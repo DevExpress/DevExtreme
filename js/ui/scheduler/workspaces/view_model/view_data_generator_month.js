@@ -60,7 +60,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
             options.startDayHour,
             options.startDate,
             options.intervalCount,
-            options.firstDayOfWeek,
+            this.getFirstDayOfWeek(options.firstDayOfWeek),
         );
     }
 

@@ -368,8 +368,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @public
+     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
      */
-    dataSource?: string | Array<dxSchedulerAppointment> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<Appointment> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @extends DateCellTemplate
@@ -1056,10 +1057,13 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ */
+export type Appointment = dxSchedulerAppointment;
+
+/**
  * @namespace DevExpress.ui
+ * @deprecated Use the Scheduler's Appointment type instead
  */
 export interface dxSchedulerAppointment extends CollectionWidgetItem {
     /**

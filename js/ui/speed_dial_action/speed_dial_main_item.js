@@ -280,6 +280,7 @@ class SpeedDialMainItem extends SpeedDialItem {
                 this._renderCloseIcon();
                 break;
             case 'position':
+                super._optionChanged(args);
                 this._setPosition();
                 break;
             case 'label':

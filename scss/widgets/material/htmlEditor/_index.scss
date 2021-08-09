@@ -19,6 +19,7 @@
   position: relative;
 
   .dx-htmleditor-toolbar-wrapper {
+    padding: 0 $material-htmleditor-toolbar-padding;
     position: relative;
 
     &:first-child {

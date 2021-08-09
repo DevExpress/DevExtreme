@@ -1221,18 +1221,14 @@ export interface dxTreeListToolbar {
 
 /**
  * @public
- * @namespace DevExpress.ui
- * @deprecated
  */
-export type dxTreeListColumn = Column;
+export type Column = dxTreeListColumn;
 
 /**
- * @docid dxTreeListColumn
- * @inherits GridBaseColumn
- * @prevFileNamespace DevExpress.ui
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use the Column type instead
  */
-export interface Column extends ColumnBase {
+export interface dxTreeListColumn extends ColumnBase {
     /**
      * @docid dxTreeListColumn.buttons
      * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
@@ -1305,18 +1301,14 @@ export interface Column extends ColumnBase {
 
 /**
  * @public
- * @namespace DevExpress.ui
- * @deprecated
  */
-export type dxTreeListColumnButton = ColumnButton;
+export type ColumnButton = dxTreeListColumnButton;
 
 /**
- * @docid dxTreeListColumnButton
- * @inherits GridBaseColumnButton
- * @prevFileNamespace DevExpress.ui
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use the TreeList's ColumnButton type instead
  */
-export interface ColumnButton extends ColumnButtonBase {
+export interface dxTreeListColumnButton extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.name
      * @type Enums.TreeListColumnButtonName|string
@@ -1429,7 +1421,7 @@ export interface Node {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use RowObject instead
  */
 export type dxTreeListRowObject = RowObject;
 

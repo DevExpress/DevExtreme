@@ -9,6 +9,7 @@ import {
   Mutable,
   ForwardRef,
 } from '@devextreme-generator/declarations';
+import '../../../events/gesture/emitter.gesture.scroll';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 
@@ -23,7 +24,7 @@ import { isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed } from '../.
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
-import '../../../events/gesture/emitter.gesture.scroll';
+
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
@@ -96,7 +97,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler,
-    lock, unlock,
+    lock, unlock, containerHasSizes,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -180,6 +181,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onScroll={onScroll}
               onEnd={onEnd}
               rtlEnabled={rtlEnabled}
+              containerHasSizes={containerHasSizes}
             />
           )}
           {direction.isVertical && (
@@ -200,6 +202,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onScroll={onScroll}
               onEnd={onEnd}
+              containerHasSizes={containerHasSizes}
 
               forceGeneratePockets={forceGeneratePockets}
               topPocketSize={topPocketClientHeight}
@@ -1196,6 +1199,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   get containerElement(): HTMLDivElement {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.containerRef.current!;
+  }
+
+  get containerHasSizes(): boolean {
+    return this.containerClientHeight > 0 && this.containerClientWidth > 0;
   }
 
   get contentWidth(): number {
