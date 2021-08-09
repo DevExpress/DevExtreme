@@ -400,7 +400,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const contentSizeChanged = this.props.contentSize !== this.prevContentSize;
     const containerSizeChanged = this.props.containerSize !== this.prevContainerSize;
 
-    if (this.props.containerDimensionsIsNotZero
+    if (this.props.containerHasSizes
         && this.props.contentSize > 0
         && (contentSizeChanged || containerSizeChanged)
     ) {
@@ -594,6 +594,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get isReachBottom(): boolean {
+    // TODO: adapt this method for 4k monitor
+    // when sizes is decimal and a rounding error of about 1px
     return this.props.reachBottomEnabled
       && (this.props.scrollLocation + this.visibleScrollAreaSize <= 0);
   }
