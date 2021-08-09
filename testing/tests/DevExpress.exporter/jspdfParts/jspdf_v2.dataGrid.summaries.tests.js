@@ -1381,6 +1381,48 @@ const JSPdfSummariesTests = {
                 });
             });
 
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], totalItems: [f3], 2 groups - height auto', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        totalItems: [
+                            { column: 'f3', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { f1: 'f1', f2: 'f2_1', f3: 'f3', f4: 'f4' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f3', f4: 'f4' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,18.4',
+                    'text,F4,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,18.4',
+                    'text,F1: f1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,170,18.4',
+                    'text,F2: f2_1,20,61,{baseline:middle}', 'setLineWidth,1', 'rect,20,51.8,160,18.4',
+                    'text,f3,30,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,30,70.2,60,18.4',
+                    'text,f4,90,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,90,70.2,90,18.4',
+                    'text,F2: f2_2,20,97.8,{baseline:middle}', 'setLineWidth,1', 'rect,20,88.6,160,18.4',
+                    'text,f3,30,116.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,107,60,18.4',
+                    'text,f4,90,116.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,107,90,18.4',
+                    'text,Max: f3,10,134.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,125.4,80,18.4', 'setLineWidth,1', 'rect,90,125.4,90,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting: () => {} }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], groupItems: [{f3, alignByColumn, showInGroupFooter}], totalItems: [f3], 2 groups', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1426,6 +1468,54 @@ const JSPdfSummariesTests = {
                     'setLineWidth,1', 'rect,90,159,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], groupItems: [{f3, alignByColumn, showInGroupFooter}], totalItems: [f3], 2 groups - height auto', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'f3', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { f1: 'f1', f2: 'f2_1', f3: 'f3', f4: 'f4' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f3', f4: 'f4' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,18.4',
+                    'text,F4,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,18.4',
+                    'text,F1: f1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,170,18.4',
+                    'text,F2: f2_1,20,61,{baseline:middle}', 'setLineWidth,1', 'rect,20,51.8,160,18.4',
+                    'text,f3,30,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,30,70.2,60,18.4',
+                    'text,f4,90,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,90,70.2,90,18.4',
+                    'text,Max: f3,30,97.8,{baseline:middle}', 'setLineWidth,1', 'rect,30,88.6,60,18.4', 'setLineWidth,1', 'rect,90,88.6,90,18.4',
+                    'text,F2: f2_2,20,116.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,107,160,18.4',
+                    'text,f3,30,134.6,{baseline:middle}', 'setLineWidth,1', 'rect,30,125.4,60,18.4',
+                    'text,f4,90,134.6,{baseline:middle}', 'setLineWidth,1', 'rect,90,125.4,90,18.4',
+                    'text,Max: f3,30,153,{baseline:middle}', 'setLineWidth,1', 'rect,30,143.8,60,18.4', 'setLineWidth,1', 'rect,90,143.8,90,18.4',
+                    'text,Max: f3,20,171.4,{baseline:middle}', 'setLineWidth,1', 'rect,20,162.2,70,18.4', 'setLineWidth,1', 'rect,90,162.2,90,18.4',
+                    'text,Max: f3,10,189.8,{baseline:middle}', 'setLineWidth,1', 'rect,10,180.6,80,18.4', 'setLineWidth,1', 'rect,90,180.6,90,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting: () => {} }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

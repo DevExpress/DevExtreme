@@ -171,13 +171,11 @@ QUnit.module('Table', moduleConfig, () => {
             columns: [{ caption: 'f1' }]
         });
 
-        const onRowExporting = () => { };
-
         const expectedLog = [
             'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
         ];
 
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -249,14 +247,12 @@ QUnit.module('Table', moduleConfig, () => {
             dataSource: [{ f1: 'v1' }],
         });
 
-        const onRowExporting = () => { };
-
         const expectedLog = [
             'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
             'text,v1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,100,18.4',
         ];
 
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -302,15 +298,13 @@ QUnit.module('Table', moduleConfig, () => {
             dataSource: [{ f1: 'v1_1' }, { f1: 'v1_2' }]
         });
 
-        const onRowExporting = () => { };
-
         const expectedLog = [
             'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
             'text,v1_1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,100,18.4',
             'text,v1_2,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,100,18.4'
         ];
 
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -348,13 +342,11 @@ QUnit.module('Table', moduleConfig, () => {
             columns: [{ caption: 'f1' }, { caption: 'f2' }]
         });
 
-        const onRowExporting = () => { };
-
         const expectedLog = [
             'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,18.4',
             'text,f2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,18.4'
         ];
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -398,15 +390,13 @@ QUnit.module('Table', moduleConfig, () => {
             dataSource: [{ f1: 'v1', f2: 'v2' }]
         });
 
-        const onRowExporting = () => { };
-
         const expectedLog = [
             'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,18.4',
             'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,18.4',
             'text,v1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,40,18.4',
             'text,v2,50,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,50,33.4,60,18.4'
         ];
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -454,8 +444,6 @@ QUnit.module('Table', moduleConfig, () => {
             dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
         });
 
-        const onRowExporting = () => { };
-
         const expectedLog = [
             'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,18.4',
             'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,18.4',
@@ -464,7 +452,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v1_2,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,40,18.4',
             'text,v2_2,50,61,{baseline:middle}', 'setLineWidth,1', 'rect,50,51.8,60,18.4'
         ];
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1130,7 +1118,6 @@ QUnit.module('Table splitting', moduleConfig, () => {
             pdfCell.drawTopBorder = false;
             pdfCell.drawBottomBorder = false;
         };
-        const onRowExporting = () => { };
 
         const expectedLog = [
             'text,F1,10,29.2,{baseline:middle}',
@@ -1145,7 +1132,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_1,12,49.6,{baseline:middle}',
             'text,v3_2,12,68,{baseline:middle}'
         ];
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting: () => {}, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1508,8 +1495,6 @@ QUnit.module('Table splitting', moduleConfig, () => {
             tableTopLeft: { x: 12, y: 22 }
         }];
 
-        const onRowExporting = () => { };
-
         const expectedLog = [
             'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,18.4',
             'text,v1_1,10,47.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,38.4,40,18.4',
@@ -1530,7 +1515,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'setLineWidth,1', 'rect,12,22,60,73.6'
         ];
 
-        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting: () => {}, splitToTablesByColumns, drawTableBorder: true }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();

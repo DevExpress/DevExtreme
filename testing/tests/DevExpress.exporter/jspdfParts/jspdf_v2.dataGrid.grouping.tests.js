@@ -66,8 +66,6 @@ const JSPdfGroupingTests = {
                     ],
                 });
 
-                const onRowExporting = () => { };
-
                 const expectedLog = [
                     'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,18.4',
                     'text,F3,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,18.4',
@@ -78,7 +76,7 @@ const JSPdfGroupingTests = {
                     'text,f2_3,100,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,100,70.2,80,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -150,8 +148,6 @@ const JSPdfGroupingTests = {
                     ],
                 });
 
-                const onRowExporting = () => { };
-
                 const expectedLog = [
                     'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,18.4',
                     'text,F3,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,18.4',
@@ -163,7 +159,7 @@ const JSPdfGroupingTests = {
                     'text,f2_3,100,97.8,{baseline:middle}', 'setLineWidth,1', 'rect,100,88.6,80,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -237,8 +233,6 @@ const JSPdfGroupingTests = {
                     ],
                 });
 
-                const onRowExporting = () => { };
-
                 const expectedLog = [
                     'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,18.4',
                     'text,F4,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,18.4',
@@ -250,7 +244,7 @@ const JSPdfGroupingTests = {
                     'text,f2_4,100,97.8,{baseline:middle}', 'setLineWidth,1', 'rect,100,88.6,80,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -327,8 +321,6 @@ const JSPdfGroupingTests = {
                     ],
                 });
 
-                const onRowExporting = () => { };
-
                 const expectedLog = [
                     'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,18.4',
                     'text,F4,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,18.4',
@@ -341,7 +333,7 @@ const JSPdfGroupingTests = {
                     'text,f2_4,100,116.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,107,80,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
