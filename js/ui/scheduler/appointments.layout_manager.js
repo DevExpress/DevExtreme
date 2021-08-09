@@ -97,7 +97,7 @@ class AppointmentLayoutManager {
             ...renderingStrategyOptions,
         });
 
-        this._positionMap = positionMap;
+        this._positionMap = positionMap; // TODO get rid of this after remove old render
 
         return viewModel;
     }
