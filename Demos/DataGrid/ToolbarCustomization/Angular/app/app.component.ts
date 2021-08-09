@@ -3,7 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule,
          DxDataGridComponent,
-         DxTemplateModule } from 'devextreme-angular';
+         DxTemplateModule,
+         DxSelectBoxModule,
+         DxButtonModule } from 'devextreme-angular';
 import { Service, Order } from './app.service';
 
 import query from 'devextreme/data/query';
@@ -23,55 +25,25 @@ export class AppComponent {
     orders: Order[];
     expanded = true;
     totalCount: number;
+    groupingValues: any[];
 
     constructor(service: Service) {
         this.orders = service.getOrders();
         this.totalCount = this.getGroupCount('CustomerStoreState');
+
+        this.groupingValues = [{
+            value: 'CustomerStoreState',
+            text: 'Grouping by State'
+        }, {
+            value: 'Employee',
+            text: 'Grouping by Employee'
+        }];
     }
 
     getGroupCount(groupField) {
         return query(this.orders)
             .groupBy(groupField)
             .toArray().length;
-    }
-
-    onToolbarPreparing(e) {
-        e.toolbarOptions.items.unshift({
-            location: 'before',
-            template: 'totalGroupCount'
-        }, {
-                location: 'before',
-                widget: 'dxSelectBox',
-                options: {
-                    width: 200,
-                    items: [{
-                        value: 'CustomerStoreState',
-                        text: 'Grouping by State'
-                    }, {
-                        value: 'Employee',
-                        text: 'Grouping by Employee'
-                    }],
-                    displayExpr: 'text',
-                    valueExpr: 'value',
-                    value: 'CustomerStoreState',
-                    onValueChanged: this.groupChanged.bind(this)
-                }
-            }, {
-                location: 'before',
-                widget: 'dxButton',
-                options: {
-                    width: 136,
-                    text: 'Collapse All',
-                    onClick: this.collapseAllClick.bind(this)
-                }
-            }, {
-                location: 'after',
-                widget: 'dxButton',
-                options: {
-                    icon: 'refresh',
-                    onClick: this.refreshDataGrid.bind(this)
-                }
-            });
     }
 
     groupChanged(e) {
@@ -96,7 +68,9 @@ export class AppComponent {
     imports: [
         BrowserModule,
         DxDataGridModule,
-        DxTemplateModule
+        DxTemplateModule,
+        DxSelectBoxModule,
+        DxButtonModule
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]
