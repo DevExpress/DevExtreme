@@ -344,7 +344,9 @@ export class AppointmentForm {
         }];
     }
 
-    setEditorsType(startDateExpr, endDateExpr, allDay) {
+    setEditorsType(allDay) {
+        const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
+
         const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${startDateExpr}`;
         const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Recurrence}.${endDateExpr}`;
 
@@ -387,8 +389,9 @@ export class AppointmentForm {
         editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
     }
 
-    updateFormData(formData, dataExprs) {
+    updateFormData(formData) {
         this.semaphore.take();
+        const dataExprs = this.scheduler.getDataAccessors().expr;
 
         const startDate = new Date(formData[dataExprs.startDateExpr]);
         const endDate = new Date(formData[dataExprs.endDateExpr]);
