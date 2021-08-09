@@ -198,8 +198,13 @@ export class AppointmentPopup {
         const { data } = this.state.appointment;
         const appointment = this._createAppointmentAdapter(this._createFormData(data));
 
-        appointment.startDate = appointment.calculateStartDate('toAppointment');
-        appointment.endDate = appointment.calculateEndDate('toAppointment');
+        if(appointment.startDate) {
+            appointment.startDate = appointment.calculateStartDate('toAppointment');
+        }
+
+        if(appointment.endDate) {
+            appointment.endDate = appointment.calculateEndDate('toAppointment');
+        }
 
         this.state.appointment.isEmptyText = data === undefined || appointment.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || appointment.description === undefined;
