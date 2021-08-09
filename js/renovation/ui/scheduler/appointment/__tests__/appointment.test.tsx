@@ -4,8 +4,8 @@ import { viewFunction, Appointment } from '../appointment';
 describe('Appointment', () => {
   const defaultViewModel = {
     appointment: {
-      startDate: new Date(2021, 7, 5, 10),
-      endDate: new Date(2021, 7, 5, 12),
+      startDate: new Date('2021-08-05T10:00:00.000Z'),
+      endDate: new Date('2021-08-05T12:00:00.000Z'),
       text: 'Some text',
     },
 
@@ -21,8 +21,8 @@ describe('Appointment', () => {
 
     info: {
       appointment: {
-        startDate: new Date(2021, 7, 5, 10),
-        endDate: new Date(2021, 7, 5, 12),
+        startDate: new Date('2021-08-05T10:00:00.000Z'),
+        endDate: new Date('2021-08-05T12:00:00.000Z'),
       },
       sourceAppointment: {
         groupIndex: 1,
@@ -70,7 +70,7 @@ describe('Appointment', () => {
         });
 
       expect(appointment.key())
-        .toBe('1-1628146800000-1628154000000_2-4-10-20');
+        .toBe('1-1628157600000-1628164800000_2-4-10-20');
     });
 
     it('it should has correct content container', () => {
