@@ -46,7 +46,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: devextreme-artifacts
-        path: artifacts.7z
+        path: artifacts.zip
         retention-days: 1
 
   qunit-tests:
