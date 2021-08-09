@@ -1747,23 +1747,22 @@ class Scheduler extends Widget {
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
         const appointment = createAppointmentAdapter(this.key, { ...rawAppointment });
-        const newAppointment = createAppointmentAdapter(this.key, newRawAppointment);
+        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
-        newAppointment.recurrenceRule = '';
-        newAppointment.recurrenceException = '';
+        const singleRawAppointment = { ...newRawAppointment };
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
 
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
             const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
-            delete newRawAppointment[keyPropertyName];
+            delete singleRawAppointment[keyPropertyName];
 
-            this.addAppointment(newRawAppointment);
+            this.addAppointment(singleRawAppointment);
         }
 
-        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
-
         if(isPopupEditing) {
-            this._appointmentPopup.show(newRawAppointment, {
+            this._appointmentPopup.show(singleRawAppointment, {
                 isToolbarVisible: true,
                 action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
                 excludeInfo: {
@@ -2188,6 +2187,7 @@ class Scheduler extends Widget {
     }
 
     createPopupAppointment() {
+        // debugger
         const result = {};
         const toMs = dateUtils.dateToMilliseconds;
 

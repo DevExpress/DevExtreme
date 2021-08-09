@@ -276,7 +276,6 @@ export class AppointmentPopup {
     saveChangesAsync(isShowLoadPanel) {
         const deferred = new Deferred();
         const validation = this.form.dxForm.validate();
-        // const state = this.state.appointment;
 
         isShowLoadPanel && this._showLoadPanel();
 
@@ -290,12 +289,7 @@ export class AppointmentPopup {
             const adapter = this._createAppointmentAdapter(this.form.formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 
-            // TODO
-            // if(state.data.recurrenceRule === undefined && adapter.recurrenceRule === '') { // TODO: plug for recurrent editor
-            //     delete appointment.recurrenceRule;
-            // }
-
-            delete appointment.repeat;
+            delete appointment.repeat; // TODO
 
             switch(this.state.action) {
                 case ACTION_TO_APPOINTMENT.CREATE:
@@ -329,7 +323,7 @@ export class AppointmentPopup {
 
         if(this._tryLockSaveChanges()) {
             when(this.saveChangesAsync(true)).done(() => {
-                if(this.state.lastEditData) {
+                if(this.state.lastEditData) { // TODO
                     const adapter = this._createAppointmentAdapter(this.state.lastEditData);
 
                     const { startDate, endDate, allDay } = adapter;
