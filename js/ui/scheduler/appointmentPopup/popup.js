@@ -206,15 +206,15 @@ export class AppointmentPopup {
             appointment.endDate = appointment.calculateEndDate('toAppointment');
         }
 
-        this.state.appointment.isEmptyText = data === undefined || appointment.text === undefined;
-        this.state.appointment.isEmptyDescription = data === undefined || appointment.description === undefined;
+        this.state.appointment.isEmptyText = appointment.text === undefined;
+        this.state.appointment.isEmptyDescription = appointment.description === undefined;
 
-        if(appointment.text === undefined) {
-            appointment.text = '';
-        }
-        if(appointment.description === undefined) {
-            appointment.description = '';
-        }
+        // if(appointment.text === undefined) {
+        //     appointment.text = '';
+        // }
+        // if(appointment.description === undefined) {
+        //     appointment.description = '';
+        // }
         if(appointment.recurrenceRule === undefined) {
             appointment.recurrenceRule = '';
         }
@@ -302,12 +302,13 @@ export class AppointmentPopup {
             const adapter = this._createAppointmentAdapter(this.form.formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 
-            if(state.isEmptyText && adapter.text === '') {
-                delete appointment.text; // TODO
-            }
-            if(state.isEmptyDescription && adapter.description === '') {
-                delete appointment.description; // TODO
-            }
+            // if(state.isEmptyText && adapter.text === '') {
+            //     delete appointment.text; // TODO
+            // }
+            // if(state.isEmptyDescription && adapter.description === '') {
+            //     delete appointment.description; // TODO
+            // }
+
             if(state.data.recurrenceRule === undefined && adapter.recurrenceRule === '') { // TODO: plug for recurrent editor
                 delete appointment.recurrenceRule;
             }
