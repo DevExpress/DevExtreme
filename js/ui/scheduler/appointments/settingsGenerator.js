@@ -522,7 +522,7 @@ export class AppointmentSettingsGenerator {
     get rawAppointment() { return this.options.rawAppointment; }
     get resourceManager() { return this.options.resourceManager; }
     get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
-    get groups() { return this.resourceManager.loadedResources; }
+    get modelGroups() { return this.options.modelGroups; }
     get dateSettingsStrategy() {
         const options = {
             ...this.options,
@@ -602,7 +602,7 @@ export class AppointmentSettingsGenerator {
         this.resourceManager.getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex,
-            groups: this.groups
+            groups: this.modelGroups
         }).done((color) => {
             info.resourceColor = color;
         });
