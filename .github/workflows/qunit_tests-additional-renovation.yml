@@ -101,6 +101,7 @@ jobs:
         NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
+        DISPLAY: ":99"
       run: |
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
