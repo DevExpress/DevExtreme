@@ -3,8 +3,8 @@ import { toNumber } from '../../../utils/type_conversion';
 
 export function getElementStyle(
   el: Element | undefined | null,
-): CSSStyleDeclaration | null {
-  return el && hasWindow() ? getWindow().getComputedStyle(el) : null;
+): CSSStyleDeclaration | null | undefined {
+  return el && hasWindow() ? getWindow().getComputedStyle?.(el) : null;
 }
 
 export function getElementPaddingBottom(element: Element | null): number {
