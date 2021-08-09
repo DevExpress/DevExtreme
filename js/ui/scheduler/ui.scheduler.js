@@ -1477,6 +1477,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
             groups: this._getCurrentViewOption('groups'),
+            isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
                 const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
