@@ -55,8 +55,12 @@ function run_test {
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
+        if [ "$GITHUBACTION" == "true" ]; then
+        Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 &
+        else
         Xvfb :99 -ac -screen 0 1200x600x24 &
         x11vnc -display :99 2>/dev/null &
+        fi
     fi
 
     if [ "$LOCAL" != "true" ]; then
