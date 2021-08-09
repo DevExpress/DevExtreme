@@ -60,6 +60,7 @@ describe('Simulated > View', () => {
       inertiaEnabled: true,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
+      needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scrollByContent: true,

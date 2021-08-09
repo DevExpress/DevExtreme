@@ -100,7 +100,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
-      needScrollViewLoadPanel,
+      needRenderScrollbars, needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
       pullDownEnabled, reachBottomEnabled,
@@ -161,7 +161,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             />
             )}
           </div>
-          {direction.isHorizontal && (
+          {needRenderScrollbars && direction.isHorizontal && (
             <AnimatedScrollbar
               direction="horizontal"
               ref={hScrollbarRef}
@@ -183,7 +183,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               containerHasSizes={containerHasSizes}
             />
           )}
-          {direction.isVertical && (
+          {needRenderScrollbars && direction.isVertical && (
             <AnimatedScrollbar
               direction="vertical"
               ref={vScrollbarRef}

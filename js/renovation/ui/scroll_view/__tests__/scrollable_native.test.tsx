@@ -61,6 +61,7 @@ describe('Native > View', () => {
       forceGeneratePockets: false,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
+      needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scrollByContent: true,
