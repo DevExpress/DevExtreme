@@ -57,16 +57,18 @@ export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
      * @docid
+     * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
+     * @type Array<string | dxToolbarItem | any>
      * @fires dxToolbarOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxToolbarItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default "menuItem"
@@ -97,9 +99,13 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
 export default class dxToolbar extends CollectionWidget<dxToolbarOptions> { }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxToolbar
+ * */
+export type Item = dxToolbarItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxToolbarItem extends CollectionWidgetItem {

@@ -19,7 +19,7 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    dxTreeListColumn,
+    Column,
 } from './tree_list';
 
 import Widget, {
@@ -249,10 +249,11 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     allowSelection?: boolean;
     /**
      * @docid
+     * @type Array<dxTreeListColumn|string>
      * @default undefined
      * @public
      */
-    columns?: Array<dxTreeListColumn | string>;
+    columns?: Array<Column | string>;
     /**
      * @docid
      * @default null
@@ -1115,7 +1116,7 @@ export interface dxGanttToolbar {
      * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
      * @public
      */
-    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
+    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
 }
 
 /**
@@ -1135,12 +1136,17 @@ export interface dxGanttContextMenu {
      * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
      * @public
      */
-    items?: Array<dxGanttContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
+    items?: Array<ContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
 }
 
 /**
- * @docid
- * @inherits dxToolbarItem
+ * @public
+ * @namespace DevExpress.ui.dxGantt
+ */
+export type ToolbarItem = dxGanttToolbarItem;
+
+/**
+ * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui
  */
 export interface dxGanttToolbarItem extends dxToolbarItem {
@@ -1160,8 +1166,13 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
 }
 
 /**
- * @docid
- * @inherits dxContextMenuItem
+ * @public
+ * @namespace DevExpress.ui.dxGantt
+ */
+export type ContextMenuItem = dxGanttContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
