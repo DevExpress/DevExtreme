@@ -1032,7 +1032,6 @@ export const virtualScrollingModule = {
                                 result = items.filter(it => it.loadIndex >= startLoadIndex && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
                             }
 
-                            // return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
                             return result;
                         }
 
