@@ -87,14 +87,10 @@ const PORTAL_COMPONENTS: Set<string> = new Set([
   'dxValidationMessage',
 ]);
 
-const USE_DEFER_UPDATE_FOR_TEMPLATE: Set<string> = new Set([
-  'dxDataGrid',
-  'dxTreeList',
-  'dxPivotGrid',
-  'dxSelectBox',
-  'dxTabPanel',
-  'dxAccordion',
-  'dxMultiView',
+// TODO: remove it as soon widgets support requestAnimationFrame
+const USE_REQUEST_ANIMATION_FRAME: Set<string> = new Set([
+  'dxChart',
+  'dxDateBox',
 ]);
 
 function getIndent(indent: number) {
@@ -332,7 +328,7 @@ const renderComponent: (model: {
   renderedTemplateProps?: string[];
   renderedPropTypings?: string[];
   isPortalComponent?: boolean;
-  useDeferUpdateFlag?: boolean;
+  useRequestAnimationFrameFlag?: boolean;
 }) => string = createTempate(
   `class <#= it.className #> extends BaseComponent<<#= it.optionsName #>> {
 
@@ -342,8 +338,8 @@ const renderComponent: (model: {
 
   protected _WidgetClass = <#= it.widgetName #>;\n`
 
-+ `<#? it.useDeferUpdateFlag #>${
-  L1}protected useDeferUpdateFlag = true;\n`
++ `<#? it.useRequestAnimationFrameFlag #>${
+  L1}protected useRequestAnimationFrameFlag = true;\n`
 + '<#?#>'
 
 + `<#? it.isPortalComponent #>${
@@ -567,7 +563,7 @@ function generate(component: IComponent): string {
       })),
       renderedPropTypings,
       expectedChildren: component.expectedChildren,
-      useDeferUpdateFlag: USE_DEFER_UPDATE_FOR_TEMPLATE.has(widgetName),
+      useRequestAnimationFrameFlag: USE_REQUEST_ANIMATION_FRAME.has(widgetName),
       isPortalComponent: PORTAL_COMPONENTS.has(widgetName),
     }),
 
