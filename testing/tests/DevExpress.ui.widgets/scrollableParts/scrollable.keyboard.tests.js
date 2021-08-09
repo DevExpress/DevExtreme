@@ -208,7 +208,6 @@ QUnit.test('arrow keys does not trigger when it not need', function(assert) {
     $scrollable.on('scroll', function(assert) {
         count++;
     });
-
     const keyboard = getKeyboardMock($scrollable);
 
     keyboard.keyDown('down');
@@ -235,7 +234,6 @@ QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-
     const keyboard = getKeyboardMock($scrollable);
     const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     const pointer = pointerMock($scrollbar).start();
@@ -360,49 +358,56 @@ if(devices.real().deviceType === 'desktop') {
     [1, 1.5, 0.25].forEach((browserZoom) => {
         ['up', 'down', 'left', 'right'].forEach((key) => {
             QUnit.testInActiveWindow(`Offset after press "${key}" key with browser zoom - ${browserZoom * 100}%: useNative - ${false}, direction: "both"`, function(assert) {
-                const $scrollable = $('#scrollable');
-                $scrollable.children().width(1000);
-                $scrollable.children().height(1000);
+                const originalWindow = getWindow();
 
-                $scrollable.dxScrollable({
-                    height: 400,
-                    width: 400,
-                    useNative: false,
-                    direction: 'both',
-                    showScrollbar: 'always'
-                });
+                try {
 
-                const scrollable = $scrollable.dxScrollable('instance');
+                    const $scrollable = $('#scrollable');
+                    $scrollable.children().width(1000);
+                    $scrollable.children().height(1000);
 
-                scrollable.scrollTo({ top: 200, left: 200 });
+                    $scrollable.dxScrollable({
+                        height: 400,
+                        width: 400,
+                        useNative: false,
+                        direction: 'both',
+                        showScrollbar: 'always'
+                    });
 
-                const defaultDevicePixelRatio = getWindow().devicePixelRatio;
-                setWindow({ devicePixelRatio: browserZoom }, true);
+                    const scrollable = $scrollable.dxScrollable('instance');
 
-                const keyboard = getKeyboardMock($scrollable);
+                    scrollable.scrollTo({ top: 200, left: 200 });
 
-                keyboard.keyDown(key);
+                    const defaultDevicePixelRatio = getWindow().devicePixelRatio;
+                    setWindow({ devicePixelRatio: browserZoom }, true);
 
-                const expectedOffset = { top: 200, left: 200 };
-                const delta = SCROLL_LINE_HEIGHT / browserZoom;
+                    const keyboard = getKeyboardMock($scrollable);
 
-                if(key === 'down') {
-                    expectedOffset.top += delta;
+                    keyboard.keyDown(key);
+
+                    const expectedOffset = { top: 200, left: 200 };
+                    const delta = SCROLL_LINE_HEIGHT / browserZoom;
+
+                    if(key === 'down') {
+                        expectedOffset.top += delta;
+                    }
+                    if(key === 'up') {
+                        expectedOffset.top -= delta;
+                    }
+                    if(key === 'left') {
+                        expectedOffset.left -= delta;
+                    }
+                    if(key === 'right') {
+                        expectedOffset.left += delta;
+                    }
+
+                    assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 1, 'scrollOffset.top');
+                    assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 1, 'scrollOffset.left');
+
+                    setWindow({ devicePixelRatio: defaultDevicePixelRatio }, true);
+                } finally {
+                    setWindow(originalWindow);
                 }
-                if(key === 'up') {
-                    expectedOffset.top -= delta;
-                }
-                if(key === 'left') {
-                    expectedOffset.left -= delta;
-                }
-                if(key === 'right') {
-                    expectedOffset.left += delta;
-                }
-
-                assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 1, 'scrollOffset.top');
-                assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 1, 'scrollOffset.left');
-
-                setWindow({ devicePixelRatio: defaultDevicePixelRatio }, true);
             });
         });
     });

@@ -1,7 +1,35 @@
 import {
-  getElementOverflowX, getElementPaddingBottom, getElementTransform, getElementOverflowY,
+  getElementStyle,
+  getElementOverflowX,
+  getElementPaddingBottom,
+  getElementTransform,
+  getElementOverflowY,
 } from '../get_element_style';
 import { setWindow } from '../../../../../core/utils/window';
+
+describe('getElementStyle', () => {
+  it('element is not defined', () => {
+    expect(getElementStyle(null)).toEqual(null);
+  });
+
+  it('hasWindow: false', () => {
+    const el = {} as HTMLElement;
+    setWindow({ }, false);
+    expect(getElementStyle(el)).toEqual(null);
+  });
+
+  it('hasWindow: true, window.getComputedStyle: undefined', () => {
+    const el = {} as HTMLElement;
+    setWindow({ }, true);
+    expect(getElementStyle(el)).toEqual(undefined);
+  });
+
+  it('hasWindow: true, window.getComputedStyle: { width: 120px }', () => {
+    const el = {} as HTMLElement;
+    setWindow({ getComputedStyle: () => ({ paddingBottom: '120px' }) }, true);
+    expect(getElementStyle(el)).toEqual({ paddingBottom: '120px' });
+  });
+});
 
 describe('getElementTransform', () => {
   it('element is not defined', () => {
