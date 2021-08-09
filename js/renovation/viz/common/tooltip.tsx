@@ -73,7 +73,7 @@ export const viewFunction = ({
   cssClassName,
   correctedCoordinates,
   isEmptyContainer,
-  fontStyles,
+  textSvgElementStyles,
   props: {
     font, shadow, opacity, interactive, zIndex,
     contentTemplate: TooltipTemplate, data, visible, rtl,
@@ -154,10 +154,7 @@ export const viewFunction = ({
                 >
                   <TextSvgElement
                     text={customizedOptions.text}
-                    styles={{
-                      ...fontStyles,
-                      pointerEvents,
-                    }}
+                    styles={textSvgElementStyles}
                   />
                 </g>
               )}
@@ -340,6 +337,10 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Method()
   getLocation(): string {
     return normalizeEnum(this.props.location);
+  }
+
+  get textSvgElementStyles(): Record<string, unknown> {
+    return { ...this.fontStyles, pointerEvents: this.pointerEvents };
   }
 
   get textSizeWithPaddings(): Required<Size> {
