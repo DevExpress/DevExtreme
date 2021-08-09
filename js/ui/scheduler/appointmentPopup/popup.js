@@ -2,8 +2,6 @@ import devices from '../../../core/devices';
 import $ from '../../../core/renderer';
 import dateUtils from '../../../core/utils/date';
 import { Deferred, when } from '../../../core/utils/deferred';
-import { extend } from '../../../core/utils/extend';
-import { each } from '../../../core/utils/iterator';
 import { isDefined } from '../../../core/utils/type';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { triggerResizeEvent } from '../../../events/visibility_change';
@@ -156,26 +154,22 @@ export class AppointmentPopup {
         return this.form.dxForm.$element(); // TODO
     }
 
-    _createAppointmentFormData(rawAppointment) {
+    _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
-        const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
-        const resourceManager = this.scheduler.getResourceManager();
+        const resources = this.scheduler.getResourceManager().getResourcesFromItem(rawAppointment, true);
 
-        each(resourceManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
-
-        return result;
+        return {
+            ...rawAppointment,
+            ...resources,
+            repeat: !!appointment.recurrenceRule,
+        };
     }
 
     _createForm() {
         const rawAppointment = this.state.appointment.data;
-        const formData = this._createAppointmentFormData(rawAppointment);
+        const formData = this._createFormData(rawAppointment);
 
-        this.form.create(
-            this.triggerResize.bind(this),
-            this.changeSize.bind(this),
-            formData,
-            formData
-        );
+        this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData);
     }
 
     _isReadOnly(rawAppointment) {
@@ -207,7 +201,7 @@ export class AppointmentPopup {
         this.state.appointment.isEmptyText = data === undefined || adapter.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || adapter.description === undefined;
 
-        const appointment = this._createAppointmentAdapter(this._createAppointmentFormData(data));
+        const appointment = this._createAppointmentAdapter(this._createFormData(data));
         if(appointment.text === undefined) {
             appointment.text = '';
         }

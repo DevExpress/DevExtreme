@@ -89,11 +89,11 @@ export class AppointmentForm {
         this.form.option('formData', value);
     }
 
-    create(triggerResize, changeSize, appointmentData, formData) {
+    create(triggerResize, changeSize, formData) {
         const allowTimeZoneEditing = this.scheduler.getEditingConfig().allowTimeZoneEditing;
         const { expr } = this.scheduler.getDataAccessors();
 
-        const recurrenceEditorVisibility = !!appointmentData[expr.recurrenceRuleExpr];
+        const recurrenceEditorVisibility = !!formData[expr.recurrenceRuleExpr]; // TODO
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
         const resourceManager = this.scheduler.getResourceManager();
