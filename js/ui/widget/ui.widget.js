@@ -102,7 +102,7 @@ const Widget = DOMComponent.inherit({
             return;
         }
 
-        this._resizeObserver = new ResizeObserverSingleton();
+        this._resizeObserver = ResizeObserverSingleton.getInstance();
     },
 
     _innerWidgetOptionChanged: function(innerWidget, args) {
