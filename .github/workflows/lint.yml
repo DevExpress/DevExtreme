@@ -1,6 +1,10 @@
 name: Lint
 
-on: [push, pull_request]
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on: [pull_request]
 
 jobs:
   Renovation:
@@ -55,6 +59,9 @@ jobs:
 
     - name: Lint TS
       run: npm run lint-ts
+
+    - name: Lint .d.ts
+      run: npm run lint-dts
 
   JS:
     runs-on: ubuntu-latest

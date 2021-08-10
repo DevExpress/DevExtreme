@@ -2,12 +2,12 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     EditorOptions,
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 /** @public */
@@ -53,13 +53,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @default undefined
      * @public
      */
-    iconHeight?: number | string;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-     iconWidth?: number | string;
+    iconSize?: number | string;
     /**
      * @docid
      * @hidden false

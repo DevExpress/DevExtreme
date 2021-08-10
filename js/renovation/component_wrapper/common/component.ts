@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
-  render, createRef, RefObject, VNode, Component,
+  createRef, RefObject, VNode, Component,
 } from 'inferno';
-import { createElement } from 'inferno-create-element';
-import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
+import renderer from './renderer';
+
 // eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
@@ -12,8 +12,6 @@ import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
-import { cleanDataRecursive } from '../../../core/element_data';
-
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
@@ -145,32 +143,17 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _renderWrapper(props: Record<string, unknown>): void {
     const containerNode = this.$element()[0];
-    const { parentNode } = containerNode;
 
     if (!this._isNodeReplaced) {
-      const nextNode = containerNode?.nextSibling;
+      renderer.onPreRender();
+    }
 
-      const rootNode = domAdapter.createElement('div');
-      rootNode.appendChild(containerNode);
-      const mountNode = this._documentFragment.appendChild(rootNode);
-      InfernoEffectHost.lock();
-      hydrate(
-        createElement(this._viewComponent, props),
-        mountNode,
-      );
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      containerNode.$V = (mountNode as any).$V;
-      if (parentNode) {
-        parentNode.insertBefore(containerNode, nextNode);
-      }
+    renderer.render(this._viewComponent, props, containerNode, this._isNodeReplaced);
+
+    if (!this._isNodeReplaced) {
       this._isNodeReplaced = true;
-      InfernoEffectHost.callEffects();
+      renderer.onAfterRender();
       this._shouldRaiseContentReady = true;
-    } else {
-      render(
-        createElement(this._viewComponent, props),
-        containerNode,
-      );
     }
 
     if (this._shouldRaiseContentReady) {
@@ -186,19 +169,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   _render(): void { } // NOTE: Inherited from DOM_Component
 
   _removeWidget(): void {
-    const containerNode = this.$element()[0];
-    const { parentNode } = containerNode;
-
-    if (parentNode) {
-      cleanDataRecursive(containerNode);
-      parentNode.$V = containerNode.$V;
-      render(null, parentNode);
-      parentNode.appendChild(containerNode);
-      containerNode.innerHTML = '';
-
-      delete parentNode.$V;
-    }
-    delete containerNode.$V;
+    renderer.remove(this.$element()[0]);
   }
 
   _dispose(): void {
@@ -369,7 +340,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     this.defaultKeyHandlers = {};
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = this._optionsWithDefaultTemplates(this.option());
-    this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
     this._componentTemplates = {};
@@ -425,7 +395,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _extractDefaultSlot(): VNode | null {
     if (this.option('_hasAnonymousTemplateContent')) {
-      return createElement(TemplateWrapper, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return renderer.createElement(TemplateWrapper as any, {
         template: this._getTemplate(this._templateManager.anonymousTemplateName),
         transclude: true,
       });
@@ -443,12 +414,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     if (isString(template) && template === 'dx-renovation-template-mock') {
       return undefined;
     }
-    const templateWrapper = (model: TemplateModel): VNode => createElement(
-      TemplateWrapper,
-      {
-        template,
-        model,
-      },
+    const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      TemplateWrapper as any, { template, model },
     );
 
     return templateWrapper;

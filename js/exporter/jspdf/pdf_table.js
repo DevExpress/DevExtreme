@@ -79,7 +79,7 @@ export class PdfTable {
         this.rect.h = this.rowHeights.reduce((a, b) => a + b, 0);
     }
 
-    drawTo(doc) {
-        drawPdfTable(doc, this);
+    drawTo(doc, docStyles) {
+        drawPdfTable(doc, docStyles, this);
     }
 }

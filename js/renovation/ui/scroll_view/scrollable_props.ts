@@ -32,6 +32,8 @@ export class ScrollableProps {
 
   @OneWay() needScrollViewLoadPanel = false;
 
+  @OneWay() needRenderScrollbars = true;
+
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 
   @Event() onUpdated?: EventCallback<ScrollEventArgs>;

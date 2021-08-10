@@ -110,11 +110,11 @@ export type AnimationConfig = {
      * @public
      */
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
-}
+};
 
 /**
  * @public
- * @deprecated Use the AnimationConfig type instead 
+ * @deprecated Use the AnimationConfig type instead
  */
 export type animationConfig = AnimationConfig;
 
@@ -156,5 +156,5 @@ declare const fx: {
      * @public
      */
     stop(element: Element, jumpToEnd: boolean): void;
-}
+};
 export default fx;

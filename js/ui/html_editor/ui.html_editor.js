@@ -12,7 +12,7 @@ import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { Event as dxEvent } from '../../events/index';
-import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
+import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
 
 import QuillRegistrator from './quill_registrator';
