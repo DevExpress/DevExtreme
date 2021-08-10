@@ -989,34 +989,32 @@ export const virtualScrollingModule = {
                         this._loadViewportParams = this._rowsScrollController.getViewportParams();
                     },
                     _processItems: function(items) {
-                        items = this.callBase.apply(this, arguments);
+                        const newItems = this.callBase.apply(this, arguments);
 
                         if(this.option(NEW_SCROLLING_MODE)) {
                             let currentIndex = this.pageIndex() * this.pageSize();
                             const dataSource = this._dataSource;
                             let lastCountable;
+                            let lastRowType;
 
-                            items.forEach(item => {
+                            newItems.forEach(item => {
                                 const rowType = item.rowType;
                                 const itemCountable = isItemCountableByDataSource(item, dataSource);
 
                                 if(isDefined(lastCountable)) {
-                                    if(rowType === 'group') {
-                                        if(lastCountable || itemCountable) {
-                                            currentIndex++;
-                                        }
-                                    } else if(itemCountable) {
-                                        if(lastCountable) {
-                                            currentIndex++;
-                                        }
+                                    const isNextGroupItem = rowType === 'group' && (lastCountable || itemCountable || lastRowType !== 'group');
+                                    const isNextDataItem = itemCountable && (lastCountable || lastRowType !== 'group');
+                                    if(isNextGroupItem || isNextDataItem) {
+                                        currentIndex++;
                                     }
                                 }
                                 item.loadIndex = currentIndex;
                                 lastCountable = itemCountable;
+                                lastRowType = rowType;
                             });
                         }
 
-                        return items;
+                        return newItems;
                     },
                     _afterProcessItems: function(items) {
                         this._uncountableItemCount = 0;
