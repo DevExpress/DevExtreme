@@ -1,13 +1,13 @@
 import { ViewProps } from '../../props';
 import { ViewType } from '../../types';
-import { getCurrentViewConfig, getCurrentViewOptions } from '../views';
+import { getCurrentViewConfig, getCurrentViewProps } from '../views';
 
 describe('Model views', () => {
-  describe('getCurrentViewOptions', () => {
+  describe('getCurrentViewProps', () => {
     it('should find current view when views is an array of strings', () => {
       const views: ViewType[] = ['day', 'week', 'month'];
 
-      expect(getCurrentViewOptions('week', views))
+      expect(getCurrentViewProps('week', views))
         .toEqual({ type: 'week' });
     });
 
@@ -20,7 +20,7 @@ describe('Model views', () => {
         type: 'month',
       }];
 
-      expect(getCurrentViewOptions('week', views))
+      expect(getCurrentViewProps('week', views))
         .toBe(views[1]);
     });
 
@@ -36,7 +36,7 @@ describe('Model views', () => {
         name: 'Month',
       }];
 
-      expect(getCurrentViewOptions('Week', views))
+      expect(getCurrentViewProps('Week', views))
         .toBe(views[1]);
     });
 
@@ -52,7 +52,7 @@ describe('Model views', () => {
         name: 'Month',
       }];
 
-      expect(getCurrentViewOptions('timelineWeek', views))
+      expect(getCurrentViewProps('timelineWeek', views))
         .toEqual({ type: 'timelineWeek' });
     });
 
@@ -68,7 +68,7 @@ describe('Model views', () => {
         name: 'Month',
       }];
 
-      expect(getCurrentViewOptions('TimelineWeek', views))
+      expect(getCurrentViewProps('TimelineWeek', views))
         .toBe(views[0]);
     });
   });
