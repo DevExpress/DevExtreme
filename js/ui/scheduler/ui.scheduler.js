@@ -1771,7 +1771,6 @@ class Scheduler extends Widget {
                 }
             });
             this._editAppointmentData = rawAppointment;
-
         } else {
             this._updateAppointment(rawAppointment, appointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
