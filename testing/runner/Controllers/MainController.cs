@@ -23,6 +23,7 @@ namespace Runner.Controllers
 
         public MainController(IHostingEnvironment env, RunFlags runFlags)
         {
+            ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
             _env = env;
             _runFlags = runFlags;
         }
@@ -106,17 +107,13 @@ namespace Runner.Controllers
         [HttpPost]
         public void NotifyTestStarted(string name) {
             lock (IO_SYNC) {
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"       [ run] {name}");
-                Console.ResetColor();
+                ConsoleHelper.Logger.Write($"       [ run] {name}");
             }
         }
         [HttpPost]
         public void NotifyTestCompleted(string name, bool passed) {
             lock (IO_SYNC) {
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"       [{(passed ? "  ok" : "fail")}] {name}");
-                Console.ResetColor();
+                ConsoleHelper.Logger.WriteLine($"       [{(passed ? "  ok" : "fail")}] {name}");
             }
         }
         [HttpPost]
@@ -125,20 +122,14 @@ namespace Runner.Controllers
             Response.ContentType = "text/plain";
             lock (IO_SYNC)
             {
-                Console.Write("[");
+                ConsoleHelper.Write("[");
                 if (passed)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(" OK ");
-                }
+                    ConsoleHelper.Write(" OK ", ConsoleColor.Green);
                 else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("FAIL");
-                }
-                Console.ResetColor();
+                    ConsoleHelper.Write("FAIL", ConsoleColor.Red);
+
                 TimeSpan runSpan = TimeSpan.FromMilliseconds(runtime);
-                Console.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
+                ConsoleHelper.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
 
                 NotifyIsAlive();
             }
@@ -173,7 +164,7 @@ namespace Runner.Controllers
 
                 if (singleRun)
                 {
-                    Console.WriteLine();
+                    ConsoleHelper.WriteLine();
                     results.PrintTextReport();
                 }
             }
