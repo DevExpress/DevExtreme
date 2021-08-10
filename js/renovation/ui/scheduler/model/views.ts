@@ -14,19 +14,21 @@ export const getCurrentView = (
   currentView: string | ViewType,
   views: (ViewType | ViewProps)[],
 ): ViewType | ViewProps => {
-  let currentViewOptions: ViewType | ViewProps | null = null;
+  let currentViewOptions: ViewType | ViewProps | undefined = undefined;
 
-  views.forEach((view): void => { // TODO: Use find
+  currentViewOptions = views.find((view): boolean => {
     const names = isObject(view)
       ? [view.name, view.type]
       : [view];
 
     if (names.includes(currentView)) {
-      currentViewOptions = view as ViewProps;
+      return true;
     }
+
+    return false;
   });
 
-  if (currentViewOptions === null) {
+  if (currentViewOptions === undefined) {
     if (VIEW_TYPES.includes(currentView)) {
       currentViewOptions = currentView as ViewType;
     } else {
@@ -48,9 +50,6 @@ export const getCurrentViewOptions = (
     : currentViewOptions;
 };
 
-// function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {
-//   return viewProp !== undefined ? viewProp : schedulerProp;
-// }
 function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {
   return viewProp !== undefined ? viewProp : schedulerProp;
 }
