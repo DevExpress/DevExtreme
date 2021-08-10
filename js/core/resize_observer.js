@@ -1,40 +1,49 @@
+import { noop } from './utils/common';
 import { getWindow, hasWindow } from './utils/window';
 const window = getWindow();
 
-const ResizeObserver = (function() {
+const ResizeObserverNoWindowMock = {
+    observe: noop,
+    unobserve: noop,
+    disconnect: noop
+};
+
+const ResizeObserverSingletonFactory = (function() {
     let instance;
 
-    function ResizeObserver(options) {
+    function ResizeObserverSingleton() {
         if(!hasWindow()) {
-            return;
+            return ResizeObserverNoWindowMock;
         }
 
-        if(instance) {
-            return instance;
-        }
-
-        this._observer = new window.ResizeObserver((...args) => {
-            const shouldSkip = options.shouldSkipCallback?.(...args);
-            if(!shouldSkip) {
-                options.callback(...args);
-            }
+        this._callbacksMap = new Map();
+        this._observer = new window.ResizeObserver((entries) => {
+            entries.forEach(entry => {
+                this._callbacksMap.get(entry.target)?.(entry);
+            });
         });
-        return instance = this;
     }
 
-    ResizeObserver.prototype.observe = function(element) {
-        this._observer?.observe(element);
+    ResizeObserverSingleton.getInstance = function() {
+        return instance ?? (instance = new ResizeObserverSingleton());
     };
 
-    ResizeObserver.prototype.unobserve = function(element) {
-        this._observer?.unobserve(element);
+    ResizeObserverSingleton.prototype.observe = function(element, callback) {
+        this._callbacksMap.set(element, callback);
+        this._observer.observe(element);
     };
 
-    ResizeObserver.prototype.disconnect = function() {
-        this._observer?.disconnect();
+    ResizeObserverSingleton.prototype.unobserve = function(element) {
+        this._callbacksMap.delete(element);
+        this._observer.unobserve(element);
     };
 
-    return ResizeObserver;
+    ResizeObserverSingleton.prototype.disconnect = function() {
+        this._callbacksMap.clear();
+        this._observer.disconnect();
+    };
+
+    return ResizeObserverSingleton;
 })();
 
-export default ResizeObserver;
+export default ResizeObserverSingletonFactory;

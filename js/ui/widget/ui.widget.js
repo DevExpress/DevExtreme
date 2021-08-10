@@ -8,7 +8,7 @@ import { extend } from '../../core/utils/extend';
 import { focusable as focusableSelector } from './selectors';
 import { inArray } from '../../core/utils/array';
 import { isPlainObject, isDefined } from '../../core/utils/type';
-import ResizeObserver from '../../core/resize_observer';
+import ResizeObserverSingleton from '../../core/resize_observer';
 import devices from '../../core/devices';
 import { compare as compareVersions } from '../../core/utils/version';
 
@@ -102,14 +102,8 @@ const Widget = DOMComponent.inherit({
             return;
         }
 
-        this._resizeObserver = new ResizeObserver({
-            callback: (entries) => { this._resizeObserverCallback(entries); },
-            shouldSkipCallback: (entries) => this._shouldSkipResizeObserverCallback(entries)
-        });
+        this._resizeObserver = new ResizeObserverSingleton();
     },
-
-    _resizeObserverCallback: noop,
-    _shouldSkipResizeObserverCallback: noop,
 
     _innerWidgetOptionChanged: function(innerWidget, args) {
         const options = Widget.getOptionsFromContainer(args);
