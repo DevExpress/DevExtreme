@@ -3,6 +3,7 @@ import devices from 'core/devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
+import { setWindow, getWindow } from 'core/utils/window';
 
 import 'generic_light.css!';
 
@@ -27,8 +28,20 @@ QUnit.module('keyboard support', {
                 </div>\
             </div>';
         $('#qunit-fixture').html(markup);
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 });
+
+const getKeyboardMock = ($scrollable) => {
+    const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+    const keyboard = keyboardMock($container);
+    $container.focus();
+
+    return keyboard;
+};
 
 QUnit.test('support arrow keys', function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -46,10 +59,7 @@ QUnit.test('support arrow keys', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const keyboard = keyboardMock($container);
-
-    $container.focus();
+    const keyboard = getKeyboardMock($scrollable);
 
     keyboard.keyDown('down');
     assert.equal(scrollable.scrollOffset().top, SCROLL_LINE_HEIGHT, 'down key moves to one line down');
@@ -81,10 +91,7 @@ QUnit.test('support pageup and pagedown', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const keyboard = keyboardMock($container);
-
-    $container.focus();
+    const keyboard = getKeyboardMock($scrollable);
 
     keyboard.keyDown('pagedown');
     keyboard.keyDown('pagedown');
@@ -111,10 +118,7 @@ QUnit.test('support end and home', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const keyboard = keyboardMock($container);
-
-    $container.focus();
+    const keyboard = getKeyboardMock($scrollable);
 
     keyboard.keyDown('end');
     assert.roughEqual(scrollable.scrollOffset().top, contentHeight - containerHeight, 1, 'end key moves to the bottom');
@@ -162,10 +166,7 @@ QUnit.test('supportKeyboard option after render', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const keyboard = keyboardMock($container);
-
-    $container.focus();
+    const keyboard = getKeyboardMock($scrollable);
 
     scrollable.option('useKeyboard', false);
     keyboard.keyDown('down');
@@ -198,10 +199,9 @@ QUnit.test('arrow keys does not trigger when it not need', function(assert) {
     $scrollable.on('scroll', function(assert) {
         count++;
     });
-    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    keyboardMock($container).keyDown('down');
+    const keyboard = getKeyboardMock($scrollable);
 
-    $container.focus();
+    keyboard.keyDown('down');
 
     assert.equal(count, 0, 'down key moves to one line down');
 });
@@ -225,12 +225,9 @@ QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const keyboard = keyboardMock($container);
+    const keyboard = getKeyboardMock($scrollable);
     const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     const pointer = pointerMock($scrollbar).start();
-
-    $container.focus();
 
     pointer
         .down()
@@ -277,11 +274,6 @@ if(devices.real().deviceType === 'desktop') {
             }
 
             QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}, direction: ${scrollbarDirection}`, function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
-                    assert.ok(true, 'mobile device does not support tabindex on div element');
-                    return;
-                }
-
                 const done = assert.async();
 
                 const scrollableContainerSize = 200;
@@ -297,17 +289,23 @@ if(devices.real().deviceType === 'desktop') {
                 const $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
                 const $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
 
+                $contentContainer1.css('tabindex', 1);
+                $contentContainer2.css('tabindex', 2);
+
                 if(scrollbarDirection === 'horizontal') {
                     $contentContainer1.css('display', 'inline-block');
                     $contentContainer2.css('display', 'inline-block');
                 }
 
-                return new Promise(function(resolve) {
-                    $scrollable.dxScrollable('option', 'onScroll', function() {
+                return new Promise((resolve) => {
+                    $scrollable.dxScrollable('option', 'onScroll', () => {
                         setTimeout(() => {
+                            this.clock.tick(400);
                             checkScrollLocation($scrollable, scrollbarDirection === 'vertical' ? { top: 100, left: 0 } : { top: 0, left: 100 });
                             done();
                         });
+                        this.clock.tick();
+
                         resolve();
                     });
 
@@ -326,11 +324,6 @@ if(devices.real().deviceType === 'desktop') {
         [true, false].forEach(ctrlKey => {
             [true, false].forEach(metaKey => {
                 QUnit.test(`Handle ctrl key (T970904). bounceEnabled: ${bounceEnabled}, ctrlKey: ${ctrlKey}, metaKey: ${metaKey}`, function(assert) {
-                    if(devices.real().deviceType !== 'desktop') {
-                        assert.ok(true, 'scenario is relevant only for desktop');
-                        return;
-                    }
-
                     const scrollable = $('#scrollable').dxScrollable({
                         useNative: false,
                         bounceEnabled
@@ -356,48 +349,56 @@ if(devices.real().deviceType === 'desktop') {
     [1, 1.5, 0.25].forEach((browserZoom) => {
         ['up', 'down', 'left', 'right'].forEach((key) => {
             QUnit.testInActiveWindow(`Offset after press "${key}" key with browser zoom - ${browserZoom * 100}%: useNative - ${false}, direction: "both"`, function(assert) {
-                const $scrollable = $('#scrollable');
-                $scrollable.children().width(1000);
-                $scrollable.children().height(1000);
+                const originalWindow = getWindow();
 
-                $scrollable.dxScrollable({
-                    height: 400,
-                    width: 400,
-                    useNative: false,
-                    direction: 'both',
-                    showScrollbar: 'always'
-                });
+                try {
 
-                const scrollable = $scrollable.dxScrollable('instance');
-                const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+                    const $scrollable = $('#scrollable');
+                    $scrollable.children().width(1000);
+                    $scrollable.children().height(1000);
 
-                scrollable.scrollTo({ top: 200, left: 200 });
+                    $scrollable.dxScrollable({
+                        height: 400,
+                        width: 400,
+                        useNative: false,
+                        direction: 'both',
+                        showScrollbar: 'always'
+                    });
 
-                $container.focus();
-                $container.attr('tabIndex', 1);
+                    const scrollable = $scrollable.dxScrollable('instance');
 
-                scrollable._strategy._tryGetDevicePixelRatio = () => browserZoom;
+                    scrollable.scrollTo({ top: 200, left: 200 });
 
-                keyboardMock($container).keyDown(key);
+                    const defaultDevicePixelRatio = getWindow().devicePixelRatio;
+                    setWindow({ devicePixelRatio: browserZoom }, true);
 
-                const expectedOffset = { top: 200, left: 200 };
-                const delta = SCROLL_LINE_HEIGHT / browserZoom;
+                    const keyboard = getKeyboardMock($scrollable);
 
-                if(key === 'down') {
-                    expectedOffset.top += delta;
+                    keyboard.keyDown(key);
+
+                    const expectedOffset = { top: 200, left: 200 };
+                    const delta = SCROLL_LINE_HEIGHT / browserZoom;
+
+                    if(key === 'down') {
+                        expectedOffset.top += delta;
+                    }
+                    if(key === 'up') {
+                        expectedOffset.top -= delta;
+                    }
+                    if(key === 'left') {
+                        expectedOffset.left -= delta;
+                    }
+                    if(key === 'right') {
+                        expectedOffset.left += delta;
+                    }
+
+                    assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 1, 'scrollOffset.top');
+                    assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 1, 'scrollOffset.left');
+
+                    setWindow({ devicePixelRatio: defaultDevicePixelRatio }, true);
+                } finally {
+                    setWindow(originalWindow);
                 }
-                if(key === 'up') {
-                    expectedOffset.top -= delta;
-                }
-                if(key === 'left') {
-                    expectedOffset.left -= delta;
-                }
-                if(key === 'right') {
-                    expectedOffset.left += delta;
-                }
-
-                assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 0.01, 'scrollOffset.top');
-                assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 0.01, 'scrollOffset.left');
             });
         });
     });

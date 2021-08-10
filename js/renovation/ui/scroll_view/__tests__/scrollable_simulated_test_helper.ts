@@ -72,6 +72,7 @@ class ScrollableTestHelper {
       onReachBottom: this.actionHandlers.onReachBottom,
       onBounce: this.actionHandlers.onBounce,
       onVisibilityChange: this.actionHandlers.onVisibilityChange,
+      needRenderScrollbars: true,
       ...this.options,
     });
     this.viewModel.scrollableRef = React.createRef() as RefObject<HTMLDivElement>;
