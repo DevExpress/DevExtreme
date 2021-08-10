@@ -640,9 +640,9 @@ const VirtualScrollingRowsViewExtender = (function() {
                 const dataController = this._dataController;
                 dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 
-                if(this.option(NEW_SCROLLING_MODE)/* && !isDefined(dataController._loadViewportParams)*/) {
+                if(this.option(NEW_SCROLLING_MODE)) {
                     const viewportSize = dataController.viewportSize();
-                    const viewportIsNotFilled = viewportSize > dataController.items().length && (isAppendMode(this) || dataController.totalItemsCount() > viewportSize);
+                    const viewportIsNotFilled = viewportSize > dataController.items().length;
                     viewportIsNotFilled && dataController.loadViewport();
                 }
             }
@@ -1127,7 +1127,9 @@ export const virtualScrollingModule = {
                                     this._repaintChangesOnly = undefined;
                                 });
                             } else if(!this._isLoading) {
-                                this.updateItems({ repaintChangesOnly: true });
+                                this.updateItems({
+                                    repaintChangesOnly: true
+                                });
                             }
                         }
                     },
@@ -1222,7 +1224,6 @@ export const virtualScrollingModule = {
                         clearTimeout(that._resizeTimeout);
                         const diff = new Date() - that._lastTime;
                         const updateTimeout = that.option('scrolling.updateTimeout');
-
                         if(that._lastTime && diff < updateTimeout) {
                             result = new Deferred();
                             that._resizeTimeout = setTimeout(function() {
