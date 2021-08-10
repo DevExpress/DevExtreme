@@ -75,7 +75,7 @@ export class SchedulerToolbarProps {
 
   @OneWay() firstDayOfWeek = 0;
 
-  @OneWay() agendaDuration = 1;
+  @OneWay() agendaDuration = 7;
 
   @OneWay() useShortDateFormat = !devices.real().generic || devices.isSimulator();
 
@@ -123,6 +123,8 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   setCurrentView(view: ItemView): void {
+    console.log('CALL', view);
+    
     this.props.onCurrentViewUpdate?.(view.name);
   }
 
@@ -189,10 +191,10 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
       useDropDownViewSwitcher: this.props.useDropDownViewSwitcher,
       selectedView: this.selectedView,
       views: this.views,
-      setCurrentView: this.setCurrentView,
+      setCurrentView: (view) => this.setCurrentView(view),
       showCalendar,
       captionText: this.captionText,
-      updateDateByDirection: this.updateDateByDirection,
+      updateDateByDirection: () => this.updateDateByDirection,
       isPreviousButtonDisabled: this.isPreviousButtonDisabled(),
       isNextButtonDisabled: this.isNextButtonDisabled(),
     };

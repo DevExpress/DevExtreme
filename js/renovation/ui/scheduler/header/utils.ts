@@ -41,9 +41,6 @@ export const formToolbarItem = (
           updateDateByDirection,
           isPreviousButtonDisabled, isNextButtonDisabled,
         );
-      default:
-        console.error(`Unknown default element type: ${defaultElementType}`);
-        break;
     }
   }
 

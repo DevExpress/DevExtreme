@@ -12,9 +12,9 @@ import {
 
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
 
-const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
-const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
-const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
+// const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
+// const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
+// const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
 
 const DIRECTION_LEFT: Direction = -1;
 const DIRECTION_RIGHT: Direction = 1;
