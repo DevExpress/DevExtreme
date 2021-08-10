@@ -60,7 +60,7 @@ export const getCurrentViewConfig = (
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   currentViewProps: Partial<ViewProps>,
   schedulerProps: SchedulerProps,
-): Partial<WorkSpaceProps> => {
+): WorkSpaceProps => {
   const { scrolling: schedulerScrolling } = schedulerProps;
 
   const {
@@ -133,5 +133,5 @@ export const getCurrentViewConfig = (
     hoursInterval: result.cellDuration / 60,
     groups: [], // TODO
     selectedCellData: [], // TODO
-  } as Partial<WorkSpaceProps>;
+  } as WorkSpaceProps;
 };

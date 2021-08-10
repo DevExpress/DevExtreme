@@ -42,7 +42,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return getCurrentViewOptions(currentView, views);
   }
 
-  get currentViewConfig(): Partial<WorkSpaceProps> {
+  get currentViewConfig(): WorkSpaceProps {
     return getCurrentViewConfig(this.currentViewProps, this.props);
   }
 
