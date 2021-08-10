@@ -1,7 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 
 function round(value) {
-    return Math.round(value * 100000) / 100000;
+    return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
 function calculateTextHeight(doc, text) {
