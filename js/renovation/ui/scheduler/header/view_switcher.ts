@@ -20,7 +20,7 @@ export const getViewSwitcher = (
     stylingMode: 'contained',
     onItemClick: (e) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      setCurrentView(e.itemData.view);
+      setCurrentView(e.itemData);
     },
   },
   ...item,
@@ -46,7 +46,7 @@ export const getDropDownViewSwitcher = (
     },
     onItemClick: (e) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      setCurrentView(e.itemData.view);
+      setCurrentView(e.itemData);
     },
   },
   ...item,

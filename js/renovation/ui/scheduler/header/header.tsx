@@ -4,7 +4,6 @@ import {
   JSXComponent,
   OneWay,
   Event,
-  Effect,
 } from '@devextreme-generator/declarations';
 
 import devices from '../../../../core/devices';
@@ -40,7 +39,6 @@ export function viewFunction(viewModel: SchedulerToolbar): JSX.Element {
   return (
     <Toolbar
       items={viewModel.items}
-      //elementAttr={{class: viewModel.class}}
     />
   );
 }
@@ -92,7 +90,7 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   get step(): string {
-      return getStep(this.props.currentView) as string;
+    return getStep(this.props.currentView) as string;
   }
 
   get caption(): DateNavigatorTextInfo {
@@ -116,7 +114,7 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   get views(): ItemView[] {
-    return formatViews(this.props.views) as ItemView[];
+    return formatViews(this.props.views);
   }
 
   get selectedView(): string {
@@ -124,13 +122,13 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   setCurrentView(view: ItemView): void {
-    if(view.name !== this.props.currentView) {
+    if (view.name !== this.props.currentView) {
       this.props.onCurrentViewUpdate?.(view.name);
     }
   }
 
   setCurrentDate(date: Date): void {
-    if(date.getTime() !== this.props.currentDate.getTime()) {
+    if (date.getTime() !== this.props.currentDate.getTime()) {
       this.props.onCurrentDateUpdate?.(new Date(date));
     }
   }
