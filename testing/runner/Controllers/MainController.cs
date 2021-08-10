@@ -104,23 +104,6 @@ namespace Runner.Controllers
         }
 
         [HttpPost]
-        public void NotifyTestStarted(string name) {
-            lock (IO_SYNC) {
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"       [ run] {name}");
-                Console.ResetColor();
-            }
-        }
-        [HttpPost]
-        public void NotifyTestCompleted(string name, bool passed) {
-            lock (IO_SYNC) {
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"       [{(passed ? "  ok" : "fail")}] {name}");
-                Console.ResetColor();
-            }
-        }
-        
-        [HttpPost]
         public void NotifySuiteFinalized(string name, bool passed, int runtime)
         {
             Response.ContentType = "text/plain";

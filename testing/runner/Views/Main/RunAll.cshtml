@@ -351,8 +351,6 @@
             }
         };
 
-        $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestStarted"))), { name: getTestCaseName(testSuite, qunitData) });
-
         var indicateTestStatusInTitle = function(failed) {
             document.title = [
                     (failed ? "\u2716" : "\u2714"),
@@ -441,8 +439,6 @@
             }
         };
 
-        $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestCompleted"))), { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
-
         window.RUNNER_ON_DONE = function(worker, qunitData) {
             var suite = suitesInProgress[indexFromWorkerName(worker)],
                 passed = !qunitData.failed;
@@ -483,10 +479,12 @@
         }
 
         function notifySuiteFinalized(name, passed, runtime) {
-             $.post(@Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))), { name: name, passed: passed, runtime: runtime });
+            var url = @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized")));
+            $.post(url, { name: name, passed: passed, runtime: runtime });
         }
         function notifyIsAlive(){
-            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))));
+            var url = @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive")));
+            $.post(url);
         }
 
         function roundTime(time) {
