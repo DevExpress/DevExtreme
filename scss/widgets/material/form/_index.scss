@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/form";
+@use "../textEditor/sizes" as *;
 
 // adduse
 @use "../scrollable";
@@ -91,11 +92,17 @@
 
 .dx-field-item-label-text {
   color: $form-field-item-color;
+  padding-left: $material-filled-texteditor-input-horizontal-padding;
+
+  .dx-rtl & {
+    padding-left: 0;
+    padding-right: $material-filled-texteditor-input-horizontal-padding;
+  }
 }
 
 .dx-field-item-help-text {
   color: $form-field-item-color;
-  padding: 6px 0 2px;
+  padding: 6px $material-filled-texteditor-input-horizontal-padding 2px;
   font-style: normal;
 }
 
