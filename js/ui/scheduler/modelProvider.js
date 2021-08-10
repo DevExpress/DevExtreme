@@ -1,7 +1,7 @@
 import { getGroupCount } from './resources/utils';
 import { getResourceManager } from './instanceFactory';
 import { isObject } from '../../core/utils/type';
-import { getCurrentView } from 'js/renovation/ui/scheduler/model/views';
+import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 
 const VIEW_RENDERING_CONFIG = {
     day: {
