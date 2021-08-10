@@ -58,6 +58,29 @@ function getScrollableBoundary($scrollable) {
     };
 }
 
+function getMaxScrollOffset(scrollableElement, isVertical) {
+    const scrollSize = isVertical ? scrollableElement.scrollHeight : scrollableElement.scrollWidth;
+    const clientSize = isVertical ? scrollableElement.clientHeight : scrollableElement.clientWidth;
+
+    return scrollSize - clientSize;
+}
+
+function checkScrollPositionBoundary(event, $scrollable, scrollableBoundary, isVertical) {
+    const scrollPosition = isVertical ? $scrollable.scrollTop() : $scrollable.scrollLeft();
+    const dragElementPosition = isVertical ? event.pageY : event.pageX;
+    const maxScrollOffset = getMaxScrollOffset($scrollable.get(0), isVertical);
+    const start = isVertical ? scrollableBoundary.top : scrollableBoundary.left;
+    const end = isVertical ? scrollableBoundary.bottom : scrollableBoundary.right;
+
+    if(start > dragElementPosition && scrollPosition === 0) {
+        return true;
+    } else if(end < dragElementPosition && scrollPosition === maxScrollOffset) {
+        return true;
+    }
+
+    return false;
+}
+
 const Sortable = Draggable.inherit({
     _init: function() {
         this.callBase();
@@ -251,14 +274,25 @@ const Sortable = Draggable.inherit({
         }
     },
 
-    _isInsideTargetDraggable: function(event) {
-        const $targetDraggable = this._getTargetDraggable().$element();
+    _allowDrop: function(event) {
+        const targetDraggable = this._getTargetDraggable();
+        const $targetDraggable = targetDraggable.$element();
         const $scrollable = this._getScrollable($targetDraggable);
 
         if($scrollable) {
             const { left, right, top, bottom } = getScrollableBoundary($scrollable);
-            const validX = left <= event.pageX && event.pageX <= right;
-            const validY = top <= event.pageY && event.pageY <= bottom;
+            let validX = left <= event.pageX && event.pageX <= right;
+            let validY = top <= event.pageY && event.pageY <= bottom;
+
+            if(targetDraggable === this) {
+                if(!validX) {
+                    validX = checkScrollPositionBoundary(event, $scrollable, { left, right }, false);
+                }
+                if(!validY) {
+                    validY = checkScrollPositionBoundary(event, $scrollable, { top, bottom }, true);
+                }
+            }
+
             return validY && validX;
         }
 
@@ -270,9 +304,9 @@ const Sortable = Draggable.inherit({
         const sourceDraggable = this._getSourceDraggable();
         const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
         const toIndex = this.option('toIndex');
-        const isInsideTargetDraggable = this._isInsideTargetDraggable(sourceEvent.event);
+        const allowDrop = this._allowDrop(sourceEvent.event);
 
-        if(toIndex !== null && toIndex >= 0 && isInsideTargetDraggable) {
+        if(toIndex !== null && toIndex >= 0 && allowDrop) {
             let cancelAdd;
             let cancelRemove;
 
