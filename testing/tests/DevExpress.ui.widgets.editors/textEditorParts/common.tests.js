@@ -459,7 +459,7 @@ QUnit.module('general', {}, () => {
             stylingMode: 'someWrongOptionValue'
         });
 
-        assert.ok($textEditor.hasClass('dx-editor-underlined'));
+        assert.ok($textEditor.hasClass('dx-editor-filled'));
 
         themes.isMaterial = realIsMaterial;
     });
