@@ -203,11 +203,6 @@ export class AppointmentPopup {
             appointment.endDate = appointment.calculateEndDate('toAppointment');
         }
 
-        // TODO
-        // if(appointment.recurrenceRule === undefined) {
-        //     appointment.recurrenceRule = '';
-        // }
-
         const formData = appointment.source();
 
         this.form.readOnly = this._isReadOnly(formData);
