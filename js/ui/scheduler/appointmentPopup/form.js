@@ -92,7 +92,8 @@ export class AppointmentForm {
     }
 
     create(dataExprs, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
-        const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
+        const recurrenceEditorVisibility = false;
+        // const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
         const resourceManager = this.scheduler.getResourceManager();
@@ -102,7 +103,7 @@ export class AppointmentForm {
             ...resourceManager.getEditors()
         ];
 
-        changeSize(recurrenceEditorVisibility);
+        // changeSize(recurrenceEditorVisibility);
         const items = [
             {
                 itemType: 'group',
@@ -133,7 +134,7 @@ export class AppointmentForm {
                 lg: 2,
                 xs: 1
             },
-            formData,
+            // formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
             screenByWidth: (width) => {
