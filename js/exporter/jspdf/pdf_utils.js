@@ -1,11 +1,11 @@
 import { isDefined } from '../../core/utils/type';
 
 function round(value) {
-    return Math.round(value * 10000) / 10000;
+    return Math.round(value * 100000) / 100000;
 }
 
 function calculateTextHeight(doc, text) {
-    return round(doc.getTextDimensions(text).h * doc.getLineHeightFactor());
+    return doc.getTextDimensions(text).h * doc.getLineHeightFactor();
 }
 
 function calculateRowHeight(doc, cells) {
