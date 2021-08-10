@@ -523,8 +523,6 @@ const TagBox = SelectBox.inherit({
         eventsEngine.on(this._$tagsContainer, eventName, `.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`, (event) => {
             tagRemoveAction({ event });
         });
-
-        this._renderTypingEvent();
     },
 
     _renderSingleLineScroll: function() {
@@ -556,13 +554,14 @@ const TagBox = SelectBox.inherit({
         }
     },
 
-    _renderTypingEvent: function() {
+    _renderEvents: function() {
+        this.callBase();
+
         const input = this._input();
         const namespace = addNamespace('keydown', this.NAME);
-        eventsEngine.off(input, namespace);
         eventsEngine.on(input, namespace, (e) => {
             const keyName = normalizeKeyName(e);
-            if(!this._isControlKey(keyName) && this._isEditable()) {
+            if(!this._isControlKey(keyName) && this._isEditable() && this._$focusedTag) {
                 this._clearTagFocus();
             }
         });
@@ -1524,7 +1523,7 @@ const TagBox = SelectBox.inherit({
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
-                !args.value && this._renderTypingEvent();
+                !args.value && this._refreshEvents();
                 break;
             case 'value':
                 this._valuesToUpdate = args?.value;
