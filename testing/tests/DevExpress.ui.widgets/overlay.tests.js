@@ -2643,7 +2643,9 @@ testModule('target', {
 
         const $wrapper = overlay.$wrapper();
 
-        assert.strictEqual($wrapper.css('transform'), 'matrix(1, 0, 0, 1, 100, 21)');
+        const transform = $wrapper.css('transform');
+        const translateX = transform.split(',')[4].trim();
+        assert.strictEqual(translateX, '100', 'target left position is passed to wrapper translateX');
     });
 });
 
