@@ -26,7 +26,7 @@ import {
 } from '../events/index';
 
 import {
-    dxListItem,
+    Item as dxListItem,
 } from './list';
 
 import {

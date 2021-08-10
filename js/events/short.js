@@ -105,15 +105,6 @@ export const click = {
     }
 };
 
-export const dxScrollInit = {
-    on: ($el, handler, eventData, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxscrollinit', namespace), eventData, handler);
-    },
-    off: ($el, handler, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxscrollinit', namespace), handler);
-    }
-};
-
 let index = 0;
 const keyboardProcessors = {};
 const generateListenerId = () => `keyboardProcessorId${index++}`;

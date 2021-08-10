@@ -584,8 +584,9 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
      * @docid
      * @public
+     * @type Array<dxTreeViewItem>
      */
-    items?: Array<dxTreeViewItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default undefined
