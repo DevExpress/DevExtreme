@@ -647,6 +647,7 @@ export default class dxFunnel extends BaseWidget {
 }
 
 /**
+ * @public
  * @namespace DevExpress.viz.dxFunnel
  */
 export type Item = dxFunnelItem;
