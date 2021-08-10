@@ -12,9 +12,10 @@ const VIEW_TYPES = [
 
 export const getCurrentView = (
   currentView: string | ViewType,
-  views: (ViewType | ViewProps)[],
-): ViewType | ViewProps => {
-  let currentViewOptions: ViewType | ViewProps | undefined = undefined;
+  // https://github.com/DevExpress/devextreme-renovation/issues/754
+  views: (ViewType | Partial<ViewProps>)[],
+): ViewType | Partial<ViewProps> => {
+  let currentViewOptions: ViewType | Partial<ViewProps> | undefined = undefined;
 
   currentViewOptions = views.find((view): boolean => {
     const names = isObject(view)
@@ -41,8 +42,9 @@ export const getCurrentView = (
 
 export const getCurrentViewOptions = (
   currentView: string | ViewType,
-  views: (ViewType | ViewProps)[],
-): ViewProps => {
+  // https://github.com/DevExpress/devextreme-renovation/issues/754
+  views: (ViewType | Partial<ViewProps>)[],
+): Partial<ViewProps> => {
   const currentViewOptions = getCurrentView(currentView, views);
 
   return isString(currentViewOptions)
@@ -55,7 +57,8 @@ function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | un
 }
 
 export const getCurrentViewConfig = (
-  currentViewProps: ViewProps,
+  // https://github.com/DevExpress/devextreme-renovation/issues/754
+  currentViewProps: Partial<ViewProps>,
   schedulerProps: SchedulerProps,
 ): Partial<WorkSpaceProps> => {
   const { scrolling: schedulerScrolling } = schedulerProps;

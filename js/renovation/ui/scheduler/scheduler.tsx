@@ -35,7 +35,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState()
   instance!: dxScheduler;
 
-  get currentViewProps(): ViewProps {
+  // https://github.com/DevExpress/devextreme-renovation/issues/754
+  get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
 
     return getCurrentViewOptions(currentView, views);
