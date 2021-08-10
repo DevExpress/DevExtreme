@@ -100,7 +100,7 @@ export class ScrollViewProps extends ScrollableProps {}
 
 type ScrollViewPropsType =
 Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 'needScrollViewLoadPanel'>
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'activeStateUnit'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
