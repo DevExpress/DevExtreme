@@ -37,10 +37,7 @@ const moduleConfig = {
 function argumentsToString() {
     const items = [];
     for(let i = 0; i < arguments.length; i++) { // Array.from(arguments) is not supported in IE
-        const roundedValue = typeof (arguments[i]) === 'number'
-            ? Math.round(arguments[i] * 10000) / 10000
-            : arguments[i];
-        items.push(roundedValue);
+        items.push(arguments[i]);
     }
     for(let i = items.length - 1; i >= 0; i--) {
         const item = items[i];

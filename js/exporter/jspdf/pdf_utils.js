@@ -1,7 +1,11 @@
 import { isDefined } from '../../core/utils/type';
 
+function round(value) {
+    return Math.round(value * 10000) / 10000;
+}
+
 function calculateTextHeight(doc, text) {
-    return doc.getTextDimensions(text).h * doc.getLineHeightFactor();
+    return round(doc.getTextDimensions(text).h * doc.getLineHeightFactor());
 }
 
 function calculateRowHeight(doc, cells) {
@@ -18,4 +22,20 @@ function calculateRowHeight(doc, cells) {
     return rowHeight;
 }
 
-export { calculateRowHeight };
+function drawLine(doc, startX, startY, endX, endY) {
+    doc.line(round(startX), round(startY), round(endX), round(endY));
+}
+
+function drawRect(doc, x, y, width, height, style) {
+    if(isDefined(style)) {
+        doc.rect(round(x), round(y), round(width), round(height), style);
+    } else {
+        doc.rect(round(x), round(y), round(width), round(height));
+    }
+}
+
+function drawText(doc, text, x, y, options) {
+    doc.text(text, round(x), round(y), options);
+}
+
+export { calculateRowHeight, drawLine, drawRect, drawText };
