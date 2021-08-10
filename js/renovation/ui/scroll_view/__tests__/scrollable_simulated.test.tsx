@@ -1041,7 +1041,7 @@ describe('Simulated > Behavior', () => {
       expect(helper.viewModel.tabWasPressed).toEqual(true);
 
       helper.viewModel.tabWasPressed = false;
-      detach();
+      detach?.();
 
       emit('keydown', { key: 'tab' } as any);
       expect(helper.viewModel.tabWasPressed).toEqual(false);

@@ -10,7 +10,16 @@ import {
   ForwardRef,
 } from '@devextreme-generator/declarations';
 import '../../../events/gesture/emitter.gesture.scroll';
-import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import {
+  subscribeToScrollEvent,
+  subscribeToDXScrollStartEvent,
+  subscribeToDXScrollMoveEvent,
+  subscribeToDXScrollEndEvent,
+  subscribeToDXScrollStopEvent,
+  subscribeToDXScrollCancelEvent,
+  subscribeToKeyDownEvent,
+  subscribeToScrollInitEvent,
+} from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 
 import { AnimatedScrollbar } from './animated_scrollbar';
@@ -20,7 +29,9 @@ import { getBoundaryProps } from './utils/get_boundary_props';
 import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
-import { isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed } from '../../../events/utils/index';
+import {
+  isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
+} from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
@@ -64,15 +75,6 @@ import { getElementComputedStyle } from './utils/get_element_computed_style';
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
 
-import {
-  dxScrollInit,
-  dxScrollStart,
-  dxScrollMove,
-  dxScrollEnd,
-  dxScrollStop,
-  dxScrollCancel,
-  keyDown,
-} from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { convertToLocation } from './utils/convert_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
@@ -461,68 +463,71 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect()
-  keyboardEffect(): DisposeEffectReturn {
-    keyDown.on(this.containerElement,
+  keyboardEffect(): EffectReturn {
+    return subscribeToKeyDownEvent(
+      this.containerElement,
       (event) => {
         if (normalizeKeyName(event) === KEY_CODES.TAB) {
           this.tabWasPressed = true;
         }
-      });
-
-    return (): void => keyDown.off(this.containerElement);
+      },
+    );
   }
 
   @Effect()
-  initEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollInit.on(this.wrapperRef.current,
+  initEffect(): EffectReturn {
+    return subscribeToScrollInitEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleInit(event);
-      }, this.getInitEventData(), { namespace });
-
-    return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
+      },
+      this.getInitEventData(),
+    );
   }
 
   @Effect()
-  startEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollStart.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => { this.handleStart(event); }, { namespace });
-
-    return (): void => dxScrollStart.off(this.wrapperRef.current, { namespace });
+  startEffect(): EffectReturn {
+    return subscribeToDXScrollStartEvent(
+      this.wrapperRef.current,
+      (event: DxMouseEvent) => {
+        this.handleStart(event);
+      },
+    );
   }
 
   @Effect()
-  moveEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollMove.on(this.wrapperRef.current,
+  moveEffect(): EffectReturn {
+    return subscribeToDXScrollMoveEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleMove(event);
-      }, { namespace });
-
-    return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
+      },
+    );
   }
 
   @Effect()
-  endEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollEnd.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => { this.handleEnd(event); }, { namespace });
-
-    return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
+  endEffect(): EffectReturn {
+    return subscribeToDXScrollEndEvent(
+      this.wrapperRef.current,
+      (event: DxMouseEvent) => {
+        this.handleEnd(event);
+      },
+    );
   }
 
   @Effect()
-  stopEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
+  stopEffect(): EffectReturn {
+    return subscribeToDXScrollStopEvent(this.wrapperRef.current, () => { this.handleStop(); });
+  }
 
-    dxScrollStop.on(this.wrapperRef.current, () => { this.handleStop(); }, { namespace });
-
-    return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
+  @Effect()
+  cancelEffect(): EffectReturn {
+    return subscribeToDXScrollCancelEvent(
+      this.wrapperRef.current,
+      (event: DxMouseEvent) => {
+        this.handleCancel(event);
+      },
+    );
   }
 
   @Method()
@@ -553,16 +558,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return isDxMouseWheelEvent(event)
       ? this.validateWheel(event as DxMouseWheelEvent)
       : this.validateMove(event as DxMouseEvent);
-  }
-
-  @Effect()
-  cancelEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollCancel.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => { this.handleCancel(event); }, { namespace });
-
-    return (): void => dxScrollCancel.off(this.wrapperRef.current, { namespace });
   }
 
   @Effect() effectDisabledState(): void {

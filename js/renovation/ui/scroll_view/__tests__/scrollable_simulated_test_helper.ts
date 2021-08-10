@@ -30,7 +30,6 @@ const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
 
 interface Mock extends jest.Mock {}
-
 class ScrollableTestHelper {
   options: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
 
@@ -62,7 +61,6 @@ class ScrollableTestHelper {
 
   constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
-    this.options.direction = this.options.direction ?? 'vertical';
     this.actionHandlers = this.getActionHandlers(this.options);
 
     this.viewModel = new Scrollable({
