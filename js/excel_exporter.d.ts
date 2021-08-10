@@ -1,19 +1,25 @@
 import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
-import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
+import dxDataGrid, { Column } from './ui/data_grid';
+import dxPivotGrid, { Cell } from './ui/pivot_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**
- * @docid
+ * @public
  * @namespace DevExpress.excelExporter
- * @type object
+ */
+export type DataGridCell = ExcelDataGridCell;
+
+/**
+ * @namespace DevExpress.excelExporter
+ * @deprecated Use DataGridCell instead
  */
 export interface ExcelDataGridCell {
     /**
      * @docid
      * @public
+     * @type dxDataGridColumn
      */
-    column?: dxDataGridColumn;
+    column?: Column;
     /**
      * @docid
      * @public
@@ -56,11 +62,16 @@ export interface ExcelDataGridCell {
 }
 
 /**
- * @docid
+ * @public
  * @namespace DevExpress.excelExporter
- * @inherits dxPivotGridPivotGridCell
  */
-export interface ExcelPivotGridCell extends dxPivotGridPivotGridCell {
+export type PivotGridCell = ExcelPivotGridCell;
+
+/**
+ * @namespace DevExpress.excelExporter
+ * @deprecated Use PivotGridCell instead
+ */
+export interface ExcelPivotGridCell extends Cell {
     /**
      * @docid
      * @public
@@ -176,7 +187,7 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: ExcelDataGridCell; excelCell?: any }) => void);
+    customizeCell?: ((options: { gridCell?: DataGridCell; excelCell?: any }) => void);
 }
 
 /**
@@ -210,7 +221,7 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell; excelCell?: any }) => void);
+    customizeCell?: ((options: { pivotCell?: PivotGridCell; excelCell?: any }) => void);
 }
 
 /**

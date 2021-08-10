@@ -68,10 +68,11 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true &for(desktop)
@@ -92,10 +93,11 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     initialItemWidth?: number;
     /**
      * @docid
+     * @type Array<string | dxGalleryItem | any>
      * @fires dxGalleryOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxGalleryItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -187,9 +189,13 @@ export default class dxGallery extends CollectionWidget<dxGalleryOptions> {
 }
 
 /**
- * @docid
- * @type object
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxGallery
+ */
+export type Item = dxGalleryItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxGalleryItem extends CollectionWidgetItem {

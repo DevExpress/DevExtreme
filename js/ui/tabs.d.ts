@@ -52,10 +52,11 @@ export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
     /**
      * @docid
+     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true &for(desktop)
@@ -70,10 +71,11 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<string | dxTabsItem | any>
      * @fires dxTabsOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxTabsItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -124,9 +126,13 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
 export default class dxTabs<TProperties = Properties> extends CollectionWidget<TProperties> { }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTabs
+ */
+export type Item = dxTabsItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxTabsItem extends CollectionWidgetItem {

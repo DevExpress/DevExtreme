@@ -1,4 +1,4 @@
-import { getAugmentedLocation } from '../utils/get_augmented_location';
+import { getAugmentedLocation } from '../get_augmented_location';
 
 describe('Ensure location', () => {
   it('should convert number type to Location type', () => {

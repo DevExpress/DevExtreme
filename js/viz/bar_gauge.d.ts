@@ -61,9 +61,13 @@ export interface BarGaugeBarInfo {
 }
 
 /**
- * @docid
- * @inherits BaseLegendItem
- * @type object
+ * @public
+ * @namespace DevExpress.viz.dxBarGauge
+ */
+export type LegendItem = BarGaugeLegendItem;
+
+/**
+ * @deprecated Use LegendItem instead
  * @namespace DevExpress.viz
  */
 export interface BarGaugeLegendItem extends BaseLegendItem {
@@ -311,7 +315,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @type_function_return Array<BarGaugeLegendItem>
      * @public
      */
-    customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>);
+    customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxBarGaugeOptions.legend.customizeText
      * @type_function_param1 arg:object
@@ -336,7 +340,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxBarGaugeOptions.legend.visible
      * @default false
