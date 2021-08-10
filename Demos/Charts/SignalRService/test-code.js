@@ -3,7 +3,6 @@
     return testUtils
         .postponeUntilFound('#chart', 100, 3000)
         .then(x => {
-            debugger;
             var chart = dxChart.getInstance(document.querySelector("#chart"));
 
             var dataSourceItems = getData(),
@@ -19,11 +18,11 @@
             }
 
 
-            chart.option("adjustAxesOnZoom", true);            
+            chart.option("adjustAxesOnZoom", true);
             chart.on("done", function () {
                 isReady = true;
             });
-            
+
             chart.option("dataSource", dataSourceItems);
             chart.getArgumentAxis().visualRange({
                 length: "hour",
@@ -31,8 +30,8 @@
             });
             chart.option = function () { };
         })
-        .then(testUtils.postponeUntil(()=>isReady, 100, 30000))
-        .then(testUtils.postpone(500)); 
+        .then(testUtils.postponeUntil(() => isReady, 100, 30000))
+        .then(testUtils.postpone(500));
 });
 
 function getData() {
