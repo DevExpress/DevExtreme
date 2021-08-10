@@ -561,7 +561,7 @@ const TagBox = SelectBox.inherit({
         const namespace = addNamespace('keydown', this.NAME);
         eventsEngine.on(input, namespace, (e) => {
             const keyName = normalizeKeyName(e);
-            if(!this._isControlKey(keyName) && this._isEditable() && this._$focusedTag) {
+            if(!this._isControlKey(keyName) && this._isEditable()) {
                 this._clearTagFocus();
             }
         });
