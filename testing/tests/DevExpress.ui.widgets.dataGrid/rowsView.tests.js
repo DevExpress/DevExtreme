@@ -5531,7 +5531,7 @@ QUnit.module('Virtual scrolling', {
     beforeEach: function() {
         this.createRowsView = function(items, dataController) {
             const rowsView = createRowsView.apply(this, arguments);
-            const x = new virtualScrollingCore.VirtualScrollController(this, { pageIndex: function() {} });
+            const x = new virtualScrollingCore.VirtualScrollController(this.dataGrid, { pageIndex: function() {} });
             rowsView._dataController._itemSizes = {};
             rowsView._dataController.getVirtualContentSize = x.getVirtualContentSize;
             rowsView._dataController.getContentOffset = x.getContentOffset;
