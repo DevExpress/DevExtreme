@@ -8,7 +8,6 @@ window.onload = function() {
         }],
         showFirstSubmenuMode = ko.observable(showSubmenuModes[1]),
         orientation = ko.observable("horizontal"),
-        submenuDirection = ko.observable("auto"),
         closeOnMouseLeave = ko.observable(false),
         productName = ko.observable(""),
         productPrice = ko.observable(""),
@@ -29,7 +28,6 @@ window.onload = function() {
             hideSubmenuOnMouseLeave: closeOnMouseLeave,
             showFirstSubmenuMode: showFirstSubmenuMode,
             orientation: orientation,
-            submenuDirection: submenuDirection,
         },
         submenuModeOptions: {
             items: showSubmenuModes,
@@ -39,10 +37,6 @@ window.onload = function() {
         orientationOptions: {
             items: ["horizontal", "vertical"],
             value: orientation
-        },
-        submenuDirectionOptions: {
-            items: ["auto", "rightOrBottom", "leftOrTop"],
-            value: submenuDirection
         },
         mouseLeaveOptions: {
             value: closeOnMouseLeave,

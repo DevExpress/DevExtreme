@@ -39,14 +39,6 @@ $(function(){
         }
     });
     
-    $("#submenu-direction").dxSelectBox({
-        items: ["auto", "rightOrBottom", "leftOrTop"],
-        value: "auto",
-        onValueChanged: function(data) {
-            dxMenu.option("submenuDirection", data.value);
-        }
-    });
-    
     $("#mouse-leave").dxCheckBox({
         value: false,
         text: "Hide Submenu on Mouse Leave",

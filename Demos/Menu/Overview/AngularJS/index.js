@@ -11,7 +11,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     $scope.showFirstSubmenuMode = showSubmenuModes[1];
     $scope.orientation = "horizontal";
-    $scope.submenuDirection = "auto";
     $scope.closeOnMouseLeave = false;
 
     $scope.productName = "",
@@ -32,7 +31,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         bindingOptions: {
             showFirstSubmenuMode: "showFirstSubmenuMode",
             orientation: "orientation",
-            submenuDirection: "submenuDirection",
             hideSubmenuOnMouseLeave: "closeOnMouseLeave"
         }
     };
@@ -49,13 +47,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         items: ["horizontal", "vertical"],
         bindingOptions: {
             value: "orientation"
-        }
-    };
-    
-    $scope.submenuDirectionOptions = {
-        items: ["auto", "rightOrBottom", "leftOrTop"],
-        bindingOptions: {
-            value: "submenuDirection"
         }
     };
     

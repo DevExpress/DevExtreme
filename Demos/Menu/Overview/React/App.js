@@ -18,19 +18,17 @@ class App extends React.Component {
     this.state = {
       showFirstSubmenuModes: this.showSubmenuModes[1],
       orientation: 'horizontal',
-      submenuDirection: 'auto',
       hideSubmenuOnMouseLeave: false,
       currentProduct: null
     };
     this.itemClick = this.itemClick.bind(this);
     this.showSubmenuModeChanged = this.showSubmenuModeChanged.bind(this);
     this.orientationChanged = this.orientationChanged.bind(this);
-    this.submenuDirectionChanged = this.submenuDirectionChanged.bind(this);
     this.hideSubmenuOnMouseLeaveChanged = this.hideSubmenuOnMouseLeaveChanged.bind(this);
   }
 
   render() {
-    const { showFirstSubmenuModes, orientation, submenuDirection, hideSubmenuOnMouseLeave, currentProduct } = this.state;
+    const { showFirstSubmenuModes, orientation, hideSubmenuOnMouseLeave, currentProduct } = this.state;
     return (
       <div className="form">
         <div>
@@ -39,7 +37,6 @@ class App extends React.Component {
             displayExpr="name"
             showFirstSubmenuMode={showFirstSubmenuModes}
             orientation={orientation}
-            submenuDirection={submenuDirection}
             hideSubmenuOnMouseLeave={hideSubmenuOnMouseLeave}
             onItemClick={this.itemClick}
           />
@@ -71,14 +68,6 @@ class App extends React.Component {
             />
           </div>
           <div className="option">
-            <div>Submenu Direction</div>
-            <SelectBox
-              items={['auto', 'rightOrBottom', 'leftOrTop']}
-              value={submenuDirection}
-              onValueChanged={this.submenuDirectionChanged}
-            />
-          </div>
-          <div className="option">
             <CheckBox
               text="Hide Submenu on Mouse Leave"
               value={hideSubmenuOnMouseLeave}
@@ -107,12 +96,6 @@ class App extends React.Component {
   orientationChanged(e) {
     this.setState({
       orientation: e.value
-    });
-  }
-
-  submenuDirectionChanged(e) {
-    this.setState({
-      submenuDirection: e.value
     });
   }
 

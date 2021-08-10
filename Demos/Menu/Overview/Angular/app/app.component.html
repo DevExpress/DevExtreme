@@ -7,7 +7,6 @@
             displayExpr="name"
             [showFirstSubmenuMode]="showFirstSubmenuModes"
             orientation="horizontal"
-            submenuDirection="auto"
             [hideSubmenuOnMouseLeave]="false"
             (onItemClick)="itemClick($event)"
         >
@@ -33,13 +32,6 @@
             <dx-select-box
                 [items]="['horizontal', 'vertical']"
                 [(value)]="menu.orientation"
-            ></dx-select-box>
-        </div>
-        <div class="option">
-            <div>Submenu Direction</div>
-            <dx-select-box
-                [items]="['auto', 'rightOrBottom', 'leftOrTop']"
-                [(value)]="menu.submenuDirection"
             ></dx-select-box>
         </div>
         <div class="option">

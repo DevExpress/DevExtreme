@@ -6,7 +6,6 @@
         :data-source="products"
         :show-first-submenu-mode="showFirstSubmenuModes"
         :orientation="orientation"
-        :submenu-direction="submenuDirection"
         :hide-submenu-on-mouse-leave="hideSubmenuOnMouseLeave"
         display-expr="name"
         @item-click="itemClick"
@@ -35,13 +34,6 @@
         <DxSelectBox
           :items="['horizontal', 'vertical']"
           v-model:value="orientation"
-        />
-      </div>
-      <div class="option">
-        <div>Submenu Direction</div>
-        <DxSelectBox
-          :items="['auto', 'rightOrBottom', 'leftOrTop']"
-          v-model:value="submenuDirection"
         />
       </div>
       <div class="option">
@@ -76,7 +68,6 @@ export default {
       showSubmenuModes,
       showFirstSubmenuModes: showSubmenuModes[1],
       orientation: 'horizontal',
-      submenuDirection: 'auto',
       hideSubmenuOnMouseLeave: false,
       currentProduct: null
     };
