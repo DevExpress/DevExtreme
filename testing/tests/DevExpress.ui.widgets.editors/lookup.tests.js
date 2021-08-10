@@ -2293,26 +2293,20 @@ QUnit.module('popup options', {
 
     QUnit.test('Check closeOnTargetScroll option in Material theme', function(assert) {
         const isMaterialStub = sinon.stub(themes, 'isMaterial');
-        const $lookup = $('#lookup');
-
         isMaterialStub.returns(true);
 
         try {
-            const lookup = $lookup
-                .dxLookup({
-                    dataSource: ['blue', 'orange', 'lime', 'purple'],
-                    value: 'orange'
-                })
+            const lookup = $('#lookup')
+                .dxLookup({ deferRendering: false })
                 .dxLookup('instance');
 
-            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (without centering)');
+            assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'is true by default');
 
-            lookup.option('dropDownCentered', true);
-
-            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (with centering)');
+            lookup.open();
+            this.clock.tick();
+            assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'still true after opening');
 
         } finally {
-            $lookup.dxLookup('instance').dispose();
             isMaterialStub.restore();
         }
     });
@@ -3247,9 +3241,11 @@ if(devices.real().deviceType === 'desktop') {
 QUnit.module('default options', {
     beforeEach: function() {
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('Check default popupWidth, popupHeight, position.of for Material theme', function(assert) {

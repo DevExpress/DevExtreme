@@ -13,7 +13,7 @@ import {
 
 export function convertToLocation(
   location: number | Partial<{ x: number; y: number; top: number; left: number }>,
-  direction?: ScrollableDirection,
+  direction: ScrollableDirection,
 ): Partial<ScrollOffset> {
   if (isPlainObject(location)) {
     const left = ensureDefined(location.left, location.x);

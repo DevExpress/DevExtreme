@@ -83,10 +83,11 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     adaptivityEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default false
@@ -95,9 +96,10 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     hideSubmenuOnMouseLeave?: boolean;
     /**
      * @docid
+     * @type Array<dxMenuItem>
      * @public
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default null
@@ -262,17 +264,22 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 }
 
 /**
- * @docid
- * @inherits dxMenuBaseItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxMenu
+ */
+export type Item = dxMenuItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @type Array<dxMenuItem>
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<Item>;
 }
 
 /** @public */

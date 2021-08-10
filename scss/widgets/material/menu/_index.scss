@@ -11,7 +11,7 @@
 @use "../../base/menu";
 
 
-$material-menu-font-size: 13px;
+$material-menu-font-size: $material-base-font-size;
 
 .dx-context-menu-container-border {
   background-color: transparent;
@@ -29,7 +29,7 @@ $material-menu-font-size: 13px;
     border-radius: $base-border-radius;
 
     .dx-menu-item-content {
-      padding: 7px $material-menu-horizontal-padding 8px;
+      padding: $material-menu-vertical-padding $material-menu-horizontal-padding;
 
       .dx-menu-item-popout-container {
         width: 0;
@@ -39,7 +39,7 @@ $material-menu-font-size: 13px;
     &.dx-menu-item-has-text {
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
+          margin-right: $material-menu-horizontal-padding;
         }
       }
     }
