@@ -368,7 +368,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type object
      * @public
      */
-     sorting?: Sorting;
+     sorting?: dxGanttSorting;
     /**
      * @docid
      * @default null
@@ -1223,7 +1223,7 @@ export interface dxGanttStripLine {
  * @type object
  * @namespace DevExpress.ui
  */
-export interface Sorting {
+export interface dxGanttSorting {
     /**
      * @docid
      * @default "Sort Ascending"
