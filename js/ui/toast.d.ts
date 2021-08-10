@@ -1,13 +1,13 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
@@ -15,12 +15,12 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 /** @public */

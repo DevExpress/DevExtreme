@@ -1,26 +1,25 @@
 import {
     UserDefinedElement,
-    DxElement
 } from '../core/element';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 /** @public */

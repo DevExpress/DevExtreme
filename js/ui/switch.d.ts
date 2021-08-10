@@ -1,17 +1,17 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 /** @public */

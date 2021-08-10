@@ -1,6 +1,6 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
@@ -9,37 +9,37 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
 import {
-    Column
+    Column,
 } from './tree_list';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 import {
-    Item as dxToolbarItem
+    Item as dxToolbarItem,
 } from './toolbar';
 
 import {
-    Item as dxContextMenuItem
+    Item as dxContextMenuItem,
 } from './context_menu';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 /** @public */
@@ -53,38 +53,38 @@ export type ContextMenuPreparingEvent = Cancelable & {
     readonly targetKey?: any;
     readonly targetType?: string;
     readonly data?: any;
-    readonly items?: Array<any>
-}
+    readonly items?: Array<any>;
+};
 
 /** @public */
 export type CustomCommandEvent = {
     readonly component?: dxGantt;
     readonly element?: DxElement;
     readonly name: string;
-}
+};
 
 /** @public */
 export type DependencyDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type DependencyDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type DependencyInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type DependencyInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxGantt>;
@@ -99,76 +99,77 @@ export type OptionChangedEvent = EventInfo<dxGantt> & ChangedOptionInfo;
 export type ResourceAssignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceAssigningEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type ResourceDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type ResourceUnassignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
+// eslint-disable-next-line spellcheck/spell-checker
 export type ResourceUnassigningEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxGantt> & {
     readonly selectedRowKey?: any;
-}
+};
 
 /** @public */
 export type TaskClickEvent = NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
-}
+};
 
 /** @public */
 export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
-}
+};
 
 /** @public */
 export type TaskDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
@@ -176,43 +177,43 @@ export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly key: any;
     readonly readOnlyFields?: Array<string>;
     readonly hiddenFields?: Array<string>;
-}
+};
 
 /** @public */
 export type ResourceManagerDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: Array<any>;
-}
+};
 
 /** @public */
 export type TaskInsertedEvent = EventInfo<dxGantt> & {
     readonly value?: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type TaskMovingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskUpdatedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
-    readonly key: any
-}
+    readonly key: any;
+};
 
 /** @public */
 export type TaskContentTemplateData = {
@@ -221,20 +222,20 @@ export type TaskContentTemplateData = {
     readonly taskData: any;
     readonly taskHTML: any;
     readonly taskPosition: any;
-    readonly taskResources:  Array<any>;
+    readonly taskResources: Array<any>;
     readonly taskSize: any;
-}
+};
 
 /** @public */
 export type ProgressTooltipTemplateData = {
     readonly progress: number;
-}
+};
 
 /** @public */
 export type TimeTooltipTemplateData = {
     readonly start: Date;
     readonly end: Date;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -264,27 +265,27 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "predecessorId"
        */
-      predecessorIdExpr?: string | Function,
+      predecessorIdExpr?: string | Function;
       /**
        * @docid
        * @default "successorId"
        */
-      successorIdExpr?: string | Function,
+      successorIdExpr?: string | Function;
       /**
        * @docid
        * @default "type"
        */
-      typeExpr?: string | Function
+      typeExpr?: string | Function;
     };
     /**
      * @docid
@@ -295,52 +296,52 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default true
        */
-      allowDependencyAdding?: boolean,
+      allowDependencyAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowDependencyDeleting?: boolean,
+      allowDependencyDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceAdding?: boolean,
+      allowResourceAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceDeleting?: boolean,
+      allowResourceDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceUpdating?: boolean,
+      allowResourceUpdating?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskAdding?: boolean,
+      allowTaskAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskDeleting?: boolean,
+      allowTaskDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskResourceUpdating?: boolean,
+      allowTaskResourceUpdating?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskUpdating?: boolean,
+      allowTaskUpdating?: boolean;
       /**
        * @docid
        * @default false
        */
-      enabled?: boolean
+      enabled?: boolean;
     };
     /**
      * @docid
@@ -351,17 +352,17 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default false
        */
-      validateDependencies?: boolean,
+      validateDependencies?: boolean;
       /**
        * @docid
        * @default false
        */
-      autoUpdateParentTasks?: boolean,
+      autoUpdateParentTasks?: boolean;
       /**
        * @docid
        * @default false
        */
-       enablePredecessorGap?: boolean
+       enablePredecessorGap?: boolean;
     };
     /**
      * @docid
@@ -671,6 +672,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void);
     /**
      * @docid
@@ -724,22 +726,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "resourceId"
        */
-      resourceIdExpr?: string | Function,
+      resourceIdExpr?: string | Function;
       /**
        * @docid
        * @default "taskId"
        */
-      taskIdExpr?: string | Function
+      taskIdExpr?: string | Function;
     };
     /**
      * @docid
@@ -751,22 +753,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function,
+      colorExpr?: string | Function;
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "text"
        */
-      textExpr?: string | Function
+      textExpr?: string | Function;
     };
     /**
      * @docid
@@ -823,42 +825,42 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function,
+      colorExpr?: string | Function;
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "end"
        */
-      endExpr?: string | Function,
+      endExpr?: string | Function;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "parentId"
        */
-      parentIdExpr?: string | Function,
+      parentIdExpr?: string | Function;
       /**
        * @docid
        * @default "progress"
        */
-      progressExpr?: string | Function,
+      progressExpr?: string | Function;
       /**
        * @docid
        * @default "start"
        */
-      startExpr?: string | Function,
+      startExpr?: string | Function;
       /**
        * @docid
        * @default "title"
        */
-      titleExpr?: string | Function
+      titleExpr?: string | Function;
     };
     /**
      * @docid
@@ -1011,7 +1013,7 @@ export default class dxGantt extends Widget {
      * @param2 taskKeys?:Array<object>
      * @public
      */
-    insertResource(data: any,  taskKeys?: Array<any>): void;
+    insertResource(data: any, taskKeys?: Array<any>): void;
     /**
      * @docid
      * @publicName deleteResource(key)
@@ -1034,6 +1036,7 @@ export default class dxGantt extends Widget {
      * @param2 taskKey:object
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     unassignResourceFromTask(resourceKey: any, taskKey: any): void;
     /**
      * @docid
@@ -1085,7 +1088,7 @@ export default class dxGantt extends Widget {
      */
     scrollToDate(date: Date | Number | string): void;
     /**
-     * @docid 
+     * @docid
      * @publicName exportToPdf(options)
      * @param1 options:object
      * @return Promise<any>
@@ -1125,7 +1128,7 @@ export interface dxGanttContextMenu {
      * @default true
      * @public
      */
-    enabled?: boolean
+    enabled?: boolean;
     /**
      * @docid
      * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>

@@ -1,13 +1,13 @@
 import {
-    UserDefinedElementsArray
+    UserDefinedElementsArray,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    animationConfig
+    animationConfig,
 } from './fx';
 
 /**

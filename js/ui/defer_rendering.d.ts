@@ -1,20 +1,20 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -52,14 +52,14 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @action
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
+    onRendered?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
     /**
      * @docid
      * @default null
      * @action
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
+    onShown?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
     /**
      * @docid
      * @type DxPromise|bool

@@ -1,5 +1,5 @@
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 /**
