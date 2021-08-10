@@ -279,6 +279,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() isHovered = false;
 
+  @InternalState() canRiseScrollAction = false;
+
   @InternalState() scrollableOffsetLeft = 0;
 
   @InternalState() scrollableOffsetTop = 0;
@@ -459,6 +461,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect() scrollEffect(): EffectReturn {
     return subscribeToScrollEvent(this.containerElement, () => { this.handleScroll(); });
+  }
+
+  // run always: effect doesn't rise always after change state canRiseScrollAction in QUnit tests
+  @Effect({ run: 'always' }) riseScroll(): void {
+    if (this.canRiseScrollAction) {
+      this.props.onScroll?.(this.getEventArgs());
+      this.canRiseScrollAction = false;
+    }
   }
 
   @Effect()
@@ -642,7 +652,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   handleScroll(): void {
     this.handleTabKey();
-    this.props.onScroll?.(this.getEventArgs());
+    this.canRiseScrollAction = true;
   }
 
   startLoading(): void {

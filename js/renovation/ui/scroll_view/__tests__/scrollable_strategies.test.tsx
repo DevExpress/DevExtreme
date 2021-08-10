@@ -421,10 +421,14 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
                         helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
+                        helper.viewModel.canRiseScrollAction = false;
                         (helper.viewModel as any).handlePocketState = jest.fn();
 
                         helper.viewModel.scrollEffect();
                         emit('scroll');
+                        expect(helper.viewModel.canRiseScrollAction).toEqual(true);
+
+                        helper.viewModel.riseScroll();
 
                         const expectedArgs = expected;
                         expectedArgs.event = { ...defaultEvent };
@@ -439,6 +443,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
                         expect(onScrollHandler).toBeCalledTimes(1);
                         expect(onScrollHandler).toBeCalledWith(expectedArgs);
+                        expect(helper.viewModel.canRiseScrollAction).toEqual(false);
                       });
                     });
                   });
@@ -455,7 +460,32 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
           scrollable.scrollEffect();
           emit('scroll');
 
-          expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
+          expect(scrollable.riseScroll.bind(scrollable)).not.toThrow();
+        });
+
+        it('should not raise scrollAction when canRiseScrollAction is false', () => {
+          const onScrollHandler = jest.fn();
+          const scrollable = new Scrollable({ onScroll: onScrollHandler });
+          scrollable.canRiseScrollAction = false;
+
+          scrollable.riseScroll();
+
+          expect(onScrollHandler).toBeCalledTimes(0);
+          scrollable.canRiseScrollAction = false;
+        });
+
+        it('should raise scrollAction when canRiseScrollAction is true', () => {
+          const onScrollHandler = jest.fn();
+          const scrollable = new Scrollable({ onScroll: onScrollHandler });
+
+          scrollable.canRiseScrollAction = true;
+          scrollable.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
+
+          scrollable.riseScroll();
+
+          expect(onScrollHandler).toBeCalledTimes(1);
+          expect(onScrollHandler).toBeCalledWith({ scrollOffset: { top: 5, left: 10 } });
+          scrollable.canRiseScrollAction = false;
         });
       });
     });
