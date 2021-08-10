@@ -189,9 +189,8 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
     return nextDate > max;
   }
 
-  @Effect()
   showCalendar() {
-    // TODO
+    console.log('Showing calendar'); // TODO
   }
 
   get items(): ToolbarItem[] {
