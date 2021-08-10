@@ -333,11 +333,14 @@ export const VirtualScrollController = Class.inherit((function() {
 
         // new mode
         getViewportParams: function() {
-            const topIndex = this._viewportItemIndex;
+            const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
+            const totalItemsCount = this._dataOptions.totalItemsCount();
+            const topIndex = virtualMode
+                ? Math.min(this._viewportItemIndex, Math.max(0, totalItemsCount - this._viewportSize))
+                : this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.pageSize();
             const minGap = this.option('scrolling.minGap');
-            const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
             const skip = Math.floor(Math.max(0, topIndex - minGap) / maxGap) * maxGap;
             let take = Math.ceil((bottomIndex + minGap) / maxGap) * maxGap - skip;
 

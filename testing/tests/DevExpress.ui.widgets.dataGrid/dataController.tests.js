@@ -3841,7 +3841,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
         // assert
         const itemCount = this.dataController.items().length;
-        assert.strictEqual(itemCount, 19);
+        assert.strictEqual(itemCount, 20);
         assert.deepEqual(this.dataController.items()[itemCount - 2].key, ['value99']);
         assert.strictEqual(this.dataController.items()[itemCount - 1].key, 99);
         assert.strictEqual(this.dataController.pageIndex(), 0);

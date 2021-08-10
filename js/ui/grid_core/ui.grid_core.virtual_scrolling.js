@@ -184,7 +184,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             return this._items;
         },
         itemsCount: function(isBase) {
-            if(isBase) {
+            if(isBase || this.option(NEW_SCROLLING_MODE)) {
                 return this.callBase();
             }
             return this._virtualScrollController.itemsCount();
@@ -196,7 +196,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             return this._virtualScrollController.load();
         },
         isLoading: function() {
-            return this._isLoading;
+            return this.option(NEW_SCROLLING_MODE) ? this._dataSource.isLoading() : this._isLoading;
         },
         isLoaded: function() {
             return this._dataSource.isLoaded() && this._isLoaded;
@@ -985,7 +985,6 @@ export const virtualScrollingModule = {
                             this._updateLoadViewportParams();
                             const { skipForCurrentPage } = this.getLoadPageParams();
                             this._itemCount = items.length;
-
                             return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
                         }
 
