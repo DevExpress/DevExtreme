@@ -1,6 +1,4 @@
-/* eslint-disable jest/expect-expect */
 import React from 'react';
-import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import {
   RefObject,
@@ -24,18 +22,17 @@ import { Widget } from '../../common/widget';
 
 import {
   ScrollableNative,
-  viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
 import {
   ScrollableSimulated,
-  viewFunction as viewFunctionSimulated,
 } from '../scrollable_simulated';
 
 import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
 
 import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './scrollable_simulated_test_helper';
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './scrollable_native_test_helper';
+import { ScrollableDirection } from '../types';
 
 jest.mock('../../../../core/utils/scroll_rtl_behavior');
 jest.mock('../../../../ui/themes', () => ({
@@ -44,27 +41,33 @@ jest.mock('../../../../ui/themes', () => ({
   current: jest.fn(() => 'generic'),
 }));
 
-each([{
-  viewFunction: viewFunctionNative,
+interface NativeStrategy {
+  Scrollable: typeof ScrollableNative;
+  ScrollableTestHelper: typeof ScrollableNativeTestHelper;
+}
+
+interface SimulatedStrategy {
+  Scrollable: typeof ScrollableSimulated;
+  ScrollableTestHelper: typeof ScrollableSimulatedTestHelper;
+}
+
+const strategies: (NativeStrategy | SimulatedStrategy)[] = [{
   Scrollable: ScrollableNative,
   ScrollableTestHelper: ScrollableNativeTestHelper,
 }, {
-  viewFunction: viewFunctionSimulated,
   Scrollable: ScrollableSimulated,
   ScrollableTestHelper: ScrollableSimulatedTestHelper,
-}]).describe('Scrollable ', ({ viewFunction, Scrollable, ScrollableTestHelper }) => {
+}];
+
+each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeStrategy) => {
+  const { Scrollable, ScrollableTestHelper } = strategy;
+
   describe(`${Scrollable === ScrollableNative ? 'Native' : 'Simulated'}`, () => {
     describe('Render', () => {
       it('should render scrollable content', () => {
-        const viewModel = new Scrollable({ });
-        viewModel.contentRef = React.createRef();
-        viewModel.containerRef = React.createRef();
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ });
 
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-
-        const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
+        const scrollableContent = helper.scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
         expect(scrollableContent.exists()).toBe(true);
       });
 
@@ -102,147 +105,97 @@ each([{
       });
 
       it('should not render top & bottom pockets', () => {
-        const viewModel = new Scrollable({ });
-        viewModel.contentRef = React.createRef();
-        viewModel.containerRef = React.createRef();
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ });
 
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
+        const topPocket = helper.scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(false);
-        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
+        const bottomPocket = helper.scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
         expect(bottomPocket.exists()).toBe(false);
       });
 
       it('should render top & bottom pockets', () => {
-        const viewModel = new Scrollable({ forceGeneratePockets: true });
-        viewModel.contentRef = React.createRef();
-        viewModel.containerRef = React.createRef();
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ forceGeneratePockets: true });
 
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
+        const topPocket = helper.scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(true);
-        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
+        const bottomPocket = helper.scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
         expect(bottomPocket.exists()).toBe(true);
       });
 
       it('should render top pockets with classes', () => {
-        const viewModel = new Scrollable({ forceGeneratePockets: true });
-        viewModel.contentRef = React.createRef();
-        viewModel.containerRef = React.createRef();
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ forceGeneratePockets: true });
 
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-
-        const pullDown = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down');
+        const pullDown = helper.scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down');
         expect(pullDown.exists()).toBe(true);
-        const pullDownImage = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
+        const pullDownImage = helper.scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
         expect(pullDownImage.exists()).toBe(true);
-        const pullDownIndicator = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-indicator');
+        const pullDownIndicator = helper.scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-indicator');
         expect(pullDownIndicator.exists()).toBe(true);
-        const pullDownText = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
+        const pullDownText = helper.scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
         expect(pullDownText.exists()).toBe(true);
       });
 
       it('should render bottom pockets with classes', () => {
-        const viewModel = new Scrollable({ forceGeneratePockets: true });
-        viewModel.contentRef = React.createRef();
-        viewModel.containerRef = React.createRef();
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ forceGeneratePockets: true });
 
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-        const reachBottom = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
+        const reachBottom = helper.scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
         expect(reachBottom.exists()).toBe(true);
-        const reachBottomIndicator = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom > .dx-scrollview-scrollbottom-indicator');
+        const reachBottomIndicator = helper.scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom > .dx-scrollview-scrollbottom-indicator');
         expect(reachBottomIndicator.exists()).toBe(true);
-        const reachBottomText = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom > .dx-scrollview-scrollbottom-text');
+        const reachBottomText = helper.scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom > .dx-scrollview-scrollbottom-text');
         expect(reachBottomText.exists()).toBe(true);
       });
 
       it('should render slot', () => {
-        const viewModel = new Scrollable({ children: <div className="content" /> });
-        viewModel.contentRef = React.createRef();
-        viewModel.containerRef = React.createRef();
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ children: <div className="content" /> });
 
-        const scrollable = shallow(viewFunction(viewModel) as JSX.Element);
-        expect(scrollable.find('.dx-scrollable-content .content').exists()).toBe(true);
+        expect(helper.scrollable.find('.dx-scrollable-content .content').exists()).toBe(true);
       });
 
-      it('should pass all necessary properties to the Widget', () => { // TODO: all props
-        const cssClasses = 'dx-scrollview';
-
+      it('should pass all necessary properties to the Widget', () => {
         const config = {
+          direction: 'vertical' as ScrollableDirection,
           width: '120px',
           height: '300px',
+          activeStateEnabled: false,
+          addWidgetClass: false,
           rtlEnabled: true,
           disabled: true,
+          focusStateEnabled: false,
+          hoverStateEnabled: Scrollable !== ScrollableNative,
+          tabIndex: 0,
+          visible: true,
         };
 
-        const viewModel = new Scrollable(config);
-        viewModel.contentRef = React.createRef();
-        viewModel.containerRef = React.createRef();
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper(config);
 
-        Object.defineProperties(viewModel, {
-          cssClasses: {
-            get() { return cssClasses; },
-          },
-        });
-
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-
-        expect(scrollable.find(Widget).at(0).props()).toMatchObject({
-          classes: cssClasses,
-          ...config,
+        const { direction, ...restProps } = config;
+        expect(helper.scrollable.find(Widget).at(0).props()).toMatchObject({
+          classes: Scrollable === ScrollableNative
+            ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled'
+            : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled',
+          ...restProps,
         });
       });
 
       it('should have ref to scrollable content', () => {
-        const contentRef = React.createRef();
-        const viewModel = new Scrollable({});
-        viewModel.contentRef = contentRef;
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({});
 
-        Object.defineProperties(viewModel, {
-          contentWidth: { get() { return 0; } },
-          contentHeight: { get() { return 0; } },
-        });
-
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-
-        expect(scrollable.find('.dx-scrollable-content').instance()).toBe(contentRef.current);
+        expect(helper.scrollable.find('.dx-scrollable-content').instance()).toBe(helper.viewModel.contentRef.current);
       });
 
       it('should have ref to scrollable container', () => {
-        const containerRef = React.createRef();
-        const viewModel = new Scrollable({});
-        viewModel.containerRef = containerRef;
-        viewModel.hScrollbarRef = React.createRef();
-        viewModel.vScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({});
 
-        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-        expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
+        expect(helper.scrollable.find('.dx-scrollable-container').instance()).toBe(helper.viewModel.containerRef.current);
       });
 
       if (Scrollable === ScrollableNative) {
         each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
           it('tabIndex on scrollable, useKeyboard', () => {
-            const viewModel = new Scrollable({ useKeyboard });
-            viewModel.contentRef = React.createRef();
-            viewModel.containerRef = React.createRef();
-            viewModel.scrollableRef = React.createRef();
+            const helper = new ScrollableTestHelper({ useKeyboard });
 
-            const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-            const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
+            const scrollableTabIndex = helper.scrollable.getDOMNode().attributes.getNamedItem('tabindex');
 
             expect(scrollableTabIndex).toEqual(null);
           });
@@ -268,8 +221,8 @@ each([{
               const { eventName, effectName, passEvent } = eventInfo;
               const eventHandlerName = `handle${titleize(effectName)}`;
               viewModel[eventHandlerName] = jest.fn();
-              viewModel.wrapperRef = React.createRef();
-              viewModel.containerRef = React.createRef();
+              viewModel.wrapperRef = { current: {} as HTMLElement } as RefObject;
+              viewModel.containerRef = { current: {} as HTMLElement } as RefObject;
 
               viewModel[`${effectName}Effect`]();
               emit(eventName, event);
@@ -291,8 +244,8 @@ each([{
           ]).describe('Event: %o', (eventInfo) => {
             it(`${eventInfo.effectName}Effect should return unsubscribe callback`, () => {
               const viewModel = new Scrollable({ direction });
-              viewModel.wrapperRef = { current: {} };
-              viewModel.containerRef = { current: {} };
+              viewModel.wrapperRef = { current: {} as HTMLElement } as RefObject;
+              viewModel.containerRef = { current: {} as HTMLElement } as RefObject;
 
               const { eventName, effectName } = eventInfo;
               viewModel[`handle${titleize(effectName)}`] = jest.fn();
@@ -317,8 +270,7 @@ each([{
                 const { eventName, effectName, passEvent } = eventInfo;
                 const eventHandlerName = `handle${titleize(effectName)}`;
                 viewModel[eventHandlerName] = jest.fn();
-                viewModel.wrapperRef = React.createRef();
-                viewModel.containerRef = React.createRef();
+                viewModel.wrapperRef = { current: {} as HTMLElement } as RefObject;
 
                 viewModel[`${effectName}Effect`]();
                 emit(eventName, event);
@@ -337,8 +289,8 @@ each([{
             ]).describe('Event: %o', (eventInfo) => {
               it(`${eventInfo.effectName}Effect should return unsubscribe callback`, () => {
                 const viewModel = new Scrollable({ direction });
-                viewModel.wrapperRef = { current: {} };
-                viewModel.containerRef = { current: {} };
+                viewModel.wrapperRef = { current: {} as HTMLElement } as RefObject;
+                viewModel.containerRef = { current: {} as HTMLElement } as RefObject;
 
                 const { eventName, effectName } = eventInfo;
                 viewModel[`handle${titleize(effectName)}`] = jest.fn();
@@ -457,7 +409,7 @@ each([{
 
                         const onScrollHandler = jest.fn();
 
-                        const event = { ...defaultEvent };
+                        const event = { ...defaultEvent } as any;
                         const helper = new ScrollableTestHelper({
                           direction,
                           pullDownEnabled,
@@ -469,8 +421,8 @@ each([{
 
                         helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
-                        helper.viewModel.handlePocketState = jest.fn();
                         helper.viewModel.canRiseScrollAction = false;
+                        (helper.viewModel as any).handlePocketState = jest.fn();
 
                         helper.viewModel.scrollEffect();
                         emit('scroll');
@@ -503,8 +455,7 @@ each([{
 
         it('should not raise any error if onScroll is not defined', () => {
           const scrollable = new Scrollable({ onScroll: undefined });
-          scrollable.containerRef = React.createRef();
-          scrollable.containerRef.current = {} as HTMLDivElement;
+          scrollable.containerRef = { current: {} as HTMLDivElement } as RefObject;
 
           scrollable.scrollEffect();
           emit('scroll');
