@@ -18,6 +18,8 @@ import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
 import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
+import { getWindow, setWindow } from '../../../../core/utils/window';
+
 interface Mock extends jest.Mock {}
 
 jest.mock('../../../../core/devices', () => {
@@ -49,6 +51,7 @@ describe('ScrollView', () => {
       forceGeneratePockets: false,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
+      needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scrollByContent: true,
@@ -198,21 +201,6 @@ describe('ScrollView', () => {
             });
           });
         });
-
-        it('should render scrollView content', () => {
-          const scrollView = mount(viewFunction({ props: {} } as any));
-
-          const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
-          expect(scrollViewContent.exists()).toBe(true);
-        });
-
-        it('should not render top & bottom pockets', () => {
-          const scrollView = mount(viewFunction({ props: { } } as any));
-          const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
-          expect(topPocket.exists()).toBe(true);
-          const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
-          expect(bottomPocket.exists()).toBe(true);
-        });
       });
 
       each([false, true]).describe('useNative: %o', (useNative) => {
@@ -224,6 +212,66 @@ describe('ScrollView', () => {
           });
 
           expect(viewModel.scrollable).toEqual('scrollableRef');
+        });
+
+        each([false, true]).describe('isServerSide: %o', (isServerSide) => {
+          it('render scrollView content', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, isServerSide);
+              const scrollView = mount(viewFunction({ props: {} } as any));
+
+              const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
+              expect(scrollViewContent.exists()).toBe(true);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
+
+          it('render scrollbars', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, isServerSide);
+              const scrollView = mount(viewFunction({ props: {} } as any));
+
+              const scrollViewContent = scrollView.find('.dx-scrollable-scrollbar');
+              expect(scrollViewContent.exists()).toBe(isServerSide);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
+
+          it('render top & bottom pockets', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, isServerSide);
+              const scrollView = mount(viewFunction({ props: {} } as any));
+
+              const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
+              expect(topPocket.exists()).toBe(isServerSide);
+              const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
+              expect(bottomPocket.exists()).toBe(isServerSide);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
+
+          it('render loadpanel', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, isServerSide);
+              const scrollView = mount(viewFunction({ props: { } } as any));
+
+              const loadPanel = scrollView.find('.dx-scrollview-loadpanel');
+              expect(loadPanel.exists()).toBe(isServerSide);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
         });
       });
     });

@@ -3,7 +3,7 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
 const DEFAULT_OFFSET = { top: 0, left: 0 };
 
-export function getElementOffset(el: Element | null): { top: number; left: number } {
+export function getElementOffset(el: Element | null | undefined): { top: number; left: number } {
   if (el && hasWindow()) {
     const rect = el.getBoundingClientRect();
 
