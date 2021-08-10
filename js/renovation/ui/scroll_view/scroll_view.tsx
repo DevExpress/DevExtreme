@@ -38,7 +38,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     scrollableRef,
     reachBottomEnabled,
     props: {
-      useNative, children,
+      useNative, activeStateUnit, children,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
@@ -50,6 +50,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 
   return (
     <Scrollable
+      activeStateUnit={activeStateUnit}
       useNative={useNative}
       classes="dx-scrollview"
       ref={scrollableRef}

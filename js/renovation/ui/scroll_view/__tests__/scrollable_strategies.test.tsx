@@ -18,8 +18,6 @@ import {
 
 import { titleize } from '../../../../core/utils/inflector';
 
-import { Widget } from '../../common/widget';
-
 import {
   ScrollableNative,
 } from '../scrollable_native';
@@ -32,7 +30,6 @@ import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
 
 import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './scrollable_simulated_test_helper';
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './scrollable_native_test_helper';
-import { ScrollableDirection } from '../types';
 
 jest.mock('../../../../core/utils/scroll_rtl_behavior');
 jest.mock('../../../../ui/themes', () => ({
@@ -150,32 +147,6 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
         const helper = new ScrollableTestHelper({ children: <div className="content" /> });
 
         expect(helper.scrollable.find('.dx-scrollable-content .content').exists()).toBe(true);
-      });
-
-      it('should pass all necessary properties to the Widget', () => {
-        const config = {
-          direction: 'vertical' as ScrollableDirection,
-          width: '120px',
-          height: '300px',
-          activeStateEnabled: false,
-          addWidgetClass: false,
-          rtlEnabled: true,
-          disabled: true,
-          focusStateEnabled: false,
-          hoverStateEnabled: Scrollable !== ScrollableNative,
-          tabIndex: 0,
-          visible: true,
-        };
-
-        const helper = new ScrollableTestHelper(config);
-
-        const { direction, ...restProps } = config;
-        expect(helper.scrollable.find(Widget).at(0).props()).toMatchObject({
-          classes: Scrollable === ScrollableNative
-            ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled'
-            : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled',
-          ...restProps,
-        });
       });
 
       it('should have ref to scrollable content', () => {
