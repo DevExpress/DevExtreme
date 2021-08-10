@@ -15,9 +15,7 @@ export const getCurrentView = (
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   views: (ViewType | Partial<ViewProps>)[],
 ): ViewType | Partial<ViewProps> => {
-  let currentViewOptions: ViewType | Partial<ViewProps> | undefined = undefined;
-
-  currentViewOptions = views.find((view): boolean => {
+  let currentViewProps: ViewType | Partial<ViewProps> | undefined = views.find((view): boolean => {
     const names = isObject(view)
       ? [view.name, view.type]
       : [view];
@@ -29,27 +27,27 @@ export const getCurrentView = (
     return false;
   });
 
-  if (currentViewOptions === undefined) {
+  if (currentViewProps === undefined) {
     if (VIEW_TYPES.includes(currentView)) {
-      currentViewOptions = currentView as ViewType;
+      currentViewProps = currentView as ViewType;
     } else {
-      [currentViewOptions] = views;
+      [currentViewProps] = views;
     }
   }
 
-  return currentViewOptions;
+  return currentViewProps;
 };
 
-export const getCurrentViewOptions = (
+export const getCurrentViewProps = (
   currentView: string | ViewType,
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   views: (ViewType | Partial<ViewProps>)[],
 ): Partial<ViewProps> => {
-  const currentViewOptions = getCurrentView(currentView, views);
+  const currentViewProps = getCurrentView(currentView, views);
 
-  return isString(currentViewOptions)
-    ? { type: currentViewOptions }
-    : currentViewOptions;
+  return isString(currentViewProps)
+    ? { type: currentViewProps }
+    : currentViewProps;
 };
 
 function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {

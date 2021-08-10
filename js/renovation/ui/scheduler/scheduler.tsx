@@ -14,7 +14,7 @@ import { ViewProps, SchedulerProps } from './props';
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
-import { getCurrentViewConfig, getCurrentViewOptions } from './model/views';
+import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { WorkSpaceProps } from './workspaces/props';
 
 export const viewFunction = (viewModel: Scheduler): JSX.Element => {
@@ -39,7 +39,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
 
-    return getCurrentViewOptions(currentView, views);
+    return getCurrentViewProps(currentView, views);
   }
 
   get currentViewConfig(): WorkSpaceProps {

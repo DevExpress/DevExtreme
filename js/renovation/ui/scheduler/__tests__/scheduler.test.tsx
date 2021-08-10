@@ -5,7 +5,7 @@ import { Widget } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 
-const getCurrentViewOptions = jest.spyOn(viewsModel, 'getCurrentViewOptions');
+const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
 describe('Scheduler', () => {
@@ -184,13 +184,13 @@ describe('Scheduler', () => {
 
           expect(currentViewProps)
             .toEqual({ type: 'week' });
-          expect(getCurrentViewOptions)
+          expect(getCurrentViewProps)
             .toBeCalledWith('week', views);
         });
       });
 
       describe('currentViewConfig', () => {
-        it('should return correct current view', () => {
+        it('should return correct current view config', () => {
           const views: ViewType[] = ['day', 'week', 'month'];
           const scheduler = new Scheduler({
             ...new SchedulerProps(),
