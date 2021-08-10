@@ -5,5 +5,6 @@ declare module 'font-carrier' {
         allGlyph(): Glyph[]
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     export function transfer(input: string, options?: any): Font;
 }

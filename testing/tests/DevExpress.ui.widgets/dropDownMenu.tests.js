@@ -482,12 +482,13 @@ QUnit.module('position', {
         $(element.dxDropDownMenu('instance')._button.$element()).trigger('dxclick');
 
         positionConfig = instance._popup.option('position');
-        assert.equal(positionConfig, instance.option('popupPosition'));
+
+        assert.deepEqual(positionConfig, instance.option('popupPosition'));
 
         instance.option('rtlEnabled', true);
         positionConfig = instance._popup.option('position');
 
-        assert.equal(positionConfig, instance.option('popupPosition'));
+        assert.deepEqual(positionConfig, instance.option('popupPosition'));
     });
 });
 

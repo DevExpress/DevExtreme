@@ -1041,7 +1041,7 @@ describe('Simulated > Behavior', () => {
       expect(helper.viewModel.tabWasPressed).toEqual(true);
 
       helper.viewModel.tabWasPressed = false;
-      detach();
+      detach?.();
 
       emit('keydown', { key: 'tab' } as any);
       expect(helper.viewModel.tabWasPressed).toEqual(false);
@@ -1192,6 +1192,20 @@ describe('Simulated > Behavior', () => {
           expect(viewModel.savedScrollOffset).toEqual(expectedSavedScrollOffset);
           expect(viewModel.containerRef.current!.scrollTop).toEqual(expectedContainerScrollTop);
           expect(viewModel.containerRef.current!.scrollLeft).toEqual(expectedContainerScrollLeft);
+        });
+      });
+
+      each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
+        each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
+          test('containerHasSizes()', () => {
+            const viewModel = new Scrollable({});
+
+            viewModel.containerClientHeight = containerClientHeight;
+            viewModel.containerClientWidth = containerClientWidth;
+
+            expect(viewModel.containerHasSizes)
+              .toEqual(containerClientWidth > 0 && containerClientHeight > 0);
+          });
         });
       });
 

@@ -1,5 +1,5 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 /**
@@ -19,12 +19,12 @@ export interface PositionConfig {
        * @docid
        * @type Enums.HorizontalAlignment
        */
-      x?: 'center' | 'left' | 'right',
+      x?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @type Enums.VerticalAlignment
        */
-      y?: 'bottom' | 'center' | 'top'
+      y?: 'bottom' | 'center' | 'top';
     };
     /**
      * @docid
@@ -40,12 +40,12 @@ export interface PositionConfig {
        * @docid
        * @default 0
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        * @default 0
        */
-      y?: number
+      y?: number;
     };
     /**
      * @docid
@@ -58,13 +58,13 @@ export interface PositionConfig {
        * @type Enums.PositionResolveCollision
        * @default 'none'
        */
-      x?: 'fit' | 'flip' | 'flipfit' | 'none',
+      x?: 'fit' | 'flip' | 'flipfit' | 'none';
       /**
        * @docid
        * @type Enums.PositionResolveCollision
        * @default 'none'
        */
-      y?: 'fit' | 'flip' | 'flipfit' | 'none'
+      y?: 'fit' | 'flip' | 'flipfit' | 'none';
     };
     /**
      * @docid
@@ -76,12 +76,12 @@ export interface PositionConfig {
        * @docid
        * @type Enums.HorizontalAlignment
        */
-      x?: 'center' | 'left' | 'right',
+      x?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @type Enums.VerticalAlignment
        */
-      y?: 'bottom' | 'center' | 'top'
+      y?: 'bottom' | 'center' | 'top';
     };
     /**
      * @docid
@@ -97,12 +97,12 @@ export interface PositionConfig {
        * @docid
        * @default 0
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        * @default 0
        */
-      y?: number
+      y?: number;
     };
 }
 

@@ -1,26 +1,26 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxSpeedDialAction> & {
-    actionElement?: DxElement
-}
+    actionElement?: DxElement;
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
-    actionElement?: DxElement
+    actionElement?: DxElement;
 };
 
 /** @public */

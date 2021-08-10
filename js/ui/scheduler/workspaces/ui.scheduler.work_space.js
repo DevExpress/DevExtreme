@@ -57,7 +57,6 @@ import CellsSelectionState from './cells_selection_state';
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import {
-    getFirstDayOfWeek,
     calculateViewStartDate,
     getViewStartByOptions,
     validateDayHours,
@@ -75,6 +74,8 @@ import {
     getMaxAllowedVerticalPosition,
     PositionHelper
 } from './helpers/positionHelper';
+
+import { utils } from '../utils';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -637,7 +638,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             hoursInterval: this.option('hoursInterval'),
             currentDate: this.option('currentDate'),
             startDate: this.option('startDate'),
-            firstDayOfWeek: this._firstDayOfWeek(),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
 
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
@@ -705,7 +706,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _firstDayOfWeek() {
-        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
+        return this.viewDataProvider.getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
     _attachEvents() {
@@ -840,7 +841,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             ? this._groupedStrategy.getAllDayTableHeight()
             : 0;
 
-        headerPanelHeight && this._headerScrollable && this._headerScrollable.$element().height(headerPanelHeight + allDayPanelHeight);
+        headerPanelHeight && this._headerScrollable && this._headerScrollable.option('height', headerPanelHeight + allDayPanelHeight);
 
         headerPanelHeight && this._dateTableScrollable.$element().css({
             'paddingBottom': allDayPanelHeight + headerPanelHeight + 'px',
@@ -1914,7 +1915,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRDateTable() {
-        this.renderRComponent(
+        utils.renovation.renderComponent(
+            this,
             this._$dateTable,
             dxrDateTableLayout,
             'renovatedDateTable',
@@ -1936,7 +1938,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.option('groups').length) {
             this._attachGroupCountClass();
-            this.renderRComponent(
+            utils.renovation.renderComponent(
+                this,
                 this._getGroupHeaderContainer(),
                 dxrGroupPanel,
                 'renovatedGroupPanel',
@@ -1961,8 +1964,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 ...(this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {}),
             };
 
-            this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
-            this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
+            utils.renovation.renderComponent(this, this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
+            utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
         }
@@ -1970,7 +1973,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRTimeTable() {
-        this.renderRComponent(
+        utils.renovation.renderComponent(
+            this,
             this._$timePanel,
             dxrTimePanelTableLayout,
             'renovatedTimePanel',
@@ -1989,7 +1993,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._detachGroupCountClass();
         }
 
-        this.renderRComponent(
+        utils.renovation.renderComponent(
+            this,
             this._$thead,
             this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
@@ -2007,26 +2012,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 isRenderDateHeader,
             }
         );
-    }
-
-    renderRComponent(parentElement, componentClass, componentName, viewModel) {
-        let component = this[componentName];
-        if(!component) {
-            const container = getPublicElement(parentElement);
-            component = this._createComponent(container, componentClass, viewModel);
-            this[componentName] = component;
-        } else {
-            // TODO: this is a workaround for setTablesSizes. Remove after CSS refactoring
-            const $element = component.$element();
-            const elementStyle = $element.get(0).style;
-            const height = elementStyle.height;
-            const width = elementStyle.width;
-
-            component.option(viewModel);
-
-            height && $element.height(height);
-            width && $element.width(width);
-        }
     }
 
     // ------------

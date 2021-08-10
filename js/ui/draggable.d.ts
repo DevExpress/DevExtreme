@@ -1,14 +1,14 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -16,7 +16,7 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxSortable from './sortable';
@@ -52,12 +52,12 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
        * @docid
        * @default 0
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        * @default 0
        */
-      y?: number
+      y?: number;
     };
     /**
      * @docid
@@ -104,6 +104,7 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
  * @hidden
  * @namespace DevExpress.ui
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DraggableBase { }
 
 /** @public */
@@ -117,7 +118,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
     readonly toData?: any;
-}
+};
 
 /** @public */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
@@ -127,14 +128,14 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
     readonly toData?: any;
-}
+};
 
 /** @public */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromData?: any;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxDraggable>;
@@ -142,12 +143,11 @@ export type InitializedEvent = InitializedEventInfo<dxDraggable>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
 
-
 /** @public */
 export type DragTemplateData = {
     readonly itemData?: any;
     readonly itemElement: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead
