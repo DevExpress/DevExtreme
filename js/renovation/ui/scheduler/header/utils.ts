@@ -1,8 +1,13 @@
 import { getViewSwitcher, getDropDownViewSwitcher } from './view_switcher';
 import { getDateNavigator } from './date_navigator';
 
-import { ItemOptions, SchedulerToolbarItem } from './types';
+import { ItemOptions, SchedulerToolbarItem, ItemView } from './types';
+import { View } from '../types.d';
+
 import { ToolbarItem } from '../../toolbar/toolbar_props';
+import { ViewProps } from '../props';
+
+import { validateViews, getViewName, getViewText } from '../../../../ui/scheduler/header/utils';
 
 const DEFAULT_ELEMENT = 'defaultElement';
 const VIEW_SWITCHER = 'viewSwitcher';
@@ -47,6 +52,13 @@ export const formToolbarItem = (
   return item as ToolbarItem;
 };
 
-export const showCalendar = (): void => {
-  console.log('Rendering calendar'); // TODO
+export const formatViews = (views: (View | ViewProps)[]): ItemView[] => {
+  validateViews(views);
+
+  return views.map(view => {
+      const text = getViewText(view);
+      const name = getViewName(view);
+
+      return { text, name };
+  });
 };

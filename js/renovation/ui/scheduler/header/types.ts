@@ -40,9 +40,4 @@ export interface ItemOptions {
 export interface ItemView {
   text: string;
   name: string;
-  view: {
-    text: string;
-    type: string;
-    name: string;
-  };
 }

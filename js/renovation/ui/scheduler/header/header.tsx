@@ -4,6 +4,7 @@ import {
   JSXComponent,
   OneWay,
   Event,
+  Effect,
 } from '@devextreme-generator/declarations';
 
 import devices from '../../../../core/devices';
@@ -15,11 +16,11 @@ import '../../../../ui/drop_down_button';
 
 import dateUtils from '../../../../core/utils/date';
 import {
-  formatViews, getCaption,
+  getCaption,
   getStep, getViewName,
   getNextIntervalDate,
 } from '../../../../ui/scheduler/header/utils';
-import { showCalendar, formToolbarItem } from './utils';
+import { formToolbarItem, formatViews } from './utils';
 
 import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
@@ -123,13 +124,15 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   setCurrentView(view: ItemView): void {
-    console.log('CALL', view);
-    
-    this.props.onCurrentViewUpdate?.(view.name);
+    if(view.name !== this.props.currentView) {
+      this.props.onCurrentViewUpdate?.(view.name);
+    }
   }
 
   setCurrentDate(date: Date): void {
-    this.props.onCurrentDateUpdate?.(new Date(date));
+    if(date.getTime() !== this.props.currentDate.getTime()) {
+      this.props.onCurrentDateUpdate?.(new Date(date));
+    }
   }
 
   get intervalOptions(): {
@@ -186,15 +189,20 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
     return nextDate > max;
   }
 
+  @Effect()
+  showCalendar() {
+    // TODO
+  }
+
   get items(): ToolbarItem[] {
     const options: ItemOptions = {
       useDropDownViewSwitcher: this.props.useDropDownViewSwitcher,
       selectedView: this.selectedView,
       views: this.views,
       setCurrentView: (view) => this.setCurrentView(view),
-      showCalendar,
+      showCalendar: () => this.showCalendar(),
       captionText: this.captionText,
-      updateDateByDirection: () => this.updateDateByDirection,
+      updateDateByDirection: (direction) => this.updateDateByDirection(direction),
       isPreviousButtonDisabled: this.isPreviousButtonDisabled(),
       isNextButtonDisabled: this.isNextButtonDisabled(),
     };

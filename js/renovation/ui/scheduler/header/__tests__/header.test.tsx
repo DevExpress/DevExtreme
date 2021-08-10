@@ -2,7 +2,6 @@ import { mount } from 'enzyme';
 import SchedulerToolbar, { viewFunction, SchedulerToolbarProps } from '../header';
 import { Toolbar } from '../../../toolbar/toolbar';
 import { ToolbarButtonGroupProps } from '../../../toolbar/toolbar_props';
-import { options } from 'yargs';
 
 const HEADER_CLASS = 'dx-scheduler-header';
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
@@ -15,7 +14,7 @@ describe('Scheduler Toolbar', () => {
 
       expect(toolbar.is(Toolbar)).toBe(true);
     });
- 
+
     it('should pass items', () => {
       const toolbar = mount(viewFunction({ items: 'items' } as any));
 
@@ -24,15 +23,22 @@ describe('Scheduler Toolbar', () => {
   });
 
   describe('Behaviour', () => {
+    const create = (options: any = {}): SchedulerToolbar => {
+      return new SchedulerToolbar({
+        ...new SchedulerToolbarProps(),
+        currentView: 'day',
+        views: ['day', 'week'],
+        currentDate: new Date(2021, 7, 7),
+        ...options,
+      });
+    };
+
     describe('Methods', () => {
       it('should call onCurrentViewUpdate after view change', () => {
         const mockCallback = jest.fn();
+        const toolbar = create({ onCurrentViewUpdate: mockCallback });
 
-        const toolbar = new SchedulerToolbar({
-          onCurrentViewUpdate: mockCallback,
-        });
-
-        toolbar.setCurrentView({name: 'week'} as any);
+        toolbar.setCurrentView({ name: 'week' } as any);
 
         expect(mockCallback.mock.calls.length).toBe(1);
         expect(mockCallback.mock.calls[0][0]).toBe('week');
@@ -40,10 +46,7 @@ describe('Scheduler Toolbar', () => {
 
       it('should call onCurrentDateUpdate', () => {
         const mockCallback = jest.fn();
-
-        const toolbar = new SchedulerToolbar({
-          onCurrentDateUpdate: mockCallback,
-        });
+        const toolbar = create({ onCurrentDateUpdate: mockCallback });
 
         toolbar.setCurrentDate(new Date(2021, 1, 1));
 
@@ -53,26 +56,72 @@ describe('Scheduler Toolbar', () => {
     });
 
     describe('User Intercation', () => {
-      const r = (methods) => mount(
-        viewFunction(new SchedulerToolbar({
-          ...new SchedulerToolbarProps(),
-          ...methods,
-        }))
-      );
+      describe('Click', () => {
+        describe('ViewSitcher', () => {
+          it('should call onCurrentViewUpdate with unselected view', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentViewUpdate: mockCallback });
 
-      it('should call', () => {
-        const mockCallback = jest.fn();
-  
-        const toolbar = new SchedulerToolbar({
-          ...new SchedulerToolbarProps(),
-          onCurrentViewUpdate: mockCallback,
+            const viewSwitcher = toolbar.items[1];
+            const options = viewSwitcher.options as ToolbarButtonGroupProps;
+            const view = { name: 'week' };
+            options.onItemClick!({ itemData: { view } } as any);
+
+            expect(mockCallback.mock.calls.length).toBe(1);
+            expect(mockCallback.mock.calls[0][0]).toEqual(view.name);
+          });
+
+          it('should not call onCurrentViewUpdate with selected view', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentViewUpdate: mockCallback });
+
+            const viewSwitcher = toolbar.items[1];
+            const options = viewSwitcher.options as ToolbarButtonGroupProps;
+            const view = { name: 'day' };
+            options.onItemClick!({ itemData: { view } } as any);
+
+            expect(mockCallback.mock.calls.length).toBe(0);
+          });
         });
-  
-        const previousButton = toolbar.items[1].options as ToolbarButtonGroupProps;
-        previousButton.onItemClick!({itemData: {view: {name: 'dayz'}}} as any);
-  
-        expect(mockCallback.mock.calls.length).toBe(1);
-        expect(mockCallback.mock.calls[0][0]).toEqual(new Date(2021, 1, 1));
+
+        describe('DateNavigator', () => {
+          it('should call onCurrentDateUpdate with previous button index', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentDateUpdate: mockCallback });
+
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+            options.onItemClick!({ itemIndex: 0 } as any);
+
+            expect(mockCallback.mock.calls.length).toBe(1);
+            expect(mockCallback.mock.calls[0][0]).toEqual(new Date(2021, 7, 6));
+          });
+
+          it('should call onCurrentDateUpdate with next button index', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentDateUpdate: mockCallback });
+
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+            options.onItemClick!({ itemIndex: 2 } as any);
+
+            expect(mockCallback.mock.calls.length).toBe(1);
+            expect(mockCallback.mock.calls[0][0]).toEqual(new Date(2021, 7, 8));
+          });
+
+          it('should call showCalandar with calendar button index', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create();
+
+            toolbar.showCalendar = mockCallback;
+
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+            options.onItemClick!({ itemIndex: 1 } as any);
+
+            expect(mockCallback.mock.calls.length).toBe(1);
+          });
+        });
       });
     });
   });
@@ -101,19 +150,19 @@ describe('Scheduler Toolbar', () => {
       });
 
       it('should return correct step for week view', () => {
-        const toolbar = create({currentView: 'week'});
+        const toolbar = create({ currentView: 'week' });
 
         expect(toolbar.step).toBe('week');
       });
 
       it('should return correct step for week agenda view', () => {
-        const toolbar = create({currentView: 'agenda'});
+        const toolbar = create({ currentView: 'agenda' });
 
         expect(toolbar.step).toBe('agenda');
       })
 
       it('should return correct step for week timelineMonth view', () => {
-        const toolbar = create({currentView: 'timelineMonth'});
+        const toolbar = create({ currentView: 'timelineMonth' });
 
         expect(toolbar.step).toBe('month');
       })
@@ -163,28 +212,14 @@ describe('Scheduler Toolbar', () => {
         expect(toolbar.captionText).toBe('custom_text');
       });
 
-      it('shoudl return views array', () => {
-        const toolbar = create({
-          views: [
-            {
-              type: 'day',
-              name: 'DAY',
-            },
-          ]
-        });
+      it('should return views array', () => {
+        const views = [{ type: 'day', name: 'DAY' }];
+        const toolbar = create({ views });
 
-        // TODO
-        expect(toolbar.views).toEqual([
-          {
-            name: 'DAY',
-            text: 'DAY',
-            view: {
-                name: 'DAY',
-                text: 'DAY',
-                type: 'day',
-            }
-          }
-        ]);
+        expect(toolbar.views).toEqual([{
+          text: "DAY",
+          name: "DAY",
+        }]);
       });
 
       it('should return correct selected view', () => {
@@ -204,7 +239,6 @@ describe('Scheduler Toolbar', () => {
         });
       });
 
-      // TODO проверить вложенные опции виджетов
       it('should return default dateNavigator configurtion', () => {
         const toolbar = create();
 
@@ -247,27 +281,29 @@ describe('Scheduler Toolbar', () => {
         expect(viewSwitcherConfig.location).toBe('after');
       });
 
-      it('should return correct viewSwitcher configuraion with useDropDownViewSwitcher=false', () => {
-        const toolbar = create({ useDropDownViewSwitcher: false });
-        const viewSwitcherConfig = toolbar.items[1];
+      it('should return correct viewSwitcher type with ' +
+        'useDropDownViewSwitcher=false', () => {
+          const toolbar = create({ useDropDownViewSwitcher: false });
+          const viewSwitcherConfig = toolbar.items[1];
 
-        expect(viewSwitcherConfig.widget).toBe('dxButtonGroup');
-      });
+          expect(viewSwitcherConfig.widget).toBe('dxButtonGroup');
+          expect(viewSwitcherConfig.locateInMenu).toBe('auto');
+        });
 
-      it('should return correct viewSwitcher configuraion with useDropDownViewSwitcher=true', () => {
+      it('should return correct viewSwitcher type with ' +
+        'useDropDownViewSwitcher=true', () => {
         const toolbar = create({ useDropDownViewSwitcher: true });
         const viewSwitcherConfig = toolbar.items[1];
 
         expect(viewSwitcherConfig.widget).toBe('dxDropDownButton');
+        expect(viewSwitcherConfig.locateInMenu).toBe('never');
       });
 
       it('should return custom items', () => {
-        const items = [
-          {
+        const items = [{
             widget: 'dxButton',
             text: 'Button text',
-          }
-        ];
+        }];
 
         const toolbar = create({ items });
 
@@ -281,6 +317,7 @@ describe('Scheduler Toolbar', () => {
 
         expect(toolbar.getNextDate(-1)).toEqual(new Date(2021, 7, 6));
       });
+
       it('should return correct next date', () => {
         const toolbar = create();
 
