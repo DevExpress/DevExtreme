@@ -205,7 +205,7 @@
     "build:angular:watch": "gulp generate-angular-watch",
     "build:vue": "gulp generate-vue",
     "build:vue:watch": "gulp generate-vue-watch",
-    "compile:r": "node ./node_modules/typescript/bin/typescript -p ./renovation.tsconfig.json",
+    "compile:r": "node ./node_modules/typescript/bin/tsc -p ./renovation.tsconfig.json",
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
