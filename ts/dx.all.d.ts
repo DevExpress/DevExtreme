@@ -12840,7 +12840,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.sorting]
      */
-    sorting?: Sorting;
+    sorting?: dxGanttSorting;
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
      */
@@ -13154,6 +13154,32 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.rootValue]
      */
     rootValue?: any;
+  }
+  /**
+   * [descr:dxGanttSorting]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttSorting {
+    /**
+     * [descr:dxGanttSorting.ascendingText]
+     */
+    ascendingText?: string;
+    /**
+     * [descr:dxGanttSorting.clearText]
+     */
+    clearText?: string;
+    /**
+     * [descr:dxGanttSorting.descendingText]
+     */
+    descendingText?: string;
+    /**
+     * [descr:dxGanttSorting.mode]
+     */
+    mode?: 'multiple' | 'none' | 'single';
+    /**
+     * [descr:dxGanttSorting.showSortIndexes]
+     */
+    showSortIndexes?: boolean;
   }
   /**
    * [descr:dxGanttStripLine]
@@ -22037,32 +22063,6 @@ declare module DevExpress.ui {
      * [descr:SearchBoxMixinOptions.searchValue]
      */
     searchValue?: string;
-  }
-  /**
-   * [descr:Sorting]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface Sorting {
-    /**
-     * [descr:Sorting.ascendingText]
-     */
-    ascendingText?: string;
-    /**
-     * [descr:Sorting.clearText]
-     */
-    clearText?: string;
-    /**
-     * [descr:Sorting.descendingText]
-     */
-    descendingText?: string;
-    /**
-     * [descr:Sorting.mode]
-     */
-    mode?: 'multiple' | 'none' | 'single';
-    /**
-     * [descr:Sorting.showSortIndexes]
-     */
-    showSortIndexes?: boolean;
   }
   /**
    * [descr:StringLengthRule]
