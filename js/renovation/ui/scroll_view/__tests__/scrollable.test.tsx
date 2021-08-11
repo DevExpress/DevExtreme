@@ -20,6 +20,8 @@ import { ScrollableSimulated } from '../scrollable_simulated';
 import { Widget } from '../../common/widget';
 import { ScrollableDirection } from '../types';
 
+import { getWindow, setWindow } from '../../../../core/utils/window';
+
 jest.mock('../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
   isGeneric: jest.fn(() => true),
@@ -93,53 +95,66 @@ describe('Scrollable', () => {
       { name: 'content', calledWith: [] },
       { name: 'container', calledWith: [] },
       { name: 'updateHandler', calledWith: [] },
-      { name: 'release', calledWith: [] },
-      { name: 'refresh', calledWith: [] },
+      { name: 'release', calledWith: [], hasSSRMode: true },
+      { name: 'refresh', calledWith: [], hasSSRMode: true },
       { name: 'startLoading', calledWith: [] },
-      { name: 'finishLoading', calledWith: [] },
+      { name: 'finishLoading', calledWith: [], hasSSRMode: true },
       { name: 'validate', calledWith: ['arg1'] },
       { name: 'getScrollElementPosition', aliasName: 'getElementLocation', calledWith: ['arg1', 'arg2'] },
     ]).describe('Method: %o', (methodInfo) => {
       each([false, true]).describe('useNative: %o', (useNative) => {
-        it(`${methodInfo.name}() method should call according strategy method`, () => {
-          const viewModel = new Scrollable({ useNative });
+        each([false, true]).describe('isServeSide: %o', (isServerSide) => {
+          it(`${methodInfo.name}() method should call according strategy method`, () => {
+            const originalWindow = getWindow();
 
-          const scrollable = mount(viewFunction(viewModel));
+            try {
+              setWindow({}, !isServerSide);
 
-          const handlerMock = jest.fn();
+              const viewModel = new Scrollable({ useNative });
+              const scrollable = mount(viewFunction(viewModel));
 
-          if (useNative) {
-            Object.defineProperties(viewModel, {
-              scrollableNativeRef: {
-                get() {
-                  return { current: scrollable.find(ScrollableNative).instance() };
-                },
-              },
-              scrollableSimulatedRef: { get() { return { current: null }; } },
-            });
+              const handlerMock = jest.fn();
 
-            expect(viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
+              if (useNative) {
+                Object.defineProperties(viewModel, {
+                  scrollableNativeRef: {
+                    get() {
+                      return { current: scrollable.find(ScrollableNative).instance() };
+                    },
+                  },
+                  scrollableSimulatedRef: { get() { return { current: null }; } },
+                });
 
-            viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
-          } else {
-            Object.defineProperties(viewModel, {
-              scrollableNativeRef: { get() { return { current: null }; } },
-              scrollableSimulatedRef: {
-                get() {
-                  return { current: scrollable.find(ScrollableSimulated).instance() };
-                },
-              },
-            });
+                expect(viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
 
-            expect(viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
+                viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
+              } else {
+                Object.defineProperties(viewModel, {
+                  scrollableNativeRef: { get() { return { current: null }; } },
+                  scrollableSimulatedRef: {
+                    get() {
+                      return { current: scrollable.find(ScrollableSimulated).instance() };
+                    },
+                  },
+                });
 
-            viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
-          }
+                expect(viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
 
-          viewModel[methodInfo.name](...methodInfo.calledWith);
+                viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
+              }
 
-          expect(handlerMock).toBeCalledTimes(1);
-          expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
+              viewModel[methodInfo.name](...methodInfo.calledWith);
+
+              if (methodInfo.hasSSRMode && isServerSide) {
+                expect(handlerMock).toBeCalledTimes(0);
+              } else {
+                expect(handlerMock).toBeCalledTimes(1);
+                expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
+              }
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
         });
       });
     });
