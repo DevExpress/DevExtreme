@@ -25,8 +25,8 @@ $tagbox-tag-border-radius: 16px !default;
 
 @else if $size == "compact" {
   $material-tagbox-tag-content-padding-left: 8px !default;
-  $material-tagbox-tag-content-padding: 5px $material-tagbox-tag-content-padding-right 5px $material-tagbox-tag-content-padding-left !default;
-  $material-tagbox-tag-margin: 3px !default;
+  $material-tagbox-tag-content-padding: 4px $material-tagbox-tag-content-padding-right 4px $material-tagbox-tag-content-padding-left !default;
+  $material-tagbox-tag-margin: 4px !default;
   $material-tagbox-tag-container-padding: 0 8px 3px 11px !default;
-  $material-tagbox-tag-height: 26px !default;
+  $material-tagbox-tag-height: 24px !default;
 }
