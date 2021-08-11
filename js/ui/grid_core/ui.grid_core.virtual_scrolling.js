@@ -810,8 +810,6 @@ export const virtualScrollingModule = {
 
                         const pageIndex = !isVirtualMode(this) && this.pageIndex() >= this.pageCount() ? this.pageCount() - 1 : this.pageIndex();
                         this._rowPageIndex = Math.ceil(pageIndex * this.pageSize() / this.getRowPageSize());
-                        this._uncountableItemCount = 0;
-
                         this._visibleItems = this.option(NEW_SCROLLING_MODE) ? null : [];
                         this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
                         this._viewportChanging = false;
@@ -852,11 +850,11 @@ export const virtualScrollingModule = {
                                 return that._itemCount;
                             },
                             totalItemsCount: function() {
-                                if(that.option(NEW_SCROLLING_MODE)) {
-                                    return isVirtualMode(that) ? that.totalItemsCount() + that._uncountableItemCount : that._itemCount;
+                                if(isVirtualMode(that)) {
+                                    return that.totalItemsCount();
                                 }
 
-                                return isVirtualMode(that) ? that.totalItemsCount() : that._items.filter(isItemCountable).length;
+                                return that.option(NEW_SCROLLING_MODE) ? that._itemCount : that._items.filter(isItemCountable).length;
                             },
                             hasKnownLastPage: function() {
                                 return true;
@@ -1032,10 +1030,8 @@ export const virtualScrollingModule = {
                         return newItems;
                     },
                     _afterProcessItems: function(items) {
-                        this._uncountableItemCount = 0;
-                        this._itemCount = items.length;
+                        this._itemCount = items.filter(item => isItemCountableByDataSource(item, this._dataSource)).length;
                         if(isDefined(this._loadViewportParams)) {
-                            this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
                             this._updateLoadViewportParams();
 
                             let result = items;
