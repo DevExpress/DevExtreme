@@ -172,7 +172,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     // TODO: get rid of an extra 'needClearSettings' argument
     calculateRows(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
-
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
         const groupedAppointments = this.groupAppointmentByResources(appointments);
