@@ -263,7 +263,6 @@ export const rowsModule = {
                     const rtlEnabled = that.option('rtlEnabled');
                     const isNativeScrolling = e.component.option('useNative');
 
-                    that._isScrollByEvent = !!e.event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
                     let scrollLeft = e.scrollOffset.left;

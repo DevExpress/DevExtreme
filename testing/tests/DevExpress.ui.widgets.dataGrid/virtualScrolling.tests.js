@@ -33,7 +33,8 @@ const mockDataSource = {
     itemsCount: sinon.stub(),
     items: sinon.stub(),
     viewportItems: sinon.stub(),
-
+    loadedOffset: sinon.stub(),
+    loadedItemCount: sinon.stub(),
     changingDuration: sinon.stub(),
     onChanged: sinon.stub()
 };
@@ -854,6 +855,8 @@ QUnit.module('VirtualScrollingController. New mode', {
         mockComponent.option.withArgs('scrolling.newMode').returns(true);
         mockComponent.option.withArgs('scrolling.minGap').returns(1);
         mockDataSource.pageSize.returns(5);
+        mockDataSource.loadedOffset.returns(0);
+        mockDataSource.loadedItemCount.returns(100000);
     },
     afterEach: function() {
         mockDataSource.pageSize.returns(20);

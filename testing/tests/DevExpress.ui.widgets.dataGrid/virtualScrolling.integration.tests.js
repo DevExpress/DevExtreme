@@ -36,6 +36,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
@@ -330,7 +331,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
                 useNative: false,
-                newMode: false
+                minGap: 0
             },
             columns: [
                 'value',
@@ -381,7 +382,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             paging: { pageSize: 2 },
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
         const keyboardController = dataGrid.getController('keyboardNavigation');
@@ -391,9 +392,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
+        assert.equal(dataGrid.pageIndex(), 1, 'Page index');
         assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Visible row index');
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(5, 1), 'Navigation row is visible');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey('Zeb'), 1), 'Navigation row is visible');
     });
 
     QUnit.test('DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling', function(assert) {
@@ -519,7 +520,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             paging: { pageSize: 2 },
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
@@ -536,7 +537,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         row = rowsView.element().find('.dx-data-row').eq(0);
-        assert.equal(row.attr('aria-rowindex'), 89, 'aria-index is correct after scrolling');
+        assert.equal(row.attr('aria-rowindex'), 87, 'aria-index is correct after scrolling');
     });
 
     // T595044
@@ -598,9 +599,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 12, 'visible row count');
+        assert.equal(visibleRows.length, 8, 'visible row count');
         assert.equal(visibleRows[0].key, 3, 'first visible row key');
-        assert.equal(visibleRows[visibleRows.length - 1].key, 14, 'last visible row key');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 10, 'last visible row key');
     });
 
     QUnit.test('DataGrid should expand the row in the onContentReady method in virtual scroll mode (T826930)', function(assert) {
@@ -665,9 +666,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, 'visible row count');
-        assert.equal(visibleRows[0].key, 1, 'first visible row key');
-        assert.equal(visibleRows[visibleRows.length - 1].key, 15, 'last visible row key');
+        assert.equal(visibleRows.length, 8, 'visible row count');
+        assert.equal(visibleRows[0].key, 3, 'first visible row key');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 10, 'last visible row key');
     });
 
     QUnit.test('scroll position should not be reseted if virtual scrolling and cell template cause relayout', function(assert) {
@@ -686,7 +687,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             loadingTimeout: null,
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             },
             columns: [{
                 dataField: 'id',
@@ -697,13 +698,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }]
         }).dxDataGrid('instance');
 
+        this.clock.tick(500);
+
         // act
-        dataGrid.getView('rowsView')._isScrollByEvent = true;
         dataGrid.getScrollable().scrollTo({ y: 2000 });
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 2000, 'scrollTop is not reseted');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, 'first visible row key');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 56, 'first visible row key');
     });
 
     // T117114

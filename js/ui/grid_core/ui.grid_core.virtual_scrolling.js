@@ -627,7 +627,12 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         _needUpdateRowHeight: function(itemsCount) {
-            return this.callBase.apply(this, arguments) || (itemsCount > 0 && isAppendMode(this) && !gridCoreUtils.isVirtualRowRendering(this));
+            return this.callBase.apply(this, arguments) || (itemsCount > 0 &&
+                (
+                    (isAppendMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
+                    || (this.option(NEW_SCROLLING_MODE) && (isAppendMode(this) || isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)))
+                )
+            );
         },
 
         _updateRowHeight: function() {
@@ -642,6 +647,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 
                 if(this.option(NEW_SCROLLING_MODE)) {
+                    // dataController.viewportHeight(viewportHeight);
                     const viewportSize = dataController.viewportSize();
                     const viewportIsNotFilled = viewportSize > dataController.items().length;
                     viewportIsNotFilled && dataController.loadViewport();
@@ -987,11 +993,11 @@ export const virtualScrollingModule = {
                     },
                     _afterProcessItems: function(items) {
                         this._uncountableItemCount = 0;
+                        this._itemCount = items.length;
                         if(isDefined(this._loadViewportParams)) {
                             this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
                             this._updateLoadViewportParams();
                             const { skipForCurrentPage } = this.getLoadPageParams(true);
-                            this._itemCount = items.length;
                             return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
                         }
 
@@ -1074,6 +1080,9 @@ export const virtualScrollingModule = {
                         }
 
                         return dataSource?.viewportSize.apply(dataSource, arguments);
+                    },
+                    viewportHeight: function(height) {
+                        this._rowsScrollController?.viewportHeight(height);
                     },
                     viewportItemSize: function() {
                         const rowsScrollController = this._rowsScrollController;

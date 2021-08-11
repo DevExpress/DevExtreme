@@ -6590,7 +6590,6 @@ QUnit.module('Virtual scrolling', {
             { rowType: 'data', values: [12] }
         ];
         options.virtualItemsCount.begin = 9;
-        rowsView._isScrollByEvent = true;
         dataController.changed.fire({
             items: options.items,
             changeType: 'prepend'
