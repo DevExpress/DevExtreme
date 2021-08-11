@@ -98,12 +98,22 @@
     padding-left: 0;
     padding-right: $material-filled-texteditor-input-horizontal-padding;
   }
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .dx-field-item-help-text {
   color: $form-field-item-color;
   padding: 6px $material-filled-texteditor-input-horizontal-padding 2px;
   font-style: normal;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .dx-field-item-required-mark {
