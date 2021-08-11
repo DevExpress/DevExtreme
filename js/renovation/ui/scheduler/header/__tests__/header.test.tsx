@@ -120,6 +120,26 @@ describe('Scheduler Toolbar', () => {
 
             expect(mockCallback.mock.calls.length).toBe(1);
           });
+
+          it('should not throw an error if onCurrentDateUpdate is not set', () => {
+            const toolbar = create();
+
+            toolbar.setCurrentDate(new Date());
+          });
+
+          it('should not throw an error if onCurrentViewUpdate is not set', () => {
+            const toolbar = create();
+
+            toolbar.setCurrentView({ name: 'week', text: 'Week' });
+          });
+
+          it('should not throw an error on caption button click', () => {
+            const toolbar = create();
+
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+            options.onItemClick!({ itemIndex: 1 } as any);
+          });
         });
       });
     });
@@ -325,7 +345,7 @@ describe('Scheduler Toolbar', () => {
           min: new Date(2021, 7, 7),
         } as any);
 
-        expect(toolbar.isPreviousButtonDisabled()).toBeTruthy();
+        expect(toolbar.isPreviousButtonDisabled()).toBe(true);
       });
 
       it('should disable next button depends on max value', () => {
@@ -333,7 +353,16 @@ describe('Scheduler Toolbar', () => {
           max: new Date(2021, 7, 7),
         } as any);
 
-        expect(toolbar.isNextButtonDisabled()).toBeTruthy();
+        expect(toolbar.isNextButtonDisabled()).toBe(true);
+      });
+
+      it('should not call onCurrentDateUpdate with selected view', () => {
+        const mockCallback = jest.fn();
+        const toolbar = create({ onCurrentDateUpdate: mockCallback });
+
+        toolbar.setCurrentDate(new Date(2021, 7, 7));
+
+        expect(mockCallback.mock.calls.length).toBe(0);
       });
     });
   });

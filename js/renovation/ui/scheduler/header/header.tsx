@@ -84,7 +84,7 @@ export class SchedulerToolbarProps {
 
 @Component({ view: viewFunction })
 export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps) {
-  readonly cssClass = 'dx-scheduler-header';
+  cssClass = 'dx-scheduler-header';
 
   get step(): string {
     return getStep(this.props.currentView) as string;
