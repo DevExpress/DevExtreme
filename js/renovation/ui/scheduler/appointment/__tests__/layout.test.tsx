@@ -47,16 +47,11 @@ describe('AppointmentLayout', () => {
       };
       const viewModel1 = {
         ...defaultViewModel,
-        geometry: {
-          ...defaultViewModel.geometry,
-          top: 20,
-        },
-      };
-      const viewModel2 = {
-        ...defaultViewModel,
-        geometry: {
-          ...defaultViewModel.geometry,
-          width: 1220,
+        info: {
+          ...defaultViewModel.info,
+          sourceAppointment: {
+            groupIndex: 11,
+          },
         },
       };
       const layout = render({
@@ -64,7 +59,6 @@ describe('AppointmentLayout', () => {
           items: [
             viewModel0,
             viewModel1,
-            viewModel2,
           ],
         },
       });
@@ -73,25 +67,19 @@ describe('AppointmentLayout', () => {
         .toEqual(true);
 
       expect(layout.children().length)
-        .toEqual(3);
+        .toEqual(2);
 
-      let appointment = layout.children().get(0);
-      expect(appointment.key)
+      let appointment = layout.childAt(0);
+      expect(appointment.key())
         .toEqual('1-1628157600000-1628164800000_11-4-10-20');
-      expect(appointment.props.viewModel)
+      expect(appointment.prop('viewModel'))
         .toBe(viewModel0);
 
-      appointment = layout.children().get(1);
-      expect(appointment.key)
-        .toEqual('1-1628157600000-1628164800000_2-22-10-20');
-      expect(appointment.props.viewModel)
+      appointment = layout.childAt(1);
+      expect(appointment.key())
+        .toEqual('11-1628157600000-1628164800000_2-4-10-20');
+      expect(appointment.prop('viewModel'))
         .toBe(viewModel1);
-
-      appointment = layout.children().get(2);
-      expect(appointment.key)
-        .toEqual('1-1628157600000-1628164800000_2-4-1220-20');
-      expect(appointment.props.viewModel)
-        .toBe(viewModel2);
     });
   });
 });
