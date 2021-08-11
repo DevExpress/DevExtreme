@@ -49,7 +49,7 @@ const moduleConfig = {
 };
 
 const getScrollOffset = function($scrollable) {
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const location = getTranslateValues($content.get(0));
 
@@ -504,11 +504,11 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true, 'scrollable has class scrollbars_disabled');
     assert.equal($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 0);
 
-    $scrollable.dxScrollable('option', 'showScrollbar', isRenovation ? 'onScroll' : true);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'onScroll');
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false, 'scrollable has not class scrollbars_disabled');
     assert.equal($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 1);
 
-    $scrollable.dxScrollable('option', 'showScrollbar', isRenovation ? 'never' : false);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'never');
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true, 'scrollable has class scrollbars_disabled');
     assert.equal($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 0);
 });
@@ -552,7 +552,6 @@ QUnit.test('scrolling component with content size equal to container size nested
         useNative: false,
         bounceEnabled: true,
         inertiaEnabled: false,
-        showScrollbar: 'always',
         onScroll: onScrollHandler
     });
 

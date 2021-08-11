@@ -56,7 +56,8 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria label for items', function(assert) {
-        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0); const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
+        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0);
+        const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($node1.attr('aria-label'), 'Item 1', 'label for 1st item is correct');
         assert.equal($node2.attr('aria-label'), 'Item 11', 'label for 2nd ite is correct');
@@ -74,7 +75,8 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria level for items', function(assert) {
-        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0); const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
+        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0);
+        const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($node1.attr('aria-level'), '1', 'level set correct');
         assert.equal($node2.attr('aria-level'), '2', 'level set correct');
@@ -159,7 +161,9 @@ QUnit.module('markup', {
             parentIdExpr: 'parent'
         });
 
-        const $node = $treeView.find('.' + NODE_CLASS).eq(0); const $nodeContainer = $node.children('.' + NODE_CONTAINER_CLASS).eq(0); const $item = $node.children('.' + ITEM_CLASS).eq(0);
+        const $node = $treeView.find('.' + NODE_CLASS).eq(0);
+        const $nodeContainer = $node.children('.' + NODE_CONTAINER_CLASS).eq(0);
+        const $item = $node.children('.' + ITEM_CLASS).eq(0);
 
         assert.equal($node.data('item-id'), '2', 'keyExpr works');
         assert.equal($item.text(), 'Item 1', 'displayExpr works');
@@ -207,7 +211,9 @@ QUnit.module('markup', {
             items: this.plainItems,
             keyExpr: 'key'
         });
-        const $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS); const $nodes = $itemContainer.find('.' + NODE_CLASS); const $items = $nodes.find('.' + ITEM_CLASS);
+        const $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS);
+        const $nodes = $itemContainer.find('.' + NODE_CLASS);
+        const $items = $nodes.find('.' + ITEM_CLASS);
 
         assert.equal($items.length, 16);
         assert.equal($($items[0]).find('span').text(), 'Animals');
@@ -233,7 +239,10 @@ QUnit.module('markup', {
             keyExpr: 'key'
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0); const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1); const $firstNestedNode = $rootNodeFirstItem.find('> .' + NODE_CONTAINER_CLASS);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
+        const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0);
+        const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
+        const $firstNestedNode = $rootNodeFirstItem.find('> .' + NODE_CONTAINER_CLASS);
 
         assert.ok(!$rootNodeFirstItem.hasClass(IS_LEAF));
         assert.ok($rootNodeSecondItem.hasClass(IS_LEAF));
@@ -269,7 +278,8 @@ QUnit.module('markup', {
             }]
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
+        const $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
 
         assert.ok($icon.hasClass('dx-state-disabled'));
     });
@@ -300,7 +310,8 @@ QUnit.module('markup', {
             parentIdExpr: 'parentId'
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'); const $rootNodeItems = $rootNode.find(' > .' + NODE_CLASS);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first');
+        const $rootNodeItems = $rootNode.find(' > .' + NODE_CLASS);
 
         assert.equal($treeView.find('.' + NODE_CONTAINER_CLASS).length, 5);
         assert.equal($rootNodeItems.length, 3);
@@ -318,7 +329,9 @@ QUnit.module('markup', {
             }
         });
 
-        const $rootNodeContainer = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'); const $firstRootNode = $rootNodeContainer.find('li').first(); const $firstItem = $firstRootNode.find('> .' + ITEM_CLASS);
+        const $rootNodeContainer = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first');
+        const $firstRootNode = $rootNodeContainer.find('li').first();
+        const $firstItem = $firstRootNode.find('> .' + ITEM_CLASS);
 
         assert.equal($firstItem.length, 1);
         assert.equal($firstItem.text(), 'Item 1');

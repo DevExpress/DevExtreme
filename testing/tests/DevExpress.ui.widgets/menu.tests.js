@@ -174,7 +174,8 @@ QUnit.module('Render content delimiters', {
         hoverSubmenuItemByIndex(firstLevelSubmenu, 0);
         this.clock.tick(ANIMATION_TIMEOUT);
 
-        const $items = firstLevelSubmenu.itemElements(); const $border = $rootMenuItem.find('.' + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
+        const $items = firstLevelSubmenu.itemElements();
+        const $border = $rootMenuItem.find('.' + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
 
         assert.equal($items.length, 3, 'all menus are rendered');
         assert.ok($border.is(':visible'), 'border is visible');
@@ -1809,7 +1810,8 @@ QUnit.module('keyboard navigation', {
         this.keyboard
             .press('right');
 
-        const $item1 = $(this.$element).find('.' + DX_MENU_ITEM_CLASS).eq(0); const submenu = getSubMenuInstance($item1);
+        const $item1 = $(this.$element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const submenu = getSubMenuInstance($item1);
 
         assert.ok(submenu.option('visible'), 'submenu is visible');
 
@@ -1984,7 +1986,9 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         assert.ok($button.is(':visible'), 'hamburger button is visible on init');
         assert.ok($treeview.is(':hidden'), 'treeview is hidden on init');
@@ -1998,7 +2002,9 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: false
         });
 
-        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
+        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
 
         assert.equal($button.length, 0, 'button was not rendered');
         assert.equal($treeview.length, 0, 'treeview was not rendered');
@@ -2013,7 +2019,10 @@ QUnit.module('adaptivity: render', {
 
         menu.option('adaptivityEnabled', false);
 
-        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
+        const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         assert.equal($button.length, 0, 'button was not rendered');
         assert.equal($treeview.length, 0, 'treeview was not rendered');
@@ -2038,7 +2047,8 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $overlayContent = $treeview.closest('.dx-overlay-content');
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $overlayContent = $treeview.closest('.dx-overlay-content');
 
         assert.ok($overlayContent.hasClass(DX_ADAPTIVE_MODE_CLASS), 'overlay container has correct class');
     });
@@ -2050,7 +2060,8 @@ QUnit.module('adaptivity: render', {
             rtlEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first();
+        const overlay = $overlay.dxOverlay('instance');
 
         assert.equal(overlay.option('position').at, 'bottom right', 'at position is correct');
         assert.equal(overlay.option('position').my, 'top right', 'my position is correct');
@@ -2062,7 +2073,8 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first();
+        const overlay = $overlay.dxOverlay('instance');
 
         assert.equal(overlay.option('position').collision, 'flipfit', 'collision strategy is correct');
     });
@@ -2074,7 +2086,8 @@ QUnit.module('adaptivity: render', {
             rtlEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first();
+        const overlay = $overlay.dxOverlay('instance');
 
         assert.ok(overlay.option('closeOnTargetScroll'), 'overlay should close on target scroll');
     });
@@ -2100,7 +2113,8 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first();
+        const overlay = $overlay.dxOverlay('instance');
 
         assert.equal(overlay.option('deferRendering'), false, 'defer rendering is disabled for overlay');
     });
@@ -2124,7 +2138,9 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
+        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
 
         assert.equal($button.length, 0, 'button was not rendered');
         assert.equal($treeview.length, 0, 'treeview was not rendered');
@@ -2261,7 +2277,8 @@ QUnit.module('adaptivity: transfer options', {
 
         new Menu(this.$element, menuOptions);
 
-        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const treeview = $treeview.dxTreeView('instance');
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const treeview = $treeview.dxTreeView('instance');
 
         $.each(options, function(_, option) {
             assert.equal(treeview.option(option), 'value', 'option ' + option + ' was transferred on init');
@@ -2284,7 +2301,8 @@ QUnit.module('adaptivity: transfer options', {
 
         $.each(options, function(_, option) {
             menu.option(option, 'value2');
-            const $treeview = that.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const treeview = $treeview.dxTreeView('instance');
+            const $treeview = that.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+            const treeview = $treeview.dxTreeView('instance');
 
             assert.equal(treeview.option(option), 'value2', 'option ' + option + ' was transferred dynamically');
         });
@@ -2421,7 +2439,9 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         $($button).trigger('dxclick');
 
@@ -2437,7 +2457,9 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         $($button).trigger('dxclick');
         $($button).trigger('dxclick');
@@ -2454,7 +2476,9 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $item = this.$element.find('.' + DX_TREEVIEW_ITEM_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $item = this.$element.find('.' + DX_TREEVIEW_ITEM_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $($item).trigger('dxclick');
@@ -2469,7 +2493,8 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $(document).trigger('dxpointerdown');
@@ -2484,7 +2509,8 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $($button).trigger('dxpointerdown');
@@ -2634,7 +2660,8 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $('#qunit-fixture').width(500);
@@ -2649,7 +2676,12 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $item2 = $treeview.find('.dx-treeview-item').eq(1); const overlay = this.$element.find('.dx-overlay').dxOverlay('instance'); const overlayPositioned = sinon.stub(); const $overlayContent = $(overlay.content());
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $item2 = $treeview.find('.dx-treeview-item').eq(1);
+        const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
+        const overlayPositioned = sinon.stub();
+        const $overlayContent = $(overlay.content());
 
         overlay.on('positioned', overlayPositioned);
 

@@ -131,7 +131,7 @@ QUnit.test('scrollbar height calculated correctly', function(assert) {
     });
 
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
@@ -222,7 +222,7 @@ QUnit.test('scrollbar in scaled container has correct position after update', fu
         inertiaEnabled: false
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -252,7 +252,7 @@ QUnit.test('scrollbar width calculated correctly', function(assert) {
         direction: 'horizontal'
     });
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.width(containerWidth);
@@ -277,7 +277,7 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
         }
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -304,7 +304,7 @@ QUnit.test('scrollbar has correct position after update', function(assert) {
         inertiaEnabled: false
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 

@@ -1694,7 +1694,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
 
         clock.tick(400);
-
     });
 
     QUnit.test('Export [string x string x number] with format: currency', function(assert) {

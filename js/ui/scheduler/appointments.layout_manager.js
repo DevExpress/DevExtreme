@@ -50,6 +50,7 @@ class AppointmentLayoutManager {
             isVirtualScrolling: this.instance.isVirtualScrolling(),
             leftVirtualCellCount: cellCountInsideLeftVirtualCell,
             topVirtualCellCount: cellCountInsideTopVirtualRow,
+            modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
@@ -96,7 +97,7 @@ class AppointmentLayoutManager {
             ...renderingStrategyOptions,
         });
 
-        this._positionMap = positionMap;
+        this._positionMap = positionMap; // TODO get rid of this after remove old render
 
         return viewModel;
     }

@@ -41,7 +41,7 @@ const moduleConfig = {
 };
 
 const getScrollOffset = function($scrollable) {
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const location = getTranslateValues($content.get(0));
 
@@ -63,14 +63,14 @@ QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
     }
 
     const $scrollable = $('#scrollable').dxScrollable({
-        showScrollbar: true,
+        showScrollbar: 'onScroll',
         useNative: false
     });
 
     let scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'onScroll', 'true normalize to onScroll');
 
-    $scrollable.dxScrollable('option', 'showScrollbar', false);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'never');
 
     scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'never', 'true normalize to onScroll');
@@ -91,7 +91,7 @@ QUnit.test('scroll by thumb', function(assert) {
     let location;
     const distance = 10;
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const containerToContentRatio = (containerHeight / contentHeight);
 
     $container.height(containerHeight);
@@ -124,7 +124,7 @@ QUnit.test('scrollTo should scroll to correct position during scroll by thumb', 
     const $thumb = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     const mouse = pointerMock($thumb).start();
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const instance = $scrollable.dxScrollable('instance');
 
     $container.height(containerHeight);
@@ -153,7 +153,7 @@ QUnit.test('scroll by thumb without scrolling by content', function(assert) {
     const mouse = pointerMock($thumb).start();
     const distance = 10;
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -180,7 +180,7 @@ QUnit.test('scroll by thumb should prevent scrolling cross direction', function(
     const mouse = pointerMock($thumb).start();
     const distance = 10;
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $container
         .height(containerSize)

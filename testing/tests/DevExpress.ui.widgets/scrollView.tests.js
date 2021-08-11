@@ -37,7 +37,7 @@ const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-
 const PULLDOWN_HEIGHT = 160;
 
 const getScrollOffset = function($scrollView) {
-    const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const location = getTranslateValues($content.get(0));
 
@@ -83,7 +83,7 @@ QUnit.testStart(function() {
 QUnit.module('render', moduleConfig, () => {
     QUnit.test('scrollView render', function(assert) {
         const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
-        const $scrollableContent = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $scrollableContent = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollableContent.children().eq(0);
         const $content = $scrollableContent.children().eq(1);
         const $bottomPocket = $scrollableContent.children().eq(2);
@@ -99,7 +99,8 @@ QUnit.module('render', moduleConfig, () => {
     });
 
     QUnit.test('scrollView pullDown markup', function(assert) {
-        const $scrollView = $('#scrollView').dxScrollView({ useNative: false }); const $pullDown = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS);
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+        const $pullDown = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS);
 
         assert.equal($pullDown.length, 1, 'pull down container');
         assert.equal($pullDown.find('.' + SCROLLVIEW_PULLDOWN_IMAGE_CLASS).length, 1, 'pull down image');
@@ -108,7 +109,11 @@ QUnit.module('render', moduleConfig, () => {
     });
 
     QUnit.test('dxLoadIndicator was created', function(assert) {
-        const $scrollView = $('#scrollView').dxScrollView({ useNative: false }); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS); const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS); const $loadIndicatorTop = $topPocket.find('.dx-loadindicator'); const $loadIndicatorBottom = $bottomPocket.find('.dx-loadindicator');
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+        const $loadIndicatorTop = $topPocket.find('.dx-loadindicator');
+        const $loadIndicatorBottom = $bottomPocket.find('.dx-loadindicator');
 
         const top = $loadIndicatorTop.dxLoadIndicator('instance');
         const bottom = $loadIndicatorBottom.dxLoadIndicator('instance');
@@ -132,7 +137,9 @@ QUnit.module('render', moduleConfig, () => {
     });
 
     QUnit.test('scrollView scrollbottom markup', function(assert) {
-        const $scrollView = $('#scrollView').dxScrollView({ useNative: false }); const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS); const $scrollBottom = $bottomPocket.find('.' + SCROLLVIEW_REACHBOTTOM_CLASS);
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+        const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+        const $scrollBottom = $bottomPocket.find('.' + SCROLLVIEW_REACHBOTTOM_CLASS);
 
         assert.equal($scrollBottom.length, 1, 'scroll bottom container');
         assert.equal($scrollBottom.find('.' + SCROLLVIEW_REACHBOTTOM_TEXT_CLASS).length, 1, 'scrollbottom text');
@@ -208,7 +215,7 @@ QUnit.module('dimension', moduleConfig, () => {
         });
 
         const $container = $scrollView.find('.dx-scrollable-container');
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
@@ -244,7 +251,7 @@ QUnit.module('actions', moduleConfig, () => {
             }
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
@@ -276,7 +283,8 @@ QUnit.module('actions', moduleConfig, () => {
                 assert.ok(true, 'end action should be fired');
             }
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
             .start()
@@ -291,7 +299,7 @@ QUnit.module('actions', moduleConfig, () => {
             pullDownEnabled: true,
             onPullDown: noop
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const offset = 2;
 
         pointerMock($content)
@@ -321,7 +329,7 @@ QUnit.module('actions', moduleConfig, () => {
             }
         }));
         const $container = $scrollView.find('.dx-scrollable-container');
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
         pointerMock($content)
@@ -343,7 +351,7 @@ QUnit.module('actions', moduleConfig, () => {
             }
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         $content.width(200);
         $content.height(0);
 
@@ -373,7 +381,7 @@ QUnit.module('actions', moduleConfig, () => {
             }
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         pointerMock($content)
             .start()
@@ -388,7 +396,9 @@ QUnit.module('actions', moduleConfig, () => {
             useNative: false
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS); const mouse = pointerMock($content).start();
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const mouse = pointerMock($content).start();
 
         mouse
             .down()
@@ -415,7 +425,9 @@ QUnit.module('actions', moduleConfig, () => {
                 assert.ok(true, 'end action was fired');
             }
         });
-        const $container = $scrollView.find('.dx-scrollable-container'); const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS); const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+        const $container = $scrollView.find('.dx-scrollable-container');
+        const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
+        const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
         pointerMock($content)
             .start()
@@ -426,7 +438,6 @@ QUnit.module('actions', moduleConfig, () => {
 
     QUnit.test('disabled scrollview should not be updated on pointerdown after finish loading', function(assert) {
         const onUpdatedHandler = sinon.spy();
-
         const $scrollView = $('#scrollView').dxScrollView({
             onUpdated: onUpdatedHandler,
             useNative: true,
@@ -455,7 +466,7 @@ QUnit.module('dynamic', moduleConfig, () => {
                 assert.equal(location.top, 0, 'pulled down');
             }
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
@@ -479,7 +490,7 @@ QUnit.module('dynamic', moduleConfig, () => {
                 assert.equal(location.top, -$topPocket.height(), 'content bounced to the top');
             }
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
@@ -498,7 +509,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             inertiaEnabled: false
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
@@ -525,7 +536,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             onPullDown: noop,
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         pointerMock($content)
             .start()
@@ -553,7 +564,8 @@ QUnit.module('dynamic', moduleConfig, () => {
             onReachBottom: noop
         });
 
-        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS); const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
+        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
 
         pointerMock($content)
             .start()
@@ -581,7 +593,10 @@ QUnit.module('dynamic', moduleConfig, () => {
             onPullDown: noop,
             showScrollbar: 'always'
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS); const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS); const mouse = pointerMock($content).start();
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+        const mouse = pointerMock($content).start();
 
         mouse.down().move(0, $topPocket.height() + 1);
         assert.equal($topPocket.children().eq(0).hasClass(SCROLLVIEW_PULLDOWN_READY_CLASS), true, 'scrollview-pull-down-ready class added');
@@ -606,7 +621,7 @@ QUnit.module('dynamic', moduleConfig, () => {
                 assert.equal($pullDownText.children().eq(2).css('opacity'), 1);
             }
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
         const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
@@ -635,7 +650,7 @@ QUnit.module('dynamic', moduleConfig, () => {
                 assert.equal($pullDownText.children().eq(0).css('opacity'), 1);
             }
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
         const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
@@ -660,7 +675,10 @@ QUnit.module('dynamic', moduleConfig, () => {
             onPullDown: noop
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS); const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS); const mouse = pointerMock($content).start();
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+        const mouse = pointerMock($content).start();
 
         mouse.down().move(0, $topPocket.height() + 1);
 
@@ -691,7 +709,7 @@ QUnit.module('dynamic', moduleConfig, () => {
                 assert.ok($pullDownText.children().eq(2).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
             }
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
         const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
@@ -730,7 +748,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             }
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
         const mouse = pointerMock($content).start();
 
@@ -754,7 +772,7 @@ QUnit.module('dynamic', moduleConfig, () => {
         });
 
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const mouse = pointerMock($content).start();
 
         mouse
@@ -838,7 +856,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             }
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
         const mouse = pointerMock($content).start();
 
@@ -874,7 +892,7 @@ QUnit.module('dynamic', moduleConfig, () => {
         });
 
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         pointerMock($content)
             .start()
@@ -886,7 +904,9 @@ QUnit.module('dynamic', moduleConfig, () => {
     QUnit.test('pull down element is not hidden when container larger than content', function(assert) {
         const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         $container.height(400);
         $content.find('.' + SCROLLVIEW_CONTENT_CLASS).children().height(50);
@@ -911,7 +931,7 @@ QUnit.module('dynamic', moduleConfig, () => {
                 isLoadPanelVisible = $scrollView.find('.' + SCROLLVIEW_LOADPANEL).eq(0).dxLoadPanel('option', 'visible');
             }
         });
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
@@ -943,7 +963,9 @@ QUnit.module('scrollbars', moduleConfig, () => {
             useNative: false
         });
 
-        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS); const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS); const $scroll = $scrollView.find('.' + SCROLLABLE_SCROLL_CLASS);
+        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
+        const $scroll = $scrollView.find('.' + SCROLLABLE_SCROLL_CLASS);
 
         $container.height(containerHeight);
         $content.empty().height(contentHeight);
@@ -956,7 +978,6 @@ QUnit.module('scrollbars', moduleConfig, () => {
     QUnit.test('moving scrollView moves scrollbar in correct position', function(assert) {
         const containerHeight = 50;
         const contentHeight = 100;
-        let location;
         const distance = -10;
         const scrollbarDistance = -distance * (containerHeight / contentHeight);
 
@@ -964,7 +985,7 @@ QUnit.module('scrollbars', moduleConfig, () => {
             useNative: false,
             inertiaEnabled: false,
             onEnd: function() {
-                location = getTranslateValues($scroll.get(0));
+                const location = getTranslateValues($scroll.get(0));
                 assert.equal(location.top, 2 * scrollbarDistance, 'scrollbar follows pointer everytime');
             }
         });
@@ -1056,7 +1077,7 @@ QUnit.module('api', moduleConfig, () => {
             }
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
@@ -1104,7 +1125,8 @@ QUnit.module('api', moduleConfig, () => {
             }
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
             .start()
@@ -1135,7 +1157,6 @@ QUnit.module('api', moduleConfig, () => {
             useNative: false,
             onUpdated: onUpdatedHandler
         });
-
         onUpdatedHandler.reset();
 
         $scrollView.dxScrollView('release');
@@ -1171,7 +1192,7 @@ QUnit.module('api', moduleConfig, () => {
         });
 
         const $container = $scrollView.find('.dx-scrollable-container');
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         const mouse = pointerMock($content).start();
@@ -1272,7 +1293,7 @@ QUnit.module('api', moduleConfig, () => {
         });
 
         const $container = $scrollView.find('.dx-scrollable-container');
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
         const mouse = pointerMock($content)
@@ -1545,7 +1566,8 @@ QUnit.module('native pullDown strategy', {
             pullDownEnabled: true
         });
 
-        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView); const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
+        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
+        const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
 
         const containerOffset = $container.offset().top;
         const topPocketOffset = $topPocket.offset().top;
@@ -1562,7 +1584,8 @@ QUnit.module('native pullDown strategy', {
 
         $scrollView.dxScrollView('option', 'pullDownEnabled', true);
         $scrollView.dxScrollView('option', 'onPullDown', noop);
-        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView); const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
+        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
+        const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
 
         const containerOffset = $container.offset().top;
         const topPocketOffset = $topPocket.offset().top;
@@ -1682,7 +1705,11 @@ QUnit.module('native pullDown strategy', {
         });
         const scrollView = $scrollView.dxScrollView('instance');
 
-        const $wrapper = $scrollView.find('.' + SCROLLABLE_WRAPPER_CLASS); const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS); const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS); const topPocketHeight = $topPocket.height();
+        const $wrapper = $scrollView.find('.' + SCROLLABLE_WRAPPER_CLASS);
+        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+        const topPocketHeight = $topPocket.height();
 
         const pointer = pointerMock($container)
             .start()
@@ -1715,7 +1742,7 @@ QUnit.module('native pullDown strategy', {
         });
 
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
         $scrollView.dxScrollView('instance').scrollTo($content.height() - $container.height() - $bottomPocket.height() + 0.51);
@@ -1928,7 +1955,8 @@ QUnit.module('native swipeDown strategy', {
 
         const scrollView = $scrollView.dxScrollView('instance');
 
-        const $pullDown = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS); const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $pullDown = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS);
+        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
         pointerMock($container)
             .start()
@@ -1952,7 +1980,7 @@ QUnit.module('native swipeDown strategy', {
         });
 
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
         $scrollView.dxScrollView('instance').scrollTo($content.height() - $container.height() + $bottomPocket.height() + 1);
@@ -1971,7 +1999,7 @@ QUnit.module('native swipeDown strategy', {
         });
 
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
         $container.scrollTop($content.height() - $container.height() + $bottomPocket.height() + 1);
@@ -2055,7 +2083,6 @@ QUnit.module('native swipeDown strategy', {
             useNative: true,
             onUpdated: onUpdateHandler
         });
-
         const clock = sinon.useFakeTimers();
         try {
             $scrollView.dxScrollView('release');
@@ -2261,7 +2288,7 @@ QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
             const $scrollView = $('#scrollView').dxScrollView($.extend(config, { useNative: false }));
             assert.ok(true, 'no exceptions');
 
-            const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+            const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
             pointerMock($content)
                 .start()
