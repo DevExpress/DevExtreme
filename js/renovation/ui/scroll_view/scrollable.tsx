@@ -28,6 +28,8 @@ import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
 import { hasWindow } from '../../../core/utils/window';
 
+let isServerSide = !hasWindow();
+
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
@@ -45,7 +47,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  const isServerSide = !hasWindow();
+  isServerSide = !hasWindow();
 
   return useNative
     ? (
@@ -182,12 +184,16 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   release(): void {
-    return this.scrollableRef.release() as undefined;
+    if (!isServerSide) {
+      this.scrollableRef.release() as undefined;
+    }
   }
 
   @Method()
   refresh(): void {
-    this.scrollableRef.refresh();
+    if (!isServerSide) {
+      this.scrollableRef.refresh();
+    }
   }
 
   @Method()
@@ -253,7 +259,9 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   finishLoading(): void {
-    this.scrollableRef.finishLoading();
+    if (!isServerSide) {
+      this.scrollableRef.finishLoading();
+    }
   }
 
   validate(event: DxMouseEvent): boolean {
