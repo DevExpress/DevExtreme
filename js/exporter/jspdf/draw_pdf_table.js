@@ -1,6 +1,5 @@
-import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
-import { drawLine, drawRect, drawText } from './pdf_utils';
+import { drawLine, drawRect, drawTextInRect } from './pdf_utils';
 
 // this function is large and will grow
 export function drawPdfTable(doc, styles, table) {
@@ -60,8 +59,7 @@ export function drawPdfTable(doc, styles, table) {
                 doc.setTextColor(textColor);
             }
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                const textY = cell._rect.y + (cell._rect.h / 2);
-                drawText(doc, cell.text, cell._rect.x, textY, extend({ baseline: 'middle' }, cell.textOptions)); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
+                drawTextInRect(doc, cell.text, cell._rect, table.wordWrapEnabled, cell.textOptions);
             }
             drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });

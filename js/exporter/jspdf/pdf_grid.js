@@ -2,12 +2,13 @@ import { isDefined } from '../../core/utils/type';
 import { PdfTable } from './pdf_table';
 
 export class PdfGrid {
-    constructor(splitByColumns, columnWidths) {
+    constructor(splitByColumns, columnWidths, wordWrapEnabled) {
         this._splitByColumns = splitByColumns ?? [];
         this._columnWidths = columnWidths ?? [];
         this._newPageTables = [];
         this._tables = [];
         this._currentHorizontalTables = null;
+        this._wordWrapEnabled = wordWrapEnabled;
     }
 
     _addLastTableToNewPages() {
@@ -24,7 +25,7 @@ export class PdfGrid {
         if(isDefined(firstColumnWidth)) {
             firstTableColumnWidths[0] = firstColumnWidth;
         }
-        this._currentHorizontalTables = [new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths)];
+        this._currentHorizontalTables = [new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths, this._wordWrapEnabled)];
         if(firstTableOnNewPage) {
             this._addLastTableToNewPages();
         }
@@ -35,7 +36,7 @@ export class PdfGrid {
                 const endColumnIndex = this._splitByColumns[i + 1]?.columnIndex ?? this._columnWidths.length;
 
                 this._currentHorizontalTables.push(
-                    new PdfTable(drawTableBorder, this._splitByColumns[i].tableTopLeft, this._columnWidths.slice(beginColumnIndex, endColumnIndex))
+                    new PdfTable(drawTableBorder, this._splitByColumns[i].tableTopLeft, this._columnWidths.slice(beginColumnIndex, endColumnIndex), this._wordWrapEnabled)
                 );
                 if(this._splitByColumns[i].drawOnNewPage) {
                     this._addLastTableToNewPages();

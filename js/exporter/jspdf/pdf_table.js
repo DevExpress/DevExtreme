@@ -2,7 +2,7 @@ import { isDefined } from '../../core/utils/type';
 import { drawPdfTable } from './draw_pdf_table';
 
 export class PdfTable {
-    constructor(drawTableBorder, topLeft, columnWidths) {
+    constructor(drawTableBorder, topLeft, columnWidths, wordWrapEnabled) {
         if(!isDefined(columnWidths)) {
             throw 'columnWidths is required';
         }
@@ -20,6 +20,7 @@ export class PdfTable {
         this.columnWidths = columnWidths; // TODO
         this.rowHeights = [];
         this.rows = [];
+        this.wordWrapEnabled = wordWrapEnabled;
     }
 
     getCellX(cellIndex) {
