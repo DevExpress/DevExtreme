@@ -17,6 +17,9 @@ import { ScrollableProps } from '../scrollable_props';
 import { ScrollableNative } from '../scrollable_native';
 import { ScrollableSimulated } from '../scrollable_simulated';
 
+import { Widget } from '../../common/widget';
+import { ScrollableDirection } from '../types';
+
 jest.mock('../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
   isGeneric: jest.fn(() => true),
@@ -41,6 +44,36 @@ describe('Scrollable', () => {
       scrollByThumb: false,
       showScrollbar: 'onScroll',
       useNative: true,
+    });
+  });
+
+  each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
+    it('should pass all necessary properties to the Widget', () => {
+      const config = {
+        activeStateUnit: '.UIFeedback',
+        useNative: useNativeScrolling,
+        direction: 'vertical' as ScrollableDirection,
+        width: '120px',
+        height: '300px',
+        activeStateEnabled: false,
+        addWidgetClass: false,
+        rtlEnabled: true,
+        disabled: true,
+        focusStateEnabled: false,
+        hoverStateEnabled: !useNativeScrolling,
+        tabIndex: 0,
+        visible: true,
+      };
+
+      const scrollable = mount<Scrollable>(<Scrollable {...config} />);
+
+      const { direction, useNative, ...restProps } = config;
+      expect(scrollable.find(Widget).at(0).props()).toMatchObject({
+        classes: useNative
+          ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled'
+          : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled',
+        ...restProps,
+      });
     });
   });
 
