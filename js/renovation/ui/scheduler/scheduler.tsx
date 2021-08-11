@@ -9,16 +9,19 @@ import {
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
 import dxScheduler, { dxSchedulerAppointment } from '../../../ui/scheduler';
-import { SchedulerProps } from './props';
+import { ViewProps, SchedulerProps } from './props';
 
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
+import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
+import { WorkSpaceProps } from './workspaces/props';
 
 export const viewFunction = (viewModel: Scheduler): JSX.Element => {
   const { restAttributes } = viewModel;
   return (
     <Widget
+      classes="dx-scheduler"
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     />
   );
@@ -31,6 +34,17 @@ export const viewFunction = (viewModel: Scheduler): JSX.Element => {
 export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState()
   instance!: dxScheduler;
+
+  // https://github.com/DevExpress/devextreme-renovation/issues/754
+  get currentViewProps(): Partial<ViewProps> {
+    const { views, currentView } = this.props;
+
+    return getCurrentViewProps(currentView, views);
+  }
+
+  get currentViewConfig(): WorkSpaceProps {
+    return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
 
   @Method()
   getComponentInstance(): dxScheduler {

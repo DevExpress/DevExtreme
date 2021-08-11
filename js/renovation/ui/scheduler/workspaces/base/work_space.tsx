@@ -2,7 +2,6 @@ import {
   Component,
   ComponentBindings,
   Effect,
-  Event,
   ForwardRef,
   JSXComponent,
   JSXTemplate,
@@ -11,18 +10,12 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 import {
-  DataCellTemplateProps,
   DateHeaderData,
-  DateTimeCellTemplateProps,
-  Group,
   GroupedViewData,
-  ResourceCellTemplateProps,
   TimePanelData,
+  ViewDataProviderType,
 } from '../types';
-import { GroupOrientation } from '../../types';
 import { OrdinaryLayout, OrdinaryLayoutProps } from './ordinary_layout';
-import dateUtils from '../../../../../core/utils/date';
-import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from './header_panel/layout';
 import { DateTableLayoutBase, DateTableLayoutProps } from './date_table/layout';
 import { TimePaneLayoutProps } from './time_panel/layout';
@@ -32,37 +25,9 @@ import {
   createCellElementMetaData,
   getHiddenInterval, getRowCountWithAllDayRow, getTotalCellCount, getTotalRowCount,
 } from './utils';
-
-interface CountGenerationConfig {
-  intervalCount: number;
-  currentDate: Date;
-  viewType: string;
-  hoursInterval: number;
-  startDayHour: number;
-  endDayHour: number;
-}
-
-// TODO: tempporary
-interface ViewDataProviderType {
-  timePanelData: TimePanelData;
-  viewData: GroupedViewData;
-  dateHeaderData: DateHeaderData;
-  getCellCount: (config: CountGenerationConfig) => number;
-  getRowCount: (config: CountGenerationConfig) => number;
-  update: (options: unknown, isGenerateNewData: boolean) => void;
-}
+import { WorkSpaceProps } from '../props';
 
 type GetDateForHeaderText = (index: number, date: Date) => Date;
-
-interface CellsMetaData {
-  dateTableCellsMeta: ClientRect[][];
-  allDayPanelCellsMeta: ClientRect[];
-}
-
-export interface ViewMetaData {
-  viewDataProvider: ViewDataProviderType;
-  cellsMetaData: CellsMetaData;
-}
 
 export const viewFunction = ({
   // dateHeaderData,
@@ -121,65 +86,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class WorkSpaceBaseProps {
-  // -------------------
-  // Public templates
-  // -------------------
-
-  @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
-
-  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
-
-  @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
-
-  @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  // -----------------
-  // Public props
-  // -----------------
-
-  @OneWay() intervalCount = 1;
-
-  @OneWay() groups: Group[] = [];
-
-  @OneWay() groupByDate = false;
-
-  @OneWay() groupOrientation: GroupOrientation = 'horizontal';
-
-  @OneWay() crossScrollingEnabled = false;
-
-  @OneWay() startDayHour = 0;
-
-  @OneWay() endDayHour = 24;
-
-  @OneWay() firstDayOfWeek = 0;
-
-  @OneWay() currentDate!: Date;
-
-  @OneWay() startDate?: Date;
-
-  @OneWay() hoursInterval = 0.5;
-
-  @OneWay() showAllDayPanel = false;
-
-  @OneWay() allDayPanelExpanded = false;
-
-  @OneWay() allowMultipleCellSelection = true;
-
-  @OneWay() indicatorTime = new Date();
-
-  @OneWay() indicatorUpdateInterval = 5 * dateUtils.dateToMilliseconds('minute');
-
-  @OneWay() shadeUntilCurrentTime = true;
-
-  @OneWay() selectedCellData = [];
-
-  @OneWay() scrolling: dxSchedulerScrolling = {
-    mode: 'standard',
-  };
-
-  @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
-
+export class WorkSpaceBaseProps extends WorkSpaceProps {
   // ---------------------
   // Internal for workspaces templates
   // ---------------------
