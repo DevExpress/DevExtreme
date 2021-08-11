@@ -2552,7 +2552,8 @@ QUnit.module('dxPivotGrid', {
             bounceEnabled: false
         };
 
-        const $pivotGridElement = $('#pivotGrid').height(200); const pivotGrid = createPivotGrid(this.testOptions);
+        const $pivotGridElement = $('#pivotGrid').height(200);
+        const pivotGrid = createPivotGrid(this.testOptions);
 
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
         assert.equal(pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).css('borderBottomWidth'), '0px', 'data area border bottom width');
