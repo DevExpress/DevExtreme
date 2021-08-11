@@ -131,8 +131,7 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
   }
 
   private getNextPageIndex(direction: Direction): number {
-    this.props.pageIndexChange?.(this.props.pageIndex + getIncrement(direction));
-    return this.props.pageIndex;
+    return this.props.pageIndex + getIncrement(direction);
   }
 
   private canNavigateTo(direction: Direction): boolean {
@@ -140,7 +139,7 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
   }
 
   private navigateToPage(direction: Direction): void {
-    this.pageIndexChange(this.getNextPageIndex(direction));
+    this.pageIndexChange?.(this.getNextPageIndex(direction));
   }
 
   get renderPrevButton(): boolean {

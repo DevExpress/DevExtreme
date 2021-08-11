@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { ResizableContainer } from './resizable_container';
-import { InternalPagerProps } from './common/pager_props';
+import { PagerProps, InternalPagerProps } from './common/pager_props';
 import { PagerContent } from './content';
 import { GridPagerWrapper } from '../../component_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
@@ -27,24 +27,24 @@ export const viewFunction = ({
   view: viewFunction,
 })
 
-export class Pager extends JSXComponent<InternalPagerProps>() {
+export class Pager extends JSXComponent<PagerProps>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
-      this.props.pageIndexChange?.(newPageIndex + 1);
+      this.props.pageIndex = newPageIndex + 1;
     } else {
-      this.props.pageIndexChange?.(newPageIndex);
+      this.props.pageIndex = newPageIndex;
     }
   }
 
   get pageIndex(): number {
     if (this.props.gridCompatibility) {
-      this.props.pageIndexChange?.(this.props.pageIndex - 1);
+      return this.props.pageIndex - 1;
     }
     return this.props.pageIndex;
   }
 
   pageSizeChange(newPageSize: number): void {
-    this.props.pageSizeChange?.(newPageSize);
+    this.props.pageSize = newPageSize;
   }
 
   get className(): string | undefined {

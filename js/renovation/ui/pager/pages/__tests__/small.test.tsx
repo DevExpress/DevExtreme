@@ -78,6 +78,7 @@ describe('Small pager pages', () => {
       const component = new PagesSmall({
         pageCount: 3,
         pageIndex: 2,
+        pageIndexChange: jest.fn(),
       });
       expect(() => component.selectLastPageIndex()).not.toThrow();
       component.props.pageIndexChange = pageIndexChangeHandler;

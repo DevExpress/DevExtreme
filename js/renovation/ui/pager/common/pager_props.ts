@@ -16,12 +16,12 @@ export class PagerProps extends BasePagerProps {
 }
 
 @ComponentBindings()
-export class InternalPagerProps extends PagerProps {
+export class InternalPagerProps extends BasePagerProps {
   @OneWay() pageSize = 5;
 
   @OneWay() pageIndex = 1;
 
-  @Event() pageIndexChange?: EventCallback<number>;
+  @Event() pageIndexChange!: EventCallback<number>;
 
-  @Event() pageSizeChange?: EventCallback<number>;
+  @Event() pageSizeChange!: EventCallback<number>;
 }

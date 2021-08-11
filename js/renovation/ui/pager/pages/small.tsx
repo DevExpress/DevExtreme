@@ -53,8 +53,7 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   @Ref() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {
-    this.props.pageIndexChange?.(this.props.pageIndex + 1);
-    return this.props.pageIndex;
+    return this.props.pageIndex + 1;
   }
 
   get width(): number {
@@ -74,10 +73,10 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   }
 
   selectLastPageIndex(): void {
-    this.props.pageIndexChange?.(this.props.pageCount - 1);
+    this.props.pageIndexChange(this.props.pageCount - 1);
   }
 
   valueChange(value: number): void {
-    this.props.pageIndexChange?.(value - 1);
+    this.props.pageIndexChange(value - 1);
   }
 }

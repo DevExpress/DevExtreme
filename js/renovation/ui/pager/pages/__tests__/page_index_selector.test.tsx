@@ -165,7 +165,7 @@ describe('Page index selector', () => {
       });
       component.config = { rtlEnabled: false };
       expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
-      component.props.pageIndexChange?.(4);
+      component.props.pageIndex = 4;
       expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
     });
 
@@ -178,7 +178,7 @@ describe('Page index selector', () => {
       });
       component.config = { rtlEnabled: false };
       expect(component.prevClassName).toBe('dx-navigate-button dx-prev-button');
-      component.props.pageIndexChange?.(0);
+      component.props.pageIndex = 0;
       expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
 
@@ -204,7 +204,7 @@ describe('Page index selector', () => {
       });
       component.config = { rtlEnabled: true };
       expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
-      component.props.pageIndexChange?.(0);
+      component.props.pageIndex = 0;
       expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
     });
 
@@ -217,7 +217,7 @@ describe('Page index selector', () => {
       });
       component.config = { rtlEnabled: true };
       expect(component.prevClassName).toBe('dx-navigate-button dx-prev-button');
-      component.props.pageIndexChange?.(4);
+      component.props.pageIndex = 4;
       expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
 
@@ -242,7 +242,7 @@ describe('Page index selector', () => {
         });
         component.config = { rtlEnabled: false };
         component.navigateToNextPage();
-        expect(component.props.pageIndexChange).toBeCalledWith(4);
+        expect(component.props.pageIndex).toBe(4);
       });
 
       it('rtlEnabled: true, can navigate', () => {
@@ -265,7 +265,7 @@ describe('Page index selector', () => {
         });
         component.config = { rtlEnabled: true };
         component.navigateToNextPage();
-        expect(component.props.pageIndexChange).toBeCalledWith(0);
+        expect(component.props.pageIndex).toBe(0);
       });
     });
 
