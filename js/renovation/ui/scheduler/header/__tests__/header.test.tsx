@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { mount } from 'enzyme';
 import SchedulerToolbar, { viewFunction, SchedulerToolbarProps } from '../header';
 import { Toolbar } from '../../../toolbar/toolbar';
@@ -23,15 +24,13 @@ describe('Scheduler Toolbar', () => {
   });
 
   describe('Behaviour', () => {
-    const create = (options: any = {}): SchedulerToolbar => {
-      return new SchedulerToolbar({
-        ...new SchedulerToolbarProps(),
-        currentView: 'day',
-        views: ['day', 'week'],
-        currentDate: new Date(2021, 7, 7),
-        ...options,
-      });
-    };
+    const create = (options: any = {}): SchedulerToolbar => new SchedulerToolbar({
+      ...new SchedulerToolbarProps(),
+      currentView: 'day',
+      views: ['day', 'week'],
+      currentDate: new Date(2021, 7, 7),
+      ...options,
+    });
 
     describe('Methods', () => {
       it('should call onCurrentViewUpdate after view change', () => {
@@ -65,7 +64,7 @@ describe('Scheduler Toolbar', () => {
             const viewSwitcher = toolbar.items[1];
             const options = viewSwitcher.options as ToolbarButtonGroupProps;
             const view = { name: 'week' };
-            options.onItemClick!({ itemData: { view } } as any);
+            options.onItemClick!({ itemData: view } as any);
 
             expect(mockCallback.mock.calls.length).toBe(1);
             expect(mockCallback.mock.calls[0][0]).toEqual(view.name);
@@ -78,7 +77,7 @@ describe('Scheduler Toolbar', () => {
             const viewSwitcher = toolbar.items[1];
             const options = viewSwitcher.options as ToolbarButtonGroupProps;
             const view = { name: 'day' };
-            options.onItemClick!({ itemData: { view } } as any);
+            options.onItemClick!({ itemData: view } as any);
 
             expect(mockCallback.mock.calls.length).toBe(0);
           });
@@ -127,20 +126,18 @@ describe('Scheduler Toolbar', () => {
   });
 
   describe('Logic', () => {
-    const create = (options: any = {}): SchedulerToolbar => {
-      return new SchedulerToolbar({
-        ...new SchedulerToolbarProps(),
-        currentView: 'day',
-        views: [
-          'agenda', 'day', 'month',
-          'timelineDay', 'timelineMonth',
-          'timelineWeek', 'timelineWorkWeek',
-          'week', 'workWeek'
-        ],
-        currentDate: new Date(2021, 7, 7),
-        ...options,
-      });
-    };
+    const create = (options: any = {}): SchedulerToolbar => new SchedulerToolbar({
+      ...new SchedulerToolbarProps(),
+      currentView: 'day',
+      views: [
+        'agenda', 'day', 'month',
+        'timelineDay', 'timelineMonth',
+        'timelineWeek', 'timelineWorkWeek',
+        'week', 'workWeek',
+      ],
+      currentDate: new Date(2021, 7, 7),
+      ...options,
+    });
 
     describe('Getters', () => {
       it('should return correct css class', () => {
@@ -159,13 +156,13 @@ describe('Scheduler Toolbar', () => {
         const toolbar = create({ currentView: 'agenda' });
 
         expect(toolbar.step).toBe('agenda');
-      })
+      });
 
       it('should return correct step for week timelineMonth view', () => {
         const toolbar = create({ currentView: 'timelineMonth' });
 
         expect(toolbar.step).toBe('month');
-      })
+      });
 
       it('should return correct caption for day view', () => {
         const toolbar = create({ currentView: 'day' });
@@ -203,10 +200,9 @@ describe('Scheduler Toolbar', () => {
         expect(toolbar.captionText).toBe('7 August 2021');
       });
 
-
       it('should apply customizationFunction to caption text', () => {
         const toolbar = create({
-          customizationFunction: (): string => 'custom_text'
+          customizationFunction: (): string => 'custom_text',
         });
 
         expect(toolbar.captionText).toBe('custom_text');
@@ -217,8 +213,8 @@ describe('Scheduler Toolbar', () => {
         const toolbar = create({ views });
 
         expect(toolbar.views).toEqual([{
-          text: "DAY",
-          name: "DAY",
+          text: 'DAY',
+          name: 'DAY',
         }]);
       });
 
@@ -281,17 +277,17 @@ describe('Scheduler Toolbar', () => {
         expect(viewSwitcherConfig.location).toBe('after');
       });
 
-      it('should return correct viewSwitcher type with ' +
-        'useDropDownViewSwitcher=false', () => {
-          const toolbar = create({ useDropDownViewSwitcher: false });
-          const viewSwitcherConfig = toolbar.items[1];
+      it('should return correct viewSwitcher type with '
+        + 'useDropDownViewSwitcher=false', () => {
+        const toolbar = create({ useDropDownViewSwitcher: false });
+        const viewSwitcherConfig = toolbar.items[1];
 
-          expect(viewSwitcherConfig.widget).toBe('dxButtonGroup');
-          expect(viewSwitcherConfig.locateInMenu).toBe('auto');
-        });
+        expect(viewSwitcherConfig.widget).toBe('dxButtonGroup');
+        expect(viewSwitcherConfig.locateInMenu).toBe('auto');
+      });
 
-      it('should return correct viewSwitcher type with ' +
-        'useDropDownViewSwitcher=true', () => {
+      it('should return correct viewSwitcher type with '
+        + 'useDropDownViewSwitcher=true', () => {
         const toolbar = create({ useDropDownViewSwitcher: true });
         const viewSwitcherConfig = toolbar.items[1];
 
@@ -301,8 +297,8 @@ describe('Scheduler Toolbar', () => {
 
       it('should return custom items', () => {
         const items = [{
-            widget: 'dxButton',
-            text: 'Button text',
+          widget: 'dxButton',
+          text: 'Button text',
         }];
 
         const toolbar = create({ items });

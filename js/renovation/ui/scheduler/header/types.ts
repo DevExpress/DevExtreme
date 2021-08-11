@@ -1,15 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   OneWay,
   ComponentBindings,
 } from '@devextreme-generator/declarations';
 import {
   ToolbarItem,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ToolbarButtonProps,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ToolbarButtonGroupProps,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ToolbarDropDownButtonProps,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ToolbarTextBoxProps,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ToolbarCheckBoxProps,
 } from '../../toolbar/toolbar_props';
 
