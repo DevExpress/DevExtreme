@@ -4036,7 +4036,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
         // assert
         assert.strictEqual(this.dataController.items().length, 15, 'item count');
-        assert.strictEqual(this.dataController.items()[0].key, 10, 'item 19 from first page');
+        assert.strictEqual(this.dataController.items()[0].key, 10, 'item 10 from first page');
         assert.strictEqual(this.dataController.items()[9].key, 19, 'item 19 from first page');
         assert.strictEqual(this.dataController.items()[10].key, 20, 'item 20 from second page');
     });

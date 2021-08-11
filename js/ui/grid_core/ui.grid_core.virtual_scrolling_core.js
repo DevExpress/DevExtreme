@@ -150,9 +150,16 @@ export const VirtualScrollController = Class.inherit((function() {
                 const totalItemsCount = this._dataOptions.totalItemsCount();
                 if(this.option(NEW_SCROLLING_MODE) && totalItemsCount !== -1) {
                     const viewportParams = this.getViewportParams();
-                    const endItemsCount = totalItemsCount - (viewportParams.skip + viewportParams.take);
+                    const loadedOffset = this._dataOptions.loadedOffset();
+                    const loadedItemCount = this._dataOptions.loadedItemCount();
+
+                    const skip = Math.max(viewportParams.skip, loadedOffset);
+                    const take = Math.min(viewportParams.take, loadedItemCount);
+
+
+                    const endItemsCount = totalItemsCount - (skip + take);
                     return {
-                        begin: viewportParams.skip,
+                        begin: skip,
                         end: endItemsCount
                     };
                 }

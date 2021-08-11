@@ -540,6 +540,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                     const correctedRowHeights = this._correctRowHeights(rowHeights);
                     dataController.setContentItemSizes(correctedRowHeights);
                 }
+
                 const top = dataController.getContentOffset('begin');
                 const bottom = dataController.getContentOffset('end');
                 const $tables = this.getTableElements();
@@ -826,6 +827,12 @@ export const virtualScrollingModule = {
                             pageSize: function() {
                                 return that.getRowPageSize();
                             },
+                            loadedOffset: function() {
+                                return isVirtualMode(that) && that._dataSource.lastLoadOptions().skip || 0;
+                            },
+                            loadedItemCount: function() {
+                                return that._itemCount;
+                            },
                             totalItemsCount: function() {
                                 if(that.option(NEW_SCROLLING_MODE)) {
                                     return isVirtualMode(that) ? that.totalItemsCount() + that._uncountableItemCount : that._itemCount;
@@ -983,7 +990,7 @@ export const virtualScrollingModule = {
                         if(isDefined(this._loadViewportParams)) {
                             this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
                             this._updateLoadViewportParams();
-                            const { skipForCurrentPage } = this.getLoadPageParams();
+                            const { skipForCurrentPage } = this.getLoadPageParams(true);
                             this._itemCount = items.length;
                             return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
                         }
@@ -1046,7 +1053,7 @@ export const virtualScrollingModule = {
 
                         if(rowsScrollController && !byLoadedRows) {
                             if(this.option(NEW_SCROLLING_MODE) && isDefined(this._loadViewportParams)) {
-                                const { skipForCurrentPage, pageIndex } = this.getLoadPageParams();
+                                const { skipForCurrentPage, pageIndex } = this.getLoadPageParams(true);
                                 offset = pageIndex * this.pageSize() + skipForCurrentPage;
                             } else {
                                 offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
@@ -1101,17 +1108,19 @@ export const virtualScrollingModule = {
 
                         return dataSource?.setContentItemSizes(sizes);
                     },
-                    getLoadPageParams: function() {
+                    getLoadPageParams: function(byLoadedPage) {
                         const viewportParams = this._loadViewportParams;
+                        const lastLoadOptions = this._dataSource.lastLoadOptions();
+                        const loadedPageIndex = lastLoadOptions.pageIndex || 0;
 
-                        const pageIndex = Math.floor(viewportParams.skip / this.pageSize());
+                        const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(viewportParams.skip / this.pageSize());
                         const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());
                         const loadPageCount = Math.ceil((skipForCurrentPage + viewportParams.take) / this.pageSize());
 
                         return {
                             pageIndex,
-                            loadPageCount,
-                            skipForCurrentPage
+                            loadPageCount: Math.max(1, loadPageCount),
+                            skipForCurrentPage: Math.max(0, skipForCurrentPage)
                         };
                     },
                     loadViewport: function() {

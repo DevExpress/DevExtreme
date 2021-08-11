@@ -168,9 +168,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                     keyExpr: 'id',
                     dataSource: data,
                     scrolling: {
-                        mode: 'virtual',
+                        mode: scrollingMode,
                         rowRenderingMode,
-                        useNative: false
+                        useNative: false,
+                        minGap: 0,
                     },
                     loadingTimeout: null
                 }).dxDataGrid('instance');
@@ -328,7 +329,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                newMode: false
             },
             columns: [
                 'value',
