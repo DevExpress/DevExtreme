@@ -1512,7 +1512,7 @@ QUnit.module('Workspace with crossScrollingEnabled markup', scrollingModuleConfi
         const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
 
         assert.equal(headerScrollable.option('direction'), 'horizontal', 'Direction is OK');
-        assert.strictEqual(headerScrollable.option('showScrollbar'), false, 'showScrollbar is OK');
+        assert.strictEqual(headerScrollable.option('showScrollbar'), 'never', 'showScrollbar is OK');
         assert.strictEqual(headerScrollable.option('bounceEnabled'), false, 'bounceEnabled is OK');
         assert.strictEqual(headerScrollable.option('updateManually'), true, 'updateManually is OK');
     });
@@ -1521,7 +1521,7 @@ QUnit.module('Workspace with crossScrollingEnabled markup', scrollingModuleConfi
         const timePanelScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
 
         assert.equal(timePanelScrollable.option('direction'), 'vertical', 'Direction is OK');
-        assert.strictEqual(timePanelScrollable.option('showScrollbar'), false, 'showScrollbar is OK');
+        assert.strictEqual(timePanelScrollable.option('showScrollbar'), 'never', 'showScrollbar is OK');
         assert.strictEqual(timePanelScrollable.option('bounceEnabled'), false, 'bounceEnabled is OK');
         assert.strictEqual(timePanelScrollable.option('updateManually'), true, 'updateManually is OK');
     });
