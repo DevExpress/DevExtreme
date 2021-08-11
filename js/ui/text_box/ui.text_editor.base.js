@@ -229,13 +229,14 @@ const TextEditorBase = Editor.inherit({
     },
 
     _render: function() {
+        this.callBase();
+
         this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
 
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
-        this.callBase();
     },
 
     _renderInput: function() {

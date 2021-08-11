@@ -601,11 +601,6 @@ const DateBox = DropDownEditor.inherit({
         return '';
     },
 
-    _renderPlaceholder: function() {
-        this._popup && this._popup.option('title', this._getPopupTitle());
-        this.callBase();
-    },
-
     _refreshStrategy: function() {
         this._strategy.dispose();
         this._initStrategy();
@@ -635,6 +630,10 @@ const DateBox = DropDownEditor.inherit({
         return this._pickerType === PICKER_TYPE['native'];
     },
 
+    _updatePopupTitle: function() {
+        this._popup?.option('title', this._getPopupTitle());
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'showClearButton':
@@ -657,7 +656,8 @@ const DateBox = DropDownEditor.inherit({
                 this._updateValue();
                 break;
             case 'placeholder':
-                this._renderPlaceholder();
+                this.callBase.apply(this, arguments);
+                this._updatePopupTitle();
                 break;
             case 'min':
             case 'max': {
