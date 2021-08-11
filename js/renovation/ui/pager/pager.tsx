@@ -29,20 +29,18 @@ export const viewFunction = ({
 
 export class Pager extends JSXComponent<InternalPagerProps>() {
   pageIndexChange(newPageIndex: number): void {
-    const { pageIndexChange, gridCompatibility } = this.props;
-    if (gridCompatibility) {
-      pageIndexChange(newPageIndex + 1);
+    if (this.props.gridCompatibility) {
+      this.props.pageIndexChange?.(newPageIndex + 1);
     } else {
-      pageIndexChange(newPageIndex);
+      this.props.pageIndexChange?.(newPageIndex);
     }
   }
 
   get pageIndex(): number {
-    const { pageIndex, pageIndexChange, gridCompatibility } = this.props;
-    if (gridCompatibility) {
-      pageIndexChange(pageIndex - 1);
+    if (this.props.gridCompatibility) {
+      this.props.pageIndexChange?.(this.props.pageIndex - 1);
     }
-    return pageIndex;
+    return this.props.pageIndex;
   }
 
   pageSizeChange(newPageSize: number): void {
@@ -64,8 +62,8 @@ export class Pager extends JSXComponent<InternalPagerProps>() {
       ...this.props,
       className: this.className,
       pageIndex: this.pageIndex,
-      pageIndexChange: (pageIndex: number): void => this.pageIndexChange(pageIndex),
-      pageSizeChange: (pageSize: number): void => this.pageSizeChange(pageSize),
+      pageIndexChange: (pageIndex: number): void => this.pageIndexChange?.(pageIndex),
+      pageSizeChange: (pageSize: number): void => this.pageSizeChange?.(pageSize),
     };
   }
 }

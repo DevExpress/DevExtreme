@@ -23,7 +23,6 @@ describe('Pager', () => {
         },
         ...restProps
       } = pager.props();
-
       expect(restProps).toEqual({
         'rest-attributes': 'restAttributes',
         contentTemplate: PagerContent,
@@ -39,7 +38,7 @@ describe('Pager', () => {
         displayMode: 'adaptive',
         maxPagesCount: 10,
         pageCount: 10,
-        pageIndex: 0,
+        pageIndex: 1,
         pageSize: 5,
         pageSizes: [5, 10],
         showInfo: false,
