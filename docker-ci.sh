@@ -171,6 +171,7 @@ function run_test {
     esac
 
     start_runner_watchdog $runner_pid
+    start_memory_logger
     wait $runner_pid || runner_result=1
     exit $runner_result
 }
@@ -179,6 +180,14 @@ function run_test_jest {
     npm i
     npx gulp localization
     npm run test-jest
+}
+
+function start_memory_logger {
+    while true; do
+        sleep 30
+        #https://shuheikagawa.com/blog/2017/05/27/memory-usage/
+        echo "[MEMORY] used $(cat /sys/fs/cgroup/memory/memory.usage_in_bytes) of $(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)"
+    done &
 }
 
 function start_runner_watchdog {
