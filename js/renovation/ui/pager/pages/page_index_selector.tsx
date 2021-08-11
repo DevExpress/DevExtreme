@@ -85,8 +85,7 @@ export class PageIndexSelectorProps {
   @OneWay() isLargeDisplayMode = true;
 }
 
-type PageIndexSelectorPropsType = Pick<InternalPagerProps,
-| 'hasKnownLastPage'
+type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
 | 'maxPagesCount'
 | 'pageCount'
 | 'pageIndex'
@@ -145,7 +144,11 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
   }
 
   get renderPrevButton(): boolean {
-    return !this.props.isLargeDisplayMode || this.props.showNavigationButtons;
+    const {
+      isLargeDisplayMode,
+      showNavigationButtons,
+    } = this.props;
+    return !isLargeDisplayMode || showNavigationButtons;
   }
 
   get renderNextButton(): boolean {
