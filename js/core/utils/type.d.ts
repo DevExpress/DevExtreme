@@ -25,7 +25,8 @@ export declare function isPlainObject<T>(object: T): object is Extract<T, object
 
 export declare function isPrimitive<T>(value: T): value is Exclude<T, Function> & Exclude<T, object> & Exclude<T, any[]>;
 
-// @ts-expect-error: globalThis was introduced in TypeScript 3.4
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore: globalThis was introduced in TypeScript 3.4
 export declare function isWindow<T>(object: T): object is Extract<T, Window & typeof globalThis>;
 
 export declare function isRenderer(object: any): boolean;
