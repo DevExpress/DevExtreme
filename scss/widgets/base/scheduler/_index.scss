@@ -546,7 +546,6 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 }
 
-
 @mixin scheduler-mixin() {
   .dx-scheduler-pseudo-cell {
     @include dx-scheduler-pseudo-cell-mixin();
@@ -554,6 +553,12 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-header {
     @include header-base($scheduler-base-border);
+  }
+
+  .dx-scheduler-view-switcher-dropdown-button-content {
+    .dx-list-item {
+      display: list-item;
+    }
   }
 
   .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
