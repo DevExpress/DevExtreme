@@ -37,7 +37,7 @@ describe('Appointment utils', () => {
   describe('getAppointmentStyles', () => {
     it('generate styles for the full model', () => {
       expect(getAppointmentStyles(testViewModel))
-        .toMatchObject({
+        .toEqual({
           backgroundColor: '#1A2BC',
           height: 20,
           left: 1,
@@ -54,7 +54,7 @@ describe('Appointment utils', () => {
           resourceColor: undefined,
         },
       }))
-        .toMatchObject({
+        .toEqual({
           height: 20,
           left: 1,
           top: 2,

@@ -52,10 +52,8 @@ describe('Appointment', () => {
       expect(appointment.is('div'))
         .toBe(true);
 
-      expect(appointment.props())
-        .toMatchObject({
-          style: 'some-styles',
-        });
+      expect(appointment.prop('style'))
+        .toEqual('some-styles');
     });
 
     it('it should has correct content container', () => {
@@ -122,7 +120,7 @@ describe('Appointment', () => {
         });
 
         expect(appointment.styles)
-          .toMatchObject({
+          .toEqual({
             backgroundColor: '#1A2BC',
             height: 20,
             left: 1,
