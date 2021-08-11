@@ -1,10 +1,10 @@
 import { Format } from '../../localization';
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 /** @namespace DevExpress.ui */
@@ -106,6 +106,7 @@ export default class Widget<TProperties> extends DOMComponent<TProperties> {
  * @public
  * @namespace DevExpress.ui
  */
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
 export var dxItem: any;
 
 /**

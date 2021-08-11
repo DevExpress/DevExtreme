@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxButton, {
-    dxButtonOptions
+    dxButtonOptions,
 } from './button';
 
 import Editor from './editor/editor';
 
 import {
-    dxTabPanelOptions
+    dxTabPanelOptions,
 } from './tab_panel';
 
 import {
@@ -36,15 +36,15 @@ import {
     PatternRule,
     RangeRule,
     RequiredRule,
-    StringLengthRule
+    StringLengthRule,
 } from './validation_rules';
 
 import {
-    dxValidationGroupResult
+    dxValidationGroupResult,
 } from './validation_group';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -56,13 +56,13 @@ export type DisposingEvent = EventInfo<dxForm>;
 /** @public */
 export type EditorEnterKeyEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
-}
+};
 
 /** @public */
 export type FieldDataChangedEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxForm>;
@@ -74,7 +74,7 @@ export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 export type GroupItemTemplateData = {
     readonly component: dxForm;
     readonly formData?: any;
-}
+};
 
 /** @public */
 export type SimpleItemTemplateData = {
@@ -83,7 +83,7 @@ export type SimpleItemTemplateData = {
     readonly editorOptions?: any;
     readonly editorType?: string;
     readonly name?: string;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -122,7 +122,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
      * @public
      */
-    customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void);
+    customizeItem?: ((item: Item) => void);
     /**
      * @docid
      * @default {}
@@ -132,10 +132,11 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     formData?: any;
     /**
      * @docid
+     * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
      * @default undefined
      * @public
      */
-    items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @type Enums.FormLabelLocation
@@ -331,10 +332,19 @@ export default class dxForm extends Widget<dxFormOptions> {
 }
 
 /**
- * @docid
- * @publicName ButtonItem
- * @section FormItems
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxForm
+ */
+export type Item = SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem;
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxForm
+ */
+export type ButtonItem = dxFormButtonItem;
+
+/**
+ * @deprecated Use ButtonItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFormButtonItem {
@@ -398,10 +408,13 @@ export interface dxFormButtonItem {
 }
 
 /**
- * @docid
- * @publicName EmptyItem
- * @section FormItems
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxForm
+ */
+export type EmptyItem = dxFormEmptyItem;
+
+/**
+ * @deprecated Use EmptyItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFormEmptyItem {
@@ -445,10 +458,13 @@ export interface dxFormEmptyItem {
 }
 
 /**
- * @docid
- * @publicName GroupItem
- * @section FormItems
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxForm
+ */
+export type GroupItem = dxFormGroupItem;
+
+/**
+ * @deprecated Use GroupItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFormGroupItem {
@@ -499,10 +515,11 @@ export interface dxFormGroupItem {
     itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
     /**
      * @docid
+     * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
      * @default undefined
      * @public
      */
-    items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default undefined
@@ -534,10 +551,13 @@ export interface dxFormGroupItem {
 }
 
 /**
- * @docid
- * @publicName SimpleItem
- * @section FormItems
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxForm
+ */
+export type SimpleItem = dxFormSimpleItem;
+
+/**
+ * @deprecated Use SimpleItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFormSimpleItem {
@@ -601,28 +621,28 @@ export interface dxFormSimpleItem {
        * @type Enums.HorizontalAlignment
        * @default "left"
        */
-      alignment?: 'center' | 'left' | 'right',
+      alignment?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @type Enums.FormLabelLocation
        * @default "left"
        */
-      location?: 'left' | 'right' | 'top',
+      location?: 'left' | 'right' | 'top';
       /**
        * @docid
        * @default from showColonAfterLabel
        */
-      showColon?: boolean,
+      showColon?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      text?: string,
+      text?: string;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -664,10 +684,13 @@ export interface dxFormSimpleItem {
 }
 
 /**
- * @docid
- * @publicName TabbedItem
- * @section FormItems
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxForm
+ */
+export type TabbedItem = dxFormTabbedItem;
+
+/**
+ * @deprecated Use TabbedItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFormTabbedItem {
@@ -712,47 +735,40 @@ export interface dxFormTabbedItem {
        * @docid
        * @default true
        */
-      alignItemLabels?: boolean,
+      alignItemLabels?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      badge?: string,
+      badge?: string;
       /**
        * @docid
        * @default 1
        */
-      colCount?: number,
+      colCount?: number;
       /**
        * @docid
        * @extends ColCountResponsibleType
        * @inherits ColCountResponsible
        * @default undefined
        */
-      colCountByScreen?: any,
+      colCountByScreen?: any;
       /**
        * @docid
        * @default false
        */
-      disabled?: boolean,
+      disabled?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      icon?: string,
+      icon?: string;
       /**
        * @docid
+       * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
        * @default undefined
        */
-      items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>,
-      /**
-       * @docid
-       * @type_function_param1 tabData:object
-       * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:DxElement
-       * @default undefined
-       */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
+      items?: Array<Item>;
       /**
        * @docid
        * @type_function_param1 tabData:object
@@ -760,12 +776,20 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
+      /**
+       * @docid
+       * @type_function_param1 tabData:object
+       * @type_function_param2 tabIndex:number
+       * @type_function_param3 tabElement:DxElement
+       * @default undefined
+       */
+      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
       /**
        * @docid
        * @default undefined
        */
-      title?: string
+      title?: string;
     }>;
     /**
      * @docid

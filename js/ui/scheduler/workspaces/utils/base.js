@@ -49,7 +49,6 @@ export const getCalculatedFirstDayOfWeek = (firstDayOfWeekOption) => {
         : dateLocalization.firstDayOfWeekIndex();
 };
 
-export const getFirstDayOfWeek = (firstDayOfWeekOption) => firstDayOfWeekOption;
 export const calculateViewStartDate = (startDateOption) => startDateOption;
 
 export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount) => {
@@ -145,3 +144,21 @@ export const isHorizontalView = (viewType) => {
             return false;
     }
 };
+
+export const getTotalCellCountByCompleteData = (completeData) => {
+    return completeData[completeData.length - 1].length;
+};
+
+export const getTotalRowCountByCompleteData = (completeData) => {
+    return completeData.length;
+};
+
+export const getDisplayedCellCount = (displayedCellCount, completeData) => {
+    return displayedCellCount || getTotalCellCountByCompleteData(completeData);
+};
+
+export const getDisplayedRowCount = (displayedRowCount, completeData) => {
+    return displayedRowCount || getTotalRowCountByCompleteData(completeData);
+};
+
+

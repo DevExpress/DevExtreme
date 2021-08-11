@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
@@ -16,11 +16,11 @@ import Store from '../../data/abstract_store';
 import {
     EventInfo,
     NativeEventInfo,
-    ItemInfo
+    ItemInfo,
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from '../widget/ui.widget';
 
 export interface SelectionChangedInfo<T = any> {
@@ -181,7 +181,6 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
 export default class CollectionWidget<TProperties> extends Widget<TProperties> {
     getDataSource(): DataSource;
 }
-
 
 /**
  * @docid

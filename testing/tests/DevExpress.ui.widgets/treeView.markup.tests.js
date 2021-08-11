@@ -327,7 +327,7 @@ QUnit.module('markup', {
             items: this.treeItems,
         }).dxTreeView('instance');
 
-        assert.equal(treeView._scrollableContainer.option('direction'), 'vertical');
+        assert.equal(treeView.getScrollable().option('direction'), 'vertical');
     });
 
     QUnit.test('custom scroll direction', function(assert) {
@@ -336,7 +336,7 @@ QUnit.module('markup', {
             scrollDirection: 'both'
         }).dxTreeView('instance');
 
-        assert.equal(treeView._scrollableContainer.option('direction'), 'both');
+        assert.equal(treeView.getScrollable().option('direction'), 'both');
     });
 
     QUnit.test('Disabled class is added when disabledExpr is used', function(assert) {

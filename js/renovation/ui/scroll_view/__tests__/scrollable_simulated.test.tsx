@@ -19,7 +19,7 @@ import devices from '../../../../core/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
-import { getElementComputedStyle } from '../utils/get_element_computed_style';
+import { getElementPaddingBottom } from '../utils/get_element_style';
 import {
   ScrollableSimulated as Scrollable,
 } from '../scrollable_simulated';
@@ -43,14 +43,10 @@ jest.mock('../../../../core/devices', () => {
   return actualDevices;
 });
 
-jest.mock('../utils/get_element_computed_style', () => ({
-  ...jest.requireActual('../utils/get_element_computed_style'),
-  getElementComputedStyle: jest.fn(() => ({
-    paddingBottom: '8px',
-  })),
+jest.mock('../utils/get_element_style', () => ({
+  ...jest.requireActual('../utils/get_element_style'),
+  getElementPaddingBottom: jest.fn(() => 8),
 }));
-
-jest.mock('../../../utils/get_computed_style');
 
 describe('Simulated > View', () => {
   it('render with defaults', () => {
@@ -64,6 +60,7 @@ describe('Simulated > View', () => {
       inertiaEnabled: true,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
+      needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scrollByContent: true,
@@ -186,7 +183,8 @@ describe('Simulated > Behavior', () => {
     });
 
     it('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o, pullDownEnabled: %o, reachBottomEnabled: %o', () => {
-      (getElementComputedStyle as jest.Mock).mockReturnValue({ paddingBottom: '8px' });
+      (getElementPaddingBottom as jest.Mock).mockReturnValue(8);
+
       const viewModel = new Scrollable({});
 
       viewModel.scrollableOffsetLeft = 5;
@@ -1041,7 +1039,7 @@ describe('Simulated > Behavior', () => {
       expect(helper.viewModel.tabWasPressed).toEqual(true);
 
       helper.viewModel.tabWasPressed = false;
-      detach();
+      detach?.();
 
       emit('keydown', { key: 'tab' } as any);
       expect(helper.viewModel.tabWasPressed).toEqual(false);
@@ -1192,6 +1190,20 @@ describe('Simulated > Behavior', () => {
           expect(viewModel.savedScrollOffset).toEqual(expectedSavedScrollOffset);
           expect(viewModel.containerRef.current!.scrollTop).toEqual(expectedContainerScrollTop);
           expect(viewModel.containerRef.current!.scrollLeft).toEqual(expectedContainerScrollLeft);
+        });
+      });
+
+      each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
+        each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
+          test('containerHasSizes()', () => {
+            const viewModel = new Scrollable({});
+
+            viewModel.containerClientHeight = containerClientHeight;
+            viewModel.containerClientWidth = containerClientWidth;
+
+            expect(viewModel.containerHasSizes)
+              .toEqual(containerClientWidth > 0 && containerClientHeight > 0);
+          });
         });
       });
 

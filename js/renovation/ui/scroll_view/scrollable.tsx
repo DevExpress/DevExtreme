@@ -26,6 +26,8 @@ import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
+import { hasWindow } from '../../../core/utils/window';
+
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
@@ -43,6 +45,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
+  const isServerSide = !hasWindow();
+
   return useNative
     ? (
       <ScrollableNative
@@ -58,9 +62,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         showScrollbar={showScrollbar}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
-        forceGeneratePockets={forceGeneratePockets}
+        forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
         onPullDown={onPullDown}
@@ -92,9 +97,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         scrollByThumb={scrollByThumb}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
-        forceGeneratePockets={forceGeneratePockets}
+        forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
         onPullDown={onPullDown}

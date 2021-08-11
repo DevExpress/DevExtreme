@@ -2,15 +2,15 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    dxSliderBaseOptions
+    dxSliderBaseOptions,
 } from './slider';
 
 import dxTrackBar from './track_bar';
@@ -32,7 +32,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInf
     readonly start?: number;
     readonly end?: number;
     readonly value?: Array<number>;
-}
+};
 
 /**
  * @deprecated use Properties instead
