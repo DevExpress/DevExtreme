@@ -40,7 +40,7 @@ $material-scheduler-workspace-month-header-height: 22px !default;
 $material-scheduler-workspace-month-timeline--time-height: 34px !default;
 
 $agenda-appointment-title-font-size: null !default;
-$material-scheduler-header-height: $material-toolbar-height !default;
+$material-scheduler-header-height: $material-toolbar-height + 2px !default;
 
 
 @if $size == "default" {
