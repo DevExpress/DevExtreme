@@ -557,7 +557,6 @@ class Scheduler extends Widget {
                 break;
             case 'currentView':
                 this.modelProvider.updateCurrentView();
-                this.getLayoutManager()._initRenderingStrategy();
 
                 this._validateDayHours();
 
@@ -1301,6 +1300,8 @@ class Scheduler extends Widget {
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
 
+            getEditingConfig: () => this._editing,
+
             getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
             getStartDayHour: () => this.option('startDayHour'),
             getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
@@ -1745,23 +1746,22 @@ class Scheduler extends Widget {
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
         const appointment = createAppointmentAdapter(this.key, { ...rawAppointment });
-        const newAppointment = createAppointmentAdapter(this.key, newRawAppointment);
+        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
-        newAppointment.recurrenceRule = '';
-        newAppointment.recurrenceException = '';
+        const singleRawAppointment = { ...newRawAppointment };
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
 
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
             const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
-            delete newRawAppointment[keyPropertyName];
+            delete singleRawAppointment[keyPropertyName];
 
-            this.addAppointment(newRawAppointment);
+            this.addAppointment(singleRawAppointment);
         }
 
-        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
-
         if(isPopupEditing) {
-            this._appointmentPopup.show(newRawAppointment, {
+            this._appointmentPopup.show(singleRawAppointment, {
                 isToolbarVisible: true,
                 action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
                 excludeInfo: {
@@ -1770,7 +1770,6 @@ class Scheduler extends Widget {
                 }
             });
             this._editAppointmentData = rawAppointment;
-
         } else {
             this._updateAppointment(rawAppointment, appointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
@@ -2200,7 +2199,7 @@ class Scheduler extends Widget {
 
     hideAppointmentPopup(saveChanges) {
         if(this._appointmentPopup?.visible) {
-            saveChanges && this._appointmentPopup.saveChanges();
+            saveChanges && this._appointmentPopup.saveChangesAsync();
             this._appointmentPopup.hide();
         }
     }

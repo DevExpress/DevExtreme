@@ -574,7 +574,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
             getCancelButton: () => this.appointmentPopup.getPopup().find('.dx-popup-cancel'),
             clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger('dxclick'),
-            saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
+            saveAppointmentData: () => this.instance._appointmentPopup.saveEditDataAsync.call(this.instance._appointmentPopup),
 
             hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0,
 

@@ -38,6 +38,9 @@ import type {
 } from '../../../ui/scheduler';
 
 import type { UserDefinedElement, DxElement } from '../../../core/element'; // eslint-disable-line import/named
+import messageLocalization from '../../../localization/message';
+import { ViewType } from './types';
+import { BaseWidgetProps } from '../common/base_props';
 
 @ComponentBindings()
 export class ResourceProps {
@@ -69,7 +72,7 @@ export class ResourceProps {
 }
 
 @ComponentBindings()
-class BaseSchedulerProps {
+export class ViewProps {
   @OneWay()
   endDayHour?: number;
 
@@ -83,10 +86,34 @@ class BaseSchedulerProps {
   cellDuration?: number;
 
   @OneWay()
-  groups?: string[];
+  groups?: Record<string, unknown>[];
 
   @OneWay()
   maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+
+  @OneWay()
+  agendaDuration?: number;
+
+  @OneWay()
+  groupByDate?: boolean;
+
+  @OneWay()
+  groupOrientation?: 'horizontal' | 'vertical';
+
+  @OneWay()
+  intervalCount?: number;
+
+  @OneWay()
+  name?: string;
+
+  @OneWay()
+  startDate?: Date | number | string;
+
+  @OneWay()
+  type?: ViewType;
+
+  @Nested()
+  scrolling?: ScrollingProps;
 
   /* Templates */
 
@@ -124,33 +151,6 @@ class BaseSchedulerProps {
   appointmentTooltipTemplate?:
   // eslint-disable-next-line max-len
   template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-}
-
-@ComponentBindings()
-export class ViewProps extends BaseSchedulerProps {
-  @OneWay()
-  agendaDuration?: number;
-
-  @OneWay()
-  groupByDate?: boolean;
-
-  @OneWay()
-  groupOrientation?: 'horizontal' | 'vertical';
-
-  @OneWay()
-  intervalCount?: number;
-
-  @OneWay()
-  name?: string;
-
-  @OneWay()
-  startDate?: Date | number | string;
-
-  @OneWay()
-  type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
-
-  @Nested()
-  scrolling?: ScrollingProps;
 }
 
 @ComponentBindings()
@@ -217,21 +217,21 @@ export class ScrollingProps {
 }
 
 @ComponentBindings()
-export class SchedulerProps extends BaseSchedulerProps {
+export class SchedulerProps extends BaseWidgetProps {
   @OneWay()
-  adaptivityEnabled?: boolean;
+  adaptivityEnabled = false;
 
   @Nested()
   appointmentDragging?: AppointmentDraggingProps;
 
   @OneWay()
-  crossScrollingEnabled?: boolean;
+  crossScrollingEnabled = false;
 
   @TwoWay()
-  currentDate?: Date | number | string = new Date();
+  currentDate: Date | number | string = new Date();
 
   @TwoWay()
-  currentView?: string | 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
+  currentView: string | 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
 
   @OneWay()
   dataSource?: string | dxSchedulerAppointment[] | DataSource | DataSourceOptions;
@@ -240,19 +240,26 @@ export class SchedulerProps extends BaseSchedulerProps {
   dateSerializationFormat?: string;
 
   @OneWay()
-  descriptionExpr?: string;
+  descriptionExpr = 'description';
 
   @Nested()
-  editing?: AppointmentEditingProps;
+  editing: AppointmentEditingProps = {
+    allowAdding: true,
+    allowDeleting: true,
+    allowDragging: true,
+    allowResizing: true,
+    allowUpdating: true,
+    allowTimeZoneEditing: false,
+  };
 
   @OneWay()
-  focusStateEnabled?: boolean;
+  focusStateEnabled = true;
 
   @OneWay()
-  groupByDate?: boolean;
+  groupByDate = false;
 
   @OneWay()
-  indicatorUpdateInterval?: number;
+  indicatorUpdateInterval = 300000;
 
   @OneWay()
   max?: Date | number | string;
@@ -261,41 +268,61 @@ export class SchedulerProps extends BaseSchedulerProps {
   min?: Date | number | string;
 
   @OneWay()
-  noDataText?: string;
+  noDataText = messageLocalization.format('dxCollectionWidget-noDataText');
 
   @OneWay()
-  recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
+  recurrenceEditMode: 'dialog' | 'occurrence' | 'series' = 'dialog';
 
   @OneWay()
-  remoteFiltering?: boolean;
+  remoteFiltering = false;
 
   @Nested()
-  resources?: ResourceProps[];
+  resources: ResourceProps[] = [];
 
   @Nested()
-  scrolling?: ScrollingProps;
+  scrolling: ScrollingProps = { mode: 'standard' };
 
   // TODO Is @TwoWay()?
   @OneWay()
-  selectedCellData?: unknown[];
+  selectedCellData: unknown[] = [];
 
   @OneWay()
-  shadeUntilCurrentTime?: boolean;
+  shadeUntilCurrentTime = false;
 
   @OneWay()
-  showAllDayPanel?: boolean;
+  showAllDayPanel = true;
 
   @OneWay()
-  showCurrentTimeIndicator?: boolean;
+  showCurrentTimeIndicator = true;
 
   @OneWay()
-  timeZone?: string;
+  timeZone = '';
 
   @OneWay()
-  useDropDownViewSwitcher?: boolean;
+  useDropDownViewSwitcher = false;
 
   @Nested()
-  views?: ('day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | ViewProps)[];
+  views: (
+    'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | ViewProps
+  )[] = ['day', 'week'];
+
+  @OneWay()
+  endDayHour = 24;
+
+  @OneWay()
+  startDayHour = 0;
+
+  @OneWay()
+  firstDayOfWeek = 0;
+
+  @OneWay()
+  cellDuration = 30;
+
+  @OneWay()
+  groups: Record<string, unknown>[] = [];
+
+  @OneWay()
+  maxAppointmentsPerCell: number | 'auto' | 'unlimited' = 'auto';
 
   /* Events */
 
@@ -344,26 +371,76 @@ export class SchedulerProps extends BaseSchedulerProps {
   /* Field expressions */
 
   @OneWay()
-  recurrenceExceptionExpr?: string;
+  recurrenceExceptionExpr = 'recurrenceException';
 
   @OneWay()
-  recurrenceRuleExpr?: string;
+  recurrenceRuleExpr = 'recurrenceRule';
 
   @OneWay()
-  startDateExpr?: string;
+  startDateExpr = 'startDate';
 
   @OneWay()
-  startDateTimeZoneExpr?: string;
+  startDateTimeZoneExpr = 'startDateTimeZone';
 
   @OneWay()
-  endDateExpr?: string;
+  endDateExpr = 'endDate';
 
   @OneWay()
-  endDateTimeZoneExpr?: string;
+  endDateTimeZoneExpr = 'endDateTimeZone';
 
   @OneWay()
-  allDayExpr?: string;
+  allDayExpr = 'allDay';
 
   @OneWay()
-  textExpr?: string;
+  textExpr = 'text';
+
+  // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
+  /* Templates */
+
+  @Template()
+  dataCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  dateCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  timeCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  resourceCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  appointmentCollectorTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  appointmentTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  appointmentTooltipTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
 }
+
+// TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
+// export type SchedulerPropsType = SchedulerProps & Pick<
+// ViewProps,
+// 'dataCellTemplate'
+// | 'dateCellTemplate'
+// | 'timeCellTemplate'
+// | 'resourceCellTemplate'
+// | 'appointmentTooltipTemplate'
+// | 'appointmentCollectorTemplate'
+// | 'appointmentTemplate'
+// >;

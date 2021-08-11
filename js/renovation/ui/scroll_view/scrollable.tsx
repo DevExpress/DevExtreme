@@ -129,7 +129,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 type ScrollablePropsType = ScrollableProps
-& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
+& Pick<WidgetProps, 'aria' | 'activeStateUnit' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;

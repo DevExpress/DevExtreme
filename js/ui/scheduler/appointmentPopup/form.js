@@ -65,7 +65,6 @@ export class AppointmentForm {
     constructor(scheduler) {
         this.scheduler = scheduler;
         this.form = null;
-        this._lockDateShiftFlag = false;
 
         this.semaphore = new Semaphore();
     }
@@ -78,9 +77,8 @@ export class AppointmentForm {
         this.form.option('readOnly', value);
         const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
-        // TODO hack fore rec editor
         const recurrenceEditor = this.form.getEditor(recurrenceRuleExpr);
-        recurrenceEditor?._recurrenceForm?.option('readOnly', value);
+        recurrenceEditor?.option('readOnly', value);
     }
 
     get formData() {
@@ -91,14 +89,17 @@ export class AppointmentForm {
         this.form.option('formData', value);
     }
 
-    create(dataExprs, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
-        const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
+    create(triggerResize, changeSize, formData) {
+        const allowTimeZoneEditing = this.scheduler.getEditingConfig().allowTimeZoneEditing;
+        const { expr } = this.scheduler.getDataAccessors();
+
+        const recurrenceEditorVisibility = !!formData[expr.recurrenceRuleExpr]; // TODO
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
         const resourceManager = this.scheduler.getResourceManager();
 
         const mainItems = [
-            ...this._createMainItems(dataExprs, triggerResize, changeSize, allowTimeZoneEditing),
+            ...this._createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing),
             ...resourceManager.getEditors()
         ];
 
@@ -118,7 +119,7 @@ export class AppointmentForm {
                 name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
                 visible: recurrenceEditorVisibility,
                 colSpan,
-                items: this._createRecurrenceEditor(dataExprs),
+                items: this._createRecurrenceEditor(expr),
             }
         ];
 
@@ -343,7 +344,9 @@ export class AppointmentForm {
         }];
     }
 
-    setEditorsType(startDateExpr, endDateExpr, allDay) {
+    setEditorsType(allDay) {
+        const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
+
         const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${startDateExpr}`;
         const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Recurrence}.${endDateExpr}`;
 
@@ -386,9 +389,12 @@ export class AppointmentForm {
         editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
     }
 
-    updateFormData(formData, dataExprs) {
+    updateFormData(formData) {
         this.semaphore.take();
 
+        const dataExprs = this.scheduler.getDataAccessors().expr;
+
+        const allDay = formData[dataExprs.allDayExpr];
         const startDate = new Date(formData[dataExprs.startDateExpr]);
         const endDate = new Date(formData[dataExprs.endDateExpr]);
 
@@ -397,6 +403,7 @@ export class AppointmentForm {
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
         this.form.option('formData', formData);
+        this.setEditorsType(allDay);
 
         this.semaphore.release();
     }
