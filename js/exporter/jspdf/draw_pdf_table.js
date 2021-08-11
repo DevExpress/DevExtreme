@@ -1,5 +1,6 @@
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
+import { drawLine, drawRect, drawText } from './pdf_utils';
 
 // this function is large and will grow
 export function drawPdfTable(doc, styles, table) {
@@ -17,24 +18,24 @@ export function drawPdfTable(doc, styles, table) {
             return;
         } else if(drawLeftBorder && drawRightBorder && drawTopBorder && drawBottomBorder) {
             doc.setLineWidth(defaultBorderLineWidth);
-            doc.rect(rect.x, rect.y, rect.w, rect.h);
+            drawRect(doc, rect.x, rect.y, rect.w, rect.h);
         } else {
             doc.setLineWidth(defaultBorderLineWidth);
 
             if(drawTopBorder) {
-                doc.line(rect.x, rect.y, rect.x + rect.w, rect.y); // top
+                drawLine(doc, rect.x, rect.y, rect.x + rect.w, rect.y); // top
             }
 
             if(drawLeftBorder) {
-                doc.line(rect.x, rect.y, rect.x, rect.y + rect.h); // left
+                drawLine(doc, rect.x, rect.y, rect.x, rect.y + rect.h); // left
             }
 
             if(drawRightBorder) {
-                doc.line(rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + rect.h); // right
+                drawLine(doc, rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + rect.h); // right
             }
 
             if(drawBottomBorder) {
-                doc.line(rect.x, rect.y + rect.h, rect.x + rect.w, rect.y + rect.h); // bottom
+                drawLine(doc, rect.x, rect.y + rect.h, rect.x + rect.w, rect.y + rect.h); // bottom
             }
         }
     }
@@ -52,7 +53,7 @@ export function drawPdfTable(doc, styles, table) {
             }
             if(isDefined(cell.backgroundColor)) {
                 doc.setFillColor(cell.backgroundColor);
-                doc.rect(cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
+                drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
             }
             const textColor = isDefined(cell.textColor) ? cell.textColor : styles.textColor;
             if(textColor !== doc.getTextColor()) {
@@ -60,7 +61,7 @@ export function drawPdfTable(doc, styles, table) {
             }
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
                 const textY = cell._rect.y + (cell._rect.h / 2);
-                doc.text(cell.text, cell._rect.x, textY, extend({ baseline: 'middle' }, cell.textOptions)); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
+                drawText(doc, cell.text, cell._rect.x, textY, extend({ baseline: 'middle' }, cell.textOptions)); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
             }
             drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });

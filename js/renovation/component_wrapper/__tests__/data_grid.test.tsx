@@ -174,6 +174,15 @@ describe('DataGrid Wrapper', () => {
     });
   });
 
+  it('should not fail on server side rendering', () => {
+    const component = new DataGridComponent({} as any, {});
+    // It's server side rendering
+    component._getInternalInstance = () => undefined as any;
+    // It's first render
+    component._isNodeReplaced = false;
+    expect(() => component._renderWrapper({})).not.toThrow();
+  });
+
   it('deprecated options', () => {
     const component = createDataGrid();
 

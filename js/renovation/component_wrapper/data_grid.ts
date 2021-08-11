@@ -158,9 +158,10 @@ export default class DataGridWrapper extends Component {
 
   _renderWrapper(props: Record<string, unknown>): void {
     const isFirstRender = !this._isNodeReplaced;
+
     super._renderWrapper(props);
     if (isFirstRender) {
-      this._getInternalInstance().on('optionChanged', this._internalOptionChangedHandler.bind(this));
+      this._getInternalInstance()?.on('optionChanged', this._internalOptionChangedHandler.bind(this));
     }
   }
 

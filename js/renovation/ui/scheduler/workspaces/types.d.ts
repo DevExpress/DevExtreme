@@ -138,3 +138,32 @@ export interface DateHeaderData {
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
 }
+
+interface CountGenerationConfig {
+  intervalCount: number;
+  currentDate: Date;
+  viewType: string;
+  hoursInterval: number;
+  startDayHour: number;
+  endDayHour: number;
+}
+
+// TODO: tempporary
+export interface ViewDataProviderType {
+  timePanelData: TimePanelData;
+  viewData: GroupedViewData;
+  dateHeaderData: DateHeaderData;
+  getCellCount: (config: CountGenerationConfig) => number;
+  getRowCount: (config: CountGenerationConfig) => number;
+  update: (options: unknown, isGenerateNewData: boolean) => void;
+}
+
+interface CellsMetaData {
+  dateTableCellsMeta: ClientRect[][];
+  allDayPanelCellsMeta: ClientRect[];
+}
+
+export interface ViewMetaData {
+  viewDataProvider: ViewDataProviderType;
+  cellsMetaData: CellsMetaData;
+}

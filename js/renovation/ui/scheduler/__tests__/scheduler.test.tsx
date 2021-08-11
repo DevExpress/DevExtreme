@@ -2,6 +2,11 @@ import { mount } from 'enzyme';
 import { SchedulerProps } from '../props';
 import { Scheduler, viewFunction } from '../scheduler';
 import { Widget } from '../../common/widget';
+import * as viewsModel from '../model/views';
+import { ViewType } from '../types';
+
+const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
+const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
 describe('Scheduler', () => {
   describe('Render', () => {
@@ -11,39 +16,41 @@ describe('Scheduler', () => {
       expect(tree.is(Widget)).toBe(true);
     });
 
-    it('should spread restAttributes', () => {
+    it('should pass correct props to the widget', () => {
       const tree = mount(viewFunction({
         restAttributes: { 'custom-attribute': 'customAttribute' },
       } as any));
 
       expect(tree.prop('custom-attribute'))
         .toBe('customAttribute');
-    });
-
-    it('dispose should pass call to instance', () => {
-      const scheduler = new Scheduler(new SchedulerProps());
-      const dispose = jest.fn();
-
-      scheduler.instance = {
-        dispose,
-      } as any;
-
-      scheduler.dispose()();
-
-      expect(dispose).toBeCalledTimes(1);
-    });
-
-    it('getComponentInstance should pass call to instance', () => {
-      const scheduler = new Scheduler(new SchedulerProps());
-      const mockInstance = {};
-
-      scheduler.instance = mockInstance as any;
-      expect(scheduler.getComponentInstance()).toMatchObject(mockInstance);
+      expect(tree.prop('classes'))
+        .toBe('dx-scheduler');
     });
   });
 
   describe('Behaviour', () => {
     describe('Methods', () => {
+      it('dispose should pass call to instance', () => {
+        const scheduler = new Scheduler(new SchedulerProps());
+        const dispose = jest.fn();
+
+        scheduler.instance = {
+          dispose,
+        } as any;
+
+        scheduler.dispose()();
+
+        expect(dispose).toBeCalledTimes(1);
+      });
+
+      it('getComponentInstance should pass call to instance', () => {
+        const scheduler = new Scheduler(new SchedulerProps());
+        const mockInstance = {};
+
+        scheduler.instance = mockInstance as any;
+        expect(scheduler.getComponentInstance()).toMatchObject(mockInstance);
+      });
+
       it('*Appointment\'s methods should pass call to instance', () => {
         const addAppointment = jest.fn();
         const deleteAppointment = jest.fn();
@@ -159,6 +166,44 @@ describe('Scheduler', () => {
 
         scheduler.scrollToTime(12, 12);
         expect(scrollToTime).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('currentViewProps', () => {
+        it('should return correct current view', () => {
+          const views: ViewType[] = ['day', 'week', 'month'];
+          const scheduler = new Scheduler({
+            views,
+            currentView: 'week',
+          });
+
+          const { currentViewProps } = scheduler;
+
+          expect(currentViewProps)
+            .toEqual({ type: 'week' });
+          expect(getCurrentViewProps)
+            .toBeCalledWith('week', views);
+        });
+      });
+
+      describe('currentViewConfig', () => {
+        it('should return correct current view config', () => {
+          const views: ViewType[] = ['day', 'week', 'month'];
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            views,
+            currentView: 'week',
+          });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          scheduler.currentViewConfig;
+
+          expect(getCurrentViewConfig)
+            .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
+        });
       });
     });
   });

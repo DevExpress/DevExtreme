@@ -4,7 +4,8 @@ import {
 } from '@devextreme-generator/declarations';
 import { formatWeekdayAndDay } from '../../../../../ui/scheduler/workspaces/utils/base';
 import { TimePanelTableLayout } from '../base/time_panel/layout';
-import { WorkSpaceBase, WorkSpaceBaseProps } from '../base/work_space';
+import { WorkSpaceBase } from '../base/work_space';
+import { WorkSpaceProps } from '../props';
 
 export const viewFunction = ({
   props: {
@@ -65,4 +66,4 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class WorkSpaceWeek extends JSXComponent<WorkSpaceBaseProps, 'currentDate' | 'onViewRendered'>() {}
+export class WorkSpaceWeek extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered'>() {}
