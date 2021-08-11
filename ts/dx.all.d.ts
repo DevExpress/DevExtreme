@@ -20568,6 +20568,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
     virtualModeEnabled?: boolean;
+    /**
+     * [descr:dxTreeViewOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
   }
   /**
    * [descr:dxValidationGroup]

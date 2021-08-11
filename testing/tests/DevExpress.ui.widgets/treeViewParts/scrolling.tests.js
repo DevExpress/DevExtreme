@@ -1,4 +1,8 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import {
+    SCROLLABLE_SIMULATED_CLASS,
+    SCROLLABLE_NATIVE_CLASS
+} from '../scrollableParts/scrollable.constants.js';
 import browser from 'core/utils/browser';
 import $ from 'jquery';
 
@@ -9,20 +13,25 @@ QUnit.module('scrollToItem', () => {
         return;
     }
 
-    function createWrapper(config, items) {
+    function createWrapper({
+        scrollDirection,
+        initialPosition,
+        rtlEnabled,
+        onContentReady
+    }, items) {
         const wrapper = new TreeViewTestWrapper({
             displayExpr: 'id',
-            scrollDirection: config.scrollDirection,
+            scrollDirection: scrollDirection,
             height: 150,
             width: 150,
             animationEnabled: false,
             items: items,
-            rtlEnabled: config.rtlEnabled,
-            onContentReady: config.onContentReady,
+            rtlEnabled: rtlEnabled,
+            onContentReady: onContentReady,
         });
 
-        if(config.initialPosition) {
-            wrapper.instance.getScrollable().scrollTo(config.initialPosition);
+        if(initialPosition) {
+            wrapper.instance.getScrollable().scrollTo(initialPosition);
         }
 
         return wrapper;
@@ -161,5 +170,39 @@ QUnit.module('scrollToItem', () => {
         wrapper.instance.scrollToItem('12345').fail(() => { assert.ok('scroll must fail, node not found for this key'); done(); });
         wrapper.instance.scrollToItem($('<div/>').get(0)).fail(() => { assert.ok('scroll must fail, node not found for this itemElement'); done(); });
         wrapper.instance.scrollToItem({}).fail(() => { assert.ok('scroll must fail, node not found for this itemData'); done(); });
+    });
+});
+
+QUnit.module('useNativeScrolling', () => {
+    QUnit.test('switching useNative to false turns off native scrolling', function(assert) {
+        const wrapper = new TreeViewTestWrapper({
+            useNativeScrolling: true
+        });
+
+        const $treeView = wrapper.getElement();
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
+
+        wrapper.getInstance().option('useNativeScrolling', false);
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
+    });
+
+    QUnit.test('switching useNative to true turns off simulated scrolling', function(assert) {
+        const wrapper = new TreeViewTestWrapper({
+            useNativeScrolling: false
+        });
+
+        const $treeView = wrapper.getElement();
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
+
+        wrapper.getInstance().option('useNativeScrolling', true);
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
     });
 });
