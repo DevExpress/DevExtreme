@@ -73,7 +73,11 @@ export class AppointmentDataProvider {
 
     // Filter mapping
     filter() {
-        this.filteredItems = this.getFilterStrategy().filter();
+        this.filteredItems = this.getFilterStrategy()
+            .filter()
+            .map(
+                ({ rawAppointment }) => rawAppointment
+            );
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
