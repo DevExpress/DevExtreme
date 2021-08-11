@@ -2185,7 +2185,6 @@ class Scheduler extends Widget {
     }
 
     createPopupAppointment() {
-
         const result = {};
         const toMs = dateUtils.dateToMilliseconds;
 
