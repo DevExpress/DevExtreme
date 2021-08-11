@@ -145,8 +145,7 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
   }
 
   get renderPrevButton(): boolean {
-    const { isLargeDisplayMode, showNavigationButtons } = this.props;
-    return !isLargeDisplayMode || showNavigationButtons;
+    return !this.props.isLargeDisplayMode || this.props.showNavigationButtons;
   }
 
   get renderNextButton(): boolean {

@@ -38,7 +38,7 @@ describe('Pager', () => {
         displayMode: 'adaptive',
         maxPagesCount: 10,
         pageCount: 10,
-        pageIndex: 1,
+        pageIndex: 0,
         pageSize: 5,
         pageSizes: [5, 10],
         showInfo: false,
