@@ -4,6 +4,7 @@ import {
   Effect,
   InternalState,
   JSXComponent,
+  JSXTemplate,
   Method,
 } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -16,14 +17,71 @@ import { UserDefinedElement } from '../../../core/element'; // eslint-disable-li
 import DataSource from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { WorkSpaceProps } from './workspaces/props';
+import { WorkSpaceWeek } from './workspaces/week/work_space';
+import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
+import { CurrentViewConfig } from './model/types';
 
-export const viewFunction = (viewModel: Scheduler): JSX.Element => {
-  const { restAttributes } = viewModel;
+export const viewFunction = ({
+  restAttributes,
+  workSpace: WorkSpace,
+  currentViewConfig,
+  onViewRendered,
+}: Scheduler): JSX.Element => {
+  const {
+    firstDayOfWeek,
+    startDayHour,
+    endDayHour,
+    cellDuration,
+    groupByDate,
+    scrolling,
+    currentDate,
+    intervalCount,
+    groupOrientation,
+    startDate,
+    showAllDayPanel,
+    showCurrentTimeIndicator,
+    indicatorUpdateInterval,
+    shadeUntilCurrentTime,
+    crossScrollingEnabled,
+    hoursInterval,
+    groups,
+
+    indicatorTime,
+    allowMultipleCellSelection,
+    allDayPanelExpanded,
+
+  } = currentViewConfig;
   return (
     <Widget
       classes="dx-scheduler"
-      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-    />
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...restAttributes}
+    >
+      <WorkSpace
+        firstDayOfWeek={firstDayOfWeek}
+        startDayHour={startDayHour}
+        endDayHour={endDayHour}
+        cellDuration={cellDuration}
+        groupByDate={groupByDate}
+        scrolling={scrolling}
+        currentDate={currentDate}
+        intervalCount={intervalCount}
+        groupOrientation={groupOrientation}
+        startDate={startDate}
+        showAllDayPanel={showAllDayPanel}
+        showCurrentTimeIndicator={showCurrentTimeIndicator}
+        indicatorUpdateInterval={indicatorUpdateInterval}
+        shadeUntilCurrentTime={shadeUntilCurrentTime}
+        crossScrollingEnabled={crossScrollingEnabled}
+        hoursInterval={hoursInterval}
+        groups={groups}
+
+        indicatorTime={indicatorTime}
+        allowMultipleCellSelection={allowMultipleCellSelection}
+        allDayPanelExpanded={allDayPanelExpanded}
+        onViewRendered={onViewRendered}
+      />
+    </Widget>
   );
 };
 
@@ -32,8 +90,11 @@ export const viewFunction = (viewModel: Scheduler): JSX.Element => {
   view: viewFunction,
 })
 export class Scheduler extends JSXComponent(SchedulerProps) {
-  @InternalState()
-  instance!: dxScheduler;
+  @InternalState() instance!: dxScheduler;
+
+  @InternalState() viewDataProvider!: ViewDataProviderType;
+
+  @InternalState() cellsMetaData!: CellsMetaData;
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -42,8 +103,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return getCurrentViewProps(currentView, views);
   }
 
-  get currentViewConfig(): WorkSpaceProps {
+  get currentViewConfig(): CurrentViewConfig {
     return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get workSpace(): JSXTemplate<WorkSpaceProps, 'currentDate' | 'onViewRendered'> {
+    return WorkSpaceWeek;
   }
 
   @Method()
@@ -118,5 +184,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @Effect({ run: 'once' })
   dispose(): DisposeEffectReturn {
     return () => { this.instance.dispose(); };
+  }
+
+  onViewRendered(viewMetaData: ViewMetaData): void {
+    this.viewDataProvider = viewMetaData.viewDataProvider;
+    this.cellsMetaData = viewMetaData.cellsMetaData;
   }
 }

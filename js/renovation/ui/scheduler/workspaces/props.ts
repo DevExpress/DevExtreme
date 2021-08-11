@@ -15,9 +15,10 @@ import {
   ResourceCellTemplateProps,
   ViewMetaData,
 } from './types';
+import { BaseWidgetProps } from '../../common/base_props';
 
 @ComponentBindings()
-export class WorkSpaceProps {
+export class WorkSpaceProps extends BaseWidgetProps {
   // -------------------
   // Public templates
   // -------------------
@@ -73,6 +74,14 @@ export class WorkSpaceProps {
   @OneWay() scrolling: dxSchedulerScrolling = {
     mode: 'standard',
   };
+
+  @OneWay() cellDuration = 30;
+
+  @OneWay() showCurrentTimeIndicator = true;
+
+  @OneWay() schedulerHeight?: number;
+
+  @OneWay() schedulerWidth?: number;
 
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 }
