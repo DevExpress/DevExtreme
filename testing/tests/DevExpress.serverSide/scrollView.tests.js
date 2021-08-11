@@ -44,12 +44,11 @@ QUnit.test('loadPanel should not be rendered in scrollView on server', function(
 });
 
 QUnit.test('scrollView content should be rendered on server', function(assert) {
-    const $scrollView = $('#scrollView').dxScrollView();
-    const $scrollableContent = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    const $content = $scrollableContent.children().eq(0);
+    const scrollView = $('#scrollView').dxScrollView().dxScrollView('instance');
+    const $content = $(scrollView.content());
 
     assert.equal($content.length, 1, 'scrollView has content on server');
-    assert.equal($content.text(), 'ScrollView content', 'scrollView content has right text');
+    assert.equal($content.text().trim(), 'ScrollView content', 'scrollView content has right text');
 });
 
 QUnit.test('root with custom size', function(assert) {

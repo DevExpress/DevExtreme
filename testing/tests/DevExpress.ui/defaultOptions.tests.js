@@ -33,7 +33,7 @@ const Menu = require('ui/menu/ui.menu');
 const ContextMenu = require('ui/context_menu/ui.context_menu');
 const NumberBox = require('ui/number_box');
 const NavBar = require('ui/nav_bar');
-const Overlay = require('ui/overlay/ui.overlay');
+const Widget = require('ui/widget/ui.widget');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
 const RadioGroup = require('ui/radio_group');
@@ -306,7 +306,7 @@ testComponentDefaults(DropDownButton, {}, {
     deferRendering: true,
     text: '',
     keyExpr: 'this',
-    displayExpr: 'this',
+    displayExpr: undefined,
     useSelectMode: false,
     wrapItemText: false,
     useItemTextAsTitle: true,
@@ -564,10 +564,10 @@ testComponentDefaults(Popup,
     }
 );
 
-testComponentDefaults(Overlay,
+testComponentDefaults(Widget,
     {},
     {
-        _observeContentResize: false
+        useResizeObserver: false
     },
     function() {
         this.originalRealDevice = devices.real();
@@ -581,10 +581,10 @@ testComponentDefaults(Overlay,
     }
 );
 
-testComponentDefaults(Overlay,
+testComponentDefaults(Widget,
     {},
     {
-        _observeContentResize: false
+        useResizeObserver: false
     },
     function() {
         this.originalRealDevice = devices.real();
@@ -601,7 +601,11 @@ testComponentDefaults(Overlay,
 testComponentDefaults(Popover,
     {},
     {
-        position: 'bottom',
+        position: {
+            at: 'bottom center',
+            collision: 'fit flip',
+            my: 'top center'
+        },
         target: undefined,
         animation: {
             show: {

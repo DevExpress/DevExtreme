@@ -49,7 +49,7 @@ const DropDownButton = Widget.inherit({
 
             keyExpr: 'this',
 
-            displayExpr: 'this',
+            displayExpr: undefined,
 
             selectedItem: null,
 
@@ -698,3 +698,9 @@ const DropDownButton = Widget.inherit({
 
 registerComponent('dxDropDownButton', DropDownButton);
 export default DropDownButton;
+
+/**
+ * @name dxDropDownButtonItem
+ * @inherits dxListItem
+ * @type object
+ */

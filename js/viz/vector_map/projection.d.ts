@@ -36,6 +36,7 @@ export interface VectorMapProjectionConfig {
  * @module viz/vector_map/projection
  * @export projection
  */
+// eslint-disable-next-line @typescript-eslint/init-declarations
 export const projection: {
     /**
      * @docid viz.map.projection.add
@@ -60,4 +61,4 @@ export const projection: {
     get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
 
     (data: VectorMapProjectionConfig): any;
-}
+};

@@ -32,82 +32,6 @@ testStart(() => initTestMarkup());
 module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
-            [{
-                mode: 'standard', result: false,
-            }, {
-                mode: 'virtual', result: true,
-            }].forEach(({ mode, result }) => {
-                test(`it should be correctly initialised in "${viewName}" view if scrolling.mode: "${mode}"`, function(assert) {
-                    const instance = createWrapper({
-                        views: supportedViews,
-                        currentView: viewName,
-                        dataSource: [],
-                        scrolling: { mode },
-                        height: 400,
-                        renovateRender: false,
-                    }).instance;
-
-                    const workspace = instance.getWorkSpace();
-
-                    assert.equal(
-                        workspace.isRenovatedRender(),
-                        result,
-                        'Render type is correct'
-                    );
-                });
-
-                test(`Component should be correctly created in "${viewName}" view if view.scrolling.mode: ${mode}`, function(assert) {
-                    const instance = createWrapper({
-                        views: [{
-                            type: viewName,
-                            scrolling: { mode }
-                        }],
-                        currentView: viewName,
-                        height: 400,
-                        renovateRender: false,
-                    }).instance;
-
-                    assert.equal(
-                        instance.getWorkSpace().isRenovatedRender(),
-                        result,
-                        'Correct render is used'
-                    );
-                });
-            });
-
-            test(`it should be correctly initialised after change scrolling.mode option to "virtual" in "${viewName}" view`, function(assert) {
-                const instance = createWrapper({
-                    views: supportedViews,
-                    currentView: viewName,
-                    height: 400
-                }).instance;
-
-                instance.option('scrolling.mode', 'virtual');
-
-                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
-
-                instance.option('scrolling.mode', 'standard');
-
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-            });
-
-            test(`it should be correctly initialised after change view.scrolling.mode option to "virtual" in "${viewName}" view`, function(assert) {
-                const instance = createWrapper({
-                    views: [{
-                        type: viewName,
-                    }],
-                    currentView: viewName,
-                    height: 400,
-                    renovateRender: false,
-                }).instance;
-
-                instance.option('views[0].scrolling.mode', 'virtual');
-                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
-
-                instance.option('views[0].scrolling.mode', 'standard');
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-            });
-
             test(`Virtual scrolling should have default cell sizes in "${viewName}" view`, function(assert) {
                 const instance = createWrapper({
                     views: [{
@@ -704,18 +628,20 @@ module('Virtual scrolling integration', () => {
                                 mode: 'virtual',
                                 orientation: 'both'
                             },
+                            dataSource: [{
+                                startDate: new Date(2015, 2, 2, 0),
+                                endDate: new Date(2015, 2, 2, 0, 30),
+                                recurrenceRule
+                            }],
                             height: 400
                         });
 
                         const { instance } = this.scheduler;
 
-                        const settings = instance.fire('createAppointmentSettings', {
-                            startDate: new Date(2015, 2, 2, 0),
-                            endDate: new Date(2015, 2, 2, 0, 30),
-                            recurrenceRule
-                        });
+                        const layoutManager = instance.getLayoutManager();
+                        const settings = layoutManager._positionMap[0][0];
 
-                        assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+                        assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                     });
                 });
 
@@ -1248,7 +1174,9 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
+
+                                    const layoutManager = instance.getLayoutManager();
+                                    const settings = layoutManager._positionMap[0][0];
 
                                     assert.equal(
                                         settings.groupIndex,
@@ -1297,19 +1225,21 @@ module('Virtual scrolling integration', () => {
                             fieldExpr: 'resourceId0',
                             dataSource: [{ id: 0 }]
                         }],
+                        dataSource: [{
+                            startDate: new Date(2015, 2, 2, 0),
+                            endDate: new Date(2015, 2, 2, 0, 30),
+                            resourceId0: 0
+                        }],
                         height: 400,
                         width: 800
                     });
 
                     const { instance } = this.scheduler;
 
-                    const settings = instance.fire('createAppointmentSettings', {
-                        startDate: new Date(2015, 2, 2, 0),
-                        endDate: new Date(2015, 2, 2, 0, 30),
-                        resourceId0: 0
-                    });
+                    const layoutManager = instance.getLayoutManager();
+                    const settings = layoutManager._positionMap[0][0];
 
-                    assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+                    assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                 });
 
                 test(`Grouped appointment should contains correct groupIndex if "${viewName}" view has horizontal group orientation`, function(assert) {
@@ -1331,19 +1261,21 @@ module('Virtual scrolling integration', () => {
                                 { id: 1 }
                             ]
                         }],
+                        dataSource: [{
+                            startDate: new Date(2015, 2, 2, 0),
+                            endDate: new Date(2015, 2, 2, 0, 30),
+                            resourceId0: 1
+                        }],
                         height: 400,
                         width: 800
                     });
 
                     const { instance } = this.scheduler;
 
-                    const settings = instance.fire('createAppointmentSettings', {
-                        startDate: new Date(2015, 2, 2, 0),
-                        endDate: new Date(2015, 2, 2, 0, 30),
-                        resourceId0: 1
-                    });
+                    const layoutManager = instance.getLayoutManager();
+                    const settings = layoutManager._positionMap[0][0];
 
-                    assert.equal(settings[0].groupIndex, 1, 'groupIndex is correct');
+                    assert.equal(settings.groupIndex, 1, 'groupIndex is correct');
                 });
 
                 test(`Grouped allDay appointment should contains correct groupIndex if "${viewName}" view has vertical group orientation`, function(assert) {
@@ -1362,19 +1294,21 @@ module('Virtual scrolling integration', () => {
                             fieldExpr: 'resourceId0',
                             dataSource: [{ id: 0 }]
                         }],
+                        dataSource: [{
+                            startDate: new Date(2015, 2, 2),
+                            endDate: new Date(2015, 2, 2),
+                            resourceId0: 0,
+                            allDay: true
+                        }],
                         height: 400
                     });
 
                     const { instance } = this.scheduler;
 
-                    const settings = instance.fire('createAppointmentSettings', {
-                        startDate: new Date(2015, 2, 2),
-                        endDate: new Date(2015, 2, 2),
-                        resourceId0: 0,
-                        allDay: true
-                    });
+                    const layoutManager = instance.getLayoutManager();
+                    const settings = layoutManager._positionMap[0][0];
 
-                    assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+                    assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                 });
             });
         });
@@ -1462,7 +1396,9 @@ module('Virtual scrolling integration', () => {
                                 const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                                 filteredItems.forEach((dataItem, index) => {
-                                    const settings = instance.fire('createAppointmentSettings', dataItem);
+                                    const layoutManager = instance.getLayoutManager();
+                                    const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+                                    const settings = appointmentRenderingStrategy.generateAppointmentSettings(dataItem);
                                     const {
                                         groupIndex,
                                         topPositions

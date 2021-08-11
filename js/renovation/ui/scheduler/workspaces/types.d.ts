@@ -68,6 +68,11 @@ export interface GroupRenderItem extends GroupItem {
   isLastGroupCell?: boolean;
 }
 
+export interface GroupPanelData {
+  groupPanelItems: GroupRenderItem[][];
+  baseColSpan: number;
+}
+
 export interface Group {
   name: string;
   items: GroupItem[];
@@ -134,5 +139,31 @@ export interface DateHeaderData {
   weekDayRightVirtualCellCount?: number;
 }
 
-export type ViewType = 'day' | 'week' | 'workWeek' | 'month'
-| 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda';
+interface CountGenerationConfig {
+  intervalCount: number;
+  currentDate: Date;
+  viewType: string;
+  hoursInterval: number;
+  startDayHour: number;
+  endDayHour: number;
+}
+
+// TODO: tempporary
+export interface ViewDataProviderType {
+  timePanelData: TimePanelData;
+  viewData: GroupedViewData;
+  dateHeaderData: DateHeaderData;
+  getCellCount: (config: CountGenerationConfig) => number;
+  getRowCount: (config: CountGenerationConfig) => number;
+  update: (options: unknown, isGenerateNewData: boolean) => void;
+}
+
+interface CellsMetaData {
+  dateTableCellsMeta: ClientRect[][];
+  allDayPanelCellsMeta: ClientRect[];
+}
+
+export interface ViewMetaData {
+  viewDataProvider: ViewDataProviderType;
+  cellsMetaData: CellsMetaData;
+}

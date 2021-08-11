@@ -12,12 +12,12 @@ const BORDERS_CLASS = 'borders';
 export const viewFunction = ({
   props: {
     views,
-    role,
   },
   className,
   viewRendered,
 }: GridBaseViews): JSX.Element => (
-  <div className={className} role={role}>
+  // TODO use role prop (angular)
+  <div className={className} role="grid">
     {(views.map(({ name, view }) => (
       <GridBaseViewWrapper
         key={name}

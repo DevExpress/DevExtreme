@@ -1,20 +1,20 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     AsyncRule,
-    ValidationRule
+    ValidationRule,
 } from './validation_rules';
 
 /** @public */
@@ -34,8 +34,8 @@ export type ValidatedEvent = {
     validationRules?: Array<ValidationRule>;
     brokenRule?: ValidationRule;
     brokenRules?: ValidationRule;
-    status?: 'valid' | 'invalid' | 'pending'
-}
+    status?: 'valid' | 'invalid' | 'pending';
+};
 
 /**
  * @deprecated use Properties instead
@@ -50,27 +50,27 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
       /**
        * @docid
        */
-      applyValidationResults?: Function,
+      applyValidationResults?: Function;
       /**
        * @docid
        */
-      bypass?: Function,
+      bypass?: Function;
       /**
        * @docid
        */
-      focus?: Function,
+      focus?: Function;
       /**
        * @docid
        */
-      getValue?: Function,
+      getValue?: Function;
       /**
        * @docid
        */
-      reset?: Function,
+      reset?: Function;
       /**
        * @docid
        */
-      validationRequestsCallbacks?: Array<Function>
+      validationRequestsCallbacks?: Array<Function>;
     };
     /**
      * @docid

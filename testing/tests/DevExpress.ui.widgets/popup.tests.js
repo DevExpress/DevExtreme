@@ -1873,4 +1873,18 @@ QUnit.module('renderGeometry', () => {
 
         instance.hide();
     });
+
+    QUnit.test('fullScreen option change to true should trigger positioned event', function(assert) {
+        const positionedHandlerStub = sinon.stub();
+
+        const instance = $('#popup').dxPopup({
+            visible: true
+        }).dxPopup('instance');
+        instance.on('positioned', positionedHandlerStub);
+
+        instance.option('fullScreen', true);
+
+        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is raised');
+        assert.deepEqual(positionedHandlerStub.getCall(0).args[0].position, { h: { location: 0 }, v: { location: 0 } }, 'parameter is correct');
+    });
 });

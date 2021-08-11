@@ -3,6 +3,7 @@ import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { AreaItem } from './ui.pivot_grid.area_item';
 import { capitalizeFirstLetter } from './ui.pivot_grid.utils';
+import { setHeight, setWidth } from '../../core/utils/style';
 import Popup from '../popup';
 import Button from '../button';
 
@@ -34,7 +35,11 @@ export const FieldsArea = AreaItem.inherit({
     },
 
     _createGroupElement: function() {
-        return $(DIV).addClass('dx-pivotgrid-fields-area').addClass('dx-area-fields').addClass(AREA_DRAG_CLASS).attr('group', this._area);
+        return $(DIV)
+            .addClass('dx-pivotgrid-fields-area')
+            .addClass('dx-area-fields')
+            .addClass(AREA_DRAG_CLASS)
+            .attr('group', this._area);
     },
 
     isVisible: function() {
@@ -149,6 +154,14 @@ export const FieldsArea = AreaItem.inherit({
         } else {
             head.append(row);
         }
+    },
+
+    setGroupWidth: function(value) {
+        setWidth(this.groupElement(), value);
+    },
+
+    setGroupHeight: function(value) {
+        setHeight(this.groupElement(), value);
     },
 
     reset: function() {

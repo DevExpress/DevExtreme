@@ -46,6 +46,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
       rtlEnabled, contentPaddingBottom,
+      containerHasSizes,
       onLock, onUnlock,
     },
   } = viewModel;
@@ -68,6 +69,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       showScrollbar={showScrollbar}
       onScroll={onScroll}
       onEnd={onEnd}
+      containerHasSizes={containerHasSizes}
       // Horizontal
       rtlEnabled={rtlEnabled}
       // Vertical
@@ -319,11 +321,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(location: number): void {
-    this.scrollbar.moveTo(location);
+    this.scrollbar.moveTo(location) as undefined;
   }
 
   stopAnimator(animator: string): void {
-    this.scrollbar.stopAnimator(animator);
+    this.scrollbar.stopAnimator(animator) as undefined;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
