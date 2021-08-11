@@ -2198,6 +2198,7 @@ class Scheduler extends Widget {
         return result;
     }
 
+
     hideAppointmentPopup(saveChanges) {
         if(this._appointmentPopup?.visible) {
             saveChanges && this._appointmentPopup.saveChangesAsync();
