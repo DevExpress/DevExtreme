@@ -49,7 +49,6 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       width, height,
     },
     iconRef, iconStyles,
-    widgetRef,
     restAttributes,
     cssClasses: classes, aria,
     onWidgetClick: onClick, onWidgetKeyDown: onKeyDown,
@@ -57,7 +56,6 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
 
   return (
     <Editor // eslint-disable-line jsx-a11y/no-access-key
-      ref={widgetRef}
       aria={aria}
       classes={classes}
       onClick={onClick}
@@ -129,8 +127,6 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 
 export class CheckBox extends JSXComponent<CheckBoxProps>() {
   @Ref() iconRef!: RefObject<HTMLDivElement>;
-
-  @Ref() widgetRef!: RefObject<Editor>;
 
   @Effect()
   updateIconFontSize(): EffectReturn {
