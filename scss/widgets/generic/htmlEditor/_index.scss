@@ -19,6 +19,7 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
 .dx-htmleditor {
   .dx-htmleditor-toolbar-wrapper {
+    padding: 5px;
     position: relative;
 
     &:first-child {

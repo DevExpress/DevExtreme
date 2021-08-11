@@ -68,16 +68,18 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     cancelText?: string;
     /**
      * @docid
+     * @type string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
+     * @type Array<string | dxActionSheetItem | any>
      * @fires dxActionSheetOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxActionSheetItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default null
@@ -162,10 +164,14 @@ export default class dxActionSheet extends CollectionWidget<dxActionSheetOptions
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxActionSheet
+ */
+export type Item = dxActionSheetItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxActionSheetItem extends CollectionWidgetItem {
     /**

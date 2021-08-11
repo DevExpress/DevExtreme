@@ -30,7 +30,6 @@ const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
 
 interface Mock extends jest.Mock {}
-
 class ScrollableTestHelper {
   options: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
 
@@ -62,7 +61,6 @@ class ScrollableTestHelper {
 
   constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
-    this.options.direction = this.options.direction ?? 'vertical';
     this.actionHandlers = this.getActionHandlers(this.options);
 
     this.viewModel = new Scrollable({
@@ -74,6 +72,7 @@ class ScrollableTestHelper {
       onReachBottom: this.actionHandlers.onReachBottom,
       onBounce: this.actionHandlers.onBounce,
       onVisibilityChange: this.actionHandlers.onVisibilityChange,
+      needRenderScrollbars: true,
       ...this.options,
     });
     this.viewModel.scrollableRef = React.createRef() as RefObject<HTMLDivElement>;

@@ -1,6 +1,3 @@
-const rulesDirPlugin = require('eslint-plugin-rulesdir');
-rulesDirPlugin.RULES_DIR = 'build/rules';
-
 module.exports = {
     'extends': [
         'devextreme/spell-check'
@@ -16,9 +13,6 @@ module.exports = {
             'jsx': true
         }
     },
-    plugins: [
-        'rulesdir'
-    ],
     'overrides': [
         {
             'files': [
@@ -323,9 +317,8 @@ module.exports = {
                 '@typescript-eslint/no-misused-promises': 'error',
                 '@typescript-eslint/no-floating-promises': 'error',
                 '@typescript-eslint/no-unsafe-return': 'error',
-                'rulesdir/no-non-null-assertion': 'error',
                 '@typescript-eslint/no-unsafe-member-access': 'warn',
-                '@typescript-eslint/no-non-null-assertion': 'off'
+                '@typescript-eslint/no-non-null-assertion': 'error'
                 /*
             "@typescript-eslint/no-magic-numbers": "error",
             "no-return-await": "off",

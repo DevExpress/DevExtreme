@@ -28,13 +28,13 @@ QUnit.test('Scrollable container should be updated after collapse/expand treeVie
     });
     const treeView = $treeView.dxTreeView('instance');
 
-    treeView._scrollableContainer.update = sinon.spy(commonUtils.noop);
+    treeView.getScrollable().update = sinon.spy(commonUtils.noop);
 
     $treeView
         .find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS + ':first')
         .trigger('dxclick');
 
-    assert.equal(treeView._scrollableContainer.update.callCount, 3); // 1 before content ready, 1 after content ready and 1 after node expanding animation (_animateNodeContainer)
+    assert.equal(treeView.getScrollable().update.callCount, 3); // 1 before content ready, 1 after content ready and 1 after node expanding animation (_animateNodeContainer)
 });
 
 QUnit.test('updateDimensions method should update scrollable container', function(assert) {
@@ -44,13 +44,13 @@ QUnit.test('updateDimensions method should update scrollable container', functio
     });
     const treeView = $treeView.dxTreeView('instance');
 
-    treeView._scrollableContainer.update = sinon.spy(function() {
+    treeView.getScrollable().update = sinon.spy(function() {
         return $.Deferred().resolve();
     });
 
     assert.ok(isFunction(treeView.updateDimensions));
     const result = treeView.updateDimensions();
-    assert.ok(treeView._scrollableContainer.update.calledOnce);
+    assert.ok(treeView.getScrollable().update.calledOnce);
     assert.ok(result.promise);
 });
 

@@ -6,6 +6,8 @@ import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
 
+import 'generic_light.css!';
+
 QUnit.testStart(() => {
     const markup =
         '<div id="scheduler-work-space">\
@@ -96,7 +98,11 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
             this.instance = $('#scheduler-work-space')[view]({})[view]('instance');
+        },
+        afterEach: function() {
+            this.clock.restore();
         }
     };
 
