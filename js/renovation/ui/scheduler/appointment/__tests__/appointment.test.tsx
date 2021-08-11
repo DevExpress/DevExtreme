@@ -107,13 +107,28 @@ describe('Appointment', () => {
           .toBe('Some text');
       });
 
-      it('should return correct date text', () => {
+      it('should return correct dateText', () => {
         const appointment = new Appointment({
           viewModel: defaultViewModel,
         });
 
         expect(appointment.dateText)
           .toBe('1AM - 2PM');
+      });
+
+      it('should return correct styles', () => {
+        const appointment = new Appointment({
+          viewModel: defaultViewModel,
+        });
+
+        expect(appointment.styles)
+          .toMatchObject({
+            backgroundColor: '#1A2BC',
+            height: 20,
+            left: 1,
+            top: 2,
+            width: 10,
+          });
       });
     });
   });
