@@ -1001,8 +1001,8 @@ export const virtualScrollingModule = {
                                 const rowType = item.rowType;
                                 const itemCountable = isItemCountableByDataSource(item, dataSource);
 
-                                if(isDefined(lastCountable)) {
-                                    const isNextGroupItem = rowType === 'group' && (lastCountable || itemCountable || lastRowType !== 'group');
+                                if(!item.isNewRow && isDefined(lastCountable)) {
+                                    const isNextGroupItem = rowType === 'group' && (lastCountable || itemCountable || (lastRowType !== 'group' && currentIndex > 0));
                                     const isNextDataItem = itemCountable && (lastCountable || lastRowType !== 'group');
                                     if(isNextGroupItem || isNextDataItem) {
                                         currentIndex++;
