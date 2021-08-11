@@ -103,9 +103,9 @@ describe('Pager', () => {
         pageIndex: 0,
       });
 
-      pageIndexChange(1);
+      pageIndexChange?.(1);
       expect(component.props.pageIndexChange).toBeCalledWith(1);
-      pageSizeChange(10);
+      pageSizeChange?.(10);
       expect(component.props.pageSizeChange).toBeCalledWith(10);
     });
 

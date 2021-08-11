@@ -114,7 +114,7 @@ describe('Small pager pages', () => {
         pageIndex: 2,
         pageIndexChange: pageIndexChangeHandler,
       });
-      expect(component.value).toBe(2);
+      expect(component.value).toBe(3);
     });
   });
 });

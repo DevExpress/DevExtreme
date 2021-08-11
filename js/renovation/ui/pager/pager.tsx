@@ -44,7 +44,7 @@ export class Pager extends JSXComponent<InternalPagerProps>() {
   }
 
   pageSizeChange(newPageSize: number): void {
-    this.props.pageSizeChange(newPageSize);
+    this.props.pageSizeChange?.(newPageSize);
   }
 
   get className(): string | undefined {

@@ -104,7 +104,7 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
 
   pageIndexChange(pageIndex: number): void {
     if (this.canNavigateToPage(pageIndex)) {
-      this.props.pageIndexChange(pageIndex);
+      this.props.pageIndexChange?.(pageIndex);
     }
   }
 
@@ -132,7 +132,7 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
   }
 
   private getNextPageIndex(direction: Direction): number {
-    this.props.pageIndexChange(this.props.pageIndex + getIncrement(direction));
+    this.props.pageIndexChange?.(this.props.pageIndex + getIncrement(direction));
     return this.props.pageIndex;
   }
 

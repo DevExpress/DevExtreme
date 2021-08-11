@@ -21,7 +21,7 @@ export class InternalPagerProps extends PagerProps {
 
   @OneWay() pageIndex = 1;
 
-  @Event() pageIndexChange!: EventCallback<number>;
+  @Event() pageIndexChange?: EventCallback<number>;
 
-  @Event() pageSizeChange!: EventCallback<number>;
+  @Event() pageSizeChange?: EventCallback<number>;
 }
