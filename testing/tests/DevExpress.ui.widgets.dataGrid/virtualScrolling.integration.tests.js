@@ -3563,6 +3563,58 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.deepEqual(loadIndices, [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5], 'indices after adding new items');
     });
 
+    QUnit.test('New mode. Load indices of group footers are correct', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            let categoryId = 0;
+            for(let i = 0; i < count; i++) {
+                i % 3 === 0 && categoryId++;
+                items.push({
+                    ID: i + 1,
+                    Name: `Name ${i + 1}`,
+                    Category: `Category ${categoryId}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(6),
+            keyExpr: 'ID',
+            height: 400,
+            scrolling: {
+                mode: 'virtual',
+                newMode: true
+            },
+            columns: ['ID', {
+                dataField: 'Name',
+                width: 300
+            }, {
+                dataField: 'Category',
+                groupIndex: 0
+            }],
+            masterDetail: {
+                enabled: true
+            },
+            width: 350,
+            columnHidingEnabled: true,
+            summary: {
+                groupItems: [{
+                    column: 'ID',
+                    summaryType: 'count',
+                    showInGroupFooter: true
+                }]
+            }
+        });
+
+        // act
+        this.clock.tick();
+        const loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
+
+        // assert
+        assert.deepEqual(loadIndices, [0, 1, 2, 3, 3, 4, 5, 6, 7, 7], 'load indices');
+    });
+
     QUnit.test('New mode. Data should be loaded without a delay on scroll', function(assert) {
         // arrange
         const getData = function(count) {
