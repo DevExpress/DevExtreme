@@ -27,11 +27,10 @@ import {
   ItemView, DefaultElement,
   SchedulerToolbarItem,
 } from './types';
-import { View } from '../types.d';
+import { ViewType } from '../types.d';
 
 import { ViewProps } from '../props';
 import { ToolbarItem, ToolbarLocationType } from '../../toolbar/toolbar_props';
-
 
 const { trimTime } = dateUtils;
 
@@ -56,11 +55,11 @@ export class SchedulerToolbarProps {
     },
   ] as SchedulerToolbarItem[];
 
-  @OneWay() views: (View | ViewProps)[] = ['day', 'week'];
+  @OneWay() views: (ViewType | ViewProps)[] = ['day', 'week'];
 
-  @OneWay() currentView: string | View = 'day';
+  @OneWay() currentView: string | ViewType = 'day';
 
-  @Event() onCurrentViewUpdate?: (view: string | View) => void;
+  @Event() onCurrentViewUpdate?: (view: string | ViewType) => void;
 
   @OneWay() currentDate: Date = new Date();
 
@@ -85,9 +84,7 @@ export class SchedulerToolbarProps {
 
 @Component({ view: viewFunction })
 export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps) {
-  get cssClass(): string {
-    return 'dx-scheduler-header';
-  }
+  readonly cssClass = 'dx-scheduler-header';
 
   get step(): string {
     return getStep(this.props.currentView) as string;
@@ -187,8 +184,9 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
     return nextDate > max;
   }
 
-  showCalendar() {
-    console.log('Showing calendar'); // TODO
+  // eslint-disable-next-line class-methods-use-this
+  showCalendar(): void {
+    // TODO
   }
 
   get items(): ToolbarItem[] {

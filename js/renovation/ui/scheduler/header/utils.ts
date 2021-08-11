@@ -2,7 +2,7 @@ import { getViewSwitcher, getDropDownViewSwitcher } from './view_switcher';
 import { getDateNavigator } from './date_navigator';
 
 import { ItemOptions, SchedulerToolbarItem, ItemView } from './types';
-import { View } from '../types.d';
+import { ViewType } from '../types.d';
 
 import { ToolbarItem } from '../../toolbar/toolbar_props';
 import { ViewProps } from '../props';
@@ -46,19 +46,21 @@ export const formToolbarItem = (
           updateDateByDirection,
           isPreviousButtonDisabled, isNextButtonDisabled,
         );
+      default:
+        break;
     }
   }
 
   return item as ToolbarItem;
 };
 
-export const formatViews = (views: (View | ViewProps)[]): ItemView[] => {
+export const formatViews = (views: (ViewType | ViewProps)[]): ItemView[] => {
   validateViews(views);
 
-  return views.map(view => {
-      const text = getViewText(view);
-      const name = getViewName(view);
+  return views.map((view) => {
+    const text = getViewText(view);
+    const name = getViewName(view);
 
-      return { text, name };
+    return { text, name };
   });
 };
