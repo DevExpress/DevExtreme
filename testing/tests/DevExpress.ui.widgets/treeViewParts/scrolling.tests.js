@@ -22,7 +22,7 @@ QUnit.module('scrollToItem', () => {
         });
 
         if(config.initialPosition) {
-            wrapper.instance._scrollableContainer.scrollTo(config.initialPosition);
+            wrapper.instance.getScrollable().scrollTo(config.initialPosition);
         }
 
         return wrapper;
@@ -132,20 +132,20 @@ QUnit.module('scrollToItem', () => {
 
         const done = assert.async(3);
         const key = 'item1_1_1';
-        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         wrapper.instance.scrollToItem('item1_1_1').done(() => {
             wrapper.checkNodeIsInVisibleArea(key);
             done();
         });
 
-        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         const node = wrapper.getElement().find('[data-item-id="item1_1_1"]').get(0);
         wrapper.instance.scrollToItem(node).done(() => {
             wrapper.checkNodeIsInVisibleArea(node.getAttribute('data-item-id'));
             done();
         });
 
-        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         const itemData = wrapper.instance.option('items')[0].items[0].items[0];
         wrapper.instance.scrollToItem(itemData).done(() => {
             wrapper.checkNodeIsInVisibleArea(itemData.id);

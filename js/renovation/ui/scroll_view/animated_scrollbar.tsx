@@ -46,6 +46,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
       rtlEnabled, contentPaddingBottom,
+      containerHasSizes,
       onLock, onUnlock,
     },
   } = viewModel;
@@ -68,6 +69,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       showScrollbar={showScrollbar}
       onScroll={onScroll}
       onEnd={onEnd}
+      containerHasSizes={containerHasSizes}
       // Horizontal
       rtlEnabled={rtlEnabled}
       // Vertical

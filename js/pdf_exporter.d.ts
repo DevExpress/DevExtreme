@@ -1,5 +1,5 @@
 import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import dxDataGrid, { Column } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**
@@ -11,8 +11,9 @@ export interface PdfDataGridCell {
     /**
      * @docid
      * @public
+     * @type dxDataGridColumn
      */
-    column?: dxDataGridColumn;
+    column?: Column;
     /**
      * @docid
      * @public
@@ -31,11 +32,11 @@ export interface PdfDataGridCell {
       /**
        * @docid
        */
-      name?: string,
+      name?: string;
       /**
        * @docid
        */
-      value?: any
+      value?: any;
     }>;
     /**
      * @docid
@@ -96,7 +97,7 @@ export interface PdfExportDataGridProps {
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => void);
+    customizeCell?: ((options: { gridCell?: PdfDataGridCell; pdfCell?: any }) => void);
     /**
      * @docid
      * @public
