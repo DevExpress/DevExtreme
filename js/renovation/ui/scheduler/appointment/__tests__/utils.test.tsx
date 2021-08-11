@@ -27,26 +27,44 @@ describe('Appointment utils', () => {
         endDate: new Date('2021-08-05T12:00:00.000Z'),
       },
       sourceAppointment: {
-        groupIndex: 1,
+        groupIndex: 99,
       },
       dateText: '1AM - 2PM',
       resourceColor: '#1A2BC',
     },
   };
 
-  it('getAppointmentStyles', () => {
-    expect(getAppointmentStyles(testViewModel))
-      .toMatchObject({
-        backgroundColor: '#1A2BC',
-        height: 20,
-        left: 1,
-        top: 2,
-        width: 10,
-      });
+  describe('getAppointmentStyles', () => {
+    it('generate styles for the full model', () => {
+      expect(getAppointmentStyles(testViewModel))
+        .toMatchObject({
+          backgroundColor: '#1A2BC',
+          height: 20,
+          left: 1,
+          top: 2,
+          width: 10,
+        });
+    });
+
+    it('generate styles if resource color is not defined', () => {
+      expect(getAppointmentStyles({
+        ...testViewModel,
+        info: {
+          ...testViewModel.info,
+          resourceColor: undefined,
+        },
+      }))
+        .toMatchObject({
+          height: 20,
+          left: 1,
+          top: 2,
+          width: 10,
+        });
+    });
   });
 
   it('getAppointmentKey', () => {
     expect(getAppointmentKey(testViewModel))
-      .toBe('1-1628157600000-1628164800000_2-4-10-20');
+      .toBe('99-1628157600000-1628164800000_2-4-10-20');
   });
 });

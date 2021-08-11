@@ -15,7 +15,7 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
     },
   } = item;
 
-  return addToStyles([{
+  let result = addToStyles([{
     attr: 'height',
     value: height || 50,
   }, {
@@ -27,10 +27,16 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
   }, {
     attr: 'left',
     value: left,
-  }, {
-    attr: 'backgroundColor',
-    value: resourceColor,
   }]);
+
+  if (resourceColor) {
+    result = addToStyles([{
+      attr: 'backgroundColor',
+      value: resourceColor,
+    }], result);
+  }
+
+  return result;
 };
 
 export const getAppointmentKey = (item: AppointmentViewModel): string => {

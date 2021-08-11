@@ -41,17 +41,10 @@ describe('Appointment', () => {
       },
     }));
 
-    it('should spread restAttributes', () => {
-      const appointment = render({
-        restAttributes: { 'custom-attribute': 'customAttribute' },
-      });
-
-      expect(appointment.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('it should has correct render', () => {
-      const appointment = render({});
+      const appointment = render({
+        styles: 'some-styles',
+      });
 
       expect(appointment.hasClass('dx-scheduler-appointment'))
         .toBe(true);
@@ -61,16 +54,8 @@ describe('Appointment', () => {
 
       expect(appointment.props())
         .toMatchObject({
-          style: {
-            left: 1,
-            top: 2,
-            width: 10,
-            height: 20,
-          },
+          style: 'some-styles',
         });
-
-      expect(appointment.key())
-        .toBe('1-1628157600000-1628164800000_2-4-10-20');
     });
 
     it('it should has correct content container', () => {

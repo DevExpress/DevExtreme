@@ -24,6 +24,6 @@ export interface AppointmentViewModel {
       groupIndex: number;
     };
     dateText: string;
-    resourceColor: string;
+    resourceColor?: string;
   };
 }
