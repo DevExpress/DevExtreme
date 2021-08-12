@@ -8,10 +8,8 @@ const ResizeObserverNoWindowMock = {
     disconnect: noop
 };
 
-const ResizeObserverSingletonFactory = (function() {
-    let instance;
-
-    function ResizeObserverSingleton() {
+class ResizeObserverSingleton {
+    constructor() {
         if(!hasWindow()) {
             return ResizeObserverNoWindowMock;
         }
@@ -24,26 +22,26 @@ const ResizeObserverSingletonFactory = (function() {
         });
     }
 
-    ResizeObserverSingleton.getInstance = function() {
-        return instance ?? (instance = new ResizeObserverSingleton());
-    };
-
-    ResizeObserverSingleton.prototype.observe = function(element, callback) {
+    observe(element, callback) {
         this._callbacksMap.set(element, callback);
         this._observer.observe(element);
-    };
+    }
 
-    ResizeObserverSingleton.prototype.unobserve = function(element) {
+    unobserve(element) {
         this._callbacksMap.delete(element);
         this._observer.unobserve(element);
-    };
+    }
 
-    ResizeObserverSingleton.prototype.disconnect = function() {
+    disconnect() {
         this._callbacksMap.clear();
         this._observer.disconnect();
-    };
+    }
+}
 
-    return ResizeObserverSingleton;
-})();
+const resizeObserverSingleton = new ResizeObserverSingleton();
 
-export default ResizeObserverSingletonFactory;
+///#DEBUG
+resizeObserverSingleton.ResizeObserverSingleton = ResizeObserverSingleton;
+///#ENDDEBUG
+
+export default resizeObserverSingleton;

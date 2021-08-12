@@ -34,6 +34,7 @@ import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
+import resizeObserverSingleton from '../../core/resize_observer';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -397,9 +398,9 @@ const Overlay = Widget.inherit({
 
         const contentElement = this._$content.get(0);
         if(shouldObserve) {
-            this._resizeObserver.observe(contentElement, (entry) => { this._contentResizeHandler(entry); });
+            resizeObserverSingleton.observe(contentElement, (entry) => { this._contentResizeHandler(entry); });
         } else {
-            this._resizeObserver.unobserve(contentElement);
+            resizeObserverSingleton.unobserve(contentElement);
         }
     },
 
@@ -1409,6 +1410,7 @@ const Overlay = Widget.inherit({
 
         this._renderVisibility(false);
         this._stopShowTimer();
+        this._observeContentResize(false);
 
         this._cleanFocusState();
     },

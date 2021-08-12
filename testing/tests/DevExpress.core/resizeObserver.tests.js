@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import ResizeObserverSingleton from 'core/resize_observer';
+import resizeObserverSingleton from 'core/resize_observer';
+
 import { getWindow, setWindow } from 'core/utils/window';
 const window = getWindow();
 
@@ -14,12 +15,11 @@ QUnit.testStart(function() {
 QUnit.module('Resize observer', () => {
     QUnit.test('should not raise any error if there is no window', function(assert) {
         setWindow(window, false);
-        let observer;
 
         try {
             const element = $('#root').get(0);
 
-            observer = new ResizeObserverSingleton();
+            const observer = new resizeObserverSingleton.ResizeObserverSingleton();
             observer.observe(element, () => {});
             observer.unobserve(element);
             observer.disconnect();
@@ -34,7 +34,7 @@ QUnit.module('Resize observer', () => {
 
     QUnit.module('base functionality', {
         beforeEach: function() {
-            this.observer = ResizeObserverSingleton.getInstance();
+            this.observer = resizeObserverSingleton;
             this.$element = $('#root');
             this.element = this.$element.get(0);
         },
@@ -43,10 +43,6 @@ QUnit.module('Resize observer', () => {
             this.$element.width(200);
         }
     }, () => {
-        QUnit.testInActiveWindow('there is only one ResizeObserverSingleton instance', function(assert) {
-            assert.strictEqual(ResizeObserverSingleton.getInstance(), this.observer, 'instances are the same');
-        });
-
         QUnit.testInActiveWindow('callback should be raised after observable element resize', function(assert) {
             const resizeHandled = assert.async();
             const callback = () => {
