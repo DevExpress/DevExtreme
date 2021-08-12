@@ -19,6 +19,8 @@ import { current } from '../../../../ui/themes';
 import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
+import { Widget } from '../../common/widget';
+import { ScrollableDirection } from '../types';
 
 interface Mock extends jest.Mock {}
 
@@ -43,9 +45,10 @@ jest.mock('../../../../ui/themes', () => ({
 describe('ScrollView', () => {
   it('render with defaults', () => {
     const props = new ScrollViewProps();
-    const scrollable = mount<ScrollView>(<ScrollView {...props} />);
 
-    expect(scrollable.props()).toEqual({
+    const scrollView = mount<ScrollView>(<ScrollView {...props} />);
+
+    expect(scrollView.props()).toEqual({
       bounceEnabled: true,
       direction: 'vertical',
       forceGeneratePockets: false,
@@ -58,6 +61,36 @@ describe('ScrollView', () => {
       scrollByThumb: false,
       showScrollbar: 'onScroll',
       useNative: true,
+    });
+  });
+
+  each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
+    it('should pass all necessary properties to the Widget', () => {
+      const config = {
+        activeStateUnit: '.UIFeedback',
+        useNative: useNativeScrolling,
+        direction: 'vertical' as ScrollableDirection,
+        width: '120px',
+        height: '300px',
+        activeStateEnabled: false,
+        addWidgetClass: false,
+        rtlEnabled: true,
+        disabled: true,
+        focusStateEnabled: false,
+        hoverStateEnabled: !useNativeScrolling,
+        tabIndex: 0,
+        visible: true,
+      };
+
+      const scrollView = mount<ScrollView>(<ScrollView {...config} />);
+
+      const { direction, useNative, ...restProps } = config;
+      expect(scrollView.find(Widget).at(0).props()).toMatchObject({
+        classes: useNative
+          ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled dx-scrollview'
+          : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled dx-scrollview',
+        ...restProps,
+      });
     });
   });
 
@@ -219,7 +252,7 @@ describe('ScrollView', () => {
             const originalWindow = getWindow();
 
             try {
-              setWindow({}, isServerSide);
+              setWindow({}, !isServerSide);
               const scrollView = mount(viewFunction({ props: {} } as any));
 
               const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
@@ -233,11 +266,11 @@ describe('ScrollView', () => {
             const originalWindow = getWindow();
 
             try {
-              setWindow({}, isServerSide);
+              setWindow({}, !isServerSide);
               const scrollView = mount(viewFunction({ props: {} } as any));
 
               const scrollViewContent = scrollView.find('.dx-scrollable-scrollbar');
-              expect(scrollViewContent.exists()).toBe(isServerSide);
+              expect(scrollViewContent.exists()).toBe(!isServerSide);
             } finally {
               setWindow(originalWindow, true);
             }
@@ -247,13 +280,13 @@ describe('ScrollView', () => {
             const originalWindow = getWindow();
 
             try {
-              setWindow({}, isServerSide);
+              setWindow({}, !isServerSide);
               const scrollView = mount(viewFunction({ props: {} } as any));
 
               const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
-              expect(topPocket.exists()).toBe(isServerSide);
+              expect(topPocket.exists()).toBe(!isServerSide);
               const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
-              expect(bottomPocket.exists()).toBe(isServerSide);
+              expect(bottomPocket.exists()).toBe(!isServerSide);
             } finally {
               setWindow(originalWindow, true);
             }
@@ -263,11 +296,11 @@ describe('ScrollView', () => {
             const originalWindow = getWindow();
 
             try {
-              setWindow({}, isServerSide);
+              setWindow({}, !isServerSide);
               const scrollView = mount(viewFunction({ props: { } } as any));
 
               const loadPanel = scrollView.find('.dx-scrollview-loadpanel');
-              expect(loadPanel.exists()).toBe(isServerSide);
+              expect(loadPanel.exists()).toBe(!isServerSide);
             } finally {
               setWindow(originalWindow, true);
             }

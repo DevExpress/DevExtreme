@@ -37,13 +37,16 @@ QUnit.module('markup', () => {
     });
 
     QUnit.test('wrapper should be rendered', function(assert) {
-        const $multiView = $('#multiView').dxMultiView(); const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const $multiView = $('#multiView').dxMultiView();
+        const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
 
         assert.equal($wrapper.length, 1, 'wrapper was rendered');
     });
 
     QUnit.test('item container should be rendered', function(assert) {
-        const $multiView = $('#multiView').dxMultiView(); const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS)); const $itemContainer = $wrapper.children(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $multiView = $('#multiView').dxMultiView();
+        const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const $itemContainer = $wrapper.children(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
 
         assert.equal($itemContainer.length, 1, 'item container was rendered');
     });
@@ -120,7 +123,8 @@ QUnit.module('markup', () => {
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria role for each item', function(assert) {
-        const $multiView = $('#multiView').dxMultiView({ items: [1, 2] }); const $item = $multiView.find('.dx-item:first');
+        const $multiView = $('#multiView').dxMultiView({ items: [1, 2] });
+        const $item = $multiView.find('.dx-item:first');
 
         assert.equal($item.attr('role'), 'tabpanel');
     });

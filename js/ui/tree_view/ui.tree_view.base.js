@@ -19,6 +19,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
 import errors from '../widget/ui.errors';
+import { nativeScrolling } from '../../core/utils/support';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -156,6 +157,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             onItemExpanded: null,
             onItemCollapsed: null,
             scrollDirection: 'vertical',
+            useNativeScrolling: true,
             virtualModeEnabled: false,
             rootValue: 0,
             focusStateEnabled: false,
@@ -188,6 +190,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 useDeferUpdateForTemplates: false
             }
         });
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return !nativeScrolling;
+                },
+                options: {
+                    useNativeScrolling: false
+                }
+            }
+        ]);
     },
 
     // TODO: implement these functions
@@ -262,6 +277,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 break;
             case 'scrollDirection':
                 this.getScrollable().option('direction', value);
+                break;
+            case 'useNativeScrolling':
+                this.getScrollable().option('useNative', value);
                 break;
             case 'items':
                 delete this._$selectAllItem;
@@ -585,6 +603,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _renderScrollableContainer: function() {
         this._scrollable = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
+            useNative: this.option('useNativeScrolling'),
             direction: this.option('scrollDirection'),
             useKeyboard: false
         });

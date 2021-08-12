@@ -121,7 +121,9 @@ QUnit.module('render', {
         assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
         assert.equal($label.children().eq(0).css('overflow'), 'hidden');
 
-        const $centerSection = this.$element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS); const beforeSectionWidth = this.$element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width; const afterSectionWidth = this.$element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+        const $centerSection = this.$element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS);
+        const beforeSectionWidth = this.$element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+        const afterSectionWidth = this.$element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
 
         assert.roughEqual(parseFloat($centerSection.css('margin-left')), beforeSectionWidth, 0.1);
         assert.roughEqual(parseFloat($centerSection.css('margin-right')), afterSectionWidth, 0.1);
@@ -625,7 +627,9 @@ QUnit.module('toolbar with menu', {
             submenuType: 'dropDownMenu'
         });
 
-        const $button = this.$element.find('.' + DROP_DOWN_MENU_CLASS); const ddMenu = $button.dxDropDownMenu('instance'); const position = ddMenu.option('popupPosition');
+        const $button = this.$element.find('.' + DROP_DOWN_MENU_CLASS);
+        const ddMenu = $button.dxDropDownMenu('instance');
+        const position = ddMenu.option('popupPosition');
 
         assert.equal(position.at, 'bottom right', 'at position is correct');
         assert.equal(position.my, 'top right', 'my position is correct');
@@ -736,21 +740,25 @@ QUnit.module('widget sizing render', () => {
     });
 
     QUnit.test('constructor', function(assert) {
-        const $element = $('#widget').dxToolbar({ width: 400 }); const instance = $element.dxToolbar('instance');
+        const $element = $('#widget').dxToolbar({ width: 400 });
+        const instance = $element.dxToolbar('instance');
 
         assert.strictEqual(instance.option('width'), 400);
         assert.strictEqual($element.outerWidth(), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('root with custom width', function(assert) {
-        const $element = $('#widthRootStyle').dxToolbar(); const instance = $element.dxToolbar('instance');
+        const $element = $('#widthRootStyle').dxToolbar();
+        const instance = $element.dxToolbar('instance');
 
         assert.strictEqual(instance.option('width'), undefined);
         assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxToolbar(); const instance = $element.dxToolbar('instance'); const customWidth = 400;
+        const $element = $('#widget').dxToolbar();
+        const instance = $element.dxToolbar('instance');
+        const customWidth = 400;
 
         instance.option('width', customWidth);
 
@@ -802,7 +810,9 @@ QUnit.module('widget sizing render', () => {
             width: 359
         });
 
-        const $center = $element.find('.dx-toolbar-center').eq(0); const $label = $center.children('.dx-toolbar-label').eq(0); const $after = $element.find('.dx-toolbar-after').eq(0);
+        const $center = $element.find('.dx-toolbar-center').eq(0);
+        const $label = $center.children('.dx-toolbar-label').eq(0);
+        const $after = $element.find('.dx-toolbar-after').eq(0);
 
         assert.ok(Math.floor($label.position().left + $label.outerWidth()) <= Math.floor($element.outerWidth() - $after.outerWidth()), 'label is positioned correctly');
     });
@@ -1266,7 +1276,8 @@ QUnit.module('adaptivity', {
             width: 400
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), 'item was rendered in menu');
@@ -1284,7 +1295,8 @@ QUnit.module('adaptivity', {
             width: 1000
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), 'item was rendered in menu');
@@ -1329,7 +1341,8 @@ QUnit.module('adaptivity', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -1354,7 +1367,8 @@ QUnit.module('adaptivity', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDown.dxDropDownMenu('instance');
         dropDown.open();
 
         $($beforeItem).trigger('dxclick');
@@ -1398,7 +1412,8 @@ QUnit.module('adaptivity', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -1440,7 +1455,8 @@ QUnit.module('adaptivity', {
     QUnit.test('overflow item should rendered with correct template in menu and in toolbar', function(assert) {
         assert.expect(4);
 
-        const $toolbarTemplate = $('<div>').width(500); const $menuTemplate = $('<div>');
+        const $toolbarTemplate = $('<div>').width(500);
+        const $menuTemplate = $('<div>');
 
         const $element = $('#widget').dxToolbar({
             items: [
@@ -1458,7 +1474,8 @@ QUnit.module('adaptivity', {
 
         $element.dxToolbar('option', 'width', 400);
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $menuTemplate.get(0)), 'item was rendered in menu');
@@ -1485,7 +1502,8 @@ QUnit.module('adaptivity', {
         });
 
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         if(!dropDown.option('focusStateEnabled')) {
             assert.expect(0);
@@ -1495,7 +1513,8 @@ QUnit.module('adaptivity', {
 
         dropDown.open();
 
-        const $item1 = $('.dx-list-item').eq(0); const $item2 = $('.dx-list-item').eq(1);
+        const $item1 = $('.dx-list-item').eq(0);
+        const $item2 = $('.dx-list-item').eq(1);
 
         $($item2).trigger('dxpointerdown');
         this.clock.tick();
@@ -1509,7 +1528,8 @@ QUnit.module('adaptivity', {
             items: [{ locateInMenu: 'always', text: 'item1' }]
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -1607,7 +1627,8 @@ QUnit.module('adaptivity', {
             ]
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.open();
 
@@ -1718,7 +1739,8 @@ QUnit.module('default template', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         const $items = $('.dx-dropdownmenu-list .dx-list-item');
@@ -1746,7 +1768,8 @@ QUnit.module('default template', {
                 }]
             });
 
-            const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+            const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
+            const dropDown = $dropDown.dxDropDownMenu('instance');
 
             dropDown.open();
             const $items = $('.dx-dropdownmenu-list .dx-buttongroup-item');
