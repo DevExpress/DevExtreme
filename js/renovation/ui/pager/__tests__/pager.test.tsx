@@ -106,6 +106,14 @@ describe('Pager', () => {
     });
 
     describe('gridCompatibility', () => {
+      it('pageIndex', () => {
+        const component = new PagerComponent({
+          pageIndex: 4,
+          gridCompatibility: true,
+        });
+        expect(component.pageIndex).toBe(3);
+      });
+
       it('pageIndexChange', () => {
         const component = new PagerComponent({
           gridCompatibility: true,
