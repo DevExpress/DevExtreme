@@ -41,6 +41,10 @@ describe('Scheduler', () => {
         currentViewConfig={defaultCurrentViewConfig}
         workSpace={WorkSpaceWeek}
         {...viewModel}
+        props={{
+          ...new SchedulerProps(),
+          ...viewModel.props,
+        }}
       />,
     );
 
@@ -76,6 +80,7 @@ describe('Scheduler', () => {
           'custom-attribute': 'customAttribute',
           classes: 'dx-scheduler',
           ...props,
+          children: expect.anything(),
         });
     });
 
