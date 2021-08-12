@@ -11,6 +11,7 @@ import {
 
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
 
+// TODO: https://trello.com/c/Y1xf4hkH/2155-allow-to-change-elementattr-for-a-root-element-of-button-in-buttongroup-via-toolbar-element-declaration
 // const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
 // const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
 // const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
