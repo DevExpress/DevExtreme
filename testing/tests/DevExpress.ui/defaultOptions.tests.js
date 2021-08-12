@@ -312,6 +312,18 @@ testComponentDefaults(List,
     }
 );
 
+testComponentDefaults(TreeView,
+    {},
+    { useNativeScrolling: false },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
 testComponentDefaults(List,
     { platform: 'ios' },
     {
