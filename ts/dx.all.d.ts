@@ -13154,6 +13154,14 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.rootValue]
      */
     rootValue?: any;
+    /**
+     * [descr:dxGanttOptions.startDateRange]
+     */
+    startDateRange?: Date;
+    /**
+     * [descr:dxGanttOptions.endDateRange]
+     */
+    endDateRange?: Date;
   }
   /**
    * [descr:dxGanttSorting]
@@ -20857,6 +20865,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
     virtualModeEnabled?: boolean;
+    /**
+     * [descr:dxTreeViewOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
   }
   /**
    * [descr:dxValidationGroup]
@@ -33819,9 +33831,6 @@ declare module DevExpress.viz.dxBarGauge {
   export type LegendItem = BarGaugeLegendItem;
 }
 declare module DevExpress.viz.dxFunnel {
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type Item = dxFunnelItem;
   export type LegendItem = FunnelLegendItem;
 }

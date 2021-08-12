@@ -41,7 +41,7 @@ QUnit.testStart(() => {
 
 QUnit.module('Form', () => {
     test('Invalidate after option changed', function(assert) {
-        const testingOptions = ['formData', 'items', 'colCount', 'onFieldDataChanged', 'labelLocation',
+        const testingOptions = ['formData', 'items', 'colCount', 'labelLocation',
             'alignItemLabels', 'showColonAfterLabel', 'customizeItem', 'minColWidth', 'alignItemLabelsInAllGroups', 'onEditorEnterKey', 'scrollingEnabled', 'formID'];
         const form = $('#form').dxForm().dxForm('instance');
         let i;
@@ -76,7 +76,8 @@ QUnit.module('Form', () => {
                     editorType: 'dxTextBox'
                 }
             ]
-        }).dxForm('instance'); const invalidateStub = sinon.stub(form, '_invalidate');
+        }).dxForm('instance');
+        const invalidateStub = sinon.stub(form, '_invalidate');
 
         form.option('formData', {
             name: 'test'

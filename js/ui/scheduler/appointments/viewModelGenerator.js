@@ -31,11 +31,11 @@ export class AppointmentViewModel {
         this.initRenderingStrategy(options);
 
         const positionMap = this.getRenderingStrategy().createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
-        const viewModel = this.postProcess(appointments, positionMap, viewRenderingStrategyName, isRenovatedAppointments);
+        let viewModel = this.postProcess(appointments, positionMap, viewRenderingStrategyName, isRenovatedAppointments);
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
-            return this.makeRenovatedViewModel(viewModel);
+            viewModel = this.makeRenovatedViewModel(viewModel);
         }
 
         return {

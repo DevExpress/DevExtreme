@@ -69,6 +69,7 @@ import {
 import { getCellGroups } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from './workspaces/utils/base';
+import { renderAppointments } from './appointments/render';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1111,20 +1112,36 @@ class Scheduler extends Widget {
             this._isAllDayExpanded(filteredItems)
         );
 
+        let viewModel = [];
         if(filteredItems.length && this._isVisible()) {
-            this._appointments.option('items', this._getAppointmentsToRepaint());
-            getAppointmentDataProvider(this.key).cleanState();
-        } else {
-            this._appointments.option('items', []);
+            viewModel = this._getAppointmentsToRepaint();
         }
+
+        if(this.modelProvider.isRenovatedAppointments) {
+            renderAppointments({
+                instance: this,
+                $dateTable: this.getWorkSpace()._getDateTable(),
+                viewModel
+            });
+        } else {
+            this._appointments.option('items', viewModel);
+        }
+
+        getAppointmentDataProvider(this.key).cleanState();
     }
 
     _getAppointmentsToRepaint() {
         const { filteredItems } = getAppointmentDataProvider(this.key);
         const layoutManager = this.getLayoutManager();
 
-        const appointments = layoutManager.createAppointmentsMap(filteredItems);
-        return layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
+        const currentViewModel = layoutManager.createAppointmentsMap(filteredItems);
+        if(this.modelProvider.isRenovatedAppointments) {
+            return currentViewModel;
+        }
+
+        const oldViewModel = this.getAppointmentsInstance().option('items');
+
+        return layoutManager.getRepaintedAppointments(currentViewModel, oldViewModel);
     }
 
     _initExpressions(fields) {
@@ -1300,6 +1317,8 @@ class Scheduler extends Widget {
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
 
+            getEditingConfig: () => this._editing,
+
             getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
             getStartDayHour: () => this.option('startDayHour'),
             getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
@@ -1460,6 +1479,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
             groups: this._getCurrentViewOption('groups'),
+            isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
                 const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
@@ -1600,6 +1620,7 @@ class Scheduler extends Widget {
 
             // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),
+            isRenovatedAppointments: this.modelProvider.isRenovatedAppointments
         }, currentViewOptions);
 
         result.observer = this;
@@ -1744,23 +1765,22 @@ class Scheduler extends Widget {
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
         const appointment = createAppointmentAdapter(this.key, { ...rawAppointment });
-        const newAppointment = createAppointmentAdapter(this.key, newRawAppointment);
+        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
-        newAppointment.recurrenceRule = '';
-        newAppointment.recurrenceException = '';
+        const singleRawAppointment = { ...newRawAppointment };
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
 
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
             const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
-            delete newRawAppointment[keyPropertyName];
+            delete singleRawAppointment[keyPropertyName];
 
-            this.addAppointment(newRawAppointment);
+            this.addAppointment(singleRawAppointment);
         }
 
-        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
-
         if(isPopupEditing) {
-            this._appointmentPopup.show(newRawAppointment, {
+            this._appointmentPopup.show(singleRawAppointment, {
                 isToolbarVisible: true,
                 action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
                 excludeInfo: {
@@ -1769,7 +1789,6 @@ class Scheduler extends Widget {
                 }
             });
             this._editAppointmentData = rawAppointment;
-
         } else {
             this._updateAppointment(rawAppointment, appointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
@@ -2199,7 +2218,7 @@ class Scheduler extends Widget {
 
     hideAppointmentPopup(saveChanges) {
         if(this._appointmentPopup?.visible) {
-            saveChanges && this._appointmentPopup.saveChanges();
+            saveChanges && this._appointmentPopup.saveChangesAsync();
             this._appointmentPopup.hide();
         }
     }
