@@ -2,7 +2,7 @@ import dateUtils from '../../../../core/utils/date';
 import { isObject, isString } from '../../../../core/utils/type';
 import { SchedulerProps, ViewProps } from '../props';
 import { ViewType } from '../types.d';
-import { CurrentViewConfig } from './types';
+import { CurrentViewConfigType } from '../workspaces/props';
 
 const VIEW_TYPES = [
   'day', 'week', 'workWeek',
@@ -58,7 +58,7 @@ export const getCurrentViewConfig = (
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   currentViewProps: Partial<ViewProps>,
   schedulerProps: SchedulerProps,
-): CurrentViewConfig => {
+): CurrentViewConfigType => {
   const { scrolling: schedulerScrolling } = schedulerProps;
 
   const {
@@ -130,5 +130,5 @@ export const getCurrentViewConfig = (
     hoursInterval: result.cellDuration / 60,
     groups: [], // TODO
     selectedCellData: [], // TODO
-  } as CurrentViewConfig;
+  } as CurrentViewConfigType;
 };

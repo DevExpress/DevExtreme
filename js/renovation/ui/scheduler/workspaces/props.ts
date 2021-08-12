@@ -7,7 +7,7 @@ import {
 } from '@devextreme-generator/declarations';
 import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
 import dateUtils from '../../../../core/utils/date';
-import { GroupOrientation } from '../types';
+import { GroupOrientation, ViewType } from '../types';
 import {
   DataCellTemplateProps,
   DateTimeCellTemplateProps,
@@ -85,3 +85,37 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 }
+
+interface CurrentViewType {
+  type: ViewType;
+}
+
+export type CurrentViewConfigType = Pick<
+WorkSpaceProps,
+'firstDayOfWeek'
+| 'startDayHour'
+| 'endDayHour'
+| 'cellDuration'
+| 'groupByDate'
+| 'scrolling'
+| 'currentDate'
+| 'intervalCount'
+| 'groupOrientation'
+| 'startDate'
+| 'showAllDayPanel'
+| 'showCurrentTimeIndicator'
+| 'indicatorUpdateInterval'
+| 'shadeUntilCurrentTime'
+| 'crossScrollingEnabled'
+| 'schedulerHeight'
+| 'schedulerWidth'
+| 'tabIndex'
+| 'accessKey'
+| 'focusStateEnabled'
+| 'indicatorTime'
+| 'allowMultipleCellSelection'
+| 'allDayPanelExpanded'
+| 'hoursInterval'
+| 'groups'
+| 'selectedCellData'
+> & CurrentViewType;

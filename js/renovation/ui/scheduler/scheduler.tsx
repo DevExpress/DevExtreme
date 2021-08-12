@@ -16,10 +16,9 @@ import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
-import { WorkSpaceProps } from './workspaces/props';
+import { WorkSpaceProps, CurrentViewConfigType } from './workspaces/props';
 import { WorkSpaceWeek } from './workspaces/week/work_space';
 import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
-import { CurrentViewConfig } from './model/types';
 
 export const viewFunction = ({
   restAttributes,
@@ -103,7 +102,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return getCurrentViewProps(currentView, views);
   }
 
-  get currentViewConfig(): CurrentViewConfig {
+  get currentViewConfig(): CurrentViewConfigType {
     return getCurrentViewConfig(this.currentViewProps, this.props);
   }
 
