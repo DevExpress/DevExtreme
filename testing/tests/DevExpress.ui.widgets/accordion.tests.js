@@ -402,7 +402,8 @@ QUnit.module('widget options', moduleSetup, () => {
             collapsible: false
         });
 
-        const $element = this.$element; const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
+        const $element = this.$element;
+        const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
 
         $($titles.eq(1)).trigger('dxclick');
 
@@ -435,7 +436,8 @@ QUnit.module('widget options', moduleSetup, () => {
                 animationDuration: 1000
             });
 
-            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1); const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1);
+            const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
@@ -718,7 +720,8 @@ QUnit.module('widget options changed', moduleSetup, () => {
         try {
             instance.option('animationDuration', 1000);
 
-            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1); const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1);
+            const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 

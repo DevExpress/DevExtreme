@@ -76,7 +76,8 @@ QUnit.module('Form', () => {
                     editorType: 'dxTextBox'
                 }
             ]
-        }).dxForm('instance'); const invalidateStub = sinon.stub(form, '_invalidate');
+        }).dxForm('instance');
+        const invalidateStub = sinon.stub(form, '_invalidate');
 
         form.option('formData', {
             name: 'test'

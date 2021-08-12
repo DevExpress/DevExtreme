@@ -931,6 +931,18 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     rootValue?: any;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    startDateRange?: Date;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    endDateRange?: Date;
 }
 /**
  * @docid

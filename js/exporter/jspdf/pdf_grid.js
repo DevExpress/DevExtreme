@@ -141,15 +141,35 @@ export class PdfGrid {
     }
 
     _getDocumentStyles(doc) {
+        const docFont = doc.getFont();
+
         return {
+            font: {
+                name: docFont.fontName,
+                style: docFont.fontStyle,
+                size: doc.getFontSize()
+            },
             textColor: doc.getTextColor()
         };
     }
 
     _setDocumentStyles(doc, styles) {
         const {
+            font,
             textColor
         } = styles;
+
+        const docFont = doc.getFont();
+        if(
+            docFont.fontName !== font.name ||
+            docFont.fontStyle !== font.style
+        ) {
+            doc.setFont(font.name, font.style, undefined);
+        }
+        const docFontSize = doc.getFontSize();
+        if(docFontSize !== font.size) {
+            doc.setFontSize(font.size);
+        }
 
         if(doc.getTextColor() !== textColor) {
             doc.setTextColor(textColor);

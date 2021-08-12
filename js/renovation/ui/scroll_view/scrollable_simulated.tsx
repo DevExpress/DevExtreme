@@ -105,7 +105,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       needRenderScrollbars, needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
-      pullDownEnabled, reachBottomEnabled,
+      pullDownEnabled, reachBottomEnabled, activeStateUnit,
     },
     restAttributes,
   } = viewModel;
@@ -114,6 +114,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     <Widget
       rootElementRef={scrollableRef}
       focusStateEnabled={useKeyboard}
+      activeStateUnit={activeStateUnit}
       hoverStateEnabled
       aria={aria}
       addWidgetClass={false}
