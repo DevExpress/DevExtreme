@@ -1,4 +1,5 @@
 import device from 'core/devices';
+import config from 'core/config';
 import domAdapter from 'core/dom_adapter';
 import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -27,7 +28,8 @@ import {
     FIELD_ITEM_REQUIRED_MARK_CLASS,
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    FORM_GROUP_CAPTION_CLASS
+    FORM_GROUP_CAPTION_CLASS,
+    FORM_UNDERLINED_CLASS
 } from 'ui/form/constants';
 
 import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
@@ -3722,6 +3724,25 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
 
             assert.equal(1, 1, 'resize of the form does not freeze the page');
         });
+    });
+});
+
+QUnit.test('Form set the right class to the root element for different global editorStylingMode option', function(assert) {
+    const stylingModes = ['filled', 'underlined', 'outlined'];
+
+    stylingModes.forEach(mode => {
+        const shouldSetClass = mode === 'underlined';
+
+        config({ editorStylingMode: mode });
+        $('#form').dxForm({});
+
+        assert.equal(
+            $('#form').hasClass(FORM_UNDERLINED_CLASS),
+            shouldSetClass,
+            `${FORM_UNDERLINED_CLASS} is ${shouldSetClass ? '' : 'not'} set`);
+
+        $('#form').dxForm('instance').dispose();
+        config({ editorStylingMode: null });
     });
 });
 
