@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
+import { RefObject } from '@devextreme-generator/declarations';
 import devices from '../../../../core/devices';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import getElementComputedStyle from '../../../utils/get_computed_style';
@@ -331,6 +332,19 @@ describe('CheckBox', () => {
               expect(checkBox.props.value).toBe(false);
             });
           });
+        });
+      });
+    });
+
+    describe('Methods', () => {
+      describe('focus', () => {
+        it('should focus main element', () => {
+          const checkBox = new CheckBox({});
+          checkBox.editorRef = { current: { focus: jest.fn() } } as unknown as RefObject<Editor>;
+          checkBox.focus();
+
+          expect(checkBox.editorRef.current?.focus).toHaveBeenCalledTimes(1);
+          expect(checkBox.editorRef.current?.focus).toHaveBeenCalledWith();
         });
       });
     });

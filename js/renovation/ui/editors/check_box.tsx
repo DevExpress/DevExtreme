@@ -8,6 +8,7 @@ import {
   Effect,
   RefObject,
   Fragment,
+  Method,
 } from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import getElementComputedStyle from '../../utils/get_computed_style';
@@ -52,10 +53,12 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
     restAttributes,
     cssClasses: classes, aria,
     onWidgetClick: onClick, onWidgetKeyDown: onKeyDown,
+    editorRef,
   } = viewModel;
 
   return (
     <Editor // eslint-disable-line jsx-a11y/no-access-key
+      ref={editorRef}
       aria={aria}
       classes={classes}
       onClick={onClick}
@@ -125,8 +128,15 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   view: viewFunction,
 })
 
-export class CheckBox extends JSXComponent<CheckBoxProps>() {
+export class CheckBox extends JSXComponent(CheckBoxProps) {
+  @Ref() editorRef!: RefObject<Editor>;
+
   @Ref() iconRef!: RefObject<HTMLDivElement>;
+
+  @Method()
+  focus(): void {
+    this.editorRef.current!.focus();
+  }
 
   @Effect()
   updateIconFontSize(): EffectReturn {
