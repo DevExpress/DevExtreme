@@ -89,12 +89,12 @@ export class AppointmentForm {
         this.form.option('formData', value);
     }
 
-    create(triggerResize, changeSize, formData) {
+    create(triggerResize, changeSize) {
         const allowTimeZoneEditing = this.scheduler.getEditingConfig().allowTimeZoneEditing;
         const { expr } = this.scheduler.getDataAccessors();
 
-        const recurrenceEditorVisibility = !!formData[expr.recurrenceRuleExpr]; // TODO
-        const colSpan = recurrenceEditorVisibility ? 1 : 2;
+        // const recurrenceEditorVisibility = !!formData[expr.recurrenceRuleExpr]; // TODO
+        // const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
         const resourceManager = this.scheduler.getResourceManager();
 
@@ -103,7 +103,6 @@ export class AppointmentForm {
             ...resourceManager.getEditors()
         ];
 
-        changeSize(recurrenceEditorVisibility);
         const items = [
             {
                 itemType: 'group',
@@ -112,13 +111,13 @@ export class AppointmentForm {
                     lg: 2,
                     xs: 1
                 },
-                colSpan,
+                // colSpan,
                 items: mainItems,
             }, {
                 itemType: 'group',
                 name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
-                visible: recurrenceEditorVisibility,
-                colSpan,
+                // visible: recurrenceEditorVisibility,
+                // colSpan,
                 items: this._createRecurrenceEditor(expr),
             }
         ];
@@ -134,7 +133,6 @@ export class AppointmentForm {
                 lg: 2,
                 xs: 1
             },
-            formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
             screenByWidth: (width) => {
