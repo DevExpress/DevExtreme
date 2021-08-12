@@ -16,6 +16,7 @@ const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
 const USER_FILTER_POSITION = 1;
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
+const RECURRENCE_FREQ = 'freq';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -321,8 +322,8 @@ export class AppointmentFilterBaseStrategy {
         return (endDate.getTime() - startDate.getTime()) / toMs('hour');
     }
 
-    appointmentTakesSeveralDays(appointment) {
-        return !dateUtils.sameDate(appointment.startDate, appointment.endDate);
+    appointmentTakesSeveralDays(adapter) {
+        return !dateUtils.sameDate(adapter.startDate, adapter.endDate);
     }
 
     _appointmentHasShortDayDuration(startDate, endDate, startDayHour, endDayHour) {
@@ -398,7 +399,6 @@ export class AppointmentFilterBaseStrategy {
         // [recurrenceRule, 'startswith', 'freq'],
 
         return [[(appointment) => {
-            // debugger;
             const appointmentVisible = appointment.visible ?? true;
 
             if(!appointmentVisible) {
@@ -425,10 +425,8 @@ export class AppointmentFilterBaseStrategy {
             const isAllDay = appointment.allDay;
             const appointmentIsLong = appointmentTakesSeveralDays || appointmentTakesAllDay;
 
-            if(!filterOptions.isVirtualScrolling && resources?.length) { // Already filtered in virtual strategy
-                if(!that._filterAppointmentByResources(appointment.rawAppointment, resources)) {
-                    return false;
-                }
+            if(resources?.length && !that._filterAppointmentByResources(appointment.rawAppointment, resources)) {
+                return false;
             }
 
             if(appointmentTakesAllDay && filterOptions.allDay === false) {
@@ -717,8 +715,9 @@ export class AppointmentFilterBaseStrategy {
             const adapter = createAppointmentAdapter(this.key, rawAppointment);
 
             const comparableStartDate = adapter.calculateStartDate('toGrid');
-            const comparableEndDate = adapter.calculateEndDate('toGrid');
-            const hasRecurrenceRule = !!adapter.recurrenceRule?.match(/freq/gi).length;
+            const comparableEndDate = adapter.calculateEndDate('toGrid') || comparableStartDate;
+            const regex = new RegExp(RECURRENCE_FREQ, 'gi');
+            const hasRecurrenceRule = !!adapter.recurrenceRule?.match(regex).length;
 
             const item = {
                 startDate: comparableStartDate,
@@ -739,13 +738,13 @@ export class AppointmentFilterBaseStrategy {
         return result;
     }
 
-    filterLoadedAppointments(filterOption) {
-        const filteredItems = this.filterPreparedItems(filterOption);
+    filterLoadedAppointments(filterOptions) {
+        const filteredItems = this.filterPreparedItems(filterOptions);
         return filteredItems.map(({ rawAppointment }) => rawAppointment);
     }
 
-    filterPreparedItems(filterOption) {
-        const combinedFilter = this._createAppointmentFilter(filterOption);
+    filterPreparedItems(filterOptions) {
+        const combinedFilter = this._createAppointmentFilter(filterOptions);
         const result = query(this.preparedItems)
             .filter(combinedFilter)
             .toArray();
@@ -755,11 +754,12 @@ export class AppointmentFilterBaseStrategy {
         return result;
     }
 
-    filterAllDayAppointments(filterOption) {
-        const combinedFilter = this._createAllDayAppointmentFilter(filterOption);
+    filterAllDayAppointments(filterOptions) {
+        const combinedFilter = this._createAllDayAppointmentFilter(filterOptions);
         return query(this.preparedItems)
             .filter(combinedFilter)
-            .toArray();
+            .toArray()
+            .map(({ rawAppointment }) => rawAppointment);
     }
 }
 
@@ -812,10 +812,13 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
             });
         });
 
-        return this.filterPreparedItems(filterOptions, this.workspace._getGroupCount());
+        return this.filterLoadedAppointments({
+            filterOptions,
+            groupCount: this.workspace._getGroupCount()
+        });
     }
 
-    filterPreparedItems(filterOptions, groupCount) {
+    filterPreparedItems({ filterOptions, groupCount }) {
         const combinedFilters = [];
 
         let itemsToFilter = this.preparedItems;
@@ -831,10 +834,10 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
             });
         }
 
-        filterOptions.forEach(filterOption => {
+        filterOptions.forEach((option) => {
             combinedFilters.length && combinedFilters.push('or');
 
-            const filter = this._createAppointmentFilter(filterOption);
+            const filter = this._createAppointmentFilter(option);
 
             combinedFilters.push(filter);
         });
