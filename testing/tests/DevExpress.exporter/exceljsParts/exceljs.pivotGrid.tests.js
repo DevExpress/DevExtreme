@@ -1623,7 +1623,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
     QUnit.test('Check header/data/total cell style/data type, pivot.rtlEnabled = true', function(assert) {
         const clock = sinon.useFakeTimers();
         const done = assert.async();
-
         const ds = {
             fields: [
                 { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: true },

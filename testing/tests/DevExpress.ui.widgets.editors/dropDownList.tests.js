@@ -1315,8 +1315,6 @@ QUnit.module('popup', moduleConfig, () => {
     });
 
     QUnit.testInActiveWindow('After search and load new page scrollTop should not be changed', function(assert) {
-        // this.clock.restore();
-
         const data = [];
         const done = assert.async();
 
@@ -1360,7 +1358,7 @@ QUnit.module('popup', moduleConfig, () => {
             done();
         });
 
-        // this.clock.tick();
+        this.clock.tick();
     });
 
     QUnit.test('popup should be configured with templatesRenderAsynchronously=false (T470619)', function(assert) {

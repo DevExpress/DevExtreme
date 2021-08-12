@@ -3426,6 +3426,7 @@ QUnit.module('default options', {
         const materialLookupPadding = 8;
 
         try {
+
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'red', 'green', 'yellow'], value: 'blue' }).dxLookup('instance');
 
             $(lookup.field()).trigger('dxclick');
@@ -3471,6 +3472,7 @@ QUnit.module('default options', {
 
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'offset of the lookup if not selected item');
         } finally {
+
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
         }

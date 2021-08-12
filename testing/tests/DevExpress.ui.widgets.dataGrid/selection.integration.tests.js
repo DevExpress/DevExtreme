@@ -1090,6 +1090,7 @@ QUnit.module('columnWidth auto option', {
     // T628315
     QUnit.test('Click near selectAll doesn\'t generate infinite loop', function(assert) {
         // arrange, act
+        // this.clock.restore();
         const dataGrid = createDataGrid({
             selection: { mode: 'multiple' },
             loadingTimeout: null,

@@ -65,7 +65,14 @@ QUnit.module('Paddings: simulated strategy', () => {
 
 
 // T872060
-QUnit.module('Nested scrollable styles', () => {
+QUnit.module('Nested scrollable styles', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
     const configs = [];
     [false, true].forEach((outerUseNative) => {
         [false, true].forEach((innerUseNative) => {

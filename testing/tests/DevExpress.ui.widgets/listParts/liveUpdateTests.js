@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 
+
 import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';

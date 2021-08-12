@@ -15,8 +15,6 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import { normalizeKeyName } from 'events/utils/index';
 
 import 'generic_light.css!';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender as reRender } from 'inferno';
 
 QUnit.testStart(() => {
     const markup =
@@ -3905,7 +3903,6 @@ QUnit.module('Async tests', {}, () => {
         dataSourceLoadedDeferred.promise().done(() => {
             const scrollableContentTop = $scrollableContent.position().top;
             list.scrollToItem(selectedItem);
-            reRender();
 
             const expectedScrollableContentTop = $scrollableContent.position().top;
             assert.equal(scrollableContentTop, expectedScrollableContentTop, 'list is scrolled to the selected item');

@@ -2014,6 +2014,7 @@ QUnit.module('Fixed columns', {
         // arrange
         that.rowsView.scrollTo(600);
 
+        this.clock.restore();
         setTimeout(function() {
             const positionTop = $fixedTable.position().top;
 
@@ -2026,8 +2027,6 @@ QUnit.module('Fixed columns', {
             assert.notStrictEqual($fixedTable.position().top, positionTop, 'scroll top of the fixed table is changed');
             done();
         });
-
-        this.clock.tick();
     });
 
     // T722330

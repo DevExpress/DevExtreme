@@ -22,8 +22,6 @@ import { setScrollView } from 'ui/list/ui.list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender as reRender } from 'inferno';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -632,15 +630,12 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             instance.scrollTo(200);
             this.clock.tick(50);
-            reRender();
 
             instance.scrollTo(200);
             this.clock.tick(50);
-            reRender();
 
             instance.collapseGroup(2);
             this.clock.tick(50);
-            reRender();
 
             assert.ok(releaseSpy.lastCall.args[0], 'The last call of \'release\' hides load indicator');
         } finally {
@@ -3065,7 +3060,6 @@ QUnit.module('scrollView integration', {
 
     QUnit.test('onScroll', function(assert) {
         const scrollActionSpy = sinon.spy();
-
         const list = $('#list').dxList({
             height: 100,
             useNativeScrolling: false,
@@ -3074,7 +3068,7 @@ QUnit.module('scrollView integration', {
         }).dxList('instance');
 
         list.scrollToItem(5);
-        reRender();
+
         assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
@@ -3089,7 +3083,7 @@ QUnit.module('scrollView integration', {
         list.on('scroll', scrollActionSpy);
 
         list.scrollToItem(5);
-        reRender();
+
         assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
@@ -3154,7 +3148,6 @@ QUnit.module('scrollView integration', {
         }).dxList('instance');
 
         list.scrollToItem(items[1]);
-        reRender();
 
         assert.expect(0);
     });
@@ -3614,15 +3607,14 @@ QUnit.module('keyboard navigation', {
             items: [0, 1, 2, 3, 4]
         });
 
-
         const instance = $element.dxList('instance');
         const $item = $element.find(toSelector(LIST_ITEM_CLASS)).first();
         const keyboard = keyboardMock($element);
         const itemHeight = $item.outerHeight();
 
-
         $element.trigger('focusin');
         instance.option('height', itemHeight * 3);
+
         keyboard.keyDown('end');
         assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'item scrolled to visible area at bottom end arrow were pressed');
 
