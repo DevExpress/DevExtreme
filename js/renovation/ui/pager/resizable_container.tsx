@@ -70,7 +70,7 @@ function getElementsWidth({
 export class ResizableContainerProps {
   @OneWay() pagerProps!: InternalPagerProps;
 
-  @Template() contentTemplate!: JSXTemplate<PagerContentProps>;
+  @Template() contentTemplate!: JSXTemplate<PagerContentProps, 'pageSizeChange' | 'pageIndexChange'>;
 }
 @Component({
   defaultOptionRules: null,
@@ -106,7 +106,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
     }
   }
 
-  get contentAttributes(): Record<string, unknown> {
+  get contentAttributes(): Record<string, unknown> & Pick<InternalPagerProps, 'pageIndexChange' | 'pageSizeChange'> {
     return { ...this.restAttributes, ...this.props.pagerProps };
   }
 
@@ -118,8 +118,8 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       pages: this.pagesRef.current,
     });
     if (isDefined(this.actualAdaptivityProps)
-    && ((this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible
-      || this.actualAdaptivityProps.isLargeDisplayMode !== this.isLargeDisplayMode))) {
+    && (this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible
+      || this.actualAdaptivityProps.isLargeDisplayMode !== this.isLargeDisplayMode)) {
       return;
     }
     const isEmpty = !isDefined(this.elementsWidth);

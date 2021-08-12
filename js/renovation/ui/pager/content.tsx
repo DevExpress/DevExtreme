@@ -116,7 +116,7 @@ export class PagerContentProps extends InternalPagerProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagerContent extends JSXComponent<PagerContentProps>() {
+export class PagerContent extends JSXComponent<PagerContentProps, 'pageSizeChange' | 'pageIndexChange'>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {
