@@ -22,7 +22,7 @@ const DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS = 'dx-dateview-item-selected-bo
 const DateViewRoller = Scrollable.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            showScrollbar: false,
+            showScrollbar: 'never',
             useNative: false,
             selectedIndex: 0,
             bounceEnabled: false,
