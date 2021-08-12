@@ -36,7 +36,7 @@ export class AppointmentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Appointment extends JSXComponent(AppointmentProps) {
+export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
   get text(): string { return this.props.viewModel.appointment.text; }
 
   get dateText(): string { return this.props.viewModel.info.dateText; }
