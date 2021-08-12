@@ -42,10 +42,11 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
       disabled, visible,
       width, height,
       onClick, onKeyDown,
+      children,
     },
     widgetRef, target,
     aria, cssClasses: classes,
-    validationErrors, targetCurrent,
+    validationErrors, targetCurrent, showValidationMessage,
     onFocusIn,
     restAttributes,
   } = viewModel;
@@ -74,9 +75,9 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <Fragment>
-        {viewModel.props.children}
+        {children}
 
-        {viewModel.showValidationMessage
+        {showValidationMessage
         && (
         <ValidationMessage
           validationErrors={validationErrors}
