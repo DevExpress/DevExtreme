@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build
-    timeout-minutes: 60
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
@@ -52,43 +52,43 @@ jobs:
   qunit-tests:
     needs: build
     runs-on: ubuntu-latest
-    name: Constel ${{ matrix.CONSTEL }}
-    timeout-minutes: 60
+    name: ${{ matrix.envs.name }}
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         envs: [
-          { CONSTEL: "misc", TZ: 'PST8PDT' },
-          { CONSTEL: "misc", TZ: 'Japan' },
-          { CONSTEL: "misc", TZ: 'Australia/ACT' },
-          { CONSTEL: "ui.editors", TZ: 'PST8PDT' },
-          { CONSTEL: "ui.editors", TZ: 'Japan' },
-          { CONSTEL: "ui.editors", TZ: 'Australia/ACT' },
-          { CONSTEL: "ui.editors", TZ: 'Europe/London' },
-          { CONSTEL: "ui.grid", TZ: 'PST8PDT' },
-          { CONSTEL: "ui.scheduler", TZ: 'PST8PDT' },
-          { CONSTEL: "ui.scheduler", TZ: 'Japan' },
-          { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT' },
-          { CONSTEL: "ui.scheduler", TZ: 'Europe/London' },
-          { PERF: true, JQUERY: true, NO_HEADLESS: true },
-          { MOBILE_UA: "ios9", CONSTEL: "ui" },
-          { MOBILE_UA: "ios9", CONSTEL: "ui.editors", NO_HEADLESS: true },
-          { MOBILE_UA: "ios9", CONSTEL: "ui.grid", NO_HEADLESS: true },
-          { MOBILE_UA: "ios9", CONSTEL: "ui.scheduler", NO_HEADLESS: true },
-          { MOBILE_UA: "ios9", CONSTEL: "viz" },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui" },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true },
-          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "export" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz" },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation" } 
+          { CONSTEL: "misc", TZ: 'PST8PDT', name: 'misc, PST8PDT' },
+          { CONSTEL: "misc", TZ: 'Japan', name: 'misc, Japan' },
+          { CONSTEL: "misc", TZ: 'Australia/ACT', name: 'misc, Australia' },
+          { CONSTEL: "ui.editors", TZ: 'PST8PDT', name: 'ui.editors, PST8PDT' },
+          { CONSTEL: "ui.editors", TZ: 'Japan', name: 'ui.editors, Japan' },
+          { CONSTEL: "ui.editors", TZ: 'Australia/ACT', name: 'ui.editors, Australia' },
+          { CONSTEL: "ui.editors", TZ: 'Europe/London', name: 'ui.editors, Europe' },
+          { CONSTEL: "ui.grid", TZ: 'PST8PDT', name: 'ui.grid, PST8PDT' },
+          { CONSTEL: "ui.scheduler", TZ: 'PST8PDT', name: 'ui.scheduler, PST8PDT' },
+          { CONSTEL: "ui.scheduler", TZ: 'Japan', name: 'ui.scheduler, Japan' },
+          { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT', name: 'ui.scheduler, Australia' },
+          { CONSTEL: "ui.scheduler", TZ: 'Europe/London', name: 'ui.scheduler, Europe' },
+          { PERF: true, JQUERY: true, NO_HEADLESS: true, name: 'Performance' },
+          { MOBILE_UA: "ios9", CONSTEL: "ui", name: 'ui, iOS9' },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors, iOS9' },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid, iOS9' },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler, iOS9' },
+          { MOBILE_UA: "ios9", CONSTEL: "viz", name: 'viz, iOS9' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui", name: 'ui, android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors, android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid, android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true, name: 'ui.scheduler, android6' },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz", name: 'viz, android6' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", name: 'export, firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", name: 'misc, firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", name: 'ui, firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors", name: 'ui.editors, firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid", name: 'ui.grid, firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler", name: 'ui.scheduler, firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", name: 'viz, firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation, firefox' } 
         ]
 
     steps:
