@@ -5,7 +5,6 @@ import {
 } from './types';
 import {
   ToolbarItem,
-  ToolbarWidgetType,
   ToolbarButtonStylingMode,
   ToolbarButtonGroupItemPropsType,
 } from '../../toolbar/toolbar_props';
@@ -57,14 +56,14 @@ export const getDateNavigator = (
     getNextButtonOptions(isNextButtonDisabled),
   ] as ToolbarButtonGroupItemPropsType[];
 
-  const stylingMode = useDropDownViewSwitcher ? 'text' : 'contained';
+  const stylingMode = useDropDownViewSwitcher ? 'text' : 'contained' as ToolbarButtonStylingMode;
 
   return {
-    widget: 'dxButtonGroup' as ToolbarWidgetType,
+    widget: 'dxButtonGroup',
     cssClass: DATE_NAVIGATOR_CLASS,
     options: {
       items,
-      stylingMode: stylingMode as ToolbarButtonStylingMode,
+      stylingMode,
       onItemClick: (e) => {
         switch (e.itemIndex) {
           case 0:

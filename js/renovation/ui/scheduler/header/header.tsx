@@ -24,13 +24,13 @@ import { formToolbarItem, formatViews } from './utils';
 import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
   ItemOptions, Direction,
-  ItemView, DefaultElement,
+  ItemView,
   SchedulerToolbarItem,
 } from './types';
 import { ViewType } from '../types.d';
 
 import { ViewProps } from '../props';
-import { ToolbarItem, ToolbarLocationType } from '../../toolbar/toolbar_props';
+import { ToolbarItem } from '../../toolbar/toolbar_props';
 
 const { trimTime } = dateUtils;
 
@@ -46,12 +46,12 @@ export function viewFunction(viewModel: SchedulerToolbar): JSX.Element {
 export class SchedulerToolbarProps {
   @OneWay() items: SchedulerToolbarItem[] = [
     {
-      defaultElement: 'dateNavigator' as DefaultElement,
-      location: 'before' as ToolbarLocationType,
+      defaultElement: 'dateNavigator',
+      location: 'before',
     },
     {
-      defaultElement: 'viewSwitcher' as DefaultElement,
-      location: 'after' as ToolbarLocationType,
+      defaultElement: 'viewSwitcher',
+      location: 'after',
     },
   ] as SchedulerToolbarItem[];
 
@@ -144,7 +144,7 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
     };
   }
 
-  getNextDate(direction: Direction, initialDate: Date | null = null): Date {
+  getNextDate(direction: Direction, initialDate?: Date): Date {
     const date = initialDate ?? this.props.currentDate;
 
     const options = { ...this.intervalOptions, date };

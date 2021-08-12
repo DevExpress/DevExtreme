@@ -8,12 +8,10 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 
-import { SchedulerToolbarItem, DefaultElement } from './header/types';
+import { SchedulerToolbarItem } from './header/types';
 import type { template } from '../../../core/templates/template';
 import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
-
-import { ToolbarLocationType } from '../toolbar/toolbar_props';
 
 import type {
   AppointmentCollectorTemplateData,
@@ -439,12 +437,12 @@ export class SchedulerProps extends BaseWidgetProps {
   @OneWay()
   toolbar: SchedulerToolbarItem[] = [
     {
-      defaultElement: 'dateNavigator' as DefaultElement,
-      location: 'before' as ToolbarLocationType,
+      defaultElement: 'dateNavigator',
+      location: 'before',
     },
     {
-      defaultElement: 'viewSwitcher' as DefaultElement,
-      location: 'after' as ToolbarLocationType,
+      defaultElement: 'viewSwitcher',
+      location: 'after',
     },
   ] as SchedulerToolbarItem[];
 }

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { mount } from 'enzyme';
-import SchedulerToolbar, { viewFunction, SchedulerToolbarProps } from '../header';
+import React from 'react';
+import { shallow } from 'enzyme';
+import SchedulerToolbar, { viewFunction as ViewFunction, SchedulerToolbarProps } from '../header';
 import { Toolbar } from '../../../toolbar/toolbar';
 import { ToolbarButtonGroupProps } from '../../../toolbar/toolbar_props';
 
@@ -10,14 +11,19 @@ const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 
 describe('Scheduler Toolbar', () => {
   describe('Render', () => {
+    const defaultProps: any = { items: [] };
+    const render = (viewModel = {}) => shallow(
+      <ViewFunction {...{ ...defaultProps, ...viewModel }} />,
+    );
+
     it('should render', () => {
-      const toolbar = mount(viewFunction({} as any));
+      const toolbar = render();
 
       expect(toolbar.is(Toolbar)).toBe(true);
     });
 
     it('should pass items', () => {
-      const toolbar = mount(viewFunction({ items: 'items' } as any));
+      const toolbar = render({ items: 'items' });
 
       expect(toolbar.prop('items')).toEqual('items');
     });
