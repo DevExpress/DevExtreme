@@ -59,7 +59,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 let rowHeight = isDefined(currentRowInfo.rowHeight)
                     ? currentRowInfo.rowHeight
-                    : calculateRowHeight(doc, currentRowInfo.cellsInfo, pdfGrid.wordWrapEnabled, options.columnWidths);
+                    : calculateRowHeight(doc, currentRowInfo.cellsInfo, pdfGrid._wordWrapEnabled, options.columnWidths);
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);

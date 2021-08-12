@@ -179,6 +179,94 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - height auto, word wrap enabled 1 line', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            columns: [{ caption: 'f1 aAa bBb' }]
+        });
+
+        const expectedLog = [
+            'text,f1 aAa bBb,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,18.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, word wrap enabled 2 line', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            columns: [{ caption: 'f1 aAa bBb 23423 sf' }]
+        });
+
+        const expectedLog = [
+            'text,f1 aAa bBb,23423 sf,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,36.8'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, word wrap enabled 3 line', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            columns: [{ caption: 'f1 aAa bBb 23423 sfdf VBB' }]
+        });
+
+        const expectedLog = [
+            'text,f1 aAa bBb,23423 sfdf,VBB,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,55.2'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, word wrap enabled 5 line', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            columns: [{ caption: 'f1 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,' }]
+        });
+
+        const expectedLog = [
+            'text,f1 aAa bBb,23423 sfdf,VBB VERY,LONG TEXT,sdfg,s .,,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,92'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('1 col - hide all borders', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -256,6 +344,31 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - 1 row - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [{ f1: 'f1 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,' }],
+        });
+
+        const expectedLog = [
+            'text,F1,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,18.4',
+            'text,f1 aAa bBb,23423 sfdf,VBB VERY,LONG TEXT,sdfg,s .,,10,42.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,33.4,100,92'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('1 col - 2 rows', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -308,6 +421,34 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - 2 rows - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [{ f1: 'v1_1 aAa bBb 23423' }, { f1: 'v1_2 f1 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,' }]
+        });
+
+        const expectedLog = [
+            'text,F1,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,18.4',
+            'text,v1_1 aAa bBb,23423,10,42.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,33.4,100,36.8',
+            'text,v1_2 f1 aAa,bBb 23423,sfdf VBB,VERY LONG,TEXT sdfg,s,.,,10,79.4,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,70.2,100,110.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('2 cols', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -342,6 +483,30 @@ QUnit.module('Table', moduleConfig, () => {
         const expectedLog = [
             'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,18.4',
             'text,f2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,18.4'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('2 cols - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            columns: [{ caption: 'f1 aAa bBb' }, { caption: 'f2 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,' }]
+        });
+
+        const expectedLog = [
+            'text,f1,aAa,bBb,10,79.4,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,40,165.6',
+            'text,f2 aAa,bBb,23423,sfdf,VBB,VERY,LONG,TEXT,sdfg,s .,,50,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,50,15,60,165.6'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
@@ -400,6 +565,36 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('2 cols - 1 row - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [{ f1: 'v1 aAa bBb', f2: 'v2 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,' }]
+        });
+
+        const expectedLog = [
+            'text,F1,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,40,18.4',
+            'text,F2,50,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,50,15,60,18.4',
+            'text,v1,aAa,bBb,10,97.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,33.4,40,165.6',
+            'text,v2 aAa,bBb,23423,sfdf,VBB,VERY,LONG,TEXT,sdfg,s .,,50,42.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,50,33.4,60,165.6'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('2 cols - 2 rows', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -448,6 +643,45 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v2_1,50,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,50,33.4,60,18.4',
             'text,v1_2,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,40,18.4',
             'text,v2_2,50,61,{baseline:middle}', 'setLineWidth,1', 'rect,50,51.8,60,18.4'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('2 cols - 2 rows - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [
+                { f1: 'v1_1 aAa bBb 23423 VERY LONG TEXT sdfg,s', f2: 'v2_1 23423 sfdf' },
+                { f1: 'v1_2 VBB', f2: 'v2_2 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,\'' }
+            ]
+        });
+
+        const expectedLog = [
+            'text,F1,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,40,18.4',
+            'text,F2,50,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,50,15,60,18.4',
+            'text,v1_1,aAa,bBb ,2342,3 VE,RY L,ONG ,TEX,T sdf,g,s,10,42.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,33.4,40,184',
+            'text,v2_1,23423,sfdf,50,107,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,50,33.4,60,184',
+            'text,v1_2,VBB,10,300.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,217.4,40,184',
+            'text,v2_2,aAa,bBb,23423,sfdf,VBB,VERY,LONG,TEXT,sdfg,s .,\',50,226.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,50,217.4,60,184'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
@@ -808,6 +1042,43 @@ QUnit.module('Table splitting', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Split grid on one page, 1 col - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [{ f1: 'v1_1 f1 aAa bBb 23423 sfdf' }, { f1: 'v2_1' }, { f1: 'v3_1 f1 aAa bBb 23423 sfdf VBB VERY LONG TEXT' }],
+        });
+
+        const onRowExporting = (e) => {
+            if(e.rowCells[0].text === 'v2_1') {
+                e.drawNewTableFromThisRow.startNewTable = true;
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 60, y: 15 };
+            }
+        };
+
+        const expectedLog = [
+            'text,F1,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,40,18.4',
+            'text,v1_1,f1,aAa,bBb ,2342,3 sfdf,10,42.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,33.4,40,110.4',
+            'text,v2_1,60,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,60,15,40,18.4',
+            'text,v3_1,f1,aAa,bBb ,2342,3 sfdf,VBB ,VER,Y LO,NG T,EXT,60,42.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,60,33.4,40,202.4'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('Split grid on one page, 1 col - draw table borders', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -911,6 +1182,45 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'addPage,',
             'text,v2_1,10,19.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,10,40,18.4',
             'text,v3_1,10,37.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,28.4,40,18.4'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 800 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid on different pages, 1 col - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [{ f1: 'v1_1 f1 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,\'' }, { f1: 'v2_1' }, { f1: 'v3_1 \'f1 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,\'' }],
+        });
+
+        const onRowExporting = (e) => {
+            if(e.rowCells[0].text === 'v2_1') {
+                e.drawNewTableFromThisRow.startNewTable = true;
+                e.drawNewTableFromThisRow.addPage = true;
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 10, y: 10 };
+            }
+        };
+
+        const expectedLog = [
+            'text,F1,10,809.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,800,40,18.4',
+            'text,v1_1,f1,aAa,bBb ,2342,3 sfdf,VBB ,VER,Y LO,NG T,EXT ,sdfg,,s .,\',10,827.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,818.4,40,239.2',
+            'addPage,',
+            'text,v2_1,10,19.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,10,40,18.4',
+            'text,v3_1,\'f1,aAa,bBb ,2342,3 sfdf,VBB ,VER,Y LO,NG T,EXT ,sdfg,,s .,\',10,37.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,28.4,40,239.2'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 800 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
             // doc.save();
@@ -1037,6 +1347,42 @@ QUnit.module('Table splitting', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Split grid by columns - 2 cols - hide all borders - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            columns: [{ caption: 'F1 VBB VERY LONG TEXT sdfg,s .,\'' }, { caption: 'F2 aAa bBb 23423 sfdf VBB VERY LONG TEXT sdfg,s .,' }]
+        });
+
+        const splitToTablesByColumns = [{
+            columnIndex: 1,
+            drawOnNewPage: true,
+            tableTopLeft: { x: 15, y: 20 }
+        }];
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.drawLeftBorder = false;
+            pdfCell.drawRightBorder = false;
+            pdfCell.drawTopBorder = false;
+            pdfCell.drawBottomBorder = false;
+        };
+        const onRowExporting = () => { };
+
+        const expectedLog = [
+            'text,F1,VBB ,VER,Y LO,NG T,EXT ,sdfg,,s .,\',10,51.8,{baseline:middle}',
+            'addPage,',
+            'text,F2,aAa,bBb,23423,sfdf,VBB,VERY,LONG,TEXT,sdfg,s,.,,15,29.2,{baseline:middle}'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50 ], customizeCell, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('Split grid by columns - 3 cols - 2 rows - hide all borders', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -1128,6 +1474,55 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,F3,12,31.2,{baseline:middle}',
             'text,v3_1,12,49.6,{baseline:middle}',
             'text,v3_2,12,68,{baseline:middle}'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting: () => {}, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid by columns - 3 cols - 2 rows - hide all borders - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [
+                { f1: 'v1_1 1111 111111 1111111', f2: 'v2_1 2222 2', f3: 'v3_1' },
+                { f1: 'v1_2', f2: 'v2_2 2222222 22222 2222222 2222 22 2', f3: 'v3_2 333333333' }
+            ]
+        });
+
+        const splitToTablesByColumns = [{
+            columnIndex: 1,
+            drawOnNewPage: true,
+            tableTopLeft: { x: 11, y: 21 }
+        }, {
+            columnIndex: 2,
+            drawOnNewPage: true,
+            tableTopLeft: { x: 12, y: 22 }
+        }];
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.drawLeftBorder = false;
+            pdfCell.drawRightBorder = false;
+            pdfCell.drawTopBorder = false;
+            pdfCell.drawBottomBorder = false;
+        };
+
+        const expectedLog = [
+            'text,F1,10,29.2,{baseline:middle}',
+            'text,v1_1,1111 ,1111,11 11,1111,1,10,47.6,{baseline:middle}',
+            'text,v1_2,10,222.4,{baseline:middle}',
+            'addPage,',
+            'text,F2,11,30.2,{baseline:middle}',
+            'text,v2_1,2222 2,11,85.4,{baseline:middle}',
+            'text,v2_2 2,22222,2,22222 ,22222,22,2222,22 2,11,159,{baseline:middle}',
+            'addPage,',
+            'text,F3,12,31.2,{baseline:middle}',
+            'text,v3_1,12,95.6,{baseline:middle}',
+            'text,v3_2 33,333333,3,12,206,{baseline:middle}'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting: () => {}, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
@@ -1417,7 +1812,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
         }];
 
         const onRowExporting = (e) => {
-            // if(rowIndex === 2) { // TODO: change to something like "if(row.valuesByColumn["f1"] === "v1_2")"
+            // if(rowIndex === 2) { // TODO: change to something like 'if(row.valuesByColumn['f1'] === 'v1_2')'
             if(e.rowCells[0].text === 'F1') {
                 e.rowHeight = 16;
             } else if(e.rowCells[0].text === 'v1_1') {
@@ -1510,6 +1905,82 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_2,12,68,{baseline:middle}', 'setLineWidth,1', 'rect,12,58.8,60,18.4',
             'text,v3_3,12,86.4,{baseline:middle}', 'setLineWidth,1', 'rect,12,77.2,60,18.4',
             'setLineWidth,1', 'rect,12,22,60,73.6'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting: () => {}, splitToTablesByColumns, drawTableBorder: true }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid by rows and by columns - 3 cols - 2 rows - show cell borders with table border - height auto, word wrap enabled', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            wordWrapEnabled: true,
+            dataSource: [
+                { f1: 'v1_1 111111111 111111 111111 1', f2: 'v2_1 1111 1111111111', f3: 'v3_1 11 111 11111 111111111 1111' },
+                { f1: 'v1_2', f2: 'v2_2 222222 222222222222 22222222 222', f3: 'v3_2 2222 22222222 22222 2222 2222222' },
+                { f1: 'v1_3 33333 33333333 333333', f2: 'v2_3 333333 33', f3: 'v3_3 3333333 333333 333333333 3333333 333333' }]
+        });
+
+        const splitToTablesByColumns = [{
+            columnIndex: 1,
+            drawOnNewPage: true,
+            tableTopLeft: { x: 11, y: 21 }
+        }, {
+            columnIndex: 2,
+            drawOnNewPage: true,
+            tableTopLeft: { x: 12, y: 22 }
+        }];
+
+        const expectedLog = [
+            'text,F1,10,29.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,20,40,18.4',
+            'text,v1_1 ,1111,1111,1 111,111 1,1111,1 1,10,47.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,38.4,40,128.8',
+            'text,v1_2,10,231.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,167.2,40,128.8',
+            'text,v1_3 ,3333,3 333,3333,3 333,333,10,314.4,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,296,40,128.8',
+            'setLineWidth,1',
+            'rect,10,20,40,404.8',
+            'addPage,',
+            'text,F2,11,30.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,11,21,50,18.4',
+            'text,v2_1,1111 1,11111,1111,11,76.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,11,39.4,50,128.8',
+            'text,v2_2 2,22222 ,22222,22222,22 222,22222,222,11,177.4,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,11,168.2,50,128.8',
+            'text,v2_3 3,33333,33,11,343,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,11,297,50,128.8',
+            'setLineWidth,1',
+            'rect,11,21,50,404.8',
+            'addPage,',
+            'text,F3,12,31.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,12,22,60,18.4',
+            'text,v3_1 11,111,11111 1,111111,11 1111,12,68,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,12,40.4,60,128.8',
+            'text,v3_2,2222 22,222222,22222,2222 22,22222,12,187.6,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,12,169.2,60,128.8',
+            'text,v3_3 33,33333,333333 ,333333,333 333,3333,333333,12,307.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,12,298,60,128.8',
+            'setLineWidth,1',
+            'rect,12,22,60,404.8'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting: () => {}, splitToTablesByColumns, drawTableBorder: true }).then(() => {
