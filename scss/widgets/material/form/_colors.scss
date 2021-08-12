@@ -8,7 +8,7 @@
 * $name 10. Label text color
 * $type color
 */
-$form-field-item-color: lighten($base-label-color, 46%) !default;
+$form-field-item-color: color.change($base-label-color, $alpha: 0.6) !default;
 
 /**
 * $name 20. Group border color

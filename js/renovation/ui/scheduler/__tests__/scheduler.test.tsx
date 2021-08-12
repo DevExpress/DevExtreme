@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { SchedulerProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
-import { Widget } from '../../common/widget';
+import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import { WorkSpaceWeek } from '../workspaces/week/work_space';
@@ -51,14 +51,32 @@ describe('Scheduler', () => {
     });
 
     it('should pass correct props to the widget', () => {
+      const props = {
+        accessKey: 'A',
+        activeStateEnabled: true,
+        disabled: true,
+        focusStateEnabled: true,
+        height: 100,
+        hint: 'hint',
+        hoverStateEnabled: true,
+        rtlEnabled: true,
+        tabIndex: -2,
+        visible: true,
+        width: 200,
+        className: 'custom-class',
+      };
       const tree = renderComponent({
         restAttributes: { 'custom-attribute': 'customAttribute' },
+        props,
       });
 
-      expect(tree.prop('custom-attribute'))
-        .toBe('customAttribute');
-      expect(tree.prop('classes'))
-        .toBe('dx-scheduler');
+      expect(tree.props())
+        .toEqual({
+          ...new WidgetProps(),
+          'custom-attribute': 'customAttribute',
+          classes: 'dx-scheduler',
+          ...props,
+        });
     });
 
     it('should render work space and pass to it correct props', () => {

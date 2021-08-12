@@ -25,6 +25,20 @@ export const viewFunction = ({
   workSpace: WorkSpace,
   currentViewConfig,
   onViewRendered,
+  props: {
+    accessKey,
+    activeStateEnabled,
+    disabled,
+    focusStateEnabled,
+    height,
+    hint,
+    hoverStateEnabled,
+    rtlEnabled,
+    tabIndex,
+    visible,
+    width,
+    className,
+  },
 }: Scheduler): JSX.Element => {
   const {
     firstDayOfWeek,
@@ -51,8 +65,20 @@ export const viewFunction = ({
 
   } = currentViewConfig;
   return (
-    <Widget
+    <Widget // eslint-disable-line jsx-a11y/no-access-key
       classes="dx-scheduler"
+      accessKey={accessKey}
+      activeStateEnabled={activeStateEnabled}
+      disabled={disabled}
+      focusStateEnabled={focusStateEnabled}
+      height={height}
+      hint={hint}
+      hoverStateEnabled={hoverStateEnabled}
+      rtlEnabled={rtlEnabled}
+      tabIndex={tabIndex}
+      visible={visible}
+      width={width}
+      className={className}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
