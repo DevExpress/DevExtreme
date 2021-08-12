@@ -292,7 +292,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       && this.isReachBottom
       && !this.pendingReachBottom
       && !this.onReachBottomWasFiredOnce
-      && this.visibleScrollAreaSize > 0
+      && this.props.containerSize
+      && this.props.contentSize
     ) {
       this.onReachBottomWasFiredOnce = true;
 
@@ -400,10 +401,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const contentSizeChanged = this.props.contentSize !== this.prevContentSize;
     const containerSizeChanged = this.props.containerSize !== this.prevContainerSize;
 
-    if (this.props.containerHasSizes
-        && this.props.contentSize > 0
-        && (contentSizeChanged || containerSizeChanged)
-    ) {
+    if (contentSizeChanged || containerSizeChanged) {
       this.prevContentSize = this.props.contentSize;
       this.prevContainerSize = this.props.containerSize;
 
