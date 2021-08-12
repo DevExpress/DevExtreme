@@ -4,6 +4,7 @@ import {
   JSXComponent,
   Method,
   OneWay,
+  TwoWay,
   Ref,
   Effect,
   Event,
@@ -94,6 +95,11 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
 @ComponentBindings()
 export class EditorProps extends BaseWidgetProps {
   @OneWay() readOnly = false;
+
+  @OneWay() name = '';
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @TwoWay() value?: any;
 
   // validation
   @OneWay() validationError: Record<string, unknown> | null = null;

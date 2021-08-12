@@ -99,8 +99,6 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
 export class CheckBoxProps extends EditorProps {
   @OneWay() text = '';
 
-  @OneWay() name = '';
-
   @OneWay() iconSize?: number | string;
 
   @TwoWay() value: boolean | null = false;
