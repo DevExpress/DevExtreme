@@ -437,6 +437,43 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
+QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
+    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    form.validate();
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is invalid after validate');
+
+    form.option('onFieldDataChanged', () => {});
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is still invalid after changing the onFieldDataChanged option');
+});
+
+QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler is called (T1014577)', function(assert) {
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    const onFieldDataChangedStub = sinon.stub();
+    form.option('onFieldDataChanged', onFieldDataChangedStub);
+
+    form.updateData({ field1: 'some value 1' });
+    assert.equal(onFieldDataChangedStub.callCount, 1, 'new handler is called after formData is updated');
+
+    form.getEditor('field1').option('value', 'some value 2');
+    assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
+});
+
+
 [
     { editorType: 'dxTextBox' },
     { label: { text: 'label text' } },
