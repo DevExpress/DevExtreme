@@ -191,7 +191,7 @@ describe('Page index selector', () => {
       });
       component.config = { rtlEnabled: false };
       expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
-      component.props.pageIndexChange?.(4);
+      component.props.pageIndexChange(4);
       expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
     });
 
