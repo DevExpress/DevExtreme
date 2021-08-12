@@ -23,13 +23,11 @@ import { formToolbarItem, formatViews } from './utils';
 
 import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
-  ItemOptions, Direction,
-  ItemView,
-  SchedulerToolbarItem,
+  ItemOptions, Direction, ItemView, SchedulerToolbarItem,
 } from './types';
 import { ViewType } from '../types.d';
 
-import { ViewProps } from '../props';
+import { SchedulerProps, ViewProps } from '../props';
 import { ToolbarItem } from '../../toolbar/toolbar_props';
 
 const { trimTime } = dateUtils;
@@ -43,31 +41,16 @@ export function viewFunction(viewModel: SchedulerToolbar): JSX.Element {
 }
 
 @ComponentBindings()
-export class SchedulerToolbarProps {
-  @OneWay() items: SchedulerToolbarItem[] = [
-    {
-      defaultElement: 'dateNavigator',
-      location: 'before',
-    },
-    {
-      defaultElement: 'viewSwitcher',
-      location: 'after',
-    },
-  ] as SchedulerToolbarItem[];
+export class SchedulerToolbarBaseProps {
+  @OneWay() items!: SchedulerToolbarItem[];
 
-  @OneWay() views: (ViewType | ViewProps)[] = ['day', 'week'];
+  @OneWay() views!: (ViewType | ViewProps)[];
 
-  @OneWay() currentView: string | ViewType = 'day';
-
-  @Event() onCurrentViewUpdate?: (view: string | ViewType) => void;
+  @Event() onCurrentViewUpdate!: (view: string | ViewType) => void;
 
   @OneWay() currentDate: Date = new Date();
 
-  @Event() onCurrentDateUpdate?: (date: Date) => void;
-
-  @OneWay() min?: Date;
-
-  @OneWay() max?: Date;
+  @Event() onCurrentDateUpdate!: (date: Date) => void;
 
   @OneWay() intervalCount = 1;
 
@@ -77,13 +60,14 @@ export class SchedulerToolbarProps {
 
   @OneWay() useShortDateFormat = !devices.real().generic || devices.isSimulator();
 
-  @OneWay() useDropDownViewSwitcher = false;
-
   @OneWay() customizationFunction?: (caption: DateNavigatorTextInfo) => string;
 }
 
+export type SchedulerToolbarProps = SchedulerToolbarBaseProps
+& Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
+
 @Component({ view: viewFunction })
-export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps) {
+export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'onCurrentDateUpdate'>() {
   cssClass = 'dx-scheduler-header';
 
   get step(): string {
@@ -120,13 +104,13 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
 
   setCurrentView(view: ItemView): void {
     if (view.name !== this.props.currentView) {
-      this.props.onCurrentViewUpdate?.(view.name);
+      this.props.onCurrentViewUpdate(view.name);
     }
   }
 
   setCurrentDate(date: Date): void {
     if (date.getTime() !== this.props.currentDate.getTime()) {
-      this.props.onCurrentDateUpdate?.(new Date(date));
+      this.props.onCurrentDateUpdate(new Date(date));
     }
   }
 

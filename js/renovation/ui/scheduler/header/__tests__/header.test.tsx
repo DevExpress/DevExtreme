@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { shallow } from 'enzyme';
-import SchedulerToolbar, { viewFunction as ViewFunction, SchedulerToolbarProps } from '../header';
+import SchedulerToolbar, { viewFunction as ViewFunction, SchedulerToolbarBaseProps } from '../header';
 import { Toolbar } from '../../../toolbar/toolbar';
 import { ToolbarButtonGroupProps } from '../../../toolbar/toolbar_props';
 
@@ -16,25 +16,30 @@ describe('Scheduler Toolbar', () => {
       <ViewFunction {...{ ...defaultProps, ...viewModel }} />,
     );
 
-    it('should render', () => {
-      const toolbar = render();
-
-      expect(toolbar.is(Toolbar)).toBe(true);
-    });
-
-    it('should pass items', () => {
+    it('should render and pass', () => {
       const toolbar = render({ items: 'items' });
 
+      expect(toolbar.is(Toolbar)).toBe(true);
       expect(toolbar.prop('items')).toEqual('items');
     });
   });
 
   describe('Behaviour', () => {
     const create = (options: any = {}): SchedulerToolbar => new SchedulerToolbar({
-      ...new SchedulerToolbarProps(),
+      ...new SchedulerToolbarBaseProps(),
       currentView: 'day',
       views: ['day', 'week'],
       currentDate: new Date(2021, 7, 7),
+      items: [
+        {
+          defaultElement: 'dateNavigator',
+          location: 'before',
+        },
+        {
+          defaultElement: 'viewSwitcher',
+          location: 'after',
+        },
+      ],
       ...options,
     });
 
@@ -45,8 +50,8 @@ describe('Scheduler Toolbar', () => {
 
         toolbar.setCurrentView({ name: 'week' } as any);
 
-        expect(mockCallback.mock.calls.length).toBe(1);
-        expect(mockCallback.mock.calls[0][0]).toBe('week');
+        expect(mockCallback).toBeCalledTimes(1);
+        expect(mockCallback).toHaveBeenCalledWith('week');
       });
 
       it('should call onCurrentDateUpdate', () => {
@@ -55,105 +60,52 @@ describe('Scheduler Toolbar', () => {
 
         toolbar.setCurrentDate(new Date(2021, 1, 1));
 
-        expect(mockCallback.mock.calls.length).toBe(1);
-        expect(mockCallback.mock.calls[0][0]).toEqual(new Date(2021, 1, 1));
+        expect(mockCallback).toBeCalledTimes(1);
+        expect(mockCallback).toHaveBeenCalledWith(new Date(2021, 1, 1));
       });
-    });
 
-    describe('User Intercation', () => {
-      describe('Click', () => {
-        describe('ViewSitcher', () => {
-          it('should call onCurrentViewUpdate with unselected view', () => {
-            const mockCallback = jest.fn();
-            const toolbar = create({ onCurrentViewUpdate: mockCallback });
+      it('should return correct previous date', () => {
+        const toolbar = create();
 
-            const viewSwitcher = toolbar.items[1];
-            const options = viewSwitcher.options as ToolbarButtonGroupProps;
-            const view = { name: 'week' };
-            options.onItemClick!({ itemData: view } as any);
+        expect(toolbar.getNextDate(-1)).toEqual(new Date(2021, 7, 6));
+      });
 
-            expect(mockCallback.mock.calls.length).toBe(1);
-            expect(mockCallback.mock.calls[0][0]).toEqual(view.name);
-          });
+      it('should return correct next date', () => {
+        const toolbar = create();
 
-          it('should not call onCurrentViewUpdate with selected view', () => {
-            const mockCallback = jest.fn();
-            const toolbar = create({ onCurrentViewUpdate: mockCallback });
+        expect(toolbar.getNextDate(1)).toEqual(new Date(2021, 7, 8));
+      });
 
-            const viewSwitcher = toolbar.items[1];
-            const options = viewSwitcher.options as ToolbarButtonGroupProps;
-            const view = { name: 'day' };
-            options.onItemClick!({ itemData: view } as any);
+      it('should disable previous button depends on min value', () => {
+        const toolbar = create({
+          min: new Date(2021, 7, 7),
+        } as any);
 
-            expect(mockCallback.mock.calls.length).toBe(0);
-          });
-        });
+        expect(toolbar.isPreviousButtonDisabled()).toBe(true);
+      });
 
-        describe('DateNavigator', () => {
-          it('should call onCurrentDateUpdate with previous button index', () => {
-            const mockCallback = jest.fn();
-            const toolbar = create({ onCurrentDateUpdate: mockCallback });
+      it('should disable next button depends on max value', () => {
+        const toolbar = create({
+          max: new Date(2021, 7, 7),
+        } as any);
 
-            const dateNavigator = toolbar.items[0];
-            const options = dateNavigator.options as ToolbarButtonGroupProps;
-            options.onItemClick!({ itemIndex: 0 } as any);
+        expect(toolbar.isNextButtonDisabled()).toBe(true);
+      });
 
-            expect(mockCallback.mock.calls.length).toBe(1);
-            expect(mockCallback.mock.calls[0][0]).toEqual(new Date(2021, 7, 6));
-          });
+      it('should not call onCurrentDateUpdate with selected view', () => {
+        const mockCallback = jest.fn();
+        const toolbar = create({ onCurrentDateUpdate: mockCallback });
 
-          it('should call onCurrentDateUpdate with next button index', () => {
-            const mockCallback = jest.fn();
-            const toolbar = create({ onCurrentDateUpdate: mockCallback });
+        toolbar.setCurrentDate(new Date(2021, 7, 7));
 
-            const dateNavigator = toolbar.items[0];
-            const options = dateNavigator.options as ToolbarButtonGroupProps;
-            options.onItemClick!({ itemIndex: 2 } as any);
-
-            expect(mockCallback.mock.calls.length).toBe(1);
-            expect(mockCallback.mock.calls[0][0]).toEqual(new Date(2021, 7, 8));
-          });
-
-          it('should call showCalandar with calendar button index', () => {
-            const mockCallback = jest.fn();
-            const toolbar = create();
-
-            toolbar.showCalendar = mockCallback;
-
-            const dateNavigator = toolbar.items[0];
-            const options = dateNavigator.options as ToolbarButtonGroupProps;
-            options.onItemClick!({ itemIndex: 1 } as any);
-
-            expect(mockCallback.mock.calls.length).toBe(1);
-          });
-
-          it('should not throw an error if onCurrentDateUpdate is not set', () => {
-            const toolbar = create();
-
-            toolbar.setCurrentDate(new Date());
-          });
-
-          it('should not throw an error if onCurrentViewUpdate is not set', () => {
-            const toolbar = create();
-
-            toolbar.setCurrentView({ name: 'week', text: 'Week' });
-          });
-
-          it('should not throw an error on caption button click', () => {
-            const toolbar = create();
-
-            const dateNavigator = toolbar.items[0];
-            const options = dateNavigator.options as ToolbarButtonGroupProps;
-            options.onItemClick!({ itemIndex: 1 } as any);
-          });
-        });
+        expect(mockCallback).toBeCalledTimes(0);
       });
     });
   });
 
   describe('Logic', () => {
     const create = (options: any = {}): SchedulerToolbar => new SchedulerToolbar({
-      ...new SchedulerToolbarProps(),
+      ...new SchedulerToolbarBaseProps(),
       currentView: 'day',
       views: [
         'agenda', 'day', 'month',
@@ -162,6 +114,16 @@ describe('Scheduler Toolbar', () => {
         'week', 'workWeek',
       ],
       currentDate: new Date(2021, 7, 7),
+      items: [
+        {
+          defaultElement: 'dateNavigator',
+          location: 'before',
+        },
+        {
+          defaultElement: 'viewSwitcher',
+          location: 'after',
+        },
+      ],
       ...options,
     });
 
@@ -210,7 +172,7 @@ describe('Scheduler Toolbar', () => {
         });
       });
 
-      it('should return correct caption for month view', () => {
+      it('should return correct caption for agenda view', () => {
         const toolbar = create({ currentView: 'agenda' });
 
         expect(toolbar.caption).toEqual({
@@ -331,44 +293,73 @@ describe('Scheduler Toolbar', () => {
 
         expect(toolbar.items).toEqual(items);
       });
-    });
 
-    describe('Methods', () => {
-      it('should return correct previous date', () => {
-        const toolbar = create();
+      describe('Items', () => {
+        describe('ViewSitcher', () => {
+          it('should call onCurrentViewUpdate with unselected view', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentViewUpdate: mockCallback });
 
-        expect(toolbar.getNextDate(-1)).toEqual(new Date(2021, 7, 6));
-      });
+            const viewSwitcher = toolbar.items[1];
+            const options = viewSwitcher.options as ToolbarButtonGroupProps;
+            const view = { name: 'week' };
+            options.onItemClick!({ itemData: view } as any);
 
-      it('should return correct next date', () => {
-        const toolbar = create();
+            expect(mockCallback).toBeCalledTimes(1);
+            expect(mockCallback).toHaveBeenCalledWith(view.name);
+          });
 
-        expect(toolbar.getNextDate(1)).toEqual(new Date(2021, 7, 8));
-      });
+          it('should not call onCurrentViewUpdate with selected view', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentViewUpdate: mockCallback });
 
-      it('should disable previous button depends on min value', () => {
-        const toolbar = create({
-          min: new Date(2021, 7, 7),
-        } as any);
+            const viewSwitcher = toolbar.items[1];
+            const options = viewSwitcher.options as ToolbarButtonGroupProps;
+            const view = { name: 'day' };
+            options.onItemClick!({ itemData: view } as any);
 
-        expect(toolbar.isPreviousButtonDisabled()).toBe(true);
-      });
+            expect(mockCallback).toBeCalledTimes(0);
+          });
+        });
 
-      it('should disable next button depends on max value', () => {
-        const toolbar = create({
-          max: new Date(2021, 7, 7),
-        } as any);
+        describe('DateNavigator', () => {
+          it('should call onCurrentDateUpdate with previous button index', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentDateUpdate: mockCallback });
 
-        expect(toolbar.isNextButtonDisabled()).toBe(true);
-      });
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+            options.onItemClick!({ itemIndex: 0 } as any);
 
-      it('should not call onCurrentDateUpdate with selected view', () => {
-        const mockCallback = jest.fn();
-        const toolbar = create({ onCurrentDateUpdate: mockCallback });
+            expect(mockCallback).toBeCalledTimes(1);
+            expect(mockCallback).toHaveBeenCalledWith(new Date(2021, 7, 6));
+          });
 
-        toolbar.setCurrentDate(new Date(2021, 7, 7));
+          it('should call onCurrentDateUpdate with next button index', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create({ onCurrentDateUpdate: mockCallback });
 
-        expect(mockCallback.mock.calls.length).toBe(0);
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+            options.onItemClick!({ itemIndex: 2 } as any);
+
+            expect(mockCallback).toBeCalledTimes(1);
+            expect(mockCallback).toHaveBeenCalledWith(new Date(2021, 7, 8));
+          });
+
+          it('should call showCalandar with calendar button index', () => {
+            const mockCallback = jest.fn();
+            const toolbar = create();
+
+            toolbar.showCalendar = mockCallback;
+
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+            options.onItemClick!({ itemIndex: 1 } as any);
+
+            expect(mockCallback).toBeCalledTimes(1);
+          });
+        });
       });
     });
   });
