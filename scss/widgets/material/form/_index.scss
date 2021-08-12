@@ -88,21 +88,17 @@
 
 .dx-field-item-label-location-top {
   padding: $material-form-top-label-padding;
-}
-
-.dx-field-item-label-text {
-  color: $form-field-item-color;
   padding-left: $material-filled-texteditor-input-horizontal-padding;
-
-  .dx-rtl & {
-    padding-left: 0;
-    padding-right: $material-filled-texteditor-input-horizontal-padding;
-  }
+  padding-right: $material-filled-texteditor-input-horizontal-padding;
 
   .dx-form-styling-mode-underlined & {
     padding-left: 0;
     padding-right: 0;
   }
+}
+
+.dx-field-item-label-text {
+  color: $form-field-item-color;
 }
 
 .dx-field-item-help-text {
