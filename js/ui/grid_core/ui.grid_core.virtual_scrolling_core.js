@@ -122,7 +122,7 @@ export const VirtualScrollController = Class.inherit((function() {
         ctor: function(component, dataOptions, isVirtual) {
             this._dataOptions = dataOptions;
             this.component = component;
-            this._viewportSize = component.option(NEW_SCROLLING_MODE) ? 20 : 0; // ???
+            this._viewportSize = component.option(NEW_SCROLLING_MODE) ? 15 : 0;
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
             this._position = 0;

@@ -803,6 +803,7 @@ export const virtualScrollingModule = {
                         const virtualRowsRendering = gridCoreUtils.isVirtualRowRendering(this);
 
                         if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || !this.option('scrolling.rowPageSize')) {
+                            this._allItems = null;
                             this._visibleItems = null;
                             this._rowsScrollController = null;
                             return;
@@ -813,6 +814,7 @@ export const virtualScrollingModule = {
                         this._visibleItems = this.option(NEW_SCROLLING_MODE) ? null : [];
                         this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
                         this._viewportChanging = false;
+                        this._allItems = [];
 
                         this._rowsScrollController.positionChanged.add(() => {
                             if(this.option(NEW_SCROLLING_MODE)) {
@@ -1035,6 +1037,7 @@ export const virtualScrollingModule = {
                             this._updateLoadViewportParams();
 
                             let result = items;
+                            this._allItems = items;
                             if(items.length) {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
                                 const startLoadIndex = items[0].loadIndex + skipForCurrentPage;
@@ -1081,7 +1084,7 @@ export const virtualScrollingModule = {
                         }
                     },
                     items: function(allItems) {
-                        return allItems ? this._items : (this._visibleItems || this._items);
+                        return allItems ? (this._allItems || this._items) : (this._visibleItems || this._items);
                     },
                     getRowIndexDelta: function() {
                         const visibleItems = this._visibleItems;
@@ -1177,11 +1180,15 @@ export const virtualScrollingModule = {
                         };
                     },
                     loadViewport: function() {
-                        if(isVirtualMode(this) || isAppendMode(this)) {
+                        const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
+                        if(isVirtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
                             const dataSourceAdapter = this._dataSource;
-                            if(pageIndex !== dataSourceAdapter.pageIndex() || loadPageCount !== dataSourceAdapter.loadPageCount()) {
+                            if(isVirtualPaging && (
+                                pageIndex !== dataSourceAdapter.pageIndex() ||
+                                loadPageCount !== dataSourceAdapter.loadPageCount()
+                            )) {
                                 dataSourceAdapter.pageIndex(pageIndex);
                                 dataSourceAdapter.loadPageCount(loadPageCount);
                                 this._repaintChangesOnly = true;

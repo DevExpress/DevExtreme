@@ -3839,7 +3839,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
         // assert
         const itemCount = this.dataController.items().length;
-        assert.strictEqual(itemCount, 40);
+        assert.strictEqual(itemCount, 30);
         assert.deepEqual(this.dataController.items()[itemCount - 2].key, ['value99']);
         assert.strictEqual(this.dataController.items()[itemCount - 1].key, 99);
         assert.strictEqual(this.dataController.pageIndex(), 0);
@@ -4069,10 +4069,10 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         [{
             changeType: 'update',
             addCount: 5,
-            removeCount: 6
+            removeCount: 5
         }, {
             changeType: 'update',
-            addCount: 6,
+            addCount: 5,
             removeCount: 5
         }], 'changed call args');
 
