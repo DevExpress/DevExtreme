@@ -23,6 +23,7 @@ describe('Pager', () => {
         },
         ...restProps
       } = pager.props();
+
       expect(restProps).toEqual({
         'rest-attributes': 'restAttributes',
         contentTemplate: PagerContent,
