@@ -2,7 +2,7 @@ import { noop } from './utils/common';
 import { getWindow, hasWindow } from './utils/window';
 const window = getWindow();
 
-const ResizeObserverNoWindowMock = {
+const ResizeObserverMock = {
     observe: noop,
     unobserve: noop,
     disconnect: noop
@@ -10,8 +10,8 @@ const ResizeObserverNoWindowMock = {
 
 class ResizeObserverSingleton {
     constructor() {
-        if(!hasWindow()) {
-            return ResizeObserverNoWindowMock;
+        if(!hasWindow() || !window.ResizeObserver) {
+            return ResizeObserverMock;
         }
 
         this._callbacksMap = new Map();
