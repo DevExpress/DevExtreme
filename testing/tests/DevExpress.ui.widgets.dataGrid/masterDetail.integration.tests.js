@@ -218,7 +218,8 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         const expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight - heightCorrection;
 
         // assert
-        assert.roughEqual($dataGrid.find('.dx-freespace-row').eq(2).height(), expectedFreeSpaceRowHeight, 1.1, 'Height of the freeSpace row');
+        assert.equal($dataGrid.find('.dx-freespace-row').length, 1, 'freespace row count');
+        assert.roughEqual($dataGrid.find('.dx-freespace-row').eq(0).height(), expectedFreeSpaceRowHeight, 1.1, 'Height of the freeSpace row');
     });
 
     // T242473

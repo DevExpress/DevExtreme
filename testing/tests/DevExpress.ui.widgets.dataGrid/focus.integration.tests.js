@@ -408,7 +408,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 10, 'Visible row count');
         assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
-        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
+        assert.equal(dataGrid.pageIndex(), 1, 'Page index');
     });
 
     QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual ()', function(assert) {
@@ -471,7 +471,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             columns: ['id'],
             scrolling: {
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             }
         }).dxDataGrid('instance');
 
@@ -487,7 +488,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
+        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible row count');
     });
 
     QUnit.test('Focused row should be in viewport if focusedRowKey specified and autoNavigateToFocusedRow is true', function(assert) {
@@ -510,7 +511,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
         this.clock.tick();
 
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(29, 1), 'navigated row in viewport');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey(30), 1), 'navigated row in viewport');
 
         dataGrid.columnOption(0, 'sortOrder', 'desc');
         this.clock.tick();
@@ -742,7 +743,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 preloadEnabled: true,
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
         this.clock.tick();
@@ -752,7 +753,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.getTopVisibleRowData().id, 5, 'top visible row id');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 3, 'top visible row id');
     });
 
     // T804927
