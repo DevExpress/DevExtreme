@@ -43,6 +43,8 @@ describe('WorkSpaceWeek', () => {
         selectedCellData: [],
         scrolling: { mode: 'standard' },
         onViewRendered: () => null,
+        showCurrentTimeIndicator: false,
+        cellDuration: 30,
       };
 
       const workSpace = renderComponent({ props });
