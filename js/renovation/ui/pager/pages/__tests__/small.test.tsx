@@ -55,7 +55,10 @@ describe('Small pager pages', () => {
   describe('Behaviour', () => {
     it('updateWidth effect', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
-      const component = new PagesSmall({ pageCount: 100 });
+      const component = new PagesSmall({
+        pageCount: 100,
+        pageIndexChange: jest.fn(),
+      });
       const numberBoxElement = { };
       const rootElement = { querySelector: () => numberBoxElement } as unknown as HTMLDivElement;
       component.pageIndexRef = { current: rootElement } as RefObject<HTMLDivElement>;
@@ -66,7 +69,10 @@ describe('Small pager pages', () => {
 
     it('Effect updateWidth default width', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue(null);
-      const component = new PagesSmall({ pageCount: 100 });
+      const component = new PagesSmall({
+        pageCount: 100,
+        pageIndexChange: jest.fn(),
+      });
       const numberBoxElement = {};
       component.pageIndexRef = { getHtmlElement: () => numberBoxElement } as any;
       component.updateWidth();
@@ -88,13 +94,20 @@ describe('Small pager pages', () => {
 
     it('pagesCountText if appropriate property is not specified', () => {
       (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'of');
-      const component = new PagesSmall({ pageCount: 100 });
+      const component = new PagesSmall({
+        pageCount: 100,
+        pageIndexChange: jest.fn(),
+      });
       expect(component.pagesCountText).toBe('of');
       expect(messageLocalization.getFormatter).toBeCalledWith('dxPager-pagesCountText');
     });
 
     it('pagesCountText', () => {
-      const component = new PagesSmall({ pageCount: 100, pagesCountText: 'from' });
+      const component = new PagesSmall({
+        pageCount: 100,
+        pagesCountText: 'from',
+        pageIndexChange: jest.fn(),
+      });
       expect(component.pagesCountText).toBe('from');
     });
 

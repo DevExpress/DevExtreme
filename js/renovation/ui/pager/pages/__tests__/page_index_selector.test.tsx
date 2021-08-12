@@ -121,6 +121,7 @@ describe('Page index selector', () => {
       const component = new PageIndexSelector({
         isLargeDisplayMode: true,
         showNavigationButtons: true,
+        pageIndexChange: jest.fn(),
       });
       expect(component.renderPrevButton).toBe(true);
       component.props.isLargeDisplayMode = false;
@@ -136,6 +137,8 @@ describe('Page index selector', () => {
         hasKnownLastPage: true,
         isLargeDisplayMode: true,
         showNavigationButtons: true,
+        pageIndexChange: jest.fn(),
+
       });
       expect(component.renderNextButton).toBe(true);
       component.props.isLargeDisplayMode = false;

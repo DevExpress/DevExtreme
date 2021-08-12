@@ -97,7 +97,7 @@ type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
 & PageIndexSelectorProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>() {
+export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 

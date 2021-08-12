@@ -49,7 +49,7 @@ class PageSizeSelectorProps {
 type PageSizeSelectorPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
-  extends JSXComponent<PageSizeSelectorPropsType>() {
+  extends JSXComponent<PageSizeSelectorPropsType, 'pageSizeChange'>() {
   @Ref() htmlRef!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

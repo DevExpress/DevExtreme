@@ -93,7 +93,7 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 type PagesLargePropsType = Pick<InternalPagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
+export class PagesLarge extends JSXComponent<PagesLargePropsType, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 

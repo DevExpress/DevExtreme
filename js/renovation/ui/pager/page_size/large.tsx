@@ -33,7 +33,7 @@ export class PageSizeLargeProps {
 type PageSizeLargePropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSizes'>() {
+export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSizes' | 'pageSizeChange'>() {
   get pageSizesText(): {
     className: string;
     click: () => void;
