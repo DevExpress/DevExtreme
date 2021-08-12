@@ -18,6 +18,7 @@ import { BaseWidgetProps } from '../../common/base_props';
 import { combineClasses } from '../../../utils/combine_classes';
 import { EffectReturn } from '../../../utils/effect_return.d';
 import { ValidationMessage } from '../../overlays/validation_message';
+import EditorWrapperComponent from '../../../component_wrapper/editors/editor';
 
 const getCssClasses = (model: EditorPropsType): string => {
   const {
@@ -99,7 +100,7 @@ export class EditorProps extends BaseWidgetProps {
   @OneWay() name = '';
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @TwoWay() value?: any;
+  @TwoWay() value?: any = null;
 
   // validation
   @OneWay() validationError: Record<string, unknown> | null = null;
@@ -120,6 +121,10 @@ export type EditorPropsType = EditorProps
 & Pick<WidgetProps, 'aria' | 'classes' | 'children'>;
 
 @Component({
+  jQuery: {
+    component: EditorWrapperComponent,
+    register: true,
+  },
   view: viewFunction,
 })
 
