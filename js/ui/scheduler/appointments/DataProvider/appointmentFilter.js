@@ -109,8 +109,8 @@ class FilterMaker {
     _make(type) {
         switch(type) {
             case 'date': return (min, max, useAccessors) => {
-                const startDate = useAccessors ? this.dataAccessors.getter.startDate : this.dataAccessors.expr.startDateExpr;
-                const endDate = useAccessors ? this.dataAccessors.getter.endDate : this.dataAccessors.expr.endDateExpr;
+                const startDate = useAccessors ? 'startDate' : this.dataAccessors.expr.startDateExpr;
+                const endDate = useAccessors ? 'endDate' : this.dataAccessors.expr.endDateExpr;
                 const recurrenceRule = this.dataAccessors.expr.recurrenceRuleExpr;
 
                 this._filterRegistry.date = [
@@ -259,7 +259,7 @@ export class AppointmentFilterBaseStrategy {
         if(!this.filterMaker.isRegistered()) {
             this._createFilter(trimmedDates.min, trimmedDates.max, remoteFiltering, dateSerializationFormat);
         } else {
-            this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max]);
+            this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max], !remoteFiltering);
 
             if(this.dataSource.filter()?.length > 1) {
                 // TODO: serialize user filter value only necessary for case T838165(details in note)
@@ -393,10 +393,13 @@ export class AppointmentFilterBaseStrategy {
             checkIntersectViewport
         } = filterOptions;
         const that = this;
-        const trimmedMinMax = this._trimDates(min, max);
+        // const trimmedMinMax = this._trimDates(min, max);
         const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
 
+        // [recurrenceRule, 'startswith', 'freq'],
+
         return [[(appointment) => {
+            // debugger;
             const appointmentVisible = appointment.visible ?? true;
 
             if(!appointmentVisible) {
@@ -405,22 +408,23 @@ export class AppointmentFilterBaseStrategy {
 
             const {
                 startDate,
-                endDate
+                endDate,
+                hasRecurrenceRule
             } = appointment;
 
-            if(!useRecurrence && !(endDate >= trimmedMinMax.min && startDate <= trimmedMinMax.max)) {
-                return false;
+            let recurrenceRule;
+            if(useRecurrence) {
+                recurrenceRule = appointment.recurrenceRule;
             }
+
+            // if(!hasRecurrenceRule && !(endDate >= trimmedMinMax.min && startDate <= trimmedMinMax.max)) {
+            //     return false;
+            // }
 
             const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
             const appointmentTakesSeveralDays = that.appointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;
             const appointmentIsLong = appointmentTakesSeveralDays || appointmentTakesAllDay;
-            let recurrenceRule;
-
-            if(useRecurrence) {
-                recurrenceRule = appointment.recurrenceRule;
-            }
 
             if(!filterOptions.isVirtualScrolling && resources?.length) { // Already filtered in virtual strategy
                 if(!that._filterAppointmentByResources(appointment.rawAppointment, resources)) {
@@ -432,7 +436,7 @@ export class AppointmentFilterBaseStrategy {
                 return false;
             }
 
-            if(useRecurrence) {
+            if(hasRecurrenceRule) {
                 const recurrenceException = getRecurrenceException
                     ? getRecurrenceException(appointment)
                     : appointment.recurrenceException;
@@ -440,7 +444,7 @@ export class AppointmentFilterBaseStrategy {
                 if(!that._filterAppointmentByRRule({
                     startDate: startDate,
                     endDate: endDate,
-                    recurrenceRule: recurrenceRule,
+                    recurrenceRule,
                     recurrenceException: recurrenceException,
                     allDay: appointmentTakesAllDay
                 }, min, max, startDayHour, endDayHour, firstDayOfWeek)) {
@@ -449,7 +453,7 @@ export class AppointmentFilterBaseStrategy {
             }
 
             // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min
-            if(endDate < min && appointmentIsLong && !isAllDay && (!useRecurrence || (useRecurrence && !recurrenceRule))) {
+            if(endDate < min && appointmentIsLong && !isAllDay && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
                 return false;
             }
 
@@ -477,7 +481,7 @@ export class AppointmentFilterBaseStrategy {
                 }
             }
 
-            if(useRecurrence && !recurrenceRule) {
+            if(useRecurrence && !hasRecurrenceRule) {
                 if(endDate < min && !isAllDay) {
                     return false;
                 }
@@ -487,48 +491,69 @@ export class AppointmentFilterBaseStrategy {
         }]];
     }
 
-    // customizeDateFilter(dateFilter) {
-    //     const currentFilter = extend(true, [], dateFilter);
+    customizeDateFilter(dateFilter) {
+        const currentFilter = extend(true, [], dateFilter);
 
-    //     return ((appointment) => {
-    //         const startDate = new Date(this.dataAccessors.getter.startDate(appointment));
-    //         const endDate = new Date(this.dataAccessors.getter.endDate(appointment));
+        return (appointment) => {
+            // const startDate = new Date(this.dataAccessors.getter.startDate(appointment));
+            // const endDate = new Date(this.dataAccessors.getter.endDate(appointment));
 
-    //         appointment = extend(true, {}, appointment);
+            // appointment = extend(true, {}, appointment);
 
-    //         const startDateTimeZone = this.dataAccessors.getter.startDateTimeZone(appointment);
-    //         const endDateTimeZone = this.dataAccessors.getter.endDateTimeZone(appointment);
+            // const startDateTimeZone = this.dataAccessors.getter.startDateTimeZone(appointment);
+            // const endDateTimeZone = this.dataAccessors.getter.endDateTimeZone(appointment);
 
-    //         const comparableStartDate = this.timeZoneCalculator.createDate(startDate, {
-    //             appointmentTimeZone: startDateTimeZone,
-    //             path: 'toGrid'
-    //         });
-    //         const comparableEndDate = this.timeZoneCalculator.createDate(endDate, {
-    //             appointmentTimeZone: endDateTimeZone,
-    //             path: 'toGrid'
-    //         });
+            // const comparableStartDate = this.timeZoneCalculator.createDate(startDate, {
+            //     appointmentTimeZone: startDateTimeZone,
+            //     path: 'toGrid'
+            // });
+            // const comparableEndDate = this.timeZoneCalculator.createDate(endDate, {
+            //     appointmentTimeZone: endDateTimeZone,
+            //     path: 'toGrid'
+            // });
 
-    //         this.dataAccessors.setter.startDate(appointment, comparableStartDate);
-    //         this.dataAccessors.setter.endDate(appointment, comparableEndDate);
+            // this.dataAccessors.setter.startDate(appointment, comparableStartDate);
+            // this.dataAccessors.setter.endDate(appointment, comparableEndDate);
 
-    //         return query([appointment]).filter(currentFilter).toArray().length > 0;
-    //     }).bind(this);
-    // }
+            // debugger;
+            const result = query([appointment]).filter(currentFilter).toArray().length > 0;
+
+            return result;
+
+            // [recurrenceRule, 'startswith', 'freq'],
+
+            // if(recurrenceRule?.match(/freq/gi).length > 0) {
+            //     return true;
+            // }
+
+            // return endDate >= min && startDate <= max;
+        };
+    }
 
     _createAppointmentFilter(filterOptions) {
         const combinedFilter = this._createCombinedFilter(filterOptions);
 
+        // const trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
+
+        // const dateFilter = this.customizeDateFilter(trimmedDates.min, trimmedDates.max);
+
+        // combinedFilter.push([dateFilter]);
+
         // if(this.filterMaker.isRegistered()) {
         //     this.filterMaker.make('user', undefined);
-
-        //     const trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
-
-        //     this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
-
-        //     const dateFilter = this.customizeDateFilter(this.filterMaker.combine());
-
-        //     combinedFilter.push([dateFilter]);
         // }
+
+        if(this.filterMaker.isRegistered()) {
+            this.filterMaker.make('user', undefined);
+
+            const trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
+
+            this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
+
+            const dateFilter = this.customizeDateFilter(this.filterMaker.combine());
+
+            combinedFilter.push([dateFilter]);
+        }
 
         return combinedFilter;
     }
@@ -686,20 +711,22 @@ export class AppointmentFilterBaseStrategy {
         const result = map(dataItems, (rawAppointment) => {
             const adapter = createAppointmentAdapter(this.key, rawAppointment);
 
-            this.replaceWrongEndDate(rawAppointment, adapter.startDate, adapter.endDate);
-
             const comparableStartDate = adapter.calculateStartDate('toGrid');
             const comparableEndDate = adapter.calculateEndDate('toGrid');
+            const hasRecurrenceRule = !!adapter.recurrenceRule?.match(/freq/gi).length;
 
-            // ???
-            // this.dataAccessors.setter.startDate(rawAppointment, comparableStartDate);
-            // this.dataAccessors.setter.endDate(rawAppointment, comparableEndDate);
-
-            return {
+            const item = {
                 startDate: comparableStartDate,
                 endDate: comparableEndDate,
+                recurrenceRule: adapter.recurrenceRule,
+                hasRecurrenceRule,
+                allDay: adapter.allDay,
                 rawAppointment
             };
+
+            this.replaceWrongEndDate(item, adapter.startDate, adapter.endDate);
+
+            return item;
         });
 
         // console.timeEnd('getPreparedDataItems');
@@ -708,12 +735,17 @@ export class AppointmentFilterBaseStrategy {
     }
 
     filterLoadedAppointments(filterOption) {
+        const filteredItems = this.filterPreparedItems(filterOption);
+        return filteredItems.map(({ rawAppointment }) => rawAppointment);
+    }
+
+    filterPreparedItems(filterOption) {
         const combinedFilter = this._createAppointmentFilter(filterOption);
         const result = query(this.preparedItems)
             .filter(combinedFilter)
             .toArray();
 
-        // console.log('filterLoadedAppointments length', result.length);
+        // console.log('filterPreparedItems length', result.length);
 
         return result;
     }
@@ -775,13 +807,10 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
             });
         });
 
-        return this.filterLoadedAppointments(
-            filterOptions,
-            this.workspace._getGroupCount()
-        );
+        return this.filterPreparedItems(filterOptions, this.workspace._getGroupCount());
     }
 
-    filterLoadedAppointments(filterOptions, groupCount) {
+    filterPreparedItems(filterOptions, groupCount) {
         const combinedFilters = [];
 
         let itemsToFilter = this.preparedItems;
@@ -805,13 +834,13 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
             combinedFilters.push(filter);
         });
 
-        // console.time('filterLoadedAppointments');
+        // console.time('filterPreparedItems');
         const result = query(itemsToFilter)
             .filter(combinedFilters)
             .toArray();
-        // console.timeEnd('filterLoadedAppointments');
+        // console.timeEnd('filterPreparedItems');
 
-        // console.log('filterLoadedAppointments', result.length);
+        // console.log('filterPreparedItems', result.length);
 
         return result;
     }
