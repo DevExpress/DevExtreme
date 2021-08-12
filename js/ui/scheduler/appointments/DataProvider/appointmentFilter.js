@@ -109,8 +109,8 @@ class FilterMaker {
     _make(type) {
         switch(type) {
             case 'date': return (min, max, useAccessors) => {
-                const startDate = useAccessors ? 'startDate' : this.dataAccessors.expr.startDateExpr;
-                const endDate = useAccessors ? 'endDate' : this.dataAccessors.expr.endDateExpr;
+                const startDate = useAccessors ? this.dataAccessors.getter.startDate : this.dataAccessors.expr.startDateExpr;
+                const endDate = useAccessors ? this.dataAccessors.getter.endDate : this.dataAccessors.expr.endDateExpr;
                 const recurrenceRule = this.dataAccessors.expr.recurrenceRuleExpr;
 
                 this._filterRegistry.date = [
@@ -146,7 +146,7 @@ class FilterMaker {
     }
 
     dateFilter() {
-        return this._filterRegistry.date;
+        return this._filterRegistry?.date;
     }
 }
 
@@ -259,14 +259,13 @@ export class AppointmentFilterBaseStrategy {
         if(!this.filterMaker.isRegistered()) {
             this._createFilter(trimmedDates.min, trimmedDates.max, remoteFiltering, dateSerializationFormat);
         } else {
-            this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max], !remoteFiltering);
-
             if(this.dataSource.filter()?.length > 1) {
                 // TODO: serialize user filter value only necessary for case T838165(details in note)
                 const userFilter = this._serializeRemoteFilter([this.dataSource.filter()[1]], dateSerializationFormat);
                 this.filterMaker.make('user', userFilter);
             }
             if(remoteFiltering) {
+                this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max]);
                 this.dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
             }
         }
@@ -393,7 +392,7 @@ export class AppointmentFilterBaseStrategy {
             checkIntersectViewport
         } = filterOptions;
         const that = this;
-        // const trimmedMinMax = this._trimDates(min, max);
+        const trimmedMinMax = this._trimDates(min, max);
         const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
 
         // [recurrenceRule, 'startswith', 'freq'],
@@ -412,14 +411,14 @@ export class AppointmentFilterBaseStrategy {
                 hasRecurrenceRule
             } = appointment;
 
+            if(!hasRecurrenceRule && !(endDate >= trimmedMinMax.min && startDate <= trimmedMinMax.max)) {
+                return false;
+            }
+
             let recurrenceRule;
             if(useRecurrence) {
                 recurrenceRule = appointment.recurrenceRule;
             }
-
-            // if(!hasRecurrenceRule && !(endDate >= trimmedMinMax.min && startDate <= trimmedMinMax.max)) {
-            //     return false;
-            // }
 
             const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
             const appointmentTakesSeveralDays = that.appointmentTakesSeveralDays(appointment);
@@ -492,7 +491,7 @@ export class AppointmentFilterBaseStrategy {
     }
 
     customizeDateFilter(dateFilter) {
-        const currentFilter = extend(true, [], dateFilter);
+        // const currentFilter = extend(true, [], dateFilter);
 
         return (appointment) => {
             // const startDate = new Date(this.dataAccessors.getter.startDate(appointment));
@@ -516,9 +515,9 @@ export class AppointmentFilterBaseStrategy {
             // this.dataAccessors.setter.endDate(appointment, comparableEndDate);
 
             // debugger;
-            const result = query([appointment]).filter(currentFilter).toArray().length > 0;
+            // const result = query([appointment]).filter(currentFilter).toArray().length > 0;
 
-            return result;
+            // return result;
 
             // [recurrenceRule, 'startswith', 'freq'],
 
@@ -539,21 +538,21 @@ export class AppointmentFilterBaseStrategy {
 
         // combinedFilter.push([dateFilter]);
 
-        // if(this.filterMaker.isRegistered()) {
-        //     this.filterMaker.make('user', undefined);
-        // }
-
         if(this.filterMaker.isRegistered()) {
             this.filterMaker.make('user', undefined);
-
-            const trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
-
-            this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
-
-            const dateFilter = this.customizeDateFilter(this.filterMaker.combine());
-
-            combinedFilter.push([dateFilter]);
         }
+
+        // if(this.filterMaker.isRegistered()) {
+        //     this.filterMaker.make('user', undefined);
+
+        //     const trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
+
+        //     this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
+
+        //     const dateFilter = this.customizeDateFilter(this.filterMaker.combine());
+
+        //     combinedFilter.push([dateFilter]);
+        // }
 
         return combinedFilter;
     }
@@ -562,7 +561,10 @@ export class AppointmentFilterBaseStrategy {
         const dateFilter = this.filterMaker.dateFilter();
         const dataSourceFilter = this.dataSource.filter();
 
-        return dataSourceFilter && (equalByValue(dataSourceFilter, dateFilter) || (dataSourceFilter.length && equalByValue(dataSourceFilter[DATE_FILTER_POSITION], dateFilter)));
+        return dateFilter && dataSourceFilter && (
+            equalByValue(dataSourceFilter, dateFilter) ||
+            (dataSourceFilter.length && equalByValue(dataSourceFilter[DATE_FILTER_POSITION], dateFilter))
+        );
     }
 
     _combineRemoteFilter(dateSerializationFormat) {
@@ -597,12 +599,15 @@ export class AppointmentFilterBaseStrategy {
     }
 
     _createFilter(min, max, remoteFiltering, dateSerializationFormat) {
-        this.filterMaker.make('date', [min, max]);
-
-        const userFilterPosition = this._excessFiltering() ? this.dataSource.filter()[USER_FILTER_POSITION] : this.dataSource.filter();
-        this.filterMaker.make('user', [userFilterPosition]);
-
         if(remoteFiltering) {
+            this.filterMaker.make('date', [min, max]);
+
+            const userFilterPosition = this._excessFiltering()
+                ? this.dataSource.filter()[USER_FILTER_POSITION]
+                : this.dataSource.filter();
+
+            this.filterMaker.make('user', [userFilterPosition]);
+
             this.dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
         }
     }

@@ -174,7 +174,7 @@ module('Server side filtering', () => {
                 endDayHour: 4
             });
 
-            assert.equal(appointmentDataProvider.filterMaker._filterRegistry.user, undefined, 'Empty user filter');
+            assert.equal(appointmentDataProvider.filterMaker._filterRegistry, null, 'Empty user filter');
         });
     });
 
@@ -210,7 +210,9 @@ module('Server side filtering', () => {
             '=',
             'Appointment 2'
         ]];
+
         const actualFilter = dataSource.filter();
+
         assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
     });
 
@@ -788,6 +790,8 @@ module('Client side after filtering', () => {
         appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
         const appts = appointmentDataProvider.filterLoadedAppointments({
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 0, 1),
             startDayHour: 3,
             endDayHour: 7
         });
@@ -829,6 +833,8 @@ module('Client side after filtering', () => {
         appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
 
         const appts = appointmentDataProvider.filterLoadedAppointments({
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 0, 1),
             startDayHour: 3,
             endDayHour: 7
         });
@@ -871,6 +877,8 @@ module('Client side after filtering', () => {
         appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
         const appts = appointmentDataProvider.filterLoadedAppointments({
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 0, 1),
             startDayHour: 3.5,
             endDayHour: 7.5
         });
@@ -1055,8 +1063,8 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
-            min: new Date(2015, 0, 1).toString(),
-            max: new Date(2015, 0, 1, 23, 59).toString()
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 11, 27)
         });
 
         assert.deepEqual(appts, [
@@ -1102,8 +1110,8 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
-            min: new Date(2015, 0, 1).toString(),
-            max: new Date(2015, 0, 1, 23, 59).toString()
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 11, 27)
         });
 
         assert.deepEqual(appts, [
@@ -1205,7 +1213,9 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
-            allDay: false
+            allDay: false,
+            min: new Date(2015, 0, 1, 3),
+            max: new Date(2015, 0, 1, 8)
         });
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
