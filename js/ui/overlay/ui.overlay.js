@@ -1,11 +1,10 @@
 import fx from '../../animation/fx';
 import positionUtils from '../../animation/position';
-import { locate, move, resetPosition } from '../../animation/translator';
+import { resetPosition } from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
-import { getOffset } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import { inArray } from '../../core/utils/array';
@@ -14,7 +13,6 @@ import { Deferred } from '../../core/utils/deferred';
 import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { fitIntoRange } from '../../core/utils/math';
 import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent, isObject } from '../../core/utils/type';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
@@ -30,6 +28,7 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../event
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
+import DraggableOverlay from './draggable_overlay';
 import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
@@ -102,15 +101,7 @@ const Overlay = Widget.inherit({
                 return;
             }
 
-            e.preventDefault();
-            e.stopPropagation();
-
-            const allowedOffsets = this._allowedOffsets();
-            const offset = {
-                top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
-                left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
-            };
-            this._changePosition(offset);
+            this._draggable.moveTo(top, left, e);
         };
         return extend(this.callBase(), {
             escape: function() {
@@ -196,7 +187,7 @@ const Overlay = Widget.inherit({
 
             dragEnabled: false,
 
-            dragArea: undefined,
+            dragAndResizeArea: undefined,
 
             resizeEnabled: false,
             onResizeStart: null,
@@ -1020,8 +1011,17 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        eventsEngine.on($dragTarget, startEventName, (e) => { this._dragStartHandler(e); });
-        eventsEngine.on($dragTarget, updateEventName, (e) => { this._dragUpdateHandler(e); });
+        const config = {
+            startEventName,
+            updateEventName,
+            dragTarget: $dragTarget,
+            dragContainer: this._getDragResizeContainer(),
+            outsideMultiplayer: 0,
+            content: this._$content,
+            updatePositionChangedHandled: this._updatePositionChangedHandled.bind(this)
+        };
+
+        this._draggable = new DraggableOverlay(config);
     },
 
     _renderResize: function() {
@@ -1091,100 +1091,15 @@ const Overlay = Widget.inherit({
         return this.$content();
     },
 
-    _dragStartHandler: function(e) {
-        e.targetElements = [];
-
-        this._prevOffset = { x: 0, y: 0 };
-
-        const allowedOffsets = this._allowedOffsets();
-        e.maxTopOffset = allowedOffsets.top;
-        e.maxBottomOffset = allowedOffsets.bottom;
-        e.maxLeftOffset = allowedOffsets.left;
-        e.maxRightOffset = allowedOffsets.right;
-    },
-
     _getDragResizeContainer: function() {
-        const { dragArea } = this.option();
-        if(dragArea?.container) {
-            return dragArea.container;
+        const { dragAndResizeArea } = this.option();
+        if(dragAndResizeArea?.container) {
+            return dragAndResizeArea.container;
         }
         const isContainerDefined = originalViewPort().get(0) || this.option('container');
         const $container = !isContainerDefined ? $(window) : this._$container;
 
         return $container;
-    },
-
-    _deltaSize: function() {
-        const $content = this._$content;
-        const $container = this._getDragResizeContainer();
-
-        const contentWidth = $content.outerWidth();
-        const contentHeight = $content.outerHeight();
-        let containerWidth = $container.outerWidth();
-        let containerHeight = $container.outerHeight();
-        const document = domAdapter.getDocument();
-        if(this._isWindow($container)) {
-            const fullPageHeight = Math.max($(document).outerHeight(), containerHeight);
-            const fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
-
-            containerHeight = fullPageHeight;
-            containerWidth = fullPageWidth;
-        }
-
-        containerWidth = Math.min(containerWidth, $(document).outerWidth());
-        const outsideMultiplayer = this.option('dragArea')?.outsideMultiplayer;
-
-        return {
-            width: containerWidth - contentWidth + (contentWidth * outsideMultiplayer),
-            height: containerHeight - contentHeight + (contentHeight * outsideMultiplayer),
-        };
-    },
-
-    _dragUpdateHandler: function(e) {
-        const offset = e.offset;
-        const prevOffset = this._prevOffset;
-        const targetOffset = {
-            top: offset.y - prevOffset.y,
-            left: offset.x - prevOffset.x
-        };
-
-        this._changePosition(targetOffset);
-
-        this._prevOffset = offset;
-    },
-
-    _changePosition: function(offset) {
-        const position = locate(this._$content);
-
-        move(this._$content, {
-            left: position.left + offset.left,
-            top: position.top + offset.top
-        });
-
-        this._positionChangeHandled = true;
-    },
-
-    _allowedOffsets: function() {
-        const { dragArea } = this.option();
-        const popupPosition = getOffset(this._$content.get(0));
-        const dragAreaPosition = this._isWindow(this._getDragResizeContainer())
-            ? { top: 0, left: 0 }
-            : getOffset(this._getDragResizeContainer().get(0));
-        const deltaSize = this._deltaSize();
-        const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
-
-        const dragAreaOffsetMultiplayer = dragArea?.outsideMultiplayer;
-        const dragAreaOffset = {
-            width: this._$content.outerWidth() * dragAreaOffsetMultiplayer,
-            height: this._$content.outerHeight() * dragAreaOffsetMultiplayer
-        };
-
-        return {
-            top: isAllowedDrag ? popupPosition.top - dragAreaPosition.top + dragAreaOffset.height : 0,
-            bottom: isAllowedDrag ? -popupPosition.top + dragAreaPosition.top + deltaSize.height : 0,
-            left: isAllowedDrag ? popupPosition.left - dragAreaPosition.left + dragAreaOffset.width : 0,
-            right: isAllowedDrag ? -popupPosition.left + dragAreaPosition.left + deltaSize.width : 0
-        };
     },
 
     _moveFromContainer: function() {
@@ -1356,15 +1271,12 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _renderPosition: function() {
-        if(this._positionChangeHandled) {
-            const allowedOffsets = this._allowedOffsets();
+    _updatePositionChangedHandled: function(value) {
+        this._positionChangeHandled = value;
+    },
 
-            this._changePosition({
-                top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
-                left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
-            });
-        } else {
+    _renderPosition: function() {
+        if(!this._positionChangeHandled) {
             this._renderOverlayBoundaryOffset();
 
             resetPosition(this._$content);
@@ -1568,6 +1480,15 @@ const Overlay = Widget.inherit({
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();
+                break;
+            case 'dragAndResizeArea':
+                if(value && this.option('resizeEnabled')) {
+                    this._resizable.option('area', this._getDragResizeContainer());
+                }
+                if(value && this.option('dragEnabled')) {
+                    this._draggable.updateDragContainer(this._getDragResizeContainer());
+                    this._draggable.updateOutsideMultiplayer(this.option('dragAndResizeArea').outsideMultiplayer);
+                }
                 break;
             default:
                 this.callBase(args);
