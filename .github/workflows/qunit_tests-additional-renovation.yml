@@ -53,7 +53,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     name: ${{ matrix.envs.name }}
-    timeout-minutes: 15
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
