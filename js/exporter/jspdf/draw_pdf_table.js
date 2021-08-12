@@ -56,6 +56,11 @@ export function drawPdfTable(doc, styles, table) {
                 drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
             }
 
+            const borderColor = isDefined(cell.borderColor) ? cell.borderColor : styles.borderColor;
+            if(borderColor !== doc.getDrawColor()) {
+                doc.setDrawColor(borderColor);
+            }
+
             const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
             const docFont = doc.getFont();
             if(
@@ -73,6 +78,7 @@ export function drawPdfTable(doc, styles, table) {
             if(textColor !== doc.getTextColor()) {
                 doc.setTextColor(textColor);
             }
+
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
                 const textY = cell._rect.y + (cell._rect.h / 2);
                 drawText(doc, cell.text, cell._rect.x, textY, extend({ baseline: 'middle' }, cell.textOptions)); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
