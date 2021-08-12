@@ -1077,8 +1077,8 @@ class ScrollableTestHelper {
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
 
                 helper.scrollable.update();
-                helper.checkScrollOffset({ left: 150, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: 35 });
+                helper.checkScrollOffset({ left: useNative || isRenovation ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative && !isRenovation ? 12 : 35 });
             });
         });
 
