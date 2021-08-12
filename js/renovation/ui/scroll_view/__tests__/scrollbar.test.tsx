@@ -607,7 +607,7 @@ describe('Scrollbar', () => {
               });
 
               if (reachBottomEnabled
-              && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0) {
+                && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0) {
                 expect(viewModel.isReachBottom).toBe(true);
               } else {
                 expect(viewModel.isReachBottom).toBe(false);

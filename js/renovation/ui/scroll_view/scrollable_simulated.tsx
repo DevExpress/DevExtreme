@@ -257,7 +257,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Mutable() tabWasPressed = false;
 
-  @Mutable() savedScrollOffset?: { top: number; left: number } = { top: 0, left: 0 };
+  @Mutable() savedScrollOffset?: { top: number; left: number };
 
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 

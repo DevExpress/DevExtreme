@@ -1,4 +1,5 @@
 import device from 'core/devices';
+import config from 'core/config';
 import domAdapter from 'core/dom_adapter';
 import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -27,7 +28,8 @@ import {
     FIELD_ITEM_REQUIRED_MARK_CLASS,
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    FORM_GROUP_CAPTION_CLASS
+    FORM_GROUP_CAPTION_CLASS,
+    FORM_UNDERLINED_CLASS
 } from 'ui/form/constants';
 
 import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
@@ -436,6 +438,43 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-numberbox').hasClass('dx-editor-underlined'), 'right class rendered');
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
+
+QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
+    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    form.validate();
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is invalid after validate');
+
+    form.option('onFieldDataChanged', () => {});
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is still invalid after changing the onFieldDataChanged option');
+});
+
+QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler is called (T1014577)', function(assert) {
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    const onFieldDataChangedStub = sinon.stub();
+    form.option('onFieldDataChanged', onFieldDataChangedStub);
+
+    form.updateData({ field1: 'some value 1' });
+    assert.equal(onFieldDataChangedStub.callCount, 1, 'new handler is called after formData is updated');
+
+    form.getEditor('field1').option('value', 'some value 2');
+    assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
+});
+
 
 [
     { editorType: 'dxTextBox' },
@@ -3685,6 +3724,25 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
 
             assert.equal(1, 1, 'resize of the form does not freeze the page');
         });
+    });
+});
+
+QUnit.test('Form set the right class to the root element for different global editorStylingMode option', function(assert) {
+    const stylingModes = ['filled', 'underlined', 'outlined'];
+
+    stylingModes.forEach(mode => {
+        const shouldSetClass = mode === 'underlined';
+
+        config({ editorStylingMode: mode });
+        $('#form').dxForm({});
+
+        assert.equal(
+            $('#form').hasClass(FORM_UNDERLINED_CLASS),
+            shouldSetClass,
+            `${FORM_UNDERLINED_CLASS} is ${shouldSetClass ? '' : 'not'} set`);
+
+        $('#form').dxForm('instance').dispose();
+        config({ editorStylingMode: null });
     });
 });
 
