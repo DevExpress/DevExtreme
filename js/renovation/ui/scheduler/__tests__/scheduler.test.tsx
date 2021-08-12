@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import { SchedulerProps } from '../props';
 import { Scheduler, viewFunction } from '../scheduler';
-import { Widget } from '../../common/widget';
+import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 
@@ -11,20 +11,38 @@ const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 describe('Scheduler', () => {
   describe('Render', () => {
     it('should be rendered', () => {
-      const tree = mount(viewFunction({} as any));
+      const tree = mount(viewFunction({ props: {} } as any));
 
       expect(tree.is(Widget)).toBe(true);
     });
 
     it('should pass correct props to the widget', () => {
+      const props = {
+        accessKey: 'A',
+        activeStateEnabled: true,
+        disabled: true,
+        focusStateEnabled: true,
+        height: 100,
+        hint: 'hint',
+        hoverStateEnabled: true,
+        rtlEnabled: true,
+        tabIndex: -2,
+        visible: true,
+        width: 200,
+        className: 'custom-class',
+      };
       const tree = mount(viewFunction({
         restAttributes: { 'custom-attribute': 'customAttribute' },
+        props,
       } as any));
 
-      expect(tree.prop('custom-attribute'))
-        .toBe('customAttribute');
-      expect(tree.prop('classes'))
-        .toBe('dx-scheduler');
+      expect(tree.props())
+        .toEqual({
+          ...new WidgetProps(),
+          'custom-attribute': 'customAttribute',
+          classes: 'dx-scheduler',
+          ...props,
+        });
     });
   });
 

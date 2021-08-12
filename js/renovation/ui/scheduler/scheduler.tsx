@@ -17,15 +17,41 @@ import DataSource from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { WorkSpaceProps } from './workspaces/props';
 
-export const viewFunction = (viewModel: Scheduler): JSX.Element => {
-  const { restAttributes } = viewModel;
-  return (
-    <Widget
-      classes="dx-scheduler"
-      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-    />
-  );
-};
+export const viewFunction = ({
+  restAttributes,
+  props: {
+    accessKey,
+    activeStateEnabled,
+    disabled,
+    focusStateEnabled,
+    height,
+    hint,
+    hoverStateEnabled,
+    rtlEnabled,
+    tabIndex,
+    visible,
+    width,
+    className,
+  },
+}: Scheduler): JSX.Element => (
+  <Widget // eslint-disable-line jsx-a11y/no-access-key
+    classes="dx-scheduler"
+    accessKey={accessKey}
+    activeStateEnabled={activeStateEnabled}
+    disabled={disabled}
+    focusStateEnabled={focusStateEnabled}
+    height={height}
+    hint={hint}
+    hoverStateEnabled={hoverStateEnabled}
+    rtlEnabled={rtlEnabled}
+    tabIndex={tabIndex}
+    visible={visible}
+    width={width}
+    className={className}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...restAttributes}
+  />
+);
 
 @Component({
   defaultOptionRules: null,
