@@ -48,6 +48,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       activeStateEnabled, hoverStateEnabled, focusStateEnabled,
       disabled, readOnly, visible,
       width, height,
+      onFocusIn,
     },
     iconRef, iconStyles,
     restAttributes,
@@ -81,6 +82,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       validationMessageMode={validationMessageMode}
       validationStatus={validationStatus}
       isValid={isValid}
+      onFocusIn={onFocusIn}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <Fragment>
@@ -101,12 +103,12 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() iconSize?: number | string;
 
-  @TwoWay() value: boolean | null = false;
-
   // overrides default value
   @OneWay() activeStateEnabled = true;
 
   @OneWay() hoverStateEnabled = true;
+
+  @TwoWay() value: boolean | null = false;
 
   // private
   @OneWay() saveValueChangeEvent?: (event: Event) => void;
