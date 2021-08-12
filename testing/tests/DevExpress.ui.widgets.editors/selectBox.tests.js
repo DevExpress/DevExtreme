@@ -3878,49 +3878,40 @@ QUnit.module('Async tests', {}, () => {
         const dataSourceLoadedDeferred = $.Deferred();
         const itemsCount = 100;
         const selectedItem = 80;
+        const dataSource = {
+            load: () => {
+                const d = $.Deferred();
 
-        const clock = sinon.useFakeTimers();
-        try {
-            const dataSource = {
-                load: () => {
-                    const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(Array.apply(null, { length: itemsCount }).map(Number.call, Number));
+                    dataSourceLoadedDeferred.resolve();
+                }, 0);
 
-                    setTimeout(() => {
-                        d.resolve(Array.apply(null, { length: itemsCount }).map(Number.call, Number));
-                        dataSourceLoadedDeferred.resolve();
-                    }, 0);
+                return d.promise();
+            },
+            byKey: (key) => {
+                return key;
+            }
+        };
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: dataSource,
+            opened: true,
+            value: selectedItem
+        });
+        const list = $element.dxSelectBox('instance')._list;
+        const $scrollableContainer = $(list.$element().find('.dx-scrollable-container'));
+        const $scrollableContent = $scrollableContainer.find('.dx-scrollable-content');
 
-                    return d.promise();
-                },
-                byKey: (key) => {
-                    return key;
-                }
-            };
-            const $element = $('#selectBox').dxSelectBox({
-                dataSource: dataSource,
-                opened: true,
-                value: selectedItem
-            });
-            const list = $element.dxSelectBox('instance')._list;
-            const $scrollableContainer = $(list.$element().find('.dx-scrollable-container'));
-            const $scrollableContent = $scrollableContainer.find('.dx-scrollable-content');
+        dataSourceLoadedDeferred.promise().done(() => {
+            const scrollableContentTop = $scrollableContent.position().top;
+            list.scrollToItem(selectedItem);
+            reRender();
 
-            dataSourceLoadedDeferred.promise().done(() => {
-                const scrollableContentTop = $scrollableContent.position().top;
-                list.scrollToItem(selectedItem);
-                reRender();
+            const expectedScrollableContentTop = $scrollableContent.position().top;
+            assert.equal(scrollableContentTop, expectedScrollableContentTop, 'list is scrolled to the selected item');
 
-                const expectedScrollableContentTop = $scrollableContent.position().top;
-                assert.equal(scrollableContentTop, expectedScrollableContentTop, 'list is scrolled to the selected item');
-
-                done();
-            });
-
-            clock.tick();
-        } finally {
-            clock.restore();
-        }
-
+            done();
+        });
     });
 
     QUnit.test('selectbox should not render own components if it was disposed (T517486)', function(assert) {
@@ -5196,7 +5187,6 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
         keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
             .focus()
             .press('tab');
-        reRender();
 
         assert.ok(instance.option('opened'), 'popup is still opened');
         assert.ok($applyButton.hasClass(STATE_FOCUSED_CLASS), 'the apply button is focused');

@@ -2407,14 +2407,7 @@ QUnit.module('list options', {
     });
 });
 
-QUnit.module('Native scrolling', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    },
-}, () => {
+QUnit.module('Native scrolling', () => {
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
         const data = [];
         const done = assert.async();
@@ -2455,8 +2448,6 @@ QUnit.module('Native scrolling', {
             assert.roughEqual(listInstance.scrollTop(), scrollTop, 2, 'scrollTop is correctly after new page load');
             done();
         });
-
-        this.clock.tick();
     });
 
     QUnit.test('Popup height should be decrease after a loading of new page and searching', function(assert) {
@@ -3434,8 +3425,6 @@ QUnit.module('default options', {
         const $lookup = $('<div>').prependTo('body');
         const materialLookupPadding = 8;
 
-        const clock = sinon.useFakeTimers();
-
         try {
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'red', 'green', 'yellow'], value: 'blue' }).dxLookup('instance');
 
@@ -3482,7 +3471,6 @@ QUnit.module('default options', {
 
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'offset of the lookup if not selected item');
         } finally {
-            clock.restore();
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
         }
@@ -3516,10 +3504,7 @@ QUnit.module('default options', {
         const $lookup = $('<div>').prependTo('body');
         const materialLookupPadding = 8;
 
-        const clock = sinon.useFakeTimers();
-
         try {
-
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green', 'red'], value: 'orange' }).dxLookup('instance');
 
             $(lookup.field()).trigger('dxclick');
@@ -3603,7 +3588,6 @@ QUnit.module('default options', {
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if dropDownCentered option is false');
         } finally {
             $lookup.remove();
-            clock.restore();
             themes.isMaterial = origIsMaterial;
         }
     });

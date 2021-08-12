@@ -142,6 +142,9 @@
                 }, args));
                 triggerEvent('scroll');
 
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
+
                 return this;
             },
 

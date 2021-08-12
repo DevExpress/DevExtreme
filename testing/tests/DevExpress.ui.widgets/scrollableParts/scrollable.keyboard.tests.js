@@ -24,7 +24,7 @@ QUnit.module('keyboard support', {
                 <div class="content2"></div>\
             </div>\
             <div id="scrollable_container">\
-                <div class="content" style="width: 400px">\
+                <div style="width: 400px">\
                     <div id="content_container_1" tabindex="1" style="height: 200px; width: 198px;"></div>\
                     <div id="content_container_2" tabindex="2" style="height: 200px; width: 198px;"></div>\
                 </div>\
@@ -275,7 +275,7 @@ QUnit.testInActiveWindow('arrows was not handled when focus on input element', f
 
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((useNativeMode) => {
-        ['horizontal', 'vertical'].forEach((scrollbarDirection) => {
+        ['vertical', 'horizontal'].forEach((scrollbarDirection) => {
             function checkScrollLocation($scrollable, expectedLocation) {
                 const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
                 const scrollLocation = getTranslateValues($scroll.get(0));

@@ -176,7 +176,6 @@ QUnit.module('dateViewRoller', {
     });
 
     QUnit.test('items changing leads to selected item recalculation', function(assert) {
-        const clock = sinon.useFakeTimers();
         const element = this.element.dxDateViewRoller({ items: ['1', '2', '3', '4', '5'], selectedIndex: 4 });
         const instance = element.dxDateViewRoller('instance');
 
@@ -185,7 +184,6 @@ QUnit.module('dateViewRoller', {
 
         instance.option('items', ['6', '7', '8']);
         assert.equal(instance.option('selectedIndex'), 2);
-        clock.restore();
     });
 
     QUnit.test('clicking on non-selected item changes selectedIndex', function(assert) {

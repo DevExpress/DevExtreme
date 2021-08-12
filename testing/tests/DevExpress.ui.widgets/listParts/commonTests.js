@@ -2703,7 +2703,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
 
         const scrollView = this.element.dxScrollView('instance');
 
-        assert.equal(scrollView._updateCount, isRenovation ? 1 : 0, 'no update after render list');
+        assert.equal(scrollView._updateCount, 1, 'no update after render list');
 
         list.updateDimensions().done(function() {
             assert.ok(true);
@@ -2711,7 +2711,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
         });
 
         list.updateDimensions();
-        assert.equal(scrollView._updateCount, isRenovation ? 3 : 2, '+2 after update() call');
+        assert.equal(scrollView._updateCount, 3, '+2 after update() call');
     });
 
     QUnit.test('width & height option change should call update method of scroll view', function(assert) {
@@ -3108,7 +3108,7 @@ QUnit.module('scrollView integration', {
         list.scrollToItem($item);
 
         const firstCallArgs = scrollToElementSpy.firstCall.args[0];
-        assert.equal(isRenovation ? firstCallArgs : firstCallArgs.get(0), $item.get(0), 'list scrolled to item');
+        assert.equal(isRenovation ? firstCallArgs : firstCallArgs, $item.get(0), 'list scrolled to item');
     });
 
     QUnit.test('it should be possible to scroll to an item by denormalized index', function(assert) {

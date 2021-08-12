@@ -569,12 +569,6 @@ QUnit.test('useSimulatedScrollbar is false when useNative option set to true', f
 });
 
 QUnit.test('useSimulatedScrollbar option dependence from useNative option', function(assert) {
-    if(isRenovation) {
-        // TODO after fix: https://trello.com/c/IQfUSY0h/2613-renovation-unable-to-change-root-widget-in-runtime
-        assert.ok(true);
-        return;
-    }
-
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         useSimulatedScrollbar: true

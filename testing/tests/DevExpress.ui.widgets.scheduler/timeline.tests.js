@@ -282,11 +282,7 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
 
 QUnit.module('Timeline Day', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
-    },
-    afterEach: function() {
-        this.clock.restore();
     }
 });
 

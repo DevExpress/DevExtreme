@@ -24,8 +24,6 @@ import {
     SCROLLABLE_WRAPPER_CLASS,
     SCROLLBAR_HOVERABLE_CLASS
 } from './scrollable.constants.js';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender as reRender } from 'inferno';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -159,7 +157,6 @@ QUnit.test('bounce problem', function(assert) {
     $scrollable.dxScrollable({
         useNative: false,
         direction: 'both',
-        showScrollbar: 'always',
         onEnd: function() {
             const location = getScrollOffset($scrollable);
             assert.equal(location.top, 0, 'content bounced back');
@@ -515,7 +512,6 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
 
 QUnit.test('simulated scrollable should stop animators on disposing', function(assert) {
     if(isRenovation) {
-        // doesn't dispose scrollable
         assert.ok(true);
         return;
     }
@@ -787,7 +783,7 @@ QUnit.module('visibility events integration', {
     }
 });
 
-QUnit.skip('scroll should save position on dxhiding and restore on dxshown', function(assert) {
+QUnit.test('scroll should save position on dxhiding and restore on dxshown', function(assert) {
     const $scrollable = $('#scrollable');
 
     const scrollable = $scrollable.dxScrollable({
@@ -828,7 +824,7 @@ QUnit.test('scroll should restore on second dxshown', function(assert) {
     assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 0 }, 'scroll position was not changed');
 });
 
-QUnit.skip('scroll should save position on dxhiding when scroll is hidden', function(assert) {
+QUnit.test('scroll should save position on dxhiding when scroll is hidden', function(assert) {
     const $scrollable = $('#scrollable');
 
     const scrollable = $scrollable.dxScrollable({
@@ -874,7 +870,6 @@ if(styleUtils.styleProp('touchAction')) {
 
         $content.width(100).height(50);
         scrollable.update();
-        reRender();
         assert.equal($container.css('touchAction'), 'pan-y');
 
         $content.width(50).height(50);

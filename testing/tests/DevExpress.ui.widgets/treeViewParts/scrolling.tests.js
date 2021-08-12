@@ -76,7 +76,6 @@ QUnit.module('scrollToItem', {
     configs.forEach(config => {
         config.keysToScroll.forEach(key => {
             QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
-
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
@@ -104,7 +103,6 @@ QUnit.module('scrollToItem', {
                         this.clock.tick(400);
                         done();
                     });
-
                 }
                 this.clock.tick();
             });

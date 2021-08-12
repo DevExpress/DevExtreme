@@ -3,8 +3,6 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender as reRender } from 'inferno';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
@@ -70,7 +68,7 @@ QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
     let scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'onScroll', 'true normalize to onScroll');
 
-    $scrollable.dxScrollable('option', 'showScrollbar', 'never');
+    $scrollable.dxScrollable('option', 'showScrollbar', false);
 
     scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'never', 'true normalize to onScroll');
@@ -207,12 +205,10 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\'', function
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden after scrollable creation');
 
     $container.trigger('mouseenter');
-    reRender();
 
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
 
     $container.trigger('mouseleave');
-    reRender();
 
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden after mouse leave');
 });
@@ -230,7 +226,6 @@ QUnit.test('thumb is visible after update when content became more then containe
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     $container.trigger('mouseenter');
-    reRender();
 
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden when content less then container');
 
