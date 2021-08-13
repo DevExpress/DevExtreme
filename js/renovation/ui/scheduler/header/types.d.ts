@@ -1,7 +1,3 @@
-import { SchedulerToolbarItemProps } from './props';
-
-export type SchedulerToolbarItem = string | SchedulerToolbarItemProps;
-
 export type DefaultElement = 'dateNavigator' | 'viewSwitcher';
 
 export type Direction = -1 | 1;

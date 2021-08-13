@@ -8,7 +8,7 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 
-import { SchedulerToolbarItem } from './header/types';
+import { SchedulerToolbarItem } from './header/props';
 import type { template } from '../../../core/templates/template';
 import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
