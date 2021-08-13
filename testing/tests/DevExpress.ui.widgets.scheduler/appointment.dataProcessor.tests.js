@@ -1318,6 +1318,31 @@ module('Client side after filtering', () => {
         });
     });
 
+    test('Appointment should be filtered if startDate, endDate are at the edge of the trimmed end view date', function(assert) {
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataProvider = createAppointmentDataProvider({
+            key: 0,
+            dataSource,
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => defaultDataAccessors
+        });
+
+        appointmentDataProvider.add({
+            text: 'a',
+            startDate: new Date(2020, 6, 16, 0),
+            endDate: new Date(2020, 6, 16, 1),
+        });
+
+        const appts = appointmentDataProvider.filterLoadedAppointments({
+            startDayHour: 0,
+            endDayHour: 24,
+            min: new Date(2020, 6, 15),
+            max: new Date(2020, 6, 15, 23, 59)
+        });
+
+        assert.ok(!appts.length, 'Filtered');
+    });
+
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
         const appointmentDataProvider = createAppointmentDataProvider({

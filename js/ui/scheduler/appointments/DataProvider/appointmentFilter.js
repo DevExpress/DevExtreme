@@ -408,8 +408,13 @@ export class AppointmentFilterBaseStrategy {
                 hasRecurrenceRule
             } = appointment;
 
-            if(!hasRecurrenceRule && !(endDate >= trimmedMinMax.min && startDate <= trimmedMinMax.max)) {
-                return false;
+            if(!hasRecurrenceRule) {
+                if(!(endDate > trimmedMinMax.min && startDate < trimmedMinMax.max ||
+                    dateUtils.sameDate(endDate, trimmedMinMax.min) &&
+                    dateUtils.sameDate(startDate, trimmedMinMax.min))
+                ) {
+                    return false;
+                }
             }
 
             let recurrenceRule;
@@ -643,12 +648,8 @@ export class AppointmentFilterBaseStrategy {
     }
 
     getPreparedDataItems(dataItems) {
-        if(!dataItems) {
-            return [];
-        }
-
         const result = [];
-        dataItems.forEach((rawAppointment) => {
+        dataItems?.forEach((rawAppointment) => {
             const startDate = new Date(this.dataAccessors.getter.startDate(rawAppointment));
             const endDate = new Date(this.dataAccessors.getter.endDate(rawAppointment));
 
