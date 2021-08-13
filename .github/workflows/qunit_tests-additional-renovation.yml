@@ -100,7 +100,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: last_run_status
-        key: last-run-status-${{ github.job }}-${{ github.sha }}
+        key: last-run-status-${{ github.job }}-${{ matrix.envs.name }}-${{ github.sha }}
 
     - name: Set last run status
       id: last_run_status
