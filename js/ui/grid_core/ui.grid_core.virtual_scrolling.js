@@ -846,7 +846,7 @@ export const virtualScrollingModule = {
                                 return that.getRowPageSize();
                             },
                             loadedOffset: function() {
-                                return isVirtualMode(that) && that._dataSource.lastLoadOptions().skip || 0;
+                                return isVirtualMode(that) && that._dataSource?.lastLoadOptions().skip || 0;
                             },
                             loadedItemCount: function() {
                                 return that._itemCount;
@@ -1166,8 +1166,8 @@ export const virtualScrollingModule = {
                     },
                     getLoadPageParams: function(byLoadedPage) {
                         const viewportParams = this._loadViewportParams;
-                        const lastLoadOptions = this._dataSource.lastLoadOptions();
-                        const loadedPageIndex = lastLoadOptions.pageIndex || 0;
+                        const lastLoadOptions = this._dataSource?.lastLoadOptions();
+                        const loadedPageIndex = lastLoadOptions?.pageIndex || 0;
 
                         const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(viewportParams.skip / this.pageSize());
                         const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());

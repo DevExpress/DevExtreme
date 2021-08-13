@@ -25,6 +25,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 import $ from 'jquery';
@@ -195,7 +196,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok(rowsViewWrapper.getDataRow(4).isFocusedRow(), 'Focused row');
-        assert.ok(rowsViewWrapper.isRowVisible(4, 1), 'Navigation row is visible');
+        assert.ok(rowsViewWrapper.isRowVisible(4, 2), 'Navigation row is visible');
     });
 
     QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is not visible', function(assert) {
@@ -804,7 +805,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             keyExpr: 'name',
             focusedRowEnabled: true,
             focusedRowIndex: 0,
-            scrolling: { mode: 'virtual' },
+            scrolling: { mode: 'virtual', minGap: 0 },
             paging: { pageSize: 2 }
         }).dxDataGrid('instance');
 

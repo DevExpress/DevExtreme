@@ -219,7 +219,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.find('.dx-freespace-row').length, 1, 'freespace row count');
-        assert.roughEqual($dataGrid.find('.dx-freespace-row').eq(0).height(), expectedFreeSpaceRowHeight, 1.1, 'Height of the freeSpace row');
+        assert.roughEqual($dataGrid.find('.dx-freespace-row').eq(0).height(), expectedFreeSpaceRowHeight, 1.5, 'Height of the freeSpace row');
     });
 
     // T242473
@@ -1015,7 +1015,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // assert
         assert.ok($(nestedGrid.getRowElement(1)).hasClass('dx-master-detail-row'), 'detail row of the nested grid');
-        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 1653, 5, 'scroll height1');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 1653, 5.5, 'scroll height1');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1290 });
@@ -1028,7 +1028,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2090, 5, 'scroll height2');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2090, 7.5, 'scroll height2');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1728 });
