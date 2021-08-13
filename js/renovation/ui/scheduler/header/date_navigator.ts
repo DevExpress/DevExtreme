@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars-experimental */
+import { isMaterial, current } from '../../../../ui/themes';
 import {
   Direction,
 } from './types';
@@ -44,7 +45,6 @@ const getNextButtonOptions = (
 
 export const getDateNavigator = (
   item: ToolbarItem,
-  useDropDownViewSwitcher: boolean,
   showCalendar: () => void,
   captionText: string,
   updateDateByDirection: (direction: Direction) => void,
@@ -57,7 +57,7 @@ export const getDateNavigator = (
     getNextButtonOptions(isNextButtonDisabled),
   ] as ToolbarButtonGroupItemPropsType[];
 
-  const stylingMode = useDropDownViewSwitcher ? 'text' : 'contained' as ToolbarButtonStylingMode;
+  const stylingMode = isMaterial(current()) ? 'text' : 'contained' as ToolbarButtonStylingMode;
 
   return {
     widget: 'dxButtonGroup',
@@ -65,6 +65,7 @@ export const getDateNavigator = (
     options: {
       items,
       stylingMode,
+      selectionMode: 'none',
       onItemClick: (e) => {
         switch (e.itemIndex) {
           case 0:

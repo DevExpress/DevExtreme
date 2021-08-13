@@ -51,9 +51,8 @@ export const getDropDownViewSwitcher = (
     },
     dropDownOptions: {
       width: 'max-content',
-      contentTemplate: (element) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        element.addClass(VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS);
+      wrapperAttr: {
+        class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS,
       },
     },
   },

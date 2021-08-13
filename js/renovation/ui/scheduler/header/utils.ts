@@ -41,10 +41,11 @@ export const formToolbarItem = (
         return getViewSwitcher(item as ToolbarItem, selectedView, views, setCurrentView);
       case DATE_NAVIGATOR:
         return getDateNavigator(
-          item as ToolbarItem, useDropDownViewSwitcher,
+          item as ToolbarItem,
           showCalendar, captionText,
           updateDateByDirection,
-          isPreviousButtonDisabled, isNextButtonDisabled,
+          isPreviousButtonDisabled,
+          isNextButtonDisabled,
         );
       default:
         break;
