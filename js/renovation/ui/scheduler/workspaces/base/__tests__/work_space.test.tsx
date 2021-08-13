@@ -92,10 +92,10 @@ describe('WorkSpace', () => {
 
   describe('Render', () => {
     const Layout = (props) => <div {...props} />;
+    const headerPanelTemplate = () => null;
+    const dateTableTemplate = () => null;
+    const timePanelTemplate = () => null;
     const renderConfig = {
-      headerPanelTemplate: () => null,
-      dateTableTemplate: () => null,
-      timePanelTemplate: () => null,
       isAllDayPanelSupported: false,
       className: 'custom',
       isRenderDateHeader: true,
@@ -104,6 +104,9 @@ describe('WorkSpace', () => {
     const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
       layout: Layout,
       renderConfig,
+      headerPanelTemplate,
+      dateTableTemplate,
+      timePanelTemplate,
       ...viewModel,
     }) as any);
 
@@ -155,6 +158,9 @@ describe('WorkSpace', () => {
             groupPanelItems: [],
           },
           ...renderConfig,
+          headerPanelTemplate,
+          dateTableTemplate,
+          timePanelTemplate,
         });
     });
   });
@@ -622,6 +628,42 @@ describe('WorkSpace', () => {
 
           expect(getViewRenderConfigByType)
             .toBeCalledWith('week', 3);
+        });
+      });
+
+      describe('headerPanelTemplate', () => {
+        it('should return correct HeaderPanelLayout', () => {
+          const workSpace = new WorkSpace({
+            type: 'week',
+            intervalCount: 3,
+          } as any);
+
+          expect(workSpace.headerPanelTemplate)
+            .toBe(HeaderPanelLayout);
+        });
+      });
+
+      describe('dateTableTemplate', () => {
+        it('should return correct dateTableTemplate', () => {
+          const workSpace = new WorkSpace({
+            type: 'week',
+            intervalCount: 3,
+          } as any);
+
+          expect(workSpace.dateTableTemplate)
+            .toBe(DateTableLayoutBase);
+        });
+      });
+
+      describe('timePanelTemplate', () => {
+        it('should return correct timePanelTemplate', () => {
+          const workSpace = new WorkSpace({
+            type: 'week',
+            intervalCount: 3,
+          } as any);
+
+          expect(workSpace.timePanelTemplate)
+            .toBe(TimePanelTableLayout);
         });
       });
     });

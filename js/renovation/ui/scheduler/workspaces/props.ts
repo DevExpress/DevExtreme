@@ -128,7 +128,7 @@ WorkSpaceProps,
 
 export interface ViewRenderConfig {
   headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
-  dateTableTemplate: JSXTemplate<DateTableLayoutProps> ;
+  dateTableTemplate: JSXTemplate<DateTableLayoutProps>;
   timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
   className?: string;
   isAllDayPanelSupported: boolean;

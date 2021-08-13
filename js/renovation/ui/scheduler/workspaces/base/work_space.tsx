@@ -21,6 +21,9 @@ import {
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
+import { HeaderPanelLayoutProps } from './header_panel/layout';
+import { DateTableLayoutProps } from './date_table/layout';
+import { TimePaneLayoutProps } from './time_panel/layout';
 
 const prepareGenerationOptions = (
   workSpaceProps: WorkSpaceProps,
@@ -101,14 +104,13 @@ export const viewFunction = ({
   },
 
   renderConfig: {
-    headerPanelTemplate,
-    dateTableTemplate,
-    timePanelTemplate,
-
     className,
     isAllDayPanelSupported,
     isRenderDateHeader,
   },
+  headerPanelTemplate,
+  dateTableTemplate,
+  timePanelTemplate,
 }: WorkSpace): JSX.Element => (
   <Layout
     viewData={viewDataProvider.viewData}
@@ -128,6 +130,10 @@ export const viewFunction = ({
     headerPanelTemplate={headerPanelTemplate}
     dateTableTemplate={dateTableTemplate}
     timePanelTemplate={timePanelTemplate}
+
+    // headerPanelTemplate={HeaderPanelLayout}
+    // dateTableTemplate={DateTableLayoutBase}
+    // timePanelTemplate={TimePanelTableLayout}
 
     isAllDayPanelCollapsed={!allDayPanelExpanded}
     isAllDayPanelSupported={isAllDayPanelSupported}
@@ -238,6 +244,21 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
 
     return this.viewDataProvider.getGroupPanelData(generationOptions);
+  }
+
+  get headerPanelTemplate(): JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'> {
+    const { headerPanelTemplate } = this.renderConfig;
+    return headerPanelTemplate;
+  }
+
+  get dateTableTemplate(): JSXTemplate<DateTableLayoutProps> {
+    const { dateTableTemplate } = this.renderConfig;
+    return dateTableTemplate;
+  }
+
+  get timePanelTemplate(): JSXTemplate<TimePaneLayoutProps> | undefined {
+    const { timePanelTemplate } = this.renderConfig;
+    return timePanelTemplate;
   }
 
   @Effect()
