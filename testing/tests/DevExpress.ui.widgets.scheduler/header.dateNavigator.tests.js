@@ -258,6 +258,7 @@ test('buttons should not be selected after clicking', function(assert) {
     });
 
     const navigator = scheduler.header.navigator;
+    navigator.nextButton.click();
 
     assert.notOk(navigator.prevButton.hasClass('dx-item-selected'));
     assert.notOk(navigator.calendarButton.hasClass('dx-item-selected'));

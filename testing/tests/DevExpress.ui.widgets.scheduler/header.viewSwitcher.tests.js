@@ -1,10 +1,8 @@
-import { createWrapper, initTestMarkup, ElementWrapper } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup, ClickElementWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
 import devices from 'core/devices';
 
-
-const VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS = '.dx-scheduler-view-switcher-dropdown-button-content';
 
 testStart(() => initTestMarkup());
 if(devices.current().deviceType === 'desktop') {
@@ -256,10 +254,10 @@ module('Meterial theme', {
             views: ['day'],
         });
 
-        scheduler.header.viewSwitcher.dropDownButton.click();
+        const dropDownButton = scheduler.header.viewSwitcher.dropDownButton;
+        dropDownButton.click();
 
-        const content = new ElementWrapper(VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS);
-
-        assert.ok(content.getElement());
+        const content = new ClickElementWrapper(CLASSES.viewSwitcherDropDownButtonContent);
+        assert.equal(content.getElement().length, 1);
     });
 });

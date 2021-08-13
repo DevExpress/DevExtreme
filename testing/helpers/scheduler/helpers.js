@@ -25,13 +25,13 @@ export const CLASSES = {
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
     navigatorPrevButton: '.dx-scheduler-navigator-previous',
-    navigatorCalendarButton: '.dx-scheduler-navigator-calendar-button',
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
     viewSwitcher: '.dx-scheduler-view-switcher',
     viewSwitcherDropDownButton: '.dx-scheduler-view-switcher-dropdown-button',
+    viewSwitcherDropDownButtonContent: '.dx-scheduler-view-switcher-dropdown-button-content',
 
     calendar: '.dx-scheduler-navigator-calendar',
     calendarToday: '.dx-calendar-today',
@@ -151,7 +151,7 @@ export const asyncAssert = (assert, assertCallback, timeout) => {
     });
 };
 
-export class ElementWrapper {
+class ElementWrapper {
     constructor(selector, parent, index = 0) {
         this.selector = selector;
         this.parent = parent;
@@ -174,7 +174,7 @@ export class ElementWrapper {
     }
 }
 
-class ClickElementWrapper extends ElementWrapper {
+export class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
     }
@@ -341,7 +341,7 @@ class NavigatorWrapper extends ElementWrapper {
     }
 
     get calendarButton() {
-        return new ClickElementWrapper(CLASSES.navigatorCalendarButton);
+        return new ClickElementWrapper(CLASSES.navigatorCaption);
     }
 
     get nextButton() {
@@ -359,7 +359,9 @@ class ViewSwitcherWrapper extends ElementWrapper {
     }
 
     get dropDownButton() {
-        return new ClickElementWrapper(CLASSES.viewSwitcherDropDownButton);
+        const dropDown = new ClickElementWrapper(CLASSES.viewSwitcherDropDownButton);
+
+        return new ClickElementWrapper(CLASSES.button, dropDown.getElement());
     }
 
     get selectedButton() {
