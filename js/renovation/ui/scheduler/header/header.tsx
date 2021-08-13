@@ -32,13 +32,9 @@ import { ToolbarItem } from '../../toolbar/toolbar_props';
 
 const { trimTime } = dateUtils;
 
-export function viewFunction(viewModel: SchedulerToolbar): JSX.Element {
-  return (
-    <Toolbar
-      items={viewModel.items}
-    />
-  );
-}
+export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => (
+  <Toolbar items={viewModel.items} />
+);
 
 @ComponentBindings()
 export class SchedulerToolbarBaseProps {
