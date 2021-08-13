@@ -79,7 +79,7 @@ fixture`Radio Group validation message position`
 test('message position is right in material (T1020449)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .expect(await takeScreenshot('radiogroup-horizontal-validation.png', '.dx-overlay-content'))
+    .expect(await takeScreenshot('radiogroup-horizontal-validation.png', '#radio-form'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
