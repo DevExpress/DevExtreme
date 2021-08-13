@@ -1263,6 +1263,61 @@ module('Client side after filtering', () => {
         assert.deepEqual(appts, [{ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' }], 'Appointments are OK');
     });
 
+    [
+        { visible: true, expectedVisibility: true },
+        { visible: false, expectedVisibility: false },
+        { visible: null, expectedVisibility: true },
+        { visible: undefined, expectedVisibility: true },
+    ].forEach(({ visible, expectedVisibility }) => {
+        test(`Appointment should be correctly filtered by visible state if visible=${visible}`, function(assert) {
+            const dataSource = new DataSource({ store: [] });
+            const appointmentDataProvider = createAppointmentDataProvider({
+                dataSource,
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => ({
+                    getter: {
+                        startDate: compileGetter('StartDate'),
+                        endDate: compileGetter('EndDate'),
+                        recurrenceRule: compileGetter('RecurrenceRule'),
+                        recurrenceException: compileGetter('Exception'),
+                        allDay: compileGetter('AllDay'),
+                        startDateTimeZone: compileGetter('StartDateTimeZone'),
+                        endDateTimeZone: compileGetter('EndDateTimeZone')
+                    },
+                    setter: {
+                        startDate: compileSetter('StartDate'),
+                        endDate: compileSetter('EndDate')
+                    },
+                    expr: {
+                        startDateExpr: 'StartDate',
+                        endDateExpr: 'EndDate',
+                        allDayExpr: 'AllDay',
+                        recurrenceRuleExpr: 'RecurrenceRule',
+                        recurrenceExceptionExpr: 'Exception'
+                    }
+                })
+            });
+
+            appointmentDataProvider.add({
+                text: 'a',
+                StartDate: new Date(2015, 0, 1).toString(),
+                EndDate: new Date(2015, 0, 2).toString(),
+                AllDay: true,
+                RecurrenceRule: 'FREQ=DAILY',
+                visible
+            });
+
+            const appts = appointmentDataProvider.filterLoadedAppointments({
+                startDayHour: 3,
+                endDayHour: 10,
+                min: new Date(2015, 0, 1, 3),
+                max: new Date(2015, 0, 1, 9, 59)
+            });
+
+            assert.equal(!!appts.length, expectedVisibility, 'Filtered correctly');
+        });
+    });
+
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
         const appointmentDataProvider = createAppointmentDataProvider({
