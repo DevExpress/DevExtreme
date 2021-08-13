@@ -1,17 +1,55 @@
-import { mount } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 import { SchedulerProps } from '../props';
-import { Scheduler, viewFunction } from '../scheduler';
+import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
+import { WorkSpaceWeek } from '../workspaces/week/work_space';
+import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
 describe('Scheduler', () => {
   describe('Render', () => {
+    const defaultCurrentViewConfig = {
+      firstDayOfWeek: 0,
+      startDayHour: 5,
+      endDayHour: 7,
+      cellDuration: 30,
+      groupByDate: false,
+      scrolling: { mode: 'standard' },
+      currentDate: new Date(2021, 8, 11),
+      intervalCount: 1,
+      groupOrientation: 'horizontal',
+      startDate: null,
+      showAllDayPanel: true,
+      showCurrentTimeIndicator: false,
+      indicatorUpdateInterval: 30000,
+      shadeUntilCurrentTime: false,
+      crossScrollingEnabled: false,
+      hoursInterval: 0.5,
+      groups: [],
+
+      indicatorTime: undefined,
+      allowMultipleCellSelection: true,
+      allDayPanelExpanded: false,
+    };
+    const renderComponent = (viewModel) => shallow(
+      <ViewFunction
+        currentViewConfig={defaultCurrentViewConfig}
+        workSpace={WorkSpaceWeek}
+        {...viewModel}
+        props={{
+          ...new SchedulerProps(),
+          ...viewModel.props,
+        }}
+      />,
+    );
+
     it('should be rendered', () => {
-      const tree = mount(viewFunction({ props: {} } as any));
+      const tree = renderComponent({});
 
       expect(tree.is(Widget)).toBe(true);
     });
@@ -31,10 +69,10 @@ describe('Scheduler', () => {
         width: 200,
         className: 'custom-class',
       };
-      const tree = mount(viewFunction({
+      const tree = renderComponent({
         restAttributes: { 'custom-attribute': 'customAttribute' },
         props,
-      } as any));
+      });
 
       expect(tree.props())
         .toEqual({
@@ -42,6 +80,24 @@ describe('Scheduler', () => {
           'custom-attribute': 'customAttribute',
           classes: 'dx-scheduler',
           ...props,
+          children: expect.anything(),
+        });
+    });
+
+    it('should render work space and pass to it correct props', () => {
+      const tree = renderComponent({
+        workSpace: WorkSpaceWeek,
+        onViewRendered: () => {},
+      });
+
+      const workSpace = tree.find(WorkSpaceWeek);
+
+      expect(workSpace.exists())
+        .toBe(true);
+      expect(workSpace.props())
+        .toEqual({
+          ...defaultCurrentViewConfig,
+          onViewRendered: expect.any(Function),
         });
     });
   });
@@ -185,6 +241,31 @@ describe('Scheduler', () => {
         scheduler.scrollToTime(12, 12);
         expect(scrollToTime).toHaveBeenCalled();
       });
+
+      it('onViewRendered should save viewDataProvider and cells meta data to the state', () => {
+        const scheduler = new Scheduler({});
+
+        expect(scheduler.viewDataProvider)
+          .toBe(undefined);
+        expect(scheduler.cellsMetaData)
+          .toBe(undefined);
+
+        const viewDataProvider = new ViewDataProvider('week') as any;
+        const cellsMetaData = {
+          dateTableCellsMeta: [],
+          allDayPanelCellsMeta: [],
+        };
+
+        scheduler.onViewRendered({
+          viewDataProvider,
+          cellsMetaData,
+        });
+
+        expect(scheduler.viewDataProvider)
+          .toBe(viewDataProvider);
+        expect(scheduler.cellsMetaData)
+          .toBe(cellsMetaData);
+      });
     });
   });
 
@@ -221,6 +302,18 @@ describe('Scheduler', () => {
 
           expect(getCurrentViewConfig)
             .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
+        });
+      });
+
+      describe('workSpace', () => {
+        it('should return correct workSpace', () => {
+          const scheduler = new Scheduler({
+            views: ['week'],
+            currentView: 'week',
+          });
+
+          expect(scheduler.workSpace)
+            .toBe(WorkSpaceWeek);
         });
       });
     });

@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import ViewDataProvider from '../../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
 import {
@@ -8,6 +7,15 @@ import {
   WorkSpaceBase,
   WorkSpaceBaseProps,
 } from '../work_space';
+
+const mockUpdate = jest.fn();
+const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
+const mockViewDataProvider = {
+  update: mockUpdate,
+  getGroupPanelData: mockGetGroupPanelData,
+  getCellCount: () => 7,
+};
+jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
 describe('WorkSpaceBase', () => {
   const viewData = {
@@ -108,6 +116,10 @@ describe('WorkSpaceBase', () => {
       const viewModel = {
         viewDataProvider,
         isAllDayPanelVisible: true,
+        groupPanelData: {
+          baseColSpan: 5,
+          groupPanelItems: [],
+        },
       };
 
       const workSpace = renderComponent({
@@ -127,6 +139,10 @@ describe('WorkSpaceBase', () => {
           dateHeaderData,
           viewData,
           timePanelData,
+          groupPanelData: {
+            baseColSpan: 5,
+            groupPanelItems: [],
+          },
         });
     });
   });
@@ -257,7 +273,7 @@ describe('WorkSpaceBase', () => {
             .toBeCalledTimes(1);
           expect(onViewRendered)
             .toBeCalledWith({
-              viewDataProvider: expect.any(ViewDataProvider),
+              viewDataProvider: mockViewDataProvider,
               cellsMetaData: {
                 dateTableCellsMeta: [[{
                   left: 0, top: 0,
@@ -314,7 +330,7 @@ describe('WorkSpaceBase', () => {
             .toBeCalledTimes(1);
           expect(onViewRendered)
             .toBeCalledWith({
-              viewDataProvider: expect.any(ViewDataProvider),
+              viewDataProvider: mockViewDataProvider,
               cellsMetaData: {
                 dateTableCellsMeta: [[{
                   left: 0, top: 0,
@@ -461,6 +477,99 @@ describe('WorkSpaceBase', () => {
 
           expect(!!workSpace.timePanelData)
             .toBe(true);
+        });
+      });
+
+      describe('viewDataProvider', () => {
+        beforeEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should create view data provider and call its update method', () => {
+          const props: any = {
+            groupOrientation: 'horizontal',
+            groupByDate: true,
+            groups: [],
+            isProvideVirtualCellsWidth: false,
+            selectedCells: undefined,
+            focusedCell: undefined,
+            headerCellTextFormat: () => 'shorttime',
+            startDayHour: 0,
+            endDayHour: 24,
+            cellDuration: 30,
+            intervalCount: 1,
+            hoursInterval: 0.5,
+            currentDate: new Date(2021, 8, 11),
+            startDate: null,
+            firstDayOfWeek: 0,
+
+            isGenerateTimePanelData: true,
+          };
+
+          const workSpace = new WorkSpaceBase({
+            ...new WorkSpaceBaseProps(),
+            ...props,
+            type: 'week',
+          });
+
+          expect(workSpace.viewDataProvider)
+            .toBe(mockViewDataProvider);
+
+          expect(mockUpdate)
+            .toHaveBeenCalledWith({
+              ...props,
+              startRowIndex: 0,
+              startCellIndex: 0,
+              isAllDayPanelVisible: false,
+              viewType: 'week',
+              getDateForHeaderText: expect.any(Function),
+            }, true);
+        });
+      });
+
+      describe('groupPanelData', () => {
+        beforeEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should return correct group panel data', () => {
+          const props: any = {
+            groupOrientation: 'horizontal',
+            groupByDate: true,
+            groups: [],
+            isProvideVirtualCellsWidth: false,
+            selectedCells: undefined,
+            focusedCell: undefined,
+            headerCellTextFormat: () => 'shorttime',
+            getDateForHeaderText: () => new Date(),
+            startDayHour: 0,
+            endDayHour: 24,
+            cellDuration: 30,
+            intervalCount: 1,
+            hoursInterval: 0.5,
+            currentDate: new Date(2021, 8, 11),
+            startDate: null,
+            firstDayOfWeek: 0,
+
+            isGenerateTimePanelData: true,
+          };
+
+          const workSpace = new WorkSpaceBase({
+            ...props,
+            type: 'week',
+          });
+
+          expect(workSpace.groupPanelData)
+            .toEqual({});
+
+          expect(mockGetGroupPanelData)
+            .toHaveBeenCalledWith({
+              ...props,
+              startRowIndex: 0,
+              startCellIndex: 0,
+              isAllDayPanelVisible: undefined,
+              viewType: 'week',
+            });
         });
       });
     });

@@ -107,7 +107,6 @@ describe('Model views', () => {
           selectedCellData: [],
           indicatorTime: expect.any(Date),
           intervalCount: undefined,
-          onViewRendered: expect.any(Function),
           startDate: undefined,
           groupOrientation: undefined,
           schedulerHeight: 500,
@@ -165,7 +164,6 @@ describe('Model views', () => {
           allDayPanelExpanded: false,
           allowMultipleCellSelection: true,
           indicatorTime: expect.any(Date),
-          onViewRendered: expect.any(Function),
         });
     });
 
@@ -208,7 +206,6 @@ describe('Model views', () => {
           allDayPanelExpanded: false,
           allowMultipleCellSelection: true,
           indicatorTime: expect.any(Date),
-          onViewRendered: expect.any(Function),
           crossScrollingEnabled: true,
         });
     });
@@ -253,7 +250,6 @@ describe('Model views', () => {
           allDayPanelExpanded: false,
           allowMultipleCellSelection: true,
           indicatorTime: expect.any(Date),
-          onViewRendered: expect.any(Function),
           crossScrollingEnabled: true,
         });
     });
