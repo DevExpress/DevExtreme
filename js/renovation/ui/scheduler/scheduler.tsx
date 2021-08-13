@@ -18,12 +18,10 @@ import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
-import { ViewType } from './types';
 
 export const viewFunction = ({
   restAttributes,
   currentViewConfig,
-  currentViewProps,
   onViewRendered,
   props: {
     accessKey,
@@ -62,7 +60,7 @@ export const viewFunction = ({
     indicatorTime,
     allowMultipleCellSelection,
     allDayPanelExpanded,
-
+    type,
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -100,7 +98,7 @@ export const viewFunction = ({
         crossScrollingEnabled={crossScrollingEnabled}
         hoursInterval={hoursInterval}
         groups={groups}
-        type={currentViewProps.type as ViewType}
+        type={type}
 
         indicatorTime={indicatorTime}
         allowMultipleCellSelection={allowMultipleCellSelection}

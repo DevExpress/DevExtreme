@@ -92,10 +92,7 @@ export class WorkSpaceProps extends BaseWidgetProps {
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 }
 
-interface CurrentViewType {
-  type: ViewType;
-}
-
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 export type CurrentViewConfigType = Pick<
 WorkSpaceProps,
 'firstDayOfWeek'
@@ -124,7 +121,8 @@ WorkSpaceProps,
 | 'hoursInterval'
 | 'groups'
 | 'selectedCellData'
-> & CurrentViewType;
+| 'type'
+>;
 
 export interface ViewRenderConfig {
   headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;

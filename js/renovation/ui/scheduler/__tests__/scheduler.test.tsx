@@ -35,11 +35,11 @@ describe('Scheduler', () => {
       indicatorTime: undefined,
       allowMultipleCellSelection: true,
       allDayPanelExpanded: false,
+      type: 'week',
     };
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
         currentViewConfig={defaultCurrentViewConfig}
-        currentViewProps={{ type: 'week' }}
         {...viewModel}
         props={{
           ...new SchedulerProps(),
@@ -97,7 +97,6 @@ describe('Scheduler', () => {
         .toEqual({
           ...defaultCurrentViewConfig,
           onViewRendered: expect.any(Function),
-          type: 'week',
         });
     });
   });
