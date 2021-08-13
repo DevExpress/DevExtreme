@@ -13,6 +13,8 @@ jobs:
     timeout-minutes: 60
 
     steps:
+    - name: Test
+      run: echo ${{ secrets.TEST }}
     - name: Set Teams notification
       uses: aliencube/microsoft-teams-actions@v0.8.0
       with:
@@ -22,7 +24,6 @@ jobs:
         text: "Проверка возможности отправлять нотификации. Прошу прощения за неудобства. @MikhailVitik"
         sections: '[{ "activityTitle": "Sextion 1" }]'
         actions: '[{ "@type": "OpenUri", "name": "Open Commit", "targets": [{ "os": "default", "uri": "https://github.com/DevExpress/DevExtreme/actions/runs/${{ github.run_id }}" }] }]'
-
     - name: Get sources
       uses: actions/checkout@v2
 
