@@ -195,7 +195,7 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         getItemIndexByPosition: function(position) {
-            position = position !== undefined ? position : this._position;
+            position = position ?? this._position;
             const defaultItemSize = this.getItemSize();
             let offset = 0;
             let itemOffset = 0;
