@@ -1,7 +1,10 @@
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup, ElementWrapper } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
 import devices from 'core/devices';
+
+
+const VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS = '.dx-scheduler-view-switcher-dropdown-button-content';
 
 testStart(() => initTestMarkup());
 if(devices.current().deviceType === 'desktop') {
@@ -245,5 +248,18 @@ module('Meterial theme', {
             'Work Week',
             'view switcher should have correct label'
         );
+    });
+
+    test('dropdown button popup should have a specified class', function(assert) {
+        const scheduler = createWrapper({
+            currentView: 'day',
+            views: ['day'],
+        });
+
+        scheduler.header.viewSwitcher.dropDownButton.click();
+
+        const content = new ElementWrapper(VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS);
+
+        assert.ok(content.getElement());
     });
 });

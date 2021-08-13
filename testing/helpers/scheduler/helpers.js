@@ -151,7 +151,7 @@ export const asyncAssert = (assert, assertCallback, timeout) => {
     });
 };
 
-class ElementWrapper {
+export class ElementWrapper {
     constructor(selector, parent, index = 0) {
         this.selector = selector;
         this.parent = parent;
@@ -359,7 +359,7 @@ class ViewSwitcherWrapper extends ElementWrapper {
     }
 
     get dropDownButton() {
-        return new ElementWrapper(CLASSES.viewSwitcherDropDownButton);
+        return new ClickElementWrapper(CLASSES.viewSwitcherDropDownButton);
     }
 
     get selectedButton() {
