@@ -4,6 +4,7 @@ import './list/modules/deleting';
 import './list/modules/dragging';
 import './list/modules/context';
 
+// STYLE list
 export default List;
 
 /**
