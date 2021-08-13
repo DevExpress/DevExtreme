@@ -283,10 +283,8 @@ module('Meterial theme', {
     beforeEach: function() {
         this.origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
