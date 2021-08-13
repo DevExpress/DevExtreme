@@ -357,9 +357,8 @@ export class AppointmentFilterBaseStrategy {
 
     replaceWrongEndDate(appointment, startDate, endDate) {
         if(this._isEndDateWrong(startDate, endDate)) {
-            const calculatedEndDate = this.calculateAppointmentEndDate(appointment.isAllDay, startDate);
-
-            this.dataAccessors.setter.endDate(appointment.rawAppointment, calculatedEndDate);
+            const calculatedEndDate = this.calculateAppointmentEndDate(appointment.allDay, startDate);
+            this.dataAccessors.setter.endDate(appointment, calculatedEndDate);
         }
     }
 
@@ -711,11 +710,17 @@ export class AppointmentFilterBaseStrategy {
 
         // console.time('getPreparedDataItems');
 
-        const result = map(dataItems, (rawAppointment) => {
+        const result = [];
+        dataItems.forEach((rawAppointment) => {
+            const startDate = new Date(this.dataAccessors.getter.startDate(rawAppointment));
+            const endDate = new Date(this.dataAccessors.getter.endDate(rawAppointment));
+
+            this.replaceWrongEndDate(rawAppointment, startDate, endDate);
+
             const adapter = createAppointmentAdapter(this.key, rawAppointment);
 
-            const comparableStartDate = adapter.calculateStartDate('toGrid');
-            const comparableEndDate = adapter.calculateEndDate('toGrid') || comparableStartDate;
+            const comparableStartDate = adapter.startDate && adapter.calculateStartDate('toGrid');
+            const comparableEndDate = adapter.endDate && adapter.calculateEndDate('toGrid') || comparableStartDate;
             const regex = new RegExp(RECURRENCE_FREQ, 'gi');
             const hasRecurrenceRule = !!adapter.recurrenceRule?.match(regex).length;
 
@@ -728,9 +733,9 @@ export class AppointmentFilterBaseStrategy {
                 rawAppointment
             };
 
-            this.replaceWrongEndDate(item, adapter.startDate, adapter.endDate);
-
-            return item;
+            if(item.startDate && item.endDate) {
+                result.push(item);
+            }
         });
 
         // console.timeEnd('getPreparedDataItems');
