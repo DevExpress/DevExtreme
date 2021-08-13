@@ -1,35 +1,30 @@
 import {
   Component,
-  ComponentBindings,
   Effect,
   ForwardRef,
   JSXComponent,
   JSXTemplate,
-  OneWay,
   RefObject,
-  Template,
 } from '@devextreme-generator/declarations';
 import {
   DateHeaderData,
-  GetDateForHeaderText,
   GroupedViewData,
   GroupPanelData,
   TimePanelData,
   ViewDataProviderType,
 } from '../types';
 import { OrdinaryLayout, OrdinaryLayoutProps } from './ordinary_layout';
-import { HeaderPanelLayout, HeaderPanelLayoutProps } from './header_panel/layout';
-import { DateTableLayoutBase, DateTableLayoutProps } from './date_table/layout';
-import { TimePaneLayoutProps } from './time_panel/layout';
 
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import {
-  createCellElementMetaData, getDateForHeaderText, getTotalCellCount,
+  createCellElementMetaData, getTotalCellCount,
 } from './utils';
-import { WorkSpaceProps } from '../props';
+import { ViewRenderConfig, WorkSpaceProps } from '../props';
+import { getViewRenderConfigByType } from './work_space_config';
 
 const prepareGenerationOptions = (
-  workSpaceProps: WorkSpaceBaseProps,
+  workSpaceProps: WorkSpaceProps,
+  renderConfig: ViewRenderConfig,
   isAllDayPanelVisible: boolean,
 ): unknown => {
   const {
@@ -44,12 +39,15 @@ const prepareGenerationOptions = (
     firstDayOfWeek,
     hoursInterval,
     type,
-    headerCellTextFormat,
     cellDuration,
-    getDateForHeaderText: getDateForHeaderTextFunction,
-    isProvideVirtualCellsWidth,
-    isGenerateTimePanelData,
   } = workSpaceProps;
+  const {
+    headerCellTextFormat,
+    getDateForHeaderText,
+    isProvideVirtualCellsWidth,
+    isRenderTimePanel,
+    isGenerateWeekDaysHeaderData,
+  } = renderConfig;
 
   return {
     startRowIndex: 0,
@@ -62,7 +60,7 @@ const prepareGenerationOptions = (
     selectedCells: undefined,
     focusedCell: undefined,
     headerCellTextFormat,
-    getDateForHeaderText: getDateForHeaderTextFunction,
+    getDateForHeaderText,
     startDayHour,
     endDayHour,
     cellDuration,
@@ -73,7 +71,8 @@ const prepareGenerationOptions = (
     startDate,
     firstDayOfWeek,
 
-    isGenerateTimePanelData,
+    isGenerateTimePanelData: isRenderTimePanel,
+    isGenerateWeekDaysHeaderData,
   };
 };
 
@@ -98,15 +97,19 @@ export const viewFunction = ({
     groupByDate,
     groupOrientation,
     allDayPanelExpanded,
-    isAllDayPanelSupported,
+    intervalCount,
+  },
 
+  renderConfig: {
     headerPanelTemplate,
     dateTableTemplate,
     timePanelTemplate,
 
     className,
+    isAllDayPanelSupported,
+    isRenderDateHeader,
   },
-}: WorkSpaceBase): JSX.Element => (
+}: WorkSpace): JSX.Element => (
   <Layout
     viewData={viewDataProvider.viewData}
     dateHeaderData={viewDataProvider.dateHeaderData}
@@ -120,6 +123,7 @@ export const viewFunction = ({
     groups={groups}
     groupByDate={groupByDate}
     groupOrientation={groupOrientation}
+    intervalCount={intervalCount}
 
     headerPanelTemplate={headerPanelTemplate}
     dateTableTemplate={dateTableTemplate}
@@ -128,6 +132,7 @@ export const viewFunction = ({
     isAllDayPanelCollapsed={!allDayPanelExpanded}
     isAllDayPanelSupported={isAllDayPanelSupported}
     isAllDayPanelVisible={isAllDayPanelVisible}
+    isRenderDateHeader={isRenderDateHeader}
 
     className={className}
     dateTableRef={dateTableRef}
@@ -135,52 +140,20 @@ export const viewFunction = ({
   />
 );
 
-@ComponentBindings()
-export class WorkSpaceBaseProps extends WorkSpaceProps {
-  // ---------------------
-  // Internal for workspaces templates
-  // ---------------------
-
-  @Template() headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'> = HeaderPanelLayout;
-
-  @Template() dateTableTemplate: JSXTemplate<DateTableLayoutProps> = DateTableLayoutBase;
-
-  @Template() timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
-
-  // ---------------------
-  // Internal for work-spaces props
-  // ---------------------
-
-  @OneWay() className?: string;
-
-  @OneWay() isAllDayPanelSupported = false;
-
-  @OneWay() isProvideVirtualCellsWidth = false;
-
-  @OneWay() isGenerateTimePanelData = true;
-
-  @OneWay() groupPanelClassName?: 'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table';
-
-  @OneWay() isWorkWeekView = false;
-
-  @OneWay() type: 'day' | 'week' | 'workWeek' | 'month'
-  | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' = 'week';
-
-  @OneWay() headerCellTextFormat?: string | ((date: Date) => string);
-
-  @OneWay() getDateForHeaderText: GetDateForHeaderText = getDateForHeaderText;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate' | 'onViewRendered'>() {
+export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered'>() {
   @ForwardRef()
   dateTableRef!: RefObject<HTMLTableElement>;
 
   @ForwardRef()
   allDayPanelRef!: RefObject<HTMLTableElement>;
+
+  get renderConfig(): ViewRenderConfig {
+    return getViewRenderConfigByType(this.props.type, this.props.intervalCount);
+  }
 
   get layout(): JSXTemplate<
   OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
@@ -191,10 +164,8 @@ export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate
   }
 
   get isAllDayPanelVisible(): boolean {
-    const {
-      isAllDayPanelSupported,
-      showAllDayPanel,
-    } = this.props;
+    const { showAllDayPanel } = this.props;
+    const { isAllDayPanelSupported } = this.renderConfig;
 
     return isAllDayPanelSupported && showAllDayPanel;
   }
@@ -253,14 +224,18 @@ export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate
     // TODO: convert ViewdataProvider to TS
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
 
-    const generationOptions = prepareGenerationOptions(this.props, this.isAllDayPanelVisible);
+    const generationOptions = prepareGenerationOptions(
+      this.props, this.renderConfig, this.isAllDayPanelVisible,
+    );
     viewDataProvider.update(generationOptions, true);
 
     return viewDataProvider;
   }
 
   get groupPanelData(): GroupPanelData {
-    const generationOptions = prepareGenerationOptions(this.props, this.isAllDayPanelVisible);
+    const generationOptions = prepareGenerationOptions(
+      this.props, this.renderConfig, this.isAllDayPanelVisible,
+    );
 
     return this.viewDataProvider.getGroupPanelData(generationOptions);
   }

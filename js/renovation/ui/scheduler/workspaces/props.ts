@@ -11,11 +11,15 @@ import { GroupOrientation, ViewType } from '../types';
 import {
   DataCellTemplateProps,
   DateTimeCellTemplateProps,
+  GetDateForHeaderText,
   Group,
   ResourceCellTemplateProps,
   ViewMetaData,
 } from './types';
 import { BaseWidgetProps } from '../../common/base_props';
+import { HeaderPanelLayoutProps } from './base/header_panel/layout';
+import { DateTableLayoutProps } from './base/date_table/layout';
+import { TimePaneLayoutProps } from './base/time_panel/layout';
 
 @ComponentBindings()
 export class WorkSpaceProps extends BaseWidgetProps {
@@ -83,6 +87,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() schedulerWidth?: number;
 
+  @OneWay() type: ViewType = 'week';
+
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 }
 
@@ -119,3 +125,18 @@ WorkSpaceProps,
 | 'groups'
 | 'selectedCellData'
 > & CurrentViewType;
+
+export interface ViewRenderConfig {
+  headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
+  dateTableTemplate: JSXTemplate<DateTableLayoutProps> ;
+  timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
+  className?: string;
+  isAllDayPanelSupported: boolean;
+  isProvideVirtualCellsWidth: boolean;
+  isRenderTimePanel: boolean;
+  groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table';
+  headerCellTextFormat: string | ((date: Date) => string);
+  getDateForHeaderText: GetDateForHeaderText;
+  isRenderDateHeader: boolean;
+  isGenerateWeekDaysHeaderData: boolean;
+}

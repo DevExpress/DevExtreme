@@ -5,8 +5,8 @@ import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
-import { WorkSpaceWeek } from '../workspaces/week/work_space';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
+import { WorkSpace } from '../workspaces/base/work_space';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -39,7 +39,7 @@ describe('Scheduler', () => {
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
         currentViewConfig={defaultCurrentViewConfig}
-        workSpace={WorkSpaceWeek}
+        currentViewProps={{ type: 'week' }}
         {...viewModel}
         props={{
           ...new SchedulerProps(),
@@ -86,11 +86,10 @@ describe('Scheduler', () => {
 
     it('should render work space and pass to it correct props', () => {
       const tree = renderComponent({
-        workSpace: WorkSpaceWeek,
         onViewRendered: () => {},
       });
 
-      const workSpace = tree.find(WorkSpaceWeek);
+      const workSpace = tree.find(WorkSpace);
 
       expect(workSpace.exists())
         .toBe(true);
@@ -98,6 +97,7 @@ describe('Scheduler', () => {
         .toEqual({
           ...defaultCurrentViewConfig,
           onViewRendered: expect.any(Function),
+          type: 'week',
         });
     });
   });
@@ -302,18 +302,6 @@ describe('Scheduler', () => {
 
           expect(getCurrentViewConfig)
             .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
-        });
-      });
-
-      describe('workSpace', () => {
-        it('should return correct workSpace', () => {
-          const scheduler = new Scheduler({
-            views: ['week'],
-            currentView: 'week',
-          });
-
-          expect(scheduler.workSpace)
-            .toBe(WorkSpaceWeek);
         });
       });
     });

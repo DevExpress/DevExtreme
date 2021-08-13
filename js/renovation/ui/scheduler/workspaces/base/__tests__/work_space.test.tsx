@@ -1,12 +1,17 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { formatWeekdayAndDay } from '../../../../../../ui/scheduler/workspaces/utils/base';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
 import {
   viewFunction as WorkSpaceLayout,
-  WorkSpaceBase,
-  WorkSpaceBaseProps,
+  WorkSpace,
 } from '../work_space';
+import { WorkSpaceProps } from '../../props';
+import * as ConfigUtils from '../work_space_config';
+import { HeaderPanelLayout } from '../header_panel/layout';
+import { DateTableLayoutBase } from '../date_table/layout';
+import { TimePanelTableLayout } from '../time_panel/layout';
 
 const mockUpdate = jest.fn();
 const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
@@ -17,7 +22,9 @@ const mockViewDataProvider = {
 };
 jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
-describe('WorkSpaceBase', () => {
+const getViewRenderConfigByType = jest.spyOn(ConfigUtils, 'getViewRenderConfigByType');
+
+describe('WorkSpace', () => {
   const viewData = {
     groupedData: [{
       allDayPane: [],
@@ -85,9 +92,18 @@ describe('WorkSpaceBase', () => {
 
   describe('Render', () => {
     const Layout = (props) => <div {...props} />;
+    const renderConfig = {
+      headerPanelTemplate: () => null,
+      dateTableTemplate: () => null,
+      timePanelTemplate: () => null,
+      isAllDayPanelSupported: false,
+      className: 'custom',
+      isRenderDateHeader: true,
+    };
 
     const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
       layout: Layout,
+      renderConfig,
       ...viewModel,
     }) as any);
 
@@ -101,12 +117,7 @@ describe('WorkSpaceBase', () => {
         groups,
         groupByDate: false,
         groupOrientation: VERTICAL_GROUP_ORIENTATION,
-        isAllDayPanelSupported: false,
-
-        headerPanelTemplate: () => null,
-        dateTableTemplate: () => null,
-        timePanelTemplate: () => null,
-        className: 'custom',
+        intervalCount: 1,
       };
       const viewDataProvider = {
         dateHeaderData,
@@ -125,7 +136,7 @@ describe('WorkSpaceBase', () => {
       const workSpace = renderComponent({
         ...viewModel,
         props: {
-          ...new WorkSpaceBaseProps(),
+          ...new WorkSpaceProps(),
           ...props,
           allDayPanelExpanded: false,
         },
@@ -143,6 +154,7 @@ describe('WorkSpaceBase', () => {
             baseColSpan: 5,
             groupPanelItems: [],
           },
+          ...renderConfig,
         });
     });
   });
@@ -255,8 +267,8 @@ describe('WorkSpaceBase', () => {
         it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
           const onViewRendered = jest.fn();
 
-          const workSpace = new WorkSpaceBase({
-            ...new WorkSpaceBaseProps(),
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
             onViewRendered,
             currentDate: new Date(),
             startDayHour: 0,
@@ -312,8 +324,8 @@ describe('WorkSpaceBase', () => {
         it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
           const onViewRendered = jest.fn();
 
-          const workSpace = new WorkSpaceBase({
-            ...new WorkSpaceBaseProps(),
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
             onViewRendered,
             currentDate: new Date(),
             startDayHour: 0,
@@ -387,9 +399,10 @@ describe('WorkSpaceBase', () => {
     describe('Getters', () => {
       describe('layout', () => {
         it('should return ordinary layout if crossScrolling is not enabled', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
             crossScrollingEnabled: false,
+            type: 'week',
           } as any);
 
           expect(workSpace.layout)
@@ -397,9 +410,10 @@ describe('WorkSpaceBase', () => {
         });
 
         it('should return cross-scrolling layout if crossScrolling is enabled', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
             crossScrollingEnabled: true,
+            type: 'week',
           } as any);
 
           expect(workSpace.layout)
@@ -409,10 +423,11 @@ describe('WorkSpaceBase', () => {
 
       describe('isAllDayPanelVisible', () => {
         it('should return false when all-day panel is not supported', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
             isAllDayPanelSupported: false,
             showAllDayPanel: false,
+            type: 'timelineWeek',
           } as any);
 
           expect(workSpace.isAllDayPanelVisible)
@@ -425,10 +440,11 @@ describe('WorkSpaceBase', () => {
         });
 
         it('should return false when all-day panel is supported but showAllDayPanel is false', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
             isAllDayPanelSupported: true,
             showAllDayPanel: false,
+            type: 'week',
           } as any);
 
           expect(workSpace.isAllDayPanelVisible)
@@ -436,10 +452,11 @@ describe('WorkSpaceBase', () => {
         });
 
         it('should return true when all-day panel is supported and showAllDayPanel is true', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
             isAllDayPanelSupported: true,
             showAllDayPanel: true,
+            type: 'week',
           } as any);
 
           expect(workSpace.isAllDayPanelVisible)
@@ -449,8 +466,9 @@ describe('WorkSpaceBase', () => {
 
       describe('viewData', () => {
         it('should return correct viewData', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
+            type: 'week',
           } as any);
 
           expect(!!workSpace.viewData)
@@ -460,8 +478,9 @@ describe('WorkSpaceBase', () => {
 
       describe('dateHeaderData', () => {
         it('should return correct dateHeaderData', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
+            type: 'week',
           } as any);
 
           expect(!!workSpace.dateHeaderData)
@@ -471,8 +490,9 @@ describe('WorkSpaceBase', () => {
 
       describe('timePanelData', () => {
         it('should return correct timePanelData', () => {
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             currentDate: new Date(),
+            type: 'week',
           } as any);
 
           expect(!!workSpace.timePanelData)
@@ -490,10 +510,8 @@ describe('WorkSpaceBase', () => {
             groupOrientation: 'horizontal',
             groupByDate: true,
             groups: [],
-            isProvideVirtualCellsWidth: false,
             selectedCells: undefined,
             focusedCell: undefined,
-            headerCellTextFormat: () => 'shorttime',
             startDayHour: 0,
             endDayHour: 24,
             cellDuration: 30,
@@ -502,12 +520,10 @@ describe('WorkSpaceBase', () => {
             currentDate: new Date(2021, 8, 11),
             startDate: null,
             firstDayOfWeek: 0,
-
-            isGenerateTimePanelData: true,
           };
 
-          const workSpace = new WorkSpaceBase({
-            ...new WorkSpaceBaseProps(),
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
             ...props,
             type: 'week',
           });
@@ -523,6 +539,10 @@ describe('WorkSpaceBase', () => {
               isAllDayPanelVisible: false,
               viewType: 'week',
               getDateForHeaderText: expect.any(Function),
+              headerCellTextFormat: expect.any(Function),
+              isGenerateTimePanelData: true,
+              isGenerateWeekDaysHeaderData: false,
+              isProvideVirtualCellsWidth: false,
             }, true);
         });
       });
@@ -537,11 +557,8 @@ describe('WorkSpaceBase', () => {
             groupOrientation: 'horizontal',
             groupByDate: true,
             groups: [],
-            isProvideVirtualCellsWidth: false,
             selectedCells: undefined,
             focusedCell: undefined,
-            headerCellTextFormat: () => 'shorttime',
-            getDateForHeaderText: () => new Date(),
             startDayHour: 0,
             endDayHour: 24,
             cellDuration: 30,
@@ -550,11 +567,9 @@ describe('WorkSpaceBase', () => {
             currentDate: new Date(2021, 8, 11),
             startDate: null,
             firstDayOfWeek: 0,
-
-            isGenerateTimePanelData: true,
           };
 
-          const workSpace = new WorkSpaceBase({
+          const workSpace = new WorkSpace({
             ...props,
             type: 'week',
           });
@@ -569,7 +584,44 @@ describe('WorkSpaceBase', () => {
               startCellIndex: 0,
               isAllDayPanelVisible: undefined,
               viewType: 'week',
+              getDateForHeaderText: expect.any(Function),
+              headerCellTextFormat: expect.any(Function),
+              isGenerateTimePanelData: true,
+              isGenerateWeekDaysHeaderData: false,
+              isProvideVirtualCellsWidth: false,
             });
+        });
+      });
+
+      describe('renderConfig', () => {
+        beforeEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should call "getViewRenderConfigByType" and pass correct props to it', () => {
+          const workSpace = new WorkSpace({
+            type: 'week',
+            intervalCount: 3,
+          } as any);
+
+          expect(workSpace.renderConfig)
+            .toEqual({
+              headerPanelTemplate: HeaderPanelLayout,
+              dateTableTemplate: DateTableLayoutBase,
+              timePanelTemplate: TimePanelTableLayout,
+              isAllDayPanelSupported: true,
+              isProvideVirtualCellsWidth: false,
+              isRenderTimePanel: true,
+              groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
+              headerCellTextFormat: formatWeekdayAndDay,
+              getDateForHeaderText: expect.any(Function),
+              isRenderDateHeader: true,
+              isGenerateWeekDaysHeaderData: false,
+              className: 'dx-scheduler-work-space-week',
+            });
+
+          expect(getViewRenderConfigByType)
+            .toBeCalledWith('week', 3);
         });
       });
     });
