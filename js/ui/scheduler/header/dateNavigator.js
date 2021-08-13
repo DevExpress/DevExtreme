@@ -27,6 +27,7 @@ export const getDateNavigator = (header, item) => {
         options: {
             items,
             stylingMode,
+            selectionMode: 'none',
             onItemClick: (e) => {
                 e.itemData.clickHandler(e);
             },
