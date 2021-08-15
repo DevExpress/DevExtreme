@@ -1,5 +1,5 @@
 import { getBoundingRect } from '../../../core/utils/position';
-import { cache } from './cache';
+import { Cache } from './cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import { calculateDayDuration, getVerticalGroupCountClass } from './utils/base';
 
@@ -9,6 +9,7 @@ const WORK_SPACE_BORDER = 1;
 class VerticalGroupedStrategy {
     constructor(workSpace) {
         this._workSpace = workSpace;
+        this.cache = new Cache();
     }
 
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
@@ -107,7 +108,7 @@ class VerticalGroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return cache.get('groupBoundsOffset', () => {
+        return this.cache.get('groupBoundsOffset', () => {
             const groupIndex = coordinates.groupIndex;
             const startOffset = $cells.eq(0).offset().left;
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
