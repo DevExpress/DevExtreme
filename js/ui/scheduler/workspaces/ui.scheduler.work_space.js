@@ -54,7 +54,7 @@ import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/head
 
 import CellsSelectionState from './cells_selection_state';
 
-import { cache } from './cache';
+import { Cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import {
     calculateViewStartDate,
@@ -149,14 +149,17 @@ const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS}
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 
 class SchedulerWorkSpace extends WidgetObserver {
+    constructor(element, option) {
+        super(element, option);
+        this.cache = new Cache();
+    }
+
     get viewDataProvider() {
         if(!this._viewDataProvider) {
             this._viewDataProvider = new ViewDataProvider(this.type);
         }
         return this._viewDataProvider;
     }
-
-    get cache() { return cache; }
 
     get cellsSelectionState() {
         if(!this._cellsSelectionState) {
