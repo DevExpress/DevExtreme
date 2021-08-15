@@ -10,7 +10,8 @@ test('Appointment\'s dragging should be work properly, if on page placed two dxS
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(await takeScreenshot('before-dragging(T1020820).png'))
+  await t
+    .expect(await takeScreenshot('before-dragging(T1020820).png'))
     .ok();
 
   await t
