@@ -16,6 +16,25 @@ function _getFullOptions(options) {
     return fullOptions;
 }
 
+function calculateColumnWidths(pdfGrid, currentRowInfo) {
+    const allWidths = pdfGrid._currentHorizontalTables.flatMap((t) => t.columnWidths);
+    const splitIndexes = pdfGrid._splitByColumns.map(s => s.columnIndex).sort();
+    return allWidths
+        .map((value, index) => {
+            const cell = currentRowInfo.cellsInfo[index];
+            const collSpan = cell.colSpan || 0;
+            let columnWidth = 0;
+            for(let cellIndex = index; cellIndex <= index + collSpan; cellIndex++) {
+                columnWidth += allWidths[cellIndex];
+                if(splitIndexes[0] === cellIndex + 1) {
+                    splitIndexes.splice(0, 1);
+                    break;
+                }
+            }
+            return columnWidth;
+        });
+}
+
 function exportDataGrid(doc, dataGrid, options) {
     options = extend({}, _getFullOptions(options));
 
@@ -59,7 +78,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 let rowHeight = isDefined(currentRowInfo.rowHeight)
                     ? currentRowInfo.rowHeight
-                    : calculateRowHeight(doc, currentRowInfo.cellsInfo, pdfGrid._wordWrapEnabled, pdfGrid._currentHorizontalTables.flatMap((t) => t.columnWidths));
+                    : calculateRowHeight(doc, currentRowInfo.cellsInfo, pdfGrid._wordWrapEnabled, calculateColumnWidths(pdfGrid, currentRowInfo));
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);

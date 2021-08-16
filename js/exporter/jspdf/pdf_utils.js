@@ -31,12 +31,8 @@ function calculateRowHeight(doc, cells, wordWrapEnabled, columnWidths) {
     let rowHeight = 0;
     for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
         const cell = cells[cellIndex];
-        const widthsForCurrentCell = columnWidths
-            .slice(cellIndex, cellIndex + (cell.colSpan || 0) + 1)
-            .reduce((accumulator, width) => accumulator + width, 0);
-
         if(isDefined(cell.text)) {
-            const cellHeight = calculateTextHeight(doc, cell.text, { wordWrapEnabled, maxWidth: widthsForCurrentCell });
+            const cellHeight = calculateTextHeight(doc, cell.text, { wordWrapEnabled, maxWidth: columnWidths[cellIndex] });
             if(rowHeight < cellHeight) {
                 rowHeight = cellHeight;
             }
