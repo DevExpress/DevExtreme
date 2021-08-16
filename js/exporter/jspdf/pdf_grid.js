@@ -144,6 +144,7 @@ export class PdfGrid {
         const docFont = doc.getFont();
 
         return {
+            borderColor: doc.getDrawColor(),
             font: {
                 name: docFont.fontName,
                 style: docFont.fontStyle,
@@ -155,6 +156,7 @@ export class PdfGrid {
 
     _setDocumentStyles(doc, styles) {
         const {
+            borderColor,
             font,
             textColor
         } = styles;
@@ -169,6 +171,10 @@ export class PdfGrid {
         const docFontSize = doc.getFontSize();
         if(docFontSize !== font.size) {
             doc.setFontSize(font.size);
+        }
+
+        if(doc.getDrawColor() !== borderColor) {
+            doc.setDrawColor(borderColor);
         }
 
         if(doc.getTextColor() !== textColor) {
