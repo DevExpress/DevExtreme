@@ -8,6 +8,7 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 
+import { SchedulerToolbarItem } from './header/props';
 import type { template } from '../../../core/templates/template';
 import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
@@ -392,6 +393,7 @@ export class SchedulerProps extends BaseWidgetProps {
   allDayExpr = 'allDay';
 
   @OneWay()
+
   textExpr = 'text';
 
   // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
@@ -431,6 +433,18 @@ export class SchedulerProps extends BaseWidgetProps {
   appointmentTooltipTemplate?:
   // eslint-disable-next-line max-len
   template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+
+  @OneWay()
+  toolbar: SchedulerToolbarItem[] = [
+    {
+      defaultElement: 'dateNavigator',
+      location: 'before',
+    },
+    {
+      defaultElement: 'viewSwitcher',
+      location: 'after',
+    },
+  ] as SchedulerToolbarItem[];
 }
 
 // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
