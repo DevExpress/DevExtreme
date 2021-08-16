@@ -1,4 +1,4 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import RadioGroup from '../../model/radioGroup';
 
