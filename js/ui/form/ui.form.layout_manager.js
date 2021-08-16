@@ -4,7 +4,6 @@ import Guid from '../../core/guid';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
-import { getPublicElement } from '../../core/element';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import { format } from '../../core/utils/string';
@@ -13,25 +12,15 @@ import { extend } from '../../core/utils/extend';
 import { inArray, normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
-import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
 import { captionize } from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
-import Validator from '../validator';
 import ResponsiveBox from '../responsive_box';
-import { isMaterial } from '../themes';
 import {
     FIELD_ITEM_CLASS,
-    FLEX_LAYOUT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
-    FIELD_ITEM_OPTIONAL_CLASS,
-    FIELD_ITEM_REQUIRED_CLASS,
-    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
-    LABEL_VERTICAL_ALIGNMENT_CLASS,
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_LABEL_ALIGN_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
@@ -44,13 +33,12 @@ import '../button';
 import {
     renderLabel,
     getLabelWidthByText,
-    renderHelpText,
     adjustContainerAsButtonItem,
     convertAlignmentToJustifyContent,
     convertAlignmentToTextAlign,
-    renderComponentTo,
-    renderTemplateTo,
-    adjustEditorContainer } from './ui.form.utils';
+} from './ui.form.utils';
+
+import { renderFieldItem } from './ui.form.field_item.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -59,14 +47,10 @@ const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 
-const INVALID_CLASS = 'dx-invalid';
-
 const LAYOUT_STRATEGY_FLEX = 'flex';
 const LAYOUT_STRATEGY_FALLBACK = 'fallback';
 
 const SIMPLE_ITEM_TYPE = 'simple';
-
-const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const DATA_OPTIONS = ['dataSource', 'items'];
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
@@ -593,165 +577,6 @@ const LayoutManager = Widget.inherit({
             .addClass(isDefined(column) ? 'dx-col-' + column : '');
     },
 
-    _renderFieldItemCore: function({ item, $container, isRequired, isFlexSupported, labelNeedBaselineAlign,
-        labelOptions, labelLocation,
-        template, editorOptions, component, createComponentCallback, helpID, labelID,
-        name, helpText
-    }) {
-        //
-        // Setup external $container:
-        //
-
-        this._addItemClasses($container, item.col);
-        $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
-        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
-        if(isSimpleItem && isFlexSupported) {
-            $container.addClass(FLEX_LAYOUT_CLASS);
-        }
-        if(isSimpleItem && labelNeedBaselineAlign) {
-            // TODO: label related code, execute ony if needRenderLabel?
-            $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
-        }
-
-        //
-        // Setup field editor container:
-        //
-
-        const $fieldEditorContainer = $('<div>');
-        $fieldEditorContainer.data('dx-form-item', item);
-        adjustEditorContainer({ // TODO: label related code, execute ony if needRenderLabel?
-            $container: $fieldEditorContainer,
-            labelLocation: this.option('labelLocation'), // TODO: use 'labelOptions.location' insted?
-        });
-
-        //
-        // Setup $label:
-        //
-
-        const needRenderLabel = labelOptions.visible && labelOptions.text;
-        const $label = needRenderLabel ? renderLabel(labelOptions) : null;
-        if($label) {
-            $container.append($label);
-            if(labelLocation === 'top' || labelLocation === 'left') {
-                $container.append($fieldEditorContainer);
-            }
-            if(labelLocation === 'right') {
-                $container.prepend($fieldEditorContainer);
-            }
-
-            if(labelLocation === 'top') {
-                $container.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
-            } else {
-                $container.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
-            }
-
-            if(item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch') {
-                eventsEngine.on($label, clickEventName, function() {
-                    eventsEngine.trigger($fieldEditorContainer.children(), clickEventName);
-                });
-            }
-        } else {
-            $container.append($fieldEditorContainer);
-        }
-
-        //
-        // Append field editor:
-        //
-
-        let instance;
-        if(template) {
-            renderTemplateTo({
-                $container: getPublicElement($fieldEditorContainer),
-                template,
-                templateOptions: {
-                    dataField: item.dataField,
-                    editorType: item.editorType,
-                    editorOptions,
-                    component,
-                    name: item.name
-                }
-            });
-        } else {
-            instance = renderComponentTo({
-                $container: $fieldEditorContainer,
-                createComponentCallback,
-                componentType: item.editorType,
-                componentOptions: editorOptions,
-                helpID,
-                labelID,
-                isRequired
-            });
-        }
-
-        //
-        // Setup $validation:
-        //
-
-        const editorElem = $fieldEditorContainer.children().first();
-        const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
-        const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
-
-        if(validationTargetInstance) {
-            const isItemHaveCustomLabel = item.label && item.label.text;
-            const itemName = isItemHaveCustomLabel ? null : name;
-            const fieldName = isItemHaveCustomLabel ? item.label.text : itemName && captionize(itemName);
-            let validationRules;
-            const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
-
-            if(isSimpleItem) {
-                if(item.validationRules) {
-                    validationRules = item.validationRules;
-                } else {
-                    const requiredMessage = format(this.option('requiredMessage'), fieldName || '');
-                    validationRules = item.isRequired ? [{ type: 'required', message: requiredMessage }] : null;
-                }
-            }
-
-            if(Array.isArray(validationRules) && validationRules.length) {
-                this._createComponent($validationTarget, Validator, {
-                    validationRules: validationRules,
-                    validationGroup: this.option('validationGroup'),
-                    dataGetter: function() {
-                        return {
-                            formItem: item
-                        };
-                    }
-                });
-            }
-
-            if(isMaterial()) {
-                const wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
-                const toggleInvalidClass = function(e) {
-                    $(e.element).parents(wrapperClass)
-                        .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option('isValid') === false);
-                };
-
-                validationTargetInstance
-                    .on('focusIn', toggleInvalidClass)
-                    .on('focusOut', toggleInvalidClass)
-                    .on('enterKey', toggleInvalidClass);
-            }
-        }
-
-        //
-        // Append help text elements:
-        //
-
-        if(helpText && isSimpleItem) {
-            const $editorParent = $fieldEditorContainer.parent();
-
-            // TODO: DOM hierarchy is changed here: new node is added between $editor and $editor.parent()
-            $editorParent.append(
-                $('<div>')
-                    .addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS)
-                    .append($fieldEditorContainer)
-                    .append(renderHelpText(helpText, helpID))
-            );
-        }
-
-        return { $fieldEditorContainer, instance };
-    },
-
     _renderFieldItem: function(item, $container) {
         const that = this;
         const name = item.dataField || item.name;
@@ -782,11 +607,18 @@ const LayoutManager = Widget.inherit({
         });
         const template = item.template ? this._getTemplate(item.template) : null;
 
-        const { $fieldEditorContainer, instance } = this._renderFieldItemCore({
-            item, $container, isRequired, isFlexSupported, labelNeedBaselineAlign,
+        const { $fieldEditorContainer, instance } = renderFieldItem({
+            $container, isRequired, isFlexSupported, labelNeedBaselineAlign,
             labelOptions, labelLocation,
-            template, editorOptions, component: this._getComponentOwner(), createComponentCallback: this._createComponent.bind(this),
-            helpID, labelID, name, helpText
+            template, editorOptions,
+            helpID, labelID, name, helpText,
+            item: { ...item, isSimpleItem: item.itemType === SIMPLE_ITEM_TYPE },
+            formLabelLocation: this.option('labelLocation') /* TODO: use 'labelOptions.location' insted?*/,
+            cssItemClass: this.option('cssItemClass'),
+            formRequiredMessage: this.option('requiredMessage'),
+            formValidationGroup: this.option('validationGroup'),
+            component: this._getComponentOwner(),
+            createComponentCallback: this._createComponent.bind(this),
         });
 
         if(instance && item.dataField) {
