@@ -50,13 +50,15 @@ function run_test {
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
-        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
-        dpkg-reconfigure --frontend noninteractive tzdata
+        sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
-        Xvfb :99 -ac -screen 0 1200x600x24 &
+        Xvfb -ac :99 -screen 0 1200x600x24 > /dev/null 2>&1 &
+        if [ "$GITHUBACTION" != "true" ]; then
         x11vnc -display :99 2>/dev/null &
+        fi
     fi
 
     if [ "$LOCAL" != "true" ]; then
@@ -90,10 +92,14 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            local firefox_args="-profile /firefox-profile $url"
+            local profile_path="/firefox-profile" 
+            [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
+            local firefox_args="-profile $profile_path $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
+            echo "$firefox_args"
+
             firefox $firefox_args &
         ;;
 
