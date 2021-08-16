@@ -13,7 +13,7 @@ import { addNamespace } from '../../events/utils/index';
 
 class OverlayDrag {
     constructor(options) {
-        const { dragEnabled, dragTarget, dragContainer, outsideMultiplayer, draggableElement } = options;
+        const { dragEnabled, dragTarget, dragContainer, outsideMultiplayer, draggableElement, updatePositionChangeHandled } = options;
         const namespace = 'overlayDrag';
         const startEventName = addNamespace(dragEventStart, namespace);
         const updateEventName = addNamespace(dragEventMove, namespace);
@@ -21,16 +21,17 @@ class OverlayDrag {
         eventsEngine.off(dragTarget, startEventName);
         eventsEngine.off(dragTarget, updateEventName);
 
+        this._$container = dragContainer;
+        this._outsideMultiplayer = outsideMultiplayer;
+        this._$draggableElement = draggableElement;
+        this._updatePositionChangeHandled = updatePositionChangeHandled;
+
         if(!dragEnabled) {
             return;
         }
 
         eventsEngine.on(dragTarget, startEventName, (e) => { this._dragStartHandler(e); });
         eventsEngine.on(dragTarget, updateEventName, (e) => { this._dragUpdateHandler(e); });
-
-        this._$container = dragContainer;
-        this._outsideMultiplayer = outsideMultiplayer;
-        this._$draggableElement = draggableElement;
     }
 
     moveTo(top, left, e) {
@@ -120,15 +121,15 @@ class OverlayDrag {
 
     _changePosition(offset) {
         const position = locate(this._$draggableElement);
-
-        move(this._$draggableElement, {
+        const resultPosition = {
             left: position.left + offset.left,
             top: position.top + offset.top
-        });
+        };
 
-        // this._updatePositionChangedHandled(true);
+        move(this._$draggableElement, resultPosition);
+        this._updatePositionChangeHandled(true);
 
-        this._positionChangeHandled = true;
+        return { h: { location: resultPosition.left }, v: { location: resultPosition.top } };
     }
 
     _isWindow($element) {
@@ -143,10 +144,10 @@ class OverlayDrag {
         this._outsideMultiplayer = value;
     }
 
-    changePositionOnRenderPosition() {
+    renderPositionHandler() {
         const allowedOffsets = this._allowedOffsets();
 
-        this._changePosition({
+        return this._changePosition({
             top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
             left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
         });

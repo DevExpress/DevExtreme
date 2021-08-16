@@ -961,7 +961,7 @@ const Overlay = Widget.inherit({
 
         this._renderDrag();
         this._renderResize();
-        // this._renderScrollTerminator();
+        this._renderScrollTerminator();
 
         whenContentRendered.done(() => {
             if(this.option('visible')) {
@@ -979,12 +979,17 @@ const Overlay = Widget.inherit({
             return;
         }
 
+        const updatePositionChangeHandled = function(value) {
+            this._positionChangeHandled = value;
+        }.bind(this);
+
         const config = {
             dragEnabled: this.option('dragEnabled'),
             dragTarget: $dragTarget,
             dragContainer: this._getDragResizeContainer(),
             outsideMultiplayer: 0,
             draggableElement: this._$content,
+            updatePositionChangeHandled
         };
 
         this._draggable = new OverlayDrag(config);
@@ -1242,16 +1247,8 @@ const Overlay = Widget.inherit({
 
     _renderPosition: function() {
         let resultPosition;
-
         if(this._positionChangeHandled) {
-            this._draggable.changePositionOnRenderPosition();
-
-            const allowedOffsets = this._allowedOffsets();
-
-            resultPosition = this._changePosition({
-                top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
-                left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
-            });
+            resultPosition = this._draggable.renderPositionHandler();
         } else {
             const position = this._position;
             this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
@@ -1424,6 +1421,9 @@ const Overlay = Widget.inherit({
                 this._initContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
+                if(this.option('dragEnabled') && !this.option('dragArea')) {
+                    this._draggable.updateDragContainer(this._getDragResizeContainer());
+                }
                 break;
             case 'innerOverlay':
                 this._initInnerOverlayClass();
@@ -1466,6 +1466,7 @@ const Overlay = Widget.inherit({
                     this._draggable.updateDragContainer(this._getDragResizeContainer());
                     this._draggable.updateOutsideMultiplayer(this.option('dragAndResizeArea').outsideMultiplayer);
                 }
+                this._renderGeometry();
                 break;
             default:
                 this.callBase(args);
