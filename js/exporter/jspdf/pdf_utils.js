@@ -30,9 +30,9 @@ function calculateRowHeight(doc, cells, wordWrapEnabled, columnWidths) {
 
     let rowHeight = 0;
     for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-        const cell = cells[cellIndex];
-        if(isDefined(cell.text)) {
-            const cellHeight = calculateTextHeight(doc, cell.text, { wordWrapEnabled, maxWidth: columnWidths[cellIndex] });
+        const cellText = cells[cellIndex].text;
+        if(isDefined(cellText)) {
+            const cellHeight = calculateTextHeight(doc, cellText, { wordWrapEnabled, maxWidth: columnWidths[cellIndex] });
             if(rowHeight < cellHeight) {
                 rowHeight = cellHeight;
             }
