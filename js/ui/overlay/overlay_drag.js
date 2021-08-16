@@ -5,17 +5,32 @@ import $ from '../../core/renderer';
 import { fitIntoRange } from '../../core/utils/math';
 import { isWindow } from '../../core/utils/type';
 import eventsEngine from '../../events/core/events_engine';
+import {
+    start as dragEventStart,
+    move as dragEventMove
+} from '../../events/drag';
+import { addNamespace } from '../../events/utils/index';
 
-class DraggableOverlay {
+class OverlayDrag {
     constructor(options) {
-        const { dragTarget, startEventName, updateEventName, dragContainer, outsideMultiplayer, content, updatePositionChangedHandled } = options;
+        const { dragEnabled, dragTarget, dragContainer, outsideMultiplayer, draggableElement } = options;
+        const namespace = 'overlayDrag';
+        const startEventName = addNamespace(dragEventStart, namespace);
+        const updateEventName = addNamespace(dragEventMove, namespace);
+
+        eventsEngine.off(dragTarget, startEventName);
+        eventsEngine.off(dragTarget, updateEventName);
+
+        if(!dragEnabled) {
+            return;
+        }
+
         eventsEngine.on(dragTarget, startEventName, (e) => { this._dragStartHandler(e); });
         eventsEngine.on(dragTarget, updateEventName, (e) => { this._dragUpdateHandler(e); });
 
         this._$container = dragContainer;
         this._outsideMultiplayer = outsideMultiplayer;
-        this._$content = content;
-        this._updatePositionChangedHandled = updatePositionChangedHandled;
+        this._$draggableElement = draggableElement;
     }
 
     moveTo(top, left, e) {
@@ -43,11 +58,11 @@ class DraggableOverlay {
     }
 
     _deltaSize() {
-        const $content = this.$content();
-        const $container = this.$container();
+        const $draggableElement = this._$draggableElement;
+        const $container = this._$container;
 
-        const contentWidth = $content.outerWidth();
-        const contentHeight = $content.outerHeight();
+        const contentWidth = $draggableElement.outerWidth();
+        const contentHeight = $draggableElement.outerHeight();
         let containerWidth = $container.outerWidth();
         let containerHeight = $container.outerHeight();
         const document = domAdapter.getDocument();
@@ -82,38 +97,38 @@ class DraggableOverlay {
     }
 
     _allowedOffsets() {
-        const popupPosition = getOffset(this.$content().get(0));
-        const dragAreaPosition = this._isWindow(this.$container())
+        const overlayPosition = getOffset(this._$draggableElement.get(0));
+        const dragAreaPosition = this._isWindow(this._$container)
             ? { top: 0, left: 0 }
-            : getOffset(this.$container().get(0));
+            : getOffset(this._$container.get(0));
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
 
         const dragAreaOffsetMultiplayer = this.outsideMultiplayer() ?? 0;
         const dragAreaOffset = {
-            width: this._$content.outerWidth() * dragAreaOffsetMultiplayer,
-            height: this._$content.outerHeight() * dragAreaOffsetMultiplayer
+            width: this._$draggableElement.outerWidth() * dragAreaOffsetMultiplayer,
+            height: this._$draggableElement.outerHeight() * dragAreaOffsetMultiplayer
         };
 
         return {
-            top: isAllowedDrag ? popupPosition.top - dragAreaPosition.top + dragAreaOffset.height : 0,
-            bottom: isAllowedDrag ? -popupPosition.top + dragAreaPosition.top + deltaSize.height : 0,
-            left: isAllowedDrag ? popupPosition.left - dragAreaPosition.left + dragAreaOffset.width : 0,
-            right: isAllowedDrag ? -popupPosition.left + dragAreaPosition.left + deltaSize.width : 0
+            top: isAllowedDrag ? overlayPosition.top - dragAreaPosition.top + dragAreaOffset.height : 0,
+            bottom: isAllowedDrag ? -overlayPosition.top + dragAreaPosition.top + deltaSize.height : 0,
+            left: isAllowedDrag ? overlayPosition.left - dragAreaPosition.left + dragAreaOffset.width : 0,
+            right: isAllowedDrag ? -overlayPosition.left + dragAreaPosition.left + deltaSize.width : 0
         };
     }
 
     _changePosition(offset) {
-        const position = locate(this._$content);
+        const position = locate(this._$draggableElement);
 
-        move(this._$content, {
+        move(this._$draggableElement, {
             left: position.left + offset.left,
             top: position.top + offset.top
         });
 
-        this._updatePositionChangedHandled(true);
+        // this._updatePositionChangedHandled(true);
 
-        // this._positionChangeHandled = true;
+        this._positionChangeHandled = true;
     }
 
     _isWindow($element) {
@@ -137,10 +152,6 @@ class DraggableOverlay {
         });
     }
 
-    $content() {
-        return this._$content;
-    }
-
     $container() {
         return this._$container;
     }
@@ -150,4 +161,4 @@ class DraggableOverlay {
     }
 }
 
-export default DraggableOverlay;
+export default OverlayDrag;

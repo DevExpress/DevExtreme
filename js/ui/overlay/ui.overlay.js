@@ -19,7 +19,6 @@ import { changeCallback, originalViewPort, value as viewPort } from '../../core/
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import {
-    start as dragEventStart,
     move as dragEventMove
 } from '../../events/drag';
 import pointerEvents from '../../events/pointer';
@@ -28,7 +27,7 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../event
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
-import DraggableOverlay from './draggable_overlay';
+import OverlayDrag from './overlay_drag';
 import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
@@ -983,7 +982,7 @@ const Overlay = Widget.inherit({
 
         this._renderDrag();
         this._renderResize();
-        this._renderScrollTerminator();
+        // this._renderScrollTerminator();
 
         whenContentRendered.done(() => {
             if(this.option('visible')) {
@@ -1001,27 +1000,15 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        const startEventName = addNamespace(dragEventStart, this.NAME);
-        const updateEventName = addNamespace(dragEventMove, this.NAME);
-
-        eventsEngine.off($dragTarget, startEventName);
-        eventsEngine.off($dragTarget, updateEventName);
-
-        if(!this.option('dragEnabled')) {
-            return;
-        }
-
         const config = {
-            startEventName,
-            updateEventName,
+            dragEnabled: this.option('dragEnabled'),
             dragTarget: $dragTarget,
             dragContainer: this._getDragResizeContainer(),
             outsideMultiplayer: 0,
-            content: this._$content,
-            updatePositionChangedHandled: this._updatePositionChangedHandled.bind(this)
+            draggableElement: this._$content,
         };
 
-        this._draggable = new DraggableOverlay(config);
+        this._draggable = new OverlayDrag(config);
     },
 
     _renderResize: function() {
@@ -1271,12 +1258,17 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _updatePositionChangedHandled: function(value) {
-        this._positionChangeHandled = value;
-    },
-
     _renderPosition: function() {
-        if(!this._positionChangeHandled) {
+        if(this._positionChangeHandled) {
+            this._draggable.changePositionOnRenderPosition();
+
+
+            // const allowedOffsets = this._allowedOffsets();
+            // this._changePosition({
+            //     top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
+            //     left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
+            // });
+        } else {
             this._renderOverlayBoundaryOffset();
 
             resetPosition(this._$content);
@@ -1482,10 +1474,10 @@ const Overlay = Widget.inherit({
                 this._renderWrapperAttributes();
                 break;
             case 'dragAndResizeArea':
-                if(value && this.option('resizeEnabled')) {
+                if(this.option('resizeEnabled')) {
                     this._resizable.option('area', this._getDragResizeContainer());
                 }
-                if(value && this.option('dragEnabled')) {
+                if(this.option('dragEnabled')) {
                     this._draggable.updateDragContainer(this._getDragResizeContainer());
                     this._draggable.updateOutsideMultiplayer(this.option('dragAndResizeArea').outsideMultiplayer);
                 }
