@@ -15,6 +15,7 @@ import 'ui/drop_down_box';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
+import { renderLabel } from 'ui/form/field_item/label.js';
 
 import {
     FIELD_ITEM_CLASS,
@@ -944,7 +945,7 @@ QUnit.module('Align labels', {
 });
 
 function getLabelWidth(container, form, text) {
-    const $label = form._rootLayoutManager._renderLabel({ text: text, location: 'left' }).appendTo(container);
+    const $label = renderLabel({ text: text, location: 'left' }).appendTo(container);
     const width = $label.children().first().width();
 
     $label.remove();

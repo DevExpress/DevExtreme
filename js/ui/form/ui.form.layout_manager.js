@@ -30,12 +30,9 @@ import '../check_box';
 import '../date_box';
 import '../button';
 
-import {
-    renderLabel,
-    getLabelWidthByText,
-} from './field_item/label';
-
+import { getLabelWidthByText } from './field_item/label';
 import { renderFieldItem } from './field_item/field_item.js';
+
 import { renderButtonItem } from './button_item/button_item.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
@@ -633,11 +630,6 @@ const LayoutManager = Widget.inherit({
         return hasRequiredRule;
     },
 
-    _isLabelNeedId: function(item) {
-        const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
-        return inArray(item.editorType, editorsRequiringIdForLabel) !== -1;
-    },
-
     _getLabelOptions: function(item, id, isRequired) {
         const labelOptions = extend(
             {
@@ -651,7 +643,8 @@ const LayoutManager = Widget.inherit({
             { markOptions: this._getLabelMarkOptions(isRequired) }
         );
 
-        if(this._isLabelNeedId(item)) {
+        const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
+        if(inArray(item.editorType, editorsRequiringIdForLabel) !== -1) {
             labelOptions.labelID = `dx-label-${new Guid()}`;
         }
 
@@ -664,14 +657,6 @@ const LayoutManager = Widget.inherit({
         }
 
         return labelOptions;
-    },
-
-    // TODO: used in tests only
-    _renderLabel: function(labelOptions) {
-        return renderLabel({
-            ...labelOptions,
-            ...{ markOptions: this._getLabelMarkOptions(labelOptions.isRequired) }
-        });
     },
 
     _getLabelWidthByText: function({ text, location }) {
