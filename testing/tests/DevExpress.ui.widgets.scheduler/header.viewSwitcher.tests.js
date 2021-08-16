@@ -1,4 +1,4 @@
-import { createWrapper, initTestMarkup, ClickElementWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
 import devices from 'core/devices';
@@ -228,10 +228,8 @@ module('Meterial theme', {
     beforeEach: function() {
         this.origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
@@ -246,18 +244,5 @@ module('Meterial theme', {
             'Work Week',
             'view switcher should have correct label'
         );
-    });
-
-    test('dropdown button popup should have a specified class', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'day',
-            views: ['day'],
-        });
-
-        const dropDownButton = scheduler.header.viewSwitcher.dropDownButton;
-        dropDownButton.click();
-
-        const content = new ClickElementWrapper(CLASSES.viewSwitcherDropDownButtonContent);
-        assert.equal(content.getElement().length, 1);
     });
 });

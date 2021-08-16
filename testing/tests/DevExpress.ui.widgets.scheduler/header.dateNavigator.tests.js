@@ -1,7 +1,6 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
 import devices from 'core/devices';
-import themes from 'ui/themes';
 
 testStart(() => initTestMarkup());
 
@@ -247,57 +246,5 @@ module('Interface Interaction', () => {
         navigator.prevButton.click();
 
         assert.equal(navigator.nextButton.isDisabled(), false, 'next button is enabled');
-    });
-});
-
-test('buttons should not be selected after clicking', function(assert) {
-    const scheduler = createWrapper({
-        currentView: 'day',
-        views: ['day'],
-        useDropDownViewSwitcher: true,
-    });
-
-    const navigator = scheduler.header.navigator;
-    navigator.nextButton.click();
-
-    assert.notOk(navigator.prevButton.hasClass('dx-item-selected'));
-    assert.notOk(navigator.calendarButton.hasClass('dx-item-selected'));
-    assert.notOk(navigator.nextButton.hasClass('dx-item-selected'));
-});
-
-test('buttons should have "contained" styling mode', function(assert) {
-    const scheduler = createWrapper({
-        currentView: 'day',
-        views: ['day'],
-        useDropDownViewSwitcher: true,
-    });
-
-    const navigator = scheduler.header.navigator;
-
-    assert.ok(navigator.prevButton.hasClass('dx-button-mode-contained'));
-    assert.ok(navigator.calendarButton.hasClass('dx-button-mode-contained'));
-    assert.ok(navigator.nextButton.hasClass('dx-button-mode-contained'));
-});
-
-module('Meterial theme', {
-    beforeEach: function() {
-        this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
-    },
-    afterEach: function() {
-        themes.isMaterial = this.origIsMaterial;
-    }
-}, () => {
-    test('buttons should have "text" styling mode in material theme', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'day',
-            views: ['day'],
-        });
-
-        const navigator = scheduler.header.navigator;
-
-        assert.ok(navigator.prevButton.hasClass('dx-button-mode-text'));
-        assert.ok(navigator.calendarButton.hasClass('dx-button-mode-text'));
-        assert.ok(navigator.nextButton.hasClass('dx-button-mode-text'));
     });
 });
