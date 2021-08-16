@@ -835,7 +835,7 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
 
                     helper.checkScrollOffset({ left: 0, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 16, horizontal: 0 });
@@ -849,7 +849,7 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: 0, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 0, horizontal: 18 });
@@ -898,8 +898,8 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
-                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 16, horizontal: 18 });
@@ -918,7 +918,7 @@ class ScrollableTestHelper {
                     helper.scrollable.update();
 
                     const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? elementOffset.top : 0;
-                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 23, horizontal: 18 });
@@ -955,7 +955,7 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
                     const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? elementOffset.left : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
@@ -967,7 +967,7 @@ class ScrollableTestHelper {
                 setInitialState();
                 const helper = new ScrollableTestHelper({ direction: 'both', useNative, useSimulatedScrollbar, rtlEnabled: false });
 
-                helper.scrollable.scrollTo({ top: helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_VERTICAL) / 2 });
+                helper.scrollable.scrollTo({ top: helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) / 2 });
                 helper.scrollable.update();
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
@@ -975,8 +975,8 @@ class ScrollableTestHelper {
                 helper.scrollable.scrollToElement($element);
                 helper.scrollable.update();
 
-                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_HORIZONTAL);
-                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_VERTICAL);
+                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL);
+                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL);
 
                 helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                 helper.checkScrollTranslateValues({ vertical: 16, horizontal: 18 });
@@ -986,15 +986,15 @@ class ScrollableTestHelper {
                 setInitialState();
                 const helper = new ScrollableTestHelper({ direction: 'both', useNative, useSimulatedScrollbar, rtlEnabled: false });
 
-                helper.scrollable.scrollTo({ left: helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_HORIZONTAL) / 2 });
+                helper.scrollable.scrollTo({ left: helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) / 2 });
                 helper.scrollable.update();
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
                 helper.scrollable.scrollToElement($element);
                 helper.scrollable.update();
 
-                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_HORIZONTAL);
-                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_VERTICAL);
+                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL);
+                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL);
 
                 helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                 helper.checkScrollTranslateValues({ vertical: 16, horizontal: 18 });
