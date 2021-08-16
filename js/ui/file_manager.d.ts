@@ -18,11 +18,11 @@ import {
 import FileSystemItem from '../file_management/file_system_item';
 
 import {
-    dxContextMenuItem,
+    Item as dxContextMenuItem,
 } from './context_menu';
 
 import {
-    dxToolbarItem,
+    Item as dxToolbarItem,
 } from './toolbar';
 
 import Widget, {
@@ -441,19 +441,26 @@ export interface dxFileManagerContextMenu {
      * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
      * @public
      */
-    items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
+    items?: Array<ContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
 }
+
 /**
- * @docid
- * @inherits dxContextMenuItem
+ * @public
+ * @namespace DevExpress.ui.dxFileManager
+ */
+export type ContextMenuItem = dxFileManagerContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
      * @public
+     * @type Array<dxFileManagerContextMenuItem>
      */
-    items?: Array<dxFileManagerContextMenuItem>;
+    items?: Array<ContextMenuItem>;
     /**
      * @docid
      * @type Enums.FileManagerContextMenuItem|string
@@ -485,19 +492,24 @@ export interface dxFileManagerToolbar {
      * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clearSelection", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
+    fileSelectionItems?: Array<ToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
     /**
      * @docid
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
      * @default [ "showNavPane", "create", "upload", "switchView", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
+    items?: Array<ToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
 }
 
 /**
- * @docid
- * @inherits dxToolbarItem
+ * @public
+ * @namespace DevExpress.ui.dxFileManager
+ */
+export type ToolbarItem = dxFileManagerToolbarItem;
+
+/**
+ * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFileManagerToolbarItem extends dxToolbarItem {

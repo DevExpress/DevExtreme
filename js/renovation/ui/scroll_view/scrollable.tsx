@@ -26,12 +26,16 @@ import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
+import { hasWindow } from '../../../core/utils/window';
+
+let isServerSide = !hasWindow();
+
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
-      useNative, children, classes,
+      useNative, activeStateUnit, children, classes,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
@@ -43,10 +47,13 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
+  isServerSide = !hasWindow();
+
   return useNative
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
+        activeStateUnit={activeStateUnit}
         aria={aria}
         classes={classes}
         width={width}
@@ -58,9 +65,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         showScrollbar={showScrollbar}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
-        forceGeneratePockets={forceGeneratePockets}
+        forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
         onPullDown={onPullDown}
@@ -80,6 +88,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     : (
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
+        activeStateUnit={activeStateUnit}
         aria={aria}
         classes={classes}
         width={width}
@@ -92,9 +101,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         scrollByThumb={scrollByThumb}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
-        forceGeneratePockets={forceGeneratePockets}
+        forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
         onPullDown={onPullDown}
@@ -121,7 +131,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 type ScrollablePropsType = ScrollableProps
-& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
+& Pick<WidgetProps, 'aria' | 'activeStateUnit' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
@@ -174,12 +184,16 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   release(): void {
-    return this.scrollableRef.release() as undefined;
+    if (!isServerSide) {
+      this.scrollableRef.release() as undefined;
+    }
   }
 
   @Method()
   refresh(): void {
-    this.scrollableRef.refresh();
+    if (!isServerSide) {
+      this.scrollableRef.refresh();
+    }
   }
 
   @Method()
@@ -245,7 +259,9 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   finishLoading(): void {
-    this.scrollableRef.finishLoading();
+    if (!isServerSide) {
+      this.scrollableRef.finishLoading();
+    }
   }
 
   validate(event: DxMouseEvent): boolean {

@@ -1163,3 +1163,9 @@ const Gallery = CollectionWidget.inherit({
 registerComponent('dxGallery', Gallery);
 
 export default Gallery;
+
+/**
+ * @name dxGalleryItem
+ * @type object
+ * @inherits CollectionWidgetItem
+ */

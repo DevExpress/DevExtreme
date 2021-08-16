@@ -9,7 +9,17 @@ import {
   Mutable,
   ForwardRef,
 } from '@devextreme-generator/declarations';
-import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import '../../../events/gesture/emitter.gesture.scroll';
+import {
+  subscribeToScrollEvent,
+  subscribeToScrollInitEvent,
+  subscribeToDXScrollStartEvent,
+  subscribeToDXScrollMoveEvent,
+  subscribeToDXScrollEndEvent,
+  subscribeToDXScrollStopEvent,
+  subscribeToDXScrollCancelEvent,
+  subscribeToKeyDownEvent,
+} from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 
 import { AnimatedScrollbar } from './animated_scrollbar';
@@ -19,11 +29,12 @@ import { getBoundaryProps } from './utils/get_boundary_props';
 import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
-import { isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed } from '../../../events/utils/index';
+import {
+  isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
+} from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
-import '../../../events/gesture/emitter.gesture.scroll';
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
@@ -58,29 +69,19 @@ import {
 } from './types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
-import { getElementComputedStyle } from './utils/get_element_computed_style';
+import {
+  getElementPaddingBottom, getElementOverflowX, getElementOverflowY,
+} from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
 
-import {
-  dxScrollInit,
-  dxScrollStart,
-  dxScrollMove,
-  dxScrollEnd,
-  dxScrollStop,
-  dxScrollCancel,
-  keyDown,
-} from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { convertToLocation } from './utils/convert_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
-import { getElementPaddingBottom } from './utils/get_element_padding';
-
-const DEFAULT_OFFSET = { top: 0, left: 0 };
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -96,14 +97,14 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler,
-    lock, unlock,
+    lock, unlock, containerHasSizes,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
-      needScrollViewLoadPanel,
+      needRenderScrollbars, needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
-      pullDownEnabled, reachBottomEnabled,
+      pullDownEnabled, reachBottomEnabled, activeStateUnit,
     },
     restAttributes,
   } = viewModel;
@@ -112,6 +113,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     <Widget
       rootElementRef={scrollableRef}
       focusStateEnabled={useKeyboard}
+      activeStateUnit={activeStateUnit}
       hoverStateEnabled
       aria={aria}
       addWidgetClass={false}
@@ -161,7 +163,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             />
             )}
           </div>
-          {direction.isHorizontal && (
+          {needRenderScrollbars && direction.isHorizontal && (
             <AnimatedScrollbar
               direction="horizontal"
               ref={hScrollbarRef}
@@ -180,9 +182,10 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onScroll={onScroll}
               onEnd={onEnd}
               rtlEnabled={rtlEnabled}
+              containerHasSizes={containerHasSizes}
             />
           )}
-          {direction.isVertical && (
+          {needRenderScrollbars && direction.isVertical && (
             <AnimatedScrollbar
               direction="vertical"
               ref={vScrollbarRef}
@@ -200,6 +203,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onScroll={onScroll}
               onEnd={onEnd}
+              containerHasSizes={containerHasSizes}
 
               forceGeneratePockets={forceGeneratePockets}
               topPocketSize={topPocketClientHeight}
@@ -253,7 +257,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Mutable() tabWasPressed = false;
 
-  @Mutable() savedScrollOffset?: { top: number; left: number } = { top: 0, left: 0 };
+  @Mutable() savedScrollOffset?: { top: number; left: number };
 
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
@@ -274,6 +278,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @ForwardRef() bottomPocketRef!: RefObject<HTMLDivElement>;
 
   @InternalState() isHovered = false;
+
+  @InternalState() canRiseScrollAction = false;
 
   @InternalState() scrollableOffsetLeft = 0;
 
@@ -457,69 +463,80 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return subscribeToScrollEvent(this.containerElement, () => { this.handleScroll(); });
   }
 
+  // run always: effect doesn't rise always after change state canRiseScrollAction in QUnit tests
+  @Effect({ run: 'always' }) riseScroll(): void {
+    if (this.canRiseScrollAction) {
+      this.props.onScroll?.(this.getEventArgs());
+      this.canRiseScrollAction = false;
+    }
+  }
+
   @Effect()
-  keyboardEffect(): DisposeEffectReturn {
-    keyDown.on(this.containerElement,
+  keyboardEffect(): EffectReturn {
+    return subscribeToKeyDownEvent(
+      this.containerElement,
       (event) => {
         if (normalizeKeyName(event) === KEY_CODES.TAB) {
           this.tabWasPressed = true;
         }
-      });
-
-    return (): void => keyDown.off(this.containerElement);
+      },
+    );
   }
 
   @Effect()
-  initEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollInit.on(this.wrapperRef.current,
+  initEffect(): EffectReturn {
+    return subscribeToScrollInitEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleInit(event);
-      }, this.getInitEventData(), { namespace });
-
-    return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
+      },
+      this.getInitEventData(),
+    );
   }
 
   @Effect()
-  startEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollStart.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => { this.handleStart(event); }, { namespace });
-
-    return (): void => dxScrollStart.off(this.wrapperRef.current, { namespace });
+  startEffect(): EffectReturn {
+    return subscribeToDXScrollStartEvent(
+      this.wrapperRef.current,
+      (event: DxMouseEvent) => {
+        this.handleStart(event);
+      },
+    );
   }
 
   @Effect()
-  moveEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollMove.on(this.wrapperRef.current,
+  moveEffect(): EffectReturn {
+    return subscribeToDXScrollMoveEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleMove(event);
-      }, { namespace });
-
-    return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
+      },
+    );
   }
 
   @Effect()
-  endEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollEnd.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => { this.handleEnd(event); }, { namespace });
-
-    return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
+  endEffect(): EffectReturn {
+    return subscribeToDXScrollEndEvent(
+      this.wrapperRef.current,
+      (event: DxMouseEvent) => {
+        this.handleEnd(event);
+      },
+    );
   }
 
   @Effect()
-  stopEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
+  stopEffect(): EffectReturn {
+    return subscribeToDXScrollStopEvent(this.wrapperRef.current, () => { this.handleStop(); });
+  }
 
-    dxScrollStop.on(this.wrapperRef.current, () => { this.handleStop(); }, { namespace });
-
-    return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
+  @Effect()
+  cancelEffect(): EffectReturn {
+    return subscribeToDXScrollCancelEvent(
+      this.wrapperRef.current,
+      (event: DxMouseEvent) => {
+        this.handleCancel(event);
+      },
+    );
   }
 
   @Method()
@@ -550,16 +567,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return isDxMouseWheelEvent(event)
       ? this.validateWheel(event as DxMouseWheelEvent)
       : this.validateMove(event as DxMouseEvent);
-  }
-
-  @Effect()
-  cancelEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollCancel.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => { this.handleCancel(event); }, { namespace });
-
-    return (): void => dxScrollCancel.off(this.wrapperRef.current, { namespace });
   }
 
   @Effect() effectDisabledState(): void {
@@ -645,7 +652,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   handleScroll(): void {
     this.handleTabKey();
-    this.props.onScroll?.(this.getEventArgs());
+    this.canRiseScrollAction = true;
   }
 
   startLoading(): void {
@@ -1180,12 +1187,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
     }
 
-    this.contentPaddingBottom = getElementPaddingBottom(this.contentRef.current!);
+    this.contentPaddingBottom = getElementPaddingBottom(contentEl);
   }
 
   get containerElement(): HTMLDivElement {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.containerRef.current!;
+  }
+
+  get containerHasSizes(): boolean {
+    return this.containerClientHeight > 0 && this.containerClientWidth > 0;
   }
 
   get contentWidth(): number {
@@ -1194,10 +1205,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current).overflowX === 'hidden';
-
     /* istanbul ignore next */
-    if (isOverflowHidden) {
+    if (getElementOverflowX(this.contentRef.current) === 'hidden') {
       return this.contentClientWidth;
     }
 
@@ -1212,10 +1221,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current).overflowY === 'hidden';
-
     /* istanbul ignore next */
-    if (isOverflowHidden) {
+    if (getElementOverflowY(this.contentRef.current) === 'hidden') {
       return this.contentClientHeight;
     }
 
@@ -1226,7 +1233,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   /* istanbul ignore next */
   get scrollableOffset(): { left: number; top: number } {
-    return getElementOffset(this.scrollableRef.current as Element) ?? DEFAULT_OFFSET;
+    return getElementOffset(this.scrollableRef.current);
   }
 
   get contentStyles(): { [key: string]: string } {

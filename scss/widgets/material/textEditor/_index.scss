@@ -17,6 +17,7 @@ $material-base-standard-texteditor-input-horizontal-padding: 0;
 $material-texteditor-icon-container-size: $material-base-icon-size - 2px;
 $material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;
 $material-editor-custom-button-margin: 5px;
+$material-filled-texteditor-input-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 4px;
 
 
 @mixin dx-texteditor-icon() {
@@ -60,11 +61,11 @@ $material-editor-custom-button-margin: 5px;
 }
 
 @mixin texteditor-validation-icon-offset-filled() {
-  right: $material-filled-texteditor-input-horizontal-padding + 1px;
+  right: $material-filled-texteditor-input-button-horizontal-padding;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    left: $material-filled-texteditor-input-horizontal-padding + 1px;
+    left: $material-filled-texteditor-input-button-horizontal-padding;
     right: auto;
   }
 }
@@ -200,11 +201,15 @@ $material-editor-custom-button-margin: 5px;
   &.dx-editor-filled {
     background-color: $texteditor-bg;
 
+    &::after {
+      border-bottom: 1px solid $texteditor-border-color;
+    }
+
     &.dx-state-hover {
       background-color: $texteditor-hover-bg;
 
       &::after {
-        border-bottom: 1px solid $texteditor-hover-border-color;
+        border-bottom-color: $texteditor-hover-border-color;
       }
     }
 
@@ -402,7 +407,7 @@ $material-editor-custom-button-margin: 5px;
 
       > .dx-clear-button-area:last-child,
       > .dx-numberbox-spin-container:last-child {
-        margin-right: 8px;
+        margin-right: $material-filled-texteditor-input-button-horizontal-padding;
       }
     }
 
@@ -446,7 +451,7 @@ $material-editor-custom-button-margin: 5px;
 
         > .dx-clear-button-area:last-child,
         > .dx-numberbox-spin-container:last-child {
-          margin-left: 8px;
+          margin-left: $material-filled-texteditor-input-button-horizontal-padding;
           margin-right: 0;
         }
       }

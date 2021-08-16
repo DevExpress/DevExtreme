@@ -259,7 +259,7 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'underlined'
+        stylingMode: 'filled'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -336,6 +336,18 @@ testComponentDefaults(DropDownList,
 );
 
 testComponentDefaults(List,
+    {},
+    { useNativeScrolling: false },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(TreeView,
     {},
     { useNativeScrolling: false },
     function() {
@@ -601,7 +613,11 @@ testComponentDefaults(Widget,
 testComponentDefaults(Popover,
     {},
     {
-        position: 'bottom',
+        position: {
+            at: 'bottom center',
+            collision: 'fit flip',
+            my: 'top center'
+        },
         target: undefined,
         animation: {
             show: {

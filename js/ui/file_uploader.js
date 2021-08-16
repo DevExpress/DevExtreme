@@ -1058,6 +1058,8 @@ class FileUploader extends Editor {
     _clean() {
         this._$fileInput.detach();
         delete this._$filesContainer;
+        this._detachSelectFileDialogHandler(this.option('dialogTrigger'));
+        this._detachDragEventHandlers(this.option('dropZone'));
 
         if(this._files) {
             this._files.forEach(file => {

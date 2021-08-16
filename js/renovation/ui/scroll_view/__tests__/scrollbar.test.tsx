@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 
 import { RefObject } from '@devextreme-generator/declarations';
 import {
-  clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
+  clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
 
 import {
@@ -130,7 +130,7 @@ describe('Scrollbar', () => {
 
     it('should subscribe to pointerDown event', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
+      scrollbar.scrollRef = { current: {} as HTMLElement } as RefObject;
       scrollbar.expand = jest.fn();
 
       scrollbar.pointerDownEffect();
@@ -139,20 +139,9 @@ describe('Scrollbar', () => {
       expect(scrollbar.expand).toHaveBeenCalledTimes(1);
     });
 
-    it('pointerDownEffect should return unsubscribe callback', () => {
-      const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
-
-      const detach = scrollbar.pointerDownEffect();
-
-      expect(getEventHandlers('dxpointerdown').length).toBe(1);
-      detach();
-      expect(getEventHandlers('dxpointerdown').length).toBe(0);
-    });
-
     it('Down & Up effects should add & remove scroll active class', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
+      scrollbar.scrollRef = { current: {} as HTMLElement } as RefObject;
 
       scrollbar.pointerDownEffect();
       emit('dxpointerdown');
@@ -175,17 +164,6 @@ describe('Scrollbar', () => {
       emit('dxpointerup');
 
       expect(scrollbar.collapse).toHaveBeenCalledTimes(1);
-    });
-
-    it('pointerUpEffect should return unsubscribe callback', () => {
-      const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
-
-      const detach = scrollbar.pointerUpEffect();
-
-      expect(getEventHandlers('dxpointerup').length).toBe(1);
-      detach();
-      expect(getEventHandlers('dxpointerup').length).toBe(0);
     });
 
     each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
@@ -256,59 +234,65 @@ describe('Scrollbar', () => {
         each([0, 80]).describe('maxOffset: %o', (maxOffset) => {
           each([0, 100, 500]).describe('contentSize: %o', (contentSize) => {
             each([0, 50, 200]).describe('containerSize: %o', (containerSize) => {
-              it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
-                const topPocketSize = 85;
+              each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
+                it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
+                  const topPocketSize = 85;
 
-                const viewModel = new Scrollbar({
-                  showScrollbar: 'always',
-                  direction,
-                  rtlEnabled,
-                  topPocketSize,
-                  scrollLocation,
-                  contentSize,
-                  containerSize,
-                });
+                  const viewModel = new Scrollbar({
+                    showScrollbar: 'always',
+                    direction,
+                    rtlEnabled,
+                    topPocketSize,
+                    scrollLocation,
+                    contentSize,
+                    containerSize,
+                    containerHasSizes,
+                  });
 
-                const minOffset = -300;
-                Object.defineProperties(viewModel, {
-                  maxOffset: { get() { return maxOffset; } },
-                  minOffset: { get() { return minOffset; } },
-                });
+                  const minOffset = -300;
+                  Object.defineProperties(viewModel, {
+                    maxOffset: { get() { return maxOffset; } },
+                    minOffset: { get() { return minOffset; } },
+                  });
 
-                [0, 100, 500].forEach((prevContentSize) => {
-                  [0, 50, 200].forEach((prevContainerSize) => {
-                    [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-                      viewModel.moveTo = jest.fn();
+                  [0, 100, 500].forEach((prevContentSize) => {
+                    [0, 50, 200].forEach((prevContainerSize) => {
+                      [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
+                        viewModel.moveTo = jest.fn();
 
-                      viewModel.prevContentSize = prevContentSize;
-                      viewModel.prevContainerSize = prevContainerSize;
-                      viewModel.rightScrollLocation = rightScrollLocation;
+                        viewModel.prevContentSize = prevContentSize;
+                        viewModel.prevContainerSize = prevContainerSize;
+                        viewModel.rightScrollLocation = rightScrollLocation;
 
-                      viewModel.moveToBoundaryOnSizeChange();
+                        viewModel.moveToBoundaryOnSizeChange();
 
-                      let expectedBoundaryLocation = Math.max(
-                        Math.min(scrollLocation, maxOffset), minOffset,
-                      );
+                        let expectedBoundaryLocation = Math.max(
+                          Math.min(scrollLocation, maxOffset), minOffset,
+                        );
 
-                      const contentSizeChanged = contentSize !== prevContentSize;
-                      const containerSizeChanged = containerSize !== prevContainerSize;
+                        const contentSizeChanged = contentSize !== prevContentSize;
+                        const containerSizeChanged = containerSize !== prevContainerSize;
 
-                      if ((contentSizeChanged || containerSizeChanged)
-                        && scrollLocation <= maxOffset) {
-                        expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                        if (containerHasSizes
+                          && contentSize > 0
+                          && (contentSizeChanged || containerSizeChanged)
+                          && scrollLocation <= maxOffset
+                        ) {
+                          expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
 
-                        if (direction === 'horizontal' && rtlEnabled) {
-                          expectedBoundaryLocation = minOffset - rightScrollLocation;
+                          if (direction === 'horizontal' && rtlEnabled) {
+                            expectedBoundaryLocation = minOffset - rightScrollLocation;
 
-                          if (expectedBoundaryLocation >= 0) {
-                            expectedBoundaryLocation = 0;
+                            if (expectedBoundaryLocation >= 0) {
+                              expectedBoundaryLocation = 0;
+                            }
                           }
-                        }
 
-                        expect(viewModel.moveTo).toHaveBeenCalledWith(expectedBoundaryLocation);
-                      } else {
-                        expect(viewModel.moveTo).not.toBeCalled();
-                      }
+                          expect(viewModel.moveTo).toHaveBeenCalledWith(expectedBoundaryLocation);
+                        } else {
+                          expect(viewModel.moveTo).not.toBeCalled();
+                        }
+                      });
                     });
                   });
                 });
@@ -605,7 +589,7 @@ describe('Scrollbar', () => {
 
       each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
         each([300, 360, 600]).describe('visibleScrollAreaSize: %o', (visibleScrollAreaSize) => {
-          each([-100, -300, -359.4, -359.6, -500]).describe('scrollLocation: %o', (scrollLocation) => {
+          each([-100, -300, -359.9, -360, -360.1, -500]).describe('scrollLocation: %o', (scrollLocation) => {
             it('isReachBottom()', () => {
               const topPocketSize = 85;
               const bottomPocketSize = 55;
@@ -623,7 +607,7 @@ describe('Scrollbar', () => {
               });
 
               if (reachBottomEnabled
-              && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0.5) {
+                && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0) {
                 expect(viewModel.isReachBottom).toBe(true);
               } else {
                 expect(viewModel.isReachBottom).toBe(false);

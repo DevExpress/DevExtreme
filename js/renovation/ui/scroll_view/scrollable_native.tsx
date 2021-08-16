@@ -10,7 +10,14 @@ import {
   InternalState,
   ForwardRef,
 } from '@devextreme-generator/declarations';
-import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import '../../../events/gesture/emitter.gesture.scroll';
+import {
+  subscribeToScrollEvent,
+  subscribeToScrollInitEvent,
+  subscribeToDXScrollEndEvent,
+  subscribeToDXScrollMoveEvent,
+  subscribeToDXScrollStopEvent,
+} from '../../utils/subscribe_to_event';
 import { Widget, WidgetProps } from '../common/widget';
 import { ScrollViewLoadPanel } from './load_panel';
 
@@ -32,7 +39,6 @@ import {
 import { TopPocketProps, TopPocket } from './top_pocket';
 import { BottomPocketProps, BottomPocket } from './bottom_pocket';
 import { nativeScrolling } from '../../../core/utils/support';
-import '../../../events/gesture/emitter.gesture.scroll';
 
 import {
   ScrollEventArgs,
@@ -62,12 +68,6 @@ import {
 
 import { Scrollbar } from './scrollbar';
 
-import {
-  dxScrollInit,
-  dxScrollMove,
-  dxScrollEnd,
-  dxScrollStop,
-} from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { isVisible } from './utils/is_element_visible';
 
@@ -84,7 +84,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     topPocketHeight, contentStyles, scrollViewContentRef, contentTranslateTop,
     hScrollLocation, vScrollLocation,
     props: {
-      aria, disabled, height, width, rtlEnabled, children, visible,
+      aria, activeStateUnit, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel,
       pullingDownText, pulledDownText, refreshingText, reachBottomText,
@@ -96,6 +96,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   return (
     <Widget
       rootElementRef={scrollableRef}
+      activeStateUnit={activeStateUnit}
       aria={aria}
       addWidgetClass={false}
       classes={cssClasses}
@@ -182,7 +183,7 @@ export class ScrollableNativeProps extends ScrollableProps {
 }
 
 export type ScrollableNativePropsType = ScrollableNativeProps
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'activeStateUnit'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;
@@ -237,6 +238,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @InternalState() contentClientHeight = 0;
 
   @InternalState() needForceScrollbarsVisibility = false;
+
+  @InternalState() canRiseScrollAction = false;
 
   @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
@@ -424,6 +427,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       });
   }
 
+  @Effect({ run: 'always' }) riseScroll(): void {
+    if (this.canRiseScrollAction) {
+      this.props.onScroll?.(this.getEventArgs());
+      this.canRiseScrollAction = false;
+    }
+  }
+
   @Effect() effectDisabledState(): void {
     if (this.props.disabled) {
       this.lock();
@@ -451,51 +461,40 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Effect()
-  initEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollInit.on(this.wrapperRef.current,
+  initEffect(): EffectReturn {
+    return subscribeToScrollInitEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleInit(event);
-      }, this.getInitEventData(), { namespace });
-
-    return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
+      },
+      this.getInitEventData(),
+    );
   }
 
   @Effect()
-  moveEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollMove.on(this.wrapperRef.current,
+  moveEffect(): EffectReturn {
+    return subscribeToDXScrollMoveEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleMove(event);
-      }, { namespace });
-
-    return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
+      },
+    );
   }
 
   @Effect()
-  endEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollEnd.on(this.wrapperRef.current,
-      () => {
-        this.handleEnd();
-      }, { namespace });
-
-    return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
+  endEffect(): EffectReturn {
+    return subscribeToDXScrollEndEvent(
+      this.wrapperRef.current,
+      () => { this.handleEnd(); },
+    );
   }
 
   @Effect()
-  stopEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollStop.on(this.wrapperRef.current,
-      () => {
-        this.handleStop();
-      }, { namespace });
-
-    return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
+  stopEffect(): EffectReturn {
+    return subscribeToDXScrollStopEvent(
+      this.wrapperRef.current,
+      () => { this.handleStop(); },
+    );
   }
 
   @Effect({ run: 'once' })
@@ -564,7 +563,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       this.moveScrollbars();
     }
 
-    this.props.onScroll?.(this.getEventArgs());
+    this.canRiseScrollAction = true;
 
     this.handlePocketState();
   }

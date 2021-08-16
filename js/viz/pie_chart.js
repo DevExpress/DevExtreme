@@ -537,3 +537,9 @@ dxPieChart.addPlugin(plugins.pieChart);
 registerComponent('dxPieChart', dxPieChart);
 
 export default dxPieChart;
+
+/**
+ * @name PieChartLegendItem
+ * @type object
+ * @inherits BaseLegendItem
+ */

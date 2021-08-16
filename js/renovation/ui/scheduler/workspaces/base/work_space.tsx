@@ -2,7 +2,6 @@ import {
   Component,
   ComponentBindings,
   Effect,
-  Event,
   ForwardRef,
   JSXComponent,
   JSXTemplate,
@@ -11,63 +10,78 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 import {
-  DataCellTemplateProps,
   DateHeaderData,
-  DateTimeCellTemplateProps,
-  Group,
+  GetDateForHeaderText,
   GroupedViewData,
-  ResourceCellTemplateProps,
+  GroupPanelData,
   TimePanelData,
+  ViewDataProviderType,
 } from '../types';
-import { GroupOrientation } from '../../types';
 import { OrdinaryLayout, OrdinaryLayoutProps } from './ordinary_layout';
-import dateUtils from '../../../../../core/utils/date';
-import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from './header_panel/layout';
 import { DateTableLayoutBase, DateTableLayoutProps } from './date_table/layout';
 import { TimePaneLayoutProps } from './time_panel/layout';
 
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import {
-  createCellElementMetaData,
-  getHiddenInterval, getRowCountWithAllDayRow, getTotalCellCount, getTotalRowCount,
+  createCellElementMetaData, getDateForHeaderText, getTotalCellCount,
 } from './utils';
+import { WorkSpaceProps } from '../props';
 
-interface CountGenerationConfig {
-  intervalCount: number;
-  currentDate: Date;
-  viewType: string;
-  hoursInterval: number;
-  startDayHour: number;
-  endDayHour: number;
-}
+const prepareGenerationOptions = (
+  workSpaceProps: WorkSpaceBaseProps,
+  isAllDayPanelVisible: boolean,
+): unknown => {
+  const {
+    intervalCount,
+    groups,
+    groupByDate,
+    groupOrientation,
+    startDayHour,
+    endDayHour,
+    currentDate,
+    startDate,
+    firstDayOfWeek,
+    hoursInterval,
+    type,
+    headerCellTextFormat,
+    cellDuration,
+    getDateForHeaderText: getDateForHeaderTextFunction,
+    isProvideVirtualCellsWidth,
+    isGenerateTimePanelData,
+  } = workSpaceProps;
 
-// TODO: tempporary
-interface ViewDataProviderType {
-  timePanelData: TimePanelData;
-  viewData: GroupedViewData;
-  dateHeaderData: DateHeaderData;
-  getCellCount: (config: CountGenerationConfig) => number;
-  getRowCount: (config: CountGenerationConfig) => number;
-  update: (options: unknown, isGenerateNewData: boolean) => void;
-}
+  return {
+    startRowIndex: 0,
+    startCellIndex: 0,
+    groupOrientation,
+    groupByDate,
+    groups,
+    isProvideVirtualCellsWidth,
+    isAllDayPanelVisible,
+    selectedCells: undefined,
+    focusedCell: undefined,
+    headerCellTextFormat,
+    getDateForHeaderText: getDateForHeaderTextFunction,
+    startDayHour,
+    endDayHour,
+    cellDuration,
+    viewType: type,
+    intervalCount,
+    hoursInterval,
+    currentDate,
+    startDate,
+    firstDayOfWeek,
 
-type GetDateForHeaderText = (index: number, date: Date) => Date;
-
-interface CellsMetaData {
-  dateTableCellsMeta: ClientRect[][];
-  allDayPanelCellsMeta: ClientRect[];
-}
-
-export interface ViewMetaData {
-  viewDataProvider: ViewDataProviderType;
-  cellsMetaData: CellsMetaData;
-}
+    isGenerateTimePanelData,
+  };
+};
 
 export const viewFunction = ({
   // dateHeaderData,
   // viewData,
   // timePanelData,
+  groupPanelData,
   layout: Layout,
   isAllDayPanelVisible,
   viewDataProvider,
@@ -97,6 +111,7 @@ export const viewFunction = ({
     viewData={viewDataProvider.viewData}
     dateHeaderData={viewDataProvider.dateHeaderData}
     timePanelData={viewDataProvider.timePanelData}
+    groupPanelData={groupPanelData}
     dataCellTemplate={dataCellTemplate}
     dateCellTemplate={dateCellTemplate}
     timeCellTemplate={timeCellTemplate}
@@ -121,65 +136,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class WorkSpaceBaseProps {
-  // -------------------
-  // Public templates
-  // -------------------
-
-  @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
-
-  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
-
-  @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
-
-  @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  // -----------------
-  // Public props
-  // -----------------
-
-  @OneWay() intervalCount = 1;
-
-  @OneWay() groups: Group[] = [];
-
-  @OneWay() groupByDate = false;
-
-  @OneWay() groupOrientation: GroupOrientation = 'horizontal';
-
-  @OneWay() crossScrollingEnabled = false;
-
-  @OneWay() startDayHour = 0;
-
-  @OneWay() endDayHour = 24;
-
-  @OneWay() firstDayOfWeek = 0;
-
-  @OneWay() currentDate!: Date;
-
-  @OneWay() startDate?: Date;
-
-  @OneWay() hoursInterval = 0.5;
-
-  @OneWay() showAllDayPanel = false;
-
-  @OneWay() allDayPanelExpanded = false;
-
-  @OneWay() allowMultipleCellSelection = true;
-
-  @OneWay() indicatorTime = new Date();
-
-  @OneWay() indicatorUpdateInterval = 5 * dateUtils.dateToMilliseconds('minute');
-
-  @OneWay() shadeUntilCurrentTime = true;
-
-  @OneWay() selectedCellData = [];
-
-  @OneWay() scrolling: dxSchedulerScrolling = {
-    mode: 'standard',
-  };
-
-  @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
-
+export class WorkSpaceBaseProps extends WorkSpaceProps {
   // ---------------------
   // Internal for workspaces templates
   // ---------------------
@@ -194,7 +151,13 @@ export class WorkSpaceBaseProps {
   // Internal for work-spaces props
   // ---------------------
 
+  @OneWay() className?: string;
+
   @OneWay() isAllDayPanelSupported = false;
+
+  @OneWay() isProvideVirtualCellsWidth = false;
+
+  @OneWay() isGenerateTimePanelData = true;
 
   @OneWay() groupPanelClassName?: 'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table';
 
@@ -205,7 +168,7 @@ export class WorkSpaceBaseProps {
 
   @OneWay() headerCellTextFormat?: string | ((date: Date) => string);
 
-  @OneWay() className?: string;
+  @OneWay() getDateForHeaderText: GetDateForHeaderText = getDateForHeaderText;
 }
 
 @Component({
@@ -285,87 +248,21 @@ export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate
 
   // TODO: rework
   get viewDataProvider(): ViewDataProviderType {
-    const {
-      intervalCount,
-      groups,
-      groupByDate,
-      groupOrientation,
-      startDayHour,
-      endDayHour,
-      currentDate,
-      startDate,
-      firstDayOfWeek,
-      hoursInterval,
-      type,
-      isWorkWeekView,
-      headerCellTextFormat,
-    } = this.props;
+    const { type } = this.props;
 
     // TODO: convert ViewdataProvider to TS
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
-    const getDateForHeaderText: GetDateForHeaderText = (_, date) => date;
 
-    const cellCount = viewDataProvider.getCellCount({
-      intervalCount,
-      currentDate,
-      viewType: type,
-      hoursInterval,
-      startDayHour,
-      endDayHour,
-    });
-    const rowCount = viewDataProvider.getRowCount({
-      intervalCount,
-      currentDate,
-      viewType: type,
-      hoursInterval,
-      startDayHour,
-      endDayHour,
-    });
-    const totalCellCount = getTotalCellCount(cellCount, groupOrientation, groups);
-    const totalRowCount = getTotalRowCount(
-      rowCount, groupOrientation, groups, this.isAllDayPanelVisible,
-    );
-    const hiddenInterval = getHiddenInterval(hoursInterval, rowCount);
-
-    const generationOptions = {
-      cellCount: totalCellCount,
-      totalCellCount,
-      rowCount: totalRowCount,
-      totalRowCount,
-      rowCountWithAllDayRow: getRowCountWithAllDayRow(rowCount, this.isAllDayPanelVisible),
-      rowCountBase: rowCount,
-      columnCountBase: cellCount,
-      startRowIndex: 0,
-      startCellIndex: 0,
-      groupOrientation,
-      groupByDate,
-      groups,
-      isProvideVirtualCellsWidth: false,
-      isAllDayPanelVisible: this.isAllDayPanelVisible,
-      selectedCells: undefined,
-      focusedCell: undefined,
-      headerCellTextFormat,
-      getDateForHeaderText,
-      startDayHour,
-      endDayHour,
-      cellDuration: hoursInterval * 60,
-      viewType: type,
-      intervalCount,
-      hoursInterval,
-      currentDate,
-      startDate,
-      firstDayOfWeek,
-
-      isWorkView: isWorkWeekView,
-      columnsInDay: 1,
-      hiddenInterval,
-      tableAllDay: false,
-      isGenerateTimePanelData: true,
-    };
-
+    const generationOptions = prepareGenerationOptions(this.props, this.isAllDayPanelVisible);
     viewDataProvider.update(generationOptions, true);
 
     return viewDataProvider;
+  }
+
+  get groupPanelData(): GroupPanelData {
+    const generationOptions = prepareGenerationOptions(this.props, this.isAllDayPanelVisible);
+
+    return this.viewDataProvider.getGroupPanelData(generationOptions);
   }
 
   @Effect()
