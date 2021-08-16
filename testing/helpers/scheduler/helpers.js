@@ -173,8 +173,7 @@ class ElementWrapper {
         return this.getElement().hasClass(className);
     }
 }
-
-export class ClickElementWrapper extends ElementWrapper {
+class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
     }

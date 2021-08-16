@@ -3,7 +3,6 @@ const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
 import devices from 'core/devices';
 
-
 testStart(() => initTestMarkup());
 if(devices.current().deviceType === 'desktop') {
     test('should pass the "views" option', function(assert) {
