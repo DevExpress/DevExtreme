@@ -34,6 +34,7 @@ import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
+import resizeObserverSingleton from '../../core/resize_observer';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -354,37 +355,30 @@ const Overlay = Widget.inherit({
         };
     },
 
-    _areContentDimensionsRendered: function(entries) {
-        const contentBox = entries[0].contentBoxSize?.[0];
+    _areContentDimensionsRendered: function(entry) {
+        const contentBox = entry.contentBoxSize?.[0];
         if(contentBox) {
             return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
                     && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
         }
 
-        const contentRect = entries[0].contentRect;
+        const contentRect = entry.contentRect;
         return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
                 && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
     },
 
-    _resizeObserverCallback(entries) {
-        entries.forEach(entry => {
-            if(entry.target === this._$content.get(0)) {
-                this._renderGeometry({ shouldOnlyReposition: true });
-            }
-        });
+    _contentResizeHandler: function(entry) {
+        if(!this._shouldSkipContentResize(entry)) {
+            this._renderGeometry({ shouldOnlyReposition: true });
+        }
     },
 
     _updateResizeCallbackSkipCondition() {
         const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
 
-        this._shouldSkipResizeObserverCallback = (entries) => {
-            for(let i = 0; i < entries.length; ++i) {
-                const entry = entries[i];
-                if(entry.target === this._$content.get(0)) {
-                    return doesShowAnimationChangeDimensions && this._showAnimationProcessing
-                        || this._areContentDimensionsRendered(entries);
-                }
-            }
+        this._shouldSkipContentResize = (entry) => {
+            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
+                || this._areContentDimensionsRendered(entry);
         };
     },
 
@@ -404,9 +398,9 @@ const Overlay = Widget.inherit({
 
         const contentElement = this._$content.get(0);
         if(shouldObserve) {
-            this._resizeObserver.observe(contentElement);
+            resizeObserverSingleton.observe(contentElement, (entry) => { this._contentResizeHandler(entry); });
         } else {
-            this._resizeObserver.unobserve(contentElement);
+            resizeObserverSingleton.unobserve(contentElement);
         }
     },
 
@@ -1416,6 +1410,7 @@ const Overlay = Widget.inherit({
 
         this._renderVisibility(false);
         this._stopShowTimer();
+        this._observeContentResize(false);
 
         this._cleanFocusState();
     },

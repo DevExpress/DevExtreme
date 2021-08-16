@@ -1,7 +1,7 @@
 import dateUtils from '../../../../../core/utils/date';
 import { getGroupCount } from '../../../../../ui/scheduler/resources/utils';
 import { GroupOrientation } from '../../types';
-import { Group } from '../types';
+import { GetDateForHeaderText, Group } from '../types';
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 
 const DAY_MS = dateUtils.dateToMilliseconds('day');
@@ -60,3 +60,5 @@ export const createCellElementMetaData = (
   left: cellRect.left - tableRect.left,
   top: cellRect.top - tableRect.top,
 });
+
+export const getDateForHeaderText: GetDateForHeaderText = (_, date) => date;

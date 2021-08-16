@@ -510,19 +510,31 @@ const VirtualScrollingRowsViewExtender = (function() {
             const visibleRows = dataController.getVisibleRows();
             let itemSize = 0;
             let firstCountableItem = true;
+            let lastLoadIndex = -1;
+
             for(let i = 0; i < rowHeights.length; i++) {
                 const currentItem = visibleRows[i];
                 if(!isDefined(currentItem)) {
                     continue;
                 }
-                if(isItemCountableByDataSource(currentItem, dataSource)) {
-                    if(firstCountableItem) {
-                        firstCountableItem = false;
-                    } else {
+
+                if(this.option(NEW_SCROLLING_MODE)) {
+                    if(lastLoadIndex >= 0 && lastLoadIndex !== currentItem.loadIndex) {
                         correctedRowHeights.push(itemSize);
                         itemSize = 0;
                     }
+                    lastLoadIndex = currentItem.loadIndex;
+                } else {
+                    if(isItemCountableByDataSource(currentItem, dataSource)) {
+                        if(firstCountableItem) {
+                            firstCountableItem = false;
+                        } else {
+                            correctedRowHeights.push(itemSize);
+                            itemSize = 0;
+                        }
+                    }
                 }
+
                 itemSize += rowHeights[i];
             }
             itemSize > 0 && correctedRowHeights.push(itemSize);
@@ -976,14 +988,49 @@ export const virtualScrollingModule = {
                     _updateLoadViewportParams: function() {
                         this._loadViewportParams = this._rowsScrollController.getViewportParams();
                     },
+                    _processItems: function(items) {
+                        const newItems = this.callBase.apply(this, arguments);
+
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            const dataSource = this._dataSource;
+                            let currentIndex = dataSource?.lastLoadOptions().skip ?? 0;
+                            let prevCountable;
+                            let prevRowType;
+
+                            newItems.forEach(item => {
+                                const rowType = item.rowType;
+                                const itemCountable = isItemCountableByDataSource(item, dataSource);
+
+                                if(!item.isNewRow && isDefined(prevCountable)) {
+                                    const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
+                                    const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
+                                    if(isNextGroupItem || isNextDataItem) {
+                                        currentIndex++;
+                                    }
+                                }
+                                item.loadIndex = currentIndex;
+                                prevCountable = itemCountable;
+                                prevRowType = rowType;
+                            });
+                        }
+
+                        return newItems;
+                    },
                     _afterProcessItems: function(items) {
                         this._uncountableItemCount = 0;
                         if(isDefined(this._loadViewportParams)) {
                             this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
                             this._updateLoadViewportParams();
-                            const { skipForCurrentPage } = this.getLoadPageParams();
 
-                            return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
+                            let result = items;
+                            if(items.length) {
+                                const { skipForCurrentPage } = this.getLoadPageParams();
+                                const startLoadIndex = items[0].loadIndex + skipForCurrentPage;
+
+                                result = items.filter(it => it.loadIndex >= startLoadIndex && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
+                            }
+
+                            return result;
                         }
 
                         return this.callBase.apply(this, arguments);

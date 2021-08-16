@@ -5460,6 +5460,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     }];
                     const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                     const dataGrid = $('#dataGrid').dxDataGrid({
+                        showRowLines: false,
                         dataSource: data,
                         keyExpr: 'id',
                         height: 50,
@@ -5530,6 +5531,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     }];
                     const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                     const dataGrid = $('#dataGrid').dxDataGrid({
+                        showRowLines: false,
                         dataSource: data,
                         keyExpr: 'id',
                         height: 50,

@@ -596,7 +596,10 @@ QUnit.module('Horizontal scrolling', () => {
             width: 200
         });
 
-        const $item = $element.find('.' + TABS_ITEM_CLASS).eq(3); const itemOffset = Math.round($item.offset().left); const contentLeft = Math.round($element.offset().left); const contentRight = Math.round(contentLeft + $element.outerWidth());
+        const $item = $element.find('.' + TABS_ITEM_CLASS).eq(3);
+        const itemOffset = Math.round($item.offset().left);
+        const contentLeft = Math.round($element.offset().left);
+        const contentRight = Math.round(contentLeft + $element.outerWidth());
 
         assert.ok(itemOffset <= contentRight - $item.outerWidth(), 'item offset is lower than right boundary');
         assert.ok(itemOffset > contentLeft, 'item offset is greater than left boundary');

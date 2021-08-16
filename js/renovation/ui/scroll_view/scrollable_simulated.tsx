@@ -12,13 +12,13 @@ import {
 import '../../../events/gesture/emitter.gesture.scroll';
 import {
   subscribeToScrollEvent,
+  subscribeToScrollInitEvent,
   subscribeToDXScrollStartEvent,
   subscribeToDXScrollMoveEvent,
   subscribeToDXScrollEndEvent,
   subscribeToDXScrollStopEvent,
   subscribeToDXScrollCancelEvent,
   subscribeToKeyDownEvent,
-  subscribeToScrollInitEvent,
 } from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 
@@ -35,7 +35,6 @@ import {
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
-
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
@@ -105,7 +104,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       needRenderScrollbars, needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
-      pullDownEnabled, reachBottomEnabled,
+      pullDownEnabled, reachBottomEnabled, activeStateUnit,
     },
     restAttributes,
   } = viewModel;
@@ -114,6 +113,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     <Widget
       rootElementRef={scrollableRef}
       focusStateEnabled={useKeyboard}
+      activeStateUnit={activeStateUnit}
       hoverStateEnabled
       aria={aria}
       addWidgetClass={false}
@@ -257,7 +257,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Mutable() tabWasPressed = false;
 
-  @Mutable() savedScrollOffset?: { top: number; left: number } = { top: 0, left: 0 };
+  @Mutable() savedScrollOffset?: { top: number; left: number };
 
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 

@@ -53,10 +53,6 @@ registerOption(
             mode = 'slide';
         }
 
-        if(mode === 'hold') {
-            mode = 'context';
-        }
-
         return mode;
     }
 );

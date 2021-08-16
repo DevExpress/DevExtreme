@@ -4,7 +4,8 @@ import {
 } from '@devextreme-generator/declarations';
 import { formatWeekdayAndDay } from '../../../../../ui/scheduler/workspaces/utils/base';
 import { TimePanelTableLayout } from '../base/time_panel/layout';
-import { WorkSpaceBase, WorkSpaceBaseProps } from '../base/work_space';
+import { WorkSpaceBase } from '../base/work_space';
+import { WorkSpaceProps } from '../props';
 
 export const viewFunction = ({
   props: {
@@ -25,8 +26,10 @@ export const viewFunction = ({
     indicatorTime,
     indicatorUpdateInterval,
     shadeUntilCurrentTime,
+    showCurrentTimeIndicator,
     selectedCellData,
     scrolling,
+    cellDuration,
     onViewRendered,
   },
 }: WorkSpaceWeek): JSX.Element => (
@@ -48,8 +51,10 @@ export const viewFunction = ({
     indicatorTime={indicatorTime}
     indicatorUpdateInterval={indicatorUpdateInterval}
     shadeUntilCurrentTime={shadeUntilCurrentTime}
+    showCurrentTimeIndicator={showCurrentTimeIndicator}
     selectedCellData={selectedCellData}
     scrolling={scrolling}
+    cellDuration={cellDuration}
     onViewRendered={onViewRendered}
     isWorkWeekView={false}
     type="week"
@@ -65,4 +70,4 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class WorkSpaceWeek extends JSXComponent<WorkSpaceBaseProps, 'currentDate' | 'onViewRendered'>() {}
+export class WorkSpaceWeek extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered'>() {}
