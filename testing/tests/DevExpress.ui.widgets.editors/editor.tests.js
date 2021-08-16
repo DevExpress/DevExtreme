@@ -28,7 +28,7 @@ const Fixture = Class.inherit({
 
         return editor;
     },
-    createOnlyElement(options) {
+    createOnlyElement() {
         this.$element = $('<div/>').appendTo('#qunit-fixture');
 
         return this.$element;
@@ -256,13 +256,13 @@ if(!Editor.IS_RENOVATED_WIDGET) {
     });
 }
 
-QUnit.module('Validation - UI', {
+QUnit.module('Validation', {
     beforeEach: function() {
         this.fixture = new Fixture();
         this.message = 'That is very bad editor';
         this.getValidationMessage = () => {
             return this.editor.$element()
-                .find(`.${INVALID_MESSAGE_CLASS}`)
+                .find(`.${INVALID_MESSAGE_CLASS}`).eq(0)
                 .dxValidationMessage()
                 .dxValidationMessage('instance');
         };
@@ -340,6 +340,172 @@ QUnit.module('Validation - UI', {
 
             this.editor.option({ validationStatus: 'invalid' });
             assert.ok(this.getValidationMessage(), 'validation message is rendered after validationStatus becomes "invalid"');
+        });
+
+        QUnit.module('options', () => {
+            QUnit.test('propagateOutsideClick=true', function(assert) {
+                const validationMessage = this.getValidationMessage();
+                assert.strictEqual(validationMessage.option('propagateOutsideClick'), true, '"propagateOutsideClick" option has correct value');
+            });
+
+            QUnit.test('mode option should be updated after editor validationMessageMode option change', function(assert) {
+                this.reinitEditor({
+                    validationMessageMode: 'always',
+                    isValid: false,
+                    validationError: {
+                        message: ''
+                    }
+                });
+                const validationMessage = this.getValidationMessage();
+
+                assert.strictEqual(validationMessage.option('mode'), 'always', 'validationMessage has correct "mode" option');
+
+                this.editor.option('validationMessageMode', 'auto');
+                assert.strictEqual(validationMessage.option('mode'), 'auto', 'validationMessage has correct "mode" option after option change');
+            });
+
+            if(!Editor.IS_RENOVATED_WIDGET) {
+                QUnit.test('editor should clear validation message cache on dispose (T968422)', function(assert) {
+                    assert.expect(0);
+
+                    class TestEditor extends Editor {
+                        repaintValidationMessage() {
+                            this._validationMessage && this._validationMessage.repaint();
+                            this._$validationMessage
+                                && this._$validationMessage.dxValidationMessage('instance').repaint();
+                        }
+                    }
+
+                    const $element = this.fixture.createOnlyElement();
+                    const instance = new TestEditor($element, {
+                        validationMessageMode: 'always',
+                        validationError: {
+                            message: 'Error message'
+                        },
+                        isValid: false
+                    });
+
+                    instance.dispose();
+
+                    try {
+                        instance.repaintValidationMessage();
+                    } catch(e) {
+                        assert.ok(false, 'cache is not cleared on editor dispose');
+                    }
+                });
+            }
+
+            skipForRenovated('private validationTooltipOptions, validationBoundary, validationMessageOffset', () => {
+                QUnit.module('private options sync', () => {
+                    QUnit.test('boundary should be updated after editor validationBoundary runtime change', function(assert) {
+                        const $boundary = this.fixture.createOnlyElement().css({
+                            paddingTop: '100px'
+                        });
+                        const validationMessage = this.getValidationMessage();
+
+                        assert.strictEqual(validationMessage.option('position.boundary'), undefined, 'validation message boundary is null');
+
+                        this.editor.option({ validationBoundary: $boundary });
+                        assert.strictEqual(validationMessage.option('position.boundary'), $boundary, 'validation message boundary was changed after editor validationBoundary change');
+                    });
+
+                    QUnit.test('position.offset should be updated after editor validationMessageOffset option change', function(assert) {
+                        const defaultOffset = { v: 0, h: 0 };
+
+                        const validationMessage = this.getValidationMessage();
+                        assert.deepEqual(validationMessage.option('position.offset'), defaultOffset, 'validationMessage has correct "offset" option');
+
+                        const newOffset = { v: 18, h: -12 };
+                        this.editor.option('validationMessageOffset', newOffset);
+                        assert.deepEqual(validationMessage.option('position.offset'), newOffset, 'validationMessage has correct "offset" option');
+                    });
+
+                    QUnit.test('position.offset should be updated after editor rtlEnabled option change', function(assert) {
+                        const offset = { v: 10, h: 20 };
+
+                        this.reinitEditor({
+                            isValid: false,
+                            validationError: {
+                                message: ''
+                            },
+                            validationMessageOffset: offset
+                        });
+                        const validationMessage = this.getValidationMessage();
+                        assert.deepEqual(validationMessage.option('position.offset'), offset, 'validationMessage has correct "offset" option');
+
+                        this.editor.option('rtlEnabled', true);
+                        offset.h = -offset.h;
+                        assert.deepEqual(validationMessage.option('position.offset'), offset, 'validationMessage has correct "offset" option');
+                    });
+
+                    QUnit.test('it should be possible to redefine validation message options', function(assert) {
+                        this.reinitEditor({
+                            validationMessageMode: 'always',
+                            validationError: {
+                                message: 'Error message'
+                            },
+                            validationTooltipOptions: {
+                                width: 200,
+                                customOption: 'Test'
+                            },
+                            isValid: false
+                        });
+
+                        const validationMessage = this.getValidationMessage();
+
+                        assert.strictEqual(validationMessage.option('customOption'), 'Test', 'a custom option has been created');
+                        assert.strictEqual(validationMessage.option('width'), 200, 'a default option has been redefined');
+                    });
+
+                    QUnit.test('editor overlay options should be changed when validation overlay options are changed', function(assert) {
+                        assert.strictEqual(this.editor.option('validationTooltipOptions.width'), 'auto', 'options are readable on init');
+
+                        const validationMessage = this.getValidationMessage();
+
+                        validationMessage.option('width', 150);
+                        assert.strictEqual(this.editor.option('validationTooltipOptions.width'), 150, 'option has been changed');
+                    });
+
+                    QUnit.test('it should be possible to set validationTooltipOptions dynamically', function(assert) {
+                        const validationMessage = this.getValidationMessage();
+
+                        this.editor.option('validationTooltipOptions.width', 130);
+                        assert.strictEqual(validationMessage.option('width'), 130, 'width option has been changed');
+
+                        this.editor.option('validationTooltipOptions', { height: 50 });
+                        assert.strictEqual(validationMessage.option('height'), 50, 'height option has been changed');
+
+                        assert.strictEqual(this.editor.option('validationTooltipOptions.width'), 130, 'redefined object"s fields was not changed');
+                        assert.strictEqual(this.editor.option('validationTooltipOptions.shading'), false, 'default object"s fields was not changed');
+                    });
+
+                    QUnit.test('it should be possible to set null or undefined to the validationTooltipOptions', function(assert) {
+                        const validationMessage = this.getValidationMessage();
+
+                        this.editor.option('validationTooltipOptions.test', 130);
+                        this.editor.option('validationTooltipOptions.test2', 120);
+                        assert.strictEqual(validationMessage.option('test'), 130, 'option has been changed');
+                        assert.strictEqual(validationMessage.option('test2'), 120, 'option has been changed');
+
+                        this.editor.option('validationTooltipOptions', { test2: null, test: undefined });
+                        assert.strictEqual(validationMessage.option('test'), undefined, 'option has been changed');
+                        assert.strictEqual(validationMessage.option('test2'), null, 'option has been changed');
+                    });
+
+                    QUnit.test('default validation options should not be redefined on revalidation', function(assert) {
+                        this.editor.option({
+                            isValid: true,
+                            validationError: {
+                                message: 'New error message'
+                            }
+                        });
+                        this.editor.option('isValid', false);
+
+                        const message = this.getValidationMessage().$content().text();
+                        assert.strictEqual(message, 'New error message');
+                    });
+                });
+            });
         });
 
         QUnit.module('width', () => {
@@ -436,23 +602,25 @@ QUnit.module('Validation - UI', {
                 assert.ok($content.outerWidth() <= $validationMessage.outerWidth(), 'validation message width is correct');
             });
 
-            QUnit.test('max width should be updated after editor width runtime change', function(assert) {
-                this.reinitEditor({
-                    width: 20,
-                    validationMessageMode: 'always',
-                    validationError: {
-                        message: 'This_message_width_more_than_max_set_width'
-                    },
-                    isValid: false
+            skipForRenovated('update validation message maxWidth on editor width change', () => {
+                QUnit.test('max width should be updated after editor width runtime change', function(assert) {
+                    this.reinitEditor({
+                        width: 20,
+                        validationMessageMode: 'always',
+                        validationError: {
+                            message: 'This_message_width_more_than_max_set_width'
+                        },
+                        isValid: false
+                    });
+
+                    this.editor.option('width', 200);
+                    let $content = this.getValidationMessage().$content();
+                    assert.strictEqual($content.outerWidth(), 200, 'the validation message width is correct');
+
+                    this.editor.option('width', 80);
+                    $content = this.getValidationMessage().$content();
+                    assert.strictEqual($content.outerWidth(), 100, 'the validation message width is correct');
                 });
-
-                this.editor.option('width', 200);
-                let $content = this.getValidationMessage().$content();
-                assert.strictEqual($content.outerWidth(), 200, 'the validation message width is correct');
-
-                this.editor.option('width', 80);
-                $content = this.getValidationMessage().$content();
-                assert.strictEqual($content.outerWidth(), 100, 'the validation message width is correct');
             });
         });
 
@@ -502,231 +670,23 @@ QUnit.module('Validation - UI', {
 
         QUnit.test('should be rendered correctly in hidden area', function(assert) {
             const $element = this.fixture.createOnlyElement();
-            const $hiddenDiv = $('<div>').css('display', 'none');
+            const $hiddenDiv = this.fixture.createOnlyElement().css('display', 'none');
 
             $element.appendTo($hiddenDiv);
 
-            const validationMessage = 'text is required';
+            const message = 'text is required';
+            this.editor.$element().remove();
             this.editor = new Editor($element, {
                 validationMessageMode: 'always',
                 validationError: {
-                    message: validationMessage
+                    message
                 },
                 isValid: false
             });
 
             const $validationMessage = this.getValidationMessageElement();
-            assert.strictEqual($validationMessage.text(), validationMessage, 'validation overlay text was render correctly');
+            assert.strictEqual($validationMessage.text(), message, 'validation overlay text was render correctly');
         });
-    });
-});
-
-QUnit.module('Validation message options', {
-    beforeEach: function() {
-        this.fixture = new Fixture();
-    },
-    afterEach: function() {
-        this.fixture.teardown();
-    }
-}, () => {
-    QUnit.test('validation message has propagateOutsideClick=true', function(assert) {
-        const validationMessage = this.getValidationMessage();
-        assert.strictEqual(validationMessage.option('propagateOutsideClick'), true, '"propagateOutsideClick" option has correct value');
-    });
-
-    QUnit.test('Validation message boundary should be updated after editor validationBoundary runtime change', function(assert) {
-        const $boundary = this.fixture.createOnlyElement().css({
-            paddingTop: '100px'
-        });
-        const validationMessage = this.getValidationMessage();
-
-        assert.strictEqual(validationMessage.option('position.boundary'), undefined, 'validation message boundary is null');
-
-        this.editor.option({ validationBoundary: $boundary });
-        assert.strictEqual(validationMessage.option('position.boundary'), $boundary, 'validation message boundary was changed after editor validationBoundary change');
-    });
-
-
-    QUnit.test('validationMessage position.offset should be updated after editor validationMessageOffset option change', function(assert) {
-        const defaultOffset = { v: 0, h: 0 };
-
-        const validationMessage = this.getValidationMessage();
-        assert.deepEqual(validationMessage.option('position.offset'), defaultOffset, 'validationMessage has correct "offset" option');
-
-        const newOffset = { v: 18, h: -12 };
-        this.editor.option('validationMessageOffset', newOffset);
-        assert.deepEqual(validationMessage.option('position.offset'), newOffset, 'validationMessage has correct "offset" option');
-    });
-
-    QUnit.test('validationMessage position.offset should be updated after editor rtlEnabled option change', function(assert) {
-        const offset = { v: 10, h: 20 };
-
-        this.reinitEditor({
-            isValid: false,
-            validationError: {
-                message: ''
-            },
-            validationMessageOffset: offset
-        });
-        const validationMessage = this.getValidationMessage();
-        assert.deepEqual(validationMessage.option('position.offset'), offset, 'validationMessage has correct "offset" option');
-
-        this.editor.option('rtlEnabled', true);
-        offset.h = -offset.h;
-        assert.deepEqual(validationMessage.option('position.offset'), offset, 'validationMessage has correct "offset" option');
-    });
-
-    QUnit.test('validationMessage mode option should be updated after editor validationMessageMode option change', function(assert) {
-        this.reinitEditor({
-            validationMessageMode: 'always',
-            isValid: false,
-            validationError: {
-                message: ''
-            }
-        });
-        const validationMessage = this.getValidationMessage();
-
-        assert.strictEqual(validationMessage.option('mode'), 'always', 'validationMessage has correct "mode" option');
-
-        this.editor.option('validationMessageMode', 'auto');
-        assert.strictEqual(validationMessage.option('mode'), 'auto', 'validationMessage has correct "mode" option after option change');
-    });
-
-    QUnit.test('it should be possible to redefine validation overlay options', function(assert) {
-        const $element = this.fixture.createOnlyElement();
-
-        new Editor($element, {
-            validationMessageMode: 'always',
-            validationError: {
-                message: 'Error message'
-            },
-            validationTooltipOptions: {
-                width: 200,
-                customOption: 'Test'
-            },
-            isValid: false
-        });
-
-        const overlay = $element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxValidationMessage('instance');
-
-        assert.strictEqual(overlay.option('customOption'), 'Test', 'a custom option has been created');
-        assert.strictEqual(overlay.option('width'), 200, 'a default option has been redefined');
-    });
-
-    QUnit.test('editor"s overlay options should be changed when validation overlay"s options changed', function(assert) {
-        const $element = this.fixture.createOnlyElement();
-
-        const instance = new Editor($element, {
-            validationMessageMode: 'always',
-            validationError: {
-                message: 'Error message'
-            },
-            isValid: false
-        });
-
-        assert.strictEqual(instance.option('validationTooltipOptions.width'), 'auto', 'options are readable on init');
-
-        const overlay = instance._validationMessage;
-
-        overlay.option('width', 150);
-        assert.strictEqual(instance.option('validationTooltipOptions.width'), 150, 'option has ben changed');
-    });
-
-    QUnit.test('it should be possible to set validationTooltipOptions dynamically', function(assert) {
-        const $element = this.fixture.createOnlyElement();
-
-        const instance = new Editor($element, {
-            validationMessageMode: 'always',
-            validationError: {
-                message: 'Error message'
-            },
-            isValid: false
-        });
-
-        const overlay = instance._validationMessage;
-
-        instance.option('validationTooltipOptions.width', 130);
-        assert.strictEqual(overlay.option('width'), 130, 'option has ben changed');
-
-        instance.option('validationTooltipOptions', { height: 50 });
-        assert.strictEqual(overlay.option('height'), 50, 'option has ben changed');
-        assert.strictEqual(instance.option('validationTooltipOptions.width'), 130, 'redefined object"s fields was not changed');
-        assert.strictEqual(instance.option('validationTooltipOptions.shading'), false, 'default object"s fields was not changed');
-    });
-
-    QUnit.test('it should be possible to set null or undefined to the validationTooltipOptions', function(assert) {
-        const $element = this.fixture.createOnlyElement();
-
-        const instance = new Editor($element, {
-            validationMessageMode: 'always',
-            validationError: {
-                message: 'Error message'
-            },
-            isValid: false
-        });
-
-        const overlay = instance._validationMessage;
-
-        instance.option('validationTooltipOptions.test', 130);
-        instance.option('validationTooltipOptions.test2', 120);
-        assert.strictEqual(overlay.option('test'), 130, 'option has ben changed');
-        assert.strictEqual(overlay.option('test2'), 120, 'option has ben changed');
-
-        instance.option('validationTooltipOptions', { test2: null, test: undefined });
-        assert.strictEqual(overlay.option('test'), undefined, 'option has ben changed');
-        assert.strictEqual(overlay.option('test2'), null, 'option has ben changed');
-    });
-
-    QUnit.test('default validation options should not be redefined on revalidation', function(assert) {
-        const $element = this.fixture.createOnlyElement();
-
-        const instance = new Editor($element, {
-            validationMessageMode: 'always',
-            validationError: {
-                message: 'Error message'
-            },
-            isValid: false
-        });
-
-        instance.option({
-            isValid: true,
-            validationError: {
-                message: 'New error message'
-            }
-        });
-        instance.option('isValid', false);
-
-        const message = this.getValidationMessage().$content().text();
-        assert.strictEqual(message, 'New error message');
-    });
-
-    QUnit.test('editor should clear validation message cache on dispose (T968422)', function(assert) {
-        assert.expect(0);
-
-        class TestEditor extends Editor {
-            repaintValidationMessage() {
-                this._validationMessage && this._validationMessage.repaint();
-                this._$validationMessage
-                    && this._$validationMessage.dxValidationMessage('instance').repaint();
-            }
-        }
-
-        const $element = this.fixture.createOnlyElement();
-        const instance = new TestEditor($element, {
-            validationMessageMode: 'always',
-            validationError: {
-                message: 'Error message'
-            },
-            isValid: false
-        });
-
-        instance.dispose();
-
-        try {
-            instance.repaintValidationMessage();
-        } catch(e) {
-            assert.ok(false, 'cache is not cleared on editor dispose');
-        }
     });
 });
 
