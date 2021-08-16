@@ -6,6 +6,7 @@ import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import hoverEvents from 'events/hover';
 import { wrapRenovatedWidget } from '../../helpers/wrapRenovatedWidget.js';
+import Validator from 'ui/validator';
 
 import 'generic_light.css!';
 
@@ -303,6 +304,37 @@ QUnit.module('Validation', {
         });
 
         assert.ok(this.editor.$element().hasClass(INVALID_VALIDATION_CLASS), 'editor is invalid');
+    });
+
+    QUnit.test('Validator integration', function(assert) {
+        this.reinitEditor({ value: '1' });
+        new Validator(this.editor.$element(), {
+            validationRules: [{
+                type: 'required',
+                message: 'required'
+            }]
+        });
+
+        this.editor.option('value', undefined);
+
+        assert.notOk(this.editor.option('isValid'), 'editor became invalid');
+        assert.strictEqual(this.editor.option('validationError').message, 'required', 'error is correct');
+    });
+
+    skipForRenovated('not validate on value change from undefined to null', () => {
+        QUnit.test('value change from undefined to null should not trigger validation', function(assert) {
+            this.reinitEditor({ value: undefined });
+            new Validator(this.editor.$element(), {
+                validationRules: [{
+                    type: 'required',
+                    message: 'required'
+                }]
+            });
+
+            this.editor.option('value', null);
+
+            assert.ok(this.editor.option('isValid'), 'validation was not triggered');
+        });
     });
 
     QUnit.module('validation message', () => {
@@ -690,90 +722,76 @@ QUnit.module('Validation', {
     });
 });
 
-QUnit.module('Validation Events', {
-    beforeEach: function() {
-        this.fixture = new Fixture();
-    },
-    afterEach: function() {
-        this.fixture.teardown();
-    }
-}, () => {
-    QUnit.test('validationRequest event should fire on value change', function(assert) {
-        const value = 'test123';
-        const handler = sinon.stub();
 
-        const editor = this.fixture.createEditor({
-            value: 'xxx'
+if(!Editor.IS_RENOVATED_WIDGET) {
+    QUnit.module('validationRequest', moduleConfig, () => {
+        QUnit.test('should fire on value change', function(assert) {
+            const value = 'test123';
+            const handler = sinon.stub();
+
+            const editor = this.fixture.createEditor({
+                value: 'xxx'
+            });
+            editor.validationRequest.add(handler);
+
+            editor.option('value', value);
+
+            const args = handler.getCall(0).args[0];
+            assert.ok(handler.calledOnce, 'validation handler should be called');
+            assert.strictEqual(args.value, value, 'correct value was passed');
+            assert.strictEqual(args.editor, editor, 'editor was passed');
         });
 
-        editor.validationRequest.add(handler);
+        QUnit.test('should NOT fire on value change from undefined to null (T220137)', function(assert) {
+            const handler = sinon.stub();
+            const editor = this.fixture.createEditor({
+                value: undefined
+            });
+            editor.validationRequest.add(handler);
 
-        // act
-        editor.option('value', value);
-        // assert
-        const params = handler.getCall(0).args[0];
-        assert.ok(handler.calledOnce, 'Validating handler should be called');
-        assert.strictEqual(params.value, value, 'Correct value was passed');
-        assert.strictEqual(params.editor, editor, 'Editor was passed');
-    });
 
-    QUnit.test('T220137: validationRequest event should NOT fire on value change', function(assert) {
-        const nullValue = null;
-        const handler = sinon.stub();
+            editor.option('value', null);
 
-        const editor = this.fixture.createEditor({
-            value: undefined
+            assert.notOk(handler.called, 'validation handler was not called');
         });
 
-        editor.validationRequest.add(handler);
-
-        // act
-        editor.option('value', nullValue);
-        // assert
-        assert.ok(!handler.called, 'Validating handler should not be called');
-    });
-
-    QUnit.test('validationRequest fires before valueChanged callback', function(assert) {
-        const editor = this.fixture.createEditor({
-            value: 'empty',
-            onValueChanged: ({ value, previousValue }) => {
-                assert.step(`Value changed from "${previousValue}" to "${value}"`);
-                if(value.toUpperCase() !== value) {
-                    editor.option('value', value.toUpperCase());
+        QUnit.test('should fire before valueChanged callback', function(assert) {
+            const editor = this.fixture.createEditor({
+                value: 'empty',
+                onValueChanged: ({ value, previousValue }) => {
+                    assert.step(`Value changed from "${previousValue}" to "${value}"`);
+                    if(value.toUpperCase() !== value) {
+                        editor.option('value', value.toUpperCase());
+                    }
                 }
-            }
+            });
+
+            editor.validationRequest.add(({ value }) => {
+                assert.step(`Validate value: "${value}"`);
+            });
+
+            editor.option('value', 'test');
+
+            assert.verifySteps([
+                'Validate value: "test"',
+                'Value changed from "empty" to "test"',
+                'Validate value: "TEST"',
+                'Value changed from "test" to "TEST"'
+            ]);
         });
-
-        editor.validationRequest.add(({ value }) => {
-            assert.step(`Validate value: "${value}"`);
-        });
-
-        editor.option('value', 'test');
-
-        assert.verifySteps([
-            'Validate value: "test"',
-            'Value changed from "empty" to "test"',
-            'Validate value: "TEST"',
-            'Value changed from "test" to "TEST"'
-        ]);
     });
-});
+}
 
-QUnit.module('aria accessibility', {
-    beforeEach: function() {
-        this.fixture = new Fixture();
-    },
-    afterEach: function() {
-        this.fixture.teardown();
-    }
-}, () => {
-    QUnit.test('readonly state', function(assert) {
+QUnit.module('aria accessibility', moduleConfig, () => {
+    const expectedFalseValue = Editor.IS_RENOVATED_WIDGET ? 'false' : 'undefined';
+
+    QUnit.test('readonly', function(assert) {
         const editor = this.fixture.createEditor({ readOnly: true });
 
         assert.strictEqual(editor.$element().attr('aria-readonly'), 'true', 'aria-readonly is correct');
 
         editor.option('readOnly', false);
-        assert.strictEqual(editor.$element().attr('aria-readonly'), undefined, 'aria-readonly does not exist in not readonly state');
+        assert.strictEqual(editor.$element().attr('aria-readonly'), expectedFalseValue, 'aria-readonly does not exist in not readonly state');
     });
 
     QUnit.test('invalid state', function(assert) {
@@ -783,30 +801,35 @@ QUnit.module('aria accessibility', {
                 message: 'test message'
             }
         });
-        const messageId = this.getValidationMessage().$content().attr('id');
+        const $editor = editor.$element();
+        const messageId = $editor.find(`.${INVALID_MESSAGE_CLASS}`)
+            .dxValidationMessage().dxValidationMessage('instance')
+            .$content().attr('id');
 
-        assert.strictEqual(editor.$element().attr('aria-invalid'), 'true', 'aria-invalid is correct');
-        assert.ok(editor.$element().get(0).hasAttribute('aria-describedby'), 'invalid editor should have the "aria-describedby" attribute');
-        assert.strictEqual(editor.$element().attr('aria-describedby'), messageId, 'invalid editor should be described by a message');
+        assert.strictEqual($editor.attr('aria-invalid'), 'true', 'aria-invalid is correct');
+        assert.ok($editor.get(0).hasAttribute('aria-describedby'), 'invalid editor should have the "aria-describedby" attribute');
+        assert.strictEqual($editor.attr('aria-describedby'), messageId, 'invalid editor should be described by a message');
 
         editor.option('isValid', true);
-        assert.strictEqual(editor.$element().attr('aria-invalid'), undefined, 'aria-invalid does not exist in valid state');
-        assert.strictEqual(editor.$element().attr('aria-describedby'), undefined, 'aria-describedby does not exist in valid state');
+        assert.strictEqual($editor.attr('aria-invalid'), expectedFalseValue, 'aria-invalid does not exist in valid state');
+        assert.strictEqual($editor.attr('aria-describedby'), undefined, 'aria-describedby does not exist in valid state');
     });
 });
 
+
 QUnit.module('private api', moduleConfig, () => {
+    if(!Editor.IS_RENOVATED_WIDGET) {
+        QUnit.test('should detach keyboard handler if readOnly is false', function(assert) {
+            const editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
 
-    QUnit.test('should detach keyboard handler if readOnly is false', function(assert) {
-        const editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
+            assert.notOk(editor._keyboardListenerId);
 
-        assert.notOk(editor._keyboardListenerId);
+            editor.option('readOnly', false);
+            assert.ok(editor._keyboardListenerId);
+        });
+    }
 
-        editor.option('readOnly', false);
-        assert.ok(editor._keyboardListenerId);
-    });
-
-    QUnit.test('If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument; and then _valueChangeEventInstance must be reset', function(assert) {
+    QUnit.test('If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument and then _valueChangeEventInstance must be reset', function(assert) {
         const newValue = 'new';
         const _valueChangeEventInstance = 'something';
 
@@ -821,30 +844,32 @@ QUnit.module('private api', moduleConfig, () => {
         assert.strictEqual(editor._valueChangeEventInstance, undefined, '_valueChangeEventInstance is reset');
     });
 
-    QUnit.test('_suppressValueChangeAction should suppress invoking _suppressValueChangeAction', function(assert) {
-        assert.expect(0);
+    skipForRenovated('private: _suppressValueChangeAction, _resumeValueChangeAction', () => {
+        QUnit.test('_suppressValueChangeAction should suppress invoking _suppressValueChangeAction', function(assert) {
+            assert.expect(0);
 
-        const editor = this.fixture.createEditor();
-        editor._suppressValueChangeAction();
-        editor.option('onValueChanged', () => {
-            throw Error('failed');
+            const editor = this.fixture.createEditor();
+            editor._suppressValueChangeAction();
+            editor.option('onValueChanged', () => {
+                throw Error('failed');
+            });
+            editor.option('value', true);
         });
-        editor.option('value', true);
-    });
 
-    QUnit.test('_resumeValueChangeAction should resume invoking _suppressValueChangeAction', function(assert) {
-        const value = 'value';
+        QUnit.test('_resumeValueChangeAction should resume invoking _suppressValueChangeAction', function(assert) {
+            const value = 'value';
 
-        const onValueChanged = options => {
-            assert.strictEqual(options.value, value);
-        };
+            const onValueChanged = options => {
+                assert.strictEqual(options.value, value);
+            };
 
-        assert.expect(1);
+            assert.expect(1);
 
-        const editor = this.fixture.createEditor();
-        editor._suppressValueChangeAction();
-        editor._resumeValueChangeAction();
-        editor.option('onValueChanged', onValueChanged);
-        editor.option('value', value);
+            const editor = this.fixture.createEditor();
+            editor._suppressValueChangeAction();
+            editor._resumeValueChangeAction();
+            editor.option('onValueChanged', onValueChanged);
+            editor.option('value', value);
+        });
     });
 });
