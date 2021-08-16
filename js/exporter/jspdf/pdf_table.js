@@ -64,6 +64,17 @@ export class PdfTable {
                 }
             }
 
+            if(i >= 1 && currentCell.drawLeftBorder !== false) {
+                if(isDefined(cells[i - 1].borderColor) && !isDefined(currentCell.borderColor)) {
+                    currentCell.drawLeftBorder = false;
+                }
+            }
+            if(this.rows.length >= 2 && currentCell.drawTopBorder !== false) {
+                if(isDefined(this.rows[this.rows.length - 2][i].borderColor) && !isDefined(currentCell.borderColor)) {
+                    currentCell.drawTopBorder = false;
+                }
+            }
+
             const columnWidth = this.columnWidths[i];
             if(!isDefined(columnWidth)) {
                 throw 'column width is required'; // TODO
