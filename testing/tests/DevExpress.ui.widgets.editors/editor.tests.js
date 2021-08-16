@@ -134,8 +134,9 @@ QUnit.module('methods', moduleConfig, () => {
         assert.strictEqual(editor.option('value'), null);
     });
 
-    QUnit.test('focus', function(assert) {
-        const editor = this.fixture.createEditor({ value: '123' });
+    QUnit.testInActiveWindow('focus', function(assert) {
+        const editor = this.fixture.createEditor({ value: '123', focusStateEnabled: true });
+
         $(editor.$element()).on('focus', () => {
             assert.ok(true, 'editor is focused');
         });
