@@ -31,14 +31,17 @@ import '../check_box';
 import '../date_box';
 import '../button';
 import {
-    renderLabel,
-    getLabelWidthByText,
     adjustContainerAsButtonItem,
     convertAlignmentToJustifyContent,
     convertAlignmentToTextAlign,
 } from './ui.form.utils';
 
-import { renderFieldItem } from './ui.form.field_item.js';
+import {
+    renderLabel,
+    getLabelWidthByText,
+} from './field_item/label';
+
+import { renderFieldItem } from './field_item/field_item.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 

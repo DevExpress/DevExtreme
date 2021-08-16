@@ -1,14 +1,14 @@
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import { name as clickEventName } from '../../events/click';
-import { getPublicElement } from '../../core/element';
-import { captionize } from '../../core/utils/inflector';
-import { format } from '../../core/utils/string';
-import { isDefined } from '../../core/utils/type';
-import { isMaterial } from '../themes';
-import errors from '../widget/ui.errors';
+import $ from '../../../core/renderer';
+import eventsEngine from '../../../events/core/events_engine';
+import { name as clickEventName } from '../../../events/click';
+import { getPublicElement } from '../../../core/element';
+import { captionize } from '../../../core/utils/inflector';
+import { format } from '../../../core/utils/string';
+import { isDefined } from '../../../core/utils/type';
+import { isMaterial } from '../../themes';
+import errors from '../../widget/ui.errors';
 
-import Validator from '../validator';
+import Validator from '../../validator';
 
 import {
     FLEX_LAYOUT_CLASS,
@@ -22,11 +22,9 @@ import {
     FIELD_ITEM_HELP_TEXT_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-} from './constants';
+} from '../constants';
 
-import {
-    renderLabel,
-} from './ui.form.utils';
+import { renderLabel } from './label';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const INVALID_CLASS = 'dx-invalid';
