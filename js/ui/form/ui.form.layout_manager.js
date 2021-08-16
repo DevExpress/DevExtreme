@@ -593,44 +593,18 @@ const LayoutManager = Widget.inherit({
             .addClass(isDefined(column) ? 'dx-col-' + column : '');
     },
 
-    _renderFieldItem: function(item, $container) {
-        const that = this;
-        const name = item.dataField || item.name;
-        const id = that.getItemID(name);
-        const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
-        const helpID = item.helpText ? ('dx-' + new Guid()) : null;
-        const helpText = item.helpText;
-        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
-
-        const labelOptions = that._getLabelOptions(item, id, isRequired);
-        const { location: labelLocation, labelID } = labelOptions;
-        const needRenderLabel = labelOptions.visible && labelOptions.text;
-        const isFlexSupported = this._hasBrowserFlex();
-        const labelNeedBaselineAlign =
-            labelLocation !== 'top'
-            &&
-            (
-                (!!item.helpText && !isFlexSupported)
-                ||
-                inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
-            );
-
-        const editorOptions = this._convertToEditorOptions({
-            dataField: item.dataField,
-            editorType: item.editorType,
-            allowIndeterminateState: item.allowIndeterminateState,
-            editorOptions: item.editorOptions,
-            id,
-            validationBoundary: that.option('validationBoundary')
-        });
-        const template = item.template ? this._getTemplate(item.template) : null;
-
-
+    _renderFieldItemCore: function({ item, $container, isRequired, isFlexSupported, labelNeedBaselineAlign,
+        labelOptions, labelLocation,
+        template, editorOptions, component, createComponentCallback, helpID, labelID,
+        name, helpText
+    }) {
         //
         // Setup external $container:
         //
+
         this._addItemClasses($container, item.col);
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
+        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
         if(isSimpleItem && isFlexSupported) {
             $container.addClass(FLEX_LAYOUT_CLASS);
         }
@@ -642,6 +616,7 @@ const LayoutManager = Widget.inherit({
         //
         // Setup field editor container:
         //
+
         const $fieldEditorContainer = $('<div>');
         $fieldEditorContainer.data('dx-form-item', item);
         adjustEditorContainer({ // TODO: label related code, execute ony if needRenderLabel?
@@ -652,6 +627,8 @@ const LayoutManager = Widget.inherit({
         //
         // Setup $label:
         //
+
+        const needRenderLabel = labelOptions.visible && labelOptions.text;
         const $label = needRenderLabel ? renderLabel(labelOptions) : null;
         if($label) {
             $container.append($label);
@@ -680,6 +657,7 @@ const LayoutManager = Widget.inherit({
         //
         // Append field editor:
         //
+
         let instance;
         if(template) {
             renderTemplateTo({
@@ -689,14 +667,14 @@ const LayoutManager = Widget.inherit({
                     dataField: item.dataField,
                     editorType: item.editorType,
                     editorOptions,
-                    component: this._getComponentOwner(),
+                    component,
                     name: item.name
                 }
             });
         } else {
             instance = renderComponentTo({
                 $container: $fieldEditorContainer,
-                createComponentCallback: this._createComponent.bind(this),
+                createComponentCallback,
                 componentType: item.editorType,
                 componentOptions: editorOptions,
                 helpID,
@@ -708,6 +686,7 @@ const LayoutManager = Widget.inherit({
         //
         // Setup $validation:
         //
+
         const editorElem = $fieldEditorContainer.children().first();
         const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
         const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
@@ -757,6 +736,7 @@ const LayoutManager = Widget.inherit({
         //
         // Append help text elements:
         //
+
         if(helpText && isSimpleItem) {
             const $editorParent = $fieldEditorContainer.parent();
 
@@ -769,7 +749,48 @@ const LayoutManager = Widget.inherit({
             );
         }
 
+        return { $fieldEditorContainer, instance };
+    },
+
+    _renderFieldItem: function(item, $container) {
+        const that = this;
+        const name = item.dataField || item.name;
+        const id = that.getItemID(name);
+        const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
+        const helpID = item.helpText ? ('dx-' + new Guid()) : null;
+        const helpText = item.helpText;
+
+        const labelOptions = that._getLabelOptions(item, id, isRequired);
+        const { location: labelLocation, labelID } = labelOptions;
+        const isFlexSupported = this._hasBrowserFlex();
+        const labelNeedBaselineAlign =
+            labelLocation !== 'top'
+            &&
+            (
+                (!!item.helpText && !isFlexSupported)
+                ||
+                inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
+            );
+
+        const editorOptions = this._convertToEditorOptions({
+            dataField: item.dataField,
+            editorType: item.editorType,
+            allowIndeterminateState: item.allowIndeterminateState,
+            editorOptions: item.editorOptions,
+            id,
+            validationBoundary: that.option('validationBoundary')
+        });
+        const template = item.template ? this._getTemplate(item.template) : null;
+
+        const { $fieldEditorContainer, instance } = this._renderFieldItemCore({
+            item, $container, isRequired, isFlexSupported, labelNeedBaselineAlign,
+            labelOptions, labelLocation,
+            template, editorOptions, component: this._getComponentOwner(), createComponentCallback: this._createComponent.bind(this),
+            helpID, labelID, name, helpText
+        });
+
         if(instance && item.dataField) {
+            // TODO: move to _renderFieldItemCore
             this._bindDataField(instance, item.dataField, item.editorType, $fieldEditorContainer);
         }
         this._itemsRunTimeInfo.add({
