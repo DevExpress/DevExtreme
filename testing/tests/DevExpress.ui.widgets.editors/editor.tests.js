@@ -259,22 +259,6 @@ QUnit.module('validation', {
         assert.strictEqual(this.editor.option('validationError').message, 'required', 'error is correct');
     });
 
-    skipForRenovated('not validate on value change from undefined to null', () => {
-        QUnit.test('value change from undefined to null should not trigger validation', function(assert) {
-            this.reinitEditor({ value: undefined });
-            new Validator(this.editor.$element(), {
-                validationRules: [{
-                    type: 'required',
-                    message: 'required'
-                }]
-            });
-
-            this.editor.option('value', null);
-
-            assert.ok(this.editor.option('isValid'), 'validation was not triggered');
-        });
-    });
-
     QUnit.module('validation message', () => {
         QUnit.test('should be created if editor is invalid', function(assert) {
             const validationMessage = this.getValidationMessage();
@@ -749,26 +733,25 @@ QUnit.module('private api', moduleConfig, () => {
         });
     });
 });
+QUnit.module('validationRequest', moduleConfig, () => {
+    QUnit.test('should fire on value change', function(assert) {
+        const value = 'test123';
+        const handler = sinon.stub();
 
-if(!Editor.IS_RENOVATED_WIDGET) {
-    QUnit.module('validationRequest', moduleConfig, () => {
-        QUnit.test('should fire on value change', function(assert) {
-            const value = 'test123';
-            const handler = sinon.stub();
-
-            const editor = this.fixture.createEditor({
-                value: 'xxx'
-            });
-            editor.validationRequest.add(handler);
-
-            editor.option('value', value);
-
-            const args = handler.getCall(0).args[0];
-            assert.ok(handler.calledOnce, 'validation handler should be called');
-            assert.strictEqual(args.value, value, 'correct value was passed');
-            assert.strictEqual(args.editor, editor, 'editor was passed');
+        const editor = this.fixture.createEditor({
+            value: 'xxx'
         });
+        editor.validationRequest.add(handler);
 
+        editor.option('value', value);
+
+        const args = handler.getCall(0).args[0];
+        assert.ok(handler.calledOnce, 'validation handler should be called');
+        assert.strictEqual(args.value, value, 'correct value was passed');
+        assert.strictEqual(args.editor, editor, 'editor was passed');
+    });
+
+    skipForRenovated('not validate on value change from undefined to null', () => {
         QUnit.test('should NOT fire on value change from undefined to null (T220137)', function(assert) {
             const handler = sinon.stub();
             const editor = this.fixture.createEditor({
@@ -781,33 +764,35 @@ if(!Editor.IS_RENOVATED_WIDGET) {
 
             assert.notOk(handler.called, 'validation handler was not called');
         });
-
-        QUnit.test('should fire before valueChanged callback', function(assert) {
-            const editor = this.fixture.createEditor({
-                value: 'empty',
-                onValueChanged: ({ value, previousValue }) => {
-                    assert.step(`Value changed from "${previousValue}" to "${value}"`);
-                    if(value.toUpperCase() !== value) {
-                        editor.option('value', value.toUpperCase());
-                    }
-                }
-            });
-
-            editor.validationRequest.add(({ value }) => {
-                assert.step(`Validate value: "${value}"`);
-            });
-
-            editor.option('value', 'test');
-
-            assert.verifySteps([
-                'Validate value: "test"',
-                'Value changed from "empty" to "test"',
-                'Validate value: "TEST"',
-                'Value changed from "test" to "TEST"'
-            ]);
-        });
     });
 
+    QUnit.test('should fire before valueChanged callback', function(assert) {
+        const editor = this.fixture.createEditor({
+            value: 'empty',
+            onValueChanged: ({ value, previousValue }) => {
+                assert.step(`Value changed from "${previousValue}" to "${value}"`);
+                if(value.toUpperCase() !== value) {
+                    editor.option('value', value.toUpperCase());
+                }
+            }
+        });
+
+        editor.validationRequest.add(({ value }) => {
+            assert.step(`Validate value: "${value}"`);
+        });
+
+        editor.option('value', 'test');
+
+        assert.verifySteps([
+            'Validate value: "test"',
+            'Value changed from "empty" to "test"',
+            'Validate value: "TEST"',
+            'Value changed from "test" to "TEST"'
+        ]);
+    });
+});
+
+if(!Editor.IS_RENOVATED_WIDGET) {
     QUnit.module('"name" option', {
         beforeEach: function() {
             this.$element = $('<div>').appendTo('body');
