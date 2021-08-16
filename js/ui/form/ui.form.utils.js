@@ -11,7 +11,6 @@ import {
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_BUTTON_ITEM_CLASS,
     FIELD_ITEM_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
@@ -105,13 +104,6 @@ export function renderLabel({ text, id, location, alignment, labelID = null, mar
                 _renderLabelMark(markOptions)
             )
         );
-}
-
-export function renderHelpText(helpText, helpID) {
-    return $('<div>')
-        .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
-        .attr('id', helpID)
-        .text(helpText);
 }
 
 function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {

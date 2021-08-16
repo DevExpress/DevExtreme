@@ -17,12 +17,12 @@ import {
     FIELD_ITEM_CONTENT_WRAPPER_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_LABEL_ALIGN_CLASS
+    FIELD_ITEM_LABEL_ALIGN_CLASS,
+    FIELD_ITEM_HELP_TEXT_CLASS,
 } from './constants';
 
 import {
     renderLabel,
-    renderHelpText,
     renderComponentTo,
     renderTemplateTo,
     adjustEditorContainer
@@ -197,7 +197,11 @@ export function renderFieldItem({
             $('<div>')
                 .addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS)
                 .append($fieldEditorContainer)
-                .append(renderHelpText(helpText, helpID))
+                .append(
+                    $('<div>')
+                        .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
+                        .attr('id', helpID)
+                        .text(helpText))
         );
     }
 
