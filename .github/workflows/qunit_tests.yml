@@ -4,7 +4,9 @@ concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
   cancel-in-progress: true
 
-on: [pull_request]
+on:
+  schedule:
+    - cron:  '0 8 * * *'
 
 jobs:
   build:
@@ -13,17 +15,15 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    - name: Test .${{ secrets.TEST }}.
-      run: echo ${{ secrets.TEST }}
-    - name: Set Teams notification
-      uses: aliencube/microsoft-teams-actions@v0.8.0
-      with:
-        webhook_uri: "https://teams.microsoft.com/_#/conversations/%D0%9E%D0%B1%D1%89%D0%B8%D0%B9?threadId=19:7a8fe7395a2d47288c29cfc421df6cbf@thread.skype&ctx=channel"
-        title: Test notification from Git Hub Action
-        summary: Hello from Git hub
-        text: "Проверка возможности отправлять нотификации. Прошу прощения за неудобства. @MikhailVitik"
-        sections: '[{ "activityTitle": "Sextion 1" }]'
-        actions: '[{ "@type": "OpenUri", "name": "Open Commit", "targets": [{ "os": "default", "uri": "https://github.com/DevExpress/DevExtreme/actions/runs/${{ github.run_id }}" }] }]'
+    # - name: Set Teams notification
+    #   uses: aliencube/microsoft-teams-actions@v0.8.0
+    #   with:
+    #     webhook_uri: ${{ secrets.TEAMS_ALERT }}
+    #     title: Test notification from Git Hub Action
+    #     summary: Hello from Git hub
+    #     text: "Проверка возможности отправлять нотификации. Прошу прощения за неудобства. @MikhailVitik"
+    #     sections: '[{ "activityTitle": "Sextion 1" }]'
+    #     actions: '[{ "@type": "OpenUri", "name": "Open Commit", "targets": [{ "os": "default", "uri": "https://github.com/DevExpress/DevExtreme/actions/runs/${{ github.run_id }}" }] }]'
     - name: Get sources
       uses: actions/checkout@v2
 
