@@ -17,15 +17,15 @@ function _getFullOptions(options) {
 }
 
 function calculateColumnWidths(pdfGrid, currentRowInfo) {
-    const allWidths = pdfGrid._currentHorizontalTables.flatMap((t) => t.columnWidths);
-    const splitIndexes = pdfGrid._splitByColumns.map(s => s.columnIndex).sort();
-    return allWidths
+    const widthsArray = pdfGrid._currentHorizontalTables.flatMap((table) => table.columnWidths);
+    const splitIndexes = pdfGrid._splitByColumns.map(splitInfo => splitInfo.columnIndex).sort();
+    return widthsArray
         .map((value, index) => {
             const cell = currentRowInfo.cellsInfo[index];
             const collSpan = cell.colSpan || 0;
             let columnWidth = 0;
             for(let cellIndex = index; cellIndex <= index + collSpan; cellIndex++) {
-                columnWidth += allWidths[cellIndex];
+                columnWidth += widthsArray[cellIndex];
                 if(splitIndexes[0] === cellIndex + 1) {
                     splitIndexes.splice(0, 1);
                     break;
