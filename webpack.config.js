@@ -1,8 +1,15 @@
 /* eslint-env node */
 const path = require('path');
-const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
+    mode: 'production',
+    optimization: {
+        // eslint-disable-next-line spellcheck/spell-checker
+        minimizer: [new TerserPlugin({
+            extractComments: false,
+        })],
+    },
     output: {
         sourcePrefix: '    ',
         devtoolModuleFilenameTemplate: 'devextreme:///[resource-path]',
@@ -28,13 +35,6 @@ module.exports = {
         'devexpress-gantt': 'window.DevExpress.Gantt',
         'luxon': 'window.luxon'
     },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify('production')
-            }
-        })
-    ],
     resolve: {
         alias: {
             '@devextreme/vdom': path.resolve('./node_modules/@devextreme/vdom/dist/cjs/index.js'),
