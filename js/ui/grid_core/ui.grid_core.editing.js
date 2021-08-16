@@ -302,7 +302,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _getInternalData: function(key) {
-            return this._internalState.filter(item => item.key === key)[0];
+            return this._internalState.filter(item => equalByValue(item.key, key))[0];
         },
 
         _addInternalData: function(params) {
