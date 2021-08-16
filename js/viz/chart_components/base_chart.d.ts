@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from '../palette';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
 import {
     EventInfo,
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
-import { 
-    Format
+import {
+    Format,
   } from '../../localization';
 
 import {
@@ -33,7 +33,7 @@ import {
     chartSeriesObject,
     dxChartAnnotationConfig,
     dxChartSeriesTypesCommonSeriesLabel,
-    dxChartSeriesTypesCommonSeriesPoint
+    dxChartSeriesTypesCommonSeriesPoint,
 } from '../chart';
 
 import {
@@ -44,7 +44,7 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    BaseWidgetAnnotationConfig
+    BaseWidgetAnnotationConfig,
 } from '../core/base_widget';
 
 export interface PointInteractionInfo {
@@ -72,23 +72,23 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
        * @docid
        * @default 1000
        */
-      duration?: number,
+      duration?: number;
       /**
        * @docid
        * @type Enums.VizAnimationEasing
        * @default 'easeOutCubic'
        */
-      easing?: 'easeOutCubic' | 'linear',
+      easing?: 'easeOutCubic' | 'linear';
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 300
        */
-      maxPointCountSupported?: number
+      maxPointCountSupported?: number;
     } | boolean;
     /**
      * @docid

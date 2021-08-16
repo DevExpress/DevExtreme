@@ -2,31 +2,30 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     ComponentDisabledDate,
-    dxCalendarOptions
+    dxCalendarOptions,
 } from './calendar';
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    Format
+    Format,
 } from '../localization';
 
 import {
-    Properties as PopupProperties
+    Properties as PopupProperties,
 } from './popup';
-
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateBox>;

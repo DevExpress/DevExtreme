@@ -1,5 +1,5 @@
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from './abstract_store';
 import { Query } from './query';
 

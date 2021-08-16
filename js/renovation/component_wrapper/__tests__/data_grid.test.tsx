@@ -174,6 +174,15 @@ describe('DataGrid Wrapper', () => {
     });
   });
 
+  it('should not fail on server side rendering', () => {
+    const component = new DataGridComponent({} as any, {});
+    // It's server side rendering
+    component._getInternalInstance = () => undefined as any;
+    // It's first render
+    component._isNodeReplaced = false;
+    expect(() => component._renderWrapper({})).not.toThrow();
+  });
+
   it('deprecated options', () => {
     const component = createDataGrid();
 
@@ -370,6 +379,17 @@ describe('DataGrid Wrapper', () => {
       component._optionChanged({ fullName: 'dataSource', value: dataSource });
       expect(mockInternalComponent.option).toBeCalledTimes(2);
       expect(mockInternalComponent.option).toBeCalledWith('dataSource', dataSource);
+    });
+
+    it('If editing.changes not changed update it directly for refresh data', () => {
+      const changes: Object[] = [];
+      const component: any = createDataGrid();
+      component.__options = { editing: { changes } };
+      mockInternalComponent.option.mockReturnValueOnce(changes);
+      changes.push({ key: 1, type: 'update', data: { updated: true } });
+      component._optionChanged({ fullName: 'editing.changes', value: changes });
+      expect(mockInternalComponent.option).toBeCalledTimes(2);
+      expect(mockInternalComponent.option).toBeCalledWith('editing.changes', changes);
     });
   });
 

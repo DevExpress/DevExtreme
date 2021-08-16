@@ -4,7 +4,7 @@ import { extend } from '../../../../core/utils/extend';
 import dateUtils from '../../../../core/utils/date';
 import { isNumeric, isObject } from '../../../../core/utils/type';
 import { current as currentTheme } from '../../../themes';
-import { getModelProvider } from '../../instanceFactory';
+import { AppointmentSettingsGenerator } from '../settingsGenerator';
 
 import timeZoneUtils from '../../utils.timeZone';
 
@@ -23,21 +23,27 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
-    get key() { return this.options.key; }
-    get modelProvider() { return getModelProvider(this.key); }
     get instance() { return this.options.instance; } // TODO get rid of this
-    get isAdaptive() { return this.modelProvider.adaptivityEnabled; }
-    get rtlEnabled() { return this.modelProvider.rtlEnabled; }
-    get startDayHour() { return this.modelProvider.startDayHour; }
-    get endDayHour() { return this.modelProvider.endDayHour; }
+    get key() { return this.options.key; }
+    get isAdaptive() { return this.options.adaptivityEnabled; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
+    get startDayHour() { return this.options.startDayHour; }
+    get endDayHour() { return this.options.endDayHour; }
+    get maxAppointmentsPerCell() { return this.options.maxAppointmentsPerCell; }
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }
     get resizableStep() { return this.options.getResizableStep(); }
     get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
     get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
+    get viewStartDayHour() { return this.options.viewStartDayHour; }
+    get viewEndDayHour() { return this.options.viewEndDayHour; }
+    get viewCellDuration() { return this.options.viewCellDuration; }
+    get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
+    get topVirtualCellCount() { return this.options.topVirtualCellCount; }
+    get groupOrientation() { return this.options.groupOrientation; }
 
-    get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
+    get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
     _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         coordinates.top = coordinates.top + this.getCollectorTopOffset(isAllDay);
@@ -80,7 +86,7 @@ class BaseRenderingStrategy {
     createTaskPositionMap(items) {
         delete this._maxAppointmentCountPerCell;
 
-        const length = items && items.length;
+        const length = items?.length;
         if(!length) return;
 
         const map = [];
@@ -90,6 +96,13 @@ class BaseRenderingStrategy {
             if(this.rtlEnabled) {
                 coordinates = this._correctRtlCoordinates(coordinates);
             }
+
+            coordinates.forEach((item) => {
+                item.leftVirtualCellCount = this.leftVirtualCellCount;
+                item.topVirtualCellCount = this.topVirtualCellCount;
+                item.leftVirtualWidth = this.leftVirtualCellCount * this.cellWidth;
+                item.topVirtualHeight = this.topVirtualCellCount * this.cellHeight;
+            });
 
             map.push(coordinates);
         }
@@ -124,7 +137,7 @@ class BaseRenderingStrategy {
     }
 
     _getItemPosition(appointment) {
-        const position = this._getAppointmentCoordinates(appointment);
+        const position = this.generateAppointmentSettings(appointment);
         const allDay = this.isAllDay(appointment);
 
         let result = [];
@@ -199,8 +212,23 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _getAppointmentCoordinates(appointment) {
-        return this.instance.fire('createAppointmentSettings', appointment);
+    getAppointmentSettingsGenerator(rawAppointment) {
+        return new AppointmentSettingsGenerator({
+            rawAppointment,
+            appointmentTakesAllDay: this.isAppointmentTakesAllDay(rawAppointment), // TODO move to the settings
+            ...this.options
+        });
+    }
+    generateAppointmentSettings(rawAppointment) {
+        return this.getAppointmentSettingsGenerator(rawAppointment).create();
+    }
+
+    isAppointmentTakesAllDay(rawAppointment) {
+        return this.options.appointmentDataProvider.appointmentTakesAllDay(
+            rawAppointment,
+            this.viewStartDayHour,
+            this.viewEndDayHour
+        );
     }
 
     _getAppointmentParts() {
@@ -459,6 +487,7 @@ class BaseRenderingStrategy {
     _getExtendedPositionMap(map, positions) {
         let positionCounter = 0;
         const result = [];
+
         for(let i = 0, mapLength = map.length; i < mapLength; i++) {
             const resultString = [];
             for(let j = 0, itemLength = map[i].length; j < itemLength; j++) {
@@ -470,6 +499,7 @@ class BaseRenderingStrategy {
             }
             result.push(resultString);
         }
+
         return result;
     }
 
@@ -589,7 +619,7 @@ class BaseRenderingStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const overlappingMode = this.maxAppointmentsPerCell;
         const offsets = this._getOffsets();
         const appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
@@ -634,7 +664,7 @@ class BaseRenderingStrategy {
 
     _getMaxAppointmentCountPerCell() {
         if(!this._maxAppointmentCountPerCell) {
-            const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+            const overlappingMode = this.maxAppointmentsPerCell;
             let appointmentCountPerCell;
 
             if(isNumeric(overlappingMode)) {

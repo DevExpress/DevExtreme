@@ -804,16 +804,27 @@ declare module DevExpress {
   export class DOMComponent<
     TProperties = DevExpress.DOMComponent.Properties
   > extends Component<TProperties> {
+    _templateManager: DevExpress.core.TemplateManager;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
     );
+
+    /**
+     * [descr:DOMComponent.getInstance(element)]
+     */
+    static getInstance(
+      element: DevExpress.core.UserDefinedElement
+    ): DOMComponent<DevExpress.DOMComponent.Properties>;
+
     /**
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
       rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
+
     /**
      * [descr:DOMComponent.dispose()]
      */
@@ -822,12 +833,6 @@ declare module DevExpress {
      * [descr:DOMComponent.element()]
      */
     element(): DevExpress.core.DxElement;
-    /**
-     * [descr:DOMComponent.getInstance(element)]
-     */
-    static getInstance(
-      element: DevExpress.core.UserDefinedElement
-    ): DOMComponent<DevExpress.DOMComponent.Properties>;
 
     $element(): DevExpress.core.UserDefinedElement;
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
@@ -837,8 +842,7 @@ declare module DevExpress {
       fullName: string,
       value: unknown,
       previousValue: unknown
-    );
-    _templateManager: DevExpress.core.TemplateManager;
+    ): void;
   }
   module DOMComponent {
     /**
@@ -850,6 +854,8 @@ declare module DevExpress {
      */
     type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
+  /* eslint-disable no-underscore-dangle */
+
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1422,16 +1428,12 @@ declare module DevExpress.core {
     _optionsByReference: Record<string, unknown>;
     _deprecatedOptions: Record<string, unknown>;
     _options: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       silent(path: any, value: any): void;
     };
     _createActionByOption(
       optionName: string,
       config: Record<string, unknown>
-    ): (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ...args: any[]
-    ) => any;
+    ): (...args: any[]) => any;
     _dispose(): void;
     _getDefaultOptions(): Record<string, unknown>;
     _init(): void;
@@ -2251,14 +2253,14 @@ declare module DevExpress.data {
      */
     interface PromiseExtension<T> {
       then<TResult1 = T, TResult2 = never>(
-        onfulfilled?:
+        onFulfilled?:
           | ((
               value: T,
               extraParameters?: T
             ) => TResult1 | PromiseLike<TResult1>)
           | undefined
           | null,
-        onrejected?:
+        onRejected?:
           | ((reason: any) => TResult2 | PromiseLike<TResult2>)
           | undefined
           | null
@@ -2381,11 +2383,11 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.fields()]
      */
-    fields(): Array<PivotGridDataSourceField>;
+    fields(): Array<DevExpress.data.PivotGridDataSource.Field>;
     /**
      * [descr:PivotGridDataSource.fields(fields)]
      */
-    fields(fields: Array<PivotGridDataSourceField>): void;
+    fields(fields: Array<DevExpress.data.PivotGridDataSource.Field>): void;
     /**
      * [descr:PivotGridDataSource.filter()]
      */
@@ -2400,7 +2402,7 @@ declare module DevExpress.data {
     getAreaFields(
       area: string,
       collectGroups: boolean
-    ): Array<PivotGridDataSourceField>;
+    ): Array<DevExpress.data.PivotGridDataSource.Field>;
     /**
      * [descr:PivotGridDataSource.getData()]
      */
@@ -2463,6 +2465,7 @@ declare module DevExpress.data {
       | 'loadingChanged';
   }
   /**
+   * @deprecated Use Field instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PivotGridDataSourceField {
@@ -2647,7 +2650,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields]
      */
-    fields?: Array<PivotGridDataSourceField>;
+    fields?: Array<DevExpress.data.PivotGridDataSource.Field>;
     /**
      * [descr:PivotGridDataSourceOptions.filter]
      */
@@ -2659,7 +2662,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.onFieldsPrepared]
      */
-    onFieldsPrepared?: (fields: Array<PivotGridDataSourceField>) => void;
+    onFieldsPrepared?: (
+      fields: Array<DevExpress.data.PivotGridDataSource.Field>
+    ) => void;
     /**
      * [descr:PivotGridDataSourceOptions.onLoadError]
      */
@@ -3037,6 +3042,9 @@ declare module DevExpress.data {
     url?: string;
   }
 }
+declare module DevExpress.data.PivotGridDataSource {
+  export type Field = PivotGridDataSourceField;
+}
 declare module DevExpress.data.utils {
   /**
    * [descr:Utils.compileGetter(expr)]
@@ -3063,6 +3071,7 @@ declare module DevExpress.events {
     readonly value?: any;
     readonly previousValue?: any;
   }
+  /* eslint-enable @typescript-eslint/no-empty-interface */
   /**
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -3087,14 +3096,17 @@ declare module DevExpress.events {
      * [descr:EventObject.currentTarget]
      */
     currentTarget: Element;
+
     /**
      * [descr:EventObject.data]
      */
     data: any;
+
     /**
      * [descr:EventObject.delegateTarget]
      */
     delegateTarget: Element;
+
     /**
      * [descr:EventObject.target]
      */
@@ -3327,15 +3339,16 @@ declare module DevExpress.excelExporter {
      */
     to?: CellAddress;
   }
+  export type DataGridCell = ExcelDataGridCell;
   /**
-   * [descr:ExcelDataGridCell]
+   * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ExcelDataGridCell {
     /**
      * [descr:ExcelDataGridCell.column]
      */
-    column?: DevExpress.ui.dxDataGridColumn;
+    column?: DevExpress.ui.dxDataGrid.Column;
     /**
      * [descr:ExcelDataGridCell.data]
      */
@@ -3413,7 +3426,7 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportDataGridProps.customizeCell]
      */
     customizeCell?: (options: {
-      gridCell?: ExcelDataGridCell;
+      gridCell?: DataGridCell;
       excelCell?: any;
     }) => void;
   }
@@ -3438,16 +3451,15 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportPivotGridProps.customizeCell]
      */
     customizeCell?: (options: {
-      pivotCell?: ExcelPivotGridCell;
+      pivotCell?: PivotGridCell;
       excelCell?: any;
     }) => void;
   }
   /**
-   * [descr:ExcelPivotGridCell]
+   * @deprecated Use PivotGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ExcelPivotGridCell
-    extends DevExpress.ui.dxPivotGridPivotGridCell {
+  export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGrid.Cell {
     /**
      * [descr:ExcelPivotGridCell.area]
      */
@@ -3473,6 +3485,7 @@ declare module DevExpress.excelExporter {
   export function exportPivotGrid(
     options: ExcelExportPivotGridProps
   ): DevExpress.core.utils.DxPromise<CellRange>;
+  export type PivotGridCell = ExcelPivotGridCell;
 }
 declare module DevExpress.exporter {
   /**
@@ -3942,7 +3955,7 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfDataGridCell.column]
      */
-    column?: DevExpress.ui.dxDataGridColumn;
+    column?: DevExpress.ui.dxDataGrid.Column;
     /**
      * [descr:PdfDataGridCell.data]
      */
@@ -4450,7 +4463,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxAccordionItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxAccordionItem extends CollectionWidgetItem {
@@ -4482,7 +4495,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxAccordionItem | any>
+      | Array<string | DevExpress.ui.dxAccordion.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -4525,7 +4538,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAccordionOptions.items]
      */
-    items?: Array<string | dxAccordionItem | any>;
+    items?: Array<string | DevExpress.ui.dxAccordion.Item | any>;
     /**
      * [descr:dxAccordionOptions.multiple]
      */
@@ -4587,7 +4600,7 @@ declare module DevExpress.ui {
     export type Properties = dxActionSheetOptions;
   }
   /**
-   * [descr:dxActionSheetItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxActionSheetItem extends CollectionWidgetItem {
@@ -4626,14 +4639,14 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxActionSheetItem | any>
+      | Array<string | DevExpress.ui.dxActionSheet.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
      * [descr:dxActionSheetOptions.items]
      */
-    items?: Array<string | dxActionSheetItem | any>;
+    items?: Array<string | DevExpress.ui.dxActionSheet.Item | any>;
     /**
      * [descr:dxActionSheetOptions.onCancelClick]
      */
@@ -4758,7 +4771,7 @@ declare module DevExpress.ui {
     export type Properties = dxBoxOptions;
   }
   /**
-   * [descr:dxBoxItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxBoxItem extends CollectionWidgetItem {
@@ -4797,7 +4810,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxBoxItem | any>
+      | Array<string | DevExpress.ui.dxBox.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -4808,7 +4821,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxOptions.items]
      */
-    items?: Array<string | dxBoxItem | any>;
+    items?: Array<string | DevExpress.ui.dxBox.Item | any>;
   }
   /**
    * [descr:dxButton]
@@ -4851,7 +4864,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxButtonGroupItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxButtonGroupItem extends CollectionWidgetItem {
@@ -4893,7 +4906,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.items]
      */
-    items?: Array<dxButtonGroupItem>;
+    items?: Array<DevExpress.ui.dxButtonGroup.Item>;
     /**
      * [descr:dxButtonGroupOptions.keyExpr]
      */
@@ -5113,13 +5126,9 @@ declare module DevExpress.ui {
      */
     hoverStateEnabled?: boolean;
     /**
-     * [descr:dxCheckBoxOptions.iconHeight]
+     * [descr:dxCheckBoxOptions.iconSize]
      */
-    iconHeight?: number | string;
-    /**
-     * [descr:dxCheckBoxOptions.iconWidth]
-     */
-    iconWidth?: number | string;
+    iconSize?: number | string;
     /**
      * [descr:dxCheckBoxOptions.name]
      */
@@ -5258,14 +5267,14 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxContextMenu>;
   }
   /**
-   * [descr:dxContextMenuItem]
+   * @deprecated Use DevExpress.ui.dxContextMenu.Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
      * [descr:dxContextMenuItem.items]
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<DevExpress.ui.dxContextMenu.Item>;
   }
   /**
    * @deprecated use Properties instead
@@ -5284,14 +5293,14 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<dxContextMenuItem>
+      | Array<DevExpress.ui.dxContextMenu.Item>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
      * [descr:dxContextMenuOptions.items]
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<DevExpress.ui.dxContextMenu.Item>;
     /**
      * [descr:dxContextMenuOptions.onHidden]
      */
@@ -5481,7 +5490,6 @@ declare module DevExpress.ui {
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: any): boolean;
     isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
     navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
@@ -5578,91 +5586,7 @@ declare module DevExpress.ui {
       readonly watch?: Function;
       readonly oldValue?: any;
     };
-    /**
-     * [descr:dxDataGridColumn]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Column extends ColumnBase {
-      /**
-       * [descr:dxDataGridColumn.allowExporting]
-       */
-      allowExporting?: boolean;
-      /**
-       * [descr:dxDataGridColumn.allowGrouping]
-       */
-      allowGrouping?: boolean;
-      /**
-       * [descr:dxDataGridColumn.autoExpandGroup]
-       */
-      autoExpandGroup?: boolean;
-      /**
-       * [descr:dxDataGridColumn.buttons]
-       */
-      buttons?: Array<
-        'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton
-      >;
-      /**
-       * [descr:dxDataGridColumn.calculateGroupValue]
-       */
-      calculateGroupValue?: string | ((rowData: any) => any);
-      /**
-       * [descr:dxDataGridColumn.cellTemplate]
-       */
-      cellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.columns]
-       */
-      columns?: Array<Column | string>;
-      /**
-       * [descr:dxDataGridColumn.editCellTemplate]
-       */
-      editCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnEditCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.groupCellTemplate]
-       */
-      groupCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnGroupCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.groupIndex]
-       */
-      groupIndex?: number;
-      /**
-       * [descr:dxDataGridColumn.headerCellTemplate]
-       */
-      headerCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            columnHeader: DevExpress.core.DxElement,
-            headerInfo: ColumnHeaderCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.showWhenGrouped]
-       */
-      showWhenGrouped?: boolean;
-      /**
-       * [descr:dxDataGridColumn.type]
-       */
-      type?:
-        | 'adaptive'
-        | 'buttons'
-        | 'detailExpand'
-        | 'groupExpand'
-        | 'selection';
-    }
+    export type Column = dxDataGridColumn;
     /**
      * [descr:GridBaseColumn]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -5920,49 +5844,7 @@ declare module DevExpress.ui {
        */
       width?: number | string;
     }
-    /**
-     * [descr:dxDataGridColumnButton]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnButton extends ColumnButtonBase {
-      /**
-       * [descr:dxDataGridColumnButton.name]
-       */
-      name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
-      /**
-       * [descr:dxDataGridColumnButton.onClick]
-       */
-      onClick?: (e: ColumnButtonClickEvent) => void;
-      /**
-       * [descr:dxDataGridColumnButton.template]
-       */
-      template?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnButtonTemplateData
-          ) => string | DevExpress.core.UserDefinedElement);
-      /**
-       * [descr:dxDataGridColumnButton.visible]
-       */
-      visible?:
-        | boolean
-        | ((options: {
-            component?: dxDataGrid;
-            row?: RowObject;
-            column?: Column;
-          }) => boolean);
-      /**
-       * [descr:dxDataGridColumnButton.disabled]
-       */
-      disabled?:
-        | boolean
-        | ((options: {
-            component?: dxDataGrid;
-            row?: RowObject;
-            column?: Column;
-          }) => boolean);
-    }
+    export type ColumnButton = dxDataGridColumnButton;
     /**
      * [descr:GridBaseColumnButton]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6515,7 +6397,7 @@ declare module DevExpress.ui {
       font?: DevExpress.exporter.ExcelFont;
       readonly value?: string | number | Date;
       numberFormat?: string;
-      gridCell?: DevExpress.excelExporter.ExcelDataGridCell;
+      gridCell?: DevExpress.excelExporter.DataGridCell;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7579,9 +7461,6 @@ declare module DevExpress.ui {
        */
       type?: 'custom' | 'localStorage' | 'sessionStorage';
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export interface Summary {
       /**
        * [descr:dxDataGridOptions.summary.calculateCustomSummary]
@@ -7756,13 +7635,140 @@ declare module DevExpress.ui {
     }
   }
   /**
-   * @deprecated 
+   * @deprecated Use the DevExpress.ui.dxDataGrid.Column type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxDataGridColumn = DevExpress.ui.dxDataGrid.Column;
+  export interface dxDataGridColumn
+    extends DevExpress.ui.dxDataGrid.ColumnBase {
+    /**
+     * [descr:dxDataGridColumn.allowExporting]
+     */
+    allowExporting?: boolean;
+    /**
+     * [descr:dxDataGridColumn.allowGrouping]
+     */
+    allowGrouping?: boolean;
+    /**
+     * [descr:dxDataGridColumn.autoExpandGroup]
+     */
+    autoExpandGroup?: boolean;
+    /**
+     * [descr:dxDataGridColumn.buttons]
+     */
+    buttons?: Array<
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete'
+      | DevExpress.ui.dxDataGrid.ColumnButton
+    >;
+    /**
+     * [descr:dxDataGridColumn.calculateGroupValue]
+     */
+    calculateGroupValue?: string | ((rowData: any) => any);
+    /**
+     * [descr:dxDataGridColumn.cellTemplate]
+     */
+    cellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.columns]
+     */
+    columns?: Array<DevExpress.ui.dxDataGrid.Column | string>;
+    /**
+     * [descr:dxDataGridColumn.editCellTemplate]
+     */
+    editCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnEditCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.groupCellTemplate]
+     */
+    groupCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnGroupCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.groupIndex]
+     */
+    groupIndex?: number;
+    /**
+     * [descr:dxDataGridColumn.headerCellTemplate]
+     */
+    headerCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          columnHeader: DevExpress.core.DxElement,
+          headerInfo: DevExpress.ui.dxDataGrid.ColumnHeaderCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.showWhenGrouped]
+     */
+    showWhenGrouped?: boolean;
+    /**
+     * [descr:dxDataGridColumn.type]
+     */
+    type?:
+      | 'adaptive'
+      | 'buttons'
+      | 'detailExpand'
+      | 'groupExpand'
+      | 'selection';
+  }
   /**
-   * @deprecated 
+   * @deprecated Use the DataGrid's ColumnButton type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxDataGridColumnButton = DevExpress.ui.dxDataGrid.ColumnButton;
+  export interface dxDataGridColumnButton
+    extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
+    /**
+     * [descr:dxDataGridColumnButton.name]
+     */
+    name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    /**
+     * [descr:dxDataGridColumnButton.onClick]
+     */
+    onClick?: (e: DevExpress.ui.dxDataGrid.ColumnButtonClickEvent) => void;
+    /**
+     * [descr:dxDataGridColumnButton.template]
+     */
+    template?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnButtonTemplateData
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxDataGridColumnButton.visible]
+     */
+    visible?:
+      | boolean
+      | ((options: {
+          component?: dxDataGrid;
+          row?: DevExpress.ui.dxDataGrid.RowObject;
+          column?: DevExpress.ui.dxDataGrid.Column;
+        }) => boolean);
+    /**
+     * [descr:dxDataGridColumnButton.disabled]
+     */
+    disabled?:
+      | boolean
+      | ((options: {
+          component?: dxDataGrid;
+          row?: DevExpress.ui.dxDataGrid.RowObject;
+          column?: DevExpress.ui.dxDataGrid.Column;
+        }) => boolean);
+  }
   /**
    * @deprecated 
    */
@@ -8203,27 +8209,27 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagram.getItemByKey(key)]
      */
-    getItemByKey(key: Object): dxDiagramItem;
+    getItemByKey(key: Object): DevExpress.ui.dxDiagram.Item;
     /**
      * [descr:dxDiagram.getItemById(id)]
      */
-    getItemById(id: string): dxDiagramItem;
+    getItemById(id: string): DevExpress.ui.dxDiagram.Item;
     /**
      * [descr:dxDiagram.getItems()]
      */
-    getItems(): Array<dxDiagramItem>;
+    getItems(): Array<DevExpress.ui.dxDiagram.Item>;
     /**
      * [descr:dxDiagram.getSelectedItems()]
      */
-    getSelectedItems(): Array<dxDiagramItem>;
+    getSelectedItems(): Array<DevExpress.ui.dxDiagram.Item>;
     /**
      * [descr:dxDiagram.setSelectedItems(items)]
      */
-    setSelectedItems(items: Array<dxDiagramItem>): void;
+    setSelectedItems(items: Array<DevExpress.ui.dxDiagram.Item>): void;
     /**
      * [descr:dxDiagram.scrollToItem(item)]
      */
-    scrollToItem(item: dxDiagramItem): void;
+    scrollToItem(item: DevExpress.ui.dxDiagram.Item): void;
     /**
      * [descr:dxDiagram.export()]
      */
@@ -8258,10 +8264,10 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDiagram>;
     export type ItemClickEvent = DevExpress.events.EventInfo<dxDiagram> & {
-      readonly item: dxDiagramItem;
+      readonly item: Item;
     };
     export type ItemDblClickEvent = DevExpress.events.EventInfo<dxDiagram> & {
-      readonly item: dxDiagramItem;
+      readonly item: Item;
     };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxDiagram> &
       DevExpress.events.ChangedOptionInfo;
@@ -8298,7 +8304,7 @@ declare module DevExpress.ui {
       };
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxDiagram> & {
-        readonly items: Array<dxDiagramItem>;
+        readonly items: Array<Item>;
       };
   }
   /**
@@ -8500,7 +8506,7 @@ declare module DevExpress.ui {
    * [descr:dxDiagramConnector]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxDiagramConnector extends dxDiagramItem {
+  export interface dxDiagramConnector extends DevExpress.ui.dxDiagram.Item {
     /**
      * [descr:dxDiagramConnector.fromKey]
      */
@@ -8587,7 +8593,7 @@ declare module DevExpress.ui {
     shape?: dxDiagramShape;
   }
   /**
-   * [descr:dxDiagramItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDiagramItem {
@@ -8678,6 +8684,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9436,6 +9444,8 @@ declare module DevExpress.ui {
           | 'italic'
           | 'underline'
           | 'fontColor'
+          | 'lineStyle'
+          | 'lineWidth'
           | 'lineColor'
           | 'fillColor'
           | 'textAlignLeft'
@@ -9496,6 +9506,8 @@ declare module DevExpress.ui {
             | 'italic'
             | 'underline'
             | 'fontColor'
+            | 'lineStyle'
+            | 'lineWidth'
             | 'lineColor'
             | 'fillColor'
             | 'textAlignLeft'
@@ -9587,6 +9599,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9652,6 +9666,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9717,6 +9733,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9921,7 +9939,7 @@ declare module DevExpress.ui {
    * [descr:dxDiagramShape]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxDiagramShape extends dxDiagramItem {
+  export interface dxDiagramShape extends DevExpress.ui.dxDiagram.Item {
     /**
      * [descr:dxDiagramShape.text]
      */
@@ -10328,10 +10346,10 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * [descr:dxDropDownButtonItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxDropDownButtonItem extends dxListItem {
+  export interface dxDropDownButtonItem extends DevExpress.ui.dxList.Item {
     /**
      * [descr:dxDropDownButtonItem.onClick]
      */
@@ -10355,7 +10373,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<dxDropDownButtonItem | any>
+      | Array<DevExpress.ui.dxDropDownButton.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -10405,7 +10423,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.items]
      */
-    items?: Array<dxDropDownButtonItem | any>;
+    items?: Array<DevExpress.ui.dxDropDownButton.Item | any>;
     /**
      * [descr:dxDropDownButtonOptions.keyExpr]
      */
@@ -10762,7 +10780,7 @@ declare module DevExpress.ui {
      * [descr:dxFileManagerContextMenu.items]
      */
     items?: Array<
-      | dxFileManagerContextMenuItem
+      | DevExpress.ui.dxFileManager.ContextMenuItem
       | 'create'
       | 'upload'
       | 'refresh'
@@ -10774,14 +10792,15 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * [descr:dxFileManagerContextMenuItem]
+   * @deprecated Use DevExpress.ui.dxFileManager.ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
+  export interface dxFileManagerContextMenuItem
+    extends DevExpress.ui.dxContextMenu.Item {
     /**
      * [descr:dxFileManagerContextMenuItem.items]
      */
-    items?: Array<dxFileManagerContextMenuItem>;
+    items?: Array<DevExpress.ui.dxFileManager.ContextMenuItem>;
     /**
      * [descr:dxFileManagerContextMenuItem.name]
      */
@@ -11056,7 +11075,7 @@ declare module DevExpress.ui {
      * [descr:dxFileManagerToolbar.fileSelectionItems]
      */
     fileSelectionItems?: Array<
-      | dxFileManagerToolbarItem
+      | DevExpress.ui.dxFileManager.ToolbarItem
       | 'showNavPane'
       | 'create'
       | 'upload'
@@ -11074,7 +11093,7 @@ declare module DevExpress.ui {
      * [descr:dxFileManagerToolbar.items]
      */
     items?: Array<
-      | dxFileManagerToolbarItem
+      | DevExpress.ui.dxFileManager.ToolbarItem
       | 'showNavPane'
       | 'create'
       | 'upload'
@@ -11090,10 +11109,11 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * [descr:dxFileManagerToolbarItem]
+   * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxFileManagerToolbarItem extends dxToolbarItem {
+  export interface dxFileManagerToolbarItem
+    extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxFileManagerToolbarItem.icon]
      */
@@ -11860,7 +11880,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * [descr:dxFormButtonItem]
+   * @deprecated Use ButtonItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormButtonItem {
@@ -11902,7 +11922,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * [descr:dxFormEmptyItem]
+   * @deprecated Use EmptyItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormEmptyItem {
@@ -11932,7 +11952,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * [descr:dxFormGroupItem]
+   * @deprecated Use GroupItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormGroupItem {
@@ -11967,13 +11987,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.items]
      */
-    items?: Array<
-      | dxFormSimpleItem
-      | dxFormGroupItem
-      | dxFormTabbedItem
-      | dxFormEmptyItem
-      | dxFormButtonItem
-    >;
+    items?: Array<DevExpress.ui.dxForm.Item>;
     /**
      * [descr:dxFormGroupItem.name]
      */
@@ -12020,14 +12034,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.customizeItem]
      */
-    customizeItem?: (
-      item:
-        | dxFormSimpleItem
-        | dxFormGroupItem
-        | dxFormTabbedItem
-        | dxFormEmptyItem
-        | dxFormButtonItem
-    ) => void;
+    customizeItem?: (item: DevExpress.ui.dxForm.Item) => void;
     /**
      * [descr:dxFormOptions.formData]
      */
@@ -12035,13 +12042,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.items]
      */
-    items?: Array<
-      | dxFormSimpleItem
-      | dxFormGroupItem
-      | dxFormTabbedItem
-      | dxFormEmptyItem
-      | dxFormButtonItem
-    >;
+    items?: Array<DevExpress.ui.dxForm.Item>;
     /**
      * [descr:dxFormOptions.labelLocation]
      */
@@ -12106,7 +12107,7 @@ declare module DevExpress.ui {
     validationGroup?: string;
   }
   /**
-   * [descr:dxFormSimpleItem]
+   * @deprecated Use SimpleItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormSimpleItem {
@@ -12221,7 +12222,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * [descr:dxFormTabbedItem]
+   * @deprecated Use TabbedItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormTabbedItem {
@@ -12276,13 +12277,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormTabbedItem.tabs.items]
        */
-      items?: Array<
-        | dxFormSimpleItem
-        | dxFormGroupItem
-        | dxFormTabbedItem
-        | dxFormEmptyItem
-        | dxFormButtonItem
-      >;
+      items?: Array<DevExpress.ui.dxForm.Item>;
       /**
        * [descr:dxFormTabbedItem.tabs.tabTemplate]
        */
@@ -12357,7 +12352,7 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxGalleryItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxGalleryItem extends CollectionWidgetItem {
@@ -12388,7 +12383,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxGalleryItem | any>
+      | Array<string | DevExpress.ui.dxGallery.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -12407,7 +12402,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGalleryOptions.items]
      */
-    items?: Array<string | dxGalleryItem | any>;
+    items?: Array<string | DevExpress.ui.dxGallery.Item | any>;
     /**
      * [descr:dxGalleryOptions.loop]
      */
@@ -12701,7 +12696,7 @@ declare module DevExpress.ui {
      * [descr:dxGanttContextMenu.items]
      */
     items?: Array<
-      | dxGanttContextMenuItem
+      | DevExpress.ui.dxGantt.ContextMenuItem
       | 'undo'
       | 'redo'
       | 'expandAll'
@@ -12716,10 +12711,11 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * [descr:dxGanttContextMenuItem]
+   * @deprecated Use ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxGanttContextMenuItem extends dxContextMenuItem {
+  export interface dxGanttContextMenuItem
+    extends DevExpress.ui.dxContextMenu.Item {
     /**
      * [descr:dxGanttContextMenuItem.name]
      */
@@ -12749,7 +12745,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.columns]
      */
-    columns?: Array<dxTreeListColumn | string>;
+    columns?: Array<DevExpress.ui.dxTreeList.Column | string>;
     /**
      * [descr:dxGanttOptions.dependencies]
      */
@@ -12841,6 +12837,10 @@ declare module DevExpress.ui {
        */
       enablePredecessorGap?: boolean;
     };
+    /**
+     * [descr:dxGanttOptions.sorting]
+     */
+    sorting?: dxGanttSorting;
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
      */
@@ -13154,6 +13154,40 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.rootValue]
      */
     rootValue?: any;
+    /**
+     * [descr:dxGanttOptions.startDateRange]
+     */
+    startDateRange?: Date;
+    /**
+     * [descr:dxGanttOptions.endDateRange]
+     */
+    endDateRange?: Date;
+  }
+  /**
+   * [descr:dxGanttSorting]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttSorting {
+    /**
+     * [descr:dxGanttSorting.ascendingText]
+     */
+    ascendingText?: string;
+    /**
+     * [descr:dxGanttSorting.clearText]
+     */
+    clearText?: string;
+    /**
+     * [descr:dxGanttSorting.descendingText]
+     */
+    descendingText?: string;
+    /**
+     * [descr:dxGanttSorting.mode]
+     */
+    mode?: 'multiple' | 'none' | 'single';
+    /**
+     * [descr:dxGanttSorting.showSortIndexes]
+     */
+    showSortIndexes?: boolean;
   }
   /**
    * [descr:dxGanttStripLine]
@@ -13186,7 +13220,7 @@ declare module DevExpress.ui {
      * [descr:dxGanttToolbar.items]
      */
     items?: Array<
-      | dxGanttToolbarItem
+      | DevExpress.ui.dxGantt.ToolbarItem
       | 'separator'
       | 'undo'
       | 'redo'
@@ -13202,10 +13236,10 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * [descr:dxGanttToolbarItem]
+   * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxGanttToolbarItem extends dxToolbarItem {
+  export interface dxGanttToolbarItem extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxGanttToolbarItem.name]
      */
@@ -13598,7 +13632,7 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorToolbar.items]
      */
     items?: Array<
-      | dxHtmlEditorToolbarItem
+      | DevExpress.ui.dxHtmlEditor.ToolbarItem
       | 'background'
       | 'bold'
       | 'color'
@@ -13642,10 +13676,11 @@ declare module DevExpress.ui {
     multiline?: boolean;
   }
   /**
-   * [descr:dxHtmlEditorToolbarItem]
+   * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
+  export interface dxHtmlEditorToolbarItem
+    extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxHtmlEditorToolbarItem.name]
      */
@@ -13935,7 +13970,7 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxListItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxListItem extends CollectionWidgetItem {
@@ -13984,7 +14019,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxListItem | any>
+      | Array<string | DevExpress.ui.dxList.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -14035,7 +14070,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.items]
      */
-    items?: Array<string | dxListItem | any>;
+    items?: Array<string | DevExpress.ui.dxList.Item | any>;
     /**
      * [descr:dxListOptions.menuItems]
      */
@@ -14917,14 +14952,14 @@ declare module DevExpress.ui {
       | 'onHover';
   }
   /**
-   * [descr:dxMenuItem]
+   * @deprecated Use DevExpress.ui.dxMenu.Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * [descr:dxMenuItem.items]
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<DevExpress.ui.dxMenu.Item>;
   }
   /**
    * @deprecated use Properties instead
@@ -14940,7 +14975,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<dxMenuItem>
+      | Array<DevExpress.ui.dxMenu.Item>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -14951,7 +14986,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuOptions.items]
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<DevExpress.ui.dxMenu.Item>;
     /**
      * [descr:dxMenuOptions.onSubmenuHidden]
      */
@@ -15038,7 +15073,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxMultiViewItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMultiViewItem extends CollectionWidgetItem {}
@@ -15057,7 +15092,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxMultiViewItem | any>
+      | Array<string | DevExpress.ui.dxMultiView.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -15072,7 +15107,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMultiViewOptions.items]
      */
-    items?: Array<string | dxMultiViewItem | any>;
+    items?: Array<string | DevExpress.ui.dxMultiView.Item | any>;
     /**
      * [descr:dxMultiViewOptions.loop]
      */
@@ -15111,10 +15146,10 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxNavBarItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxNavBarItem extends dxTabsItem {
+  export interface dxNavBarItem extends DevExpress.ui.dxTabs.Item {
     /**
      * [descr:dxNavBarItem.badge]
      */
@@ -15389,17 +15424,17 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxPivotGrid> & {
         readonly area?: string;
         readonly cellElement?: DevExpress.core.DxElement;
-        readonly cell?: dxPivotGridPivotGridCell;
+        readonly cell?: Cell;
         readonly rowIndex?: number;
         readonly columnIndex?: number;
-        readonly columnFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly rowFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly dataFields?: Array<DevExpress.data.PivotGridDataSourceField>;
+        readonly columnFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly rowFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly dataFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
       };
     export type CellPreparedEvent = DevExpress.events.EventInfo<dxPivotGrid> & {
       readonly area?: string;
       readonly cellElement?: DevExpress.core.DxElement;
-      readonly cell?: dxPivotGridPivotGridCell;
+      readonly cell?: Cell;
       readonly rowIndex?: number;
       readonly columnIndex?: number;
     };
@@ -15407,14 +15442,14 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent =
       DevExpress.events.EventInfo<dxPivotGrid> & {
         readonly area?: string;
-        readonly cell?: dxPivotGridPivotGridCell;
+        readonly cell?: Cell;
         readonly cellElement?: DevExpress.core.DxElement;
         readonly columnIndex?: number;
         readonly rowIndex?: number;
-        readonly dataFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly rowFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly columnFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly field?: DevExpress.data.PivotGridDataSourceField;
+        readonly dataFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly rowFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly columnFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly field?: DevExpress.data.PivotGridDataSource.Field;
         items?: Array<any>;
       };
     export type DisposingEvent = DevExpress.events.EventInfo<dxPivotGrid>;
@@ -15463,7 +15498,7 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent =
       DevExpress.events.EventInfo<dxPivotGridFieldChooser> & {
         readonly area?: string;
-        readonly field?: DevExpress.data.PivotGridDataSourceField;
+        readonly field?: DevExpress.data.PivotGridDataSource.Field;
         readonly event?: DevExpress.events.DxEvent;
         items?: Array<any>;
       };
@@ -15996,7 +16031,7 @@ declare module DevExpress.ui {
     wordWrapEnabled?: boolean;
   }
   /**
-   * [descr:dxPivotGridPivotGridCell]
+   * @deprecated Use Cell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPivotGridPivotGridCell {
@@ -16045,7 +16080,7 @@ declare module DevExpress.ui {
    * [descr:dxPivotGridSummaryCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxPivotGridSummaryCell {
+  interface dxPivotGridSummaryCell {
     /**
      * [descr:dxPivotGridSummaryCell.child(direction, fieldValue)]
      */
@@ -16060,7 +16095,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridSummaryCell.field(area)]
      */
-    field(area: string): DevExpress.data.PivotGridDataSourceField;
+    field(area: string): DevExpress.data.PivotGridDataSource.Field;
     /**
      * [descr:dxPivotGridSummaryCell.grandTotal()]
      */
@@ -16073,7 +16108,7 @@ declare module DevExpress.ui {
      * [descr:dxPivotGridSummaryCell.isPostProcessed(field)]
      */
     isPostProcessed(
-      field: DevExpress.data.PivotGridDataSourceField | string
+      field: DevExpress.data.PivotGridDataSource.Field | string
     ): boolean;
     /**
      * [descr:dxPivotGridSummaryCell.next(direction)]
@@ -16099,7 +16134,7 @@ declare module DevExpress.ui {
      * [descr:dxPivotGridSummaryCell.slice(field, value)]
      */
     slice(
-      field: DevExpress.data.PivotGridDataSourceField,
+      field: DevExpress.data.PivotGridDataSource.Field,
       value: number | string
     ): dxPivotGridSummaryCell;
     /**
@@ -16109,12 +16144,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridSummaryCell.value(field)]
      */
-    value(field: DevExpress.data.PivotGridDataSourceField | string): any;
+    value(field: DevExpress.data.PivotGridDataSource.Field | string): any;
     /**
      * [descr:dxPivotGridSummaryCell.value(field, postProcessed)]
      */
     value(
-      field: DevExpress.data.PivotGridDataSourceField | string,
+      field: DevExpress.data.PivotGridDataSource.Field | string,
       postProcessed: boolean
     ): any;
     /**
@@ -16381,13 +16416,14 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.toolbarItems]
      */
-    toolbarItems?: Array<dxPopupToolbarItem>;
+    toolbarItems?: Array<DevExpress.ui.dxPopup.ToolbarItem>;
     /**
      * [descr:dxPopupOptions.width]
      */
     width?: number | string | (() => number | string);
   }
   /**
+   * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPopupToolbarItem {
@@ -16707,7 +16743,7 @@ declare module DevExpress.ui {
     export type Properties = dxResponsiveBoxOptions;
   }
   /**
-   * [descr:dxResponsiveBoxItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxResponsiveBoxItem extends CollectionWidgetItem {
@@ -16777,7 +16813,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxResponsiveBoxItem | any>
+      | Array<string | DevExpress.ui.dxResponsiveBox.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -16788,7 +16824,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.items]
      */
-    items?: Array<string | dxResponsiveBoxItem | any>;
+    items?: Array<string | DevExpress.ui.dxResponsiveBox.Item | any>;
     /**
      * [descr:dxResponsiveBoxOptions.rows]
      */
@@ -16886,6 +16922,7 @@ declare module DevExpress.ui {
     ): void;
   }
   module dxScheduler {
+    export type Appointment = dxSchedulerAppointment;
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
         readonly appointmentData: dxSchedulerAppointment;
@@ -17013,7 +17050,7 @@ declare module DevExpress.ui {
     }
   }
   /**
-   * [descr:dxSchedulerAppointment]
+   * @deprecated Use the Scheduler's Appointment type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSchedulerAppointment extends CollectionWidgetItem {
@@ -17213,7 +17250,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<dxSchedulerAppointment>
+      | Array<DevExpress.ui.dxScheduler.Appointment>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -18006,7 +18043,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxSlideOutItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSlideOutItem extends CollectionWidgetItem {
@@ -18040,14 +18077,14 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxSlideOutItem | any>
+      | Array<string | DevExpress.ui.dxSlideOut.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
      * [descr:dxSlideOutOptions.items]
      */
-    items?: Array<string | dxSlideOutItem | any>;
+    items?: Array<string | DevExpress.ui.dxSlideOut.Item | any>;
     /**
      * [descr:dxSlideOutOptions.menuGroupTemplate]
      */
@@ -18584,10 +18621,10 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * [descr:dxTabPanelItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTabPanelItem extends dxMultiViewItem {
+  export interface dxTabPanelItem extends DevExpress.ui.dxMultiView.Item {
     /**
      * [descr:dxTabPanelItem.badge]
      */
@@ -18621,7 +18658,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxTabPanelItem | any>
+      | Array<string | DevExpress.ui.dxTabPanel.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -18642,7 +18679,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabPanelOptions.items]
      */
-    items?: Array<string | dxTabPanelItem | any>;
+    items?: Array<string | DevExpress.ui.dxTabPanel.Item | any>;
     /**
      * [descr:dxTabPanelOptions.onTitleClick]
      */
@@ -18708,7 +18745,7 @@ declare module DevExpress.ui {
     interface TabsInstance extends dxTabs<Properties> {}
   }
   /**
-   * [descr:dxTabsItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTabsItem extends CollectionWidgetItem {
@@ -18732,7 +18769,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxTabsItem | any>
+      | Array<string | DevExpress.ui.dxTabs.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -18747,7 +18784,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.items]
      */
-    items?: Array<string | dxTabsItem | any>;
+    items?: Array<string | DevExpress.ui.dxTabs.Item | any>;
     /**
      * [descr:dxTabsOptions.repaintChangesOnly]
      */
@@ -19198,7 +19235,7 @@ declare module DevExpress.ui {
     export type Properties = dxTileViewOptions;
   }
   /**
-   * [descr:dxTileViewItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTileViewItem extends CollectionWidgetItem {
@@ -19234,7 +19271,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxTileViewItem | any>
+      | Array<string | DevExpress.ui.dxTileView.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -19261,7 +19298,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTileViewOptions.items]
      */
-    items?: Array<string | dxTileViewItem | any>;
+    items?: Array<string | DevExpress.ui.dxTileView.Item | any>;
     /**
      * [descr:dxTileViewOptions.showScrollbar]
      */
@@ -19381,7 +19418,7 @@ declare module DevExpress.ui {
     export type Properties = dxToolbarOptions;
   }
   /**
-   * [descr:dxToolbarItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxToolbarItem extends CollectionWidgetItem {
@@ -19436,14 +19473,14 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxToolbarItem | any>
+      | Array<string | DevExpress.ui.dxToolbar.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
      * [descr:dxToolbarOptions.items]
      */
-    items?: Array<string | dxToolbarItem | any>;
+    items?: Array<string | DevExpress.ui.dxToolbar.Item | any>;
     /**
      * [descr:dxToolbarOptions.menuItemTemplate]
      */
@@ -19720,110 +19757,8 @@ declare module DevExpress.ui {
         readonly watch?: Function;
         readonly oldValue?: any;
       };
-    /**
-     * [descr:dxTreeListColumn]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Column extends DevExpress.ui.dxDataGrid.ColumnBase {
-      /**
-       * [descr:dxTreeListColumn.buttons]
-       */
-      buttons?: Array<
-        | 'add'
-        | 'cancel'
-        | 'delete'
-        | 'edit'
-        | 'save'
-        | 'undelete'
-        | ColumnButton
-      >;
-      /**
-       * [descr:dxTreeListColumn.cellTemplate]
-       */
-      cellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxTreeListColumn.columns]
-       */
-      columns?: Array<Column | string>;
-      /**
-       * [descr:dxTreeListColumn.editCellTemplate]
-       */
-      editCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnEditCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxTreeListColumn.headerCellTemplate]
-       */
-      headerCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            columnHeader: DevExpress.core.DxElement,
-            headerInfo: ColumnHeaderCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxTreeListColumn.type]
-       */
-      type?: 'adaptive' | 'buttons';
-    }
-    /**
-     * [descr:dxTreeListColumnButton]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnButton
-      extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
-      /**
-       * [descr:dxTreeListColumnButton.name]
-       */
-      name?:
-        | 'add'
-        | 'cancel'
-        | 'delete'
-        | 'edit'
-        | 'save'
-        | 'undelete'
-        | string;
-      /**
-       * [descr:dxTreeListColumnButton.onClick]
-       */
-      onClick?: (e: ColumnButtonClickEvent) => void;
-      /**
-       * [descr:dxTreeListColumnButton.template]
-       */
-      template?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnButtonTemplateData
-          ) => string | DevExpress.core.UserDefinedElement);
-      /**
-       * [descr:dxTreeListColumnButton.visible]
-       */
-      visible?:
-        | boolean
-        | ((options: {
-            readonly component: dxTreeList;
-            readonly row?: RowObject;
-            readonly column: Column;
-          }) => boolean);
-      /**
-       * [descr:dxTreeListColumnButton.disabled]
-       */
-      disabled?:
-        | boolean
-        | ((options: {
-            readonly component: dxTreeList;
-            readonly row?: RowObject;
-            readonly column: Column;
-          }) => boolean);
-    }
+    export type Column = dxTreeListColumn;
+    export type ColumnButton = dxTreeListColumnButton;
     export type ColumnButtonClickEvent =
       DevExpress.events.NativeEventInfo<dxTreeList> & {
         row?: RowObject;
@@ -20239,13 +20174,103 @@ declare module DevExpress.ui {
         DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
   }
   /**
-   * @deprecated 
+   * @deprecated Use the DevExpress.ui.dxTreeList.Column type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxTreeListColumn = DevExpress.ui.dxTreeList.Column;
+  export interface dxTreeListColumn
+    extends DevExpress.ui.dxDataGrid.ColumnBase {
+    /**
+     * [descr:dxTreeListColumn.buttons]
+     */
+    buttons?: Array<
+      | 'add'
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete'
+      | DevExpress.ui.dxTreeList.ColumnButton
+    >;
+    /**
+     * [descr:dxTreeListColumn.cellTemplate]
+     */
+    cellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxTreeList.ColumnCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxTreeListColumn.columns]
+     */
+    columns?: Array<DevExpress.ui.dxTreeList.Column | string>;
+    /**
+     * [descr:dxTreeListColumn.editCellTemplate]
+     */
+    editCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxTreeList.ColumnEditCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxTreeListColumn.headerCellTemplate]
+     */
+    headerCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          columnHeader: DevExpress.core.DxElement,
+          headerInfo: DevExpress.ui.dxTreeList.ColumnHeaderCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxTreeListColumn.type]
+     */
+    type?: 'adaptive' | 'buttons';
+  }
   /**
-   * @deprecated 
+   * @deprecated Use the TreeList's ColumnButton type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxTreeListColumnButton = DevExpress.ui.dxTreeList.ColumnButton;
+  export interface dxTreeListColumnButton
+    extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
+    /**
+     * [descr:dxTreeListColumnButton.name]
+     */
+    name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    /**
+     * [descr:dxTreeListColumnButton.onClick]
+     */
+    onClick?: (e: DevExpress.ui.dxTreeList.ColumnButtonClickEvent) => void;
+    /**
+     * [descr:dxTreeListColumnButton.template]
+     */
+    template?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxTreeList.ColumnButtonTemplateData
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxTreeListColumnButton.visible]
+     */
+    visible?:
+      | boolean
+      | ((options: {
+          readonly component: dxTreeList;
+          readonly row?: DevExpress.ui.dxTreeList.RowObject;
+          readonly column: DevExpress.ui.dxTreeList.Column;
+        }) => boolean);
+    /**
+     * [descr:dxTreeListColumnButton.disabled]
+     */
+    disabled?:
+      | boolean
+      | ((options: {
+          readonly component: dxTreeList;
+          readonly row?: DevExpress.ui.dxTreeList.RowObject;
+          readonly column: DevExpress.ui.dxTreeList.Column;
+        }) => boolean);
+  }
   /**
    * @deprecated 
    */
@@ -20440,7 +20465,7 @@ declare module DevExpress.ui {
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxTreeList.RowObject instead
    */
   export type dxTreeListRowObject = DevExpress.ui.dxTreeList.RowObject;
   /**
@@ -20635,7 +20660,7 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeView>;
   }
   /**
-   * [descr:dxTreeViewItem]
+   * @deprecated Use DevExpress.ui.dxTreeView.Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewItem extends CollectionWidgetItem {
@@ -20654,7 +20679,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewItem.items]
      */
-    items?: Array<dxTreeViewItem>;
+    items?: Array<DevExpress.ui.dxTreeView.Item>;
     /**
      * [descr:dxTreeViewItem.id]
      */
@@ -20728,7 +20753,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<dxTreeViewItem>
+      | Array<DevExpress.ui.dxTreeView.Item>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -20759,7 +20784,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.items]
      */
-    items?: Array<dxTreeViewItem>;
+    items?: Array<DevExpress.ui.dxTreeView.Item>;
     /**
      * [descr:dxTreeViewOptions.onItemClick]
      */
@@ -20840,6 +20865,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
     virtualModeEnabled?: boolean;
+    /**
+     * [descr:dxTreeViewOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
   }
   /**
    * [descr:dxValidationGroup]
@@ -22214,11 +22243,98 @@ declare module DevExpress.ui.dialog {
    */
   export function custom(options: CustomDialogOptions): any;
 }
+declare module DevExpress.ui.dxAccordion {
+  export type Item = dxAccordionItem;
+}
+declare module DevExpress.ui.dxActionSheet {
+  export type Item = dxActionSheetItem;
+}
+declare module DevExpress.ui.dxBox {
+  export type Item = dxBoxItem;
+}
+declare module DevExpress.ui.dxButtonGroup {
+  export type Item = dxButtonGroupItem;
+}
+declare module DevExpress.ui.dxContextMenu {
+  export type Item = dxContextMenuItem;
+}
+declare module DevExpress.ui.dxDiagram {
+  export type Item = dxDiagramItem;
+}
+declare module DevExpress.ui.dxDropDownButton {
+  export type Item = dxDropDownButtonItem;
+}
+declare module DevExpress.ui.dxFileManager {
+  export type ContextMenuItem = dxFileManagerContextMenuItem;
+  export type ToolbarItem = dxFileManagerToolbarItem;
+}
+declare module DevExpress.ui.dxForm {
+  export type ButtonItem = dxFormButtonItem;
+  export type EmptyItem = dxFormEmptyItem;
+  export type GroupItem = dxFormGroupItem;
+  export type Item =
+    | SimpleItem
+    | GroupItem
+    | TabbedItem
+    | EmptyItem
+    | ButtonItem;
+  export type SimpleItem = dxFormSimpleItem;
+  export type TabbedItem = dxFormTabbedItem;
+}
+declare module DevExpress.ui.dxGallery {
+  export type Item = dxGalleryItem;
+}
+declare module DevExpress.ui.dxGantt {
+  export type ContextMenuItem = dxGanttContextMenuItem;
+  export type ToolbarItem = dxGanttToolbarItem;
+}
+declare module DevExpress.ui.dxHtmlEditor {
+  export type ToolbarItem = dxHtmlEditorToolbarItem;
+}
+declare module DevExpress.ui.dxList {
+  export type Item = dxListItem;
+}
+declare module DevExpress.ui.dxMenu {
+  export type Item = dxMenuItem;
+}
+declare module DevExpress.ui.dxMultiView {
+  export type Item = dxMultiViewItem;
+}
+declare module DevExpress.ui.dxNavBar {
+  export type Item = dxNavBarItem;
+}
 declare module DevExpress.ui.dxOverlay {
   /**
    * [descr:ui.dxOverlay.baseZIndex(zIndex)]
    */
   export function baseZIndex(zIndex: number): void;
+}
+declare module DevExpress.ui.dxPivotGrid {
+  export type Cell = dxPivotGridPivotGridCell;
+}
+declare module DevExpress.ui.dxPopup {
+  export type ToolbarItem = dxPopupToolbarItem;
+}
+declare module DevExpress.ui.dxResponsiveBox {
+  export type Item = dxResponsiveBoxItem;
+}
+declare module DevExpress.ui.dxSlideOut {
+  export type Item = dxSlideOutItem;
+}
+declare module DevExpress.ui.dxTabPanel {
+  export type Item = dxTabPanelItem;
+}
+declare module DevExpress.ui.dxTabs {
+  export type Item = dxTabsItem;
+}
+declare module DevExpress.ui.dxTileView {
+  export type Item = dxTileViewItem;
+}
+declare module DevExpress.ui.dxToolbar {
+  export type Item = dxToolbarItem;
+}
+declare module DevExpress.ui.dxTreeView {
+  export type Item = dxTreeViewItem;
 }
 declare module DevExpress.utils {
   /**
@@ -22262,7 +22378,7 @@ declare module DevExpress.viz {
     value?: number;
   }
   /**
-   * [descr:BarGaugeLegendItem]
+   * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface BarGaugeLegendItem extends BaseLegendItem {
@@ -24261,8 +24377,8 @@ declare module DevExpress.viz {
      * [descr:dxBarGaugeOptions.legend.customizeItems]
      */
     customizeItems?: (
-      items: Array<BarGaugeLegendItem>
-    ) => Array<BarGaugeLegendItem>;
+      items: Array<DevExpress.viz.dxBarGauge.LegendItem>
+    ) => Array<DevExpress.viz.dxBarGauge.LegendItem>;
     /**
      * [descr:dxBarGaugeOptions.legend.customizeText]
      */
@@ -24277,7 +24393,7 @@ declare module DevExpress.viz {
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: BarGaugeLegendItem,
+          legendItem: DevExpress.viz.dxBarGauge.LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
     /**
@@ -28239,7 +28355,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnel.getAllItems()]
      */
-    getAllItems(): Array<dxFunnelItem>;
+    getAllItems(): Array<DevExpress.viz.dxFunnel.Item>;
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxFunnel.hideTooltip()]
@@ -28258,7 +28374,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     interface FunnelItemInfo {
-      readonly item: dxFunnelItem;
+      readonly item: Item;
     }
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
@@ -28277,7 +28393,7 @@ declare module DevExpress.viz {
       FunnelItemInfo;
   }
   /**
-   * [descr:dxFunnelItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFunnelItem {
@@ -28330,20 +28446,20 @@ declare module DevExpress.viz {
      * [descr:dxFunnelOptions.legend.customizeHint]
      */
     customizeHint?: (itemInfo: {
-      item?: dxFunnelItem;
+      item?: DevExpress.viz.dxFunnel.Item;
       text?: string;
     }) => string;
     /**
      * [descr:dxFunnelOptions.legend.customizeItems]
      */
     customizeItems?: (
-      items: Array<FunnelLegendItem>
-    ) => Array<FunnelLegendItem>;
+      items: Array<DevExpress.viz.dxFunnel.LegendItem>
+    ) => Array<DevExpress.viz.dxFunnel.LegendItem>;
     /**
      * [descr:dxFunnelOptions.legend.customizeText]
      */
     customizeText?: (itemInfo: {
-      item?: dxFunnelItem;
+      item?: DevExpress.viz.dxFunnel.Item;
       text?: string;
     }) => string;
     /**
@@ -28352,7 +28468,7 @@ declare module DevExpress.viz {
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: FunnelLegendItem,
+          legendItem: DevExpress.viz.dxFunnel.LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
     /**
@@ -28573,7 +28689,7 @@ declare module DevExpress.viz {
        * [descr:dxFunnelOptions.label.customizeText]
        */
       customizeText?: (itemInfo: {
-        item?: dxFunnelItem;
+        item?: DevExpress.viz.dxFunnel.Item;
         value?: number;
         valueText?: string;
         percent?: number;
@@ -28690,7 +28806,7 @@ declare module DevExpress.viz {
       | DevExpress.core.template
       | ((
           info: {
-            item?: dxFunnelItem;
+            item?: DevExpress.viz.dxFunnel.Item;
             value?: number;
             valueText?: string;
             percent?: number;
@@ -28702,7 +28818,7 @@ declare module DevExpress.viz {
      * [descr:dxFunnelOptions.tooltip.customizeTooltip]
      */
     customizeTooltip?: (info: {
-      item?: dxFunnelItem;
+      item?: DevExpress.viz.dxFunnel.Item;
       value?: number;
       valueText?: string;
       percent?: number;
@@ -28956,8 +29072,8 @@ declare module DevExpress.viz {
      * [descr:dxPieChartOptions.legend.customizeItems]
      */
     customizeItems?: (
-      items: Array<PieChartLegendItem>
-    ) => Array<PieChartLegendItem>;
+      items: Array<DevExpress.viz.dxPieChart.LegendItem>
+    ) => Array<DevExpress.viz.dxPieChart.LegendItem>;
     /**
      * [descr:dxPieChartOptions.legend.customizeText]
      */
@@ -28976,7 +29092,7 @@ declare module DevExpress.viz {
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: PieChartLegendItem,
+          legendItem: DevExpress.viz.dxPieChart.LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
   }
@@ -32848,8 +32964,8 @@ declare module DevExpress.viz {
      * [descr:dxVectorMapOptions.legends.customizeItems]
      */
     customizeItems?: (
-      items: Array<VectorMapLegendItem>
-    ) => Array<VectorMapLegendItem>;
+      items: Array<DevExpress.viz.dxVectorMap.LegendItem>
+    ) => Array<DevExpress.viz.dxVectorMap.LegendItem>;
     /**
      * [descr:dxVectorMapOptions.legends.customizeText]
      */
@@ -32882,7 +32998,7 @@ declare module DevExpress.viz {
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: VectorMapLegendItem,
+          legendItem: DevExpress.viz.dxVectorMap.LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
     /**
@@ -33321,14 +33437,14 @@ declare module DevExpress.viz {
     weight?: number;
   }
   /**
-   * [descr:FunnelLegendItem]
+   * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface FunnelLegendItem extends BaseLegendItem {
     /**
      * [descr:FunnelLegendItem.item]
      */
-    item?: dxFunnelItem;
+    item?: DevExpress.viz.dxFunnel.Item;
   }
   /**
    * [descr:GaugeIndicator]
@@ -33459,7 +33575,7 @@ declare module DevExpress.viz {
     | 'Material'
     | 'Office';
   /**
-   * [descr:PieChartLegendItem]
+   * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PieChartLegendItem extends BaseLegendItem {
@@ -33608,7 +33724,7 @@ declare module DevExpress.viz {
     | 'week'
     | 'year';
   /**
-   * [descr:VectorMapLegendItem]
+   * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface VectorMapLegendItem extends BaseLegendItem {
@@ -33710,6 +33826,19 @@ declare module DevExpress.viz {
         years?: number;
       }
     | TimeIntervalType;
+}
+declare module DevExpress.viz.dxBarGauge {
+  export type LegendItem = BarGaugeLegendItem;
+}
+declare module DevExpress.viz.dxFunnel {
+  export type Item = dxFunnelItem;
+  export type LegendItem = FunnelLegendItem;
+}
+declare module DevExpress.viz.dxPieChart {
+  export type LegendItem = PieChartLegendItem;
+}
+declare module DevExpress.viz.dxVectorMap {
+  export type LegendItem = VectorMapLegendItem;
 }
 declare module DevExpress.viz.map {
   /**

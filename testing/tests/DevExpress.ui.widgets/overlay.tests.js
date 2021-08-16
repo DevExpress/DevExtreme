@@ -458,6 +458,30 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
     });
 
+    test('resizeEnd should trigger positioned event', function(assert) {
+        const positionedHandlerStub = sinon.stub();
+
+        const instance = $('#overlay').dxOverlay({
+            resizeEnabled: true,
+            visible: true
+        }).dxOverlay('instance');
+        instance.on('positioned', positionedHandlerStub);
+
+        const $content = $(instance.$content());
+        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_TOP_CLASS));
+        const pointer = pointerMock($handle);
+
+        pointer.start().dragStart().drag(0, 50).dragEnd();
+
+        const contentRect = $content.get(0).getBoundingClientRect();
+        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is triggered');
+        assert.deepEqual(
+            positionedHandlerStub.getCall(0).args[0].position,
+            { h: { location: contentRect.left }, v: { location: contentRect.top } },
+            'position parameter is correct'
+        );
+    });
+
     test('resize should change overlay width/height options value', function(assert) {
         const instance = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -1342,7 +1366,15 @@ testModule('animation', moduleConfig, () => {
         const origFX = fx.animate;
 
         try {
-            const widgetPosition = { my: 'top', at: 'top', of: window };
+            const widgetPosition = {
+                my: 'top',
+                at: 'top',
+                of: window,
+                boundaryOffset: {
+                    h: 0,
+                    v: 0
+                }
+            };
             const animationShowToPosition = { my: 'bottom', at: 'bottom', of: window };
 
             const $overlay = $('#overlay').dxOverlay({
@@ -1365,7 +1397,15 @@ testModule('animation', moduleConfig, () => {
         const origFX = fx.animate;
 
         try {
-            const widgetPosition = { my: 'top', at: 'top', of: window };
+            const widgetPosition = {
+                my: 'top',
+                at: 'top',
+                of: window,
+                boundaryOffset: {
+                    h: 0,
+                    v: 0
+                }
+            };
             const animationShowToPosition = { my: 'bottom', at: 'bottom', of: window };
 
             const $overlay = $('#overlay').dxOverlay({
@@ -1974,6 +2014,7 @@ testModule('close on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -1993,6 +2034,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
         const overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2011,6 +2053,7 @@ testModule('close on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of jQuery Event target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2028,6 +2071,7 @@ testModule('close on target scroll', moduleConfig, () => {
     test('overlay should not be hidden on any target\'s parents scroll events if option set to false', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: false,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2098,6 +2142,7 @@ testModule('close on target scroll', moduleConfig, () => {
         const $overlay = $('#overlay').dxOverlay({
             visible: true,
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2118,9 +2163,11 @@ testModule('close on target scroll', moduleConfig, () => {
 
     test('scroll subscriptions should be unsubscribed from subscribed elements', function(assert) {
         const $target = $('#overlayInputTarget');
+        const $container = $('#test');
 
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $container,
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2130,30 +2177,26 @@ testModule('close on target scroll', moduleConfig, () => {
         });
         const overlay = $overlay.dxOverlay('instance');
 
-        const targetParent = $target.parent().get(0);
+        const containerParent = $container.parent().get(0);
         $target.detach();
         overlay.hide();
-        const parentEvents = $._data(targetParent).events || {};
+        const parentEvents = $._data(containerParent).events || {};
         assert.strictEqual('scroll' in parentEvents, false, 'scroll unsubscribed');
     });
 
     test('all opened overlays should be closed on scroll', function(assert) {
-        const $target = $('#overlayInputTarget');
+        const container = $('#overlayInputTarget');
 
         const $overlay1 = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
-            position: {
-                of: $target
-            },
-            visible: true
+            visible: true,
+            container
         });
 
         const $overlay2 = $('#overlay2').dxOverlay({
             closeOnTargetScroll: true,
-            position: {
-                of: $target
-            },
-            visible: true
+            visible: true,
+            container
         });
 
         $('#parentContainer').triggerHandler('scroll');
@@ -2168,6 +2211,7 @@ testModule('close on target scroll', moduleConfig, () => {
             closeOnTargetScroll: function() {
                 return $overlay2.dxOverlay('option', 'visible');
             },
+            container: $('#test'),
             position: {
                 of: $target
             },
@@ -2176,6 +2220,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
         const $overlay2 = $('#overlay2').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#overlay'),
             position: {
                 of: $target
             },
@@ -2284,7 +2329,7 @@ testModule('container', moduleConfig, () => {
             visible: true,
             copyRootClassesToWrapper: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.ok($wrapper.hasClass('something'), 'class added to wrapper');
         assert.ok($wrapper.hasClass('another'), 'another class added to wrapper');
@@ -2296,7 +2341,7 @@ testModule('container', moduleConfig, () => {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.notOk($wrapper.hasClass('something'), 'class was not added to wrapper');
         assert.notOk($wrapper.hasClass('another'), 'another class was not added to wrapper');
@@ -2509,11 +2554,11 @@ testModule('container', moduleConfig, () => {
 });
 
 
-testModule('target', moduleConfig, () => {
-    test('target option should be present in positions', function(assert) {
-        const $target = $('#container');
-
-        const OverlayTarget = Overlay.inherit({
+testModule('target', {
+    beforeEach() {
+        moduleConfig.beforeEach.apply(this, arguments);
+        this.animate = sinon.stub(fx, 'animate');
+        this.baseOverlayOptions = {
 
             _defaultOptionsRules: function() {
                 return [];
@@ -2523,7 +2568,6 @@ testModule('target', moduleConfig, () => {
                 return $.extend(
                     this.callBase(),
                     {
-                        position: { of: $(window) },
                         animation: {
                             show: {
                                 to: { position: { of: $(window) } },
@@ -2538,22 +2582,70 @@ testModule('target', moduleConfig, () => {
                 );
             }
 
-        });
+        };
+    },
+    afterEach() {
+        moduleConfig.afterEach.apply(this, arguments);
+        this.animate.restore();
+    }
+}, () => {
+    test('target option should be present in show animation position', function(assert) {
+        const $target = $('#container');
+
+        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
 
         const $overlay = $('#overlay');
         const overlay = new OverlayTarget($overlay, {
             target: $target
         });
 
-        $.each([
-            'position.of',
-            'animation.show.from.position.of',
-            'animation.show.to.position.of',
-            'animation.hide.from.position.of',
-            'animation.hide.to.position.of'
-        ], function(_, item) {
-            assert.strictEqual(overlay.option(item).get(0), $target.get(0), item + ' set');
+        overlay.show();
+
+        const animationShowSettings = this.animate.getCall(0).args[1];
+
+        assert.strictEqual(this.animate.callCount, 1, 'animation count');
+        assert.strictEqual(animationShowSettings.to.position.of.get(0), $target.get(0), 'animation.show.to.position.of');
+        assert.strictEqual(animationShowSettings.from.position.of.get(0), $target.get(0), 'animation.show.from.position.of');
+    });
+
+    test('target option should be present in hide animation position', function(assert) {
+        const $target = $('#container');
+
+        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
+
+        const $overlay = $('#overlay');
+        const overlay = new OverlayTarget($overlay, {
+            target: $target
         });
+
+        overlay.show();
+        this.animate.reset();
+        overlay.hide();
+
+        const animationHideSettings = this.animate.getCall(0).args[1];
+
+        assert.strictEqual(this.animate.callCount, 1, 'animation count');
+        assert.strictEqual(animationHideSettings.to.position.of.get(0), $target.get(0), 'animation.hide.to.position.of');
+        assert.strictEqual(animationHideSettings.from.position.of.get(0), $target.get(0), 'animation.hide.from.position.of');
+    });
+
+    test('target participation in position calculation', function(assert) {
+        const $target = $('#container').css({
+            position: 'absolute',
+            left: 100
+        });
+
+        const overlay = new Overlay($('#overlay'), {
+            target: $target
+        });
+
+        overlay.show();
+
+        const $wrapper = overlay.$wrapper();
+
+        const transform = $wrapper.css('transform');
+        const translateX = transform.split(',')[4].trim();
+        assert.strictEqual(translateX, '100', 'target left position is passed to wrapper translateX');
     });
 });
 
@@ -3893,7 +3985,7 @@ testModule('overlay utils', moduleConfig, () => {
 testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
-        this.timeToWaitResize = 25;
+        this.timeToWaitResize = 50;
         this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
@@ -3973,7 +4065,6 @@ testModule('renderGeometry', {
             maxWidth: 10,
             minHeight: 2000,
             maxHeight: 10,
-            boundaryOffset: { h: 10, v: 10 },
             position: { of: 'body' }
         };
         for(const optionName in newOptions) {
@@ -4151,7 +4242,7 @@ QUnit.module('prevent safari scrolling on ios devices', {
 QUnit.module('resizeObserver integration', {
     beforeEach: function() {
         fx.off = true;
-        this.timeToWaitResize = 25;
+        this.timeToWaitResize = 50;
     },
     afterEach: function() {
         fx.off = false;
@@ -4173,41 +4264,6 @@ QUnit.module('resizeObserver integration', {
                 assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
                 resizeOnWindowResizeDone();
             }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
-    QUnit.testInActiveWindow('content resize should trigger overlay geometry rendering', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnRestylingDone = assert.async();
-        const overlay = $('#overlay').dxOverlay({
-            contentTemplate: () => {
-                return $('<div>')
-                    .attr({ id: 'customOverlayContent' })
-                    .css({ width: 100, height: 100 });
-            },
-            width: 'auto',
-            height: 'auto',
-            visible: true
-        }).dxOverlay('instance');
-
-        const overlayContentElement = overlay.$content().get(0);
-        const contentRect = overlayContentElement.getBoundingClientRect();
-        const getCenter = (rect, dimension) => {
-            if(dimension === 'x') {
-                return (rect.left + rect.right) / 2;
-            }
-            return (rect.bottom + rect.top) / 2;
-        };
-
-        setTimeout(() => {
-            $('#customOverlayContent').css({ width: 500, height: 500 });
-            setTimeout(() => {
-                const contentRectAfterResize = overlayContentElement.getBoundingClientRect();
-                assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
-                assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
-                resizeOnRestylingDone();
-            }, 100);
             resizeOnOpeningDone();
         }, this.timeToWaitResize);
     });
@@ -4261,31 +4317,5 @@ QUnit.module('resizeObserver integration', {
             }, this.timeToWaitResize);
             resizeOnOpeningDone();
         }, this.timeToWaitResize);
-    });
-
-    QUnit.testInActiveWindow('showing and shown events should be raised only once when content is resized during animation', function(assert) {
-        fx.off = false;
-
-        const showingHandled = assert.async();
-        const resizingHandled = assert.async();
-        const showingStub = sinon.stub();
-        const shownStub = sinon.stub();
-        const overlay = $('#overlay').dxOverlay({
-            visible: true,
-            width: 200,
-            height: 200,
-            onShowing: showingStub,
-            onShown: shownStub
-        }).dxOverlay('instance');
-        overlay.option('width', 300);
-
-        setTimeout(() => {
-            setTimeout(() => {
-                assert.ok(shownStub.calledOnce, 'shown is called only once');
-                assert.ok(showingStub.calledOnce, 'showing is called only once');
-                resizingHandled();
-            }, 250, this.timeToWaitResize);
-            showingHandled();
-        }, 250, this.timeToWaitResize);
     });
 });

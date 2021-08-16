@@ -1,18 +1,18 @@
 import {
-    AnimationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
-    PositionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -21,23 +21,23 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    ScrollInfo
+    ScrollInfo,
 } from './list';
 
 import {
@@ -45,7 +45,7 @@ import {
 } from './popover';
 
 import {
-    TitleRenderedInfo
+    TitleRenderedInfo,
 } from './popup';
 
 /** @public */
@@ -103,12 +103,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
        * @docid
        * @default undefined
        */
-      hide?: AnimationConfig,
+      hide?: AnimationConfig;
       /**
        * @docid
        * @default undefined
        */
-      show?: AnimationConfig
+      show?: AnimationConfig;
     };
     /**
      * @docid

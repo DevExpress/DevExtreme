@@ -30,6 +30,7 @@ $agenda-appointment-title-font-size: null !default;
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
 
+@use "./layout/header" as *;
 @use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icons" as *;
@@ -40,8 +41,6 @@ $agenda-appointment-recurrence-icon-color: null !default;
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg
 );
 
-$scheduler-toolbat-item-offset: 9px;
-$toolbar-menu-container-offset: 9px;
 $scheduler-default-header-height: 56px;
 
 $scheduler-timepanel-cell-offset: 20px;
@@ -123,8 +122,6 @@ $scheduler-current-time-cell-border-size: 2px;
 $scheduler-timeline-min-height: 100px;
 
 $scheduler-appointment-form-label-padding: 20px;
-
-$arrow-down: "\f016";
 
 @use "./appointment" with (
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,
@@ -549,58 +546,18 @@ $arrow-down: "\f016";
   }
 }
 
-
 @mixin scheduler-mixin() {
   .dx-scheduler-pseudo-cell {
     @include dx-scheduler-pseudo-cell-mixin();
   }
 
   .dx-scheduler-header {
-    border: $scheduler-base-border;
-    position: relative;
-    z-index: 1;
-    width: 100%;
+    @include header-base($scheduler-base-border);
+  }
 
-    .dx-toolbar {
-      height: 100%;
-      background-color: transparent;
-
-      .dx-toolbar-items-container {
-        height: 100%;
-      }
-
-      .dx-toolbar-item-content,
-      .dx-toolbar-menu-container {
-        padding: $scheduler-toolbat-item-offset;
-      }
-
-      .dx-toolbar-menu-container {
-        .dx-icon::before {
-          content: $arrow-down;
-        }
-      }
-
-      .dx-button {
-        background-color: white;
-      }
-
-      .dx-scheduler-navigator {
-        .dx-buttongroup {
-          .dx-button {
-            &.dx-item-selected {
-              background-color: white;
-
-              &.dx-state-focused {
-                background-color: rgba(0, 0, 0, 0.17);
-              }
-            }
-
-            &.dx-state-focused {
-              background-color: rgba(0, 0, 0, 0.17);
-            }
-          }
-        }
-      }
+  .dx-scheduler-view-switcher-dropdown-button-content {
+    .dx-list-item {
+      display: list-item;
     }
   }
 

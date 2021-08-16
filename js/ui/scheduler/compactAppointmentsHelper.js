@@ -124,7 +124,9 @@ export class CompactAppointmentsHelper {
     }
 
     _getCollectorRightOffset() {
-        return this.instance.getRenderingStrategyInstance()._isCompactTheme() ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET : WEEK_VIEW_COLLECTOR_OFFSET;
+        return this.instance.getRenderingStrategyInstance()._isCompactTheme()
+            ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
+            : WEEK_VIEW_COLLECTOR_OFFSET;
     }
 
     _makeBackgroundDarker(button) {

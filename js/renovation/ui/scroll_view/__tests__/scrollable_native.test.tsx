@@ -61,6 +61,7 @@ describe('Native > View', () => {
       forceGeneratePockets: false,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
+      needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scrollByContent: true,
@@ -95,7 +96,7 @@ describe('Native > Effects', () => {
   ]))('emit "dxscroll" event, allowedDirection: %s, locked: %s', (allowedDirection, locked) => {
     const event = { ...defaultEvent, cancel: undefined, originalEvent: {} } as any;
     const viewModel = new Scrollable({ });
-    (viewModel as any).wrapperRef = React.createRef();
+    viewModel.wrapperRef = { current: {} as HTMLElement } as RefObject;
     viewModel.locked = locked;
     viewModel.tryGetAllowedDirection = jest.fn(() => allowedDirection);
 

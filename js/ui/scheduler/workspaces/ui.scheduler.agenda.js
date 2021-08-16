@@ -466,12 +466,6 @@ class SchedulerAgenda extends WorkSpace {
             this.option('currentDate'));
     }
 
-    preRenderAppointments(options) {
-        super.preRenderAppointments(options);
-
-        this._calculateRows(options.appointments);
-    }
-
     onDataSourceChanged(appointments) {
         super.onDataSourceChanged();
 

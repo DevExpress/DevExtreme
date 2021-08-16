@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  JSXComponent, Component, Method, Effect, Mutable, RefObject, Ref, InternalState,
+  JSXComponent, Component, Method, Effect, Mutable, RefObject, ForwardRef, InternalState,
 } from '@devextreme-generator/declarations';
 import {
   DataGridProps,
@@ -140,7 +140,7 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
-  @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
+  @ForwardRef() widgetElementRef?: RefObject<HTMLDivElement>;
 
   @Mutable() instance!: GridInstance;
 
@@ -567,7 +567,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onInitialized: (e) => {
+      onInitialized: (e: { component: GridInstance }) => {
         this.instance = e.component;
 
         (onInitialized as (e: unknown) => void)?.(e);

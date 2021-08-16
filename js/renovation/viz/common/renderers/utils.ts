@@ -13,11 +13,13 @@ import { isDefined } from '../../../../core/utils/type';
 import domAdapter from '../../../../core/dom_adapter';
 import { normalizeEnum } from '../../../../viz/core/utils';
 import SvgGraphicsProps from './base_graphics_props';
+import { getWindow } from '../../../../core/utils/window';
 
 const KEY_FONT_SIZE = 'font-size';
 const DEFAULT_FONT_SIZE = 12;
 const SHARPING_CORRECTION = 0.5;
 
+const window = getWindow();
 export interface TextItem {
   value: string;
   height?: number;

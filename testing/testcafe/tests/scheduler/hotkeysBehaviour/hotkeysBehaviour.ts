@@ -2,6 +2,7 @@ import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import FocusableElement from '../../../model/internal/focusable';
 
 fixture`Hotkeys for appointments update and navigation`
   .page(url(__dirname, '../../container.html'));
@@ -90,3 +91,99 @@ fixture`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 });
+
+test('Navigate between toolbar items', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const toolbar = scheduler.getToolbar();
+  const navigator = toolbar.getNavigator();
+  const viewSwitcher = toolbar.getViewSwitcher();
+
+  const prevDuration = new FocusableElement(navigator.prevDuration);
+  const caption = new FocusableElement(navigator.caption);
+  const nextDuration = new FocusableElement(navigator.nextDuration);
+
+  await t
+    .click(toolbar.element)
+    .pressKey('tab')
+    .expect(prevDuration.hasFocusedState)
+    .ok()
+
+    .pressKey('right')
+    .expect(caption.hasFocusedState)
+    .ok()
+
+    .pressKey('right')
+    .expect(nextDuration.hasFocusedState)
+    .ok()
+
+    .pressKey('tab')
+    .expect(viewSwitcher.getButton('Day').hasFocusedState)
+    .ok()
+
+    .pressKey('right')
+    .expect(viewSwitcher.getButton('Week').hasFocusedState)
+    .ok();
+}).before(async () => createScheduler({
+  views: ['day', 'week'],
+  currentView: 'day',
+}));
+
+test('Navigate between custom toolbar items', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const toolbar = scheduler.getToolbar();
+  const navigator = toolbar.getNavigator();
+  const viewSwitcher = toolbar.getViewSwitcher();
+
+  const prevDuration = new FocusableElement(navigator.prevDuration);
+  const caption = new FocusableElement(navigator.caption);
+  const nextDuration = new FocusableElement(navigator.nextDuration);
+  const todayButton = new FocusableElement(
+    toolbar.element.find('.dx-button').withText('Today'),
+  );
+
+  await t
+    .click(toolbar.element)
+    .pressKey('tab')
+    .expect(viewSwitcher.getButton('Day').hasFocusedState)
+    .ok()
+
+    .pressKey('right')
+    .expect(viewSwitcher.getButton('Week').hasFocusedState)
+    .ok()
+
+    .pressKey('tab')
+    .expect(todayButton.hasFocusedState)
+    .ok()
+
+    .pressKey('tab')
+    .expect(prevDuration.hasFocusedState)
+    .ok()
+
+    .pressKey('right')
+    .expect(caption.hasFocusedState)
+    .ok()
+
+    .pressKey('right')
+    .expect(nextDuration.hasFocusedState)
+    .ok();
+}).before(async () => createScheduler({
+  views: ['day', 'week'],
+  currentView: 'day',
+  toolbar: [
+    {
+      location: 'before',
+      defaultElement: 'viewSwitcher',
+    },
+    {
+      location: 'before',
+      widget: 'dxButton',
+      options: {
+        text: 'Today',
+      },
+    },
+    {
+      location: 'after',
+      defaultElement: 'dateNavigator',
+    },
+  ],
+}));

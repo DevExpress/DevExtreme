@@ -4,6 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/scheduler" as baseScheduler with (
@@ -396,35 +397,20 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-header {
+  @include header-sizes(
+    $material-scheduler-header-height,
+    $material-scheduler-toolbar-item-offset,
+  );
+  @include header-buttons(
+    $button-normal-bg,
+    $material-scheduler-toolbar-active-color,
+  );
+  @include header-buttons-material(
+    $base-accent,
+    $material-scheduler-toolbar-color,
+  );
+
   background-color: $scheduler-header-bg;
-  height: $material-scheduler-header-height;
-
-  .dx-scheduler-navigator {
-    .dx-button {
-      @include dx-button-flat-color-styling(
-        $button-default-bg,
-        $button-default-text-hover-bg,
-        $button-default-text-focused-bg,
-        $button-default-text-active-bg
-      );
-    }
-  }
-
-  .dx-scheduler-view-switcher {
-    .dx-button {
-      .dx-button-text {
-        text-transform: none;
-      }
-    }
-
-    .dx-icon::before {
-      content: baseScheduler.$arrow-down;
-    }
-  }
-}
-
-.dx-overlay-content {
-  min-width: 120px;
 }
 
 .dx-scheduler-group-flex-container .dx-scheduler-group-header {
@@ -493,7 +479,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
   padding-top: $material-scheduler-header-height;
-  margin-top: -$material-scheduler-header-height - 1;
+  margin-top: -$material-scheduler-header-height;
 
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
     .dx-scheduler-header-panel {

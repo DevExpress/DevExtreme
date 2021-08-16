@@ -276,10 +276,6 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
   .dx-#{$widget-name}-checkbox-size {
     line-height: 1em;
 
-    &.dx-checkbox-checked .dx-checkbox-icon {
-      font-size: $generic-grid-base-checkbox-fontsize;
-    }
-
     .dx-checkbox-icon {
       height: $generic-grid-base-checkbox-icon-size;
       width: $generic-grid-base-checkbox-icon-size;

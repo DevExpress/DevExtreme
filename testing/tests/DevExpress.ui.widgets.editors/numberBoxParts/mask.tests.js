@@ -1315,6 +1315,21 @@ QUnit.module('format: percent format', moduleConfig, () => {
             config({ decimalSeparator: oldDecimalSeparator });
         }
     });
+
+    [
+        { text: '14.55', value: 0.1455 },
+        { text: '20.2', value: 0.202 },
+        { text: '1.0154', value: 0.010154, format: '#0.####%' }
+    ].forEach(({ text, value, format }) => {
+        QUnit.test(`percent format should correctly handle float values, value is ${value}`, function(assert) {
+            this.instance.option('format', format ? format : '#0.##%');
+            this.keyboard.type(text).change();
+
+            assert.equal(this.input.val(), `${text}%`, 'text is correct');
+            assert.equal(this.instance.option('value'), value, 'value is correct');
+        });
+    });
+
 });
 
 QUnit.module('format: removing', moduleConfig, () => {

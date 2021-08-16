@@ -8,6 +8,7 @@ import {
   isVerticalGroupingApplied,
   isHorizontalGroupingApplied,
   isGroupingByDate,
+  addToStyles,
 } from '../utils';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
 
@@ -78,6 +79,34 @@ describe('Workspaces utils', () => {
         .toEqual({
           height: '500px',
           width: '300px',
+        });
+    });
+  });
+
+  describe('addToStyles', () => {
+    it('should return correct result', () => {
+      expect(addToStyles([{
+        attr: 'someAttr',
+        value: 'someValue',
+      }, {
+        attr: 'someAttr1',
+        value: 123,
+      }]))
+        .toEqual({ someAttr: 'someValue', someAttr1: 123 });
+    });
+
+    it('should return correct result if default style is presents', () => {
+      expect(addToStyles([{
+        attr: 'someAttr',
+        value: 'someValue',
+      }, {
+        attr: 'someAttr1',
+        value: 123,
+      }], { width: '600px' }))
+        .toEqual({
+          someAttr: 'someValue',
+          someAttr1: 123,
+          width: '600px',
         });
     });
   });

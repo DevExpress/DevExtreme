@@ -21,7 +21,7 @@ import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
-import { getTimeZoneCalculator } from '../instanceFactory';
+import { getAppointmentDataProvider, getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 
@@ -166,6 +166,10 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _optionChanged(args) {
+        if(this.option('isRenovatedAppointments')) {
+            return undefined;
+        }
+
         switch(args.name) {
             case 'items':
                 this._cleanFocusState();
@@ -804,20 +808,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _sortAppointmentsByStartDate(appointments) {
-        appointments.sort((function(a, b) {
-            let result = 0;
-            const firstDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', a.settings || a)).getTime();
-            const secondDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', b.settings || b)).getTime();
-
-            if(firstDate < secondDate) {
-                result = -1;
-            }
-            if(firstDate > secondDate) {
-                result = 1;
-            }
-
-            return result;
-        }).bind(this));
+        getAppointmentDataProvider(this.option('key')).sortAppointmentsByStartDate(appointments);
     }
 
     _processRecurrenceAppointment(appointment, index, skipLongAppointments) {

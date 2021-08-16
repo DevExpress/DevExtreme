@@ -1,5 +1,5 @@
 import {
-    Device
+    Device,
 } from '../devices';
 
 export type RecursivePartial<T> = {

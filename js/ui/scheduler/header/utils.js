@@ -40,7 +40,7 @@ const nextDay = (date) => {
     return addDateInterval(date, DAY_DURATION, 1);
 };
 
-const nextWeek = (date) => {
+export const nextWeek = (date) => {
     return addDateInterval(date, WEEK_DURATION, 1);
 };
 

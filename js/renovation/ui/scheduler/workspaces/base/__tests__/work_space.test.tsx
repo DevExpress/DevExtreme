@@ -8,6 +8,15 @@ import {
   WorkSpaceBaseProps,
 } from '../work_space';
 
+const mockUpdate = jest.fn();
+const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
+const mockViewDataProvider = {
+  update: mockUpdate,
+  getGroupPanelData: mockGetGroupPanelData,
+  getCellCount: () => 7,
+};
+jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
+
 describe('WorkSpaceBase', () => {
   const viewData = {
     groupedData: [{
@@ -97,12 +106,20 @@ describe('WorkSpaceBase', () => {
         headerPanelTemplate: () => null,
         dateTableTemplate: () => null,
         timePanelTemplate: () => null,
+        className: 'custom',
       };
-      const viewModel = {
+      const viewDataProvider = {
         dateHeaderData,
         viewData,
         timePanelData,
+      };
+      const viewModel = {
+        viewDataProvider,
         isAllDayPanelVisible: true,
+        groupPanelData: {
+          baseColSpan: 5,
+          groupPanelItems: [],
+        },
       };
 
       const workSpace = renderComponent({
@@ -116,10 +133,253 @@ describe('WorkSpaceBase', () => {
 
       expect(workSpace.props())
         .toEqual({
-          ...viewModel,
           ...props,
           isAllDayPanelCollapsed: true,
+          isAllDayPanelVisible: true,
+          dateHeaderData,
+          viewData,
+          timePanelData,
+          groupPanelData: {
+            baseColSpan: 5,
+            groupPanelItems: [],
+          },
         });
+    });
+  });
+
+  describe('Behaviour', () => {
+    describe('Effects', () => {
+      describe('onViewRendered', () => {
+        const dateTableRefMock: any = {
+          current: {
+            getBoundingClientRect: () => ({
+              left: 100, top: 100,
+            }),
+            querySelectorAll: () => [{
+              getBoundingClientRect: () => ({
+                left: 100, top: 100,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 150, top: 100,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 200, top: 100,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 250, top: 100,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 300, top: 100,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 350, top: 100,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 400, top: 100,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 100, top: 200,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 150, top: 200,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 200, top: 200,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 250, top: 200,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 300, top: 200,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 350, top: 200,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 400, top: 200,
+              }),
+            }],
+          },
+        };
+
+        const allDayPanelRefMock: any = {
+          current: {
+            getBoundingClientRect: () => ({
+              left: 100, top: 0,
+            }),
+            querySelectorAll: () => [{
+              getBoundingClientRect: () => ({
+                left: 100, top: 0,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 150, top: 0,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 200, top: 0,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 250, top: 0,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 300, top: 0,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 350, top: 0,
+              }),
+            }, {
+              getBoundingClientRect: () => ({
+                left: 400, top: 0,
+              }),
+            }],
+          },
+        };
+
+        it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
+          const onViewRendered = jest.fn();
+
+          const workSpace = new WorkSpaceBase({
+            ...new WorkSpaceBaseProps(),
+            onViewRendered,
+            currentDate: new Date(),
+            startDayHour: 0,
+            endDayHour: 1,
+            showAllDayPanel: false,
+          });
+
+          workSpace.dateTableRef = dateTableRefMock;
+          workSpace.allDayPanelRef = { current: null } as any;
+
+          workSpace.onViewRendered();
+
+          expect(onViewRendered)
+            .toBeCalledTimes(1);
+          expect(onViewRendered)
+            .toBeCalledWith({
+              viewDataProvider: mockViewDataProvider,
+              cellsMetaData: {
+                dateTableCellsMeta: [[{
+                  left: 0, top: 0,
+                }, {
+                  left: 50, top: 0,
+                }, {
+                  left: 100, top: 0,
+                }, {
+                  left: 150, top: 0,
+                }, {
+                  left: 200, top: 0,
+                }, {
+                  left: 250, top: 0,
+                }, {
+                  left: 300, top: 0,
+                }], [{
+                  left: 0, top: 100,
+                }, {
+                  left: 50, top: 100,
+                }, {
+                  left: 100, top: 100,
+                }, {
+                  left: 150, top: 100,
+                }, {
+                  left: 200, top: 100,
+                }, {
+                  left: 250, top: 100,
+                }, {
+                  left: 300, top: 100,
+                }]],
+                allDayPanelCellsMeta: [],
+              },
+            });
+        });
+
+        it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
+          const onViewRendered = jest.fn();
+
+          const workSpace = new WorkSpaceBase({
+            ...new WorkSpaceBaseProps(),
+            onViewRendered,
+            currentDate: new Date(),
+            startDayHour: 0,
+            endDayHour: 1,
+            showAllDayPanel: false,
+          });
+
+          workSpace.dateTableRef = dateTableRefMock;
+          workSpace.allDayPanelRef = allDayPanelRefMock;
+
+          workSpace.onViewRendered();
+
+          expect(onViewRendered)
+            .toBeCalledTimes(1);
+          expect(onViewRendered)
+            .toBeCalledWith({
+              viewDataProvider: mockViewDataProvider,
+              cellsMetaData: {
+                dateTableCellsMeta: [[{
+                  left: 0, top: 0,
+                }, {
+                  left: 50, top: 0,
+                }, {
+                  left: 100, top: 0,
+                }, {
+                  left: 150, top: 0,
+                }, {
+                  left: 200, top: 0,
+                }, {
+                  left: 250, top: 0,
+                }, {
+                  left: 300, top: 0,
+                }], [{
+                  left: 0, top: 100,
+                }, {
+                  left: 50, top: 100,
+                }, {
+                  left: 100, top: 100,
+                }, {
+                  left: 150, top: 100,
+                }, {
+                  left: 200, top: 100,
+                }, {
+                  left: 250, top: 100,
+                }, {
+                  left: 300, top: 100,
+                }]],
+                allDayPanelCellsMeta: [{
+                  left: 0, top: 0,
+                }, {
+                  left: 50, top: 0,
+                }, {
+                  left: 100, top: 0,
+                }, {
+                  left: 150, top: 0,
+                }, {
+                  left: 200, top: 0,
+                }, {
+                  left: 250, top: 0,
+                }, {
+                  left: 300, top: 0,
+                }],
+              },
+            });
+        });
+      });
     });
   });
 
@@ -130,7 +390,7 @@ describe('WorkSpaceBase', () => {
           const workSpace = new WorkSpaceBase({
             currentDate: new Date(),
             crossScrollingEnabled: false,
-          });
+          } as any);
 
           expect(workSpace.layout)
             .toBe(OrdinaryLayout);
@@ -140,7 +400,7 @@ describe('WorkSpaceBase', () => {
           const workSpace = new WorkSpaceBase({
             currentDate: new Date(),
             crossScrollingEnabled: true,
-          });
+          } as any);
 
           expect(workSpace.layout)
             .toBe(OrdinaryLayout); // TODO: CrossScrollingLayout
@@ -153,7 +413,7 @@ describe('WorkSpaceBase', () => {
             currentDate: new Date(),
             isAllDayPanelSupported: false,
             showAllDayPanel: false,
-          });
+          } as any);
 
           expect(workSpace.isAllDayPanelVisible)
             .toBe(false);
@@ -169,7 +429,7 @@ describe('WorkSpaceBase', () => {
             currentDate: new Date(),
             isAllDayPanelSupported: true,
             showAllDayPanel: false,
-          });
+          } as any);
 
           expect(workSpace.isAllDayPanelVisible)
             .toBe(false);
@@ -180,7 +440,7 @@ describe('WorkSpaceBase', () => {
             currentDate: new Date(),
             isAllDayPanelSupported: true,
             showAllDayPanel: true,
-          });
+          } as any);
 
           expect(workSpace.isAllDayPanelVisible)
             .toBe(true);
@@ -191,7 +451,7 @@ describe('WorkSpaceBase', () => {
         it('should return correct viewData', () => {
           const workSpace = new WorkSpaceBase({
             currentDate: new Date(),
-          });
+          } as any);
 
           expect(!!workSpace.viewData)
             .toBe(true);
@@ -202,7 +462,7 @@ describe('WorkSpaceBase', () => {
         it('should return correct dateHeaderData', () => {
           const workSpace = new WorkSpaceBase({
             currentDate: new Date(),
-          });
+          } as any);
 
           expect(!!workSpace.dateHeaderData)
             .toBe(true);
@@ -213,10 +473,103 @@ describe('WorkSpaceBase', () => {
         it('should return correct timePanelData', () => {
           const workSpace = new WorkSpaceBase({
             currentDate: new Date(),
-          });
+          } as any);
 
           expect(!!workSpace.timePanelData)
             .toBe(true);
+        });
+      });
+
+      describe('viewDataProvider', () => {
+        beforeEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should create view data provider and call its update method', () => {
+          const props: any = {
+            groupOrientation: 'horizontal',
+            groupByDate: true,
+            groups: [],
+            isProvideVirtualCellsWidth: false,
+            selectedCells: undefined,
+            focusedCell: undefined,
+            headerCellTextFormat: () => 'shorttime',
+            startDayHour: 0,
+            endDayHour: 24,
+            cellDuration: 30,
+            intervalCount: 1,
+            hoursInterval: 0.5,
+            currentDate: new Date(2021, 8, 11),
+            startDate: null,
+            firstDayOfWeek: 0,
+
+            isGenerateTimePanelData: true,
+          };
+
+          const workSpace = new WorkSpaceBase({
+            ...new WorkSpaceBaseProps(),
+            ...props,
+            type: 'week',
+          });
+
+          expect(workSpace.viewDataProvider)
+            .toBe(mockViewDataProvider);
+
+          expect(mockUpdate)
+            .toHaveBeenCalledWith({
+              ...props,
+              startRowIndex: 0,
+              startCellIndex: 0,
+              isAllDayPanelVisible: false,
+              viewType: 'week',
+              getDateForHeaderText: expect.any(Function),
+            }, true);
+        });
+      });
+
+      describe('groupPanelData', () => {
+        beforeEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should return correct group panel data', () => {
+          const props: any = {
+            groupOrientation: 'horizontal',
+            groupByDate: true,
+            groups: [],
+            isProvideVirtualCellsWidth: false,
+            selectedCells: undefined,
+            focusedCell: undefined,
+            headerCellTextFormat: () => 'shorttime',
+            getDateForHeaderText: () => new Date(),
+            startDayHour: 0,
+            endDayHour: 24,
+            cellDuration: 30,
+            intervalCount: 1,
+            hoursInterval: 0.5,
+            currentDate: new Date(2021, 8, 11),
+            startDate: null,
+            firstDayOfWeek: 0,
+
+            isGenerateTimePanelData: true,
+          };
+
+          const workSpace = new WorkSpaceBase({
+            ...props,
+            type: 'week',
+          });
+
+          expect(workSpace.groupPanelData)
+            .toEqual({});
+
+          expect(mockGetGroupPanelData)
+            .toHaveBeenCalledWith({
+              ...props,
+              startRowIndex: 0,
+              startCellIndex: 0,
+              isAllDayPanelVisible: undefined,
+              viewType: 'week',
+            });
         });
       });
     });

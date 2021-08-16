@@ -14,7 +14,6 @@ import { inArray, normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
 import { name as clickEventName } from '../../events/click';
-import errors from '../widget/ui.errors';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
 import { captionize } from '../../core/utils/inflector';
@@ -33,8 +32,6 @@ import {
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
@@ -44,7 +41,15 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText, renderButton, adjustContainerAsButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
+import {
+    renderLabel,
+    renderHelpText,
+    adjustContainerAsButtonItem,
+    convertAlignmentToJustifyContent,
+    convertAlignmentToTextAlign,
+    renderComponentTo,
+    renderTemplateTo,
+    adjustEditorContainer } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -141,9 +146,9 @@ const LayoutManager = Widget.inherit({
         return dataField ? this.option('layoutData.' + dataField) : null;
     },
 
-    _isCheckboxUndefinedStateEnabled: function(editorOption) {
-        if(editorOption.allowIndeterminateState === true && editorOption.editorType === 'dxCheckBox') {
-            const nameParts = ['layoutData', ...editorOption.dataField.split('.')];
+    _isCheckboxUndefinedStateEnabled: function({ allowIndeterminateState, editorType, dataField }) {
+        if(allowIndeterminateState === true && editorType === 'dxCheckBox') {
+            const nameParts = ['layoutData', ...dataField.split('.')];
             const propertyName = nameParts.pop();
             const layoutData = this.option(nameParts.join('.'));
 
@@ -565,16 +570,16 @@ const LayoutManager = Widget.inherit({
             targetColIndex: item.col
         });
 
-        const $button = renderButton({
-            buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
-            createComponentCallback: this._createComponent.bind(this)
-        });
+        const $button = $('<div>');
         $container.append($button);
+        const buttonWidget = this._createComponent(
+            $button, 'dxButton',
+            extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions));
 
         // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: $button.dxButton('instance'), // TODO: try to remove 'widgetInstance'
+            widgetInstance: buttonWidget, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
             $itemContainer: $container
         });
@@ -619,20 +624,50 @@ const LayoutManager = Widget.inherit({
             labelOptions: labelOptions
         });
 
-        const instance = that._renderEditor({
-            $container: $editor,
+        const editorOptions = this._convertToEditorOptions({
             dataField: item.dataField,
-            name: item.name,
             editorType: item.editorType,
+            allowIndeterminateState: item.allowIndeterminateState,
             editorOptions: item.editorOptions,
-            template: that._getTemplateByFieldItem(item),
-            isRequired: isRequired,
-            helpID: helpID,
-            labelID: labelOptions.labelID,
-            id: id,
-            validationBoundary: that.option('validationBoundary'),
-            allowIndeterminateState: item.allowIndeterminateState
+            id,
+            validationBoundary: that.option('validationBoundary')
         });
+
+        adjustEditorContainer({
+            $container: $editor,
+            labelLocation: this.option('labelLocation'),
+        });
+
+        let instance;
+        const template = that._getTemplateByFieldItem(item);
+        if(template) {
+            renderTemplateTo({
+                $container: getPublicElement($editor),
+                template,
+                templateOptions: {
+                    dataField: item.dataField,
+                    editorType: item.editorType,
+                    editorOptions,
+                    component: this._getComponentOwner(),
+                    name: item.name
+                }
+            });
+        } else {
+            instance = renderComponentTo({
+                $container: $editor,
+                createComponentCallback: this._createComponent.bind(this),
+                componentType: item.editorType,
+                componentOptions: editorOptions,
+                helpID,
+                labelID: labelOptions.labelID,
+                isRequired
+            });
+
+        }
+
+        if(instance && item.dataField) {
+            this._bindDataField(instance, item.dataField, item.editorType, $editor);
+        }
 
         this._itemsRunTimeInfo.add({
             item,
@@ -743,40 +778,43 @@ const LayoutManager = Widget.inherit({
         };
     },
 
-    _renderEditor: function(options) {
-        const dataValue = this._getDataByField(options.dataField);
-        const defaultEditorOptions = dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(options)
-            ? { value: dataValue }
-            : {};
-        const isDeepExtend = true;
+    _convertToEditorOptions: function({ dataField, editorType, allowIndeterminateState, editorOptions, id, validationBoundary }) {
+        const dataValue = this._getDataByField(dataField);
+        const defaultEditorOptions =
+            dataValue !== undefined
+            || this._isCheckboxUndefinedStateEnabled({
+                allowIndeterminateState, editorType, dataField })
+                ? { value: dataValue }
+                : {};
 
-        if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
+        if(EDITORS_WITH_ARRAY_VALUE.indexOf(editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
         }
 
         const formInstance = this.option('form');
 
-        const editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
-            inputAttr: {
-                id: options.id
+        const result = extend(true, defaultEditorOptions,
+            editorOptions,
+            {
+                inputAttr: { id: id },
+                validationBoundary: validationBoundary,
+                stylingMode: formInstance && formInstance.option('stylingMode')
             },
-            validationBoundary: options.validationBoundary,
-            stylingMode: formInstance && formInstance.option('stylingMode')
-        });
+        );
 
-        this._replaceDataOptions(options.editorOptions, editorOptions);
+        if(editorOptions) {
+            if(result.dataSource) {
+                result.dataSource = editorOptions.dataSource;
+            }
+            if(result.items) {
+                result.items = editorOptions.items;
+            }
+        }
 
-        const renderOptions = {
-            editorType: options.editorType,
-            dataField: options.dataField,
-            template: options.template,
-            name: options.name,
-            helpID: options.helpID,
-            labelID: options.labelID,
-            isRequired: options.isRequired
-        };
-
-        return this._createEditor(options.$container, renderOptions, editorOptions);
+        if(dataField && !result.name) {
+            result.name = dataField;
+        }
+        return result;
     },
 
     _replaceDataOptions: function(originalOptions, resultOptions) {
@@ -843,66 +881,22 @@ const LayoutManager = Widget.inherit({
             .on('enterKey', toggleInvalidClass);
     },
 
-    _createEditor: function($container, renderOptions, editorOptions) {
-        const that = this;
-        const template = renderOptions.template;
-        let editorInstance;
-
-        if(renderOptions.dataField && !editorOptions.name) {
-            editorOptions.name = renderOptions.dataField;
-        }
-
-        that._addItemContentClasses($container);
-
-        if(template) {
-            const data = {
-                dataField: renderOptions.dataField,
-                editorType: renderOptions.editorType,
-                editorOptions: editorOptions,
-                component: that._getComponentOwner(),
-                name: renderOptions.name
-            };
-
-            template.render({
-                model: data,
-                container: getPublicElement($container)
-            });
-        } else {
-            const $editor = $('<div>').appendTo($container);
-
-            try {
-                editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
-                editorInstance.setAria('describedby', renderOptions.helpID);
-                editorInstance.setAria('labelledby', renderOptions.labelID);
-                editorInstance.setAria('required', renderOptions.isRequired);
-
-                if(renderOptions.dataField) {
-                    that._bindDataField(editorInstance, renderOptions, $container);
-                }
-            } catch(e) {
-                errors.log('E1035', e.message);
-            }
-        }
-
-        return editorInstance;
-    },
-
     _getComponentOwner: function() {
         return this.option('form') || this;
     },
 
-    _bindDataField: function(editorInstance, renderOptions, $container) {
+    _bindDataField: function(editorInstance, dataField, editorType, $container) {
         const componentOwner = this._getComponentOwner();
 
         editorInstance.on('enterKey', function(args) {
-            componentOwner._createActionByOption('onEditorEnterKey')(extend(args, { dataField: renderOptions.dataField }));
+            componentOwner._createActionByOption('onEditorEnterKey')(extend(args, { dataField: dataField }));
         });
 
-        this._createWatcher(editorInstance, $container, renderOptions);
-        this.linkEditorToDataField(editorInstance, renderOptions.dataField, renderOptions.editorType);
+        this._createWatcher(editorInstance, $container, dataField);
+        this.linkEditorToDataField(editorInstance, dataField, editorType);
     },
 
-    _createWatcher: function(editorInstance, $container, renderOptions) {
+    _createWatcher: function(editorInstance, $container, dataField) {
         const that = this;
         const watch = that._getWatch();
 
@@ -912,10 +906,10 @@ const LayoutManager = Widget.inherit({
 
         const dispose = watch(
             function() {
-                return that._getDataByField(renderOptions.dataField);
+                return that._getDataByField(dataField);
             },
             function() {
-                editorInstance.option('value', that._getDataByField(renderOptions.dataField));
+                editorInstance.option('value', that._getDataByField(dataField));
             },
             {
                 deep: true,
@@ -934,22 +928,6 @@ const LayoutManager = Widget.inherit({
         }
 
         return this._watch;
-    },
-
-    _addItemContentClasses: function($itemContent) {
-        const locationSpecificClass = this._getItemContentLocationSpecificClass();
-        $itemContent.addClass([FIELD_ITEM_CONTENT_CLASS, locationSpecificClass].join(' '));
-    },
-
-    _getItemContentLocationSpecificClass: function() {
-        const labelLocation = this.option('labelLocation');
-        const oppositeClasses = {
-            right: 'left',
-            left: 'right',
-            top: 'bottom'
-        };
-
-        return FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation];
     },
 
     _createComponent: function($editor, type, editorOptions) {
@@ -1075,7 +1053,8 @@ const LayoutManager = Widget.inherit({
                                     const valueGetter = compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
-                                    if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(itemRunTimeInfo.item)) {
+                                    if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(
+                                        { allowIndeterminateState: itemRunTimeInfo.item.allowIndeterminateState, editorType: itemRunTimeInfo.item.editorType, dataField: itemRunTimeInfo.item.dataField })) {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     } else {
                                         this._resetWidget(itemRunTimeInfo.widgetInstance);

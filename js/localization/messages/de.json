@@ -581,6 +581,9 @@
         "dxGantt-zoomIn": "Vergrößern",
         "dxGantt-zoomOut": "Verkleinern",
         "dxGantt-fullScreen": "Vollbildmodus",
-        "dxGantt-quarter": "Q{0}"
+        "dxGantt-quarter": "Q{0}",
+        "dxGantt-sortingAscendingText": "Aufsteigend sortieren",
+        "dxGantt-sortingDescendingText": "Absteigend sortieren",
+        "dxGantt-sortingClearText": "Sortierung aufheben"
     }
 }

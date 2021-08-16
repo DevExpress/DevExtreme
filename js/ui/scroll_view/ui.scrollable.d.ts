@@ -1,18 +1,18 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 import {
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
 export interface ScrollEventInfo<T> extends NativeEventInfo<T> {

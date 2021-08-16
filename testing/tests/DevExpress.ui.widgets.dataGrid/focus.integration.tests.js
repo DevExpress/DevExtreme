@@ -612,7 +612,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 600 });
-        $(scrollable._container()).trigger('scroll');
+        $(scrollable.container()).trigger('scroll');
         this.clock.tick();
         $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
@@ -3551,9 +3551,34 @@ QUnit.module('View\'s focus', {
         this.clock.tick();
 
         // assert
-        assert.ok($inputElement.closest('td').hasClass('dx-focused'), 'cell is marked as focused');
         assert.ok($inputElement.is(':focus'), 'input is focused');
     });
+
+    QUnit.testInActiveWindow('Cell with checkbox should be focused with other row (T1016005)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [{ id: 1 }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'multiple'
+            },
+            focusedRowEnabled: true,
+        });
+        this.clock.tick();
+
+        const $checkbox = $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox');
+
+        // act
+        $checkbox.trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($checkbox.parents('tr').hasClass('dx-row-focused'), 'row is focused');
+        assert.ok(!$checkbox.parent('td').hasClass('dx-focused'), 'cell is not focused');
+        assert.ok($checkbox.parent('td').hasClass('dx-cell-focus-disabled'), 'cell focus is disabled');
+    });
+
 
     QUnit.testInActiveWindow('The expand button of the master cell should not lose its tabindex when a row in a detail grid is switched to editing mode (T969832)', function(assert) {
         // arrange

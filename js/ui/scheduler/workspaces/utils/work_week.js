@@ -1,7 +1,7 @@
 import dateUtils from '../../../../core/utils/date';
 import { getViewStartByOptions, setOptionHour } from './base';
 import { getValidStartDate } from './week';
-const MONDAY_INDEX = 1;
+
 const SATURDAY_INDEX = 6;
 const SUNDAY_INDEX = 0;
 
@@ -9,10 +9,6 @@ const SUNDAY_INDEX = 0;
 export const isDataOnWeekend = (date) => {
     const day = date.getDay();
     return day === SATURDAY_INDEX || day === SUNDAY_INDEX;
-};
-
-export const getFirstDayOfWeek = (firstDayOfWeekOption) => {
-    return firstDayOfWeekOption || MONDAY_INDEX;
 };
 
 export const getWeekendsCount = (days) => {
@@ -24,9 +20,8 @@ export const calculateStartViewDate = (
     startDayHour,
     startDate,
     intervalDuration,
-    firstDayOfWeekOption,
+    firstDayOfWeek,
 ) => {
-    const firstDayOfWeek = getFirstDayOfWeek(firstDayOfWeekOption);
     const viewStart = getViewStartByOptions(
         startDate,
         currentDate,
@@ -34,7 +29,7 @@ export const calculateStartViewDate = (
         getValidStartDate(startDate, firstDayOfWeek),
     );
 
-    const firstViewDate = dateUtils.getFirstWeekDate(viewStart, getFirstDayOfWeek(firstDayOfWeekOption));
+    const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
     const normalizedDate = dateUtils.normalizeDateByWeek(firstViewDate, viewStart);
 
     return setOptionHour(normalizedDate, startDayHour);

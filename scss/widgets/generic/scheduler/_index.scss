@@ -4,6 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/scheduler" as baseScheduler with (
@@ -198,8 +199,16 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-header {
+  @include header-sizes(
+    $generic-scheduler-header-height,
+    $generic-scheduler-toolbar-item-offset,
+  );
+  @include header-buttons(
+    $button-normal-bg,
+    $button-normal-contained-bg-focused,
+  );
+
   background-color: $scheduler-header-bg;
-  height: $generic-scheduler-header-height;
 }
 
 .dx-scheduler-header-panel { // stylelint-disable-line no-duplicate-selectors

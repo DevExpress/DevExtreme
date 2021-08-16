@@ -284,8 +284,9 @@ export class ToolbarDropDownButtonItemProps extends CollectionWidgetItem {
   @OneWay()
   icon?: string;
 
-  @OneWay()
-  key?: string;
+  // @OneWay()
+  // TODO: suppress ComponentBindings has property with reserved name: key
+  // key?: string;
 
   @OneWay()
   showChevron?: boolean;

@@ -54,7 +54,7 @@ class AppointmentPositioningStrategy {
         // NOTE: Simplify using only object
         if(renderingStrategy.hasAllDayAppointments()) {
             return {
-                allDay: renderingStrategy.instance._groupOrientation === 'vertical' ? allDayCount : renderingStrategy.instance.option('_appointmentCountPerCell'),
+                allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : renderingStrategy.instance.option('_appointmentCountPerCell'),
                 simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
             };
         } else {

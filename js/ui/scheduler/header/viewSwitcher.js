@@ -5,6 +5,7 @@ import {
 
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
+const VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS = 'dx-scheduler-view-switcher-dropdown-button-content';
 
 const getViewsAndSelectedView = (header) => {
     const views = formatViews(header.views);
@@ -28,7 +29,7 @@ export const getViewSwitcher = (header, item) => {
             items: views,
             keyExpr: 'name',
             selectedItemKeys: [selectedView],
-            stylingMode: 'outlined',
+            stylingMode: 'contained',
             onItemClick: (e) => {
                 const view = e.itemData.view;
 
@@ -59,7 +60,6 @@ export const getDropDownViewSwitcher = (header, item) => {
             keyExpr: 'name',
             selectedItemKey: selectedView,
             displayExpr: 'text',
-            splitButton: true,
             elementAttr: {
                 class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
             },
@@ -74,6 +74,12 @@ export const getDropDownViewSwitcher = (header, item) => {
                 header._addEvent('currentView', (view) => {
                     viewSwitcher.option('selectedItemKey', getViewName(view));
                 });
+            },
+            dropDownOptions: {
+                width: 'max-content',
+                contentTemplate: function($element) {
+                    $element.addClass(VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS);
+                }
             },
         },
         ...item,

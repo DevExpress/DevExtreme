@@ -13,7 +13,7 @@ export const viewFunction = ({
   style,
   props: {
     className,
-    groupsRenderData,
+    groupPanelData,
     resourceCellTemplate,
   },
 }: GroupPanelVerticalLayout): JSX.Element => (
@@ -24,7 +24,7 @@ export const viewFunction = ({
     style={style}
   >
     <div className="dx-scheduler-group-flex-container">
-      {groupsRenderData.map((group: GroupRenderItem[]) => (
+      {groupPanelData.groupPanelItems.map((group: GroupRenderItem[]) => (
         <Row
           groupItems={group}
           cellTemplate={resourceCellTemplate}
