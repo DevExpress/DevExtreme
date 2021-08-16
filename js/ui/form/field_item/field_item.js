@@ -31,7 +31,7 @@ const INVALID_CLASS = 'dx-invalid';
 
 export function renderFieldItem({
     $fieldItemElement,
-    fieldItemCssClass,
+    fieldItemElementCssClass,
     parentComponent,
     createComponentCallback,
     useFlexLayout,
@@ -48,12 +48,12 @@ export function renderFieldItem({
 }) {
 
     //
-    // Setup external $container:
+    // Setup the root $element:
     //
 
     $fieldItemElement
         .addClass(FIELD_ITEM_CLASS)
-        .addClass(fieldItemCssClass)
+        .addClass(fieldItemElementCssClass)
         .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
 
     $fieldItemElement.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);

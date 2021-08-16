@@ -592,7 +592,7 @@ const LayoutManager = Widget.inherit({
 
         const { $fieldEditorContainer, instance } = renderFieldItem({
             $fieldItemElement: $container,
-            fieldItemCssClass: this.option('cssItemClass'),
+            fieldItemElementCssClass: this.option('cssItemClass'),
             parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
             useFlexLayout: isFlexSupported,
