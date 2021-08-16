@@ -11,6 +11,8 @@ import { HeaderPanelLayout } from './header_panel/layout';
 import { TimePanelTableLayout } from './time_panel/layout';
 import { getDateForHeaderText } from './utils';
 
+const TIMELINE_CLASS = 'dx-scheduler-timeline';
+
 type GetRenderConfig = (intervalCount: number) => ViewRenderConfig;
 
 const verticalViewConfig: ViewRenderConfig = {
@@ -69,20 +71,20 @@ const getMonthViewConfig: GetRenderConfig = () => ({
 
 const getTimelineDayViewConfig: GetRenderConfig = (intervalCount) => ({
   ...timelineViewConfig,
-  className: 'dx-scheduler-timeline-day dx-scheduler-timeline',
+  className: `dx-scheduler-timeline-day ${TIMELINE_CLASS}`,
   isGenerateWeekDaysHeaderData: intervalCount > 1,
 });
 const getTimelineWeekViewConfig: GetRenderConfig = () => ({
   ...timelineViewConfig,
-  className: 'dx-scheduler-timeline-week dx-scheduler-timeline',
+  className: `dx-scheduler-timeline-week ${TIMELINE_CLASS}`,
 });
 const getTimelineWorkWeekViewConfig: GetRenderConfig = () => ({
   ...timelineViewConfig,
-  className: 'dx-scheduler-timeline-work-week dx-scheduler-timeline',
+  className: `dx-scheduler-timeline-work-week ${TIMELINE_CLASS}`,
 });
 const getTimelineMonthViewConfig: GetRenderConfig = () => ({
   ...timelineViewConfig,
-  className: 'dx-scheduler-timeline-month dx-scheduler-timeline',
+  className: `dx-scheduler-timeline-month ${TIMELINE_CLASS}`,
   headerCellTextFormat: formatWeekdayAndDay,
   isGenerateWeekDaysHeaderData: false,
   getDateForHeaderText,
