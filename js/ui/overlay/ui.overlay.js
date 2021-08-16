@@ -1248,7 +1248,7 @@ const Overlay = Widget.inherit({
     _renderPosition: function() {
         let resultPosition;
         if(this._positionChangeHandled) {
-            resultPosition = this._draggable.renderPositionHandler();
+            resultPosition = this._draggable?.renderPositionHandler();
         } else {
             const position = this._position;
             this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
@@ -1422,7 +1422,7 @@ const Overlay = Widget.inherit({
                 this._invalidate();
                 this._toggleSafariScrolling();
                 if(this.option('dragEnabled') && !this.option('dragArea')) {
-                    this._draggable.updateDragContainer(this._getDragResizeContainer());
+                    this._draggable?.updateDragContainer(this._getDragResizeContainer());
                 }
                 break;
             case 'innerOverlay':

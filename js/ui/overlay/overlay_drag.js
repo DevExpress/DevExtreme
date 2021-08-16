@@ -75,7 +75,6 @@ class OverlayDrag {
             containerWidth = fullPageWidth;
         }
 
-        containerWidth = Math.min(containerWidth, $(document).outerWidth());
         const outsideMultiplayer = this.outsideMultiplayer() ?? 0;
 
         return {
