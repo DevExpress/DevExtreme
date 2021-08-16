@@ -95,7 +95,7 @@ QUnit.module('readOnly', moduleConfig, () => {
         assert.ok($editor.hasClass('dx-state-hover'), 'there is hover class');
     });
 
-    skipForRenovated('Prevent backspace event when editor is readonly', () => {
+    skipForRenovated('prevent backspace event when editor is readonly', () => {
         [false, true].forEach((readOnly) => {
             QUnit.module('"backspace" key press event', {
                 beforeEach: function() {
@@ -125,7 +125,7 @@ QUnit.module('readOnly', moduleConfig, () => {
     });
 });
 
-QUnit.module('Methods', moduleConfig, () => {
+QUnit.module('methods', moduleConfig, () => {
     QUnit.test('reset', function(assert) {
         const editor = this.fixture.createEditor({ value: '123' });
 
@@ -181,7 +181,7 @@ QUnit.module('value option', moduleConfig, () => {
         });
     });
 
-    QUnit.test('onValueChanged should work correctly when it passed on onInitialized (T314007)', function(assert) {
+    QUnit.test('onValueChanged should work correctly when it is passed on onInitialized (T314007)', function(assert) {
         const valueChangedStub = sinon.stub();
         const editor = this.fixture.createEditor({
             onInitialized(e) {
@@ -195,69 +195,7 @@ QUnit.module('value option', moduleConfig, () => {
     });
 });
 
-if(!Editor.IS_RENOVATED_WIDGET) {
-    QUnit.module('"name" option', {
-        beforeEach: function() {
-            this.$element = $('<div>').appendTo('body');
-            this.EditorInheritor = Editor.inherit({
-                _initMarkup() {
-                    this._$submitElement = $('<input type="hidden">').appendTo(this.$element());
-                    this.callBase();
-                },
-                _getSubmitElement() {
-                    return this._$submitElement;
-                }
-            });
-        },
-        afterEach: function() {
-            this.$element.remove();
-        }
-    }, () => {
-        QUnit.test('editor inheritor input should get the "name" attribute with a correct value', function(assert) {
-            const expectedName = 'some_name';
-
-            new this.EditorInheritor(this.$element, {
-                name: expectedName
-            });
-
-            const $input = this.$element.find('input[type="hidden"]');
-            assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value');
-        });
-
-        QUnit.test('editor inheritor input should get correct "name" attribute after the "name" option is changed', function(assert) {
-            const expectedName = 'new_name';
-
-            const instance = new this.EditorInheritor(this.$element, {
-                name: 'initial_name'
-            });
-
-            const $input = this.$element.find('input[type="hidden"]');
-
-            instance.option('name', expectedName);
-            assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value ');
-        });
-
-        QUnit.test('the "name" attribute should not be rendered if name is an empty string', function(assert) {
-            new this.EditorInheritor(this.$element);
-
-            const input = this.$element.find('input[type="hidden"]').get(0);
-            assert.notOk(input.hasAttribute('name'), 'there should be no "name" attribute for hidden input');
-        });
-
-        QUnit.test('the "name" attribute should be removed after name is changed to an empty string', function(assert) {
-            const instance = new this.EditorInheritor(this.$element, {
-                name: 'some_name'
-            });
-
-            const input = this.$element.find('input[type="hidden"]').get(0);
-
-            instance.option('name', '');
-            assert.notOk(input.hasAttribute('name'), 'there should be no "name" attribute for hidden input');
-        });
-    });
-}
-
-QUnit.module('Validation', {
+QUnit.module('validation', {
     beforeEach: function() {
         this.fixture = new Fixture();
         this.message = 'That is very bad editor';
@@ -306,7 +244,7 @@ QUnit.module('Validation', {
         assert.ok(this.editor.$element().hasClass(INVALID_VALIDATION_CLASS), 'editor is invalid');
     });
 
-    QUnit.test('Validator integration', function(assert) {
+    QUnit.test('validator integration', function(assert) {
         this.reinitEditor({ value: '1' });
         new Validator(this.editor.$element(), {
             validationRules: [{
@@ -699,7 +637,6 @@ QUnit.module('Validation', {
             assert.ok($validationMessage.offset().top < $element.offset().top, 'validation message was flipped');
         });
 
-
         QUnit.test('should be rendered correctly in hidden area', function(assert) {
             const $element = this.fixture.createOnlyElement();
             const $hiddenDiv = this.fixture.createOnlyElement().css('display', 'none');
@@ -722,6 +659,96 @@ QUnit.module('Validation', {
     });
 });
 
+QUnit.module('aria accessibility', moduleConfig, () => {
+    const expectedFalseValue = Editor.IS_RENOVATED_WIDGET ? 'false' : 'undefined';
+
+    QUnit.test('readonly', function(assert) {
+        const editor = this.fixture.createEditor({ readOnly: true });
+
+        assert.strictEqual(editor.$element().attr('aria-readonly'), 'true', 'aria-readonly is correct');
+
+        editor.option('readOnly', false);
+        assert.strictEqual(editor.$element().attr('aria-readonly'), expectedFalseValue, 'aria-readonly does not exist in not readonly state');
+    });
+
+    QUnit.test('invalid state', function(assert) {
+        const editor = this.fixture.createEditor({
+            isValid: false,
+            validationError: {
+                message: 'test message'
+            }
+        });
+        const $editor = editor.$element();
+        const messageId = $editor.find(`.${INVALID_MESSAGE_CLASS}`)
+            .dxValidationMessage().dxValidationMessage('instance')
+            .$content().attr('id');
+
+        assert.strictEqual($editor.attr('aria-invalid'), 'true', 'aria-invalid is correct');
+        assert.ok($editor.get(0).hasAttribute('aria-describedby'), 'invalid editor should have the "aria-describedby" attribute');
+        assert.strictEqual($editor.attr('aria-describedby'), messageId, 'invalid editor should be described by a message');
+
+        editor.option('isValid', true);
+        assert.strictEqual($editor.attr('aria-invalid'), expectedFalseValue, 'aria-invalid does not exist in valid state');
+        assert.strictEqual($editor.attr('aria-describedby'), undefined, 'aria-describedby does not exist in valid state');
+    });
+});
+
+QUnit.module('private api', moduleConfig, () => {
+    if(!Editor.IS_RENOVATED_WIDGET) {
+        QUnit.test('should detach keyboard handler if readOnly is false', function(assert) {
+            const editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
+
+            assert.notOk(editor._keyboardListenerId);
+
+            editor.option('readOnly', false);
+            assert.ok(editor._keyboardListenerId);
+        });
+    }
+
+    QUnit.test('If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument and then _valueChangeEventInstance must be reset', function(assert) {
+        const newValue = 'new';
+        const _valueChangeEventInstance = 'something';
+
+        const onValueChanged = options => {
+            assert.strictEqual(options.event, _valueChangeEventInstance, 'Event is ok');
+        };
+
+        const editor = this.fixture.createEditor();
+        editor.option('onValueChanged', onValueChanged);
+        editor._valueChangeEventInstance = _valueChangeEventInstance;
+        editor.option('value', newValue);
+        assert.strictEqual(editor._valueChangeEventInstance, undefined, '_valueChangeEventInstance is reset');
+    });
+
+    skipForRenovated('private: _suppressValueChangeAction, _resumeValueChangeAction', () => {
+        QUnit.test('_suppressValueChangeAction should suppress invoking _suppressValueChangeAction', function(assert) {
+            assert.expect(0);
+
+            const editor = this.fixture.createEditor();
+            editor._suppressValueChangeAction();
+            editor.option('onValueChanged', () => {
+                throw Error('failed');
+            });
+            editor.option('value', true);
+        });
+
+        QUnit.test('_resumeValueChangeAction should resume invoking _suppressValueChangeAction', function(assert) {
+            const value = 'value';
+
+            const onValueChanged = options => {
+                assert.strictEqual(options.value, value);
+            };
+
+            assert.expect(1);
+
+            const editor = this.fixture.createEditor();
+            editor._suppressValueChangeAction();
+            editor._resumeValueChangeAction();
+            editor.option('onValueChanged', onValueChanged);
+            editor.option('value', value);
+        });
+    });
+});
 
 if(!Editor.IS_RENOVATED_WIDGET) {
     QUnit.module('validationRequest', moduleConfig, () => {
@@ -780,96 +807,64 @@ if(!Editor.IS_RENOVATED_WIDGET) {
             ]);
         });
     });
-}
 
-QUnit.module('aria accessibility', moduleConfig, () => {
-    const expectedFalseValue = Editor.IS_RENOVATED_WIDGET ? 'false' : 'undefined';
-
-    QUnit.test('readonly', function(assert) {
-        const editor = this.fixture.createEditor({ readOnly: true });
-
-        assert.strictEqual(editor.$element().attr('aria-readonly'), 'true', 'aria-readonly is correct');
-
-        editor.option('readOnly', false);
-        assert.strictEqual(editor.$element().attr('aria-readonly'), expectedFalseValue, 'aria-readonly does not exist in not readonly state');
-    });
-
-    QUnit.test('invalid state', function(assert) {
-        const editor = this.fixture.createEditor({
-            isValid: false,
-            validationError: {
-                message: 'test message'
-            }
-        });
-        const $editor = editor.$element();
-        const messageId = $editor.find(`.${INVALID_MESSAGE_CLASS}`)
-            .dxValidationMessage().dxValidationMessage('instance')
-            .$content().attr('id');
-
-        assert.strictEqual($editor.attr('aria-invalid'), 'true', 'aria-invalid is correct');
-        assert.ok($editor.get(0).hasAttribute('aria-describedby'), 'invalid editor should have the "aria-describedby" attribute');
-        assert.strictEqual($editor.attr('aria-describedby'), messageId, 'invalid editor should be described by a message');
-
-        editor.option('isValid', true);
-        assert.strictEqual($editor.attr('aria-invalid'), expectedFalseValue, 'aria-invalid does not exist in valid state');
-        assert.strictEqual($editor.attr('aria-describedby'), undefined, 'aria-describedby does not exist in valid state');
-    });
-});
-
-
-QUnit.module('private api', moduleConfig, () => {
-    if(!Editor.IS_RENOVATED_WIDGET) {
-        QUnit.test('should detach keyboard handler if readOnly is false', function(assert) {
-            const editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
-
-            assert.notOk(editor._keyboardListenerId);
-
-            editor.option('readOnly', false);
-            assert.ok(editor._keyboardListenerId);
-        });
-    }
-
-    QUnit.test('If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument and then _valueChangeEventInstance must be reset', function(assert) {
-        const newValue = 'new';
-        const _valueChangeEventInstance = 'something';
-
-        const onValueChanged = options => {
-            assert.strictEqual(options.event, _valueChangeEventInstance, 'Event is ok');
-        };
-
-        const editor = this.fixture.createEditor();
-        editor.option('onValueChanged', onValueChanged);
-        editor._valueChangeEventInstance = _valueChangeEventInstance;
-        editor.option('value', newValue);
-        assert.strictEqual(editor._valueChangeEventInstance, undefined, '_valueChangeEventInstance is reset');
-    });
-
-    skipForRenovated('private: _suppressValueChangeAction, _resumeValueChangeAction', () => {
-        QUnit.test('_suppressValueChangeAction should suppress invoking _suppressValueChangeAction', function(assert) {
-            assert.expect(0);
-
-            const editor = this.fixture.createEditor();
-            editor._suppressValueChangeAction();
-            editor.option('onValueChanged', () => {
-                throw Error('failed');
+    QUnit.module('"name" option', {
+        beforeEach: function() {
+            this.$element = $('<div>').appendTo('body');
+            this.EditorInheritor = Editor.inherit({
+                _initMarkup() {
+                    this._$submitElement = $('<input type="hidden">').appendTo(this.$element());
+                    this.callBase();
+                },
+                _getSubmitElement() {
+                    return this._$submitElement;
+                }
             });
-            editor.option('value', true);
+        },
+        afterEach: function() {
+            this.$element.remove();
+        }
+    }, () => {
+        QUnit.test('editor inheritor input should get the "name" attribute with a correct value', function(assert) {
+            const expectedName = 'some_name';
+
+            new this.EditorInheritor(this.$element, {
+                name: expectedName
+            });
+
+            const $input = this.$element.find('input[type="hidden"]');
+            assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value');
         });
 
-        QUnit.test('_resumeValueChangeAction should resume invoking _suppressValueChangeAction', function(assert) {
-            const value = 'value';
+        QUnit.test('editor inheritor input should get correct "name" attribute after the "name" option is changed', function(assert) {
+            const expectedName = 'new_name';
 
-            const onValueChanged = options => {
-                assert.strictEqual(options.value, value);
-            };
+            const instance = new this.EditorInheritor(this.$element, {
+                name: 'initial_name'
+            });
 
-            assert.expect(1);
+            const $input = this.$element.find('input[type="hidden"]');
 
-            const editor = this.fixture.createEditor();
-            editor._suppressValueChangeAction();
-            editor._resumeValueChangeAction();
-            editor.option('onValueChanged', onValueChanged);
-            editor.option('value', value);
+            instance.option('name', expectedName);
+            assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value ');
+        });
+
+        QUnit.test('the "name" attribute should not be rendered if name is an empty string', function(assert) {
+            new this.EditorInheritor(this.$element);
+
+            const input = this.$element.find('input[type="hidden"]').get(0);
+            assert.notOk(input.hasAttribute('name'), 'there should be no "name" attribute for hidden input');
+        });
+
+        QUnit.test('the "name" attribute should be removed after name is changed to an empty string', function(assert) {
+            const instance = new this.EditorInheritor(this.$element, {
+                name: 'some_name'
+            });
+
+            const input = this.$element.find('input[type="hidden"]').get(0);
+
+            instance.option('name', '');
+            assert.notOk(input.hasAttribute('name'), 'there should be no "name" attribute for hidden input');
         });
     });
-});
+}
