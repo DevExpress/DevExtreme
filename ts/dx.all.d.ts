@@ -13154,6 +13154,14 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.rootValue]
      */
     rootValue?: any;
+    /**
+     * [descr:dxGanttOptions.startDateRange]
+     */
+    startDateRange?: Date;
+    /**
+     * [descr:dxGanttOptions.endDateRange]
+     */
+    endDateRange?: Date;
   }
   /**
    * [descr:dxGanttSorting]
@@ -20857,6 +20865,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
     virtualModeEnabled?: boolean;
+    /**
+     * [descr:dxTreeViewOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
   }
   /**
    * [descr:dxValidationGroup]

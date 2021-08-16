@@ -54,6 +54,20 @@ export function drawPdfTable(doc, styles, table) {
                 doc.setFillColor(cell.backgroundColor);
                 drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
             }
+
+            const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
+            const docFont = doc.getFont();
+            if(
+                font.name !== docFont.fontName ||
+                font.style !== docFont.fontStyle ||
+                isDefined(font.weight) // fontWeight logic, https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line4842
+            ) {
+                doc.setFont(font.name, font.style, font.weight);
+            }
+            if(font.size !== doc.getFontSize()) {
+                doc.setFontSize(font.size);
+            }
+
             const textColor = isDefined(cell.textColor) ? cell.textColor : styles.textColor;
             if(textColor !== doc.getTextColor()) {
                 doc.setTextColor(textColor);

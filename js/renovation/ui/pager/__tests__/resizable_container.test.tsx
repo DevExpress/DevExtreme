@@ -50,6 +50,8 @@ describe('resizable-container', () => {
         contentAttributes: {
           pagerPropsProp1: 'pagerPropsProp1',
           pagerPropsProp2: 'pagerPropsProp2',
+          pageIndexChange: jest.fn(),
+          pageSizeChange: jest.fn(),
         },
         props: {
           contentTemplate,
@@ -66,6 +68,8 @@ describe('resizable-container', () => {
         infoTextRef: 'infoTextRef',
         infoTextVisible: true,
         isLargeDisplayMode: true,
+        pageIndexChange: expect.any(Function),
+        pageSizeChange: expect.any(Function),
         pageSizesRef: 'pageSizesRef',
         pagesRef: 'pagesRef',
         rootElementRef: 'parentRef',

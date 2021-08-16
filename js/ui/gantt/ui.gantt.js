@@ -146,6 +146,8 @@ class Gantt extends Widget {
             allowSelection: this.option('allowSelection'),
             selectedRowKey: this.option('selectedRowKey'),
             showResources: this.option('showResources'),
+            startDateRange: this.option('startDateRange'),
+            endDateRange: this.option('endDateRange'),
             taskTitlePosition: this.option('taskTitlePosition'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             showRowLines: this.option('showRowLines'),
@@ -582,6 +584,12 @@ class Gantt extends Widget {
                 break;
             case 'firstDayOfWeek':
                 this._setGanttViewOption('firstDayOfWeek', args.value);
+                break;
+            case 'startDateRange':
+                this._setGanttViewOption('startDateRange', args.value);
+                break;
+            case 'endDateRange':
+                this._setGanttViewOption('endDateRange', args.value);
                 break;
             case 'selectedRowKey':
                 this._ganttTreeList?.selectRows(GanttHelper.getArrayFromOneElement(args.value));

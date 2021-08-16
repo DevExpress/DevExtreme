@@ -6895,7 +6895,12 @@ QUnit.module('Scrollbar', {
 
     // T697699
     QUnit.test('The vertical scrollbar should not be shown if showScrollbar is always', function(assert) {
-    // arrange
+        if(devices.real().android) {
+            assert.ok(true, 'It\'s a bug under Android only');
+            return;
+        }
+
+        // arrange
         const rows = [{ values: ['test1'], rowType: 'data' }];
         const columns = ['field1'];
         const rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: false, showScrollbar: 'always' } });

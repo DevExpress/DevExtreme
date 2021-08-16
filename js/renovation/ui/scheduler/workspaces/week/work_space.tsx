@@ -26,8 +26,10 @@ export const viewFunction = ({
     indicatorTime,
     indicatorUpdateInterval,
     shadeUntilCurrentTime,
+    showCurrentTimeIndicator,
     selectedCellData,
     scrolling,
+    cellDuration,
     onViewRendered,
   },
 }: WorkSpaceWeek): JSX.Element => (
@@ -49,8 +51,10 @@ export const viewFunction = ({
     indicatorTime={indicatorTime}
     indicatorUpdateInterval={indicatorUpdateInterval}
     shadeUntilCurrentTime={shadeUntilCurrentTime}
+    showCurrentTimeIndicator={showCurrentTimeIndicator}
     selectedCellData={selectedCellData}
     scrolling={scrolling}
+    cellDuration={cellDuration}
     onViewRendered={onViewRendered}
     isWorkWeekView={false}
     type="week"

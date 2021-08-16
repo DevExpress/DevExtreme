@@ -294,6 +294,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       && !this.onReachBottomWasFiredOnce
       && this.props.containerSize
       && this.props.contentSize
+      && this.visibleScrollAreaSize > 0
     ) {
       this.onReachBottomWasFiredOnce = true;
 
@@ -592,8 +593,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get isReachBottom(): boolean {
+    // TODO: adapt this method for 4k monitor
+    // when sizes is decimal and a rounding error of about 1px
     return this.props.reachBottomEnabled
-      && (this.props.scrollLocation + this.visibleScrollAreaSize <= 0.5);
+      && (this.props.scrollLocation + this.visibleScrollAreaSize <= 0);
   }
 
   get visibleContentAreaSize(): number {

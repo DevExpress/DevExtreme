@@ -69,6 +69,7 @@ import {
 import { getCellGroups } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from './workspaces/utils/base';
+import { renderAppointments } from './appointments/render';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1008,9 +1009,9 @@ class Scheduler extends Widget {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
             timeZone: this.option('timeZone'),
-            getDataAccessors: function(key) {
+            getDataAccessors: (key) => {
                 return utils.dataAccessors.combine(key, this._dataAccessors);
-            }.bind(this),
+            },
         });
     }
 
@@ -1111,20 +1112,36 @@ class Scheduler extends Widget {
             this._isAllDayExpanded(filteredItems)
         );
 
+        let viewModel = [];
         if(filteredItems.length && this._isVisible()) {
-            this._appointments.option('items', this._getAppointmentsToRepaint());
-            getAppointmentDataProvider(this.key).cleanState();
-        } else {
-            this._appointments.option('items', []);
+            viewModel = this._getAppointmentsToRepaint();
         }
+
+        if(this.modelProvider.isRenovatedAppointments) {
+            renderAppointments({
+                instance: this,
+                $dateTable: this.getWorkSpace()._getDateTable(),
+                viewModel
+            });
+        } else {
+            this._appointments.option('items', viewModel);
+        }
+
+        getAppointmentDataProvider(this.key).cleanState();
     }
 
     _getAppointmentsToRepaint() {
         const { filteredItems } = getAppointmentDataProvider(this.key);
         const layoutManager = this.getLayoutManager();
 
-        const appointments = layoutManager.createAppointmentsMap(filteredItems);
-        return layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
+        const currentViewModel = layoutManager.createAppointmentsMap(filteredItems);
+        if(this.modelProvider.isRenovatedAppointments) {
+            return currentViewModel;
+        }
+
+        const oldViewModel = this.getAppointmentsInstance().option('items');
+
+        return layoutManager.getRepaintedAppointments(currentViewModel, oldViewModel);
     }
 
     _initExpressions(fields) {
@@ -1462,6 +1479,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
             groups: this._getCurrentViewOption('groups'),
+            isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
                 const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
@@ -1602,6 +1620,7 @@ class Scheduler extends Widget {
 
             // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),
+            isRenovatedAppointments: this.modelProvider.isRenovatedAppointments
         }, currentViewOptions);
 
         result.observer = this;
