@@ -6,26 +6,26 @@ import { captionize } from '../../core/utils/inflector';
 import { format } from '../../core/utils/string';
 import { isDefined } from '../../core/utils/type';
 import { isMaterial } from '../themes';
+import errors from '../widget/ui.errors';
 
 import Validator from '../validator';
 
 import {
-    FIELD_ITEM_CLASS,
     FLEX_LAYOUT_CLASS,
+    FIELD_ITEM_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
     FIELD_ITEM_REQUIRED_CLASS,
+    FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-    LABEL_VERTICAL_ALIGNMENT_CLASS,
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     FIELD_ITEM_HELP_TEXT_CLASS,
+    LABEL_VERTICAL_ALIGNMENT_CLASS,
+    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
 } from './constants';
 
 import {
     renderLabel,
-    renderComponentTo,
-    renderTemplateTo,
-    adjustEditorContainer
 } from './ui.form.utils';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
@@ -73,10 +73,10 @@ export function renderFieldItem({
 
     const $fieldEditorContainer = $('<div>');
     $fieldEditorContainer.data('dx-form-item', item);
-    adjustEditorContainer({ // TODO: label related code, execute ony if needRenderLabel ?
-        $container: $fieldEditorContainer,
-        labelLocation: formLabelLocation
-    });
+    const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
+    $fieldEditorContainer.
+        addClass(FIELD_ITEM_CONTENT_CLASS).
+        addClass(FIELD_ITEM_CONTENT_LOCATION_CLASS + locationClassSuffix[formLabelLocation]);
 
     //
     // Setup $label:
@@ -113,27 +113,27 @@ export function renderFieldItem({
 
     let instance;
     if(template) {
-        renderTemplateTo({
-            $container: getPublicElement($fieldEditorContainer),
-            template,
-            templateOptions: {
+        template.render({
+            container: getPublicElement($fieldEditorContainer),
+            model: {
                 dataField: item.dataField,
                 editorType: item.editorType,
                 editorOptions,
                 component: parentComponent,
                 name: item.name
-            }
+            },
         });
     } else {
-        instance = renderComponentTo({
-            $container: $fieldEditorContainer,
-            createComponentCallback,
-            componentType: item.editorType,
-            componentOptions: editorOptions,
-            helpID,
-            labelID,
-            isRequired
-        });
+        const $div = $('<div>').appendTo($fieldEditorContainer);
+
+        try {
+            instance = createComponentCallback($div, item.editorType, editorOptions);
+            instance.setAria('describedby', helpID);
+            instance.setAria('labelledby', labelID);
+            instance.setAria('required', isRequired);
+        } catch(e) {
+            errors.log('E1035', e.message);
+        }
     }
 
     //

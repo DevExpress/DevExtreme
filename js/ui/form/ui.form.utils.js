@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import errors from '../widget/ui.errors';
 import { isDefined } from '../../core/utils/type';
 
 import {
@@ -13,8 +12,6 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FIELD_BUTTON_ITEM_CLASS,
     FIELD_ITEM_CLASS,
-    FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -143,34 +140,3 @@ export function adjustContainerAsButtonItem({ $container, justifyContent, textAl
     // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
     $container.parent().css('justifyContent', justifyContent);
 }
-
-export function adjustEditorContainer({ $container, labelLocation }) {
-    // TODO: inline this code
-    const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
-    $container.
-        addClass(FIELD_ITEM_CONTENT_CLASS).
-        addClass(FIELD_ITEM_CONTENT_LOCATION_CLASS + locationClassSuffix[labelLocation]);
-}
-
-export function renderTemplateTo({ $container, template, templateOptions }) {
-    // TODO: rename $container to $target
-    template.render({
-        model: templateOptions,
-        container: $container
-    });
-}
-
-export function renderComponentTo({ $container, createComponentCallback, componentType, componentOptions, helpID, labelID, isRequired }) {
-    const $div = $('<div>').appendTo($container); // TODO: move <div> out of this method, pass $target
-
-    try {
-        const result = createComponentCallback($div, componentType, componentOptions);
-        result.setAria('describedby', helpID);
-        result.setAria('labelledby', labelID);
-        result.setAria('required', isRequired);
-        return result;
-    } catch(e) {
-        errors.log('E1035', e.message);
-    }
-}
-
