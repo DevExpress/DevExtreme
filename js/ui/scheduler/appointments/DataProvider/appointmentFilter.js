@@ -656,13 +656,12 @@ export class AppointmentFilterBaseStrategy {
             const regex = new RegExp(RECURRENCE_FREQ, 'gi');
             const recurrenceRule = adapter.recurrenceRule;
             const hasRecurrenceRule = !!recurrenceRule?.match(regex).length;
-            const recurrenceException = hasRecurrenceRule && adapter.recurrenceException;
 
             const item = {
                 startDate: comparableStartDate,
                 endDate: comparableEndDate,
                 recurrenceRule: adapter.recurrenceRule,
-                recurrenceException,
+                recurrenceException: adapter.recurrenceException,
                 hasRecurrenceRule,
                 allDay: adapter.allDay,
                 visible: rawAppointment.visible,
