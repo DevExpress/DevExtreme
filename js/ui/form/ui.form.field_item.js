@@ -31,28 +31,40 @@ import {
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const INVALID_CLASS = 'dx-invalid';
 
-export function renderFieldItem({ item, $container, isRequired, isFlexSupported, labelNeedBaselineAlign,
-    labelOptions, labelLocation, formLabelLocation,
-    template, editorOptions, component, createComponentCallback, helpID, labelID,
-    name, helpText, cssItemClass, formRequiredMessage,
-    formValidationGroup
+export function renderFieldItem({
+    $fieldItemElement,
+    fieldItemCssClass,
+    parentComponent,
+    createComponentCallback,
+    useFlexLayout,
+
+    labelOptions, // TODO: move to 'item' ?
+    labelNeedBaselineAlign, labelLocation, needRenderLabel, // TODO: move to 'labelOptions' ?
+    formLabelLocation, // TODO: use 'labelOptions.location' insted ?
+
+    item,
+    editorOptions, isSimpleItem, isRequired, template, helpID, labelID, name, helpText, // TODO: move to 'item' ?
+
+    requiredMessageTemplate,
+    validationGroup
 }) {
+
     //
     // Setup external $container:
     //
 
-    $container
+    $fieldItemElement
         .addClass(FIELD_ITEM_CLASS)
-        .addClass(cssItemClass)
+        .addClass(fieldItemCssClass)
         .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
 
-    $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
-    if(item.isSimpleItem && isFlexSupported) {
-        $container.addClass(FLEX_LAYOUT_CLASS);
+    $fieldItemElement.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
+    if(isSimpleItem && useFlexLayout) {
+        $fieldItemElement.addClass(FLEX_LAYOUT_CLASS);
     }
-    if(item.isSimpleItem && labelNeedBaselineAlign) {
-        // TODO: label related code, execute ony if needRenderLabel?
-        $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
+    if(isSimpleItem && labelNeedBaselineAlign) {
+        // TODO: label related code, execute ony if needRenderLabel ?
+        $fieldItemElement.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
     }
 
     //
@@ -61,7 +73,7 @@ export function renderFieldItem({ item, $container, isRequired, isFlexSupported,
 
     const $fieldEditorContainer = $('<div>');
     $fieldEditorContainer.data('dx-form-item', item);
-    adjustEditorContainer({ // TODO: label related code, execute ony if needRenderLabel?
+    adjustEditorContainer({ // TODO: label related code, execute ony if needRenderLabel ?
         $container: $fieldEditorContainer,
         labelLocation: formLabelLocation
     });
@@ -70,21 +82,20 @@ export function renderFieldItem({ item, $container, isRequired, isFlexSupported,
     // Setup $label:
     //
 
-    const needRenderLabel = labelOptions.visible && labelOptions.text;
     const $label = needRenderLabel ? renderLabel(labelOptions) : null;
     if($label) {
-        $container.append($label);
+        $fieldItemElement.append($label);
         if(labelLocation === 'top' || labelLocation === 'left') {
-            $container.append($fieldEditorContainer);
+            $fieldItemElement.append($fieldEditorContainer);
         }
         if(labelLocation === 'right') {
-            $container.prepend($fieldEditorContainer);
+            $fieldItemElement.prepend($fieldEditorContainer);
         }
 
         if(labelLocation === 'top') {
-            $container.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
+            $fieldItemElement.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
-            $container.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
+            $fieldItemElement.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
         }
 
         if(item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch') {
@@ -93,7 +104,7 @@ export function renderFieldItem({ item, $container, isRequired, isFlexSupported,
             });
         }
     } else {
-        $container.append($fieldEditorContainer);
+        $fieldItemElement.append($fieldEditorContainer);
     }
 
     //
@@ -109,7 +120,7 @@ export function renderFieldItem({ item, $container, isRequired, isFlexSupported,
                 dataField: item.dataField,
                 editorType: item.editorType,
                 editorOptions,
-                component,
+                component: parentComponent,
                 name: item.name
             }
         });
@@ -139,11 +150,11 @@ export function renderFieldItem({ item, $container, isRequired, isFlexSupported,
         const fieldName = isItemHaveCustomLabel ? item.label.text : itemName && captionize(itemName);
         let validationRules;
 
-        if(item.isSimpleItem) {
+        if(isSimpleItem) {
             if(item.validationRules) {
                 validationRules = item.validationRules;
             } else {
-                const requiredMessage = format(formRequiredMessage, fieldName || '');
+                const requiredMessage = format(requiredMessageTemplate, fieldName || '');
                 validationRules = item.isRequired ? [{ type: 'required', message: requiredMessage }] : null;
             }
         }
@@ -151,7 +162,7 @@ export function renderFieldItem({ item, $container, isRequired, isFlexSupported,
         if(Array.isArray(validationRules) && validationRules.length) {
             createComponentCallback($validationTarget, Validator, {
                 validationRules: validationRules,
-                validationGroup: formValidationGroup,
+                validationGroup: validationGroup,
                 dataGetter: function() {
                     return {
                         formItem: item
@@ -178,7 +189,7 @@ export function renderFieldItem({ item, $container, isRequired, isFlexSupported,
     // Append help text elements:
     //
 
-    if(helpText && item.isSimpleItem) {
+    if(helpText && isSimpleItem) {
         const $editorParent = $fieldEditorContainer.parent();
 
         // TODO: DOM hierarchy is changed here: new node is added between $editor and $editor.parent()

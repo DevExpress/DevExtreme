@@ -582,10 +582,12 @@ const LayoutManager = Widget.inherit({
         const name = item.dataField || item.name;
         const id = that.getItemID(name);
         const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
+        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
         const helpText = item.helpText;
 
         const labelOptions = that._getLabelOptions(item, id, isRequired);
+        const needRenderLabel = labelOptions.visible && labelOptions.text;
         const { location: labelLocation, labelID } = labelOptions;
         const isFlexSupported = this._hasBrowserFlex();
         const labelNeedBaselineAlign =
@@ -608,21 +610,20 @@ const LayoutManager = Widget.inherit({
         const template = item.template ? this._getTemplate(item.template) : null;
 
         const { $fieldEditorContainer, instance } = renderFieldItem({
-            $container, isRequired, isFlexSupported, labelNeedBaselineAlign,
-            labelOptions, labelLocation,
-            template, editorOptions,
-            helpID, labelID, name, helpText,
-            item: { ...item, isSimpleItem: item.itemType === SIMPLE_ITEM_TYPE },
-            formLabelLocation: this.option('labelLocation') /* TODO: use 'labelOptions.location' insted?*/,
-            cssItemClass: this.option('cssItemClass'),
-            formRequiredMessage: this.option('requiredMessage'),
-            formValidationGroup: this.option('validationGroup'),
-            component: this._getComponentOwner(),
+            $fieldItemElement: $container,
+            fieldItemCssClass: this.option('cssItemClass'),
+            parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
+            useFlexLayout: isFlexSupported,
+            labelOptions, labelNeedBaselineAlign, labelLocation, needRenderLabel,
+            item, editorOptions, isSimpleItem, isRequired, template, helpID, labelID, name, helpText,
+            formLabelLocation: this.option('labelLocation'),
+            requiredMessageTemplate: this.option('requiredMessage'),
+            validationGroup: this.option('validationGroup'),
         });
 
         if(instance && item.dataField) {
-            // TODO: move to _renderFieldItemCore
+            // TODO: move to renderFieldItem ?
             this._bindDataField(instance, item.dataField, item.editorType, $fieldEditorContainer);
         }
         this._itemsRunTimeInfo.add({
