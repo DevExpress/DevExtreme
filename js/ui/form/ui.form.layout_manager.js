@@ -18,7 +18,6 @@ import { captionize } from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
 import ResponsiveBox from '../responsive_box';
 import {
-    FIELD_ITEM_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
@@ -30,11 +29,6 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import {
-    adjustContainerAsButtonItem,
-    convertAlignmentToJustifyContent,
-    convertAlignmentToTextAlign,
-} from './ui.form.utils';
 
 import {
     renderLabel,
@@ -42,6 +36,7 @@ import {
 } from './field_item/label';
 
 import { renderFieldItem } from './field_item/field_item.js';
+import { renderButtonItem } from './button_item/button_item.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -549,35 +544,21 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderButtonItem: function(item, $container) {
-        // TODO: try to create $container in this function and return it
-        adjustContainerAsButtonItem({
+        const instance = renderButtonItem({
+            item,
             $container,
-            justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
-            textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
+            validationGroup: this.option('validationGroup'),
+            createComponentCallback: this._createComponent.bind(this),
             cssItemClass: this.option('cssItemClass'),
-            targetColIndex: item.col
         });
-
-        const $button = $('<div>');
-        $container.append($button);
-        const buttonWidget = this._createComponent(
-            $button, 'dxButton',
-            extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions));
 
         // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: buttonWidget, // TODO: try to remove 'widgetInstance'
+            widgetInstance: instance, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
             $itemContainer: $container
         });
-    },
-
-    _addItemClasses: function($item, column) {
-        $item
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(this.option('cssItemClass'))
-            .addClass(isDefined(column) ? 'dx-col-' + column : '');
     },
 
     _renderFieldItem: function(item, $container) {

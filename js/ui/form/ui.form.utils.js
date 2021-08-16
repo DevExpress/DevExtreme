@@ -1,10 +1,5 @@
 import { isDefined } from '../../core/utils/type';
 
-import {
-    FIELD_BUTTON_ITEM_CLASS,
-    FIELD_ITEM_CLASS,
-} from './constants';
-
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
 
 export const concatPaths = (path1, path2) => {
@@ -57,31 +52,3 @@ export const getItemPath = (items, item, isTabs) => {
         }
     }
 };
-
-export function convertAlignmentToJustifyContent(verticalAlignment) {
-    switch(verticalAlignment) {
-        case 'center':
-            return 'center';
-        case 'bottom':
-            return 'flex-end';
-        default:
-            return 'flex-start';
-    }
-}
-
-export function convertAlignmentToTextAlign(horizontalAlignment) {
-    return isDefined(horizontalAlignment) ? horizontalAlignment : 'right';
-}
-
-export function adjustContainerAsButtonItem({ $container, justifyContent, textAlign, cssItemClass, targetColIndex }) {
-    // TODO: try to create $container in this function and return it
-    $container
-        .addClass(FIELD_BUTTON_ITEM_CLASS)
-        .css('textAlign', textAlign)
-        .addClass(FIELD_ITEM_CLASS)
-        .addClass(cssItemClass)
-        .addClass(isDefined(targetColIndex) ? 'dx-col-' + targetColIndex : '');
-
-    // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
-    $container.parent().css('justifyContent', justifyContent);
-}
