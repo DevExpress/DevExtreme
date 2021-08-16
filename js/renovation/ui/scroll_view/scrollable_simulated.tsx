@@ -396,21 +396,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   // TODO: it uses for DataGrid only
   /* istanbul ignore next */
   getElementLocation(
-    element: HTMLElement,
+    targetElement: HTMLElement,
     direction: ScrollableDirection,
     offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
   ): number {
+    const scrollOffset = this.scrollOffset();
+
     return getElementLocationInternal(
-      element,
-      {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        ...offset,
-      },
+      targetElement,
       direction,
       this.containerElement,
+      scrollOffset,
+      offset,
     );
   }
 
