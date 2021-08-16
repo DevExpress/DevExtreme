@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    - name: Test
+    - name: Test .${{ secrets.TEST }}.
       run: echo ${{ secrets.TEST }}
     - name: Set Teams notification
       uses: aliencube/microsoft-teams-actions@v0.8.0
