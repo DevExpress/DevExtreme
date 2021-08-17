@@ -1,7 +1,7 @@
-import { formatWeekdayAndDay, formatWeekday } from '../../../../../../ui/scheduler/workspaces/utils/base';
+import { formatWeekdayAndDay, formatWeekday } from '../../../view_model/to_test/views/utils/base';
 import {
   getDateForHeaderText as timelineGetDateFrHeaderText,
-} from '../../../../../../ui/scheduler/workspaces/utils/timeline_week';
+} from '../../../view_model/to_test/views/utils/timeline_week';
 import { DateTableLayoutBase } from '../date_table/layout';
 import { HeaderPanelLayout } from '../header_panel/layout';
 import { TimePanelTableLayout } from '../time_panel/layout';

@@ -16,6 +16,7 @@ module.exports = {
         '!**/*.j.tsx',
         '!**/test_utils/**/*',
         '!**/__tests__/**/*',
+        '!./js/renovation/ui/scheduler/view_model/to_test/**/*', // TODO: this is temporary
     ],
     coveragePathIgnorePatterns: [
         './js/renovation/component_wrapper/editors/editor.ts',
