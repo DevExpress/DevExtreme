@@ -140,7 +140,7 @@ describe('Editor', () => {
           expect(editor.showValidationMessage).toBe(false);
         });
 
-        it('should set showValidationMessage to false if validationStatis not equal to "invalid"', () => {
+        it('should set showValidationMessage to false if validationStatus is not invalid but isValid=false', () => {
           const editor = new Editor({
             isValid: false,
             validationStatus: 'pending',
@@ -149,10 +149,10 @@ describe('Editor', () => {
 
           editor.updateValidationMessageVisibility();
 
-          expect(editor.showValidationMessage).toBe(false);
+          expect(editor.showValidationMessage).toBe(true);
         });
 
-        it('should set showValidationMessage to false if isValid is true', () => {
+        it('should set showValidationMessage to false if isValid is true but validationStatus="invalid"', () => {
           const editor = new Editor({
             isValid: true,
             validationStatus: 'invalid',
@@ -161,7 +161,7 @@ describe('Editor', () => {
 
           editor.updateValidationMessageVisibility();
 
-          expect(editor.showValidationMessage).toBe(false);
+          expect(editor.showValidationMessage).toBe(true);
         });
       });
     });
@@ -314,24 +314,24 @@ describe('Editor', () => {
           expect(editor.shouldShowValidationMessage).toBe(false);
         });
 
-        it('should return false if validationStatis not equal to "invalid"', () => {
+        it('should return false if validationStatus not equal to "invalid" but isValid=false', () => {
           const editor = new Editor({
             isValid: false,
             validationStatus: 'pending',
             validationErrors: [{ message: 'error message' }],
           });
 
-          expect(editor.shouldShowValidationMessage).toBe(false);
+          expect(editor.shouldShowValidationMessage).toBe(true);
         });
 
-        it('should return false if isValid is true', () => {
+        it('should return false if isValid is true but validationStatus="invalid', () => {
           const editor = new Editor({
             isValid: true,
             validationStatus: 'invalid',
             validationErrors: [{ message: 'error message' }],
           });
 
-          expect(editor.shouldShowValidationMessage).toBe(false);
+          expect(editor.shouldShowValidationMessage).toBe(true);
         });
       });
     });
