@@ -197,6 +197,240 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - 1 text line. fontSize default, lineHeight: default', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 text line. fontSize 20, lineHeight: default', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        doc.setFontSize(20);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 text line. fontSize 20, lineHeight: 1.5', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        doc.setFontSize(20);
+        doc.setLineHeightFactor(1.5);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 text lines. fontSize default, lineHeight: default', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 text lines. fontSize 20, lineHeight: default', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        doc.setFontSize(20);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 text lines. fontSize 20, lineHeight: 1.5', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        doc.setFontSize(20);
+        doc.setLineHeightFactor(1.5);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 text lines. fontSize default, lineHeight: default', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2\nline3' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 80;
+        };
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 text lines. fontSize 20, lineHeight: default', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2\nline3' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 80;
+        };
+
+        doc.setFontSize(20);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 text lines. fontSize 20, lineHeight: 1.5', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2\nline3' }]
+        });
+
+        const expectedLog = [
+            'text,line1,10,30.8,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,50'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 80;
+        };
+
+        doc.setFontSize(20);
+        doc.setLineHeightFactor(1.5);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('1 col - hide all borders', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
