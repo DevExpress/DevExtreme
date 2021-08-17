@@ -70,7 +70,7 @@ import {
 
 import { getElementOffset } from '../../utils/get_element_offset';
 import {
-  getElementPaddingBottom, getElementOverflowX, getElementOverflowY,
+  getElementPadding, getElementOverflowX, getElementOverflowY,
 } from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
@@ -1187,7 +1187,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
     }
 
-    this.contentPaddingBottom = getElementPaddingBottom(contentEl);
+    this.contentPaddingBottom = getElementPadding(contentEl, 'bottom');
   }
 
   get containerElement(): HTMLDivElement {
