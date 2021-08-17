@@ -32,7 +32,6 @@ import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import {
   isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
 } from '../../../events/utils/index';
-import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
 import eventsEngine from '../../../events/core/events_engine';
@@ -70,7 +69,9 @@ import {
 
 import { getElementOffset } from '../../utils/get_element_offset';
 import {
-  getElementPadding, getElementOverflowX, getElementOverflowY,
+  getElementPadding,
+  getElementOverflowX,
+  getElementOverflowY,
 } from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
@@ -80,6 +81,7 @@ import { getOffsetDistance } from './utils/get_offset_distance';
 import { convertToLocation } from './utils/convert_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
+import { getDevicePixelRatio } from './utils/get_device_pixel_ratio';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
 
@@ -296,6 +298,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() contentClientWidth = 0;
 
   @InternalState() contentClientHeight = 0;
+
+  @InternalState() contentWidth = 0;
+
+  @InternalState() contentHeight = 0;
 
   @InternalState() contentPaddingBottom = 0;
 
@@ -536,6 +542,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     );
   }
 
+  @Effect()
+  updateContentWidth(): void {
+    // T320141
+    this.contentWidth = getElementOverflowX(this.contentRef.current) === 'hidden'
+      ? this.contentClientWidth
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollWidth, this.contentClientWidth);
+  }
+
+  @Effect()
+  updateContentHeight(): void {
+    // T320141
+    this.contentHeight = getElementOverflowY(this.contentRef.current) === 'hidden'
+      ? this.contentClientHeight
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollHeight, this.contentClientHeight);
+  }
+
   @Method()
   validate(event: DxMouseEvent): boolean {
     if (this.isLocked()) {
@@ -576,7 +600,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect() effectResetInactiveState(): void {
     if (this.props.direction === DIRECTION_BOTH
-      || !isDefined(this.containerElement)) { // || !hasWindow()
+      || !isDefined(this.containerElement)) {
       return;
     }
 
@@ -584,8 +608,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect({ run: 'always' }) updateScrollbarSize(): void {
-    this.scrollableOffsetLeft = this.scrollableOffset.left;
-    this.scrollableOffsetTop = this.scrollableOffset.top;
+    const { left, top } = getElementOffset(this.scrollableRef.current);
+
+    this.scrollableOffsetLeft = left;
+    this.scrollableOffsetTop = top;
 
     this.updateSizes();
   }
@@ -863,8 +889,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     distance.x *= this.validDirections[DIRECTION_HORIZONTAL] ? 1 : 0;
     distance.y *= this.validDirections[DIRECTION_VERTICAL] ? 1 : 0;
 
-    const devicePixelRatio = this.tryGetDevicePixelRatio();
-    if (devicePixelRatio && isDxMouseWheelEvent(event.originalEvent)) {
+    if (isDxMouseWheelEvent(event.originalEvent)) {
+      const devicePixelRatio = getDevicePixelRatio();
+
       distance.x = Math.round((distance.x / devicePixelRatio) * 100) / 100;
       distance.y = Math.round((distance.y / devicePixelRatio) * 100) / 100;
     }
@@ -1066,20 +1093,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   scrollByLine(lines: { x?: number; y?: number }): void {
-    const devicePixelRatio = this.tryGetDevicePixelRatio();
-    let scrollOffset = SCROLL_LINE_HEIGHT;
-    if (devicePixelRatio) {
-      scrollOffset = Math.abs((scrollOffset / devicePixelRatio) * 100) / 100;
-    }
+    const scrollOffset = Math.abs((SCROLL_LINE_HEIGHT / getDevicePixelRatio()) * 100) / 100;
+
     this.scrollBy({
       top: (lines.y ?? 0) * scrollOffset,
       left: (lines.x ?? 0) * scrollOffset,
     });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  tryGetDevicePixelRatio(): number | undefined {
-    return hasWindow() ? getWindow().devicePixelRatio : undefined;
   }
 
   scrollByPage(page: number): void {
@@ -1194,43 +1213,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   get containerHasSizes(): boolean {
     return this.containerClientHeight > 0 && this.containerClientWidth > 0;
-  }
-
-  get contentWidth(): number {
-    if (!isDefined(this.contentRef?.current)) {
-      return 0;
-    }
-
-    // T320141
-    /* istanbul ignore next */
-    if (getElementOverflowX(this.contentRef.current) === 'hidden') {
-      return this.contentClientWidth;
-    }
-
-    const containerScrollSize = this.contentScrollWidth;
-    // for position absolute elements inside content
-    return Math.max(containerScrollSize, this.contentClientWidth);
-  }
-
-  get contentHeight(): number {
-    if (!isDefined(this.contentRef?.current)) {
-      return 0;
-    }
-
-    // T320141
-    /* istanbul ignore next */
-    if (getElementOverflowY(this.contentRef.current) === 'hidden') {
-      return this.contentClientHeight;
-    }
-
-    const containerScrollSize = this.contentScrollHeight;
-    // for position absolute elements inside content
-    return Math.max(containerScrollSize, this.contentClientHeight);
-  }
-
-  /* istanbul ignore next */
-  get scrollableOffset(): { left: number; top: number } {
-    return getElementOffset(this.scrollableRef.current);
   }
 
   get contentStyles(): { [key: string]: string } {
