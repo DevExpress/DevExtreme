@@ -10,7 +10,7 @@ import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 import timeZoneUtils from '../../utils.timeZone';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../workspaces/utils/base';
+import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
