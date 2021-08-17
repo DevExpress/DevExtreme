@@ -205,6 +205,8 @@
     "build:angular:watch": "gulp generate-angular-watch",
     "build:vue": "gulp generate-vue",
     "build:vue:watch": "gulp generate-vue-watch",
+    "build:modular": "cd ./playground/modular && webpack",
+    "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "compile:r": "node ./node_modules/typescript/bin/tsc -p ./renovation.tsconfig.json",
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",

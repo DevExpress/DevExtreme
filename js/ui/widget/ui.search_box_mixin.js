@@ -1,9 +1,11 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
-import TextBox from '../text_box';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
+import { componentGetter } from '../../core/modules_registry';
+
+const TextBoxGetter = componentGetter('ui/text_box');
 
 
 export default {
@@ -46,7 +48,7 @@ export default {
         } else {
             $element.addClass(rootElementClassName);
             this._$searchEditorElement = $('<div>').addClass(searchBoxClassName).prependTo($element);
-            this._searchEditor = this._createComponent(this._$searchEditorElement, TextBox, editorOptions);
+            this._searchEditor = this._createComponent(this._$searchEditorElement, TextBoxGetter(), editorOptions);
         }
     },
 
