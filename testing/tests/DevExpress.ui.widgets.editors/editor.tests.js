@@ -645,7 +645,7 @@ QUnit.module('validation', {
 });
 
 QUnit.module('aria accessibility', moduleConfig, () => {
-    const expectedFalseValue = Editor.IS_RENOVATED_WIDGET ? 'false' : 'undefined';
+    const expectedFalseValue = Editor.IS_RENOVATED_WIDGET ? 'false' : undefined;
 
     QUnit.test('readonly', function(assert) {
         const editor = this.fixture.createEditor({ readOnly: true });
