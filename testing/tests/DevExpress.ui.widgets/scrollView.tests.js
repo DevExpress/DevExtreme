@@ -2077,18 +2077,17 @@ QUnit.module('native swipeDown strategy', {
             assert.ok(true, 'Ziborov: temporary we do not test this case if browser does not supported touch');
             return;
         }
-        const onUpdateHandler = sinon.spy();
+        const onUpdatedHandler = sinon.spy();
 
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: true,
-            onUpdated: onUpdateHandler
+            onUpdated: onUpdatedHandler
         });
         const clock = sinon.useFakeTimers();
         try {
             $scrollView.dxScrollView('release');
             clock.tick(800);
-            assert.equal(onUpdateHandler.callCount(), 1, 'update fired');
-
+            assert.equal(onUpdatedHandler.callCount, 2, 'update fired');
         } finally {
             clock.restore();
         }

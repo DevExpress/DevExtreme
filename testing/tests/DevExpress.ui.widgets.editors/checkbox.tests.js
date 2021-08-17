@@ -160,16 +160,6 @@ QUnit.module('Checkbox', function() {
 
             assert.equal($element.find(ICON_SELECTOR).height(), initHeight, 'icon height is not resized');
         });
-
-        QUnit.test('widget input should get the "name" attribute with a correct value', function(assert) {
-            const expectedName = 'some_name';
-            const $element = $('#checkBox').dxCheckBox({
-                name: expectedName
-            });
-            const $input = $element.find('input');
-
-            assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value');
-        });
     });
 
     QUnit.module('hidden input', function() {

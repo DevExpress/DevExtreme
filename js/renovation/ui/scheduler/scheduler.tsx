@@ -4,7 +4,6 @@ import {
   Effect,
   InternalState,
   JSXComponent,
-  JSXTemplate,
   Method,
 } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -16,13 +15,12 @@ import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
-import { WorkSpaceProps, CurrentViewConfigType } from './workspaces/props';
-import { WorkSpaceWeek } from './workspaces/week/work_space';
+import { CurrentViewConfigType } from './workspaces/props';
 import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
+import { WorkSpace } from './workspaces/base/work_space';
 
 export const viewFunction = ({
   restAttributes,
-  workSpace: WorkSpace,
   currentViewConfig,
   onViewRendered,
   props: {
@@ -62,7 +60,7 @@ export const viewFunction = ({
     indicatorTime,
     allowMultipleCellSelection,
     allDayPanelExpanded,
-
+    type,
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -100,6 +98,7 @@ export const viewFunction = ({
         crossScrollingEnabled={crossScrollingEnabled}
         hoursInterval={hoursInterval}
         groups={groups}
+        type={type}
 
         indicatorTime={indicatorTime}
         allowMultipleCellSelection={allowMultipleCellSelection}
@@ -130,11 +129,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get currentViewConfig(): CurrentViewConfigType {
     return getCurrentViewConfig(this.currentViewProps, this.props);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  get workSpace(): JSXTemplate<WorkSpaceProps, 'currentDate' | 'onViewRendered'> {
-    return WorkSpaceWeek;
   }
 
   @Method()
