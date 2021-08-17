@@ -161,6 +161,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._cache = new Cache();
         }
 
+
         return this._cache;
     }
 
