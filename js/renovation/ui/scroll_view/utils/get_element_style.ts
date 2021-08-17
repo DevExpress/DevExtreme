@@ -1,3 +1,4 @@
+import { titleize } from '../../../../core/utils/inflector';
 import { getWindow, hasWindow } from '../../../../core/utils/window';
 import { toNumber } from '../../../utils/type_conversion';
 
@@ -7,9 +8,14 @@ export function getElementStyle(
   return el && hasWindow() ? getWindow().getComputedStyle?.(el) : null;
 }
 
-export function getElementPaddingBottom(element: Element | null): number {
+export function getElementMargin(element: Element | null, side: string): number {
   const style = getElementStyle(element);
-  return style ? toNumber(style.paddingBottom) : 0;
+  return style ? toNumber(style[`margin${titleize(side)}`]) : 0;
+}
+
+export function getElementPadding(element: Element | null, side: string): number {
+  const style = getElementStyle(element);
+  return style ? toNumber(style[`padding${titleize(side)}`]) : 0;
 }
 
 export function getElementOverflowX(element: Element | null): string {
