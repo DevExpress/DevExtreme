@@ -2984,7 +2984,8 @@ testModule('drag', moduleConfig, () => {
             dragEnabled: true,
             visible: true,
             width: 1,
-            height: 1
+            height: 1,
+            position: { of: viewPort() }
         });
         const overlay = $overlay.dxOverlay('instance');
         const $overlayContent = overlay.$content();
@@ -3006,7 +3007,8 @@ testModule('drag', moduleConfig, () => {
             dragEnabled: true,
             visible: true,
             height: 10,
-            width: 10
+            width: 10,
+            position: { of: viewPort() }
         });
         const overlay = $overlay.dxOverlay('instance');
         const $overlayContent = overlay.$content();
@@ -3029,7 +3031,8 @@ testModule('drag', moduleConfig, () => {
             dragEnabled: true,
             width: 2,
             height: 2,
-            visible: true
+            visible: true,
+            position: { of: viewPort() }
         });
         const overlay = $overlay.dxOverlay('instance');
         const $overlayContent = overlay.$content();
@@ -3316,7 +3319,8 @@ testModule('keyboard navigation', {
             dragEnabled: true,
             visible: true,
             width: 1,
-            height: 1
+            height: 1,
+            position: { of: viewPort() }
         });
 
         this.overlay = this.$overlay.dxOverlay('instance');
