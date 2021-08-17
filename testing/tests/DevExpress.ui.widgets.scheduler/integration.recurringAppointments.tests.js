@@ -408,7 +408,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Appointment shouldn\'t render on view if he is excluded from recurrence', function(assert) {
+        test('Appointment should not render on view if he is excluded from recurrence', function(assert) {
             const scheduler = createWrapper({
                 currentDate: new Date(2015, 1, 12),
                 dataSource: [{
