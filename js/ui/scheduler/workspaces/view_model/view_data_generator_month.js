@@ -7,7 +7,7 @@ import {
     getCellText,
     isFirstCellInMonthWithIntervalCount,
     getViewStartByOptions,
-} from '../utils/month';
+} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 const DAYS_IN_WEEK = 7;
