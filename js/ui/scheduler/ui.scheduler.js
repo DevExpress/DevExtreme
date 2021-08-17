@@ -1009,9 +1009,9 @@ class Scheduler extends Widget {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
             timeZone: this.option('timeZone'),
-            getDataAccessors: function(key) {
+            getDataAccessors: (key) => {
                 return utils.dataAccessors.combine(key, this._dataAccessors);
-            }.bind(this),
+            },
         });
     }
 
