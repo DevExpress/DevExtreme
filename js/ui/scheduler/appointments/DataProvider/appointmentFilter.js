@@ -206,11 +206,9 @@ export class AppointmentFilterBaseStrategy {
             resources: resources,
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
-            recurrenceException: this.getRecurrenceException.bind(this),
         });
     }
 
-    // TODO: Get rid of it after rework filtering
     getRecurrenceException(appointmentAdapter) {
         const recurrenceException = appointmentAdapter.recurrenceException;
 
@@ -381,7 +379,6 @@ export class AppointmentFilterBaseStrategy {
     _createCombinedFilter(filterOptions) {
         const min = new Date(filterOptions.min);
         const max = new Date(filterOptions.max);
-        const getRecurrenceException = filterOptions.recurrenceException;
         const {
             startDayHour,
             endDayHour,
@@ -436,15 +433,12 @@ export class AppointmentFilterBaseStrategy {
             }
 
             if(hasRecurrenceRule) {
-                const recurrenceException = getRecurrenceException
-                    ? getRecurrenceException(appointment)
-                    : appointment.recurrenceException;
-
+                const recurrenceException = this.getRecurrenceException(appointment);
                 if(!that._filterAppointmentByRRule({
                     startDate: startDate,
                     endDate: endDate,
                     recurrenceRule,
-                    recurrenceException: recurrenceException,
+                    recurrenceException,
                     allDay: appointmentTakesAllDay
                 }, min, max, startDayHour, endDayHour, firstDayOfWeek)) {
                     return false;
@@ -660,12 +654,14 @@ export class AppointmentFilterBaseStrategy {
             const comparableStartDate = adapter.startDate && adapter.calculateStartDate('toGrid');
             const comparableEndDate = adapter.endDate && adapter.calculateEndDate('toGrid') || comparableStartDate;
             const regex = new RegExp(RECURRENCE_FREQ, 'gi');
-            const hasRecurrenceRule = !!adapter.recurrenceRule?.match(regex).length;
+            const recurrenceRule = adapter.recurrenceRule;
+            const hasRecurrenceRule = !!recurrenceRule?.match(regex).length;
 
             const item = {
                 startDate: comparableStartDate,
                 endDate: comparableEndDate,
                 recurrenceRule: adapter.recurrenceRule,
+                recurrenceException: adapter.recurrenceException,
                 hasRecurrenceRule,
                 allDay: adapter.allDay,
                 visible: rawAppointment.visible,
@@ -745,7 +741,6 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
                 allDay: supportAllDayAppointment,
                 resources,
                 firstDayOfWeek: this.firstDayOfWeek,
-                recurrenceException: this.getRecurrenceException.bind(this),
                 checkIntersectViewport
             });
         });
