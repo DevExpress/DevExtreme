@@ -1,3 +1,6 @@
+import type { AppointmentTemplateData } from '../../../../ui/scheduler';
+import type { DxElement } from '../../../../core/element';
+
 export interface AppointmentViewModel {
   appointment: {
     startDate: Date;
@@ -26,4 +29,10 @@ export interface AppointmentViewModel {
     dateText: string;
     resourceColor?: string;
   };
+}
+
+export interface AppointmentTemplateProps {
+  model: AppointmentTemplateData;
+  itemIndex: number;
+  contentElement?: DxElement;
 }
