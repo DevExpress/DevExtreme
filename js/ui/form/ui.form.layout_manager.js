@@ -534,7 +534,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderEmptyItem: function($container) {
-        renderEmptyItem($container);
+        renderEmptyItem({ $container });
     },
 
     _renderButtonItem: function(item, $container) {
