@@ -99,11 +99,12 @@ export function drawPdfTable(doc, styles, table) {
         throw 'table.rect is required';
     }
 
-    if(isDefined(table.rows)) {
-        for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
-            drawRow(table.rows[rowIndex]);
-        }
-    }
+    const cells = [].concat(...table.rows).sort((a, b) => {
+        const aValue = isDefined(a.borderColor) ? 1 : 0;
+        const bValue = isDefined(b.borderColor) ? 1 : 0;
+        return aValue - bValue;
+    });
+    drawRow(cells);
 
     if(isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0)) {
         drawBorder(table.rect);
