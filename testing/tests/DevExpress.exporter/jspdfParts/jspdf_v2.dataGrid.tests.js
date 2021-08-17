@@ -77,6 +77,12 @@ function createMockPdfDoc() {
         this.__setFontSize.apply(this, arguments);
     };
 
+    result.__setLineHeightFactor = result.setLineHeightFactor;
+    result.setLineHeightFactor = function() {
+        this.__log.push('setLineHeightFactor,' + argumentsToString.apply(null, arguments));
+        this.__setLineHeightFactor.apply(this, arguments);
+    };
+
     result.__setTextColor = result.setTextColor;
     result.setTextColor = function() {
         this.__log.push('setTextColor,' + argumentsToString.apply(null, arguments));
@@ -206,9 +212,9 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'text,line1,10,45,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,60'
         ];
 
         const onExporting = (e) => {
@@ -216,7 +222,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -231,9 +237,10 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'setFontSize,20',
+            'text,line1,10,45,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,60'
         ];
 
         const onExporting = (e) => {
@@ -242,7 +249,36 @@ QUnit.module('Table', moduleConfig, () => {
 
         doc.setFontSize(20);
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 text line. fontSize 20, lineHeight: 1', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1' }]
+        });
+
+        const expectedLog = [
+            'setFontSize,20',
+            'setLineHeightFactor,1',
+            'text,line1,10,42,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,60'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        doc.setFontSize(20);
+        doc.setLineHeightFactor(1);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -257,9 +293,11 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'setFontSize,20',
+            'setLineHeightFactor,1.5',
+            'text,line1,10,52,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,60'
         ];
 
         const onExporting = (e) => {
@@ -269,7 +307,7 @@ QUnit.module('Table', moduleConfig, () => {
         doc.setFontSize(20);
         doc.setLineHeightFactor(1.5);
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -284,9 +322,9 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'text,line1\nline2,10,35.8,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,60'
         ];
 
         const onExporting = (e) => {
@@ -294,7 +332,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -309,9 +347,10 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'setFontSize,20',
+            'text,line1\nline2,10,33.5,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,60'
         ];
 
         const onExporting = (e) => {
@@ -320,7 +359,36 @@ QUnit.module('Table', moduleConfig, () => {
 
         doc.setFontSize(20);
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 text lines. fontSize 20, lineHeight: 1', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2' }]
+        });
+
+        const expectedLog = [
+            'setFontSize,20',
+            'setLineHeightFactor,1',
+            'text,line1\nline2,10,32,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,60'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 60;
+        };
+
+        doc.setFontSize(20);
+        doc.setLineHeightFactor(1);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -335,9 +403,11 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'setFontSize,20',
+            'setLineHeightFactor,1.5',
+            'text,line1\nline2,10,37,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,60'
         ];
 
         const onExporting = (e) => {
@@ -347,7 +417,7 @@ QUnit.module('Table', moduleConfig, () => {
         doc.setFontSize(20);
         doc.setLineHeightFactor(1.5);
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -362,9 +432,9 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'text,line1\nline2\nline3,10,36.6,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,80'
         ];
 
         const onExporting = (e) => {
@@ -372,7 +442,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -387,9 +457,10 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'setFontSize,20',
+            'text,line1\nline2\nline3,10,32,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,80'
         ];
 
         const onExporting = (e) => {
@@ -398,7 +469,36 @@ QUnit.module('Table', moduleConfig, () => {
 
         doc.setFontSize(20);
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 text lines. fontSize 20, lineHeight: 1', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'line1\nline2\nline3' }]
+        });
+
+        const expectedLog = [
+            'setFontSize,20',
+            'setLineHeightFactor,1',
+            'text,line1\nline2\nline3,10,32,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,100,80'
+        ];
+
+        const onExporting = (e) => {
+            e.rowHeight = 80;
+        };
+
+        doc.setFontSize(20);
+        doc.setLineHeightFactor(1);
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
@@ -413,9 +513,11 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,line1,10,30.8,{baseline:middle}',
+            'setFontSize,20',
+            'setLineHeightFactor,1.5',
+            'text,line1\nline2\nline3,10,32,{baseline:middle}',
             'setLineWidth,1',
-            'rect,10,15,100,50'
+            'rect,10,15,100,80'
         ];
 
         const onExporting = (e) => {
@@ -425,7 +527,7 @@ QUnit.module('Table', moduleConfig, () => {
         doc.setFontSize(20);
         doc.setLineHeightFactor(1.5);
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: onExporting }).then(() => {
-            doc.save();
+            // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
         });
