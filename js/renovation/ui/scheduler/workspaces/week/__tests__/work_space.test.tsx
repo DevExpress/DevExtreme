@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { formatWeekdayAndDay } from '../../../../../../ui/scheduler/workspaces/utils/base';
+import { formatWeekdayAndDay } from '../../../view_model/to_test/views/utils/base';
 import { TimePanelTableLayout } from '../../base/time_panel/layout';
 import {
   viewFunction as WorkSpaceLayout,

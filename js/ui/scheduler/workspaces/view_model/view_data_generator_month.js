@@ -1,4 +1,4 @@
-import { getToday, setOptionHour } from '../utils/base';
+import { getToday, setOptionHour } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { ViewDataGenerator } from './view_data_generator';
 import dateUtils from '../../../../core/utils/date';
 import {

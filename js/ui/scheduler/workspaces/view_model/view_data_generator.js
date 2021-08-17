@@ -10,7 +10,7 @@ import {
     getTotalCellCountByCompleteData,
     getTotalRowCountByCompleteData,
     getDisplayedCellCount,
-} from '../utils/base';
+} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 const DAY_MS = dateUtils.dateToMilliseconds('day');

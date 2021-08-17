@@ -2,7 +2,7 @@ import {
   Component,
   JSXComponent,
 } from '@devextreme-generator/declarations';
-import { formatWeekdayAndDay } from '../../../../../ui/scheduler/workspaces/utils/base';
+import { formatWeekdayAndDay } from '../../view_model/to_test/views/utils/base';
 import { TimePanelTableLayout } from '../base/time_panel/layout';
 import { WorkSpaceBase } from '../base/work_space';
 import { WorkSpaceProps } from '../props';

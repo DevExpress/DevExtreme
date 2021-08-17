@@ -1,7 +1,7 @@
 import { ViewDataGenerator } from './view_data_generator';
-import { calculateCellIndex } from '../utils/month';
-import { calculateStartViewDate } from '../utils/timeline_month';
-import { setOptionHour } from '../utils/base';
+import { calculateCellIndex } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
+import { calculateStartViewDate } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/timeline_month';
+import { setOptionHour } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import dateUtils from '../../../../core/utils/date';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
