@@ -811,7 +811,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 },
                 scrolling: {
                     mode: 'infinite',
-                    useNative: false
+                    useNative: false,
+                    rowPageSize: 20
                 },
                 columns: ['id', {
                     dataField: 'group',
@@ -829,8 +830,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
             // assert
             let rows = dataGrid.getVisibleRows();
-            assert.equal(dataGrid.totalCount(), 38, 'totalCount');
-            assert.equal(rows.length, 38, 'visible row count');
+            assert.equal(dataGrid.totalCount(), grouping ? 54 : 48, 'totalCount'); // ??? 56?
+            assert.equal(rows.length, 40, 'visible row count');
             assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
             assert.equal(rows[18].key, grouping ? 19 : 21, 'row 18');
             assert.equal(rows[37].key, grouping ? 36 : 40, 'row 37');
@@ -840,8 +841,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
             // assert
             rows = dataGrid.getVisibleRows();
-            assert.equal(dataGrid.totalCount(), 20, 'totalCount');
-            assert.equal(rows.length, 20, 'visible row count');
+            assert.equal(dataGrid.totalCount(), grouping ? 54 : 48, 'totalCount');
+            assert.equal(rows.length, 40, 'visible row count');
             assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
         });
     });
@@ -871,7 +872,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             },
             columns: ['id'],
             loadingTimeout: null
@@ -884,7 +885,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.deleteRow(0);
         dataGrid.deleteRow(0);
         dataGrid.getScrollable().scrollTo({ y: 10000 });
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        this.clock.tick();
+
+        for(let i = 0; i < 10; i++) {
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+        }
 
         // assert
         const rows = dataGrid.getVisibleRows();
@@ -926,13 +931,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.addRow();
             dataGrid.saveEditData();
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            for(let i = 0; i < 12; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+            }
 
             // assert
             const rows = dataGrid.getVisibleRows();
-            assert.strictEqual(dataGrid.totalCount(), refreshMode === 'repaint' ? 152 : 151, 'totalCount'); // TODO: Fix duplicate added row when editing.refreshMode = 'repaint'
+            assert.strictEqual(dataGrid.totalCount(), 151, 'totalCount');
             assert.strictEqual(rows[rows.length - 2].key, 150, 'penultimate row key');
         });
 
@@ -969,14 +974,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.getDataSource().store().push([{ type: 'insert', data: { id: 987654321 }, index: 0 }]);
             this.clock.tick();
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            for(let i = 0; i < 12; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+            }
 
             // assert
             const rows = dataGrid.getVisibleRows();
             assert.strictEqual(rows[rows.length - 2].key, 150, 'penultimate row key');
-            assert.strictEqual(dataGrid.totalCount(), 152, 'totalCount'); // TODO: Fix duplicate added row
+            assert.strictEqual(dataGrid.totalCount(), 151, 'totalCount');
         });
     });
 
@@ -1025,7 +1030,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGridTables = $dataGrid.find('.dx-datagrid-table');
         // assert
-        assert.equal(contentReadyCallCount, 1);
+        assert.equal(contentReadyCallCount, 2);
         assert.equal($dataGridTables.length, 2);
         assert.equal($dataGridTables.eq(0).find('.dx-row').first().find('td')[0].getBoundingClientRect().width, $dataGridTables.eq(1).find('.dx-row').first().find('td')[0].getBoundingClientRect().width);
 
@@ -1038,11 +1043,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataSource = [];
 
         for(let i = 0; i < 40; i++) {
-            dataSource.push({ field: i });
+            dataSource.push({ id: i });
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
+            keyExpr: 'id',
             dataSource,
             height: 150,
             editing: {
@@ -1060,13 +1066,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         dataGrid.getScrollable().scrollTo({ y: 1500 });
 
-        dataGrid.editCell(8, 0);
+        dataGrid.editCell(dataGrid.getRowIndexByKey(38), 0);
 
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
         assert.notOk(visibleRows[-1], 'no visible row with index -1');
-        assert.equal($(dataGrid.getCellElement(9, 0)).text(), '39', 'last row is correct');
+        assert.equal($(dataGrid.getCellElement(dataGrid.getRowIndexByKey(39), 0)).text(), '39', 'last row is correct');
     });
 
     // T833061
@@ -3375,7 +3381,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, 'visible row count');
+        assert.equal(visibleRows.length, 10, 'visible row count');
         assert.equal(visibleRows[0].key, 6, 'first visible row key');
         assert.equal($(dataGrid.getRowElement(1, 0)).find('.dx-texteditor').length, 1, 'row has editor');
     });

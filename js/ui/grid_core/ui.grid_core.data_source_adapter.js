@@ -228,7 +228,7 @@ export default gridCore.Controller.inherit((function() {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
             });
 
-            const getItemCount = () => groupCount ? this.itemsCount() : this._items.length;
+            const getItemCount = () => groupCount ? this.itemsCount() : this.items().length;
             const oldItemCount = getItemCount();
 
 
@@ -248,7 +248,9 @@ export default gridCore.Controller.inherit((function() {
             });
 
             if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
-                this._skipCorrection += getItemCount() - oldItemCount;
+                if(!this.option('scrolling.newMode')) {
+                    this._skipCorrection += getItemCount() - oldItemCount;
+                }
             }
 
             changes.splice(0, changes.length);

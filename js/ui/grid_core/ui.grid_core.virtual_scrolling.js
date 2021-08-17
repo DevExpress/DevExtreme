@@ -1168,10 +1168,12 @@ export const virtualScrollingModule = {
                         const viewportParams = this._loadViewportParams;
                         const lastLoadOptions = this._dataSource.lastLoadOptions();
                         const loadedPageIndex = lastLoadOptions.pageIndex || 0;
+                        const loadedTake = lastLoadOptions.take;
 
+                        const skipCorrection = loadedTake ? loadedTake - this._itemCount : 0;
                         const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(viewportParams.skip / this.pageSize());
                         const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());
-                        const loadPageCount = Math.ceil((skipForCurrentPage + viewportParams.take) / this.pageSize());
+                        const loadPageCount = Math.ceil((skipForCurrentPage + skipCorrection + viewportParams.take) / this.pageSize());
 
                         return {
                             pageIndex,
@@ -1185,6 +1187,7 @@ export const virtualScrollingModule = {
                             this._updateLoadViewportParams();
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
                             const dataSourceAdapter = this._dataSource;
+
                             if(isVirtualPaging && (
                                 pageIndex !== dataSourceAdapter.pageIndex() ||
                                 loadPageCount !== dataSourceAdapter.loadPageCount()
