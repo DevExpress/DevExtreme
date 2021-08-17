@@ -1,43 +1,59 @@
-import { titleize } from '../../../../core/utils/inflector';
-
 import {
-  ScrollableDirection,
+  ScrollableDirection, ScrollOffset,
 } from '../types.d';
+
+import { getRelativeOffset } from './get_relative_offset';
 
 import {
   DIRECTION_VERTICAL,
+  SCROLLABLE_CONTENT_CLASS,
 } from '../common/consts';
 
 /* istanbul ignore next */
 export function getElementLocationInternal(
-  element: HTMLElement,
-  offset: Omit<ClientRect, 'width' | 'height'>,
+  targetElement: HTMLElement,
   direction: ScrollableDirection,
   containerElement: HTMLDivElement,
+  scrollOffset: ScrollOffset,
+  offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
 ): number {
-  const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
-  const dimension = direction === DIRECTION_VERTICAL ? 'Height' : 'Width';
-  const relativeLocation: number = containerElement[`scroll${titleize(prop)}`] - containerElement.getBoundingClientRect()[prop] + element.getBoundingClientRect()[prop];
-  const containerLocation: number = containerElement[`scroll${titleize(prop)}`];
+  const additionalOffset = {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    ...offset,
+  };
 
-  const scrollBarSize: number = containerElement[`offset${dimension}`] - containerElement[`client${dimension}`];
-  const containerSize: number = containerElement[`offset${dimension}`];
-  const elementOffset: number = element[`offset${dimension}`];
-  const offsetStart: number = offset[prop];
-  const offsetEnd: number = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'] || 0;
+  const isVertical = direction === DIRECTION_VERTICAL;
 
-  if (relativeLocation < containerLocation + offsetStart) {
-    if (elementOffset < containerSize - offsetStart - offsetEnd) {
-      return relativeLocation - offsetStart;
-    }
-    return relativeLocation + elementOffset - containerSize + offsetEnd + scrollBarSize;
+  const prop = isVertical ? 'top' : 'left';
+  const inverseProp = isVertical ? 'bottom' : 'right';
+
+  const dimension = isVertical ? 'Height' : 'Width';
+
+  // T162489
+  const relativeElementOffset = getRelativeOffset(targetElement.closest(`.${SCROLLABLE_CONTENT_CLASS}`), targetElement)[prop];
+  const containerScrollOffset = scrollOffset[prop];
+
+  const containerSize: number = containerElement[`client${dimension}`];
+
+  const targetElementRect = targetElement.getBoundingClientRect();
+  const elementSize = targetElementRect[inverseProp] - targetElementRect[prop];
+
+  const relativeStartOffset = containerScrollOffset - relativeElementOffset
+    + additionalOffset[prop];
+  const relativeEndOffset = containerScrollOffset - relativeElementOffset
+    - elementSize
+    + containerSize
+    - additionalOffset[inverseProp];
+
+  if (relativeStartOffset <= 0 && relativeEndOffset >= 0) {
+    return containerScrollOffset;
   }
-  if (relativeLocation + elementOffset
-    >= containerLocation + containerSize - offsetEnd - scrollBarSize) {
-    if (elementOffset < containerSize - offsetStart - offsetEnd) {
-      return relativeLocation + elementOffset + scrollBarSize - containerSize + offsetEnd;
-    }
-    return relativeLocation - offsetStart;
-  }
-  return containerLocation;
+
+  return containerScrollOffset
+    - (Math.abs(relativeStartOffset) > Math.abs(relativeEndOffset)
+      ? relativeEndOffset
+      : relativeStartOffset);
 }

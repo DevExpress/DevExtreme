@@ -69,6 +69,25 @@ QUnit.module('Checkbox markup', () => {
         instance.option({ value: 0 });
         assert.notOk($element.hasClass(CHECKED_CLASS));
     });
+
+    QUnit.test('name property value should be passed to input "name" attribute', function(assert) {
+        const expectedName = 'some_name';
+        const $element = $('#checkBox').dxCheckBox({
+            name: expectedName
+        });
+        const $input = $element.find('input');
+
+        assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value');
+    });
+
+    QUnit.test('"name" attr should not be rendered if property is set to an empty string', function(assert) {
+        const $element = $('#checkBox').dxCheckBox({
+            name: ''
+        });
+        const $input = $element.find('input');
+
+        assert.strictEqual($input.attr('name'), undefined, 'name attribute is not rendered');
+    });
 });
 
 QUnit.module('aria accessibility', () => {
