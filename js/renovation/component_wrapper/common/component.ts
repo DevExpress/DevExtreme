@@ -3,7 +3,7 @@
 import {
   createRef, RefObject, VNode, Component,
 } from 'inferno';
-import renderer from './renderer';
+import renderer from '../../../core/inferno_renderer';
 
 // eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
@@ -395,8 +395,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _extractDefaultSlot(): VNode | null {
     if (this.option('_hasAnonymousTemplateContent')) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return renderer.createElement(TemplateWrapper as any, {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return renderer.createElement(TemplateWrapper, {
         template: this._getTemplate(this._templateManager.anonymousTemplateName),
         transclude: true,
       });
@@ -414,9 +414,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     if (isString(template) && template === 'dx-renovation-template-mock') {
       return undefined;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      TemplateWrapper as any, { template, model },
+      TemplateWrapper, { template, model },
     );
 
     return templateWrapper;
@@ -454,7 +455,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _patchElementParam(value: Element): Element {
     try {
-      const result: dxElementWrapper = $(value);
+      const result = $(value);
       const element = result?.get(0);
       return element?.nodeType ? element : value;
     } catch (error) {
