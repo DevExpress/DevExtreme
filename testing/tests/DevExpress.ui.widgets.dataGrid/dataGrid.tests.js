@@ -1036,7 +1036,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
-        assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
+        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 0.51, 'toolbar custom item is aligned');
     });
 
     QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {

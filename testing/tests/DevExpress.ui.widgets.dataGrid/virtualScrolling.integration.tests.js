@@ -415,6 +415,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
+            showRowLines: false,
             height: 80,
             dataSource: data,
             keyExpr: 'name',
