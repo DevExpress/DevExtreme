@@ -5,21 +5,23 @@
 }
 
 .caption {
-	font-weight: 500;
-	font-size: 18px;
+    font-weight: 500;
+    font-size: 18px;
 }
 
 .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
-.option > span {
+.option>span {
     position: relative;
     top: 2px;
     margin-right: 10px;
 }
 
-.option > .dx-widget {
+.option>.dx-widget {
     width: 500px;
     display: inline-block;
     vertical-align: middle;

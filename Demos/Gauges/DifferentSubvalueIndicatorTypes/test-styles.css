@@ -1,0 +1,21 @@
+/*BEGIN: use flex-box to arrange inner elements (stable results for all frameworks)*/
+
+#gauge-demo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#triangleMarker, #rectangleNeedle, #triangleNeedle, #textCloud, #twoColorNeedle {
+    margin: 0px !important;
+}
+
+#app {
+    margin: 0px 6px 0px 3px;
+}
+
+#app[data-v-app] {
+    margin: initial;
+}
+
+/*END: use flex-box to arrange inner elements (stable results for all frameworks)*/

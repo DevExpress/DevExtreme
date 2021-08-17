@@ -113,6 +113,8 @@ export default {
 
 .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .option > span {

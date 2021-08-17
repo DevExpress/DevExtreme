@@ -15,14 +15,16 @@
 
 .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
-.option > span {
+.option>span {
     width: 120px;
     display: inline-block;
 }
 
-.option > .dx-widget {
+.option>.dx-widget {
     display: inline-block;
     vertical-align: middle;
     width: 100%;

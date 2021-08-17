@@ -5,7 +5,7 @@ testUtils.importAnd(() => 'devextreme/ui/gallery', () => DevExpress.ui.dxGallery
             var i = dxGallery.getInstance(document.querySelector('#gallery'));
             i.option("slideshowDelay", 0);
             i.goToItem(0, false);
-            i._optionChanged = function() {};
+            i._optionChanged = function () { };
         })
-        .then(testUtils.postpone(2000));
+        .then(() => testUtils.postpone(2000));
 });

@@ -1,0 +1,13 @@
+/*fix pivot sizing issues at Ubuntu+Chrome*/
+
+.dx-pivotgrid:first-of-type {
+    height: 100vh !important;
+}
+
+/*move options to the left-top corner*/
+
+.options {
+    position: absolute;
+    top: 0px;
+    background-color: white !important;
+}

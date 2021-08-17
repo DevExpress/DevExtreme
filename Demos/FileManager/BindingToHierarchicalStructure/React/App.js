@@ -7,7 +7,9 @@ import { fileItems } from './data.js';
 class App extends React.Component {
   render() {
     return (
-      <FileManager fileSystemProvider={fileItems}>
+      <FileManager
+        height='450'
+        fileSystemProvider={fileItems}>
         <Permissions
           create={true}
           copy={true}

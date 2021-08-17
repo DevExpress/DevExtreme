@@ -3,12 +3,12 @@ testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/viz/range_selecto
 
     return testUtils.postponeUntilFound(['#zoomed-chart', '#range-selector']).then(x => {
         var chart = dxChart.getInstance(document.getElementById("zoomed-chart")),
-        rangeSelector = dxRangeSelector.getInstance(document.getElementById("range-selector"))
+            rangeSelector = dxRangeSelector.getInstance(document.getElementById("range-selector"))
 
         chart.option("autoHidePointMarkers", false);
         chart.option("dataSource", ds);
         rangeSelector.option("dataSource", ds);
-        chart.option = function(){};
-        rangeSelector.option = function(){};
-    }).then(testUtils.postpone(2000));
+        chart.option = function () { };
+        rangeSelector.option = function () { };
+    }).then(() => testUtils.postpone(2000));
 });

@@ -4,8 +4,5 @@
     },
     "vue": {
         "ignore": true
-    },
-    "angular": {
-        "ignore": true
     }
 }

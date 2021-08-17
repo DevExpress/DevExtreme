@@ -1,8 +1,8 @@
-$(function(){
+$(function () {
     $.connection.hub.url = "https://js.devexpress.com/Demos/Mvc/signalr";
     var hub = $.connection.liveUpdateSignalRHub;
     var store = new DevExpress.data.CustomStore({
-        load: function() {
+        load: function () {
             return hub.server.getAllStocks();
         },
         key: "Symbol"
@@ -23,7 +23,7 @@ $(function(){
                 dataType: "date",
                 width: 115,
                 format: "longTime"
-            },  {
+            }, {
                 dataField: "Symbol"
             }, {
                 dataField: "Price",
@@ -46,12 +46,10 @@ $(function(){
                         .addClass("current-value")
                         .text(options.text)
                         .appendTo(container);
-                    container.append(" ");
 
                     $("<span>")
                         .addClass("arrow")
                         .appendTo(container);
-                    container.append(" ");
 
                     $("<span>")
                         .addClass("diff")

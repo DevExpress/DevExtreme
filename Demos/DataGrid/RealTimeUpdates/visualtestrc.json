@@ -1,11 +1,3 @@
 {
-    "react": {
-        "ignore": true
-    },
-    "vue": {
-        "ignore": true
-    },
-    "angular": {
-        "ignore": true
-    }
+    "ignore": true
 }

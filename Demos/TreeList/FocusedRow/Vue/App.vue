@@ -34,13 +34,13 @@
       />
       <DxColumn
         data-field="Task_Start_Date"
-        caption="Start Data"
+        caption="Start Date"
         data-type="date"
         width="160"
       />
       <DxColumn
         data-field="Task_Due_Date"
-        caption="Due Data"
+        caption="Due Date"
         data-type="date"
         width="160"
       />

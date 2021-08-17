@@ -5,21 +5,23 @@
 }
 
 ::ng-deep .caption {
-	font-weight: 500;
-	font-size: 18px;
+    font-weight: 500;
+    font-size: 18px;
 }
 
 ::ng-deep .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
-::ng-deep .option > span {
+::ng-deep .option>span {
     position: relative;
     top: 2px;
     margin-right: 10px;
 }
 
-::ng-deep .option > .dx-widget {
+::ng-deep .option>.dx-widget {
     width: 500px;
     display: inline-block;
     vertical-align: middle;

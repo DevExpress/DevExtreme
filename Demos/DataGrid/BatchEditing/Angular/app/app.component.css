@@ -15,14 +15,16 @@
 
 ::ng-deep .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
-::ng-deep .option > span {
+::ng-deep .option>span {
     width: 120px;
     display: inline-block;
 }
 
-::ng-deep .option > .dx-widget {
+::ng-deep .option>.dx-widget {
     display: inline-block;
     vertical-align: middle;
     width: 100%;

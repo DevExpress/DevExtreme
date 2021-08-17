@@ -30,8 +30,8 @@
             });
             chart.option = function () { };
         })
-        .then(testUtils.postponeUntil(() => isReady, 100, 30000))
-        .then(testUtils.postpone(500));
+        .then(() => testUtils.postponeUntil(() => isReady, 100, 30000))
+        .then(() => testUtils.postpone(500));
 });
 
 function getData() {

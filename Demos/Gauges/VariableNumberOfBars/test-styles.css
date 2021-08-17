@@ -1,0 +1,5 @@
+/*use the same font size for all frameworks*/
+
+.dx-checkbox-icon {
+    font-size: unset !important;
+}

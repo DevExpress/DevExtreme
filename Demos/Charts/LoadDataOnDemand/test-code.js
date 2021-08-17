@@ -1,5 +1,5 @@
 testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/data/data_source'], () => [DevExpress.viz.dxChart, DevExpress.data.DataSource], function (dxChart, DataSource) {
-    window.checkReady = function() {
+    window.checkReady = function () {
         var dataSource = dxChart.getInstance(document.querySelector("#chart")).getDataSource();
         return dataSource ? dataSource.items().length > 0 : false;
     }
@@ -12,5 +12,5 @@ testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/data/data_source'
             const instance = dxChart.getInstance(document.querySelector('#chart'));
             instance.option("dataSource", dataSource);
         })
-        .then(testUtils.postpone(2000));
+        .then(() => testUtils.postpone(2000));
 });

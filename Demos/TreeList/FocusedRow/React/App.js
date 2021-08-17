@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import TreeList, { Column, Lookup } from 'devextreme-react/tree-list';
 import { NumberBox } from 'devextreme-react/number-box';
@@ -80,8 +80,8 @@ class App extends React.Component {
             <Lookup dataSource={taskEmployees} valueExpr="ID" displayExpr="Name" />
           </Column>
           <Column dataField="Task_Status" caption="Status" width={160} />
-          <Column dataField="Task_Start_Date" caption="Start Data" dataType="date" width={160} />
-          <Column dataField="Task_Due_Date" caption="Due Data" dataType="date" width={160} />
+          <Column dataField="Task_Start_Date" caption="Start Date" dataType="date" width={160} />
+          <Column dataField="Task_Due_Date" caption="Due Date" dataType="date" width={160} />
         </TreeList>
         <div className="task-info">
           <div className="info">

@@ -1,5 +1,6 @@
 <template>
   <DxFileManager
+    :height="450"
     :file-system-provider="fileItems"
   >
     <DxPermissions

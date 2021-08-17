@@ -117,7 +117,7 @@
         .then(() => {
             const instance = dxChart.getInstance(document.querySelector('#chart'));
             instance.option("dataSource", dataSource);
-            instance.option = function() { };
+            instance.option = function () { };
         })
-        .then(testUtils.postpone(2000));
+        .then(() => testUtils.postpone(2000));
 });

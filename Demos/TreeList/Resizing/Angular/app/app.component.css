@@ -18,6 +18,8 @@
 
 ::ng-deep .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
 ::ng-deep .option > span {

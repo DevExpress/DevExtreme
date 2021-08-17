@@ -1,0 +1,6 @@
+/*move to the left top corner to reduce subpixel positioning*/
+
+.buttongroups-container {
+    margin: 0px !important;
+    justify-content: flex-start !important;
+}

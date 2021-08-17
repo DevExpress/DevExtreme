@@ -6,5 +6,5 @@ testUtils.importAnd(() => 'devextreme/ui/date_box', () => DevExpress.ui.dxDateBo
                 .getInstance(document.querySelector('.dx-datebox'))
                 .option('value', new Date('2019/04/22'));
         })
-        .then(testUtils.postpone(2000));
+        .then(() => testUtils.postpone(2000));
 });
