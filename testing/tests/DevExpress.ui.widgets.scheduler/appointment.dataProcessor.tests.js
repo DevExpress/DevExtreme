@@ -1517,6 +1517,66 @@ module('Client side after filtering', () => {
     });
 });
 
+module('API', () => {
+    [
+        {
+            item: {
+                text: 'all day appointment',
+                StartDate: new Date(2015, 2, 1, 11, 0),
+                AllDay123: true
+            },
+            expected: true
+        },
+        {
+            item: {
+                text: 'not all day appointment',
+                StartDate: new Date(2015, 2, 1, 11, 0),
+            },
+            expected: false
+        },
+        {
+            item: {
+                text: 'not all day appointment',
+                StartDate: new Date(2015, 2, 1, 11, 0),
+                allDay: true
+            },
+            expected: false
+        }
+    ].forEach(({ item, expected }) => {
+        test(`hasAllDayAppointments() should return correct result if all day is ${expected}`, function(assert) {
+            const dataSource = new DataSource({ store: [] });
+            const appointmentDataProvider = createAppointmentDataProvider({
+                key: 0,
+                dataSource,
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => ({
+                    getter: {
+                        startDate: compileGetter('StartDate'),
+                        endDate: compileGetter('EndDate'),
+                        allDay: compileGetter('AllDay123'),
+                    },
+                    setter: {
+                        startDate: compileSetter('StartDate'),
+                        endDate: compileSetter('EndDate')
+                    },
+                    expr: {
+                        startDateExpr: 'StartDate',
+                        endDateExpr: 'EndDate',
+                        allDayExpr: 'AllDay123',
+                    }
+                }),
+                appointmentDuration: 60
+            });
+
+            appointmentDataProvider.add(item);
+
+            const result = appointmentDataProvider.hasAllDayAppointments([item]);
+
+            assert.equal(result, expected, 'Result is corrects');
+        });
+    });
+});
+
 module('Virtual Scrolling', () => {
     test('Appointment model should take into account startDayHour, endDayHour of the current view', function(assert) {
         const appointments = [
