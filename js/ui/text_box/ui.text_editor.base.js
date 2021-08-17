@@ -140,7 +140,7 @@ const TextEditorBase = Editor.inherit({
                     return isMaterial(themeName);
                 },
                 options: {
-                    stylingMode: config().editorStylingMode || 'underlined'
+                    stylingMode: config().editorStylingMode || 'filled'
                 }
             }
         ]);
