@@ -20,7 +20,7 @@ import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
 import { Widget } from '../../common/widget';
-import { ScrollableDirection } from '../types';
+import { ScrollableDirection } from '../types.d';
 
 interface Mock extends jest.Mock {}
 
@@ -103,8 +103,7 @@ describe('ScrollView', () => {
       { name: 'scrollOffset', calledWith: [] },
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
-      { name: 'scrollToElement', calledWith: ['arg1'] },
-      { name: 'scrollToElementTopLeft', calledWith: ['arg1'] },
+      { name: 'scrollToElement', calledWith: ['arg1-element', 'arg2-offset'] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
