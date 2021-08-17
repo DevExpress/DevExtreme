@@ -29,6 +29,7 @@ import { LayoutProps } from './layout_props';
 import { TimePaneLayoutProps } from './time_panel/layout';
 import { AllDayPanelTitle } from './date_table/all_day_panel/title';
 import { AllDayPanelLayout } from './date_table/all_day_panel/layout';
+import { ScrollableDirection } from '../../../scroll_view/types';
 
 export const viewFunction = ({
   classes,
@@ -52,6 +53,7 @@ export const viewFunction = ({
     groupByDate,
     groupPanelClassName,
     isAllDayPanelSupported,
+    scrollingDirection,
 
     dataCellTemplate,
     timeCellTemplate,
@@ -96,6 +98,7 @@ export const viewFunction = ({
     <Scrollable
       useKeyboard={false}
       bounceEnabled={false}
+      direction={scrollingDirection}
       className="dx-scheduler-date-table-scrollable"
     >
       {isRenderGroupPanel && (
@@ -176,6 +179,8 @@ export class OrdinaryLayoutProps extends LayoutProps {
   @OneWay() isAllDayPanelSupported = false;
 
   @OneWay() isAllDayPanelVisible = false;
+
+  @OneWay() scrollingDirection?: ScrollableDirection;
 
   @ForwardRef() dateTableRef!: RefObject<HTMLTableElement>;
 
