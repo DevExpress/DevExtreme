@@ -5,7 +5,7 @@ import { extend } from '../../../core/utils/extend';
 import {
     FIELD_BUTTON_ITEM_CLASS,
     FIELD_ITEM_CLASS,
-} from './../constants';
+} from '../constants';
 
 export function renderButtonItem({
     item,

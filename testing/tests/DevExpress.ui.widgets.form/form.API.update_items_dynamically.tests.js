@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/form/ui.form';
 import 'ui/form/ui.form.layout_manager';
-import { renderLabel } from 'ui/form/field_item/label.js';
+import { renderLabel } from 'ui/form/components/label.js';
 
 import 'generic_light.css!';
 

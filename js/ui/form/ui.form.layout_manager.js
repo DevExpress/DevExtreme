@@ -30,10 +30,10 @@ import '../check_box';
 import '../date_box';
 import '../button';
 
-import { getLabelWidthByText } from './field_item/label';
-import { renderFieldItem } from './field_item/field_item.js';
+import { getLabelWidthByText } from './components/label';
+import { renderFieldItem } from './components/field_item.js';
 
-import { renderButtonItem } from './button_item/button_item.js';
+import { renderButtonItem } from './components/button_item.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 

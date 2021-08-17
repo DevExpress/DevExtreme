@@ -15,7 +15,7 @@ import 'ui/drop_down_box';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
-import { renderLabel } from 'ui/form/field_item/label.js';
+import { renderLabel } from 'ui/form/components/label.js';
 
 import {
     FIELD_ITEM_CLASS,
