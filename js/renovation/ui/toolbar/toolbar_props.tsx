@@ -159,6 +159,9 @@ export class ToolbarButtonGroupItemProps extends CollectionWidgetItem {
   @OneWay()
   type?: ToolbarButtonType;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @OneWay elementAttr?: { [key: string]: any };
+
   // TODO: other props
 }
 
@@ -309,7 +312,11 @@ export type ToolbarDropDownButtonItemPropsType = ToolbarDropDownButtonItemProps;
           {
             icon: "alignleft",
             alignment: "left",
-            hint: "Align left"
+            hint: "Align left",
+            elementAttr: {
+              foo1: 'attr1',
+              class: 'some-class123'
+            }
           },
           {
             icon: "aligncenter",
