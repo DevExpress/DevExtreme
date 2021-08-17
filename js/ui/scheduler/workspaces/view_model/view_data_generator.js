@@ -465,7 +465,7 @@ export class ViewDataGenerator {
     }
 
     _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
-        return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+        return calculateCellIndex(rowIndex, columnIndex, rowCount);
     }
 
     generateGroupedDataMap(viewDataMap) {
