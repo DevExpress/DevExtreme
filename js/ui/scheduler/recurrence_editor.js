@@ -612,7 +612,8 @@ class RecurrenceEditor extends Editor {
             onValueChanged: this._repeatUntilValueChangeHandler.bind(this),
             calendarOptions: {
                 firstDayOfWeek: this._getFirstDayOfWeek()
-            }
+            },
+            useMaskBehavior: true
         });
 
         return $editorWrapper;
