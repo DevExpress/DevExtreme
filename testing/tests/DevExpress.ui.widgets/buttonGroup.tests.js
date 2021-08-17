@@ -23,6 +23,40 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
+QUnit.module('options', () => {
+    QUnit.test('items=[item1.elementAttr = { attr1="test1", attr2="test2", attr3="test3" }]', function(assert) {
+        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'multiple',
+            items: [
+                { id: 1, text: 'button 1', elementAttr: { attr1: 'test1', attr2: 'test2', attr3: 'test3' } },
+            ],
+        });
+
+        const $button = buttonGroup.find('.dx-button');
+        assert.equal($button.attr('attr1'), 'test1');
+        assert.equal($button.attr('attr2'), 'test2');
+        assert.equal($button.attr('attr3'), 'test3');
+    });
+
+    QUnit.test('items=[item1.elementAttr.class="test1",item2.elementAttr.class="test2"]', function(assert) {
+        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'multiple',
+            items: [
+                { id: 1, text: 'button 1', elementAttr: { class: 'test1' } },
+                { id: 2, text: 'button 2', elementAttr: { class: 'test2' } },
+            ],
+        });
+
+        const $button = buttonGroup.find('.dx-button');
+        assert.equal($button.eq(0).hasClass('test1'), true);
+        assert.equal($button.eq(0).hasClass('test2'), false);
+        assert.equal($button.eq(1).hasClass('test1'), false);
+        assert.equal($button.eq(1).hasClass('test2'), true);
+    });
+});
+
 QUnit.module('option changed', {
     createButtonGroup(options) {
         options = options || {
@@ -235,7 +269,6 @@ QUnit.module('option changed', {
         assert.equal(buttons[1].option('stylingMode'), 'text', 'second button');
     });
 });
-
 
 QUnit.module('Events', () => {
     class ButtonGroupEventsTestHelper {
