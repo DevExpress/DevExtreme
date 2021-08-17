@@ -30,8 +30,8 @@ const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const INVALID_CLASS = 'dx-invalid';
 
 export function renderFieldItem({
-    $fieldItemElement,
-    fieldItemElementCssClass,
+    $container,
+    containerCssClass,
     parentComponent,
     createComponentCallback,
     useFlexLayout,
@@ -51,18 +51,18 @@ export function renderFieldItem({
     // Setup the root $element:
     //
 
-    $fieldItemElement
+    $container
         .addClass(FIELD_ITEM_CLASS)
-        .addClass(fieldItemElementCssClass)
+        .addClass(containerCssClass)
         .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
 
-    $fieldItemElement.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
+    $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
     if(isSimpleItem && useFlexLayout) {
-        $fieldItemElement.addClass(FLEX_LAYOUT_CLASS);
+        $container.addClass(FLEX_LAYOUT_CLASS);
     }
     if(isSimpleItem && labelNeedBaselineAlign) {
         // TODO: label related code, execute ony if needRenderLabel ?
-        $fieldItemElement.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
+        $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
     }
 
     //
@@ -82,18 +82,18 @@ export function renderFieldItem({
 
     const $label = needRenderLabel ? renderLabel(labelOptions) : null;
     if($label) {
-        $fieldItemElement.append($label);
+        $container.append($label);
         if(labelLocation === 'top' || labelLocation === 'left') {
-            $fieldItemElement.append($fieldEditorContainer);
+            $container.append($fieldEditorContainer);
         }
         if(labelLocation === 'right') {
-            $fieldItemElement.prepend($fieldEditorContainer);
+            $container.prepend($fieldEditorContainer);
         }
 
         if(labelLocation === 'top') {
-            $fieldItemElement.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
+            $container.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
-            $fieldItemElement.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
+            $container.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
         }
 
         if(item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch') {
@@ -102,7 +102,7 @@ export function renderFieldItem({
             });
         }
     } else {
-        $fieldItemElement.append($fieldEditorContainer);
+        $container.append($fieldEditorContainer);
     }
 
     //

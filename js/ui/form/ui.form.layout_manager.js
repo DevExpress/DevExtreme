@@ -20,7 +20,6 @@ import ResponsiveBox from '../responsive_box';
 import {
     LAYOUT_MANAGER_ONE_COLUMN,
     FORM_LAYOUT_MANAGER_CLASS,
-    FIELD_EMPTY_ITEM_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
@@ -32,8 +31,8 @@ import '../button';
 
 import { getLabelWidthByText } from './components/label';
 import { renderFieldItem } from './components/field_item.js';
-
 import { renderButtonItem } from './components/button_item.js';
+import { renderEmptyItem } from './components/empty_item.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -535,9 +534,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderEmptyItem: function($container) {
-        return $container
-            .addClass(FIELD_EMPTY_ITEM_CLASS)
-            .html('&nbsp;');
+        renderEmptyItem($container);
     },
 
     _renderButtonItem: function(item, $container) {
@@ -591,8 +588,8 @@ const LayoutManager = Widget.inherit({
         const template = item.template ? this._getTemplate(item.template) : null;
 
         const { $fieldEditorContainer, instance } = renderFieldItem({
-            $fieldItemElement: $container,
-            fieldItemElementCssClass: this.option('cssItemClass'),
+            $container,
+            containerCssClass: this.option('cssItemClass'),
             parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
             useFlexLayout: isFlexSupported,
