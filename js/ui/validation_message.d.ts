@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import dxOverlay, {
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 /** @namespace DevExpress.ui */

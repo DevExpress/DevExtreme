@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 /** @namespace DevExpress.ui */

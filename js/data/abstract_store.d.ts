@@ -1,12 +1,13 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    LoadOptions
+    LoadOptions,
 } from './load_options';
 
 /** @namespace DevExpress.data */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface StoreOptions<T = Store> {
     /**
      * @docid
@@ -210,7 +211,7 @@ export default class Store {
      * @return Promise<number>
      * @public
      */
-    totalCount(obj: { filter?: any, group?: any }): DxPromise<number>;
+    totalCount(obj: { filter?: any; group?: any }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)

@@ -1,9 +1,9 @@
 import {
-    Device
+    Device,
 } from '../core/devices';
 
 import {
-    animationConfig
+    animationConfig,
 } from './fx';
 
 /**
@@ -56,7 +56,7 @@ export default class animationPresets {
      * @param2_field2 device:Device
      * @public
      */
-    registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
+    registerPreset(name: string, config: { animation?: animationConfig; device?: Device }): void;
     /**
      * @docid
      * @publicName resetToDefaults()

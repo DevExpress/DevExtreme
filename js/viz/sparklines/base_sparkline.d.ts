@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 import BaseWidget, {
@@ -16,7 +16,7 @@ import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTitle,
-    BaseWidgetTooltip
+    BaseWidgetTooltip,
 } from '../core/base_widget';
 
 /** @namespace DevExpress.viz */

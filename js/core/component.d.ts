@@ -1,5 +1,5 @@
 import {
-  DxElement
+  DxElement,
 } from './element';
 
 /** @namespace DevExpress */
@@ -21,7 +21,7 @@ export interface ComponentOptions<T = Component> {
    * @default null
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: DxElement }) => void);
+  onInitialized?: ((e: { component?: T; element?: DxElement }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -33,7 +33,7 @@ export interface ComponentOptions<T = Component> {
    * @action
    * @public
    */
-  onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => void);
+  onOptionChanged?: ((e: { component?: T; name?: string; fullName?: string; value?: any }) => void);
 }
 /**
  * @docid Component

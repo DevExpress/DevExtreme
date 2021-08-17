@@ -1,5 +1,5 @@
 import {
-    format
+    format,
 } from './ui/widget/ui.widget';
 
 /**
@@ -14,6 +14,7 @@ import {
  * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function formatDate(value: Date, format: format): string;
 
 /**
@@ -42,6 +43,7 @@ export function formatMessage(key: string, ...values: Array<string>): string;
  * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function formatNumber(value: number, format: format): string;
 
 /**
@@ -78,6 +80,7 @@ export function locale(): string;
  * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function locale(locale: string): void;
 
 /**
@@ -92,6 +95,7 @@ export function locale(locale: string): void;
  * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function parseDate(text: string, format: format): Date;
 
 /**
@@ -106,6 +110,5 @@ export function parseDate(text: string, format: format): Date;
  * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function parseNumber(text: string, format: format): number;
-
-
