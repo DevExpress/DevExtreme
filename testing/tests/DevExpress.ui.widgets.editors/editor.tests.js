@@ -752,19 +752,17 @@ QUnit.module('validationRequest', moduleConfig, () => {
         assert.strictEqual(args.editor, editor, 'editor was passed');
     });
 
-    skipForRenovated('not validate on value change from undefined to null', () => {
-        QUnit.test('should NOT fire on value change from undefined to null (T220137)', function(assert) {
-            const handler = sinon.stub();
-            const editor = this.fixture.createEditor({
-                value: undefined
-            });
-            editor.validationRequest.add(handler);
-
-
-            editor.option('value', null);
-
-            assert.notOk(handler.called, 'validation handler was not called');
+    QUnit.test('should NOT fire on value change from undefined to null (T220137)', function(assert) {
+        const handler = sinon.stub();
+        const editor = this.fixture.createEditor({
+            value: undefined
         });
+        editor.validationRequest.add(handler);
+
+
+        editor.option('value', null);
+
+        assert.notOk(handler.called, 'validation handler was not called');
     });
 
     QUnit.test('should fire before valueChanged callback', function(assert) {

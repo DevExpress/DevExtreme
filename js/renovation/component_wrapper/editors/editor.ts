@@ -99,7 +99,7 @@ export default class Editor extends Component {
 
     switch (name) {
       case 'value':
-        if (value !== previousValue) {
+        if (value != previousValue) { // eslint-disable-line eqeqeq
           this.validationRequest.fire({
             value,
             editor: this,
