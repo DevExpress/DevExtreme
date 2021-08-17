@@ -4029,14 +4029,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.saveEditData();
         dataGrid.getScrollable().scrollTo({ top: 10000 });
         dataGrid.getScrollable().scrollTo({ top: 10000 });
-        dataGrid.cellValue(9, 'name', 'updated');
+        dataGrid.cellValue(dataGrid.getRowIndexByKey(10), 'name', 'updated');
         dataGrid.saveEditData();
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
-        assert.deepEqual(dataGrid.getVisibleRows()[0].data, { id: 1, name: 'updated' }, 'row 1 is updated');
-        assert.deepEqual(dataGrid.getVisibleRows()[1].data, { id: 2, name: 'test 2' }, 'row 2 is not updated');
-        assert.deepEqual(dataGrid.getVisibleRows()[9].data, { id: 10, name: 'updated' }, 'row 10 is updated');
+        assert.equal(dataGrid.getVisibleRows().length, 10, 'visible row count');
+        assert.deepEqual(dataGrid.getVisibleRows()[0].data, { id: 6, name: 'test 6' }, 'row 6 is not updated');
+        assert.deepEqual(dataGrid.getVisibleRows()[4].data, { id: 10, name: 'updated' }, 'row 10 is updated');
     });
 
     // T804060
@@ -5490,7 +5489,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
-                    assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.ok(visibleRows[1].isNewRow, 'new row is added after the first page');
                     assert.equal(dataGrid.option('editing.changes')[0].pageIndex, undefined, 'no pageIndex');
 
                     // act
@@ -5548,7 +5548,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         },
                         scrolling: {
                             mode: 'virtual',
-                            useNative: false
+                            useNative: false,
+                            minGap: 0
                         }
                     }).dxDataGrid('instance');
 
@@ -5569,11 +5570,12 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // assert
                     visibleRows = dataGrid.getVisibleRows();
-                    const $insertedRow = $(dataGrid.getRowElement(2));
+                    const $insertedRow = $(dataGrid.getRowElement(1));
                     const $cells = $insertedRow.find('td');
 
-                    assert.equal(visibleRows.length, 3, 'three rows');
-                    assert.ok(visibleRows[2].isNewRow, 'new row');
+                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.equal(visibleRows[0].key, 2, 'first row key');
+                    assert.ok(visibleRows[1].isNewRow, 'new row is in the end');
                     assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
                     assert.equal(data.length, 2, 'row count in datasource');
 
@@ -5589,7 +5591,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
 
                     visibleRows = dataGrid.getVisibleRows();
-                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.equal(visibleRows.length, 1, 'one row');
+                    assert.equal(visibleRows[0].key, 2, 'row key');
                     assert.notOk(visibleRows[0].isNewRow, 'not new row');
                     assert.equal(data.length, 3, 'row count in datasource');
                     assert.equal(data[2].field, 'test', 'field value was posted');
