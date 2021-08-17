@@ -375,7 +375,6 @@ QUnit.module('render', {
                 widget: 'dxButtonGroup',
                 options: {
                     keyExpr: 'id',
-                    selectionMode: 'multiple',
                     items: [
                         { id: 1, text: 'button 1', elementAttr: { attr1: 'test1', attr2: 'test2', attr3: 'test3' } },
                     ],
@@ -396,7 +395,6 @@ QUnit.module('render', {
                 widget: 'dxButtonGroup',
                 options: {
                     keyExpr: 'id',
-                    selectionMode: 'multiple',
                     items: [
                         { id: 1, text: 'button 1', elementAttr: { class: 'test1' } },
                         { id: 2, text: 'button 2', elementAttr: { class: 'test2' } },
