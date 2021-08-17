@@ -1,5 +1,6 @@
 declare global {
   interface JQuery<TElement = HTMLElement> {}
+  /* eslint-enable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
   interface JQuery<TElement = HTMLElement> {
     dxAccordion(): JQuery;
     dxAccordion(options: 'instance'): DevExpress.ui.dxAccordion;
@@ -498,6 +499,7 @@ declare global {
     dxVectorMap(options: string, ...params: any[]): any;
   }
   interface JQueryEventObject {}
+  /* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
   interface JQueryPromise<T> {}
 }
 declare module DevExpress {
@@ -776,14 +778,24 @@ declare module DevExpress {
     isSimulator(): boolean;
   }
   /**
-   * [descr:DOMComponent]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export class DOMComponent extends Component {
+                                               * [descr:DOMComponent]
+                                               * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                               */
+                                              export class DOMComponent extends Component {
+    _templateManager: DevExpress.core.TemplateManager;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: DOMComponentOptions
     );
+
+    /**
+     * [descr:DOMComponent.getInstance(element)]
+     */
+    static getInstance(
+      element: DevExpress.core.UserDefinedElement
+    ): DOMComponent;
+
     /**
      * [descr:DOMComponent.defaultOptions(rule)]
      */
@@ -791,6 +803,7 @@ declare module DevExpress {
       device?: Device | Array<Device> | Function;
       options?: any;
     }): void;
+
     /**
      * [descr:DOMComponent.dispose()]
      */
@@ -799,18 +812,11 @@ declare module DevExpress {
      * [descr:DOMComponent.element()]
      */
     element(): DevExpress.core.DxElement;
-    /**
-     * [descr:DOMComponent.getInstance(element)]
-     */
-    static getInstance(
-      element: DevExpress.core.UserDefinedElement
-    ): DOMComponent;
 
     $element(): DevExpress.core.UserDefinedElement;
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
-    _templateManager: DevExpress.core.TemplateManager;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1288,6 +1294,7 @@ declare module DevExpress.core {
     _setOptionsByReference(): void;
     _setDeprecatedOptions(): void;
   }
+  /* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1980,14 +1987,14 @@ declare module DevExpress.data {
      */
     interface PromiseExtension<T> {
       then<TResult1 = T, TResult2 = never>(
-        onfulfilled?:
+        onFulfilled?:
           | ((
               value: T,
               extraParameters?: T
             ) => TResult1 | PromiseLike<TResult1>)
           | undefined
           | null,
-        onrejected?:
+        onRejected?:
           | ((reason: any) => TResult2 | PromiseLike<TResult2>)
           | undefined
           | null
@@ -2712,6 +2719,8 @@ declare module DevExpress.events {
     readonly value?: any;
     readonly previousValue?: any;
   }
+  /* eslint-enable @typescript-eslint/no-empty-interface */
+
   /**
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -2736,14 +2745,17 @@ declare module DevExpress.events {
      * [descr:EventObject.currentTarget]
      */
     currentTarget: Element;
+
     /**
      * [descr:EventObject.data]
      */
     data: any;
+
     /**
      * [descr:EventObject.delegateTarget]
      */
     delegateTarget: Element;
+
     /**
      * [descr:EventObject.target]
      */
@@ -3419,9 +3431,9 @@ declare module DevExpress.fileManagement {
     ): DevExpress.core.utils.DxPromise<any>;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * [descr:FileSystemProviderBaseOptions.dateModifiedExpr]
      */
@@ -5161,7 +5173,6 @@ declare module DevExpress.ui {
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: any): boolean;
     isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
     navigateToRow(key: any): void;
     pageCount(): number;

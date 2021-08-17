@@ -1,28 +1,28 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     DxEvent,
     Cancelable,
-    EventInfo
+    EventInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @namespace DevExpress.ui */

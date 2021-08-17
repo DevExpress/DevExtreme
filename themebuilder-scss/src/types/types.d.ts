@@ -18,6 +18,7 @@ interface ConfigMetaItem {
 }
 
 interface LessCompilerInterface {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   render: Function;
 }
 

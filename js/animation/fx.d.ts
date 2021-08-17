@@ -1,9 +1,9 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 /**
@@ -116,5 +116,5 @@ declare const fx: {
      * @public
      */
     stop(element: Element, jumpToEnd: boolean): void;
-}
+};
 export default fx;

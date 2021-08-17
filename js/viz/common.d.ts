@@ -1,9 +1,9 @@
 import {
-    dxChartSeriesTypesCommonSeries
+    dxChartSeriesTypesCommonSeries,
 } from './chart';
 
 import {
-    Font
+    Font,
 } from './core/base_widget';
 
 export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
@@ -18,23 +18,23 @@ export type HatchingDirectionType = 'left' | 'none' | 'right';
  */
 export type VizTimeInterval = number | {
   /** @docid */
-  days?: number,
+  days?: number;
   /** @docid */
-  hours?: number,
+  hours?: number;
   /** @docid */
-  milliseconds?: number,
+  milliseconds?: number;
   /** @docid */
-  minutes?: number,
+  minutes?: number;
   /** @docid */
-  months?: number,
+  months?: number;
   /** @docid */
-  quarters?: number,
+  quarters?: number;
   /** @docid */
-  seconds?: number,
+  seconds?: number;
   /** @docid */
-  weeks?: number,
+  weeks?: number;
   /** @docid */
-  years?: number
+  years?: number;
 } | TimeIntervalType;
 
 /**
@@ -58,33 +58,33 @@ export interface BaseLegend {
        * @docid
        * @default '#d3d3d3'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 0
        */
-      cornerRadius?: number,
+      cornerRadius?: number;
       /**
        * @docid
        * @type Enums.DashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType,
+      dashStyle?: DashStyleType;
       /**
        * @docid
        * @default undefined
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @default false
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -135,22 +135,22 @@ export interface BaseLegend {
        * @docid
        * @default 10
        */
-      bottom?: number,
+      bottom?: number;
       /**
        * @docid
        * @default 10
        */
-      left?: number,
+      left?: number;
       /**
        * @docid
        * @default 10
        */
-      right?: number,
+      right?: number;
       /**
        * @docid
        * @default 10
        */
-      top?: number
+      top?: number;
     };
     /**
      * @docid
@@ -201,13 +201,13 @@ export interface BaseLegend {
        * @default 200 [prop](weight)
        * @extends CommonVizLightFontFamily
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid
        * @type Enums.HorizontalAlignment
        * @default undefined
        */
-      horizontalAlignment?: 'center' | 'left' | 'right',
+      horizontalAlignment?: 'center' | 'left' | 'right';
       /**
        * @docid
        */
@@ -216,28 +216,28 @@ export interface BaseLegend {
          * @docid
          * @default 9
          */
-        bottom?: number,
+        bottom?: number;
         /**
          * @docid
          * @default 0
          */
-        left?: number,
+        left?: number;
         /**
          * @docid
          * @default 0
          */
-        right?: number,
+        right?: number;
         /**
          * @docid
          * @default 0
          */
-        top?: number
-      },
+        top?: number;
+      };
       /**
        * @docid
        * @default undefined
        */
-      placeholderSize?: number,
+      placeholderSize?: number;
       /**
        * @docid
        */
@@ -249,29 +249,29 @@ export interface BaseLegend {
          * @default 200 [prop](weight)
          * @extends CommonVizLightFontFamily
          */
-        font?: Font,
+        font?: Font;
         /**
          * @docid
          * @default 0
          */
-        offset?: number,
+        offset?: number;
         /**
          * @docid
          * @default null
          */
-        text?: string
-      } | string,
+        text?: string;
+      } | string;
       /**
        * @docid
        * @default null
        */
-      text?: string,
+      text?: string;
       /**
        * @docid
        * @type Enums.VerticalEdge
        * @default 'top'
        */
-      verticalAlignment?: 'bottom' | 'top'
+      verticalAlignment?: 'bottom' | 'top';
     } | string;
     /**
      * @docid
@@ -302,20 +302,20 @@ export interface BaseLegendItem {
       /**
        * @docid
        */
-      fill?: string,
+      fill?: string;
       /**
        * @docid
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        */
-      size?: number,
+      size?: number;
       /**
        * @docid
        * @type Enums.LegendMarkerState
        */
-      state?: 'normal' | 'hovered' | 'selected'
+      state?: 'normal' | 'hovered' | 'selected';
     };
     /**
      * @docid

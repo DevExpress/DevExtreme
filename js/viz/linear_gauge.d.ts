@@ -1,17 +1,17 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import {
@@ -21,7 +21,7 @@ import {
     BaseGaugeScale,
     BaseGaugeScaleLabel,
     GaugeIndicator,
-    TooltipInfo
+    TooltipInfo,
 } from './gauges/base_gauge';
 
 /** @public */
@@ -69,7 +69,7 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
        * @type Enums.Orientation
        * @default 'horizontal'
        */
-      orientation?: 'horizontal' | 'vertical'
+      orientation?: 'horizontal' | 'vertical';
     };
     /**
      * @docid
@@ -121,12 +121,12 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
        * @docid dxLinearGaugeOptions.rangeContainer.width.start
        * @default 5
        */
-      start?: number,
+      start?: number;
       /**
        * @docid dxLinearGaugeOptions.rangeContainer.width.end
        * @default 5
        */
-      end?: number
+      end?: number;
     } | number;
 }
 /** @namespace DevExpress.viz */
