@@ -63,6 +63,5 @@ h3.long-title {
     font-size: 28px;
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 0px;
 }
 </style>
