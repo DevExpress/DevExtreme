@@ -792,6 +792,21 @@ QUnit.module('validationRequest', moduleConfig, () => {
 });
 
 if(!Editor.IS_RENOVATED_WIDGET) {
+    QUnit.test('keybord navigation should work after editor becomes not read only', function(assert) {
+        const $element = $('<div>').appendTo('body');
+        const keyboardHandledStub = sinon.stub();
+
+        const editor = new Editor($element, {
+            onKeyboardHandled: keyboardHandledStub,
+            readOnly: true
+        });
+
+        editor.option('readOnly', false);
+        $(editor.$element()).trigger($.Event('keydown'));
+
+        assert.ok(keyboardHandledStub.called, 'keyboard navigation works fine');
+    });
+
     QUnit.module('"name" option', {
         beforeEach: function() {
             this.$element = $('<div>').appendTo('body');
