@@ -54,7 +54,7 @@ import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/head
 
 import CellsSelectionState from './cells_selection_state';
 
-import { cache } from './cache';
+import { Cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import {
     calculateViewStartDate,
@@ -156,7 +156,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._viewDataProvider;
     }
 
-    get cache() { return cache; }
+    get cache() {
+        if(!this._cache) {
+            this._cache = new Cache();
+        }
+
+        return this._cache;
+    }
 
     get cellsSelectionState() {
         if(!this._cellsSelectionState) {
