@@ -17,10 +17,10 @@ test('dateNavigator buttons should not be selected after clicking', async (t) =>
     .expect(navigator.prevDuration.hasClass('dx-item-selected'))
     .notOk()
 
-    .expect(navigator.prevDuration.hasClass('dx-item-selected'))
+    .expect(navigator.caption.hasClass('dx-item-selected'))
     .notOk()
 
-    .expect(navigator.prevDuration.hasClass('dx-item-selected'))
+    .expect(navigator.nextDuration.hasClass('dx-item-selected'))
     .notOk();
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
@@ -37,10 +37,10 @@ test('dateNavigator buttons should have "contained" styling mode with generic th
     .expect(navigator.prevDuration.hasClass('dx-button-mode-contained'))
     .ok()
 
-    .expect(navigator.prevDuration.hasClass('dx-button-mode-contained'))
+    .expect(navigator.caption.hasClass('dx-button-mode-contained'))
     .ok()
 
-    .expect(navigator.prevDuration.hasClass('dx-button-mode-contained'))
+    .expect(navigator.nextDuration.hasClass('dx-button-mode-contained'))
     .ok();
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
@@ -60,10 +60,10 @@ test('dateNavigator buttons should have "text" styling mode with material theme'
     .expect(navigator.prevDuration.hasClass('dx-button-mode-text'))
     .ok()
 
-    .expect(navigator.prevDuration.hasClass('dx-button-mode-text'))
+    .expect(navigator.caption.hasClass('dx-button-mode-text'))
     .ok()
 
-    .expect(navigator.prevDuration.hasClass('dx-button-mode-text'))
+    .expect(navigator.nextDuration.hasClass('dx-button-mode-text'))
     .ok();
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
