@@ -167,6 +167,7 @@ class NotificationManager extends NotificationManagerBase {
             this._failedOperationCount++;
         }
         this._progressPanel.completeOperation(operationInfo, commonText, isError, statusText);
+        this.tryHideActionProgress();
     }
 
     completeSingleOperationWithError(operationInfo, errorInfo) {
@@ -206,7 +207,7 @@ class NotificationManager extends NotificationManagerBase {
     _onProgressPanelOperationClosed(operationInfo) {
         if(operationInfo.hasError) {
             this._failedOperationCount--;
-            this.tryHideActionProgress(operationInfo);
+            this.tryHideActionProgress();
         }
     }
 
