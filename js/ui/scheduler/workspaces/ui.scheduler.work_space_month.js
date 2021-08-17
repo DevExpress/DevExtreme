@@ -18,7 +18,6 @@ const DATE_TABLE_CURRENT_DATE_CLASS = 'dx-scheduler-date-table-current-date';
 const DATE_TABLE_CELL_TEXT_CLASS = 'dx-scheduler-date-table-cell-text';
 const DATE_TABLE_FIRST_OF_MONTH_CLASS = 'dx-scheduler-date-table-first-of-month';
 const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
-const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -168,10 +167,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     // -------------
     // We need these methods for now but they are useless for renovation
     // -------------
-
-    _toggleFixedScrollableClass() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
-    }
 
     _createWorkSpaceElements() {
         if(this._isVerticalGroupedWorkSpace()) {

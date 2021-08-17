@@ -259,7 +259,7 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'underlined'
+        stylingMode: 'filled'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
