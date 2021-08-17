@@ -1690,7 +1690,6 @@
           {
             "Title": "Agenda",
             "Name": "Agenda",
-            "Badge": "Updated",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/SampleData/AgendaTasks.cs"
@@ -1782,7 +1781,6 @@
         "Demos": [
           {
             "Title": "Virtual Scrolling",
-            "Badge": "Updated",
             "Name": "VirtualScrolling",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [],
