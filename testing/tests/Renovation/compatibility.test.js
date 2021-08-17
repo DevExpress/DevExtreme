@@ -14,7 +14,8 @@ const PRIVATE_JQUERY_WIDGETS = [
     'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
     'DateTableLayoutBase', 'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
     'AppointmentLayout',
-    'GridPager', 'Scrollable', 'DraggableContainer', 'Droppable'
+    'GridPager', 'Scrollable', 'DraggableContainer', 'Droppable',
+    'Editor'
 ];
 const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'LayoutManager', 'ResponsiveBox', 'Box'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
