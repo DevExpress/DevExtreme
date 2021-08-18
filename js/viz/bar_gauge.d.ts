@@ -252,7 +252,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */

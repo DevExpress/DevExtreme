@@ -158,7 +158,7 @@ export interface BaseGaugeRangeContainer {
     offset?: number;
     /**
      * @docid BaseGaugeOptions.rangeContainer.palette
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -500,7 +500,7 @@ export interface CommonIndicator {
     offset?: number;
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */

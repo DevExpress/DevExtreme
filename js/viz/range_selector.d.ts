@@ -217,7 +217,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       negativesAsZeroes?: boolean;
       /**
        * @docid
-       * @extends CommonVizPalette
+       * @default "Material"
        * @type Array<string>|Enums.VizPalette
        */
       palette?: Array<string> | PaletteType;
