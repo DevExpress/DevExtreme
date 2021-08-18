@@ -323,7 +323,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @extends AppointmentTooltipTemplate
+     * @type template|function
+     * @default "appointmentTooltip"
+     * @type_function_param1 model:object
+     * @type_function_param1_field1 appointmentData:object
+     * @type_function_param1_field2 targetedAppointmentData:object
+     * @type_function_param2 itemIndex:number
+     * @type_function_param3 contentElement:DxElement
+     * @type_function_return string|Element|jQuery
      * @public
      */
     appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
@@ -884,7 +891,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @extends AppointmentTooltipTemplate
+       * @type template|function
+       * @default "appointmentTooltip"
+       * @type_function_param1 model:object
+       * @type_function_param1_field1 appointmentData:object
+       * @type_function_param1_field2 targetedAppointmentData:object
+       * @type_function_param2 itemIndex:number
+       * @type_function_param3 contentElement:DxElement
+       * @type_function_return string|Element|jQuery
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
