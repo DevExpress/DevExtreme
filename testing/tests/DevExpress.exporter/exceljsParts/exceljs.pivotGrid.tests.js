@@ -10,7 +10,6 @@ import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHel
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
-import browser from 'core/utils/browser';
 
 import { isDefined, isFunction } from 'core/utils/type';
 import 'ui/pivot_grid/ui.pivot_grid';
