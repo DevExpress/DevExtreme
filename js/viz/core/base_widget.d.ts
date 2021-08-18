@@ -514,7 +514,7 @@ export interface BaseWidgetTooltip {
     font?: Font;
     /**
      * @docid BaseWidgetOptions.tooltip.format
-     * @type format
+     * @type Format
      * @default undefined
      * @public
      */

@@ -96,7 +96,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions.onItemDeleting
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1 e:object
             * @type_function_param1_field1 component:this
             * @type_function_param1_field2 element:DxElement
             * @type_function_param1_field3 model:object
@@ -114,7 +113,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @default null
             * @name CollectionWidgetOptions.onItemDeleted
             * @type function(e)
-            * @type_function_param1 e:object
             * @type_function_param1 e:object
             * @type_function_param1_field1 component:this
             * @type_function_param1_field2 element:DxElement
