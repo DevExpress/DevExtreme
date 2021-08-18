@@ -138,17 +138,6 @@ class Scheduler extends Widget {
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
 
-
-            /**
-                * @pseudo DateCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
             /**
                 * @pseudo DataCellTemplate
                 * @type template|function

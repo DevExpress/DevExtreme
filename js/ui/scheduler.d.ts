@@ -388,7 +388,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     dataSource?: string | Array<Appointment> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @extends DateCellTemplate
+     * @type template|function
+     * @default null
+     * @type_function_param1 itemData:object
+     * @type_function_param2 itemIndex:number
+     * @type_function_param3 itemElement:DxElement
+     * @type_function_return string|Element|jQuery
      * @public
      */
     dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -931,7 +936,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @extends DateCellTemplate
+       * @type template|function
+       * @default null
+       * @type_function_param1 itemData:object
+       * @type_function_param2 itemIndex:number
+       * @type_function_param3 itemElement:DxElement
+       * @type_function_return string|Element|jQuery
        */
       dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
