@@ -375,7 +375,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string);
     /**
      * @docid
-     * @extends DataCellTemplate
+     * @type template|function
+     * @default null
+     * @type_function_param1 itemData:object
+     * @type_function_param2 itemIndex:number
+     * @type_function_param3 itemElement:DxElement
+     * @type_function_return string|Element|jQuery
      * @public
      */
     dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -914,7 +919,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       cellDuration?: number;
       /**
        * @docid
-       * @extends DataCellTemplate
+       * @type template|function
+       * @default null
+       * @type_function_param1 itemData:object
+       * @type_function_param2 itemIndex:number
+       * @type_function_param3 itemElement:DxElement
+       * @type_function_return string|Element|jQuery
        */
       dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
