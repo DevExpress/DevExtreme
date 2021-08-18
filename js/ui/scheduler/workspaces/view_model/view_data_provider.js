@@ -2,7 +2,7 @@ import dateUtils from '../../../../core/utils/date';
 import { getGroupPanelData } from '../../../../renovation/ui/scheduler/view_model/group_panel/utils';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { VIEWS } from '../../constants';
-import { calculateIsGroupedAllDayPanel } from '../utils/base';
+import { calculateIsGroupedAllDayPanel } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
