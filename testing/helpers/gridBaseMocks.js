@@ -246,7 +246,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             getMaxRowIndex: function() {
                 this.items().length - 1;
             },
-            loadViewport: commonUtils.noop
+            loadViewport: commonUtils.noop,
+            updateViewport: commonUtils.noop
         };
     };
 

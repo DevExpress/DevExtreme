@@ -660,9 +660,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 if(this.option(NEW_SCROLLING_MODE)) {
                     // dataController.viewportHeight(viewportHeight);
-                    const viewportSize = dataController.viewportSize();
-                    const viewportIsNotFilled = viewportSize > dataController.items().length;
-                    viewportIsNotFilled && dataController.loadViewport();
+                    dataController.updateViewport();
                 }
             }
         },
@@ -1206,6 +1204,13 @@ export const virtualScrollingModule = {
                                 });
                             }
                         }
+                    },
+                    updateViewport: function() {
+                        const viewportSize = this.viewportSize();
+                        const viewportIsNotFilled = viewportSize > this.items().length;
+                        const currentTake = this._loadViewportParams?.take ?? 0;
+                        const newTake = this._rowsScrollController?.getViewportParams().take;
+                        (viewportIsNotFilled || currentTake < newTake) && this.loadViewport();
                     },
                     loadIfNeed: function() {
                         if(this.option(NEW_SCROLLING_MODE)) {
