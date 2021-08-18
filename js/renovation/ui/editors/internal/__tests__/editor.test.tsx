@@ -14,7 +14,7 @@ describe('Editor', () => {
       const renderOptions = {
         aria: { role: 'aria' },
       };
-      const onWidgetKeyDown = (): null => null;
+      const keyDown = (): null => null;
       const onWidgetClick = (): null => null;
       const renderProps = {
         accessKey: 'A',
@@ -30,7 +30,7 @@ describe('Editor', () => {
         visible: true,
         width: 200,
         onClick: onWidgetClick,
-        onKeyDown: onWidgetKeyDown,
+        onKeyDown: keyDown,
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
