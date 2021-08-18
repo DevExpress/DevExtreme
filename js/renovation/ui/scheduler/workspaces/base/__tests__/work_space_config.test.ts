@@ -27,6 +27,7 @@ describe('Workspace config utils', () => {
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-work-space-day',
           isRenderDateHeader: false,
+          scrollingDirection: 'vertical',
         });
     });
 
@@ -45,6 +46,7 @@ describe('Workspace config utils', () => {
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-work-space-day',
           isRenderDateHeader: true,
+          scrollingDirection: 'vertical',
         });
     });
 
@@ -63,6 +65,7 @@ describe('Workspace config utils', () => {
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-work-space-week',
           isRenderDateHeader: true,
+          scrollingDirection: 'vertical',
         });
     });
 
@@ -81,6 +84,7 @@ describe('Workspace config utils', () => {
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-work-space-work-week',
           isRenderDateHeader: true,
+          scrollingDirection: 'vertical',
         });
     });
 
@@ -98,6 +102,7 @@ describe('Workspace config utils', () => {
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-work-space-month',
           isRenderDateHeader: true,
+          scrollingDirection: 'vertical',
         });
     });
 
@@ -115,6 +120,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-timeline-day dx-scheduler-timeline',
+          scrollingDirection: 'horizontal',
         });
     });
 
@@ -132,6 +138,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           isGenerateWeekDaysHeaderData: true,
           className: 'dx-scheduler-timeline-day dx-scheduler-timeline',
+          scrollingDirection: 'horizontal',
         });
     });
 
@@ -149,6 +156,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           isGenerateWeekDaysHeaderData: true,
           className: 'dx-scheduler-timeline-week dx-scheduler-timeline',
+          scrollingDirection: 'horizontal',
         });
     });
 
@@ -166,6 +174,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           isGenerateWeekDaysHeaderData: true,
           className: 'dx-scheduler-timeline-work-week dx-scheduler-timeline',
+          scrollingDirection: 'horizontal',
         });
     });
 
@@ -183,6 +192,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-timeline-month dx-scheduler-timeline',
+          scrollingDirection: 'horizontal',
         });
     });
 
@@ -201,6 +211,7 @@ describe('Workspace config utils', () => {
           isGenerateWeekDaysHeaderData: false,
           className: 'dx-scheduler-work-space-week',
           isRenderDateHeader: true,
+          scrollingDirection: 'vertical',
         });
     });
   });

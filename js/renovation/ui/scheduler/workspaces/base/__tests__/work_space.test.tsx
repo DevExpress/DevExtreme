@@ -99,6 +99,7 @@ describe('WorkSpace', () => {
       isAllDayPanelSupported: false,
       className: 'custom',
       isRenderDateHeader: true,
+      scrollingDirection: 'vertical',
     };
 
     const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
@@ -624,6 +625,7 @@ describe('WorkSpace', () => {
               isRenderDateHeader: true,
               isGenerateWeekDaysHeaderData: false,
               className: 'dx-scheduler-work-space-week',
+              scrollingDirection: 'vertical',
             });
 
           expect(getViewRenderConfigByType)
