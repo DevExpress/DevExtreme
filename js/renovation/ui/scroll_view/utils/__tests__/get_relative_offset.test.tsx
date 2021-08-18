@@ -20,6 +20,21 @@ describe('getRelativeOffset(targetElement, sourceElement)', () => {
     expect(getRelativeOffset(targetElement, sourceEl)).toEqual({ left: 105, top: 105 });
   });
 
+  it('should not cause any errors if element not have offsetParent', () => {
+    const sourceEl = {
+      getBoundingClientRect: () => ({
+        left: 35,
+        top: 125,
+      }),
+    } as HTMLDivElement;
+
+    expect(getRelativeOffset.bind([({} as HTMLElement, sourceEl)])).not.toThrow();
+    expect(getRelativeOffset({} as HTMLElement, sourceEl)).toEqual({
+      top: 0,
+      left: 0,
+    });
+  });
+
   // T162489
   it('should return correct relative offset with intermediate element', () => {
     const targetElement = {

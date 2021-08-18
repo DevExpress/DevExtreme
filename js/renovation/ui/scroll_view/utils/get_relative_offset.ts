@@ -1,5 +1,5 @@
 export function getRelativeOffset(
-  targetElement: HTMLElement | null, sourceElement: HTMLElement,
+  targetElement: HTMLDivElement | HTMLElement | null, sourceElement: HTMLDivElement | HTMLElement,
 ): { top: number; left: number } {
   const offset = { left: 0, top: 0 };
 
