@@ -1,11 +1,14 @@
+import each from 'jest-each';
 import {
   getElementStyle,
   getElementOverflowX,
-  getElementPaddingBottom,
+  getElementPadding,
   getElementTransform,
   getElementOverflowY,
+  getElementMargin,
 } from '../get_element_style';
 import { setWindow } from '../../../../../core/utils/window';
+import { titleize } from '../../../../../core/utils/inflector';
 
 describe('getElementStyle', () => {
   it('element is not defined', () => {
@@ -44,16 +47,39 @@ describe('getElementTransform', () => {
   });
 });
 
-describe('getElementPaddingBottom', () => {
-  it('element is not defined', () => {
-    expect(getElementPaddingBottom(null)).toEqual(0);
+each(['top', 'left', 'right', 'bottom']).describe('side: %o', (side) => {
+  describe(`getElementPadding(element, ${side})`, () => {
+    it('element is not defined', () => {
+      expect(getElementPadding(null, side)).toEqual(0);
+    });
+
+    it(`padding${titleize(side)}: 5px`, () => {
+      const el = {} as HTMLElement;
+      setWindow({
+        getComputedStyle: () => ({
+          [`padding${titleize(side)}`]: '5px',
+        }),
+      }, true);
+
+      expect(getElementPadding(el, side)).toEqual(5);
+    });
   });
 
-  it('paddingBottom: 5px', () => {
-    const el = {} as HTMLElement;
-    setWindow({ getComputedStyle: () => ({ paddingBottom: '5px' }) }, true);
+  describe(`getElementMargin(element, ${side})`, () => {
+    it('element is not defined', () => {
+      expect(getElementMargin(null, side)).toEqual(0);
+    });
 
-    expect(getElementPaddingBottom(el)).toEqual(5);
+    it(`margin${titleize(side)}: 5px`, () => {
+      const el = {} as HTMLElement;
+      setWindow({
+        getComputedStyle: () => ({
+          [`margin${titleize(side)}`]: '5px',
+        }),
+      }, true);
+
+      expect(getElementMargin(el, side)).toEqual(5);
+    });
   });
 });
 

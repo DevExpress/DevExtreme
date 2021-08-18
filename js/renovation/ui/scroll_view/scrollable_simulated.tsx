@@ -12,13 +12,13 @@ import {
 import '../../../events/gesture/emitter.gesture.scroll';
 import {
   subscribeToScrollEvent,
+  subscribeToScrollInitEvent,
   subscribeToDXScrollStartEvent,
   subscribeToDXScrollMoveEvent,
   subscribeToDXScrollEndEvent,
   subscribeToDXScrollStopEvent,
   subscribeToDXScrollCancelEvent,
   subscribeToKeyDownEvent,
-  subscribeToScrollInitEvent,
 } from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 
@@ -35,7 +35,6 @@ import {
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
-
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
@@ -71,7 +70,7 @@ import {
 
 import { getElementOffset } from '../../utils/get_element_offset';
 import {
-  getElementPaddingBottom, getElementOverflowX, getElementOverflowY,
+  getElementPadding, getElementOverflowX, getElementOverflowY,
 } from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
@@ -258,7 +257,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Mutable() tabWasPressed = false;
 
-  @Mutable() savedScrollOffset?: { top: number; left: number } = { top: 0, left: 0 };
+  @Mutable() savedScrollOffset?: { top: number; left: number };
 
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
@@ -397,21 +396,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   // TODO: it uses for DataGrid only
   /* istanbul ignore next */
   getElementLocation(
-    element: HTMLElement,
+    targetElement: HTMLElement,
     direction: ScrollableDirection,
     offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
   ): number {
+    const scrollOffset = this.scrollOffset();
+
     return getElementLocationInternal(
-      element,
-      {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        ...offset,
-      },
+      targetElement,
       direction,
       this.containerElement,
+      scrollOffset,
+      offset,
     );
   }
 
@@ -1188,7 +1184,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
     }
 
-    this.contentPaddingBottom = getElementPaddingBottom(contentEl);
+    this.contentPaddingBottom = getElementPadding(contentEl, 'bottom');
   }
 
   get containerElement(): HTMLDivElement {

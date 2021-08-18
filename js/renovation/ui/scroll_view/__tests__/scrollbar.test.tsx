@@ -589,7 +589,7 @@ describe('Scrollbar', () => {
 
       each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
         each([300, 360, 600]).describe('visibleScrollAreaSize: %o', (visibleScrollAreaSize) => {
-          each([-100, -300, -359.4, -359.6, -500]).describe('scrollLocation: %o', (scrollLocation) => {
+          each([-100, -300, -359.9, -360, -360.1, -500]).describe('scrollLocation: %o', (scrollLocation) => {
             it('isReachBottom()', () => {
               const topPocketSize = 85;
               const bottomPocketSize = 55;
@@ -607,7 +607,7 @@ describe('Scrollbar', () => {
               });
 
               if (reachBottomEnabled
-              && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0.5) {
+                && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0) {
                 expect(viewModel.isReachBottom).toBe(true);
               } else {
                 expect(viewModel.isReachBottom).toBe(false);

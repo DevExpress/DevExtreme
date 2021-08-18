@@ -7,17 +7,22 @@ import {
 } from '@devextreme-generator/declarations';
 import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
 import dateUtils from '../../../../core/utils/date';
-import { GroupOrientation } from '../types';
+import { GroupOrientation, ViewType } from '../types';
 import {
   DataCellTemplateProps,
   DateTimeCellTemplateProps,
+  GetDateForHeaderText,
   Group,
   ResourceCellTemplateProps,
   ViewMetaData,
 } from './types';
+import { BaseWidgetProps } from '../../common/base_props';
+import { HeaderPanelLayoutProps } from './base/header_panel/layout';
+import { DateTableLayoutProps } from './base/date_table/layout';
+import { TimePaneLayoutProps } from './base/time_panel/layout';
 
 @ComponentBindings()
-export class WorkSpaceProps {
+export class WorkSpaceProps extends BaseWidgetProps {
   // -------------------
   // Public templates
   // -------------------
@@ -74,5 +79,62 @@ export class WorkSpaceProps {
     mode: 'standard',
   };
 
+  @OneWay() cellDuration = 30;
+
+  @OneWay() showCurrentTimeIndicator = true;
+
+  @OneWay() schedulerHeight?: number;
+
+  @OneWay() schedulerWidth?: number;
+
+  @OneWay() type: ViewType = 'week';
+
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type CurrentViewConfigType = Pick<
+WorkSpaceProps,
+'firstDayOfWeek'
+| 'startDayHour'
+| 'endDayHour'
+| 'cellDuration'
+| 'groupByDate'
+| 'scrolling'
+| 'currentDate'
+| 'intervalCount'
+| 'groupOrientation'
+| 'startDate'
+| 'showAllDayPanel'
+| 'showCurrentTimeIndicator'
+| 'indicatorUpdateInterval'
+| 'shadeUntilCurrentTime'
+| 'crossScrollingEnabled'
+| 'schedulerHeight'
+| 'schedulerWidth'
+| 'tabIndex'
+| 'accessKey'
+| 'focusStateEnabled'
+| 'indicatorTime'
+| 'allowMultipleCellSelection'
+| 'allDayPanelExpanded'
+| 'hoursInterval'
+| 'groups'
+| 'selectedCellData'
+| 'type'
+>;
+
+export interface ViewRenderConfig {
+  headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
+  dateTableTemplate: JSXTemplate<DateTableLayoutProps>;
+  timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
+  className?: string;
+  isAllDayPanelSupported: boolean;
+  isProvideVirtualCellsWidth: boolean;
+  isRenderTimePanel: boolean;
+  groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table';
+  headerCellTextFormat: string | ((date: Date) => string);
+  getDateForHeaderText: GetDateForHeaderText;
+  isRenderDateHeader: boolean;
+  isGenerateWeekDaysHeaderData: boolean;
 }
