@@ -3,7 +3,7 @@ import { isDefined } from '../../core/utils/type';
 import { drawLine, drawRect, drawText } from './pdf_utils';
 
 // this function is large and will grow
-export function drawPdfTable(doc, styles, table) {
+export function drawPdfTable(doc, styles, table, linkedTables) {
     if(!isDefined(doc)) {
         throw 'doc is required';
     }
@@ -99,12 +99,17 @@ export function drawPdfTable(doc, styles, table) {
         throw 'table.rect is required';
     }
 
-    const cells = [].concat(...table.rows).sort((a, b) => {
+    let cells = [].concat(...table.rows);
+    linkedTables.forEach((linkedTable) => {
+        cells = cells.concat(...linkedTable.rows);
+    });
+
+    const sortedCells = cells.sort((a, b) => {
         const aValue = isDefined(a.borderColor) ? 1 : 0;
         const bValue = isDefined(b.borderColor) ? 1 : 0;
         return aValue - bValue;
     });
-    drawRow(cells);
+    drawRow(sortedCells);
 
     if(isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0)) {
         drawBorder(table.rect);

@@ -3441,16 +3441,61 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
                     'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,16',
-                    'setDrawColor,#dddd00',
-                    'text,F1: f1_1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'setDrawColor,#000000',
                     'text,f1_2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,80,16',
                     'text,f1_3,100,55,{baseline:middle}', 'setLineWidth,1', 'rect,100,47,80,16',
-                    'setDrawColor,#dddd00',
-                    'text,F1: f2_1,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,170,16',
-                    'setDrawColor,#000000',
                     'text,f2_2,20,87,{baseline:middle}', 'setLineWidth,1', 'rect,20,79,80,16',
-                    'text,f2_3,100,87,{baseline:middle}', 'setLineWidth,1', 'rect,100,79,80,16'
+                    'text,f2_3,100,87,{baseline:middle}', 'setLineWidth,1', 'rect,100,79,80,16',
+                    'setDrawColor,#dddd00',
+                    'text,F1: f1_1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,F1: f2_1,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,170,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('Grouped rows - 1 level - [{f1, groupIndex: 0}, f2, f3] - custom border color in grouped row and data row', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f2_1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.rowType === 'group' && gridCell.column.dataField === 'f1') {
+                        pdfCell.borderColor = '#ff0000';
+                    } else if(gridCell.rowType === 'data' && gridCell.column.dataField === 'f2') {
+                        pdfCell.borderColor = '#0000ff';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
+                    'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,16',
+                    'text,f1_3,100,55,{baseline:middle}', 'setLineWidth,1', 'rect,100,47,80,16',
+                    'text,f2_3,100,87,{baseline:middle}', 'setLineWidth,1', 'rect,100,79,80,16',
+                    'setDrawColor,#ff0000',
+                    'text,F1: f1_1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'setDrawColor,#0000ff',
+                    'text,f1_2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,80,16',
+                    'setDrawColor,#ff0000',
+                    'text,F1: f2_1,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,170,16',
+                    'setDrawColor,#0000ff',
+                    'text,f2_2,20,87,{baseline:middle}', 'setLineWidth,1', 'rect,20,79,80,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -3488,16 +3533,14 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
                     'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,16',
-                    'setDrawColor,#dddd00',
-                    'text,F1: f1_1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'setDrawColor,#000000',
                     'text,f1_2,20,55,{baseline:middle}', 'setLineWidth,1', 'line,20,47,20,63', 'line,100,47,100,63', 'line,20,63,100,63',
                     'text,f1_3,100,55,{baseline:middle}', 'setLineWidth,1', 'line,100,47,100,63', 'line,180,47,180,63', 'line,100,63,180,63',
-                    'setDrawColor,#dddd00',
-                    'text,F1: f2_1,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,170,16',
-                    'setDrawColor,#000000',
                     'text,f2_2,20,87,{baseline:middle}', 'setLineWidth,1', 'line,20,79,20,95', 'line,100,79,100,95', 'line,20,95,100,95',
-                    'text,f2_3,100,87,{baseline:middle}', 'setLineWidth,1', 'line,100,79,100,95', 'line,180,79,180,95', 'line,100,95,180,95'
+                    'text,f2_3,100,87,{baseline:middle}', 'setLineWidth,1', 'line,100,79,100,95', 'line,180,79,180,95', 'line,100,95,180,95',
+                    'setDrawColor,#dddd00',
+                    'text,F1: f1_1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,F1: f2_1,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,170,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -3533,18 +3576,16 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
                     'text,F4,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,16',
+                    'text,f1_3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,70,16',
+                    'text,f1_4,100,71,{baseline:middle}', 'setLineWidth,1', 'rect,100,63,80,16',
+                    'text,f2_3,30,103,{baseline:middle}', 'setLineWidth,1', 'rect,30,95,70,16',
+                    'text,f2_4,100,103,{baseline:middle}', 'setLineWidth,1', 'rect,100,95,80,16',
                     'setDrawColor,#dddd00',
                     'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
                     'setDrawColor,#00dddd',
                     'text,F2: f1_2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
-                    'setDrawColor,#000000',
-                    'text,f1_3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,70,16',
-                    'text,f1_4,100,71,{baseline:middle}', 'setLineWidth,1', 'rect,100,63,80,16',
-                    'setDrawColor,#00dddd',
                     'text,F2: f2_2,20,87,{baseline:middle}', 'setLineWidth,1', 'rect,20,79,160,16',
-                    'setDrawColor,#000000',
-                    'text,f2_3,30,103,{baseline:middle}', 'setLineWidth,1', 'rect,30,95,70,16',
-                    'text,f2_4,100,103,{baseline:middle}', 'setLineWidth,1', 'rect,100,95,80,16'
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {

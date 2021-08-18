@@ -8,6 +8,7 @@ export class PdfGrid {
         this._newPageTables = [];
         this._tables = [];
         this._currentHorizontalTables = null;
+        this._referentialConstraints = [];
     }
 
     _addLastTableToNewPages() {
@@ -24,9 +25,17 @@ export class PdfGrid {
         if(isDefined(firstColumnWidth)) {
             firstTableColumnWidths[0] = firstColumnWidth;
         }
+        const startNewTableWithIndent = isDefined(firstColumnWidth) && !firstTableOnNewPage;
+        const lastHorizontalTables = isDefined(this._currentHorizontalTables) ? [...this._currentHorizontalTables] : [];
         this._currentHorizontalTables = [new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths)];
         if(firstTableOnNewPage) {
             this._addLastTableToNewPages();
+        }
+        if(startNewTableWithIndent && lastHorizontalTables.length > 0) {
+            this._referentialConstraints.push({
+                key: lastHorizontalTables[0],
+                value: this._currentHorizontalTables[0]
+            });
         }
 
         if(isDefined(this._splitByColumns)) {
@@ -39,6 +48,11 @@ export class PdfGrid {
                 );
                 if(this._splitByColumns[i].drawOnNewPage) {
                     this._addLastTableToNewPages();
+                } else if(startNewTableWithIndent) {
+                    this._referentialConstraints.push({
+                        key: this.lastHorizontalTables[i + 1],
+                        value: this._currentHorizontalTables[i + 1]
+                    });
                 }
             }
         }
@@ -131,10 +145,22 @@ export class PdfGrid {
         const styles = this._getDocumentStyles(doc);
 
         this._tables.forEach((table) => {
-            if(this._newPageTables.indexOf(table) !== -1) {
-                doc.addPage();
+            const hasRefToAnotherTable = this._referentialConstraints.filter((e) => e.value === table).length > 0;
+            if(!hasRefToAnotherTable) {
+                if(this._newPageTables.indexOf(table) !== -1) {
+                    doc.addPage();
+                }
+
+                const linkedTables = [];
+                let referentialConstraint = this._referentialConstraints.filter((e) => e.key === table)[0];
+                while(isDefined(referentialConstraint)) {
+                    const linkedTable = referentialConstraint.value;
+                    linkedTables.push(linkedTable);
+                    referentialConstraint = this._referentialConstraints.filter((e) => e.key === linkedTable)[0];
+                }
+
+                table.drawTo(doc, styles, linkedTables);
             }
-            table.drawTo(doc, styles);
         });
 
         this._setDocumentStyles(doc, styles);
