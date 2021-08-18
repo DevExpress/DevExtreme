@@ -31,7 +31,7 @@ import { getLabelWidthByText } from './components/label';
 import { renderFieldItem } from './components/field_item.js';
 import { renderButtonItem } from './components/button_item.js';
 import { renderEmptyItem } from './components/empty_item.js';
-import { getLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
+import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -554,43 +554,35 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderFieldItem: function(item, $container) {
-        const template = item.template ? this._getTemplate(item.template) : null;
         const editorValue = this._getDataByField(item.dataField);
-        const managerMarkOptions = this._getMarkOptions();
-        const isFlexSupported = this._hasBrowserFlex();
-        let isCheckboxUndefinedStateEnabled = false;
+        let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
-            isCheckboxUndefinedStateEnabled = this._isCheckboxUndefinedStateEnabled({
-                allowIndeterminateState: item.allowIndeterminateState, editorType: item.editorType, dataField: item.dataField });
+            const { allowIndeterminateState, editorType, dataField } = item;
+            canAssignUndefinedValueToEditor = this._isCheckboxUndefinedStateEnabled({ allowIndeterminateState, editorType, dataField });
         }
 
         const name = item.dataField || item.name;
-        const formInstance = this.option('form');
-        const itemId = formInstance && formInstance.getItemID(name);
 
         const { $fieldEditorContainer, instance } = renderFieldItem(convertToRenderFieldItemOptions({
             $container,
+            item,
+            name,
+            editorValue,
+            canAssignUndefinedValueToEditor,
             containerCssClass: this.option('cssItemClass'),
             parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
-            useFlexLayout: isFlexSupported,
-            item, template, name,
+            useFlexLayout: this._hasBrowserFlex(),
             formLabelLocation: this.option('labelLocation'),
             requiredMessageTemplate: this.option('requiredMessage'),
             validationGroup: this.option('validationGroup'),
-            editorType: item.editorType,
-            editorValue,
-            defaultEditorName: item.dataField,
-            editorAllowUndefinedValue: isCheckboxUndefinedStateEnabled,
-            externalEditorOptions: item.editorOptions,
-            editorInputId: itemId,
             editorValidationBoundary: this.option('validationBoundary'),
             editorStylingMode: this.option('form') && this.option('form').option('stylingMode'),
-            isFlexSupported,
             showColonAfterLabel: this.option('showColonAfterLabel'),
             managerLabelLocation: this.option('labelLocation'),
-            manager_id: itemId,
-            managerMarkOptions
+            template: item.template ? this._getTemplate(item.template) : null,
+            itemId: this.option('form') && this.option('form').getItemID(name),
+            managerMarkOptions: this._getMarkOptions(),
         }));
 
         if(instance && item.dataField) {
@@ -607,7 +599,7 @@ const LayoutManager = Widget.inherit({
 
     _getLabelWidthByText: function({ text, location }) {
         return getLabelWidthByText({
-            text, location, markOptions: getLabelMarkOptions(this._getMarkOptions())
+            text, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
         });
     },
 
@@ -779,8 +771,9 @@ const LayoutManager = Widget.inherit({
                                     const valueGetter = compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
+                                    const { allowIndeterminateState, editorType } = itemRunTimeInfo.item;
                                     if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(
-                                        { allowIndeterminateState: itemRunTimeInfo.item.allowIndeterminateState, editorType: itemRunTimeInfo.item.editorType, dataField: itemRunTimeInfo.item.dataField })) {
+                                        { allowIndeterminateState, editorType, dataField })) {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     } else {
                                         this._resetWidget(itemRunTimeInfo.widgetInstance);

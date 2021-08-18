@@ -40,7 +40,7 @@ export function renderFieldItem({
     labelNeedBaselineAlign, labelLocation, needRenderLabel, // TODO: move to 'labelOptions' ?
     formLabelLocation, // TODO: use 'labelOptions.location' insted ?
 
-    item,
+    item, // TODO: pass simple values instead of complex object
     editorOptions, isSimpleItem, isRequired, template, helpID, labelID, name, helpText, // TODO: move to 'item' ?
 
     requiredMessageTemplate,

@@ -14,31 +14,28 @@ export function convertToRenderFieldItemOptions({
     parentComponent,
     createComponentCallback,
     useFlexLayout,
-    item, template, name,
+    item,
+    template,
+    name,
     formLabelLocation,
     requiredMessageTemplate,
     validationGroup,
-    editorType,
     editorValue,
-    defaultEditorName,
-    editorAllowUndefinedValue: isCheckboxUndefinedStateEnabled,
-    externalEditorOptions,
-    editorInputId,
+    canAssignUndefinedValueToEditor,
     editorValidationBoundary,
     editorStylingMode,
-    isFlexSupported,
     showColonAfterLabel,
     managerLabelLocation,
-    manager_id,
+    itemId,
     managerMarkOptions
 }) {
-    const isRequired = isDefined(item.isRequired) ? item.isRequired : !!hasRequiredRuleInSet(item.validationRules);
+    const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
     const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
     const helpID = item.helpText ? ('dx-' + new Guid()) : null;
     const helpText = item.helpText;
 
-    const labelOptions = getLabelOptions({
-        item, id: manager_id, isRequired, managerMarkOptions,
+    const labelOptions = _convertToLabelOptions({
+        item, id: itemId, isRequired, managerMarkOptions,
         showColonAfterLabel,
         labelLocation: managerLabelLocation,
     });
@@ -50,7 +47,7 @@ export function convertToRenderFieldItemOptions({
         labelLocation !== 'top'
         &&
         (
-            (!!item.helpText && !isFlexSupported)
+            (!!item.helpText && !useFlexLayout)
             ||
             inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
         );
@@ -66,24 +63,33 @@ export function convertToRenderFieldItemOptions({
         formLabelLocation,
         requiredMessageTemplate,
         validationGroup,
-        editorOptions: convertToEditorOptions({
-            editorType,
+        editorOptions: _convertToEditorOptions({
+            editorType: item.editorType,
             editorValue,
-            defaultEditorName,
-            editorAllowUndefinedValue: isCheckboxUndefinedStateEnabled,
-            externalEditorOptions,
-            editorInputId,
+            defaultEditorName: item.dataField,
+            canAssignUndefinedValueToEditor,
+            externalEditorOptions: item.editorOptions,
+            editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
         })
     };
 }
 
-export function convertToEditorOptions({
-    editorType, defaultEditorName, editorValue, editorAllowUndefinedValue, externalEditorOptions, editorInputId, editorValidationBoundary, editorStylingMode
+export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
+    return {
+        isRequiredMark: showRequiredMark && isRequired,
+        requiredMark,
+        isOptionalMark: showOptionalMark && !isRequired,
+        optionalMark
+    };
+}
+
+function _convertToEditorOptions({
+    editorType, defaultEditorName, editorValue, canAssignUndefinedValueToEditor, externalEditorOptions, editorInputId, editorValidationBoundary, editorStylingMode
 }) {
     const editorOptionsWithValue = {};
-    if(editorValue !== undefined || editorAllowUndefinedValue) {
+    if(editorValue !== undefined || canAssignUndefinedValueToEditor) {
         editorOptionsWithValue.value = editorValue;
     }
     if(EDITORS_WITH_ARRAY_VALUE.indexOf(editorType) !== -1) {
@@ -114,7 +120,7 @@ export function convertToEditorOptions({
     return result;
 }
 
-export function hasRequiredRuleInSet(rules) {
+function _hasRequiredRuleInSet(rules) {
     let hasRequiredRule;
 
     if(rules && rules.length) {
@@ -129,16 +135,7 @@ export function hasRequiredRuleInSet(rules) {
     return hasRequiredRule;
 }
 
-export function getLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
-    return {
-        isRequiredMark: showRequiredMark && isRequired,
-        requiredMark,
-        isOptionalMark: showOptionalMark && !isRequired,
-        optionalMark
-    };
-}
-
-export function getLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation }) {
+function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation }) {
     const labelOptions = extend(
         {
             showColon: showColonAfterLabel,
@@ -148,7 +145,7 @@ export function getLabelOptions({ item, id, isRequired, managerMarkOptions, show
             isRequired: isRequired
         },
         item ? item.label : {},
-        { markOptions: getLabelMarkOptions(managerMarkOptions, isRequired) }
+        { markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired) }
     );
 
     const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
