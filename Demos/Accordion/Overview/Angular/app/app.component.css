@@ -7,11 +7,11 @@
     margin: 0;
 }
 
-::ng-deep .dx-theme-material #accordion .dx-accordion-item-opened .dx-accordion-item-title {
+::ng-deep .dx-theme-material #accordion .dx-accordion-item-title {
     display: flex;
 }
 
-::ng-deep .dx-theme-material #accordion .dx-accordion-item-opened h1 {
+::ng-deep .dx-theme-material #accordion h1 {
     align-self: center;
 }
 

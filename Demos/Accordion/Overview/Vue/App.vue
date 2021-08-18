@@ -92,11 +92,11 @@ export default {
   margin: 0;
 }
 
-.dx-theme-material #accordion .dx-accordion-item-opened .dx-accordion-item-title {
+.dx-theme-material #accordion .dx-accordion-item-title {
   display: flex;
 }
 
-.dx-theme-material #accordion .dx-accordion-item-opened h1 {
+.dx-theme-material #accordion h1 {
   align-self: center;
 }
 
