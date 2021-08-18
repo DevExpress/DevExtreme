@@ -496,7 +496,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */

@@ -435,7 +435,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       opacity?: number;
       /**
        * @docid
-       * @extends CommonVizPalette
+       * @default "Material"
        * @type Array<string>|Enums.VizPalette
        */
       palette?: Array<string> | PaletteType;

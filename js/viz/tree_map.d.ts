@@ -125,7 +125,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       colorizeGroups?: boolean;
       /**
        * @docid
-       * @extends CommonVizPalette
+       * @default "Material"
        * @type Array<string>|Enums.VizPalette
        */
       palette?: Array<string> | PaletteType;

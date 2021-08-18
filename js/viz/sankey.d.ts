@@ -483,7 +483,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */

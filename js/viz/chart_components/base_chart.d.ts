@@ -194,7 +194,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
