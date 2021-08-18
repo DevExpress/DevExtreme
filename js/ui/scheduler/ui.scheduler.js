@@ -146,12 +146,6 @@ class Scheduler extends Widget {
         const defaultOptions = extend(super._getDefaultOptions(), {
 
             /**
-                * @pseudo Groups
-                * @type Array<string>
-                * @default []
-                */
-
-            /**
                 * @pseudo CellDuration
                 * @type number
                 * @default 30
