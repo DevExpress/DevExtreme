@@ -2381,9 +2381,15 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _createWorkSpaceScrollableElements() {
         this.$element().append(this._$fixedContainer);
+
+        this._$flexContainer = $('<div>').addClass('dx-scheduler-work-space-flex-container');
+
         this._createHeaderScrollable();
+
+        this.$element().append(this._$flexContainer);
+
         this._createSidebarScrollable();
-        this.$element().append(this._dateTableScrollable.$element());
+        this._$flexContainer.append(this._dateTableScrollable.$element());
 
         this._headerScrollable.$content().append(this._$headerPanel);
         this._dateTableScrollable.$content().append(this._$dateTable);
@@ -2409,7 +2415,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _createSidebarScrollable() {
         const $timePanelScrollable = $('<div>')
             .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
-            .appendTo(this.$element());
+            .appendTo(this._$flexContainer);
 
         this._sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
             useKeyboard: false,
