@@ -485,7 +485,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     groupByDate?: boolean;
     /**
      * @docid
-     * @extends Groups
+     * @type Array<string>
+     * @default []
      * @public
      */
     groups?: Array<string>;
@@ -937,7 +938,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       groupOrientation?: 'horizontal' | 'vertical';
       /**
        * @docid
-       * @extends Groups
+       * @type Array<string>
+       * @default []
        */
       groups?: Array<string>;
       /**
