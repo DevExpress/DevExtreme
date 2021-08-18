@@ -322,7 +322,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @extends CellDuration
+     * @type number
+     * @default 30
      * @public
      */
     cellDuration?: number;
@@ -874,7 +875,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @extends CellDuration
+       * @type number
+       * @default 30
        */
       cellDuration?: number;
       /**
