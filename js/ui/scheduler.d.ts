@@ -867,7 +867,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     textExpr?: string;
     /**
      * @docid
-     * @extends TimeCellTemplate
+     * @type template|function
+     * @default null
+     * @type_function_param1 itemData:object
+     * @type_function_param2 itemIndex:number
+     * @type_function_param3 itemElement:DxElement
+     * @type_function_return string|Element|jQuery
      * @public
      */
     timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -1026,7 +1031,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       startDayHour?: number;
       /**
        * @docid
-       * @extends TimeCellTemplate
+       * @type template|function
+       * @default null
+       * @type_function_param1 itemData:object
+       * @type_function_param2 itemIndex:number
+       * @type_function_param3 itemElement:DxElement
+       * @type_function_return string|Element|jQuery
        */
       timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
