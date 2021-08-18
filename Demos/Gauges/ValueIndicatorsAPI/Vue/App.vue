@@ -128,14 +128,12 @@ export default {
 
 .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.option > span {
-    width: 155px;
-    line-height: 36px;
-}
-
-.option > .dx-widget {
-    float: right;
+#edit {
+    margin-left: auto;
 }
 </style>

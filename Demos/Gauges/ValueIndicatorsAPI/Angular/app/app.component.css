@@ -16,11 +16,10 @@
 }
 ::ng-deep .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-::ng-deep .option > span {
-    width: 155px;
-    line-height: 36px;
-}
-::ng-deep .option > .dx-widget {
-    float: right;
+::ng-deep .dx-button {
+    margin-left: auto;
 }
