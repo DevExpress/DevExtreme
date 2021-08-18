@@ -53,15 +53,14 @@ class App extends React.Component {
             </tbody>
           </table>
           <div className="action">
+            <div className="label">Choose a number of months:
+            </div>
             <SelectBox
               id="choose-months"
               dataSource={months}
-              width={70}
               defaultValue={months[0]}
               onValueChanged={this.onValueChanged}
             />
-            <div className="label">Choose a number of months:
-            </div>
           </div>
         </div>
       </React.Fragment>

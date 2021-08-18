@@ -46,7 +46,6 @@ $(function(){
     
     $("#choose-months").dxSelectBox({
         dataSource: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-        width: 70,
         value: 12,
         onValueChanged: function (data) {
             var count = data.value;

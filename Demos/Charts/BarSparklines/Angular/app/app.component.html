@@ -48,14 +48,13 @@
       
     </table>
     <div class="action">
+        <div class="label">Choose a number of months:
+        </div>
         <dx-select-box
             id="choose-months"
             [dataSource]="filters"
-            [width]="70"
             [value]="filters[0]"
             (onValueChanged)="onValueChanged($event)">
         </dx-select-box>
-        <div class="label">Choose a number of months:
-        </div>
     </div>
 </div>

@@ -34,20 +34,17 @@
     height: 30px;
 }
 
-#choose-months {
-    float: right;
-}
-
 .action {
-    width: 270px;
+    width: 300px;
     margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.label {
-    padding-top: 9px;
+.action .dx-selectbox {
+    width: 90px;
 }
-
-
 
 .long-title h3 {
     font-weight: 200;
