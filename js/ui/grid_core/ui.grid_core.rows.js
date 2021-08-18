@@ -1126,7 +1126,9 @@ export const rowsModule = {
                     this._scrollable && this._scrollable.dispose();
                 },
 
-                setScrollerSpacing: function() { }
+                setScrollerSpacing: function() { },
+
+                _restoreErrorRow: function() { }
             };
         })())
     }

@@ -2160,16 +2160,15 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'standard',
-                minGap: 0
+                minGap: 0,
+                useNative: false
             }
         });
         const instance = dataGrid.dxDataGrid('instance');
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
-        const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         scrollable.scrollTo({ y: 1440 });
-        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
         const rowHeight = rowsView._rowHeight;
@@ -2196,7 +2195,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
-        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
         assert.strictEqual(instance.pageIndex(), 10, 'current page index is not changed'); // T881314
@@ -4072,7 +4070,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo({ y: 10000 });
 
         // assert
-        assert.strictEqual(dataGrid.getVisibleRows().length, 20);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 15);
         assert.strictEqual(dataGrid.getVisibleRows()[0].key, 11);
         assert.strictEqual($(dataGrid.$element()).find('.dx-error-row').length, 0, 'error row is hidden');
     });
