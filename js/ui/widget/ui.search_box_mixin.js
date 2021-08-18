@@ -3,10 +3,9 @@ import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
-import { componentGetter } from '../../core/modules_registry';
+import { stubComponent } from '../../core/modules_registry';
 
-const TextBoxGetter = componentGetter('ui/text_box');
-
+let EditorClass = stubComponent('TextBox');
 
 export default {
     _getDefaultOptions: function() {
@@ -48,7 +47,7 @@ export default {
         } else {
             $element.addClass(rootElementClassName);
             this._$searchEditorElement = $('<div>').addClass(searchBoxClassName).prependTo($element);
-            this._searchEditor = this._createComponent(this._$searchEditorElement, TextBoxGetter(), editorOptions);
+            this._searchEditor = this._createComponent(this._$searchEditorElement, EditorClass, editorOptions);
         }
     },
 
@@ -169,5 +168,9 @@ export default {
         }
 
         this.callBase();
+    },
+
+    setEditorClass: function(value) {
+        EditorClass = value;
     }
 };

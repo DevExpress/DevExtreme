@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: './entry.js',
   output: {
     path:path.resolve(__dirname, "../../artifacts/modular"),
