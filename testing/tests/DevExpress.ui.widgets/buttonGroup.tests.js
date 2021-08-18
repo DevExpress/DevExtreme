@@ -52,6 +52,14 @@ QUnit.module('options', () => {
         assert.equal($button.eq(0).hasClass('test2'), false);
         assert.equal($button.eq(1).hasClass('test1'), false);
         assert.equal($button.eq(1).hasClass('test2'), true);
+
+        // default classes are still exist
+        assert.equal($button.eq(0).hasClass('dx-widget'), true);
+        assert.equal($button.eq(1).hasClass('dx-widget'), true);
+        assert.equal($button.eq(0).hasClass('dx-buttongroup-item'), true);
+        assert.equal($button.eq(1).hasClass('dx-buttongroup-item'), true);
+        assert.equal($button.eq(0).hasClass('dx-buttongroup-first-item'), true);
+        assert.equal($button.eq(1).hasClass('dx-buttongroup-last-item'), true);
     });
 });
 
