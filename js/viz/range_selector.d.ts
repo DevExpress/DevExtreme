@@ -440,7 +440,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         font?: Font;
         /**
          * @docid
-         * @extends CommonVizFormat
+         * @type format
+         * @default undefined
          */
         format?: Format;
         /**
@@ -489,7 +490,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
           customizeText?: ((markerValue: { value?: Date | number; valueText?: string }) => string);
           /**
            * @docid
-           * @extends CommonVizFormat
+           * @type format
+           * @default undefined
            */
           format?: Format;
         };
@@ -714,7 +716,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       font?: Font;
       /**
        * @docid
-       * @extends CommonVizFormat
+       * @type format
+       * @default undefined
        */
       format?: Format;
       /**
