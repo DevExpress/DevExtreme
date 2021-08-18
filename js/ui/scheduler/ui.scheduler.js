@@ -139,16 +139,6 @@ class Scheduler extends Widget {
         const defaultOptions = extend(super._getDefaultOptions(), {
 
             /**
-                * @pseudo ResourceCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
                 * @pseudo AppointmentCollectorTemplate
                 * @type template|function
                 * @default "appointmentCollector"
