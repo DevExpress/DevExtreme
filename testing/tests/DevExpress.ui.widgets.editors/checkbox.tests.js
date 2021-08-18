@@ -25,7 +25,7 @@ QUnit.module('Checkbox', function() {
 
     QUnit.module('methods', () => {
         QUnit.testInActiveWindow('focus', function(assert) {
-            const $element = $('#checkBox').dxCheckBox();
+            const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
             const instance = $element.dxCheckBox('instance');
 
             instance.focus();
@@ -445,7 +445,7 @@ QUnit.module('Checkbox', function() {
 
             QUnit.testInActiveWindow('blur method', function(assert) {
                 const blurSpy = sinon.spy();
-                const $element = $('#checkBox').dxCheckBox();
+                const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
                 const instance = $element.dxCheckBox('instance');
                 $element.on('blur', blurSpy);
 
