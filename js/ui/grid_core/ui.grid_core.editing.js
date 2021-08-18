@@ -211,6 +211,11 @@ const EditingController = modules.ViewController.inherit((function() {
             return this.option(EDITING_CHANGES_OPTION_NAME);
         },
 
+        getInsertRowCount: function() {
+            const changes = this.option(EDITING_CHANGES_OPTION_NAME);
+            return changes.filter(change => change.type === 'insert').length;
+        },
+
         resetChanges: function() {
             const changes = this.getChanges();
             const needReset = changes?.length;

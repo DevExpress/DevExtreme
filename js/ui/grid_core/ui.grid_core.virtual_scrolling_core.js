@@ -358,9 +358,7 @@ export const VirtualScrollController = Class.inherit((function() {
             let take = Math.ceil((bottomIndex + minGap) / maxGap) * maxGap - skip;
 
             if(virtualMode) {
-                const changes = this.option('editing.changes') || [];
-                const newItemRowCount = changes.filter(change => change.type === 'insert').length;
-                const remainedItems = Math.max(0, totalItemsCount + newItemRowCount - skip);
+                const remainedItems = Math.max(0, totalItemsCount - skip);
                 take = Math.min(take, remainedItems);
             }
 

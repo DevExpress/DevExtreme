@@ -845,7 +845,8 @@ export const virtualScrollingModule = {
                             },
                             totalItemsCount: function() {
                                 if(isVirtualMode(that)) {
-                                    return that.totalItemsCount();
+                                    const insertRowCount = that.getController('editing')?.getInsertRowCount() ?? 0;
+                                    return that.totalItemsCount() + insertRowCount;
                                 }
 
                                 return that.option(NEW_SCROLLING_MODE) ? that._itemCount : that._items.filter(isItemCountable).length;
