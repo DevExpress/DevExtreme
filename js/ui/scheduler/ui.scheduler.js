@@ -147,18 +147,6 @@ class Scheduler extends Widget {
 
 
             /**
-                * @pseudo AppointmentTemplate
-                * @type template|function
-                * @default "item"
-                * @type_function_param1 model:object
-                * @type_function_param1_field1 appointmentData:object
-                * @type_function_param1_field2 targetedAppointmentData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
                 * @pseudo AppointmentTooltipTemplate
                 * @type template|function
                 * @default "appointmentTooltip"
