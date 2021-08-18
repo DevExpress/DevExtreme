@@ -1,12 +1,12 @@
-import { Format } from '../localization';
+import { Format as LocalizationFormat } from '../localization';
 
-type AbbreviationFormat = 'abbreviated' | 'short' | 'narrow';
+type Format = 'abbreviated' | 'short' | 'narrow';
 
 interface DateLocalization {
   firstDayOfWeekIndex(): number;
-  format(date: Date | undefined, format: Format): string | Date | undefined;
-  getDayNames(format: AbbreviationFormat): string[];
-  getMonthNames(format: AbbreviationFormat): string[];
+  format(date: Date | undefined, format: LocalizationFormat): string | Date | undefined;
+  getDayNames(format: Format): string[];
+  getMonthNames(format: Format): string[];
 }
 declare const dateLocalization: DateLocalization;
 export default dateLocalization;
