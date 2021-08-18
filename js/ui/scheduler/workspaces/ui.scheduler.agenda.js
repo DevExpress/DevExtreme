@@ -307,11 +307,14 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _createWorkSpaceStaticElements() {
+        this._$dateTableContainer = $('<div>').addClass('dx-scheduler-agenda-date-table-container');
+        this._$dateTableContainer.append(this._$dateTable);
+
         if(this._$groupTable) {
             this._dateTableScrollable.$content().prepend(this._$groupTable);
         }
 
-        this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
+        this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTableContainer);
         this.$element().append(this._dateTableScrollable.$element());
     }
 
@@ -546,6 +549,10 @@ class SchedulerAgenda extends WorkSpace {
 
     _getIntervalDuration() {
         return dateUtils.dateToMilliseconds('day') * this.option('intervalCount');
+    }
+
+    getWorkArea() {
+        return this._$dateTableContainer;
     }
 }
 

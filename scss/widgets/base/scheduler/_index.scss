@@ -1455,15 +1455,6 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-agenda {
     .dx-scheduler-scrollable-appointments {
-      padding-left: $scheduler-agenda-left-column-width;
-
-      .dx-scheduler-small & {
-        &.dx-rtl {
-          padding-left: 0;
-          padding-right: $scheduler-agenda-left-column-width;
-        }
-      }
-
       width: 100%;
       height: 0;
     }
