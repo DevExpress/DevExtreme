@@ -1,12 +1,11 @@
-#choose-temperature {
-    float: right;
-}
-
 .action {
-    width: 320px;
+    width: 330px;
     margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.label {
-    padding-top: 9px;
+.action .dx-selectbox {
+    width: 90px;
 }

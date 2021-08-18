@@ -22,15 +22,14 @@
       <DxLoadingIndicator :enabled="true"/>
     </DxChart>
     <div class="action">
+      <div class="label">Choose a temperature threshold, &deg;C:
+      </div>
       <DxSelectBox
         id="choose-temperature"
         :data-source="temperature"
-        :width="70"
         :value="2"
         :on-value-changed="changeTemperature"
       />
-      <div class="label">Choose a temperature threshold, &deg;C:
-      </div>
     </div>
   </div>
 </template>
@@ -106,14 +105,15 @@ export default {
 };
 </script>
 <style>
-#choose-temperature {
-    float: right;
-}
 .action {
-    width: 320px;
+    width: 330px;
     margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-.label {
-    padding-top: 9px;
+
+.action .dx-selectbox {
+    width: 90px;
 }
 </style>

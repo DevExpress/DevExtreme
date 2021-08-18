@@ -1,10 +1,11 @@
-::ng-deep #choose-temperature {
-    float: right;
-}
 ::ng-deep .action {
-    width: 320px;
+    width: 330px;
     margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-::ng-deep .label {
-    padding-top: 9px;
+
+::ng-deep .action .dx-selectbox {
+    width: 90px;
 }

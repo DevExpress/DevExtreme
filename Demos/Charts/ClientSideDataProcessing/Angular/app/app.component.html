@@ -18,14 +18,13 @@
         <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
     </dx-chart>
     <div class="action">
+        <div class="label">Choose a temperature threshold, &deg;C:
+        </div>
         <dx-select-box
             id="choose-temperature"
             [dataSource]="temperature"
-            [width]="70"
             [value]="2"
             (onValueChanged)="onValueChanged($event)"
         ></dx-select-box>
-        <div class="label">Choose a temperature threshold, &deg;C:
-        </div>
     </div>
 </div>

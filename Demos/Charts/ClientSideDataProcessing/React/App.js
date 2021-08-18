@@ -72,14 +72,13 @@ class App extends React.Component {
           <LoadingIndicator enabled={true} />
         </Chart>
         <div className="action">
+          <div className="label">Choose a temperature threshold, &deg;C:
+          </div>
           <SelectBox
             id="choose-temperature"
             dataSource={this.temperature}
-            width={70}
             defaultValue={2}
             onValueChanged={this.changeTemperature} />
-          <div className="label">Choose a temperature threshold, &deg;C:
-          </div>
         </div>
       </div>
     );

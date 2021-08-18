@@ -57,7 +57,6 @@ window.onload = function() {
         },
         temperatureOptions: {
             dataSource: [2, 4, 6, 8, 9, 10, 11],
-            width: 70,
             value: 2,
             onValueChanged: function (data) {
                 var t = data.value;

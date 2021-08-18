@@ -50,7 +50,6 @@ $(function(){
     
     $("#choose-temperature").dxSelectBox({
         dataSource: [2, 4, 6, 8, 9, 10, 11],
-        width: 70,
         value: 2,
         onValueChanged: function (data) {
             source.filter(['t', '>', data.value]);
