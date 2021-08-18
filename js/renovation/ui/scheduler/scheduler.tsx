@@ -156,6 +156,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return getCurrentViewConfig(this.currentViewProps, this.props);
   }
 
+  get startViewDate(): Date {
+    if (this.viewDataProvider) {
+      return this.viewDataProvider.getStartViewDate();
+    }
+
+    return this.currentViewConfig.currentDate;
+  }
+
   @Method()
   getComponentInstance(): dxScheduler {
     return this.instance;
@@ -241,13 +249,5 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   setCurrentDate(date: Date): void {
     this.props.currentDate = date;
-  }
-
-  get startViewDate(): Date {
-    if (this.viewDataProvider) {
-      return this.viewDataProvider.getStartViewDate();
-    }
-
-    return this.currentViewConfig.currentDate;
   }
 }
