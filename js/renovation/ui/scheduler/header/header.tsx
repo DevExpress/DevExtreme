@@ -18,6 +18,7 @@ import {
   getCaption,
   getStep, getViewName,
   getNextIntervalDate,
+  getViewType, nextWeek,
 } from '../../../../ui/scheduler/header/utils';
 import { formToolbarItem, formatViews } from './utils';
 
@@ -34,7 +35,13 @@ import { ToolbarItem } from '../../toolbar/toolbar_props';
 const { trimTime } = dateUtils;
 
 export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => (
-  <Toolbar items={viewModel.items} />
+  <div
+    className="dx-scheduler-header"
+  >
+    <Toolbar
+      items={viewModel.items}
+    />
+  </div>
 );
 
 @ComponentBindings()
@@ -48,6 +55,8 @@ export class SchedulerToolbarBaseProps {
   @OneWay() currentDate: Date = new Date();
 
   @Event() onCurrentDateUpdate!: (date: Date) => void;
+
+  @OneWay() startViewDate?: Date;
 
   @OneWay() intervalCount = 1;
 
@@ -71,13 +80,27 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
     return getStep(this.props.currentView) as string;
   }
 
+  get displayedDate(): Date {
+    if (this.props.startViewDate) {
+      const startViewDate = new Date(this.props.startViewDate);
+
+      if (this.isMonth()) {
+        return nextWeek(startViewDate);
+      }
+
+      return startViewDate;
+    }
+
+    return new Date(this.props.currentDate);
+  }
+
   get caption(): DateNavigatorTextInfo {
     const options = {
       step: this.step,
       intervalCount: this.props.intervalCount,
       firstDayOfWeek: this.props.firstDayOfWeek,
       agendaDuration: this.props.agendaDuration,
-      date: this.props.currentDate,
+      date: this.displayedDate,
     };
 
     return getCaption(
@@ -97,6 +120,11 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
 
   get selectedView(): string {
     return getViewName(this.props.currentView) as string;
+  }
+
+  isMonth(): boolean {
+    const { currentView } = this.props;
+    return getViewType(currentView) as string === 'month';
   }
 
   setCurrentView(view: ItemView): void {
