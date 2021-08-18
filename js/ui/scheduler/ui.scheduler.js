@@ -144,17 +144,6 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends Widget {
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
-            /**
-                * @pseudo StartDayHour
-                * @type number
-                * @default 0
-                */
-
-            /**
-                * @pseudo EndDayHour
-                * @type number
-                * @default 24
-                */
 
             /**
                 * @pseudo Groups
