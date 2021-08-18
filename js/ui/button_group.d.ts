@@ -176,6 +176,12 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * @docid
+     * @public
+     */
+    elementAttr?: { [key: string]: any };
 }
 
 /** @public */

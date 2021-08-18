@@ -4552,6 +4552,11 @@ declare module DevExpress.ui {
      * [descr:dxButtonGroupItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * [descr:dxButtonGroupItem.elementAttr]
+     */
+    elementAttr?: { [key: string]: any };
   }
   /**
    * @deprecated use Properties instead
