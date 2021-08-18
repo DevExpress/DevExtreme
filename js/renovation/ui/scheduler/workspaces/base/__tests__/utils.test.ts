@@ -112,7 +112,7 @@ describe('Workspace base utils', () => {
     it('should return date', () => {
       const date = new Date(2021, 8, 11);
 
-      expect(getDateForHeaderText(1, date))
+      expect(getDateForHeaderText(1, date, {} as any))
         .toBe(date);
     });
   });

@@ -11,7 +11,6 @@ import { GroupOrientation, ViewType } from '../types';
 import {
   DataCellTemplateProps,
   DateTimeCellTemplateProps,
-  GetDateForHeaderText,
   Group,
   ResourceCellTemplateProps,
   ViewMetaData,
@@ -20,6 +19,8 @@ import { BaseWidgetProps } from '../../common/base_props';
 import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
 import { TimePaneLayoutProps } from './base/time_panel/layout';
+import { GetDateForHeaderText } from '../view_model/to_test/views/types';
+import { ScrollableDirection } from '../../scroll_view/types';
 
 @ComponentBindings()
 export class WorkSpaceProps extends BaseWidgetProps {
@@ -137,4 +138,5 @@ export interface ViewRenderConfig {
   getDateForHeaderText: GetDateForHeaderText;
   isRenderDateHeader: boolean;
   isGenerateWeekDaysHeaderData: boolean;
+  scrollingDirection: ScrollableDirection;
 }

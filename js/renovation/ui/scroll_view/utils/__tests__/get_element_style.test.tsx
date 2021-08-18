@@ -98,7 +98,7 @@ describe('getElementOverflowX', () => {
 
 describe('getElementOverflowY', () => {
   it('element is not defined', () => {
-    expect(getElementOverflowX(null)).toEqual('visible');
+    expect(getElementOverflowY(null)).toEqual('visible');
   });
 
   it('overflowY: hidden', () => {
