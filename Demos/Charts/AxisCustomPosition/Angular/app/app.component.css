@@ -6,13 +6,13 @@
 
 ::ng-deep .option {
   margin-top: 10px;
-  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 ::ng-deep .option > span {
   margin-right: 20px;
-  margin-top: 6px;
-  float: left;
 }
 
 ::ng-deep .caption {
@@ -22,14 +22,14 @@
 
 ::ng-deep .option > .dx-numberbox {
   width: 90px;
-  float: right;
+  margin-left: auto;
 }
 
 ::ng-deep .common {
   width: 488px;
 }
 
-::ng-deep .block {
+::ng-deep ::ng-deep .block {
   vertical-align: middle;
   margin-top: 10px;
 }

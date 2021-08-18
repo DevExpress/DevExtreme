@@ -118,13 +118,13 @@ export default {
 
 .option {
   margin-top: 10px;
-  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .option > span {
   margin-right: 20px;
-  margin-top: 6px;
-  float: left;
 }
 
 .caption {
@@ -134,7 +134,7 @@ export default {
 
 .option > .dx-numberbox {
   width: 90px;
-  float: right;
+  margin-left: auto;
 }
 
 .common {
