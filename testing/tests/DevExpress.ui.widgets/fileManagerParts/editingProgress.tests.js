@@ -357,6 +357,46 @@ const createTestData = () => {
             { updatedOnlyFiles: false, type: 'editing-onSuccess' }
         ],
 
+        'single request - delete multiple items with opened progress panel': [
+            { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
+            { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
+            {
+                details: [
+                    {
+                        commonText: 'Folder 3',
+                        imageUrl: 'folder'
+                    },
+                    {
+                        commonText: 'File 1.txt',
+                        imageUrl: 'txtfile'
+                    },
+                    {
+                        commonText: 'File 2.jpg',
+                        imageUrl: 'image'
+                    }
+                ],
+                operationId: 1,
+                type: 'progress-addOperationDetails'
+            },
+            {
+                commonProgress: 100,
+                itemIndex: 0,
+                operationId: 1,
+                type: 'progress-completeOperationItem'
+            },
+            {
+                commonProgress: 100,
+                itemIndex: 0,
+                itemProgress: 100,
+                operationId: 1,
+                type: 'progress-updateOperationItemProgress'
+            },
+            { commonText: 'Deleted 3 items from Files', type: 'notification-_showPopup' },
+            { operationId: 1, commonText: 'Deleted 3 items from Files', isError: false, type: 'progress-completeOperation' },
+            { message: '', status: 'default', type: 'notification-onActionProgress' },
+            { updatedOnlyFiles: false, type: 'editing-onSuccess' }
+        ],
+
         'upload multiple files': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
@@ -644,6 +684,25 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         startDeleteItems(this, 3)
             .then((items, itemCount) => {
                 assert.equal(items.length, itemCount, 'item count decreased');
+                assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
+                done();
+            });
+
+        this.clock.tick(10000);
+    });
+
+    test('single request - delete multiple items with opened progress panel', function(assert) {
+        prepareEnvironment(this, {
+            provider: { requestMode: 'single' },
+            notification: { progressPanelOpened: true }
+        });
+
+        const done = assert.async();
+        const expectedEvents = createTestData()['single request - delete multiple items with opened progress panel'];
+
+        startDeleteItems(this, 3)
+            .then((items, itemCount) => {
+                assert.equal(items.length, itemCount - 3, 'item count decreased');
                 assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
                 done();
             });
