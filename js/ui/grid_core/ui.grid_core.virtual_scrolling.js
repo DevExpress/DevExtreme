@@ -826,7 +826,9 @@ export const virtualScrollingModule = {
                             this._dataSource?.setViewportItemIndex(this._rowsScrollController.getViewportItemIndex());
                         });
 
-                        this._updateLoadViewportParams();
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            this._updateLoadViewportParams();
+                        }
 
                         if(this.isLoaded() && !this.option(NEW_SCROLLING_MODE)) {
                             this._rowsScrollController.load();
