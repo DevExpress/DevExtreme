@@ -107,6 +107,7 @@ export const viewFunction = ({
     className,
     isAllDayPanelSupported,
     isRenderDateHeader,
+    scrollingDirection,
   },
   headerPanelTemplate,
   dateTableTemplate,
@@ -131,14 +132,11 @@ export const viewFunction = ({
     dateTableTemplate={dateTableTemplate}
     timePanelTemplate={timePanelTemplate}
 
-    // headerPanelTemplate={HeaderPanelLayout}
-    // dateTableTemplate={DateTableLayoutBase}
-    // timePanelTemplate={TimePanelTableLayout}
-
     isAllDayPanelCollapsed={!allDayPanelExpanded}
     isAllDayPanelSupported={isAllDayPanelSupported}
     isAllDayPanelVisible={isAllDayPanelVisible}
     isRenderDateHeader={isRenderDateHeader}
+    scrollingDirection={scrollingDirection}
 
     className={className}
     dateTableRef={dateTableRef}
