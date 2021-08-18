@@ -145,17 +145,6 @@ class Scheduler extends Widget {
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
 
-            /**
-                * @pseudo AppointmentCollectorTemplate
-                * @type template|function
-                * @default "appointmentCollector"
-                * @type_function_param1 data:object
-                * @type_function_param1_field1 appointmentCount:number
-                * @type_function_param1_field2 isCompact:boolean
-                * @type_function_param2 collectorElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
             views: ['day', 'week'],
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
             currentDate: dateUtils.trimTime(new Date()),

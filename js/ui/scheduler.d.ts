@@ -209,7 +209,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "appointmentCollector"
-     * @extends AppointmentCollectorTemplate
+     * @type template|function
+     * @type_function_param1 data:object
+     * @type_function_param1_field1 appointmentCount:number
+     * @type_function_param1_field2 isCompact:boolean
+     * @type_function_param2 collectorElement:DxElement
+     * @type_function_return string|Element|jQuery
      * @public
      */
     appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
@@ -894,7 +899,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "appointmentCollector"
-       * @extends AppointmentCollectorTemplate
+       * @type template|function
+       * @type_function_param1 data:object
+       * @type_function_param1_field1 appointmentCount:number
+       * @type_function_param1_field2 isCompact:boolean
+       * @type_function_param2 collectorElement:DxElement
+       * @type_function_return string|Element|jQuery
        */
       appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
       /**
