@@ -9,18 +9,103 @@ import {
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
 import dxScheduler, { dxSchedulerAppointment } from '../../../ui/scheduler';
-import { SchedulerProps } from './props';
+import { ViewProps, SchedulerProps } from './props';
 
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
+import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
+import { CurrentViewConfigType } from './workspaces/props';
+import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
+import { WorkSpace } from './workspaces/base/work_space';
 
-export const viewFunction = (viewModel: Scheduler): JSX.Element => {
-  const { restAttributes } = viewModel;
+export const viewFunction = ({
+  restAttributes,
+  currentViewConfig,
+  onViewRendered,
+  props: {
+    accessKey,
+    activeStateEnabled,
+    disabled,
+    focusStateEnabled,
+    height,
+    hint,
+    hoverStateEnabled,
+    rtlEnabled,
+    tabIndex,
+    visible,
+    width,
+    className,
+  },
+}: Scheduler): JSX.Element => {
+  const {
+    firstDayOfWeek,
+    startDayHour,
+    endDayHour,
+    cellDuration,
+    groupByDate,
+    scrolling,
+    currentDate,
+    intervalCount,
+    groupOrientation,
+    startDate,
+    showAllDayPanel,
+    showCurrentTimeIndicator,
+    indicatorUpdateInterval,
+    shadeUntilCurrentTime,
+    crossScrollingEnabled,
+    hoursInterval,
+    groups,
+
+    indicatorTime,
+    allowMultipleCellSelection,
+    allDayPanelExpanded,
+    type,
+  } = currentViewConfig;
   return (
-    <Widget
-      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-    />
+    <Widget // eslint-disable-line jsx-a11y/no-access-key
+      classes="dx-scheduler"
+      accessKey={accessKey}
+      activeStateEnabled={activeStateEnabled}
+      disabled={disabled}
+      focusStateEnabled={focusStateEnabled}
+      height={height}
+      hint={hint}
+      hoverStateEnabled={hoverStateEnabled}
+      rtlEnabled={rtlEnabled}
+      tabIndex={tabIndex}
+      visible={visible}
+      width={width}
+      className={className}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...restAttributes}
+    >
+      <WorkSpace
+        firstDayOfWeek={firstDayOfWeek}
+        startDayHour={startDayHour}
+        endDayHour={endDayHour}
+        cellDuration={cellDuration}
+        groupByDate={groupByDate}
+        scrolling={scrolling}
+        currentDate={currentDate}
+        intervalCount={intervalCount}
+        groupOrientation={groupOrientation}
+        startDate={startDate}
+        showAllDayPanel={showAllDayPanel}
+        showCurrentTimeIndicator={showCurrentTimeIndicator}
+        indicatorUpdateInterval={indicatorUpdateInterval}
+        shadeUntilCurrentTime={shadeUntilCurrentTime}
+        crossScrollingEnabled={crossScrollingEnabled}
+        hoursInterval={hoursInterval}
+        groups={groups}
+        type={type}
+
+        indicatorTime={indicatorTime}
+        allowMultipleCellSelection={allowMultipleCellSelection}
+        allDayPanelExpanded={allDayPanelExpanded}
+        onViewRendered={onViewRendered}
+      />
+    </Widget>
   );
 };
 
@@ -29,8 +114,22 @@ export const viewFunction = (viewModel: Scheduler): JSX.Element => {
   view: viewFunction,
 })
 export class Scheduler extends JSXComponent(SchedulerProps) {
-  @InternalState()
-  instance!: dxScheduler;
+  @InternalState() instance!: dxScheduler;
+
+  @InternalState() viewDataProvider!: ViewDataProviderType;
+
+  @InternalState() cellsMetaData!: CellsMetaData;
+
+  // https://github.com/DevExpress/devextreme-renovation/issues/754
+  get currentViewProps(): Partial<ViewProps> {
+    const { views, currentView } = this.props;
+
+    return getCurrentViewProps(currentView, views);
+  }
+
+  get currentViewConfig(): CurrentViewConfigType {
+    return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
 
   @Method()
   getComponentInstance(): dxScheduler {
@@ -104,5 +203,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @Effect({ run: 'once' })
   dispose(): DisposeEffectReturn {
     return () => { this.instance.dispose(); };
+  }
+
+  onViewRendered(viewMetaData: ViewMetaData): void {
+    this.viewDataProvider = viewMetaData.viewDataProvider;
+    this.cellsMetaData = viewMetaData.cellsMetaData;
   }
 }

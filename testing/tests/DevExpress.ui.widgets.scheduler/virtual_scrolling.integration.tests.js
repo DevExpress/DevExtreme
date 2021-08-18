@@ -183,6 +183,39 @@ module('Virtual scrolling integration', () => {
                 });
             });
         });
+
+        [
+            {
+                isRenovatedAppointments: true,
+                expected: -1
+            }, {
+                isRenovatedAppointments: false,
+                expected: 15
+            }
+        ].forEach(({ isRenovatedAppointments, expected }) => {
+            test(`appointment render timeout should be initialized correctly if isRenovatedAppointments is ${isRenovatedAppointments}`, function(assert) {
+                const instance = createWrapper({
+                    views: supportedViews,
+                    currentView: 'day',
+                    dataSource: [],
+                    scrolling: { mode: 'virtual' },
+                    height: 400,
+                    isRenovatedAppointments
+                }).instance;
+
+                const workspace = instance.getWorkSpace();
+                const { virtualScrollingDispatcher } = workspace;
+                const { renderer } = virtualScrollingDispatcher;
+
+                assert.equal(
+                    renderer.getRenderTimeout(),
+                    expected,
+                    'appointment render timeout is correct'
+                );
+            });
+
+
+        });
     });
 
     module('AppointmentSettings', {

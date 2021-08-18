@@ -349,6 +349,8 @@
                     new Error().stack
                 );
             }
+
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestStarted"))), { name: getTestCaseName(testSuite, qunitData) });
         };
 
         var indicateTestStatusInTitle = function(failed) {
@@ -437,6 +439,8 @@
                     new Error().stack
                 );
             }
+
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestCompleted"))), { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
@@ -479,12 +483,10 @@
         }
 
         function notifySuiteFinalized(name, passed, runtime) {
-            var url = @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized")));
-            $.post(url, { name: name, passed: passed, runtime: runtime });
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))), { name: name, passed: passed, runtime: runtime });
         }
         function notifyIsAlive(){
-            var url = @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive")));
-            $.post(url);
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))));
         }
 
         function roundTime(time) {

@@ -841,7 +841,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             ? this._groupedStrategy.getAllDayTableHeight()
             : 0;
 
-        headerPanelHeight && this._headerScrollable && this._headerScrollable.$element().height(headerPanelHeight + allDayPanelHeight);
+        headerPanelHeight && this._headerScrollable && this._headerScrollable.option('height', headerPanelHeight + allDayPanelHeight);
 
         headerPanelHeight && this._dateTableScrollable.$element().css({
             'paddingBottom': allDayPanelHeight + headerPanelHeight + 'px',
@@ -2181,7 +2181,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'intervalCount':
                 this._cleanWorkSpace();
                 this._toggleWorkSpaceCountClass();
-                this._toggleFixedScrollableClass();
                 break;
             case 'groupByDate':
                 this._cleanWorkSpace();
@@ -2468,7 +2467,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this._toggleGroupedClass();
-        this._toggleFixedScrollableClass();
 
         this._renderView();
         this._attachEvents();
@@ -2483,8 +2481,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _toggleGroupedClass() {
         this.$element().toggleClass(GROUPED_WORKSPACE_CLASS, this._getGroupCount() > 0);
     }
-
-    _toggleFixedScrollableClass() { return noop(); }
 
     _renderView() {
         if(this.isRenovatedRender()) {

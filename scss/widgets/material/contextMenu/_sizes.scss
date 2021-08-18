@@ -9,7 +9,7 @@ $material-context-menu-font-size: null !default;
 @if $size == "default" {
   $material-context-menu-horizontal-padding: 16px !default;
   $material-context-menu-container-vertical-padding: 8px !default;
-  $material-context-menu-font-size: 15px !default;
+  $material-context-menu-font-size: 14px !default;
 }
 
 @else if $size == "compact" {

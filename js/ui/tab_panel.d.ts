@@ -26,7 +26,7 @@ import {
 } from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
-    dxMultiViewItem,
+    Item as dxMultiViewItem,
     dxMultiViewOptions,
 } from './multi_view';
 

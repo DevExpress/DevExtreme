@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/validation" as *;
+@use "../textEditor/sizes" as *;
 
 // adduse
 @use "../overlay";
@@ -15,6 +16,12 @@
   background-color: transparent;
   color: $validation-message-background-color;
   padding: $material-validation-message-padding 0 0;
+
+  .dx-editor-filled &,
+  .dx-editor-outlined & {
+    padding-left: $material-filled-texteditor-input-horizontal-padding;
+    padding-right: $material-filled-texteditor-input-horizontal-padding;
+  }
 }
 
 .dx-validationsummary > .dx-validationsummary-item:not(:last-child) {

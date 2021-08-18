@@ -621,7 +621,8 @@ QUnit.module('integration', () => {
             opened: true
         });
 
-        const $popover = $('.dx-popover'); const $target = $($popover.dxPopover('option', 'target'));
+        const $popover = $('.dx-popover');
+        const $target = $($popover.dxPopover('option', 'target'));
 
         assert.equal($target.get(0), $dropDownMenu.get(0), 'popover target is drop down menu button');
     });
@@ -995,10 +996,12 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria-activedescendant on widget should point to focused list item', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3], opened: true }); const instance = $element.dxDropDownMenu('instance');
+        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3], opened: true });
+        const instance = $element.dxDropDownMenu('instance');
         instance.close();
 
-        const $listItem = $element.find('.dx-list-item:first'); const list = $element.find('.dx-list').dxList('instance');
+        const $listItem = $element.find('.dx-list-item:first');
+        const list = $element.find('.dx-list').dxList('instance');
 
         instance.open();
         list.option('focusedElement', $listItem);
@@ -1008,7 +1011,8 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria-expanded property', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3] }); const instance = $element.dxDropDownMenu('instance');
+        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3] });
+        const instance = $element.dxDropDownMenu('instance');
 
         instance.close();
         assert.equal($element.attr('aria-expanded'), 'false', 'collapsed by default');

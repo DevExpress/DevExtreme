@@ -150,7 +150,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             },
             scrolling: {
                 useNative: true,
-                showScrollbar: true
+                showScrollbar: 'onScroll'
             },
             columnFixing: {
                 enabled: true
@@ -195,7 +195,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             },
             scrolling: {
                 useNative: false,
-                showScrollbar: false
+                showScrollbar: 'never'
             },
             loadingTimeout: null
         }, 'options');

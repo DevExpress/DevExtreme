@@ -27,11 +27,11 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-    dxToolbarItem,
+    Item as dxToolbarItem,
 } from './toolbar';
 
 import {
-    dxContextMenuItem,
+    Item as dxContextMenuItem,
 } from './context_menu';
 
 import {
@@ -368,7 +368,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type object
      * @public
      */
-     sorting?: Sorting;
+     sorting?: dxGanttSorting;
     /**
      * @docid
      * @default null
@@ -931,6 +931,18 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     rootValue?: any;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    startDateRange?: Date;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    endDateRange?: Date;
 }
 /**
  * @docid
@@ -1223,7 +1235,7 @@ export interface dxGanttStripLine {
  * @type object
  * @namespace DevExpress.ui
  */
-export interface Sorting {
+export interface dxGanttSorting {
     /**
      * @docid
      * @default "Sort Ascending"
