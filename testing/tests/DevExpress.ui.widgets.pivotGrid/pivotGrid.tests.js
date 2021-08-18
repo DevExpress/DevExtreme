@@ -2878,11 +2878,6 @@ QUnit.module('dxPivotGrid', {
                 return toCellRect.x - fromCellRect.x - 1;
             }
 
-            function hideExpandIcons() {
-                const style = $('<style />').html('.dx-expand-icon-container { display: none !important; }');
-                $('#pivotArea').append(style);
-            }
-
             function checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, errorMessageDetails) {
                 const $rowsHeaderArea = getArea(pivotGrid, 'row');
                 const $columnsHeaderArea = getArea(pivotGrid, 'column');
@@ -3066,7 +3061,6 @@ QUnit.module('dxPivotGrid', {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
                     }
 
-                    hideExpandIcons();
                     const pivotGrid = createPivotGrid({
                         width: 1000,
                         height: 1000,
@@ -3077,6 +3071,7 @@ QUnit.module('dxPivotGrid', {
                                 { dataField: 'column', area: 'column' },
                                 { dataField: 'row', area: 'row' },
                                 { dataField: 'subField', area: area },
+                                { dataField: 'subField2', area: area },
                                 { dataField: 'data', area: 'data' }
                             ]
                         }
@@ -3108,7 +3103,6 @@ QUnit.module('dxPivotGrid', {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
                     }
 
-                    hideExpandIcons();
                     const pivotGrid = createPivotGrid({
                         width: 1000,
                         height: 1000,
@@ -3119,6 +3113,7 @@ QUnit.module('dxPivotGrid', {
                                 { dataField: 'column', area: 'column' },
                                 { dataField: 'row', area: 'row' },
                                 { dataField: 'subField', area: area },
+                                { dataField: 'subField2', area: area },
                                 { dataField: 'data', area: 'data' }
                             ]
                         }
