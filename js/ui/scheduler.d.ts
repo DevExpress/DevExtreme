@@ -459,7 +459,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     endDateTimeZoneExpr?: string;
     /**
      * @docid
-     * @extends EndDayHour
+     * @type number
+     * @default 24
      * @public
      */
     endDayHour?: number;
@@ -827,7 +828,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     startDateTimeZoneExpr?: string;
     /**
      * @docid
-     * @extends StartDayHour
+     * @type number
+     * @default 0
      * @public
      */
     startDayHour?: number;
@@ -913,7 +915,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @extends EndDayHour
+       * @type number
+       * @default 24
        */
       endDayHour?: number;
       /**
@@ -965,7 +968,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       startDate?: Date | number | string;
       /**
        * @docid
-       * @extends StartDayHour
+       * @type number
+       * @default 0
        */
       startDayHour?: number;
       /**
