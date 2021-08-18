@@ -1,5 +1,8 @@
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
+import { captionize } from '../../core/utils/inflector';
+import { inArray } from '../../core/utils/array';
+import Guid from '../../core/guid';
 
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
@@ -60,4 +63,33 @@ export function getLabelMarkOptions({ showRequiredMark, requiredMark, showOption
         isOptionalMark: showOptionalMark && !isRequired,
         optionalMark
     };
+}
+
+export function getLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation }) {
+    const labelOptions = extend(
+        {
+            showColon: showColonAfterLabel,
+            location: labelLocation,
+            id: id,
+            visible: true,
+            isRequired: isRequired
+        },
+        item ? item.label : {},
+        { markOptions: getLabelMarkOptions(managerMarkOptions, isRequired) }
+    );
+
+    const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
+    if(inArray(item.editorType, editorsRequiringIdForLabel) !== -1) {
+        labelOptions.labelID = `dx-label-${new Guid()}`;
+    }
+
+    if(!labelOptions.text && item.dataField) {
+        labelOptions.text = captionize(item.dataField);
+    }
+
+    if(labelOptions.text) {
+        labelOptions.text += labelOptions.showColon ? ':' : '';
+    }
+
+    return labelOptions;
 }

@@ -14,7 +14,6 @@ import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
-import { captionize } from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
 import ResponsiveBox from '../responsive_box';
 import {
@@ -33,7 +32,7 @@ import { getLabelWidthByText } from './components/label';
 import { renderFieldItem } from './components/field_item.js';
 import { renderButtonItem } from './components/button_item.js';
 import { renderEmptyItem } from './components/empty_item.js';
-import { convertToEditorOptions, hasRequiredRuleInSet, getLabelMarkOptions } from './ui.form.layout_manager.utils.js';
+import { convertToEditorOptions, hasRequiredRuleInSet, getLabelMarkOptions, getLabelOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -558,6 +557,8 @@ const LayoutManager = Widget.inherit({
     _renderFieldItem: function(item, $container) {
         const template = item.template ? this._getTemplate(item.template) : null;
         const editorValue = this._getDataByField(item.dataField);
+        const managerMarkOptions = this._getMarkOptions();
+        const isFlexSupported = this._hasBrowserFlex();
         let isCheckboxUndefinedStateEnabled = false;
         if(editorValue === undefined) {
             isCheckboxUndefinedStateEnabled = this._isCheckboxUndefinedStateEnabled({
@@ -567,15 +568,19 @@ const LayoutManager = Widget.inherit({
         const name = item.dataField || item.name;
         const formInstance = this.option('form');
         const id = formInstance && formInstance.getItemID(name);
+
         const isRequired = isDefined(item.isRequired) ? item.isRequired : !!hasRequiredRuleInSet(item.validationRules);
         const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
         const helpText = item.helpText;
 
-        const labelOptions = this._getLabelOptions(item, id, isRequired);
+        const labelOptions = getLabelOptions({
+            item, id, isRequired, managerMarkOptions,
+            showColonAfterLabel: this.option('showColonAfterLabel'),
+            labelLocation: this.option('labelLocation'),
+        });
         const needRenderLabel = labelOptions.visible && labelOptions.text;
         const { location: labelLocation, labelID } = labelOptions;
-        const isFlexSupported = this._hasBrowserFlex();
         const labelNeedBaselineAlign =
             labelLocation !== 'top'
             &&
@@ -620,35 +625,6 @@ const LayoutManager = Widget.inherit({
             guid: item.guid,
             $itemContainer: $container
         });
-    },
-
-    _getLabelOptions: function(item, id, isRequired) {
-        const labelOptions = extend(
-            {
-                showColon: this.option('showColonAfterLabel'),
-                location: this.option('labelLocation'),
-                id: id,
-                visible: true,
-                isRequired: isRequired
-            },
-            item ? item.label : {},
-            { markOptions: getLabelMarkOptions(this._getMarkOptions(), isRequired) }
-        );
-
-        const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
-        if(inArray(item.editorType, editorsRequiringIdForLabel) !== -1) {
-            labelOptions.labelID = `dx-label-${new Guid()}`;
-        }
-
-        if(!labelOptions.text && item.dataField) {
-            labelOptions.text = captionize(item.dataField);
-        }
-
-        if(labelOptions.text) {
-            labelOptions.text += labelOptions.showColon ? ':' : '';
-        }
-
-        return labelOptions;
     },
 
     _getLabelWidthByText: function({ text, location }) {
