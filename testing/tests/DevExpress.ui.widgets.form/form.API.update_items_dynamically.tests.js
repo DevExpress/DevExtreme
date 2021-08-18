@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/form/ui.form';
 import 'ui/form/ui.form.layout_manager';
+import { renderLabel } from 'ui/form/components/label.js';
 
 import 'generic_light.css!';
 
@@ -32,7 +33,7 @@ class FormTestWrapper {
     }
 
     _getLabelWidth(text) {
-        const $label = this._form._rootLayoutManager._renderLabel({ text: text, location: 'left' }).appendTo(this._getTestContainer());
+        const $label = renderLabel({ text: text, location: 'left' }).appendTo(this._getTestContainer());
         const width = $label.children().first().width();
         $label.remove();
         return width;
