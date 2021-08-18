@@ -164,22 +164,40 @@ const Popover = Popup.inherit({
             resizeEnabled: false,
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name dxPopoverOptions.onResizeStart
-            * @extends Action
             * @action
             * @hidden
             */
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name dxPopoverOptions.onResize
-            * @extends Action
             * @action
             * @hidden
             */
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name dxPopoverOptions.onResizeEnd
-            * @extends Action
             * @action
             * @hidden
             */
