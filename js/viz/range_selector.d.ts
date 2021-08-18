@@ -306,7 +306,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     containerBackgroundColor?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;

@@ -112,7 +112,8 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     alignment?: 'bottom' | 'center' | 'top' | Array<'bottom' | 'center' | 'top'>;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
