@@ -740,7 +740,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     remoteFiltering?: boolean;
     /**
      * @docid
-     * @extends ResourceCellTemplate
+     * @type template|function
+     * @default null
+     * @type_function_param1 itemData:object
+     * @type_function_param2 itemIndex:number
+     * @type_function_param3 itemElement:DxElement
+     * @type_function_return string|Element|jQuery
      * @public
      */
     resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -988,7 +993,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       name?: string;
       /**
        * @docid
-       * @extends ResourceCellTemplate
+       * @type template|function
+       * @default null
+       * @type_function_param1 itemData:object
+       * @type_function_param2 itemIndex:number
+       * @type_function_param3 itemElement:DxElement
+       * @type_function_return string|Element|jQuery
        */
       resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
