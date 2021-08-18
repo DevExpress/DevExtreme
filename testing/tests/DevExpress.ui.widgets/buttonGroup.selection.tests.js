@@ -494,7 +494,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
 
 QUnit.module('selectionMode', () => {
     QUnit.test('selectionMode=multiple, selectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'multiple',
             selectedItemKeys: [1, 2, 3],
@@ -515,7 +515,7 @@ QUnit.module('selectionMode', () => {
             { id: 3, text: 'button 3' },
         ];
 
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'multiple',
             items: items,
@@ -526,7 +526,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=multiple -> setSelectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'multiple',
             items: [
@@ -547,7 +547,7 @@ QUnit.module('selectionMode', () => {
             { id: 3, text: 'button 3' },
         ];
 
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'multiple',
             items: items,
@@ -558,7 +558,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=single, selectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'single',
             selectedItemKeys: [1, 2, 3],
@@ -579,7 +579,7 @@ QUnit.module('selectionMode', () => {
             { id: 3, text: 'button 3' },
         ];
 
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'single',
             items: items,
@@ -590,7 +590,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=single -> setSelectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'single',
             items: [
@@ -611,7 +611,7 @@ QUnit.module('selectionMode', () => {
             { id: 3, text: 'button 3' },
         ];
 
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'single',
             items: items,
@@ -622,7 +622,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=none, selectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'none',
             selectedItemKeys: [1, 2, 3],
@@ -643,7 +643,7 @@ QUnit.module('selectionMode', () => {
             { id: 3, text: 'button 3' },
         ];
 
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'none',
             items: items,
@@ -654,7 +654,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=none -> setSelectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'none',
             items: [
@@ -675,7 +675,7 @@ QUnit.module('selectionMode', () => {
             { id: 3, text: 'button 3' },
         ];
 
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'none',
             items: items,
@@ -686,7 +686,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=multiple -> clickByItem1, clickByItem2, clickByItem3 -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'multiple',
             items: [
@@ -707,7 +707,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=single -> clickByItem1, clickByItem2, clickByItem3 -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'single',
             items: [
@@ -728,7 +728,7 @@ QUnit.module('selectionMode', () => {
     });
 
     QUnit.test('selectionMode=none -> clickByItem1, clickByItem2, clickByItem3 -> getSelectedKeys', function(assert) {
-        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+        const buttonGroup = $('#widget').dxButtonGroup({
             keyExpr: 'id',
             selectionMode: 'none',
             items: [
