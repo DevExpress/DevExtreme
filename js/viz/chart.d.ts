@@ -709,7 +709,8 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           font?: Font;
           /**
            * @docid
-           * @extends CommonVizFormat
+           * @type format
+           * @default undefined
            */
           format?: format;
           /**
@@ -760,7 +761,8 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         font?: Font;
         /**
          * @docid
-         * @extends CommonVizFormat
+         * @type format
+         * @default undefined
          */
         format?: format;
         /**
@@ -815,7 +817,8 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           font?: Font;
           /**
            * @docid
-           * @extends CommonVizFormat
+           * @type format
+           * @default undefined
            */
           format?: format;
           /**
@@ -1510,7 +1513,8 @@ export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel
     customizeText?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.argumentAxis.label.format
-     * @extends CommonVizFormat
+     * @type format
+     * @default undefined
      * @public
      */
     format?: format;
@@ -2598,7 +2602,8 @@ export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
     customizeText?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.valueAxis.label.format
-     * @extends CommonVizFormat
+     * @type format
+     * @default undefined
      * @public
      */
     format?: format;
@@ -3684,7 +3689,8 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
     alignment?: 'center' | 'left' | 'right';
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.argumentFormat
-     * @extends CommonVizFormat
+     * @type format
+     * @default undefined
      * @public
      */
     argumentFormat?: format;
@@ -3763,7 +3769,8 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
     font?: Font;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.format
-     * @extends CommonVizFormat
+     * @type format
+     * @default undefined
      * @public
      */
     format?: format;
