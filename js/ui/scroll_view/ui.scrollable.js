@@ -19,6 +19,7 @@ import NativeStrategy from './ui.scrollable.native';
 import { deviceDependentOptions } from './ui.scrollable.device';
 import { when } from '../../core/utils/deferred';
 import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
+import { getElementLocationInternal } from '../../renovation/ui/scroll_view/utils/get_element_location_internal';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -492,38 +493,15 @@ const Scrollable = DOMComponent.inherit({
     },
 
     getScrollElementPosition: function($element, direction, offset) {
-        offset = offset || {};
-        const isVertical = direction === VERTICAL;
-        const startOffset = (isVertical ? offset.top : offset.left) || 0;
-        const endOffset = (isVertical ? offset.bottom : offset.right) || 0;
-        const elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
-        const elementPosition = elementPositionRelativeToContent;
-        const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
-        const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
-        const clientSize = $(this.container()).get(0)[isVertical ? 'clientHeight' : 'clientWidth'];
+        const scrollOffset = this.scrollOffset();
 
-        const startDistance = scrollLocation - elementPosition + startOffset;
-        const endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
-
-        if(startDistance <= 0 && endDistance >= 0) {
-            return scrollLocation;
-        }
-
-        return scrollLocation - (Math.abs(startDistance) > Math.abs(endDistance) ? endDistance : startDistance);
-    },
-
-    _elementPositionRelativeToContent: function($element, prop) {
-        let result = 0;
-        while(this._hasScrollContent($element)) {
-            result += $element.position()[prop];
-            $element = $element.offsetParent();
-        }
-        return result;
-    },
-
-    _hasScrollContent: function($element) {
-        const $content = this.$content();
-        return $element.closest($content).length && !$element.is($content);
+        return getElementLocationInternal(
+            $element.get(0),
+            direction,
+            $(this.container()).get(0),
+            scrollOffset,
+            offset,
+        );
     },
 
     _updateIfNeed: function() {

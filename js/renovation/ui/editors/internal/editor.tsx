@@ -162,8 +162,8 @@ export class Editor extends JSXComponent<EditorPropsType>() {
   get shouldShowValidationMessage(): boolean {
     const { isValid, validationStatus } = this.props;
     const validationErrors = this.validationErrors ?? [];
-    return !isValid
-        && validationStatus === 'invalid'
+    const isEditorValid = isValid && validationStatus !== 'invalid';
+    return !isEditorValid
         && validationErrors.length > 0;
   }
 
