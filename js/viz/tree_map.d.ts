@@ -149,7 +149,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     };
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;

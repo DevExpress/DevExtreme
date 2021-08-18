@@ -364,7 +364,8 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       /**
        * @docid
        * @type object|Store|DataSource|DataSourceOptions|string|Array<any>
-       * @extends CommonVizDataSource
+       * @type Array<any>|Store|DataSource|DataSourceOptions|string
+       * @notUsedInTheme
        */
       dataSource?: any | Store | DataSource | DataSourceOptions | string;
       /**
