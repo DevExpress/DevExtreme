@@ -455,7 +455,7 @@ const moduleConfig = {
             }).dxDataGrid('instance');
 
             exportDataGrid(getOptions(this, dataGrid, null, true)).then(() => {
-                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column, 0.2);
+                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column);
                 done();
             });
         });
