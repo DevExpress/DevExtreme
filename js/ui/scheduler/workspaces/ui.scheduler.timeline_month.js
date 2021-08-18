@@ -3,8 +3,8 @@ import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import { getViewStartByOptions } from './utils/month';
-import { formatWeekdayAndDay } from './utils/base';
+import { getViewStartByOptions } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
+import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';

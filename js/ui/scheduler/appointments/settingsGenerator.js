@@ -7,7 +7,7 @@ import { createResourcesTree, getGroupCount } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
 import { ExpressionUtils } from '../expressionUtils';
-import { isDateAndTimeView } from '../workspaces/utils/base';
+import { isDateAndTimeView } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createFormattedDateText } from './textUtils';
 
 const toMs = dateUtils.dateToMilliseconds;

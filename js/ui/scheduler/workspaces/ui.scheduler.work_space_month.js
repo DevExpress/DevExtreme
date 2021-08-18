@@ -8,8 +8,8 @@ import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces
 import {
     getViewStartByOptions,
     getCellText,
-} from './utils/month';
-import { calculateDayDuration, formatWeekday } from './utils/base';
+} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
+import { calculateDayDuration, formatWeekday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';

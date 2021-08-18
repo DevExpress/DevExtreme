@@ -4,7 +4,7 @@ import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
 import {
     getWeekendsCount,
     isDataOnWeekend,
-} from './utils/work_week';
+} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
 const LAST_DAY_WEEK_INDEX = 5;

@@ -1,7 +1,7 @@
 import { getBoundingRect } from '../../../core/utils/position';
 import { Cache } from './cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
-import { calculateDayDuration, getVerticalGroupCountClass } from './utils/base';
+import { calculateDayDuration, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
