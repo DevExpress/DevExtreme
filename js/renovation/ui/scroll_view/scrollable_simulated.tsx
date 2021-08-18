@@ -26,7 +26,6 @@ import { AnimatedScrollbar } from './animated_scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { getBoundaryProps } from './utils/get_boundary_props';
-import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import {
@@ -360,61 +359,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const distance = getOffsetDistance(targetLocation, direction, this.scrollOffset());
 
     this.scrollBy(distance);
-  }
-
-  @Method()
-  /* istanbul ignore next */
-  scrollToElement(
-    element: HTMLElement,
-    scrollToOptions: {
-      block: 'start' | 'center' | 'end' | 'nearest';
-      inline: 'start' | 'center' | 'end' | 'nearest';
-      behavior: 'auto'; 'smooth';
-    },
-  ): void {
-    if (!isDefined(element)) {
-      return;
-    }
-
-    const { top, left } = this.scrollOffset();
-    element.scrollIntoView(scrollToOptions || { block: 'nearest', inline: 'nearest' });
-
-    const containerEl = this.containerElement;
-
-    const { direction } = this.props;
-    const distance = getOffsetDistance({ top, left }, direction, this.scrollOffset());
-
-    if (!this.direction.isHorizontal) {
-      containerEl.scrollLeft += distance.left;
-    }
-
-    if (!this.direction.isVertical) {
-      containerEl.scrollTop += distance.top;
-    }
-
-    const { scrollLeft, scrollTop } = containerEl;
-
-    this.vScrollLocation = -scrollTop;
-    this.hScrollLocation = -scrollLeft;
-  }
-
-  @Method()
-  // TODO: it uses for DataGrid only
-  /* istanbul ignore next */
-  getElementLocation(
-    targetElement: HTMLElement,
-    direction: ScrollableDirection,
-    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
-  ): number {
-    const scrollOffset = this.scrollOffset();
-
-    return getElementLocationInternal(
-      targetElement,
-      direction,
-      this.containerElement,
-      scrollOffset,
-      offset,
-    );
   }
 
   @Method()
