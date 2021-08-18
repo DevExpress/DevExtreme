@@ -486,24 +486,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     );
   }
 
-  @Effect()
-  updateContentWidth(): void {
-    // T320141
-    this.contentWidth = getElementOverflowX(this.contentRef.current) === 'hidden'
-      ? this.contentClientWidth
-      // for position absolute elements inside content
-      : Math.max(this.contentScrollWidth, this.contentClientWidth);
-  }
-
-  @Effect()
-  updateContentHeight(): void {
-    // T320141
-    this.contentHeight = getElementOverflowY(this.contentRef.current) === 'hidden'
-      ? this.contentClientHeight
-      // for position absolute elements inside content
-      : Math.max(this.contentScrollHeight, this.contentClientHeight);
-  }
-
   @Method()
   validate(event: DxMouseEvent): boolean {
     if (this.isLocked()) {
@@ -558,6 +540,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.scrollableOffsetTop = top;
 
     this.updateSizes();
+  }
+
+  @Effect()
+  updateContentHeight(): void {
+    // T320141
+    this.contentHeight = getElementOverflowY(this.contentRef.current) === 'hidden'
+      ? this.contentClientHeight
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollHeight, this.contentClientHeight);
+  }
+
+  @Effect()
+  updateContentWidth(): void {
+    // T320141
+    this.contentWidth = getElementOverflowX(this.contentRef.current) === 'hidden'
+      ? this.contentClientWidth
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollWidth, this.contentClientWidth);
   }
 
   scrollByLocation(location: Partial<ScrollOffset>): void {
