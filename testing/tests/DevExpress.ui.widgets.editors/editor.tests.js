@@ -144,20 +144,32 @@ QUnit.module('methods', moduleConfig, () => {
         editor.focus();
     });
 
-    skipForRenovated('blur method', () => {
-        QUnit.testInActiveWindow('The blur() method does not blur the active item', function(assert) {
-            const focusOutSpy = sinon.spy();
-            const editor = this.fixture.createEditor({ value: '123' });
-            const $testElement = $('<input type="button">');
-            $testElement.appendTo('#qunit-fixture');
-            $testElement.on('blur', focusOutSpy);
-            $testElement.focus();
+    QUnit.testInActiveWindow('The blur() method does not blur the active item', function(assert) {
+        const blurSpy = sinon.spy();
+        const editor = this.fixture.createEditor({ value: '123' });
+        const $testElement = $('<input type="button">');
+        $testElement.appendTo('#qunit-fixture');
+        $testElement.on('blur', blurSpy);
+        $testElement.focus();
 
-            editor.blur();
+        editor.blur();
 
-            assert.strictEqual(focusOutSpy.callCount, 0);
-        });
+        assert.strictEqual(blurSpy.callCount, 0);
     });
+
+    if(Editor.IS_RENOVATED_WIDGET) {
+        QUnit.testInActiveWindow('The blur() method should blur editor element if it is active', function(assert) {
+            const blurSpy = sinon.spy();
+            const editor = this.fixture.createEditor({ value: '123', focusStateEnabled: true });
+            const $editor = $(editor.$element());
+            $editor.on('blur', blurSpy);
+
+            $editor.focus();
+            $editor.blur();
+
+            assert.strictEqual(blurSpy.callCount, 1, 'editor element is blurred');
+        });
+    }
 });
 
 QUnit.module('value option', moduleConfig, () => {
@@ -503,7 +515,7 @@ QUnit.module('validation', {
                 assert.strictEqual($content.css('width', 'auto').outerWidth(), contentWidth, 'validation message width is correct');
             });
 
-            QUnit.test('should be max 100px if the editor has smaller size (T376114)', function(assert) {
+            QUnit.test('should be min 100px if the editor has smaller size (T376114)', function(assert) {
                 this.reinitEditor({
                     width: 20,
                     validationMessageMode: 'always',

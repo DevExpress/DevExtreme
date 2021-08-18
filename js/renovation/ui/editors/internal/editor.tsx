@@ -148,6 +148,11 @@ export class Editor extends JSXComponent<EditorPropsType>() {
     this.widgetRef.current!.focus();
   }
 
+  @Method()
+  blur(): void {
+    this.widgetRef.current!.blur();
+  }
+
   onFocusIn(event: Event): void {
     const { onFocusIn } = this.props;
 

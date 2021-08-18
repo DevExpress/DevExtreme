@@ -138,6 +138,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     this.editorRef.current!.focus();
   }
 
+  @Method()
+  blur(): void {
+    this.editorRef.current!.blur();
+  }
+
   @Effect()
   updateIconFontSize(): EffectReturn {
     const iconElement = this.iconRef?.current;
