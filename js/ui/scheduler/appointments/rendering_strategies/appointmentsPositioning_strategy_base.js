@@ -52,7 +52,7 @@ class AppointmentPositioningStrategy {
         const allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
 
         // NOTE: Simplify using only object
-        if(renderingStrategy.hasAllDayAppointments()) {
+        if(renderingStrategy.allDaySupported()) {
             return {
                 allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : renderingStrategy.instance.option('_appointmentCountPerCell'),
                 simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()

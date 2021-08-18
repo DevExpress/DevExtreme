@@ -687,7 +687,7 @@ class BaseRenderingStrategy {
         return this.getPositioningStrategy().getDynamicAppointmentCountPerCell();
     }
 
-    hasAllDayAppointments() {
+    allDaySupported() {
         return false;
     }
 
