@@ -38,6 +38,7 @@
         <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
     </dx-chart>
     <div class="action">
+        <div class="label">Choose a month:</div>
         <dx-select-box
             id="selectbox"
             [items]="months"
@@ -47,6 +48,5 @@
             displayExpr="name"
             (onValueChanged)="onValueChanged($event)"
         ></dx-select-box>
-        <div class="label">Choose a month:</div>
     </div>
 </div>

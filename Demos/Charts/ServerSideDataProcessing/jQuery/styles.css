@@ -1,12 +1,7 @@
-#selectbox {
-    float: right;
-}
-
 .action {
     width: 270px;
     margin-top: 20px;
-}
-
-.label {
-    padding-top: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -82,6 +82,8 @@ class App extends React.Component {
         </Chart>
 
         <div className="action">
+          <div className="label">Choose a month:
+          </div>
           <SelectBox
             id="selectbox"
             width={150}
@@ -90,8 +92,6 @@ class App extends React.Component {
             items={months}
             defaultValue={1}
             onValueChanged={this.onValueChanged} />
-          <div className="label">Choose a month:
-          </div>
         </div>
       </div>
     );

@@ -39,6 +39,7 @@
       <DxLoadingIndicator :enabled="true"/>
     </DxChart>
     <div class="action">
+      <div class="label">Choose a month:</div>
       <DxSelectBox
         id="selectbox"
         :width="150"
@@ -48,7 +49,6 @@
         value-expr="id"
         display-expr="name"
       />
-      <div class="label">Choose a month:</div>
     </div>
   </div>
 </template>
@@ -135,14 +135,11 @@ export default {
 };
 </script>
 <style>
-#selectbox {
-    float: right;
-}
 .action {
     width: 270px;
     margin-top: 20px;
-}
-.label {
-    padding-top: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>
