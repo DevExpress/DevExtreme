@@ -1,13 +1,86 @@
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { captionize } from '../../core/utils/inflector';
 import { inArray } from '../../core/utils/array';
 import Guid from '../../core/guid';
 
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
+const SIMPLE_ITEM_TYPE = 'simple'; // TODO: copy from layout_manager.js
+
+export function convertToRenderFieldItemOptions({
+    $container,
+    containerCssClass,
+    parentComponent,
+    createComponentCallback,
+    useFlexLayout,
+    item, template, name,
+    formLabelLocation,
+    requiredMessageTemplate,
+    validationGroup,
+    editorType,
+    editorValue,
+    defaultEditorName,
+    editorAllowUndefinedValue: isCheckboxUndefinedStateEnabled,
+    externalEditorOptions,
+    editorInputId,
+    editorValidationBoundary,
+    editorStylingMode,
+    isFlexSupported,
+    showColonAfterLabel,
+    managerLabelLocation,
+    manager_id,
+    managerMarkOptions
+}) {
+    const isRequired = isDefined(item.isRequired) ? item.isRequired : !!hasRequiredRuleInSet(item.validationRules);
+    const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
+    const helpID = item.helpText ? ('dx-' + new Guid()) : null;
+    const helpText = item.helpText;
+
+    const labelOptions = getLabelOptions({
+        item, id: manager_id, isRequired, managerMarkOptions,
+        showColonAfterLabel,
+        labelLocation: managerLabelLocation,
+    });
+
+
+    const needRenderLabel = labelOptions.visible && labelOptions.text;
+    const { location: labelLocation, labelID } = labelOptions;
+    const labelNeedBaselineAlign =
+        labelLocation !== 'top'
+        &&
+        (
+            (!!item.helpText && !isFlexSupported)
+            ||
+            inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
+        );
+
+    return {
+        $container,
+        containerCssClass,
+        parentComponent,
+        createComponentCallback,
+        useFlexLayout,
+        labelOptions, labelNeedBaselineAlign, labelLocation, needRenderLabel,
+        item, isSimpleItem, isRequired, template, helpID, labelID, name, helpText,
+        formLabelLocation,
+        requiredMessageTemplate,
+        validationGroup,
+        editorOptions: convertToEditorOptions({
+            editorType,
+            editorValue,
+            defaultEditorName,
+            editorAllowUndefinedValue: isCheckboxUndefinedStateEnabled,
+            externalEditorOptions,
+            editorInputId,
+            editorValidationBoundary,
+            editorStylingMode,
+        })
+    };
+}
 
 export function convertToEditorOptions({
-    editorType, defaultEditorName, editorValue, editorAllowUndefinedValue, editorOptions, editorInputId, editorValidationBoundary, editorStylingMode
+    editorType, defaultEditorName, editorValue, editorAllowUndefinedValue, externalEditorOptions, editorInputId, editorValidationBoundary, editorStylingMode
 }) {
     const editorOptionsWithValue = {};
     if(editorValue !== undefined || editorAllowUndefinedValue) {
@@ -18,7 +91,7 @@ export function convertToEditorOptions({
     }
 
     const result = extend(true, editorOptionsWithValue,
-        editorOptions,
+        externalEditorOptions,
         {
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
@@ -26,12 +99,12 @@ export function convertToEditorOptions({
         },
     );
 
-    if(editorOptions) {
+    if(externalEditorOptions) {
         if(result.dataSource) {
-            result.dataSource = editorOptions.dataSource;
+            result.dataSource = externalEditorOptions.dataSource;
         }
         if(result.items) {
-            result.items = editorOptions.items;
+            result.items = externalEditorOptions.items;
         }
     }
 

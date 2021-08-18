@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import Guid from '../../core/guid';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
@@ -9,7 +8,7 @@ import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { inArray, normalizeIndexes } from '../../core/utils/array';
+import { normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
@@ -32,7 +31,7 @@ import { getLabelWidthByText } from './components/label';
 import { renderFieldItem } from './components/field_item.js';
 import { renderButtonItem } from './components/button_item.js';
 import { renderEmptyItem } from './components/empty_item.js';
-import { convertToEditorOptions, hasRequiredRuleInSet, getLabelMarkOptions, getLabelOptions } from './ui.form.layout_manager.utils.js';
+import { getLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -567,53 +566,32 @@ const LayoutManager = Widget.inherit({
 
         const name = item.dataField || item.name;
         const formInstance = this.option('form');
-        const id = formInstance && formInstance.getItemID(name);
+        const itemId = formInstance && formInstance.getItemID(name);
 
-        const isRequired = isDefined(item.isRequired) ? item.isRequired : !!hasRequiredRuleInSet(item.validationRules);
-        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
-        const helpID = item.helpText ? ('dx-' + new Guid()) : null;
-        const helpText = item.helpText;
-
-        const labelOptions = getLabelOptions({
-            item, id, isRequired, managerMarkOptions,
-            showColonAfterLabel: this.option('showColonAfterLabel'),
-            labelLocation: this.option('labelLocation'),
-        });
-        const needRenderLabel = labelOptions.visible && labelOptions.text;
-        const { location: labelLocation, labelID } = labelOptions;
-        const labelNeedBaselineAlign =
-            labelLocation !== 'top'
-            &&
-            (
-                (!!item.helpText && !isFlexSupported)
-                ||
-                inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
-            );
-
-
-        const editorOptions = convertToEditorOptions({
-            editorType: item.editorType,
-            editorValue,
-            defaultEditorName: item.dataField,
-            editorAllowUndefinedValue: isCheckboxUndefinedStateEnabled,
-            editorOptions: item.editorOptions,
-            editorInputId: id,
-            editorValidationBoundary: this.option('validationBoundary'),
-            editorStylingMode: this.option('form') && this.option('form').option('stylingMode'),
-        });
-
-        const { $fieldEditorContainer, instance } = renderFieldItem({
+        const { $fieldEditorContainer, instance } = renderFieldItem(convertToRenderFieldItemOptions({
             $container,
             containerCssClass: this.option('cssItemClass'),
             parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
             useFlexLayout: isFlexSupported,
-            labelOptions, labelNeedBaselineAlign, labelLocation, needRenderLabel,
-            item, editorOptions, isSimpleItem, isRequired, template, helpID, labelID, name, helpText,
+            item, template, name,
             formLabelLocation: this.option('labelLocation'),
             requiredMessageTemplate: this.option('requiredMessage'),
             validationGroup: this.option('validationGroup'),
-        });
+            editorType: item.editorType,
+            editorValue,
+            defaultEditorName: item.dataField,
+            editorAllowUndefinedValue: isCheckboxUndefinedStateEnabled,
+            externalEditorOptions: item.editorOptions,
+            editorInputId: itemId,
+            editorValidationBoundary: this.option('validationBoundary'),
+            editorStylingMode: this.option('form') && this.option('form').option('stylingMode'),
+            isFlexSupported,
+            showColonAfterLabel: this.option('showColonAfterLabel'),
+            managerLabelLocation: this.option('labelLocation'),
+            manager_id: itemId,
+            managerMarkOptions
+        }));
 
         if(instance && item.dataField) {
             // TODO: move to renderFieldItem ?
