@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
-import { stubComponent } from '../../core/modules_registry';
+import { stubComponent } from '../../core/utils/stubs';
 
 let EditorClass = stubComponent('TextBox');
 
