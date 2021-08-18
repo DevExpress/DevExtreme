@@ -19,6 +19,7 @@ export interface ComponentOptions<T = Component> {
    * @type_function_param1_field1 component:this
    * @type_function_param1_field2 element:DxElement
    * @default null
+   * @action
    * @public
    */
   onInitialized?: ((e: { component?: T; element?: DxElement }) => void);
