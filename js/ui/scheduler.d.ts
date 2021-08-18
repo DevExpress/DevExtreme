@@ -310,7 +310,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     };
     /**
      * @docid
-     * @extends AppointmentTemplate
+     * @type template|function
+     * @default "item"
+     * @type_function_param1 model:object
+     * @type_function_param1_field1 appointmentData:object
+     * @type_function_param1_field2 targetedAppointmentData:object
+     * @type_function_param2 itemIndex:number
+     * @type_function_param3 contentElement:DxElement
+     * @type_function_return string|Element|jQuery
      * @public
      */
     appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
@@ -882,7 +889,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @extends AppointmentTemplate
+       * @type template|function
+       * @default "item"
+       * @type_function_param1 model:object
+       * @type_function_param1_field1 appointmentData:object
+       * @type_function_param1_field2 targetedAppointmentData:object
+       * @type_function_param2 itemIndex:number
+       * @type_function_param3 contentElement:DxElement
+       * @type_function_return string|Element|jQuery
        */
       appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
