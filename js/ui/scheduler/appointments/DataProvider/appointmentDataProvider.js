@@ -86,8 +86,9 @@ export class AppointmentDataProvider {
         return this.getFilterStrategy().appointmentTakesAllDay(adapter, startDayHour, endDayHour);
     }
 
-    hasAllDayAppointments(appointments) {
-        return this.getFilterStrategy().hasAllDayAppointments(appointments);
+    hasAllDayAppointments(rawAppointments) {
+        const adapters = rawAppointments.map((item) => createAppointmentAdapter(this.key, item));
+        return this.getFilterStrategy().hasAllDayAppointments(adapters);
     }
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
