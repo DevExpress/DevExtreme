@@ -147,26 +147,26 @@ export type ToolbarLocateInMenuType = 'always' | 'auto' | 'never';
 
 export type ToolbarLocationType = 'after' | 'before' | 'center';
 
-// TODO: it is not a 'native' way
-@ComponentBindings()
-export class ToolbarButtonGroupItemProps extends CollectionWidgetItem {
-  @OneWay()
+export interface CollectionItemType {
+  text?: string;
+
+  disabled?: boolean;
+
+  html?: string;
+
+  visible?: boolean;
+}
+
+export interface ToolbarButtonGroupItemPropsType extends CollectionItemType {
   hint?: string;
 
-  @OneWay()
   icon?: string;
 
-  @OneWay()
   type?: ToolbarButtonType;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @OneWay elementAttr?: { [key: string]: any };
-
-  // TODO: other props
+  elementAttr?: { [key: string]: any };
 }
-
-// eslint-disable-next-line
-export type ToolbarButtonGroupItemPropsType = ToolbarButtonGroupItemProps;
 
 export type ToolbarButtonGroupSelectionMode = 'multiple' | 'single';
 
