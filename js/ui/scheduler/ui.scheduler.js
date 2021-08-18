@@ -138,11 +138,6 @@ class Scheduler extends Widget {
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
 
-            /**
-                * @pseudo CellDuration
-                * @type number
-                * @default 30
-                */
 
             /**
                 * @pseudo AppointmentTemplate
