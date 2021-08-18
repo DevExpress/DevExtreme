@@ -147,23 +147,26 @@ export type ToolbarLocateInMenuType = 'always' | 'auto' | 'never';
 
 export type ToolbarLocationType = 'after' | 'before' | 'center';
 
-// TODO: it is not a 'native' way
-@ComponentBindings()
-export class ToolbarButtonGroupItemProps extends CollectionWidgetItem {
-  @OneWay()
-  hint?: string;
+export interface CollectionItemType {
+  text?: string;
 
-  @OneWay()
-  icon?: string;
+  disabled?: boolean;
 
-  @OneWay()
-  type?: ToolbarButtonType;
+  html?: string;
 
-  // TODO: other props
+  visible?: boolean;
 }
 
-// eslint-disable-next-line
-export type ToolbarButtonGroupItemPropsType = ToolbarButtonGroupItemProps;
+export interface ToolbarButtonGroupItemPropsType extends CollectionItemType {
+  hint?: string;
+
+  icon?: string;
+
+  type?: ToolbarButtonType;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  elementAttr?: { [key: string]: any };
+}
 
 export type ToolbarButtonGroupSelectionMode = 'multiple' | 'single';
 
@@ -309,7 +312,11 @@ export type ToolbarDropDownButtonItemPropsType = ToolbarDropDownButtonItemProps;
           {
             icon: "alignleft",
             alignment: "left",
-            hint: "Align left"
+            hint: "Align left",
+            elementAttr: {
+              foo1: 'attr1',
+              class: 'some-class123'
+            }
           },
           {
             icon: "aligncenter",

@@ -1,7 +1,8 @@
 import dateUtils from '../../../../../core/utils/date';
 import { getGroupCount } from '../../../../../ui/scheduler/resources/utils';
 import { GroupOrientation } from '../../types';
-import { GetDateForHeaderText, Group } from '../types';
+import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
+import { Group } from '../types';
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 
 const DAY_MS = dateUtils.dateToMilliseconds('day');

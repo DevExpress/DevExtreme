@@ -1,7 +1,7 @@
-import { formatWeekday, formatWeekdayAndDay } from '../../../../../ui/scheduler/workspaces/utils/base';
+import { formatWeekday, formatWeekdayAndDay } from '../../view_model/to_test/views/utils/base';
 import {
   getDateForHeaderText as timelineGetDateFrHeaderText,
-} from '../../../../../ui/scheduler/workspaces/utils/timeline_week';
+} from '../../view_model/to_test/views/utils/timeline_week';
 import { ViewType } from '../../types';
 import { MonthDateTableLayout } from '../month/date_table/layout';
 import { ViewRenderConfig } from '../props';
@@ -27,6 +27,7 @@ const verticalViewConfig: ViewRenderConfig = {
   getDateForHeaderText,
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: false,
+  scrollingDirection: 'vertical',
 };
 const timelineViewConfig: ViewRenderConfig = {
   headerPanelTemplate: TimelineHeaderPanelLayout,
@@ -39,6 +40,7 @@ const timelineViewConfig: ViewRenderConfig = {
   getDateForHeaderText: timelineGetDateFrHeaderText,
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: true,
+  scrollingDirection: 'horizontal',
 };
 
 const getDayViewConfig: GetRenderConfig = (intervalCount) => ({
@@ -67,6 +69,7 @@ const getMonthViewConfig: GetRenderConfig = () => ({
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: false,
   className: 'dx-scheduler-work-space-month',
+  scrollingDirection: 'vertical',
 });
 
 const getTimelineDayViewConfig: GetRenderConfig = (intervalCount) => ({
