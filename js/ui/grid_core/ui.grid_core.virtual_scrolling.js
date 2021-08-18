@@ -264,8 +264,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                             storeLoadOptions.skip = this.pageIndex() * this.pageSize();
                         }
                     }
-                } else if(isAppendMode(this) && storeLoadOptions.skip && this._skipCorrection < 0) {
-                    storeLoadOptions.skip += this._skipCorrection;
+                } else if(isAppendMode(this) && storeLoadOptions.skip && this._totalCountCorrection < 0) {
+                    storeLoadOptions.skip += this._totalCountCorrection;
                 }
             }
             return this.callBase.apply(this, arguments);
@@ -1164,10 +1164,10 @@ export const virtualScrollingModule = {
                         const loadedPageIndex = lastLoadOptions?.pageIndex || 0;
                         const loadedTake = lastLoadOptions?.take || 0;
 
-                        const skipCorrection = loadedTake ? loadedTake - this._itemCount : 0;
+                        const takeCorrection = loadedTake ? loadedTake - this._itemCount : 0;
                         const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(viewportParams.skip / this.pageSize());
                         const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());
-                        const take = byLoadedPage ? loadedTake : skipForCurrentPage + skipCorrection + viewportParams.take;
+                        const take = byLoadedPage ? loadedTake : skipForCurrentPage + takeCorrection + viewportParams.take;
                         const loadPageCount = Math.ceil(take / this.pageSize());
 
                         return {
