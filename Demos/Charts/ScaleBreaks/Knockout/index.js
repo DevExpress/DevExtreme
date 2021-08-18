@@ -35,7 +35,7 @@ window.onload = function() {
             maxCountSelectBoxOptions: {
                 items: breaksCount,
                 value: breaksCountValue,
-                width: 60
+                width: 80
             },
 
             lineStyleSelectBoxOptions: {

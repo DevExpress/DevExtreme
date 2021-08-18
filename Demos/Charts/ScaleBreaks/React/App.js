@@ -78,7 +78,7 @@ class App extends React.Component {
               items={breaksCount}
               value={this.state.breaksCountValue}
               onValueChanged={this.changeBreaksCount}
-              width={60}>
+              width={80}>
             </SelectBox>
           </div>
           &nbsp;

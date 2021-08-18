@@ -38,7 +38,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     $scope.maxCountSelectBoxOptions = {
         items: breaksCount,
-        width: 60,
+        width: 80,
         bindingOptions: {
             value: "breaksCountValue"
         }

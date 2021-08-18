@@ -34,7 +34,7 @@
         <DxSelectBox
           :items="breaksCount"
           v-model:value="breaksCountValue"
-          :width="60"
+          :width="80"
         />
       </div>
       <div class="option right">

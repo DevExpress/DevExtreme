@@ -34,7 +34,7 @@ $(function(){
     $("#max-count").dxSelectBox({
         items: breaksCount,
         value: breaksCount[2],
-        width: 60,
+        width: 80,
         onValueChanged: function(data) {
             chart.option("valueAxis.maxAutoBreakCount", data.value);   
         }
