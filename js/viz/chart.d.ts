@@ -709,7 +709,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           font?: Font;
           /**
            * @docid
-           * @type format
+           * @type Format
            * @default undefined
            */
           format?: Format;
@@ -761,7 +761,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         font?: Font;
         /**
          * @docid
-         * @type format
+         * @type Format
          * @default undefined
          */
         format?: Format;
@@ -817,7 +817,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           font?: Font;
           /**
            * @docid
-           * @type format
+           * @type Format
            * @default undefined
            */
           format?: Format;
@@ -1513,7 +1513,7 @@ export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel
     customizeText?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.argumentAxis.label.format
-     * @type format
+     * @type Format
      * @default undefined
      * @public
      */
@@ -2587,7 +2587,7 @@ export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
     customizeText?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.valueAxis.label.format
-     * @type format
+     * @type Format
      * @default undefined
      * @public
      */
@@ -3673,7 +3673,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
     alignment?: 'center' | 'left' | 'right';
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.argumentFormat
-     * @type format
+     * @type Format
      * @default undefined
      * @public
      */
@@ -3753,7 +3753,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
     font?: Font;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.format
-     * @type format
+     * @type Format
      * @default undefined
      * @public
      */

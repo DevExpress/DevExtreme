@@ -607,7 +607,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     label?: {
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
-       * @type format
+       * @type Format
        * @default undefined
        */
       argumentFormat?: Format;
@@ -677,7 +677,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       font?: Font;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
-       * @type format
+       * @type Format
        * @default undefined
        */
       format?: Format;

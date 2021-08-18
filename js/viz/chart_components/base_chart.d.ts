@@ -272,7 +272,7 @@ export interface BaseChartLegend extends BaseLegend {
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
-     * @type format
+     * @type Format
      * @default undefined
      * @public
      */
