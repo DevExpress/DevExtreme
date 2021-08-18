@@ -17,7 +17,7 @@ describe('Scheduler Toolbar', () => {
     );
 
     it('should render and pass', () => {
-      const toolbar = render({ items: 'items' });
+      const toolbar = render({ items: 'items' }).childAt(0);
 
       expect(toolbar.is(Toolbar)).toBe(true);
       expect(toolbar.prop('items')).toEqual('items');
@@ -221,6 +221,42 @@ describe('Scheduler Toolbar', () => {
           const toolbar = createToolbar({ currentView: 'timelineMonth' });
 
           expect(toolbar.step).toBe('month');
+        });
+      });
+
+      describe('Displayed date', () => {
+        it('should retun correct displayed date for week view', () => {
+          const toolbar = createToolbar({
+            currentDate: new Date(2021, 4, 7),
+            currentView: 'week',
+            views: {
+              type: 'week',
+              intervalCount: 3,
+              startDate: new Date(2021, 4, 5),
+            },
+          });
+
+          expect(toolbar.displayedDate.getTime())
+            .toBe(new Date(2021, 4, 7).getTime());
+        });
+
+        it('should retun startViewDate props', () => {
+          const toolbar = createToolbar({
+            startViewDate: new Date(2021, 5, 10),
+          });
+
+          expect(toolbar.displayedDate.getTime())
+            .toBe(new Date(2021, 5, 10).getTime());
+        });
+
+        it('should retun next week of startViewDate if view is month', () => {
+          const toolbar = createToolbar({
+            currentView: 'month',
+            startViewDate: new Date(2021, 5, 10),
+          });
+
+          expect(toolbar.displayedDate.getTime())
+            .toBe(new Date(2021, 5, 17).getTime());
         });
       });
 

@@ -59,7 +59,7 @@ describe('Scheduler', () => {
         accessKey: 'A',
         activeStateEnabled: true,
         disabled: true,
-        focusStateEnabled: true,
+        focusStateEnabled: false,
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
