@@ -4,9 +4,11 @@ import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
+import { changeTheme } from '../../helpers/changeTheme';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
+  await changeTheme('generic.light');
   return createWidget('dxDataGrid', {
     dataSource,
     columns: ['name', 'phone', 'room'],
