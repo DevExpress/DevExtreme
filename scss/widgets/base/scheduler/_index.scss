@@ -205,6 +205,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-date-time-shader {
     pointer-events: none;
+    position: absolute;
   }
 
   .dx-scheduler-work-space-week,
@@ -452,6 +453,10 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-header-tables-container {
     overflow: hidden;
+  }
+
+  .dx-scheduler-date-table-container {
+    position: relative;
   }
 
   .dx-scheduler-date-table-scrollable .dx-scrollable-content {
