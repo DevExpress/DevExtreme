@@ -120,8 +120,13 @@ describe('Scheduler', () => {
         ],
         customizeDateNavigatorText: () => {},
       };
+      const setCurrentDate = () => {};
+      const setCurrentView = () => {};
+      const startViewDate = new Date(2021, 1, 1);
 
-      const tree = renderComponent({ props });
+      const tree = renderComponent({
+        props, setCurrentView, setCurrentDate, startViewDate,
+      });
       const schedulerToolbar = tree.find(SchedulerToolbar);
 
       expect(schedulerToolbar.exists())
@@ -139,6 +144,9 @@ describe('Scheduler', () => {
           currentView: props.currentView,
           useDropDownViewSwitcher: props.useDropDownViewSwitcher,
           customizationFunction: props.customizeDateNavigatorText,
+          onCurrentViewUpdate: setCurrentView,
+          onCurrentDateUpdate: setCurrentDate,
+          startViewDate,
         });
     });
   });

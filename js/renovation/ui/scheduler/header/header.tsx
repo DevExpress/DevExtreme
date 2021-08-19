@@ -81,17 +81,13 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
   }
 
   get displayedDate(): Date {
-    if (this.props.startViewDate) {
-      const startViewDate = new Date(this.props.startViewDate);
+    const startViewDate = new Date(this.props.startViewDate);
 
-      if (this.isMonth()) {
-        return nextWeek(startViewDate);
-      }
-
-      return startViewDate;
+    if (this.isMonth()) {
+      return nextWeek(startViewDate);
     }
 
-    return new Date(this.props.currentDate);
+    return startViewDate;
   }
 
   get caption(): DateNavigatorTextInfo {

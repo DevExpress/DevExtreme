@@ -30,6 +30,7 @@ describe('Scheduler Toolbar', () => {
       currentView: 'day',
       views: ['day', 'week'],
       currentDate: new Date(2021, 7, 7),
+      startViewDate: new Date(2021, 7, 7),
       items: [
         {
           defaultElement: 'dateNavigator',
@@ -184,6 +185,7 @@ describe('Scheduler Toolbar', () => {
         'week', 'workWeek',
       ],
       currentDate: new Date(2021, 7, 7),
+      startViewDate: new Date(2021, 7, 7),
       items: [
         {
           defaultElement: 'dateNavigator',
@@ -225,19 +227,14 @@ describe('Scheduler Toolbar', () => {
       });
 
       describe('Displayed date', () => {
-        it('should retun correct displayed date if view is week', () => {
+        it('should retun correct displayed date', () => {
           const toolbar = createToolbar({
             currentDate: new Date(2021, 4, 7),
-            currentView: 'week',
-            views: {
-              type: 'week',
-              intervalCount: 3,
-              startDate: new Date(2021, 4, 5),
-            },
+            startViewDate: new Date(2021, 4, 4),
           });
 
           expect(toolbar.displayedDate.getTime())
-            .toBe(new Date(2021, 4, 7).getTime());
+            .toBe(new Date(2021, 4, 4).getTime());
         });
 
         it('should retun startViewDate props', () => {
@@ -383,7 +380,7 @@ describe('Scheduler Toolbar', () => {
             expect(previousButton.items![0].icon).toBe('chevronprev');
           });
 
-          it('should return correct dateNavigator calendat button text', () => {
+          it('should return correct dateNavigator calendar button text', () => {
             const toolbar = createToolbar();
 
             const previousButton = toolbar.items[0].options as ToolbarButtonGroupProps;
