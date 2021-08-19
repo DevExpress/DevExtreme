@@ -193,7 +193,7 @@ export class BulletProps extends BaseWidgetProps {
 
   @OneWay() endScaleValue?: number;
 
-  @Nested() tooltip?: TooltipProps;
+  @Nested() tooltip: TooltipProps = new TooltipProps();
 
   @Event() onTooltipHidden?: OnTooltipHiddenFn<BaseEventData>;
 
@@ -315,17 +315,13 @@ export class Bullet extends JSXComponent(BulletProps) {
       onTooltipHidden,
       onTooltipShown,
       customizeTooltip: generateCustomizeTooltipCallback(
-        tooltip?.customizeTooltip,
-        tooltip?.font,
+        tooltip.customizeTooltip,
+        tooltip.font,
         this.rtlEnabled,
       ),
       data: this.tooltipData,
       ...this.tooltipCoords,
     };
-
-    if (!tooltip) {
-      return customProps;
-    }
 
     return {
       ...tooltip,
