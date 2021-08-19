@@ -8,6 +8,8 @@ import { Widget } from '../../../common/widget';
 import { Editor, viewFunction } from '../editor';
 import { ValidationMessage } from '../../../overlays/validation_message';
 
+jest.mock('../../../overlays/validation_message', () => ({ ValidationMessage: () => null }));
+
 describe('Editor', () => {
   describe('Render', () => {
     it('should pass all necessary properties to Widget', () => {
