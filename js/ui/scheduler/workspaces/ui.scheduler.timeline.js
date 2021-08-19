@@ -364,7 +364,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             this.renderRGroupPanel();
         }
 
+        this._updateHeaderEmptyCellWidth();
+
         this._applyCellTemplates(groupCellTemplates);
+    }
+
+    _updateHeaderEmptyCellWidth() {
+        const groupPanelWidth = getBoundingRect(this._$sidebarTable.get(0)).width;
+
+        this._$headerPanelEmptyCell.width(groupPanelWidth);
     }
 
     _setHorizontalGroupHeaderCellsHeight() { return noop(); }

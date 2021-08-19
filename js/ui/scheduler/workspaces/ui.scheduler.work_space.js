@@ -441,7 +441,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     createRAllDayPanelElements() {
         this._$allDayPanel = $('<div>');
-        this._$allDayTitle = $('<div>').appendTo(this.$element());
+        this._$allDayTitle = $('<div>').appendTo(this._$headerPanelEmptyCell);
     }
 
     _dateTableScrollableConfig() {
@@ -658,6 +658,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(this._isVerticalGroupedWorkSpace() && hasWindow()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
+    }
+
+    _updateHeaderEmptyCellWidth() {
+        const timePanelWidth = getBoundingRect(this._$timePanel.get(0)).width;
+        const groupPanelWidth = getBoundingRect(this._$groupTable.get(0)).width;
+
+        this._$headerPanelEmptyCell.width(timePanelWidth + groupPanelWidth);
     }
 
     _isGroupsSpecified(resources) {
@@ -2332,10 +2339,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _initWorkSpaceUnits() {
-
+        this._$headerPanelContainer = $('<div>').addClass('dx-scheduler-header-panel-container');
+        this._$headerTablesContainer = $('<div>').addClass('dx-scheduler-header-tables-container');
         this._$headerPanel = $('<table>');
-
         this._$thead = $('<thead>').appendTo(this._$headerPanel);
+        this._$headerPanelEmptyCell = $('<div>').addClass('dx-scheduler-header-panel-empty-cell');
 
         this._$fixedContainer = $('<div>').addClass(FIXED_CONTAINER_CLASS);
         this._$allDayContainer = $('<div>').addClass(ALL_DAY_CONTAINER_CLASS);
@@ -2349,9 +2357,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
-
         this._$dateTable = $('<table>');
-
         this._$groupTable = $('<div>').addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
     }
 
@@ -2377,11 +2383,33 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _createWorkSpaceStaticElements() {
         if(this._isVerticalGroupedWorkSpace()) {
-            this._dateTableScrollable.$content().append(this._$allDayContainer, this._$groupTable, this._$timePanel, this._$dateTable);
-            this.$element().append(this._$fixedContainer, this._$headerPanel, this._dateTableScrollable.$element());
+            this._dateTableScrollable.$content().append(
+                this._$allDayContainer,
+                this._$groupTable,
+                this._$timePanel,
+                this._$dateTable,
+            );
+
+            this._$headerTablesContainer.append(this._$headerPanel);
+            this._$headerPanelContainer.append(this._$headerPanelEmptyCell, this._$headerTablesContainer);
+
+            this.$element().append(
+                this._$fixedContainer,
+                this._$headerPanelContainer,
+                this._dateTableScrollable.$element(),
+            );
         } else {
             this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
-            this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
+
+            this._$headerTablesContainer.append(this._$headerPanel, this._$allDayPanel);
+            this._$headerPanelContainer.append(this._$headerPanelEmptyCell, this._$headerTablesContainer);
+
+            this.$element().append(
+                this._$fixedContainer,
+                this._$headerPanelContainer,
+                this._$allDayContainer,
+                this._dateTableScrollable.$element(),
+            );
         }
     }
 
@@ -2392,12 +2420,15 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._createHeaderScrollable();
 
+        this._headerScrollable.$content().append(this._$headerPanel);
+        this._$headerPanelContainer.append(this._$headerPanelEmptyCell, this._$headerTablesContainer);
+
+        this.$element().append(this._$headerPanelContainer);
         this.$element().append(this._$flexContainer);
 
         this._createSidebarScrollable();
         this._$flexContainer.append(this._dateTableScrollable.$element());
 
-        this._headerScrollable.$content().append(this._$headerPanel);
         this._dateTableScrollable.$content().append(this._$dateTable);
 
         if(this._isVerticalGroupedWorkSpace()) {
@@ -2413,7 +2444,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _createHeaderScrollable() {
         const $headerScrollable = $('<div>')
             .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
-            .appendTo(this.$element());
+            .appendTo(this._$headerTablesContainer);
 
         this._headerScrollable = this._createComponent($headerScrollable, Scrollable, this._headerScrollableConfig());
     }
@@ -2508,6 +2539,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.renderWorkSpace();
 
         this._updateGroupTableHeight();
+        this._updateHeaderEmptyCellWidth();
 
         this._shader = new VerticalShader(this);
     }

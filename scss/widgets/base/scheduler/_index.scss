@@ -439,6 +439,20 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
+  .dx-scheduler-header-panel-container {
+    display: flex;
+  }
+
+  .dx-scheduler-header-panel-empty-cell {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .dx-scheduler-header-tables-container {
+    overflow: hidden;
+  }
 
   .dx-scheduler-date-table-scrollable .dx-scrollable-content {
     overflow: hidden;
