@@ -81,7 +81,7 @@ var AzureFileSystem = function(azureGateway) {
 
     var downloadFile = function(path) {
         gateway.getBlobUrl(path)
-            .done(function(accessUrl) {
+            .then(function(accessUrl) {
                 window.location.href = accessUrl;
             });
     };
@@ -92,7 +92,7 @@ var AzureFileSystem = function(azureGateway) {
                 var deferreds = entries.map(function(entry) {
                     return action(entry);
                 });
-                return $.when.apply(null, deferreds);
+                return Promise.all(deferreds);
             });
     };
 
@@ -181,25 +181,24 @@ var AzureGateway = function(endpointUrl, onRequestExecuted) {
             });
     };
 
-    var parseEntryListResult = function(xml) {
-        return $(xml).find("Blob")
-            .map(function(i, xmlEntry) {
-                var entry = {};
-                parseEntry($(xmlEntry), entry);
-                return entry;
-            })
-            .get();
+    var parseEntryListResult = function (xmlString) {
+        var xml = new DOMParser().parseFromString(xmlString, "text/xml");
+        return [...xml.querySelectorAll('Blob')].map(parseEntry);
     };
 
-    var parseEntry = function($xmlEntry, entry) {
-        entry.etag = $xmlEntry.find("Etag").text();
-        entry.name = $xmlEntry.find("Name").text();
+    var parseEntry = function (xmlEntry) {
+        var entry = {};
 
-        var dateStr = $xmlEntry.find("Last-Modified").text();
+        entry.etag = xmlEntry.querySelector("Etag").textContent;
+        entry.name = xmlEntry.querySelector("Name").textContent;
+
+        var dateStr = xmlEntry.querySelector("Last-Modified").textContent;
         entry.lastModified = new Date(dateStr);
 
-        var lengthStr = $xmlEntry.find("Content-Length").text();
+        var lengthStr = xmlEntry.querySelector("Content-Length").textContent;
         entry.length = parseInt(lengthStr);
+
+        return entry;
     };
 
     var executeBlobListRequest = function(accessUrl, prefix) {
@@ -309,8 +308,7 @@ var AzureGateway = function(endpointUrl, onRequestExecuted) {
         return getAccessUrl("GetBlob", blobName);
     };
 
-    var getAccessUrl = function(command, blobName, blobName2) {
-        var deferred = $.Deferred();
+    var getAccessUrl = function (command, blobName, blobName2) {
         var url = endpointUrl + "?command=" + command;
         if(blobName) {
             url += "&blobName=" + encodeURIComponent(blobName);
@@ -319,17 +317,16 @@ var AzureGateway = function(endpointUrl, onRequestExecuted) {
             url += "&blobName2=" + encodeURIComponent(blobName2);
         }
 
-        executeRequest(url)
-            .done(function(result) {
-                if(result.success) {
-                    deferred.resolve(result.accessUrl, result.accessUrl2);
-                } else {
-                    deferred.reject(result.error);
-                }
-            })
-            .fail(deferred.reject);
-
-        return deferred.promise();
+        return new Promise(async function (resolve, reject) {
+            await executeRequest(url)
+                .then(function (x) {
+                    if (x.success) {
+                        resolve(x.accessUrl, x.accessUrl2);
+                    } else {
+                        reject(x.error);
+                    }
+                });
+        });
     };
 
     var executeRequest = function(args, commandParams) {
@@ -349,8 +346,8 @@ var AzureGateway = function(endpointUrl, onRequestExecuted) {
 
         ajaxArgs.url = queryString ? urlPath + "?" + queryString : urlPath;
 
-        return $.ajax(ajaxArgs)
-            .done(function() {
+        return fetch(ajaxArgs.url, ajaxArgs)
+            .then(function (x) {
                 var eventArgs = {
                     method: method,
                     urlPath: urlPath,
@@ -358,6 +355,18 @@ var AzureGateway = function(endpointUrl, onRequestExecuted) {
                 };
                 if(onRequestExecuted) {
                     onRequestExecuted(eventArgs);
+                }
+                return x;
+            }).then(async function (x) {
+                if (x.status === 200) {
+                    var text = await x.text();
+                    try {
+                        return ({ success: true, ...JSON.parse(text) });
+                    } catch (ex) {
+                        return text;
+                    }
+                } else {
+                    return ({ error: x.statusText });
                 }
             });
     };

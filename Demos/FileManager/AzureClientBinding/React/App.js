@@ -41,8 +41,11 @@ class App extends React.Component {
         <LoadPanel visible={this.state.loadPanelVisible} position={loadPanelPosition} />
         <div id="widget-area">
           <FileManager id="file-manager" fileSystemProvider={this.fileSystemProvider} allowedFileExtensions={allowedFileExtensions}>
-            {/* uncomment the code below to enable file/directory management */}
             <Permissions
+              download={true}>
+            </Permissions>
+            {/* uncomment the code below to enable file/directory management */}
+            {/* <Permissions
               create={true}
               copy={true}
               move={true}
@@ -50,7 +53,7 @@ class App extends React.Component {
               rename={true}
               upload={true}
               download={true}>
-            </Permissions>
+            </Permissions> */}
           </FileManager>
           <div id="request-panel">
             {
