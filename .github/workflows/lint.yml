@@ -123,10 +123,10 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '15'
 
     - name: Check package-lock
-      run: npm ci --no-audit --no-fund --ignore-scripts
+      run: npm ci --no-audit --no-fund
 
 
 
