@@ -5,7 +5,7 @@ import { EffectReturn } from '../../../utils/effect_return';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import { hasWindow } from '../../../../core/utils/window';
 import { normalizeStyleProp } from '../../../../core/utils/style';
-import { isNumeric } from '../../../../core/utils/type';
+import { isNumeric as isNumber } from '../../../../core/utils/type';
 import { getDefaultIconSize, getFontSizeByIconSize } from './utils';
 
 export const viewFunction = (viewModel: CheckBoxIcon): JSX.Element => {
@@ -32,7 +32,7 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
     const { size } = this.props;
 
     if (hasWindow()) {
-      const newIconSize = isNumeric(size) ? size : this.computedIconSize;
+      const newIconSize = isNumber(size) ? size : this.computedIconSize;
       const newFontSize = getFontSizeByIconSize(newIconSize);
 
       this.setIconFontSize(newFontSize);
