@@ -107,6 +107,13 @@ describe('Widget', () => {
           widget.applyCssTextEffect();
           expect(widget.widgetRef.current!.style.cssText).toStrictEqual('background-color: red;');
         });
+
+        it('should ignore empty cssText value', () => {
+          const widget = new Widget({ cssText: '' });
+          widget.widgetRef = { current: { style: {} } } as any;
+          widget.applyCssTextEffect();
+          expect(widget.widgetRef.current!.style.cssText).toStrictEqual(undefined);
+        });
       });
 
       describe('activeEffect', () => {
