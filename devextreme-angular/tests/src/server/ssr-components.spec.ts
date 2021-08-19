@@ -11,6 +11,8 @@ import {
     DevExtremeModule
 } from 'devextreme-angular';
 
+import { DxServerModule } from 'devextreme-angular/server';
+
 import {
     componentNames
 } from './component-names';
@@ -28,6 +30,7 @@ describe('Universal', () => {
         TestBed.configureTestingModule({
             declarations: [TestContainerComponent],
             imports: [
+                DxServerModule,
                 DevExtremeModule
             ]
         });

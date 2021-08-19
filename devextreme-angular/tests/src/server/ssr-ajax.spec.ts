@@ -6,6 +6,8 @@ import { isPlatformServer } from '@angular/common';
 
 import { DxServerTransferStateModule } from 'devextreme-angular';
 
+import { DxServerModule } from 'devextreme-angular/server';
+
 import { Deferred } from 'devextreme/core/utils/deferred';
 import ajax from 'devextreme/core/utils/ajax';
 
@@ -43,7 +45,9 @@ describe('Universal', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [ServerModule,
+                imports: [
+                    DxServerModule,
+                    ServerModule,
                     DxServerTransferStateModule,
                     ServerTransferStateModule,
                     BrowserModule.withServerTransition({appId: 'appid'})]

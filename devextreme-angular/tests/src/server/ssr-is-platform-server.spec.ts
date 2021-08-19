@@ -9,12 +9,14 @@ import { isPlatformServer } from '@angular/common';
 
 import { TransferState } from '@angular/platform-browser';
 
+import { DxServerModule } from 'devextreme-angular/server';
+
 import {
     TestBed
 } from '@angular/core/testing';
 
 import {
-    DxTextBoxModule,
+    DxDataGridModule,
     getServerStateKey
 } from 'devextreme-angular';
 
@@ -35,7 +37,8 @@ describe('Universal', () => {
         TestBed.configureTestingModule({
             declarations: [TestContainerComponent],
             imports: [
-                DxTextBoxModule
+                DxServerModule,
+                DxDataGridModule
             ]
         });
     });
@@ -44,7 +47,7 @@ describe('Universal', () => {
     it('should set transfer state for rendererdOnServer option of integration', () => {
         TestBed.overrideComponent(TestContainerComponent, {
             set: {
-                template: `<dx-text-box></dx-text-box>`
+                template: `<dx-data-grid></dx-data-grid>`
             }
         });
         let platformID = TestBed.get(PLATFORM_ID);
@@ -62,7 +65,7 @@ describe('Universal', () => {
     it('should set rendererdOnServer option of integration', () => {
         TestBed.overrideComponent(TestContainerComponent, {
             set: {
-                template: `<dx-text-box (onInitialized)="initializedHandler($event)"></dx-text-box>`
+                template: `<dx-data-grid (onInitialized)="initializedHandler($event)"></dx-data-grid>`
             }
         });
 
