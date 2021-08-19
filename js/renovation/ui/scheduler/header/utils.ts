@@ -8,7 +8,10 @@ import { ToolbarItem } from '../../toolbar/toolbar_props';
 import { ViewProps } from '../props';
 import { SchedulerToolbarItem } from './props';
 
-import { validateViews, getViewName, getViewText } from '../../../../ui/scheduler/header/utils';
+import {
+  validateViews, getViewName,
+  getViewText, getViewType,
+} from '../../../../ui/scheduler/header/utils';
 
 const DEFAULT_ELEMENT = 'defaultElement';
 const VIEW_SWITCHER = 'viewSwitcher';
@@ -66,3 +69,5 @@ export const formatViews = (views: (ViewType | ViewProps)[]): ItemView[] => {
     return { text, name };
   });
 };
+
+export const isMonthView = (currentView: string): boolean => getViewType(currentView) as string === 'month';
