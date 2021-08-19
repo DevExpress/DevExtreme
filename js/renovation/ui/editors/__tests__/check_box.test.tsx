@@ -338,13 +338,23 @@ describe('CheckBox', () => {
 
     describe('Methods', () => {
       describe('focus', () => {
-        it('should focus main element', () => {
+        it('should call editor focus method', () => {
           const checkBox = new CheckBox({});
           checkBox.editorRef = { current: { focus: jest.fn() } } as unknown as RefObject<Editor>;
           checkBox.focus();
 
           expect(checkBox.editorRef.current?.focus).toHaveBeenCalledTimes(1);
           expect(checkBox.editorRef.current?.focus).toHaveBeenCalledWith();
+        });
+      });
+
+      describe('blur', () => {
+        it('should call editor blur method', () => {
+          const checkBox = new CheckBox({});
+          checkBox.editorRef = { current: { blur: jest.fn() } } as unknown as RefObject<Editor>;
+          checkBox.blur();
+
+          expect(checkBox.editorRef.current?.blur).toHaveBeenCalledTimes(1);
         });
       });
     });

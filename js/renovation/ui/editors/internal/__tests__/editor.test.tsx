@@ -168,13 +168,23 @@ describe('Editor', () => {
 
     describe('Methods', () => {
       describe('focus', () => {
-        it('should focus main element', () => {
+        it('should call widget focus method', () => {
           const editor = new Editor({});
           editor.widgetRef = { current: { focus: jest.fn() } } as unknown as RefObject<Widget>;
           editor.focus();
 
           expect(editor.widgetRef.current?.focus).toHaveBeenCalledTimes(1);
           expect(editor.widgetRef.current?.focus).toHaveBeenCalledWith();
+        });
+      });
+
+      describe('blur', () => {
+        it('should call widget blur method', () => {
+          const editor = new Editor({});
+          editor.widgetRef = { current: { blur: jest.fn() } } as unknown as RefObject<Widget>;
+          editor.blur();
+
+          expect(editor.widgetRef.current?.blur).toHaveBeenCalledTimes(1);
         });
       });
     });
