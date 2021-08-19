@@ -51,7 +51,7 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
     const element = this.elementRef.current!;
 
     const iconComputedStyle = getElementComputedStyle(element) as CSSStyleDeclaration;
-    const computedIconSize = parseInt(iconComputedStyle.width, 10);
+    const computedIconSize = parseInt(iconComputedStyle?.width, 10);
 
     return computedIconSize || getDefaultIconSize();
   }

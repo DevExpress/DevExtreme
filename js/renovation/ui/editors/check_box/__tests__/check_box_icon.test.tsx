@@ -118,8 +118,8 @@ describe('CheckBoxIconIcon', () => {
           expect(icon.style.fontSize).toEqual('16px');
         });
 
-        it("should use default icon size if 'getElementComputedStyle' util returns nullish width", () => {
-          (getElementComputedStyle as Mock).mockReturnValue({ width: 0 });
+        it("should use default icon size if 'getElementComputedStyle' util returns null", () => {
+          (getElementComputedStyle as Mock).mockReturnValue(null);
 
           const checkBoxIcon = new CheckBoxIcon({});
           checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
