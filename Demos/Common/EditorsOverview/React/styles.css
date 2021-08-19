@@ -1,25 +1,22 @@
 .settings {
-    text-align: center;
     background-color: rgba(191, 191, 191, 0.15);
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
 }
-.settings .column {
-    width: 26%;
-    display: inline-block;
-    margin: 15px 3%;
-    text-align: left;
-}
+
 .settings .column .field {
     padding: 5px 0;
+    display: flex;
+    align-items: center;
 }
-.settings .column .field > div {
-    display: inline-block;
-    vertical-align: middle;
-}
+
 .settings .column .field .label {
     width: 75px;
 }
+
 .settings .column .field .value {
-    width: 60%;
+    width: 200px;
 }
 
 .dx-theme-generic .settings .column .field .value .dx-switch {
@@ -27,11 +24,7 @@
 }
 
 .dx-theme-material .settings .column .field .value .dx-switch {
-    height: 32px;
-}
-
-.dx-theme-material .settings .column .field .label {
-    padding-top: 2px;
+    height:48px;
 }
 
 .picture-container {
@@ -43,14 +36,17 @@
     outline-style: none;
     outline-color: #f05b41;
 }
+
 .picture {
     transition: transform ease-in-out 400ms;
     display: inline-block;
     padding: 10px;
 }
+
 .color {
     fill: #f05b41;
 }
+
 .text {
     text-align: center;
     color: #f05b41;
@@ -60,18 +56,23 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
 .dx-color-scheme-light .base-color, .dx-color-scheme-carmine .base-color, .dx-color-scheme-softblue .base-color {
     fill: #333;
 }
+
 .dx-color-scheme-contrast .base-color, .dx-color-scheme-darkmoon .base-color {
     fill: #fff;
 }
+
 .dx-color-scheme-dark .base-color {
     fill: #dedede;
 }
+
 .dx-color-scheme-darkviolet .base-color {
     fill: #f5f6f7;
 }
+
 .dx-color-scheme-greenmist .base-color {
     fill: #28484f;
 }

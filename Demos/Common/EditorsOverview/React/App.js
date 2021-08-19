@@ -58,7 +58,6 @@ class App extends React.Component {
           <div className="column">
             <div className="field">
               <div className="label">Title</div>
-              &nbsp;
               <div className="value">
                 <TextBox
                   value={this.state.text}
@@ -70,7 +69,6 @@ class App extends React.Component {
             </div>
             <div className="field">
               <div className="label">Color</div>
-              &nbsp;
               <div className="value">
                 <ColorBox
                   value={this.state.color}
@@ -80,11 +78,9 @@ class App extends React.Component {
               </div>
             </div>
           </div>
-          &nbsp;
           <div className="column">
             <div className="field">
               <div className="label">Width</div>
-              &nbsp;
               <div className="value">
                 <NumberBox
                   value={this.state.width}
@@ -98,7 +94,6 @@ class App extends React.Component {
             </div>
             <div className="field">
               <div className="label">Height</div>
-              &nbsp;
               <div className="value">
                 <NumberBox
                   value={this.state.height}
@@ -111,11 +106,9 @@ class App extends React.Component {
               </div>
             </div>
           </div>
-          &nbsp;
           <div className="column">
             <div className="field">
               <div className="label">Transform</div>
-              &nbsp;
               <div className="value">
                 <SelectBox
                   value={this.state.transform}
@@ -130,7 +123,6 @@ class App extends React.Component {
 
             <div className="field">
               <div className="label">Border</div>
-              &nbsp;
               <div className="value">
                 <Switch
                   value={this.state.border}

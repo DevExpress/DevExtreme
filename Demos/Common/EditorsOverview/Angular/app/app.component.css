@@ -1,22 +1,14 @@
 ::ng-deep .settings {
-    text-align: center;
     background-color: rgba(191, 191, 191, 0.15);
-}
-
-::ng-deep .settings .column {
-    width: 26%;
-    display: inline-block;
-    margin: 15px 3%;
-    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
 }
 
 ::ng-deep .settings .column .field {
     padding: 5px 0;
-}
-
-::ng-deep .settings .column .field > div {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
 }
 
 ::ng-deep .settings .column .field .label {
@@ -24,7 +16,7 @@
 }
 
 ::ng-deep .settings .column .field .value {
-    width: 60%;
+    width: 200px;
 }
 
 ::ng-deep .dx-theme-generic .settings .column .field .value .dx-switch {
@@ -32,11 +24,7 @@
 }
 
 ::ng-deep .dx-theme-material .settings .column .field .value .dx-switch {
-    height: 32px;
-}
-
-::ng-deep .dx-theme-material .settings .column .field .label {
-    padding-top: 2px;
+    height:48px;
 }
 
 ::ng-deep .picture-container {

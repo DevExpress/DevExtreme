@@ -1,22 +1,14 @@
 .settings {
-    text-align: center;
     background-color: rgba(191, 191, 191, 0.15);
-}
-
-.settings .column {
-    width: 26%;
-    display: inline-block;
-    margin: 15px 3%;
-    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
 }
 
 .settings .column .field {
     padding: 5px 0;
-}
-
-.settings .column .field > div {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
 }
 
 .settings .column .field .label {
@@ -24,7 +16,7 @@
 }
 
 .settings .column .field .value {
-    width: 60%;
+    width: 200px;
 }
 
 .dx-theme-generic .settings .column .field .value .dx-switch {
@@ -32,11 +24,7 @@
 }
 
 .dx-theme-material .settings .column .field .value .dx-switch {
-    height: 32px;
-}
-
-.dx-theme-material .settings .column .field .label {
-    padding-top: 2px;
+    height:48px;
 }
 
 .picture-container {
