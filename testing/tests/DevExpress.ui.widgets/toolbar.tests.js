@@ -367,6 +367,48 @@ QUnit.module('render', {
             assert.equal(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
         });
     });
+
+    QUnit.test('toolbar.items = [ buttonGroup.items=[ item1.elementAttr = { attr1="test1", attr2="test2", attr3="test3" }] ]', function(assert) {
+        const $toolbar = this.$element.dxToolbar({
+            items: [{
+                location: 'before',
+                widget: 'dxButtonGroup',
+                options: {
+                    keyExpr: 'id',
+                    items: [
+                        { id: 1, text: 'button 1', elementAttr: { attr1: 'test1', attr2: 'test2', attr3: 'test3' } },
+                    ],
+                }
+            }]
+        });
+
+        const $button = $toolbar.find('.dx-button');
+        assert.equal($button.attr('attr1'), 'test1');
+        assert.equal($button.attr('attr2'), 'test2');
+        assert.equal($button.attr('attr3'), 'test3');
+    });
+
+    QUnit.test('toolbar.items = [ buttonGroup.items=[ item1.elementAttr.class="test1",item2.elementAttr.class="test2"] ]', function(assert) {
+        const $toolbar = this.$element.dxToolbar({
+            items: [{
+                location: 'before',
+                widget: 'dxButtonGroup',
+                options: {
+                    keyExpr: 'id',
+                    items: [
+                        { id: 1, text: 'button 1', elementAttr: { class: 'test1' } },
+                        { id: 2, text: 'button 2', elementAttr: { class: 'test2' } },
+                    ],
+                }
+            }]
+        });
+
+        const $button = $toolbar.find('.dx-button');
+        assert.equal($button.eq(0).hasClass('test1'), true);
+        assert.equal($button.eq(0).hasClass('test2'), false);
+        assert.equal($button.eq(1).hasClass('test1'), false);
+        assert.equal($button.eq(1).hasClass('test2'), true);
+    });
 });
 
 QUnit.module('Deprecated options', {
