@@ -444,10 +444,12 @@ $scheduler-appointment-form-label-padding: 20px;
     overflow: hidden;
     position: relative;
     display: flex;
+    align-items: flex-start;
   }
 
   .dx-scheduler-sidebar-scrollable .dx-scrollable-content {
     display: flex;
+    align-items: flex-start;
   }
 
   .dx-scheduler-date-table-cell {
@@ -1126,7 +1128,6 @@ $scheduler-appointment-form-label-padding: 20px;
     width: $scheduler-left-column-width;
     border-collapse: collapse;
     font-size: $scheduler-workspace-info-font-size;
-    height: max-content;
 
     .dx-scheduler-small & {
       width: $scheduler-left-column-width * $scheduler-small-size-factor;
@@ -1198,7 +1199,6 @@ $scheduler-appointment-form-label-padding: 20px;
     width: 100%;
     border-spacing: 0;
     table-layout: fixed;
-    height: max-content;
   }
 
   .dx-scheduler-date-table-cell { // stylelint-disable-line no-duplicate-selectors
