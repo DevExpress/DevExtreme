@@ -168,6 +168,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                     height: 200,
                     keyExpr: 'id',
                     dataSource: data,
+                    showRowLines: false,
                     scrolling: {
                         mode: scrollingMode,
                         rowRenderingMode,

@@ -1437,7 +1437,10 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 pageSize: 4
             },
             focusedRowEnabled: true,
-            focusedRowKey: 12
+            focusedRowKey: 12,
+            scrolling: {
+                minGap: 0
+            }
         });
 
         this.clock.tick();
@@ -1726,7 +1729,8 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                     pageSize: 4
                 },
                 scrolling: {
-                    mode: scrollingMode
+                    mode: scrollingMode,
+                    minGap: 0
                 },
                 focusedRowEnabled: true,
                 focusedRowKey: 12,
