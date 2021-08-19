@@ -1128,6 +1128,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.contentPaddingBottom = getElementPadding(contentEl, 'bottom');
   }
 
+  get containerElement(): HTMLDivElement {
+    return this.containerRef.current!;
+  }
+
   get contentHeight(): number {
     // T320141
     return getElementOverflowY(this.contentRef?.current) === 'hidden'
@@ -1142,10 +1146,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       ? this.contentClientWidth
       // for position absolute elements inside content
       : Math.max(this.contentScrollWidth, this.contentClientWidth);
-  }
-
-  get containerElement(): HTMLDivElement {
-    return this.containerRef.current!;
   }
 
   get containerHasSizes(): boolean {
