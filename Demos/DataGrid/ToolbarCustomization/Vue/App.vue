@@ -143,11 +143,11 @@ export default {
 }
 
 .dx-datagrid-header-panel .dx-selectbox {
-    margin: 17px 10px;
+    margin: auto 10px;
 }
 
 .dx-datagrid-header-panel .dx-button {
-     margin: 17px 0;
+     margin: auto 0;
 }
 
 .informer {
@@ -160,6 +160,7 @@ export default {
 .count {
     padding-top: 15px;
     line-height: 27px;
-	margin: 0;
+    font-size: 28px;
+    margin: 0;
 }
 </style>

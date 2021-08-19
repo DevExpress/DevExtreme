@@ -22,11 +22,11 @@
 }
 
 ::ng-deep #gridContainer .dx-datagrid-header-panel .dx-selectbox {
-    margin: 17px 10px;
+    margin: auto 10px;
 }
 
 ::ng-deep #gridContainer .dx-datagrid-header-panel .dx-button {
-    margin: 17px 0;
+    margin: auto 0;
 }
 
 ::ng-deep #gridContainer .informer {
@@ -39,5 +39,6 @@
 ::ng-deep #gridContainer .count {
     padding-top: 15px;
     line-height: 27px;
+    font-size: 28px;
     margin: 0;
 }
