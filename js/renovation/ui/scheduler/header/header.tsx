@@ -15,12 +15,11 @@ import '../../../../ui/drop_down_button';
 
 import dateUtils from '../../../../core/utils/date';
 import {
-  getCaption,
+  getCaption, nextWeek,
   getStep, getViewName,
   getNextIntervalDate,
-  getViewType, nextWeek,
 } from '../../../../ui/scheduler/header/utils';
-import { formToolbarItem, formatViews } from './utils';
+import { formToolbarItem, formatViews, isMonthView } from './utils';
 
 import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
@@ -83,7 +82,7 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
   get displayedDate(): Date {
     const startViewDate = new Date(this.props.startViewDate);
 
-    if (this.isMonth()) {
+    if (isMonthView(this.props.currentView)) {
       return nextWeek(startViewDate);
     }
 
@@ -116,11 +115,6 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
 
   get selectedView(): string {
     return getViewName(this.props.currentView) as string;
-  }
-
-  isMonth(): boolean {
-    const { currentView } = this.props;
-    return getViewType(currentView) as string === 'month';
   }
 
   setCurrentView(view: ItemView): void {
