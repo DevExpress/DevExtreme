@@ -5,7 +5,6 @@ import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
-import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { normalizeIndexes } from '../../core/utils/array';
@@ -19,7 +18,9 @@ import {
     LAYOUT_MANAGER_ONE_COLUMN,
     FORM_LAYOUT_MANAGER_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
-    ROOT_SIMPLE_ITEM_CLASS } from './constants';
+    ROOT_SIMPLE_ITEM_CLASS,
+    SIMPLE_ITEM_TYPE,
+} from './constants';
 
 import '../text_box';
 import '../number_box';
@@ -42,10 +43,6 @@ const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 
 const LAYOUT_STRATEGY_FLEX = 'flex';
 const LAYOUT_STRATEGY_FALLBACK = 'fallback';
-
-const SIMPLE_ITEM_TYPE = 'simple';
-
-const DATA_OPTIONS = ['dataSource', 'items'];
 
 const LayoutManager = Widget.inherit({
     _getDefaultOptions: function() {
@@ -610,33 +607,6 @@ const LayoutManager = Widget.inherit({
             showOptionalMark: this.option('showOptionalMark'),
             optionalMark: this.option('optionalMark')
         };
-    },
-
-    _replaceDataOptions: function(originalOptions, resultOptions) {
-        if(originalOptions) {
-            DATA_OPTIONS.forEach(function(item) {
-                if(resultOptions[item]) {
-                    resultOptions[item] = originalOptions[item];
-                }
-            });
-        }
-    },
-
-    _prepareValidationRules: function(userValidationRules, isItemRequired, itemType, itemName) {
-        const isSimpleItem = itemType === SIMPLE_ITEM_TYPE;
-        let validationRules;
-
-        if(isSimpleItem) {
-            if(userValidationRules) {
-                validationRules = userValidationRules;
-            } else {
-                const requiredMessage = format(this.option('requiredMessage'), itemName || '');
-
-                validationRules = isItemRequired ? [{ type: 'required', message: requiredMessage }] : null;
-            }
-        }
-
-        return validationRules;
     },
 
     _getComponentOwner: function() {

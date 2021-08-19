@@ -5,8 +5,9 @@ import { captionize } from '../../core/utils/inflector';
 import { inArray } from '../../core/utils/array';
 import Guid from '../../core/guid';
 
+import { SIMPLE_ITEM_TYPE } from './constants';
+
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
-const SIMPLE_ITEM_TYPE = 'simple'; // TODO: copy from layout_manager.js
 
 export function convertToRenderFieldItemOptions({
     $container,
