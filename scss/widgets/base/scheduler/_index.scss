@@ -459,6 +459,10 @@ $scheduler-appointment-form-label-padding: 20px;
     position: relative;
   }
 
+  .dx-scheduler-work-space-month:not(.dx-scheduler-work-space-count) .dx-scheduler-date-table-container {
+    height: 100%;
+  }
+
   .dx-scheduler-date-table-scrollable .dx-scrollable-content {
     overflow: hidden;
     position: relative;

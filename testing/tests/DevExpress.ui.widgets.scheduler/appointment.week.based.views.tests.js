@@ -185,7 +185,12 @@ module('Integration: Appointment Day, Week views', {
             test('Scheduler tasks should have a right parent', function(assert) {
                 const scheduler = createInstance({}, this.clock);
 
-                assert.equal(scheduler.instance.$element().find('.dx-scheduler-work-space .dx-scrollable-content>.dx-scheduler-scrollable-appointments').length, 1, 'scrollable is parent of dxSchedulerAppointments');
+                assert.equal(
+                    scheduler.instance.$element().find('.dx-scheduler-work-space .dx-scrollable-content .dx-scheduler-date-table-container>.dx-scheduler-scrollable-appointments').length
+                    || scheduler.instance.$element().find('.dx-scheduler-work-space .dx-scrollable-content>.dx-scheduler-scrollable-appointments').length,
+                    1,
+                    'scrollable is parent of dxSchedulerAppointments',
+                );
             });
 
             test('Scheduler tasks should have a right height', function(assert) {
@@ -1205,10 +1210,10 @@ module('Integration: Appointment Day, Week views', {
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
         assert.equal(appointments[0].position.top, 0, 'Correct top coordinate');
-        assert.roughEqual(appointments[0].position.left, 324, 2, 'Correct left coordinate');
+        assert.roughEqual(appointments[0].position.left, 224, 2, 'Correct left coordinate');
 
         assert.equal(appointments[1].position.top, 0, 'Correct top coordinate');
-        assert.roughEqual(appointments[1].position.left, 548, 2, 'Correct left coordinate');
+        assert.roughEqual(appointments[1].position.left, 448, 2, 'Correct left coordinate');
     });
 
     test('Appointments should be rendered correctly when groupByDate is true in Week view', function(assert) {
@@ -1252,9 +1257,9 @@ module('Integration: Appointment Day, Week views', {
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
         assert.equal(appointments[0].position.top, 100, 'Correct top coordinate');
-        assert.roughEqual(appointments[0].position.left, 420, 2, 'Correct left coordinate');
+        assert.roughEqual(appointments[0].position.left, 320, 2, 'Correct left coordinate');
 
         assert.equal(appointments[1].position.top, 200, 'Correct top coordinate');
-        assert.roughEqual(appointments[1].position.left, 740, 2, 'Correct left coordinate');
+        assert.roughEqual(appointments[1].position.left, 640, 2, 'Correct left coordinate');
     });
 });
