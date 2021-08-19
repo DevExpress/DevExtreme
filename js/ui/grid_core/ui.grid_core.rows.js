@@ -1091,14 +1091,7 @@ export const rowsModule = {
 
                 _scrollToElement: function($element, offset) {
                     const scrollable = this.getScrollable();
-
-                    if(scrollable) {
-                        // TODO: think about this scenario with offset
-                        scrollable.scrollToElement($element, offset);
-
-                        // for renovate Scrollable
-                        isDefined(offset) && scrollable.scrollBy({ left: offset.right || -offset.left });
-                    }
+                    scrollable && scrollable.scrollToElement($element, offset);
                 },
 
                 optionChanged: function(args) {
