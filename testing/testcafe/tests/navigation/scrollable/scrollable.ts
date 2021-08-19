@@ -286,7 +286,7 @@ fixture`Scrollable_ScrollToElement`
           // for (const { initialScrollOffset, position } of positions) {
           await ClientFunction(
             () => {
-              $((getInstance() as any).content).css({
+              $((getInstance() as any).content()).css({
                 transform: 'scale(1.5)',
                 transformOrigin: '0 0',
               });
