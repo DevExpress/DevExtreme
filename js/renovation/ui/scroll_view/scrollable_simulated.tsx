@@ -1130,7 +1130,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   get contentHeight(): number {
     // T320141
-    return getElementOverflowY(this.contentRef.current) === 'hidden'
+    return getElementOverflowY(this.contentRef?.current) === 'hidden'
       ? this.contentClientHeight
       // for position absolute elements inside content
       : Math.max(this.contentScrollHeight, this.contentClientHeight);
@@ -1138,7 +1138,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   get contentWidth(): number {
     // T320141
-    return getElementOverflowX(this.contentRef.current) === 'hidden'
+    return getElementOverflowX(this.contentRef?.current) === 'hidden'
       ? this.contentClientWidth
       // for position absolute elements inside content
       : Math.max(this.contentScrollWidth, this.contentClientWidth);
