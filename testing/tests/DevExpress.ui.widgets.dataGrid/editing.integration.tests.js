@@ -830,7 +830,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
             // assert
             let rows = dataGrid.getVisibleRows();
-            assert.equal(dataGrid.totalCount(), grouping ? 54 : 48, 'totalCount'); // ??? 56?
+            assert.equal(dataGrid.totalCount(), grouping ? 54 : 48, 'totalCount');
             assert.equal(rows.length, 40, 'visible row count');
             assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
             assert.equal(rows[18].key, grouping ? 19 : 21, 'row 18');

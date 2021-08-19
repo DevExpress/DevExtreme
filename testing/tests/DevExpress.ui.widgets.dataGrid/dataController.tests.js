@@ -3620,7 +3620,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         const oldItems = this.dataController.items().slice();
         this.dataController.setViewportPosition(50);
 
-        assert.strictEqual(this.dataController.pageIndex(), 0); // 5 WTF?
+        assert.strictEqual(this.dataController.pageIndex(), 0);
         assert.strictEqual(this.dataController.items().length, 10);
         assert.strictEqual(this.dataController.items()[0].key, 5);
         assert.strictEqual(this.dataController.getContentOffset('begin'), 50);
