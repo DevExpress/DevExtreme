@@ -52,11 +52,11 @@ export class SchedulerToolbarBaseProps {
 
   @Event() onCurrentViewUpdate!: (view: string | ViewType) => void;
 
-  @OneWay() currentDate: Date = new Date();
+  @OneWay() currentDate!: Date;
 
   @Event() onCurrentDateUpdate!: (date: Date) => void;
 
-  @OneWay() startViewDate?: Date;
+  @OneWay() startViewDate!: Date;
 
   @OneWay() intervalCount = 1;
 
@@ -73,7 +73,7 @@ export type SchedulerToolbarProps = SchedulerToolbarBaseProps
 & Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
 
 @Component({ view: viewFunction })
-export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'onCurrentDateUpdate'>() {
+export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
   cssClass = 'dx-scheduler-header';
 
   get step(): string {

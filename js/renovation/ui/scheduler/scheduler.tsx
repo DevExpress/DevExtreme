@@ -19,6 +19,7 @@ import { CurrentViewConfigType } from './workspaces/props';
 import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
 import SchedulerToolbar from './header/header';
+import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -157,11 +158,27 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get startViewDate(): Date {
-    if (this.viewDataProvider) {
-      return this.viewDataProvider.getStartViewDate();
-    }
+    const type = this.props.currentView;
+    const {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+    } = this.currentViewConfig;
 
-    return this.currentViewConfig.currentDate;
+    const options = {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+    };
+
+    const viewDataGenerator = getViewDataGeneratorByViewType(type);
+    const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
+
+    return startViewDate;
   }
 
   @Method()

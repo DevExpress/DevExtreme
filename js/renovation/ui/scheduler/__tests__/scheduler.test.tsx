@@ -375,7 +375,7 @@ describe('Scheduler', () => {
       });
 
       describe('startViewDate', () => {
-        it('should return passed currentDate', () => {
+        it('should return correct startViewDate if view is day', () => {
           const scheduler = new Scheduler({
             ...new SchedulerProps(),
             currentDate: new Date(2021, 1, 1),
@@ -385,25 +385,15 @@ describe('Scheduler', () => {
             .toBe(new Date(2021, 1, 1).getTime());
         });
 
-        it('should return startViewDate from viewDataProvider', () => {
+        it('should return correct startViewDate if view is week', () => {
           const scheduler = new Scheduler({
             ...new SchedulerProps(),
-          });
-
-          const viewDataProvider = new ViewDataProvider('week') as any;
-          viewDataProvider.getStartViewDate = () => new Date(2021, 1, 1);
-          const cellsMetaData = {
-            dateTableCellsMeta: [],
-            allDayPanelCellsMeta: [],
-          };
-
-          scheduler.onViewRendered({
-            viewDataProvider,
-            cellsMetaData,
+            currentDate: new Date(2021, 7, 19),
+            currentView: 'week',
           });
 
           expect(scheduler.startViewDate.getTime())
-            .toBe(new Date(2021, 1, 1).getTime());
+            .toBe(new Date(2021, 7, 15).getTime());
         });
       });
     });
