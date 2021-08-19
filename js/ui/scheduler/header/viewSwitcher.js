@@ -77,10 +77,8 @@ export const getDropDownViewSwitcher = (header, item) => {
             },
             dropDownOptions: {
                 width: 'max-content',
-                contentTemplate: function($element) {
-                    $element.addClass(VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS);
-                }
-            },
+                wrapperAttr: { class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS }
+            }
         },
         ...item,
     };

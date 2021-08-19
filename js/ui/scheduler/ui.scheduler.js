@@ -68,7 +68,7 @@ import {
 } from './instanceFactory';
 import { getCellGroups } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
-import { validateDayHours } from './workspaces/utils/base';
+import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 
 // STYLE scheduler
