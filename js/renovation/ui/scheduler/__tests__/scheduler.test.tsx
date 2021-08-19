@@ -122,22 +122,15 @@ describe('Scheduler', () => {
       };
 
       const tree = renderComponent({ props });
-
       const schedulerToolbar = tree.find(SchedulerToolbar);
-
-      const {
-        currentDate,
-        intervalCount,
-        firstDayOfWeek,
-      } = defaultCurrentViewConfig;
 
       expect(schedulerToolbar.exists())
         .toBe(true);
       expect(schedulerToolbar.props())
         .toEqual({
-          currentDate,
-          intervalCount,
-          firstDayOfWeek,
+          currentDate: defaultCurrentViewConfig.currentDate,
+          intervalCount: defaultCurrentViewConfig.intervalCount,
+          firstDayOfWeek: defaultCurrentViewConfig.firstDayOfWeek,
 
           items: props.toolbar,
           min: props.min,

@@ -225,7 +225,7 @@ describe('Scheduler Toolbar', () => {
       });
 
       describe('Displayed date', () => {
-        it('should retun correct displayed date for week view', () => {
+        it('should retun correct displayed date if view is week', () => {
           const toolbar = createToolbar({
             currentDate: new Date(2021, 4, 7),
             currentView: 'week',
