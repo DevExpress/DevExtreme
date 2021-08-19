@@ -54,7 +54,7 @@ export function renderFieldItem({
     $container
         .addClass(FIELD_ITEM_CLASS)
         .addClass(containerCssClass)
-        .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
+        .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');// TODO: this is a part of Form markup settings, move it to form.js
 
     $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
     if(isSimpleItem && useFlexLayout) {
