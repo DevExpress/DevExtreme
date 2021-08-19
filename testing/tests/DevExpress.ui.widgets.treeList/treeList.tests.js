@@ -2144,38 +2144,6 @@ QUnit.module('Virtual scrolling', defaultModuleConfig, () => {
     });
 });
 
-QUnit.module('Virtual scrolling', defaultModuleConfig, () => {
-    QUnit.test('New mode. Expand/collapse button should be updated on click', function(assert) {
-        // arrange
-        const treeList = createTreeList({
-            dataSource: [
-                { ID: 1, Head_ID: 0, Name: 'John' },
-                { ID: 2, Head_ID: 1, Name: 'Alex' },
-                { ID: 3, Head_ID: 100, Name: 'Alex' }
-            ],
-            keyExpr: 'ID',
-            parentIdExpr: 'Head_ID',
-            loadingTimeout: undefined,
-            scrolling: {
-                mode: 'virtual',
-                rowRenderingMode: 'virtual',
-                newMode: true
-            },
-        });
-
-        // act
-        $(treeList.getCellElement(0, 0)).find('.dx-treelist-collapsed').trigger('dxclick');
-
-        // assert
-        assert.strictEqual($(treeList.getCellElement(0, 0)).find('.dx-treelist-expanded').length, 1, 'row expanded');
-
-        // act
-        $(treeList.getCellElement(0, 0)).find('.dx-treelist-expanded').trigger('dxclick');
-
-        // assert
-        assert.strictEqual($(treeList.getCellElement(0, 0)).find('.dx-treelist-collapsed').length, 1, 'row collapsed');
-    });
-});
 
 QUnit.module('Row dragging', defaultModuleConfig, () => {
 
