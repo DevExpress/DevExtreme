@@ -209,11 +209,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "appointmentCollector"
-     * @type_function_param1 data:object
      * @type_function_param1_field1 appointmentCount:number
      * @type_function_param1_field2 isCompact:boolean
      * @type_function_param2 collectorElement:DxElement
-     * @type_function_return string|Element|jQuery
      * @public
      */
     appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
@@ -315,24 +313,20 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "item"
-     * @type_function_param1 model:object
      * @type_function_param1_field1 appointmentData:object
      * @type_function_param1_field2 targetedAppointmentData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 contentElement:DxElement
-     * @type_function_return string|Element|jQuery
      * @public
      */
     appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "appointmentTooltip"
-     * @type_function_param1 model:object
      * @type_function_param1_field1 appointmentData:object
      * @type_function_param1_field2 targetedAppointmentData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 contentElement:DxElement
-     * @type_function_return string|Element|jQuery
      * @public
      */
     appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
@@ -381,7 +375,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
-     * @type_function_return string|Element|jQuery
      * @public
      */
     dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -398,7 +391,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
-     * @type_function_return string|Element|jQuery
      * @public
      */
     dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -744,7 +736,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
-     * @type_function_return string|Element|jQuery
      * @public
      */
     resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -858,7 +849,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
-     * @type_function_return string|Element|jQuery
      * @public
      */
     timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -892,33 +882,27 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "appointmentCollector"
-       * @type_function_param1 data:object
        * @type_function_param1_field1 appointmentCount:number
        * @type_function_param1_field2 isCompact:boolean
        * @type_function_param2 collectorElement:DxElement
-       * @type_function_return string|Element|jQuery
        */
       appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
        * @default "item"
-       * @type_function_param1 model:object
        * @type_function_param1_field1 appointmentData:object
        * @type_function_param1_field2 targetedAppointmentData:object
        * @type_function_param2 itemIndex:number
        * @type_function_param3 contentElement:DxElement
-       * @type_function_return string|Element|jQuery
        */
       appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
        * @default "appointmentTooltip"
-       * @type_function_param1 model:object
        * @type_function_param1_field1 appointmentData:object
        * @type_function_param1_field2 targetedAppointmentData:object
        * @type_function_param2 itemIndex:number
        * @type_function_param3 contentElement:DxElement
-       * @type_function_return string|Element|jQuery
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
@@ -933,7 +917,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1 itemData:object
        * @type_function_param2 itemIndex:number
        * @type_function_param3 itemElement:DxElement
-       * @type_function_return string|Element|jQuery
        */
       dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
@@ -942,7 +925,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1 itemData:object
        * @type_function_param2 itemIndex:number
        * @type_function_param3 itemElement:DxElement
-       * @type_function_return string|Element|jQuery
        */
       dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
@@ -995,7 +977,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1 itemData:object
        * @type_function_param2 itemIndex:number
        * @type_function_param3 itemElement:DxElement
-       * @type_function_return string|Element|jQuery
        */
       resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
@@ -1015,7 +996,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1 itemData:object
        * @type_function_param2 itemIndex:number
        * @type_function_param3 itemElement:DxElement
-       * @type_function_return string|Element|jQuery
        */
       timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
