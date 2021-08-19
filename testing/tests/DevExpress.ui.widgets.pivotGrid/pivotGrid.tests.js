@@ -2845,6 +2845,7 @@ QUnit.module('dxPivotGrid', {
         scrollable.scrollTo({ left: 10, top: 1 });
     });
 
+
     ['row', 'column'].forEach((area) => {
         [false, true].forEach((useNative) => {
             function getHeaderCellByText($area, text) {
@@ -2853,9 +2854,32 @@ QUnit.module('dxPivotGrid', {
                     .get(0);
             }
 
+            function getArea(pivotGrid, area) {
+                const $element = pivotGrid.$element();
+                return area === 'row'
+                    ? $element.find('.dx-pivotgrid-vertical-headers')
+                    : $element.find('.dx-pivotgrid-horizontal-headers');
+            }
+
+            function getVerticalOffset(pivotGrid, fromCellText, toCellText) {
+                const $rowsHeaderArea = getArea(pivotGrid, 'row');
+                const fromCellRect = getHeaderCellByText($rowsHeaderArea, fromCellText).getBoundingClientRect();
+                const toCellRect = getHeaderCellByText($rowsHeaderArea, toCellText).getBoundingClientRect();
+
+                return toCellRect.y - fromCellRect.y - 1;
+            }
+
+            function getHorizontalOffset(pivotGrid, fromCellText, toCellText) {
+                const $columnsHeaderArea = getArea(pivotGrid, 'column');
+                const fromCellRect = getHeaderCellByText($columnsHeaderArea, fromCellText).getBoundingClientRect();
+                const toCellRect = getHeaderCellByText($columnsHeaderArea, toCellText).getBoundingClientRect();
+
+                return toCellRect.x - fromCellRect.x - 1;
+            }
+
             function checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, errorMessageDetails) {
-                const $rowsHeaderArea = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers');
-                const $columnsHeaderArea = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers');
+                const $rowsHeaderArea = getArea(pivotGrid, 'row');
+                const $columnsHeaderArea = getArea(pivotGrid, 'column');
 
                 const rowsAreaRect = $rowsHeaderArea.get(0).getBoundingClientRect();
                 const columnsAreaRect = $columnsHeaderArea.get(0).getBoundingClientRect();
@@ -2863,8 +2887,8 @@ QUnit.module('dxPivotGrid', {
                 const expectedRowCellRect = getHeaderCellByText($rowsHeaderArea, expectedRowHeaderCellText).getBoundingClientRect();
                 const expectedColumnCellRect = getHeaderCellByText($columnsHeaderArea, expectedColHeaderCellText).getBoundingClientRect();
 
-                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 16, `expected row position ${errorMessageDetails}`);
-                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 16, `expected column position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 2, `expected row position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 2, `expected column position ${errorMessageDetails}`);
             }
 
             function triggerScrollEvent(scrollable) {
@@ -2879,6 +2903,7 @@ QUnit.module('dxPivotGrid', {
                 ds.fields(fields);
                 ds.load();
             }
+
             QUnit.module('T984139, T1010175', () => {
                 QUnit.test(`Render. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
                     const store = [];
@@ -2927,14 +2952,16 @@ QUnit.module('dxPivotGrid', {
                     });
                     this.clock.tick(100);
 
-                    const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                     const scrollable = pivotGrid._dataArea._getScrollable();
-                    scrollable.scrollTo({ left: scrollDistance, top: 2000 });
+                    scrollable.scrollTo({
+                        left: getHorizontalOffset(pivotGrid, '1', '60'),
+                        top: getVerticalOffset(pivotGrid, '1', '60')
+                    });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
 
                     const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = area === 'row' ? '57' : '46';
+                    const expectedColHeaderCellText = '60';
                     checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after scrolling');
                 });
 
@@ -2961,9 +2988,11 @@ QUnit.module('dxPivotGrid', {
 
                     this.clock.tick(100);
 
-                    const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({ left: scrollDistance, top: 2000 });
+                    scrollable.scrollTo({
+                        left: getHorizontalOffset(pivotGrid, '1', '60'),
+                        top: getVerticalOffset(pivotGrid, '1', '60')
+                    });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
 
@@ -2972,7 +3001,7 @@ QUnit.module('dxPivotGrid', {
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
                     const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = area === 'row' ? '57' : '46';
+                    const expectedColHeaderCellText = '60';
                     checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after expanding');
 
                     const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
@@ -3001,9 +3030,11 @@ QUnit.module('dxPivotGrid', {
                     });
                     this.clock.tick(100);
 
-                    const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({ left: scrollDistance, top: 2000 });
+                    scrollable.scrollTo({
+                        left: getHorizontalOffset(pivotGrid, '1', '60'),
+                        top: getVerticalOffset(pivotGrid, '1', '60')
+                    });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
 
@@ -3017,7 +3048,7 @@ QUnit.module('dxPivotGrid', {
                     this.clock.tick(100);
 
                     const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = area === 'row' ? '57' : '46';
+                    const expectedColHeaderCellText = '60';
                     checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after collapsing');
                     const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
                     assert.strictEqual(getExpandedCells().length, 0);
@@ -3039,15 +3070,18 @@ QUnit.module('dxPivotGrid', {
                                 { dataField: 'column', area: 'column' },
                                 { dataField: 'row', area: 'row' },
                                 { dataField: 'subField', area: area },
+                                { dataField: 'subField2', area: area },
                                 { dataField: 'data', area: 'data' }
                             ]
                         }
                     });
                     this.clock.tick(100);
 
-                    const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({ left: scrollDistance, top: 2000 });
+                    scrollable.scrollTo({
+                        left: getHorizontalOffset(pivotGrid, '1', '60'),
+                        top: getVerticalOffset(pivotGrid, '1', '60')
+                    });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
 
@@ -3058,10 +3092,8 @@ QUnit.module('dxPivotGrid', {
                     this.clock.tick(100);
 
                     const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = area === 'row' ? '57' : '46';
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, area === 'row'
-                        ? expectedColHeaderCellText
-                        : (Number(expectedColHeaderCellText) + 1).toString(), 'after changing visible to a false value');
+                    const expectedColHeaderCellText = '60';
+                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after changing visible to a false value');
                 });
 
                 QUnit.test(`Render -> scrollTo() -> subField.visible=false -> subField.visible=true. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
@@ -3080,15 +3112,18 @@ QUnit.module('dxPivotGrid', {
                                 { dataField: 'column', area: 'column' },
                                 { dataField: 'row', area: 'row' },
                                 { dataField: 'subField', area: area },
+                                { dataField: 'subField2', area: area },
                                 { dataField: 'data', area: 'data' }
                             ]
                         }
                     });
                     this.clock.tick(100);
 
-                    const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({ left: scrollDistance, top: 2000 });
+                    scrollable.scrollTo({
+                        left: getHorizontalOffset(pivotGrid, '1', '60'),
+                        top: getVerticalOffset(pivotGrid, '1', '60')
+                    });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
 
@@ -3103,7 +3138,7 @@ QUnit.module('dxPivotGrid', {
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
                     const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = area === 'row' ? '57' : '46';
+                    const expectedColHeaderCellText = '60';
                     checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after changing visible to a true value');
                 });
 
@@ -3129,9 +3164,11 @@ QUnit.module('dxPivotGrid', {
                     });
                     this.clock.tick(100);
 
-                    const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({ left: scrollDistance, top: 2000 });
+                    scrollable.scrollTo({
+                        left: getHorizontalOffset(pivotGrid, '1', '60'),
+                        top: getVerticalOffset(pivotGrid, '1', '60')
+                    });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
 
@@ -3162,14 +3199,16 @@ QUnit.module('dxPivotGrid', {
                     });
                     this.clock.tick(100);
 
-                    const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({ left: scrollDistance, top: 2000 });
+                    scrollable.scrollTo({
+                        left: getHorizontalOffset(pivotGrid, '1', '60'),
+                        top: getVerticalOffset(pivotGrid, '1', '60')
+                    });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
 
                     const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = area === 'row' ? '57' : '46';
+                    const expectedColHeaderCellText = '60';
 
                     filterPivotGrid(pivotGrid, [11], area);
                     this.clock.tick(100);
