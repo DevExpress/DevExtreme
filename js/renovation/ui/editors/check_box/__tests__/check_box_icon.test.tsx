@@ -133,14 +133,39 @@ describe('CheckBoxIconIcon', () => {
     });
 
     describe('Methods', () => {
-      it('setIconFontSize', () => {
-        const checkBoxIcon = new CheckBoxIcon({});
-        checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-        const icon = checkBoxIcon.elementRef.current!;
+      describe('setIconFontSize', () => {
+        it('should set element font size', () => {
+          const checkBoxIcon = new CheckBoxIcon({});
+          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
+          const icon = checkBoxIcon.elementRef.current!;
 
-        checkBoxIcon.setIconFontSize(50);
+          checkBoxIcon.setIconFontSize(50);
 
-        expect(icon.style.fontSize).toEqual('50px');
+          expect(icon.style.fontSize).toEqual('50px');
+        });
+      });
+
+      describe('getComputedIconSize', () => {
+        beforeEach(() => {
+          jest.resetAllMocks();
+        });
+
+        it('should return element computed style width as a number', () => {
+          const checkBoxIcon = new CheckBoxIcon({});
+          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
+          (getElementComputedStyle as Mock).mockReturnValue({ width: '200px' });
+
+          expect(checkBoxIcon.getComputedIconSize()).toEqual(200);
+        });
+
+        it('should return default icon size if element computed style width is 0', () => {
+          const checkBoxIcon = new CheckBoxIcon({});
+          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
+          (getElementComputedStyle as Mock).mockReturnValue({ width: 0 });
+
+          const defaultIconSize = getDefaultIconSize();
+          expect(checkBoxIcon.getComputedIconSize()).toEqual(defaultIconSize);
+        });
       });
     });
   });
@@ -161,29 +186,6 @@ describe('CheckBoxIconIcon', () => {
 
             expect(checkBoxIcon.cssStyles).toMatchObject({ width: value, height: value });
           });
-      });
-
-      describe('computedIconSize', () => {
-        beforeEach(() => {
-          jest.resetAllMocks();
-        });
-
-        it('should return element computed style width as a number', () => {
-          const checkBoxIcon = new CheckBoxIcon({});
-          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-          (getElementComputedStyle as Mock).mockReturnValue({ width: '200px' });
-
-          expect(checkBoxIcon.computedIconSize).toEqual(200);
-        });
-
-        it('should return default icon size if element computed style width is 0', () => {
-          const checkBoxIcon = new CheckBoxIcon({});
-          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-          (getElementComputedStyle as Mock).mockReturnValue({ width: 0 });
-
-          const defaultIconSize = getDefaultIconSize();
-          expect(checkBoxIcon.computedIconSize).toEqual(defaultIconSize);
-        });
       });
     });
   });
