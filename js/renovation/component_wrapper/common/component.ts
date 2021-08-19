@@ -288,6 +288,14 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return [];
   }
 
+  prepareStyleProp(props: Record<string, unknown>): Record<string, unknown> {
+    if (typeof props.style === 'string') {
+      return { ...props, style: {}, cssText: props.style };
+    }
+
+    return props;
+  }
+
   getProps(): Record<string, unknown> {
     const { elementAttr } = this.option();
 
@@ -300,7 +308,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       options[template] = this._componentTemplates[template];
     });
 
-    return {
+    return this.prepareStyleProp({
       ...options,
       ...this.elementAttr,
       ...elementAttr,
@@ -313,7 +321,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         .trim(),
       class: '',
       ...this._actionsMap,
-    };
+    });
   }
 
   _getActionConfigs(): Record<string, Record<string, unknown>> {

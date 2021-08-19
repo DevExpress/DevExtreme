@@ -100,6 +100,15 @@ describe('Widget', () => {
     });
 
     describe('Effects', () => {
+      describe('applyCssTextEffect', () => {
+        it('should apply cssText value to the main element', () => {
+          const widget = new Widget({ cssText: 'background-color: red;' });
+          widget.widgetRef = { current: { style: {} } } as any;
+          widget.applyCssTextEffect();
+          expect(widget.widgetRef.current!.style.cssText).toStrictEqual('background-color: red;');
+        });
+      });
+
       describe('activeEffect', () => {
         const onActive = jest.fn();
         const onInactive = jest.fn();
@@ -888,6 +897,7 @@ describe('Widget', () => {
         visible: true,
         _feedbackHideTimeout: 400,
         _feedbackShowTimeout: 30,
+        cssText: '',
         aria: {},
         classes: '',
         className: '',
