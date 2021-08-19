@@ -1,8 +1,6 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 
-const DEFAULT_LINE_HEIGHT = 1.15;
-
 function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
@@ -37,18 +35,15 @@ function drawRect(doc, x, y, width, height, style) {
     }
 }
 
-function getLineHeightShift(doc) {
-    return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
-}
-
 function drawTextInRect(doc, text, rect, options) {
     const textArray = text.split('\n');
     const linesCount = textArray.length;
 
     const heightOfOneLine = calculateTextHeight(doc, textArray[0]);
+
+    // TODO: check lineHeightFactor - https://github.com/MrRio/jsPDF/issues/3234
     const y = rect.y + (rect.h / 2)
-        - heightOfOneLine * (linesCount - 1) / 2
-        + getLineHeightShift(doc);
+        - heightOfOneLine * (linesCount - 1) / 2;
 
     // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
     const textOptions = extend({ baseline: 'middle' }, options);
