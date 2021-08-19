@@ -25,8 +25,10 @@ import { nativeScrolling, touch } from '../../../core/utils/support';
 import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable';
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
+import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { hasWindow } from '../../../core/utils/window';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
 
 let isServerSide = !hasWindow();
 
@@ -202,8 +204,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement): void {
-    this.scrollableRef.scrollToElement(element);
+  scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
+    if (!this.content().contains(element)) {
+      return;
+    }
+
+    const scrollPosition = { top: 0, left: 0 };
+    const { direction } = this.props;
+
+    if (direction !== DIRECTION_VERTICAL) {
+      scrollPosition.left = this.getScrollElementPosition(element, DIRECTION_HORIZONTAL, offset);
+    }
+    if (direction !== DIRECTION_HORIZONTAL) {
+      scrollPosition.top = this.getScrollElementPosition(element, DIRECTION_VERTICAL, offset);
+    }
+
+    this.scrollTo(scrollPosition);
   }
 
   @Method()
@@ -241,15 +257,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth() as number;
   }
 
+  // TODO: decorator uses for DataGrid. It's internal method
   @Method()
-  // TODO: it uses for DataGrid only
-  getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
-    return this.scrollableRef.getElementLocation(element, direction) as boolean;
-  }
+  getScrollElementPosition(
+    targetElement: HTMLElement,
+    direction: ScrollableDirection,
+    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
+  ): number {
+    const scrollOffset = this.scrollOffset();
 
-  @Method()
-  scrollToElementTopLeft(element: HTMLElement): void {
-    this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
+    return getElementLocationInternal(
+      targetElement,
+      direction,
+      this.container(),
+      scrollOffset,
+      offset,
+    );
   }
 
   @Method()

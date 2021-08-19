@@ -168,5 +168,3 @@ export interface ViewMetaData {
   viewDataProvider: ViewDataProviderType;
   cellsMetaData: CellsMetaData;
 }
-
-export type GetDateForHeaderText = (index: number, date: Date) => Date;

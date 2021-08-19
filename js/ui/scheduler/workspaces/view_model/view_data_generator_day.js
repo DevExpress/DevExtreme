@@ -1,4 +1,4 @@
-import { calculateStartViewDate } from '../utils/day';
+import { calculateStartViewDate } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/day';
 import { ViewDataGenerator } from './view_data_generator';
 
 export class ViewDataGeneratorDay extends ViewDataGenerator {
