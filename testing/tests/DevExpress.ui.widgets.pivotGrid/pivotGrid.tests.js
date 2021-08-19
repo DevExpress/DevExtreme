@@ -2867,7 +2867,7 @@ QUnit.module('dxPivotGrid', {
                 const fromCellRect = getHeaderCellByText($rowsHeaderArea, fromCellText).getBoundingClientRect();
                 const toCellRect = getHeaderCellByText($rowsHeaderArea, toCellText).getBoundingClientRect();
 
-                return toCellRect.y - fromCellRect.y - 1;
+                return toCellRect.top - fromCellRect.top - 1;
             }
 
             function getHorizontalOffset(pivotGrid, fromCellText, toCellText) {
@@ -2875,7 +2875,7 @@ QUnit.module('dxPivotGrid', {
                 const fromCellRect = getHeaderCellByText($columnsHeaderArea, fromCellText).getBoundingClientRect();
                 const toCellRect = getHeaderCellByText($columnsHeaderArea, toCellText).getBoundingClientRect();
 
-                return toCellRect.x - fromCellRect.x - 1;
+                return toCellRect.left - fromCellRect.left - 1;
             }
 
             function checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, errorMessageDetails) {
