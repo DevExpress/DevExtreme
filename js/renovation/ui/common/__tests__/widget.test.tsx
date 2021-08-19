@@ -13,6 +13,7 @@ import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 import errors from '../../../../core/errors';
+import domAdapter from '../../../../core/dom_adapter';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
@@ -637,6 +638,38 @@ describe('Widget', () => {
           expect(widget.focused).toBe(false);
           widget.focus();
           expect(widget.focused).toBe(true);
+        });
+      });
+
+      describe('blur', () => {
+        it('should trigger blur at root element if it is active element', () => {
+          const widget = new Widget({ focusStateEnabled: true });
+          const mockRef = { current: { blur: jest.fn() } };
+          widget.widgetRef = mockRef as any;
+
+          const { getActiveElement } = domAdapter;
+          try {
+            domAdapter.getActiveElement = () => mockRef.current as unknown as HTMLDivElement;
+            widget.focusEffect();
+            widget.focus();
+            widget.blur();
+
+            expect(widget.widgetRef.current?.blur).toHaveBeenCalledTimes(1);
+          } finally {
+            domAdapter.getActiveElement = getActiveElement;
+          }
+        });
+
+        it('should not trigger blur at root element if it is not active element', () => {
+          const widget = new Widget({ focusStateEnabled: true });
+          const mockRef = { current: { blur: jest.fn() } };
+          widget.widgetRef = mockRef as any;
+
+          widget.focusEffect();
+          widget.focus();
+          widget.blur();
+
+          expect(widget.widgetRef.current?.blur).not.toBeCalled();
         });
       });
     });

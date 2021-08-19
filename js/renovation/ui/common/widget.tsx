@@ -31,6 +31,7 @@ import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import errors from '../../../core/errors';
+import domAdapter from '../../../core/dom_adapter';
 
 const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
 const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
@@ -195,6 +196,15 @@ export class Widget extends JSXComponent(WidgetProps) {
   @Method()
   focus(): void {
     focus.trigger(this.widgetRef.current);
+  }
+
+  @Method()
+  blur(): void {
+    const activeElement = domAdapter.getActiveElement();
+
+    if (this.widgetRef.current === activeElement) {
+      activeElement.blur();
+    }
   }
 
   @Method()

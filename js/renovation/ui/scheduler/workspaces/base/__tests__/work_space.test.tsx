@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { formatWeekdayAndDay } from '../../../../../../ui/scheduler/workspaces/utils/base';
+import { formatWeekdayAndDay } from '../../../view_model/to_test/views/utils/base';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
 import {

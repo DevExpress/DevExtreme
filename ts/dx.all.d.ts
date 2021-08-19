@@ -4880,6 +4880,11 @@ declare module DevExpress.ui {
      * [descr:dxButtonGroupItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * [descr:dxButtonGroupItem.elementAttr]
+     */
+    elementAttr?: { [key: string]: any };
   }
   /**
    * @deprecated use Properties instead
@@ -5095,7 +5100,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCheckBox]
    */
-  export class dxCheckBox extends Editor<dxCheckBoxOptions> {}
+  export class dxCheckBox extends Editor<dxCheckBoxOptions> {
+    /**
+     * [descr:dxCheckBox.blur()]
+     */
+    blur(): void;
+  }
   module dxCheckBox {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCheckBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxCheckBox>;

@@ -1,7 +1,7 @@
 import registerComponent from '../../../core/component_registrator';
 import { VIEWS } from '../constants';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
-import { calculateViewStartDate } from './utils/week';
+import { calculateViewStartDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/week';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {

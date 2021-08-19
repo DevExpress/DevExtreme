@@ -298,10 +298,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() contentClientHeight = 0;
 
-  @InternalState() contentWidth = 0;
-
-  @InternalState() contentHeight = 0;
-
   @InternalState() contentPaddingBottom = 0;
 
   @InternalState() topPocketClientHeight = 0;
@@ -484,24 +480,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
         this.handleCancel(event);
       },
     );
-  }
-
-  @Effect()
-  updateContentWidth(): void {
-    // T320141
-    this.contentWidth = getElementOverflowX(this.contentRef.current) === 'hidden'
-      ? this.contentClientWidth
-      // for position absolute elements inside content
-      : Math.max(this.contentScrollWidth, this.contentClientWidth);
-  }
-
-  @Effect()
-  updateContentHeight(): void {
-    // T320141
-    this.contentHeight = getElementOverflowY(this.contentRef.current) === 'hidden'
-      ? this.contentClientHeight
-      // for position absolute elements inside content
-      : Math.max(this.contentScrollHeight, this.contentClientHeight);
   }
 
   @Method()
@@ -1151,8 +1129,23 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get containerElement(): HTMLDivElement {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.containerRef.current!;
+  }
+
+  get contentHeight(): number {
+    // T320141
+    return getElementOverflowY(this.contentRef?.current) === 'hidden'
+      ? this.contentClientHeight
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollHeight, this.contentClientHeight);
+  }
+
+  get contentWidth(): number {
+    // T320141
+    return getElementOverflowX(this.contentRef?.current) === 'hidden'
+      ? this.contentClientWidth
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollWidth, this.contentClientWidth);
   }
 
   get containerHasSizes(): boolean {

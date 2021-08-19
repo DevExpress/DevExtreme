@@ -1,8 +1,11 @@
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import searchBoxMixin from '../widget/ui.search_box_mixin';
+import TextBox from '../text_box';
 import { extend } from '../../core/utils/extend';
 import TreeViewBase from './ui.tree_view.base';
+
+searchBoxMixin.setEditorClass(TextBox);
 
 // STYLE treeView
 
