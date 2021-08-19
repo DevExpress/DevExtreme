@@ -671,8 +671,8 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       customizeText?: ((pointInfo: any) => string);
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.font
-       * @default '#FFFFFF' [prop](color)
-       * @default 14 [prop](size)
+       * @default '#FFFFFF' &prop(color)
+       * @default 14 &prop(size)
        */
       font?: Font;
       /**

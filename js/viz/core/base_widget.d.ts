@@ -266,7 +266,7 @@ export interface BaseWidgetLoadingIndicator {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -330,9 +330,9 @@ export interface BaseWidgetSize {
 export interface BaseWidgetTitle {
     /**
      * @docid BaseWidgetOptions.title.font
-     * @default '#232323' [prop](color)
-     * @default 28 [prop](size)
-     * @default 200 [prop](weight)
+     * @default '#232323' &prop(color)
+     * @default 28 &prop(size)
+     * @default 200 &prop(weight)
      * @extends CommonVizLightFontFamily
      * @public
      */
@@ -384,9 +384,9 @@ export interface BaseWidgetTitle {
     subtitle?: {
       /**
        * @docid BaseWidgetOptions.title.subtitle.font
-       * @default '#232323' [prop](color)
-       * @default 16 [prop](size)
-       * @default 200 [prop](weight)
+       * @default '#232323' &prop(color)
+       * @default 16 &prop(size)
+       * @default 200 &prop(weight)
        * @extends CommonVizLightFontFamily
        */
       font?: Font;
@@ -496,7 +496,7 @@ export interface BaseWidgetTooltip {
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
-     * @default 4 [for](Material)
+     * @default 4 &for(Material)
      * @public
      */
     cornerRadius?: number;
@@ -508,7 +508,7 @@ export interface BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.tooltip.font
-     * @default '#232323' [prop](color)
+     * @default '#232323' &prop(color)
      * @public
      */
     font?: Font;
@@ -715,7 +715,7 @@ export interface BaseWidgetAnnotationConfig {
       /**
        * @docid
        * @default 0
-       * @default 4 [for](Material)
+       * @default 4 &for(Material)
        */
       cornerRadius?: number;
       /**
@@ -759,7 +759,7 @@ export interface BaseWidgetAnnotationConfig {
     description?: string;
     /**
      * @docid
-     * @default '#333333' [prop](color)
+     * @default '#333333' &prop(color)
      * @public
      */
     font?: Font;

@@ -704,7 +704,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
           /**
            * @docid
-           * @default '#FFFFFF' [prop](color)
+           * @default '#FFFFFF' &prop(color)
            */
           font?: Font;
           /**
@@ -755,7 +755,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
         /**
          * @docid
-         * @default '#FFFFFF' [prop](color)
+         * @default '#FFFFFF' &prop(color)
          */
         font?: Font;
         /**
@@ -810,7 +810,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
           /**
            * @docid
-           * @default '#FFFFFF' [prop](color)
+           * @default '#FFFFFF' &prop(color)
            */
           font?: Font;
           /**
@@ -1850,7 +1850,7 @@ export interface dxChartCommonAxisSettingsConstantLineStyle {
 export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -1897,7 +1897,7 @@ export interface dxChartCommonAxisSettingsLabel {
     displayMode?: 'rotate' | 'stagger' | 'standard';
     /**
      * @docid dxChartOptions.commonAxisSettings.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -1979,7 +1979,7 @@ export interface dxChartCommonAxisSettingsStripStyle {
 export interface dxChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.stripStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -2009,8 +2009,8 @@ export interface dxChartCommonAxisSettingsTitle {
     alignment?: 'center' | 'left' | 'right';
     /**
      * @docid dxChartOptions.commonAxisSettings.title.font
-     * @default '#767676' [prop](color)
-     * @default 16 [prop](size)
+     * @default '#767676' &prop(color)
+     * @default 16 &prop(size)
      * @public
      */
     font?: Font;
@@ -3756,8 +3756,8 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.font
-     * @default '#FFFFFF' [prop](color)
-     * @default 14 [prop](size)
+     * @default '#FFFFFF' &prop(color)
+     * @default 14 &prop(size)
      * @public
      */
     font?: Font;

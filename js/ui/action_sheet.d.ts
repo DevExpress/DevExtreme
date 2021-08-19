@@ -118,7 +118,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     /**
      * @docid
      * @default false
-     * @default true [for](iPad)
+     * @default true &for(iPad)
      * @public
      */
     usePopover?: boolean;
