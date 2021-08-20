@@ -39,11 +39,12 @@ test('Long all day appointment should be render, if him ended on next view day i
     currentView: 'day',
     currentDate: new Date(2021, 2, 28),
     startDayHour: 9,
+    width: 400,
     height: 600,
   }, true);
 });
 
-test('Long all day appointment should be render, if him ended on next view day in currentView: \'week\'(T1021963)', async (t) => {
+test('Long all day appointment should be render, if him ended on next view day in currentView:', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -72,6 +73,7 @@ test('Long all day appointment should be render, if him ended on next view day i
     currentView: 'week',
     currentDate: new Date(2021, 2, 28),
     startDayHour: 9,
+    width: 600,
     height: 600,
   }, true);
 });
