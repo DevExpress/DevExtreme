@@ -2386,7 +2386,7 @@ module('Appointment dragging', {
             editing: true,
         });
 
-        const $workspace = $(this.instance.$element()).find('.dx-scrollable-content');
+        const $workspace = $(this.instance.$element()).find('.dx-scheduler-date-table-container');
         const immediate = $workspace.dxDraggable('instance').option('immediate');
 
         assert.notOk(immediate, 'immediate option is false');
