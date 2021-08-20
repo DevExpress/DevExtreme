@@ -3765,7 +3765,7 @@ export interface dxDataGridOptions
      * @type_function_param2_field10 isExpanded:boolean
      * @public
      */
-    rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData) => any);
+    rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData<TRowData, TKey, TColumns>) => string | UserDefinedElement);
     /**
      * @docid
      * @public
@@ -4000,7 +4000,7 @@ export interface MasterDetail<TRowData, TKey> {
    * @type_function_param2_field2 data:object
    * @type_function_param2_field3 watch:function
    */
-  template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData<TRowData, TKey>) => any);
+  template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData<TRowData, TKey>) => string | UserDefinedElement);
 }
 
 export interface dxDataGridSortByGroupSummaryInfoItem {
@@ -4647,7 +4647,7 @@ export interface Column
      * @type_function_param2_field12 watch:function
      * @public
      */
-    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData<TRowData, TKey, TCellValue, Column<TRowData, TKey, any>[]>) => any);
+    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData<TRowData, TKey, TCellValue, Column<TRowData, TKey, any>[]>) => string | UserDefinedElement);
     /**
      * @docid dxDataGridColumn.columns
      * @type Array<dxDataGridColumn|string>
@@ -4673,7 +4673,7 @@ export interface Column
      * @type_function_param2_field12 watch:function
      * @public
      */
-    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData<TRowData, TKey, TCellValue, Column<TRowData, TKey, any>[]>) => any);
+    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData<TRowData, TKey, TCellValue, Column<TRowData, TKey, any>[]>) => string | UserDefinedElement);
     /**
      * @docid dxDataGridColumn.groupCellTemplate
      * @type_function_param1 cellElement:DxElement
@@ -4692,7 +4692,7 @@ export interface Column
      * @type_function_param2_field12 groupContinuedMessage:string
      * @public
      */
-    groupCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnGroupCellTemplateData<TRowData, TKey, TCellValue, Column<TRowData, TKey, any>[]>) => any);
+    groupCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnGroupCellTemplateData<TRowData, TKey, TCellValue, Column<TRowData, TKey, any>[]>) => string | UserDefinedElement);
     /**
      * @docid dxDataGridColumn.groupIndex
      * @default undefined
@@ -4709,7 +4709,7 @@ export interface Column
      * @type_function_param2_field3 column:dxDataGridColumn
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData<TRowData, TKey, TCellValue>) => any);
+    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData<TRowData, TKey, TCellValue>) => string | UserDefinedElement);
     /**
      * @docid dxDataGridColumn.showWhenGrouped
      * @default false
