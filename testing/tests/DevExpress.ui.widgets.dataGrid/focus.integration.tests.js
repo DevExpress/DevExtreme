@@ -370,6 +370,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual and useNative is true (T988877)', function(assert) {
+        if(devices.real().platform === 'ios') {
+            assert.ok(true);
+            return;
+        }
         // arrange
         const data = [];
 
