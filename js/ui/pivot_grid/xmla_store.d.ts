@@ -11,7 +11,7 @@ export interface XmlaStoreOptions {
      * @type_function_param1_field6 dataType:string
      * @public
      */
-    beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => void);
+    beforeSend?: ((options: { url?: string; method?: string; headers?: any; xhrFields?: any; data?: string; dataType?: string }) => void);
     /**
      * @docid
      * @public
@@ -35,6 +35,7 @@ export interface XmlaStoreOptions {
  * @export default
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class XmlaStore {
     constructor(options?: XmlaStoreOptions)
 }

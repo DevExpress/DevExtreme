@@ -1,18 +1,17 @@
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -24,19 +23,19 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import dxMenuBase, {
-    dxMenuBaseOptions
+    dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
 import {
-    dxMenuBaseItem
+    dxMenuBaseItem,
 } from './menu';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -69,7 +68,7 @@ export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 /** @public */
 export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
     readonly position: positionConfig;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxContextMenu> & SelectionChangedInfo;
@@ -182,12 +181,12 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid

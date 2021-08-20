@@ -1,21 +1,21 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
 /** @public */

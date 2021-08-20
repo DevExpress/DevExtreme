@@ -1,25 +1,25 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxTextEditor, {
     dxTextEditorButton,
-    dxTextEditorOptions
+    dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    format
+    format,
 } from './widget/ui.widget';
 
 /** @public */

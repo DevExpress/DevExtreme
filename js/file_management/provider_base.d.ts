@@ -2,10 +2,11 @@ import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 /** @namespace DevExpress.fileManagement */
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * @docid

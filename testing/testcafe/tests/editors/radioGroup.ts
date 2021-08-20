@@ -1,3 +1,4 @@
+import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import RadioGroup from '../../model/radioGroup';
 
@@ -70,4 +71,16 @@ fixture`Radio Group dataSource updating`
 
 test('There is no error on updating async CustomStore', async (t) => {
   await t.wait(50);
+});
+
+fixture`Radio Group validation message position`
+  .page(url(__dirname, './pages/t1020449.html'));
+
+test('message position is right in material (T1020449)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(await takeScreenshot('radiogroup-horizontal-validation.png', '#radio-form'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 });

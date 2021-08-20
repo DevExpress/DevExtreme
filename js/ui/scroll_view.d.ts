@@ -1,20 +1,20 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxScrollable, {
     dxScrollableOptions,
-    ScrollEventInfo
+    ScrollEventInfo,
 } from './scroll_view/ui.scrollable';
 
 /** @public */

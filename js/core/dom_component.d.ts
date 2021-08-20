@@ -1,15 +1,15 @@
 import {
     Component,
-    ComponentOptions
+    ComponentOptions,
 } from './component';
 
 import {
-    Device
+    Device,
 } from './devices';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from './element';
 
 import { TemplateManager } from './template_manager';
@@ -42,14 +42,14 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @default null
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: DxElement, model?: any }) => void);
+    onDisposing?: ((e: { component?: T; element?: DxElement; model?: any }) => void);
     /**
      * @docid
      * @action
      * @default null
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: { component?: T; element?: DxElement; model?: any; name?: string; fullName?: string; value?: any }) => void);
     /**
      * @docid
      * @default false
@@ -73,8 +73,23 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @export default
  * @hidden
  */
+/* eslint-disable no-underscore-dangle */
 export default class DOMComponent extends Component {
+    _templateManager: TemplateManager;
+
     constructor(element: UserDefinedElement, options?: DOMComponentOptions);
+
+    /**
+     * @docid
+     * @static
+     * @section uiWidgets
+     * @publicName getInstance(element)
+     * @param1 element:Element|JQuery
+     * @return DOMComponent
+     * @public
+     */
+    static getInstance(element: UserDefinedElement): DOMComponent;
+
     /**
      * @docid
      * @static
@@ -85,7 +100,8 @@ export default class DOMComponent extends Component {
      * @param1_field2 options:Object
      * @public
      */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+    static defaultOptions(rule: { device?: Device | Array<Device> | Function; options?: any }): void;
+
     /**
      * @docid
      * @publicName dispose()
@@ -99,23 +115,13 @@ export default class DOMComponent extends Component {
      * @public
      */
     element(): DxElement;
-    /**
-     * @docid
-     * @static
-     * @section uiWidgets
-     * @publicName getInstance(element)
-     * @param1 element:Element|JQuery
-     * @return DOMComponent
-     * @public
-     */
-    static getInstance(element: UserDefinedElement): DOMComponent;
 
     $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
-    _templateManager: TemplateManager;
 }
+ /* eslint-enable no-underscore-dangle */
 
 export type Options = DOMComponentOptions;
 export type IOptions = DOMComponentOptions;

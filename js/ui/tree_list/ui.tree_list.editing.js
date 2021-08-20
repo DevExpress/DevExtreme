@@ -96,25 +96,35 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
         },
 
         addRow: function(key) {
-            const that = this;
-            const callBase = that.callBase;
-            const dataController = that.getController('data');
+            if(key === undefined) {
+                key = this.option('rootValue');
+            }
 
-            if(key !== undefined && !dataController.isRowExpanded(key)) {
+            return this.callBase.call(this, key);
+        },
+
+        _addRowCore: function(data, parentKey, oldEditRowIndex) {
+            const callBase = this.callBase;
+            const rootValue = this.option('rootValue');
+            const dataController = this.getController('data');
+            const dataSourceAdapter = dataController.dataSource();
+            const parentKeyGetter = dataSourceAdapter.createParentIdGetter();
+
+            parentKey = parentKeyGetter(data);
+
+            if(parentKey !== undefined && parentKey !== rootValue && !dataController.isRowExpanded(parentKey)) {
                 const deferred = new Deferred();
-                dataController.expandRow(key).done(function() {
-                    setTimeout(function() {
-                        callBase.call(that, key).done(deferred.resolve).fail(deferred.reject);
+
+                dataController.expandRow(parentKey).done(() => {
+                    setTimeout(() => {
+                        callBase.call(this, data, parentKey, oldEditRowIndex).done(deferred.resolve).fail(deferred.reject);
                     });
                 }).fail(deferred.reject);
+
                 return deferred.promise();
             }
 
-            if(key === undefined) {
-                key = that.option('rootValue');
-            }
-
-            return callBase.call(that, key);
+            return callBase.call(this, data, parentKey, oldEditRowIndex);
         },
 
         _initNewRow: function(options, parentKey) {

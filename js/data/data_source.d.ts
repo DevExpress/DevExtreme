@@ -1,13 +1,13 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from './abstract_store';
 
 import {
-    CustomStoreOptions
+    CustomStoreOptions,
 } from './custom_store';
 
 /** @namespace DevExpress.data */

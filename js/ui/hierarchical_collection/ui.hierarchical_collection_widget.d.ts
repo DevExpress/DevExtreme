@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import CollectionWidget, {
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */

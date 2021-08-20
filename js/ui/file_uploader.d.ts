@@ -1,17 +1,17 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 import UploadInfo from '../file_management/upload_info';
@@ -21,7 +21,7 @@ export type BeforeSendEvent = EventInfo<dxFileUploader> & {
     readonly request: XMLHttpRequest;
     readonly file: File;
     readonly uploadInfo?: UploadInfo;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileUploader>;
@@ -32,12 +32,12 @@ export type DisposingEvent = EventInfo<dxFileUploader>;
 /** @public */
 export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader> & {
     readonly dropZoneElement: DxElement;
-}
+};
 
 /** @public */
 export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader> & {
     readonly dropZoneElement: DxElement;
-}
+};
 
 /** @public */
 export type FilesUploadedEvent = EventInfo<dxFileUploader>;
@@ -55,21 +55,21 @@ export type ProgressEvent = NativeEventInfo<dxFileUploader> & {
     readonly bytesLoaded: number;
     readonly bytesTotal: number;
     readonly request: XMLHttpRequest;
-}
+};
 
 /** @public */
 export type UploadAbortedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
-    message: string
-}
+    message: string;
+};
 
 /** @public */
 export type UploadedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
     message: string;
-}
+};
 
 /** @public */
 export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
@@ -77,19 +77,19 @@ export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
     readonly request: XMLHttpRequest;
     readonly error: any;
     message: string;
-}
+};
 
 /** @public */
 export type UploadStartedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
-    readonly request: XMLHttpRequest 
-}
+    readonly request: XMLHttpRequest;
+};
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
     readonly value?: Array<File>;
     readonly previousValue?: Array<File>;
-}
+};
 
 /**
  * @deprecated use Properties instead

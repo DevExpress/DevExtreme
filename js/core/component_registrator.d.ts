@@ -7,7 +7,7 @@
  * @namespace DevExpress
  * @hidden
  */
-export default function registerComponent(name: string, componentClass: any): void;
+declare function registerComponent(name: string, componentClass: any): void;
 
 /**
  * @docid
@@ -19,4 +19,6 @@ export default function registerComponent(name: string, componentClass: any): vo
  * @namespace DevExpress
  * @hidden
  */
-export default function registerComponent(name: string, namespace: any, componentClass: any): void;
+declare function registerComponent(name: string, namespace: any, componentClass: any): void;
+
+export default registerComponent;

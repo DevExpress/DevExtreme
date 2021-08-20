@@ -1,15 +1,15 @@
 import {
     UserDefinedElement,
     DxElement,
-    UserDefinedElementsArray
+    UserDefinedElementsArray,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource from '../data/data_source';
@@ -19,7 +19,7 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
@@ -52,7 +52,7 @@ import {
     SavingInfo,
     SelectionChangedInfo,
     ToolbarPreparingInfo,
-    RowDraggingTemplateDataModel
+    RowDraggingTemplateDataModel,
 } from './data_grid';
 
 import dxScrollable from './scroll_view/ui.scrollable';
@@ -85,7 +85,7 @@ export type CellDblClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
 /** @public */
 export type CellHoverChangedEvent = EventInfo<dxTreeList> & CellInfo & {
     readonly eventType: string;
-}
+};
 
 /** @public */
 export type CellPreparedEvent = EventInfo<dxTreeList> & CellInfo & {
@@ -94,7 +94,7 @@ export type CellPreparedEvent = EventInfo<dxTreeList> & CellInfo & {
     readonly isNewRow?: boolean;
     readonly watch?: Function;
     readonly oldValue?: any;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTreeList>;
@@ -108,7 +108,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxTreeList> & {
     readonly column?: Column;
     readonly rowIndex: number;
     readonly row?: RowObject;
-}
+};
 
 /** @public */
 export type DataErrorOccurredEvent = EventInfo<dxTreeList> & DataErrorOccurredInfo;
@@ -127,7 +127,7 @@ export type EditingStartEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly column: any;
-}
+};
 
 /** @public */
 export type EditorPreparedEvent = EventInfo<dxTreeList> & {
@@ -142,7 +142,7 @@ export type EditorPreparedEvent = EventInfo<dxTreeList> & {
     readonly readOnly: boolean;
     readonly dataField?: string;
     readonly row?: RowObject;
-}
+};
 
 /** @public */
 export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
@@ -159,7 +159,7 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     editorOptions: any;
     readonly dataField?: string;
     readonly row?: RowObject;
-}
+};
 
 /** @public */
 export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
@@ -168,7 +168,7 @@ export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
     readonly rowIndex: number;
     readonly row: RowObject;
     readonly column: Column;
-}
+};
 
 /** @public */
 export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> & {
@@ -180,14 +180,14 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> 
     readonly rows: Array<RowObject>;
     readonly columns: Array<Column>;
     isHighlighted: boolean;
-}
+};
 
 /** @public */
 export type FocusedRowChangedEvent = EventInfo<dxTreeList> & {
     readonly rowElement: DxElement;
     readonly rowIndex: number;
     readonly row: RowObject;
-}
+};
 
 /** @public */
 export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
@@ -195,7 +195,7 @@ export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
     readonly prevRowIndex: number;
     newRowIndex: number;
     readonly rows: Array<RowObject>;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxTreeList>;
@@ -209,7 +209,7 @@ export type KeyDownEvent = NativeEventInfo<dxTreeList> & KeyDownInfo;
 /** @public */
 export type NodesInitializedEvent = EventInfo<dxTreeList> & {
     readonly root: Node;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTreeList> & ChangedOptionInfo;
@@ -229,7 +229,7 @@ export type RowClickEvent = NativeEventInfo<dxTreeList> & {
     readonly handled: boolean;
     readonly node: Node;
     readonly level: number;
-}
+};
 
 /** @public */
 export type RowCollapsedEvent = EventInfo<dxTreeList> & RowKeyInfo;
@@ -249,7 +249,7 @@ export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
     readonly rowElement: DxElement;
-}
+};
 
 /** @public */
 export type RowExpandedEvent = EventInfo<dxTreeList> & RowKeyInfo;
@@ -277,7 +277,7 @@ export type RowPreparedEvent = EventInfo<dxTreeList> & {
     readonly rowElement: DxElement;
     readonly node: Node;
     readonly level: number;
-}
+};
 
 /** @public */
 export type RowRemovedEvent = EventInfo<dxTreeList> & RowRemovedInfo;
@@ -306,7 +306,6 @@ export type SelectionChangedEvent = EventInfo<dxTreeList> & SelectionChangedInfo
 /** @public */
 export type ToolbarPreparingEvent = EventInfo<dxTreeList> & ToolbarPreparingInfo;
 
-
 /** @public */
 export type RowDraggingAddEvent = RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
@@ -328,13 +327,11 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxTreeList>;
 /** @public */
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxTreeList> & DragReorderInfo;
 
-
 /** @public */
 export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
     row?: RowObject;
     column?: Column;
-}
-
+};
 
 /** @public */
 export type ColumnButtonTemplateData = {
@@ -346,7 +343,7 @@ export type ColumnButtonTemplateData = {
     readonly rowIndex: number;
     readonly rowType: string;
     readonly row: RowObject;
-}
+};
 
 /** @public */
 export type ColumnCellTemplateData = {
@@ -362,7 +359,7 @@ export type ColumnCellTemplateData = {
     readonly row: RowObject;
     readonly rowType: string;
     readonly watch?: Function;
-}
+};
 
 /** @public */
 export type ColumnEditCellTemplateData = {
@@ -378,13 +375,13 @@ export type ColumnEditCellTemplateData = {
     readonly row: RowObject;
     readonly rowType: string;
     readonly watch?: Function;
-}
+};
 
 export type ColumnHeaderCellTemplateData = {
     readonly component: dxTreeList;
     readonly columnIndex: number;
     readonly column: Column;
-}
+};
 
 /** @public */
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
@@ -812,17 +809,17 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
        * @docid
        * @default false
        */
-      filtering?: boolean,
+      filtering?: boolean;
       /**
        * @docid
        * @default false
        */
-      grouping?: boolean,
+      grouping?: boolean;
       /**
        * @docid
        * @default false
        */
-      sorting?: boolean
+      sorting?: boolean;
     } | 'auto';
     /**
      * @docid
@@ -861,7 +858,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowAdding?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
+    allowAdding?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
@@ -871,7 +868,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowDeleting?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
@@ -881,7 +878,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowUpdating?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.texts
      * @type object
@@ -1270,7 +1267,6 @@ export interface dxTreeListColumn extends ColumnBase {
  */
 export type ColumnButton = dxTreeListColumnButton;
 
-
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the TreeList's ColumnButton type instead
@@ -1320,7 +1316,7 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { readonly component: dxTreeList, row?: RowObject, readonly column: Column }) => boolean);
+    visible?: boolean | ((options: { readonly component: dxTreeList; row?: RowObject; readonly column: Column }) => boolean);
 }
 
 /**

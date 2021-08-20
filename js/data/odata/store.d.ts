@@ -1,19 +1,19 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from '../abstract_store';
 
 import {
-    LoadOptions
+    LoadOptions,
 } from '../load_options';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
-        onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): Promise<TResult1 | TResult2>;
 }
 
@@ -31,7 +31,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url?: string; async?: boolean; method?: string; timeout?: number; params?: any; payload?: any; headers?: any }) => void);
     /**
      * @docid
      * @public
@@ -45,7 +45,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus?: number; errorDetails?: any; requestOptions?: any }) => void);
     /**
      * @docid
      * @default {}
@@ -116,7 +116,7 @@ export default class ODataStore extends Store {
      * @return Promise<any>
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<any>;
+    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<any>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
