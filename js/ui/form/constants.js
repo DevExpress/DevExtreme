@@ -36,3 +36,5 @@ export const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
 export const GROUP_COL_COUNT_ATTR = 'group-col-count';
 export const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
 export const FORM_UNDERLINED_CLASS = 'dx-form-styling-mode-underlined';
+
+export const SIMPLE_ITEM_TYPE = 'simple';
