@@ -167,7 +167,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
                 assert.equal($workSpace.length, 1, 'Work Space is rendered');
                 assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
                 assert.roughEqual(appointmentPosition.top, 100, 2.001, 'Appointment top is OK');
-                assert.roughEqual(appointmentPosition.left, 299, 1.001, 'Appointment left is OK');
+                assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
                 done();
             }
         });
@@ -187,7 +187,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
 
             assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
             assert.roughEqual(appointmentPosition.top, 100, 2.001, 'Appointment top is OK');
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, 'Appointment left is OK');
+            assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
         });
 
         scheduler.instance.addAppointment({
@@ -215,7 +215,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
 
             assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
             assert.roughEqual(appointmentPosition.top, 150, 2.001, 'Appointment top is OK');
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, 'Appointment left is OK');
+            assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
         });
 
         scheduler.instance.updateAppointment(appointment, {
