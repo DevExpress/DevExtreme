@@ -7,6 +7,7 @@ $arrow-down: "\f016";
   position: relative;
   z-index: 1;
   width: 100%;
+  flex-shrink: 0;
 
   .dx-toolbar {
     height: 100%;

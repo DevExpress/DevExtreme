@@ -1000,20 +1000,7 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     .dx-scheduler-all-day-title {
-      z-index: 100;
       border-right: $scheduler-base-border;
-
-      &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: $scheduler-left-column-width;
-        border-right: $scheduler-base-border;
-
-        .dx-scheduler-small & {
-          width: $scheduler-left-column-width * $scheduler-small-size-factor;
-        }
-      }
     }
 
     .dx-scheduler-date-table {
@@ -1094,7 +1081,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-all-day-title {
     color: $scheduler-panel-text-color;
-    width: $scheduler-left-column-width;
+    width: 100%;
     height: $scheduler-all-day-table-cell-height;
     position: absolute;
     line-height: $scheduler-all-day-table-cell-height;
