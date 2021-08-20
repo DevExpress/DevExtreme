@@ -1083,7 +1083,7 @@ $scheduler-appointment-form-label-padding: 20px;
     color: $scheduler-panel-text-color;
     width: 100%;
     height: $scheduler-all-day-table-cell-height;
-    position: absolute;
+    position: relative;
     line-height: $scheduler-all-day-table-cell-height;
     text-align: center;
     border-bottom: 2px solid $scheduler-base-border-color;
@@ -1624,7 +1624,6 @@ $scheduler-appointment-form-label-padding: 20px;
     &.dx-scheduler-work-space-work-week {
       .dx-scheduler-all-day-title {
         top: 0;
-        position: relative;
         height: 50px !important; // stylelint-disable-line declaration-no-important
         line-height: 50px !important; // stylelint-disable-line declaration-no-important
         border-bottom: none;
