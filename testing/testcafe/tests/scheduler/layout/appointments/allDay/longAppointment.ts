@@ -11,19 +11,19 @@ test('Long all day appointment should be render, if him ended on next view day i
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(scheduler.getToolbar().getNavigator().prevDuration, { speed: 0.1 })
+    .click(scheduler.getToolbar().getNavigator().prevDuration)
     .expect(await takeScreenshot('27-march-day-view.png', scheduler.workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration, { speed: 0.1 })
+    .click(scheduler.getToolbar().getNavigator().nextDuration)
     .expect(await takeScreenshot('28-march-day-view.png', scheduler.workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration, { speed: 0.1 })
-    .expect(await takeScreenshot('29-march-day-view', scheduler.workSpace)).ok();
+    .click(scheduler.getToolbar().getNavigator().nextDuration)
+    .expect(await takeScreenshot('29-march-day-view.png', scheduler.workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration, { speed: 0.1 })
+    .click(scheduler.getToolbar().getNavigator().nextDuration)
     .expect(await takeScreenshot('30-march-day-view.png', scheduler.workSpace)).ok();
 
   await t.expect(compareResults.isValid())
@@ -49,15 +49,15 @@ test('Long all day appointment should be render, if him ended on next view day i
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(scheduler.getToolbar().getNavigator().prevDuration, { speed: 0.1 })
+    .click(scheduler.getToolbar().getNavigator().prevDuration)
     .expect(await takeScreenshot('21-27-march-week-view.png', scheduler.workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration, { speed: 0.1 })
+    .click(scheduler.getToolbar().getNavigator().nextDuration)
     .expect(await takeScreenshot('28-march-3-apr-week-view.png', scheduler.workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration, { speed: 0.1 })
+    .click(scheduler.getToolbar().getNavigator().nextDuration)
     .expect(await takeScreenshot('4-10-apr-week-view.png', scheduler.workSpace)).ok();
 
   await t.expect(compareResults.isValid())
