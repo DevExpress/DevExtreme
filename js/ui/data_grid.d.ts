@@ -1493,6 +1493,7 @@ export interface StateStoring {
     /**
      * @docid GridBaseOptions.stateStoring.customSave
      * @type_function_param1 gridState:object
+     * @return void
      */
     customSave?: ((gridState: any) => any);
     /**
@@ -2665,6 +2666,7 @@ export interface ColumnHeaderFilter {
    * @type_function_param1_field1 component:object
    * @type_function_param1_field2 dataSource:DataSourceOptions
    * @default undefined
+   * @return void
    */
   dataSource?: Array<any> | Store | ((options: { component?: any; dataSource?: DataSourceOptions }) => any) | DataSourceOptions;
   /**
