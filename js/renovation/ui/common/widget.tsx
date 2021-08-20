@@ -351,7 +351,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const { cssText } = this.props;
 
     if (cssText !== '') {
-      this.widgetRef.current!.style.cssText = cssText;
+      this.widgetElementRef.current!.style.cssText = cssText;
     }
   }
 

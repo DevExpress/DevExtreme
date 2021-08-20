@@ -103,16 +103,16 @@ describe('Widget', () => {
       describe('applyCssTextEffect', () => {
         it('should apply cssText value to the main element', () => {
           const widget = new Widget({ cssText: 'background-color: red;' });
-          widget.widgetRef = { current: { style: {} } } as any;
+          widget.widgetElementRef = { current: { style: {} } } as any;
           widget.applyCssTextEffect();
-          expect(widget.widgetRef.current!.style.cssText).toStrictEqual('background-color: red;');
+          expect(widget.widgetElementRef.current!.style.cssText).toStrictEqual('background-color: red;');
         });
 
         it('should ignore empty cssText value', () => {
           const widget = new Widget({ cssText: '' });
-          widget.widgetRef = { current: { style: {} } } as any;
+          widget.widgetElementRef = { current: { style: {} } } as any;
           widget.applyCssTextEffect();
-          expect(widget.widgetRef.current!.style.cssText).toStrictEqual(undefined);
+          expect(widget.widgetElementRef.current!.style.cssText).toStrictEqual(undefined);
         });
       });
 
