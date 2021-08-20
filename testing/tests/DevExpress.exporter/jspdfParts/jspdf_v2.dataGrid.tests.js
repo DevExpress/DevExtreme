@@ -11,6 +11,7 @@ import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v2.dataGrid.summaries.tests.js';
 import { JSPdfStylesTests } from './jspdf_v2.dataGrid.styles.tests.js';
+import { JSPdfMultilineTests } from './jspdf_v2.dataGrid.multiline.tests.js';
 
 import 'generic_light.css!';
 
@@ -75,6 +76,12 @@ function createMockPdfDoc() {
     result.setFontSize = function() {
         this.__log.push('setFontSize,' + argumentsToString.apply(null, arguments));
         this.__setFontSize.apply(this, arguments);
+    };
+
+    result.__setLineHeightFactor = result.setLineHeightFactor;
+    result.setLineHeightFactor = function() {
+        this.__log.push('setLineHeightFactor,' + argumentsToString.apply(null, arguments));
+        this.__setLineHeightFactor.apply(this, arguments);
     };
 
     result.__setTextColor = result.setTextColor;
@@ -1691,3 +1698,4 @@ JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfStylesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfMultilineTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
