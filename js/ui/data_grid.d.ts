@@ -1493,6 +1493,7 @@ export interface StateStoring {
     /**
      * @docid GridBaseOptions.stateStoring.customSave
      * @type_function_param1 gridState:object
+     * @return void
      */
     customSave?: ((gridState: any) => any);
     /**
