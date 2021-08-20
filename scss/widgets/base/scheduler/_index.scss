@@ -208,9 +208,37 @@ $scheduler-appointment-form-label-padding: 20px;
     position: absolute;
   }
 
+  .dx-scheduler-group-column-count-one .dx-scheduler-header-panel-empty-cell {
+    width: $scheduler-left-column-width;
+  }
+
+  .dx-scheduler-group-column-count-two .dx-scheduler-header-panel-empty-cell {
+    width: 2 * $scheduler-left-column-width;
+  }
+
+  .dx-scheduler-group-column-count-three .dx-scheduler-header-panel-empty-cell {
+    width: 3 * $scheduler-left-column-width;
+  }
+
   .dx-scheduler-work-space-week,
   .dx-scheduler-work-space-work-week,
   .dx-scheduler-work-space-day {
+    .dx-scheduler-header-panel-empty-cell {
+      width: $scheduler-left-column-width;
+    }
+
+    &.dx-scheduler-group-column-count-one .dx-scheduler-header-panel-empty-cell {
+      width: 2 * $scheduler-left-column-width;
+    }
+
+    &.dx-scheduler-group-column-count-two .dx-scheduler-header-panel-empty-cell {
+      width: 3 * $scheduler-left-column-width;
+    }
+
+    &.dx-scheduler-group-column-count-three .dx-scheduler-header-panel-empty-cell {
+      width: 4 * $scheduler-left-column-width;
+    }
+
     .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content {
       padding: 0 7px;
     }
@@ -440,6 +468,7 @@ $scheduler-appointment-form-label-padding: 20px;
     display: flex;
     align-items: flex-end;
     flex-shrink: 0;
+    width: 0;
   }
 
   .dx-scheduler-header-tables-container {
@@ -1832,6 +1861,28 @@ $scheduler-appointment-form-label-padding: 20px;
             text-align: right;
           }
         }
+      }
+    }
+  }
+
+  .dx-scheduler-small {
+    .dx-scheduler-work-space-week,
+    .dx-scheduler-work-space-work-week,
+    .dx-scheduler-work-space-day {
+      .dx-scheduler-header-panel-empty-cell {
+        width: $scheduler-small-size-factor * $scheduler-left-column-width;
+      }
+
+      &.dx-scheduler-group-column-count-one .dx-scheduler-header-panel-empty-cell {
+        width: (1 + $scheduler-small-size-factor) * $scheduler-left-column-width;
+      }
+
+      &.dx-scheduler-group-column-count-two .dx-scheduler-header-panel-empty-cell {
+        width: (2 + $scheduler-small-size-factor) * $scheduler-left-column-width;
+      }
+
+      &.dx-scheduler-group-column-count-three .dx-scheduler-header-panel-empty-cell {
+        width: (3 + $scheduler-small-size-factor) * $scheduler-left-column-width;
       }
     }
   }
