@@ -464,7 +464,6 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-header-panel-empty-cell {
-    height: 100%;
     display: flex;
     align-items: flex-end;
     flex-shrink: 0;
@@ -521,8 +520,7 @@ $scheduler-appointment-form-label-padding: 20px;
     display: flex;
     flex-direction: row;
     flex: 1 1 0;
-
-    // min-height: 0; - break scheduler when height is not specified
+    min-height: 0;
   }
 
   .dx-scheduler-group-flex-container {
