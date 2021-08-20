@@ -1103,6 +1103,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-all-day-panel {
     width: 100%;
+    position: relative;
 
     .dx-scheduler-all-day-table-cell {
       border-bottom: 2px solid $scheduler-base-border-color;

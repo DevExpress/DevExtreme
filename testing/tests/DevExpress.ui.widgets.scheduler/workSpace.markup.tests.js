@@ -192,10 +192,10 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
                 assert.ok($row.hasClass('dx-scheduler-all-day-table-row'), 'Css class of row is correct');
             });
 
-            QUnit.test('All-day-appointments container should be rendered directly in workspace', function(assert) {
+            QUnit.test('All-day-appointments container should be rendered inside all-day-panael', function(assert) {
                 const $element = this.instance.$element();
 
-                assert.equal($element.children('.dx-scheduler-all-day-appointments').length, 1, 'Container is rendered correctly');
+                assert.equal($element.find('.dx-scheduler-all-day-panel').children('.dx-scheduler-all-day-appointments').length, 1, 'Container is rendered correctly');
             });
 
             QUnit.test('Scheduler workspace day should have right groupedStrategy by default', function(assert) {

@@ -1832,7 +1832,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 return [{}];
             }
 
-            const allDayAppointmentContainer = this.getAllDayContainer();
+            const allDayAppointmentContainer = this._$allDayPanel;
             const allDayPanelRect = getBoundingRect(allDayAppointmentContainer.get(0));
 
             allDayCells.each((_, cell) => {
@@ -1957,6 +1957,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
+
+            this._$allDayPanel.prepend(this._$allDayContainer);
         }
         this._toggleAllDayVisibility(true);
     }
@@ -2385,7 +2387,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.$element().append(
                 this._$fixedContainer,
                 this._$headerPanelContainer,
-                this._$allDayContainer,
                 this._dateTableScrollable.$element(),
             );
         }
