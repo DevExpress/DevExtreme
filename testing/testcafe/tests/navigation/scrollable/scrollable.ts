@@ -191,6 +191,26 @@ fixture`Scrollable_ScrollToElement`
         showScrollbar: 'always',
       });
     });
+  });
+
+  [
+    { initialScrollOffset: { top: 0, left: 0 }, position: 'scrollFromTopLeftCorner' },
+    { initialScrollOffset: { top: 0, left: 290 }, position: 'scrollFromTopRightCorner' },
+    { initialScrollOffset: { top: 290, left: 290 }, position: 'scrollFromBottomRightCorner' },
+    { initialScrollOffset: { top: 290, left: 0 }, position: 'scrollFromBottomLeftCorner' },
+
+    { initialScrollOffset: { top: 0, left: 160 }, position: 'scrollFromTop' },
+    { initialScrollOffset: { top: 160, left: 290 }, position: 'scrollFromRight' },
+    { initialScrollOffset: { top: 290, left: 160 }, position: 'scrollFromBottom' },
+    { initialScrollOffset: { top: 160, left: 0 }, position: 'scrollFromLeft' },
+
+    // from inside
+
+    { initialScrollOffset: { top: 165, left: 175 }, position: 'scrollFromInsideTopLeftPart' },
+    { initialScrollOffset: { top: 140, left: 140 }, position: 'scrollFromInsideRightBottomPart' },
+  ].forEach(({ initialScrollOffset, position }) => {
+    // TODO: support useNative: false
+    const useNative = true;
 
     test(`scrollToElement(element, offset), transform: scale(1.5), useNative: '${useNative}', direction: '${direction}', `, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -198,47 +218,47 @@ fixture`Scrollable_ScrollToElement`
       const scrollable = new Scrollable('#container', { useNative, direction });
       const { getInstance } = scrollable;
 
-      const positions = [
-        { initialScrollOffset: { top: 0, left: 0 }, position: 'scrollFromTopLeftCorner' },
-        { initialScrollOffset: { top: 0, left: 290 }, position: 'scrollFromTopRightCorner' },
-        { initialScrollOffset: { top: 290, left: 290 }, position: 'scrollFromBottomRightCorner' },
-        { initialScrollOffset: { top: 290, left: 0 }, position: 'scrollFromBottomLeftCorner' },
+      // const positions = [
+      //   { initialScrollOffset: { top: 0, left: 0 }, position: 'scrollFromTopLeftCorner' },
+      //   { initialScrollOffset: { top: 0, left: 290 }, position: 'scrollFromTopRightCorner' },
+      //   { initialScrollOffset: { top: 290, left: 290 }, position: 'scrollFromBottomRightCorner' },
+      //   { initialScrollOffset: { top: 290, left: 0 }, position: 'scrollFromBottomLeftCorner' },
 
-        { initialScrollOffset: { top: 0, left: 160 }, position: 'scrollFromTop' },
-        { initialScrollOffset: { top: 160, left: 290 }, position: 'scrollFromRight' },
-        { initialScrollOffset: { top: 290, left: 160 }, position: 'scrollFromBottom' },
-        { initialScrollOffset: { top: 160, left: 0 }, position: 'scrollFromLeft' },
+      //   { initialScrollOffset: { top: 0, left: 160 }, position: 'scrollFromTop' },
+      //   { initialScrollOffset: { top: 160, left: 290 }, position: 'scrollFromRight' },
+      //   { initialScrollOffset: { top: 290, left: 160 }, position: 'scrollFromBottom' },
+      //   { initialScrollOffset: { top: 160, left: 0 }, position: 'scrollFromLeft' },
 
-        // from inside
+      //   // from inside
 
-        { initialScrollOffset: { top: 165, left: 175 }, position: 'scrollFromInsideTopLeftPart' },
-        { initialScrollOffset: { top: 140, left: 140 }, position: 'scrollFromInsideRightBottomPart' },
-      ];
+      //   { initialScrollOffset: { top: 165, left: 175 }, position: 'scrollFromInsideTopLeftPart' },
+      //   { initialScrollOffset: { top: 140, left: 140 }, position: 'scrollFromInsideRightBottomPart' },
+      // ];
 
       // eslint-disable-next-line no-restricted-syntax
-      for (const { initialScrollOffset, position } of positions) {
-        await ClientFunction(
-          () => {
-            $((getInstance() as any).content()).css({
-              transform: 'scale(1.5)',
-              transformOrigin: '0 0',
-            });
-            (getInstance() as any).scrollTo(initialScrollOffset);
-          },
-          { dependencies: { getInstance, initialScrollOffset } },
-        )();
+      // for (const { initialScrollOffset, position } of positions) {
+      await ClientFunction(
+        () => {
+          $((getInstance() as any).content()).css({
+            transform: 'scale(1.5)',
+            transformOrigin: '0 0',
+          });
+          (getInstance() as any).scrollTo(initialScrollOffset);
+        },
+        { dependencies: { getInstance, initialScrollOffset } },
+      )();
 
-        await ClientFunction(
-          () => { (getInstance() as any).scrollToElement($('#element').get(0)); },
-          { dependencies: { getInstance } },
-        )();
+      await ClientFunction(
+        () => { (getInstance() as any).scrollToElement($('#element').get(0)); },
+        { dependencies: { getInstance } },
+      )();
 
-        await t
-          .expect(await takeScreenshot(`scrollToElement(),transform=scale(1.5),useNative=${useNative}-direction=${direction}-${position}.png`, Selector('#container')))
-          .ok()
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }
+      await t
+        .expect(await takeScreenshot(`scrollToElement(),transform=scale(1.5),useNative=${useNative}-direction=${direction}-${position}.png`, Selector('#container')))
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+      // }
     }).before(async () => {
       await ClientFunction(() => {
         $('#container').css({
