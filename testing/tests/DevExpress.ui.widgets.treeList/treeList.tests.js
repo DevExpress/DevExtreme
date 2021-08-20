@@ -8,6 +8,7 @@ QUnit.testStart(function() {
 ';
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 import 'generic_light.css!';
@@ -1733,7 +1734,8 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 },
                 scrolling: {
                     mode: scrollingMode,
-                    minGap: 0
+                    minGap: 0,
+                    useNative: true
                 },
                 focusedRowEnabled: true,
                 focusedRowKey: 12,

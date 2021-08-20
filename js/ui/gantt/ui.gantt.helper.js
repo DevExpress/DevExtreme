@@ -89,6 +89,16 @@ export const GanttHelper = {
         }
     },
 
+    getAllParentNodesKeys(node, array) {
+        if(node?.data) {
+            array.push(node.key);
+        }
+
+        if(node?.parent?.data) {
+            GanttHelper.getAllParentNodesKeys(node.parent, array);
+        }
+    },
+
     getDefaultOptions() {
         return {
             /**
