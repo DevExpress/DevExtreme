@@ -78,8 +78,20 @@ import {
   Format,
 } from '../localization';
 
+import { dxContextMenuItem } from './context_menu';
+
+import { FilterDescriptor } from '../data';
+
+import { Properties as DateBoxProperties } from './date_box';
+import { Properties as NumberBoxProperties } from './number_box';
+import { Properties as CheckBoxProperties } from './check_box';
+import { Properties as TextBoxProperties } from './text_box';
+import { Properties as SelectBoxProperties } from './select_box';
+
+export type EditorOptions = DateBoxProperties | NumberBoxProperties | CheckBoxProperties | TextBoxProperties | SelectBoxProperties;
+
 export interface AdaptiveDetailRowPreparingInfo {
-  readonly formOptions: any;
+  readonly formOptions: dxFormOptions;
 }
 
 export interface DataErrorOccurredInfo {
@@ -204,7 +216,7 @@ export interface RowDraggingTemplateDataModel {
 
 export interface FilterPanelCustomizeTextArg<T> {
   readonly component: T;
-  readonly filterValue: any;
+  readonly filterValue: FilterDescriptor;
   readonly text: string;
 }
 
@@ -597,7 +609,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @fires GridBase.onOptionChanged
      * @public
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: FilterDescriptor;
     /**
      * @docid
      * @default -1
@@ -2040,14 +2052,14 @@ export interface GridBase {
      * @return any
      * @public
      */
-    filter(): any;
+    filter(): FilterDescriptor;
     /**
      * @docid
      * @publicName filter(filterExpr)
      * @param1 filterExpr:any
      * @public
      */
-    filter(filterExpr: any): void;
+    filter(filterExpr: FilterDescriptor): void;
     focus(): void;
     /**
      * @docid
@@ -2080,7 +2092,7 @@ export interface GridBase {
      * @return any
      * @public
      */
-    getCombinedFilter(): any;
+    getCombinedFilter(): FilterDescriptor;
     /**
      * @docid
      * @publicName getCombinedFilter(returnDataField)
@@ -2088,7 +2100,7 @@ export interface GridBase {
      * @return any
      * @public
      */
-    getCombinedFilter(returnDataField: boolean): any;
+    getCombinedFilter(returnDataField: boolean): FilterDescriptor;
     getDataSource(): DataSource;
     /**
      * @docid
@@ -2415,7 +2427,7 @@ export interface ColumnBase {
      * @type_function_return Filter expression
      * @public
      */
-    calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
+    calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: 'filterRow' | 'headerFilter' | 'filterBuilder' | 'search') => FilterDescriptor);
     /**
      * @docid GridBaseColumn.calculateSortValue
      * @type_function_param1 rowData:object
@@ -2463,7 +2475,7 @@ export interface ColumnBase {
      * @docid GridBaseColumn.editorOptions
      * @public
      */
-    editorOptions?: any;
+    editorOptions?: EditorOptions;
     /**
      * @docid GridBaseColumn.encodeHtml
      * @default true
@@ -2902,7 +2914,7 @@ export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   readonly editorElement: DxElement;
   readonly readOnly: boolean;
   editorName: string;
-  editorOptions: any;
+  editorOptions: EditorOptions;
   readonly dataField?: string;
   readonly row?: RowObject;
 };
@@ -3670,7 +3682,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @fires dxDataGridOptions.onOptionChanged
      * @public
      */
-    selectionFilter?: string | Array<any> | Function;
+    selectionFilter?: FilterDescriptor;
     /**
      * @docid
      * @type Array<object>
@@ -4404,14 +4416,14 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
     expandAdaptiveDetailRow(key: any): void;
-    filter(): any;
-    filter(filterExpr: any): void;
+    filter(): FilterDescriptor;
+    filter(filterExpr: FilterDescriptor): void;
     focus(): void;
     focus(element: UserDefinedElement): void;
     getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
-    getCombinedFilter(): any;
-    getCombinedFilter(returnDataField: boolean): any;
+    getCombinedFilter(): FilterDescriptor;
+    getCombinedFilter(returnDataField: boolean): FilterDescriptor;
     getDataSource(): DataSource;
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;

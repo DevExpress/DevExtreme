@@ -267,7 +267,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  filter(filterExpr: any): void {
+  filter(filterExpr: FilterDescriptor): void {
     return this.instance?.filter(filterExpr);
   }
 

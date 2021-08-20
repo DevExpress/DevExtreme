@@ -8,6 +8,7 @@ import {
   Nested,
   Template,
 } from '@devextreme-generator/declarations';
+import { FilterDescriptor } from '../../../../../data';
 import type { dxToolbarItem } from '../../../../../ui/toolbar';
 import type { dxLoadPanelAnimation } from '../../../../../ui/load_panel';
 import DxDataGrid from '../../../../../ui/data_grid';
@@ -39,6 +40,7 @@ import type {
   RowDraggingMoveEvent,
   RowDraggingStartEvent,
   EditingStartEvent,
+  EditorOptions,
   EditorPreparedEvent,
   EditorPreparingEvent,
   ExportedEvent,
@@ -242,7 +244,7 @@ export class DataGridColumn {
   dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
 
   @OneWay()
-  editorOptions?: any;
+  editorOptions?: EditorOptions;
 
   @OneWay()
   encodeHtml?: boolean;
@@ -1547,7 +1549,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() toolbar?: DataGridToolbar;
 
-  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
+  @TwoWay() filterValue?: FilterDescriptor;
 
   @TwoWay() focusedColumnIndex = -1;
 
@@ -1557,7 +1559,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @TwoWay() selectedRowKeys: any[] = [];
 
-  @TwoWay() selectionFilter: string | any[] | ((...args: any[]) => any) = [];
+  @TwoWay() selectionFilter: FilterDescriptor = [];
 
   @Event() onCellClick?:
   | ((e: CellClickEvent) => any);
