@@ -1,3 +1,4 @@
+import { isDefined } from '../../../core/utils/type';
 import Component from '../common/component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
@@ -90,6 +91,27 @@ export default class Editor extends Component {
     innerWidget.on('optionChanged', syncOptions);
   }
 
+  _raiseValidation(value: unknown, previousValue: unknown): void {
+    const areValuesEmpty = !isDefined(value) && !isDefined(previousValue);
+
+    if (value !== previousValue && !areValuesEmpty) {
+      this.validationRequest.fire({
+        value,
+        editor: this,
+      });
+    }
+  }
+
+  _raiseValueChangeAction(value: unknown, previousValue: unknown): void {
+    this._valueChangeAction?.({
+      element: this.$element(),
+      previousValue,
+      value,
+      event: this._valueChangeEventInstance,
+    });
+    this._valueChangeEventInstance = undefined;
+  }
+
   _optionChanged(option: Option): void {
     const { name, value, previousValue } = option;
 
@@ -99,19 +121,8 @@ export default class Editor extends Component {
 
     switch (name) {
       case 'value':
-        if (value !== previousValue) {
-          this.validationRequest.fire({
-            value,
-            editor: this,
-          });
-        }
-        this._valueChangeAction?.({
-          element: this.$element(),
-          previousValue,
-          value,
-          event: this._valueChangeEventInstance,
-        });
-        this._valueChangeEventInstance = undefined;
+        this._raiseValidation(value, previousValue);
+        this._raiseValueChangeAction(value, previousValue);
         break;
       case 'onValueChanged':
         this._valueChangeAction = this._createActionByOption('onValueChanged', {

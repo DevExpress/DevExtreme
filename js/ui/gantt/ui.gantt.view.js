@@ -172,7 +172,7 @@ export class GanttView extends Widget {
             case 'resources':
             case 'resourceAssignments':
                 this._sortOptions = undefined;
-                this._update();
+                this._update(true);
                 break;
             case 'showResources':
                 this._ganttViewCore.setShowResources(args.value);

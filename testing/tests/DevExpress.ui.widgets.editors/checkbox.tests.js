@@ -23,6 +23,17 @@ const ICON_SELECTOR = '.dx-checkbox-icon';
 QUnit.module('Checkbox', function() {
     const isRenovation = !!dxCheckBox.IS_RENOVATED_WIDGET;
 
+    QUnit.module('methods', () => {
+        QUnit.testInActiveWindow('focus', function(assert) {
+            const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+            const instance = $element.dxCheckBox('instance');
+
+            instance.focus();
+
+            assert.ok($element.hasClass('dx-state-focused'), 'checkBox has focus class');
+        });
+    });
+
     QUnit.module('render', function() {
         QUnit.test('init with default options', function(assert) {
             const $element = $('#checkBox').dxCheckBox();
@@ -430,6 +441,18 @@ QUnit.module('Checkbox', function() {
                         assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${value} option value`);
                     });
                 });
+            });
+
+            QUnit.testInActiveWindow('blur method', function(assert) {
+                const blurSpy = sinon.spy();
+                const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+                const instance = $element.dxCheckBox('instance');
+                $element.on('blur', blurSpy);
+
+                instance.focus();
+                instance.blur();
+
+                assert.ok(blurSpy.calledOnce, 'element was blurred');
             });
         }
     });

@@ -7,6 +7,7 @@ import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
+import SchedulerToolbar from '../header/header';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -48,7 +49,7 @@ describe('Scheduler', () => {
       />,
     );
 
-    it('should be rendered', () => {
+    it('should render correct markup and pass correct props to the toolbar', () => {
       const tree = renderComponent({});
 
       expect(tree.is(Widget)).toBe(true);
@@ -59,7 +60,7 @@ describe('Scheduler', () => {
         accessKey: 'A',
         activeStateEnabled: true,
         disabled: true,
-        focusStateEnabled: true,
+        focusStateEnabled: false,
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
@@ -97,6 +98,55 @@ describe('Scheduler', () => {
         .toEqual({
           ...defaultCurrentViewConfig,
           onViewRendered: expect.any(Function),
+        });
+    });
+
+    it('should render toolbar and pass to it correct props', () => {
+      const props = {
+        min: new Date(2021, 1, 1),
+        max: new Date(2021, 1, 2),
+        views: ['month', 'week'],
+        currentView: 'month',
+        useDropDownViewSwitcher: true,
+        toolbar: [
+          {
+            defaultElement: 'dateNavigator',
+            location: 'before',
+          },
+          {
+            defaultElement: 'viewSwitcher',
+            location: 'after',
+          },
+        ],
+        customizeDateNavigatorText: () => {},
+      };
+      const setCurrentDate = () => {};
+      const setCurrentView = () => {};
+      const startViewDate = new Date(2021, 1, 1);
+
+      const tree = renderComponent({
+        props, setCurrentView, setCurrentDate, startViewDate,
+      });
+      const schedulerToolbar = tree.find(SchedulerToolbar);
+
+      expect(schedulerToolbar.exists())
+        .toBe(true);
+      expect(schedulerToolbar.props())
+        .toEqual({
+          currentDate: defaultCurrentViewConfig.currentDate,
+          intervalCount: defaultCurrentViewConfig.intervalCount,
+          firstDayOfWeek: defaultCurrentViewConfig.firstDayOfWeek,
+
+          items: props.toolbar,
+          min: props.min,
+          max: props.max,
+          views: props.views,
+          currentView: props.currentView,
+          useDropDownViewSwitcher: props.useDropDownViewSwitcher,
+          customizationFunction: props.customizeDateNavigatorText,
+          onCurrentViewUpdate: setCurrentView,
+          onCurrentDateUpdate: setCurrentDate,
+          startViewDate,
         });
     });
   });
@@ -265,6 +315,34 @@ describe('Scheduler', () => {
         expect(scheduler.cellsMetaData)
           .toBe(cellsMetaData);
       });
+
+      describe('setCurrentView', () => {
+        it('should update currentView', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentView: 'day',
+          });
+
+          scheduler.setCurrentView('week');
+
+          expect(scheduler.props.currentView)
+            .toBe('week');
+        });
+      });
+
+      describe('setCurrentDate', () => {
+        it('should update currentDate', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate: new Date(2021, 1, 1),
+          });
+
+          scheduler.setCurrentDate(new Date(2021, 1, 2));
+
+          expect((scheduler.props.currentDate as Date).getTime())
+            .toBe(new Date(2021, 1, 2).getTime());
+        });
+      });
     });
   });
 
@@ -301,6 +379,29 @@ describe('Scheduler', () => {
 
           expect(getCurrentViewConfig)
             .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
+        });
+      });
+
+      describe('startViewDate', () => {
+        it('should return correct startViewDate if view is day', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate: new Date(2021, 1, 1),
+          });
+
+          expect(scheduler.startViewDate.getTime())
+            .toBe(new Date(2021, 1, 1).getTime());
+        });
+
+        it('should return correct startViewDate if view is week', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate: new Date(2021, 7, 19),
+            currentView: 'week',
+          });
+
+          expect(scheduler.startViewDate.getTime())
+            .toBe(new Date(2021, 7, 15).getTime());
         });
       });
     });

@@ -799,7 +799,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(keyOfSpy.callCount, 55, 'keyOf call count');
+        assert.equal(keyOfSpy.callCount, 50, 'keyOf call count');
     });
 
     QUnit.test('isReady when loading', function(assert) {

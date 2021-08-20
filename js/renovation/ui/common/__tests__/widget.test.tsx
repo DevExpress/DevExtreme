@@ -13,6 +13,7 @@ import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 import errors from '../../../../core/errors';
+import domAdapter from '../../../../core/dom_adapter';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
@@ -53,7 +54,7 @@ describe('Widget', () => {
         visible: true,
       };
       mount(viewFunction({
-        widgetRef: mockRef,
+        widgetElementRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
@@ -69,7 +70,7 @@ describe('Widget', () => {
         children: <div className="child" />,
       };
       const widget = mount(viewFunction({
-        widgetRef: mockRef,
+        widgetElementRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
@@ -108,7 +109,7 @@ describe('Widget', () => {
           const widget = new Widget({
             activeStateEnabled: true, disabled: false, onActive, onInactive,
           });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.activeEffect();
 
           emit(EVENT.active, e);
@@ -128,7 +129,7 @@ describe('Widget', () => {
           const widget = new Widget({
             activeStateEnabled: true, disabled: false, onActive: undefined, onInactive: undefined,
           });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.activeEffect();
 
           emit(EVENT.active, e);
@@ -140,7 +141,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
-          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.activeEffect() as DisposeEffectReturn;
 
@@ -193,7 +194,7 @@ describe('Widget', () => {
           const e = { ...defaultEvent };
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
-          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
           widget.clickEffect();
           emit(EVENT.dxClick, e);
@@ -205,7 +206,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
-          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.clickEffect() as DisposeEffectReturn;
           detach();
@@ -232,7 +233,7 @@ describe('Widget', () => {
           const widget = new Widget({
             focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
           });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
 
           widget.focusEffect();
 
@@ -253,7 +254,7 @@ describe('Widget', () => {
           const widget = new Widget({
             focusStateEnabled: true, disabled: false, onFocusIn: undefined, onFocusOut: undefined,
           });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
 
           widget.focusEffect();
 
@@ -274,7 +275,7 @@ describe('Widget', () => {
             const widget = new Widget({
               focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
             });
-            widget.widgetRef = {} as any;
+            widget.widgetElementRef = {} as any;
 
             widget.focusEffect();
 
@@ -294,7 +295,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
-          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.focusEffect() as DisposeEffectReturn;
 
@@ -307,7 +308,7 @@ describe('Widget', () => {
 
         it('should subscribe if widget is disabled', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: true });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.focused = false;
 
           widget.focusEffect();
@@ -321,7 +322,7 @@ describe('Widget', () => {
           const onFocusIn = jest.fn();
 
           const widget = new Widget({ focusStateEnabled: false, disabled: false, onFocusIn });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.focused = false;
 
           widget.focusEffect();
@@ -341,7 +342,7 @@ describe('Widget', () => {
           const widget = new Widget({
             hoverStateEnabled: true, disabled: false, onHoverStart, onHoverEnd,
           });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.active = false;
           widget.hoverEffect();
 
@@ -360,7 +361,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
-          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
           widget.active = false;
           const detach = widget.hoverEffect() as DisposeEffectReturn;
 
@@ -373,7 +374,7 @@ describe('Widget', () => {
 
         it('should change hover state if widget is not active', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.active = true;
           widget.hoverEffect();
 
@@ -386,7 +387,7 @@ describe('Widget', () => {
 
         it('should subscribe if widget is disabled', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: true });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.active = false;
           widget.hoverEffect();
 
@@ -397,7 +398,7 @@ describe('Widget', () => {
 
         it('should subscribe if widget is not hovered', () => {
           const widget = new Widget({ hoverStateEnabled: false, disabled: false });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.active = false;
           widget.hoverEffect();
 
@@ -412,7 +413,7 @@ describe('Widget', () => {
 
         it('should subscribe to keyboard event', () => {
           const widget = new Widget({ focusStateEnabled: true, onKeyDown });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.keyboardEffect();
 
           emitKeyboard(KEY.enter);
@@ -423,7 +424,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, onKeyDown });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           const detach = widget.keyboardEffect() as DisposeEffectReturn;
 
           emitKeyboard(KEY.enter);
@@ -437,7 +438,7 @@ describe('Widget', () => {
 
         it('should not subscribe if focusStateEnabled is "false"', () => {
           const widget = new Widget({ focusStateEnabled: false, onKeyDown });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.keyboardEffect();
 
           emitKeyboard(KEY.enter);
@@ -458,7 +459,7 @@ describe('Widget', () => {
         it('should subscribe to resize event', () => {
           const e = { ...defaultEvent };
           const widget = new Widget({ onDimensionChanged });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.resizeEffect();
 
           emit(EVENT.resize, e);
@@ -468,7 +469,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onDimensionChanged });
-          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
           const detach = widget.resizeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
@@ -530,7 +531,7 @@ describe('Widget', () => {
 
         it('should subscribe to visible events', () => {
           const widget = new Widget({ onVisibilityChange });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.visibilityEffect();
 
           emit(EVENT.shown);
@@ -544,7 +545,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onVisibilityChange });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           const detach = widget.visibilityEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
@@ -565,19 +566,19 @@ describe('Widget', () => {
 
       describe('setRootElementRef', () => {
         it('set rootElementRef to div ref', () => {
-          const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          const widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
           const component = new Widget({
             rootElementRef: {},
           } as WidgetProps);
-          component.widgetRef = widgetRef;
+          component.widgetElementRef = widgetElementRef;
           component.setRootElementRef();
 
-          expect(component.props.rootElementRef?.current).toBe(component.widgetRef.current);
+          expect(component.props.rootElementRef?.current).toBe(component.widgetElementRef.current);
         });
 
         it('hasnt rootElementRef', () => {
           const component = new Widget({ });
-          component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+          component.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
           component.setRootElementRef();
           expect(component.props.rootElementRef?.current).toBeUndefined();
         });
@@ -630,13 +631,45 @@ describe('Widget', () => {
         it('should trigger focus at element', () => {
           const widget = new Widget({ focusStateEnabled: true });
           const mockRef = jest.fn();
-          widget.widgetRef = mockRef as any;
+          widget.widgetElementRef = mockRef as any;
 
           widget.focusEffect();
 
           expect(widget.focused).toBe(false);
           widget.focus();
           expect(widget.focused).toBe(true);
+        });
+      });
+
+      describe('blur', () => {
+        it('should trigger blur at root element if it is active element', () => {
+          const widget = new Widget({ focusStateEnabled: true });
+          const mockRef = { current: { blur: jest.fn() } };
+          widget.widgetElementRef = mockRef as any;
+
+          const { getActiveElement } = domAdapter;
+          try {
+            domAdapter.getActiveElement = () => mockRef.current as unknown as HTMLDivElement;
+            widget.focusEffect();
+            widget.focus();
+            widget.blur();
+
+            expect(widget.widgetElementRef.current?.blur).toHaveBeenCalledTimes(1);
+          } finally {
+            domAdapter.getActiveElement = getActiveElement;
+          }
+        });
+
+        it('should not trigger blur at root element if it is not active element', () => {
+          const widget = new Widget({ focusStateEnabled: true });
+          const mockRef = { current: { blur: jest.fn() } };
+          widget.widgetElementRef = mockRef as any;
+
+          widget.focusEffect();
+          widget.focus();
+          widget.blur();
+
+          expect(widget.widgetElementRef.current?.blur).not.toBeCalled();
         });
       });
     });

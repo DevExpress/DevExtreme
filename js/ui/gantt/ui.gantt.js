@@ -213,8 +213,6 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = validatedData;
-            const expandedRowKeys = validatedData.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
-            this._ganttTreeList?.setOption('expandedRowKeys', expandedRowKeys);
             this._ganttTreeList?.updateDataSource(validatedData);
         }
     }
@@ -415,24 +413,44 @@ class Gantt extends Widget {
     _collapseAll() {
         this._changeExpandAll(false);
     }
-    _changeExpandAll(expanded) {
-        const keysToExpand = [ ];
+
+    _onTreeListRowExpandChanged(e, expanded) {
+        if(!this._lockRowExpandEvent) {
+            this._ganttView.changeTaskExpanded(e.key, expanded);
+            this._sizeHelper.adjustHeight();
+        }
+    }
+
+    _changeExpandAll(expanded, level, rowKey) {
+        const allExpandableNodes = [ ];
+        const nodesToExpand = [ ];
+
         this._treeList.forEachNode(node => {
             if(node.children?.length) {
-                keysToExpand.push(node.key);
+                allExpandableNodes.push(node);
             }
         });
+        if(rowKey) {
+            const node = this._treeList.getNodeByKey(rowKey);
+            GanttHelper.getAllParentNodesKeys(node, nodesToExpand);
+        }
 
         let promise;
-        this._lockRowExpandEvent = keysToExpand.length > 0;
-        const state = keysToExpand.reduce((previous, key, index) => {
-            previous[key] = expanded;
+        this._lockRowExpandEvent = allExpandableNodes.length > 0;
+        const state = allExpandableNodes.reduce((previous, node, index) => {
+            if(rowKey) {
+                expanded = nodesToExpand.includes(node.key);
+            } else if(level) {
+                expanded = node.level < level;
+            }
+
+            previous[node.key] = expanded;
             const action = expanded ? this._treeList.expandRow : this._treeList.collapseRow;
-            const isLast = index === keysToExpand.length - 1;
+            const isLast = index === allExpandableNodes.length - 1;
             if(isLast) {
-                promise = action(key);
+                promise = action(node.key);
             } else {
-                action(key);
+                action(node.key);
             }
             return previous;
         }, {});
@@ -442,12 +460,6 @@ class Gantt extends Widget {
             this._sizeHelper.adjustHeight();
             delete this._lockRowExpandEvent;
         });
-    }
-    _onTreeListRowExpandChanged(e, expanded) {
-        if(!this._lockRowExpandEvent) {
-            this._ganttView.changeTaskExpanded(e.key, expanded);
-            this._sizeHelper.adjustHeight();
-        }
     }
 
     getTaskResources(key) {
@@ -551,6 +563,25 @@ class Gantt extends Widget {
             const doc = this._ganttView?._ganttViewCore.exportToPdf(fullOptions);
             resolve(doc);
         });
+    }
+    expandAll() {
+        this._expandAll();
+    }
+    collapseAll() {
+        this._collapseAll();
+    }
+    expandAllToLevel(level) {
+        this._changeExpandAll(false, level);
+    }
+    expandToTask(key) {
+        const node = this._treeList.getNodeByKey(key);
+        this._changeExpandAll(false, 0, node?.parent?.key);
+    }
+    collapseTask(key) {
+        this._treeList.collapseRow(key);
+    }
+    expandTask(key) {
+        this._treeList.expandRow(key);
     }
 
     _getDefaultOptions() {

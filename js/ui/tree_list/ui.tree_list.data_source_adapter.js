@@ -51,7 +51,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return compileSetter(keyExpr);
         },
 
-        _createParentIdGetter: function() {
+        createParentIdGetter: function() {
             return compileGetter(this.option('parentIdExpr'));
         },
 
@@ -646,7 +646,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const dataStructure = this.option('dataStructure');
 
             this._keyGetter = this._createKeyGetter();
-            this._parentIdGetter = this._createParentIdGetter();
+            this._parentIdGetter = this.createParentIdGetter();
             this._hasItemsGetter = this._createHasItemsGetter();
             this._hasItemsSetter = this._createHasItemsSetter();
 

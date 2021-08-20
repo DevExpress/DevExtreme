@@ -14,7 +14,7 @@ describe('Editor', () => {
       const renderOptions = {
         aria: { role: 'aria' },
       };
-      const onWidgetKeyDown = (): null => null;
+      const keyDown = (): null => null;
       const onWidgetClick = (): null => null;
       const renderProps = {
         accessKey: 'A',
@@ -30,7 +30,7 @@ describe('Editor', () => {
         visible: true,
         width: 200,
         onClick: onWidgetClick,
-        onKeyDown: onWidgetKeyDown,
+        onKeyDown: keyDown,
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
@@ -168,13 +168,23 @@ describe('Editor', () => {
 
     describe('Methods', () => {
       describe('focus', () => {
-        it('should focus main element', () => {
+        it('should call widget focus method', () => {
           const editor = new Editor({});
           editor.widgetRef = { current: { focus: jest.fn() } } as unknown as RefObject<Widget>;
           editor.focus();
 
           expect(editor.widgetRef.current?.focus).toHaveBeenCalledTimes(1);
           expect(editor.widgetRef.current?.focus).toHaveBeenCalledWith();
+        });
+      });
+
+      describe('blur', () => {
+        it('should call widget blur method', () => {
+          const editor = new Editor({});
+          editor.widgetRef = { current: { blur: jest.fn() } } as unknown as RefObject<Widget>;
+          editor.blur();
+
+          expect(editor.widgetRef.current?.blur).toHaveBeenCalledTimes(1);
         });
       });
     });
