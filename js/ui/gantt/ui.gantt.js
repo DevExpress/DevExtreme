@@ -438,7 +438,12 @@ class Gantt extends Widget {
         let promise;
         this._lockRowExpandEvent = allExpandableNodes.length > 0;
         const state = allExpandableNodes.reduce((previous, node, index) => {
-            expanded = rowKey ? nodesToExpand.includes(node.key) : level ? node.level < level : expanded;
+            if(rowKey) {
+                expanded = nodesToExpand.includes(node.key);
+            } else if(level) {
+                expanded = node.level < level;
+            }
+
             previous[node.key] = expanded;
             const action = expanded ? this._treeList.expandRow : this._treeList.collapseRow;
             const isLast = index === allExpandableNodes.length - 1;
