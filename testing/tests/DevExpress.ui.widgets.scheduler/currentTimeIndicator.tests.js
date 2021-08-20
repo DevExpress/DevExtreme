@@ -290,7 +290,7 @@ QUnit.module('DateTime indicator on Day View', {
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1.5, 'Shader has correct height');
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1.5, 'Top shader has correct height');
         assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, 'Bottom shader has correct height');
-        assert.roughEqual($shader.outerWidth(), 3 * cellWidth, 2, 'Shader has correct width');
+        assert.roughEqual($shader.outerWidth(), 2 * cellWidth, 2, 'Shader has correct width');
         assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1.5, 'Top shader has correct width');
         assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1, 'Bottom shader has correct width');
     });
@@ -314,7 +314,7 @@ QUnit.module('DateTime indicator on Day View', {
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1.5, 'Top shader has correct height');
         assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, 'Bottom shader has correct height');
 
-        assert.roughEqual($shader.outerWidth(), 3 * cellWidth, 2, 'Indicator has correct width');
+        assert.roughEqual($shader.outerWidth(), 2 * cellWidth, 2, 'Indicator has correct width');
         assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1.5, 'Top shader has correct width');
         assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1, 'Bottom shader has correct width');
     });
@@ -353,7 +353,7 @@ QUnit.module('DateTime indicator on Day View', {
         const cellWidth = instance.getRoundedCellWidth(1);
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, 'Shader has correct height');
-        assert.roughEqual($shader.outerWidth(), 9 * cellWidth, 5, 'Shader has correct width');
+        assert.roughEqual($shader.outerWidth(), 2 * cellWidth, 5, 'Shader has correct width');
 
         for(let i = 0; i <= 2; i++) {
             const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS).eq(i);
@@ -456,9 +456,9 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         const cellHeight = instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
-        assert.equal($indicators.eq(0).position().left, 100);
+        assert.equal($indicators.eq(0).position().left, 101);
         assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, 100);
+        assert.equal($indicators.eq(1).position().left, 101);
         assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
     });
 
@@ -501,9 +501,9 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         const cellHeight = instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
-        assert.equal($indicators.eq(0).position().left, 100);
+        assert.equal($indicators.eq(0).position().left, 101);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, 100);
+        assert.equal($indicators.eq(1).position().left, 101);
         assert.equal($indicators.eq(1).position().top, 21.5 * cellHeight);
     });
 
@@ -519,9 +519,9 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         const cellHeight = instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
-        assert.equal($indicators.eq(0).position().left, 100);
+        assert.equal($indicators.eq(0).position().left, 101);
         assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, 100);
+        assert.equal($indicators.eq(1).position().left, 101);
         assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
     });
 
@@ -551,7 +551,7 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         const cellWidth = instance.getRoundedCellWidth(0);
 
         assert.roughEqual($shader.outerHeight(), 10.5 * cellHeight, 1, 'Shader has correct height');
-        assert.roughEqual($shader.outerWidth(), 3 * cellWidth + 100, 5, 'Shader has correct width');
+        assert.roughEqual($shader.outerWidth(), 2 * cellWidth, 5, 'Shader has correct width');
 
         for(let i = 0; i <= 2; i++) {
             const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS).eq(i);
@@ -668,7 +668,7 @@ QUnit.module('DateTime indicator on Week View', () => {
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, 'Top indicator has correct height');
         assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, 'Bottom indicator has correct height');
 
-        assert.roughEqual($shader.outerWidth(), 898, 1, 'Indicator has correct width');
+        assert.roughEqual($shader.outerWidth(), 504, 1, 'Indicator has correct width');
         assert.roughEqual($topShader.outerWidth(), 4 * cellWidth, 1.5, 'Top indicator has correct width');
         assert.roughEqual($bottomShader.outerWidth(), 3 * cellWidth, 1.5, 'Bottom indicator has correct width');
     });
@@ -801,7 +801,7 @@ QUnit.module('DateTime indicator on Week View', () => {
         const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
 
         assert.equal($indicator.length, 1, 'Indicator count is correct');
-        assert.roughEqual($indicator.eq(0).position().left, 706, 1.5, 'Indicator left is OK');
+        assert.roughEqual($indicator.eq(0).position().left, 694, 1.5, 'Indicator left is OK');
         assert.roughEqual(parseInt($topShader.css('left')), 706, 1.5, 'Top indicator has correct left');
         assert.roughEqual(parseInt($bottomShader.css('left')), 770, 1.5, 'Bottom indicator has correct left');
     });
@@ -879,10 +879,7 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
     QUnit.test('DateTimeIndicator should have correct position and size, Week view with groupByDate = true', function(assert) {
         const instance = createInstance({
             groupByDate: true,
-            indicatorTime: new Date(2017, 8, 5, 12, 45)
-        });
-
-        instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
             groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         });
 
@@ -964,7 +961,7 @@ QUnit.module('DateTime indicator on TimelineDay View', () => {
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
-        assert.roughEqual($shader.outerHeight(), 200, 1, 'Shader has correct height');
+        assert.roughEqual($shader.outerHeight(), 256, 1, 'Shader has correct height');
 
         assert.roughEqual($shader.outerWidth(), 9.5 * cellWidth, 1, 'Shader has correct width');
     });
@@ -1117,10 +1114,10 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
 
         assert.equal($shader.length, 2, 'Shaders count is correct');
 
-        assert.roughEqual($shader.eq(0).outerHeight(), 160, 1, 'Shader has correct height');
+        assert.roughEqual($shader.eq(0).outerHeight(), 206, 1, 'Shader has correct height');
         assert.roughEqual($shader.eq(0).outerWidth(), 950, 1, 'Shader has correct width');
 
-        assert.roughEqual($shader.eq(1).outerHeight(), 160, 1, 'Shader has correct height');
+        assert.roughEqual($shader.eq(1).outerHeight(), 206, 1, 'Shader has correct height');
         assert.roughEqual($shader.eq(1).outerWidth(), 950, 1, 'Shader has correct width');
 
         assert.roughEqual($shader.eq(0).position().left, 0, 1, 'Shader has correct left');
@@ -1167,7 +1164,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
             const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
-            assert.roughEqual($shader.outerHeight(), 160, 1, 'Shader has correct height');
+            assert.roughEqual($shader.outerHeight(), 216, 1, 'Shader has correct height');
             assert.roughEqual($shader.outerWidth(), testCase.expectedCellCount * cellWidth, 1, 'Shader has correct width');
 
             const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -1206,7 +1203,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
             const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
-            assert.roughEqual($shader.outerHeight(), 200, 1, 'Shader has correct height');
+            assert.roughEqual($shader.outerHeight(), 256, 1, 'Shader has correct height');
             assert.roughEqual($shader.outerWidth(), 4.5 * cellWidth, 6, 'Shader has correct width');
 
             const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -1244,7 +1241,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
-        assert.roughEqual($shader.outerHeight(), 200, 1, 'Shader has correct height');
+        assert.roughEqual($shader.outerHeight(), 256, 1, 'Shader has correct height');
 
         assert.roughEqual($shader.outerWidth(), 15.5 * cellWidth, 1, 'Shader has correct width');
     });
