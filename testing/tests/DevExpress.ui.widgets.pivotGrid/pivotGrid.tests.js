@@ -3039,8 +3039,8 @@ QUnit.module('dxPivotGrid', {
                 const expectedRowCellRect = getHeaderCellByText($rowsHeaderArea, expectedRowHeaderCellText).getBoundingClientRect();
                 const expectedColumnCellRect = getHeaderCellByText($columnsHeaderArea, expectedColHeaderCellText).getBoundingClientRect();
 
-                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 2, `expected row position ${errorMessageDetails}`);
-                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 2, `expected column position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 5, `expected row position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 5, `expected column position ${errorMessageDetails}`);
             }
 
             function triggerScrollEvent(scrollable) {
@@ -3139,7 +3139,6 @@ QUnit.module('dxPivotGrid', {
                     });
 
                     this.clock.tick(100);
-
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                     scrollable.scrollTo({
                         left: getHorizontalOffset(pivotGrid, '1', '60'),
