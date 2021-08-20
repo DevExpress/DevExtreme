@@ -507,6 +507,10 @@ $scheduler-appointment-form-label-padding: 20px;
       width: $scheduler-left-column-width;
       min-width: 0;
 
+      &:last-child {
+        border-right: $scheduler-base-border;
+      }
+
       &::before {
         display: none;
       }
@@ -822,10 +826,6 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-group-row .dx-scheduler-group-header {
         border: none;
         border-top: $scheduler-base-border;
-      }
-
-      .dx-scheduler-group-table {
-        border-right: $scheduler-base-border;
       }
 
       .dx-scheduler-date-table-row .dx-scheduler-date-table-cell,
@@ -1612,7 +1612,6 @@ $scheduler-appointment-form-label-padding: 20px;
     .dx-scheduler-work-space-vertical-group-table {
       height: 100%;
       min-height: 100px;
-      border-right: $scheduler-base-border;
       border-top: $scheduler-base-border;
       border-spacing: 0;
 
@@ -1702,7 +1701,7 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-rtl {
-    .dx-scheduler-work-space-vertical-group-table {
+    .dx-scheduler-work-space-vertical-grouped .dx-scheduler-group-row:last-child {
       border-right: none;
       border-left: $scheduler-base-border;
     }
@@ -1817,11 +1816,6 @@ $scheduler-appointment-form-label-padding: 20px;
             border-left: $scheduler-base-border;
             border-right: none;
           }
-        }
-
-        .dx-scheduler-group-table {
-          border-left: $scheduler-base-border;
-          border-right: none;
         }
 
         .dx-scheduler-date-table {
