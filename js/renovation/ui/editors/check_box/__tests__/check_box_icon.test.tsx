@@ -118,7 +118,7 @@ describe('CheckBoxIconIcon', () => {
           expect(icon.style.fontSize).toEqual('16px');
         });
 
-        it("should use default icon size if 'getElementComputedStyle' util returns null", () => {
+        it('should not change font size if getComputedIconSize returns nullish value', () => {
           (getElementComputedStyle as Mock).mockReturnValue(null);
 
           const checkBoxIcon = new CheckBoxIcon({});
@@ -127,7 +127,7 @@ describe('CheckBoxIconIcon', () => {
 
           checkBoxIcon.updateFontSize();
 
-          expect(icon.style.fontSize).toEqual('16px');
+          expect(icon.style.fontSize).toEqual(undefined);
         });
       });
     });
@@ -158,13 +158,12 @@ describe('CheckBoxIconIcon', () => {
           expect(checkBoxIcon.getComputedIconSize()).toEqual(200);
         });
 
-        it('should return default icon size if element computed style width is 0', () => {
+        it('should not raise any error if getElementComputedStyle returns null', () => {
           const checkBoxIcon = new CheckBoxIcon({});
           checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-          (getElementComputedStyle as Mock).mockReturnValue({ width: 0 });
+          (getElementComputedStyle as Mock).mockReturnValue(null);
 
-          const defaultIconSize = getDefaultIconSize();
-          expect(checkBoxIcon.getComputedIconSize()).toEqual(defaultIconSize);
+          expect(() => { checkBoxIcon.getComputedIconSize(); }).not.toThrow();
         });
       });
     });

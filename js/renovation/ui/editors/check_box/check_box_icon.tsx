@@ -1,12 +1,11 @@
 import {
   Component, ComponentBindings, JSXComponent, Ref, Effect, OneWay, RefObject,
 } from '@devextreme-generator/declarations';
-import { EffectReturn } from '../../../utils/effect_return';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import { hasWindow } from '../../../../core/utils/window';
 import { normalizeStyleProp } from '../../../../core/utils/style';
 import { isNumeric as isNumber } from '../../../../core/utils/type';
-import { getDefaultIconSize, getFontSizeByIconSize } from './utils';
+import { getFontSizeByIconSize } from './utils';
 
 export const viewFunction = (viewModel: CheckBoxIcon): JSX.Element => {
   const { elementRef, cssStyles } = viewModel;
@@ -28,17 +27,18 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
   @Ref() elementRef!: RefObject<HTMLDivElement>;
 
   @Effect()
-  updateFontSize(): EffectReturn {
+  updateFontSize(): void {
     const { size } = this.props;
 
     if (hasWindow()) {
       const newIconSize = isNumber(size) ? size : this.getComputedIconSize();
-      const newFontSize = getFontSizeByIconSize(newIconSize);
 
-      this.setIconFontSize(newFontSize);
+      if (newIconSize) {
+        const newFontSize = getFontSizeByIconSize(newIconSize);
+
+        this.setIconFontSize(newFontSize);
+      }
     }
-
-    return undefined;
   }
 
   setIconFontSize(fontSize: number): void {
@@ -53,7 +53,7 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
     const iconComputedStyle = getElementComputedStyle(element) as CSSStyleDeclaration;
     const computedIconSize = parseInt(iconComputedStyle?.width, 10);
 
-    return computedIconSize || getDefaultIconSize();
+    return computedIconSize;
   }
 
   get cssStyles(): { [key: string]: string | number } {
