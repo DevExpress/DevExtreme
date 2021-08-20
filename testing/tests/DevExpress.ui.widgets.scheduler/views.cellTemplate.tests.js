@@ -1743,34 +1743,6 @@ module('CellTemplate tests', moduleConfig, () => {
 
                 });
 
-                test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
-                    this.createInstance({
-                        currentView: 'week',
-                        currentDate: new Date(2016, 8, 5),
-                        dataSource: [{
-                            text: 'a',
-                            ownerId: 1,
-                            startDate: new Date(2016, 8, 5, 7),
-                            endDate: new Date(2016, 8, 5, 8),
-                            allDay: true
-                        }],
-                        crossScrollingEnabled: true,
-                        dateCellTemplate: function(itemData, index, $container) {
-                            return $('<div>').css({ height: '150px' });
-                        }
-                    });
-
-                    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
-                    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-                    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
-                    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
-                    const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
-
-                    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
-                    assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
-                    assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
-                });
-
                 [
                     {
                         description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate',
