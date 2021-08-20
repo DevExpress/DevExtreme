@@ -1,15 +1,12 @@
 ::ng-deep #grid {
-    position: relative;
-}
-
-::ng-deep #grid-container {
-    margin-top: 10px;
-}
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 
 ::ng-deep #select-prefix {
     width: 150px;
-    display: inline-block;
-    vertical-align: middle;
+    margin-right: 8px;
 }
 
 ::ng-deep .selected-data {
@@ -21,4 +18,5 @@
 ::ng-deep .selected-data .caption {
     font-weight: bold;
     font-size: 115%;
+    margin-right: 4px;
 }

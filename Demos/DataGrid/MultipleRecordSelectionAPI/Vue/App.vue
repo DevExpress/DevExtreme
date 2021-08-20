@@ -1,17 +1,19 @@
 <template>
-  <div id="grid">
-    <DxSelectBox
-      id="select-prefix"
-      :data-source="['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.']"
-      :value="prefix"
-      placeholder="Select title"
-      @value-changed="filterSelection"
-    />
-    <DxButton
-      :disabled="!selectedRowKeys.length"
-      text="Clear Selection"
-      @click="clearSelection"
-    />
+  <div>
+    <div id="grid">
+      <DxSelectBox
+        id="select-prefix"
+        :data-source="['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.']"
+        :value="prefix"
+        placeholder="Select title"
+        @value-changed="filterSelection"
+      />
+      <DxButton
+        :disabled="!selectedRowKeys.length"
+        text="Clear Selection"
+        @click="clearSelection"
+      />
+    </div>
     <DxDataGrid
       id="grid-container"
       :data-source="employees"
@@ -49,7 +51,7 @@
       />
     </DxDataGrid>
     <div class="selected-data">
-      <span class="caption">Selected Records:</span>
+      <span class="caption">Selected Records:</span>{{ ' ' }}
       <span>
         {{ selectedEmployeeNames }}
       </span>
@@ -125,18 +127,14 @@ export default {
 </script>
 <style scoped>
 #grid {
-  position: relative;
-}
-
-#grid-container {
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 #select-prefix {
   width: 150px;
-  margin-right: 4px;
-  display: inline-block;
-  vertical-align: middle;
+  margin-right: 8px;
 }
 
 .selected-data {

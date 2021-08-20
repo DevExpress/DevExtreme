@@ -30,19 +30,21 @@ class App extends React.Component {
     const { prefix, selectedRowKeys, selectedEmployeeNames } = this.state;
 
     return (
-      <div id="grid">
-        <SelectBox
-          id="select-prefix"
-          dataSource={['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.']}
-          onValueChanged={this.onSelectionFilterChanged}
-          placeholder="Select title"
-          value={prefix}
-        />{' '}
-        <Button
-          disabled={!selectedRowKeys.length}
-          onClick={this.onClearButtonClicked}
-          text="Clear Selection"
-        />
+      <div>
+        <div id="grid">
+          <SelectBox
+            id="select-prefix"
+            dataSource={['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.']}
+            onValueChanged={this.onSelectionFilterChanged}
+            placeholder="Select title"
+            value={prefix}
+          />{' '}
+          <Button
+            disabled={!selectedRowKeys.length}
+            onClick={this.onClearButtonClicked}
+            text="Clear Selection"
+          />
+        </div>
         <DataGrid
           id="grid-container"
           dataSource={employees}

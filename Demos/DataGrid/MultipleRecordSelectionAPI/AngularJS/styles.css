@@ -1,15 +1,12 @@
 #grid {
-    position: relative;
-}
-
-#grid-container {
-    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 #select-prefix {
     width: 150px;
-    display: inline-block;
-    vertical-align: middle;
+    margin-right: 8px;
 }
 
 .selected-data {
@@ -21,4 +18,5 @@
 .selected-data .caption {
     font-weight: bold;
     font-size: 115%;
+    margin-right: 4px;
 }
