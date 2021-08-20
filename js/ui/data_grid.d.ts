@@ -1884,7 +1884,7 @@ export interface GridBase
      * @return any
      * @public
      */
-    cellValue(rowIndex: number, dataField: string): any;
+    cellValue(rowIndex: number, dataField: string): TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField, value)
@@ -1893,7 +1893,7 @@ export interface GridBase
      * @param3 value:any
      * @public
      */
-    cellValue(rowIndex: number, dataField: string, value: any): void;
+    cellValue(rowIndex: number, dataField: string, value: TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any): void;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex)
@@ -1902,7 +1902,7 @@ export interface GridBase
      * @return any
      * @public
      */
-    cellValue(rowIndex: number, visibleColumnIndex: number): any;
+    cellValue(rowIndex: number, visibleColumnIndex: number): TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex, value)
@@ -1911,7 +1911,7 @@ export interface GridBase
      * @param3 value:any
      * @public
      */
-    cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
+    cellValue(rowIndex: number, visibleColumnIndex: number, value: TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any): void;
     /**
      * @docid
      * @publicName clearFilter()
@@ -1963,7 +1963,7 @@ export interface GridBase
      * @return object
      * @public
      */
-    columnOption(id: number | string): any;
+    columnOption(id: number | string): TColumns[number];
     /**
      * @docid
      * @publicName columnOption(id, optionName)
@@ -1972,7 +1972,7 @@ export interface GridBase
      * @return any
      * @public
      */
-    columnOption(id: number | string, optionName: string): any;
+    columnOption<T extends string>(id: number | string, optionName: T): T extends keyof Column<TRowData, TKey, any> ? Column<TRowData, TKey, any>[T] : any;
     /**
      * @docid
      * @publicName columnOption(id, optionName, optionValue)
@@ -1981,7 +1981,7 @@ export interface GridBase
      * @param3 optionValue:any
      * @public
      */
-    columnOption(id: number | string, optionName: string, optionValue: any): void;
+    columnOption<T extends string>(id: number | string, optionName: T, optionValue: T extends keyof Column<TRowData, TKey, any> ? Column<TRowData, TKey, any>[T] : any): void;
     /**
      * @docid
      * @publicName columnOption(id, options)
@@ -1989,7 +1989,7 @@ export interface GridBase
      * @param2 options:object
      * @public
      */
-    columnOption(id: number | string, options: any): void;
+    columnOption(id: number | string, options: Column<TRowData, TKey, any>): void;
     /**
      * @docid
      * @publicName deleteColumn(id)
@@ -4526,10 +4526,10 @@ declare class dxDataGrid
     closeEditCell(): void;
     collapseAdaptiveDetailRow(): void;
     columnCount(): number;
-    columnOption(id: number | string): any;
-    columnOption(id: number | string, optionName: string): any;
-    columnOption(id: number | string, optionName: string, optionValue: any): void;
-    columnOption(id: number | string, options: any): void;
+    columnOption<T extends number | string>(id: T): Column<TRowData, TKey, any>;
+    columnOption<T extends string>(id: number | string, optionName: T): T extends (keyof Column<TRowData, TKey, any>) ? Column<TRowData, TKey, any>[T] : any;
+    columnOption<T extends string>(id: number | string, optionName: T, optionValue: T extends (keyof Column<TRowData, TKey, any>) ? Column<TRowData, TKey, any>[T] : any): void;
+    columnOption<T extends number | string>(id: T, options: Column<TRowData, TKey, any>): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
     deselectAll(): DxPromise<void>;
