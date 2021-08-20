@@ -244,4 +244,46 @@ module('Renovated Views', () => {
             });
         });
     });
+
+    QUnit.test('Time panel scrollable should update position if date scrollable position is changed', function(assert) {
+        const done = assert.async();
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            crossScrollingEnabled: true,
+            height: 400,
+        });
+
+        const timePanelScrollable = scheduler.workSpace.getSideBarScrollable().dxScrollable('instance');
+        const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+        dateTableScrollable.scrollTo({ top: 100 });
+
+        setTimeout(() => {
+            assert.equal(timePanelScrollable.scrollTop(), 100, 'Scroll position is OK');
+            done();
+        }, 100);
+    });
+
+    QUnit.test('Date table scrollable should update position if time panel position is changed', function(assert) {
+        const done = assert.async();
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            crossScrollingEnabled: true,
+            height: 400,
+        });
+
+        const timePanelScrollable = scheduler.workSpace.getSideBarScrollable().dxScrollable('instance');
+        const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+        timePanelScrollable.scrollTo({ top: 100 });
+
+        setTimeout(() => {
+            assert.equal(dateTableScrollable.scrollTop(), 100, 'Scroll position is OK');
+            done();
+        }, 100);
+    });
 });
