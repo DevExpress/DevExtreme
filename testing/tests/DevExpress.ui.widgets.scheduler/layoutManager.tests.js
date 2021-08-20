@@ -1371,11 +1371,11 @@ QUnit.test('Two rival appointments should have correct positions, vertical strat
     const secondAppointmentPosition = translator.locate($appointment.eq(1));
 
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, cellWidth + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.left, cellWidth, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(0).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 });
 
@@ -1405,15 +1405,15 @@ QUnit.test('Three rival appointments with two columns should have correct positi
 
     assert.equal($appointment.length, 3, 'All appointments are rendered');
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, cellWidth + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.left, cellWidth, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(0).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
     assert.equal(thirdAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(thirdAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(thirdAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 });
 
@@ -1441,16 +1441,16 @@ QUnit.test('Four rival appointments with three columns should have correct posit
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 4, 'All appointments are rendered');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth + 100 }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 2 * cellHeight, left: cellWidth + 100 + 2 * expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 2 * cellHeight, left: cellWidth + 2 * expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(1), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 0, left: cellWidth + 100 + expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 0, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(2), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(3), { top: 4 * cellHeight, left: cellWidth + 100 + expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(3), { top: 4 * cellHeight, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(3), expectedAppWidth, 1, 'appointment has a right size');
 });
 
@@ -1474,10 +1474,10 @@ QUnit.test('Rival duplicated appointments should have correct positions', functi
     const offset = APPOINTMENT_DEFAULT_LEFT_OFFSET;
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'All appointments are rendered');
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth + 100 }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth }, 'appointment is rendered in right place');
     assert.equal(this.scheduler.appointments.getAppointmentWidth(0), cellWidth - offset, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 0, left: 2 * cellWidth + 100 }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 0, left: 2 * cellWidth }, 'appointment is rendered in right place');
     assert.equal(this.scheduler.appointments.getAppointmentWidth(1), cellWidth - offset, 'appointment has a right size');
 
     assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Compact button is rendered');
