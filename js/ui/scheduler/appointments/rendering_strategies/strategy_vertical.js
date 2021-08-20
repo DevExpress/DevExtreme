@@ -325,7 +325,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return allDayCondition ? allDayCondition : condition;
     }
 
-    hasAllDayAppointments() {
+    allDaySupported() {
         return true;
     }
 

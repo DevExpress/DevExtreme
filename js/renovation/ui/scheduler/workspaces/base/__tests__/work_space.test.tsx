@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { formatWeekdayAndDay } from '../../../../../../ui/scheduler/workspaces/utils/base';
+import { formatWeekdayAndDay } from '../../../view_model/to_test/views/utils/base';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
 import {
@@ -99,6 +99,7 @@ describe('WorkSpace', () => {
       isAllDayPanelSupported: false,
       className: 'custom',
       isRenderDateHeader: true,
+      scrollingDirection: 'vertical',
     };
 
     const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
@@ -624,6 +625,7 @@ describe('WorkSpace', () => {
               isRenderDateHeader: true,
               isGenerateWeekDaysHeaderData: false,
               className: 'dx-scheduler-work-space-week',
+              scrollingDirection: 'vertical',
             });
 
           expect(getViewRenderConfigByType)

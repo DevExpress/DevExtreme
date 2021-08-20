@@ -158,7 +158,9 @@ describe('OrdinaryLayout', () => {
     });
 
     it('should render scrollable and pass correct props to it', () => {
-      const layout = render({});
+      const layout = render({
+        props: { scrollingDirection: 'vertical' },
+      });
 
       const scrollable = layout.find(Scrollable);
 
@@ -168,6 +170,7 @@ describe('OrdinaryLayout', () => {
           bounceEnabled: false,
           className: 'dx-scheduler-date-table-scrollable',
           children: expect.anything(),
+          direction: 'vertical',
         });
     });
 

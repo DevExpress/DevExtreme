@@ -4880,6 +4880,11 @@ declare module DevExpress.ui {
      * [descr:dxButtonGroupItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * [descr:dxButtonGroupItem.elementAttr]
+     */
+    elementAttr?: { [key: string]: any };
   }
   /**
    * @deprecated use Properties instead
@@ -5095,7 +5100,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCheckBox]
    */
-  export class dxCheckBox extends Editor<dxCheckBoxOptions> {}
+  export class dxCheckBox extends Editor<dxCheckBoxOptions> {
+    /**
+     * [descr:dxCheckBox.blur()]
+     */
+    blur(): void;
+  }
   module dxCheckBox {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCheckBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxCheckBox>;
@@ -12532,6 +12542,30 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showResourceManagerDialog()]
      */
     showResourceManagerDialog(): void;
+    /**
+     * [descr:dxGantt.expandAll()]
+     */
+    expandAll(): void;
+    /**
+     * [descr:dxGantt.collapseAll()]
+     */
+    collapseAll(): void;
+    /**
+     * [descr:dxGantt.expandAllToLevel(level)]
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * [descr:dxGantt.expandToTask(key)]
+     */
+    expandToTask(key: any): void;
+    /**
+     * [descr:dxGantt.collapseTask(key)]
+     */
+    collapseTask(key: any): void;
+    /**
+     * [descr:dxGantt.expandTask(key)]
+     */
+    expandTask(key: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;

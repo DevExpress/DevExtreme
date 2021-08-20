@@ -157,6 +157,7 @@ export interface ViewDataProviderType {
   getRowCount: (config: CountGenerationConfig) => number;
   update: (options: unknown, isGenerateNewData: boolean) => void;
   getGroupPanelData: (options: unknown) => GroupPanelData;
+  getStartViewDate: () => Date;
 }
 
 export interface CellsMetaData {
@@ -168,5 +169,3 @@ export interface ViewMetaData {
   viewDataProvider: ViewDataProviderType;
   cellsMetaData: CellsMetaData;
 }
-
-export type GetDateForHeaderText = (index: number, date: Date) => Date;

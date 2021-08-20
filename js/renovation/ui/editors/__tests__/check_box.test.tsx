@@ -115,14 +115,14 @@ describe('CheckBox', () => {
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
-      const onWidgetKeyDown = (): null => null;
+      const keyDown = (): null => null;
       const onWidgetClick = (): null => null;
       const checkBox = mount(viewFunction({
         ...renderOptions,
         props: renderProps,
         restAttributes,
         cssClasses,
-        onWidgetKeyDown,
+        keyDown,
         onWidgetClick,
       } as any));
       expect(checkBox.find(Editor).props()).toMatchObject({
@@ -130,7 +130,7 @@ describe('CheckBox', () => {
         ...renderProps,
         ...restAttributes,
         classes: cssClasses,
-        onKeyDown: onWidgetKeyDown,
+        onKeyDown: keyDown,
         onClick: onWidgetClick,
       });
     });
@@ -261,7 +261,7 @@ describe('CheckBox', () => {
               const originalEvent = {} as Event & { cancel: boolean };
               const options = { keyName: '', which: '', originalEvent };
               const checkBox = new CheckBox({ onKeyDown });
-              checkBox.onWidgetKeyDown(options);
+              checkBox.keyDown(options);
               expect(onKeyDown).toHaveBeenCalledTimes(1);
               expect(onKeyDown).toHaveBeenCalledWith(options);
             });
@@ -272,7 +272,7 @@ describe('CheckBox', () => {
               const originalEvent = {} as Event & { cancel: boolean };
               const options = { keyName: 'enter', which: '', originalEvent };
               const checkBox = new CheckBox({ onKeyDown, onClick });
-              checkBox.onWidgetKeyDown(options);
+              checkBox.keyDown(options);
               expect(onKeyDown).toBeCalled();
               expect(onClick).not.toBeCalled();
             });
@@ -288,7 +288,7 @@ describe('CheckBox', () => {
               };
               const checkBox = new CheckBox({});
               checkBox.onWidgetClick = jest.fn();
-              checkBox.onWidgetKeyDown(options);
+              checkBox.keyDown(options);
               expect(options.originalEvent.preventDefault).toBeCalled();
               expect(checkBox.onWidgetClick).toHaveBeenCalled();
             });
@@ -297,7 +297,7 @@ describe('CheckBox', () => {
               const onClick = jest.fn();
               const checkBox = new CheckBox({ onClick });
               const originalEvent = {} as Event & { cancel: boolean };
-              checkBox.onWidgetKeyDown({ keyName: 'enter', which: 'enter', originalEvent });
+              checkBox.keyDown({ keyName: 'enter', which: 'enter', originalEvent });
               expect(onClick).not.toBeCalled();
             });
           });
@@ -338,13 +338,23 @@ describe('CheckBox', () => {
 
     describe('Methods', () => {
       describe('focus', () => {
-        it('should focus main element', () => {
+        it('should call editor focus method', () => {
           const checkBox = new CheckBox({});
           checkBox.editorRef = { current: { focus: jest.fn() } } as unknown as RefObject<Editor>;
           checkBox.focus();
 
           expect(checkBox.editorRef.current?.focus).toHaveBeenCalledTimes(1);
           expect(checkBox.editorRef.current?.focus).toHaveBeenCalledWith();
+        });
+      });
+
+      describe('blur', () => {
+        it('should call editor blur method', () => {
+          const checkBox = new CheckBox({});
+          checkBox.editorRef = { current: { blur: jest.fn() } } as unknown as RefObject<Editor>;
+          checkBox.blur();
+
+          expect(checkBox.editorRef.current?.blur).toHaveBeenCalledTimes(1);
         });
       });
     });

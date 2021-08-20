@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
+import { getScrollbarSize } from 'renovation/ui/scroll_view/utils/get_scrollbar_size';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
 import config from 'core/config';
@@ -21,6 +22,12 @@ import {
     SCROLLABLE_DISABLED_CLASS,
     calculateInertiaDistance
 } from './scrollable.constants.js';
+
+import {
+    DIRECTION_HORIZONTAL,
+    DIRECTION_VERTICAL
+} from 'renovation/ui/scroll_view/common/consts.js';
+
 
 const moduleConfig = {
     beforeEach: function() {
@@ -320,7 +327,7 @@ QUnit.test('scrollOffset', function(assert) {
 QUnit.test('scrollLeft', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
-        direction: 'horizontal'
+        direction: DIRECTION_HORIZONTAL
     });
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
@@ -488,7 +495,7 @@ QUnit.test('scrollToElement', function(assert) {
     const $item = $('<div>').height(25).appendTo($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
@@ -503,11 +510,11 @@ QUnit.test('getScrollElementPosition', function(assert) {
     const $item = $('<div>').height(25).appendTo($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const position = scrollable.getScrollElementPosition($item, 'vertical');
+    const position = scrollable.getScrollElementPosition($item, DIRECTION_VERTICAL);
 
     assert.equal(position, $item.offset().top - $scrollable.offset().top - $item.height());
 });
@@ -518,7 +525,7 @@ QUnit.test('scrollToElement when item height is greater than scroll height', fun
     const $item = $('<div>').height(100).appendTo($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
@@ -537,7 +544,7 @@ QUnit.test('scrollToElement with offset', function(assert) {
     $('<div>').height(150).appendTo($scrollable);
 
     const scrollable = $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     }).dxScrollable('instance');
 
     scrollable.scrollToElement($item2, { bottom: bottomOffset });
@@ -553,7 +560,7 @@ QUnit.test('scrollToElement with offset in opposite direction', function(assert)
     $('<div>').height(1500).appendTo($scrollable);
 
     const scrollable = $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     }).dxScrollable('instance');
 
     scrollable.scrollTo(200);
@@ -572,7 +579,7 @@ QUnit.test('scrollToElement with absolute position in the container(T162489)', f
     }).height(100).append($('<div/>')).appendTo($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
@@ -588,7 +595,7 @@ QUnit.test('scrollToElement does not scroll to element when element is not child
     const $item = $('<div>').height(500).insertAfter($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
@@ -605,7 +612,7 @@ QUnit.test('scrollToElement scrolls to bottom position of element when scroll sc
     const $spaceItem = $('<div>').height(500).appendTo($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
@@ -622,7 +629,7 @@ QUnit.test('scrollToElement does not scroll when element is placed in visible ar
     $('<div>').height(30).prependTo($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
@@ -637,7 +644,7 @@ QUnit.test('scrollToElement does not scroll when element is placed in visible ar
     const $item = $('<div>').height(50).prependTo($scrollable);
 
     $scrollable.dxScrollable({
-        direction: 'vertical'
+        direction: DIRECTION_VERTICAL
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
@@ -727,8 +734,8 @@ class ScrollableTestHelper {
         };
     }
 
-    getScrollbarSize(prop) {
-        return this.$container.get(0)[`offset${prop}`] - this.$container.get(0)[`client${prop}`];
+    getScrollbarSize(direction) {
+        return getScrollbarSize(this.$container.get(0), direction);
     }
 
     checkScrollEvent(options) {
@@ -744,7 +751,7 @@ class ScrollableTestHelper {
         if(!this._useNative || (this._useNative && this._useSimulatedScrollbar)) {
 
             const checkTranslateValues = ({ vertical, horizontal }) => {
-                if(this._direction === 'vertical' || this._direction === 'both') {
+                if(this._direction === DIRECTION_VERTICAL || this._direction === 'both') {
                     const $scroll = this.$scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .${SCROLLABLE_SCROLL_CLASS}`);
 
 
@@ -755,7 +762,7 @@ class ScrollableTestHelper {
 
                 }
 
-                if(this._direction === 'horizontal' || this._direction === 'both') {
+                if(this._direction === DIRECTION_HORIZONTAL || this._direction === 'both') {
                     const $scroll = this.$scrollable.find(`.${SCROLLBAR_HORIZONTAL_CLASS} .${SCROLLABLE_SCROLL_CLASS}`);
 
                     const { left, top } = getTranslateValues($scroll.get(0));
@@ -819,7 +826,7 @@ class ScrollableTestHelper {
                 $('<div id="element"></div>').css({ position: 'absolute', width: elementWidth, height: elementHeight }).appendTo($('.content2'));
             };
 
-            ['vertical', 'horizontal', 'both'].forEach((direction) => {
+            [DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, 'both'].forEach((direction) => {
                 QUnit.test(`Scroll from top to bottom, direction: ${direction}, rtlEnabled: false`, function() {
                     setInitialState();
                     const helper = new ScrollableTestHelper({ direction, useNative, useSimulatedScrollbar, rtlEnabled: false });
@@ -828,7 +835,7 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
 
                     helper.checkScrollOffset({ left: 0, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 16, horizontal: 0 });
@@ -842,7 +849,7 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: 0, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 0, horizontal: 18 });
@@ -859,7 +866,7 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? elementOffset.top : 0;
 
                     helper.checkScrollOffset({ left: 0, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 23, horizontal: 0 });
@@ -876,7 +883,7 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? elementOffset.left : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: 0, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 0, horizontal: 23 });
@@ -891,8 +898,8 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
-                    const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 16, horizontal: 18 });
@@ -910,8 +917,8 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
-                    const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? elementOffset.top : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 23, horizontal: 18 });
@@ -929,8 +936,8 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
-                    const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? elementOffset.top : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? elementOffset.left : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 23, horizontal: 23 });
@@ -948,8 +955,8 @@ class ScrollableTestHelper {
                     helper.scrollable.scrollToElement($element);
                     helper.scrollable.update();
 
-                    const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
-                    const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
+                    const expectedTopOffset = direction !== DIRECTION_HORIZONTAL ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) : 0;
+                    const expectedLeftOffset = direction !== DIRECTION_VERTICAL ? elementOffset.left : 0;
 
                     helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                     helper.checkScrollTranslateValues({ vertical: 16, horizontal: 23 });
@@ -960,7 +967,7 @@ class ScrollableTestHelper {
                 setInitialState();
                 const helper = new ScrollableTestHelper({ direction: 'both', useNative, useSimulatedScrollbar, rtlEnabled: false });
 
-                helper.scrollable.scrollTo({ top: helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') / 2 });
+                helper.scrollable.scrollTo({ top: helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL) / 2 });
                 helper.scrollable.update();
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
@@ -968,8 +975,8 @@ class ScrollableTestHelper {
                 helper.scrollable.scrollToElement($element);
                 helper.scrollable.update();
 
-                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width');
-                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height');
+                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL);
+                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL);
 
                 helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                 helper.checkScrollTranslateValues({ vertical: 16, horizontal: 18 });
@@ -979,15 +986,15 @@ class ScrollableTestHelper {
                 setInitialState();
                 const helper = new ScrollableTestHelper({ direction: 'both', useNative, useSimulatedScrollbar, rtlEnabled: false });
 
-                helper.scrollable.scrollTo({ left: helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') / 2 });
+                helper.scrollable.scrollTo({ left: helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL) / 2 });
                 helper.scrollable.update();
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
                 helper.scrollable.scrollToElement($element);
                 helper.scrollable.update();
 
-                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width');
-                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height');
+                const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize(DIRECTION_VERTICAL);
+                const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize(DIRECTION_HORIZONTAL);
 
                 helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
                 helper.checkScrollTranslateValues({ vertical: 16, horizontal: 18 });
@@ -996,7 +1003,7 @@ class ScrollableTestHelper {
 
         QUnit.module(`ScrollPosition after update(), native: ${useNative}`, moduleConfig, () => {
             QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: false -> scrollTo(left: center) -> scrollTo(left: max)`, function() {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: false });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: false });
                 helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 0 });
 
@@ -1016,7 +1023,7 @@ class ScrollableTestHelper {
             });
 
             QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: true -> scrollTo(left: center) -> scrollTo(left: 0)`, function() {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: true });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
@@ -1036,7 +1043,7 @@ class ScrollableTestHelper {
             });
 
             QUnit.test(`Change content size, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, direction: horizontal, rtl: false -> change content size`, function() {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: false });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: false });
                 helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 0 });
 
@@ -1050,7 +1057,7 @@ class ScrollableTestHelper {
             });
 
             QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: true -> change content size`, function() {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: true });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
@@ -1066,7 +1073,7 @@ class ScrollableTestHelper {
 
         QUnit.module(`ScrollPosition after resize, rtl: true, native: ${useNative}`, moduleConfig, () => {
             QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right), content.width:100, container.width(50) -> container.width(75) -> container.width(100)`, function() {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: true });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
 
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 }, 'initial rendering');
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
@@ -1082,7 +1089,7 @@ class ScrollableTestHelper {
             });
 
             QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right), content.width:100, container.width(75) -> container.width(50) -> container.width(100)`, function() {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: true });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
                 helper.setContainerWidth(75);
                 helper.checkScrollOffset({ left: 25, top: 0, maxScrollOffset: 25 }, 'scrolled to max right position after resize to 75px');
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 19 });
@@ -1097,7 +1104,7 @@ class ScrollableTestHelper {
             });
 
             QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right), content.width:100, container.width(50) -> container.width(100) -> container.width(75)`, function() {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: true });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
                 helper.setContainerWidth(50);
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 }, 'scrolled to max right position after resize to 50px');
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
@@ -1114,7 +1121,7 @@ class ScrollableTestHelper {
             [1, 10, 20].forEach(scrollOffset => {
                 QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right), content.width:100, container.width(50), scrollTo(Right - ${scrollOffset}) -> container.width(75) -> container.width(50) -> container.width(100) -> container.width(50)`, function() {
                     const helper = new ScrollableTestHelper({
-                        direction: 'horizontal',
+                        direction: DIRECTION_HORIZONTAL,
                         useNative,
                         useSimulatedScrollbar,
                         rtlEnabled: true
@@ -1144,7 +1151,7 @@ class ScrollableTestHelper {
             [30, 40, 50].forEach(scrollOffset => {
                 QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Left), content.width:100, container.width(50), scrollTo(${scrollOffset}) -> container.width(75) -> container.width(50) -> width(100) -> container.width(50)`, function() {
                     const helper = new ScrollableTestHelper({
-                        direction: 'horizontal',
+                        direction: DIRECTION_HORIZONTAL,
                         useNative,
                         useSimulatedScrollbar,
                         rtlEnabled: true
@@ -1174,7 +1181,7 @@ class ScrollableTestHelper {
                 [0, 10, 20].forEach(scrollRight => {
                     QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right - ${scrollRight}), css.zoomIn -> css.zoomOut`, function() {
                         const helper = new ScrollableTestHelper({
-                            direction: 'horizontal',
+                            direction: DIRECTION_HORIZONTAL,
                             useNative,
                             useSimulatedScrollbar,
                             rtlEnabled: true
@@ -1193,7 +1200,7 @@ class ScrollableTestHelper {
 
                     QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Left: ${scrollRight}), css.zoomIn -> css.zoomOut`, function() {
                         const helper = new ScrollableTestHelper({
-                            direction: 'horizontal',
+                            direction: DIRECTION_HORIZONTAL,
                             useNative,
                             useSimulatedScrollbar,
                             rtlEnabled: true
@@ -1213,7 +1220,7 @@ class ScrollableTestHelper {
             }
 
             QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: true, scroll save the max right position when width of window was changed`, function(assert) {
-                const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, useSimulatedScrollbar, rtlEnabled: true });
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
                 assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position');
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
@@ -1231,7 +1238,7 @@ class ScrollableTestHelper {
 
     QUnit.module(`Scroll arguments, native: ${useNative}`, moduleConfig, () => {
         QUnit.test('Direction: vertical, rtl: false, scrollPosition: { top: 0 } -> { top: 1 } -> { top: center } -> { top: max-1 } -> { top: max }', function() {
-            const helper = new ScrollableTestHelper({ direction: 'vertical', useNative, rtlEnabled: false });
+            const helper = new ScrollableTestHelper({ direction: DIRECTION_VERTICAL, useNative, rtlEnabled: false });
             const maxOffset = helper.getMaxScrollOffset();
 
             helper.$container.trigger('scroll');
@@ -1259,7 +1266,7 @@ class ScrollableTestHelper {
         });
 
         QUnit.test('Direction: horizontal, rtl: false, scrollPosition: { left: 0 } -> { left: 1 } -> { left: center } -> { left: max-1 } -> { left: max }', function() {
-            const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, rtlEnabled: false });
+            const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, rtlEnabled: false });
             const maxOffset = helper.getMaxScrollOffset();
 
             helper.$container.trigger('scroll');
@@ -1315,7 +1322,7 @@ class ScrollableTestHelper {
         });
 
         QUnit.test('Direction: vertical, rtl: true, scrollPosition: { top: 0 } -> { top: 1 } -> { top: center } -> { top: max-1 } -> { top: max }', function() {
-            const helper = new ScrollableTestHelper({ direction: 'vertical', useNative, rtlEnabled: true });
+            const helper = new ScrollableTestHelper({ direction: DIRECTION_VERTICAL, useNative, rtlEnabled: true });
             const maxOffset = helper.getMaxScrollOffset();
 
             helper.$container.trigger('scroll');
@@ -1343,7 +1350,7 @@ class ScrollableTestHelper {
         });
 
         QUnit.test('Direction: horizontal, rtl: true, scrollPosition: { left: max } -> { left: max-1 } -> { left: center } -> { left: 1 } -> { left: 0 }', function() {
-            const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, rtlEnabled: true });
+            const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, rtlEnabled: true });
             const maxOffset = helper.getMaxScrollOffset();
 
             helper.$container.trigger('scroll');

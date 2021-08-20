@@ -53,7 +53,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
     iconRef, iconStyles,
     restAttributes,
     cssClasses: classes, aria,
-    onWidgetClick: onClick, onWidgetKeyDown: onKeyDown,
+    onWidgetClick: onClick, keyDown: onKeyDown,
     editorRef,
   } = viewModel;
 
@@ -138,6 +138,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     this.editorRef.current!.focus();
   }
 
+  @Method()
+  blur(): void {
+    this.editorRef.current!.blur();
+  }
+
   @Effect()
   updateIconFontSize(): EffectReturn {
     const iconElement = this.iconRef?.current;
@@ -177,7 +182,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
   }
 
-  onWidgetKeyDown(e: {
+  keyDown(e: {
     originalEvent: Event & { cancel: boolean };
     keyName: string;
     which: string;
