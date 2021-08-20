@@ -1,4 +1,4 @@
-import { getUpdatedOptions } from '../get_updated_options';
+import { getUpdatedOptions } from '../../../../common/utils/get_updated_options';
 
 describe('get_updated_options', () => {
   class DummyDataSource { dummy = true; }

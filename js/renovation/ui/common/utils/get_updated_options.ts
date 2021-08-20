@@ -1,4 +1,4 @@
-import { isPlainObject, type } from '../../../../../core/utils/type';
+import { isPlainObject, type } from '../../../../core/utils/type';
 
 const defaultNotDeepCopyArrays: string[] = [
   'dataSource',
@@ -94,5 +94,6 @@ export function getUpdatedOptions(
   props: {},
   notDeepCopyArrays: string[] = defaultNotDeepCopyArrays,
 ): ResultItem[] {
-  return objectDiffsWithoutReactProps(oldProps, props, '', notDeepCopyArrays);
+  return objectDiffsWithoutReactProps(oldProps, props, '', notDeepCopyArrays)
+    .filter((item) => item.path.includes('integrationOptions'));
 }
