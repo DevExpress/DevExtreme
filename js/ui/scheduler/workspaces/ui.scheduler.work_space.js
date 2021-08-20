@@ -551,8 +551,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._setTableSizes();
         }
 
-        this.headerPanelOffsetRecalculate();
-
         this.cache.clear();
     }
 
@@ -840,32 +838,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getDateHeaderContainer() {
         return this._$thead;
-    }
-
-    headerPanelOffsetRecalculate() {
-        if(!this.option('resourceCellTemplate') &&
-            !this.option('dateCellTemplate')) {
-            return;
-        }
-
-        const headerPanelHeight = this.getHeaderPanelHeight();
-        const headerHeight = this.option('getHeaderHeight')();
-        const allDayPanelHeight = this.isAllDayPanelVisible
-            ? this._groupedStrategy.getAllDayTableHeight()
-            : 0;
-
-        headerPanelHeight && this._headerScrollable && this._headerScrollable.option('height', headerPanelHeight + allDayPanelHeight);
-
-        headerPanelHeight && this._dateTableScrollable.$element().css({
-            'paddingBottom': allDayPanelHeight + headerPanelHeight + 'px',
-            'marginBottom': -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + 'px'
-        });
-        headerPanelHeight && this._sidebarScrollable && this._sidebarScrollable.$element().css({
-            'paddingBottom': allDayPanelHeight + headerPanelHeight + 'px',
-            'marginBottom': -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + 'px'
-        });
-
-        this._$allDayTitle && this._$allDayTitle.css('top', headerHeight + headerPanelHeight + 'px');
     }
 
     _getCalculateHeaderCellRepeatCount() {
@@ -2183,7 +2155,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'allDayExpanded':
                 this._changeAllDayVisibility();
                 this._attachTablesEvents();
-                this.headerPanelOffsetRecalculate();
                 this._updateScrollable();
                 break;
             case 'onSelectionChanged':

@@ -95,10 +95,6 @@ class VerticalGroupedStrategy {
         return 0;
     }
 
-    getAllDayTableHeight() {
-        return 0;
-    }
-
     getGroupCountClass(groups) {
         return getVerticalGroupCountClass(groups);
     }

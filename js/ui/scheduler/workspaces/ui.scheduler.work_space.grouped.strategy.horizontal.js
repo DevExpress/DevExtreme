@@ -73,10 +73,6 @@ class HorizontalGroupedStrategy {
         return this._workSpace.getAllDayHeight();
     }
 
-    getAllDayTableHeight() {
-        return getBoundingRect(this._workSpace._$allDayTable.get(0)).height || 0;
-    }
-
     getGroupCountClass(groups) {
         switch(groups?.length) {
             case 1:
