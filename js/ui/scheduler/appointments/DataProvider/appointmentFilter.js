@@ -432,7 +432,7 @@ export class AppointmentFilterBaseStrategy {
             const appointmentTakesAllDay = this.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
             const appointmentTakesSeveralDays = this.appointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;
-            const appointmentIsLong = appointmentTakesSeveralDays || appointmentTakesAllDay;
+            const isLongAppointment = appointmentTakesSeveralDays || appointmentTakesAllDay;
 
             if(resources?.length && !this._filterAppointmentByResources(appointment.rawAppointment, resources)) {
                 return false;
@@ -445,8 +445,8 @@ export class AppointmentFilterBaseStrategy {
             if(hasRecurrenceRule) {
                 const recurrenceException = this.getRecurrenceException(appointment);
                 if(!this._filterAppointmentByRRule({
-                    startDate: startDate,
-                    endDate: endDate,
+                    startDate,
+                    endDate,
                     recurrenceRule,
                     recurrenceException,
                     allDay: appointmentTakesAllDay
@@ -456,7 +456,7 @@ export class AppointmentFilterBaseStrategy {
             }
 
             // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min
-            if(endDate < min && appointmentIsLong && !isAllDay && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
+            if(endDate < min && isLongAppointment && !isAllDay && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
                 return false;
             }
 
