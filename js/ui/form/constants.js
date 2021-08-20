@@ -35,3 +35,5 @@ export const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
 export const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
 export const GROUP_COL_COUNT_ATTR = 'group-col-count';
 export const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
+
+export const SIMPLE_ITEM_TYPE = 'simple';

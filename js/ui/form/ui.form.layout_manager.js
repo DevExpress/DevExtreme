@@ -1,27 +1,26 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import Guid from '../../core/guid';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
-import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { inArray, normalizeIndexes } from '../../core/utils/array';
+import { normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
-import { captionize } from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
 import ResponsiveBox from '../responsive_box';
 import {
     LAYOUT_MANAGER_ONE_COLUMN,
     FORM_LAYOUT_MANAGER_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
-    ROOT_SIMPLE_ITEM_CLASS } from './constants';
+    ROOT_SIMPLE_ITEM_CLASS,
+    SIMPLE_ITEM_TYPE,
+} from './constants';
 
 import '../text_box';
 import '../number_box';
@@ -33,6 +32,7 @@ import { getLabelWidthByText } from './components/label';
 import { renderFieldItem } from './components/field_item.js';
 import { renderButtonItem } from './components/button_item.js';
 import { renderEmptyItem } from './components/empty_item.js';
+import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -43,11 +43,6 @@ const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 
 const LAYOUT_STRATEGY_FLEX = 'flex';
 const LAYOUT_STRATEGY_FALLBACK = 'fallback';
-
-const SIMPLE_ITEM_TYPE = 'simple';
-
-const DATA_OPTIONS = ['dataSource', 'items'];
-const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
 const LayoutManager = Widget.inherit({
     _getDefaultOptions: function() {
@@ -556,49 +551,36 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderFieldItem: function(item, $container) {
-        const that = this;
+        const editorValue = this._getDataByField(item.dataField);
+        let canAssignUndefinedValueToEditor = false;
+        if(editorValue === undefined) {
+            const { allowIndeterminateState, editorType, dataField } = item;
+            canAssignUndefinedValueToEditor = this._isCheckboxUndefinedStateEnabled({ allowIndeterminateState, editorType, dataField });
+        }
+
         const name = item.dataField || item.name;
-        const id = that.getItemID(name);
-        const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
-        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
-        const helpID = item.helpText ? ('dx-' + new Guid()) : null;
-        const helpText = item.helpText;
 
-        const labelOptions = that._getLabelOptions(item, id, isRequired);
-        const needRenderLabel = labelOptions.visible && labelOptions.text;
-        const { location: labelLocation, labelID } = labelOptions;
-        const isFlexSupported = this._hasBrowserFlex();
-        const labelNeedBaselineAlign =
-            labelLocation !== 'top'
-            &&
-            (
-                (!!item.helpText && !isFlexSupported)
-                ||
-                inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
-            );
-
-        const editorOptions = this._convertToEditorOptions({
-            dataField: item.dataField,
-            editorType: item.editorType,
-            allowIndeterminateState: item.allowIndeterminateState,
-            editorOptions: item.editorOptions,
-            id,
-            validationBoundary: that.option('validationBoundary')
-        });
-        const template = item.template ? this._getTemplate(item.template) : null;
-
-        const { $fieldEditorContainer, instance } = renderFieldItem({
+        const { $fieldEditorContainer, instance } = renderFieldItem(convertToRenderFieldItemOptions({
             $container,
+            item,
+            name,
+            editorValue,
+            canAssignUndefinedValueToEditor,
             containerCssClass: this.option('cssItemClass'),
             parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
-            useFlexLayout: isFlexSupported,
-            labelOptions, labelNeedBaselineAlign, labelLocation, needRenderLabel,
-            item, editorOptions, isSimpleItem, isRequired, template, helpID, labelID, name, helpText,
+            useFlexLayout: this._hasBrowserFlex(),
             formLabelLocation: this.option('labelLocation'),
             requiredMessageTemplate: this.option('requiredMessage'),
             validationGroup: this.option('validationGroup'),
-        });
+            editorValidationBoundary: this.option('validationBoundary'),
+            editorStylingMode: this.option('form') && this.option('form').option('stylingMode'),
+            showColonAfterLabel: this.option('showColonAfterLabel'),
+            managerLabelLocation: this.option('labelLocation'),
+            template: item.template ? this._getTemplate(item.template) : null,
+            itemId: this.option('form') && this.option('form').getItemID(name),
+            managerMarkOptions: this._getMarkOptions(),
+        }));
 
         if(instance && item.dataField) {
             // TODO: move to renderFieldItem ?
@@ -612,129 +594,19 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _hasRequiredRuleInSet: function(rules) {
-        let hasRequiredRule;
-
-        if(rules && rules.length) {
-            each(rules, function(index, rule) {
-                if(rule.type === 'required') {
-                    hasRequiredRule = true;
-                    return false;
-                }
-            });
-        }
-
-        return hasRequiredRule;
-    },
-
-    _getLabelOptions: function(item, id, isRequired) {
-        const labelOptions = extend(
-            {
-                showColon: this.option('showColonAfterLabel'),
-                location: this.option('labelLocation'),
-                id: id,
-                visible: true,
-                isRequired: isRequired
-            },
-            item ? item.label : {},
-            { markOptions: this._getLabelMarkOptions(isRequired) }
-        );
-
-        const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
-        if(inArray(item.editorType, editorsRequiringIdForLabel) !== -1) {
-            labelOptions.labelID = `dx-label-${new Guid()}`;
-        }
-
-        if(!labelOptions.text && item.dataField) {
-            labelOptions.text = captionize(item.dataField);
-        }
-
-        if(labelOptions.text) {
-            labelOptions.text += labelOptions.showColon ? ':' : '';
-        }
-
-        return labelOptions;
-    },
-
     _getLabelWidthByText: function({ text, location }) {
         return getLabelWidthByText({
-            text, location, markOptions: this._getLabelMarkOptions()
+            text, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
         });
     },
 
-    _getLabelMarkOptions: function(isRequired) {
+    _getMarkOptions: function() {
         return {
-            isRequiredMark: this.option('showRequiredMark') && isRequired,
+            showRequiredMark: this.option('showRequiredMark'),
             requiredMark: this.option('requiredMark'),
-            isOptionalMark: this.option('showOptionalMark') && !isRequired,
+            showOptionalMark: this.option('showOptionalMark'),
             optionalMark: this.option('optionalMark')
         };
-    },
-
-    _convertToEditorOptions: function({ dataField, editorType, allowIndeterminateState, editorOptions, id, validationBoundary }) {
-        const dataValue = this._getDataByField(dataField);
-        const defaultEditorOptions =
-            dataValue !== undefined
-            || this._isCheckboxUndefinedStateEnabled({
-                allowIndeterminateState, editorType, dataField })
-                ? { value: dataValue }
-                : {};
-
-        if(EDITORS_WITH_ARRAY_VALUE.indexOf(editorType) !== -1) {
-            defaultEditorOptions.value = defaultEditorOptions.value || [];
-        }
-
-        const formInstance = this.option('form');
-
-        const result = extend(true, defaultEditorOptions,
-            editorOptions,
-            {
-                inputAttr: { id: id },
-                validationBoundary: validationBoundary,
-                stylingMode: formInstance && formInstance.option('stylingMode')
-            },
-        );
-
-        if(editorOptions) {
-            if(result.dataSource) {
-                result.dataSource = editorOptions.dataSource;
-            }
-            if(result.items) {
-                result.items = editorOptions.items;
-            }
-        }
-
-        if(dataField && !result.name) {
-            result.name = dataField;
-        }
-        return result;
-    },
-
-    _replaceDataOptions: function(originalOptions, resultOptions) {
-        if(originalOptions) {
-            DATA_OPTIONS.forEach(function(item) {
-                if(resultOptions[item]) {
-                    resultOptions[item] = originalOptions[item];
-                }
-            });
-        }
-    },
-
-    _prepareValidationRules: function(userValidationRules, isItemRequired, itemType, itemName) {
-        const isSimpleItem = itemType === SIMPLE_ITEM_TYPE;
-        let validationRules;
-
-        if(isSimpleItem) {
-            if(userValidationRules) {
-                validationRules = userValidationRules;
-            } else {
-                const requiredMessage = format(this.option('requiredMessage'), itemName || '');
-
-                validationRules = isItemRequired ? [{ type: 'required', message: requiredMessage }] : null;
-            }
-        }
-
-        return validationRules;
     },
 
     _getComponentOwner: function() {
@@ -869,8 +741,9 @@ const LayoutManager = Widget.inherit({
                                     const valueGetter = compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
+                                    const { allowIndeterminateState, editorType } = itemRunTimeInfo.item;
                                     if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(
-                                        { allowIndeterminateState: itemRunTimeInfo.item.allowIndeterminateState, editorType: itemRunTimeInfo.item.editorType, dataField: itemRunTimeInfo.item.dataField })) {
+                                        { allowIndeterminateState, editorType, dataField })) {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     } else {
                                         this._resetWidget(itemRunTimeInfo.widgetInstance);
@@ -947,11 +820,6 @@ const LayoutManager = Widget.inherit({
         if(this.option('colCount') === 'auto' && this.isCachedColCountObsolete()) {
             this._eventsStrategy.fireEvent('autoColCountChanged');
         }
-    },
-
-    getItemID: function(name) {
-        const formInstance = this.option('form');
-        return formInstance && formInstance.getItemID(name);
     },
 
     updateData: function(data, value) {
