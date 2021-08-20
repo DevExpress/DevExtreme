@@ -95,5 +95,5 @@ export function getUpdatedOptions(
   notDeepCopyArrays: string[] = defaultNotDeepCopyArrays,
 ): ResultItem[] {
   return objectDiffsWithoutReactProps(oldProps, props, '', notDeepCopyArrays)
-    .filter((item) => item.path.includes('integrationOptions'));
+    .filter((item) => !item.path.includes('integrationOptions'));
 }

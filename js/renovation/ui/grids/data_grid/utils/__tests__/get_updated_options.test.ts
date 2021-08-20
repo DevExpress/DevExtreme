@@ -155,4 +155,22 @@ describe('get_updated_options', () => {
     expect(getUpdatedOptions(oldObj, obj))
       .toEqual([{ path: 'toolbar.dataSource', value: [{ value: 2 }], previousValue: [{ value: 1 }] }]);
   });
+
+  it('integration otions are ignored', () => {
+    expect(getUpdatedOptions(
+      { visible: true, integrationOptions: true },
+      { visible: false, integrationOptions: undefined },
+    )).toEqual([
+      { path: 'visible', value: false, previousValue: true },
+    ]);
+  });
+
+  it('integration otions in child props are ignored', () => {
+    expect(getUpdatedOptions(
+      { visible: true, items: { integrationOptions: true } },
+      { visible: false, items: { integrationOptions: undefined } },
+    )).toEqual([
+      { path: 'visible', value: false, previousValue: true },
+    ]);
+  });
 });
