@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="long-title">Monthly Prices of Aluminium, Nickel and Copper</h3>
+    <div class="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
     <div id="chart-demo">
       <table
         class="demo-table"
@@ -124,7 +124,7 @@ export default {
     width: 90px;
 }
 
-h3.long-title  {
+.long-title h3 {
     font-weight: 200;
     font-size: 28px;
     text-align: center;

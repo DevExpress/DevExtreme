@@ -46,7 +46,7 @@
     width: 90px;
 }
 
-h3.long-title {
+.long-title h3 {
     font-weight: 200;
     font-size: 28px;
     text-align: center;

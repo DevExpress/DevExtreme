@@ -7,7 +7,7 @@ const years = ['2010', '2011', '2012'];
 export default function App() {
   return (
     <React.Fragment>
-      <h3 className="long-title">Monthly Prices of Oil, Gold and Silver</h3>
+      <div className="long-title"><h3>Monthly Prices of Oil, Gold and Silver</h3></div>
       <div id="chart-demo">
         <table className="demo-table">
           <tbody>

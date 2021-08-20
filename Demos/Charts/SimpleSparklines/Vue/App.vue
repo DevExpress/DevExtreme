@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="long-title">Monthly Prices of Oil, Gold and Silver</h3>
+    <div class="long-title"><h3>Monthly Prices of Oil, Gold and Silver</h3></div>
     <div id="chart-demo">
       <table class="demo-table">
         <tr>
@@ -55,7 +55,7 @@ export default {
     border: 1px solid #c2c2c2;
 }
 
-h3.long-title {
+.long-title h3 {
     font-weight: 200;
     font-size: 28px;
     text-align: center;
