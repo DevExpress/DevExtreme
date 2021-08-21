@@ -1033,7 +1033,6 @@
           {
             "Title": "Field Panel",
             "Name": "FieldPanel",
-            "DocUrl": "Guide/UI_Components/PivotGrid/Visual_Elements/#Field_Panel",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
