@@ -179,7 +179,7 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
       }
     }
 
-    .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
+    .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]::before {
       background-position-y: 34px;
     }
 
@@ -727,6 +727,18 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
     }
 
     @include dx-set-checkbox-border-color-as-background();
+
+    .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
+      display: none;
+    }
+
+    .dx-select-checkboxes-hidden > tbody > tr > td:hover > .dx-select-checkbox {
+      display: inline-block;
+    }
+
+    .dx-select-checkboxes-hidden > tbody > tr.dx-selection > td > .dx-select-checkbox {
+      display: inline-block;
+    }
 
     .dx-adaptive-detail-row {
       .dx-adaptive-item-text {
