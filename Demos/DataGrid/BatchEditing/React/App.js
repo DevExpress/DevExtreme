@@ -66,7 +66,6 @@ class App extends React.Component {
           </div>
           <div className="option">
             <span>Start Edit Action</span>
-                &nbsp;
             <SelectBox
               items={['click', 'dblClick']}
               value={this.state.startEditAction}
