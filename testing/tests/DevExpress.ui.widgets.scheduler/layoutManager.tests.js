@@ -1528,12 +1528,12 @@ QUnit.test('Two rival all day appointments should have correct sizes and positio
     assert.equal($appointment.length, 2, 'All appointments are rendered');
 
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(0).outerWidth(), 798, 1.1, 'appointment has a right width');
     assert.roughEqual($appointment.eq(0).outerHeight(), 24.5, 1.1, 'appointment has a right height');
 
     assert.roughEqual(secondAppointmentPosition.top, 24.5, 1, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), 798, 1.1, 'appointment has a right width');
     assert.roughEqual($appointment.eq(1).outerHeight(), 24.5, 1.1, 'appointment has a right height');
 });
@@ -2062,15 +2062,14 @@ QUnit.test('Appointment should have a right top position, Day view, \'auto\' mod
     );
 
     let $appointment = $(this.instance.$element().find('.dx-scheduler-all-day-appointment'));
-    const $header = $(this.instance.$element().find('.dx-scheduler-header'));
 
-    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(0).position().top, 0, 1.5, 'appointment has a correct position');
 
     this.instance.addAppointment({ text: 'Task 2', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true });
     $appointment = $(this.instance.$element().find('.dx-scheduler-all-day-appointment'));
 
-    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, 'appointment has a correct position');
-    assert.roughEqual($appointment.eq(1).position().top, $header.outerHeight() + $appointment.outerHeight(), 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(0).position().top, 0, 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(1).position().top, 0 + $appointment.outerHeight(), 1.5, 'appointment has a correct position');
 });
 
 QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Week view, \'unlimited\' mode', function(assert) {
