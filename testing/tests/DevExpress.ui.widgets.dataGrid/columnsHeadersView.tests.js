@@ -2721,7 +2721,7 @@ QUnit.module('Multiple sorting', {
 
         // assert
         assert.equal(Math.floor(headerCellWidth), Math.floor(etalonHeaderCellWidth + widthDiffs.cellWidthDiff), 'header cell width');
-        assert.equal(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth + widthDiffs.textContentWidthDiff), 'header text width');
+        assert.roughEqual(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth + widthDiffs.textContentWidthDiff), 1.1, 'header text width');
 
         // act
         that.columnOption(1, 'sortOrder', 'asc');
@@ -2733,7 +2733,7 @@ QUnit.module('Multiple sorting', {
 
         // assert
         assert.equal(Math.floor(headerCellWidth), Math.floor(etalonHeaderCellWidth), 'header cell width');
-        assert.equal(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth), 'header text width');
+        assert.roughEqual(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth), 1.1, 'header text width');
     }
 
     QUnit.test('Check header widths', function(assert) {
