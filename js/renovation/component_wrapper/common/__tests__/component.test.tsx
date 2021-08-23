@@ -335,6 +335,14 @@ describe('Widget\'s container manipulations', () => {
     });
   });
 
+  it('should convert elementAttr.style string to the cssText prop', () => {
+    const instance = $('#component')
+      .dxTestWidget({ elementAttr: { style: 'background-color: red;' } })
+      .dxTestWidget('instance');
+
+    expect(instance._viewRef.current.props.cssText).toStrictEqual('background-color: red;');
+  });
+
   it('widget does not show className option', () => {
     $('#component').addClass('custom-css-class');
 
