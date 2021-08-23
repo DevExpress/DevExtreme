@@ -90,7 +90,7 @@ module('Server side filtering', () => {
         });
         const dateFilter = [
             [
-                ['endDate', '>', new Date(2015, 1, 9, 0)],
+                ['endDate', '>=', new Date(2015, 1, 9, 0)],
                 ['startDate', '<', new Date(2015, 1, 11)]
             ],
             'or',
@@ -99,6 +99,7 @@ module('Server side filtering', () => {
                 ['startDate', new Date(2015, 1, 9)]
             ]
         ];
+
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
 
         let expectedFilter = [dateFilter, [
@@ -181,7 +182,7 @@ module('Server side filtering', () => {
     test('Appointment filterByDate should filter dataSource correctly without copying dateFilter', function(assert) {
         const dateFilter = [
             [
-                ['endDate', '>', new Date(2015, 1, 9, 0)],
+                ['endDate', '>=', new Date(2015, 1, 9, 0)],
                 ['startDate', '<', new Date(2015, 1, 11)]
             ],
             'or',
@@ -250,7 +251,7 @@ module('Server side filtering', () => {
 
             const expectedFilter = [[
                 [
-                    ['endDate', '>', new Date(2015, 1, 10)],
+                    ['endDate', '>=', new Date(2015, 1, 10)],
                     ['startDate', '<', new Date(2015, 1, 11)]
                 ],
                 'or',
@@ -300,7 +301,7 @@ module('Server side filtering', () => {
 
             const expectedFilter = [[
                 [
-                    ['endDate', '>', '2015-02-10T00:00:00'],
+                    ['endDate', '>=', '2015-02-10T00:00:00'],
                     ['startDate', '<', '2015-02-11T00:00:00']
                 ],
                 'or',
@@ -458,7 +459,7 @@ module('Server side filtering', () => {
         appointmentDataProvider.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
         dataSource.load();
 
-        assert.equal(dataSource.items().length, 0, 'filterByDate works correctly');
+        assert.equal(dataSource.items().length, 1, 'filterByDate works correctly');
     });
 
     test('Appointment filterByDate should correctly filter items with recurrenceRule, if recurrenceRuleExpr!=null', function(assert) {
