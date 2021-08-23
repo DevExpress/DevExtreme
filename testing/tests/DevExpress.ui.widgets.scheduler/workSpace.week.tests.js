@@ -334,14 +334,14 @@ module('Work Space Week', () => {
             const bounds = this.instance.getVisibleBounds();
 
             assert.deepEqual(bounds.top, { hours: 3, minutes: 30 }, 'Top bound is OK');
-            assert.deepEqual(bounds.bottom, { hours: 8, minutes: 0 }, 'Bottom bound is OK');
+            assert.deepEqual(bounds.bottom, { hours: 8, minutes: 30 }, 'Bottom bound is OK');
         });
 
         test('Get visible bounds if hoursInterval is set', function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 2),
                 firstDayOfWeek: 1,
-                startDayHour: 1,
+                startDayHour: 0,
                 height: 700,
                 showAllDayPanel: true,
                 allDayExpanded: true,
@@ -358,8 +358,8 @@ module('Work Space Week', () => {
 
             bounds = this.instance.getVisibleBounds();
 
-            assert.deepEqual(bounds.top, { hours: 7, minutes: 0 }, 'Top bound is OK');
-            assert.deepEqual(bounds.bottom, { hours: 22, minutes: 0 }, 'Bottom bound is OK');
+            assert.deepEqual(bounds.top, { hours: 6, minutes: 0 }, 'Top bound is OK');
+            assert.deepEqual(bounds.bottom, { hours: 23, minutes: 30 }, 'Bottom bound is OK');
 
         });
 
@@ -471,13 +471,13 @@ module('Work Space Week', () => {
             let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 2, 2, 0), 1, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
-            assert.roughEqual(coords.hMax, 998, 1, 'hMax cell coordinates are right');
+            assert.roughEqual(coords.hMax, 898, 1, 'hMax cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-all-day-table tbody td').eq(3).position().left, 0.01, 'Left cell coordinates are right');
 
             coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
-            assert.roughEqual(coords.hMax, 998, 1, 'hMax cell coordinates are right');
+            assert.roughEqual(coords.hMax, 898, 1, 'hMax cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(8).position().left, 0.01, 'Left cell coordinates are right');
         });
     });
