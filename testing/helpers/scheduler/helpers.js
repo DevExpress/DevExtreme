@@ -498,9 +498,12 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 if(isAsync) {
                     click();
                 } else {
+
                     const clock = sinon.useFakeTimers();
 
+                    Date.now = () => NaN;
                     click();
+                    Date.now = () => 0;
 
                     clock.tick(300);
                     clock.restore();
