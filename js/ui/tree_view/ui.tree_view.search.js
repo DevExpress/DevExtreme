@@ -1,8 +1,11 @@
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import searchBoxMixin from '../widget/ui.search_box_mixin';
+import TextBox from '../text_box';
 import { extend } from '../../core/utils/extend';
 import TreeViewBase from './ui.tree_view.base';
+
+searchBoxMixin.setEditorClass(TextBox);
 
 // STYLE treeView
 
@@ -75,8 +78,8 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _itemContainer: function(isSearchMode) {
-        if(this._scrollableContainer && isSearchMode) {
-            return $(this._scrollableContainer.content());
+        if(this._scrollable && isSearchMode) {
+            return $(this._scrollable.content());
         }
 
         return this.callBase();

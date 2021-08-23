@@ -54,17 +54,16 @@ import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/head
 
 import CellsSelectionState from './cells_selection_state';
 
-import { cache } from './cache';
+import { Cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import {
-    getFirstDayOfWeek,
     calculateViewStartDate,
     getViewStartByOptions,
     validateDayHours,
     getStartViewDateTimeOffset,
     isDateAndTimeView,
     calculateIsGroupedAllDayPanel,
-} from './utils/base';
+} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
 import Semaphore from '../semaphore';
 import {
@@ -157,7 +156,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._viewDataProvider;
     }
 
-    get cache() { return cache; }
+    get cache() {
+        if(!this._cache) {
+            this._cache = new Cache();
+        }
+
+        return this._cache;
+    }
 
     get cellsSelectionState() {
         if(!this._cellsSelectionState) {
@@ -639,7 +644,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             hoursInterval: this.option('hoursInterval'),
             currentDate: this.option('currentDate'),
             startDate: this.option('startDate'),
-            firstDayOfWeek: this._firstDayOfWeek(),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
 
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
@@ -707,7 +712,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _firstDayOfWeek() {
-        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
+        return this.viewDataProvider.getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
     _attachEvents() {
@@ -842,7 +847,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             ? this._groupedStrategy.getAllDayTableHeight()
             : 0;
 
-        headerPanelHeight && this._headerScrollable && this._headerScrollable.$element().height(headerPanelHeight + allDayPanelHeight);
+        headerPanelHeight && this._headerScrollable && this._headerScrollable.option('height', headerPanelHeight + allDayPanelHeight);
 
         headerPanelHeight && this._dateTableScrollable.$element().css({
             'paddingBottom': allDayPanelHeight + headerPanelHeight + 'px',
@@ -2182,7 +2187,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'intervalCount':
                 this._cleanWorkSpace();
                 this._toggleWorkSpaceCountClass();
-                this._toggleFixedScrollableClass();
                 break;
             case 'groupByDate':
                 this._cleanWorkSpace();
@@ -2469,7 +2473,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this._toggleGroupedClass();
-        this._toggleFixedScrollableClass();
 
         this._renderView();
         this._attachEvents();
@@ -2484,8 +2487,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _toggleGroupedClass() {
         this.$element().toggleClass(GROUPED_WORKSPACE_CLASS, this._getGroupCount() > 0);
     }
-
-    _toggleFixedScrollableClass() { return noop(); }
 
     _renderView() {
         if(this.isRenovatedRender()) {

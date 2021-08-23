@@ -19,7 +19,7 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    dxTreeListColumn,
+    Column,
 } from './tree_list';
 
 import Widget, {
@@ -27,11 +27,11 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-    dxToolbarItem,
+    Item as dxToolbarItem,
 } from './toolbar';
 
 import {
-    dxContextMenuItem,
+    Item as dxContextMenuItem,
 } from './context_menu';
 
 import {
@@ -249,10 +249,11 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     allowSelection?: boolean;
     /**
      * @docid
+     * @type Array<dxTreeListColumn|string>
      * @default undefined
      * @public
      */
-    columns?: Array<dxTreeListColumn | string>;
+    columns?: Array<Column | string>;
     /**
      * @docid
      * @default null
@@ -367,7 +368,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type object
      * @public
      */
-     sorting?: Sorting;
+     sorting?: dxGanttSorting;
     /**
      * @docid
      * @default null
@@ -930,6 +931,18 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     rootValue?: any;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    startDateRange?: Date;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    endDateRange?: Date;
 }
 /**
  * @docid
@@ -1102,6 +1115,46 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @public
      */
     showResourceManagerDialog(): void;
+    /**
+     * @docid
+     * @publicName expandAll()
+     * @public
+     */
+    expandAll(): void;
+    /**
+     * @docid
+     * @publicName collapseAll()
+     * @public
+     */
+    collapseAll(): void;
+    /**
+     * @docid
+     * @publicName expandAllToLevel(level)
+     * @param1 level: Number
+     * @public
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * @docid
+     * @publicName expandToTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandToTask(key: any): void;
+    /**
+     * @docid
+     * @publicName collapseTask(key)
+     * @param1 key:object
+     * @public
+     */
+    collapseTask(key: any): void;
+    /**
+     * @docid
+     * @publicName expandTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandTask(key: any): void;
 }
 
 /**
@@ -1115,7 +1168,7 @@ export interface dxGanttToolbar {
      * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
      * @public
      */
-    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
+    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
 }
 
 /**
@@ -1135,12 +1188,17 @@ export interface dxGanttContextMenu {
      * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
      * @public
      */
-    items?: Array<dxGanttContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
+    items?: Array<ContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
 }
 
 /**
- * @docid
- * @inherits dxToolbarItem
+ * @public
+ * @namespace DevExpress.ui.dxGantt
+ */
+export type ToolbarItem = dxGanttToolbarItem;
+
+/**
+ * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui
  */
 export interface dxGanttToolbarItem extends dxToolbarItem {
@@ -1160,8 +1218,13 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
 }
 
 /**
- * @docid
- * @inherits dxContextMenuItem
+ * @public
+ * @namespace DevExpress.ui.dxGantt
+ */
+export type ContextMenuItem = dxGanttContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
@@ -1212,7 +1275,7 @@ export interface dxGanttStripLine {
  * @type object
  * @namespace DevExpress.ui
  */
-export interface Sorting {
+export interface dxGanttSorting {
     /**
      * @docid
      * @default "Sort Ascending"

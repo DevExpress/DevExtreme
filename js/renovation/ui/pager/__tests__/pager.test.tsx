@@ -61,26 +61,38 @@ describe('Pager', () => {
 
   describe('Behaviour', () => {
     it('pageSizeChange', () => {
-      const component = new PagerComponent({ pageSize: 5, gridCompatibility: false });
+      const component = new PagerComponent({
+        pageSize: 5,
+        gridCompatibility: false,
+      });
       expect(component.props.pageSize).toBe(5);
       component.pageSizeChange(10);
       expect(component.props.pageSize).toBe(10);
     });
 
     it('pageIndexChange', () => {
-      const component = new PagerComponent({ pageIndex: 5, gridCompatibility: false });
+      const component = new PagerComponent({
+        pageIndex: 5,
+        gridCompatibility: false,
+      });
       expect(component.props.pageIndex).toBe(5);
       component.pageIndexChange(10);
       expect(component.props.pageIndex).toBe(10);
     });
 
     it('className', () => {
-      const component = new PagerComponent({ className: 'custom', gridCompatibility: false });
+      const component = new PagerComponent({
+        className: 'custom',
+        gridCompatibility: false,
+      });
       expect(component.className).toBe('custom');
     });
 
     it('pagerProps', () => {
-      const component = new PagerComponent({ pageIndex: 0, gridCompatibility: false });
+      const component = new PagerComponent({
+        pageIndex: 0,
+        gridCompatibility: false,
+      });
 
       const { pageIndexChange, pageSizeChange, ...restProps } = component.pagerProps;
       expect(restProps).toMatchObject({
@@ -88,26 +100,34 @@ describe('Pager', () => {
         pageIndex: 0,
       });
 
-      pageIndexChange?.(1);
+      pageIndexChange(1);
       expect(component.props.pageIndex).toBe(1);
-      pageSizeChange?.(10);
+      pageSizeChange(10);
       expect(component.props.pageSize).toBe(10);
     });
 
     describe('gridCompatibility', () => {
       it('pageIndex', () => {
-        const component = new PagerComponent({ pageIndex: 4, gridCompatibility: true });
+        const component = new PagerComponent({
+          pageIndex: 4,
+          gridCompatibility: true,
+        });
         expect(component.pageIndex).toBe(3);
       });
 
       it('pageIndexChange', () => {
-        const component = new PagerComponent({ gridCompatibility: true });
+        const component = new PagerComponent({
+          gridCompatibility: true,
+        });
         component.pageIndexChange(4);
         expect(component.props.pageIndex).toBe(5);
       });
 
       it('className', () => {
-        const component = new PagerComponent({ className: 'custom', gridCompatibility: true });
+        const component = new PagerComponent({
+          className: 'custom',
+          gridCompatibility: true,
+        });
         expect(component.className).toBe('dx-datagrid-pager custom');
       });
     });

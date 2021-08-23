@@ -25,13 +25,19 @@ import { nativeScrolling, touch } from '../../../core/utils/support';
 import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable';
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
+import { getElementLocationInternal } from './utils/get_element_location_internal';
+
+import { hasWindow } from '../../../core/utils/window';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
+
+let isServerSide = !hasWindow();
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
-      useNative, children, classes,
+      useNative, activeStateUnit, children, classes,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
@@ -43,10 +49,13 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
+  isServerSide = !hasWindow();
+
   return useNative
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
+        activeStateUnit={activeStateUnit}
         aria={aria}
         classes={classes}
         width={width}
@@ -58,9 +67,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         showScrollbar={showScrollbar}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
-        forceGeneratePockets={forceGeneratePockets}
+        forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
         onPullDown={onPullDown}
@@ -80,6 +90,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     : (
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
+        activeStateUnit={activeStateUnit}
         aria={aria}
         classes={classes}
         width={width}
@@ -92,9 +103,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         scrollByThumb={scrollByThumb}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
-        forceGeneratePockets={forceGeneratePockets}
+        forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
         onPullDown={onPullDown}
@@ -121,7 +133,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 type ScrollablePropsType = ScrollableProps
-& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
+& Pick<WidgetProps, 'aria' | 'activeStateUnit' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
@@ -174,12 +186,16 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   release(): void {
-    return this.scrollableRef.release() as undefined;
+    if (!isServerSide) {
+      this.scrollableRef.release() as undefined;
+    }
   }
 
   @Method()
   refresh(): void {
-    this.scrollableRef.refresh();
+    if (!isServerSide) {
+      this.scrollableRef.refresh();
+    }
   }
 
   @Method()
@@ -188,8 +204,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement): void {
-    this.scrollableRef.scrollToElement(element);
+  scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
+    if (!this.content().contains(element)) {
+      return;
+    }
+
+    const scrollPosition = { top: 0, left: 0 };
+    const { direction } = this.props;
+
+    if (direction !== DIRECTION_VERTICAL) {
+      scrollPosition.left = this.getScrollElementPosition(element, DIRECTION_HORIZONTAL, offset);
+    }
+    if (direction !== DIRECTION_HORIZONTAL) {
+      scrollPosition.top = this.getScrollElementPosition(element, DIRECTION_VERTICAL, offset);
+    }
+
+    this.scrollTo(scrollPosition);
   }
 
   @Method()
@@ -227,15 +257,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth() as number;
   }
 
+  // TODO: decorator uses for DataGrid. It's internal method
   @Method()
-  // TODO: it uses for DataGrid only
-  getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
-    return this.scrollableRef.getElementLocation(element, direction) as boolean;
-  }
+  getScrollElementPosition(
+    targetElement: HTMLElement,
+    direction: ScrollableDirection,
+    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
+  ): number {
+    const scrollOffset = this.scrollOffset();
 
-  @Method()
-  scrollToElementTopLeft(element: HTMLElement): void {
-    this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
+    return getElementLocationInternal(
+      targetElement,
+      direction,
+      this.container(),
+      scrollOffset,
+      offset,
+    );
   }
 
   @Method()
@@ -245,7 +282,9 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   finishLoading(): void {
-    this.scrollableRef.finishLoading();
+    if (!isServerSide) {
+      this.scrollableRef.finishLoading();
+    }
   }
 
   validate(event: DxMouseEvent): boolean {

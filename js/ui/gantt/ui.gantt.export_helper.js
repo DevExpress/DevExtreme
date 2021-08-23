@@ -161,6 +161,6 @@ export class GanttExportHelper {
                 return numberLocalization.format(value, format);
             }
         }
-        return value;
+        return typeof value === 'string' ? value : value?.toString();
     }
 }

@@ -19,6 +19,7 @@
   position: relative;
 
   .dx-htmleditor-toolbar-wrapper {
+    padding: 0 $material-htmleditor-toolbar-padding;
     position: relative;
 
     &:first-child {
@@ -279,6 +280,10 @@
 .dx-htmleditor-toolbar-format {
   &.dx-dropdowneditor.dx-editor-filled {
     background-color: transparent;
+
+    &::after {
+      border-bottom-color: transparent;
+    }
   }
 
   &.dx-color-format,

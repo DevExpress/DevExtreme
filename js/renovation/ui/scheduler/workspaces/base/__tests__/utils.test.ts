@@ -2,6 +2,7 @@ import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../
 import { Group } from '../../types';
 import {
   createCellElementMetaData,
+  getDateForHeaderText,
   getHiddenInterval,
   getRowCountWithAllDayRow,
   getTotalCellCount,
@@ -104,6 +105,15 @@ describe('Workspace base utils', () => {
           left: 50,
           top: 150,
         });
+    });
+  });
+
+  describe('getDateForHeaderText', () => {
+    it('should return date', () => {
+      const date = new Date(2021, 8, 11);
+
+      expect(getDateForHeaderText(1, date, {} as any))
+        .toBe(date);
     });
   });
 });

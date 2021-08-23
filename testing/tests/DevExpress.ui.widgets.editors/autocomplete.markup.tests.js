@@ -87,20 +87,25 @@ QUnit.module('dxAutocomplete', {
 
 QUnit.module('widget sizing render', () => {
     QUnit.test('constructor', function(assert) {
-        const $element = $('#widget').dxAutocomplete({ width: 400 }); const instance = $element.dxAutocomplete('instance'); const elementStyles = $element.get(0).style;
+        const $element = $('#widget').dxAutocomplete({ width: 400 });
+        const instance = $element.dxAutocomplete('instance');
+        const elementStyles = $element.get(0).style;
 
         assert.strictEqual(instance.option('width'), 400);
         assert.strictEqual(elementStyles.width, '400px', 'width of the element must be equal to custom width');
     });
 
     QUnit.test('root with custom width', function(assert) {
-        const $element = $('#widthRootStyle').dxAutocomplete(); const elementStyles = $element.get(0).style;
+        const $element = $('#widthRootStyle').dxAutocomplete();
+        const elementStyles = $element.get(0).style;
 
         assert.strictEqual(elementStyles.width, '300px', 'width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxAutocomplete(); const element = $element.get(0); const instance = $element.dxAutocomplete('instance');
+        const $element = $('#widget').dxAutocomplete();
+        const element = $element.get(0);
+        const instance = $element.dxAutocomplete('instance');
 
         instance.option('width', 400);
 

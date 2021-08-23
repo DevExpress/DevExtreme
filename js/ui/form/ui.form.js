@@ -3,6 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
 import Guid from '../../core/guid';
 import { ensureDefined } from '../../core/utils/common';
+import config from '../../core/config';
 import { isDefined, isEmptyObject, isObject, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
@@ -33,7 +34,6 @@ import {
     isExpectedItem,
     isFullPathContainsTabs,
     getItemPath,
-    getLabelWidthByText
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -58,7 +58,8 @@ import {
     GROUP_COL_COUNT_ATTR,
     FIELD_ITEM_CONTENT_CLASS,
     FORM_VALIDATION_SUMMARY,
-    ROOT_SIMPLE_ITEM_CLASS } from './constants';
+    ROOT_SIMPLE_ITEM_CLASS,
+    FORM_UNDERLINED_CLASS } from './constants';
 
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
@@ -110,7 +111,7 @@ const Form = Widget.inherit({
             items: undefined,
             scrollingEnabled: false,
             validationGroup: undefined,
-            stylingMode: undefined
+            stylingMode: config().editorStylingMode
         });
     },
 
@@ -173,12 +174,10 @@ const Form = Widget.inherit({
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = getLabelWidthByText(
-                layoutManager._getRenderLabelOptions({
-                    text: this._getLabelText($labelTexts[i]),
-                    location: this._labelLocation(),
-                })
-            );
+            labelWidth = layoutManager._getLabelWidthByText({
+                text: this._getLabelText($labelTexts[i]),
+                location: this._labelLocation(),
+            });
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
             }
@@ -280,11 +279,18 @@ const Form = Widget.inherit({
         }
     },
 
+    _setStylingModeClass: function() {
+        if(this.option('stylingMode') === 'underlined') {
+            this.$element().addClass(FORM_UNDERLINED_CLASS);
+        }
+    },
+
     _initMarkup: function() {
         ValidationEngine.addGroup(this._getValidationGroup());
         this._clearCachedInstances();
         this._prepareFormData();
         this.$element().addClass(FORM_CLASS);
+        this._setStylingModeClass();
 
         this.callBase();
 
@@ -696,9 +702,10 @@ const Form = Widget.inherit({
                     this._resetValues();
                 }
                 break;
+            case 'onFieldDataChanged':
+                break;
             case 'items':
             case 'colCount':
-            case 'onFieldDataChanged':
             case 'onEditorEnterKey':
             case 'labelLocation':
             case 'alignItemLabels':

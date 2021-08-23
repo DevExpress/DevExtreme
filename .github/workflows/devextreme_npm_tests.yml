@@ -1,0 +1,311 @@
+name: DevExtreme package tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Restore artifacts cache
+      uses: actions/cache@v2
+      with:
+        path: ./artifacts
+        key: build-npm-devextreme-artifacts-${{ github.sha }}
+
+    - name: Install packages in devextreme repo
+      run: test -d artifacts || npm install --no-audit --no-fund
+
+    - name: Build devextreme repo
+      run: test -d artifacts || npm run build-npm-devextreme
+
+    - name: Pack devextreme package
+      working-directory: ./artifacts/npm/devextreme
+      run: npm pack
+
+    - name: Copy build artifacts      
+      uses: actions/upload-artifact@v2
+      with:
+        name: devextreme-npm
+        path: ./artifacts/npm/devextreme/devextreme-*.tgz
+        retention-days: 1
+
+  test_angular:
+    name: Angular wrapper tests
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Set default run status
+      run: echo "default" > last_run_status
+
+    - name: Restore last run status
+      uses: actions/cache@v2
+      with:
+        path: last_run_status
+        key: last-run-status-${{ github.job }}-${{ github.sha }}
+
+    - name: Set last run status
+      id: last_run_status
+      run: cat last_run_status
+
+    - name: Get sources
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Install packages in devextreme repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: npm install --no-audit --no-fund
+
+    - name: Clone devextreme-angular repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular ./devextreme-angular-repo
+
+    - name: Clone devextreme-angular repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
+
+    - name: Download artifacts
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-npm
+        path: ./devextreme-angular-repo/packages/devextreme-angular
+   
+    - name: Install devextreme package
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
+      run: npm install --save-dev $(ls *.tgz)
+
+    - name: Install packages for devextreme-angular
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-angular-repo
+      run: npm install --no-audit --no-fund
+      
+    - name: Update angular metadata
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        npm run internal-tool -- update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js
+
+    - name: Build with Angular 7
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        cd ./devextreme-angular-repo
+        npm run build
+
+    - name: Run tests with Angular 7
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        cd ./devextreme-angular-repo
+        npx lerna run --scope devextreme-angular gulp -- run.tests
+
+    - name: Save run status
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: echo "::set-output name=last_run_status::success" > last_run_status
+
+  test_bundlers:
+    name: Bundlers tests
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Set default run status
+      run: echo "default" > last_run_status
+
+    - name: Restore last run status
+      uses: actions/cache@v2
+      with:
+        path: last_run_status
+        key: last-run-status-${{ github.job }}-${{ github.sha }}
+
+    - name: Set last run status
+      id: last_run_status
+      run: cat last_run_status
+
+    - name: Download artifacts
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-npm
+        path: ./testing/bundlers
+
+    - name: Install bundlers
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers  
+      run: npm install --no-audit --no-fund
+
+    - name: Install DevExtreme package 
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm install --save-dev $(find . -maxdepth 1 -name "devextreme-*.tgz")
+
+    - name: Generate entry files 
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm run generate-entry-files  
+
+    - name: Build webpack cjs
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm run build:webpack-cjs
+
+    - name: Build browserify cjs
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm run build:browserify-cjs
+
+    - name: Build webpack
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm run build:webpack
+
+    - name: Build rollup
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm run build:rollup
+      
+    - name: Build parcel
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm run build:parcel
+      
+    - name: Build vite
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./testing/bundlers
+      run: npm run build:vite
+
+    - name: Save run status
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: echo "::set-output name=last_run_status::success" > last_run_status
+      
+  test_demos:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:      
+        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
+
+    runs-on: ubuntu-latest
+    name: Demos visual tests ${{ matrix.CONSTEL }}
+    timeout-minutes: 20
+  
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Set default run status
+      run: echo "default" > last_run_status
+
+    - name: Restore last run status
+      uses: actions/cache@v2
+      with:
+        path: last_run_status
+        key: last-run-status-${{ github.job }}-${{ matrix.CONSTEL }}-${{ github.sha }}
+
+    - name: Set last run status
+      id: last_run_status
+      run: cat last_run_status
+
+    - name: Clone devextreme-demos repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
+
+    - name: Clone devextreme-demos repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
+        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
+
+    - name: Download artifacts
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-npm
+        path: ./devextreme-demos
+
+    - name: Install packages for devextreme-demos
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-demos
+      run: npm install --no-audit --no-fund
+
+    - name: Install devextreme package
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-demos
+      run: npm install $(find . -maxdepth 1 -name "devextreme-*.tgz")
+
+    - name: Prepare JS
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-demos
+      run: npm run prepare-js
+      
+    - name: Run Web Server
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-demos
+      run: |
+        python -m http.server 8080 &
+        python -m http.server 8081 &
+        python -m http.server 8082 &
+        python -m http.server 8083 &
+
+    - name: Run TestCafe tests
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-demos
+      env:
+        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        CONCURRENCY: 4
+        TCQUARANTINE: true
+        CONSTEL: ${{ matrix.CONSTEL }}
+        ENABLE_DEMO_TEST_SETTINGS: true
+      run: npm run test-testcafe
+
+    - name: Copy screenshots artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
+        if-no-files-found: ignore
+
+    - name: Save run status
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: echo "::set-output name=last_run_status::success" > last_run_status

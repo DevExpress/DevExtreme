@@ -193,7 +193,7 @@ export class BulletProps extends BaseWidgetProps {
 
   @OneWay() endScaleValue?: number;
 
-  @Nested() tooltip?: TooltipProps;
+  @Nested() tooltip: TooltipProps = new TooltipProps();
 
   @Event() onTooltipHidden?: OnTooltipHiddenFn<BaseEventData>;
 
@@ -315,17 +315,13 @@ export class Bullet extends JSXComponent(BulletProps) {
       onTooltipHidden,
       onTooltipShown,
       customizeTooltip: generateCustomizeTooltipCallback(
-        tooltip?.customizeTooltip,
-        tooltip?.font,
+        tooltip.customizeTooltip,
+        tooltip.font,
         this.rtlEnabled,
       ),
       data: this.tooltipData,
       ...this.tooltipCoords,
     };
-
-    if (!tooltip) {
-      return customProps;
-    }
 
     return {
       ...tooltip,
@@ -421,7 +417,7 @@ export class Bullet extends JSXComponent(BulletProps) {
   onCanvasChange(canvas: ClientRect): void {
     this.canvasState = canvas;
     const svgElement = this.widgetRef.current?.svg() ?? undefined;
-    this.offsetState = getElementOffset(svgElement) ?? DEFAULT_OFFSET;
+    this.offsetState = getElementOffset(svgElement);
   }
 
   prepareScaleProps(): BulletScaleProps {

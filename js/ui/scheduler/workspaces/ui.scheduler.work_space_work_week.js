@@ -2,8 +2,7 @@ import registerComponent from '../../../core/component_registrator';
 import {
     isDataOnWeekend,
     getWeekendsCount,
-    getFirstDayOfWeek,
-} from './utils/work_week';
+} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
 import SchedulerWorkSpaceWeek from './ui.scheduler.work_space_week';
 import { VIEWS } from '../constants';
 
@@ -23,10 +22,6 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
 
     _getElementClass() {
         return WORK_WEEK_CLASS;
-    }
-
-    _firstDayOfWeek() {
-        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 }
 

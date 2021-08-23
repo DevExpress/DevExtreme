@@ -196,6 +196,7 @@ QUnit.module('DateBox', commonEnvironment, () => {
 
     QUnit.test('dxDateBox rollers localize years and days', function(assert) {
         const originalCulture = Globalize.locale().locale;
+        const clock = sinon.useFakeTimers();
 
         try {
             Globalize.locale('ar');
@@ -215,6 +216,7 @@ QUnit.module('DateBox', commonEnvironment, () => {
             assert.equal(yearText, '١٩٠٠', 'Year localized');
         } finally {
             Globalize.locale(originalCulture);
+            clock.restore();
         }
     });
 

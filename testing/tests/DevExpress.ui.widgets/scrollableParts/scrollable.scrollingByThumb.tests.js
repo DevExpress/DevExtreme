@@ -38,7 +38,7 @@ const moduleConfig = {
 };
 
 const getScrollOffset = function($scrollable) {
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const location = getTranslateValues($content.get(0));
 
@@ -52,14 +52,14 @@ QUnit.module('scrolling by thumb', moduleConfig);
 
 QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
-        showScrollbar: true,
+        showScrollbar: 'onScroll',
         useNative: false
     });
 
     let scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'onScroll', 'true normalize to onScroll');
 
-    $scrollable.dxScrollable('option', 'showScrollbar', false);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'never');
 
     scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'never', 'true normalize to onScroll');
@@ -80,7 +80,7 @@ QUnit.test('scroll by thumb', function(assert) {
     let location;
     const distance = 10;
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const containerToContentRatio = (containerHeight / contentHeight);
 
     $container.height(containerHeight);
@@ -113,7 +113,7 @@ QUnit.test('scrollTo should scroll to correct position during scroll by thumb', 
     const $thumb = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     const mouse = pointerMock($thumb).start();
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const instance = $scrollable.dxScrollable('instance');
 
     $container.height(containerHeight);
@@ -142,7 +142,7 @@ QUnit.test('scroll by thumb without scrolling by content', function(assert) {
     const mouse = pointerMock($thumb).start();
     const distance = 10;
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -169,7 +169,7 @@ QUnit.test('scroll by thumb should prevent scrolling cross direction', function(
     const mouse = pointerMock($thumb).start();
     const distance = 10;
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $container
         .height(containerSize)
@@ -390,8 +390,8 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     const $scrollableScroll = $scrollableContainer.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
-    $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
-    $scrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $wrapScrollableContainer.trigger('mouseenter');
+    $scrollableContainer.trigger('mouseenter');
 
     assert.equal($scrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible for inner scrollable');
     assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden for outer scrollable');
@@ -407,7 +407,7 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
     const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    $container.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $container.trigger('mouseenter');
 
     pointerMock($container)
         .start()
@@ -417,7 +417,7 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
 
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible');
 
-    $container.trigger($.Event('mouseleave', { originalEvent: {} }));
+    $container.trigger('mouseleave');
 
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible after mouseleave');
 });
@@ -446,9 +446,9 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
     const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
     // enter outer
-    $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $wrapScrollableContainer.trigger('mouseenter');
     // enter inner
-    $scrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $scrollableContainer.trigger('mouseenter');
 
     // start scrolling inner
     pointerMock($scrollableContainer).start().down().move(0, 10);

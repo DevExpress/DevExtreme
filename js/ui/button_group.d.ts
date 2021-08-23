@@ -70,9 +70,10 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<dxButtonGroupItem>
      * @public
      */
-    items?: Array<dxButtonGroupItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default 'text'
@@ -126,7 +127,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: 'multiple' | 'single' | 'none';
     /**
      * @docid
      * @type Enums.ButtonStylingMode
@@ -146,10 +147,14 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
 export default class dxButtonGroup extends Widget<dxButtonGroupOptions> { }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxButtonGroup
+ */
+export type Item = dxButtonGroupItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
@@ -169,6 +174,12 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * @docid
+     * @public
+     */
+    elementAttr?: { [key: string]: any };
 }
 
 /** @public */

@@ -10,7 +10,7 @@ import {
     getTotalCellCountByCompleteData,
     getTotalRowCountByCompleteData,
     getDisplayedCellCount,
-} from '../utils/base';
+} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 const DAY_MS = dateUtils.dateToMilliseconds('day');
@@ -21,6 +21,10 @@ export class ViewDataGenerator {
     get isWorkView() { return false; }
 
     get tableAllDay() { return false; }
+
+    getStartViewDate(options) {
+        return this._calculateStartViewDate(options);
+    }
 
     getCompleteViewDataMap(options) {
         const {
@@ -425,7 +429,7 @@ export class ViewDataGenerator {
         const offsetByCount = this.isWorkView
             ? this.getTimeOffsetByColumnIndex(
                 columnIndex,
-                firstDayOfWeek,
+                this.getFirstDayOfWeek(firstDayOfWeek),
                 columnCountBase,
                 intervalCount,
             ) : 0;
@@ -465,7 +469,7 @@ export class ViewDataGenerator {
     }
 
     _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
-        return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+        return calculateCellIndex(rowIndex, columnIndex, rowCount);
     }
 
     generateGroupedDataMap(viewDataMap) {
@@ -693,5 +697,9 @@ export class ViewDataGenerator {
         const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
         return hoursInterval * cellCountInDay * HOUR_MS;
+    }
+
+    getFirstDayOfWeek(firstDayOfWeekOption) {
+        return firstDayOfWeekOption;
     }
 }

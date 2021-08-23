@@ -1,12 +1,20 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Consumer,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  Fragment,
+  Consumer,
 } from '@devextreme-generator/declarations';
 
 import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
-import { PagerProps } from '../common/pager_props';
-import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
+import { InternalPagerProps } from '../common/pager_props';
+import {
+  ConfigContextValue,
+  ConfigContext,
+} from '../../../common/config_context';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
@@ -26,40 +34,43 @@ export const viewFunction = ({
   navigateToNextPage,
   pageIndexChange,
   props: {
-    isLargeDisplayMode, maxPagesCount,
-    pageCount, pageIndex, pagesCountText,
+    isLargeDisplayMode,
+    maxPagesCount,
+    pageCount,
+    pageIndex,
+    pagesCountText,
   },
 }: PageIndexSelector): JSX.Element => (
   <Fragment>
     {renderPrevButton && (
-    <LightButton
-      className={prevClassName}
-      label="Previous page"
-      onClick={navigateToPrevPage}
-    />
+      <LightButton
+        className={prevClassName}
+        label="Previous page"
+        onClick={navigateToPrevPage}
+      />
     )}
     {isLargeDisplayMode && (
-    <PagesLarge
-      maxPagesCount={maxPagesCount}
-      pageCount={pageCount}
-      pageIndex={pageIndex}
-      pageIndexChange={pageIndexChange}
-    />
+      <PagesLarge
+        maxPagesCount={maxPagesCount}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        pageIndexChange={pageIndexChange}
+      />
     )}
     {!isLargeDisplayMode && (
-    <PagesSmall
-      pageCount={pageCount}
-      pageIndex={pageIndex}
-      pageIndexChange={pageIndexChange}
-      pagesCountText={pagesCountText}
-    />
+      <PagesSmall
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        pageIndexChange={pageIndexChange}
+        pagesCountText={pagesCountText}
+      />
     )}
     {renderNextButton && (
-    <LightButton
-      className={nextClassName}
-      label="Next page"
-      onClick={navigateToNextPage}
-    />
+      <LightButton
+        className={nextClassName}
+        label="Next page"
+        onClick={navigateToNextPage}
+      />
     )}
   </Fragment>
 );
@@ -74,18 +85,25 @@ export class PageIndexSelectorProps {
   @OneWay() isLargeDisplayMode = true;
 }
 
-type PageIndexSelectorPropsType = Pick<PagerProps,
-'hasKnownLastPage' | 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' |
-'showNavigationButtons' | 'totalCount'> & PageIndexSelectorProps;
+type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
+| 'maxPagesCount'
+| 'pageCount'
+| 'pageIndex'
+| 'pageIndexChange'
+| 'pagesCountText'
+| 'showNavigationButtons'
+| 'totalCount'
+>
+& PageIndexSelectorProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>() {
+export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
   pageIndexChange(pageIndex: number): void {
     if (this.canNavigateToPage(pageIndex)) {
-      this.props.pageIndex = pageIndex;
+      this.props.pageIndexChange(pageIndex);
     }
   }
 

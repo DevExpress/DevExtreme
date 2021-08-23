@@ -1,20 +1,37 @@
-import { AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
+import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const {
     module,
     test
 } = QUnit;
 
+const defaultDataAccessors = {
+    getter: {
+        startDate: compileGetter('startDate'),
+        endDate: compileGetter('endDate'),
+    },
+    setter: {
+        startDate: compileSetter('startDate'),
+        endDate: compileSetter('endDate'),
+    },
+    expr: {
+        startDateExpr: 'startDate',
+        endDateExpr: 'endDate'
+    },
+};
+
 const createAppointmentDataProvider = (options) => {
-    return new AppointmentDataProvider({
-        ...options,
+    const key = createFactoryInstances({
         timeZoneCalculator: ({
             createDate: date => date
-        })
+        }),
+        ...options
     });
+
+    return getAppointmentDataProvider(key);
 };
 
 module('Server side filtering', () => {
@@ -36,15 +53,9 @@ module('Server side filtering', () => {
             store: data,
         });
         const appointmentDataProvider = createAppointmentDataProvider({
-            key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate'
-                },
-            }),
+            getDataAccessors: () => defaultDataAccessors,
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
@@ -75,12 +86,7 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate'
-                },
-            })
+            getDataAccessors: () => defaultDataAccessors
         });
         const dateFilter = [
             [
@@ -168,7 +174,7 @@ module('Server side filtering', () => {
                 endDayHour: 4
             });
 
-            assert.equal(appointmentDataProvider.filterMaker._filterRegistry.user, undefined, 'Empty user filter');
+            assert.equal(appointmentDataProvider.filterMaker._filterRegistry, null, 'Empty user filter');
         });
     });
 
@@ -194,12 +200,7 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate'
-                }
-            })
+            getDataAccessors: () => defaultDataAccessors
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
@@ -209,7 +210,9 @@ module('Server side filtering', () => {
             '=',
             'Appointment 2'
         ]];
+
         const actualFilter = dataSource.filter();
+
         assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
     });
 
@@ -333,12 +336,7 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate'
-                }
-            })
+            getDataAccessors: () => defaultDataAccessors
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
@@ -361,6 +359,14 @@ module('Server side filtering', () => {
             dataSource,
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => ({
+                getter: {
+                    startDate: compileGetter('Start'),
+                    endDate: compileGetter('End'),
+                },
+                setter: {
+                    startDate: compileSetter('Start'),
+                    endDate: compileSetter('End'),
+                },
                 expr: {
                     startDateExpr: 'Start',
                     endDateExpr: 'End'
@@ -391,6 +397,16 @@ module('Server side filtering', () => {
             dataSource,
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => ({
+                getter: {
+                    startDate: compileGetter('startDate'),
+                    endDate: compileGetter('endDate'),
+                    allDay: compileGetter('AllDay'),
+                },
+                setter: {
+                    startDate: compileSetter('startDate'),
+                    endDate: compileSetter('endDate'),
+                    allDay: compileSetter('AllDay'),
+                },
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -421,6 +437,16 @@ module('Server side filtering', () => {
             dataSource,
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => ({
+                getter: {
+                    startDate: compileGetter('startDate'),
+                    endDate: compileGetter('endDate'),
+                    allDay: compileGetter('AllDay'),
+                },
+                setter: {
+                    startDate: compileSetter('startDate'),
+                    endDate: compileSetter('endDate'),
+                    allDay: compileSetter('AllDay'),
+                },
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -447,7 +473,8 @@ module('Server side filtering', () => {
                 text: 'Appointment 2',
                 startDate: new Date(2015, 1, 10, 11, 0),
                 endDate: new Date(2015, 1, 10, 13, 0)
-            }];
+            }
+        ];
 
         const dataSource = new DataSource({
             store: recurrentAppts
@@ -457,6 +484,18 @@ module('Server side filtering', () => {
             dataSource,
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => ({
+                getter: {
+                    startDate: compileGetter('startDate'),
+                    endDate: compileGetter('endDate'),
+                    allDay: compileGetter('AllDay'),
+                    recurrenceRule: compileGetter('_recurrenceRule'),
+                },
+                setter: {
+                    startDate: compileSetter('startDate'),
+                    endDate: compileSetter('endDate'),
+                    allDay: compileSetter('AllDay'),
+                    recurrenceRule: compileSetter('_recurrenceRule'),
+                },
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -494,6 +533,16 @@ module('Server side filtering', () => {
             dataSource,
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => ({
+                getter: {
+                    startDate: compileGetter('startDate'),
+                    endDate: compileGetter('endDate'),
+                    allDay: compileGetter('allDay'),
+                },
+                setter: {
+                    startDate: compileSetter('startDate'),
+                    endDate: compileSetter('endDate'),
+                    allDay: compileSetter('allDay'),
+                },
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -532,6 +581,16 @@ module('Server side filtering', () => {
             dataSource,
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => ({
+                getter: {
+                    startDate: compileGetter('startDate'),
+                    endDate: compileGetter('endDate'),
+                    allDay: compileGetter('allDay'),
+                },
+                setter: {
+                    startDate: compileSetter('startDate'),
+                    endDate: compileSetter('endDate'),
+                    allDay: compileSetter('allDay'),
+                },
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -563,10 +622,21 @@ module('Server side filtering', () => {
             dataSource,
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => ({
+                getter: {
+                    startDate: compileGetter('startDate'),
+                    endDate: compileGetter('endDate'),
+                    allDay: compileGetter('allDay'),
+                },
+                setter: {
+                    startDate: compileSetter('startDate'),
+                    endDate: compileSetter('endDate'),
+                    allDay: compileSetter('allDay'),
+                },
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
-                    allDayExpr: 'allDay'
+                    allDayExpr: 'allDay',
+                    recurrenceRuleExpr: ''
                 }
             })
         });
@@ -679,7 +749,6 @@ module('Server side filtering', () => {
         appointmentDataProvider.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
         dataSource.load();
 
-
         assert.deepEqual(dataSource.items(), [{ text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2 }], 'Appointments are OK');
     });
 }
@@ -721,6 +790,8 @@ module('Client side after filtering', () => {
         appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
         const appts = appointmentDataProvider.filterLoadedAppointments({
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 0, 1),
             startDayHour: 3,
             endDayHour: 7
         });
@@ -762,6 +833,8 @@ module('Client side after filtering', () => {
         appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
 
         const appts = appointmentDataProvider.filterLoadedAppointments({
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 0, 1),
             startDayHour: 3,
             endDayHour: 7
         });
@@ -804,6 +877,8 @@ module('Client side after filtering', () => {
         appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
         const appts = appointmentDataProvider.filterLoadedAppointments({
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 0, 1),
             startDayHour: 3.5,
             endDayHour: 7.5
         });
@@ -988,8 +1063,8 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
-            min: new Date(2015, 0, 1).toString(),
-            max: new Date(2015, 0, 1, 23, 59).toString()
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 11, 27)
         });
 
         assert.deepEqual(appts, [
@@ -1035,8 +1110,8 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
-            min: new Date(2015, 0, 1).toString(),
-            max: new Date(2015, 0, 1, 23, 59).toString()
+            min: new Date(2015, 0, 1),
+            max: new Date(2015, 11, 27)
         });
 
         assert.deepEqual(appts, [
@@ -1138,7 +1213,9 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
-            allDay: false
+            allDay: false,
+            min: new Date(2015, 0, 1, 3),
+            max: new Date(2015, 0, 1, 8)
         });
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
@@ -1184,6 +1261,86 @@ module('Client side after filtering', () => {
         });
 
         assert.deepEqual(appts, [{ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' }], 'Appointments are OK');
+    });
+
+    [
+        { visible: true, expectedVisibility: true },
+        { visible: false, expectedVisibility: false },
+        { visible: null, expectedVisibility: true },
+        { visible: undefined, expectedVisibility: true },
+    ].forEach(({ visible, expectedVisibility }) => {
+        test(`Appointment should be correctly filtered by visible state if visible=${visible}`, function(assert) {
+            const dataSource = new DataSource({ store: [] });
+            const appointmentDataProvider = createAppointmentDataProvider({
+                dataSource,
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => ({
+                    getter: {
+                        startDate: compileGetter('StartDate'),
+                        endDate: compileGetter('EndDate'),
+                        recurrenceRule: compileGetter('RecurrenceRule'),
+                        recurrenceException: compileGetter('Exception'),
+                        allDay: compileGetter('AllDay'),
+                        startDateTimeZone: compileGetter('StartDateTimeZone'),
+                        endDateTimeZone: compileGetter('EndDateTimeZone')
+                    },
+                    setter: {
+                        startDate: compileSetter('StartDate'),
+                        endDate: compileSetter('EndDate')
+                    },
+                    expr: {
+                        startDateExpr: 'StartDate',
+                        endDateExpr: 'EndDate',
+                        allDayExpr: 'AllDay',
+                        recurrenceRuleExpr: 'RecurrenceRule',
+                        recurrenceExceptionExpr: 'Exception'
+                    }
+                })
+            });
+
+            appointmentDataProvider.add({
+                text: 'a',
+                StartDate: new Date(2015, 0, 1).toString(),
+                EndDate: new Date(2015, 0, 2).toString(),
+                AllDay: true,
+                RecurrenceRule: 'FREQ=DAILY',
+                visible
+            });
+
+            const appts = appointmentDataProvider.filterLoadedAppointments({
+                startDayHour: 3,
+                endDayHour: 10,
+                min: new Date(2015, 0, 1, 3),
+                max: new Date(2015, 0, 1, 9, 59)
+            });
+
+            assert.equal(!!appts.length, expectedVisibility, 'Filtered correctly');
+        });
+    });
+
+    test('Appointment should be filtered if startDate, endDate are at the edge of the trimmed end view date', function(assert) {
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataProvider = createAppointmentDataProvider({
+            key: 0,
+            dataSource,
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => defaultDataAccessors
+        });
+
+        appointmentDataProvider.add({
+            text: 'a',
+            startDate: new Date(2020, 6, 16, 0),
+            endDate: new Date(2020, 6, 16, 1),
+        });
+
+        const appts = appointmentDataProvider.filterLoadedAppointments({
+            startDayHour: 0,
+            endDayHour: 24,
+            min: new Date(2020, 6, 15),
+            max: new Date(2020, 6, 15, 23, 59)
+        });
+
+        assert.ok(!appts.length, 'Filtered');
     });
 
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
@@ -1357,6 +1514,66 @@ module('Client side after filtering', () => {
         });
 
         assert.deepEqual(appts[0].EndDate, new Date(2015, 2, 1, 12, 0), 'EndDate of appointment should be replaced by correct value');
+    });
+});
+
+module('API', () => {
+    [
+        {
+            item: {
+                text: 'all day appointment',
+                StartDate: new Date(2015, 2, 1, 11, 0),
+                AllDay123: true
+            },
+            expected: true
+        },
+        {
+            item: {
+                text: 'not all day appointment',
+                StartDate: new Date(2015, 2, 1, 11, 0),
+            },
+            expected: false
+        },
+        {
+            item: {
+                text: 'not all day appointment',
+                StartDate: new Date(2015, 2, 1, 11, 0),
+                allDay: true
+            },
+            expected: false
+        }
+    ].forEach(({ item, expected }) => {
+        test(`hasAllDayAppointments() should return correct result if all day is ${expected}`, function(assert) {
+            const dataSource = new DataSource({ store: [] });
+            const appointmentDataProvider = createAppointmentDataProvider({
+                key: 0,
+                dataSource,
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => ({
+                    getter: {
+                        startDate: compileGetter('StartDate'),
+                        endDate: compileGetter('EndDate'),
+                        allDay: compileGetter('AllDay123'),
+                    },
+                    setter: {
+                        startDate: compileSetter('StartDate'),
+                        endDate: compileSetter('EndDate')
+                    },
+                    expr: {
+                        startDateExpr: 'StartDate',
+                        endDateExpr: 'EndDate',
+                        allDayExpr: 'AllDay123',
+                    }
+                }),
+                appointmentDuration: 60
+            });
+
+            appointmentDataProvider.add(item);
+
+            const result = appointmentDataProvider.hasAllDayAppointments([item]);
+
+            assert.equal(result, expected, 'Result is corrects');
+        });
     });
 });
 

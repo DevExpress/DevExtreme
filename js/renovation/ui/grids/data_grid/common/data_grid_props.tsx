@@ -1291,7 +1291,7 @@ export class DataGridProps
     columnPageSize: 5,
     columnRenderingThreshold: 300,
     useNative: 'auto',
-    newMode: false,
+    newMode: true,
     minGap: 1,
   };
 

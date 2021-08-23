@@ -436,3 +436,9 @@ const Accordion = CollectionWidget.inherit({
 registerComponent('dxAccordion', Accordion);
 
 export default Accordion;
+
+/**
+ * @name dxAccordionItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

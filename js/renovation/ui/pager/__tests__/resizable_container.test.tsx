@@ -47,14 +47,15 @@ describe('resizable-container', () => {
         pagesRef: 'pagesRef' as any,
         infoTextVisible: true,
         isLargeDisplayMode: true,
+        contentAttributes: {
+          pagerPropsProp1: 'pagerPropsProp1',
+          pagerPropsProp2: 'pagerPropsProp2',
+          pageIndexChange: jest.fn(),
+          pageSizeChange: jest.fn(),
+        },
         props: {
           contentTemplate,
-          pagerProps: {
-            pagerPropsProp1: 'pagerPropsProp1',
-            pagerPropsProp2: 'pagerPropsProp2',
-          } as any,
-        },
-        restAttributes: { restAttribute: {} },
+        } as any,
       } as Partial<ResizableContainer>;
 
       const tree = shallow(
@@ -67,6 +68,8 @@ describe('resizable-container', () => {
         infoTextRef: 'infoTextRef',
         infoTextVisible: true,
         isLargeDisplayMode: true,
+        pageIndexChange: expect.any(Function),
+        pageSizeChange: expect.any(Function),
         pageSizesRef: 'pageSizesRef',
         pagesRef: 'pagesRef',
         rootElementRef: 'parentRef',
@@ -103,6 +106,19 @@ describe('resizable-container', () => {
     }
 
     describe('UpdateChildProps', () => {
+      describe('contentAttributes', () => {
+        it('should merge rest attributes with pager props', () => {
+          const resizableContainer = new ResizableContainer({
+            pagerProps: { prop1: 'value1' },
+          } as any);
+
+          expect(resizableContainer.contentAttributes).toEqual({
+            'rest-attributes': 'restAttributes',
+            prop1: 'value1',
+          });
+        });
+      });
+
       it('first render should update elementsWidth', () => {
         const component = createComponent({
           width: 400, pageSizes: 100, info: 50, pages: 100,

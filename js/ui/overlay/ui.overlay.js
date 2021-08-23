@@ -34,6 +34,7 @@ import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
+import resizeObserverSingleton from '../../core/resize_observer';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -71,6 +72,8 @@ const POSITION_ALIASES = {
     'left bottom': { my: 'left bottom', at: 'left bottom' },
     'left top': { my: 'left top', at: 'left top' }
 };
+
+const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
 const getElement = value => {
     if(isEvent(value)) {
@@ -138,10 +141,7 @@ const Overlay = Widget.inherit({
 
             wrapperAttr: {},
 
-            position: {
-                my: 'center',
-                at: 'center'
-            },
+            position: extend({}, POSITION_ALIASES.center),
 
             width: '80vw',
 
@@ -207,7 +207,6 @@ const Overlay = Widget.inherit({
             hideTopOverlayHandler: () => { this.hide(); },
             closeOnTargetScroll: false,
             onPositioned: null,
-            boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
@@ -276,11 +275,15 @@ const Overlay = Widget.inherit({
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
+        this._parentsScrollSubscriptionInfo = {
+            handler: e => { this._targetParentsScrollHandler(e); }
+        };
+
         this._updateResizeCallbackSkipCondition();
     },
 
     _initOptions: function(options) {
-        this._initTarget(options.target);
+        this._setAnimationTarget(options.target);
         const container = options.container === undefined ? this.option('container') : options.container;
         this._initContainer(container);
 
@@ -291,19 +294,18 @@ const Overlay = Widget.inherit({
         this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option('innerOverlay'));
     },
 
-    _initTarget: function(target) {
+    _setAnimationTarget: function(target) {
         if(!isDefined(target)) {
             return;
         }
 
         const options = this.option();
-        each([
-            'position.of',
+        [
             'animation.show.from.position.of',
             'animation.show.to.position.of',
             'animation.hide.from.position.of',
             'animation.hide.to.position.of'
-        ], (_, path) => {
+        ].forEach(path => {
             const pathParts = path.split('.');
 
             let option = options;
@@ -353,37 +355,30 @@ const Overlay = Widget.inherit({
         };
     },
 
-    _areContentDimensionsRendered: function(entries) {
-        const contentBox = entries[0].contentBoxSize?.[0];
+    _areContentDimensionsRendered: function(entry) {
+        const contentBox = entry.contentBoxSize?.[0];
         if(contentBox) {
             return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
                     && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
         }
 
-        const contentRect = entries[0].contentRect;
+        const contentRect = entry.contentRect;
         return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
                 && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
     },
 
-    _resizeObserverCallback(entries) {
-        entries.forEach(entry => {
-            if(entry.target === this._$content.get(0)) {
-                this._renderGeometry({ shouldOnlyReposition: true });
-            }
-        });
+    _contentResizeHandler: function(entry) {
+        if(!this._shouldSkipContentResize(entry)) {
+            this._renderGeometry({ shouldOnlyReposition: true });
+        }
     },
 
     _updateResizeCallbackSkipCondition() {
         const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
 
-        this._shouldSkipResizeObserverCallback = (entries) => {
-            for(let i = 0; i < entries.length; ++i) {
-                const entry = entries[i];
-                if(entry.target === this._$content.get(0)) {
-                    return doesShowAnimationChangeDimensions && this._showAnimationProcessing
-                        || this._areContentDimensionsRendered(entries);
-                }
-            }
+        this._shouldSkipContentResize = (entry) => {
+            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
+                || this._areContentDimensionsRendered(entry);
         };
     },
 
@@ -403,9 +398,9 @@ const Overlay = Widget.inherit({
 
         const contentElement = this._$content.get(0);
         if(shouldObserve) {
-            this._resizeObserver.observe(contentElement);
+            resizeObserverSingleton.observe(contentElement, (entry) => { this._contentResizeHandler(entry); });
         } else {
-            this._resizeObserver.unobserve(contentElement);
+            resizeObserverSingleton.unobserve(contentElement);
         }
     },
 
@@ -515,14 +510,20 @@ const Overlay = Widget.inherit({
     },
 
     _normalizePosition: function() {
-        const position = this.option('position');
-        this._position = typeof position === 'function' ? position() : position;
+        const defaultPositionOptions = {
+            of: this.option('target'),
+            boundaryOffset: DEFAULT_BOUNDARY_OFFSET
+        };
+
+        if(isDefined(this.option('position'))) {
+            this._position = extend(true, {}, defaultPositionOptions, this._getPositionValue(POSITION_ALIASES));
+        } else {
+            this._position = defaultPositionOptions;
+        }
     },
 
     _getAnimationConfig: function() {
-        let animation = this.option('animation');
-        if(isFunction(animation)) animation = animation.call(this);
-        return animation;
+        return this._getOptionValue('animation', this);
     },
 
     _animateShowing: function() {
@@ -577,7 +578,6 @@ const Overlay = Widget.inherit({
         this._isShown = false;
 
         this._normalizePosition();
-
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
@@ -863,28 +863,20 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _toggleParentsScrollSubscription: function(subscribe) {
-        if(!this._position) {
-            return;
-        }
-
-        const target = this._position.of || $();
-        const closeOnScroll = this.option('closeOnTargetScroll');
-        let $parents = getElement(target).parents();
+    _toggleParentsScrollSubscription: function(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
+        const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
-        if(devices.real().deviceType === 'desktop') {
-            $parents = $parents.add(window);
-        }
+        eventsEngine.off(prevTargets, scrollEvent, handler);
 
-        this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
-            || (e => { this._targetParentsScrollHandler(e); });
-
-        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._proxiedTargetParentsScrollHandler);
-
-        if(subscribe && closeOnScroll) {
-            eventsEngine.on($parents, scrollEvent, this._proxiedTargetParentsScrollHandler);
-            this._$prevTargetParents = $parents;
+        const closeOnScroll = this.option('closeOnTargetScroll');
+        if(needSubscribe && closeOnScroll) {
+            let $parents = getElement(this._$wrapper).parents();
+            if(devices.real().deviceType === 'desktop') {
+                $parents = $parents.add(window);
+            }
+            eventsEngine.on($parents, scrollEvent, handler);
+            this._parentsScrollSubscriptionInfo.prevTargets = $parents;
         }
     },
 
@@ -1151,7 +1143,7 @@ const Overlay = Widget.inherit({
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
         const shaderOffset = this.option('shading') && !this.option('container') && !this._isContainerWindow() ? locate(this._$wrapper) : { top: 0, left: 0 };
-        const boundaryOffset = this.option('boundaryOffset');
+        const boundaryOffset = this._position.boundaryOffset;
 
         return {
             top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
@@ -1343,14 +1335,13 @@ const Overlay = Widget.inherit({
                 left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
             });
         } else {
-            this._renderOverlayBoundaryOffset();
+            const position = this._position;
+            this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
 
             resetPosition(this._$content);
 
-            const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             resultPosition = positionUtils.setup(this._$content, position);
         }
-
         return resultPosition;
     },
 
@@ -1360,7 +1351,8 @@ const Overlay = Widget.inherit({
         this._actions.onPositioned({ position: resultPosition });
     },
 
-    _transformStringPosition: function(position, positionAliases) {
+    _getPositionValue: function(positionAliases) {
+        let position = this._getOptionValue('position', this);
         if(isString(position)) {
             position = extend({}, positionAliases[position]);
         }
@@ -1368,9 +1360,7 @@ const Overlay = Widget.inherit({
         return position;
     },
 
-    _renderOverlayBoundaryOffset: function() {
-        const boundaryOffset = this.option('boundaryOffset');
-
+    _renderOverlayBoundaryOffset: function({ boundaryOffset }) {
         this._$content.css('margin', boundaryOffset.v + 'px ' + boundaryOffset.h + 'px');
     },
 
@@ -1420,6 +1410,7 @@ const Overlay = Widget.inherit({
 
         this._renderVisibility(false);
         this._stopShowTimer();
+        this._observeContentResize(false);
 
         this._cleanFocusState();
     },
@@ -1442,6 +1433,7 @@ const Overlay = Widget.inherit({
         this._toggleTabTerminator(false);
 
         this._actions = null;
+        this._parentsScrollSubscriptionInfo = null;
 
         this.callBase();
 
@@ -1490,7 +1482,6 @@ const Overlay = Widget.inherit({
             case 'maxWidth':
             case 'minHeight':
             case 'maxHeight':
-            case 'boundaryOffset':
                 this._renderGeometry();
                 break;
             case 'position':
@@ -1508,7 +1499,7 @@ const Overlay = Widget.inherit({
                 });
                 break;
             case 'target':
-                this._initTarget(value);
+                this._setAnimationTarget(value);
                 this._invalidate();
                 break;
             case 'container':

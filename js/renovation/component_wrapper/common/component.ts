@@ -3,7 +3,8 @@
 import {
   createRef, RefObject, VNode, Component,
 } from 'inferno';
-import renderer from './renderer';
+import KeyboardProcessor from '../../../events/core/keyboard_processor';
+import renderer from '../../../core/inferno_renderer';
 
 // eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
@@ -11,6 +12,7 @@ import domAdapter from '../../../core/dom_adapter';
 import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
+import type { UserDefinedElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
@@ -82,6 +84,23 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       templates: [],
       props: [],
     };
+  }
+
+  constructor(element: UserDefinedElement, options?: ComponentWrapperProps) {
+    super(element, options);
+
+    this.validateKeyDownHandler();
+  }
+
+  validateKeyDownHandler(): void {
+    const supportedKeyNames = this.getSupportedKeyNames();
+    const hasComponentDefaultKeyHandlers = supportedKeyNames.length > 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const hasComponentKeyDownMethod = typeof (this._viewComponent.prototype as any).keyDown === 'function';
+
+    if (hasComponentDefaultKeyHandlers && !hasComponentKeyDownMethod) {
+      throw Error('Component\'s declaration must have \'keyDown\' method.');
+    }
   }
 
   public get viewRef(): unknown {
@@ -265,6 +284,18 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return widgetProps;
   }
 
+  getSupportedKeyNames(): string[] {
+    return [];
+  }
+
+  prepareStyleProp(props: Record<string, unknown>): Record<string, unknown> {
+    if (typeof props.style === 'string') {
+      return { ...props, style: {}, cssText: props.style };
+    }
+
+    return props;
+  }
+
   getProps(): Record<string, unknown> {
     const { elementAttr } = this.option();
 
@@ -277,7 +308,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       options[template] = this._componentTemplates[template];
     });
 
-    return {
+    return this.prepareStyleProp({
       ...options,
       ...this.elementAttr,
       ...elementAttr,
@@ -290,7 +321,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         .trim(),
       class: '',
       ...this._actionsMap,
-    };
+    });
   }
 
   _getActionConfigs(): Record<string, Record<string, unknown>> {
@@ -337,7 +368,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     super._init();
 
     this.customKeyHandlers = {};
-    this.defaultKeyHandlers = {};
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = this._optionsWithDefaultTemplates(this.option());
     this._actionsMap = {};
@@ -350,6 +380,21 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     Object.keys(this._getActionConfigsFull()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
+    this.defaultKeyHandlers = this._createDefaultKeyHandlers();
+  }
+
+  _createDefaultKeyHandlers(): Record<string, Function> {
+    const result = {};
+    const keys = this.getSupportedKeyNames();
+
+    keys.forEach((key) => {
+      // eslint-disable-next-line
+      result[key] = (e: Event): Event | undefined => (this.viewRef as any).keyDown(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (KeyboardProcessor as any).createKeyDownOptions(e),
+      );
+    });
+    return result;
   }
 
   _addAction(event: string, actionToAdd?: Function): void {
@@ -395,8 +440,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _extractDefaultSlot(): VNode | null {
     if (this.option('_hasAnonymousTemplateContent')) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return renderer.createElement(TemplateWrapper as any, {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return renderer.createElement(TemplateWrapper, {
         template: this._getTemplate(this._templateManager.anonymousTemplateName),
         transclude: true,
       });
@@ -414,9 +459,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     if (isString(template) && template === 'dx-renovation-template-mock') {
       return undefined;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      TemplateWrapper as any, { template, model },
+      TemplateWrapper, { template, model },
     );
 
     return templateWrapper;
@@ -454,8 +500,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _patchElementParam(value: Element): Element {
     try {
-      const result: dxElementWrapper = $(value);
+      const result = $(value);
       const element = result?.get(0);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return element?.nodeType ? element : value;
     } catch (error) {
       return value;

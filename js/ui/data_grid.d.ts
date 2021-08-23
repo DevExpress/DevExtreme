@@ -28,7 +28,7 @@ import {
 } from '../events/index';
 
 import {
-    ExcelDataGridCell,
+    DataGridCell as ExcelCell,
 } from '../excel_exporter';
 
 import {
@@ -3822,7 +3822,7 @@ export interface ExcelCellInfo<TRowData, TKey> {
   font?: ExcelFont;
   readonly value?: string | number | Date;
   numberFormat?: string;
-  gridCell?: ExcelDataGridCell;
+  gridCell?: ExcelCell;
 }
 
 export interface Export<TRowData, TKey> {
@@ -4036,6 +4036,7 @@ export interface CustomSummaryInfo<TRowData, TKey> {
   readonly groupIndex?: number;
 }
 
+/** @public */
 export interface Summary<TRowData, TKey> {
   /**
    * @docid dxDataGridOptions.summary.calculateCustomSummary
@@ -4588,19 +4589,16 @@ declare class dxDataGrid
 
 /**
  * @public
- * @namespace DevExpress.ui
- * @deprecated
  */
-export type dxDataGridColumn<TRowData, TKey, TCellValue> = Column<TRowData, TKey, TCellValue>;
+export type Column<TRowData, TKey, TCellValue> = dxDataGridColumn<TRowData, TKey, TCellValue>;
 
 type ColumnValueType<TColumns extends Column<any, any, string>[]> = TColumns[number]['calculateCellValue'] extends Function ? ReturnType<TColumns[number]['calculateCellValue']> : any;
 
 /**
- * @docid dxDataGridColumn
- * @inherits GridBaseColumn
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use the Column type instead
  */
-export interface Column
+export interface dxDataGridColumn
 <TRowData,
  TKey,
  TCellValue,
@@ -4734,17 +4732,13 @@ export interface Column
 
 /**
  * @public
- * @namespace DevExpress.ui
- * @deprecated
  */
-export type dxDataGridColumnButton<TRowData, TKey, TCellValue, TColumns extends Column<TRowData, TKey, any>[] = Column<TRowData, TKey, any>[]> = ColumnButton<TRowData, TKey, TCellValue, TColumns>;
+export type ColumnButton<TRowData, TKey, TCellValue, TColumns extends Column<TRowData, TKey, any>[] = Column<TRowData, TKey, any>[]> = dxDataGridColumnButton<TRowData, TKey, TCellValue, TColumns>;
 /**
- * @docid dxDataGridColumnButton
- * @inherits GridBaseColumnButton
- * @prevFileNamespace DevExpress.ui
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use the DataGrid's ColumnButton type instead
  */
-export interface ColumnButton
+export interface dxDataGridColumnButton
   <TRowData,
    TKey,
    TCellValue,
