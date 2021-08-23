@@ -1,10 +1,10 @@
 import Widget from '../internal/widget';
 import AppointmentPopup from './appointment/popup';
 import AppointmentTooltip from './appointment/tooltip';
-import AppointmentCollector from './appointment/collector';
 import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
 import Toolbar from './toolbar';
+import Collectors from './collectors';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -52,6 +52,8 @@ export default class Scheduler extends Widget {
 
   readonly toolbar: Toolbar;
 
+  readonly collectors: Collectors;
+
   constructor(id: string) {
     super(id);
 
@@ -67,6 +69,7 @@ export default class Scheduler extends Widget {
     const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
 
     this.toolbar = new Toolbar(this.element);
+    this.collectors = new Collectors(this.element);
 
     this.headerSpaceScroll = {
       left: headerSpaceScroll.scrollLeft,
@@ -110,23 +113,11 @@ export default class Scheduler extends Widget {
     return new Appointment(this.element, index, title);
   }
 
-  getAppointmentCollector(title: string, index = 0): AppointmentCollector {
-    return new AppointmentCollector(this.element, index, title);
-  }
-
   getAppointmentByIndex(index = 0): Appointment {
     return new Appointment(this.element, index);
   }
 
-  getAppointmentCollectorByIndex(index = 0): AppointmentCollector {
-    return new AppointmentCollector(this.element, index);
-  }
-
   getAppointmentCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointment}`).count;
-  }
-
-  getAppointmentCollectorCount(): Promise<number> {
-    return this.element.find(`.${CLASS.appointmentCollector}`).count;
   }
 }
