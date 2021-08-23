@@ -2927,10 +2927,15 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         // arrange
         $('#bothScrolls').height(300);
         $('#bothScrolls').width(200);
+        $('#bothScrolls .draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
         const onReorder = sinon.spy();
 
         this.createSortable({
             filter: '.draggable',
+            itemOrientation: 'horizontal',
             onReorder
         });
 
@@ -2945,10 +2950,15 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         // arrange
         $('#bothScrolls').height(300);
         $('#bothScrolls').width(200);
+        $('#bothScrolls .draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
         const onReorder = sinon.spy();
 
         this.createSortable({
             filter: '.draggable',
+            itemOrientation: 'horizontal',
             onReorder
         });
 
@@ -2963,11 +2973,16 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         // arrange
         $('#bothScrolls').height(300);
         $('#bothScrolls').width(200);
+        $('#bothScrolls .draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
         $('#bothScrolls').scrollLeft(1000);
         const onReorder = sinon.spy();
 
         this.createSortable({
             filter: '.draggable',
+            itemOrientation: 'horizontal',
             onReorder
         });
 
@@ -2982,11 +2997,16 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         // arrange
         $('#bothScrolls').height(300);
         $('#bothScrolls').width(200);
+        $('#bothScrolls draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
         $('#bothScrolls').scrollLeft(1000);
         const onReorder = sinon.spy();
 
         this.createSortable({
             filter: '.draggable',
+            itemOrientation: 'horizontal',
             onReorder
         });
 
