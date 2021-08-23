@@ -456,9 +456,9 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         const cellHeight = instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
-        assert.equal($indicators.eq(0).position().left, 101);
+        assert.equal($indicators.eq(0).position().left, 100);
         assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, 101);
+        assert.equal($indicators.eq(1).position().left, 100);
         assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
     });
 
@@ -501,9 +501,9 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         const cellHeight = instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
-        assert.equal($indicators.eq(0).position().left, 101);
+        assert.equal($indicators.eq(0).position().left, 100);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, 101);
+        assert.equal($indicators.eq(1).position().left, 100);
         assert.equal($indicators.eq(1).position().top, 21.5 * cellHeight);
     });
 
@@ -519,9 +519,9 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         const cellHeight = instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
-        assert.equal($indicators.eq(0).position().left, 101);
+        assert.equal($indicators.eq(0).position().left, 100);
         assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, 101);
+        assert.equal($indicators.eq(1).position().left, 100);
         assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
     });
 
@@ -668,7 +668,7 @@ QUnit.module('DateTime indicator on Week View', () => {
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, 'Top indicator has correct height');
         assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, 'Bottom indicator has correct height');
 
-        assert.roughEqual($shader.outerWidth(), 504, 1, 'Indicator has correct width');
+        assert.roughEqual($shader.outerWidth(), 513, 1, 'Shader has correct width');
         assert.roughEqual($topShader.outerWidth(), 4 * cellWidth, 1.5, 'Top indicator has correct width');
         assert.roughEqual($bottomShader.outerWidth(), 3 * cellWidth, 1.5, 'Bottom indicator has correct width');
     });
@@ -801,9 +801,9 @@ QUnit.module('DateTime indicator on Week View', () => {
         const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
 
         assert.equal($indicator.length, 1, 'Indicator count is correct');
-        assert.roughEqual($indicator.eq(0).position().left, 694, 1.5, 'Indicator left is OK');
-        assert.roughEqual(parseInt($topShader.css('left')), 706, 1.5, 'Top indicator has correct left');
-        assert.roughEqual(parseInt($bottomShader.css('left')), 770, 1.5, 'Bottom indicator has correct left');
+        assert.roughEqual($indicator.eq(0).position().left, 706, 1.5, 'Indicator left is OK');
+        assert.roughEqual(parseInt($topShader.css('left')), 706, 1.5, 'Top shader has correct left');
+        assert.roughEqual(parseInt($bottomShader.css('left')), 770, 1.5, 'Bottom shader has correct left');
     });
 });
 
