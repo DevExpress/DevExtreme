@@ -58,29 +58,6 @@ function getScrollableBoundary($scrollable) {
     };
 }
 
-function getMaxScrollOffset(scrollableElement, isVertical) {
-    const scrollSize = isVertical ? scrollableElement.scrollHeight : scrollableElement.scrollWidth;
-    const clientSize = isVertical ? scrollableElement.clientHeight : scrollableElement.clientWidth;
-
-    return scrollSize - clientSize;
-}
-
-function checkScrollPositionBoundary(event, $scrollable, scrollableBoundary, isVertical) {
-    const scrollPosition = isVertical ? $scrollable.scrollTop() : $scrollable.scrollLeft();
-    const dragElementPosition = isVertical ? event.pageY : event.pageX;
-    const maxScrollOffset = getMaxScrollOffset($scrollable.get(0), isVertical);
-    const start = isVertical ? scrollableBoundary.top : scrollableBoundary.left;
-    const end = isVertical ? scrollableBoundary.bottom : scrollableBoundary.right;
-
-    if(start > dragElementPosition && scrollPosition === 0) {
-        return true;
-    } else if(end < dragElementPosition && scrollPosition === maxScrollOffset) {
-        return true;
-    }
-
-    return false;
-}
-
 const Sortable = Draggable.inherit({
     _init: function() {
         this.callBase();
@@ -281,19 +258,18 @@ const Sortable = Draggable.inherit({
 
         if($scrollable) {
             const { left, right, top, bottom } = getScrollableBoundary($scrollable);
-            let validX = left <= event.pageX && event.pageX <= right;
-            let validY = top <= event.pageY && event.pageY <= bottom;
+            const toIndex = this.option('toIndex');
+            const itemPoints = this.option('itemPoints');
+            const itemPoint = itemPoints?.[toIndex];
 
-            if(targetDraggable === this) {
-                if(!validX) {
-                    validX = checkScrollPositionBoundary(event, $scrollable, { left, right }, false);
-                }
-                if(!validY) {
-                    validY = checkScrollPositionBoundary(event, $scrollable, { top, bottom }, true);
+            if(itemPoint) {
+                const isVertical = this._isVerticalOrientation();
+                if(isVertical) {
+                    return top <= itemPoint.top && itemPoint.top <= bottom;
+                } else {
+                    return left <= itemPoint.left && itemPoint.left <= right;
                 }
             }
-
-            return validY && validX;
         }
 
         return true;
