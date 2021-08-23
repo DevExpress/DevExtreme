@@ -93,8 +93,8 @@ module('RTL', moduleConfig, () => {
                 [getAppointment(0), getAppointment(1)].forEach((appointment, index) => {
                     const position = translator.locate(appointment);
 
-                    assert.roughEqual(Math.round(position.left), expectedValue[index].left, 2.1, `left position of ${index} appointment should be correct in ${view} view`);
-                    assert.roughEqual(Math.round(position.top), expectedValue[index].top, 2.1, `top position of ${index} appointment should be correct in ${view} view`);
+                    assert.roughEqual(Math.round(position.left), expectedValue[index].left, 3.1, `left position of ${index} appointment should be correct in ${view} view`);
+                    assert.roughEqual(Math.round(position.top), expectedValue[index].top, 3.1, `top position of ${index} appointment should be correct in ${view} view`);
                 });
             });
         });
