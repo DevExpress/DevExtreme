@@ -1,4 +1,5 @@
 import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
 
 function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
@@ -34,8 +35,19 @@ function drawRect(doc, x, y, width, height, style) {
     }
 }
 
-function drawText(doc, text, x, y, options) {
-    doc.text(text, round(x), round(y), options);
+function drawTextInRect(doc, text, rect, options) {
+    const textArray = text.split('\n');
+    const linesCount = textArray.length;
+
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0]);
+
+    // TODO: check lineHeightFactor - https://github.com/MrRio/jsPDF/issues/3234
+    const y = rect.y + (rect.h / 2)
+        - heightOfOneLine * (linesCount - 1) / 2;
+
+    // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
+    const textOptions = extend({ baseline: 'middle' }, options);
+    doc.text(text, round(rect.x), round(y), textOptions);
 }
 
-export { calculateRowHeight, drawLine, drawRect, drawText };
+export { calculateRowHeight, drawLine, drawRect, drawTextInRect };
