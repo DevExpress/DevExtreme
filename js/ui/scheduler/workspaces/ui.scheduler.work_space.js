@@ -659,10 +659,12 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _updateHeaderEmptyCellWidth() {
-        const timePanelWidth = getBoundingRect(this._$timePanel.get(0)).width;
-        const groupPanelWidth = getBoundingRect(this._$groupTable.get(0)).width;
+        if(hasWindow()) {
+            const timePanelWidth = getBoundingRect(this._$timePanel.get(0)).width;
+            const groupPanelWidth = getBoundingRect(this._$groupTable.get(0)).width;
 
-        this._$headerPanelEmptyCell.width(timePanelWidth + groupPanelWidth);
+            this._$headerPanelEmptyCell.width(timePanelWidth + groupPanelWidth);
+        }
     }
 
     _isGroupsSpecified(resources) {
