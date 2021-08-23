@@ -48,7 +48,7 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
 
     .expect(scheduler.appointmentTooltip.element.exists)
     .ok()
-    .click(scheduler.appointmentTooltip.deleteElement)
+    .click(scheduler.appointmentTooltip.deleteButton)
     .click(Scheduler.getDialog().appointment)
 
     .expect(scheduler.getAppointmentCount())
@@ -57,7 +57,7 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
   await t
     .click(scheduler.getAppointment('Text', 3).element)
 
-    .click(scheduler.appointmentTooltip.deleteElement)
+    .click(scheduler.appointmentTooltip.deleteButton)
     .click(Scheduler.getDialog().series)
 
     .expect(scheduler.getAppointmentCount())
@@ -90,7 +90,7 @@ test('Common appointments should be deleted by click on \'delete\' button and pr
   await t
     .expect(scheduler.getAppointmentCount()).eql(2)
     .click(scheduler.getAppointment('Text').element)
-    .click(scheduler.appointmentTooltip.deleteElement)
+    .click(scheduler.appointmentTooltip.deleteButton)
     .expect(scheduler.getAppointmentCount())
     .eql(1);
 
