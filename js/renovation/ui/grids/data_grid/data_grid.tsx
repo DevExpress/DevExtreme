@@ -16,14 +16,19 @@ import { GridInstance, DataGridForComponentWrapper } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
 import { hasWindow } from '../../../../core/utils/window';
-import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
+import { UserDefinedElement, UserDefinedElementsArray, DxElement } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
-import type { OptionChangedEvent } from '../../../../ui/data_grid';
+import type {
+  OptionChangedEvent, Column, RowObject,
+} from '../../../../ui/data_grid';
 import { createDefaultOptionRules } from '../../../../core/options/utils';
 import devices from '../../../../core/devices';
 import browser from '../../../../core/utils/browser';
 import { isMaterial, current } from '../../../../ui/themes';
+import { FilterDescriptor } from '../../../../data';
+import DataSource from '../../../../data/data_source';
+import dxScrollable from '../../../../ui/scroll_view/ui.scrollable';
 
 const aria = { role: 'presentation' };
 
@@ -50,7 +55,7 @@ function normalizeProps(props: Record<string, unknown>): Record<string, unknown>
   return result;
 }
 
-export const viewFunction = ({
+export const viewFunction = <TRowData, TKey>({
   initializedInstance,
   widgetElementRef,
   onHoverStart,
@@ -73,7 +78,7 @@ export const viewFunction = ({
     className,
   },
   restAttributes,
-}: DataGrid): JSX.Element => (
+}: DataGrid<TRowData, string, TKey>): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
     rootElementRef={widgetElementRef}
     accessKey={accessKey}
@@ -98,13 +103,16 @@ export const viewFunction = ({
     {...restAttributes}
   >
     <DataGridViews
-      instance={initializedInstance}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      instance={initializedInstance as any}
       showBorders={showBorders}
     />
   </Widget>
-);
+  );
 
-export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
+export const defaultOptionRules = createDefaultOptionRules<
+DataGridProps<unknown, string, unknown>
+>([{
   device: (): boolean => devices.real().platform === 'ios',
   options: { showRowLines: true },
 }, {
@@ -139,23 +147,33 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })
-export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
+export class DataGrid
+  <TRowData,
+   TKeyExpr extends string | string[],
+   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+   TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
+   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+  >
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  extends JSXComponent<DataGridProps<any, string, any, Column<any, any, any>[]>>()
+  implements DataGridForComponentWrapper<TRowData, TKeyExpr, TKey, TColumns> {
   @ForwardRef() widgetElementRef?: RefObject<HTMLDivElement>;
 
-  @Mutable() instance!: GridInstance;
+  @Mutable() instance!: GridInstance<TRowData, TKeyExpr, TKey, TColumns>;
 
   @InternalState() initialized = false;
 
   @Mutable() isTwoWayPropUpdating = false;
 
-  @Mutable() prevProps!: DataGridProps;
+  @Mutable() prevProps!: DataGridProps<TRowData, TKeyExpr, TKey, TColumns>;
 
-  get initializedInstance(): GridInstance | undefined {
+  get initializedInstance(): GridInstance<TRowData, TKeyExpr, TKey, TColumns> | undefined {
     return this.initialized ? this.instance : undefined;
   }
 
   @Method()
-  getComponentInstance(): GridInstance {
+  getComponentInstance(): GridInstance<TRowData, TKeyExpr, TKey, TColumns> {
     return this.instance;
   }
 
@@ -169,7 +187,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  byKey(key: any | string | number): DxPromise<any> {
+  byKey(key: TKey): DxPromise<TRowData> {
     return this.instance?.byKey(key);
   }
 
@@ -179,8 +197,13 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  cellValue(rowIndex: number, dataField: string | number, value: any): any {
-    return this.instance?.cellValue(rowIndex, dataField as any, value);
+  cellValue(
+    rowIndex: number,
+    dataField: string | number,
+    value?: TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any,
+  ): TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.instance?.cellValue(rowIndex, dataField as any, value as any) as any;
   }
 
   @Method()
@@ -214,11 +237,18 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  columnOption(id: number | string, optionName?: string, optionValue?: unknown): any {
+  columnOption<T extends string>(
+    id: number | string,
+    optionName?: T,
+    optionValue?: T extends keyof Column<TRowData, TKey, any>
+      ? Column<TRowData, TKey, any>[T]
+      : any,
+  ): T extends keyof Column<TRowData, TKey, any> ? Column<TRowData, TKey, any>[T] : any {
     if (this.instance) {
       if (arguments.length === 1 || optionName === undefined) {
         return this.instance.columnOption(id);
       } if (arguments.length === 2) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return this.instance.columnOption(id, optionName);
       }
       return this.instance.columnOption(id, optionName, optionValue);
@@ -242,7 +272,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  deselectRows(keys: any[]): DxPromise<any> {
+  deselectRows(keys: TKey[]): DxPromise<TRowData[]> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -262,7 +292,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  expandAdaptiveDetailRow(key: any): void {
+  expandAdaptiveDetailRow(key: TKey): void {
     return this.instance?.expandAdaptiveDetailRow(key);
   }
 
@@ -279,22 +309,22 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
-  ): any/* DxElement | undefined */ {
+  ): DxElement | undefined {
     return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
   @Method()
-  getCombinedFilter(returnDataField?: boolean): any {
+  getCombinedFilter(returnDataField?: boolean): FilterDescriptor {
     return this.instance?.getCombinedFilter(returnDataField as boolean);
   }
 
   @Method()
-  getDataSource(): any /* DataSource */ {
+  getDataSource(): DataSource<TKey, TRowData> /* DataSource */ {
     return this.instance?.getDataSource();
   }
 
   @Method()
-  getKeyByRowIndex(rowIndex: number): any {
+  getKeyByRowIndex(rowIndex: number): TKey {
     return this.instance?.getKeyByRowIndex(rowIndex);
   }
 
@@ -304,12 +334,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  getRowIndexByKey(key: any | string | number): number {
+  getRowIndexByKey(key: TKey): number {
     return this.instance?.getRowIndexByKey(key);
   }
 
   @Method()
-  getScrollable(): any /* dxScrollable */ {
+  getScrollable(): dxScrollable /* dxScrollable */ {
     return this.instance?.getScrollable();
   }
 
@@ -329,27 +359,27 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  isAdaptiveDetailRowExpanded(key: any): boolean {
+  isAdaptiveDetailRowExpanded(key: TKey): boolean {
     return this.instance?.isAdaptiveDetailRowExpanded(key);
   }
 
   @Method()
-  isRowFocused(key: any): boolean {
+  isRowFocused(key: TKey): boolean {
     return this.instance?.isRowFocused(key);
   }
 
   @Method()
-  isRowSelected(key: any): boolean {
+  isRowSelected(key: TKey): boolean {
     return this.instance?.isRowSelected(key);
   }
 
   @Method()
-  keyOf(obj: any): any {
+  keyOf(obj: TRowData): TKey {
     return this.instance?.keyOf(obj);
   }
 
   @Method()
-  navigateToRow(key: any): DxPromise {
+  navigateToRow(key: TKey): DxPromise {
     return this.instance?.navigateToRow(key);
   }
 
@@ -399,13 +429,13 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   @Method()
   selectRows(
-    keys: any[], preserve: boolean,
-  ): DxPromise<any> {
+    keys: TKey[], preserve: boolean,
+  ): DxPromise<TRowData[]> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
+  selectRowsByIndexes(indexes: number[]): DxPromise<TRowData[]> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -414,11 +444,11 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return this.instance?.showColumnChooser();
   }
 
-  /*
-  @Method()
-  state(state: any): any {
-    return this.instance?.state();
-  } */
+  // @Method()
+  // state(state?: State<TKey, TRowData, dxDataGrid<TKey, TRowData>>):
+  // State<TKey, TRowData, dxDataGrid> | void {
+  //   return this.instance?.state(state);
+  // }
 
   @Method()
   undeleteRow(rowIndex: number): void {
@@ -436,7 +466,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  addColumn(columnOptions: any | string): void {
+  addColumn(columnOptions: Column<TRowData, TKey, any> | string): void {
     return this.instance?.addColumn(columnOptions);
   }
 
@@ -456,7 +486,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  collapseRow(key: any): DxPromise {
+  collapseRow(key: TKey): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -466,7 +496,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  expandRow(key: any): DxPromise {
+  expandRow(key: TKey): DxPromise {
     return this.instance?.expandRow(key);
   }
 
@@ -476,12 +506,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  getSelectedRowKeys(): any[] & DxPromise<any> {
+  getSelectedRowKeys(): TKey[] | DxPromise<TKey[]> {
     return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
-  getSelectedRowsData(): any[] & DxPromise<any> {
+  getSelectedRowsData(): TKey[] | DxPromise<TKey[]> {
     return this.instance?.getSelectedRowsData();
   }
 
@@ -491,17 +521,17 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  getVisibleColumns(headerLevel?: number): any /* dxDataGridColumn[] */ {
+  getVisibleColumns(headerLevel?: number): TColumns {
     return this.instance?.getVisibleColumns(headerLevel as number);
   }
 
   @Method()
-  getVisibleRows(): any /* dxDataGridRowObject[] */ {
+  getVisibleRows(): RowObject<TRowData, TKey, TColumns>[] /* dxDataGridRowObject[] */ {
     return this.instance?.getVisibleRows();
   }
 
   @Method()
-  isRowExpanded(key: any): boolean {
+  isRowExpanded(key: TKey): boolean {
     return this.instance?.isRowExpanded(key);
   }
 
@@ -516,7 +546,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  getTopVisibleRowData(): any {
+  getTopVisibleRowData(): TRowData {
     return this.instance?.getTopVisibleRowData();
   }
 
@@ -544,10 +574,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
         this.instance._options.silent(path, previousValue);
         this.instance.option(path, value);
       });
-      this.prevProps = this.props;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.prevProps = this.props as any;
       this.instance.endUpdate();
     } else {
-      this.prevProps = this.props;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.prevProps = this.props as any;
     }
   }
 
@@ -567,7 +599,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onInitialized: (e: { component: GridInstance }) => {
+      onInitialized: (e: { component: GridInstance<TRowData, TKeyExpr, TKey, TColumns> }) => {
         this.instance = e.component;
 
         (onInitialized as (e: unknown) => void)?.(e);
@@ -578,7 +610,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     new DataGridComponent(
       element,
       normalizeProps(restProps),
-    ) as unknown as GridInstance;
+    ) as unknown as GridInstance<TRowData, TKeyExpr, TKey, TColumns>;
     if (hasWindow()) {
       this.instance.getController('resizing').updateSize(element);
     }
@@ -587,7 +619,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     this.initialized = true;
   }
 
-  instanceOptionChangedHandler(e: OptionChangedEvent): void {
+  instanceOptionChangedHandler(e: OptionChangedEvent<TKey, TRowData>): void {
     try {
       this.isTwoWayPropUpdating = true;
       this.updateTwoWayValue(e);
@@ -596,7 +628,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     }
   }
 
-  updateTwoWayValue(e: OptionChangedEvent): void {
+  updateTwoWayValue(e: OptionChangedEvent<TKey, TRowData>): void {
     // T867777
     const optionValue = e.component.option(e.fullName);
     const isValueCorrect = e.value === optionValue;

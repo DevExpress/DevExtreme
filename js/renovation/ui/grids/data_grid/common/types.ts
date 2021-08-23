@@ -1,8 +1,15 @@
-import dxDataGrid from '../../../../../ui/data_grid';
+import dxDataGrid, { Column } from '../../../../../ui/data_grid';
 import { ComponentExt } from '../../../common/component';
 import type { DataGridProps } from './data_grid_props';
 
-export interface GridInstance extends dxDataGrid, ComponentExt {
+export interface GridInstance
+  <TRowData,
+   TKeyExpr extends string | string[],
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+  > extends dxDataGrid<TRowData, TKeyExpr, TKey, TColumns>, ComponentExt {
   isReady: () => boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getView: (name: string) => any;
@@ -11,14 +18,20 @@ export interface GridInstance extends dxDataGrid, ComponentExt {
   resize: () => void;
   updateDimensions: (checkSize?: boolean) => void;
   isScrollbarVisible: () => boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getTopVisibleRowData: () => any;
+  getTopVisibleRowData: () => TRowData;
   getScrollbarWidth: (isHorizontal: boolean) => number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getDataProvider: (selectedRowsOnly: boolean) => any;
 }
 
-export interface DataGridForComponentWrapper {
-  getComponentInstance: () => GridInstance;
-  prevProps: DataGridProps;
+export interface DataGridForComponentWrapper
+  <TRowData,
+   TKeyExpr extends string | string[],
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+  > {
+  getComponentInstance: () => GridInstance<TRowData, TKeyExpr, TKey, TColumns>;
+  prevProps: DataGridProps<TRowData, TKeyExpr, TKey, TColumns>;
 }
