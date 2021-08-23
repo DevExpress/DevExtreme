@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom';
 
 import App from './App.js';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('app')
-);
+import themes from 'devextreme/ui/themes';
+
+themes.initialized(() => {
+  ReactDOM.render(
+    <App />,
+    document.getElementById('app')
+  );
+});
