@@ -458,7 +458,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
                 assert.equal(scheduler.appointmentList.length, 4, 'should be render 4 appointments');
 
-                const positions = [100, 214, 328, 442];
+                const positions = [0, 114, 228, 342];
 
                 for(let i = 0; i < 4; i++) {
                     const element = scheduler.appointmentList[i].getElement();
@@ -471,11 +471,11 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
         [{
             view: 'day',
-            left: 100,
+            left: 0,
             top: 100,
         }, {
             view: 'week',
-            left: 100,
+            left: 0,
             top: 100,
         }, {
             view: 'timelineDay',
