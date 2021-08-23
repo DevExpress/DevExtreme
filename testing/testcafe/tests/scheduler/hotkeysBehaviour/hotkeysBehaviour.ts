@@ -93,14 +93,12 @@ fixture`Hotkeys for appointments update and navigation`
 });
 
 test('Navigate between toolbar items', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const toolbar = scheduler.getToolbar();
-  const navigator = toolbar.getNavigator();
-  const viewSwitcher = toolbar.getViewSwitcher();
+  const { toolbar } = new Scheduler('#container');
+  const { navigator, viewSwitcher } = toolbar;
 
-  const prevDuration = new FocusableElement(navigator.prevDuration);
+  const prevDuration = new FocusableElement(navigator.prevButton);
   const caption = new FocusableElement(navigator.caption);
-  const nextDuration = new FocusableElement(navigator.nextDuration);
+  const nextDuration = new FocusableElement(navigator.nextButton);
 
   await t
     .click(toolbar.element)
@@ -129,14 +127,12 @@ test('Navigate between toolbar items', async (t) => {
 }));
 
 test('Navigate between custom toolbar items', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const toolbar = scheduler.getToolbar();
-  const navigator = toolbar.getNavigator();
-  const viewSwitcher = toolbar.getViewSwitcher();
+  const { toolbar } = new Scheduler('#container');
+  const { navigator, viewSwitcher } = toolbar;
 
-  const prevDuration = new FocusableElement(navigator.prevDuration);
+  const prevDuration = new FocusableElement(navigator.prevButton);
   const caption = new FocusableElement(navigator.caption);
-  const nextDuration = new FocusableElement(navigator.nextDuration);
+  const nextDuration = new FocusableElement(navigator.nextButton);
   const todayButton = new FocusableElement(
     toolbar.element.find('.dx-button').withText('Today'),
   );
