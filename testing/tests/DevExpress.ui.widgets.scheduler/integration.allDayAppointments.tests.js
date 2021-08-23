@@ -1340,7 +1340,7 @@ module('Integration: allDay appointments', config, () => {
                 assert.equal(scheduler.appointments.getTitleText(2), 'C', 'Text is right');
                 assert.equal(scheduler.appointments.getTitleText(3), 'Simple appointment', 'Text is right');
 
-                assert.roughEqual(scheduler.appointments.getAppointmentPosition(3).left, 100, 1.001, 'Appointment position is OK');
+                assert.roughEqual(scheduler.appointments.getAppointmentPosition(3).left, 0, 1.001, 'Appointment position is OK');
                 assert.roughEqual(scheduler.appointments.getAppointmentPosition(3).top, 100, 1.001, 'Appointment position is OK');
                 assert.roughEqual(scheduler.appointments.getAppointmentWidth(3), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Appointment size is OK');
             });
@@ -1371,7 +1371,7 @@ module('Integration: allDay appointments', config, () => {
                 const $dropDown = $(scheduler.instance.$element()).find('.dx-scheduler-appointment-collector').eq(0);
 
                 assert.equal($dropDown.parent().get(0), $(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointments').get(0), 'Container is OK');
-                assert.roughEqual(translator.locate($dropDown).left, 228, 1.001, 'Appointment position is OK');
+                assert.roughEqual(translator.locate($dropDown).left, 128, 1.001, 'Appointment position is OK');
                 assert.roughEqual(translator.locate($dropDown).top, 0, 1.001, 'Appointment position is OK');
             });
 
