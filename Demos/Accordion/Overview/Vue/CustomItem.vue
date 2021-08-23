@@ -6,7 +6,7 @@
         (<span>{{ itemData.State }}</span>)
       </p>
       <p>
-        <span>{{ itemData.Zipcode }}</span>
+        <span>{{ itemData.Zipcode }}&nbsp;</span>
         <span>{{ itemData.Address }}</span>
       </p>
     </div>

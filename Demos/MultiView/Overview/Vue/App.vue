@@ -20,7 +20,7 @@
                 (<span>{{ company.State }}</span>)
               </p>
               <p>
-                <span>{{ company.Zipcode }}</span>
+                <span>{{ company.Zipcode }}&nbsp;</span>
                 <span>{{ company.Address }}</span>
               </p>
             </div>
