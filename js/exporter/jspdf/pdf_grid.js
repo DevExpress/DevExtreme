@@ -10,15 +10,6 @@ export class PdfGrid {
         this._currentHorizontalTables = null;
     }
 
-    _addLastTableToPage(newPage) {
-        const lastTable = this._currentHorizontalTables[this._currentHorizontalTables.length - 1];
-        if(newPage) {
-            this._pages.push(new PdfPage([lastTable]));
-        } else {
-            this._pages[this._pages.length - 1].addTable(lastTable);
-        }
-    }
-
     startNewTable(drawTableBorder, firstTableTopLeft, firstTableOnNewPage, splitByColumns, firstColumnWidth) {
         if(isDefined(splitByColumns)) {
             this._splitByColumns = splitByColumns;
@@ -29,18 +20,22 @@ export class PdfGrid {
         if(isDefined(firstColumnWidth)) {
             firstTableColumnWidths[0] = firstColumnWidth;
         }
-        this._currentHorizontalTables = [new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths)];
-        this._addLastTableToPage(firstTableOnNewPage);
+        const newTable = new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths);
+        this._currentHorizontalTables = [newTable];
+        if(firstTableOnNewPage) {
+            this._pages.push(new PdfPage(newTable));
+        } else {
+            this._pages[this._pages.length - 1].addTable(newTable);
+        }
 
         if(isDefined(this._splitByColumns)) {
             for(let i = 0; i < this._splitByColumns.length; i++) {
                 const beginColumnIndex = this._splitByColumns[i].columnIndex;
                 const endColumnIndex = this._splitByColumns[i + 1]?.columnIndex ?? this._columnWidths.length;
 
-                this._currentHorizontalTables.push(
-                    new PdfTable(drawTableBorder, this._splitByColumns[i].tableTopLeft, this._columnWidths.slice(beginColumnIndex, endColumnIndex))
-                );
-                this._addLastTableToPage(this._splitByColumns[i].drawOnNewPage);
+                const newSplitByColumnTable = new PdfTable(drawTableBorder, this._splitByColumns[i].tableTopLeft, this._columnWidths.slice(beginColumnIndex, endColumnIndex));
+                this._currentHorizontalTables.push(newSplitByColumnTable);
+                this._pages.push(new PdfPage(newSplitByColumnTable));
             }
         }
     }

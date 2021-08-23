@@ -1,6 +1,8 @@
+import { isDefined } from '../../core/utils/type';
+
 export class PdfPage {
-    constructor(tables) {
-        this._tables = tables ?? [];
+    constructor(table) {
+        this._tables = isDefined(table) ? [table] : [];
     }
 
     addTable(table) {
