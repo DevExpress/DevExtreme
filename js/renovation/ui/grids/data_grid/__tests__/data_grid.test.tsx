@@ -43,7 +43,7 @@ jest.mock('../datagrid_component', () => ({
     return component;
   }),
 }));
-jest.mock('../utils/get_updated_options');
+jest.mock('../../../common/utils/get_updated_options');
 jest.mock('../../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../../core/devices').default;
   const real = actualDevices.real.bind(actualDevices);
