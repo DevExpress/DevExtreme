@@ -1341,7 +1341,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     getVisibleRowIndex: function() {
         const rowIndex = this._focusedCellPosition && this._focusedCellPosition.rowIndex;
-        if(!isDefined(rowIndex)) {
+        if(!isDefined(rowIndex) || rowIndex < 0) {
             return -1;
         }
         return rowIndex - this._dataController.getRowIndexOffset();

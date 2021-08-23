@@ -200,32 +200,24 @@ describe('Simulated > Behavior', () => {
     });
 
     each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
-      it('updateContentWidth()', () => {
+      it('contentWidth()', () => {
         (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
         const viewModel = new Scrollable({});
 
         viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentWidth = 50;
-
         viewModel.contentClientWidth = 200;
         viewModel.contentScrollWidth = 700;
-
-        viewModel.updateContentWidth();
 
         expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
       });
 
-      it('updateContentHeight()', () => {
+      it('contentHeight()', () => {
         (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
         const viewModel = new Scrollable({});
 
         viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentHeight = 50;
-
         viewModel.contentClientHeight = 200;
         viewModel.contentScrollHeight = 700;
-
-        viewModel.updateContentHeight();
 
         expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
       });

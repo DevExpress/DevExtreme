@@ -144,20 +144,32 @@ QUnit.module('methods', moduleConfig, () => {
         editor.focus();
     });
 
-    skipForRenovated('blur method', () => {
-        QUnit.testInActiveWindow('The blur() method does not blur the active item', function(assert) {
-            const focusOutSpy = sinon.spy();
-            const editor = this.fixture.createEditor({ value: '123' });
-            const $testElement = $('<input type="button">');
-            $testElement.appendTo('#qunit-fixture');
-            $testElement.on('blur', focusOutSpy);
-            $testElement.focus();
+    QUnit.testInActiveWindow('The blur() method does not blur the active item', function(assert) {
+        const blurSpy = sinon.spy();
+        const editor = this.fixture.createEditor({ value: '123' });
+        const $testElement = $('<input type="button">');
+        $testElement.appendTo('#qunit-fixture');
+        $testElement.on('blur', blurSpy);
+        $testElement.focus();
 
-            editor.blur();
+        editor.blur();
 
-            assert.strictEqual(focusOutSpy.callCount, 0);
-        });
+        assert.strictEqual(blurSpy.callCount, 0);
     });
+
+    if(Editor.IS_RENOVATED_WIDGET) {
+        QUnit.testInActiveWindow('The blur() method should blur editor element if it is active', function(assert) {
+            const blurSpy = sinon.spy();
+            const editor = this.fixture.createEditor({ value: '123', focusStateEnabled: true });
+            const $editor = $(editor.$element());
+            $editor.on('blur', blurSpy);
+
+            $editor.focus();
+            $editor.blur();
+
+            assert.strictEqual(blurSpy.callCount, 1, 'editor element is blurred');
+        });
+    }
 });
 
 QUnit.module('value option', moduleConfig, () => {
@@ -503,7 +515,7 @@ QUnit.module('validation', {
                 assert.strictEqual($content.css('width', 'auto').outerWidth(), contentWidth, 'validation message width is correct');
             });
 
-            QUnit.test('should be max 100px if the editor has smaller size (T376114)', function(assert) {
+            QUnit.test('should be min 100px if the editor has smaller size (T376114)', function(assert) {
                 this.reinitEditor({
                     width: 20,
                     validationMessageMode: 'always',
@@ -645,7 +657,7 @@ QUnit.module('validation', {
 });
 
 QUnit.module('aria accessibility', moduleConfig, () => {
-    const expectedFalseValue = Editor.IS_RENOVATED_WIDGET ? 'false' : 'undefined';
+    const expectedFalseValue = Editor.IS_RENOVATED_WIDGET ? 'false' : undefined;
 
     QUnit.test('readonly', function(assert) {
         const editor = this.fixture.createEditor({ readOnly: true });
@@ -752,19 +764,17 @@ QUnit.module('validationRequest', moduleConfig, () => {
         assert.strictEqual(args.editor, editor, 'editor was passed');
     });
 
-    skipForRenovated('not validate on value change from undefined to null', () => {
-        QUnit.test('should NOT fire on value change from undefined to null (T220137)', function(assert) {
-            const handler = sinon.stub();
-            const editor = this.fixture.createEditor({
-                value: undefined
-            });
-            editor.validationRequest.add(handler);
-
-
-            editor.option('value', null);
-
-            assert.notOk(handler.called, 'validation handler was not called');
+    QUnit.test('should NOT fire on value change from undefined to null (T220137)', function(assert) {
+        const handler = sinon.stub();
+        const editor = this.fixture.createEditor({
+            value: undefined
         });
+        editor.validationRequest.add(handler);
+
+
+        editor.option('value', null);
+
+        assert.notOk(handler.called, 'validation handler was not called');
     });
 
     QUnit.test('should fire before valueChanged callback', function(assert) {
@@ -794,6 +804,21 @@ QUnit.module('validationRequest', moduleConfig, () => {
 });
 
 if(!Editor.IS_RENOVATED_WIDGET) {
+    QUnit.test('keybord navigation should work after editor becomes not read only', function(assert) {
+        const $element = $('<div>').appendTo('body');
+        const keyboardHandledStub = sinon.stub();
+
+        const editor = new Editor($element, {
+            onKeyboardHandled: keyboardHandledStub,
+            readOnly: true
+        });
+
+        editor.option('readOnly', false);
+        $(editor.$element()).trigger($.Event('keydown'));
+
+        assert.ok(keyboardHandledStub.called, 'keyboard navigation works fine');
+    });
+
     QUnit.module('"name" option', {
         beforeEach: function() {
             this.$element = $('<div>').appendTo('body');

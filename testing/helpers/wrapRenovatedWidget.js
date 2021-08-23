@@ -18,6 +18,9 @@ exports.wrapRenovatedWidget = function wrapRenovatedWidget(renovatedWidget) {
         focus: function() {
             return callMethod.apply(this, arguments);
         },
+        blur: function() {
+            return callMethod.apply(this, arguments);
+        },
         repaint: function() {
             return callMethod.apply(this, arguments);
         },
