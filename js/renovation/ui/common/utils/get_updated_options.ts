@@ -11,6 +11,10 @@ interface ResultItem {
   previousValue: unknown;
 }
 
+const propsToIgnore = {
+  integrationOptions: true,
+};
+
 function getDiffItem(key, value, previousValue): ResultItem {
   return { path: key, value, previousValue };
 }
@@ -21,6 +25,10 @@ function compare(resultPaths: ResultItem[],
   key: string,
   fullPropName: string,
   notDeepCopyArrays: string[]): void {
+  if (propsToIgnore[key]) {
+    return;
+  }
+
   const type1 = type(item1);
   const type2 = type(item2);
   if (item1 === item2) return;
@@ -94,6 +102,5 @@ export function getUpdatedOptions(
   props: {},
   notDeepCopyArrays: string[] = defaultNotDeepCopyArrays,
 ): ResultItem[] {
-  return objectDiffsWithoutReactProps(oldProps, props, '', notDeepCopyArrays)
-    .filter((item) => !item.path.includes('integrationOptions'));
+  return objectDiffsWithoutReactProps(oldProps, props, '', notDeepCopyArrays);
 }

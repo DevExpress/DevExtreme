@@ -58,8 +58,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Mutable()
   instance!: DomComponent | null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Mutable() prevProps!: any;
+  @Mutable() prevProps!: Record<string, unknown>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
