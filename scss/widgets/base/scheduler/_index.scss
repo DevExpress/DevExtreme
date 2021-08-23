@@ -1079,14 +1079,6 @@ $scheduler-appointment-form-label-padding: 20px;
         border-left: none;
       }
     }
-
-    .dx-scheduler-scrollable-appointments {
-      top: 0;
-
-      &.dx-rtl {
-        left: 0;
-      }
-    }
   }
 
   .dx-scheduler-header-panel-cell {
@@ -1275,7 +1267,8 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
 
-  .dx-scheduler-scrollable-appointments {
+  .dx-scheduler-scrollable-appointments,
+  .dx-scheduler-all-day-appointments {
     position: absolute;
     top: 0;
 

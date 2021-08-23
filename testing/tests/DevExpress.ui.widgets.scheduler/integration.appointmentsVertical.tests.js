@@ -367,7 +367,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 0, 2.001, 'Left position is OK');
         assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 0, 2.001, 'Left position is OK');
-        assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, 'Left position is OK');
+        assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 0, 2.001, 'Left position is OK');
 
         assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
         assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
@@ -838,7 +838,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, 'correct top position of allDay appointment');
         assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
-        assert.roughEqual(translator.locate($appointments.eq(0)).left, 456, 1.1, 'correct left position of allDay appointment');
+        assert.roughEqual(translator.locate($appointments.eq(0)).left, 256, 1.1, 'correct left position of allDay appointment');
 
         assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
         assert.roughEqual($appointments.eq(1).position().left, 256, 1.1, 'correct left position of appointment');
@@ -891,11 +891,11 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, 'correct top position of allDay appointment');
         assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
-        assert.equal(translator.locate($appointments.eq(0)).left, 314, 'correct left position of allDay appointment');
+        assert.equal(translator.locate($appointments.eq(0)).left, 114, 'correct left position of allDay appointment');
 
         assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, 'correct top position of allDay appointment');
         assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
-        assert.equal(translator.locate($appointments.eq(1)).left, 314, 'correct left position of allDay appointment');
+        assert.equal(translator.locate($appointments.eq(1)).left, 114, 'correct left position of allDay appointment');
     });
 
     QUnit.test('Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week', function(assert) {
@@ -944,7 +944,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, 'correct top position of allDay appointment');
         assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
-        assert.equal(translator.locate($appointments.eq(0)).left, 314, 'correct left position of allDay appointment');
+        assert.equal(translator.locate($appointments.eq(0)).left, 114, 'correct left position of allDay appointment');
     });
 
     QUnit.test('Rival appointments from one group should be rendered correctly in vertical grouped workspace Week', function(assert) {

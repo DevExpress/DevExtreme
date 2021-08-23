@@ -2364,8 +2364,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._$dateTableContainer.append(this._$dateTable);
 
         if(this._isVerticalGroupedWorkSpace()) {
+            this._$dateTableContainer.append(this._$allDayContainer);
             this._dateTableScrollable.$content().append(
-                this._$allDayContainer,
                 this._$groupTable,
                 this._$timePanel,
                 this._$dateTableContainer,
