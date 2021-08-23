@@ -135,7 +135,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
                 const scrollRightAfterGrouping = getRightScrollOffset(scrollable);
                 assert.ok($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('tbody > tr').first().hasClass('dx-group-row'));
-                assert.equal(scrollRightAfterGrouping, scrollRight, 'scroll position after grouping');
+                assert.roughEqual(scrollRightAfterGrouping, scrollRight, 0.1, 'scroll position after grouping');
                 done();
             });
         });
