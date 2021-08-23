@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
-  render, createRef, RefObject, VNode, Component,
+  createRef, RefObject, VNode, Component,
 } from 'inferno';
-import { createElement } from 'inferno-create-element';
-import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
+import KeyboardProcessor from '../../../events/core/keyboard_processor';
+import renderer from '../../../core/inferno_renderer';
+
 // eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
+import type { UserDefinedElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
-
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
@@ -84,6 +86,23 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     };
   }
 
+  constructor(element: UserDefinedElement, options?: ComponentWrapperProps) {
+    super(element, options);
+
+    this.validateKeyDownHandler();
+  }
+
+  validateKeyDownHandler(): void {
+    const supportedKeyNames = this.getSupportedKeyNames();
+    const hasComponentDefaultKeyHandlers = supportedKeyNames.length > 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const hasComponentKeyDownMethod = typeof (this._viewComponent.prototype as any).keyDown === 'function';
+
+    if (hasComponentDefaultKeyHandlers && !hasComponentKeyDownMethod) {
+      throw Error('Component\'s declaration must have \'keyDown\' method.');
+    }
+  }
+
   public get viewRef(): unknown {
     return this._viewRef?.current;
   }
@@ -133,7 +152,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         }),
         {},
       ),
-    );
+    ) as Record<string, unknown>;
   }
 
   _initMarkup(): void {
@@ -143,31 +162,17 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _renderWrapper(props: Record<string, unknown>): void {
     const containerNode = this.$element()[0];
-    const { parentNode } = containerNode;
 
     if (!this._isNodeReplaced) {
-      const nextNode = containerNode?.nextSibling;
+      renderer.onPreRender();
+    }
 
-      const rootNode = domAdapter.createElement('div');
-      rootNode.appendChild(containerNode);
-      const mountNode = this._documentFragment.appendChild(rootNode);
-      InfernoEffectHost.lock();
-      hydrate(
-        createElement(this._viewComponent, props),
-        mountNode,
-      );
-      containerNode.$V = mountNode.$V;
-      if (parentNode) {
-        parentNode.insertBefore(containerNode, nextNode);
-      }
+    renderer.render(this._viewComponent, props, containerNode, this._isNodeReplaced);
+
+    if (!this._isNodeReplaced) {
       this._isNodeReplaced = true;
-      InfernoEffectHost.callEffects();
+      renderer.onAfterRender();
       this._shouldRaiseContentReady = true;
-    } else {
-      render(
-        createElement(this._viewComponent, props),
-        containerNode,
-      );
     }
 
     if (this._shouldRaiseContentReady) {
@@ -183,18 +188,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   _render(): void { } // NOTE: Inherited from DOM_Component
 
   _removeWidget(): void {
-    const containerNode = this.$element()[0];
-    const { parentNode } = containerNode;
-
-    if (parentNode) {
-      parentNode.$V = containerNode.$V;
-      render(null, parentNode);
-      parentNode.appendChild(containerNode);
-      containerNode.innerHTML = '';
-
-      delete parentNode.$V;
-    }
-    delete containerNode.$V;
+    renderer.remove(this.$element()[0]);
   }
 
   _dispose(): void {
@@ -290,6 +284,18 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return widgetProps;
   }
 
+  getSupportedKeyNames(): string[] {
+    return [];
+  }
+
+  prepareStyleProp(props: Record<string, unknown>): Record<string, unknown> {
+    if (typeof props.style === 'string') {
+      return { ...props, style: {}, cssText: props.style };
+    }
+
+    return props;
+  }
+
   getProps(): Record<string, unknown> {
     const { elementAttr } = this.option();
 
@@ -302,7 +308,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       options[template] = this._componentTemplates[template];
     });
 
-    return {
+    return this.prepareStyleProp({
       ...options,
       ...this.elementAttr,
       ...elementAttr,
@@ -315,7 +321,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         .trim(),
       class: '',
       ...this._actionsMap,
-    };
+    });
   }
 
   _getActionConfigs(): Record<string, Record<string, unknown>> {
@@ -362,10 +368,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     super._init();
 
     this.customKeyHandlers = {};
-    this.defaultKeyHandlers = {};
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = this._optionsWithDefaultTemplates(this.option());
-    this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
     this._componentTemplates = {};
@@ -376,6 +380,21 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     Object.keys(this._getActionConfigsFull()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
+    this.defaultKeyHandlers = this._createDefaultKeyHandlers();
+  }
+
+  _createDefaultKeyHandlers(): Record<string, Function> {
+    const result = {};
+    const keys = this.getSupportedKeyNames();
+
+    keys.forEach((key) => {
+      // eslint-disable-next-line
+      result[key] = (e: Event): Event | undefined => (this.viewRef as any).keyDown(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (KeyboardProcessor as any).createKeyDownOptions(e),
+      );
+    });
+    return result;
   }
 
   _addAction(event: string, actionToAdd?: Function): void {
@@ -395,7 +414,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
             actArgs[name] = getPublicElement($(actArgs[name]));
           }
         });
-        return actionByOption(actArgs);
+        return actionByOption(actArgs) as undefined;
       };
     }
     this._actionsMap[event] = action;
@@ -421,7 +440,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _extractDefaultSlot(): VNode | null {
     if (this.option('_hasAnonymousTemplateContent')) {
-      return createElement(TemplateWrapper, {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return renderer.createElement(TemplateWrapper, {
         template: this._getTemplate(this._templateManager.anonymousTemplateName),
         transclude: true,
       });
@@ -439,12 +459,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     if (isString(template) && template === 'dx-renovation-template-mock') {
       return undefined;
     }
-    const templateWrapper = (model: TemplateModel): VNode => createElement(
-      TemplateWrapper,
-      {
-        template,
-        model,
-      },
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
+      TemplateWrapper, { template, model },
     );
 
     return templateWrapper;
@@ -472,7 +490,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       }
 
       // NOTE: make it possible to pass onKeyDown property
-      return initialHandler?.(originalEvent, options);
+      return initialHandler?.(originalEvent, options) as Event;
     };
   }
 
@@ -482,8 +500,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _patchElementParam(value: Element): Element {
     try {
-      const result: dxElementWrapper = $(value);
+      const result = $(value);
       const element = result?.get(0);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return element?.nodeType ? element : value;
     } catch (error) {
       return value;
@@ -522,3 +541,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 /// #DEBUG
 ComponentWrapper.IS_RENOVATED_WIDGET = true;
 /// #ENDDEBUG
+
+/* eslint-enable @typescript-eslint/ban-types */
+/* eslint-enable @typescript-eslint/no-unsafe-member-access */

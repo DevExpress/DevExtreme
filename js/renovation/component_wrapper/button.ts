@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // eslint-disable-next-line import/named
 import { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
@@ -7,11 +8,16 @@ import type { Button } from '../ui/button';
 export default class ButtonWrapper extends Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get _validationGroupConfig(): any {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return ValidationEngine.getGroupConfig(this._findGroup());
   }
 
   getDefaultTemplateNames(): string[] {
     return ['content'];
+  }
+
+  getSupportedKeyNames(): string[] {
+    return ['space', 'enter'];
   }
 
   getProps(): Record<string, unknown> {
@@ -66,10 +72,6 @@ export default class ButtonWrapper extends Component {
 
   _init(): void {
     super._init();
-    this.defaultKeyHandlers = {
-      enter: (_, opts): Event | undefined => (this.viewRef as Button).onWidgetKeyDown(opts),
-      space: (_, opts): Event | undefined => (this.viewRef as Button).onWidgetKeyDown(opts),
-    };
     this._addAction('onSubmit', this._getSubmitAction());
   }
 
@@ -99,3 +101,4 @@ export default class ButtonWrapper extends Component {
       : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }
+/* eslint-enable @typescript-eslint/no-unsafe-member-access */

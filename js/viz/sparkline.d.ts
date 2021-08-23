@@ -1,12 +1,11 @@
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -14,11 +13,11 @@ import Store from '../data/abstract_store';
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
 /** @public */
@@ -34,7 +33,7 @@ export type ExportedEvent = EventInfo<dxSparkline>;
 export type ExportingEvent = EventInfo<dxSparkline> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSparkline>;
+export type FileSavingEvent = FileSavingEventInfo<dxSparkline>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxSparkline> & IncidentInfo;

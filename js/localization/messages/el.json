@@ -527,6 +527,9 @@
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Ταξινόμηση αύξουσα",
+        "dxGantt-sortingDescendingText": "Ταξινόμηση φθήνουσα",
+        "dxGantt-sortingClearText": "Εκκαθάριση ταξινόμισης"
     }
 }

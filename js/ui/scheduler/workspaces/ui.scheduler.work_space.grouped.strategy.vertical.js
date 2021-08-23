@@ -1,7 +1,7 @@
 import { getBoundingRect } from '../../../core/utils/position';
-import { cache } from './cache';
+import { Cache } from './cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
-import { getVerticalGroupCountClass } from './utils/base';
+import { calculateDayDuration, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
@@ -9,6 +9,7 @@ const WORK_SPACE_BORDER = 1;
 class VerticalGroupedStrategy {
     constructor(workSpace) {
         this._workSpace = workSpace;
+        this.cache = new Cache();
     }
 
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
@@ -107,11 +108,15 @@ class VerticalGroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return cache.get('groupBoundsOffset', () => {
+        return this.cache.get('groupBoundsOffset', () => {
             const groupIndex = coordinates.groupIndex;
             const startOffset = $cells.eq(0).offset().left;
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
-            const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
+            const startDayHour = this._workSpace.option('startDayHour');
+            const endDayHour = this._workSpace.option('endDayHour');
+            const hoursInterval = this._workSpace.option('hoursInterval');
+
+            const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
             const scrollTop = this.getScrollableScrollTop();
             let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.option('getHeaderHeight')() + DATE_HEADER_OFFSET - scrollTop;
 

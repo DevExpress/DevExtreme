@@ -1,12 +1,8 @@
-import {
-    format
-} from './ui/widget/ui.widget';
-
 /**
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
  * @param1 value:date
- * @param2 format:format
+ * @param2 format:Format
  * @return string
  * @static
  * @module localization
@@ -14,7 +10,7 @@ import {
  * @namespace DevExpress.localization
  * @public
  */
-export function formatDate(value: Date, format: format): string;
+export function formatDate(value: Date, format: Format): string;
 
 /**
  * @docid localization.formatMessage
@@ -34,7 +30,7 @@ export function formatMessage(key: string, ...values: Array<string>): string;
  * @docid localization.formatNumber
  * @publicName formatNumber(value, format)
  * @param1 value:number
- * @param2 format:format
+ * @param2 format:Format
  * @return string
  * @static
  * @module localization
@@ -42,7 +38,7 @@ export function formatMessage(key: string, ...values: Array<string>): string;
  * @namespace DevExpress.localization
  * @public
  */
-export function formatNumber(value: number, format: format): string;
+export function formatNumber(value: number, format: Format): string;
 
 /**
  * @docid localization.loadMessages
@@ -78,13 +74,14 @@ export function locale(): string;
  * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function locale(locale: string): void;
 
 /**
  * @docid localization.parseDate
  * @publicName parseDate(text, format)
  * @param1 text:string
- * @param2 format:format
+ * @param2 format:Format
  * @return date
  * @static
  * @module localization
@@ -92,13 +89,13 @@ export function locale(locale: string): void;
  * @namespace DevExpress.localization
  * @public
  */
-export function parseDate(text: string, format: format): Date;
+export function parseDate(text: string, format: Format): Date;
 
 /**
  * @docid localization.parseNumber
  * @publicName parseNumber(text, format)
  * @param1 text:string
- * @param2 format:format
+ * @param2 format:Format
  * @return number
  * @static
  * @module localization
@@ -106,6 +103,51 @@ export function parseDate(text: string, format: format): Date;
  * @namespace DevExpress.localization
  * @public
  */
-export function parseNumber(text: string, format: format): number;
+export function parseNumber(text: string, format: Format): number;
 
+type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
+export interface FormatObject {
+    /**
+     * @docid Format.currency
+     * @public
+     */
+   currency?: string;
+   /**
+    * @docid Format.formatter
+    * @public
+    * @type_function_param1 value:number|date
+    * @type_function_return string
+    */
+   formatter?: ((value: number | Date) => string);
+   /**
+    * @docid Format.parser
+    * @public
+    * @type_function_param1 value:string
+    * @type_function_return number|date
+    */
+   parser?: ((value: string) => number | Date);
+   /**
+    * @docid Format.precision
+    * @public
+    */
+   precision?: number;
+   /**
+    * @docid Format.type
+    * @public
+    * @type Enums.Format|string
+    */
+   type?: PredefinedFormat | string;
+}
+type ExternalFormat = any;
 
+/**
+ * @docid
+ * @type Object|Enums.Format|string|function
+ * @type_function_param1 value:number|date
+ * @type_function_return string
+ * @default undefined
+ * @section Common
+ * @namespace DevExpress.ui
+ * @public
+ */
+export type Format = FormatObject | PredefinedFormat | string | ((value: number | Date) => string) | ExternalFormat;

@@ -1,25 +1,25 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    animationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 /** @public */
@@ -80,7 +80,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @type_function_return number|string
      * @default 90
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @public
      */
     height?: number | string | (() => number | string);
@@ -92,14 +92,14 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     indicatorSrc?: string;
     /**
      * @docid
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
      * @public
      */
     maxHeight?: number | string | (() => number | string);
     /**
      * @docid
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
      * @public
      */
@@ -107,20 +107,20 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default "Loading ..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     message?: string;
     /**
      * @docid
-     * @type Enums.PositionAlignment|positionConfig|function
+     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default 'transparent'
-     * @default '' [for](Android|iOS)
+     * @default '' &for(Android|iOS)
      * @public
      */
     shadingColor?: string;
@@ -139,7 +139,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default 222
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
      * @public
      */
@@ -152,13 +152,13 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
      * @default null
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
      * @default null
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

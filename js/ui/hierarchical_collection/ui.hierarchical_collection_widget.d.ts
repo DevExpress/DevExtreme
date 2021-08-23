@@ -1,5 +1,5 @@
 import CollectionWidget, {
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */
@@ -20,7 +20,7 @@ export interface HierarchicalCollectionWidgetOptions<TComponent> extends Collect
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

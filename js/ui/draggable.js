@@ -80,15 +80,22 @@ class ScrollHelper {
     }
 
     updateScrollable(elements, mousePosition) {
-        const needResetScrollable = !elements.some((element) => {
+        let isScrollableFound = false;
+
+        elements.some((element) => {
             const $element = $(element);
             const isTargetOverOverlayWrapper = $element.hasClass(OVERLAY_WRAPPER_CLASS);
             const isTargetOverOverlayContent = $element.hasClass(OVERLAY_CONTENT_CLASS);
+            if(isTargetOverOverlayWrapper || isTargetOverOverlayContent) {
+                return true;
+            }
 
-            return isTargetOverOverlayWrapper || isTargetOverOverlayContent || this._trySetScrollable(element, mousePosition);
+            isScrollableFound = this._trySetScrollable(element, mousePosition);
+
+            return isScrollableFound;
         });
 
-        if(needResetScrollable) {
+        if(!isScrollableFound) {
             this._$scrollableAtPointer = null;
             this._scrollSpeed = 0;
         }

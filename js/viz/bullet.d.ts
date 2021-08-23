@@ -1,18 +1,17 @@
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
 /** @public */
@@ -28,7 +27,7 @@ export type ExportedEvent = EventInfo<dxBullet>;
 export type ExportingEvent = EventInfo<dxBullet> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxBullet>;
+export type FileSavingEvent = FileSavingEventInfo<dxBullet>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxBullet> & IncidentInfo;

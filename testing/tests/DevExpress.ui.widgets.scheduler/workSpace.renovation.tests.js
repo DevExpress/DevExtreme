@@ -105,7 +105,6 @@ module('Renovated Render', {
                         groupIndex: 0,
                         isGroupedAllDayPanel: false
                     }],
-                    cellCountInGroupRow: 1,
                     bottomVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: false,
                     topVirtualRowHeight: undefined,
@@ -181,7 +180,6 @@ module('Renovated Render', {
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
                 const expectedViewData = {
-                    cellCountInGroupRow: 1,
                     groupedData: [{
                         allDayPanel: [{
                             allDay: true,
@@ -371,7 +369,6 @@ module('Renovated Render', {
                 const { viewData } = this.instance.viewDataProvider;
 
                 const expectedViewData = {
-                    cellCountInGroupRow: 2,
                     groupedData: [{
                         allDayPanel: [{
                             allDay: true,
@@ -1016,7 +1013,7 @@ module('Renovated Render', {
 
             this.instance.renderWorkSpace();
 
-            assert.ok(cacheClearSpy.calledOnce, 'Cache has been cleared');
+            assert.ok(cacheClearSpy.callCount > 0, 'Cache has been cleared');
 
             cacheClearSpy.restore();
         });

@@ -18,6 +18,10 @@ import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
 import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
+import { getWindow, setWindow } from '../../../../core/utils/window';
+import { Widget } from '../../common/widget';
+import { ScrollableDirection } from '../types.d';
+
 interface Mock extends jest.Mock {}
 
 jest.mock('../../../../core/devices', () => {
@@ -41,20 +45,52 @@ jest.mock('../../../../ui/themes', () => ({
 describe('ScrollView', () => {
   it('render with defaults', () => {
     const props = new ScrollViewProps();
-    const scrollable = mount<ScrollView>(<ScrollView {...props} />);
 
-    expect(scrollable.props()).toEqual({
+    const scrollView = mount<ScrollView>(<ScrollView {...props} />);
+
+    expect(scrollView.props()).toEqual({
       bounceEnabled: true,
       direction: 'vertical',
       forceGeneratePockets: false,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
+      needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
       useNative: true,
+    });
+  });
+
+  each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
+    it('should pass all necessary properties to the Widget', () => {
+      const config = {
+        activeStateUnit: '.UIFeedback',
+        useNative: useNativeScrolling,
+        direction: 'vertical' as ScrollableDirection,
+        width: '120px',
+        height: '300px',
+        activeStateEnabled: false,
+        addWidgetClass: false,
+        rtlEnabled: true,
+        disabled: true,
+        focusStateEnabled: false,
+        hoverStateEnabled: !useNativeScrolling,
+        tabIndex: 0,
+        visible: true,
+      };
+
+      const scrollView = mount<ScrollView>(<ScrollView {...config} />);
+
+      const { direction, useNative, ...restProps } = config;
+      expect(scrollView.find(Widget).at(0).props()).toMatchObject({
+        classes: useNative
+          ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled dx-scrollview'
+          : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled dx-scrollview',
+        ...restProps,
+      });
     });
   });
 
@@ -67,8 +103,7 @@ describe('ScrollView', () => {
       { name: 'scrollOffset', calledWith: [] },
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
-      { name: 'scrollToElement', calledWith: ['arg1'] },
-      { name: 'scrollToElementTopLeft', calledWith: ['arg1'] },
+      { name: 'scrollToElement', calledWith: ['arg1-element', 'arg2-offset'] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
@@ -174,7 +209,6 @@ describe('ScrollView', () => {
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
               expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
 
               if (useNative) {
@@ -199,21 +233,6 @@ describe('ScrollView', () => {
             });
           });
         });
-
-        it('should render scrollView content', () => {
-          const scrollView = mount(viewFunction({ props: {} } as any));
-
-          const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
-          expect(scrollViewContent.exists()).toBe(true);
-        });
-
-        it('should not render top & bottom pockets', () => {
-          const scrollView = mount(viewFunction({ props: { } } as any));
-          const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
-          expect(topPocket.exists()).toBe(true);
-          const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
-          expect(bottomPocket.exists()).toBe(true);
-        });
       });
 
       each([false, true]).describe('useNative: %o', (useNative) => {
@@ -225,6 +244,66 @@ describe('ScrollView', () => {
           });
 
           expect(viewModel.scrollable).toEqual('scrollableRef');
+        });
+
+        each([false, true]).describe('isServerSide: %o', (isServerSide) => {
+          it('render scrollView content', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, !isServerSide);
+              const scrollView = mount(viewFunction({ props: {} } as any));
+
+              const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
+              expect(scrollViewContent.exists()).toBe(true);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
+
+          it('render scrollbars', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, !isServerSide);
+              const scrollView = mount(viewFunction({ props: {} } as any));
+
+              const scrollViewContent = scrollView.find('.dx-scrollable-scrollbar');
+              expect(scrollViewContent.exists()).toBe(!isServerSide);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
+
+          it('render top & bottom pockets', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, !isServerSide);
+              const scrollView = mount(viewFunction({ props: {} } as any));
+
+              const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
+              expect(topPocket.exists()).toBe(!isServerSide);
+              const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
+              expect(bottomPocket.exists()).toBe(!isServerSide);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
+
+          it('render loadpanel', () => {
+            const originalWindow = getWindow();
+
+            try {
+              setWindow({}, !isServerSide);
+              const scrollView = mount(viewFunction({ props: { } } as any));
+
+              const loadPanel = scrollView.find('.dx-scrollview-loadpanel');
+              expect(loadPanel.exists()).toBe(!isServerSide);
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
         });
       });
     });

@@ -42,6 +42,7 @@ define(function(require) {
                     name === 'validationMessageOffset' ||
                     name === 'templatesRenderAsynchronously' ||
                     name === 'ignoreChildEvents' ||
+                    name === 'copyRootClassesToWrapper' ||
                     name === '_checkParentVisibility') {
                     return;
                 }
@@ -82,7 +83,6 @@ define(function(require) {
             }
 
             const widgetName = componentName.replace('dx', '').toLowerCase();
-
             if($.fn[componentName]) {
                 componentConstructor.prototype._defaultOptionsRules = function() {
                     return [];

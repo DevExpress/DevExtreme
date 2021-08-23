@@ -1,29 +1,28 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import BaseWidget, {
@@ -32,7 +31,7 @@ import BaseWidget, {
     Font,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import { HatchingDirectionType } from './common';
@@ -50,7 +49,7 @@ export type ExportedEvent = EventInfo<dxSankey>;
 export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSankey>;
+export type FileSavingEvent = FileSavingEventInfo<dxSankey>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
@@ -61,19 +60,19 @@ export type InitializedEvent = InitializedEventInfo<dxSankey>;
 /** @public */
 export type LinkClickEvent = NativeEventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
-}
+};
 /** @public */
 export type LinkHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
-}
+};
 /** @public */
 export type NodeClickEvent = NativeEventInfo<dxSankey> & {
     readonly target: dxSankeyNode;
-}
+};
 /** @public */
 export type NodeHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyNode;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
@@ -92,17 +91,17 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
        * @docid
        * @default 80
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @default true
        */
-      keepLabels?: boolean,
+      keepLabels?: boolean;
       /**
        * @docid
        * @default 80
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -136,41 +135,41 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#000000'
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @default 2
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @type_function_param1 itemInfo: dxSankeyNode
        * @type_function_return string
        * @notUsedInTheme
        */
-      customizeText?: ((itemInfo: dxSankeyNode) => string),
+      customizeText?: ((itemInfo: dxSankeyNode) => string);
       /**
        * @docid
-       * @default '#FFFFFF' [prop](color)
+       * @default '#FFFFFF' &prop(color)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid
        * @default 5
        */
-      horizontalOffset?: number,
+      horizontalOffset?: number;
       /**
        * @docid
        * @type Enums.SankeyLabelOverlappingBehavior
        * @default 'ellipsis'
        */
-      overlappingBehavior?: 'ellipsis' | 'hide' | 'none',
+      overlappingBehavior?: 'ellipsis' | 'hide' | 'none';
       /**
        * @docid
        */
@@ -179,43 +178,43 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default 1
          */
-        blur?: number,
+        blur?: number;
         /**
          * @docid
          * @default '#000000'
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default 0
          */
-        offsetX?: number,
+        offsetX?: number;
         /**
          * @docid
          * @default 1
          */
-        offsetY?: number,
+        offsetY?: number;
         /**
          * @docid
          * @default 0
          */
-        opacity?: number
-      },
+        opacity?: number;
+      };
       /**
        * @docid
        * @default false
        */
-      useNodeColors?: boolean,
+      useNodeColors?: boolean;
       /**
        * @docid
        * @default 0
        */
-      verticalOffset?: number,
+      verticalOffset?: number;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -230,29 +229,29 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#000000'
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @default 2
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @default '#000000'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @type Enums.SankeyColorMode
        * @default 'none'
        */
-      colorMode?: 'none' | 'source' | 'target' | 'gradient',
+      colorMode?: 'none' | 'source' | 'target' | 'gradient';
       /**
        * @docid
        */
@@ -265,23 +264,23 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default undefined
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          */
@@ -291,34 +290,34 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType,
+          direction?: HatchingDirectionType;
           /**
            * @docid
            * @default 0.75
            */
-          opacity?: number,
+          opacity?: number;
           /**
            * @docid
            * @default 6
            */
-          step?: number,
+          step?: number;
           /**
            * @docid
            * @default 2
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default 0.5
          */
-        opacity?: number
-      },
+        opacity?: number;
+      };
       /**
        * @docid
        * @default 0.3
        */
-      opacity?: number
+      opacity?: number;
     };
     /**
      * @docid
@@ -333,23 +332,23 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#000000'
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @default 1
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @default undefined
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        */
@@ -362,23 +361,23 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default undefined
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          */
@@ -388,52 +387,52 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType,
+          direction?: HatchingDirectionType;
           /**
            * @docid
            * @default 0.75
            */
-          opacity?: number,
+          opacity?: number;
           /**
            * @docid
            * @default 6
            */
-          step?: number,
+          step?: number;
           /**
            * @docid
            * @default 2
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default undefined
          */
-        opacity?: number
-      },
+        opacity?: number;
+      };
       /**
        * @docid
        * @default 1
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @default 30
        */
-      padding?: number,
+      padding?: number;
       /**
        * @docid
        * @default 15
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyLink
      * @notUsedInTheme
@@ -445,9 +444,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
      * @action
@@ -458,9 +457,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyNode
      * @notUsedInTheme
@@ -472,9 +471,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
      * @action
@@ -538,7 +537,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
-    customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
+    customizeLinkTooltip?: ((info: { source?: string; target?: string; weight?: number }) => any);
     /**
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
@@ -550,7 +549,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
-    customizeNodeTooltip?: ((info: { title?: string, label?: string, weightIn?: number, weightOut?: number }) => any);
+    customizeNodeTooltip?: ((info: { title?: string; label?: string; weightIn?: number; weightOut?: number }) => any);
     /**
      * @docid dxSankeyOptions.tooltip.enabled
      * @default true
@@ -568,7 +567,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: DxElement) => string | UserDefinedElement);
+    linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
      * @type_function_param1 info:object
@@ -580,7 +579,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: DxElement) => string | UserDefinedElement);
+    nodeTooltipTemplate?: template | ((info: { label?: string; weightIn?: number; weightOut?: number }, element: DxElement) => string | UserDefinedElement);
 }
 /**
  * @docid

@@ -3,9 +3,8 @@ import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import { calculateCellIndex, getViewStartByOptions } from './utils/month';
-import { calculateStartViewDate } from './utils/timeline_month';
-import { formatWeekdayAndDay } from './utils/base';
+import { getViewStartByOptions } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
+import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
@@ -14,10 +13,6 @@ const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimelineMonth extends SchedulerTimeline {
     get type() { return VIEWS.TIMELINE_MONTH; }
-
-    get isDateAndTimeView() {
-        return false;
-    }
 
     get viewDirection() { return 'horizontal'; }
 
@@ -37,10 +32,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return this.option('dateCellTemplate');
     }
 
-    _getHiddenInterval() {
-        return 0;
-    }
-
     _calculateDurationInCells(timeDiff) {
         return timeDiff / this.getCellDuration();
     }
@@ -53,31 +44,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return true;
     }
 
-    _getCellCount() {
-        const currentDate = this.option('currentDate');
-        let cellCount = 0;
-        if(this._isWorkSpaceWithCount()) {
-            const intervalCount = this.option('intervalCount');
-
-            for(let i = 1; i <= intervalCount; i++) {
-                cellCount += new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 0).getDate();
-            }
-        } else {
-            cellCount = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-        }
-
-        return cellCount;
-    }
-
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this.option('intervalCount'),
-        );
-    }
-
     _getFormat() {
         return formatWeekdayAndDay;
     }
@@ -87,14 +53,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
-    }
-
-    _getDateGenerationOptions() {
-        return {
-            ...super._getDateGenerationOptions(),
-            columnsInDay: 1,
-            calculateCellIndex,
-        };
     }
 
     getPositionShift() {

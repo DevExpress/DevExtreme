@@ -1486,6 +1486,43 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
     });
 
+    QUnit.test('selectAll when calculateCellValue is defined for filtered column (T1021412)', function(assert) {
+        this.applyOptions({
+            columns: [{
+                dataField: 'age',
+                calculateCellValue() { return 99; },
+                filterValue: 99
+            }]
+        });
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ['age', '=', 99], 'filter');
+        assert.strictEqual(this.getVisibleRows().length, 7, 'visible row count');
+        assert.strictEqual(this.totalCount(), 7, 'total count');
+        assert.strictEqual(this.getSelectedRowKeys().length, 7, 'selected row count');
+        assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
+    });
+
+    ['single', 'multiple'].forEach(selectionMode => {
+        QUnit.test(`Disabled item should be selected when mode = ${selectionMode} (T1015840)`, function(assert) {
+            this.applyOptions({
+                selection: {
+                    mode: selectionMode
+                }
+            });
+            this.array[0].disabled = true;
+
+            // act
+            this.selectionController.changeItemSelection(0, { control: selectionMode === 'multiple' });
+
+            // assert
+            assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15, disabled: true }]);
+        });
+    });
+
     QUnit.module('W1018', () => {
         [true, false].forEach(deferred => {
             ['infinite', 'virtual', 'standard'].forEach(scrollingMode => {

@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -17,16 +17,16 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 import {
-    dxToolbarItem
+    Item as dxToolbarItem,
 } from './toolbar';
 
 /** @public */
@@ -293,7 +293,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    getSelection(focus?: boolean|undefined): any;
+    getSelection(focus?: boolean | undefined): any;
     /**
      * @docid
      * @publicName getText(index, length)
@@ -401,7 +401,7 @@ export interface dxHtmlEditorMediaResizing {
    minColumnWidth?: number;
   /**
    * @docid
-   * @default 20
+   * @default 24
    * @public
    */
   minRowHeight?: number;
@@ -504,7 +504,7 @@ export interface dxHtmlEditorToolbar {
      * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
      * @public
      */
-    items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+    items?: Array<ToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
     /**
      * @docid
      * @default true
@@ -514,8 +514,13 @@ export interface dxHtmlEditorToolbar {
 }
 
 /**
- * @docid
- * @inherits dxToolbarItem
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type ToolbarItem = dxHtmlEditorToolbarItem;
+
+/**
+ * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {

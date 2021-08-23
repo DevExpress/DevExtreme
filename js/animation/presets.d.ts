@@ -1,9 +1,9 @@
 import {
-    Device
+    Device,
 } from '../core/devices';
 
 import {
-    animationConfig
+    AnimationConfig,
 } from './fx';
 
 /**
@@ -13,7 +13,7 @@ import {
  * @export default
  * @public
  */
-export default class animationPresets {
+declare const animationPresets: {
     /**
      * @docid
      * @publicName applyChanges()
@@ -37,10 +37,10 @@ export default class animationPresets {
      * @docid
      * @publicName getPreset(name)
      * @param1 name:string
-     * @return any
+     * @return AnimationConfig
      * @public
      */
-    getPreset(name: string): any;
+    getPreset(name: string): AnimationConfig;
     /**
      * @docid
      * @publicName registerDefaultPresets()
@@ -52,15 +52,17 @@ export default class animationPresets {
      * @publicName registerPreset(name, config)
      * @param1 name:string
      * @param2 config:object
-     * @param2_field1 animation:animationConfig
+     * @param2_field1 animation:AnimationConfig
      * @param2_field2 device:Device
      * @public
      */
-    registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
+    registerPreset(name: string, config: { animation: AnimationConfig; device?: Device }): void;
     /**
      * @docid
      * @publicName resetToDefaults()
      * @public
      */
     resetToDefaults(): void;
-}
+};
+
+export default animationPresets;

@@ -4,7 +4,7 @@ import {
 
 import { format } from '../../../core/utils/string';
 import messageLocalization from '../../../localization/message';
-import { PagerProps } from './common/pager_props';
+import { InternalPagerProps } from './common/pager_props';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX.Element => (
@@ -16,7 +16,7 @@ export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX
 export class InfoTextProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
-type InfoTextPropsType = InfoTextProps & Pick<PagerProps, 'infoText' | 'pageCount' | 'pageIndex' | 'totalCount'>;
+type InfoTextPropsType = InfoTextProps & Pick<InternalPagerProps, 'infoText' | 'pageCount' | 'pageIndex' | 'totalCount'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class InfoText extends JSXComponent<InfoTextPropsType>() {
@@ -31,6 +31,6 @@ export class InfoText extends JSXComponent<InfoTextPropsType>() {
     return format(this.infoText,
       (pageIndex + 1).toString(),
       pageCount.toString(),
-      totalCount.toString());
+      totalCount.toString()) as string;
   }
 }

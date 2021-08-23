@@ -5409,7 +5409,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
             const scrollable = this.rowsView._scrollable;
             scrollable.scrollTo({ y: 2500 });
-            $(scrollable._container()).trigger('scroll');
+            $(scrollable.container()).trigger('scroll');
             clock.tick(500);
 
             // assert
@@ -5531,7 +5531,7 @@ QUnit.module('Virtual scrolling', {
     beforeEach: function() {
         this.createRowsView = function(items, dataController) {
             const rowsView = createRowsView.apply(this, arguments);
-            const x = new virtualScrollingCore.VirtualScrollController(this, { pageIndex: function() {} });
+            const x = new virtualScrollingCore.VirtualScrollController(this.dataGrid, { pageIndex: function() {} });
             rowsView._dataController._itemSizes = {};
             rowsView._dataController.getVirtualContentSize = x.getVirtualContentSize;
             rowsView._dataController.getContentOffset = x.getContentOffset;
@@ -6590,7 +6590,6 @@ QUnit.module('Virtual scrolling', {
             { rowType: 'data', values: [12] }
         ];
         options.virtualItemsCount.begin = 9;
-        rowsView._isScrollByEvent = true;
         dataController.changed.fire({
             items: options.items,
             changeType: 'prepend'
@@ -6895,7 +6894,12 @@ QUnit.module('Scrollbar', {
 
     // T697699
     QUnit.test('The vertical scrollbar should not be shown if showScrollbar is always', function(assert) {
-    // arrange
+        if(devices.real().android) {
+            assert.ok(true, 'It\'s a bug under Android only');
+            return;
+        }
+
+        // arrange
         const rows = [{ values: ['test1'], rowType: 'data' }];
         const columns = ['field1'];
         const rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: false, showScrollbar: 'always' } });
@@ -6907,7 +6911,7 @@ QUnit.module('Scrollbar', {
         rowsView.resize();
 
         // assert
-        assert.strictEqual(rowsView.getScrollable().$content().outerHeight(), rowsView.getScrollable()._container().outerHeight(), 'No vertical scroll');
+        assert.strictEqual(rowsView.getScrollable().$content().outerHeight(), $(rowsView.getScrollable().container()).outerHeight(), 'No vertical scroll');
     });
 });
 

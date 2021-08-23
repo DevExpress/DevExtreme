@@ -29,6 +29,8 @@ export class GanttView extends Widget {
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
             firstDayOfWeek: this._getFirstDayOfWeek(this.option('firstDayOfWeek')),
             allowSelectTask: this.option('allowSelection'),
+            startDateRange: this.option('startDateRange'),
+            endDateRange: this.option('endDateRange'),
             editing: this._parseEditingSettings(this.option('editing')),
             validation: this.option('validation'),
             stripLines: { stripLines: this.option('stripLines') },
@@ -39,7 +41,8 @@ export class GanttView extends Widget {
             taskTooltipContentTemplate: this.option('taskTooltipContentTemplate'),
             taskProgressTooltipContentTemplate: this.option('taskProgressTooltipContentTemplate'),
             taskTimeTooltipContentTemplate: this.option('taskTimeTooltipContentTemplate'),
-            taskContentTemplate: this.option('taskContentTemplate')
+            taskContentTemplate: this.option('taskContentTemplate'),
+            sorting: this.option('sorting')
         });
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
@@ -48,7 +51,7 @@ export class GanttView extends Widget {
         return isDefined(value) ? value : dateLocalization.firstDayOfWeekIndex();
     }
     getTaskAreaContainer() {
-        return this._ganttViewCore.taskAreaContainer;
+        return this._ganttViewCore.getTaskAreaContainer();
     }
     getBarManager() {
         return this._ganttViewCore.barManager;
@@ -168,7 +171,8 @@ export class GanttView extends Widget {
             case 'dependencies':
             case 'resources':
             case 'resourceAssignments':
-                this._update();
+                this._sortOptions = undefined;
+                this._update(true);
                 break;
             case 'showResources':
                 this._ganttViewCore.setShowResources(args.value);
@@ -178,6 +182,12 @@ export class GanttView extends Widget {
                 break;
             case 'firstDayOfWeek':
                 this._ganttViewCore.setFirstDayOfWeek(this._getFirstDayOfWeek(args.value));
+                break;
+            case 'startDateRange':
+                this._ganttViewCore.setStartDateRange(args.value);
+                break;
+            case 'endDateRange':
+                this._ganttViewCore.setEndDateRange(args.value);
                 break;
             case 'allowSelection':
                 this._ganttViewCore.setAllowSelection(args.value);
@@ -213,6 +223,9 @@ export class GanttView extends Widget {
             case 'taskContentTemplate':
                 this._ganttViewCore.setTaskContentTemplate(args.value);
                 break;
+            case 'sorting':
+                this._sort(args.value);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -229,7 +242,22 @@ export class GanttView extends Widget {
         return this.option('headerHeight');
     }
     getGanttTasksData() {
-        return this.option('tasks');
+        const tasks = this.option('tasks');
+        const sortingOptions = this.getSortingOptions();
+        if(sortingOptions?.sortedItems && sortingOptions?.sortColumn) {
+            return sortingOptions.sortedItems;
+        }
+        return tasks;
+    }
+    _sort(args) {
+        this._sortOptions = args;
+        this._update(true);
+        const selectedRowKey = this.option('selectedRowKey');
+        this._selectTask(selectedRowKey);
+    }
+
+    getSortingOptions() {
+        return this._sortOptions;
     }
     getGanttDependenciesData() {
         return this.option('dependencies');

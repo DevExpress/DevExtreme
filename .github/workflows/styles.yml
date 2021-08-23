@@ -1,0 +1,33 @@
+name: Styles tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on: [pull_request]
+
+jobs:
+  Tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Run tests
+      run: npm run test-styles

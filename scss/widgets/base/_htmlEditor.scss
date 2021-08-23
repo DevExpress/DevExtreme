@@ -159,7 +159,8 @@ $transparent-border: 1px solid transparent;
     border-collapse: collapse;
   }
 
-  td {
+  td,
+  th {
     border: 1px solid #000;
     padding: 2px 5px;
   }
@@ -249,7 +250,8 @@ $transparent-border: 1px solid transparent;
     table-layout: fixed;
     width: 100%;
 
-    td {
+    td,
+    th {
       outline: none;
     }
   }
@@ -257,6 +259,11 @@ $transparent-border: 1px solid transparent;
   // stylelint-disable selector-class-pattern
   .ql-code-block-container {
     font-family: monospace;
+  }
+
+  code,
+  .ql-code-block-container {
+    background-color: rgba(191, 191, 191, 0.15);
   }
 
   .ql-video {
@@ -305,11 +312,6 @@ $transparent-border: 1px solid transparent;
 
   // stylelint-enable selector-class-pattern
 
-  pre {
-    white-space: pre-wrap;
-    background-color: rgba(191, 191, 191, 0.15);
-  }
-
   blockquote {
     padding-left: 12px;
     border-left: 4px solid;
@@ -356,10 +358,6 @@ $transparent-border: 1px solid transparent;
   .dx-rtl & {
     text-align: left;
   }
-}
-
-.dx-htmleditor-toolbar-wrapper {
-  padding: 5px;
 }
 
 .dx-color-format,
@@ -534,13 +532,6 @@ $transparent-border: 1px solid transparent;
     position: absolute;
     pointer-events: auto;
     background-color: transparent;
-
-    &.dx-draggable-dragging {
-      &::after {
-        content: '';
-        position: absolute;
-      }
-    }
   }
 
   .dx-htmleditor-column-resizer {
@@ -548,13 +539,12 @@ $transparent-border: 1px solid transparent;
     top: 0;
     height: 100%;
     cursor: col-resize;
+  }
 
-    &::after {
-      width: 3px;
-      top: 0;
-      left: 1px;
-      height: 100%;
-    }
+  .dx-htmleditor-highlighted-column {
+    width: 3px;
+    top: 0;
+    height: 100%;
   }
 
   .dx-htmleditor-row-resizer {
@@ -562,11 +552,11 @@ $transparent-border: 1px solid transparent;
     left: 0;
     width: 100%;
     cursor: row-resize;
+  }
 
-    &::after {
-      height: 3px;
-      top: 1px;
-      width: 100%;
-    }
+  .dx-htmleditor-highlighted-row {
+    height: 3px;
+    left: 0;
+    width: 100%;
   }
 }

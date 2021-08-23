@@ -38,7 +38,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     scrollableRef,
     reachBottomEnabled,
     props: {
-      useNative, children,
+      useNative, activeStateUnit, children,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
@@ -50,6 +50,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 
   return (
     <Scrollable
+      activeStateUnit={activeStateUnit}
       useNative={useNative}
       classes="dx-scrollview"
       ref={scrollableRef}
@@ -99,7 +100,7 @@ export class ScrollViewProps extends ScrollableProps {}
 
 type ScrollViewPropsType =
 Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 'needScrollViewLoadPanel'>
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'activeStateUnit'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
@@ -136,7 +137,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollable.content();
+    return this.scrollable.content() as HTMLDivElement;
   }
 
   @Method()
@@ -150,48 +151,43 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement): void {
-    this.scrollable.scrollToElement(element);
-  }
-
-  @Method()
-  scrollToElementTopLeft(element: HTMLElement): void {
-    this.scrollable.scrollToElementTopLeft(element);
+  scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
+    this.scrollable.scrollToElement(element, offset);
   }
 
   @Method()
   scrollHeight(): number {
-    return this.scrollable.scrollHeight();
+    return this.scrollable.scrollHeight() as number;
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollable.scrollWidth();
+    return this.scrollable.scrollWidth() as number;
   }
 
   @Method()
   scrollOffset(): ScrollOffset {
-    return this.scrollable.scrollOffset();
+    return this.scrollable.scrollOffset() as ScrollOffset;
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollable.scrollTop();
+    return this.scrollable.scrollTop() as number;
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollable.scrollLeft();
+    return this.scrollable.scrollLeft() as number;
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollable.clientHeight();
+    return this.scrollable.clientHeight() as number;
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollable.clientWidth();
+    return this.scrollable.clientWidth() as number;
   }
 
   @Method()

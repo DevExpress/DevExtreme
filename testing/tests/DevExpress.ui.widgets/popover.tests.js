@@ -847,7 +847,7 @@ QUnit.module('content positioning', () => {
         try {
             const $target = $('#where');
             const $popover = $('#what');
-            const popover = new Popover($popover, {
+            new Popover($popover, {
                 target: $target,
                 width: 800,
                 height: 50,
@@ -856,9 +856,8 @@ QUnit.module('content positioning', () => {
             });
 
             const $content = wrapper().find('.dx-overlay-content');
-            const left = popover.option('boundaryOffset').h;
 
-            assert.equal($content.offset().left, left, 'popover content positioned considering fit option');
+            assert.equal($content.offset().left, 10, 'popover content positioned considering fit option');
         } finally {
             fixtures.collisionTopLeft.drop();
         }
@@ -2090,25 +2089,25 @@ QUnit.module('renderGeometry', () => {
         fixtures.simple.create();
         try {
             const $popover = $('#what');
-            const instance = new Popover($popover, { visible: true });
+            this.positionedHandlerStub = sinon.stub();
+            const instance = new Popover($popover, {
+                visible: true,
+                onPositioned: this.positionedHandlerStub
+            });
             const newOptions = {
-                boundaryOffset: { h: 40, v: 40 },
                 arrowPosition: {
                     boundaryOffset: { h: 30, v: 20 },
                     collision: 'fit'
                 },
                 arrowOffset: 24
             };
-            const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
 
             for(const optionName in newOptions) {
-                const initialCallCount = renderGeometrySpy.callCount;
+                const initialCallCount = this.positionedHandlerStub.callCount;
 
                 instance.option(optionName, newOptions[optionName]);
 
-                const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
-                assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
-                assert.notOk(isDimensionChanged);
+                assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
             }
         } finally {
             fixtures.simple.drop();

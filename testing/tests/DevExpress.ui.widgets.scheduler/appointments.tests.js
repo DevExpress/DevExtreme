@@ -1,3 +1,5 @@
+import 'generic_light.css!';
+
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
@@ -78,9 +80,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     },
     getEndViewDate: () => {
         return new Date(2150, 1, 1);
-    },
-    getAppointmentDurationInMs: function(options) {
-        return options.endDate.getTime() - options.startDate.getTime();
     },
     getAppointmentGeometry: (settings) => {
         return {
@@ -575,10 +574,22 @@ QUnit.module('Appointments', moduleOptions, () => {
     });
 
     QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', function(assert) {
+        const key = createFactoryInstances({
+            model: {
+                adaptivityEnabled: false
+            },
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => dataAccessors
+        });
+
         const strategy = new HorizontalMonthAppointmentsStrategy({
-            notifyObserver: commonUtils.noop,
-            option: commonUtils.noop,
-            fire: commonUtils.noop
+            key,
+            instance: {
+                notifyObserver: commonUtils.noop,
+                option: commonUtils.noop,
+                fire: commonUtils.noop,
+            },
+            getResizableStep: () => 0
         });
         const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
 
@@ -586,16 +597,27 @@ QUnit.module('Appointments', moduleOptions, () => {
     });
 
     QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', function(assert) {
-        const strategy = new VerticalAppointmentsStrategy({
-            notifyObserver: commonUtils.noop,
-            invoke: commonUtils.noop,
-            fire: commonUtils.noop,
-            appointmentTakesAllDay: commonUtils.noop,
-            getAppointmentDurationInMinutes: function() {
-                return 30;
-            }
+        const key = createFactoryInstances({
+            model: {
+                adaptivityEnabled: false
+            },
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => dataAccessors
         });
-        strategy._defaultHeight = 50;
+
+        const strategy = new VerticalAppointmentsStrategy({
+            key,
+            instance: {
+                notifyObserver: commonUtils.noop,
+                invoke: commonUtils.noop,
+                fire: commonUtils.noop,
+                appointmentTakesAllDay: commonUtils.noop,
+                getAppointmentDurationInMinutes: function() {
+                    return 30;
+                }
+            },
+            getCellHeight: () => 50
+        });
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 
         assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');

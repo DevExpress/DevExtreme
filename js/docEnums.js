@@ -1184,6 +1184,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GanttSortingMode
+ * @enum {'multiple'|'none'|'single'}
+ */
+
+/**
  * @typedef {string} Enums.LegendMarkerState
  * @enum {'normal'|'hovered'|'selected'}
  */
@@ -1211,4 +1216,14 @@
 /**
  * @typedef {string} Enums.GridDataChangeType
  * @enum {'insert' | 'update' | 'remove'}
+ */
+
+/**
+ * @typedef {string} Enums.DataGridToolbarItem
+ * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListToolbarItem
+ * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel'}
  */

@@ -1,0 +1,129 @@
+name: Lint
+
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on: [pull_request]
+
+jobs:
+  Renovation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Compile renovation
+      run: npm run compile:r
+
+    - name: Lint renovation
+      run: npm run lint-renovation
+
+  TS:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Lint TS
+      run: npm run lint-ts
+
+    - name: Lint .d.ts
+      run: npm run lint-dts
+
+  JS:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Lint TS
+      run: npm run lint-js
+
+  CSS:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+    
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Lint CSS
+      run: npm run lint-css
+
+  package_lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Check package-lock
+      run: npm ci --no-audit --no-fund --ignore-scripts

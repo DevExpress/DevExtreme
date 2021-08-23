@@ -436,7 +436,7 @@ QUnit.module('dimensions', {
         const $popupContent = instance.$content();
         const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
-        assert.equal($popupContent.offset().top + $popupContent.outerHeight(), $popupBottom.offset().top, 'content doesn\'t overlap bottom buttons');
+        assert.roughEqual($popupContent.offset().top + $popupContent.outerHeight(), $popupBottom.offset().top, 0.1, 'content doesn\'t overlap bottom buttons');
         devices.current(devices.real());
     });
 
@@ -591,33 +591,98 @@ QUnit.module('dimensions', {
         );
     });
 
-    QUnit.test('Popup should keep nested scroll position on dimension changed', function(assert) {
-        const SCROLLABLE_CONTAINER_CLASS = 'test-scroll';
+    QUnit.module('Popup should keep nested scroll position on geometry rerendering', {
+        beforeEach: function() {
+            const SCROLLABLE_CONTAINER_CLASS = 'test-scroll';
+            this.instance = $('#popup').dxPopup({
+                visible: true,
+                resizeEnabled: true,
+                width: 'auto',
+                contentTemplate: () => {
+                    const $content = $('<div>').height(3000);
+                    const $wrapper = $('<div>');
 
-        $('#popup').dxPopup({
-            visible: true,
-            contentTemplate: function($container) {
-                const $content = $('<div>').height(3000);
-                const $wrapper = $('<div>');
+                    return $wrapper
+                        .addClass(SCROLLABLE_CONTAINER_CLASS)
+                        .css({
+                            height: '100%',
+                            width: 50,
+                            overflow: 'auto'
+                        })
+                        .append($content);
+                }
+            }).dxPopup('instance');
+            this.$scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            this.$scrollableContainer.scrollTop(300);
+        }
+    }, () => {
+        QUnit.test('on window resize', function(assert) {
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is set');
 
-                $wrapper
-                    .addClass(SCROLLABLE_CONTAINER_CLASS)
-                    .css({
-                        height: '100%',
-                        overflow: 'auto'
-                    })
-                    .append($content)
-                    .appendTo($container);
-            }
+            resizeCallbacks.fire();
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
         });
 
-        const $scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        QUnit.test('on dimension option change', function(assert) {
+            this.instance.option('width', 100);
 
-        $scrollableContainer.scrollTop(100);
-        assert.strictEqual($scrollableContainer.scrollTop(), 100, 'scroll position changed');
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+        });
 
-        resizeCallbacks.fire();
-        assert.strictEqual($scrollableContainer.scrollTop(), 100, 'scroll position still the same');
+        QUnit.test('on content dimension change', function(assert) {
+            const showingObserved = assert.async();
+            const contentResizingObserved = assert.async();
+            setTimeout(() => {
+                this.$scrollableContainer.width(300);
+                setTimeout(() => {
+                    assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+                    contentResizingObserved();
+                }, 100);
+                showingObserved();
+            });
+        });
+
+        QUnit.test('on resize', function(assert) {
+            const $overlayContent = this.instance.$overlayContent();
+            const $handle = $overlayContent.find('.dx-resizable-handle-right');
+            const pointer = pointerMock($handle);
+
+            pointer.start().dragStart().drag(100).dragEnd();
+
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+        });
+    });
+
+    QUnit.module('popup should be repositioned correctly after change height', {
+        beforeEach: function() {
+            this.getCenterY = (rect) => {
+                return (rect.bottom + rect.top) / 2;
+            };
+            this.popup = $('#popup').dxPopup({
+                visible: true,
+                height: 500,
+                contentTemplate: function($container) {
+                    return $('<div>').height(100);
+                }
+            }).dxPopup('instance');
+
+            this.contentElement = this.popup.$content().get(0);
+            this.initialContentRect = this.contentElement.getBoundingClientRect();
+        }
+    }, () => {
+        QUnit.test('from static to "auto"', function(assert) {
+            this.popup.option('height', 'auto');
+
+            const contentRect = this.contentElement.getBoundingClientRect();
+            assert.roughEqual(this.getCenterY(contentRect), this.getCenterY(this.initialContentRect), 0.51, 'popup is repositioned correctly');
+        });
+
+        QUnit.test('from static to function which returns "auto"', function(assert) {
+            this.popup.option('height', () => 'auto');
+
+            const contentRect = this.contentElement.getBoundingClientRect();
+            assert.roughEqual(this.getCenterY(contentRect), this.getCenterY(this.initialContentRect), 0.51, 'popup is repositioned correctly');
+        });
     });
 });
 
@@ -1124,39 +1189,40 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
-        const renderGeometrySpy = sinon.spy(this.instance, '_renderGeometry');
+        const positionedHandlerStub = sinon.stub();
+        this.instance.on('positioned', positionedHandlerStub);
 
         this.instance.option('toolbarItems[0].visible', true);
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for visibility option');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for visibility option');
 
         this.instance.option('toolbarItems', [{
             widget: 'dxButton',
             options: { text: 'Supprimer', type: 'danger' }
         }]);
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
 
         this.instance.option('toolbarItems[0]', {
             widget: 'dxButton',
             options: { text: 'Supprimer', type: 'danger' }
         });
 
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
     });
 
 
     QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
+        const positionedHandlerStub = sinon.stub();
         this.instance.option({
             visible: true,
             toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
         });
-
-        const renderGeometrySpy = sinon.spy(this.instance, '_renderGeometry');
+        this.instance.on('positioned', positionedHandlerStub);
 
         this.instance.option('toolbarItems[0].options', { text: 'test', disabled: true });
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called on partial update of a widget');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called on partial update of a widget');
 
         this.instance.option('toolbarItems[0].toolbar', 'top');
-        assert.ok(renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+        assert.ok(positionedHandlerStub.calledOnce, 'renderGeometry is called on item location changing');
     });
 
     QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
@@ -1780,8 +1846,10 @@ QUnit.module('templates', () => {
 
 QUnit.module('renderGeometry', () => {
     QUnit.test('option change', function(assert) {
+        this.positionedHandlerStub = sinon.stub();
         const instance = $('#popup').dxPopup({
-            visible: true
+            visible: true,
+            onPositioned: this.positionedHandlerStub
         }).dxPopup('instance');
         const options = instance.option();
         const newOptions = {
@@ -1794,18 +1862,29 @@ QUnit.module('renderGeometry', () => {
             useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
             useFlatToolbarButtons: !options.useFlatToolbarButtons
         };
-        const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
 
         for(const optionName in newOptions) {
-            const initialCallCount = renderGeometrySpy.callCount;
+            const initialCallCount = this.positionedHandlerStub.callCount;
 
             instance.option(optionName, newOptions[optionName]);
 
-            const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
-            assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
-            assert.notOk(isDimensionChanged);
+            assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
         }
 
         instance.hide();
+    });
+
+    QUnit.test('fullScreen option change to true should trigger positioned event', function(assert) {
+        const positionedHandlerStub = sinon.stub();
+
+        const instance = $('#popup').dxPopup({
+            visible: true
+        }).dxPopup('instance');
+        instance.on('positioned', positionedHandlerStub);
+
+        instance.option('fullScreen', true);
+
+        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is raised');
+        assert.deepEqual(positionedHandlerStub.getCall(0).args[0].position, { h: { location: 0 }, v: { location: 0 } }, 'parameter is correct');
     });
 });

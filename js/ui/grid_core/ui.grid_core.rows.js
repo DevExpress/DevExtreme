@@ -263,7 +263,6 @@ export const rowsModule = {
                     const rtlEnabled = that.option('rtlEnabled');
                     const isNativeScrolling = e.component.option('useNative');
 
-                    that._isScrollByEvent = !!e.event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
                     let scrollLeft = e.scrollOffset.left;
@@ -289,7 +288,7 @@ export const rowsModule = {
                     dxScrollableOptions.onScroll = scrollHandler;
 
                     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
-                    that._scrollableContainer = that._scrollable && that._scrollable._$container;
+                    that._scrollableContainer = that._scrollable && $(that._scrollable.container());
                 },
 
                 _renderLoadPanel: gridCoreUtils.renderLoadPanel,
@@ -1127,7 +1126,9 @@ export const rowsModule = {
                     this._scrollable && this._scrollable.dispose();
                 },
 
-                setScrollerSpacing: function() { }
+                setScrollerSpacing: function() { },
+
+                _restoreErrorRow: function() { }
             };
         })())
     }

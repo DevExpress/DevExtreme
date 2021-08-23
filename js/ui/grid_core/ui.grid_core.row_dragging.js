@@ -84,6 +84,10 @@ const RowDraggingExtender = {
                     togglePointerEventsStyle(false);
                     rowDragging.onDragEnd?.(e);
                 },
+                onAdd: (e) => {
+                    togglePointerEventsStyle(false);
+                    rowDragging.onAdd?.(e);
+                },
                 dropFeedbackMode: rowDragging.dropFeedbackMode,
                 onOptionChanged: (e) => {
                     const hasFixedSortable = this[sortableFixedName];
@@ -122,7 +126,7 @@ const RowDraggingExtender = {
             showColumnHeaders: false,
             scrolling: {
                 useNative: false,
-                showScrollbar: false
+                showScrollbar: 'never'
             },
             pager: {
                 visible: false

@@ -33,6 +33,7 @@ const Menu = require('ui/menu/ui.menu');
 const ContextMenu = require('ui/context_menu/ui.context_menu');
 const NumberBox = require('ui/number_box');
 const NavBar = require('ui/nav_bar');
+const Widget = require('ui/widget/ui.widget');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
 const RadioGroup = require('ui/radio_group');
@@ -258,7 +259,7 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'underlined'
+        stylingMode: 'filled'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -305,7 +306,7 @@ testComponentDefaults(DropDownButton, {}, {
     deferRendering: true,
     text: '',
     keyExpr: 'this',
-    displayExpr: 'this',
+    displayExpr: undefined,
     useSelectMode: false,
     wrapItemText: false,
     useItemTextAsTitle: true,
@@ -335,6 +336,18 @@ testComponentDefaults(DropDownList,
 );
 
 testComponentDefaults(List,
+    {},
+    { useNativeScrolling: false },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(TreeView,
     {},
     { useNativeScrolling: false },
     function() {
@@ -563,10 +576,48 @@ testComponentDefaults(Popup,
     }
 );
 
+testComponentDefaults(Widget,
+    {},
+    {
+        useResizeObserver: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: 'ios',
+            version: '13.3'
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
+    }
+);
+
+testComponentDefaults(Widget,
+    {},
+    {
+        useResizeObserver: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: 'android',
+            version: '4.4.4'
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
+    }
+);
+
 testComponentDefaults(Popover,
     {},
     {
-        position: 'bottom',
+        position: {
+            at: 'bottom center',
+            collision: 'fit flip',
+            my: 'top center'
+        },
         target: undefined,
         animation: {
             show: {

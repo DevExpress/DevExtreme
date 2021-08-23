@@ -445,8 +445,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._dataController.pageIndex(pageIndex + pageStep);
                 eventArgs.originalEvent.preventDefault();
             }
-        } else if(scrollable && scrollable._container().height() < scrollable.$content().height()) {
-            this._scrollBy(0, scrollable._container().height() * pageStep);
+        } else if(scrollable && $(scrollable.container()).height() < scrollable.$content().height()) {
+            this._scrollBy(0, $(scrollable.container()).height() * pageStep);
             eventArgs.originalEvent.preventDefault();
         }
     },
@@ -1066,7 +1066,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         this._isHiddenFocus = disableFocus;
 
-        if(isGroupRow($row) || this.isRowFocusType()) {
+        const isRowFocus = isGroupRow($row) || this.isRowFocusType();
+
+        if(isRowFocus) {
             $focusElement = $row;
             if(focusedView) {
                 this.setFocusedRowIndex(this._getRowIndex($row));
@@ -1095,6 +1097,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
             }
             if(disableFocus) {
                 $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
+                if(isRowFocus) {
+                    $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+                }
             } else {
                 this._editorFactory.focus($focusElement);
             }
@@ -1336,7 +1341,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     getVisibleRowIndex: function() {
         const rowIndex = this._focusedCellPosition && this._focusedCellPosition.rowIndex;
-        if(!isDefined(rowIndex)) {
+        if(!isDefined(rowIndex) || rowIndex < 0) {
             return -1;
         }
         return rowIndex - this._dataController.getRowIndexOffset();
@@ -1364,10 +1369,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return this._isCellValid($cell);
     },
     _isLastRow: function(rowIndex) {
+        const dataController = this._dataController;
+
         if(this._isVirtualRowRender()) {
-            return rowIndex >= this._dataController.totalItemsCount() - 1;
+            return rowIndex >= dataController.getMaxRowIndex();
         }
-        return rowIndex === this._dataController.items().length - 1;
+        return rowIndex === dataController.items().length - 1;
     },
     _isFirstValidCell: function(cellPosition) {
         let isFirstValidCell = false;
@@ -2166,6 +2173,16 @@ export const keyboardNavigationModule = {
                             editorFactory.refocus();
                         }
                     }
+                },
+                getMaxRowIndex: function() {
+                    let result = this.items().length - 1;
+                    const virtualItemsCount = this.virtualItemsCount();
+
+                    if(virtualItemsCount) {
+                        result += (virtualItemsCount.begin + virtualItemsCount.end);
+                    }
+
+                    return result;
                 }
             },
             adaptiveColumns: {

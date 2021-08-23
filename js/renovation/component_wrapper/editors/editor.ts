@@ -1,11 +1,14 @@
+import { isDefined } from '../../../core/utils/type';
 import Component from '../common/component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
-import $ from '../../../core/renderer';
+// eslint-disable-next-line import/named
+import $, { dxElementWrapper } from '../../../core/renderer';
 import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
 import { Option } from '../common/types';
+import { addAttributes, getAriaName } from '../utils/utils';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
@@ -50,6 +53,14 @@ export default class Editor extends Component {
     return props;
   }
 
+  setAria(name: string, value: string): void {
+    const attrName = getAriaName(name);
+    addAttributes(
+      this.$element() as unknown as dxElementWrapper,
+      [{ name: attrName, value }],
+    );
+  }
+
   _init(): void {
     super._init();
 
@@ -69,7 +80,7 @@ export default class Editor extends Component {
         validationMessageOffset: { h: 0, v: 0 },
         validationTooltipOptions: {},
       },
-    );
+    ) as Record<string, unknown>;
   }
 
   _bindInnerWidgetOptions(innerWidget: Component, optionsContainer: string): void {
@@ -78,6 +89,27 @@ export default class Editor extends Component {
 
     syncOptions();
     innerWidget.on('optionChanged', syncOptions);
+  }
+
+  _raiseValidation(value: unknown, previousValue: unknown): void {
+    const areValuesEmpty = !isDefined(value) && !isDefined(previousValue);
+
+    if (value !== previousValue && !areValuesEmpty) {
+      this.validationRequest.fire({
+        value,
+        editor: this,
+      });
+    }
+  }
+
+  _raiseValueChangeAction(value: unknown, previousValue: unknown): void {
+    this._valueChangeAction?.({
+      element: this.$element(),
+      previousValue,
+      value,
+      event: this._valueChangeEventInstance,
+    });
+    this._valueChangeEventInstance = undefined;
   }
 
   _optionChanged(option: Option): void {
@@ -89,12 +121,13 @@ export default class Editor extends Component {
 
     switch (name) {
       case 'value':
-        if (value !== previousValue) {
-          this.validationRequest.fire({
-            value,
-            editor: this,
-          });
-        }
+        this._raiseValidation(value, previousValue);
+        this._raiseValueChangeAction(value, previousValue);
+        break;
+      case 'onValueChanged':
+        this._valueChangeAction = this._createActionByOption('onValueChanged', {
+          excludeValidators: ['disabled', 'readOnly'],
+        });
         break;
       case 'isValid':
       case 'validationError':
@@ -127,5 +160,6 @@ export default class Editor extends Component {
 
 const prevIsEditor = (OldEditor as unknown as { isEditor: (instance: Component) => boolean })
   .isEditor;
-(OldEditor as unknown as { isEditor: (instance: Component) => boolean })
-  .isEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;
+const newIsEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;
+(Editor as unknown as { isEditor: (instance: Component) => boolean }).isEditor = newIsEditor;
+(OldEditor as unknown as { isEditor: (instance: Component) => boolean }).isEditor = newIsEditor;

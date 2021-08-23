@@ -1,28 +1,28 @@
 import {
-    animationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     DxEvent,
     Cancelable,
-    EventInfo
+    EventInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @namespace DevExpress.ui */
@@ -31,7 +31,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default { show: { type: "pop", duration: 300, from: { scale: 0.55 } }, hide: { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
      * @ref
-     * @default { show: { type: 'fade', duration: 400 }, hide: { type: 'fade', duration: 400, to: { opacity: 0 }, from: { opacity: 1 } }} [for](Android_below_version_4.2)
+     * @default { show: { type: 'fade', duration: 400 }, hide: { type: 'fade', duration: 400, to: { opacity: 0 }, from: { opacity: 1 } }} &for(Android_below_version_4.2)
      * @public
      * @type object
      */
@@ -52,6 +52,12 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @public
      */
     contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     copyRootClassesToWrapper?: boolean;
     /**
      * @docid
      * @default true
@@ -200,13 +206,13 @@ export interface dxOverlayAnimation {
      * @default { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxOverlayOptions.animation.show
      * @default { type: "pop", duration: 400, from: { scale: 0.55 } }
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

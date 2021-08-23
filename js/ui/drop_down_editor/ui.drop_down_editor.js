@@ -385,9 +385,9 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _integrateInput: function() {
-        this._refreshEvents();
-        this._refreshValueChangeEvent();
         this._renderFocusState();
+        this._refreshValueChangeEvent();
+        this._refreshEvents();
         this._refreshEmptinessEvent();
     },
 
@@ -567,9 +567,11 @@ const DropDownEditor = TextBox.inherit({
                 of: this.$element()
             }),
             showTitle: this.option('dropDownOptions.showTitle'),
+            _ignoreFunctionValueDeprecation: true,
             width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
+            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
             closeOnTargetScroll: true,
             closeOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
             animation: {

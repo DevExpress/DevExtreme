@@ -46,6 +46,8 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
       rtlEnabled, contentPaddingBottom,
+      containerHasSizes,
+      onLock, onUnlock,
     },
   } = viewModel;
 
@@ -67,6 +69,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       showScrollbar={showScrollbar}
       onScroll={onScroll}
       onEnd={onEnd}
+      containerHasSizes={containerHasSizes}
       // Horizontal
       rtlEnabled={rtlEnabled}
       // Vertical
@@ -81,6 +84,9 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       reachBottomEnabled={reachBottomEnabled}
       pocketState={pocketState}
       pocketStateChange={pocketStateChange}
+
+      onLock={onLock}
+      onUnlock={onUnlock}
     />
   );
 };
@@ -115,22 +121,22 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Method()
   getLocationWithinRange(value: number): number {
-    return this.scrollbar.getLocationWithinRange(value);
+    return this.scrollbar.getLocationWithinRange(value) as number;
   }
 
   @Method()
   getMinOffset(): number {
-    return this.scrollbar.getMinOffset();
+    return this.scrollbar.getMinOffset() as number;
   }
 
   @Method()
   validateEvent(event: DxMouseEvent): boolean {
-    return this.scrollbar.validateEvent(event);
+    return this.scrollbar.validateEvent(event) as boolean;
   }
 
   @Method()
   isThumb(element: EventTarget | null): boolean {
-    return this.scrollbar.isThumb(element);
+    return this.scrollbar.isThumb(element) as boolean;
   }
 
   @Method()
@@ -159,8 +165,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  endHandler(velocity: { x: number; y: number }): void {
-    this.scrollbar.endHandler(velocity);
+  endHandler(velocity: { x: number; y: number }, needRiseEnd: boolean): void {
+    this.scrollbar.endHandler(velocity, needRiseEnd);
   }
 
   @Method()
@@ -226,7 +232,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   /* istanbul ignore next */
   getStepAnimationFrame(): number {
-    return requestAnimationFrame(this.stepCore);
+    return requestAnimationFrame(this.stepCore.bind(this));
   }
 
   step(): void {
@@ -252,11 +258,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
       this.moveTo(boundaryLocation);
 
-      if (this.props.scrollLocation === boundaryLocation) {
-        this.scrollComplete();
-      }
+      // if (this.props.scrollLocation === boundaryLocation) {
+      this.stopAnimator('bounce');
+      // }
     } else {
-      this.scrollComplete();
+      this.stopAnimator('inertia');
     }
   }
 
@@ -307,7 +313,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   getMaxOffset(): number {
-    return this.scrollbar.getMaxOffset();
+    return this.scrollbar.getMaxOffset() as number;
   }
 
   scrollStep(delta: number): void {
@@ -315,11 +321,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(location: number): void {
-    this.scrollbar.moveTo(location);
+    this.scrollbar.moveTo(location) as undefined;
   }
 
-  scrollComplete(): void {
-    this.scrollbar.scrollComplete();
+  stopAnimator(animator: string): void {
+    this.scrollbar.stopAnimator(animator) as undefined;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

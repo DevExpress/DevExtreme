@@ -9,6 +9,7 @@ import './utils/test_components/options';
 import './utils/test_components/templated';
 import './utils/test_components/non_templated';
 import './utils/test_components/children';
+import './utils/test_components/invalid';
 import {
   defaultEvent,
   emitKeyboard,
@@ -16,10 +17,24 @@ import {
 } from '../../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../../core/element';
 import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
+import registerEvent from '../../../../events/core/event_registrator';
+import { one } from '../../../../events';
+import KeyboardProcessor from '../../../../events/core/keyboard_processor';
+
+const fakeEventSingleton = new class {
+  handlerCount = 0;
+
+  add() { this.handlerCount += 1; }
+
+  remove() { this.handlerCount -= 1; }
+}();
+
+registerEvent('dxFakeEvent', fakeEventSingleton);
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
   dxTestWidget: any;
+  dxInvalidTestWidget: any;
   dxOptionsTestWidget: any;
   dxTemplatedTestWidget: any;
   dxNonTemplatedTestWidget: any;
@@ -318,6 +333,14 @@ describe('Widget\'s container manipulations', () => {
       class: '',
       'data-custom-attr': 'attr-value',
     });
+  });
+
+  it('should convert elementAttr.style string to the cssText prop', () => {
+    const instance = $('#component')
+      .dxTestWidget({ elementAttr: { style: 'background-color: red;' } })
+      .dxTestWidget('instance');
+
+    expect(instance._viewRef.current.props.cssText).toStrictEqual('background-color: red;');
   });
 
   it('widget does not show className option', () => {
@@ -648,12 +671,25 @@ describe('templates and slots', () => {
     expect($template.text()).toBe('template text');
   });
 
+  it('should unsubscribe from all events for nested jquery components when disposing parent component', () => {
+    $('#component').dxTemplatedTestWidget({
+      template(_: never, element: Element) {
+        one(element, 'dxFakeEvent', () => {});
+        $(element).html('<span>Template content</span>');
+      },
+    });
+
+    $('#components').empty();
+
+    expect(fakeEventSingleton.handlerCount).toBe(0);
+  });
+
   it('pass anonymous template content as children', () => {
     $('#component').html('<span>Default slot</span>');
 
     $('#component').dxTemplatedTestWidget({});
 
-    expect(($('#component').children('') as any).length).toBe(1);
+    expect($('#component').children('').length).toBe(1);
     expect($('#component')[0].innerHTML).toBe('<span>Default slot</span>');
   });
 
@@ -997,6 +1033,26 @@ describe('registerKeyHandler', () => {
     expect(supportedKeys.enter()).toBe('custom enter handler');
     expect(supportedKeys.space()).toBe('custom space handler');
     expect(supportedKeys.arrowUp()).toBe('default arrow up handler');
+  });
+
+  it('should throw exception if the component has key handlers but does not have keyDown event', () => {
+    expect(() => $('#component').dxInvalidTestWidget({})).toThrow(
+      'Component\'s declaration must have \'keyDown\' method.',
+    );
+  });
+
+  it('Default key handlers should call keyDown method', () => {
+    const mockFunction = jest.fn();
+    const instance = $('#component').dxTestWidget({}).dxTestWidget('instance');
+    const supportedKeys = instance._supportedKeys();
+
+    instance._viewRef.current.keyDown = mockFunction;
+    supportedKeys.space(defaultEvent);
+
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+    expect(mockFunction).toHaveBeenCalledWith(
+      (KeyboardProcessor as any).createKeyDownOptions(defaultEvent),
+    );
   });
 
   it('call custom handler only', () => {

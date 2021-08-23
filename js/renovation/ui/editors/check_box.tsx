@@ -2,28 +2,28 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-  Method,
   OneWay,
   TwoWay,
   Ref,
   Effect,
-  Event,
-  ForwardRef,
   RefObject,
+  Fragment,
+  Method,
 } from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../../core/options/utils';
+import getElementComputedStyle from '../../utils/get_computed_style';
+import { isMaterial, current } from '../../../ui/themes';
 import devices from '../../../core/devices';
-import Guid from '../../../core/guid';
-import { Widget } from '../common/widget';
+import { Editor, EditorProps } from './internal/editor';
 import BaseComponent from '../../component_wrapper/editors/check_box';
-import { BaseWidgetProps } from '../common/base_props';
+import { normalizeStyleProp } from '../../../core/utils/style';
 import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return.d';
-import { ValidationMessage } from '../overlays/validation_message';
+import { hasWindow } from '../../../core/utils/window';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
-    text, readOnly, isValid, value,
+    text, value,
   } = model;
 
   const checked = value;
@@ -31,89 +31,86 @@ const getCssClasses = (model: CheckBoxProps): string => {
 
   const classesMap = {
     'dx-checkbox': true,
-    'dx-state-readonly': !!readOnly,
     'dx-checkbox-checked': checked === true,
     'dx-checkbox-has-text': !!text,
-    'dx-invalid': !isValid,
     'dx-checkbox-indeterminate': indeterminate,
   };
+
   return combineClasses(classesMap);
 };
 
 export const viewFunction = (viewModel: CheckBox): JSX.Element => {
-  const { text, name } = viewModel.props;
+  const {
+    props: {
+      text, name, value,
+      validationError, validationErrors, validationMessageMode, isValid, validationStatus,
+      accessKey, className, hint, tabIndex, rtlEnabled,
+      activeStateEnabled, hoverStateEnabled, focusStateEnabled,
+      disabled, readOnly, visible,
+      width, height,
+      onFocusIn,
+    },
+    iconRef, iconStyles,
+    restAttributes,
+    cssClasses: classes, aria,
+    onWidgetClick: onClick, keyDown: onKeyDown,
+    editorRef,
+  } = viewModel;
 
   return (
-    <Widget // eslint-disable-line jsx-a11y/no-access-key
-      ref={viewModel.widgetRef}
-      rootElementRef={viewModel.target}
-      accessKey={viewModel.props.accessKey}
-      activeStateEnabled={viewModel.props.activeStateEnabled}
-      className={viewModel.props.className}
-      classes={viewModel.cssClasses}
-      disabled={viewModel.props.disabled}
-      focusStateEnabled={viewModel.props.focusStateEnabled}
-      height={viewModel.props.height}
-      hint={viewModel.props.hint}
-      hoverStateEnabled={viewModel.props.hoverStateEnabled}
-      onFocusIn={viewModel.onFocusIn}
-      aria={viewModel.aria}
-      onClick={viewModel.onWidgetClick}
-      onKeyDown={viewModel.onWidgetKeyDown}
-      rtlEnabled={viewModel.props.rtlEnabled}
-      tabIndex={viewModel.props.tabIndex}
-      visible={viewModel.props.visible}
-      width={viewModel.props.width}
-      {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+    <Editor // eslint-disable-line jsx-a11y/no-access-key
+      ref={editorRef}
+      aria={aria}
+      classes={classes}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      accessKey={accessKey}
+      activeStateEnabled={activeStateEnabled}
+      focusStateEnabled={focusStateEnabled}
+      hoverStateEnabled={hoverStateEnabled}
+      className={className}
+      disabled={disabled}
+      readOnly={readOnly}
+      hint={hint}
+      height={height}
+      width={width}
+      rtlEnabled={rtlEnabled}
+      tabIndex={tabIndex}
+      visible={visible}
+      validationError={validationError}
+      validationErrors={validationErrors}
+      validationMessageMode={validationMessageMode}
+      validationStatus={validationStatus}
+      isValid={isValid}
+      onFocusIn={onFocusIn}
+      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
-      <div className="dx-checkbox-container">
-        <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
-        {text && (<span className="dx-checkbox-text">{text}</span>)}
-      </div>
-      {viewModel.showValidationMessage
-                && (
-                <ValidationMessage
-                  validationErrors={viewModel.validationErrors}
-                  mode={viewModel.props.validationMessageMode}
-                  positionRequest="below"
-                  rtlEnabled={viewModel.props.rtlEnabled}
-                  target={viewModel.targetCurrent}
-                  boundary={viewModel.targetCurrent}
-                  container={viewModel.targetCurrent}
-                />
-                )}
-    </Widget>
+      <Fragment>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <input type="hidden" value={`${value}`} {...name && { name }} />
+        <div className="dx-checkbox-container">
+          <span className="dx-checkbox-icon" ref={iconRef} style={iconStyles} />
+          {text && (<span className="dx-checkbox-text">{text}</span>)}
+        </div>
+      </Fragment>
+    </Editor>
   );
 };
 
 @ComponentBindings()
-export class CheckBoxProps extends BaseWidgetProps {
+export class CheckBoxProps extends EditorProps {
+  @OneWay() text = '';
+
+  @OneWay() iconSize?: number | string;
+
+  // overrides default value
   @OneWay() activeStateEnabled = true;
 
   @OneWay() hoverStateEnabled = true;
 
-  @OneWay() validationError: Record<string, unknown> | null = null;
-
-  @OneWay() validationErrors: Record<string, unknown>[] | null = null;
-
-  @OneWay() text = '';
-
-  @OneWay() validationMessageMode: 'auto' | 'always' = 'auto';
-
-  @OneWay() validationStatus: 'valid' | 'invalid' | 'pending' = 'valid';
-
-  @OneWay() name = '';
-
-  @OneWay() readOnly = false;
-
-  @OneWay() isValid = true;
-
   @TwoWay() value: boolean | null = false;
 
-  @Event() onFocusIn?: (e: Event) => void;
-
+  // private
   @OneWay() saveValueChangeEvent?: (event: Event) => void;
 }
 
@@ -132,33 +129,47 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
+  @Ref() editorRef!: RefObject<Editor>;
+
   @Ref() iconRef!: RefObject<HTMLDivElement>;
-
-  @Ref() inputRef!: RefObject<HTMLInputElement>;
-
-  @Ref() widgetRef!: RefObject<Widget>;
-
-  @ForwardRef() target!: RefObject<HTMLDivElement>;
-
-  showValidationMessage = false;
-
-  @Effect()
-  updateValidationMessageVisibility(): EffectReturn {
-    this.showValidationMessage = this.shouldShowValidationMessage;
-
-    return undefined;
-  }
 
   @Method()
   focus(): void {
-    this.widgetRef.current!.focus();
+    this.editorRef.current!.focus();
   }
 
-  onFocusIn(event: Event): void {
-    const { onFocusIn } = this.props;
+  @Method()
+  blur(): void {
+    this.editorRef.current!.blur();
+  }
 
-    // NOTE: pass to jQ wrapper
-    onFocusIn?.(event);
+  @Effect()
+  updateIconFontSize(): EffectReturn {
+    const iconElement = this.iconRef?.current;
+    const { iconSize } = this.props;
+
+    if (iconElement && hasWindow()) {
+      const isCompactTheme = current()?.includes('compact');
+      const defaultFontSize = isCompactTheme ? 12 : 16;
+      const isMaterialTheme = isMaterial(current());
+      let defaultIconSize = isMaterialTheme ? 18 : 22;
+      if (isCompactTheme) {
+        defaultIconSize = 16;
+      }
+      const iconFontSizeRatio = defaultFontSize / defaultIconSize;
+
+      const getIconComputedStyle = (): CSSStyleDeclaration => {
+        const computedStyle = getElementComputedStyle(iconElement) ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` } as CSSStyleDeclaration;
+        return computedStyle;
+      };
+
+      const computedIconSize = typeof iconSize === 'number' ? iconSize : parseInt(getIconComputedStyle().width, 10);
+      const computedFontSize = `${Math.ceil(computedIconSize * iconFontSizeRatio)}px`;
+
+      iconElement.style.fontSize = computedFontSize;
+    }
+
+    return undefined;
   }
 
   onWidgetClick(event: Event): void {
@@ -171,7 +182,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
   }
 
-  onWidgetKeyDown(e: {
+  keyDown(e: {
     originalEvent: Event & { cancel: boolean };
     keyName: string;
     which: string;
@@ -192,48 +203,26 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     return undefined;
   }
 
+  get iconStyles(): { [key: string]: string | number } {
+    const { iconSize } = this.props;
+    const width = normalizeStyleProp('width', iconSize);
+    const height = normalizeStyleProp('height', iconSize);
+
+    return { height, width };
+  }
+
   get cssClasses(): string {
     return getCssClasses(this.props);
   }
 
-  get shouldShowValidationMessage(): boolean {
-    const { isValid, validationStatus } = this.props;
-    const validationErrors = this.validationErrors ?? [];
-    return !isValid
-      && validationStatus === 'invalid'
-      && validationErrors.length > 0;
-  }
-
   get aria(): Record<string, string> {
-    const { readOnly, isValid } = this.props;
-    const checked = this.props.value === true;
-    const indeterminate = this.props.value === null;
+    const { value } = this.props;
+    const checked = value === true;
+    const indeterminate = value === null;
 
-    const result: Record<string, string> = {
+    return {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
-      readonly: readOnly ? 'true' : 'false',
-      invalid: !isValid ? 'true' : 'false',
     };
-
-    if (this.shouldShowValidationMessage) {
-      // eslint-disable-next-line spellcheck/spell-checker
-      result.describedby = `dx-${new Guid()}`;
-    }
-
-    return result;
-  }
-
-  get validationErrors(): Record<string, unknown>[] | null | undefined {
-    const { validationErrors, validationError } = this.props;
-    let allValidationErrors = validationErrors;
-    if (!allValidationErrors && validationError) {
-      allValidationErrors = [validationError];
-    }
-    return allValidationErrors;
-  }
-
-  get targetCurrent(): HTMLDivElement | null | undefined {
-    return this.target?.current;
   }
 }

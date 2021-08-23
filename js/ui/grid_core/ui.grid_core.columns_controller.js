@@ -976,6 +976,19 @@ export const columnsControllerModule = {
                 return columns;
             };
 
+            const strictParseNumber = function(text, format) {
+                const parsedValue = numberLocalization.parse(text, format);
+
+                if(isNumeric(parsedValue)) {
+                    const formattedValue = numberLocalization.format(parsedValue, format);
+                    const formattedValueWithDefaultFormat = numberLocalization.format(parsedValue);
+
+                    if(formattedValue === text || formattedValueWithDefaultFormat === text) {
+                        return parsedValue;
+                    }
+                }
+            };
+
             return {
                 _getExpandColumnOptions: function() {
                     return {
@@ -1112,7 +1125,6 @@ export const columnsControllerModule = {
                         case 'groupPanel':
                         case 'regenerateColumnsByVisibleItems':
                         case 'customizeColumns':
-                        case 'editing':
                         case 'columnHidingEnabled':
                         case 'dateSerializationFormat':
                         case 'columnResizingMode':
@@ -1120,16 +1132,7 @@ export const columnsControllerModule = {
                         case 'columnWidth': {
                             args.handled = true;
                             const ignoreColumnOptionNames = args.fullName === 'columnWidth' && ['width'];
-                            const isEditingPopup = args.fullName?.indexOf('editing.popup') === 0;
-                            const isEditingForm = args.fullName?.indexOf('editing.form') === 0;
-                            const isEditRowKey = args.fullName?.indexOf('editing.editRowKey') === 0;
-                            const isEditColumnName = args.fullName?.indexOf('editing.editColumnName') === 0;
-                            const isChanges = args.fullName?.indexOf('editing.changes') === 0;
-                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey && !isChanges && !isEditColumnName;
-
-                            if(needReinit) {
-                                this.reinit(ignoreColumnOptionNames);
-                            }
+                            this.reinit(ignoreColumnOptionNames);
                             break;
                         }
                         case 'rtlEnabled':
@@ -2309,11 +2312,7 @@ export const columnsControllerModule = {
 
                                     if(column.dataType === 'number') {
                                         if(isString(text) && column.format) {
-                                            parsedValue = numberLocalization.parse(text);
-
-                                            if(isNumeric(parsedValue)) {
-                                                result = parsedValue;
-                                            }
+                                            result = strictParseNumber(text.trim(), column.format);
                                         } else if(isDefined(text) && isNumeric(text)) {
                                             result = Number(text);
                                         }

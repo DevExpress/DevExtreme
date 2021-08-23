@@ -1,4 +1,4 @@
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -43,11 +43,11 @@ fixture`Scheduler: long appointments in month view`
       .expect(await compareScreenshot(t, `month-long-appointment-several-months-january(rtl=${rtlEnabled}).png`, scheduler.workSpace)).ok();
 
     await t
-      .click(scheduler.getNavigator().nextDuration)
+      .click(scheduler.getToolbar().getNavigator().nextDuration)
       .expect(await compareScreenshot(t, `month-long-appointment-several-months-february(rtl=${rtlEnabled}).png`, scheduler.workSpace)).ok();
 
     await t
-      .click(scheduler.getNavigator().nextDuration)
+      .click(scheduler.getToolbar().getNavigator().nextDuration)
       .expect(await compareScreenshot(t, `month-long-appointment-several-months-march(rtl=${rtlEnabled}).png`, scheduler.workSpace)).ok();
   }).before(async () => createWidget('dxScheduler', {
     dataSource: [{
@@ -69,7 +69,7 @@ test('Long recurrence appointment should display valid on month view', async (t)
     .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-january.png', scheduler.workSpace)).ok();
 
   await t
-    .click(scheduler.getNavigator().nextDuration)
+    .click(scheduler.getToolbar().getNavigator().nextDuration)
     .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-february.png', scheduler.workSpace)).ok();
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [{

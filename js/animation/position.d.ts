@@ -1,13 +1,14 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 /**
  * @docid
  * @namespace DevExpress
  * @type object
+ * @public
  */
-export interface positionConfig {
+export interface PositionConfig {
     /**
      * @docid
      * @type Enums.PositionAlignment|object
@@ -18,12 +19,12 @@ export interface positionConfig {
        * @docid
        * @type Enums.HorizontalAlignment
        */
-      x?: 'center' | 'left' | 'right',
+      x?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @type Enums.VerticalAlignment
        */
-      y?: 'bottom' | 'center' | 'top'
+      y?: 'bottom' | 'center' | 'top';
     };
     /**
      * @docid
@@ -39,12 +40,12 @@ export interface positionConfig {
        * @docid
        * @default 0
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        * @default 0
        */
-      y?: number
+      y?: number;
     };
     /**
      * @docid
@@ -57,13 +58,13 @@ export interface positionConfig {
        * @type Enums.PositionResolveCollision
        * @default 'none'
        */
-      x?: 'fit' | 'flip' | 'flipfit' | 'none',
+      x?: 'fit' | 'flip' | 'flipfit' | 'none';
       /**
        * @docid
        * @type Enums.PositionResolveCollision
        * @default 'none'
        */
-      y?: 'fit' | 'flip' | 'flipfit' | 'none'
+      y?: 'fit' | 'flip' | 'flipfit' | 'none';
     };
     /**
      * @docid
@@ -75,12 +76,12 @@ export interface positionConfig {
        * @docid
        * @type Enums.HorizontalAlignment
        */
-      x?: 'center' | 'left' | 'right',
+      x?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @type Enums.VerticalAlignment
        */
-      y?: 'bottom' | 'center' | 'top'
+      y?: 'bottom' | 'center' | 'top';
     };
     /**
      * @docid
@@ -96,11 +97,17 @@ export interface positionConfig {
        * @docid
        * @default 0
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        * @default 0
        */
-      y?: number
+      y?: number;
     };
 }
+
+/**
+ * @public
+ * @deprecated Use the PositionConfig type instead
+ */
+export interface positionConfig extends PositionConfig { }

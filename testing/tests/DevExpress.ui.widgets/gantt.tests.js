@@ -23,6 +23,7 @@ import './ganttParts/rootValue.tests.js';
 import './ganttParts/fullScreenMode.tests.js';
 import './ganttParts/repaint.tests.js';
 import './ganttParts/validateDependencies.tests.js';
+import './ganttParts/sorting.tests.js';
 
 
 QUnit.testStart(() => {

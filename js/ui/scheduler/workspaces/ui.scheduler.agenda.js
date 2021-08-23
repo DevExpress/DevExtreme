@@ -16,9 +16,10 @@ import {
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
 import { getPathToLeaf } from '../resources/utils';
-import { calculateStartViewDate } from './utils/agenda';
-import { formatWeekday, getVerticalGroupCountClass } from './utils/base';
+import { calculateStartViewDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
+import { formatWeekday, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
+import dateUtils from '../../../core/utils/date';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -39,6 +40,10 @@ class SchedulerAgenda extends WorkSpace {
     get type() { return VIEWS.AGENDA; }
 
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
+
+    getStartViewDate() {
+        return this._startViewDate;
+    }
 
     _init() {
         super._init();
@@ -115,10 +120,6 @@ class SchedulerAgenda extends WorkSpace {
 
     _getTimePanelRowCount() {
         return this.option('agendaDuration');
-    }
-
-    _getFormat() {
-        return 'd ddd';
     }
 
     _renderAllDayPanel() { return noop(); }
@@ -465,12 +466,6 @@ class SchedulerAgenda extends WorkSpace {
             this.option('currentDate'));
     }
 
-    preRenderAppointments(options) {
-        super.preRenderAppointments(options);
-
-        this._calculateRows(options.appointments);
-    }
-
     onDataSourceChanged(appointments) {
         super.onDataSourceChanged();
 
@@ -548,6 +543,10 @@ class SchedulerAgenda extends WorkSpace {
     renovatedRenderSupported() { return false; }
 
     _setSelectedCellsByCellData() {}
+
+    _getIntervalDuration() {
+        return dateUtils.dateToMilliseconds('day') * this.option('intervalCount');
+    }
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);

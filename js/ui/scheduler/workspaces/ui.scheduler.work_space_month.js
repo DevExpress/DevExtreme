@@ -3,15 +3,13 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
-
+import { utils } from '../utils';
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
-    calculateStartViewDate,
     getViewStartByOptions,
-    calculateCellIndex,
     getCellText,
-} from './utils/month';
-import { formatWeekday } from './utils/base';
+} from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
+import { calculateDayDuration, formatWeekday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -20,29 +18,14 @@ const DATE_TABLE_CURRENT_DATE_CLASS = 'dx-scheduler-date-table-current-date';
 const DATE_TABLE_CELL_TEXT_CLASS = 'dx-scheduler-date-table-cell-text';
 const DATE_TABLE_FIRST_OF_MONTH_CLASS = 'dx-scheduler-date-table-first-of-month';
 const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
-const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
-
-const DAYS_IN_WEEK = 7;
 
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     get type() { return VIEWS.MONTH; }
 
-    get isDateAndTimeView() {
-        return false;
-    }
-
     _getElementClass() {
         return MONTH_CLASS;
-    }
-
-    _getRowCount() {
-        return this._isWorkSpaceWithCount() ? 4 * this.option('intervalCount') + 2 : 6;
-    }
-
-    _getCellCount() {
-        return DAYS_IN_WEEK;
     }
 
     _getFormat() {
@@ -59,9 +42,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _getDateGenerationOptions() {
         return {
             ...super._getDateGenerationOptions(),
-            columnsInDay: 1,
             cellCountInDay: 1,
-            calculateCellIndex,
         };
     }
 
@@ -81,11 +62,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         });
     }
 
-    _getHiddenInterval() {
-        return 0;
-    }
-
-
     _insertAllDayRowsIntoDateTable() {
         return false;
     }
@@ -101,22 +77,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _needCreateCrossScrolling() {
         return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
-    }
-
-    _setVisibilityDates() {
-        const date = this._getViewStartByOptions();
-        this._minVisibleDate = new Date(date.setDate(1));
-        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option('intervalCount'))).setDate(0));
-    }
-
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this.option('intervalCount'),
-            this.option('firstDayOfWeek'),
-        );
     }
 
     _getViewStartByOptions() {
@@ -137,7 +97,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     getCellDuration() {
-        return this._calculateDayDuration() * 3600000;
+        return calculateDayDuration(this.option('startDayHour'), this.option('endDayHour')) * 3600000;
     }
 
     getIntervalDuration() {
@@ -190,16 +150,13 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     scrollToTime() { return noop(); }
 
-    _getRowCountWithAllDayRows() {
-        return this._getRowCount();
-    }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
 
     renderRDateTable() {
-        this.renderRComponent(
+        utils.renovation.renderComponent(
+            this,
             this._$dateTable,
             dxrMonthDateTableLayout,
             'renovatedDateTable',
@@ -211,10 +168,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     // We need these methods for now but they are useless for renovation
     // -------------
 
-    _toggleFixedScrollableClass() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
-    }
-
     _createWorkSpaceElements() {
         if(this._isVerticalGroupedWorkSpace()) {
             this._createWorkSpaceScrollableElements();
@@ -223,7 +176,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         }
     }
 
-    _getTableAllDay() { return noop(); } //
     _toggleAllDayVisibility() { return noop(); }
     _changeAllDayVisibility() { return noop(); }
 

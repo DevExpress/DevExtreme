@@ -15,6 +15,8 @@ export class ScrollbarProps {
 
   @OneWay() containerSize = 0;
 
+  @OneWay() containerHasSizes = false;
+
   @OneWay() contentSize = 0;
 
   @OneWay() topPocketSize = 0;
@@ -36,6 +38,10 @@ export class ScrollbarProps {
   @Event() onAnimatorStart?: (animator: 'inertia' | 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
   @Event() onAnimatorCancel?: EventCallback;
+
+  @Event() onLock?: EventCallback;
+
+  @Event() onUnlock?: EventCallback;
 
   @Event() onPullDown?: EventCallback;
 

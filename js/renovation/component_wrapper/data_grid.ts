@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { isPlainObject } from '../../core/utils/type';
 import { getPathParts } from '../../core/utils/data';
 import Component, { ComponentWrapperProps } from './common/component';
 import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
@@ -6,6 +7,7 @@ import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent, Option } from './common/types';
 import type { ExcelCellInfo, Export, OptionChangedEvent } from '../../ui/data_grid';
+import { getUpdatedOptions } from '../ui/grids/data_grid/utils/get_updated_options';
 
 import { themeReadyCallback } from '../../ui/themes_callback';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
@@ -38,7 +40,7 @@ export default class DataGridWrapper extends Component {
 
     if (internalInstance) {
       if (state === undefined) {
-        return internalInstance.state();
+        return internalInstance.state() as Record<string, unknown>;
       }
       internalInstance.state(state);
     }
@@ -88,7 +90,15 @@ export default class DataGridWrapper extends Component {
         // TODO remove when silent assign will be removed from editing
         updatePropsImmutable(prevProps, this.option(), name, name);
       }
-      updatePropsImmutable(prevProps, this.option(), name, fullName);
+
+      if (isPlainObject(prevValue) && isPlainObject(value)) {
+        const updatedOptions = getUpdatedOptions(prevValue, value);
+        updatedOptions.forEach((item) => {
+          updatePropsImmutable(prevProps, this.option(), name, `${fullName}.${item.path}`);
+        });
+      } else {
+        updatePropsImmutable(prevProps, this.option(), name, fullName);
+      }
 
       (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
     }
@@ -96,9 +106,13 @@ export default class DataGridWrapper extends Component {
 
   _optionChanged(e: Option): void {
     const internalInstance = this._getInternalInstance();
-    if (internalInstance && e.fullName === 'dataSource' && e.value === internalInstance.option('dataSource')) {
-      internalInstance.option('dataSource', e.value as string);
-    }
+    ['dataSource', 'editing.changes'].forEach((fullName) => {
+      if (internalInstance
+        && e.fullName === fullName
+        && e.value === internalInstance.option(fullName)) {
+        internalInstance.option(fullName, e.value as string);
+      }
+    });
     super._optionChanged(e);
   }
 
@@ -122,8 +136,9 @@ export default class DataGridWrapper extends Component {
 
     if (originalCustomizeExcelCell) {
       exportOptions.customizeExcelCell = (e: ExcelCellInfo): void => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         (e as any).component = this;
+
         return originalCustomizeExcelCell(e);
       };
     }
@@ -143,9 +158,10 @@ export default class DataGridWrapper extends Component {
 
   _renderWrapper(props: Record<string, unknown>): void {
     const isFirstRender = !this._isNodeReplaced;
+
     super._renderWrapper(props);
     if (isFirstRender) {
-      this._getInternalInstance().on('optionChanged', this._internalOptionChangedHandler.bind(this));
+      this._getInternalInstance()?.on('optionChanged', this._internalOptionChangedHandler.bind(this));
     }
   }
 

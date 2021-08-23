@@ -60,6 +60,8 @@ export interface Device {
     version?: Array<number>;
 }
 
+type EventName = 'orientationChanged';
+
 /**
  * @docid
  * @publicName devices
@@ -70,7 +72,7 @@ export interface Device {
  * @public
  */
 declare class DevicesObject {
-    constructor(options: { window?: Window });
+    constructor(options?: { window?: Window });
     /**
      * @docid
      * @publicName current()
@@ -92,7 +94,7 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -101,7 +103,7 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -110,7 +112,7 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -118,14 +120,14 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    on(events: any): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * @docid
      * @publicName orientation()
      * @return String
      * @public
      */
-    orientation(): string;
+    orientation(): 'portrait' | 'landscape' | undefined;
     /**
      * @docid
      * @publicName real()

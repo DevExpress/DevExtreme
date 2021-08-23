@@ -1,5 +1,5 @@
 import {
-  DxElement
+  DxElement,
 } from './element';
 
 /** @namespace DevExpress */
@@ -19,9 +19,10 @@ export interface ComponentOptions<TComponent> {
    * @type_function_param1_field1 component:this
    * @type_function_param1_field2 element:DxElement
    * @default null
+   * @action
    * @public
    */
-  onInitialized?: ((e: { component?: TComponent, element?: DxElement }) => void);
+  onInitialized?: ((e: { component?: TComponent; element?: DxElement }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -33,7 +34,7 @@ export interface ComponentOptions<TComponent> {
    * @action
    * @public
    */
-  onOptionChanged?: ((e: { component?: TComponent, name?: string, fullName?: string, value?: any }) => void);
+  onOptionChanged?: ((e: { component?: TComponent; name?: string; fullName?: string; value?: any }) => void);
 }
 /**
  * @docid Component
@@ -97,7 +98,7 @@ export class Component<TProperties> {
    * @return this
    * @public
    */
-  on(events: any): this;
+  on(events: { [key: string]: Function }): this;
   /**
    * @docid
    * @publicName option()

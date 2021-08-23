@@ -12,7 +12,7 @@ import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { Event as dxEvent } from '../../events/index';
-import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
+import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
 
 import QuillRegistrator from './quill_registrator';
@@ -415,6 +415,20 @@ const HtmlEditor = Editor.inherit({
         return this._$htmlContainer;
     },
 
+    _tableResizingOptionChanged: function(args) {
+        const tableResizingModule = this._quillInstance?.getModule('tableResizing');
+        const shouldPassOptionsToModule = Boolean(tableResizingModule);
+
+        if(shouldPassOptionsToModule) {
+            const optionData = args.fullName?.split('.');
+            const optionName = optionData.length === 2 ? optionData[1] : args.name;
+
+            tableResizingModule.option(optionName, args.value);
+        } else {
+            this._invalidate();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'value':
@@ -437,9 +451,11 @@ const HtmlEditor = Editor.inherit({
             case 'variables':
             case 'toolbar':
             case 'mentions':
-            case 'tableResizing':
             case 'customizeModules':
                 this._invalidate();
+                break;
+            case 'tableResizing':
+                this._tableResizingOptionChanged(args);
                 break;
             case 'valueType': {
                 this._prepareConverters();

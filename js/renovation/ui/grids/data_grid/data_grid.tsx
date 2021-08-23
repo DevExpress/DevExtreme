@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  JSXComponent, Component, Method, Effect, Mutable, RefObject, Ref, InternalState,
+  JSXComponent, Component, Method, Effect, Mutable, RefObject, ForwardRef, InternalState,
 } from '@devextreme-generator/declarations';
 import {
   DataGridProps,
@@ -22,6 +22,7 @@ import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
 import { createDefaultOptionRules } from '../../../../core/options/utils';
 import devices from '../../../../core/devices';
+import browser from '../../../../core/utils/browser';
 import { isMaterial, current } from '../../../../ui/themes';
 
 const aria = { role: 'presentation' };
@@ -55,6 +56,7 @@ export const viewFunction = ({
   onHoverStart,
   onHoverEnd,
   onDimensionChanged,
+  onVisibilityChange,
   props: {
     accessKey,
     activeStateEnabled,
@@ -91,6 +93,7 @@ export const viewFunction = ({
     onHoverStart={onHoverStart}
     onHoverEnd={onHoverEnd}
     onDimensionChanged={onDimensionChanged}
+    onVisibilityChange={onVisibilityChange}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
@@ -124,6 +127,12 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
     },
   },
 },
+{
+  device: () => browser.webkit === true,
+  options: {
+    loadingTimeout: 30, // T344031
+  },
+},
 ]);
 @Component({
   defaultOptionRules,
@@ -131,7 +140,7 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
-  @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
+  @ForwardRef() widgetElementRef?: RefObject<HTMLDivElement>;
 
   @Mutable() instance!: GridInstance;
 
@@ -558,7 +567,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onInitialized: (e) => {
+      onInitialized: (e: { component: GridInstance }) => {
         this.instance = e.component;
 
         (onInitialized as (e: unknown) => void)?.(e);
@@ -640,5 +649,11 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   onDimensionChanged(): void {
     this.instance?.updateDimensions(true);
+  }
+
+  onVisibilityChange(visible: boolean): void {
+    if (visible) {
+      this.instance?.updateDimensions();
+    }
   }
 }

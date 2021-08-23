@@ -344,12 +344,13 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-lookup {
       height: auto;
-    }
 
-    .dx-lookup-field {
-      padding-left: $material-grid-base-cell-horizontal-padding;
-      padding-top: $material-grid-base-cell-vertical-padding;
-      padding-bottom: $material-grid-base-cell-vertical-padding;
+      .dx-lookup-field {
+        padding-left: $material-grid-base-cell-horizontal-padding;
+        padding-top: $material-grid-base-cell-vertical-padding;
+        padding-bottom: $material-grid-base-cell-vertical-padding;
+        font-size: $material-grid-base-cell-font-size;
+      }
     }
 
     .dx-dropdowneditor-button-visible.dx-dropdowneditor {
@@ -940,8 +941,9 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
-      border-top: 1px solid $datagrid-cell-modified-border-color;
-      border-bottom: 1px solid $datagrid-cell-modified-border-color;
+      border-top: 1px solid $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      color: $datagrid-cell-removed-text-color;
     }
 
     .dx-adaptive-detail-row {
@@ -1111,6 +1113,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
+    background-color: $datagrid-base-background-color;
   }
 
   .dx-#{$widget-name}-summary-item {

@@ -1,7 +1,18 @@
 import dateUtils from '../../../../core/utils/date';
-import { getHeaderCellText, formatWeekdayAndDay } from '../utils/base';
+import { getGroupCount } from '../../resources/utils';
+import {
+    getHeaderCellText,
+    formatWeekdayAndDay,
+    getHorizontalGroupCount,
+    getTotalCellCountByCompleteData,
+    getDisplayedCellCount,
+} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 export class DateHeaderDataGenerator {
+    constructor(viewDataGenerator) {
+        this._viewDataGenerator = viewDataGenerator;
+    }
+
     getCompleteDateHeaderMap(options, completeViewDataMap) {
         const {
             isGenerateWeekDaysHeaderData,
@@ -23,14 +34,28 @@ export class DateHeaderDataGenerator {
 
     _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
         const {
-            groupByDate,
-            horizontalGroupCount,
-            cellCountInDay,
-            daysInView,
+            isGroupedByDate,
+            groups,
+            groupOrientation,
+            startDayHour,
+            endDayHour,
+            hoursInterval,
+            isHorizontalGrouping,
+            intervalCount,
         } = options;
 
+        const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+        const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
+        const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
+
+        const groupCount = getGroupCount(groups);
+        const datesRepeatCount = isHorizontalGrouping && !isGroupedByDate
+            ? groupCount
+            : 1;
+
+        const daysInGroup = this._viewDataGenerator.daysInInterval * intervalCount;
+        const daysInView = daysInGroup * datesRepeatCount;
 
         const weekDaysRow = [];
 
@@ -52,23 +77,34 @@ export class DateHeaderDataGenerator {
     _generateHeaderDateRow(options, completeViewDataMap) {
         const {
             today,
-            groupByDate,
-            horizontalGroupCount,
-            cellCountInGroupRow,
+            isGroupedByDate,
             groupOrientation,
+            groups,
             headerCellTextFormat,
             getDateForHeaderText,
             interval,
             startViewDate,
             startDayHour,
-            cellCountInDay,
+            endDayHour,
+            hoursInterval,
+            intervalCount,
+            currentDate,
+            viewType,
         } = options;
 
+        const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const colSpan = groupByDate ? horizontalGroupCount : 1;
+        const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
+        const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
+        const cellCountInDay = this._viewDataGenerator.getCellCountInDay(
+            startDayHour, endDayHour, hoursInterval,
+        );
 
-        const slicedByColumnsData = groupByDate
+        const slicedByColumnsData = isGroupedByDate
             ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
             : completeViewDataMap[index];
 
@@ -98,18 +134,20 @@ export class DateHeaderDataGenerator {
                 text,
                 today: dateUtils.sameDate(startDate, today),
                 colSpan,
-                isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
-                isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
+                isFirstGroupCell: isGroupedByDate || (isFirstGroupCell && !isVerticalGrouping),
+                isLastGroupCell: isGroupedByDate || (isLastGroupCell && !isVerticalGrouping),
             });
         });
     }
 
-    generateDateHeaderData(completeDateHeaderMap, options) {
+    generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options) {
         const {
             isGenerateWeekDaysHeaderData,
-            cellCountInDay,
             cellWidth,
             isProvideVirtualCellsWidth,
+            startDayHour,
+            endDayHour,
+            hoursInterval
         } = options;
 
         const dataMap = [];
@@ -120,7 +158,10 @@ export class DateHeaderDataGenerator {
             weekDayRowConfig = this._generateDateHeaderDataRow(
                 options,
                 completeDateHeaderMap,
-                cellCountInDay,
+                completeViewDataMap,
+                this._viewDataGenerator.getCellCountInDay(
+                    startDayHour, endDayHour, hoursInterval,
+                ),
                 0,
                 validCellWidth,
             );
@@ -131,6 +172,7 @@ export class DateHeaderDataGenerator {
         const datesRowConfig = this._generateDateHeaderDataRow(
             options,
             completeDateHeaderMap,
+            completeViewDataMap,
             1,
             isGenerateWeekDaysHeaderData ? 1 : 0,
             validCellWidth,
@@ -151,19 +193,29 @@ export class DateHeaderDataGenerator {
         };
     }
 
-    _generateDateHeaderDataRow(options, completeDateHeaderMap, baseColSpan, rowIndex, cellWidth) {
+    _generateDateHeaderDataRow(
+        options,
+        completeDateHeaderMap,
+        completeViewDataMap,
+        baseColSpan,
+        rowIndex,
+        cellWidth,
+    ) {
         const {
-            groupByDate,
-            horizontalGroupCount,
             startCellIndex,
             cellCount,
-            totalCellCount,
             isProvideVirtualCellsWidth,
+            groups,
+            groupOrientation,
+            isGroupedByDate,
         } = options;
 
-        const colSpan = groupByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+        const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
+        const colSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
         const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
-        const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+        const displayedCellCount = getDisplayedCellCount(cellCount, completeViewDataMap);
+        const actualCellCount = Math.ceil((startCellIndex + displayedCellCount) / colSpan);
+        const totalCellCount = getTotalCellCountByCompleteData(completeViewDataMap);
 
         const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
 

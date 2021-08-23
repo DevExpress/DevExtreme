@@ -1,24 +1,159 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from '../../data/abstract_store';
 
 import DataSource from '../../data/data_source';
 
 import {
-    dxPivotGridSummaryCell
-} from '../pivot_grid';
-
-import {
-    format
-} from '../widget/ui.widget';
+    Format,
+  } from '../../localization';
 
 import XmlaStore, {
-    XmlaStoreOptions
+    XmlaStoreOptions,
 } from './xmla_store';
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+interface dxPivotGridSummaryCell {
+    /**
+     * @docid
+     * @publicName child(direction, fieldValue)
+     * @param1 direction:string
+     * @param2 fieldValue:number|string
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    child(direction: string, fieldValue: number | string): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName children(direction)
+     * @param1 direction:string
+     * @return Array<dxPivotGridSummaryCell>
+     * @public
+     */
+    children(direction: string): Array<dxPivotGridSummaryCell>;
+    /**
+     * @docid
+     * @publicName field(area)
+     * @param1 area:string
+     * @return PivotGridDataSourceOptions.fields
+     * @public
+     */
+    field(area: string): Field;
+    /**
+     * @docid
+     * @publicName grandTotal()
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    grandTotal(): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName grandTotal(direction)
+     * @param1 direction:string
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    grandTotal(direction: string): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName isPostProcessed(field)
+     * @param1 field:PivotGridDataSourceOptions.fields|string
+     * @return boolean
+     * @public
+     */
+    isPostProcessed(field: Field | string): boolean;
+    /**
+     * @docid
+     * @publicName next(direction)
+     * @param1 direction:string
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    next(direction: string): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName next(direction, allowCrossGroup)
+     * @param1 direction:string
+     * @param2 allowCrossGroup:bool
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    next(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName parent(direction)
+     * @param1 direction:string
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    parent(direction: string): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName prev(direction)
+     * @param1 direction:string
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    prev(direction: string): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName prev(direction, allowCrossGroup)
+     * @param1 direction:string
+     * @param2 allowCrossGroup:bool
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    prev(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName slice(field, value)
+     * @param1 field:PivotGridDataSourceOptions.fields
+     * @param2 value:number|string
+     * @return dxPivotGridSummaryCell
+     * @public
+     */
+    slice(field: Field, value: number | string): dxPivotGridSummaryCell;
+    /**
+     * @docid
+     * @publicName value()
+     * @return any
+     * @public
+     */
+    value(): any;
+    /**
+     * @docid
+     * @publicName value(field)
+     * @param1 field:PivotGridDataSourceOptions.fields|string
+     * @return any
+     * @public
+     */
+    value(field: Field | string): any;
+    /**
+     * @docid
+     * @publicName value(field, postProcessed)
+     * @param1 field:PivotGridDataSourceOptions.fields|string
+     * @param2 postProcessed:boolean
+     * @return any
+     * @public
+     */
+    value(field: Field | string, postProcessed: boolean): any;
+    /**
+     * @docid
+     * @publicName value(postProcessed)
+     * @param1 postProcessed:boolean
+     * @return any
+     * @public
+     */
+    value(postProcessed: boolean): any;
+}
 
 /** @namespace DevExpress.data */
 export interface PivotGridDataSourceOptions {
@@ -28,7 +163,7 @@ export interface PivotGridDataSourceOptions {
      * @default undefined
      * @public
      */
-    fields?: Array<PivotGridDataSourceField>;
+    fields?: Array<Field>;
     /**
      * @docid
      * @type Filter expression
@@ -47,7 +182,7 @@ export interface PivotGridDataSourceOptions {
      * @action
      * @public
      */
-    onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => void);
+    onFieldsPrepared?: ((fields: Array<Field>) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -89,16 +224,26 @@ export interface PivotGridDataSourceOptions {
        * @docid
        * @type Enums.PivotGridStoreType
        */
-      type?: 'array' | 'local' | 'odata' | 'xmla'
+      type?: 'array' | 'local' | 'odata' | 'xmla';
     }> | {
       /**
        * @docid
        * @type Enums.PivotGridStoreType
        */
-      type?: 'array' | 'local' | 'odata' | 'xmla'
+      type?: 'array' | 'local' | 'odata' | 'xmla';
     };
 }
-/** @namespace DevExpress.data */
+
+/**
+ * @public
+ * @namespace DevExpress.data.PivotGridDataSource
+ */
+export type Field = PivotGridDataSourceField;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Field instead
+ */
 export interface PivotGridDataSourceField {
     /**
      * @docid PivotGridDataSourceOptions.fields.allowCrossGroupCalculation
@@ -152,7 +297,7 @@ export interface PivotGridDataSourceField {
      * @type_function_param1_field3 totalValue:any
      * @public
      */
-    calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => void);
+    calculateCustomSummary?: ((options: { summaryProcess?: string; value?: any; totalValue?: any }) => void);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
      * @type_function_param1 e:dxPivotGridSummaryCell
@@ -175,7 +320,7 @@ export interface PivotGridDataSourceField {
      * @type_function_return string
      * @public
      */
-    customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
+    customizeText?: ((cellInfo: { value?: string | number | Date; valueText?: string }) => string);
     /**
      * @docid PivotGridDataSourceOptions.fields.dataField
      * @default undefined
@@ -219,7 +364,7 @@ export interface PivotGridDataSourceField {
      * @default ''
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupIndex
      * @default undefined
@@ -243,7 +388,7 @@ export interface PivotGridDataSourceField {
      * @docid PivotGridDataSourceOptions.fields.headerFilter
      * @public
      */
-    headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
+    headerFilter?: { allowSearch?: boolean; height?: number; width?: number };
     /**
      * @docid PivotGridDataSourceOptions.fields.isMeasure
      * @default undefined
@@ -326,7 +471,7 @@ export interface PivotGridDataSourceField {
      * @default undefined
      * @public
      */
-    sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
+    sortingMethod?: ((a: { value?: string | number; children?: Array<any> }, b: { value?: string | number; children?: Array<any> }) => number);
     /**
      * @docid PivotGridDataSourceOptions.fields.summaryDisplayMode
      * @type Enums.PivotGridSummaryDisplayMode
@@ -396,7 +541,7 @@ export default class PivotGridDataSource {
      * @return DataSource
      * @public
      */
-    createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
+    createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>; rowPath?: Array<string | number | Date>; dataIndex?: number; maxRowCount?: number; customColumns?: Array<string> }): DataSource;
     /**
      * @docid
      * @publicName dispose()
@@ -440,14 +585,14 @@ export default class PivotGridDataSource {
      * @return Array<PivotGridDataSourceOptions.fields>
      * @public
      */
-    fields(): Array<PivotGridDataSourceField>;
+    fields(): Array<Field>;
     /**
      * @docid
      * @publicName fields(fields)
      * @param1 fields:Array<PivotGridDataSourceOptions.fields>
      * @public
      */
-    fields(fields: Array<PivotGridDataSourceField>): void;
+    fields(fields: Array<Field>): void;
     /**
      * @docid
      * @publicName filter()
@@ -470,7 +615,7 @@ export default class PivotGridDataSource {
      * @return Array<PivotGridDataSourceOptions.fields>
      * @public
      */
-    getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
+    getAreaFields(area: string, collectGroups: boolean): Array<Field>;
     /**
      * @docid
      * @publicName getData()
@@ -499,7 +644,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -508,7 +653,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -517,7 +662,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -525,7 +670,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    on(events: any): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * @docid
      * @publicName reload()
@@ -548,3 +693,5 @@ export default class PivotGridDataSource {
      */
     state(state: any): void;
 }
+
+type EventName = 'changed' | 'fieldsPrepared' | 'loadError' | 'loadingChanged';

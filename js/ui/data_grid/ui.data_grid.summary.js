@@ -385,15 +385,15 @@ gridCore.registerModule('summary', {
                 skipEmptyValues: true,
                 recalculateWhileEditing: false,
                 texts: {
-                    sum: messageLocalization.getFormatter('dxDataGrid-summarySum'),
-                    sumOtherColumn: messageLocalization.getFormatter('dxDataGrid-summarySumOtherColumn'),
-                    min: messageLocalization.getFormatter('dxDataGrid-summaryMin'),
-                    minOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMinOtherColumn'),
-                    max: messageLocalization.getFormatter('dxDataGrid-summaryMax'),
-                    maxOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMaxOtherColumn'),
-                    avg: messageLocalization.getFormatter('dxDataGrid-summaryAvg'),
-                    avgOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryAvgOtherColumn'),
-                    count: messageLocalization.getFormatter('dxDataGrid-summaryCount')
+                    sum: messageLocalization.format('dxDataGrid-summarySum'),
+                    sumOtherColumn: messageLocalization.format('dxDataGrid-summarySumOtherColumn'),
+                    min: messageLocalization.format('dxDataGrid-summaryMin'),
+                    minOtherColumn: messageLocalization.format('dxDataGrid-summaryMinOtherColumn'),
+                    max: messageLocalization.format('dxDataGrid-summaryMax'),
+                    maxOtherColumn: messageLocalization.format('dxDataGrid-summaryMaxOtherColumn'),
+                    avg: messageLocalization.format('dxDataGrid-summaryAvg'),
+                    avgOtherColumn: messageLocalization.format('dxDataGrid-summaryAvgOtherColumn'),
+                    count: messageLocalization.format('dxDataGrid-summaryCount')
                 }
             },
             sortByGroupSummaryInfo: undefined

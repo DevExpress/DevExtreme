@@ -22,7 +22,7 @@ describe('Public methods', () => {
     { name: 'getMaxOffset', calledWith: [] },
     { name: 'scrollStep', calledWith: ['arg1'] },
     { name: 'moveTo', calledWith: ['arg1'] },
-    { name: 'scrollComplete', calledWith: [] },
+    { name: 'stopAnimator', calledWith: ['arg1'] },
     { name: 'getLocationWithinRange', calledWith: ['arg1'] },
     { name: 'getMinOffset', calledWith: [] },
     { name: 'validateEvent', calledWith: ['arg1'] },
@@ -30,7 +30,7 @@ describe('Public methods', () => {
     { name: 'initHandler', calledWith: ['arg1', 'arg2'] },
     { name: 'startHandler', calledWith: [] },
     { name: 'moveHandler', calledWith: ['arg1'] },
-    { name: 'endHandler', calledWith: ['arg1'] },
+    { name: 'endHandler', calledWith: ['arg1', 'arg2'] },
     { name: 'stopHandler', calledWith: [] },
     { name: 'scrollByHandler', calledWith: ['arg1'] },
     { name: 'releaseHandler', calledWith: [] },
@@ -59,8 +59,8 @@ describe('Public methods', () => {
 
   each([-1000, -700]).describe('scrollLocation: %o', (scrollLocation) => {
     each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
-      it('animator should call scrollComplete during step if was finished', () => {
-        const scrollCompleteHandler = jest.fn();
+      it('animator should call stopAnimator during step if was finished', () => {
+        const stopAnimatorHandler = jest.fn();
         const scrollbarMoveToHandler = jest.fn();
 
         const viewModel = new AnimatedScrollbar({
@@ -68,7 +68,7 @@ describe('Public methods', () => {
         });
         (viewModel as any).scrollbarRef = {
           current: {
-            scrollComplete: scrollCompleteHandler,
+            stopAnimator: stopAnimatorHandler,
             moveTo: scrollbarMoveToHandler,
             getLocationWithinRange: () => -700,
           },
@@ -85,13 +85,9 @@ describe('Public methods', () => {
           expect(scrollbarMoveToHandler).toHaveBeenCalledTimes(1);
           expect(scrollbarMoveToHandler).toHaveBeenCalledWith(-700);
 
-          if (scrollLocation === -700) {
-            expect(scrollCompleteHandler).toHaveBeenCalledTimes(1);
-          } else {
-            expect(scrollCompleteHandler).not.toBeCalled();
-          }
+          expect(stopAnimatorHandler).toHaveBeenCalledTimes(1);
         } else {
-          expect(scrollCompleteHandler).toHaveBeenCalledTimes(1);
+          expect(stopAnimatorHandler).toHaveBeenCalledTimes(1);
         }
       });
     });

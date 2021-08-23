@@ -1,17 +1,17 @@
 import {
-    animationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
@@ -19,13 +19,13 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxPopup, {
     dxPopupAnimation,
     dxPopupOptions,
-    TitleRenderedInfo
+    TitleRenderedInfo,
 } from './popup';
 
 /** @public */
@@ -92,20 +92,20 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
-     * @type Enums.Position|positionConfig
-     * @default 'bottom'
+     * @type Enums.Position|PositionConfig
+     * @default { my: 'top center', at: 'bottom center', collision: 'fit flip' }
      * @public
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
     /**
      * @docid
      * @default false
@@ -122,12 +122,12 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -156,13 +156,13 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
      * @default { type: "fade", to: 0 }
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxPopoverOptions.animation.show
      * @default { type: "fade", from: 0, to: 1 }
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

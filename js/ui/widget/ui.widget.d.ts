@@ -1,9 +1,10 @@
+import { Format } from '../../localization';
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 /** @namespace DevExpress.ui */
@@ -105,42 +106,11 @@ export default class Widget<TProperties> extends DOMComponent<TProperties> {
  * @public
  * @namespace DevExpress.ui
  */
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
 export var dxItem: any;
 
 /**
  * @docid
- * @type Enums.Format|string|function|Object
- * @type_function_param1 value:number|date
- * @type_function_return string
- * @default undefined
- * @section Common
- * @namespace DevExpress.ui
- * @public
+ * @deprecated
  */
-export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | {
-  /**
-   * @docid
-   */
-  currency?: string,
-  /**
-   * @docid
-   * @type_function_param1 value:number|date
-   * @type_function_return string
-   */
-  formatter?: ((value: number | Date) => string),
-  /**
-   * @docid
-   * @type_function_param1 value:string
-   * @type_function_return number|date
-   */
-  parser?: ((value: string) => number | Date),
-  /**
-   * @docid
-   */
-  precision?: number,
-  /**
-   * @docid
-   * @type Enums.Format
-   */
-  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime'
-};
+export type format = Format;

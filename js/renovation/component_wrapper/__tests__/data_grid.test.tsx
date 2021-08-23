@@ -174,6 +174,15 @@ describe('DataGrid Wrapper', () => {
     });
   });
 
+  it('should not fail on server side rendering', () => {
+    const component = new DataGridComponent({} as any, {});
+    // It's server side rendering
+    component._getInternalInstance = () => undefined as any;
+    // It's first render
+    component._isNodeReplaced = false;
+    expect(() => component._renderWrapper({})).not.toThrow();
+  });
+
   it('deprecated options', () => {
     const component = createDataGrid();
 
@@ -315,6 +324,22 @@ describe('DataGrid Wrapper', () => {
       expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
     });
 
+    it('option changed with complex object value', () => {
+      const component: any = createDataGrid();
+      const options = { dataSource: { store: { data: [1] } } };
+      component.__options = options;
+      component.viewRef.prevProps = options;
+      component._optionChanging('dataSource', options.dataSource, { dataSource: { store: { data: [1, 2] } } });
+      // emulate base component mutable option change
+      component.__options.dataSource.store.data = [1, 2];
+      // value in prev props shouldn't change for future getUpdatedOptions
+      const { prevProps } = component.viewRef;
+      expect(options.dataSource).not.toBe(prevProps.dataSource);
+      expect(options.dataSource.store).not.toBe(prevProps.dataSource.store);
+      expect(options.dataSource.store.data).not.toBe(prevProps.dataSource.store.data);
+      expect(prevProps.dataSource.store.data).toEqual([1]);
+    });
+
     it('editing complex option changed', () => {
       const component: any = createDataGrid();
       const prevProps = { editing: { editRowKey: null } };
@@ -354,6 +379,17 @@ describe('DataGrid Wrapper', () => {
       component._optionChanged({ fullName: 'dataSource', value: dataSource });
       expect(mockInternalComponent.option).toBeCalledTimes(2);
       expect(mockInternalComponent.option).toBeCalledWith('dataSource', dataSource);
+    });
+
+    it('If editing.changes not changed update it directly for refresh data', () => {
+      const changes: Object[] = [];
+      const component: any = createDataGrid();
+      component.__options = { editing: { changes } };
+      mockInternalComponent.option.mockReturnValueOnce(changes);
+      changes.push({ key: 1, type: 'update', data: { updated: true } });
+      component._optionChanged({ fullName: 'editing.changes', value: changes });
+      expect(mockInternalComponent.option).toBeCalledTimes(2);
+      expect(mockInternalComponent.option).toBeCalledWith('editing.changes', changes);
     });
   });
 

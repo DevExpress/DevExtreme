@@ -679,7 +679,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             return column.fixed && (result || column.fixedPosition === 'right');
         }
 
-        return result && !column.fixed;
+        return result && (!this._isFixedColumns || !column.fixed);
     },
 
     _renderGroupSummaryCellsCore: function($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
@@ -817,8 +817,8 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             elasticScrollTop = -e.scrollOffset.top;
         } else if(e.reachedBottom) {
             const scrollableContent = this._findContentElement();
-            const scrollableContainer = e.component._container();
-            const maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - scrollableContainer.height(), 0);
+            const $scrollableContainer = $(e.component.container());
+            const maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - $scrollableContainer.height(), 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 

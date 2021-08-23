@@ -1,13 +1,8 @@
-import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
-    LoadOptions
-} from './load_options';
+import { DxPromise } from '../core/utils/deferred';
+import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 /** @namespace DevExpress.data */
-export interface StoreOptions<T = Store> {
+export interface StoreOptions<TKey = any, TValue = any> {
     /**
      * @docid
      * @public
@@ -25,28 +20,29 @@ export interface StoreOptions<T = Store> {
      * @action
      * @public
      */
-    onInserted?: ((values: any, key: any | string | number) => void);
+    onInserted?: ((values: TValue, key: TKey) => void);
     /**
      * @docid
      * @type_function_param1 values:object
      * @action
      * @public
      */
-    onInserting?: ((values: any) => void);
+    onInserting?: ((values: TValue) => void);
     /**
      * @docid
      * @type_function_param1 result:Array<any>
+     * @type_function_param2 loadOptions:LoadOptions
      * @action
      * @public
      */
-    onLoaded?: ((result: Array<any>) => void);
+    onLoaded?: ((result: Array<TValue>, loadOptions: LoadOptions<TValue>) => void);
     /**
      * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => void);
+    onLoading?: ((loadOptions: LoadOptions<TValue>) => void);
     /**
      * @docid
      * @action
@@ -65,29 +61,21 @@ export interface StoreOptions<T = Store> {
      * @action
      * @public
      */
-    onPush?: ((changes: Array<any>) => void);
+    onPush?: ((changes: Array<TValue>) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
      * @action
      * @public
      */
-    onRemoved?: ((key: any | string | number) => void);
+    onRemoved?: ((key: TKey) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
      * @action
      * @public
      */
-    onRemoving?: ((key: any | string | number) => void);
-    /**
-     * @docid
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 values:object
-     * @action
-     * @public
-     */
-    onUpdated?: ((key: any | string | number, values: any) => void);
+    onRemoving?: ((key: TKey) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -95,8 +83,19 @@ export interface StoreOptions<T = Store> {
      * @action
      * @public
      */
-    onUpdating?: ((key: any | string | number, values: any) => void);
+    onUpdated?: ((key: TKey, values: TValue) => void);
+    /**
+     * @docid
+     * @type_function_param1 key:object|string|number
+     * @type_function_param2 values:object
+     * @action
+     * @public
+     */
+    onUpdating?: ((key: TKey, values: TValue) => void);
 }
+
+type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
+
 /**
  * @docid
  * @hidden
@@ -104,16 +103,17 @@ export interface StoreOptions<T = Store> {
  * @export default
  * @namespace DevExpress.data
  */
-export default class Store {
-    constructor(options?: StoreOptions)
+export default class Store<TKey = any, TValue = any> {
+    constructor(options?: StoreOptions<TKey, TValue>)
     /**
      * @docid
      * @publicName byKey(key)
      * @param1 key:object|string|number
+     * @param2 extraOptions:LoadOptions
      * @return Promise<any>
      * @public
      */
-    byKey(key: any | string | number): DxPromise<any>;
+    byKey(key: TKey, extraOptions?: LoadOptions<TValue>): DxPromise<TValue>;
     /**
      * @docid
      * @publicName insert(values)
@@ -121,29 +121,29 @@ export default class Store {
      * @return Promise<any>
      * @public
      */
-    insert(values: any): DxPromise<any>;
+    insert(values: TValue): DxPromise<TValue>;
     /**
      * @docid
      * @publicName key()
-     * @return any
+     * @return string|Array<string>
      * @public
      */
-    key(): any;
+    key(): string | Array<string>;
     /**
      * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
+     * @return any|string|number
      * @public
      */
-    keyOf(obj: any): any;
+    keyOf(obj: TValue): TKey;
     /**
      * @docid
      * @publicName load()
      * @return Promise<any>
      * @public
      */
-    load(): DxPromise<any>;
+    load(): DxPromise<Array<TValue>>;
     /**
      * @docid
      * @publicName load(options)
@@ -151,7 +151,7 @@ export default class Store {
      * @return Promise<any>
      * @public
      */
-    load(options: LoadOptions): DxPromise<any>;
+    load(options: LoadOptions<TValue>): DxPromise<Array<TValue>>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -159,7 +159,7 @@ export default class Store {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -168,7 +168,7 @@ export default class Store {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -177,7 +177,7 @@ export default class Store {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -185,14 +185,14 @@ export default class Store {
      * @return this
      * @public
      */
-    on(events: any): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * @docid
      * @publicName push(changes)
      * @param1 changes:Array<any>
      * @public
      */
-    push(changes: Array<any>): void;
+    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: TValue; key?: TKey; index?: number }>): void;
     /**
      * @docid
      * @publicName remove(key)
@@ -200,7 +200,7 @@ export default class Store {
      * @return Promise<void>
      * @public
      */
-    remove(key: any | string | number): DxPromise<void>;
+    remove(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName totalCount(options)
@@ -210,7 +210,7 @@ export default class Store {
      * @return Promise<number>
      * @public
      */
-    totalCount(obj: { filter?: any, group?: any }): DxPromise<number>;
+    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)
@@ -219,5 +219,5 @@ export default class Store {
      * @return Promise<any>
      * @public
      */
-    update(key: any | string | number, values: any): DxPromise<any>;
+    update(key: TKey, values: TValue): DxPromise<TValue>;
 }

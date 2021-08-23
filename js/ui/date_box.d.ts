@@ -2,31 +2,30 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     ComponentDisabledDate,
-    dxCalendarOptions
+    dxCalendarOptions,
 } from './calendar';
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    format
-} from './widget/ui.widget';
+    Format,
+} from '../localization';
 
 import {
-    Properties as PopupProperties
+    Properties as PopupProperties,
 } from './popup';
-
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateBox>;
@@ -145,7 +144,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @default null
      * @public
      */
-    displayFormat?: format;
+    displayFormat?: Format;
     /**
      * @docid
      * @default 30
@@ -174,10 +173,10 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @docid
      * @type Enums.DateBoxPickerType
      * @default 'calendar'
-     * @default 'native' [for](iOS)
-     * @default 'native' [for](Android)
-     * @default 'rollers' [for](Android_below_version_4.4)
-     * @default 'rollers' [for](mobile_devices)
+     * @default 'native' &for(iOS)
+     * @default 'native' &for(Android)
+     * @default 'rollers' &for(Android_below_version_4.4)
+     * @default 'rollers' &for(mobile_devices)
      * @public
      */
     pickerType?: 'calendar' | 'list' | 'native' | 'rollers';

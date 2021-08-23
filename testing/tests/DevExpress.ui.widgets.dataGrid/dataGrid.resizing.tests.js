@@ -439,6 +439,25 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($('#dataGrid').find('.dx-datagrid').height(), 298);
     });
 
+    QUnit.test('update column widths when rendering to invisible container', function(assert) {
+        const $container = $('#dataGrid');
+
+        $container.css('display', 'none');
+        const dataGrid = $container.dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ id: 1 }],
+            selection: {
+                mode: 'multiple'
+            }
+        }).dxDataGrid('instance');
+
+        // act
+        $container.css('display', '');
+        $container.trigger('dxshown');
+
+        // assert
+        assert.equal(dataGrid.getVisibleColumns()[0].visibleWidth, 70);
+    });
 
     QUnit.test('height from extern styles', function(assert) {
         // arrange, act
@@ -499,7 +518,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(Math.round($dataGrid.find('.dx-datagrid').height()), 400, 'height is equal max-height');
-        assert.ok(dataGrid.getScrollable().$content().height() > dataGrid.getScrollable()._container().height(), 'scroll is exists');
+        assert.ok(dataGrid.getScrollable().$content().height() > $(dataGrid.getScrollable().container()).height(), 'scroll is exists');
 
         // act
         dataGrid.searchByText('test');
@@ -521,7 +540,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         const scrollable = dataGrid.getScrollable();
         assert.ok(scrollable, 'scrollable is created');
-        assert.ok(scrollable.$content().height() > scrollable._container().height(), 'scroll is exists');
+        assert.ok(scrollable.$content().height() > $(scrollable.container()).height(), 'scroll is exists');
     });
 
     // T820186

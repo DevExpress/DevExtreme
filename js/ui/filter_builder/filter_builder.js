@@ -771,6 +771,9 @@ const FilterBuilder = Widget.inherit({
         const $popup = $('<div>')
             .addClass(options.menu.cssClass).appendTo($container);
         this._createComponent($popup, Popup, {
+            wrapperAttr: {
+                class: options.menu.cssClass
+            },
             onHiding: options.menu.onHiding,
             onHidden: options.menu.onHidden,
             rtlEnabled: options.menu.rtlEnabled,
@@ -782,6 +785,7 @@ const FilterBuilder = Widget.inherit({
                 // T852701
                 this.repaint();
             },
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 return getElementMaxHeightByWindow(options.menu.position.of);
             },

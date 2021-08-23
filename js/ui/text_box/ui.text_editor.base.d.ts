@@ -1,13 +1,13 @@
 import {
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
 import dxButton, {
-    dxButtonOptions
+    dxButtonOptions,
 } from '../button';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from '../editor/editor';
 
 /** @namespace DevExpress.ui */
@@ -229,7 +229,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @type Enums.EditorStylingMode
      * @default 'outlined'
-     * @default 'underlined' [for](Material)
+     * @default 'filled' &for(Material)
      * @public
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';

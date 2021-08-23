@@ -11,6 +11,9 @@ import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
 import themes from 'ui/themes';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable.js';
+
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 initTestMarkup();
 
@@ -120,7 +123,7 @@ QUnit.module('Filtering', () => {
 
                 assert.equal(dateFilter.length, 2, 'Date filter contains 2 items');
 
-                assert.deepEqual(dateFilter[0], ['endDate', '>', startViewDate]);
+                assert.deepEqual(dateFilter[0], ['endDate', '>=', startViewDate]);
 
                 assert.deepEqual(dateFilter[1], ['startDate', '<', endViewDate]);
 
@@ -796,6 +799,12 @@ QUnit.module('View with configuration', {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', function(assert) {
+        if(isRenovatedScrollable) {
+            // this scenario doesn't relevant for renovated widget
+            assert.ok(true, 'skip test');
+            return;
+        }
+
         const scheduler = createWrapper({
             height: 1500,
             views: ['month'],
@@ -814,6 +823,12 @@ QUnit.module('View with configuration', {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', function(assert) {
+        if(isRenovatedScrollable) {
+            // this scenario doesn't relevant for renovated widget
+            assert.ok(true, 'skip test');
+            return;
+        }
+
         const scheduler = createWrapper({
             height: 500,
             views: [{
@@ -846,17 +861,6 @@ QUnit.module('Options for Material theme in components', {
         themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
-    QUnit.test('_dropDownButtonIcon option should be passed to SchedulerHeader', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'week',
-            showCurrentTimeIndicator: false
-        });
-
-        const header = scheduler.instance.getHeader();
-
-        assert.equal(header.option('_dropDownButtonIcon'), 'chevrondown', 'header has correct _dropDownButtonIcon');
-    });
-
     QUnit.test('_collectorOffset option should be passed to SchedulerAppointments depending on the view', function(assert) {
         const scheduler = createWrapper({
             currentView: 'month',

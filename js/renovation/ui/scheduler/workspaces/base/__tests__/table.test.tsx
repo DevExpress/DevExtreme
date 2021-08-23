@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { viewFunction as TableView, Table } from '../table';
 import { VirtualRow } from '../virtual_row';
 
@@ -11,13 +11,6 @@ describe('LayoutBase', () => {
         ...viewModel.props,
       },
     }) as any);
-
-    it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(layout.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
 
     it('render should be correct', () => {
       const layout = render({
@@ -98,6 +91,18 @@ describe('LayoutBase', () => {
               rightVirtualCellCount: 42,
             });
         });
+    });
+
+    it('should pass ref to the root', () => {
+      const ref = React.createRef();
+      mount(TableView({
+        props: {
+          tableRef: ref,
+        },
+      } as any));
+
+      expect(ref.current)
+        .not.toBe(null);
     });
   });
 

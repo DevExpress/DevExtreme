@@ -1,24 +1,18 @@
-import {
-    DxPromise
-} from '../../core/utils/deferred';
-
-import Store, {
-    StoreOptions
-} from '../abstract_store';
-
-import {
-    LoadOptions
-} from '../load_options';
+import { DxPromise } from '../../core/utils/deferred';
+import Store, { StoreOptions } from '../abstract_store';
+import { LoadOptions } from '../index';
+import { Query } from '../query';
+import { ODataRequestOptions } from './context';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
-        onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): Promise<TResult1 | TResult2>;
 }
 
 /** @namespace DevExpress.data */
-export interface ODataStoreOptions extends StoreOptions<ODataStore> {
+export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
     /**
      * @docid
      * @type_function_param1 options:object
@@ -31,7 +25,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
     /**
      * @docid
      * @public
@@ -45,7 +39,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
      * @default {}
@@ -76,7 +70,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @action
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => void);
+    onLoading?: ((loadOptions: LoadOptions<TValue>) => void);
     /**
      * @docid
      * @public
@@ -103,9 +97,9 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
  * @export default
  * @public
  */
-export default class ODataStore extends Store {
-    constructor(options?: ODataStoreOptions)
-    byKey(key: any | string | number): DxPromise<any>;
+export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
+    constructor(options?: ODataStoreOptions<TKey, TValue>)
+    byKey(key: TKey): DxPromise<TValue>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -116,7 +110,7 @@ export default class ODataStore extends Store {
      * @return Promise<any>
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<any>;
+    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TValue>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -124,7 +118,7 @@ export default class ODataStore extends Store {
      * @return object
      * @public
      */
-    createQuery(loadOptions: any): any;
+    createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
 
     /**
      * @docid
@@ -133,5 +127,5 @@ export default class ODataStore extends Store {
      * @return Promise<any>
      * @public
      */
-    insert(values: any): DxPromise<any> & PromiseExtension<any>;
+    insert(values: TValue): DxPromise<TValue> & PromiseExtension<TValue>;
 }

@@ -72,13 +72,16 @@ const ResizingController = modules.ViewController.inherit({
                     if(!isDelayed) {
                         resizeDeferred = that.resize();
                     }
-                } else if(changeType === 'update' && e.changeTypes) {
+                } else if(changeType === 'update') {
+                    if(e.changeTypes?.length === 0) {
+                        return;
+                    }
                     if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
                         !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
-                        deferUpdate(function() {
+                        deferUpdate(() => deferRender(() => deferUpdate(() => {
                             that._setScrollerSpacing(that._hasHeight);
                             that._rowsView.resize();
-                        });
+                        })));
                     } else {
                         resizeDeferred = that.resize();
                     }

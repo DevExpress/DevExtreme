@@ -1,4 +1,5 @@
 import { compileGetter, compileSetter } from '../../core/utils/data';
+import messageLocalization from '../../localization/message';
 
 export const GanttHelper = {
 
@@ -75,6 +76,27 @@ export const GanttHelper = {
 
     getSelectionMode(allowSelection) {
         return allowSelection ? 'single' : 'none';
+    },
+
+    convertTreeToList(node, array) {
+        if(node.data) {
+            array.push(node.data);
+        }
+
+        for(let i = 0; i < node.children?.length; i++) {
+            const child = node.children[i];
+            GanttHelper.convertTreeToList(child, array);
+        }
+    },
+
+    getAllParentNodesKeys(node, array) {
+        if(node?.data) {
+            array.push(node.key);
+        }
+
+        if(node?.parent?.data) {
+            GanttHelper.getAllParentNodesKeys(node.parent, array);
+        }
     },
 
     getDefaultOptions() {
@@ -176,7 +198,14 @@ export const GanttHelper = {
             taskProgressTooltipContentTemplate: null,
             taskTimeTooltipContentTemplate: null,
             taskContentTemplate: null,
-            rootValue: 0
+            rootValue: 0,
+            sorting: {
+                ascendingText: messageLocalization.format('dxGantt-sortingAscendingText'),
+                descendingText: messageLocalization.format('dxGantt-sortingDescendingText'),
+                clearText: messageLocalization.format('dxGantt-sortingClearText'),
+                mode: 'none',
+                showSortIndexes: false
+            }
         };
     }
 

@@ -152,6 +152,7 @@ const ColumnChooserView = ColumnsView.inherit({
             showCloseButton: false,
             dragEnabled: true,
             resizeEnabled: true,
+            copyRootClassesToWrapper: true,
             toolbarItems: [
                 { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' }
             ],

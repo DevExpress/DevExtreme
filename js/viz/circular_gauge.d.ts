@@ -1,14 +1,13 @@
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import {
@@ -18,7 +17,7 @@ import {
     BaseGaugeScale,
     BaseGaugeScaleLabel,
     GaugeIndicator,
-    TooltipInfo
+    TooltipInfo,
 } from './gauges/base_gauge';
 
 /** @public */
@@ -34,7 +33,7 @@ export type ExportedEvent = EventInfo<dxCircularGauge>;
 export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxCircularGauge>;
+export type FileSavingEvent = FileSavingEventInfo<dxCircularGauge>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;
@@ -65,12 +64,12 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
        * @docid
        * @default 315
        */
-      endAngle?: number,
+      endAngle?: number;
       /**
        * @docid
        * @default 225
        */
-      startAngle?: number
+      startAngle?: number;
     };
     /**
      * @docid

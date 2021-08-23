@@ -8,17 +8,24 @@ const MILLISECONDS_IN_MINUTE = 60000;
 const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
+    get viewDataProvider() { return this.options.viewDataProvider; }
+    get appointmentDataProvider() { return this.options.appointmentDataProvider; }
+
     calculateAppointmentWidth(appointment, position) {
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
-        const duration = Math.ceil(this._getDurationInDays(startDate, endDate));
+        const { normalizedEndDate } = position.info.appointment;
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
+        const duration = Math.ceil(this._getDurationInDays(startDate, normalizedEndDate));
 
         let width = this.cropAppointmentWidth(duration * cellWidth, cellWidth);
 
-        if(this.instance.isVirtualScrolling()) {
-            const workSpace = this.instance.getWorkSpace();
-            const skippedDays = workSpace.viewDataProvider.getSkippedDaysCount(position.groupIndex, startDate, endDate, duration);
+        if(this.isVirtualScrolling) {
+            const skippedDays = this.viewDataProvider.getSkippedDaysCount(
+                position.groupIndex,
+                startDate,
+                normalizedEndDate,
+                duration
+            );
 
             width -= skippedDays * cellWidth;
         }
@@ -41,7 +48,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
 
     createTaskPositionMap(items, skipSorting) {
         if(!skipSorting) {
-            this.instance.getAppointmentsInstance()._sortAppointmentsByStartDate(items);
+            this.appointmentDataProvider.sortAppointmentsByStartDate(items);
         }
 
         return super.createTaskPositionMap(items);

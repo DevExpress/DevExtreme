@@ -1,9 +1,7 @@
-import getElementComputedStyle from '../../../utils/get_computed_style';
+import { getElementTransform } from './get_element_style';
 
-export function getTranslateValues(element: Element | null): { left: number; top: number } {
-  if (!element) return { left: 0, top: 0 };
-
-  const matrix = getElementComputedStyle(element)?.transform ?? '';
+export function getTranslateValues(el: Element | null): { left: number; top: number } {
+  const matrix = getElementTransform(el);
   const regex = /matrix.*\((.+)\)/;
   const matrixValues = regex.exec(matrix);
 
@@ -12,5 +10,6 @@ export function getTranslateValues(element: Element | null): { left: number; top
 
     return { left: Number(result[4]), top: Number(result[5]) };
   }
+
   return { left: 0, top: 0 };
 }

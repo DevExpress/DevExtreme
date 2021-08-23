@@ -400,6 +400,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
             }
 
             assert.deepEqual(instance.option('text'), selectedDate, `value is successfully changed by calendar when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
+            instance.dispose();
         });
     });
 

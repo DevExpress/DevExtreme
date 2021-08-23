@@ -243,6 +243,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
             fireError: function() { },
+            getMaxRowIndex: function() {
+                this.items().length - 1;
+            },
+            loadViewport: commonUtils.noop,
+            updateViewport: commonUtils.noop
         };
     };
 

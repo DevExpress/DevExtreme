@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,27 +22,27 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
-    dxSortableOptions
+    dxSortableOptions,
 } from './sortable';
 
 import {
-    SearchBoxMixinOptions
+    SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
 interface ListItemInfo {
     readonly itemData?: any;
     readonly itemElement: DxElement;
-    readonly itemIndex: number | { group: number; item: number; };
+    readonly itemIndex: number | { group: number; item: number };
 }
 
 export interface ScrollInfo {
@@ -64,7 +64,7 @@ export type GroupRenderedEvent = EventInfo<dxList> & {
     readonly groupData?: any;
     readonly groupElement?: DxElement;
     readonly groupIndex?: number;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxList>;
@@ -81,7 +81,7 @@ export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 /** @public */
 export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
     cancel?: boolean | PromiseLike<void>;
-}
+};
 
 /** @public */
 export type ItemHoldEvent = NativeEventInfo<dxList> & ListItemInfo;
@@ -93,12 +93,12 @@ export type ItemRenderedEvent = NativeEventInfo<dxList> & ItemInfo;
 export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
     readonly fromIndex: number;
     readonly toIndex: number;
-}
+};
 
 /** @public */
 export type ItemSwipeEvent = NativeEventInfo<dxList> & ListItemInfo & {
     readonly direction: string;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxList> & ChangedOptionInfo;
@@ -115,7 +115,7 @@ export type ScrollEvent = NativeEventInfo<dxList> & ScrollInfo;
 /** @public */
 export type SelectAllValueChangedEvent = EventInfo<dxList> & {
     readonly value: boolean;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
@@ -140,7 +140,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @public
      */
     bounceEnabled?: boolean;
@@ -152,10 +152,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     collapsibleGroups?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default undefined
@@ -166,7 +167,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -202,8 +203,8 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @type Enums.ListItemDeleteMode
      * @default 'static'
-     * @default 'slideItem' [for](iOS)
-     * @default 'swipe' [for](Android)
+     * @default 'slideItem' &for(iOS)
+     * @default 'swipe' &for(Android)
      * @public
      */
     itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
@@ -214,10 +215,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     itemDragging?: dxSortableOptions;
     /**
      * @docid
+     * @type Array<string | dxListItem | any>
      * @fires dxListOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxListItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default []
@@ -228,19 +230,19 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @docid
        * @type_function_param1 itemElement:DxElement
        * @type_function_param2 itemData:object
-       * @return void
+       * @type_function_return void
        */
-      action?: ((itemElement: DxElement, itemData: any) => any),
+      action?: ((itemElement: DxElement, itemData: any) => any);
       /**
        * @docid
        */
-      text?: string
+      text?: string;
     }>;
     /**
      * @docid
      * @type Enums.ListMenuMode
      * @default 'context'
-     * @default 'slide' [for](iOS)
+     * @default 'slide' &for(iOS)
      * @public
      */
     menuMode?: 'context' | 'slide';
@@ -428,14 +430,14 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
-     * @default "nextButton" [for](desktop except Mac)
+     * @default "nextButton" &for(desktop except Mac)
      * @public
      */
     pageLoadMode?: 'nextButton' | 'scrollBottom';
     /**
      * @docid
      * @default "Loading..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pageLoadingText?: string;
@@ -448,21 +450,21 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default "Release to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pulledDownText?: string;
     /**
      * @docid
      * @default "Pull down to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pullingDownText?: string;
     /**
      * @docid
      * @default "Refreshing..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     refreshingText?: string;
@@ -475,14 +477,14 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default true
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     scrollByThumb?: boolean;
@@ -510,7 +512,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
-     * @default 'onHover' [for](desktop)
+     * @default 'onHover' &for(desktop)
      * @public
      */
     showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
@@ -522,7 +524,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     showSelectionControls?: boolean;
     /**
      * @docid
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @default true
      * @public
      */
@@ -708,9 +710,13 @@ export default class dxList extends CollectionWidget<dxListOptions> {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxList
+ */
+export type Item = dxListItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxListItem extends CollectionWidgetItem {

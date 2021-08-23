@@ -50,13 +50,15 @@ function run_test {
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
-        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
-        dpkg-reconfigure --frontend noninteractive tzdata
+        sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
-        Xvfb :99 -ac -screen 0 1200x600x24 &
+        Xvfb -ac :99 -screen 0 1200x600x24 > /dev/null 2>&1 &
+        if [ "$GITHUBACTION" != "true" ]; then
         x11vnc -display :99 2>/dev/null &
+        fi
     fi
 
     if [ "$LOCAL" != "true" ]; then
@@ -90,10 +92,14 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            local firefox_args="-profile /firefox-profile $url"
+            local profile_path="/firefox-profile" 
+            [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
+            local firefox_args="-profile $profile_path $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
+            echo "$firefox_args"
+
             firefox $firefox_args &
         ;;
 
@@ -181,13 +187,9 @@ function run_test_jest {
     npm run test-jest
 }
 
-function run_test_styles {
-    npm i
-    npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false
-}
-
 function start_runner_watchdog {
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
+    local raw_log_file="$PWD/testing/RawLog.txt"
     local last_suite_time=unknown
 
     while true; do
@@ -195,6 +197,7 @@ function start_runner_watchdog {
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"
+            tail -n 100 $raw_log_file
             kill -9 $1
         else
             last_suite_time=$(cat $last_suite_time_file)

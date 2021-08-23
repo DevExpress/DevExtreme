@@ -3,8 +3,6 @@ import { isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import dateLocalization from '../../localization/date';
-import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
 import {
@@ -13,6 +11,7 @@ import {
     getTimeZoneCalculator
 } from './instanceFactory';
 import { createAppointmentAdapter } from './appointmentAdapter';
+import { getFormatType, formatDates } from './appointments/textUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -52,11 +51,7 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    createAppointmentSettings: function(appointment) {
-        return this._getAppointmentSettingsGenerator(appointment).create();
-    },
-
-    isGroupedByDate: function() {
+    isGroupedByDate: function() { // TODO replace with ModelProvider
         return this.getWorkSpace().isGroupedByDate();
     },
 
@@ -133,22 +128,12 @@ const subscribes = {
         const startDate = timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
         const endDate = timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
 
-        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, targetedAdapter.allDay);
+        const formatType = format || getFormatType(startDate, endDate, targetedAdapter.allDay, this.option('currentView') !== 'month');
 
         return {
             text: targetedAdapter.text || appointmentAdapter.text,
-            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
+            formatDate: formatDates(startDate, endDate, formatType)
         };
-    },
-
-    _getTypeFormat(startDate, endDate, isAllDay) {
-        if(isAllDay) {
-            return 'DATE';
-        }
-        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
-            return 'TIME';
-        }
-        return 'DATETIME';
     },
 
     _createAppointmentTitle(data) {
@@ -157,28 +142,6 @@ const subscribes = {
         }
 
         return String(data);
-    },
-
-    _formatDates(startDate, endDate, formatType) {
-        const dateFormat = 'monthandday';
-        const timeFormat = 'shorttime';
-        const isSameDate = startDate.getDate() === endDate.getDate();
-
-        switch(formatType) {
-            case 'DATETIME':
-                return [
-                    dateLocalization.format(startDate, dateFormat),
-                    ' ',
-                    dateLocalization.format(startDate, timeFormat),
-                    ' - ',
-                    isSameDate ? '' : dateLocalization.format(endDate, dateFormat) + ' ',
-                    dateLocalization.format(endDate, timeFormat)
-                ].join('');
-            case 'TIME':
-                return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
-            case 'DATE':
-                return `${dateLocalization.format(startDate, dateFormat)}${isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
-        }
     },
 
     getResizableAppointmentArea: function(options) {
@@ -238,21 +201,6 @@ const subscribes = {
 
     getCellHeight: function() {
         return this.getWorkSpace().getCellHeight();
-    },
-
-    getResizableStep: function() {
-        const workSpace = this.getWorkSpace();
-        const cellWidth = workSpace.getCellWidth();
-
-        if(workSpace.isGroupedByDate()) {
-            return workSpace._getGroupCount() * cellWidth;
-        }
-
-        return cellWidth;
-    },
-
-    getRenderingStrategy: function() {
-        return this._getAppointmentsRenderingStrategy();
     },
 
     getMaxAppointmentCountPerCellByType: function(isAllDay) {
@@ -379,10 +327,6 @@ const subscribes = {
         return this.getEndViewDate();
     },
 
-    getMaxAppointmentsPerCell: function() {
-        return this.getMaxAppointmentsPerCell();
-    },
-
     forceMaxAppointmentPerCell: function() {
         return this.forceMaxAppointmentPerCell();
     },
@@ -408,54 +352,6 @@ const subscribes = {
 
     getTargetedAppointmentData: function(appointment, element) {
         return this.getTargetedAppointment(appointment, element);
-    },
-
-    getAppointmentDurationInMs: function(options) {
-        const startDate = options.startDate;
-        const endDate = options.endDate;
-        const allDay = options.allDay;
-        const appointmentDuration = endDate.getTime() - startDate.getTime();
-
-        const dayDuration = toMs('day');
-        const visibleDayDuration = this._workSpace.getVisibleDayDuration();
-        let result = 0;
-
-        if(allDay) {
-            const ceilQuantityOfDays = Math.ceil(appointmentDuration / dayDuration);
-
-            result = ceilQuantityOfDays * visibleDayDuration;
-        } else {
-            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
-            const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
-            let tailDuration;
-
-            if(isDifferentDates) {
-                const startDateEndHour = new Date(new Date(startDate).setHours(this.option('endDayHour'), 0, 0));
-                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
-
-                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
-
-                const startDayTime = this.option('startDayHour') * toMs('hour');
-                const endPartDuration = endDate - dateUtils.trimTime(endDate);
-
-                if(endPartDuration < startDayTime) {
-                    if(floorQuantityOfDays) {
-                        tailDuration -= hiddenDayDuration;
-                    }
-
-                    tailDuration += startDayTime - endPartDuration;
-                }
-            } else {
-                tailDuration = appointmentDuration % dayDuration;
-            }
-
-            if(tailDuration > visibleDayDuration) {
-                tailDuration = visibleDayDuration;
-            }
-
-            result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
-        }
-        return result;
     },
 
     getEndDayHour: function() {

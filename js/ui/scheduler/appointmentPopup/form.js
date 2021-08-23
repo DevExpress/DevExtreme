@@ -7,6 +7,7 @@ import DataSource from '../../../data/data_source';
 import timeZoneDataUtils from '../timezones/utils.timezones_data';
 import { extend } from '../../../core/utils/extend';
 import dateUtils from '../../../core/utils/date';
+import Semaphore from '../semaphore';
 
 import '../recurrence_editor';
 import '../../text_area';
@@ -19,10 +20,6 @@ const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 export const APPOINTMENT_FORM_GROUP_NAMES = {
     Main: 'mainGroup',
     Recurrence: 'recurrenceGroup'
-};
-
-const getAllDayEndDate = startDate => {
-    return new Date(new Date(startDate).setDate(startDate.getDate() + 1));
 };
 
 const getStartDateWithStartHour = (startDate, startDayHour) => {
@@ -59,34 +56,51 @@ const createDateBoxEditor = (dataField, colSpan, firstDayOfWeek, label, onValueC
             calendarOptions: {
                 firstDayOfWeek
             },
-            onValueChanged
-        }
+            onValueChanged,
+            useMaskBehavior: true
+        },
     };
 };
 
 export class AppointmentForm {
     constructor(scheduler) {
-        this.schedulerInst = scheduler;
-        this._appointmentForm = null;
-        this._lockDateShiftFlag = false;
+        this.scheduler = scheduler;
+        this.form = null;
+
+        this.semaphore = new Semaphore();
+    }
+
+    get dxForm() {
+        return this.form;
     }
 
     set readOnly(value) {
-        this._appointmentForm.option('readOnly', value);
-        const { recurrenceRuleExpr } = this.schedulerInst.getDataAccessors().expr;
+        this.form.option('readOnly', value);
+        const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
-        const recurrenceEditor = this._appointmentForm.getEditor(recurrenceRuleExpr);
-        recurrenceEditor?._recurrenceForm?.option('readOnly', value);
+        const recurrenceEditor = this.form.getEditor(recurrenceRuleExpr);
+        recurrenceEditor?.option('readOnly', value);
     }
 
-    create(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
-        const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
+    get formData() {
+        return this.form.option('formData');
+    }
+
+    set formData(value) {
+        this.form.option('formData', value);
+    }
+
+    create(triggerResize, changeSize, formData) {
+        const allowTimeZoneEditing = this.scheduler.getEditingConfig().allowTimeZoneEditing;
+        const { expr } = this.scheduler.getDataAccessors();
+
+        const recurrenceEditorVisibility = !!formData[expr.recurrenceRuleExpr]; // TODO
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
-        const resourceManager = schedulerInst.getResourceManager();
+        const resourceManager = this.scheduler.getResourceManager();
 
         const mainItems = [
-            ...this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
+            ...this._createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing),
             ...resourceManager.getEditors()
         ];
 
@@ -106,13 +120,13 @@ export class AppointmentForm {
                 name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
                 visible: recurrenceEditorVisibility,
                 colSpan,
-                items: this._createRecurrenceEditor(dataExprs, schedulerInst),
+                items: this._createRecurrenceEditor(expr),
             }
         ];
 
         const element = $('<div>');
 
-        this._appointmentForm = schedulerInst.createComponent(element, Form, {
+        this.form = this.scheduler.createComponent(element, Form, {
             items,
             showValidationSummary: true,
             scrollingEnabled: true,
@@ -135,9 +149,9 @@ export class AppointmentForm {
 
         const value = dateSerialization.deserializeDate(args.value);
         const previousValue = dateSerialization.deserializeDate(args.previousValue);
-        const dateEditor = this._appointmentForm.getEditor(dateExpr);
+        const dateEditor = this.form.getEditor(dateExpr);
         const dateValue = dateSerialization.deserializeDate(dateEditor.option('value'));
-        if(!this._lockDateShiftFlag && dateValue && value && isNeedCorrect(dateValue, value)) {
+        if(this.semaphore.isFree() && dateValue && value && isNeedCorrect(dateValue, value)) {
             const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
             dateEditor.option('value', new Date(value.getTime() + duration));
         }
@@ -160,7 +174,7 @@ export class AppointmentForm {
                 placeholder: noTzTitle,
                 searchEnabled: true,
                 onValueChanged: (args) => {
-                    const form = this._appointmentForm;
+                    const form = this.form;
                     const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
                     if(isMainTimeZone) {
                         secondTimezoneEditor.option('value', args.value);
@@ -171,9 +185,9 @@ export class AppointmentForm {
         };
     }
 
-    _createDateBoxItems(dataExprs, schedulerInst, allowTimeZoneEditing) {
+    _createDateBoxItems(dataExprs, allowTimeZoneEditing) {
         const colSpan = allowTimeZoneEditing ? 2 : 1;
-        const firstDayOfWeek = schedulerInst.getFirstDayOfWeek();
+        const firstDayOfWeek = this.scheduler.getFirstDayOfWeek();
 
         return [
             createDateBoxEditor(
@@ -203,16 +217,16 @@ export class AppointmentForm {
     }
 
     _changeFormItemDateType(itemPath, isAllDay) {
-        const itemEditorOptions = this._appointmentForm.itemOption(itemPath).editorOptions;
+        const itemEditorOptions = this.form.itemOption(itemPath).editorOptions;
 
         const type = isAllDay ? 'date' : 'datetime';
 
         const newEditorOption = { ...itemEditorOptions, type };
 
-        this._appointmentForm.itemOption(itemPath, 'editorOptions', newEditorOption);
+        this.form.itemOption(itemPath, 'editorOptions', newEditorOption);
     }
 
-    _createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
+    _createMainItems(dataExprs, triggerResize, changeSize, allowTimeZoneEditing) {
         return [
             {
                 dataField: dataExprs.textExpr,
@@ -229,7 +243,7 @@ export class AppointmentForm {
                     lg: 2,
                     xs: 1
                 },
-                items: this._createDateBoxItems(dataExprs, schedulerInst, allowTimeZoneEditing),
+                items: this._createDateBoxItems(dataExprs, allowTimeZoneEditing),
             },
             {
                 itemType: 'group',
@@ -249,18 +263,18 @@ export class AppointmentForm {
                     editorOptions: {
                         onValueChanged: (args) => {
                             const value = args.value;
-                            const startDateEditor = this._appointmentForm.getEditor(dataExprs.startDateExpr);
-                            const endDateEditor = this._appointmentForm.getEditor(dataExprs.endDateExpr);
+                            const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
+                            const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
                             const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-                            if(!this._lockDateShiftFlag && startDate) {
+                            if(this.semaphore.isFree() && startDate) {
                                 if(value) {
                                     const allDayStartDate = dateUtils.trimTime(startDate);
-                                    startDateEditor.option('value', allDayStartDate);
-                                    endDateEditor.option('value', getAllDayEndDate(allDayStartDate));
+                                    startDateEditor.option('value', new Date(allDayStartDate));
+                                    endDateEditor.option('value', new Date(allDayStartDate));
                                 } else {
-                                    const startDateWithStartHour = getStartDateWithStartHour(startDate, schedulerInst.getStartDayHour());
-                                    const endDate = schedulerInst.getCalculatedEndDate(startDateWithStartHour);
+                                    const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
+                                    const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);
                                     startDateEditor.option('value', startDateWithStartHour);
                                     endDateEditor.option('value', endDate);
                                 }
@@ -284,7 +298,7 @@ export class AppointmentForm {
                     },
                     editorOptions: {
                         onValueChanged: (args) => {
-                            const form = this._appointmentForm;
+                            const form = this.form;
                             const colSpan = args.value ? 1 : 2;
 
                             form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Main, 'colSpan', colSpan);
@@ -317,12 +331,12 @@ export class AppointmentForm {
         ];
     }
 
-    _createRecurrenceEditor(dataExprs, schedulerInst) {
+    _createRecurrenceEditor(dataExprs) {
         return [{
             dataField: dataExprs.recurrenceRuleExpr,
             editorType: 'dxRecurrenceEditor',
             editorOptions: {
-                firstDayOfWeek: schedulerInst.getFirstDayOfWeek(),
+                firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
             },
             label: {
                 text: ' ',
@@ -331,12 +345,14 @@ export class AppointmentForm {
         }];
     }
 
-    setEditorsType(startDateExpr, endDateExpr, allDay) {
+    setEditorsType(allDay) {
+        const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
+
         const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${startDateExpr}`;
         const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Recurrence}.${endDateExpr}`;
 
-        const startDateFormItem = this._appointmentForm.itemOption(startDateItemPath);
-        const endDateFormItem = this._appointmentForm.itemOption(endDateItemPath);
+        const startDateFormItem = this.form.itemOption(startDateItemPath);
+        const endDateFormItem = this.form.itemOption(endDateItemPath);
 
         if(startDateFormItem && endDateFormItem) {
             const startDateEditorOptions = startDateFormItem.editorOptions;
@@ -344,8 +360,8 @@ export class AppointmentForm {
 
             startDateEditorOptions.type = endDateEditorOptions.type = allDay ? 'date' : 'datetime';
 
-            this._appointmentForm.itemOption(startDateItemPath, 'editorOptions', startDateEditorOptions);
-            this._appointmentForm.itemOption(endDateItemPath, 'editorOptions', endDateEditorOptions);
+            this.form.itemOption(startDateItemPath, 'editorOptions', startDateEditorOptions);
+            this.form.itemOption(endDateItemPath, 'editorOptions', endDateEditorOptions);
         }
     }
 
@@ -369,14 +385,17 @@ export class AppointmentForm {
 
     setEditorOptions(name, groupName, options) {
         const editorPath = `${APPOINTMENT_FORM_GROUP_NAMES.groupName}.${name}`;
-        const editor = this._appointmentForm.itemOption(editorPath);
+        const editor = this.form.itemOption(editorPath);
 
-        editor && this._appointmentForm.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
+        editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
     }
 
-    updateFormData(formData, dataExprs) {
-        this._lockDateShiftFlag = true;
+    updateFormData(formData) {
+        this.semaphore.take();
 
+        const dataExprs = this.scheduler.getDataAccessors().expr;
+
+        const allDay = formData[dataExprs.allDayExpr];
         const startDate = new Date(formData[dataExprs.startDateExpr]);
         const endDate = new Date(formData[dataExprs.endDateExpr]);
 
@@ -384,7 +403,9 @@ export class AppointmentForm {
         this.updateTimeZoneEditorDataSource(endDate, dataExprs.endDateTimeZoneExpr);
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
-        this._appointmentForm.option('formData', formData);
-        this._lockDateShiftFlag = false;
+        this.form.option('formData', formData);
+        this.setEditorsType(allDay);
+
+        this.semaphore.release();
     }
 }

@@ -104,7 +104,7 @@
     }
   },
   {
-    "name": "data/load_options",
+    "name": "data/index",
     "exports": {
       "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" }
     }

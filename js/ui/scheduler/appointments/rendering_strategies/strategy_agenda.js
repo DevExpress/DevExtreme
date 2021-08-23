@@ -5,6 +5,9 @@ import BaseRenderingStrategy from './strategy.base';
 import { ExpressionUtils } from '../../expressionUtils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
+    get agendaDuration() { return this.options.agendaDuration; }
+    get currentDate() { return this.options.currentDate; }
+
     getAppointmentMinSize() {
     }
 
@@ -30,6 +33,12 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     createTaskPositionMap(appointments) {
         let height;
         let appointmentsByResources;
+
+        this.calculateRows(
+            appointments,
+            this.agendaDuration,
+            this.currentDate
+        );
 
         if(appointments.length) {
             height = this.instance.fire('getAgendaVerticalStepHeight');
@@ -108,15 +117,11 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        return this.getDefaultCellWidth();
+        return this.cellWidth;
     }
 
     _needVerifyItemSize() {
         return false;
-    }
-
-    _isRtl() {
-        return this.instance.option('rtlEnabled');
     }
 
     _getAppointmentParts() {
@@ -158,19 +163,15 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getDropDownAppointmentWidth() {
     }
 
-    getDefaultCellWidth() {
-        return this._defaultWidth;
-    }
-
     getCollectorLeftOffset() {
     }
     getCollectorTopOffset() {
     }
 
 
+    // TODO: get rid of an extra 'needClearSettings' argument
     calculateRows(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
-
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
         const groupedAppointments = this.groupAppointmentByResources(appointments);

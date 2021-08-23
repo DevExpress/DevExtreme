@@ -1,3 +1,4 @@
+export const WIDGET_CLASS = 'dx-widget';
 export const FORM_CLASS = 'dx-form';
 export const FORM_GROUP_CLASS = 'dx-form-group';
 export const FORM_GROUP_CAPTION_CLASS = 'dx-form-group-caption';
@@ -34,4 +35,6 @@ export const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
 export const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
 export const GROUP_COL_COUNT_ATTR = 'group-col-count';
 export const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
+export const FORM_UNDERLINED_CLASS = 'dx-form-styling-mode-underlined';
 
+export const SIMPLE_ITEM_TYPE = 'simple';

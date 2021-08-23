@@ -2,20 +2,20 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxTrackBar, {
-    dxTrackBarOptions
+    dxTrackBarOptions,
 } from './track_bar';
 
 import {
-    format
-} from './widget/ui.widget';
+    Format,
+} from '../localization';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlider>;
@@ -70,7 +70,7 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -95,18 +95,18 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        * @docid
        * @default function(value) { return value }
        */
-      format?: format,
+      format?: Format;
       /**
        * @docid
        * @type Enums.VerticalEdge
        * @default 'bottom'
        */
-      position?: 'bottom' | 'top',
+      position?: 'bottom' | 'top';
       /**
        * @docid
        * @default false
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -135,24 +135,24 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        * @docid
        * @default false
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default function(value) { return value }
        */
-      format?: format,
+      format?: Format;
       /**
        * @docid
        * @type Enums.VerticalEdge
        * @default 'top'
        */
-      position?: 'bottom' | 'top',
+      position?: 'bottom' | 'top';
       /**
        * @docid
        * @type Enums.SliderTooltipShowMode
        * @default 'onHover'
        */
-      showMode?: 'always' | 'onHover'
+      showMode?: 'always' | 'onHover';
     };
 }
 

@@ -8,6 +8,8 @@ import { extend } from '../../core/utils/extend';
 import { focusable as focusableSelector } from './selectors';
 import { inArray } from '../../core/utils/array';
 import { isPlainObject, isDefined } from '../../core/utils/type';
+import devices from '../../core/devices';
+import { compare as compareVersions } from '../../core/utils/version';
 
 import '../../events/click';
 import '../../events/core/emitter.feedback';
@@ -68,8 +70,24 @@ const Widget = DOMComponent.inherit({
             */
             onFocusOut: null,
             onKeyboardHandled: null,
-            ignoreParentReadOnly: false
+            ignoreParentReadOnly: false,
+            useResizeObserver: true
         });
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([{
+            device: function() {
+                const device = devices.real();
+                const platform = device.platform;
+                const version = device.version;
+                return platform === 'ios' && compareVersions(version, '13.3') <= 0
+                    || platform === 'android' && compareVersions(version, '4.4.4') <= 0;
+            },
+            options: {
+                useResizeObserver: false
+            }
+        }]);
     },
 
     _init() {
@@ -481,6 +499,7 @@ const Widget = DOMComponent.inherit({
                 break;
             case 'onFocusIn':
             case 'onFocusOut':
+            case 'useResizeObserver':
                 break;
             case 'accessKey':
                 this._renderAccessKey();

@@ -30,6 +30,8 @@ $agenda-appointment-title-font-size: null !default;
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
 
+@use "./layout/header" as *;
+@use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icons" as *;
 @use "./common";
@@ -39,15 +41,7 @@ $agenda-appointment-recurrence-icon-color: null !default;
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg
 );
 
-$scheduler-navigator-offset: 10px;
-$scheduler-switcher-offset: 10px;
 $scheduler-default-header-height: 56px;
-
-$scheduler-navigator-caption-width: 180px;
-
-$scheduler-mobile-navigator-caption-width: 140px;
-
-$scheduler-switcher-tab-width: 100px;
 
 $scheduler-timepanel-cell-offset: 20px;
 
@@ -552,103 +546,18 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 }
 
-
 @mixin scheduler-mixin() {
   .dx-scheduler-pseudo-cell {
     @include dx-scheduler-pseudo-cell-mixin();
   }
 
   .dx-scheduler-header {
-    position: relative;
-    z-index: 1;
-    width: 100%;
+    @include header-base($scheduler-base-border);
   }
 
-  .dx-scheduler-navigator {
-    float: left;
-    padding-left: $scheduler-navigator-offset;
-    white-space: nowrap;
-
-    .dx-device-mobile & {
-      padding-left: $scheduler-navigator-offset * 0.5;
-    }
-
-    min-width: $scheduler-navigator-caption-width;
-    max-width: 40%;
-  }
-
-  .dx-scheduler-navigator-caption {
-    width: $scheduler-navigator-caption-width;
-    min-width: $scheduler-navigator-caption-width * 0.6;
-    max-width: 80%;
-
-    .dx-device-mobile & {
-      width: $scheduler-mobile-navigator-caption-width;
-    }
-  }
-
-  .dx-calendar.dx-scheduler-navigator-calendar {
-    width: 100%;
-    height: 100%;
-  }
-
-  .dx-scheduler-view-switcher.dx-tabs.dx-tabs-expanded {
-    .dx-tab-selected::before {
-      position: absolute;
-      bottom: -2px;
-      width: 100%;
-      height: 2px;
-      content: '';
-      right: 0;
-    }
-  }
-
-  .dx-scheduler-view-switcher.dx-tabs {
-    max-width: 52%;
-    min-width: $scheduler-navigator-caption-width * 0.4;
-    width: auto;
-    float: right;
-    height: 100%;
-    border: none;
-
-    .dx-scheduler-small & {
-      display: none;
-    }
-
-    .dx-tabs-scrollable .dx-tabs-wrapper {
-      border-bottom: none;
-    }
-
-    .dx-tab {
-      width: $scheduler-switcher-tab-width;
-
-      &.dx-state-focused::after {
-        border-bottom: none;
-      }
-    }
-  }
-
-  .dx-scheduler-view-switcher.dx-dropdownmenu.dx-button {
-    position: absolute;
-    right: $scheduler-switcher-offset;
-  }
-
-  .dx-scheduler-view-switcher-label {
-    position: absolute;
-  }
-
-  .dx-scheduler-view-switcher-reduced {
-    table-layout: auto;
-
-    &.dx-tabs {
-      .dx-tab {
-        width: auto;
-        height: $scheduler-default-header-height;
-      }
-    }
-
-    .dx-tabs-wrapper {
-      height: $scheduler-default-header-height;
+  .dx-scheduler-view-switcher-dropdown-button-content {
+    .dx-list-item {
+      display: list-item;
     }
   }
 
@@ -1039,10 +948,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-scrollable-fixed-content {
-    height: 100%;
-  }
-
   .dx-scheduler-work-space-month {
     .dx-scheduler-all-day-title {
       display: none;
@@ -1092,10 +997,8 @@ $scheduler-appointment-form-label-padding: 20px;
       min-height: $scheduler-month-workspace-date-table-height;
     }
 
-    .dx-scrollable-native .dx-scrollable-content {
-      &.dx-scheduler-scrollable-fixed-content {
-        height: 100%;
-      }
+    &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-vertical-grouped) .dx-scrollable-content {
+      height: 100%;
     }
 
     .dx-scheduler-date-table-cell {
@@ -2415,25 +2318,6 @@ $scheduler-appointment-form-label-padding: 20px;
     .dx-scheduler-date-time-shader-all-day {
       margin-left: 0;
       margin-right: $scheduler-left-column-width;
-    }
-
-    .dx-scheduler-navigator {
-      float: right;
-      padding-left: 0;
-      padding-right: $scheduler-navigator-offset;
-
-      .dx-device-mobile & {
-        padding-right: $scheduler-navigator-offset * 0.5;
-      }
-    }
-
-    .dx-scheduler-view-switcher.dx-tabs {
-      float: left;
-    }
-
-    .dx-scheduler-view-switcher.dx-dropdownmenu {
-      left: $scheduler-switcher-offset;
-      right: auto;
     }
 
     .dx-scheduler-work-space-month {

@@ -429,6 +429,135 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk(dataGrid.option('selectionFilter').length, 'no selection filter');
         assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible');
     });
+
+    QUnit.test('Disabled item should be selected when single mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'single'
+            }
+        });
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.getRowElement(0)).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row is selected');
+
+        // act
+        $(dataGrid.getRowElement(1)).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [2], 'second row is selected');
+    });
+
+    QUnit.test('Disabled item should be selected when single deferred mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'single',
+                deferred: true
+            }
+        });
+
+        this.clock.tick(100);
+
+        let selectedRowKeys;
+
+        // act
+        $(dataGrid.getRowElement(0)).trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [1], 'first row is selected');
+
+        // act
+        selectedRowKeys = null;
+        $(dataGrid.getRowElement(1)).trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [2], 'second row is selected');
+    });
+
+    QUnit.test('Disabled item should be selected when multiple mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always'
+            }
+        });
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.getRowElement(0)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row is selected');
+
+        // act
+        $(dataGrid.getRowElement(1)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1, 2], 'both rows are selected');
+    });
+
+    QUnit.test('Disabled item should be selected when multiple deferred mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'multiple',
+                deferred: true,
+                showCheckBoxesMode: 'always'
+            }
+        });
+        let selectedRowKeys;
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.getRowElement(0)).find('.dx-checkbox').trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [1], 'first row is selected');
+
+        // act
+        selectedRowKeys = null;
+        $(dataGrid.getRowElement(1)).find('.dx-checkbox').trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [1, 2], 'both rows are selected');
+    });
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
@@ -464,7 +593,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, 'visible row count');
+        assert.equal(visibleRows.length, 10, 'visible row count');
         assert.equal(visibleRows[0].key, 6, 'first visible row key');
         assert.equal(visibleRows[6].key, 12, 'selected row key');
         assert.equal(visibleRows[6].isSelected, true, 'isSelected for selected row');
@@ -476,7 +605,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         // arrange, act
         const array = [];
 
-        for(let i = 1; i <= 30; i++) {
+        for(let i = 1; i <= 40; i++) {
             array.push({ id: i });
         }
 
@@ -484,7 +613,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             height: 100,
             dataSource: array,
             keyExpr: 'id',
-            loadingTimeout: null,
+            paging: {
+                pageSize: 30
+            },
             selection: {
                 mode: 'multiple',
                 selectAllMode: 'page'
@@ -494,13 +625,16 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
+        this.clock.tick();
+
         // act
         dataGrid.selectAll();
+        this.clock.tick();
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 10, 'visible row count');
-        assert.equal(dataGrid.getSelectedRowKeys().length, 20, 'selected row key count equals pageSize');
+        assert.equal(visibleRows.length, 20, 'visible row count');
+        assert.equal(dataGrid.getSelectedRowKeys().length, 30, 'selected row key count equals pageSize');
     });
 
     // T726385
@@ -528,13 +662,14 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 10000 });
+
         $(dataGrid.getRowElement(0)).trigger('dxclick');
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 10, 'visible row count');
+        assert.equal(visibleRows.length, 5, 'visible row count');
         assert.equal(visibleRows[0].isSelected, true, 'first visible row is selected');
-        assert.deepEqual(dataGrid.getSelectedRowKeys(), [11], 'selected row key count equals pageSize');
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [16], 'selected row key count equals pageSize');
     });
 });
 

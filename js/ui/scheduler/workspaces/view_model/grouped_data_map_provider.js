@@ -1,4 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
+import { isDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 export class GroupedDataMapProvider {
     constructor(viewDataGenerator, viewDataMap, completeViewDataMap, viewOptions) {
@@ -95,7 +96,7 @@ export class GroupedDataMapProvider {
             : startDate.getTime();
 
         const isStartDateInCell = cellData => {
-            if(!this._viewOptions.isDateAndTimeView) {
+            if(!isDateAndTimeView(this._viewOptions.viewType)) {
                 return dateUtils.sameDate(startDate, cellData.startDate);
             }
 

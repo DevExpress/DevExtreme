@@ -30,9 +30,22 @@ export const EVENT = {
   dragMove: 'dxdrag',
   drag: 'dxdrag',
   dragEnd: 'dxdragend',
+  dragEnter: 'dxdragenter',
+  dragLeave: 'dxdragleave',
+  drop: 'dxdrop',
+  scroll: 'scroll',
+  scrollStart: 'dxscrollstart',
+  scrollEnd: 'dxscrollend',
+  scrollCancel: 'dxscrollcancel',
+  scrollInit: 'dxscrollinit',
+  scrollStop: 'dxscrollstop',
+  scrollMove: 'dxscroll',
+  pointerDown: 'dxpointerdown',
+  pointerUp: 'dxpointerup',
 };
 
 export const defaultEvent = {
+  type: '',
   isDefaultPrevented: (): void => undefined,
   preventDefault: (): void => undefined,
   stopImmediatePropagation: (): void => undefined,

@@ -1,29 +1,28 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import BaseWidget, {
@@ -35,7 +34,7 @@ import BaseWidget, {
     VizTextOverflowType,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 export interface InteractionInfo {
@@ -44,8 +43,8 @@ export interface InteractionInfo {
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxTreeMap> & {
-  readonly node: dxTreeMapNode
-}
+  readonly node: dxTreeMapNode;
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxTreeMap>;
@@ -56,7 +55,7 @@ export type DrawnEvent = EventInfo<dxTreeMap>;
 /** @public */
 export type DrillEvent = EventInfo<dxTreeMap> & {
   readonly node: dxTreeMapNode;
-}
+};
 
 /** @public */
 export type ExportedEvent = EventInfo<dxTreeMap>;
@@ -65,7 +64,7 @@ export type ExportedEvent = EventInfo<dxTreeMap>;
 export type ExportingEvent = EventInfo<dxTreeMap> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxTreeMap>;
+export type FileSavingEvent = FileSavingEventInfo<dxTreeMap>;
 
 /** @public */
 export type HoverChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
@@ -79,12 +78,12 @@ export type InitializedEvent = InitializedEventInfo<dxTreeMap>;
 /** @public */
 export type NodesInitializedEvent = EventInfo<dxTreeMap> & {
     readonly root: dxTreeMapNode;
-}
+};
 
 /** @public */
 export type NodesRenderingEvent = EventInfo<dxTreeMap> & {
     readonly node: dxTreeMapNode;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
@@ -118,35 +117,35 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default undefined
        */
-      colorCodeField?: string,
+      colorCodeField?: string;
       /**
        * @docid
        * @default false
        */
-      colorizeGroups?: boolean,
+      colorizeGroups?: boolean;
       /**
        * @docid
        * @extends CommonVizPalette
        * @type Array<string>|Enums.VizPalette
        */
-      palette?: Array<string> | PaletteType,
+      palette?: Array<string> | PaletteType;
       /**
        * @docid
        * @type Enums.VizPaletteExtensionMode
        * @default 'blend'
        */
-      paletteExtensionMode?: PaletteExtensionModeType,
+      paletteExtensionMode?: PaletteExtensionModeType;
       /**
        * @docid
        * @default undefined
        */
-      range?: Array<number>,
+      range?: Array<number>;
       /**
        * @docid
        * @type Enums.TreeMapColorizerType
        * @default undefined
        */
-      type?: 'discrete' | 'gradient' | 'none' | 'range'
+      type?: 'discrete' | 'gradient' | 'none' | 'range';
     };
     /**
      * @docid
@@ -167,33 +166,33 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "#d3d3d3"
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default 1
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @default "#eeeeee"
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 4
        */
-      padding?: number,
+      padding?: number;
       /**
        * @docid
        * @default undefined
        */
-      headerHeight?: number,
+      headerHeight?: number;
       /**
        * @docid
        * @default undefined
        */
-      hoverEnabled?: boolean,
+      hoverEnabled?: boolean;
       /**
        * @docid
        */
@@ -206,41 +205,41 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default undefined
          */
-        color?: string
-      },
+        color?: string;
+      };
       /**
        * @docid
        */
       label?: {
         /**
          * @docid
-         * @default '#767676' [prop](color)
-         * @default 600 [prop](weight)
+         * @default '#767676' &prop(color)
+         * @default 600 &prop(weight)
          */
-        font?: Font,
+        font?: Font;
         /**
          * @docid
          * @type Enums.VizTextOverflow
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflowType,
+        textOverflow?: VizTextOverflowType;
         /**
          * @docid
          * @default true
          */
-        visible?: boolean
-      },
+        visible?: boolean;
+      };
       /**
        * @docid
        */
@@ -253,19 +252,19 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default "#232323"
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default undefined
          */
-        color?: string
-      }
+        color?: string;
+      };
     };
     /**
      * @docid
@@ -301,7 +300,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default 'squarified'
      * @public
      */
-    layoutAlgorithm?: 'sliceanddice' | 'squarified' | 'strip' | ((e: { rect?: Array<number>, sum?: number, items?: Array<any> }) => any);
+    layoutAlgorithm?: 'sliceanddice' | 'squarified' | 'strip' | ((e: { rect?: Array<number>; sum?: number; items?: Array<any> }) => any);
     /**
      * @docid
      * @type Enums.TreeMapLayoutDirection
@@ -325,9 +324,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
      * @notUsedInTheme
@@ -339,9 +338,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -352,9 +351,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -365,9 +364,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -378,9 +377,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -391,9 +390,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -426,18 +425,18 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "#000000"
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default 1
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @default "#$5f8b95"
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        */
@@ -450,47 +449,47 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default undefined
          */
-        color?: string
-      },
+        color?: string;
+      };
       /**
        * @docid
        */
       label?: {
         /**
          * @docid
-         * @default '#FFFFFF' [prop](color)
-         * @default 300 [prop](weight)
+         * @default '#FFFFFF' &prop(color)
+         * @default 300 &prop(weight)
          */
-        font?: Font,
+        font?: Font;
         /**
          * @docid
          * @type Enums.VizTextOverflow
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflowType,
+        textOverflow?: VizTextOverflowType;
         /**
          * @docid
          * @defaultValue true
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @type Enums.VizWordWrap
          * @default "normal"
          */
-        wordWrap?: WordWrapType
-      },
+        wordWrap?: WordWrapType;
+      };
       /**
        * @docid
        */
@@ -503,19 +502,19 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default "#232323"
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          * @default undefined
          */
-        color?: string
-      }
+        color?: string;
+      };
     };
     /**
      * @docid
@@ -543,7 +542,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
@@ -554,7 +553,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }) => any);
+    customizeTooltip?: ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }) => any);
 }
 /**
  * @docid

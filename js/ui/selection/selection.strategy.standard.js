@@ -151,17 +151,24 @@ export default SelectionStrategy.inherit({
         return this._lastLoadDeferred?.state() === 'pending';
     },
 
-    _concatRequestsItems: function(keys, isDeselect, oldRequestItems) {
+    _concatRequestsItems: function(keys, isDeselect, oldRequestItems, updatedKeys) {
+        let selectedItems;
         const deselectedItems = isDeselect ? keys : [];
 
+        if(updatedKeys) {
+            selectedItems = updatedKeys;
+        } else {
+            selectedItems = removeDuplicates(keys, this.options.selectedItemKeys);
+        }
+
         return {
-            addedItems: oldRequestItems.added.concat(removeDuplicates(keys, this.options.selectedItemKeys)),
+            addedItems: oldRequestItems.added.concat(selectedItems),
             removedItems: oldRequestItems.removed.concat(deselectedItems),
             keys: keys
         };
     },
 
-    _collectLastRequestData: function(keys, isDeselect, isSelectAll) {
+    _collectLastRequestData: function(keys, isDeselect, isSelectAll, updatedKeys) {
         const isDeselectAll = isDeselect && isSelectAll;
         const oldRequestItems = {
             added: [],
@@ -171,7 +178,7 @@ export default SelectionStrategy.inherit({
         let lastRequestData = multiSelectEnabled ? this._lastRequestData : {};
 
         if(multiSelectEnabled) {
-            if(this._requestInProgress()) {
+            if(this._shouldMergeWithLastRequest) {
                 if(isDeselectAll) {
                     this._lastLoadDeferred.reject();
                     lastRequestData = {};
@@ -182,12 +189,10 @@ export default SelectionStrategy.inherit({
                     if(!isDeselect) {
                         this._lastLoadDeferred.reject();
                     }
-                } else {
-                    lastRequestData = {};
                 }
             }
 
-            lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems);
+            lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems, this._shouldMergeWithLastRequest ? undefined : updatedKeys);
         }
 
         return lastRequestData;
@@ -195,7 +200,7 @@ export default SelectionStrategy.inherit({
 
     _updateKeysByLastRequestData: function(keys, isDeselect, isSelectAll) {
         let currentKeys = keys;
-        if(this._isMultiSelectEnabled() && !isDeselect && !isSelectAll) {
+        if(this._isMultiSelectEnabled() && this._shouldMergeWithLastRequest && !isDeselect && !isSelectAll) {
             currentKeys = removeDuplicates(keys.concat(this._lastRequestData?.addedItems), this._lastRequestData?.removedItems);
             currentKeys = uniqueValues(currentKeys);
         }
@@ -203,14 +208,17 @@ export default SelectionStrategy.inherit({
         return currentKeys;
     },
 
-    _loadSelectedItems: function(keys, isDeselect, isSelectAll) {
+    _loadSelectedItems: function(keys, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
         const deferred = new Deferred();
+        this._shouldMergeWithLastRequest = this._requestInProgress();
 
-        this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll);
+        this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll, updatedKeys);
 
         when(that._lastLoadDeferred).always(function() {
             const currentKeys = that._updateKeysByLastRequestData(keys, isDeselect, isSelectAll);
+
+            that._shouldMergeWithLastRequest = false;
 
             that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll)
                 .done(deferred.resolve)
@@ -222,9 +230,9 @@ export default SelectionStrategy.inherit({
         return deferred;
     },
 
-    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
+    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
-        const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll);
+        const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys);
 
         deferred.done(function(items) {
             if(preserve) {
@@ -244,7 +252,7 @@ export default SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key, itemData) {
-        if(isDefined(itemData) && itemData.disabled) {
+        if(isDefined(itemData) && !this.options.ignoreDisabledItems && itemData.disabled) {
             if(this.options.disabledItemKeys.indexOf(key) === -1) {
                 this.options.disabledItemKeys.push(key);
             }
@@ -379,7 +387,7 @@ export default SelectionStrategy.inherit({
     _isItemSelectionInProgress: function(key, checkPending) {
         const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
         if(shouldCheckPending) {
-            return this._lastRequestData.addedItems && this._lastRequestData.addedItems.indexOf(key) !== -1;
+            return this._lastRequestData.addedItems?.indexOf(key) !== -1;
         } else {
             return false;
         }

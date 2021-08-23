@@ -40,7 +40,6 @@ interface GroupedViewDataBase {
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
-  cellCountInGroupRow: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
   topVirtualRowCount: number;
@@ -67,6 +66,11 @@ export interface GroupRenderItem extends GroupItem {
   colSpan?: number;
   isFirstGroupCell?: boolean;
   isLastGroupCell?: boolean;
+}
+
+export interface GroupPanelData {
+  groupPanelItems: GroupRenderItem[][];
+  baseColSpan: number;
 }
 
 export interface Group {
@@ -133,4 +137,35 @@ export interface DateHeaderData {
   weekDayRightVirtualCellWidth?: number;
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
+}
+
+interface CountGenerationConfig {
+  intervalCount: number;
+  currentDate: Date;
+  viewType: string;
+  hoursInterval: number;
+  startDayHour: number;
+  endDayHour: number;
+}
+
+// TODO: tempporary
+export interface ViewDataProviderType {
+  timePanelData: TimePanelData;
+  viewData: GroupedViewData;
+  dateHeaderData: DateHeaderData;
+  getCellCount: (config: CountGenerationConfig) => number;
+  getRowCount: (config: CountGenerationConfig) => number;
+  update: (options: unknown, isGenerateNewData: boolean) => void;
+  getGroupPanelData: (options: unknown) => GroupPanelData;
+  getStartViewDate: () => Date;
+}
+
+export interface CellsMetaData {
+  dateTableCellsMeta: ClientRect[][];
+  allDayPanelCellsMeta: ClientRect[];
+}
+
+export interface ViewMetaData {
+  viewDataProvider: ViewDataProviderType;
+  cellsMetaData: CellsMetaData;
 }

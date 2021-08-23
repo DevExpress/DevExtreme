@@ -5,6 +5,7 @@ import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
 import devices from '../../../../core/devices';
 import { convertRulesToOptions } from '../../../../core/options/utils';
+import getElementComputedStyle from '../../../utils/get_computed_style';
 import { current } from '../../../../ui/themes';
 import {
   clear as clearEventHandlers,
@@ -12,10 +13,11 @@ import {
 import {
   CheckBox, CheckBoxProps, defaultOptionRules, viewFunction,
 } from '../check_box';
-import { Widget } from '../../common/widget';
-import { ValidationMessage } from '../../overlays/validation_message';
+import { Editor } from '../internal/editor';
 
 interface Mock extends jest.Mock {}
+
+jest.mock('../../../utils/get_computed_style');
 
 jest.mock('../../overlays/validation_message', () => ({ ValidationMessage: () => null }));
 
@@ -82,20 +84,20 @@ describe('CheckBox', () => {
     });
 
     it('should always render icon', () => {
-      const button = shallow(viewFunction({
+      const checkBox = shallow(viewFunction({
         props: {},
       } as CheckBox));
-      expect(button.find('.dx-checkbox-container .dx-checkbox-icon').exists()).toBe(true);
+      expect(checkBox.find('.dx-checkbox-container .dx-checkbox-icon').exists()).toBe(true);
     });
 
-    it('should pass all necessary properties to the Widget', () => {
+    it('should pass all necessary properties to Editor', () => {
       const renderOptions = {
         aria: { role: 'aria' },
-        onFocusIn: (): null => null,
       };
       const renderProps = {
         accessKey: 'A',
         activeStateEnabled: true,
+        className: 'name',
         disabled: true,
         focusStateEnabled: true,
         height: 100,
@@ -105,93 +107,32 @@ describe('CheckBox', () => {
         tabIndex: -2,
         visible: true,
         width: 200,
+        isValid: true,
+        validationMessageMode: 'auto',
+        validationError: { message: 'error' },
+        validationErrors: [],
+        validationStatus: 'valid',
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
-      const onWidgetKeyDown = (): null => null;
+      const keyDown = (): null => null;
       const onWidgetClick = (): null => null;
-      const target = {};
       const checkBox = mount(viewFunction({
-        target,
         ...renderOptions,
         props: renderProps,
         restAttributes,
         cssClasses,
-        onWidgetKeyDown,
+        keyDown,
         onWidgetClick,
       } as any));
-      expect(checkBox.find(Widget).props()).toMatchObject({
-        rootElementRef: target,
+      expect(checkBox.find(Editor).props()).toMatchObject({
         ...renderOptions,
         ...renderProps,
         ...restAttributes,
         classes: cssClasses,
-        onKeyDown: onWidgetKeyDown,
+        onKeyDown: keyDown,
         onClick: onWidgetClick,
       });
-    });
-
-    describe('validation', () => {
-      it('widget should pass correct props to validationMessage', () => {
-        const ref = { current: {} } as RefObject<HTMLDivElement>;
-        const validationErrors = [{ message: 'error message' }];
-        const CustomTree = ({ target }: any) => (
-          <div ref={ref}>
-            {viewFunction({
-              showValidationMessage: true,
-              target,
-              validationErrors,
-              props: {
-                isValid: false,
-                validationErrors,
-                validationStatus: 'invalid',
-                validationMessageMode: 'always',
-                rtlEnabled: false,
-              },
-              shouldShowValidationMessage: true,
-              targetCurrent: target?.current,
-            } as any)}
-          </div>
-        );
-        const tree = mount(<CustomTree />);
-        tree.setProps({ target: ref });
-        tree.update();
-
-        const validationMessage = tree.find(ValidationMessage);
-        const props = validationMessage.props();
-        expect(props.container).toBe(ref.current);
-        expect(props.target).toBe(ref.current);
-        expect(props.boundary).toBe(ref.current);
-        expect(props.positionRequest).toBe('below');
-        expect(props.mode).toBe('always');
-        expect(props.rtlEnabled).toBe(false);
-        expect(props.validationErrors).toEqual(validationErrors);
-      });
-    });
-
-    it('validationMessage should not be rendered when widget is not rendered yet', () => {
-      const ref = React.createRef();
-      const validationErrors = [{ message: 'error message' }];
-      const CustomTree = ({ target }: any) => (
-        <div ref={ref as any}>
-          {viewFunction({
-            showValidationMessage: false,
-            target,
-            validationErrors,
-            props: {
-              isValid: false,
-              validationErrors,
-              validationStatus: 'invalid',
-            },
-          } as any)}
-        </div>
-      );
-      const tree = mount(<CustomTree />);
-      tree.setProps({ target: ref.current });
-      tree.update();
-
-      const validationMessage = tree.find(ValidationMessage);
-      expect(validationMessage.exists()).toBe(false);
     });
   });
 
@@ -199,65 +140,116 @@ describe('CheckBox', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
 
-      describe('updateValidationMessageVisibility', () => {
-        it('should set showValidationMessage to true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
-          const checkBox = new CheckBox({
-            isValid: false,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
-          });
+      describe('updateIconFontSize', () => {
+        it('should set icon font size on init', () => {
+          const checkBox = new CheckBox({ iconSize: 22 });
+          checkBox.iconRef = { current: { style: {} } } as any;
+          const icon = checkBox.iconRef.current;
 
-          checkBox.updateValidationMessageVisibility();
+          checkBox.updateIconFontSize();
 
-          expect(checkBox.showValidationMessage).toBe(true);
+          expect(icon?.style.fontSize).toEqual('16px');
         });
 
-        it('should set showValidationMessage to false if there is no validation errors', () => {
-          const checkBox = new CheckBox({
-            isValid: false,
-            validationStatus: 'invalid',
-          });
+        it('should change icon font size after runtime changing "iconSize" option', () => {
+          const checkBox = new CheckBox({ iconSize: 22 });
+          checkBox.iconRef = { current: { style: {} } } as any;
+          const icon = checkBox.iconRef.current;
 
-          checkBox.updateValidationMessageVisibility();
+          checkBox.updateIconFontSize();
+          checkBox.props.iconSize = 16;
 
-          expect(checkBox.showValidationMessage).toBe(false);
+          checkBox.updateIconFontSize();
+
+          expect(icon?.style.fontSize).toEqual('12px');
         });
 
-        it('should set showValidationMessage to false if validationStatis not equal to "invalid"', () => {
-          const checkBox = new CheckBox({
-            isValid: false,
-            validationStatus: 'pending',
-            validationErrors: [{ message: 'error message' }],
-          });
+        it('should set default generic theme font-size if theme is not defined (e.g. in SSR)', () => {
+          (current as Mock).mockImplementation(() => undefined);
+          const checkBox = new CheckBox({ iconSize: 22 });
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            style: {},
+          } as any;
+          const icon = checkBox.iconRef.current;
 
-          checkBox.updateValidationMessageVisibility();
+          checkBox.updateIconFontSize();
 
-          expect(checkBox.showValidationMessage).toBe(false);
+          expect(icon?.style.fontSize).toEqual('16px');
         });
 
-        it('should set showValidationMessage to false if isValid is true', () => {
-          const checkBox = new CheckBox({
-            isValid: true,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
+        each(['material', 'generic', 'material-compact', 'generic-compact'])
+          .it('should set fontSize properly for "%s" theme when iconSize is defined', (theme) => {
+            (current as Mock).mockImplementation(() => theme);
+            let iconSize = theme === 'material' ? 18 : 22;
+            if (theme.includes('compact')) {
+              iconSize = 16;
+            }
+
+            const checkBox = new CheckBox({ iconSize });
+            checkBox.iconRef = React.createRef() as any;
+            checkBox.iconRef.current = { style: {} } as any;
+            const icon = checkBox.iconRef.current;
+
+            checkBox.updateIconFontSize();
+
+            const iconFontSizeRatio = theme.includes('compact') ? 12 / iconSize : 16 / iconSize;
+            const expectedValue = `${Math.ceil(iconFontSizeRatio * iconSize)}px`;
+
+            expect(icon?.style.fontSize).toEqual(expectedValue);
           });
 
-          checkBox.updateValidationMessageVisibility();
+        each(['material-compact', 'generic-compact', 'material', 'generic'])
+          .it('should set fontSize properly for "%s" theme when iconSize is undefined', (theme) => {
+            (current as Mock).mockImplementation(() => theme);
 
-          expect(checkBox.showValidationMessage).toBe(false);
-        });
-      });
+            let iconSize = theme === 'material' ? 18 : 22;
+            if (theme.includes('compact')) {
+              iconSize = 16;
+            }
 
-      describe('Methods', () => {
-        describe('focus', () => {
-          it('should focus main element', () => {
+            (getElementComputedStyle as jest.Mock).mockReturnValue({
+              width: iconSize,
+              height: iconSize,
+            });
+
             const checkBox = new CheckBox({});
-            checkBox.widgetRef = { current: { focus: jest.fn() } } as any;
-            checkBox.focus();
+            checkBox.iconRef = React.createRef() as any;
+            checkBox.iconRef.current = { style: {} } as any;
+            const icon = checkBox.iconRef.current;
 
-            expect(checkBox.widgetRef.current?.focus).toHaveBeenCalledTimes(1);
-            expect(checkBox.widgetRef.current?.focus).toHaveBeenCalledWith();
+            checkBox.updateIconFontSize();
+
+            const iconFontSizeRatio = theme.includes('compact') ? 12 / iconSize : 16 / iconSize;
+            const expectedValue = `${Math.ceil(iconFontSizeRatio * iconSize)}px`;
+
+            expect(icon?.style.fontSize).toEqual(expectedValue);
           });
+
+        it("should correctly change icon font size if 'iconSize' option is defined in pixels string", () => {
+          (getElementComputedStyle as jest.Mock).mockReturnValue({ width: '22px', height: '22px' });
+
+          const checkBox = new CheckBox({ iconSize: '22px' });
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            style: {},
+          } as any;
+          checkBox.updateIconFontSize();
+
+          const icon = checkBox.iconRef.current;
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
+
+        it("should use default icon size if 'getElementComputedStyle' util returns null", () => {
+          (getElementComputedStyle as jest.Mock).mockReturnValue(null);
+
+          const checkBox = new CheckBox({});
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = { style: {} } as any;
+          checkBox.updateIconFontSize();
+
+          const icon = checkBox.iconRef.current;
+          expect(icon?.style.fontSize).toEqual('16px');
         });
       });
 
@@ -269,7 +261,7 @@ describe('CheckBox', () => {
               const originalEvent = {} as Event & { cancel: boolean };
               const options = { keyName: '', which: '', originalEvent };
               const checkBox = new CheckBox({ onKeyDown });
-              checkBox.onWidgetKeyDown(options);
+              checkBox.keyDown(options);
               expect(onKeyDown).toHaveBeenCalledTimes(1);
               expect(onKeyDown).toHaveBeenCalledWith(options);
             });
@@ -280,7 +272,7 @@ describe('CheckBox', () => {
               const originalEvent = {} as Event & { cancel: boolean };
               const options = { keyName: 'enter', which: '', originalEvent };
               const checkBox = new CheckBox({ onKeyDown, onClick });
-              checkBox.onWidgetKeyDown(options);
+              checkBox.keyDown(options);
               expect(onKeyDown).toBeCalled();
               expect(onClick).not.toBeCalled();
             });
@@ -296,7 +288,7 @@ describe('CheckBox', () => {
               };
               const checkBox = new CheckBox({});
               checkBox.onWidgetClick = jest.fn();
-              checkBox.onWidgetKeyDown(options);
+              checkBox.keyDown(options);
               expect(options.originalEvent.preventDefault).toBeCalled();
               expect(checkBox.onWidgetClick).toHaveBeenCalled();
             });
@@ -305,7 +297,7 @@ describe('CheckBox', () => {
               const onClick = jest.fn();
               const checkBox = new CheckBox({ onClick });
               const originalEvent = {} as Event & { cancel: boolean };
-              checkBox.onWidgetKeyDown({ keyName: 'enter', which: 'enter', originalEvent });
+              checkBox.keyDown({ keyName: 'enter', which: 'enter', originalEvent });
               expect(onClick).not.toBeCalled();
             });
           });
@@ -344,28 +336,56 @@ describe('CheckBox', () => {
       });
     });
 
-    describe('FocusIn', () => {
-      it('should raise onFocusIn prop event', () => {
-        const onFocusIn = jest.fn();
-        const checkBox = new CheckBox({ onFocusIn });
-        const event = {} as Event;
+    describe('Methods', () => {
+      describe('focus', () => {
+        it('should call editor focus method', () => {
+          const checkBox = new CheckBox({});
+          checkBox.editorRef = { current: { focus: jest.fn() } } as unknown as RefObject<Editor>;
+          checkBox.focus();
 
-        checkBox.onFocusIn(event);
-
-        expect(onFocusIn).toHaveBeenCalledTimes(1);
+          expect(checkBox.editorRef.current?.focus).toHaveBeenCalledTimes(1);
+          expect(checkBox.editorRef.current?.focus).toHaveBeenCalledWith();
+        });
       });
 
-      it('should not raise any error if onFocusIn prop is not passed', () => {
-        const checkBox = new CheckBox({});
-        const event = {} as Event;
+      describe('blur', () => {
+        it('should call editor blur method', () => {
+          const checkBox = new CheckBox({});
+          checkBox.editorRef = { current: { blur: jest.fn() } } as unknown as RefObject<Editor>;
+          checkBox.blur();
 
-        expect(() => { checkBox.onFocusIn(event); }).not.toThrow();
+          expect(checkBox.editorRef.current?.blur).toHaveBeenCalledTimes(1);
+        });
       });
     });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
+      describe('icon styles', () => {
+        it('should have "width","height" styles', () => {
+          const checkBox = new CheckBox({ iconSize: 22 });
+
+          checkBox.updateIconFontSize();
+
+          expect(checkBox.iconStyles).toMatchObject({ width: '22px', height: '22px' });
+        });
+
+        each([22, '22px'])
+          .it('should convert "%s" in "22px"', (value) => {
+            expect(new CheckBox({
+              iconSize: value,
+            }).iconStyles).toMatchObject({ width: '22px', height: '22px' });
+          });
+
+        each(['50%', '1em', 'auto'])
+          .it('should apply "%s" as it is', (value) => {
+            expect(new CheckBox({
+              iconSize: value, width: 44, height: 44,
+            }).iconStyles).toMatchObject({ width: value, height: value });
+          });
+      });
+
       describe('aria', () => {
         it('should have role = "checkbox"', () => {
           expect(new CheckBox({}).aria).toMatchObject({ role: 'checkbox' });
@@ -380,55 +400,12 @@ describe('CheckBox', () => {
             expect(new CheckBox({ value }).aria)
               .toMatchObject({ checked: expectedValue });
           });
-
-        each([true, false])
-          .it('should have "readonly=%s if readOnly=%s', (readOnly) => {
-            expect(new CheckBox({ readOnly }).aria)
-              .toMatchObject({ readonly: `${readOnly}` });
-          });
-
-        each([true, false])
-          .it('should have "invalid=%s" if isValid=%s', (isValid: boolean) => {
-            expect(new CheckBox({ isValid }).aria)
-              .toMatchObject({ invalid: `${!isValid}` });
-          });
-
-        /* eslint-disable spellcheck/spell-checker */
-        it('should have no "describedby" when widget is valid', () => {
-          expect(new CheckBox({}).aria)
-            .not.toHaveProperty('describedby');
-        });
-
-        it('should have no "describedby" when widget "validationStatus" is not "invalid"', () => {
-          expect(new CheckBox({ isValid: false, validationStatus: 'pending' }).aria)
-            .not.toHaveProperty('describedby');
-        });
-
-        it('should have no "describedby" when there is no validation errors', () => {
-          expect(new CheckBox({ isValid: false, validationStatus: 'invalid' }).aria)
-            .not.toHaveProperty('describedby');
-        });
-
-        it('should have "describedby" when widget is invalid', () => {
-          const { aria } = new CheckBox({
-            isValid: false,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
-          });
-          expect(aria.describedby).not.toBeUndefined();
-        });
-        /* eslint-enable spellcheck/spell-checker */
       });
 
       describe('cssClasses', () => {
         it('should have "dx-checkbox" class', () => {
           expect(new CheckBox({}).cssClasses)
             .toEqual(expect.stringMatching('dx-checkbox'));
-        });
-
-        it('should have "dx-state-readonly" class if readOnly option is true', () => {
-          expect(new CheckBox({ readOnly: true }).cssClasses)
-            .toEqual(expect.stringMatching('dx-state-readonly'));
         });
 
         it('should have "dx-checkbox-checked" class if value option is true', () => {
@@ -444,83 +421,6 @@ describe('CheckBox', () => {
         it('should have "dx-checkbox-has-text" class if text option is defined', () => {
           expect(new CheckBox({ text: 'text' }).cssClasses)
             .toEqual(expect.stringMatching('dx-checkbox-has-text'));
-        });
-
-        it('should have "dx-invalid" class if isValid option is false', () => {
-          expect(new CheckBox({ isValid: false }).cssClasses)
-            .toEqual(expect.stringMatching('dx-invalid'));
-        });
-      });
-
-      describe('validationErrors', () => {
-        it('should return "validationErrors" props value when it is specified', () => {
-          const validationErrors = [{ message: 'error message' }];
-          expect(new CheckBox({ validationErrors }).validationErrors)
-            .toEqual(validationErrors);
-        });
-
-        it('should return array with one element equal to "validationError" props value when "validationErrors" is not specified', () => {
-          const validationError = { message: 'error message' };
-          expect(new CheckBox({ validationError }).validationErrors)
-            .toEqual([validationError]);
-        });
-      });
-
-      describe('targetCurrent', () => {
-        it('should return "this.target.current" value when it is specified', () => {
-          const checkBox = new CheckBox({});
-          const expectedCurrent = {};
-          const ref = { current: expectedCurrent } as RefObject<HTMLDivElement>;
-          checkBox.target = ref;
-
-          expect(checkBox.targetCurrent).toEqual(expectedCurrent);
-        });
-
-        it('should return undefined when target is not specified', () => {
-          const checkBox = new CheckBox({});
-
-          expect(checkBox.targetCurrent).toEqual(undefined);
-        });
-      });
-
-      describe('shouldShowValidationMessage', () => {
-        it('should return true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
-          const checkBox = new CheckBox({
-            isValid: false,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
-          });
-
-          expect(checkBox.shouldShowValidationMessage).toBe(true);
-        });
-
-        it('should return false if there is no validation errors', () => {
-          const checkBox = new CheckBox({
-            isValid: false,
-            validationStatus: 'invalid',
-          });
-
-          expect(checkBox.shouldShowValidationMessage).toBe(false);
-        });
-
-        it('should return false if validationStatis not equal to "invalid"', () => {
-          const checkBox = new CheckBox({
-            isValid: false,
-            validationStatus: 'pending',
-            validationErrors: [{ message: 'error message' }],
-          });
-
-          expect(checkBox.shouldShowValidationMessage).toBe(false);
-        });
-
-        it('should return false if isValid is true', () => {
-          const checkBox = new CheckBox({
-            isValid: true,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
-          });
-
-          expect(checkBox.shouldShowValidationMessage).toBe(false);
         });
       });
     });

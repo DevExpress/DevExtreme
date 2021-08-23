@@ -56,7 +56,6 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
-
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 const ROW_INSERTED_CLASS = 'dx-datagrid-row-inserted-animation';
@@ -800,7 +799,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(keyOfSpy.callCount, 55, 'keyOf call count');
+        assert.equal(keyOfSpy.callCount, 50, 'keyOf call count');
     });
 
     QUnit.test('isReady when loading', function(assert) {
@@ -1038,7 +1037,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
-        assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
+        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 0.51, 'toolbar custom item is aligned');
     });
 
     QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
@@ -1328,6 +1327,33 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         assert.strictEqual(dataSourceInstance, dataGrid.getController('data')._dataSource, 'dataSource is not recreated');
         assert.strictEqual(dataGrid.getController('data').items().length, 2, 'data is updated');
+    });
+
+    QUnit.test('dataSource object change', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [{ id: 1 }]
+                }
+            }
+        });
+
+        // act
+        dataGrid.option('dataSource', {
+            store: {
+                type: 'array',
+                key: 'id',
+                data: [{ id: 1 }, { id: 2 }]
+            }
+        });
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 2);
     });
 
     // T260011
@@ -1635,7 +1661,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('columnChooser', { mode: 'select' });
         assert.equal(headerPanel._getToolbarOptions.callCount, 3, 'Toolbar items are updated after columnChooser options change');
 
-        dataGrid.option('export', { allowExportSelectedData: false });
+        dataGrid.option('export', { allowExportSelectedData: true });
         assert.equal(headerPanel._getToolbarOptions.callCount, 4, 'Toolbar items are updated after export options change');
 
         dataGrid.option('groupPanel', { emptyPanelText: 'test' });
@@ -1729,12 +1755,13 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('paging change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
             }
         });
+
+        this.clock.tick();
 
         const changedSpy = sinon.spy();
         const loadingSpy = sinon.spy();
@@ -1747,6 +1774,8 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             pageIndex: 1,
             pageSize: 2
         });
+
+        this.clock.tick();
 
         // assert
         assert.strictEqual(changedSpy.callCount, 1, 'changed is called');
@@ -2300,6 +2329,250 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(onOptionChanged.callCount, 1, 'onOptionChanged is called once');
+    });
+
+    QUnit.test('Change toolbar.items[i].prop at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items[1].location', 'after');
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar.items[i] at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items[1]', { name: 'addRowButton', location: 'after' });
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar.items at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items', [{
+            name: 'columnChooserButton',
+            location: 'before'
+        }, {
+            name: 'addRowButton',
+            location: 'after'
+        }]);
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar', { items: [{
+            name: 'columnChooserButton',
+            location: 'before'
+        }, {
+            name: 'addRowButton',
+            location: 'after'
+        }] });
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Changing toolbar.items[i].prop saves the state of button', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            toolbar: {
+                items: [
+                    {
+                        location: 'before',
+                        widget: 'dxSelectBox',
+                        cssClass: 'my-test-button',
+                        options: {
+                            items: ['item1', 'item2'],
+                            value: 'item1',
+                        }
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $selectBox = dataGrid.$element().find('.my-test-button .dx-selectbox');
+        const selectBox = $selectBox.dxSelectBox('instance');
+        selectBox.option('value', 'item2');
+
+        // assert
+        assert.equal(selectBox.option('value'), 'item2', 'selectbox state is right');
+
+        // act
+        dataGrid.option('toolbar.items[0].disabled', true);
+
+        // assert
+        const $selectBoxDisabledContainer = dataGrid.$element().find('.my-test-button');
+        assert.ok($selectBoxDisabledContainer.hasClass('dx-state-disabled'), 'button option changed');
+
+        const $selectBoxDisabled = $selectBoxDisabledContainer.find('.dx-selectbox');
+        const selectBoxDisabled = $selectBoxDisabled.dxSelectBox('instance');
+        assert.equal(selectBoxDisabled.option('value'), 'item2', 'selectbox state saved');
     });
 });
 
@@ -3512,7 +3785,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
-        $(dataGrid.getScrollable()._container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
+        $(dataGrid.getScrollable().container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'row is navigated');
@@ -3551,7 +3824,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
-        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(500);
 
         // assert

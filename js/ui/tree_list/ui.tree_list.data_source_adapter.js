@@ -51,7 +51,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return compileSetter(keyExpr);
         },
 
-        _createParentIdGetter: function() {
+        createParentIdGetter: function() {
             return compileGetter(this.option('parentIdExpr'));
         },
 
@@ -117,21 +117,16 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return !!hasItems;
         },
 
-        _createVisibleItemsByNodes: function(nodes, options) {
-            const that = this;
-            let result = [];
-
+        _fillVisibleItemsByNodes: function(nodes, options, result) {
             for(let i = 0; i < nodes.length; i++) {
                 if(nodes[i].visible) {
                     result.push(nodes[i]);
                 }
 
-                if((that.isRowExpanded(nodes[i].key, options) || !nodes[i].visible) && nodes[i].hasChildren && nodes[i].children.length) {
-                    result = result.concat(that._createVisibleItemsByNodes(nodes[i].children, options));
+                if((this.isRowExpanded(nodes[i].key, options) || !nodes[i].visible) && nodes[i].hasChildren && nodes[i].children.length) {
+                    this._fillVisibleItemsByNodes(nodes[i].children, options, result);
                 }
             }
-
-            return result;
         },
 
         _convertItemToNode: function(item, rootValue, nodeByKey) {
@@ -593,10 +588,12 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 this._isNodesInitializing = false;
             }
 
-            data = this._createVisibleItemsByNodes(this._rootNode.children, options);
+            const resultData = [];
 
-            options.data = data;
-            this._totalItemsCount = data.length;
+            this._fillVisibleItemsByNodes(this._rootNode.children, options, resultData);
+
+            options.data = resultData;
+            this._totalItemsCount = resultData.length;
         },
 
         _handleDataLoadedCore: function(options) {
@@ -649,7 +646,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const dataStructure = this.option('dataStructure');
 
             this._keyGetter = this._createKeyGetter();
-            this._parentIdGetter = this._createParentIdGetter();
+            this._parentIdGetter = this.createParentIdGetter();
             this._hasItemsGetter = this._createHasItemsGetter();
             this._hasItemsSetter = this._createHasItemsSetter();
 

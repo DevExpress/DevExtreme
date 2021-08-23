@@ -17,6 +17,18 @@ import { ScrollableProps } from '../scrollable_props';
 import { ScrollableNative } from '../scrollable_native';
 import { ScrollableSimulated } from '../scrollable_simulated';
 
+import { Widget } from '../../common/widget';
+import { ScrollableDirection, ScrollOffset } from '../types.d';
+
+import { getWindow, setWindow } from '../../../../core/utils/window';
+import * as ElementLocationModule from '../utils/get_element_location_internal';
+import { DIRECTION_BOTH, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
+
+jest.mock('../utils/get_element_location_internal', () => ({
+  ...jest.requireActual('../utils/get_element_location_internal'),
+  getElementLocationInternal: jest.fn(),
+}));
+
 jest.mock('../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
   isGeneric: jest.fn(() => true),
@@ -34,12 +46,43 @@ describe('Scrollable', () => {
       forceGeneratePockets: false,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
+      needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
       useNative: true,
+    });
+  });
+
+  each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
+    it('should pass all necessary properties to the Widget', () => {
+      const config = {
+        activeStateUnit: '.UIFeedback',
+        useNative: useNativeScrolling,
+        direction: 'vertical' as ScrollableDirection,
+        width: '120px',
+        height: '300px',
+        activeStateEnabled: false,
+        addWidgetClass: false,
+        rtlEnabled: true,
+        disabled: true,
+        focusStateEnabled: false,
+        hoverStateEnabled: !useNativeScrolling,
+        tabIndex: 0,
+        visible: true,
+      };
+
+      const scrollable = mount<Scrollable>(<Scrollable {...config} />);
+
+      const { direction, useNative, ...restProps } = config;
+      expect(scrollable.find(Widget).at(0).props()).toMatchObject({
+        classes: useNative
+          ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled'
+          : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled',
+        ...restProps,
+      });
     });
   });
 
@@ -52,62 +95,154 @@ describe('Scrollable', () => {
       { name: 'scrollOffset', calledWith: [] },
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
-      { name: 'scrollToElement', calledWith: ['arg1'] },
-      { name: 'scrollToElementTopLeft', aliasName: 'scrollToElement', calledWith: ['arg1', { block: 'start', inline: 'start' }] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
       { name: 'container', calledWith: [] },
       { name: 'updateHandler', calledWith: [] },
-      { name: 'release', calledWith: [] },
-      { name: 'refresh', calledWith: [] },
+      { name: 'release', calledWith: [], hasSSRMode: true },
+      { name: 'refresh', calledWith: [], hasSSRMode: true },
       { name: 'startLoading', calledWith: [] },
-      { name: 'finishLoading', calledWith: [] },
+      { name: 'finishLoading', calledWith: [], hasSSRMode: true },
       { name: 'validate', calledWith: ['arg1'] },
-      { name: 'getScrollElementPosition', aliasName: 'getElementLocation', calledWith: ['arg1', 'arg2'] },
     ]).describe('Method: %o', (methodInfo) => {
       each([false, true]).describe('useNative: %o', (useNative) => {
-        it(`${methodInfo.name}() method should call according strategy method`, () => {
-          const viewModel = new Scrollable({ useNative });
+        each([false, true]).describe('isServeSide: %o', (isServerSide) => {
+          it(`${methodInfo.name}() method should call according strategy method`, () => {
+            const originalWindow = getWindow();
 
-          const scrollable = mount(viewFunction(viewModel));
+            try {
+              setWindow({}, !isServerSide);
 
-          const handlerMock = jest.fn();
+              const viewModel = new Scrollable({ useNative });
+              const scrollable = mount(viewFunction(viewModel));
 
-          if (useNative) {
-            Object.defineProperties(viewModel, {
-              scrollableNativeRef: {
-                get() {
-                  return { current: scrollable.find(ScrollableNative).instance() };
-                },
-              },
-              scrollableSimulatedRef: { get() { return { current: null }; } },
-            });
+              const handlerMock = jest.fn();
 
-            expect(viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
+              if (useNative) {
+                Object.defineProperties(viewModel, {
+                  scrollableNativeRef: {
+                    get() {
+                      return { current: scrollable.find(ScrollableNative).instance() };
+                    },
+                  },
+                  scrollableSimulatedRef: { get() { return { current: null }; } },
+                });
 
-            viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
-          } else {
-            Object.defineProperties(viewModel, {
-              scrollableNativeRef: { get() { return { current: null }; } },
-              scrollableSimulatedRef: {
-                get() {
-                  return { current: scrollable.find(ScrollableSimulated).instance() };
-                },
-              },
-            });
+                expect(viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
 
-            expect(viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
+                viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
+              } else {
+                Object.defineProperties(viewModel, {
+                  scrollableNativeRef: { get() { return { current: null }; } },
+                  scrollableSimulatedRef: {
+                    get() {
+                      return { current: scrollable.find(ScrollableSimulated).instance() };
+                    },
+                  },
+                });
 
-            viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
-          }
+                expect(viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
 
-          viewModel[methodInfo.name](...methodInfo.calledWith);
+                viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
+              }
 
-          expect(handlerMock).toBeCalledTimes(1);
-          expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
+              viewModel[methodInfo.name](...methodInfo.calledWith);
+
+              if (methodInfo.hasSSRMode && isServerSide) {
+                expect(handlerMock).toBeCalledTimes(0);
+              } else {
+                expect(handlerMock).toBeCalledTimes(1);
+                expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
+              }
+            } finally {
+              setWindow(originalWindow, true);
+            }
+          });
         });
       });
+    });
+
+    each([false, true]).describe('elementIsInsiceContent: %o', (contentContainsElement) => {
+      each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('direction: %o', (direction) => {
+        it('scrollToElement() method should call getScrollElementLocation() method', () => {
+          const viewModel = new Scrollable({ direction });
+          const contentElement = {
+            contains: () => contentContainsElement as boolean,
+          };
+          const element = {} as HTMLElement;
+          const additionalOffset = { top: 10 };
+
+          viewModel.content = () => contentElement as unknown as HTMLDivElement;
+          viewModel.scrollTo = jest.fn();
+          viewModel.getScrollElementPosition = jest.fn(
+            () => (direction !== DIRECTION_VERTICAL ? 70 : 105),
+          );
+
+          viewModel.scrollToElement(
+            element,
+            additionalOffset,
+          );
+
+          const expectedTargetLocation = { top: 0, left: 0 };
+
+          if (!contentContainsElement) {
+            expect(viewModel.scrollTo).not.toBeCalled();
+            expect(viewModel.getScrollElementPosition).not.toBeCalled();
+          } else {
+            const isBoth = direction === DIRECTION_BOTH;
+
+            if (direction !== DIRECTION_VERTICAL) {
+              expect(viewModel.getScrollElementPosition)
+                .toBeCalledTimes(isBoth ? 2 : 1);
+              expect(viewModel.getScrollElementPosition)
+                .nthCalledWith(1, element, DIRECTION_HORIZONTAL, additionalOffset);
+              expectedTargetLocation.left = 70;
+            }
+
+            if (direction !== DIRECTION_HORIZONTAL) {
+              expect(viewModel.getScrollElementPosition)
+                .toBeCalledTimes(isBoth ? 2 : 1);
+              expect(viewModel.getScrollElementPosition)
+                .lastCalledWith(element, DIRECTION_VERTICAL, additionalOffset);
+              expectedTargetLocation.top = isBoth ? 70 : 105;
+            }
+
+            expect(viewModel.scrollTo).toBeCalled();
+            expect(viewModel.scrollTo).toBeCalledWith(expectedTargetLocation);
+          }
+        });
+      });
+    });
+
+    it('getScrollElementLocation() method should call getScrollElementLocationInternal utility method', () => {
+      const handlerMock = jest.spyOn(ElementLocationModule, 'getElementLocationInternal');
+      const viewModel = new Scrollable({});
+
+      const containerElement = { scrollLeft: 20 } as HTMLDivElement;
+      const scrollOffset = { top: 10, left: 5 } as ScrollOffset;
+      const additionalOffset = {
+        top: 1, right: 2, bottom: 3, left: 4,
+      };
+
+      viewModel.container = () => containerElement;
+      viewModel.scrollOffset = jest.fn(() => scrollOffset);
+
+      const targetElement = { scrollLeft: 20 } as HTMLDivElement;
+      viewModel.getScrollElementPosition(
+        targetElement,
+        DIRECTION_VERTICAL,
+        additionalOffset,
+      );
+
+      expect(handlerMock).toBeCalled();
+      expect(handlerMock).toBeCalledWith(
+        targetElement,
+        DIRECTION_VERTICAL,
+        containerElement,
+        scrollOffset,
+        additionalOffset,
+      );
     });
   });
 

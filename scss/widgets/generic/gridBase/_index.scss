@@ -276,10 +276,6 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
   .dx-#{$widget-name}-checkbox-size {
     line-height: 1em;
 
-    &.dx-checkbox-checked .dx-checkbox-icon {
-      font-size: $generic-grid-base-checkbox-fontsize;
-    }
-
     .dx-checkbox-icon {
       height: $generic-grid-base-checkbox-icon-size;
       width: $generic-grid-base-checkbox-icon-size;
@@ -725,8 +721,9 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
-      border-top: 1px solid $datagrid-cell-modified-border-color;
-      border-bottom: 1px solid $datagrid-cell-modified-border-color;
+      border-top: 1px solid $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      color: $datagrid-cell-removed-text-color;
     }
 
     @include dx-set-checkbox-border-color-as-background();
@@ -930,6 +927,7 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
+    background-color: $datagrid-base-background-color;
   }
 
   .dx-#{$widget-name}-pager {
