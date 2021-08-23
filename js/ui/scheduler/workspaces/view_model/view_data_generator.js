@@ -22,6 +22,10 @@ export class ViewDataGenerator {
 
     get tableAllDay() { return false; }
 
+    getStartViewDate(options) {
+        return this._calculateStartViewDate(options);
+    }
+
     getCompleteViewDataMap(options) {
         const {
             groups,

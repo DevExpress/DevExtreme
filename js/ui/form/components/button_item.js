@@ -19,7 +19,7 @@ export function renderButtonItem({
         .css('textAlign', convertAlignmentToTextAlign(item.horizontalAlignment))
         .addClass(FIELD_ITEM_CLASS)
         .addClass(cssItemClass)
-        .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
+        .addClass(isDefined(item.col) ? 'dx-col-' + item.col : ''); // TODO: this is a part of Form markup settings, move it to form.js
 
     // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
     $container.parent().css('justifyContent', convertAlignmentToJustifyContent(item.verticalAlignment));

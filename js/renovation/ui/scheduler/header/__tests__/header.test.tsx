@@ -17,8 +17,10 @@ describe('Scheduler Toolbar', () => {
     );
 
     it('should render and pass', () => {
-      const toolbar = render({ items: 'items' });
+      const tree = render({ items: 'items' });
+      const toolbar = tree.childAt(0);
 
+      expect(tree.hasClass(HEADER_CLASS)).toBe(true);
       expect(toolbar.is(Toolbar)).toBe(true);
       expect(toolbar.prop('items')).toEqual('items');
     });
@@ -30,6 +32,7 @@ describe('Scheduler Toolbar', () => {
       currentView: 'day',
       views: ['day', 'week'],
       currentDate: new Date(2021, 7, 7),
+      startViewDate: new Date(2021, 7, 7),
       items: [
         {
           defaultElement: 'dateNavigator',
@@ -184,6 +187,7 @@ describe('Scheduler Toolbar', () => {
         'week', 'workWeek',
       ],
       currentDate: new Date(2021, 7, 7),
+      startViewDate: new Date(2021, 7, 7),
       items: [
         {
           defaultElement: 'dateNavigator',
@@ -221,6 +225,28 @@ describe('Scheduler Toolbar', () => {
           const toolbar = createToolbar({ currentView: 'timelineMonth' });
 
           expect(toolbar.step).toBe('month');
+        });
+      });
+
+      describe('Displayed date', () => {
+        it('should retun correct displayed date', () => {
+          const toolbar = createToolbar({
+            currentDate: new Date(2021, 4, 7),
+            startViewDate: new Date(2021, 4, 4),
+          });
+
+          expect(toolbar.displayedDate.getTime())
+            .toBe(new Date(2021, 4, 4).getTime());
+        });
+
+        it('should retun next week of startViewDate if view is month', () => {
+          const toolbar = createToolbar({
+            currentView: 'month',
+            startViewDate: new Date(2021, 5, 10),
+          });
+
+          expect(toolbar.displayedDate.getTime())
+            .toBe(new Date(2021, 5, 17).getTime());
         });
       });
 
@@ -347,7 +373,7 @@ describe('Scheduler Toolbar', () => {
             expect(previousButton.items![0].icon).toBe('chevronprev');
           });
 
-          it('should return correct dateNavigator calendat button text', () => {
+          it('should return correct dateNavigator calendar button text', () => {
             const toolbar = createToolbar();
 
             const previousButton = toolbar.items[0].options as ToolbarButtonGroupProps;

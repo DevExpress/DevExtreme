@@ -474,9 +474,10 @@ const PivotGrid = Widget.inherit({
         if(that._scrollTop !== null || that._scrollLeft !== null || scrolled || that.option('rtlEnabled')) {
             scrollTop = that._scrollTop || 0;
             scrollLeft = that._scrollLeft || 0;
-            dataArea.scrollTo({ x: scrollLeft, y: scrollTop });
-            columnsArea.scrollTo(scrollLeft);
-            rowsArea.scrollTo(scrollTop);
+
+            dataArea.scrollTo({ left: scrollLeft, top: scrollTop });
+            columnsArea.scrollTo({ left: scrollLeft });
+            rowsArea.scrollTo({ top: scrollTop });
             that._dataController.updateWindowScrollPosition(that._scrollTop);
         }
 

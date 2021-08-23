@@ -194,14 +194,14 @@ describe('Button', () => {
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
-      const onWidgetKeyDown = () => null;
+      const keyDown = () => null;
       const onWidgetClick = () => null;
       const button = mount(viewFunction({
         ...renderOptions,
         props: renderProps,
         restAttributes,
         cssClasses,
-        onWidgetKeyDown,
+        keyDown,
         onWidgetClick,
       } as any) as any);
       expect(button.find(Widget).props()).toMatchObject({
@@ -209,7 +209,7 @@ describe('Button', () => {
         ...renderProps,
         ...restAttributes,
         classes: cssClasses,
-        onKeyDown: onWidgetKeyDown,
+        onKeyDown: keyDown,
         onClick: onWidgetClick,
       });
     });
@@ -301,7 +301,7 @@ describe('Button', () => {
             const originalEvent = {} as Event & { cancel: boolean };
             const options = { keyName: '', which: '', originalEvent };
             const button = new Button({ onKeyDown });
-            button.onWidgetKeyDown(options);
+            button.keyDown(options);
             expect(onKeyDown).toHaveBeenCalledTimes(1);
             expect(onKeyDown).toHaveBeenCalledWith(options);
           });
@@ -312,7 +312,7 @@ describe('Button', () => {
             const originalEvent = {} as Event & { cancel: boolean };
             const options = { keyName: 'enter', which: 'enter', originalEvent };
             const button = new Button({ onKeyDown, onClick });
-            button.onWidgetKeyDown(options);
+            button.keyDown(options);
             expect(onKeyDown).toBeCalled();
             expect(onClick).not.toBeCalled();
           });
@@ -328,7 +328,7 @@ describe('Button', () => {
               originalEvent,
             };
             const button = new Button({ onClick, validationGroup: 'vGroup' });
-            button.onWidgetKeyDown(options);
+            button.keyDown(options);
             expect(options.originalEvent.preventDefault).toBeCalled();
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(onClick).toHaveBeenCalledWith({
@@ -340,7 +340,7 @@ describe('Button', () => {
             const onClick = jest.fn();
             const button = new Button({ onClick, validationGroup: 'vGroup' });
             const originalEvent = {} as Event & { cancel: boolean };
-            button.onWidgetKeyDown({ keyName: 'A', which: 'A', originalEvent });
+            button.keyDown({ keyName: 'A', which: 'A', originalEvent });
             expect(onClick).not.toBeCalled();
           });
         });

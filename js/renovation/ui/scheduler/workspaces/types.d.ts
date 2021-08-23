@@ -157,6 +157,7 @@ export interface ViewDataProviderType {
   getRowCount: (config: CountGenerationConfig) => number;
   update: (options: unknown, isGenerateNewData: boolean) => void;
   getGroupPanelData: (options: unknown) => GroupPanelData;
+  getStartViewDate: () => Date;
 }
 
 export interface CellsMetaData {

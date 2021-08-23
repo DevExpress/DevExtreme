@@ -157,12 +157,14 @@ export class GanttTreeList {
     }
 
     updateDataSource(data, forceUpdate = false) {
+        const expandedRowKeys = this.getOption('expandedRowKeys');
         if(!this._skipUpdateTreeListDataSource()) {
             this.setOption('dataSource', data);
         } else if(forceUpdate) {
             const data = this._treeList.option('dataSource');
             this._gantt._onParentTasksRecalculated(data);
         }
+        this.setOption('expandedRowKeys', expandedRowKeys);
     }
 
     onRowClick(e) {

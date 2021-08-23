@@ -1115,6 +1115,46 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @public
      */
     showResourceManagerDialog(): void;
+    /**
+     * @docid
+     * @publicName expandAll()
+     * @public
+     */
+    expandAll(): void;
+    /**
+     * @docid
+     * @publicName collapseAll()
+     * @public
+     */
+    collapseAll(): void;
+    /**
+     * @docid
+     * @publicName expandAllToLevel(level)
+     * @param1 level: Number
+     * @public
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * @docid
+     * @publicName expandToTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandToTask(key: any): void;
+    /**
+     * @docid
+     * @publicName collapseTask(key)
+     * @param1 key:object
+     * @public
+     */
+    collapseTask(key: any): void;
+    /**
+     * @docid
+     * @publicName expandTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandTask(key: any): void;
 }
 
 /**
