@@ -11,7 +11,7 @@ test('Multi-day appointment should not overlap other appointments when specific 
   const appointment = scheduler.getAppointment('Appointment 1', 1);
 
   await t
-    .expect(scheduler.getAppointmentCollectorCount()).eql(3)
+    .expect(scheduler.collectors.count).eql(3)
 
     .expect(parseInt(await appointment.size.height, 10))
     .eql(350)
@@ -27,7 +27,7 @@ test('Simple appointment should not overlap allDay appointment when specific wid
   const { element } = scheduler.getAppointment('Appointment 4');
 
   await t
-    .expect(scheduler.getAppointmentCollectorCount()).eql(0)
+    .expect(scheduler.collectors.count).eql(0)
     .expect(await element.getBoundingClientRectProperty('top')).eql(114);
 }).before(async () => createScheduler({
   dataSource: allDayData,

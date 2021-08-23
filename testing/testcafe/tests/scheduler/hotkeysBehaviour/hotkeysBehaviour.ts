@@ -67,7 +67,7 @@ fixture`Hotkeys for appointments update and navigation`
 
   test(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async (t) => {
     const scheduler = new Scheduler('#container');
-    const collector = scheduler.getAppointmentCollector('3');
+    const collector = scheduler.collectors.find('3');
     const { appointmentPopup } = scheduler;
     const { appointmentTooltip } = scheduler;
 
