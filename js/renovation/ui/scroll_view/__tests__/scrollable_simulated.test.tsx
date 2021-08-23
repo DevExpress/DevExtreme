@@ -1359,7 +1359,6 @@ describe('Simulated > Behavior', () => {
           helper.viewModel.updateHandler = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
-          helper.viewModel.eventHandler = jest.fn();
 
           helper.viewModel.scrollBy({ left: 10, top: 10 });
 
@@ -1373,7 +1372,6 @@ describe('Simulated > Behavior', () => {
           helper.viewModel.updateHandler = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
-          helper.viewModel.eventHandler = jest.fn();
 
           helper.viewModel.scrollBy({ left: 0, top: 0 });
 
