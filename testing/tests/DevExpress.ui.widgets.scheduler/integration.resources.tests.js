@@ -606,7 +606,6 @@ if(devices.real().deviceType === 'desktop') {
 
     QUnit.module('Integration: Multiple resources', desktopModuleConfig, () => {
         const SCHEDULER_HORIZONTAL_SCROLLBAR = '.dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal';
-        const SCHEDULER_SCROLLBAR_CONTAINER = '.dx-scheduler-work-space-both-scrollbar';
 
         QUnit.test('Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)', function(assert) {
             const getData = function(count) {
@@ -634,7 +633,13 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             const scrollbar = $(scheduler.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
-            assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(scheduler.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, 'Horizontal scrollbar has visible top coordinate');
+
+            assert.roughEqual(
+                scrollbar.offset().top + scrollbar.outerHeight(),
+                scheduler.instance.$element().outerHeight() - 1,
+                1,
+                'Horizontal scrollbar has visible top coordinate',
+            );
         });
     });
 }
