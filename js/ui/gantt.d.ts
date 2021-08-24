@@ -1155,6 +1155,13 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @public
      */
     expandTask(key: any): void;
+    /**
+     * @docid
+     * @publicName refresh()
+     * @return Promise<void>
+     * @public
+     */
+    refresh(): DxPromise<void>;
 }
 
 /**
