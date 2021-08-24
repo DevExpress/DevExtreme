@@ -19,19 +19,23 @@ test('Empty', async (t) => {
   height: 100,
 }));
 
-test('1_TextBox,colCount:1', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+// eslint-disable-next-line no-plusplus
+for (let colCount = 1; colCount <= 3; colCount++) {
+  const testName = `TextBox_1,colCount_${colCount}`;
+  test(testName, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('1_TextBox,colCount:1', Selector('#container')))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxForm', {
-  width: 100,
-  height: 100,
-  colCount: 1,
-  items: [{
-    dataField: 'TextBox',
-  }],
-}));
+    await t
+      .expect(await takeScreenshot(`${testName}.png`, Selector('#container')))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxForm', {
+    width: 100,
+    height: 100,
+    colCount: 1,
+    items: [{
+      dataField: `TextBox_${colCount}`,
+    }],
+  }));
+}
