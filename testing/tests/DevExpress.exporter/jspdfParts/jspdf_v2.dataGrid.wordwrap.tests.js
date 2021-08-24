@@ -2,8 +2,8 @@ import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 
 const JSPdfWordWrapTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
-        QUnit.module('Wordwrap enabled', moduleConfig, () => {
-            QUnit.test('1 col - 1 text line. fontSize default', function(assert) {
+        QUnit.module('Wordwrap', moduleConfig, () => {
+            QUnit.test('1 col - 1 text line. fontSize default, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -26,7 +26,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 1 text line. fontSize default, height auto', function(assert) {
+            QUnit.test('1 col - 1 text line. fontSize default, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -48,7 +48,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 1 text line. fontSize 20', function(assert) {
+            QUnit.test('1 col - 1 text line. fontSize 20, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -74,7 +74,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 1 text line. fontSize 20, height auto', function(assert) {
+            QUnit.test('1 col - 1 text line. fontSize 20, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -99,7 +99,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 2 text lines. fontSize default', function(assert) {
+            QUnit.test('1 col - 2 text lines. fontSize default, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -122,7 +122,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 2 text lines. fontSize default, height auto', function(assert) {
+            QUnit.test('1 col - 2 text lines. fontSize default, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -144,7 +144,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 2 text lines. fontSize 20', function(assert) {
+            QUnit.test('1 col - 2 text lines. fontSize 20, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -170,7 +170,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 2 text lines. fontSize 20, height auto', function(assert) {
+            QUnit.test('1 col - 2 text lines. fontSize 20, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -195,7 +195,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 3 text lines. fontSize default', function(assert) {
+            QUnit.test('1 col - 3 text lines. fontSize default, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -218,7 +218,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 3 text lines. fontSize default, height auto', function(assert) {
+            QUnit.test('1 col - 3 text lines. fontSize default, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -240,7 +240,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 3 text lines. fontSize 20', function(assert) {
+            QUnit.test('1 col - 3 text lines. fontSize 20, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -266,7 +266,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('1 col - 3 text lines. fontSize 20, height auto', function(assert) {
+            QUnit.test('1 col - 3 text lines. fontSize 20, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -291,7 +291,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 1 text line. col1.fontSize default, col2.fontSize 20', function(assert) {
+            QUnit.test('2 col - 1 text line. col1.fontSize default, col2.fontSize 20, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -327,7 +327,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 1 text line. col1.fontSize default, col2.fontSize 20, height auto', function(assert) {
+            QUnit.test('2 col - 1 text line. col1.fontSize default, col2.fontSize 20, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -362,7 +362,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 1 text line. col1.fontSize 20, col2.fontSize 30', function(assert) {
+            QUnit.test('2 col - 1 text line. col1.fontSize 20, col2.fontSize 30, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -401,7 +401,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 1 text line. col1.fontSize 20, col2.fontSize 30, height auto', function(assert) {
+            QUnit.test('2 col - 1 text line. col1.fontSize 20, col2.fontSize 30, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -439,7 +439,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 2 text lines. col1.fontSize default, col2.fontSize: 20', function(assert) {
+            QUnit.test('2 col - 2 text lines. col1.fontSize default, col2.fontSize: 20, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -475,7 +475,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 2 text lines. col1.fontSize default, col2.fontSize: 20, height auto', function(assert) {
+            QUnit.test('2 col - 2 text lines. col1.fontSize default, col2.fontSize: 20, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -510,7 +510,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 2 text lines. col1.fontSize 20 col2.fontSize: 30', function(assert) {
+            QUnit.test('2 col - 2 text lines. col1.fontSize 20 col2.fontSize: 30, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -549,7 +549,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 2 text lines. col1.fontSize 20 col2.fontSize: 30, height auto', function(assert) {
+            QUnit.test('2 col - 2 text lines. col1.fontSize 20 col2.fontSize: 30, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -587,7 +587,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 3 text lines. col1.fontSize default, col2.fontSize: 20', function(assert) {
+            QUnit.test('2 col - 3 text lines. col1.fontSize default, col2.fontSize: 20, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -623,7 +623,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 3 text lines. col1.fontSize default, col2.fontSize: 20, height auto', function(assert) {
+            QUnit.test('2 col - 3 text lines. col1.fontSize default, col2.fontSize: 20, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -658,7 +658,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 3 text lines. col1.fontSize 20, col2.fontSize: 30', function(assert) {
+            QUnit.test('2 col - 3 text lines. col1.fontSize 20, col2.fontSize: 30, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -697,7 +697,7 @@ const JSPdfWordWrapTests = {
                 });
             });
 
-            QUnit.test('2 col - 3 text lines. col1.fontSize 20, col2.fontSize: 30, height auto', function(assert) {
+            QUnit.test('2 col - 3 text lines. col1.fontSize 20, col2.fontSize: 30, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
