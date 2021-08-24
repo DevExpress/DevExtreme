@@ -1,3 +1,4 @@
+import { getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -275,8 +276,8 @@ const ListStrategy = DateBoxStrategy.inherit({
         const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
         if(dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
             this.dateBox._setPopupOption('height', 'auto');
-            const popupHeight = this._widget.$element().outerHeight();
-            const maxHeight = $(window).height() * 0.45;
+            const popupHeight = getOuterHeight(this._widget.$element());
+            const maxHeight = getHeight($(window)) * 0.45;
             this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
         }
 

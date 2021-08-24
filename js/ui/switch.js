@@ -1,3 +1,4 @@
+import { getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
@@ -165,7 +166,7 @@ const Switch = Editor.inherit({
     },
 
     _getItemSizeFunc: function() {
-        return this._$switchContainer.outerWidth(true) - getBoundingRect(this._$handle.get(0)).width;
+        return getOuterWidth(this._$switchContainer, true) - getBoundingRect(this._$handle.get(0)).width;
     },
 
     _renderSubmitElement: function() {

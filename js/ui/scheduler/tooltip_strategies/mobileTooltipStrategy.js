@@ -1,3 +1,4 @@
+import { getHeight, getWidth, getOuterHeight } from '../../../core/utils/size';
 import Overlay from '../../overlay/ui.overlay';
 import { TooltipStrategyBase } from './tooltipStrategyBase';
 import { getWindow } from '../../../core/utils/window';
@@ -47,7 +48,7 @@ const createPhoneDeviceConfig = (listHeight) => {
 };
 
 const createTabletDeviceConfig = (listHeight) => {
-    const currentMaxHeight = $(getWindow()).height() * MAX_TABLET_OVERLAY_HEIGHT_FACTOR;
+    const currentMaxHeight = getHeight($(getWindow())) * MAX_TABLET_OVERLAY_HEIGHT_FACTOR;
 
     return {
         shading: true,
@@ -67,10 +68,10 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     }
 
     _onShowing() {
-        const isTabletWidth = $(getWindow()).width() > 700;
+        const isTabletWidth = getWidth($(getWindow())) > 700;
 
         this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
-        const listHeight = this._list.$element().outerHeight();
+        const listHeight = getOuterHeight(this._list.$element());
 
         this._tooltip.option(isTabletWidth ? createTabletDeviceConfig(listHeight) : createPhoneDeviceConfig(listHeight));
     }

@@ -1,3 +1,4 @@
+import { getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, deferRenderer, noop } from '../../core/utils/common';
@@ -1044,7 +1045,7 @@ const CollectionWidget = Widget.inherit({
 
         if(items) {
             each(items, function(_, item) {
-                result += $(item).outerWidth(includeMargin || false);
+                result += getOuterWidth($(item), includeMargin || false);
             });
         }
 

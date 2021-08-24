@@ -1,3 +1,4 @@
+import { setWidth } from '../../../core/utils/size';
 import { getBoundingRect } from '../../../core/utils/position';
 import CurrentTimeShader from '../shaders/ui.scheduler.current_time_shader';
 
@@ -43,7 +44,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
         }
 
         if(width > 0) {
-            $shader.width(width);
+            setWidth($shader, width);
         }
     }
 

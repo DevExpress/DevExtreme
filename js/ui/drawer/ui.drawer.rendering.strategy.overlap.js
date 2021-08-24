@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
@@ -99,7 +100,7 @@ class OverlapStrategy extends DrawerStrategy {
             overlay.option('height', '100%');
             overlay.option('width', calcFromRealPanelSize ? drawer.getRealPanelWidth() : this._getPanelSize(drawer.option('opened')));
         } else {
-            overlay.option('width', overlay.option('container').width());
+            overlay.option('width', getWidth(overlay.option('container')));
             overlay.option('height', calcFromRealPanelSize ? drawer.getRealPanelHeight() : this._getPanelSize(drawer.option('opened')));
         }
     }

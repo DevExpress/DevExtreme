@@ -1,3 +1,4 @@
+import { getOuterWidth, getInnerWidth, getWidth, getHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import { deferRender, deferUpdate } from '../../core/utils/common';
@@ -361,7 +362,7 @@ const ResizingController = modules.ViewController.inherit({
                     isColumnWidthsCorrected = true;
                     if(hasWidth === false && !hasPercentWidth) {
                         const borderWidth = that.option('showBorders') ?
-                            Math.ceil($rowsViewElement.outerWidth() - $rowsViewElement.innerWidth())
+                            Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
                             : 0;
 
                         that._maxWidth = totalWidth + scrollbarWidth + borderWidth;
@@ -464,7 +465,7 @@ const ResizingController = modules.ViewController.inherit({
         const $rootElement = $(rootElement);
         const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
-        if(that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && $rootElement.width()) {
+        if(that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
             $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
             if($groupElement.length) {
                 $groupElement.detach();
@@ -472,9 +473,9 @@ const ResizingController = modules.ViewController.inherit({
 
             that._hasHeight = !!getContainerHeight($rootElement);
 
-            width = $rootElement.width();
+            width = getWidth($rootElement);
             $rootElement.addClass(importantMarginClass);
-            that._hasWidth = $rootElement.width() === width;
+            that._hasWidth = getWidth($rootElement) === width;
             $rootElement.removeClass(importantMarginClass);
 
             if($groupElement.length) {
@@ -536,8 +537,8 @@ const ResizingController = modules.ViewController.inherit({
         const $rootElement = this.component.$element();
 
         if(checkSize && (
-            this._lastWidth === $rootElement.width() &&
-            this._lastHeight === $rootElement.height() &&
+            this._lastWidth === getWidth($rootElement) &&
+            this._lastHeight === getHeight($rootElement) &&
             this._devicePixelRatio === getWindow().devicePixelRatio ||
             !$rootElement.is(':visible')
         )) {
@@ -574,7 +575,7 @@ const ResizingController = modules.ViewController.inherit({
         const rowsView = that._rowsView;
         const $rootElement = that.component.$element();
         const groupElement = $rootElement.children().get(0);
-        const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height());
+        const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || getHeight($rootElement));
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
         const height = that.option('height') || $rootElement.get(0).style.height;
@@ -586,13 +587,15 @@ const ResizingController = modules.ViewController.inherit({
         const hasHeight = that._hasHeight || maxHeightHappened;
 
         if(height && (that._hasHeight ^ height !== 'auto')) {
-            $testDiv = $('<div>').height(height).appendTo($rootElement);
-            that._hasHeight = !!$testDiv.height();
+            $testDiv = $('<div>');
+            setHeight($testDiv, height);
+            $testDiv.appendTo($rootElement);
+            that._hasHeight = !!getHeight($testDiv);
             $testDiv.remove();
         }
 
         deferRender(function() {
-            rowsView.height(null, hasHeight);
+            setHeight(rowsView, null, hasHeight);
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
@@ -619,8 +622,8 @@ const ResizingController = modules.ViewController.inherit({
     },
 
     _updateLastSizes: function($rootElement) {
-        this._lastWidth = $rootElement.width();
-        this._lastHeight = $rootElement.height();
+        this._lastWidth = getWidth($rootElement);
+        this._lastHeight = getHeight($rootElement);
         this._devicePixelRatio = getWindow().devicePixelRatio;
     },
 

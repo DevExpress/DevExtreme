@@ -14,7 +14,9 @@ import {
     getVisibleHeight,
     addOffsetToMaxHeight,
     addOffsetToMinHeight,
-    getVerticalOffsets
+    getVerticalOffsets,
+    getOuterWidth,
+    getWidth,
 } from '../core/utils/size';
 import { getBoundingRect } from '../core/utils/position';
 import { isDefined } from '../core/utils/type';
@@ -643,7 +645,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderFullscreenWidthClass: function() {
-        this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, this.$overlayContent().outerWidth() === $(window).width());
+        this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, getOuterWidth(this.$overlayContent()) === getWidth($(window)));
     },
 
     refreshPosition: function() {

@@ -1,3 +1,4 @@
+import { getOuterWidth, setHeight, getOuterHeight } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import { noop } from '../../../core/utils/common';
 import { extend } from '../../../core/utils/extend';
@@ -40,7 +41,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
 
     getGroupTableWidth() {
-        return this._$sidebarTable ? this._$sidebarTable.outerWidth() : 0;
+        return this._$sidebarTable ? getOuterWidth(this._$sidebarTable) : 0;
     }
 
     _getTotalRowCount(groupCount) {
@@ -159,8 +160,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _setTableSizes() {
         const minHeight = this._getWorkSpaceMinHeight();
 
-        this._$sidebarTable.height(minHeight);
-        this._$dateTable.height(minHeight);
+        setHeight(this._$sidebarTable, minHeight);
+        setHeight(this._$dateTable, minHeight);
 
         super._setTableSizes();
 
@@ -169,7 +170,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getWorkSpaceMinHeight() {
         let minHeight = this._getWorkSpaceHeight();
-        const workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - DATE_TABLE_HEADER_MARGIN;
+        const workspaceContainerHeight = getOuterHeight(this.$element(), true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - DATE_TABLE_HEADER_MARGIN;
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
@@ -196,7 +197,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getWorkSpaceWidth() {
-        return this._$dateTable.outerWidth(true);
+        return getOuterWidth(this._$dateTable, true);
     }
 
     _getIndicationFirstViewDate() {
@@ -482,13 +483,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         if(this.option('groupOrientation') === 'vertical') {
             $indicator = this._createIndicator($container);
-            $indicator.height(getBoundingRect($container.get(0)).height);
+            setHeight($indicator, getBoundingRect($container.get(0)).height);
             $indicator.css('left', rtlOffset ? rtlOffset - width : width);
         } else {
             for(let i = 0; i < groupCount; i++) {
                 const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
                 $indicator = this._createIndicator($container);
-                $indicator.height(getBoundingRect($container.get(0)).height);
+                setHeight($indicator, getBoundingRect($container.get(0)).height);
 
                 $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
             }

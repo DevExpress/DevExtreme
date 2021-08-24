@@ -1,3 +1,4 @@
+import { getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
 import Overlay from './overlay/ui.overlay';
@@ -83,7 +84,7 @@ const ValidationMessage = Overlay.inherit({
 
     updateMaxWidth() {
         const target = this.option('target');
-        const targetWidth = target?.outerWidth?.() || $(target).outerWidth();
+        const targetWidth = getOuterWidth(target) || getOuterWidth($(target));
         let maxWidth = '100%';
         if(targetWidth) {
             maxWidth = Math.max(targetWidth, VALIDATION_MESSAGE_MIN_WIDTH);

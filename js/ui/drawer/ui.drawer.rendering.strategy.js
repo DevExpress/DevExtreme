@@ -1,3 +1,4 @@
+import { setWidth, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { animation } from './ui.drawer.animation';
 import { Deferred, when } from '../../core/utils/deferred';
@@ -90,9 +91,15 @@ class DrawerStrategy {
         const panelSize = this._getPanelSize(drawer.option('opened'));
 
         if(drawer.isHorizontalDirection()) {
-            $(drawer.content()).width(calcFromRealPanelSize ? drawer.getRealPanelWidth() : panelSize);
+            setWidth(
+                $(drawer.content()),
+                calcFromRealPanelSize ? drawer.getRealPanelWidth() : panelSize
+            );
         } else {
-            $(drawer.content()).height(calcFromRealPanelSize ? drawer.getRealPanelHeight() : panelSize);
+            setHeight(
+                $(drawer.content()),
+                calcFromRealPanelSize ? drawer.getRealPanelHeight() : panelSize
+            );
         }
     }
 

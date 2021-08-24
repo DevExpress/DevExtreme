@@ -1,3 +1,4 @@
+import { getHeight, setHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
@@ -321,9 +322,9 @@ const DropDownMenu = Widget.inherit({
 
         this._setListDataSource();
 
-        const listMaxHeight = $(window).height() * 0.5;
-        if($content.height() > listMaxHeight) {
-            $content.height(listMaxHeight);
+        const listMaxHeight = getHeight($(window)) * 0.5;
+        if(getHeight($content) > listMaxHeight) {
+            setHeight($content, listMaxHeight);
         }
     },
 

@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from 'utils/size';
 import $ from '../core/renderer';
 import { getWindow, getNavigator, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
@@ -310,7 +311,7 @@ class Devices {
 
     _changeOrientation() {
         const $window = $(this._window);
-        const orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
+        const orientation = getHeight($window) > getWidth($window) ? 'portrait' : 'landscape';
 
         if(this._currentOrientation === orientation) {
             return;
@@ -324,7 +325,7 @@ class Devices {
     }
 
     _recalculateOrientation() {
-        const windowWidth = $(this._window).width();
+        const windowWidth = getWidth($(this._window));
 
         if(this._currentWidth === windowWidth) {
             return;

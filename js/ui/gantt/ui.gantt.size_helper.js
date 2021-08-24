@@ -1,3 +1,4 @@
+import { getWidth, getHeight } from '../../core/utils/size';
 import { hasWindow } from '../../core/utils/window';
 
 export class GanttSizeHelper {
@@ -16,12 +17,12 @@ export class GanttSizeHelper {
     _getPanelsWidthByOption() {
         return {
             leftPanelWidth: this._gantt.option('taskListWidth'),
-            rightPanelWidth: this._gantt._$element.width() - this._gantt.option('taskListWidth')
+            rightPanelWidth: getWidth(this._gantt._$element) - this._gantt.option('taskListWidth')
         };
     }
 
     onAdjustControl() {
-        const elementHeight = this._gantt._$element.height();
+        const elementHeight = getHeight(this._gantt._$element);
         this.updateGanttWidth();
         this.setGanttHeight(elementHeight);
     }

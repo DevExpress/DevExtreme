@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { each } from '../../core/utils/iterator';
@@ -213,7 +214,7 @@ const ScrollViewScroller = Scroller.inherit({
     },
 
     _considerTopPocketChange: function() {
-        this._location -= this._$topPocket.height() || -this._topPocketSize;
+        this._location -= getHeight(this._$topPocket) || -this._topPocketSize;
         this._maxOffset = 0;
         this._move();
     },
@@ -307,7 +308,7 @@ const SimulatedScrollViewStrategy = SimulatedStrategy.inherit({
 
     location: function() {
         const location = this.callBase();
-        location.top += this._$topPocket.height();
+        location.top += getHeight(this._$topPocket);
         return location;
     },
 

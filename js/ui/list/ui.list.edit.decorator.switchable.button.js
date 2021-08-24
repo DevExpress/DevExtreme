@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import fx from '../../animation/fx';
 import Button from '../button';
@@ -54,7 +55,7 @@ const SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
 
     _animatePrepareDeleteReady: function() {
         const rtl = this._isRtlEnabled();
-        const listWidth = this._list.$element().width();
+        const listWidth = getWidth(this._list.$element());
         const buttonWidth = this._buttonWidth();
         const fromValue = rtl ? listWidth : -buttonWidth;
         const toValue = rtl ? listWidth - buttonWidth : 0;
@@ -69,7 +70,7 @@ const SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
 
     _animateForgetDeleteReady: function() {
         const rtl = this._isRtlEnabled();
-        const listWidth = this._list.$element().width();
+        const listWidth = getWidth(this._list.$element());
         const buttonWidth = this._buttonWidth();
         const fromValue = rtl ? listWidth - buttonWidth : 0;
         const toValue = rtl ? listWidth : -buttonWidth;
@@ -84,7 +85,7 @@ const SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
 
     _buttonWidth: function() {
         if(!this._buttonContainerWidth) {
-            this._buttonContainerWidth = this._$buttonContainer.outerWidth();
+            this._buttonContainerWidth = getOuterWidth(this._$buttonContainer);
         }
         return this._buttonContainerWidth;
     },

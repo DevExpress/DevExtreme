@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isString } from '../../core/utils/type';
@@ -405,7 +406,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _toolbarHasItemsOverflow(toolbar) {
-        const toolbarWidth = toolbar.$element().width();
+        const toolbarWidth = getWidth(toolbar.$element());
         const itemsWidth = toolbar._getItemsWidth();
         return toolbarWidth < itemsWidth;
     }

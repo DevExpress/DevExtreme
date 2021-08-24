@@ -8,7 +8,7 @@ import { isDefined } from '../core/utils/type';
 import { addNamespace, eventData } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
 import scrollEvents from '../events/gesture/emitter.gesture.scroll';
-import { getVerticalOffsets, getElementBoxParams, parseHeight } from '../core/utils/size';
+import { getVerticalOffsets, getElementBoxParams, parseHeight, getOuterHeight } from '../core/utils/size';
 import { allowScroll, prepareScrollData } from './text_box/utils.scroll';
 import TextBox from './text_box';
 
@@ -185,7 +185,7 @@ const TextArea = TextBox.inherit({
             return;
         } else {
             this._resetDimensions();
-            this._$element.css('height', this._$element.outerHeight());
+            this._$element.css('height', getOuterHeight(this._$element));
         }
 
         $input.css('height', 0);

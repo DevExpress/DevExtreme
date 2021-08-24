@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import gridCore from './ui.data_grid.core';
 import { GroupingHelper as ExpandedGroupingHelper } from './ui.data_grid.grouping.expanded';
@@ -488,7 +489,7 @@ export const GroupingHeaderPanelExtender = (function() {
 
                 return {
                     top: offset.top,
-                    bottom: offset.top + $element.height()
+                    bottom: offset.top + getHeight($element)
                 };
             }
             return null;

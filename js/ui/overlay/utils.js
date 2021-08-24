@@ -1,3 +1,4 @@
+import { getInnerHeight, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 import { isNumeric } from '../../core/utils/type';
@@ -13,11 +14,11 @@ export const getElementMaxHeightByWindow = ($element, startLocation) => {
         if(startLocation < elementOffset) {
             return elementOffset - startLocation;
         } else {
-            actualOffset = $window.innerHeight() - startLocation + $window.scrollTop();
+            actualOffset = getInnerHeight($window) - startLocation + $window.scrollTop();
         }
     } else {
         const offsetTop = elementOffset - $window.scrollTop();
-        const offsetBottom = $window.innerHeight() - offsetTop - $element.outerHeight();
+        const offsetBottom = getInnerHeight($window) - offsetTop - getOuterHeight($element);
         actualOffset = Math.max(offsetTop, offsetBottom);
     }
 

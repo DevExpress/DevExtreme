@@ -1,3 +1,12 @@
+import {
+    setWidth,
+    getOuterHeight,
+    getOuterWidth,
+    setOuterHeight,
+    getHeight,
+    getWidth,
+} from '../../../core/utils/size';
+
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
@@ -533,9 +542,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             width = minWidth;
         }
 
-        this._$headerPanel.width(width);
-        this._$dateTable.width(width);
-        this._$allDayTable && this._$allDayTable.width(width);
+        setWidth(this._$headerPanel, width);
+        setWidth(this._$dateTable, width);
+        if(this._$allDayTable) {
+            setWidth(this._$allDayTable, width);
+        }
 
         this._attachHeaderTableClasses();
 
@@ -1004,7 +1015,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getHeaderPanelHeight() {
-        return this._$headerPanel && this._$headerPanel.outerHeight(true);
+        return this._$headerPanel && getOuterHeight(this._$headerPanel, true);
     }
 
     getTimePanelWidth() {
@@ -1012,7 +1023,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getGroupTableWidth() {
-        return this._$groupTable ? this._$groupTable.outerWidth() : 0;
+        return this._$groupTable ? getOuterWidth(this._$groupTable) : 0;
     }
 
     getWorkSpaceLeftOffset() {
@@ -1138,7 +1149,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setHorizontalGroupHeaderCellsHeight() {
         const height = getBoundingRect(this._$dateTable.get(0)).height;
-        this._$groupTable.outerHeight(height);
+        setOuterHeight(this._$groupTable, height);
     }
 
     _getGroupHeaderCells() {
@@ -1523,7 +1534,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $scrollable = this.getScrollable().$element();
         const cellHeight = this.getCellHeight();
         const scrolledCellCount = this.getScrollableScrollTop() / cellHeight;
-        const totalCellCount = scrolledCellCount + $scrollable.height() / cellHeight;
+        const totalCellCount = scrolledCellCount + getHeight($scrollable) / cellHeight;
 
         result.top = {
             hours: Math.floor(scrolledCellCount * this.option('hoursInterval')) + this.option('startDayHour'),
@@ -1597,8 +1608,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolledColumnCount += 1;
         }
 
-        const rowCount = Math.floor(fullScrolledRowCount + $scrollable.height() / cellHeight);
-        const columnCount = Math.floor(fullScrolledColumnCount + $scrollable.width() / cellWidth);
+        const rowCount = Math.floor(fullScrolledRowCount + getHeight($scrollable) / cellHeight);
+        const columnCount = Math.floor(fullScrolledColumnCount + getWidth($scrollable) / cellWidth);
 
         const $cells = this._getAllCells(inAllDayRow);
         const result = [];
@@ -1684,8 +1695,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         const offset = this.option('rtlEnabled')
             ? cellWidth
             : 0;
-        const scrollableHeight = $scrollable.height();
-        const scrollableWidth = $scrollable.width();
+        const scrollableHeight = getHeight($scrollable);
+        const scrollableWidth = getWidth($scrollable);
         const cellHeight = this.getCellHeight();
 
         const xShift = (scrollableWidth - cellWidth) / 2;
@@ -3038,7 +3049,7 @@ const createDragBehaviorConfig = (
 
         const MOUSE_IDENT = 10;
 
-        const appointmentWidth = $(state.dragElement).width();
+        const appointmentWidth = getWidth($(state.dragElement));
         const cellWidth = getCellWidth();
         const isWideAppointment = appointmentWidth > cellWidth;
 
@@ -3085,8 +3096,8 @@ const createDragBehaviorConfig = (
         ? () => {
             const $dragElement = $(state.dragElement);
             return {
-                x: $dragElement.width() / 2,
-                y: $dragElement.height() / 2
+                x: getWidth($dragElement) / 2,
+                y: getHeight($dragElement) / 2
             };
         }
         : undefined;

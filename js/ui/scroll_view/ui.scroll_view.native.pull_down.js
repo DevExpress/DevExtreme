@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
@@ -93,13 +94,13 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _updateDimensions: function() {
         this.callBase();
-        this._topPocketSize = this._$topPocket.height();
-        this._bottomPocketSize = this._$bottomPocket.height();
+        this._topPocketSize = getHeight(this._$topPocket);
+        this._bottomPocketSize = getHeight(this._$bottomPocket);
 
         if(browser.msie) {
-            this._scrollOffset = Math.round((this._$container.height() - this._$content.height()) * 100) / 100;
+            this._scrollOffset = Math.round((getHeight(this._$container) - getHeight(this._$content)) * 100) / 100;
         } else {
-            this._scrollOffset = this._$container.height() - this._$content.height();
+            this._scrollOffset = getHeight(this._$container) - getHeight(this._$content);
         }
     },
 

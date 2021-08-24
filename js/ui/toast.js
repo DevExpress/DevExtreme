@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
@@ -156,7 +157,7 @@ const Toast = Overlay.inherit({
                     return isPhone && isAndroid;
                 },
                 options: {
-                    width: function() { return window?.visualViewport?.width || $(window).width(); },
+                    width: function() { return window?.visualViewport?.width || getWidth($(window)); },
 
                     position: {
                         at: 'bottom center',
@@ -170,7 +171,7 @@ const Toast = Overlay.inherit({
                     return device.deviceType === 'phone';
                 },
                 options: {
-                    width: function() { return window?.visualViewport?.width || $(window).width(); }
+                    width: function() { return window?.visualViewport?.width || getWidth($(window)); }
                 }
             },
             {

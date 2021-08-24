@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isMaterial, waitWebFont } from '../themes';
 import { noop } from '../../core/utils/common';
@@ -226,7 +227,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _arrangeItems: function(elementWidth) {
-        elementWidth = elementWidth || this.$element().width();
+        elementWidth = elementWidth || getWidth(this.$element());
 
         this._$centerSection.css({
             margin: '0 auto',
@@ -251,7 +252,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         let elemsAtSectionWidth = 0;
 
         $section.children().not(TOOLBAR_LABEL_SELECTOR).each(function() {
-            elemsAtSectionWidth += $(this).outerWidth();
+            elemsAtSectionWidth += getOuterWidth($(this));
         });
 
         const freeSpace = elementWidth - elemsAtSectionWidth;
@@ -260,7 +261,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         if($section.hasClass(TOOLBAR_BEFORE_CLASS)) {
             this._alignSection(this._$beforeSection, sectionMaxWidth);
         } else {
-            const labelPaddings = $label.outerWidth() - $label.width();
+            const labelPaddings = getOuterWidth($label) - getWidth($label);
             $label.css('maxWidth', sectionMaxWidth - labelPaddings);
         }
     },
@@ -330,7 +331,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         const $element = this.$element();
         $element.removeClass(TOOLBAR_COMPACT_CLASS);
 
-        if(this.option('compactMode') && this._getSummaryItemsWidth(this.itemElements(), true) > $element.width()) {
+        if(this.option('compactMode') && this._getSummaryItemsWidth(this.itemElements(), true) > getWidth($element)) {
             $element.addClass(TOOLBAR_COMPACT_CLASS);
         }
     },
@@ -339,7 +340,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         let width = 0;
 
         labels.forEach(function(label, index) {
-            width += $(label).outerWidth();
+            width += getOuterWidth($(label));
         });
 
         return width;
@@ -349,7 +350,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         let padding = 0;
 
         labels.forEach(function(label, index) {
-            padding += ($(label).outerWidth() - $(label).width());
+            padding += (getOuterWidth($(label)) - getWidth($(label)));
         });
 
         return padding;
@@ -426,7 +427,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _isVisible: function() {
-        return this.$element().width() > 0 && this.$element().height() > 0;
+        return getWidth(this.$element()) > 0 && getHeight(this.$element()) > 0;
     },
 
     _getIndexByItem: function(item) {

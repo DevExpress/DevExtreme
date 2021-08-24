@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import Slider from './slider';
@@ -157,7 +158,7 @@ const RangeSlider = Slider.inherit({
     _startHandler: function(args) {
         const e = args.event;
         const $range = this._$range;
-        const rangeWidth = $range.width();
+        const rangeWidth = getWidth($range);
         const eventOffsetX = eventData(e).x - this._$bar.offset().left;
         const startHandleX = $range.position().left;
         const endHandleX = $range.position().left + rangeWidth;

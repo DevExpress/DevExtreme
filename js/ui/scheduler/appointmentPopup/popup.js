@@ -1,3 +1,4 @@
+import { getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
 import $ from '../../../core/renderer';
 import dateUtils from '../../../core/utils/date';
@@ -220,7 +221,7 @@ export class AppointmentPopup {
     _tryGetWindowWidth() {
         if(hasWindow()) {
             const window = getWindow();
-            return $(window).width();
+            return getWidth($(window));
         }
     }
 

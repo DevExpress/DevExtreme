@@ -1,3 +1,4 @@
+import { setOuterHeight, setHeight } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import { noop } from '../../../core/utils/common';
@@ -189,7 +190,7 @@ class SchedulerAgenda extends WorkSpace {
 
         for(let i = 0; i < $cells.length; i++) {
             const $cellContent = $cells.eq(i).find('.dx-scheduler-group-header-content');
-            $cellContent.outerHeight(this._getGroupRowHeight(rows[i]));
+            setOuterHeight($cellContent, this._getGroupRowHeight(rows[i]));
         }
     }
 
@@ -370,7 +371,8 @@ class SchedulerAgenda extends WorkSpace {
                 let cellDateNumber;
                 let cellDayName;
                 const $row = $('<tr>');
-                const $td = $('<td>').height(this._getRowHeight(rowSize));
+                const $td = $('<td>');
+                setHeight($td, this._getRowHeight(rowSize));
 
                 if(options.getStartDate) {
                     date = options.getStartDate && options.getStartDate(rowIndex);

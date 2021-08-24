@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getInnerWidth, getInnerHeight } from '../core/utils/size';
 import { locate, move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
@@ -197,8 +198,8 @@ const Resizable = DOMComponent.inherit({
         }
 
         const $handle = $(e.target).closest('.' + RESIZABLE_HANDLE_CLASS);
-        const handleWidth = $handle.outerWidth();
-        const handleHeight = $handle.outerHeight();
+        const handleWidth = getOuterWidth($handle);
+        const handleHeight = getOuterHeight($handle);
         const handleOffset = $handle.offset();
         const areaOffset = area.offset;
         const scrollOffset = this._getAreaScrollOffset();
@@ -373,8 +374,8 @@ const Resizable = DOMComponent.inherit({
 
         if($area.length) {
             result = {
-                width: $area.innerWidth(),
-                height: $area.innerHeight(),
+                width: getInnerWidth($area),
+                height: getInnerHeight($area),
                 offset: extend({
                     top: 0,
                     left: 0
@@ -394,8 +395,8 @@ const Resizable = DOMComponent.inherit({
         result.offset.left += areaBorderLeft + this._getBorderWidth(this.$element(), 'left');
         result.offset.top += areaBorderTop + this._getBorderWidth(this.$element(), 'top');
 
-        result.width -= this.$element().outerWidth() - this.$element().innerWidth();
-        result.height -= this.$element().outerHeight() - this.$element().innerHeight();
+        result.width -= getOuterWidth(this.$element()) - getInnerWidth(this.$element());
+        result.height -= getOuterHeight(this.$element()) - getInnerHeight(this.$element());
     },
 
     _dragEndHandler: function(e) {
@@ -403,8 +404,8 @@ const Resizable = DOMComponent.inherit({
 
         this._resizeEndAction({
             event: e,
-            width: $element.outerWidth(),
-            height: $element.outerHeight(),
+            width: getOuterWidth($element),
+            height: getOuterHeight($element),
             handles: this._movingSides
         });
 
@@ -430,11 +431,11 @@ const Resizable = DOMComponent.inherit({
                 break;
             case 'minWidth':
             case 'maxWidth':
-                hasWindow() && this._renderWidth(this.$element().outerWidth());
+                hasWindow() && this._renderWidth(getOuterWidth(this.$element()));
                 break;
             case 'minHeight':
             case 'maxHeight':
-                hasWindow() && this._renderHeight(this.$element().outerHeight());
+                hasWindow() && this._renderHeight(getOuterHeight(this.$element()));
                 break;
             case 'onResize':
             case 'onResizeStart':

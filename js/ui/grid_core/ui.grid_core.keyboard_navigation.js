@@ -1,3 +1,4 @@
+import { getOuterHeight, getHeight, getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -423,7 +424,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             isEditingNavigationMode && this._closeEditCell();
             if(!this._navigateNextCell($event, eventArgs.keyName)) {
                 if(this._isVirtualRowRender() && isUpArrow && dataSource && !dataSource.isLoading()) {
-                    const rowHeight = $row.outerHeight();
+                    const rowHeight = getOuterHeight($row);
                     rowIndex = this._focusedCellPosition.rowIndex - 1;
                     this._scrollBy(0, -rowHeight, rowIndex, $event);
                 }
@@ -445,8 +446,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._dataController.pageIndex(pageIndex + pageStep);
                 eventArgs.originalEvent.preventDefault();
             }
-        } else if(scrollable && $(scrollable.container()).height() < scrollable.$content().height()) {
-            this._scrollBy(0, $(scrollable.container()).height() * pageStep);
+        } else if(scrollable && getHeight($(scrollable.container())) < getHeight(scrollable.$content())) {
+            this._scrollBy(0, getHeight($(scrollable.container())) * pageStep);
             eventArgs.originalEvent.preventDefault();
         }
     },
@@ -524,7 +525,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _getMaxHorizontalOffset: function() {
         const scrollable = this.component.getScrollable();
         const rowsView = this.getView('rowsView');
-        const offset = scrollable ? scrollable.scrollWidth() - $(rowsView.element()).width() : 0;
+        const offset = scrollable ? scrollable.scrollWidth() - getWidth($(rowsView.element())) : 0;
         return offset;
     },
     _isColumnRendered: function(columnIndex) {
@@ -595,7 +596,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _getHorizontalScrollPositionOffset: function(direction) {
         let positionOffset = 0;
         const $currentCell = this._getCell(this._focusedCellPosition);
-        const currentCellWidth = $currentCell && $currentCell.outerWidth();
+        const currentCellWidth = $currentCell && getOuterWidth($currentCell);
         if(currentCellWidth > 0) {
             const rtlMultiplier = this.option('rtlEnabled') ? -1 : 1;
             positionOffset = direction === 'nextInRow' || direction === 'next' ? currentCellWidth * rtlMultiplier : currentCellWidth * rtlMultiplier * (-1);
@@ -1158,9 +1159,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         if(hasScrollable) {
             if(cellOffset.left < 0) {
-                isOverlapped = $cell.width() + cellOffset.left <= 0;
+                isOverlapped = getWidth($cell) + cellOffset.left <= 0;
             } else if(cellOffset.top < 0) {
-                isOverlapped = $cell.height() + cellOffset.top <= 0;
+                isOverlapped = getHeight($cell) + cellOffset.top <= 0;
             }
         }
 

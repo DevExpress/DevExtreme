@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getWidth, getHeight } from '../../core/utils/size';
 import fx from '../../animation/fx';
 import positionUtils from '../../animation/position';
 import { locate, move, resetPosition } from '../../animation/translator';
@@ -1091,15 +1092,15 @@ const Overlay = Widget.inherit({
         const $content = this._$content;
         const $container = this._getDragResizeContainer();
 
-        const contentWidth = $content.outerWidth();
-        const contentHeight = $content.outerHeight();
-        let containerWidth = $container.outerWidth();
-        let containerHeight = $container.outerHeight();
+        const contentWidth = getOuterWidth($content);
+        const contentHeight = getOuterHeight($content);
+        let containerWidth = getOuterWidth($container);
+        let containerHeight = getOuterHeight($container);
 
         if(this._isWindow($container)) {
             const document = domAdapter.getDocument();
-            const fullPageHeight = Math.max($(document).outerHeight(), containerHeight);
-            const fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
+            const fullPageHeight = Math.max(getOuterHeight($(document)), containerHeight);
+            const fullPageWidth = Math.max(getOuterWidth($(document)), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;
@@ -1209,8 +1210,8 @@ const Overlay = Widget.inherit({
         }
 
         this._renderedDimensions = {
-            width: parseInt(this._$content.width(), 10),
-            height: parseInt(this._$content.height(), 10)
+            width: parseInt(getWidth(this._$content), 10),
+            height: parseInt(getHeight(this._$content), 10)
         };
     },
 
@@ -1278,8 +1279,8 @@ const Overlay = Widget.inherit({
 
         const isWindow = this._isWindow($container);
         const documentElement = domAdapter.getDocumentElement();
-        wrapperWidth = isWindow ? documentElement.clientWidth : $container.outerWidth(),
-        wrapperHeight = isWindow ? window.innerHeight : $container.outerHeight();
+        wrapperWidth = isWindow ? documentElement.clientWidth : getOuterWidth($container),
+        wrapperHeight = isWindow ? window.innerHeight : getOuterHeight($container);
 
         this._$wrapper.css({
             width: wrapperWidth,

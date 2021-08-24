@@ -1,3 +1,4 @@
+import { getHeight, getWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { locate, move } from '../../animation/translator';
@@ -365,8 +366,8 @@ const ColorView = Editor.inherit({
             .css('backgroundColor', this._currentColor.getPureColor().toHex())
             .appendTo($paletteCell);
 
-        this._paletteHeight = this._$palette.height();
-        this._paletteWidth = this._$palette.width();
+        this._paletteHeight = getHeight(this._$palette);
+        this._paletteWidth = getWidth(this._$palette);
 
         this._renderPaletteHandle();
         this._$palette.append([$paletteGradientWhite, $paletteGradientBlack]);
@@ -395,8 +396,8 @@ const ColorView = Editor.inherit({
             }
         });
 
-        this._paletteHandleWidth = this._$paletteHandle.width();
-        this._paletteHandleHeight = this._$paletteHandle.height();
+        this._paletteHandleWidth = getWidth(this._$paletteHandle);
+        this._paletteHandleHeight = getHeight(this._$paletteHandle);
 
         this._placePaletteHandle();
     },
@@ -437,8 +438,8 @@ const ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_HUE_SCALE_CLASS)
             .appendTo(this._$hueScaleWrapper);
 
-        this._hueScaleHeight = this._$hueScale.height();
-        this._hueScaleWrapperHeight = this._$hueScaleWrapper.outerHeight();
+        this._hueScaleHeight = getHeight(this._$hueScale);
+        this._hueScaleWrapperHeight = getOuterHeight(this._$hueScaleWrapper);
 
         this._renderHueScaleHandle();
     },
@@ -459,7 +460,7 @@ const ColorView = Editor.inherit({
             }
         });
 
-        this._hueScaleHandleHeight = this._$hueScaleHandle.height();
+        this._hueScaleHandleHeight = getHeight(this._$hueScaleHandle);
 
         this._placeHueScaleHandle();
     },
@@ -721,9 +722,9 @@ const ColorView = Editor.inherit({
             }
         });
 
-        this._alphaChannelHandleWidth = this._$alphaChannelHandle.width();
+        this._alphaChannelHandleWidth = getWidth(this._$alphaChannelHandle);
 
-        this._alphaChannelScaleWorkWidth = $parent.width() - this._alphaChannelHandleWidth;
+        this._alphaChannelScaleWorkWidth = getWidth($parent) - this._alphaChannelHandleWidth;
 
         this._placeAlphaChannelHandle();
     },

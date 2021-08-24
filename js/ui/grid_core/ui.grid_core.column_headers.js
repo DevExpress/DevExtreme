@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ColumnsView } from './ui.grid_core.columns_view';
@@ -337,7 +338,7 @@ export const columnHeadersModule = {
                     const $headerRows = $tableElement && $tableElement.find('.' + HEADER_ROW_CLASS);
 
                     return $headerRows && $headerRows.toArray().reduce(function(sum, headerRow) {
-                        return sum + $(headerRow).height();
+                        return sum + getHeight($(headerRow));
                     }, 0) || 0;
                 },
 

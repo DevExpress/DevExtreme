@@ -1,3 +1,4 @@
+import { getWidth } from '../../../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
@@ -481,7 +482,7 @@ const LayoutManager = Widget.inherit({
         }
 
         const minColWidth = this.option('minColWidth');
-        const width = this.$element().width();
+        const width = getWidth(this.$element());
         const itemsCount = this._items.length;
         const maxColCount = Math.floor(width / minColWidth) || 1;
 

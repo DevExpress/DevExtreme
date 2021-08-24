@@ -1,3 +1,4 @@
+import { getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { name as wheelEventName } from '../../events/core/wheel';
@@ -348,7 +349,7 @@ const baseFixedColumns = {
 
             offset = {
                 left: positionTransparentColumn.left,
-                right: this.element().outerWidth(true) - ($transparentColumn.outerWidth(true) + positionTransparentColumn.left)
+                right: getOuterWidth(this.element(), true) - (getOuterWidth($transparentColumn, true) + positionTransparentColumn.left)
             };
         }
 
@@ -818,7 +819,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         } else if(e.reachedBottom) {
             const scrollableContent = this._findContentElement();
             const $scrollableContainer = $(e.component.container());
-            const maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - $scrollableContainer.height(), 0);
+            const maxScrollTop = Math.max(getHeight(scrollableContent) + scrollbarWidth - getHeight($scrollableContainer), 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 

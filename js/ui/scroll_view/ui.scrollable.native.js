@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDxMouseWheelEvent } from '../../events/utils/index';
@@ -213,16 +214,16 @@ const NativeStrategy = Class.inherit({
 
     _updateDimensions: function() {
         this._containerSize = {
-            height: this._$container.height(),
-            width: this._$container.width()
+            height: getHeight(this._$container),
+            width: getWidth(this._$container)
         };
         this._componentContentSize = {
-            height: this._component.$content().height(),
-            width: this._component.$content().width()
+            height: getHeight(this._component.$content()),
+            width: getWidth(this._component.$content())
         };
         this._contentSize = {
-            height: this._$content.height(),
-            width: this._$content.width()
+            height: getHeight(this._$content),
+            width: getWidth(this._$content)
         };
     },
 

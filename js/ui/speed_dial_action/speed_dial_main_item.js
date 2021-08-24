@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import config from '../../core/config';
 import { extend } from '../../core/utils/extend';
@@ -195,14 +196,14 @@ class SpeedDialMainItem extends SpeedDialItem {
         const directionIndex = 1;
 
         if(direction === 'auto') {
-            const contentHeight = this.$content().height();
+            const contentHeight = getHeight(this.$content());
             const actionsHeight = this.initialOption('indent') + this.initialOption('childIndent') * actions.length - contentHeight;
             const offsetTop = this.$content().offset().top;
 
             if(actionsHeight < offsetTop) {
                 return -directionIndex;
             } else {
-                const offsetBottom = this._getContainer().height() - contentHeight - offsetTop;
+                const offsetBottom = getHeight(this._getContainer()) - contentHeight - offsetTop;
 
                 return offsetTop >= offsetBottom ? -directionIndex : directionIndex;
             }

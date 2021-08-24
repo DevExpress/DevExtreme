@@ -1,3 +1,4 @@
+import { getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import ScrollView from '../scroll_view';
@@ -43,8 +44,8 @@ class DiagramScrollView extends Widget {
         const { Size } = getDiagram();
         const $element = this._scrollView.$element();
         return new Size(
-            Math.floor($element.width()),
-            Math.floor($element.height())
+            Math.floor(getWidth($element)),
+            Math.floor(getHeight($element))
         );
     }
     getScrollContainer() {

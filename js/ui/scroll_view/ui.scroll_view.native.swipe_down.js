@@ -1,3 +1,4 @@
+import { getHeight, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
@@ -69,9 +70,9 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _updateDimensions: function() {
         this.callBase();
-        this._topPocketSize = this._$topPocket.height();
-        this._bottomPocketSize = this._$bottomPocket.height();
-        this._scrollOffset = this._$container.height() - this._$content.height();
+        this._topPocketSize = getHeight(this._$topPocket);
+        this._bottomPocketSize = getHeight(this._$bottomPocket);
+        this._scrollOffset = getHeight(this._$container) - getHeight(this._$content);
     },
 
     _allowedDirections: function() {
@@ -130,11 +131,11 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _getPullDownHeight: function() {
-        return Math.round(this._$element.outerHeight() * 0.05);
+        return Math.round(getOuterHeight(this._$element) * 0.05);
     },
 
     _getPullDownStartPosition: function() {
-        return -Math.round(this._$pullDown.outerHeight() * 1.5);
+        return -Math.round(getOuterHeight(this._$pullDown) * 1.5);
     },
 
     handleEnd: function() {

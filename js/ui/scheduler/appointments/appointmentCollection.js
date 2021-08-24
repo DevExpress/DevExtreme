@@ -1,3 +1,4 @@
+import { setOuterWidth, setOuterHeight } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
@@ -934,8 +935,8 @@ class SchedulerAppointments extends CollectionWidget {
                 delete this._initialSize;
             }
             if(size) {
-                $appointment.outerWidth(size.width);
-                $appointment.outerHeight(size.height);
+                setOuterWidth($appointment, size.width);
+                setOuterHeight($appointment, size.height);
                 delete this._initialCoordinates;
             }
         }

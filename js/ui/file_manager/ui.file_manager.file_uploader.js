@@ -1,3 +1,4 @@
+import { getInnerHeight, setHeight, setWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
@@ -164,7 +165,7 @@ class FileManagerFileUploader extends Widget {
         const $placeholderContainer = this.option('dropZonePlaceholderContainer');
         const containerBorderBottomWidth = parseFloat($placeholderContainer.css('borderBottomWidth'));
         const containerBorderLeftWidth = parseFloat($placeholderContainer.css('borderLeftWidth'));
-        const containerHeight = $placeholderContainer.innerHeight();
+        const containerHeight = getInnerHeight($placeholderContainer);
         const containerOffset = $placeholderContainer.offset();
         const dropZoneOffset = $dropZoneTarget.offset();
 
@@ -172,8 +173,14 @@ class FileManagerFileUploader extends Widget {
             top: dropZoneOffset.top - containerOffset.top - containerHeight - containerBorderBottomWidth,
             left: dropZoneOffset.left - containerOffset.left - containerBorderLeftWidth
         });
-        this._$dropZonePlaceholder.height($dropZoneTarget.get(0).offsetHeight - placeholderBorderTopWidth * 2);
-        this._$dropZonePlaceholder.width($dropZoneTarget.get(0).offsetWidth - placeholderBorderLeftWidth * 2);
+        setHeight(
+            this._$dropZonePlaceholder,
+            $dropZoneTarget.get(0).offsetHeight - placeholderBorderTopWidth * 2
+        );
+        setWidth(
+            this._$dropZonePlaceholder,
+            $dropZoneTarget.get(0).offsetWidth - placeholderBorderLeftWidth * 2
+        );
     }
 
     _setDropZonePlaceholderVisible(visible) {

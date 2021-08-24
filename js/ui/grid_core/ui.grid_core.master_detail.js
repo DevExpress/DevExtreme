@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import gridCoreUtils from './ui.grid_core.utils';
 import { grep } from '../../core/utils/common';
@@ -237,14 +238,14 @@ export const masterDetailModule = {
                 _updateFixedMasterDetailGrids: function(masterDataGrid, masterRowIndex, $detailElement) {
                     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
                     const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
-                    const rowsNotEqual = $rows?.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height();
-                    const tablesNotEqual = $tables?.length === 2 && $tables.eq(0).height() !== $tables.eq(1).height();
+                    const rowsNotEqual = $rows?.length === 2 && getHeight($rows.eq(0)) !== getHeight($rows.eq(1));
+                    const tablesNotEqual = $tables?.length === 2 && getHeight($tables.eq(0)) !== getHeight($tables.eq(1));
 
                     if(rowsNotEqual || tablesNotEqual) {
-                        const detailElementWidth = $detailElement.width();
+                        const detailElementWidth = getWidth($detailElement);
                         return masterDataGrid.updateDimensions().done(() => {
                             const isDetailHorizontalScrollCanBeShown = this.option('columnAutoWidth') && masterDataGrid.option('scrolling.useNative') === true;
-                            const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailElementWidth !== $detailElement.width();
+                            const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailElementWidth !== getWidth($detailElement);
 
                             if(isDetailHorizontalScrollCanBeShown && isDetailGridWidthChanged) {
                                 this.updateDimensions();

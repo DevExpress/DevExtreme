@@ -1,3 +1,4 @@
+import { getWidth, getHeight } from '../../core/utils/size';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from '../../core/utils/window';
 import { camelize } from '../../core/utils/inflector';
@@ -118,7 +119,7 @@ Tooltip.prototype = {
                     if(useTemplate) {
                         template.render({ model: state.formatObject, container: textHtml, onRendered: () => {
                             state.html = textHtml.html();
-                            if(textHtml.width() === 0 && textHtml.height() === 0) {
+                            if(getWidth(textHtml) === 0 && getHeight(textHtml) === 0) {
                                 this.plaque.clear();
                                 templateCallback(false);
                                 return;
@@ -332,7 +333,7 @@ Tooltip.prototype = {
             that._textHtml.css({
                 left: -left, top: -top
             });
-            that._textGroupHtml.css({ width: mathCeil(that._textHtml.width()) });
+            that._textGroupHtml.css({ width: mathCeil(getWidth(that._textHtml)) });
         }
     },
 

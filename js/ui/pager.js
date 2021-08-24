@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth, getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import Class from '../core/class';
@@ -522,7 +523,7 @@ const Pager = Widget.inherit({
             that._renderPageSizes();
         }
 
-        that._pagesSizeChooserWidth = that._$pagesSizeChooser.width();
+        that._pagesSizeChooserWidth = getWidth(that._$pagesSizeChooser);
     },
 
     _renderInfo: function() {
@@ -536,7 +537,7 @@ const Pager = Widget.inherit({
                 .appendTo(this._$pagesChooser);
 
             if(!this._isInfoHide) {
-                this._infoWidth = this._$info.outerWidth(true);
+                this._infoWidth = getOuterWidth(this._$info, true);
             }
         }
     },
@@ -717,13 +718,13 @@ const Pager = Widget.inherit({
     },
 
     _updatePagesChooserWidth: deferUpdater(function() {
-        const lastPageWidth = this._pages && this._pages.length > 0 ? this._pages[this._pages.length - 1]._$page.width() : 0;
-        this._pagesChooserWidth = this._$pagesChooser.width() + lastPageWidth;
+        const lastPageWidth = this._pages && this._pages.length > 0 ? getWidth(this._pages[this._pages.length - 1]._$page) : 0;
+        this._pagesChooserWidth = getWidth(this._$pagesChooser) + lastPageWidth;
     }),
 
     _updateLightMode: deferUpdater(function() {
         const that = this;
-        const width = this.$element().width();
+        const width = getWidth(this.$element());
         const infoWidth = isDefined(this._infoWidth) ? this._infoWidth : 0;
 
         deferRender(function() {
@@ -759,7 +760,7 @@ const Pager = Widget.inherit({
     },
 
     getHeight: function() {
-        return this.option('visible') ? this.$element().outerHeight() : 0;
+        return this.option('visible') ? getOuterHeight(this.$element()) : 0;
     }
 });
 

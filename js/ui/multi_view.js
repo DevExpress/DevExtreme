@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import { locate } from '../animation/translator';
 import { _translator, animation } from './multi_view/ui.multi_view.animation';
@@ -107,7 +108,7 @@ const MultiView = CollectionWidget.inherit({
 
     _itemWidth: function() {
         if(!this._itemWidthValue) {
-            this._itemWidthValue = this._$wrapper.width();
+            this._itemWidthValue = getWidth(this._$wrapper);
         }
 
         return this._itemWidthValue;
@@ -283,7 +284,7 @@ const MultiView = CollectionWidget.inherit({
             this._updateItems(newIndex);
 
             // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713)
-            this._$itemContainer.width();
+            getWidth(this._$itemContainer);
         }).bind(this));
     },
 

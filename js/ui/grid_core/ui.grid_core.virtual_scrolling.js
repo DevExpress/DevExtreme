@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
@@ -646,7 +647,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 this._updateContentPosition();
 
-                const viewportHeight = this._hasHeight ? this.element().outerHeight() : $(getWindow()).outerHeight();
+                const viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight($(getWindow()));
                 const dataController = this._dataController;
                 dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 
@@ -782,7 +783,7 @@ export const virtualScrollingModule = {
                                     const isChromeLatest = browser.chrome && browser.version >= 91;
                                     const allowedTopOffset = browser.mozilla || isChromeLatest ? 1 : 0; // T884308
                                     if(top > allowedTopOffset) {
-                                        top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
+                                        top = Math.round(top + getOuterHeight($rowElement) * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
                                     }
                                 }

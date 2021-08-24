@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
@@ -340,7 +341,7 @@ const TileView = CollectionWidget.inherit({
         cssProps[config.crossPosition] = itemPositionCross * baseItemCross + (itemPositionCross + 1) * itemMargin;
 
         if(this.option('rtlEnabled')) {
-            const offsetCorrection = this._$container.width();
+            const offsetCorrection = getWidth(this._$container);
             const baseItemWidth = this.option('baseItemWidth');
             const itemPositionX = itemPosition.left;
             const offsetPosition = itemPositionX * baseItemWidth;

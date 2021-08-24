@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import { move } from '../../animation/translator';
 import fx from '../../animation/fx';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
@@ -33,7 +34,7 @@ registerDecorator(
         },
 
         _swipeStartHandler: function($itemElement) {
-            this._itemElementWidth = $itemElement.width();
+            this._itemElementWidth = getWidth($itemElement);
             return true;
         },
 

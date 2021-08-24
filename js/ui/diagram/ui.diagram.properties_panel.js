@@ -1,3 +1,4 @@
+import { getHeight, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import ScrollView from '../scroll_view';
@@ -134,9 +135,9 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
                 this._onPointerUpAction();
             },
             onContentReady: (e) => {
-                this._popup.option('height', e.component.$element().height() + this._getVerticalPaddingsAndBorders());
+                this._popup.option('height', getHeight(e.component.$element()) + this._getVerticalPaddingsAndBorders());
                 if(this._firstScrollView) {
-                    this._scrollViewHeight = this._firstScrollView.$element().outerHeight();
+                    this._scrollViewHeight = getOuterHeight(this._firstScrollView.$element());
                     this._firstScrollView.option('height', this._scrollViewHeight);
                 }
             }
@@ -150,7 +151,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         });
         this._renderTabInnerContent(scrollView.content(), tab, index);
         if(isSingleTab) {
-            this._popup.option('height', scrollView.$element().height() + this._getVerticalPaddingsAndBorders());
+            this._popup.option('height', getHeight(scrollView.$element()) + this._getVerticalPaddingsAndBorders());
         } else {
             this._firstScrollView = this._firstScrollView || scrollView;
         }

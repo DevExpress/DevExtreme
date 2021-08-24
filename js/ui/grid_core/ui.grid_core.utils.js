@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
@@ -190,7 +191,7 @@ export default {
                 message: loadPanelOptions.text,
                 position: function() {
                     const $window = $(getWindow());
-                    if($element.height() > $window.height()) {
+                    if(getHeight($element) > getHeight($window)) {
                         return {
                             of: $window,
                             boundary: $element,

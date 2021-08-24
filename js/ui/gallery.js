@@ -1,3 +1,4 @@
+import { getOuterWidth, setOuterWidth, getOuterHeight, getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
@@ -229,7 +230,7 @@ const Gallery = CollectionWidget.inherit({
 
     _itemPercentWidth: function() {
         let percentWidth;
-        const elementWidth = this.$element().outerWidth();
+        const elementWidth = getOuterWidth(this.$element());
         const initialItemWidth = this.option('initialItemWidth');
 
         if(initialItemWidth && initialItemWidth <= elementWidth) {
@@ -405,7 +406,7 @@ const Gallery = CollectionWidget.inherit({
         }
 
         $items.each(function(index) {
-            $($items[index]).outerWidth(itemWidth * 100 + '%');
+            setOuterWidth($($items[index]), itemWidth * 100 + '%');
         });
     },
 
@@ -551,10 +552,10 @@ const Gallery = CollectionWidget.inherit({
         }
 
         if(!that.option('height')) {
-            that.option('height', $firstItem.outerHeight());
+            that.option('height', getOuterHeight($firstItem));
         }
         if(!that.option('width')) {
-            that.option('width', $firstItem.outerWidth());
+            that.option('width', getOuterWidth($firstItem));
         }
 
         this._dimensionChanged();
@@ -857,7 +858,7 @@ const Gallery = CollectionWidget.inherit({
 
     _elementWidth: function() {
         if(!this._cacheElementWidth) {
-            this._cacheElementWidth = this.$element().width();
+            this._cacheElementWidth = getWidth(this.$element());
         }
 
         return this._cacheElementWidth;

@@ -1,3 +1,4 @@
+import { getWidth, getHeight } from '../core/utils/size';
 import { eventData } from './utils/index';
 import GestureEmitter from './gesture/emitter.gesture';
 import registerEmitter from './core/emitter_registrator';
@@ -9,7 +10,7 @@ const SWIPE_END_EVENT = 'dxswipeend';
 
 const HorizontalStrategy = {
     defaultItemSizeFunc: function() {
-        return this.getElement().width();
+        return getWidth(this.getElement());
     },
 
     getBounds: function() {
@@ -32,7 +33,7 @@ const HorizontalStrategy = {
 
 const VerticalStrategy = {
     defaultItemSizeFunc: function() {
-        return this.getElement().height();
+        return getHeight(this.getElement());
     },
 
     getBounds: function() {

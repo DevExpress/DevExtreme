@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import Guid from '../core/guid';
 import { getWindow } from '../core/utils/window';
@@ -610,14 +611,16 @@ class FileUploader extends Editor {
     _updateFileNameMaxWidth() {
         const cancelButtonsCount = this.option('allowCanceling') && this.option('uploadMode') !== 'useForm' ? 1 : 0;
         const uploadButtonsCount = this.option('uploadMode') === 'useButtons' ? 1 : 0;
-        const filesContainerWidth = this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width();
+        const filesContainerWidth = getWidth(
+            this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first()
+        ) || getWidth(this._$filesContainer);
         const $buttonContainer = this._$filesContainer.find('.' + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0);
-        const buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount);
+        const buttonsWidth = getWidth($buttonContainer) * (cancelButtonsCount + uploadButtonsCount);
         const $fileSize = this._$filesContainer.find('.' + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
 
         const prevFileSize = $fileSize.text();
         $fileSize.text('1000 Mb');
-        const fileSizeWidth = $fileSize.width();
+        const fileSizeWidth = getWidth($fileSize);
         $fileSize.text(prevFileSize);
 
         this._$filesContainer.find('.' + FILEUPLOADER_FILE_NAME_CLASS).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth);

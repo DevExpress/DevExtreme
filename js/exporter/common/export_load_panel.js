@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { getWindow } from '../../core/utils/window';
@@ -23,7 +24,7 @@ class ExportLoadPanel {
             width: 200,
             position: () => {
                 const $window = $(getWindow());
-                if(this._$targetElement.height() > $window.height()) {
+                if(getHeight(this._$targetElement) > getHeight($window)) {
                     return {
                         of: $window,
                         boundary: this._$targetElement,

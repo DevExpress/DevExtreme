@@ -1,3 +1,4 @@
+import { setOuterWidth, getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import Tooltip from '../tooltip';
@@ -140,20 +141,19 @@ const SliderHandle = Widget.inherit({
             return;
         }
 
-        this._$tooltipContent.outerWidth('auto');
+        setOuterWidth(this._$tooltipContent, 'auto');
 
         const outerWidthWithoutRounding = getBoundingRect(this._$tooltipContent.get(0)).width;
         const tooltipOuterWidth = Math.ceil(outerWidthWithoutRounding);
         const roundedTooltipOuterWidth = tooltipOuterWidth % 2 + tooltipOuterWidth;
 
-        this._$tooltipContent
-            .outerWidth(roundedTooltipOuterWidth);
+        setOuterWidth(this._$tooltipContent, roundedTooltipOuterWidth);
 
-        const tooltipCenter = (roundedTooltipOuterWidth - this.$element().width()) / 2;
+        const tooltipCenter = (roundedTooltipOuterWidth - getWidth(this.$element())) / 2;
 
         this._contentLocate.left = -tooltipCenter;
         this._$tooltipArrow.css({
-            marginLeft: -this._$tooltipArrow.outerWidth() / 2,
+            marginLeft: -getOuterWidth(this._$tooltipArrow) / 2,
             left: '50%'
         });
 
@@ -180,7 +180,7 @@ const SliderHandle = Widget.inherit({
 
         const arrowLeft = (isLeftSide ? -1 : 1) * calculatePosition.h.oversize;
         const arrowMinLeft = this._contentLocate.left;
-        const arrowMaxRight = this._contentLocate.left + this._$tooltipContent.outerWidth() - this._$tooltipArrow.outerWidth();
+        const arrowMaxRight = this._contentLocate.left + getOuterWidth(this._$tooltipContent) - getOuterWidth(this._$tooltipArrow);
 
         move(this._$tooltipContent, { left: this._contentLocate.left + (isLeftSide ? 1 : -1) * calculatePosition.h.oversize });
         move(this._$tooltipArrow, { left: fitIntoRange(arrowLeft, arrowMinLeft, arrowMaxRight) });

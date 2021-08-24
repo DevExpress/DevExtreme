@@ -1,3 +1,4 @@
+import { getOuterWidth, getHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import devices from '../core/devices';
 import { data as elementData } from '../core/element_data';
@@ -256,7 +257,7 @@ const TagBox = SelectBox.inherit({
 
         return (isScrollLeft ^ !isScrollInverted)
             ? 0
-            : scrollSign * (this._$tagsContainer.get(0).scrollWidth - this._$tagsContainer.outerWidth());
+            : scrollSign * (this._$tagsContainer.get(0).scrollWidth - getOuterWidth(this._$tagsContainer));
     },
 
     _getFocusedTagPosition: function(direction) {
@@ -266,7 +267,7 @@ const TagBox = SelectBox.inherit({
         let scrollLeft = this._$tagsContainer.scrollLeft();
 
         if(isScrollLeft) {
-            scrollOffset += this._$focusedTag.outerWidth(true) - this._$tagsContainer.outerWidth();
+            scrollOffset += getOuterWidth(this._$focusedTag, true) - getOuterWidth(this._$tagsContainer);
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
@@ -703,7 +704,7 @@ const TagBox = SelectBox.inherit({
             const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
 
             $calculationElement.insertAfter($input);
-            width = $calculationElement.outerWidth() + cursorWidth;
+            width = getOuterWidth($calculationElement) + cursorWidth;
 
             $calculationElement.remove();
         } else if(!value) {
@@ -1318,11 +1319,11 @@ const TagBox = SelectBox.inherit({
 
     _updateWidgetHeight: function() {
         const element = this.$element();
-        const originalHeight = element.height();
+        const originalHeight = getHeight(element);
 
         this._renderInputSize();
 
-        const currentHeight = element.height();
+        const currentHeight = getHeight(element);
 
         if(this._popup && this.option('opened') && this._isEditable() && currentHeight !== originalHeight) {
             this._popup.repaint();

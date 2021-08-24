@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -99,7 +100,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _isSmallScreen: function() {
-        return $(window).width() <= SHRINK_VIEW_SCREEN_WIDTH;
+        return getWidth($(window)) <= SHRINK_VIEW_SCREEN_WIDTH;
     },
 
     _isShrinkView: function() {

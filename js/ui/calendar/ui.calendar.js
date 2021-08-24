@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
@@ -869,7 +870,7 @@ const Calendar = Editor.inherit({
 
     _viewWidth: function() {
         if(!this._viewWidthValue) {
-            this._viewWidthValue = this.$element().width();
+            this._viewWidthValue = getWidth(this.$element());
         }
 
         return this._viewWidthValue;

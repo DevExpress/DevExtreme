@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from '../../../core/utils/size';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';
@@ -57,7 +58,7 @@ export default class VirtualScrollingDispatcher {
 
     get viewportHeight() {
         return this.height
-            ? this.workspace.$element().height()
+            ? getHeight(this.workspace.$element())
             : getWindow().innerHeight;
     }
 
@@ -66,7 +67,7 @@ export default class VirtualScrollingDispatcher {
 
     get viewportWidth() {
         return this.width
-            ? this.workspace.$element().width()
+            ? getWidth(this.workspace.$element())
             : getWindow().innerWidth;
     }
 

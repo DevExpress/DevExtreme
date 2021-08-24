@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -824,9 +825,9 @@ const DropDownList = DropDownEditor.inherit({
         const $element = this.$element();
         const $customBoundaryContainer = this._$customBoundaryContainer;
         const offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0);
-        const windowHeight = $(window).outerHeight();
-        const containerHeight = $customBoundaryContainer ? Math.min($customBoundaryContainer.outerHeight(), windowHeight) : windowHeight;
-        const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
+        const windowHeight = getOuterHeight($(window));
+        const containerHeight = $customBoundaryContainer ? Math.min(getOuterHeight($customBoundaryContainer), windowHeight) : windowHeight;
+        const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - getOuterHeight($element));
 
         return Math.min(containerHeight * 0.5, maxHeight);
     },
