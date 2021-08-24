@@ -101,6 +101,14 @@ import devices from '../../../../../core/devices';
 import browser from '../../../../../core/utils/browser';
 import { isMaterial, current } from '../../../../../ui/themes';
 
+function getDefaultShowRowLines(): boolean {
+  return devices.real().platform === 'ios' || isMaterial(current());
+}
+
+function getDefaultShowColumnLines(): boolean {
+  return !isMaterial(current());
+}
+
 @ComponentBindings()
 export class DataGridColumnButton {
   @OneWay()
@@ -1527,9 +1535,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() showColumnHeaders?: boolean = true;
 
-  @OneWay() showColumnLines?: boolean = !isMaterial(current());
+  @OneWay() showColumnLines?: boolean = getDefaultShowColumnLines();
 
-  @OneWay() showRowLines?: boolean = devices.real().platform === 'ios' || isMaterial(current());
+  @OneWay() showRowLines?: boolean = getDefaultShowRowLines();
 
   @OneWay() twoWayBindingEnabled?: boolean = true;
 
