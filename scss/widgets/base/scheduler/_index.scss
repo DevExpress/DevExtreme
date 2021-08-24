@@ -448,7 +448,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
     &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
       .dx-scheduler-header-panel {
-        border-bottom: 2px solid $scheduler-base-border-color;
+        border-bottom: 1px solid $scheduler-base-border-color;
       }
     }
 
