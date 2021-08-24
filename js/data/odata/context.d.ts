@@ -1,5 +1,5 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 /** @namespace DevExpress.data */
@@ -16,7 +16,7 @@ export interface ODataContextOptions {
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url?: string; async?: boolean; method?: string; timeout?: number; params?: any; payload?: any; headers?: any }) => void);
     /**
      * @docid
      * @public
@@ -35,7 +35,7 @@ export interface ODataContextOptions {
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus?: number; errorDetails?: any; requestOptions?: any }) => void);
     /**
      * @docid
      * @public

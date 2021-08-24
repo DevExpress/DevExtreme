@@ -1,13 +1,13 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 /** @namespace DevExpress.ui */
@@ -110,6 +110,7 @@ export default class Widget extends DOMComponent {
  * @public
  * @namespace DevExpress.ui
  */
+// eslint-disable-next-line no-var, vars-on-top, import/no-mutable-exports
 export var dxItem: any;
 
 /**
@@ -126,26 +127,26 @@ export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential'
   /**
    * @docid
    */
-  currency?: string,
+  currency?: string;
   /**
    * @docid
    * @type_function_param1 value:number|date
    * @type_function_return string
    */
-  formatter?: ((value: number | Date) => string),
+  formatter?: ((value: number | Date) => string);
   /**
    * @docid
    * @type_function_param1 value:string
    * @type_function_return number|date
    */
-  parser?: ((value: string) => number | Date),
+  parser?: ((value: string) => number | Date);
   /**
    * @docid
    */
-  precision?: number,
+  precision?: number;
   /**
    * @docid
    * @type Enums.Format|string
    */
-  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string
+  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string;
 };

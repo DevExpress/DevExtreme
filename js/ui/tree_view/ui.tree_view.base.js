@@ -20,6 +20,8 @@ import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
 import errors from '../widget/ui.errors';
 import { nativeScrolling } from '../../core/utils/support';
+import { getRelativeOffset } from '../../renovation/ui/scroll_view/utils/get_relative_offset';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../renovation/ui/scroll_view/common/consts';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -1651,7 +1653,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
             const $element = this._getNodeElement(node);
             if($element && $element.length) {
-                this.getScrollable().scrollToElementTopLeft($element);
+                this.scrollToElementTopLeft($element.get(0));
                 scrollCallback.resolve();
             } else {
                 scrollCallback.reject();
@@ -1659,6 +1661,27 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         return scrollCallback.promise();
+    },
+
+    scrollToElementTopLeft: function(targetElement) {
+        const scrollable = this.getScrollable();
+        const { scrollDirection, rtlEnabled } = this.option();
+
+        const targetLocation = { top: 0, left: 0 };
+        const relativeOffset = getRelativeOffset($(scrollable.content()).get(0), targetElement);
+
+        if(scrollDirection !== DIRECTION_VERTICAL) {
+            const containerElement = $(scrollable.container()).get(0);
+
+            targetLocation.left = rtlEnabled
+                ? relativeOffset.left + targetElement.offsetWidth - containerElement.clientWidth
+                : relativeOffset.left;
+        }
+        if(scrollDirection !== DIRECTION_HORIZONTAL) {
+            targetLocation.top = relativeOffset.top;
+        }
+
+        scrollable.scrollTo(targetLocation);
     },
 
     _expandNodes: function(keysToExpand) {

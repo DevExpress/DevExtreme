@@ -1,20 +1,20 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
-    NativeEventInfo
+    NativeEventInfo,
 } from '../events/index';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 export interface ComponentDisabledDate<T> {
@@ -31,10 +31,10 @@ export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {
-    readonly date: Date,
-    readonly view: string,
-    readonly text?: string
-}
+    readonly date: Date;
+    readonly view: string;
+    readonly text?: string;
+};
 
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
@@ -89,7 +89,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

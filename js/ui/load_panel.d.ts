@@ -1,26 +1,25 @@
 import {
     UserDefinedElement,
-    DxElement
 } from '../core/element';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 /** @public */
@@ -81,7 +80,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @type_function_return number|string
      * @default 90
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @public
      */
     height?: number | string | (() => number | string);
@@ -93,14 +92,14 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     indicatorSrc?: string;
     /**
      * @docid
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
      * @public
      */
     maxHeight?: number | string | (() => number | string);
     /**
      * @docid
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
      * @public
      */
@@ -108,7 +107,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default "Loading ..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     message?: string;
@@ -121,7 +120,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default 'transparent'
-     * @default '' [for](Android|iOS)
+     * @default '' &for(Android|iOS)
      * @public
      */
     shadingColor?: string;
@@ -140,7 +139,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default 222
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
      * @public
      */

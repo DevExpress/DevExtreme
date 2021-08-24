@@ -1,9 +1,9 @@
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from './abstract_store';
 
 import {
-    LoadOptions
+    LoadOptions,
 } from './load_options';
 
 /** @namespace DevExpress.data */
@@ -58,7 +58,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @type_function_return Promise<number>
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: any, group?: any }) => PromiseLike<number>);
+    totalCount?: ((loadOptions: { filter?: any; group?: any }) => PromiseLike<number>);
     /**
      * @docid
      * @type_function_param1 key:object|string|number

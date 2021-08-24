@@ -7,6 +7,6 @@
         "node": true
     },
     "parserOptions": {
-        "project": "themebuilder-scss/tests/tsconfig.json",
+        "project": "themebuilder-scss/tests/tsconfig.json"
     }
 }

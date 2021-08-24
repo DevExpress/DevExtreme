@@ -1,13 +1,13 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import {
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from '../widget/ui.widget';
 
 export interface ValueChangedInfo {

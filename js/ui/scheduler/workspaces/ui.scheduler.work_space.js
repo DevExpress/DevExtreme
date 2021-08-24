@@ -45,7 +45,7 @@ import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/grou
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
-import { cache } from './cache';
+import { Cache } from './cache';
 import { isDateInRange } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
@@ -159,7 +159,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._viewDataProvider;
     }
 
-    get cache() { return cache; }
+    get cache() {
+        if(!this._cache) {
+            this._cache = new Cache();
+        }
+
+        return this._cache;
+    }
     get virtualSelectionState() {
         if(!this._virtualSelectionState) {
             this._virtualSelectionState = new VirtualSelectionState(this.viewDataProvider);

@@ -1,23 +1,23 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../../animation/fx';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
 import HierarchicalCollectionWidget, {
-    HierarchicalCollectionWidgetOptions
+    HierarchicalCollectionWidgetOptions,
 } from '../hierarchical_collection/ui.hierarchical_collection_widget';
 
 import {
-    dxMenuBaseItem
+    dxMenuBaseItem,
 } from '../menu';
 
 /** @namespace DevExpress.ui */
@@ -39,12 +39,12 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
        * @docid
        * @default { type: "fade", from: 1, to: 0, duration: 100 }
        */
-      hide?: animationConfig,
+      hide?: animationConfig;
       /**
        * @docid
        * @default { type: "fade", from: 0, to: 1, duration: 100 }
        */
-      show?: animationConfig
+      show?: animationConfig;
     };
     /**
      * @docid
@@ -92,19 +92,19 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
          * @docid
          * @default 300
          */
-        hide?: number,
+        hide?: number;
         /**
          * @docid
          * @default 50
          */
-        show?: number
-      } | number,
+        show?: number;
+      } | number;
       /**
        * @docid
        * @type Enums.ShowSubmenuMode
        * @default "onHover"
        */
-      name?: 'onClick' | 'onHover'
+      name?: 'onClick' | 'onHover';
     } | 'onClick' | 'onHover';
 }
 /**

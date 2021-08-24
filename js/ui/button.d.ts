@@ -1,27 +1,27 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxButton> & {
     validationGroup?: any;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxButton>;
@@ -39,7 +39,7 @@ export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 export type TemplateData = {
     readonly text?: string;
     readonly icon?: string;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -54,7 +54,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

@@ -1,6 +1,6 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
@@ -8,19 +8,19 @@ import {
     NativeEventInfo,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import PivotGridDataSource, {
     Field,
     PivotGridDataSourceOptions,
-    dxPivotGridSummaryCell as SummaryCell
+    dxPivotGridSummaryCell as SummaryCell,
 } from './pivot_grid/data_source';
 
 import dxPopup from './popup';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -33,7 +33,7 @@ export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {
     readonly columnFields?: Array<Field>;
     readonly rowFields?: Array<Field>;
     readonly dataFields?: Array<Field>;
-}
+};
 
 /** @public */
 export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
@@ -41,8 +41,8 @@ export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
     readonly cellElement?: DxElement;
     readonly cell?: Cell;
     readonly rowIndex?: number;
-    readonly columnIndex?: number
-}
+    readonly columnIndex?: number;
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPivotGrid>;
@@ -59,7 +59,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
     readonly columnFields?: Array<Field>;
     readonly field?: Field;
     items?: Array<any>;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPivotGrid>;
@@ -70,7 +70,7 @@ export type ExportedEvent = EventInfo<dxPivotGrid>;
 /** @public */
 export type ExportingEvent = Cancelable & EventInfo<dxPivotGrid> & {
     fileName?: string;
-}
+};
 
 /** @public */
 export type FileSavingEvent = Cancelable & {
@@ -79,7 +79,7 @@ export type FileSavingEvent = Cancelable & {
     readonly data?: Blob;
     readonly format?: string;
     fileName?: string;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxPivotGrid>;
@@ -144,25 +144,25 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default false
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default "PivotGrid"
        * @deprecated
        */
-      fileName?: string,
+      fileName?: string;
       /**
        * @docid
        * @default true
        * @deprecated
        */
-      ignoreExcelErrors?: boolean,
+      ignoreExcelErrors?: boolean;
       /**
        * @docid
        * @default undefined
        * @deprecated
        */
-      proxyUrl?: string
+      proxyUrl?: string;
     };
     /**
      * @docid
@@ -173,34 +173,34 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default false
        */
-      allowSearch?: boolean,
+      allowSearch?: boolean;
       /**
        * @docid
        * @type Enums.ApplyChangesMode
        * @default "instantly"
        */
-      applyChangesMode?: 'instantly' | 'onDemand',
+      applyChangesMode?: 'instantly' | 'onDemand';
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 600
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @type Enums.PivotGridFieldChooserLayout
        * @default 0
        */
-      layout?: 0 | 1 | 2,
+      layout?: 0 | 1 | 2;
       /**
        * @docid
        * @default 500
        */
-      searchTimeout?: number,
+      searchTimeout?: number;
       /**
        * @docid
        */
@@ -209,38 +209,38 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
          * @docid
          * @default 'All Fields'
          */
-        allFields?: string,
+        allFields?: string;
         /**
          * @docid
          * @default 'Column Fields'
          */
-        columnFields?: string,
+        columnFields?: string;
         /**
          * @docid
          * @default 'Data Fields'
          */
-        dataFields?: string,
+        dataFields?: string;
         /**
          * @docid
          * @default 'Filter Fields'
          */
-        filterFields?: string,
+        filterFields?: string;
         /**
          * @docid
          * @default 'Row Fields'
          */
-        rowFields?: string
-      },
+        rowFields?: string;
+      };
       /**
        * @docid
        * @default "Field Chooser"
        */
-      title?: string,
+      title?: string;
       /**
        * @docid
        * @default 600
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -251,27 +251,27 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default true
        */
-      allowFieldDragging?: boolean,
+      allowFieldDragging?: boolean;
       /**
        * @docid
        * @default true
        */
-      showColumnFields?: boolean,
+      showColumnFields?: boolean;
       /**
        * @docid
        * @default true
        */
-      showDataFields?: boolean,
+      showDataFields?: boolean;
       /**
        * @docid
        * @default true
        */
-      showFilterFields?: boolean,
+      showFilterFields?: boolean;
       /**
       * @docid
       * @default true
       */
-      showRowFields?: boolean,
+      showRowFields?: boolean;
       /**
        * @docid
        */
@@ -280,28 +280,28 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
          * @docid
          * @default "Drop Column Fields Here"
          */
-        columnFieldArea?: string,
+        columnFieldArea?: string;
         /**
          * @docid
          * @default "Drop Data Fields Here"
          */
-        dataFieldArea?: string,
+        dataFieldArea?: string;
         /**
          * @docid
          * @default "Drop Filter Fields Here"
          */
-        filterFieldArea?: string,
+        filterFieldArea?: string;
         /**
          * @docid
          * @default "Drop Row Fields Here"
          */
-        rowFieldArea?: string
-      },
+        rowFieldArea?: string;
+      };
       /**
        * @docid
        * @default false
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -312,22 +312,22 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default false
        */
-      allowSearch?: boolean,
+      allowSearch?: boolean;
       /**
        * @docid
        * @default 325
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @default 500
        */
-      searchTimeout?: number,
+      searchTimeout?: number;
       /**
        * @docid
        * @default false
        */
-      showRelevantValues?: boolean,
+      showRelevantValues?: boolean;
       /**
        * @docid
        */
@@ -336,23 +336,23 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
          * @docid
          * @default "Cancel"
          */
-        cancel?: string,
+        cancel?: string;
         /**
          * @docid
          * @default "(Blanks)"
          */
-        emptyValue?: string,
+        emptyValue?: string;
         /**
          * @docid
          * @default "Ok"
          */
-        ok?: string
-      },
+        ok?: string;
+      };
       /**
        * @docid
        * @default 252
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -369,47 +369,47 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 70
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @default ""
        */
-      indicatorSrc?: string,
+      indicatorSrc?: string;
       /**
        * @docid
        * @default false
        */
-      shading?: boolean,
+      shading?: boolean;
       /**
        * @docid
        * @default ''
        */
-      shadingColor?: string,
+      shadingColor?: string;
       /**
        * @docid
        * @default true
        */
-      showIndicator?: boolean,
+      showIndicator?: boolean;
       /**
        * @docid
        * @default true
        */
-      showPane?: boolean,
+      showPane?: boolean;
       /**
        * @docid
        * @default 'Loading...'
        */
-      text?: string,
+      text?: string;
       /**
        * @docid
        * @default 200
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -526,13 +526,13 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @type Enums.PivotGridScrollingMode
        * @default "standard"
        */
-      mode?: 'standard' | 'virtual',
+      mode?: 'standard' | 'virtual';
       /**
        * @docid
        * @type boolean|Enums.Mode
        * @default "auto"
        */
-      useNative?: boolean | 'auto'
+      useNative?: boolean | 'auto';
     };
     /**
      * @docid
@@ -580,33 +580,34 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @type_function_return Promise<Object>
        */
-      customLoad?: (() => PromiseLike<any>),
+      customLoad?: (() => PromiseLike<any>);
       /**
        * @docid
        * @type_function_param1 state:object
+       * @type_function_return void
        */
-      customSave?: ((state: any) => any),
+      customSave?: ((state: any) => any);
       /**
        * @docid
        * @default false
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 2000
        */
-      savingTimeout?: number,
+      savingTimeout?: number;
       /**
        * @docid
        * @default null
        */
-      storageKey?: string,
+      storageKey?: string;
       /**
        * @docid
        * @type Enums.StateStoringType
        * @default "localStorage"
        */
-      type?: 'custom' | 'localStorage' | 'sessionStorage'
+      type?: 'custom' | 'localStorage' | 'sessionStorage';
     };
     /**
      * @docid
@@ -617,57 +618,57 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default 'Collapse All'
        */
-      collapseAll?: string,
+      collapseAll?: string;
       /**
        * @docid
        * @default "N/A"
        */
-      dataNotAvailable?: string,
+      dataNotAvailable?: string;
       /**
        * @docid
        * @default 'Expand All'
        */
-      expandAll?: string,
+      expandAll?: string;
       /**
        * @docid
        * @default "Export to Excel file"
        */
-      exportToExcel?: string,
+      exportToExcel?: string;
       /**
        * @docid
        * @default 'Grand Total'
        */
-      grandTotal?: string,
+      grandTotal?: string;
       /**
        * @docid
        * @default 'No data'
        */
-      noData?: string,
+      noData?: string;
       /**
        * @docid
        * @default 'Remove All Sorting'
        */
-      removeAllSorting?: string,
+      removeAllSorting?: string;
       /**
        * @docid
        * @default 'Show Field Chooser'
        */
-      showFieldChooser?: string,
+      showFieldChooser?: string;
       /**
        * @docid
        * @default 'Sort {0} by This Column'
        */
-      sortColumnBySummary?: string,
+      sortColumnBySummary?: string;
       /**
        * @docid
        * @default 'Sort {0} by This Row'
        */
-      sortRowBySummary?: string,
+      sortRowBySummary?: string;
       /**
        * @docid
        * @default '{0} Total'
        */
-      total?: string
+      total?: string;
     };
     /**
      * @docid
@@ -701,7 +702,7 @@ export default class dxPivotGrid extends Widget {
      * @return function | null
      * @public
      */
-    bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
+    bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean; dataFieldsDisplayMode?: string; putDataFieldsInto?: string; alternateDataFields?: boolean; processCell?: Function; customizeChart?: Function; customizeSeries?: Function }): Function & null;
     /**
      * @docid
      * @publicName exportToExcel()

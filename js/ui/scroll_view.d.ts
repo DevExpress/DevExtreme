@@ -1,20 +1,20 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxScrollable, {
     dxScrollableOptions,
-    ScrollEventInfo
+    ScrollEventInfo,
 } from './scroll_view/ui.scrollable';
 
 /** @public */
@@ -68,28 +68,28 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default "Release to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pulledDownText?: string;
     /**
      * @docid
      * @default "Pull down to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pullingDownText?: string;
     /**
      * @docid
      * @default "Loading..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     reachBottomText?: string;
     /**
      * @docid
      * @default "Refreshing..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     refreshingText?: string;

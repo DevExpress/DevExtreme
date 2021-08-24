@@ -1,18 +1,18 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -20,20 +20,20 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 import {
-    ResizeInfo
+    ResizeInfo,
 } from './resizable';
 
 export interface TitleRenderedInfo {
-    readonly titleElement: DxElement
+    readonly titleElement: DxElement;
 }
 
 /** @public */
@@ -79,7 +79,7 @@ export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
-     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} [for](iOS)
+     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} &for(iOS)
      * @public
      * @type object
      */
@@ -93,13 +93,13 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     dragEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -176,7 +176,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     showCloseButton?: boolean;
@@ -218,13 +218,13 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
 export interface dxPopupAnimation extends dxOverlayAnimation {
     /**
      * @docid dxPopupOptions.animation.hide
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} [for](iOS)
+     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} &for(iOS)
      * @public
      */
     hide?: animationConfig;
     /**
      * @docid dxPopupOptions.animation.show
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} [for](iOS)
+     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} &for(iOS)
      * @public
      */
     show?: animationConfig;

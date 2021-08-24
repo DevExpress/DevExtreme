@@ -1,5 +1,5 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DataSource from '../data/data_source';
@@ -8,16 +8,16 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 import {
-    DataExpressionMixinOptions
+    DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 
 /** @public */
@@ -48,7 +48,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -60,7 +60,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     hoverStateEnabled?: boolean;
     /**
      * @docid
-     * @default 'horizontal' [for](tablets)
+     * @default 'horizontal' &for(tablets)
      * @type Enums.Orientation
      * @default "vertical"
      * @public

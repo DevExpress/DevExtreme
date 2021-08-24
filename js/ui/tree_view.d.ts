@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -17,19 +17,19 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import HierarchicalCollectionWidget, {
-    HierarchicalCollectionWidgetOptions
+    HierarchicalCollectionWidgetOptions,
 } from './hierarchical_collection/ui.hierarchical_collection_widget';
 
 import {
-    SearchBoxMixinOptions
+    SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
 /** @public */
@@ -47,7 +47,7 @@ export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
     readonly itemElement?: DxElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
-}
+};
 
 /** @public */
 export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
@@ -55,7 +55,7 @@ export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
-}
+};
 
 /** @public */
 export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
@@ -63,7 +63,7 @@ export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
     readonly itemElement?: DxElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
-}
+};
 
 /** @public */
 export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
@@ -71,7 +71,7 @@ export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
-}
+};
 
 /** @public */
 export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
@@ -79,7 +79,7 @@ export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
-}
+};
 
 /** @public */
 export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
@@ -87,7 +87,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
-}
+};
 
 /** @public */
 export type ItemSelectionChangedEvent = EventInfo<dxTreeView> & {
@@ -95,7 +95,7 @@ export type ItemSelectionChangedEvent = EventInfo<dxTreeView> & {
     readonly itemElement?: DxElement;
     readonly itemData?: any;
     readonly itemIndex?: number;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTreeView> & ChangedOptionInfo;
@@ -103,7 +103,7 @@ export type OptionChangedEvent = EventInfo<dxTreeView> & ChangedOptionInfo;
 /** @public */
 export type SelectAllValueChangedEvent = EventInfo<dxTreeView> & {
     readonly value?: boolean | undefined;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTreeView>;
@@ -373,7 +373,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid
      * @default true
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @public
      */
     useNativeScrolling?: boolean;

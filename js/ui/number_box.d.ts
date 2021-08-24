@@ -1,25 +1,25 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxTextEditor, {
     dxTextEditorButton,
-    dxTextEditorOptions
+    dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    format
+    format,
 } from './widget/ui.widget';
 
 /** @public */
@@ -110,7 +110,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @docid
      * @type Enums.NumberBoxMode
      * @default "text"
-     * @default 'number' [for](mobile_devices)
+     * @default 'number' &for(mobile_devices)
      * @public
      */
     mode?: 'number' | 'text' | 'tel';
@@ -129,7 +129,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @public
      */
     useLargeSpinButtons?: boolean;

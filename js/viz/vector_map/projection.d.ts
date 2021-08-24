@@ -60,4 +60,4 @@ export const projection: {
     get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
 
     (data: VectorMapProjectionConfig): any;
-}
+};

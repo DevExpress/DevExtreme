@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    PaletteType
+    PaletteType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -21,16 +21,16 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    format
+    format,
 } from '../ui/widget/ui.widget';
 
 import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
 } from './common';
 
 import BaseWidget, {
@@ -41,11 +41,11 @@ import BaseWidget, {
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import {
-    VectorMapProjectionConfig
+    VectorMapProjectionConfig,
 } from './vector_map/projection';
 
 export interface TooltipInfo {
@@ -55,12 +55,12 @@ export interface TooltipInfo {
 /** @public */
 export type CenterChangedEvent = EventInfo<dxVectorMap> & {
     readonly center: Array<number>;
-}
+};
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxVectorMap>;
@@ -89,7 +89,7 @@ export type OptionChangedEvent = EventInfo<dxVectorMap> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
-}
+};
 
 /** @public */
 export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
@@ -100,7 +100,7 @@ export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
 /** @public */
 export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
     readonly zoomFactor: number;
-}
+};
 
 /**
  * @docid
@@ -254,12 +254,12 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default '#cacaca'
        */
-      borderColor?: string,
+      borderColor?: string;
       /**
        * @docid
        * @default '#ffffff'
        */
-      color?: string
+      color?: string;
     };
     /**
      * @docid
@@ -284,39 +284,39 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default '#5d5d5d'
        */
-      borderColor?: string,
+      borderColor?: string;
       /**
        * @docid
        * @default '#ffffff'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @type Enums.HorizontalAlignment
        * @default 'left'
        */
-      horizontalAlignment?: 'center' | 'left' | 'right',
+      horizontalAlignment?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @default 20
        */
-      margin?: number,
+      margin?: number;
       /**
        * @docid
        * @default 0.3
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @type Enums.VerticalEdge
        * @default 'top'
        */
-      verticalAlignment?: 'bottom' | 'top'
+      verticalAlignment?: 'bottom' | 'top';
     };
     /**
      * @docid
@@ -329,70 +329,70 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default '#9d9d9d'
        */
-      borderColor?: string,
+      borderColor?: string;
       /**
        * @docid
        * @default 1
        */
-      borderWidth?: number,
+      borderWidth?: number;
       /**
        * @docid
        * @default '#d2d2d2'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default undefined
        */
-      colorGroupingField?: string,
+      colorGroupingField?: string;
       /**
        * @docid
        * @default undefined
        */
-      colorGroups?: Array<number>,
+      colorGroups?: Array<number>;
       /**
        * @docid
        * @type_function_param1 elements:Array<MapLayerElement>
        * @notUsedInTheme
        */
-      customize?: ((elements: Array<MapLayerElement>) => void),
+      customize?: ((elements: Array<MapLayerElement>) => void);
       /**
        * @docid
        * @default undefined
        */
-      dataField?: string,
+      dataField?: string;
       /**
        * @docid
        * @type object|Store|DataSource|DataSourceOptions|string|Array<any>
        * @extends CommonVizDataSource
        */
-      dataSource?: any | Store | DataSource | DataSourceOptions | string,
+      dataSource?: any | Store | DataSource | DataSourceOptions | string;
       /**
        * @docid
        * @type Enums.VectorMapMarkerType
        * @notUsedInTheme
        */
-      elementType?: 'bubble' | 'dot' | 'image' | 'pie',
+      elementType?: 'bubble' | 'dot' | 'image' | 'pie';
       /**
        * @docid
        * @default true
        */
-      hoverEnabled?: boolean,
+      hoverEnabled?: boolean;
       /**
        * @docid
        * @default '#303030'
        */
-      hoveredBorderColor?: string,
+      hoveredBorderColor?: string;
       /**
        * @docid
        * @default 1
        */
-      hoveredBorderWidth?: number,
+      hoveredBorderWidth?: number;
       /**
        * @docid
        * @default '#d2d2d2'
        */
-      hoveredColor?: string,
+      hoveredColor?: string;
       /**
        * @docid
        */
@@ -400,49 +400,49 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
         /**
          * @docid
          */
-        dataField?: string,
+        dataField?: string;
         /**
          * @docid
          * @default <i>true</i> for markers; <i>false</i> for areas
          */
-        enabled?: boolean,
+        enabled?: boolean;
         /**
          * @docid
-         * @default '#2b2b2b' [prop](color)
+         * @default '#2b2b2b' &prop(color)
          */
-        font?: Font
-      },
+        font?: Font;
+      };
       /**
        * @docid
        * @default 50
        */
-      maxSize?: number,
+      maxSize?: number;
       /**
        * @docid
        * @default 20
        */
-      minSize?: number,
+      minSize?: number;
       /**
        * @docid
        * @notUsedInTheme
        */
-      name?: string,
+      name?: string;
       /**
        * @docid
        * @default 1
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @extends CommonVizPalette
        * @type Array<string>|Enums.VizPalette
        */
-      palette?: Array<string> | PaletteType,
+      palette?: Array<string> | PaletteType;
       /**
        * @docid
        * @default 0
        */
-      paletteSize?: number,
+      paletteSize?: number;
       /**
        * @docid
        */
@@ -451,45 +451,45 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default '#303030'
        */
-      selectedBorderColor?: string,
+      selectedBorderColor?: string;
       /**
        * @docid
        * @default 2
        */
-      selectedBorderWidth?: number,
+      selectedBorderWidth?: number;
       /**
        * @docid
        * @default '#d2d2d2'
        */
-      selectedColor?: string,
+      selectedColor?: string;
       /**
        * @docid
        * @type Enums.SelectionMode
        * @default 'single'
        */
-      selectionMode?: 'multiple' | 'none' | 'single',
+      selectionMode?: 'multiple' | 'none' | 'single';
       /**
        * @docid
        * @default 8
        */
-      size?: number,
+      size?: number;
       /**
        * @docid
        * @default undefined
        */
-      sizeGroupingField?: string,
+      sizeGroupingField?: string;
       /**
        * @docid
        * @default undefined
        */
-      sizeGroups?: Array<number>,
+      sizeGroups?: Array<number>;
       /**
        * @docid
        * @type Enums.VectorMapLayerType
        * @notUsedInTheme
        */
-      type?: 'area' | 'line' | 'marker'
-    }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | Store | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
+      type?: 'area' | 'line' | 'marker';
+    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: any | Store | DataSource | DataSourceOptions | string; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | PaletteType; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: 'multiple' | 'none' | 'single'; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
     /**
      * @docid
      * @type Array<Object>
@@ -515,9 +515,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
      * @action
@@ -528,9 +528,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
      * @notUsedInTheme
@@ -542,9 +542,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
      * @action
@@ -555,9 +555,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
@@ -568,9 +568,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
@@ -581,9 +581,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme
      * @action
@@ -728,7 +728,7 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @notUsedInTheme
      * @public
      */
-    customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
+    customizeHint?: ((itemInfo: { start?: number; end?: number; index?: number; color?: string; size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.customizeItems
      * @type_function_param1 items:Array<VectorMapLegendItem>
@@ -748,10 +748,10 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @notUsedInTheme
      * @public
      */
-    customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
+    customizeText?: ((itemInfo: { start?: number; end?: number; index?: number; color?: string; size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.font
-     * @default '#2b2b2b' [prop](color)
+     * @default '#2b2b2b' &prop(color)
      * @public
      */
     font?: Font;
@@ -793,12 +793,12 @@ export interface dxVectorMapLegends extends BaseLegend {
        * @docid dxVectorMapOptions.legends.source.grouping
        * @notUsedInTheme
        */
-      grouping?: string,
+      grouping?: string;
       /**
        * @docid dxVectorMapOptions.legends.source.layer
        * @notUsedInTheme
        */
-      layer?: string
+      layer?: string;
     };
 }
 /** @namespace DevExpress.viz */

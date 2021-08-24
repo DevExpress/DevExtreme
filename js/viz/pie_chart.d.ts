@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    format
+    format,
 } from '../ui/widget/ui.widget';
 
 import {
     basePointObject,
-    baseSeriesObject
+    baseSeriesObject,
 } from './chart';
 
 import {
-    PaletteType
+    PaletteType,
 } from './palette';
 
 import {
@@ -33,13 +33,13 @@ import {
     BaseChartLegend,
     BaseChartOptions,
     PointInteractionInfo,
-    TooltipInfo
+    TooltipInfo,
 } from './chart_components/base_chart';
 
 import {
     BaseLegendItem,
     DashStyleType,
-    HatchingDirectionType
+    HatchingDirectionType,
 } from './common';
 
 import {
@@ -49,12 +49,11 @@ import {
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
 export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
-
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPieChart>;
@@ -84,7 +83,7 @@ export type InitializedEvent = InitializedEventInfo<dxPieChart>;
 export type LegendClickEvent = NativeEventInfo<dxPieChart> & {
   readonly target: string | number;
   readonly points: Array<piePointObject>;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPieChart> & ChangedOptionInfo;
@@ -215,9 +214,9 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxPieChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxPieChart
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:String|Number
      * @type_function_param1_field6 points:Array<piePointObject>
@@ -267,12 +266,12 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
        * @type_function_param1 seriesName:any
        * @type_function_return PieChartSeries
        */
-      customizeSeries?: ((seriesName: any) => PieChartSeries),
+      customizeSeries?: ((seriesName: any) => PieChartSeries);
       /**
        * @docid
        * @default 'series'
        */
-      nameField?: string
+      nameField?: string;
     };
     /**
      * @docid
@@ -404,7 +403,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @type_function_return string
      * @public
      */
-    customizeHint?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
+    customizeHint?: ((pointInfo: { pointName?: any; pointIndex?: number; pointColor?: string }) => string);
     /**
      * @docid dxPieChartOptions.legend.customizeItems
      * @type_function_param1 items:Array<PieChartLegendItem>
@@ -422,7 +421,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @notUsedInTheme
      * @public
      */
-    customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
+    customizeText?: ((pointInfo: { pointName?: any; pointIndex?: number; pointColor?: string }) => string);
     /**
      * @docid dxPieChartOptions.legend.hoverMode
      * @type Enums.PieChartLegendHoverMode
@@ -508,23 +507,23 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.color
        * @default undefined
        */
-      color?: string,
+      color?: string;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle
        * @type Enums.DashStyle
        * @default undefined
        */
-      dashStyle?: DashStyleType,
+      dashStyle?: DashStyleType;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.visible
        * @default false
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.width
        * @default 2
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.color
@@ -552,29 +551,29 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.color
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle
            * @type Enums.DashStyle
            * @default undefined
            */
-          dashStyle?: DashStyleType,
+          dashStyle?: DashStyleType;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible
            * @default false
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.width
            * @default 3
            */
-          width?: number
-      },
+          width?: number;
+      };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
        * @default undefined
        */
-      color?: string,
+      color?: string;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
        */
@@ -584,23 +583,23 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType,
+          direction?: HatchingDirectionType;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity
            * @default 0.75
            */
-          opacity?: number,
+          opacity?: number;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.step
            * @default 10
            */
-          step?: number,
+          step?: number;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.width
            * @default 4
            */
-          width?: number
-      }
+          width?: number;
+      };
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label
@@ -611,12 +610,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
        * @extends CommonVizFormat
        */
-      argumentFormat?: format,
+      argumentFormat?: format;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor
        * @default undefined
        */
-      backgroundColor?: string,
+      backgroundColor?: string;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border
        */
@@ -625,24 +624,24 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.color
            * @default  '#d3d3d3'
            */
-          color?: string,
+          color?: string;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
            * @type Enums.DashStyle
            * @default 'solid'
            */
-          dashStyle?: DashStyleType,
+          dashStyle?: DashStyleType;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible
            * @default false
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.width
            * @default 1
            */
-          width?: number
-      },
+          width?: number;
+      };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector
        */
@@ -651,69 +650,69 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.color
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.visible
            * @default false
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.width
            * @default 1
            */
-          width?: number
-      },
+          width?: number;
+      };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.customizeText
        * @type_function_param1 pointInfo:object
        * @type_function_return string
        * @notUsedInTheme
        */
-      customizeText?: ((pointInfo: any) => string),
+      customizeText?: ((pointInfo: any) => string);
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.font
-       * @default '#FFFFFF' [prop](color)
-       * @default 14 [prop](size)
+       * @default '#FFFFFF' &prop(color)
+       * @default 14 &prop(size)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: format;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.position
        * @type Enums.PieChartLabelPosition
        * @default 'outside'
        */
-      position?: 'columns' | 'inside' | 'outside',
+      position?: 'columns' | 'inside' | 'outside';
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.radialOffset
        * @default 0
        */
-      radialOffset?: number,
+      radialOffset?: number;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.rotationAngle
        * @default 0
        */
-      rotationAngle?: number,
+      rotationAngle?: number;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow
        * @default 'ellipsis'
        * @type Enums.VizTextOverflow
        */
-      textOverflow?: VizTextOverflowType,
+      textOverflow?: VizTextOverflowType;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.visible
        * @default false
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap
        * @default 'normal'
        * @type Enums.VizWordWrap
        */
-      wordWrap?: WordWrapType
+      wordWrap?: WordWrapType;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount
@@ -747,29 +746,29 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.color
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle
            * @type Enums.DashStyle
            * @default undefined
            */
-          dashStyle?: DashStyleType,
+          dashStyle?: DashStyleType;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible
            * @default false
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.width
            * @default 3
            */
-          width?: number
-      },
+          width?: number;
+      };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
        * @default undefined
        */
-      color?: string,
+      color?: string;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
        */
@@ -779,23 +778,23 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType,
+          direction?: HatchingDirectionType;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity
            * @default 0.5
            */
-          opacity?: number,
+          opacity?: number;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.step
            * @default 10
            */
-          step?: number,
+          step?: number;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.width
            * @default 4
            */
-          width?: number
-      }
+          width?: number;
+      };
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping
@@ -806,23 +805,23 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.groupName
        * @default 'others'
        */
-      groupName?: string,
+      groupName?: string;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.mode
        * @type Enums.SmallValuesGroupingMode
        * @default 'none'
        */
-      mode?: 'none' | 'smallValueThreshold' | 'topN',
+      mode?: 'none' | 'smallValueThreshold' | 'topN';
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.threshold
        * @default undefined
        */
-      threshold?: number,
+      threshold?: number;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.topCount
        * @default undefined
        */
-      topCount?: number
+      topCount?: number;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.tagField

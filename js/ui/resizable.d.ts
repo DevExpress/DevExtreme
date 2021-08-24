@@ -1,16 +1,16 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 export interface ResizeInfo {
@@ -21,7 +21,7 @@ export interface ResizeInfo {
         readonly top: boolean;
         readonly right: boolean;
         readonly bottom: boolean;
-    }
+    };
 }
 
 /** @public */

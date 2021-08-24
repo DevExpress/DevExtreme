@@ -1,9 +1,9 @@
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
-import { drawLine, drawRect, drawText } from './pdf_utils';
+import { drawLine, drawRect, drawTextInRect } from './pdf_utils';
 
 // this function is large and will grow
-export function drawPdfTable(doc, styles, table, linkedTables) {
+export function drawPdfTable(doc, styles, table) {
     if(!isDefined(doc)) {
         throw 'doc is required';
     }
@@ -85,8 +85,7 @@ export function drawPdfTable(doc, styles, table, linkedTables) {
             specifyCellStyles(cell);
 
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                const textY = cell._rect.y + (cell._rect.h / 2);
-                drawText(doc, cell.text, cell._rect.x, textY, extend({ baseline: 'middle' }, cell.textOptions)); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
+                drawTextInRect(doc, cell.text, cell._rect, cell.textOptions);
             }
             drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });
@@ -99,17 +98,12 @@ export function drawPdfTable(doc, styles, table, linkedTables) {
         throw 'table.rect is required';
     }
 
-    let cells = [].concat(...table.rows);
-    linkedTables.forEach((linkedTable) => {
-        cells = cells.concat(...linkedTable.rows);
-    });
-
-    const sortedCells = cells.sort((a, b) => {
+    const cells = [].concat(...table.rows).sort((a, b) => {
         const aValue = isDefined(a.borderColor) ? 1 : 0;
         const bValue = isDefined(b.borderColor) ? 1 : 0;
         return aValue - bValue;
     });
-    drawRow(sortedCells);
+    drawRow(cells);
 
     if(isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0)) {
         drawBorder(table.rect);

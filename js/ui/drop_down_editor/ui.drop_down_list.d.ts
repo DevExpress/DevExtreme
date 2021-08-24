@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource from '../../data/data_source';
@@ -12,19 +12,19 @@ import DataSource from '../../data/data_source';
 import {
     EventInfo,
     NativeEventInfo,
-    ItemInfo
+    ItemInfo,
 } from '../../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from '../editor/editor';
 
 import {
-    DataExpressionMixinOptions
+    DataExpressionMixinOptions,
 } from '../editor/ui.data_expression';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
 
 export interface SelectionChangedInfo<T = any> {
@@ -109,7 +109,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @action
      * @public
      */
-    onValueChanged?: ((e:  NativeEventInfo<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false

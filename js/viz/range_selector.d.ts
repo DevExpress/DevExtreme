@@ -1,14 +1,14 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -17,22 +17,22 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    format
+    format,
 } from '../ui/widget/ui.widget';
 
 import {
-    dxChartCommonSeriesSettings
+    dxChartCommonSeriesSettings,
 } from './chart';
 
 import {
     ChartSeries,
     ScaleBreak,
     VizRange,
-    VizTimeInterval
+    VizTimeInterval,
 } from './common';
 
 import BaseWidget, {
@@ -41,7 +41,7 @@ import BaseWidget, {
     Font,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 /** @public */
@@ -70,9 +70,9 @@ export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
-  readonly value: Array<number | string | Date>,
-  readonly previousValue: Array<number | string | Date>,
-}
+  readonly value: Array<number | string | Date>;
+  readonly previousValue: Array<number | string | Date>;
+};
 
 /**
  * @deprecated use Properties instead
@@ -88,7 +88,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default '#C0BAE1'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        */
@@ -98,18 +98,18 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @type Enums.BackgroundImageLocation
          * @default 'full'
          */
-        location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop',
+        location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
         /**
          * @docid
          * @default undefined
          */
-        url?: string
-      },
+        url?: string;
+      };
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -120,33 +120,33 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default true
        */
-      allowSlidersSwap?: boolean,
+      allowSlidersSwap?: boolean;
       /**
        * @docid
        * @default true
        */
-      animationEnabled?: boolean,
+      animationEnabled?: boolean;
       /**
        * @docid
        * @type Enums.ValueChangedCallMode
        * @default 'onMovingComplete'
        */
-      callValueChanged?: 'onMoving' | 'onMovingComplete',
+      callValueChanged?: 'onMoving' | 'onMovingComplete';
       /**
        * @docid
        * @default true
        */
-      manualRangeSelectionEnabled?: boolean,
+      manualRangeSelectionEnabled?: boolean;
       /**
        * @docid
        * @default true
        */
-      moveSelectedRangeByClick?: boolean,
+      moveSelectedRangeByClick?: boolean;
       /**
        * @docid
        * @default true
        */
-      snapToTicks?: boolean
+      snapToTicks?: boolean;
     };
     /**
      * @docid
@@ -158,23 +158,23 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default 0.3
        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
        */
-      barGroupPadding?: number,
+      barGroupPadding?: number;
       /**
        * @docid
        * @default undefined
        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
        */
-      barGroupWidth?: number,
+      barGroupWidth?: number;
       /**
        * @docid
        * @default 0
        */
-      bottomIndent?: number,
+      bottomIndent?: number;
       /**
        * @docid
        * @type dxChartOptions.commonSeriesSettings
        */
-      commonSeriesSettings?: dxChartCommonSeriesSettings,
+      commonSeriesSettings?: dxChartCommonSeriesSettings;
       /**
        * @docid
        */
@@ -183,12 +183,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default false
          */
-        checkTypeForAllData?: boolean,
+        checkTypeForAllData?: boolean;
         /**
          * @docid
          * @default true
          */
-        convertToAxisDataType?: boolean,
+        convertToAxisDataType?: boolean;
         /**
          * @docid
          * @type_function_param1 a:object
@@ -200,44 +200,44 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @type_function_return Number
          * @default true
          */
-        sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number)
-      },
+        sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);
+      };
       /**
        * @docid
        * @default 0.2
        * @propertyOf dxChartSeriesTypes.BubbleSeries
        */
-      maxBubbleSize?: number,
+      maxBubbleSize?: number;
       /**
        * @docid
        * @default 12
        * @propertyOf dxChartSeriesTypes.BubbleSeries
        */
-      minBubbleSize?: number,
+      minBubbleSize?: number;
       /**
        * @docid
        * @default false
        */
-      negativesAsZeroes?: boolean,
+      negativesAsZeroes?: boolean;
       /**
        * @docid
        * @extends CommonVizPalette
        * @type Array<string>|Enums.VizPalette
        */
-      palette?: Array<string> | PaletteType,
+      palette?: Array<string> | PaletteType;
       /**
        * @docid
        * @type Enums.VizPaletteExtensionMode
        * @default 'blend'
        */
-      paletteExtensionMode?: PaletteExtensionModeType,
+      paletteExtensionMode?: PaletteExtensionModeType;
       /**
        * @docid
        * @type ChartSeries|Array<ChartSeries>
        * @default undefined
        * @notUsedInTheme
        */
-      series?: ChartSeries | Array<ChartSeries>,
+      series?: ChartSeries | Array<ChartSeries>;
       /**
        * @docid
        * @default undefined
@@ -248,18 +248,18 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @type_function_param1 seriesName:any
          * @type_function_return ChartSeries
          */
-        customizeSeries?: ((seriesName: any) => ChartSeries),
+        customizeSeries?: ((seriesName: any) => ChartSeries);
         /**
          * @docid
          * @default 'series'
          */
-        nameField?: string
-      },
+        nameField?: string;
+      };
       /**
        * @docid
        * @default 0.1
        */
-      topIndent?: number,
+      topIndent?: number;
       /**
        * @docid
        */
@@ -268,35 +268,35 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default false
          */
-        inverted?: boolean,
+        inverted?: boolean;
         /**
          * @docid
          * @default 10
          */
-        logarithmBase?: number,
+        logarithmBase?: number;
         /**
          * @docid
          * @default undefined
          */
-        max?: number,
+        max?: number;
         /**
          * @docid
          * @default undefined
          */
-        min?: number,
+        min?: number;
         /**
          * @docid
          * @type Enums.RangeSelectorChartAxisScaleType
          * @default undefined
          */
-        type?: 'continuous' | 'logarithmic',
+        type?: 'continuous' | 'logarithmic';
         /**
          * @docid
          * @type Enums.ChartDataType
          * @default undefined
          */
-        valueType?: 'datetime' | 'numeric' | 'string'
-      }
+        valueType?: 'datetime' | 'numeric' | 'string';
+      };
     };
     /**
      * @docid
@@ -326,21 +326,21 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      left?: number,
+      left?: number;
       /**
        * @docid
        * @default undefined
        * @notUsedInTheme
        */
-      right?: number
+      right?: number;
     };
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxRangeSelector
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxRangeSelector
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:Array<number,string,Date>
      * @type_function_param1_field5 previousValue:Array<number,string,Date>
      * @type_function_param1_field6 event:event
@@ -358,23 +358,23 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default false
        */
-      aggregateByCategory?: boolean,
+      aggregateByCategory?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      aggregationGroupWidth?: number,
+      aggregationGroupWidth?: number;
       /**
        * @docid
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      aggregationInterval?: VizTimeInterval,
+      aggregationInterval?: VizTimeInterval;
       /**
        * @docid
        * @default undefined
        */
-      allowDecimals?: boolean,
+      allowDecimals?: boolean;
       /**
        * @docid
        */
@@ -383,46 +383,46 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default "#ababab"
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @type Enums.ScaleBreakLineStyle
          * @default "waved"
          */
-        line?: 'straight' | 'waved',
+        line?: 'straight' | 'waved';
         /**
          * @docid
          * @default 5
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @inherits ScaleBreak
        * @default undefined
        * @notUsedInTheme
        */
-      breaks?: Array<ScaleBreak>,
+      breaks?: Array<ScaleBreak>;
       /**
        * @docid
        */
-      categories?: Array<number | string | Date>,
+      categories?: Array<number | string | Date>;
       /**
        * @docid
        * @default false
        */
-      endOnTick?: boolean,
+      endOnTick?: boolean;
       /**
        * @docid
        * @default undefined
        * @notUsedInTheme
        */
-      endValue?: number | Date | string,
+      endValue?: number | Date | string;
       /**
        * @docid
        * @default undefined
        */
-      holidays?: Array<Date | string> | Array<number>,
+      holidays?: Array<Date | string> | Array<number>;
       /**
        * @docid
        */
@@ -435,45 +435,45 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @type_function_return string
          * @notUsedInTheme
          */
-        customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
+        customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);
         /**
          * @docid
-         * @default '#767676' [prop](color)
-         * @default 11 [prop](size)
+         * @default '#767676' &prop(color)
+         * @default 11 &prop(size)
          */
-        font?: Font,
+        font?: Font;
         /**
          * @docid
          * @extends CommonVizFormat
          */
-        format?: format,
+        format?: format;
         /**
          * @docid
          * @type Enums.ScaleLabelOverlappingBehavior
          * @default "hide"
          */
-        overlappingBehavior?: 'hide' | 'none',
+        overlappingBehavior?: 'hide' | 'none';
         /**
          * @docid
          * @default 7
          */
-        topIndent?: number,
+        topIndent?: number;
         /**
          * @docid
          * @default true
          */
-        visible?: boolean
-      },
+        visible?: boolean;
+      };
       /**
        * @docid
        * @default 0
        */
-      linearThreshold?: number,
+      linearThreshold?: number;
       /**
        * @docid
        * @default 10
        */
-      logarithmBase?: number,
+      logarithmBase?: number;
       /**
        * @docid
        */
@@ -490,51 +490,51 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
            * @type_function_return string
            * @notUsedInTheme
            */
-          customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string),
+          customizeText?: ((markerValue: { value?: Date | number; valueText?: string }) => string);
           /**
            * @docid
            * @extends CommonVizFormat
            */
-          format?: format
-        },
+          format?: format;
+        };
         /**
          * @docid
          * @default 33
          */
-        separatorHeight?: number,
+        separatorHeight?: number;
         /**
          * @docid
          * @default 7
          */
-        textLeftIndent?: number,
+        textLeftIndent?: number;
         /**
          * @docid
          * @default 11
          */
-        textTopIndent?: number,
+        textTopIndent?: number;
         /**
          * @docid
          * @default 10
          */
-        topIndent?: number,
+        topIndent?: number;
         /**
          * @docid
          * @default true
          */
-        visible?: boolean
-      },
+        visible?: boolean;
+      };
       /**
        * @docid
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      maxRange?: VizTimeInterval,
+      maxRange?: VizTimeInterval;
       /**
        * @docid
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      minRange?: VizTimeInterval,
+      minRange?: VizTimeInterval;
       /**
        * @docid
        */
@@ -543,55 +543,55 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default '#000000'
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default 0.06
          */
-        opacity?: number,
+        opacity?: number;
         /**
          * @docid
          * @default true
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @default 1
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @default undefined
        */
-      minorTickCount?: number,
+      minorTickCount?: number;
       /**
        * @docid
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      minorTickInterval?: VizTimeInterval,
+      minorTickInterval?: VizTimeInterval;
       /**
        * @docid
        * @default undefined
        */
-      placeholderHeight?: number,
+      placeholderHeight?: number;
       /**
        * @docid
        * @default true
        */
-      showCustomBoundaryTicks?: boolean,
+      showCustomBoundaryTicks?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      singleWorkdays?: Array<Date | string> | Array<number>,
+      singleWorkdays?: Array<Date | string> | Array<number>;
       /**
        * @docid
        * @default undefined
        * @notUsedInTheme
        */
-      startValue?: number | Date | string,
+      startValue?: number | Date | string;
       /**
        * @docid
        */
@@ -600,46 +600,46 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default '#000000'
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default 0.1
          */
-        opacity?: number,
+        opacity?: number;
         /**
          * @docid
          * @default 1
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      tickInterval?: VizTimeInterval,
+      tickInterval?: VizTimeInterval;
       /**
        * @docid
        * @type Enums.RangeSelectorAxisScaleType
        * @default undefined
        */
-      type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete',
+      type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
       /**
        * @docid
        * @type Enums.ChartDataType
        * @default undefined
        */
-      valueType?: 'datetime' | 'numeric' | 'string',
+      valueType?: 'datetime' | 'numeric' | 'string';
       /**
        * @docid
        * @default [1, 2, 3, 4, 5]
        */
-      workWeek?: Array<number>,
+      workWeek?: Array<number>;
       /**
        * @docid
        * @default false
        */
-      workdaysOnly?: boolean
+      workdaysOnly?: boolean;
     };
     /**
      * @docid
@@ -663,12 +663,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 0.75
        */
-      opacity?: number
+      opacity?: number;
     };
     /**
      * @docid
@@ -679,17 +679,17 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default '#000000'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 0.2
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -700,7 +700,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default '#9B9B9B'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @type_function_param1 scaleValue:object
@@ -709,44 +709,44 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @type_function_return string
        * @notUsedInTheme
        */
-      customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
+      customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);
       /**
        * @docid
-       * @default '#FFFFFF' [prop](color)
-       * @default 14 [prop](size)
+       * @default '#FFFFFF' &prop(color)
+       * @default 14 &prop(size)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: format;
       /**
        * @docid
        * @default 'red'
        */
-      invalidRangeColor?: string,
+      invalidRangeColor?: string;
       /**
        * @docid
        * @default 4
        */
-      paddingLeftRight?: number,
+      paddingLeftRight?: number;
       /**
        * @docid
        * @default 2
        */
-      paddingTopBottom?: number,
+      paddingTopBottom?: number;
       /**
        * @docid
        * @default undefined
        * @notUsedInTheme
        */
-      placeholderHeight?: number,
+      placeholderHeight?: number;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid

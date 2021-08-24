@@ -1,5 +1,5 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
@@ -7,16 +7,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxTabs, {
     Item as dxTabsItem,
-    dxTabsOptions
+    dxTabsOptions,
 } from './tabs';
 
 /** @public */

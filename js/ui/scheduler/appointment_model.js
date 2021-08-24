@@ -47,7 +47,7 @@ class FilterMaker {
 
                 this._filterRegistry.date = [
                     [
-                        [endDate, '>', min],
+                        [endDate, '>=', min],
                         [startDate, '<', max]
                     ],
                     'or',
