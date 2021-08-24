@@ -25,13 +25,7 @@ export default function() {
         beforeEach: function() {
             this.initialEditorDefaults = HtmlEditor._classCustomRules; // Save initial defaults
             HtmlEditor.defaultOptions({
-                options: {
-                    customizeModules: function(config) {
-                        config.multiline = true;
-
-                        return config;
-                    }
-                }
+                options: { allowSoftBreak: true }
             });
         },
         afterEach: function() {

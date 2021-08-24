@@ -63,6 +63,12 @@ export interface MentionTemplateData {
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    allowSoftBreak?: boolean;
+    /**
+     * @docid
      * @type_function_param1 config:object
      * @public
      */

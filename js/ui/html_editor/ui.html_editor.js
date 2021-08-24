@@ -48,6 +48,7 @@ const HtmlEditor = Editor.inherit({
             tableResizing: null,
             mentions: null,
             customizeModules: null,
+            allowSoftBreak: false,
 
             formDialogOptions: null,
 
@@ -309,7 +310,8 @@ const HtmlEditor = Editor.inherit({
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
                     ['p.MsoListParagraphCxSpLast', wordListMatcher]
                 ]
-            }
+            },
+            multiline: Boolean(this.option('allowSoftBreak'))
         }, this._getCustomModules());
 
         return modulesConfig;
