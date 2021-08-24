@@ -3,13 +3,13 @@ import domAdapter from './dom_adapter';
 import { getWindow } from './utils/window';
 import { isObject, isWindow, isPlainObject, isString, isNumeric, isDefined, isFunction, type } from './utils/type';
 import { styleProp, normalizeStyleProp } from './utils/style';
-import { getOffset, getWindowByElement, elementSize } from './utils/size';
+import { getOffset, getWindowByElement, elementSize, hooks } from './utils/size';
 import { parseHTML, isTablePart } from './utils/html_parser';
 
 const window = getWindow();
 
 let renderer;
-
+const sizeCallbacks = { default: {} };
 const initRender = function(selector, context) {
     if(!selector) {
         this.length = 0;
@@ -166,7 +166,18 @@ initRender.prototype.toggleClass = function(className, value) {
 };
 
 ['width', 'height', 'outerWidth', 'outerHeight', 'innerWidth', 'innerHeight'].forEach(function(methodName) {
-    initRender.prototype[methodName] = function(value) {
+    Object.defineProperty(initRender.prototype, methodName, {
+        get: function() { return sizeCallbacks[methodName]; },
+        set: function(value) {
+            sizeCallbacks[methodName] = value;
+            if(value === sizeCallbacks.default[methodName]) {
+                delete hooks[methodName];
+            } else {
+                hooks[methodName] = value;
+            }
+        }
+    });
+    sizeCallbacks.default[methodName] = sizeCallbacks[methodName] = function(value) {
         const result = arguments.length ? elementSize(this, methodName, value) : elementSize(this, methodName);
 
         if(arguments.length === 0 || typeof value === 'boolean') {
