@@ -3,16 +3,16 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
-import { DataGrid, viewFunction as DataGridView, defaultOptionRules } from '../data_grid';
+import { DataGrid, viewFunction as DataGridView } from '../data_grid';
 import { DataGridEditing, DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
 import { getUpdatedOptions } from '../utils/get_updated_options';
-import { convertRulesToOptions } from '../../../../../core/options/utils';
 import devices from '../../../../../core/devices';
 import { current } from '../../../../../ui/themes';
 import { hasWindow } from '../../../../../core/utils/window';
+import browser from '../../../../../core/utils/browser';
 import { getPathParts } from '../../../../../core/utils/data';
 
 interface Mock extends jest.Mock {}
@@ -60,6 +60,7 @@ jest.mock('../../../../../core/utils/window', () => ({
   ...jest.requireActual('../../../../../core/utils/window'),
   hasWindow: jest.fn(),
 }));
+jest.mock('../../../../../core/utils/browser', () => ({}));
 
 describe('DataGrid', () => {
   beforeEach(() => {
@@ -587,8 +588,7 @@ describe('DataGrid', () => {
   });
 
   describe('Default options', () => {
-    const getDefaultOptions = (): DataGridProps => Object.assign(new DataGridProps(),
-      convertRulesToOptions(defaultOptionRules));
+    const getDefaultOptions = (): DataGridProps => new DataGridProps();
 
     beforeEach(() => {
       (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
@@ -628,6 +628,21 @@ describe('DataGrid', () => {
       it('should be true if material', () => {
         (current as Mock).mockImplementation(() => 'material');
         expect(getDefaultOptions().showColumnLines).toBe(false);
+      });
+    });
+
+    describe('loadingTimeout', () => {
+      afterEach(() => {
+        browser.webkit = false;
+      });
+
+      it('should be 0 by default', () => {
+        expect(getDefaultOptions().loadingTimeout).toBe(0);
+      });
+
+      it('should be 30 for webkit', () => {
+        browser.webkit = true;
+        expect(getDefaultOptions().loadingTimeout).toBe(30);
       });
     });
 
