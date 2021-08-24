@@ -30,11 +30,7 @@ $material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-s
 $material-grid-base-header-cell-vertical-padding: round(math.div($material-grid-base-header-height - $material-grid-base-header-line-height, 2));
 $material-grid-base-footer-font-size: $material-grid-base-header-cell-font-size;
 
-$material-grid-base-command-select-column-width:
-  $material-grid-base-checkbox-size +
-  ($material-grid-base-cell-first-column-padding - $material-grid-base-cell-horizontal-padding) +
-  $material-grid-base-cell-first-column-padding +
-  $material-command-column-additional-right-margin;
+$material-grid-base-command-select-column-width: $material-grid-base-checkbox-size + 2 * $material-grid-base-cell-horizontal-padding;
 
 $material-grid-base-cell-vertical-padding: round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
 $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
@@ -252,20 +248,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         padding-left: $material-grid-base-cell-horizontal-padding;
         vertical-align: middle;
 
-        &:first-of-type {
-          padding-left: $material-grid-base-cell-first-column-padding;
-        }
-
-        &:last-of-type {
-          padding-right: $material-grid-base-cell-last-column-padding;
-        }
-
         &.dx-command-select {
           overflow: visible;
           width: $material-grid-base-command-select-column-width;
           min-width: $material-grid-base-command-select-column-width;
-          padding-left: $material-grid-base-cell-first-column-padding;
-          padding-right: $material-grid-base-command-select-column-width - $material-grid-base-cell-first-column-padding - $material-grid-base-checkbox-size;
           line-height: 1;
         }
 
@@ -316,8 +302,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-command-drag {
-      width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-      min-width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+      width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+      min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
 
       .dx-#{$widget-name}-drag-icon {
         @include dx-icon-sizing($material-base-icon-size);
@@ -488,22 +474,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       &::before {
         padding-top: $material-grid-base-cell-vertical-padding;
         padding-bottom: $material-grid-base-cell-vertical-padding;
-      }
-    }
-
-    &:first-of-type {
-      > .dx-texteditor {
-        .dx-texteditor-input {
-          padding-left: $material-grid-base-cell-first-column-padding;
-        }
-      }
-    }
-
-    &:last-of-type {
-      > .dx-texteditor {
-        .dx-texteditor-input {
-          padding-right: $material-grid-base-cell-last-column-padding;
-        }
       }
     }
   }
@@ -1190,27 +1160,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
           }
         }
       }
-
-      .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
-        > td,
-        > td.dx-cell-modified:not(.dx-field-item-content),
-        > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content) {
-          &:first-of-type {
-            padding-left: $material-grid-base-cell-horizontal-padding;
-            padding-right: $material-grid-base-cell-first-column-padding;
-          }
-
-          &:last-of-type {
-            padding-right: $material-grid-base-cell-horizontal-padding;
-            padding-left: $material-grid-base-cell-last-column-padding;
-          }
-
-          &.dx-command-select {
-            padding-right: $material-grid-base-cell-first-column-padding;
-            padding-left: $material-grid-base-cell-first-column-padding - $material-grid-base-cell-horizontal-padding;
-          }
-        }
-      }
     }
 
     .dx-#{$widget-name}-rowsview {
@@ -1252,12 +1201,12 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
   }
 
   .dx-command-adaptive {
-    width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-    min-width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+    width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+    min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
   }
 
   .dx-#{$widget-name}-filter-panel {
-    padding: 15px $material-grid-base-cell-last-column-padding 15px $material-grid-base-cell-first-column-padding;
+    padding: 18px $material-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {
@@ -1268,10 +1217,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-icon-filter {
       color: $datagrid-filter-panel-color;
-    }
-
-    + .dx-pager {
-      border-top: 1px solid $material-grid-base-border-color;
     }
   }
 }
