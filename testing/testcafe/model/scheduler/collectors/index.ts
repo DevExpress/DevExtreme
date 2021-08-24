@@ -11,16 +11,8 @@ export default class Collectors {
     return this.scheduler.find(`.${CLASS.appointmentCollector}`).count;
   }
 
-  async items(): Promise<AppointmentCollector[]> {
-    const result: AppointmentCollector[] = [];
-    const count = await this.count;
-
-    // eslint-disable-next-line no-plusplus
-    for (let index = 0; index < count; index++) {
-      result.push(new AppointmentCollector(this.scheduler, index));
-    }
-
-    return result;
+  get(index: number): AppointmentCollector {
+    return new AppointmentCollector(this.scheduler, index);
   }
 
   find(title: string, index = 0): AppointmentCollector {
