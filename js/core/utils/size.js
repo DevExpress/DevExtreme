@@ -1,6 +1,6 @@
 import { getWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
-import { isWindow, isString, isNumeric } from '../utils/type';
+import { isWindow, isString, isNumeric, isRenderer } from '../utils/type';
 
 const window = getWindow();
 
@@ -158,6 +158,21 @@ export const elementSize = function(el, sizeProperty, value) {
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;
     const isInner = sizeProperty.indexOf('inner') === 0;
+    const isGetter = arguments.length === 2 || typeof value === 'boolean';
+
+    if(isRenderer(el)) {
+        if(el.length > 1) {
+            if(!isGetter) {
+                for(let innerIndex = 0; innerIndex < el.length; innerIndex++) {
+                    elementSize(el[innerIndex], sizeProperty, value);
+                }
+                return;
+            }
+            el = el[0];
+        }
+    }
+
+    if(!el) return;
 
     if(isWindow(el)) {
         return isOuter ? el['inner' + partialName] : domAdapter.getDocumentElement()['client' + partialName];
@@ -176,7 +191,7 @@ export const elementSize = function(el, sizeProperty, value) {
         );
     }
 
-    if(arguments.length === 2 || typeof value === 'boolean') {
+    if(isGetter) {
         const include = {
             paddings: isInner || isOuter,
             borders: isOuter,

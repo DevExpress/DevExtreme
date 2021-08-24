@@ -167,31 +167,12 @@ initRender.prototype.toggleClass = function(className, value) {
 
 ['width', 'height', 'outerWidth', 'outerHeight', 'innerWidth', 'innerHeight'].forEach(function(methodName) {
     initRender.prototype[methodName] = function(value) {
-        const hasValueArg = arguments.length > 0;
-        const isValueBool = typeof value === 'boolean';
-        const element = this[0];
+        const result = elementSize(this, methodName, value);
 
-        if(hasValueArg && this.length > 1) {
-            return repeatMethod.call(this, methodName, arguments);
+        if(arguments.length === 0 || typeof value === 'boolean') {
+            return result;
         }
-
-        if(element) {
-            if(!hasValueArg) {
-                return elementSize(element, methodName);
-            }
-
-            if(isValueBool) {
-                return elementSize(element, methodName, value);
-            }
-
-            if(isDefined(value)) {
-                elementSize(element, methodName, value);
-            }
-
-            return this;
-        }
-
-        return null;
+        return this;
     };
 });
 
