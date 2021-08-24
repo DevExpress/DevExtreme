@@ -6,11 +6,11 @@ import createWidget from '../../../helpers/createWidget';
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
 
-test('Empty form', async (t) => {
+test('Empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('Empty Form', Selector('#container')))
+    .expect(await takeScreenshot('Empty', Selector('#container')))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -19,11 +19,11 @@ test('Empty form', async (t) => {
   height: 100,
 }));
 
-test('1 TextBox, colCount: 1', async (t) => {
+test('1_TextBox,colCount:1', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('1 TextBox, colCount: 1', Selector('#container')))
+    .expect(await takeScreenshot('1_TextBox,colCount:1', Selector('#container')))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
