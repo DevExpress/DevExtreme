@@ -663,7 +663,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const timePanelWidth = getBoundingRect(this._$timePanel.get(0)).width;
             const groupPanelWidth = getBoundingRect(this._$groupTable.get(0)).width;
 
-            this._$headerPanelEmptyCell.width(timePanelWidth + groupPanelWidth);
+            this._$headerPanelEmptyCell.css('width', timePanelWidth + groupPanelWidth);
         }
     }
 

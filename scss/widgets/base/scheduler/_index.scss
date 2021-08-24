@@ -464,6 +464,8 @@ $scheduler-appointment-form-label-padding: 20px;
     align-items: flex-end;
     flex-shrink: 0;
     width: 0;
+    border-bottom: 1px solid $scheduler-base-border-color;
+    border-right: 1px solid $scheduler-base-border-color;
   }
 
   .dx-scheduler-header-tables-container {
@@ -1031,7 +1033,6 @@ $scheduler-appointment-form-label-padding: 20px;
     position: relative;
     line-height: $scheduler-all-day-table-cell-height;
     text-align: center;
-    border-bottom: 2px solid $scheduler-base-border-color;
 
     @include user-select(none);
 
@@ -1631,6 +1632,11 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-rtl {
+    .dx-scheduler-header-panel-empty-cell {
+      border-left: 1px solid $scheduler-base-border-color;
+      border-right: none;
+    }
+
     .dx-scheduler-work-space-vertical-grouped .dx-scheduler-group-row:last-child {
       border-right: none;
       border-left: $scheduler-base-border;
