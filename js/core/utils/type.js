@@ -74,7 +74,7 @@ const isWindow = function(object) {
 };
 
 const isRenderer = function(object) {
-    return !!(object.jquery || object.dxRenderer);
+    return object && !!(object.jquery || object.dxRenderer);
 };
 
 const isPromise = function(object) {
