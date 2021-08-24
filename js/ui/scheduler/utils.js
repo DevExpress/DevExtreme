@@ -1,3 +1,4 @@
+import { getOuterHeight, setHeight, setWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
 import { getPublicElement } from '../../core/element';
@@ -15,7 +16,7 @@ export const utils = {
     },
     DOM: {
         getHeaderHeight: (header) => {
-            return header._$element && parseInt(header._$element.outerHeight(), 10);
+            return header._$element && parseInt(getOuterHeight(header._$element), 10);
         },
     },
     renovation: {
@@ -34,8 +35,12 @@ export const utils = {
 
                 component.option(viewModel);
 
-                height && $element.height(height);
-                width && $element.width(width);
+                if(height) {
+                    setHeight($element, height);
+                }
+                if(width) {
+                    setWidth($element, width);
+                }
             }
         }
     }

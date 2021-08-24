@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
@@ -230,16 +231,16 @@ const Tabs = CollectionWidget.inherit({
         const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
 
         // NOTE: "-1" is a hack fix for IE (T190044)
-        return tabItemsWidth - 1 > this.$element().width();
+        return tabItemsWidth - 1 > getWidth(this.$element());
     },
 
     _needStretchItems: function() {
         const $visibleItems = this._getVisibleItems();
-        const elementWidth = this.$element().width();
+        const elementWidth = getWidth(this.$element());
         const itemsWidth = [];
 
         each($visibleItems, (_, item) => {
-            itemsWidth.push($(item).outerWidth(true));
+            itemsWidth.push(getOuterWidth($(item), true));
         });
 
         const maxTabWidth = Math.max.apply(null, itemsWidth);

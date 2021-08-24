@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
@@ -111,7 +112,7 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     _isSmallScreen() {
-        return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
+        return getWidth($(window)) <= ADAPTIVE_STATE_SCREEN_WIDTH;
     }
 
     _isDrawerOpened() {

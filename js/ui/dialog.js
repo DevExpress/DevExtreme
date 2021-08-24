@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import { Component } from '../core/component';
 import Action from '../core/action';
@@ -117,7 +118,7 @@ export const custom = function(options) {
         dragEnabled: ensureDefined(options.dragEnabled, true),
         height: 'auto',
         width: function() {
-            const isPortrait = $(window).height() > $(window).width();
+            const isPortrait = getHeight($(window)) > getWidth($(window));
             const key = (isPortrait ? 'p' : 'l') + 'Width';
             const widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options['width'];
 

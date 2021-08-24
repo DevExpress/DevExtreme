@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();

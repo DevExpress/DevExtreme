@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { compileGetter, compileSetter } from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
@@ -798,7 +799,7 @@ class Gantt extends Widget {
                 break;
             case 'height':
                 super._optionChanged(args);
-                this._sizeHelper?.setGanttHeight(this._$element.height());
+                this._sizeHelper?.setGanttHeight(getHeight(this._$element));
                 break;
             case 'sorting':
                 this._ganttTreeList?.setOption('sorting', args.value);

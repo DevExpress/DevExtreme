@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
@@ -163,7 +164,7 @@ export default class FileManagerNotificationControl extends Widget {
         if(!hasWindow()) {
             return false;
         }
-        return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
+        return getWidth($(window)) <= ADAPTIVE_STATE_SCREEN_WIDTH;
     }
 
     _dimensionChanged(dimension) {

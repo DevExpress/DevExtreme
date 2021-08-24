@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from '../../../core/utils/size';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';

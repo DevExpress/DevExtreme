@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { grep, noop } from '../core/utils/common';
@@ -280,7 +281,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _screenWidth: function() {
-        return hasWindow() ? $(window).width() : HD_SCREEN_WIDTH;
+        return hasWindow() ? getWidth($(window)) : HD_SCREEN_WIDTH;
     },
 
     _createEmptyCell: function() {

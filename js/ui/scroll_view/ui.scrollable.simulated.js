@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -312,7 +313,7 @@ export const Scroller = Class.inherit({
 
     _moveToMouseLocation: function(e) {
         const mouseLocation = e['page' + this._axis.toUpperCase()] - this._$element.offset()[this._prop];
-        const location = this._location + mouseLocation / this._containerToContentRatio() - this._$container.height() / 2;
+        const location = this._location + mouseLocation / this._containerToContentRatio() - getHeight(this._$container) / 2;
 
         this._scrollStep(-Math.round(location));
     },

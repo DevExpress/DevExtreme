@@ -1,3 +1,4 @@
+import { getHeight } from '../../../core/utils/size';
 import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
@@ -87,7 +88,7 @@ if(Quill) {
 
         get maxHeight() {
             const window = getWindow();
-            const windowHeight = window && $(window).height() || 0;
+            const windowHeight = window && getHeight($(window)) || 0;
             return Math.max(MIN_HEIGHT, windowHeight * 0.5);
         }
 

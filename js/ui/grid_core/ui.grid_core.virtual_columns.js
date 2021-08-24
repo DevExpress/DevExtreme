@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth } from '../../core/utils/size';
 import { hasWindow } from '../../core/utils/window';
 import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
 
@@ -17,7 +18,7 @@ const VirtualScrollingRowsViewExtender = {
         that.callBase.apply(that, arguments);
 
         if(that.option('rtlEnabled') && scrollable) {
-            left = scrollable.$content().width() - scrollable.$element().width() - left;
+            left = getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - left;
         }
 
         that._columnsController.setScrollPosition(left);
@@ -72,7 +73,7 @@ const ColumnsControllerExtender = (function() {
             if(typeof width === 'number') {
                 return width;
             }
-            return this.getController('resizing')._lastWidth || this.component.$element().outerWidth();
+            return this.getController('resizing')._lastWidth || getOuterWidth(this.component.$element());
         },
         getEndPageIndex: function(position) {
             const visibleColumns = this.getVisibleColumns(undefined, true);
