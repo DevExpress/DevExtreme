@@ -28,7 +28,7 @@
 @include grid-base(treelist);
 
 $treelist-empty-space-width: 24px;
-$treelist-checkbox-offset-left: $treelist-empty-space-width + $material-grid-base-cell-first-column-padding;
+$treelist-checkbox-offset-left: $treelist-empty-space-width + $material-grid-base-cell-horizontal-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $material-grid-base-checkbox-size;
 $treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $material-grid-base-cell-horizontal-padding;
 $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $material-grid-base-cell-horizontal-padding;
