@@ -22,7 +22,7 @@ async function createDataGridWithPager(): Promise<any> {
     },
   });
 }
-fixture.disablePageReloads`Pager`
+fixture`Pager`
   .page(url(__dirname, '../container.html'))
   .beforeEach(createDataGridWithPager)
   .afterEach(async () => disposeWidgets());

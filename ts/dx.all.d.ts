@@ -12542,6 +12542,30 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showResourceManagerDialog()]
      */
     showResourceManagerDialog(): void;
+    /**
+     * [descr:dxGantt.expandAll()]
+     */
+    expandAll(): void;
+    /**
+     * [descr:dxGantt.collapseAll()]
+     */
+    collapseAll(): void;
+    /**
+     * [descr:dxGantt.expandAllToLevel(level)]
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * [descr:dxGantt.expandToTask(key)]
+     */
+    expandToTask(key: any): void;
+    /**
+     * [descr:dxGantt.collapseTask(key)]
+     */
+    collapseTask(key: any): void;
+    /**
+     * [descr:dxGantt.expandTask(key)]
+     */
+    expandTask(key: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;

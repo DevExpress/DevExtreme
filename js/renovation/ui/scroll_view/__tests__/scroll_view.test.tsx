@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
 
+import { RefObject } from '@devextreme-generator/declarations';
 import {
   ScrollView,
   viewFunction,
@@ -127,13 +128,11 @@ describe('ScrollView', () => {
 
     each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
       it('refresh() method should call according method from scrollbar', () => {
-        const viewModel = new ScrollView({ pullDownEnabled });
         const funcHandler = jest.fn();
-        Object.defineProperties(viewModel, {
-          scrollable: {
-            get() { return { refresh: funcHandler }; },
-          },
-        });
+        const viewModel = new ScrollView({ pullDownEnabled });
+        viewModel.scrollableRef = {
+          current: { refresh: funcHandler },
+        } as RefObject;
 
         viewModel.refresh();
         if (pullDownEnabled) {
@@ -146,13 +145,11 @@ describe('ScrollView', () => {
 
     each([true, false, undefined]).describe('preventScrollBottom: %o', (preventScrollBottom) => {
       it('release(preventScrollBottom)', () => {
-        const viewModel = new ScrollView({ });
         const funcHandler = jest.fn();
-        Object.defineProperties(viewModel, {
-          scrollable: {
-            get() { return { release: funcHandler }; },
-          },
-        });
+        const viewModel = new ScrollView({ });
+        viewModel.scrollableRef = {
+          current: { release: funcHandler },
+        } as RefObject;
 
         viewModel.toggleLoading = jest.fn();
 
@@ -236,23 +233,13 @@ describe('ScrollView', () => {
       });
 
       each([false, true]).describe('useNative: %o', (useNative) => {
-        it('scrollableRef', () => {
-          const viewModel = new ScrollView({ useNative });
-
-          Object.defineProperties(viewModel, {
-            scrollableRef: { get() { return { current: 'scrollableRef' }; } },
-          });
-
-          expect(viewModel.scrollable).toEqual('scrollableRef');
-        });
-
         each([false, true]).describe('isServerSide: %o', (isServerSide) => {
           it('render scrollView content', () => {
             const originalWindow = getWindow();
 
             try {
               setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: {} } as any));
+              const scrollView = mount(viewFunction({ props: { useNative } } as any));
 
               const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
               expect(scrollViewContent.exists()).toBe(true);
@@ -261,18 +248,27 @@ describe('ScrollView', () => {
             }
           });
 
-          it('render scrollbars', () => {
-            const originalWindow = getWindow();
+          each([false, true]).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+            it('render scrollbars', () => {
+              const originalWindow = getWindow();
 
-            try {
-              setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: {} } as any));
+              try {
+                setWindow({}, !isServerSide);
+                const scrollView = mount(viewFunction(
+                  { props: { useNative, useSimulatedScrollbar } } as any,
+                ));
 
-              const scrollViewContent = scrollView.find('.dx-scrollable-scrollbar');
-              expect(scrollViewContent.exists()).toBe(!isServerSide);
-            } finally {
-              setWindow(originalWindow, true);
-            }
+                const shouldRenderScrollbars = (!isServerSide && !useNative)
+                  || (!isServerSide && useNative && useSimulatedScrollbar);
+
+                const scrollViewContent = scrollView.find('.dx-scrollable-scrollbar');
+                expect(scrollViewContent.exists()).toBe(
+                  shouldRenderScrollbars,
+                );
+              } finally {
+                setWindow(originalWindow, true);
+              }
+            });
           });
 
           it('render top & bottom pockets', () => {
@@ -280,7 +276,7 @@ describe('ScrollView', () => {
 
             try {
               setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: {} } as any));
+              const scrollView = mount(viewFunction({ props: { useNative } } as any));
 
               const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
               expect(topPocket.exists()).toBe(!isServerSide);
@@ -296,7 +292,7 @@ describe('ScrollView', () => {
 
             try {
               setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: { } } as any));
+              const scrollView = mount(viewFunction({ props: { useNative } } as any));
 
               const loadPanel = scrollView.find('.dx-scrollview-loadpanel');
               expect(loadPanel.exists()).toBe(!isServerSide);

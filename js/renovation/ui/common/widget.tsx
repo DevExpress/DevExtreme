@@ -83,6 +83,8 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() activeStateUnit?: string;
 
+  @OneWay() cssText = '';
+
   @OneWay() aria?: Record<string, string> = {};
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
@@ -341,6 +343,15 @@ export class Widget extends JSXComponent(WidgetProps) {
     }
     if (isFunction(height)) {
       errors.log('W0017', 'height');
+    }
+  }
+
+  @Effect()
+  applyCssTextEffect(): void {
+    const { cssText } = this.props;
+
+    if (cssText !== '') {
+      this.widgetElementRef.current!.style.cssText = cssText;
     }
   }
 
