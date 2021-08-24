@@ -27,6 +27,8 @@ import dxDropDownEditor, {
     dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
 
+import { DropDownSearchMode } from '../../docEnums';
+
 export interface SelectionChangedInfo<T = any> {
     readonly selectedItem: T;
 }
@@ -125,11 +127,10 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
     searchExpr?: string | Function | Array<string | Function>;
     /**
      * @docid
-     * @type Enums.DropDownSearchMode
      * @default "contains"
      * @public
      */
-    searchMode?: 'contains' | 'startswith';
+    searchMode?: DropDownSearchMode;
     /**
      * @docid
      * @default 500

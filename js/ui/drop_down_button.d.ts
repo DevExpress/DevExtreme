@@ -1,4 +1,8 @@
 import {
+    ButtonStylingMode,
+} from '../docEnums';
+
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
@@ -228,11 +232,10 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     splitButton?: boolean;
     /**
      * @docid
-     * @type Enums.ButtonStylingMode
      * @default 'outlined'
      * @public
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: ButtonStylingMode;
     /**
      * @docid
      * @default ""

@@ -9,6 +9,10 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    ResizeHandle,
+} from '../docEnums';
+
 export interface ResizeInfo {
     readonly width: number;
     readonly height: number;
@@ -45,11 +49,10 @@ export type ResizeEndEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
-     * @type Enums.ResizeHandle | string
      * @default "all"
      * @public
      */
-    handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
+    handles?: ResizeHandle | string;
     /**
      * @docid
      * @type_function_return number|string

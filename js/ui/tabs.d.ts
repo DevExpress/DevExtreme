@@ -18,6 +18,10 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+import {
+    NavSelectionMode,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTabs>;
 
@@ -102,11 +106,10 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
     selectedItems?: Array<string | number | any>;
     /**
      * @docid
-     * @type Enums.NavSelectionMode
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: NavSelectionMode;
     /**
      * @docid
      * @default true

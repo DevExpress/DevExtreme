@@ -22,6 +22,26 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+  DiagramDataLayoutType,
+  DiagramDataLayoutOrientation,
+  DiagramUnits,
+  DiagramPageOrientation,
+  DiagramShapeCategory,
+  DiagramShapeType,
+  DiagramConnectorLineType,
+  DiagramConnectorLineEnd,
+  DiagramToolboxDisplayMode,
+  DiagramCommand,
+  DiagramPanelVisibility,
+  DiagramAutoZoomMode,
+  DiagramItemType,
+  DiagramExportFormat,
+  DiagramModelOperation,
+  DiagramRequestEditOperationReason,
+  DiagramConnectorPosition,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxDiagram>;
 
@@ -53,9 +73,9 @@ export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
 
 /** @public */
 export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
-    readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
+    readonly operation: DiagramModelOperation;
     readonly args: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs;
-    readonly reason: 'checkUIElementAvailability' | 'modelModification';
+    readonly reason: DiagramRequestEditOperationReason;
     allowed?: boolean;
 };
 
@@ -87,11 +107,10 @@ export type CustomShapeToolboxTemplateData = {
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
-     * @type Enums.DiagramAutoZoomMode
      * @default "disabled"
      * @public
      */
-    autoZoomMode?: 'fitContent' | 'fitWidth' | 'disabled';
+    autoZoomMode?: DiagramAutoZoomMode;
     /**
      * @docid
      * @default {}
@@ -100,10 +119,10 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     contextMenu?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
+      commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand >;
       /**
        * @docid
        * @default true
@@ -118,14 +137,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     contextToolbox?: {
       /**
        * @docid
-       * @type Enums.DiagramShapeCategory|String
        */
-      category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string;
+      category?: DiagramShapeCategory | string;
       /**
        * @docid
-       * @type Enums.DiagramToolboxDisplayMode
        */
-      displayMode?: 'icons' | 'texts';
+      displayMode?: DiagramToolboxDisplayMode;
       /**
        * @docid
        * @default true
@@ -138,9 +155,8 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       shapeIconsPerRow?: number;
       /**
        * @docid
-       * @type Array<Enums.DiagramShapeType>|Array<String>
        */
-      shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>;
+      shapes?: Array<DiagramShapeType> | Array<string>;
       /**
        * @docid
        * @default 152
@@ -219,9 +235,8 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       backgroundImageWidth?: number;
       /**
        * @docid
-       * @type Enums.DiagramShapeType|String
        */
-      baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+      baseType?: DiagramShapeType | string;
       /**
        * @docid
        */
@@ -368,22 +383,19 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       textStyle?: Object;
       /**
        * @docid
-       * @type Enums.DiagramConnectorLineType
        * @default 'orthogonal'
        */
-      connectorLineType?: 'straight' | 'orthogonal';
+      connectorLineType?: DiagramConnectorLineType;
       /**
        * @docid
-       * @type Enums.DiagramConnectorLineEnd
        * @default 'none'
        */
-      connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
+      connectorLineStart?: DiagramConnectorLineEnd;
       /**
        * @docid
-       * @type Enums.DiagramConnectorLineEnd
        * @default 'arrow'
        */
-      connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
+      connectorLineEnd?: DiagramConnectorLineEnd;
       /**
        * @docid
        * @default undefined
@@ -604,20 +616,17 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     nodes?: {
       /**
        * @docid
-       * @type Enums.DiagramDataLayoutType|Object
        * @default "auto"
        */
-      autoLayout?: 'off' | 'tree' | 'layered' | {
+      autoLayout?: DiagramDataLayoutType | {
         /**
          * @docid
-         * @type Enums.DiagramDataLayoutOrientation
          */
-        orientation?: 'vertical' | 'horizontal';
+        orientation?: DiagramDataLayoutOrientation;
         /**
          * @docid
-         * @type Enums.DiagramDataLayoutType
          */
-        type?: 'off' | 'tree' | 'layered';
+        type?: DiagramDataLayoutType;
       };
       /**
        * @docid
@@ -781,9 +790,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param1_field1 component:dxDiagram
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 operation:Enums.DiagramModelOperation
+     * @type_function_param1_field4 operation:DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
-     * @type_function_param1_field6 reason:Enums.DiagramRequestEditOperationReason
+     * @type_function_param1_field6 reason:DiagramRequestEditOperationReason
      * @type_function_param1_field7 allowed:boolean
      * @action
      * @public
@@ -810,11 +819,10 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     pageColor?: string;
     /**
      * @docid
-     * @type Enums.DiagramPageOrientation
      * @default "portrait"
      * @public
      */
-    pageOrientation?: 'portrait' | 'landscape';
+    pageOrientation?: DiagramPageOrientation;
     /**
      * @docid
      * @public
@@ -859,18 +867,18 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       tabs?: Array<{
         /**
          * @docid
-         * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
+         * @type Array<dxDiagramCustomCommand>|Array<DiagramCommand>
          */
-        commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
+        commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
         /**
          * @docid
          */
         groups?: Array<{
           /**
            * @docid
-           * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
+           * @type Array<dxDiagramCustomCommand>|Array<DiagramCommand>
            */
-          commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
+          commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
           /**
            * @docid
            */
@@ -883,10 +891,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       }>;
       /**
        * @docid
-       * @type Enums.DiagramPanelVisibility
        * @default 'auto'
        */
-      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled';
+      visibility?: DiagramPanelVisibility;
     };
     /**
      * @docid
@@ -920,10 +927,10 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     mainToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
+      commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
       /**
        * @docid
        * @default false
@@ -938,10 +945,10 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     historyToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
+      commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
       /**
        * @docid
        * @default true
@@ -956,10 +963,10 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     viewToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
+      commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
       /**
        * @docid
        * @default true
@@ -974,29 +981,26 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     toolbox?: {
       /**
        * @docid
-       * @type Array<Object>|Array<Enums.DiagramShapeCategory>
+       * @type Array<Object>|Array<DiagramShapeCategory>
        * @default undefined
        */
       groups?: Array<{
         /**
          * @docid
-         * @type Enums.DiagramShapeCategory|String
          */
-        category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string;
+        category?: DiagramShapeCategory | string;
         /**
          * @docid
-         * @type Enums.DiagramToolboxDisplayMode
          */
-        displayMode?: 'icons' | 'texts';
+        displayMode?: DiagramToolboxDisplayMode;
         /**
          * @docid
          */
         expanded?: boolean;
         /**
          * @docid
-         * @type Array<Enums.DiagramShapeType>|Array<String>
          */
-        shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>;
+        shapes?: Array<DiagramShapeType> | Array<string>;
         /**
          * @docid
          */
@@ -1014,10 +1018,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       showSearch?: boolean;
       /**
        * @docid
-       * @type Enums.DiagramPanelVisibility
        * @default 'auto'
        */
-      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled';
+      visibility?: DiagramPanelVisibility;
       /**
        * @docid
        * @default undefined
@@ -1026,18 +1029,16 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     };
     /**
      * @docid
-     * @type Enums.DiagramUnits
      * @default "in"
      * @public
      */
-    units?: 'in' | 'cm' | 'px';
+    units?: DiagramUnits;
     /**
      * @docid
-     * @type Enums.DiagramUnits
      * @default "in"
      * @public
      */
-    viewUnits?: 'in' | 'cm' | 'px';
+    viewUnits?: DiagramUnits;
     /**
      * @docid
      * @default 1
@@ -1133,11 +1134,11 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
     /**
      * @docid
      * @publicName exportTo(format, callback)
-     * @param1 format:Enums.DiagramExportFormat
+     * @param1 format:DiagramExportFormat
      * @param2 callback:function
      * @public
      */
-    exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
+    exportTo(format: DiagramExportFormat, callback: Function): void;
     /**
      * @docid
      * @publicName import(data, updateExistingItemsOnly)
@@ -1240,10 +1241,9 @@ export interface dxDiagramItem {
     key?: Object;
     /**
      * @docid
-     * @type Enums.DiagramItemType
      * @public
      */
-    itemType?: 'shape' | 'connector';
+    itemType?: DiagramItemType;
 }
 
 /**
@@ -1259,10 +1259,9 @@ export interface dxDiagramShape extends Item {
     text?: string;
     /**
      * @docid
-     * @type Enums.DiagramShapeType|String
      * @public
      */
-    type?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+    type?: DiagramShapeType | string;
     /**
      * @docid
      * @public
@@ -1324,7 +1323,7 @@ export interface dxDiagramShape extends Item {
 export interface dxDiagramCustomCommand {
     /**
      * @docid
-     * @type String|Enums.DiagramCommand
+     * @type String|DiagramCommand
      * @public
      */
     name?: string;
@@ -1377,10 +1376,9 @@ export interface dxDiagramAddShapeArgs {
 export interface dxDiagramAddShapeFromToolboxArgs {
   /**
    * @docid
-   * @type Enums.DiagramShapeType|String
    * @public
    */
-  shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+  shapeType?: DiagramShapeType | string;
 }
 
 /**
@@ -1434,10 +1432,9 @@ export interface dxDiagramChangeConnectionArgs {
   connectionPointIndex?: number;
   /**
    * @docid
-   * @type Enums.DiagramConnectorPosition
    * @public
    */
-  connectorPosition?: 'start' | 'end';
+  connectorPosition?: DiagramConnectorPosition;
 }
 
 /**

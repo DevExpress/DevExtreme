@@ -20,6 +20,10 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    SlideOutMenuPosition,
+} from '../docEnums';
+
 /** @public */
 export type DisposingEvent = EventInfo<dxSlideOutView>;
 
@@ -43,11 +47,10 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     contentTemplate?: template | ((contentElement: DxElement) => any);
     /**
      * @docid
-     * @type Enums.SlideOutMenuPosition
      * @default "normal"
      * @public
      */
-    menuPosition?: 'inverted' | 'normal';
+    menuPosition?: SlideOutMenuPosition;
     /**
      * @docid
      * @type_function_param1 menuElement:DxElement

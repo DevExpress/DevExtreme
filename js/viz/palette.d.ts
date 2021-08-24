@@ -1,5 +1,9 @@
-export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
-export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
+import {
+    PaletteType,
+    PaletteExtensionModeType,
+    VizPaletteColorSet,
+} from '../docEnums';
+
 /**
  * @docid viz.currentPalette
  * @publicName currentPalette()
@@ -25,18 +29,18 @@ export function currentPalette(paletteName: string): void;
 /**
  * @docid viz.generateColors
  * @publicName generateColors(palette, count, options)
- * @param1 palette:Enums.VizPalette|Array<string>
+ * @param1 palette:PaletteType|Array<string>
  * @param2 count:number
  * @param3 options:object
- * @param3_field1 paletteExtensionMode:Enums.VizPaletteExtensionMode
- * @param3_field2 baseColorSet:Enums.VizPaletteColorSet
+ * @param3_field1 paletteExtensionMode:PaletteExtensionModeType
+ * @param3_field2 baseColorSet:VizPaletteColorSet
  * @return Array<string>
  * @static
  * @module viz/palette
  * @export generateColors
  * @public
  */
-export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType; baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType; baseColorSet?: VizPaletteColorSet }): Array<string>;
 
 /**
  * @docid viz.getPalette

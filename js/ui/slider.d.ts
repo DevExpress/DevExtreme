@@ -17,6 +17,11 @@ import {
     Format,
 } from '../localization';
 
+import {
+    VerticalEdge,
+    SliderTooltipShowMode,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlider>;
 
@@ -98,10 +103,9 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
       format?: Format;
       /**
        * @docid
-       * @type Enums.VerticalEdge
        * @default 'bottom'
        */
-      position?: 'bottom' | 'top';
+      position?: VerticalEdge;
       /**
        * @docid
        * @default false
@@ -143,16 +147,14 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
       format?: Format;
       /**
        * @docid
-       * @type Enums.VerticalEdge
        * @default 'top'
        */
-      position?: 'bottom' | 'top';
+      position?: VerticalEdge;
       /**
        * @docid
-       * @type Enums.SliderTooltipShowMode
        * @default 'onHover'
        */
-      showMode?: 'always' | 'onHover';
+      showMode?: SliderTooltipShowMode;
     };
 }
 

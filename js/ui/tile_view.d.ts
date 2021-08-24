@@ -17,6 +17,8 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import { Orientation } from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTileView>;
 
@@ -73,11 +75,10 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @type Enums.Orientation
      * @default 'horizontal'
      * @public
      */
-    direction?: 'horizontal' | 'vertical';
+    direction?: Orientation;
     /**
      * @docid
      * @default true &for(desktop)

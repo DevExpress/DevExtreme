@@ -1,3 +1,5 @@
+import { PredefinedFormat } from './docEnums';
+
 /**
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
@@ -105,7 +107,6 @@ export function parseDate(text: string, format: Format): Date;
  */
 export function parseNumber(text: string, format: Format): number;
 
-type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 export interface FormatObject {
     /**
      * @docid Format.currency
@@ -134,7 +135,6 @@ export interface FormatObject {
    /**
     * @docid Format.type
     * @public
-    * @type Enums.Format|string
     */
    type?: PredefinedFormat | string;
 }
@@ -142,7 +142,7 @@ type ExternalFormat = any;
 
 /**
  * @docid
- * @type Object|Enums.Format|string|function
+ * @type Object|PredefinedFormat|string|function
  * @type_function_param1 value:number|date
  * @type_function_return string
  * @default undefined

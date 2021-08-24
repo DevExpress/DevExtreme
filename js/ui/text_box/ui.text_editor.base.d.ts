@@ -10,15 +10,21 @@ import Editor, {
     EditorOptions,
 } from '../editor/editor';
 
+import {
+    ShowMaskMode,
+    TextEditorButtonLocation,
+    TextBoxButtonName,
+    EditorStylingMode,
+} from '../../docEnums';
+
 /** @namespace DevExpress.ui */
 export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponent> {
     /**
      * @docid
-     * @type Array<string, Enums.TextBoxButtonName, dxTextEditorButton>
      * @default undefined
      * @public
      */
-    buttons?: Array<string | 'clear' | dxTextEditorButton>;
+    buttons?: Array<string | TextBoxButtonName | dxTextEditorButton>;
     /**
      * @docid
      * @default true
@@ -214,11 +220,10 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     showClearButton?: boolean;
     /**
      * @docid
-     * @type Enums.ShowMaskMode
      * @default "always"
      * @public
      */
-    showMaskMode?: 'always' | 'onFocus';
+    showMaskMode?: ShowMaskMode;
     /**
      * @docid
      * @default false
@@ -227,12 +232,11 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     spellcheck?: boolean;
     /**
      * @docid
-     * @type Enums.EditorStylingMode
      * @default 'outlined'
      * @default 'filled' &for(Material)
      * @public
      */
-    stylingMode?: 'outlined' | 'underlined' | 'filled';
+    stylingMode?: EditorStylingMode;
     /**
      * @docid
      * @readonly
@@ -295,11 +299,10 @@ export default class dxTextEditor<TProperties = Properties> extends Editor<TProp
 export interface dxTextEditorButton {
     /**
      * @docid
-     * @type Enums.TextEditorButtonLocation
      * @default "after"
      * @public
      */
-    location?: 'after' | 'before';
+    location?: TextEditorButtonLocation;
     /**
      * @docid
      * @default undefined

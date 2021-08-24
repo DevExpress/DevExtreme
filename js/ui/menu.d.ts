@@ -26,6 +26,12 @@ import dxMenuBase, {
     dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
+import {
+    Orientation,
+    ShowSubmenuMode,
+    SubmenuDirection,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxMenu>;
 
@@ -151,14 +157,12 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     onSubmenuShown?: ((e: SubmenuShownEvent) => void);
     /**
      * @docid
-     * @type Enums.Orientation
      * @default "horizontal"
      * @public
      */
-    orientation?: 'horizontal' | 'vertical';
+    orientation?: Orientation;
     /**
      * @docid
-     * @type Object|Enums.ShowSubmenuMode
      * @default { name: "onClick", delay: { show: 50, hide: 300 } }
      * @public
      */
@@ -181,18 +185,16 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
       } | number;
       /**
        * @docid
-       * @type Enums.ShowSubmenuMode
        * @default "onClick"
        */
-      name?: 'onClick' | 'onHover';
-    } | 'onClick' | 'onHover';
+      name?: ShowSubmenuMode;
+    } | ShowSubmenuMode;
     /**
      * @docid
-     * @type Enums.SubmenuDirection
      * @default "auto"
      * @public
      */
-    submenuDirection?: 'auto' | 'leftOrTop' | 'rightOrBottom';
+    submenuDirection?: SubmenuDirection;
 }
 /**
  * @docid

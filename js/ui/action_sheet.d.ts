@@ -28,6 +28,8 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import { ButtonType } from '../docEnums';
+
 /** @public */
 export type CancelClickEvent = Cancelable & EventInfo<dxActionSheet>;
 
@@ -192,11 +194,10 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     onClick?: ((e: { component?: dxActionSheet; element?: DxElement; model?: any; event?: DxEvent }) => void) | string;
     /**
      * @docid
-     * @type Enums.ButtonType
      * @default 'normal'
      * @public
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: ButtonType;
 }
 
 /** @public */

@@ -12,21 +12,27 @@ export type DropDownSearchMode = 'contains' | 'startswith';
 
 export type ValidationMessageMode = 'always' | 'auto';
 
-export type GaugeTitlePosition = 'bottom-center' | 'bottom-left' | 'bottom-right' | 'top-center' | 'top-left' | 'top-right';
-
 export type VizAnimationEasing = 'easeOutCubic' | 'linear';
 
-export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
+// Format
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+ */
+export type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
 export type VizTheme = 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
 
-export type VizPalette = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+// VizPalette
+export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
 
-export type VizWordWrap = 'normal' | 'breakWord' | 'none';
+// VizWordWrap
+export type WordWrapType = 'normal' | 'breakWord' | 'none';
 
-export type VizTextOverflow = 'ellipsis' | 'hide' | 'none';
+// VizTextOverflow
+export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
 
-export type VizPaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
+// VizPaletteExtensionMode
+export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
 
 export type VizPaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
 
@@ -52,7 +58,8 @@ export type HorizontalAlignment = 'center' | 'left' | 'right';
 
 export type VerticalEdge = 'bottom' | 'top';
 
-export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+// DashStyle
+export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
 
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
@@ -79,13 +86,12 @@ export type FunnelResolveLabelOverlapping = 'hide' | 'none' | 'shift';
 
 export type ChartElementSelectionMode = 'multiple' | 'single';
 
-export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+// SeriesType
+export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
 
 export type AnnotationType = 'text' | 'image' | 'custom';
 
 export type Position = 'bottom' | 'left' | 'right' | 'top';
-
-export type ChartPointerType = 'all' | 'mouse' | 'none' | 'touch';
 
 export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
 
@@ -99,12 +105,14 @@ export type ScaleBreakLineStyle = 'straight' | 'waved';
 
 export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
 
-export type VizTimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+// VizTimeInterval
+export type TimeIntervalType = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
 
 export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
 
 export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
+// can simplify type if :deprecated is not used?
 export type ChartZoomPanActionType = 'zoom' | 'pan';
 
 export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
@@ -119,9 +127,11 @@ export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
 
 export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
 
-export type PieChartType = 'donut' | 'doughnut' | 'pie';
+// PieChartType
+export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
 
-export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
+// PieChartSegmentsDirection
+export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
 
 export type PieChartAnnotationLocation = 'center' | 'edge';
 
@@ -203,7 +213,8 @@ export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
 
-export type HatchingDirection = 'left' | 'none' | 'right';
+// HatchingDirection
+export type HatchingDirectionType = 'left' | 'none' | 'right';
 
 export type FunnelLabelPosition = 'columns' | 'inside' | 'outside';
 
@@ -286,8 +297,6 @@ export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
 export type ToolbarItemLocateInMenuMode = 'always' | 'auto' | 'never';
 
 export type ToolbarItemShowTextMode = 'always' | 'inMenu';
-
-export type ToolbarRenderMode = 'bottomToolbar' | 'topToolbar';
 
 export type TreeListDataStructure = 'plain' | 'tree';
 
@@ -378,7 +387,8 @@ export type PositionResolveCollision = 'fit' | 'flip' | 'flipfit' | 'none';
 
 export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
 
-export type ChartSingleValueSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+// ChartSingleValueSeriesAggregationMethod
+export type ChartSingleValueSeriesAggregationMethodType = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
 
 export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
 
@@ -386,6 +396,7 @@ export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
 
 export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
 
+// only in js ???
 export type DataSourceStoreType = 'array' | 'local' | 'odata';
 
 export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
@@ -410,7 +421,8 @@ export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
 
 export type GridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 
-export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+// has additional member | 'drag' - but ts has no such member
+export type TreeListCommandColumnType = 'adaptive' | 'buttons';
 
 export type GridColumnButtonName = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 
@@ -430,7 +442,8 @@ export type FileManagerItemViewMode = 'details' | 'thumbnails';
 
 export type FileManagerViewArea = 'navPane' | 'itemView';
 
-export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+// has additional member | 'auto' - but ts has no such member
+export type DiagramDataLayoutType = 'off' | 'tree' | 'layered';
 
 export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
 
@@ -458,7 +471,9 @@ export type DiagramItemType = 'shape' | 'connector';
 
 export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
 
-export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
+// ts-type doesn't has members: 'beforeChangeShapeText' 'changeShapeText'
+// 'beforeChangeConnectorText' 'changeConnectorText' 'resizeShape' 'moveShape'
+export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
 
 export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
 
@@ -488,6 +503,10 @@ export type GridPagerPageSize = 'all';
 
 export type GridDataChangeType = 'insert' | 'update' | 'remove';
 
-export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+// was DataGridToolbarItem
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
-export type TreeListToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+// was TreeListToolbarItem
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';

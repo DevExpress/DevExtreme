@@ -17,6 +17,10 @@ import {
     ValidationRule,
 } from './validation_rules';
 
+import {
+    ValidationStatus,
+} from '../docEnums';
+
 /** @public */
 export type DisposingEvent = EventInfo<dxValidator>;
 
@@ -34,7 +38,7 @@ export type ValidatedEvent = {
     validationRules?: Array<ValidationRule>;
     brokenRule?: ValidationRule;
     brokenRules?: ValidationRule;
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: ValidationStatus;
 };
 
 /**
@@ -86,7 +90,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      * @type_function_param1_field4 validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @type_function_param1_field5 brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
      * @type_function_param1_field6 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @type_function_param1_field7 status:Enums.ValidationStatus
+     * @type_function_param1_field7 status:ValidationStatus
      * @action
      * @public
      */
@@ -171,10 +175,9 @@ export interface dxValidatorResult {
     pendingRules?: Array<AsyncRule>;
     /**
      * @docid
-     * @type Enums.ValidationStatus
      * @public
      */
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: ValidationStatus;
     /**
      * @docid
      * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>

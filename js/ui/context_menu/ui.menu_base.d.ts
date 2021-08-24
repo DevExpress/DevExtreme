@@ -16,6 +16,11 @@ import {
     dxMenuBaseItem,
 } from '../menu';
 
+import {
+  ShowSubmenuMode,
+  MenuSelectionMode,
+} from '../../docEnums';
+
 /** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWidgetOptions<TComponent> {
     /**
@@ -67,14 +72,12 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
     selectByClick?: boolean;
     /**
      * @docid
-     * @type Enums.MenuSelectionMode
      * @default none
      * @public
      */
-    selectionMode?: 'none' | 'single';
+    selectionMode?: MenuSelectionMode;
     /**
      * @docid
-     * @type Object|Enums.ShowSubmenuMode
      * @default { name: "onHover", delay: { show: 50, hide: 300 } }
      * @public
      */
@@ -97,11 +100,10 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
       } | number;
       /**
        * @docid
-       * @type Enums.ShowSubmenuMode
        * @default "onHover"
        */
-      name?: 'onClick' | 'onHover';
-    } | 'onClick' | 'onHover';
+      name?: ShowSubmenuMode;
+    } | ShowSubmenuMode;
 }
 /**
  * @docid

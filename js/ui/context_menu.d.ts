@@ -38,6 +38,10 @@ import {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+import {
+    ContextMenuSubmenuDirection,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxContextMenu>;
 
@@ -190,11 +194,10 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     } | string;
     /**
      * @docid
-     * @type Enums.ContextMenuSubmenuDirection
      * @default "auto"
      * @public
      */
-    submenuDirection?: 'auto' | 'left' | 'right';
+    submenuDirection?: ContextMenuSubmenuDirection;
     /**
      * @docid
      * @default undefined

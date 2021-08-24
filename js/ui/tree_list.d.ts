@@ -61,6 +61,16 @@ import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
 
+import {
+    Mode,
+    TreeListDataStructure,
+    TreeListScrollingMode,
+    TreeListColumnButtonName,
+    TreeListFilterMode,
+    TreeListCommandColumnType,
+    dxTreeListDefaultToolbarItemName,
+} from '../docEnums';
+
 interface CellInfo {
     readonly data: any;
     readonly key: any;
@@ -414,11 +424,10 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     customizeColumns?: ((columns: Array<Column>) => void);
     /**
      * @docid
-     * @type Enums.TreeListDataStructure
      * @default "plain"
      * @public
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: TreeListDataStructure;
     /**
      * @docid
      * @public
@@ -440,11 +449,10 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     expandedRowKeys?: Array<any>;
     /**
      * @docid
-     * @type Enums.TreeListFilterMode
      * @default "withAncestors"
      * @public
      */
-    filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
+    filterMode?: TreeListFilterMode;
     /**
      * @docid
      * @public
@@ -802,7 +810,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     parentIdExpr?: string | Function;
     /**
      * @docid
-     * @type object|Enums.Mode
      * @default "auto"
      * @public
      */
@@ -822,7 +829,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
          * @default false
          */
         sorting?: boolean;
-    } | 'auto';
+    } | Mode;
     /**
      * @docid
      * @default 0
@@ -937,11 +944,10 @@ export type dxTreeListScrolling = Scrolling;
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
-     * @type Enums.TreeListScrollingMode
      * @default "virtual"
      * @public
      */
-    mode?: 'standard' | 'virtual';
+    mode?: TreeListScrollingMode;
 }
 
 /**
@@ -1189,8 +1195,6 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     updateDimensions(): void;
 }
 
-type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
-
 /**
  * @docid
  * @inherits dxToolbarItem
@@ -1199,7 +1203,6 @@ type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | '
 export interface dxTreeListToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type Enums.TreeListToolbarItem|string
      * @public
      */
     name?: dxTreeListDefaultToolbarItemName | string;
@@ -1213,7 +1216,6 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
 export interface dxTreeListToolbar {
     /**
      * @docid
-     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
      * @public
      */
     items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
@@ -1231,10 +1233,10 @@ export type Column = dxTreeListColumn;
 export interface dxTreeListColumn extends ColumnBase {
     /**
      * @docid dxTreeListColumn.buttons
-     * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
+     * @type Array<TreeListColumnButtonName,dxTreeListColumnButton>
      * @public
      */
-    buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton>;
+    buttons?: Array<TreeListColumnButtonName | ColumnButton>;
     /**
      * @docid dxTreeListColumn.cellTemplate
      * @type_function_param1 cellElement:DxElement
@@ -1293,10 +1295,9 @@ export interface dxTreeListColumn extends ColumnBase {
     /**
      * @docid dxTreeListColumn.type
      * @publicName type
-     * @type Enums.TreeListCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons';
+    type?: TreeListCommandColumnType;
 }
 
 /**
@@ -1311,10 +1312,9 @@ export type ColumnButton = dxTreeListColumnButton;
 export interface dxTreeListColumnButton extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.name
-     * @type Enums.TreeListColumnButtonName|string
      * @public
      */
-    name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    name?: TreeListColumnButtonName | string;
     /**
      * @docid dxTreeListColumnButton.onClick
      * @type_function_param1 e:object

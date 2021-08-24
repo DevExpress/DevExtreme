@@ -29,6 +29,14 @@ import {
     Item as dxToolbarItem,
 } from './toolbar';
 
+import {
+    ToolbarItemLocation,
+    HtmlEditorValueType,
+    HtmlEditorToolbarItem,
+    HtmlEditorFormat,
+    EditorStylingMode,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
@@ -135,11 +143,10 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     toolbar?: dxHtmlEditorToolbar;
     /**
      * @docid
-     * @type Enums.HtmlEditorValueType
      * @default "html"
      * @public
      */
-    valueType?: 'html' | 'markdown';
+    valueType?: HtmlEditorValueType;
     /**
      * @docid
      * @default null
@@ -148,11 +155,10 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     variables?: dxHtmlEditorVariables;
     /**
      * @docid
-     * @type Enums.EditorStylingMode
      * @default 'outlined'
      * @public
      */
-    stylingMode?: 'outlined' | 'underlined' | 'filled';
+    stylingMode?: EditorStylingMode;
 }
 /**
  * @docid
@@ -188,21 +194,21 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
     /**
      * @docid
      * @publicName format(formatName, formatValue)
-     * @param1 formatName:Enums.HtmlEditorFormat|string
+     * @param1 formatName:HtmlEditorFormat|string
      * @param2 formatValue:any
      * @public
      */
-    format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
+    format(formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
      * @docid
      * @publicName formatLine(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
-     * @param3 formatName:Enums.HtmlEditorFormat|string
+     * @param3 formatName:HtmlEditorFormat|string
      * @param4 formatValue:any
      * @public
      */
-    formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
+    formatLine(index: number, length: number, formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
      * @docid
      * @publicName formatLine(index, length, formats)
@@ -217,11 +223,11 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @publicName formatText(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
-     * @param3 formatName:Enums.HtmlEditorFormat|string
+     * @param3 formatName:HtmlEditorFormat|string
      * @param4 formatValue:any
      * @public
      */
-    formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
+    formatText(index: number, length: number, formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
      * @docid
      * @publicName formatText(index, length, formats)
@@ -316,11 +322,11 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @publicName insertText(index, text, formatName, formatValue)
      * @param1 index:number
      * @param2 text:string
-     * @param3 formatName:Enums.HtmlEditorFormat|string
+     * @param3 formatName:HtmlEditorFormat|string
      * @param4 formatValue:any
      * @public
      */
-    insertText(index: number, text: string, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
+    insertText(index: number, text: string, formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
      * @docid
      * @publicName insertText(index, text, formats)
@@ -501,10 +507,10 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
+     * @type Array<dxHtmlEditorToolbarItem,HtmlEditorToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+    items?: Array<ToolbarItem | HtmlEditorToolbarItem>;
     /**
      * @docid
      * @default true
@@ -526,16 +532,14 @@ export type ToolbarItem = dxHtmlEditorToolbarItem;
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type Enums.HtmlEditorToolbarItem|string
      * @public
      */
-    name?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
+    name?: HtmlEditorToolbarItem | string;
     /**
      * @docid
-     * @type Enums.HtmlEditorToolbarItem|string
      * @deprecated dxHtmlEditorToolbarItem.name
      */
-    formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
+    formatName?: HtmlEditorToolbarItem | string;
     /**
      * @docid
      * @public
@@ -549,10 +553,9 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
      * @default "before"
-     * @type Enums.ToolbarItemLocation
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
 /**

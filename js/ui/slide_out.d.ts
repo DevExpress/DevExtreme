@@ -31,6 +31,10 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+import {
+    SlideOutMenuPosition,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlideOut>;
 
@@ -125,11 +129,10 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @type Enums.SlideOutMenuPosition
      * @default "normal"
      * @public
      */
-    menuPosition?: 'inverted' | 'normal';
+    menuPosition?: SlideOutMenuPosition;
     /**
      * @docid
      * @default false

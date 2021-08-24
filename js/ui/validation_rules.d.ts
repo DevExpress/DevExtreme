@@ -1,3 +1,7 @@
+import {
+    ComparisonOperator,
+} from '../docEnums';
+
 /**
  * @public
  */
@@ -37,7 +41,7 @@ export interface AsyncRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'async';
@@ -71,11 +75,10 @@ export interface CompareRule {
     comparisonTarget?: (() => any);
     /**
      * @docid
-     * @type Enums.ComparisonOperator
      * @default '=='
      * @public
      */
-    comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
+    comparisonType?: ComparisonOperator;
     /**
      * @docid
      * @default false
@@ -96,7 +99,7 @@ export interface CompareRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'compare';
@@ -129,7 +132,7 @@ export interface CustomRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'custom';
@@ -169,7 +172,7 @@ export interface EmailRule {
     message?: string;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'email';
@@ -196,7 +199,7 @@ export interface NumericRule {
     message?: string;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'numeric';
@@ -229,7 +232,7 @@ export interface PatternRule {
     pattern?: RegExp | string;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'pattern';
@@ -272,7 +275,7 @@ export interface RangeRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'range';
@@ -299,7 +302,7 @@ export interface RequiredRule {
     trim?: boolean;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'required';
@@ -342,7 +345,7 @@ export interface StringLengthRule {
     trim?: boolean;
     /**
      * @docid
-     * @type Enums.ValidationRuleType
+     * @type ValidationRuleType
      * @public
      */
     type: 'stringLength';

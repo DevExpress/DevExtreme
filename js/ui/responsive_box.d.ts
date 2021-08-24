@@ -17,6 +17,10 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+  Mode,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxResponsiveBox>;
 
@@ -53,10 +57,10 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     cols?: Array<{
       /**
        * @docid
-       * @type number | Enums.Mode
+       * @type number | Mode
        * @default 0
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | Mode;
       /**
        * @docid
        * @default 1
@@ -101,10 +105,9 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     rows?: Array<{
       /**
        * @docid
-       * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | Mode;
       /**
        * @docid
        * @default 1

@@ -17,6 +17,6 @@
 
 /**
 * @pseudo CommonVizPalette
-* @type Array<string>|Enums.VizPalette
+* @type Array<string>|Enums.PaletteType
 * @default "Material"
 */

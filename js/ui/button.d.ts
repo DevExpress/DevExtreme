@@ -18,6 +18,11 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    ButtonType,
+    ButtonStylingMode,
+} from '../docEnums';
+
 /** @public */
 export type ClickEvent = NativeEventInfo<dxButton> & {
     validationGroup?: any;
@@ -85,11 +90,10 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
-     * @type Enums.ButtonStylingMode
      * @default 'contained'
      * @public
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: ButtonStylingMode;
     /**
      * @docid
      * @default "content"
@@ -109,11 +113,10 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     text?: string;
     /**
      * @docid
-     * @type Enums.ButtonType
      * @default 'normal'
      * @public
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: ButtonType;
     /**
      * @docid
      * @default false

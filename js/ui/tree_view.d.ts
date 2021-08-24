@@ -31,6 +31,14 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
+import {
+    NavSelectionMode,
+    ScrollDirection,
+    TreeViewDataStructure,
+    TreeViewCheckBoxMode,
+    TreeViewExpandEvent,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTreeView>;
 
@@ -134,11 +142,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @type Enums.TreeViewDataStructure
      * @default 'tree'
      * @public
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: TreeViewDataStructure;
     /**
      * @docid
      * @default false
@@ -147,11 +154,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     expandAllEnabled?: boolean;
     /**
      * @docid
-     * @type Enums.TreeViewExpandEvent
      * @default "dblclick"
      * @public
      */
-    expandEvent?: 'dblclick' | 'click';
+    expandEvent?: TreeViewExpandEvent;
     /**
      * @docid
      * @default true
@@ -326,11 +332,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     rootValue?: any;
     /**
      * @docid
-     * @type Enums.ScrollDirection
      * @default "vertical"
      * @public
      */
-    scrollDirection?: 'both' | 'horizontal' | 'vertical';
+    scrollDirection?: ScrollDirection;
     /**
      * @docid
      * @default "Select All"
@@ -351,18 +356,16 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     selectNodesRecursive?: boolean;
     /**
      * @docid
-     * @type Enums.NavSelectionMode
      * @default "multiple"
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: NavSelectionMode;
     /**
      * @docid
-     * @type Enums.TreeViewCheckBoxMode
      * @default 'none'
      * @public
      */
-    showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
+    showCheckBoxesMode?: TreeViewCheckBoxMode;
     /**
      * @docid
      * @default false

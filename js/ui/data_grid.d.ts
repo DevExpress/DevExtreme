@@ -78,6 +78,49 @@ import {
   Format,
 } from '../localization';
 
+import {
+  DropFeedbackMode,
+  HorizontalAlignment,
+  Mode,
+  GridColumnChooserMode,
+  ColumnResizingMode,
+  HorizontalEdge,
+  GridColumnDataType,
+  SortOrder,
+  FilterOperations,
+  GridFilterOperations,
+  FilterType,
+  HeaderFilterGroupInterval,
+  GridEditMode,
+  GridEnterKeyAction,
+  GridEnterKeyDirection,
+  GridEditRefreshMode,
+  GridApplyFilterMode,
+  GridGroupingExpandMode,
+  GridScrollingMode,
+  ShowScrollbarMode,
+  SelectionMode,
+  GridSelectionShowCheckBoxesMode,
+  SelectAllMode,
+  SummaryType,
+  GridSortingMode,
+  StateStoringType,
+  CollectionSearchMode,
+  DragDirection,
+  GridRowRenderingMode,
+  GridColumnRenderingMode,
+  ExcelCellHorizontalAlignment,
+  ExcelCellVerticalAlignment,
+  ExcelCellPatternType,
+  GridCommandColumnType,
+  GridColumnButtonName,
+  GridStartEditAction,
+  GridPagerDisplayMode,
+  GridPagerPageSize,
+  GridDataChangeType,
+  dxDataGridDefaultToolbarItemName,
+} from '../docEnums';
+
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
 }
@@ -285,10 +328,9 @@ export interface RowDragging<T extends GridBase> {
     data?: any;
     /**
      * @docid GridBaseOptions.rowDragging.dragDirection
-     * @type Enums.DragDirection
      * @default "both"
      */
-    dragDirection?: 'both' | 'horizontal' | 'vertical';
+    dragDirection?: DragDirection;
     /**
      * @docid GridBaseOptions.rowDragging.dragTemplate
      * @type_function_param1 dragInfo:object
@@ -301,10 +343,9 @@ export interface RowDragging<T extends GridBase> {
     dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid GridBaseOptions.rowDragging.dropFeedbackMode
-     * @type Enums.DropFeedbackMode
      * @default "indicate"
      */
-    dropFeedbackMode?: 'push' | 'indicate';
+    dropFeedbackMode?: DropFeedbackMode;
     /**
      * @docid GridBaseOptions.rowDragging.filter
      * @default "> *"
@@ -514,18 +555,16 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     columnMinWidth?: number;
     /**
      * @docid
-     * @type Enums.ColumnResizingMode
      * @default "nextColumn"
      * @public
      */
-    columnResizingMode?: 'nextColumn' | 'widget';
+    columnResizingMode?: ColumnResizingMode;
     /**
      * @docid
-     * @type number|Enums.Mode
      * @default undefined
      * @public
      */
-    columnWidth?: number | 'auto';
+    columnWidth?: number | Mode;
     /**
      * @docid
      * @type Array<GridBaseColumn|string>
@@ -585,11 +624,10 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     filterRow?: FilterRow;
     /**
      * @docid
-     * @type boolean|Enums.Mode
      * @default "auto"
      * @public
      */
-    filterSyncEnabled?: boolean | 'auto';
+    filterSyncEnabled?: boolean | Mode;
     /**
      * @docid
      * @type Filter expression
@@ -1071,10 +1109,9 @@ export interface ColumnChooser {
     height?: number;
     /**
      * @docid GridBaseOptions.columnChooser.mode
-     * @type Enums.GridColumnChooserMode
      * @default "dragAndDrop"
      */
-    mode?: 'dragAndDrop' | 'select';
+    mode?: GridColumnChooserMode;
     /**
      * @docid GridBaseOptions.columnChooser.searchTimeout
      * @default 500
@@ -1092,10 +1129,9 @@ export interface ColumnChooser {
     width?: number;
     /**
      * @docid GridBaseOptions.columnChooser.sortOrder
-     * @type Enums.SortOrder
      * @default undefined
      */
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: SortOrder;
 }
 
 export interface ColumnFixing {
@@ -1155,10 +1191,9 @@ export interface FilterPanelTexts {
 export interface FilterRow {
     /**
      * @docid GridBaseOptions.filterRow.applyFilter
-     * @type Enums.GridApplyFilterMode
      * @default "auto"
      */
-    applyFilter?: 'auto' | 'onClick';
+    applyFilter?: GridApplyFilterMode;
     /**
      * @docid GridBaseOptions.filterRow.applyFilterText
      * @default "Apply filter"
@@ -1324,25 +1359,22 @@ export interface KeyboardNavigation {
     enabled?: boolean;
     /**
      * @docid GridBaseOptions.keyboardNavigation.enterKeyAction
-     * @type Enums.GridEnterKeyAction
      * @default "startEdit"
      */
-    enterKeyAction?: 'startEdit' | 'moveFocus';
+    enterKeyAction?: GridEnterKeyAction;
     /**
      * @docid GridBaseOptions.keyboardNavigation.enterKeyDirection
-     * @type Enums.GridEnterKeyDirection
      * @default "none"
      */
-    enterKeyDirection?: 'none' | 'column' | 'row';
+    enterKeyDirection?: GridEnterKeyDirection;
 }
 
 export interface LoadPanel {
     /**
      * @docid GridBaseOptions.loadPanel.enabled
-     * @type boolean|Enums.Mode
      * @default "auto"
      */
-    enabled?: boolean | 'auto';
+    enabled?: boolean | Mode;
     /**
      * @docid GridBaseOptions.loadPanel.height
      * @default 90
@@ -1388,16 +1420,14 @@ export interface LoadPanel {
 export interface Pager {
     /**
      * @docid GridBaseOptions.pager.allowedPageSizes
-     * @type Array<number, Enums.GridPagerPageSize>|Enums.Mode
      * @default "auto"
      */
-    allowedPageSizes?: Array<(number | 'all')> | 'auto';
+    allowedPageSizes?: Array<(number | GridPagerPageSize)> | Mode;
     /**
      * @docid GridBaseOptions.pager.displayMode
      * @default "adaptive"
-     * @type Enums.GridPagerDisplayMode
      */
-    displayMode?: 'adaptive' | 'compact' | 'full';
+    displayMode?: GridPagerDisplayMode;
     /**
      * @docid GridBaseOptions.pager.infoText
      * @default "Page {0} of {1} ({2} items)"
@@ -1420,10 +1450,10 @@ export interface Pager {
     showPageSizeSelector?: boolean;
     /**
      * @docid GridBaseOptions.pager.visible
-     * @type boolean|Enums.Mode
+     * @type boolean|Mode
      * @default "auto"
      */
-    visible?: boolean | 'auto';
+    visible?: boolean | Mode;
 }
 
 export interface SearchPanel {
@@ -1483,10 +1513,9 @@ export interface Sorting {
     descendingText?: string;
     /**
      * @docid GridBaseOptions.sorting.mode
-     * @type Enums.GridSortingMode
      * @default "single"
      */
-    mode?: 'multiple' | 'none' | 'single';
+    mode?: GridSortingMode;
     /**
      * @docid GridBaseOptions.sorting.showSortIndexes
      * @default true
@@ -1522,10 +1551,9 @@ export interface StateStoring {
     storageKey?: string;
     /**
      * @docid GridBaseOptions.stateStoring.type
-     * @type Enums.StateStoringType
      * @default "localStorage"
      */
-    type?: 'custom' | 'localStorage' | 'sessionStorage';
+    type?: StateStoringType;
 }
 
 /**
@@ -1569,11 +1597,10 @@ export interface EditingBase {
     form?: dxFormOptions;
     /**
      * @docid GridBaseOptions.editing.mode
-     * @type Enums.GridEditMode
      * @default "row"
      * @public
      */
-    mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
+    mode?: GridEditMode;
     /**
      * @docid GridBaseOptions.editing.popup
      * @public
@@ -1582,11 +1609,10 @@ export interface EditingBase {
     popup?: PopupProperties;
     /**
      * @docid GridBaseOptions.editing.refreshMode
-     * @type Enums.GridEditRefreshMode
      * @default "full"
      * @public
      */
-    refreshMode?: 'full' | 'reshape' | 'repaint';
+    refreshMode?: GridEditRefreshMode;
     /**
      * @docid GridBaseOptions.editing.selectTextOnEditStart
      * @default false
@@ -1595,11 +1621,10 @@ export interface EditingBase {
     selectTextOnEditStart?: boolean;
     /**
      * @docid GridBaseOptions.editing.startEditAction
-     * @type Enums.GridStartEditAction
      * @default "click"
      * @public
      */
-    startEditAction?: 'click' | 'dblClick';
+    startEditAction?: GridStartEditAction;
     /**
      * @docid GridBaseOptions.editing.texts
      * @type object
@@ -1626,9 +1651,8 @@ export interface DataChange {
     key: any;
     /**
      * @docid
-     * @type Enums.GridDataChangeType
      */
-    type: 'insert' | 'update' | 'remove';
+    type: GridDataChangeType;
     /**
      * @docid
      */
@@ -1756,11 +1780,10 @@ export type GridBaseScrolling = ScrollingBase;
 export interface ScrollingBase {
     /**
      * @docid GridBaseOptions.scrolling.columnRenderingMode
-     * @type Enums.GridColumnRenderingMode
      * @default "standard"
      * @public
      */
-    columnRenderingMode?: 'standard' | 'virtual';
+    columnRenderingMode?: GridColumnRenderingMode;
     /**
      * @docid GridBaseOptions.scrolling.preloadEnabled
      * @default false
@@ -1769,11 +1792,10 @@ export interface ScrollingBase {
     preloadEnabled?: boolean;
     /**
      * @docid GridBaseOptions.scrolling.rowRenderingMode
-     * @type Enums.GridRowRenderingMode
      * @default "standard"
      * @public
      */
-    rowRenderingMode?: 'standard' | 'virtual';
+    rowRenderingMode?: GridRowRenderingMode;
     /**
      * @docid GridBaseOptions.scrolling.scrollByContent
      * @default true
@@ -1789,18 +1811,17 @@ export interface ScrollingBase {
     /**
      * @docid GridBaseOptions.scrolling.showScrollbar
      * @default 'onHover' &for(desktop)
-     * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
      * @public
      */
-    showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+    showScrollbar?: ShowScrollbarMode;
     /**
      * @docid GridBaseOptions.scrolling.useNative
-     * @type boolean|Enums.Mode
+     * @type boolean|Mode
      * @default "auto"
      * @public
      */
-    useNative?: boolean | 'auto';
+    useNative?: boolean | Mode;
 }
 
 /**
@@ -1818,11 +1839,10 @@ export interface SelectionBase {
     allowSelectAll?: boolean;
     /**
      * @docid GridBaseOptions.selection.mode
-     * @type Enums.SelectionMode
      * @default "none"
      * @public
      */
-    mode?: 'multiple' | 'none' | 'single';
+    mode?: SelectionMode;
 }
 
 /**
@@ -2333,12 +2353,11 @@ export type GridBaseColumn = ColumnBase;
 export interface ColumnBase {
     /**
      * @docid GridBaseColumn.alignment
-     * @type Enums.HorizontalAlignment
      * @default undefined
      * @acceptValues undefined
      * @public
      */
-    alignment?: 'center' | 'left' | 'right';
+    alignment?: HorizontalAlignment;
     /**
      * @docid GridBaseColumn.allowEditing
      * @default true
@@ -2454,11 +2473,10 @@ export interface ColumnBase {
     dataField?: string;
     /**
      * @docid GridBaseColumn.dataType
-     * @type Enums.GridColumnDataType
      * @default undefined
      * @public
      */
-    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+    dataType?: GridColumnDataType;
     /**
      * @docid GridBaseColumn.editorOptions
      * @public
@@ -2478,18 +2496,16 @@ export interface ColumnBase {
     falseText?: string;
     /**
      * @docid GridBaseColumn.filterOperations
-     * @type Array<Enums.GridFilterOperations, string>
      * @default undefined
      * @public
      */
-    filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof'>;
+    filterOperations?: Array<GridFilterOperations>;
     /**
      * @docid GridBaseColumn.filterType
-     * @type Enums.FilterType
      * @default "include"
      * @public
      */
-    filterType?: 'exclude' | 'include';
+    filterType?: FilterType;
     /**
      * @docid GridBaseColumn.filterValue
      * @default undefined
@@ -2512,11 +2528,10 @@ export interface ColumnBase {
     fixed?: boolean;
     /**
      * @docid GridBaseColumn.fixedPosition
-     * @type Enums.HorizontalEdge
      * @default undefined
      * @public
      */
-    fixedPosition?: 'left' | 'right';
+    fixedPosition?: HorizontalEdge;
     /**
      * @docid GridBaseColumn.formItem
      * @public
@@ -2580,12 +2595,11 @@ export interface ColumnBase {
     renderAsync?: boolean;
     /**
      * @docid GridBaseColumn.selectedFilterOperation
-     * @type Enums.FilterOperations
      * @default undefined
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    selectedFilterOperation?: '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
+    selectedFilterOperation?: FilterOperations;
     /**
      * @docid GridBaseColumn.setCellValue
      * @type_function_param1 newData:object
@@ -2616,13 +2630,12 @@ export interface ColumnBase {
     sortIndex?: number;
     /**
      * @docid GridBaseColumn.sortOrder
-     * @type Enums.SortOrder
      * @default undefined
      * @acceptValues undefined
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: SortOrder;
     /**
      * @docid GridBaseColumn.sortingMethod
      * @type_function_param1 value1:any
@@ -2681,10 +2694,9 @@ export interface ColumnHeaderFilter {
   dataSource?: Array<any> | Store | ((options: { component?: any; dataSource?: DataSourceOptions }) => any) | DataSourceOptions;
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
-   * @type Enums.HeaderFilterGroupInterval|number
    * @default undefined
    */
-  groupInterval?: 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year' | number;
+  groupInterval?: HeaderFilterGroupInterval | number;
   /**
    * @docid GridBaseColumn.headerFilter.height
    * @default undefined
@@ -2692,10 +2704,9 @@ export interface ColumnHeaderFilter {
   height?: number;
   /**
    * @docid GridBaseColumn.headerFilter.searchMode
-   * @type Enums.CollectionSearchMode
    * @default 'contains'
    */
-  searchMode?: 'contains' | 'startswith' | 'equals';
+  searchMode?: CollectionSearchMode;
   /**
    * @docid GridBaseColumn.headerFilter.width
    * @default undefined
@@ -3598,7 +3609,6 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     onRowPrepared?: ((e: RowPreparedEvent) => void);
     /**
      * @docid
-     * @type boolean|object|Enums.Mode
      * @default "auto"
      * @public
      */
@@ -3633,7 +3643,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
        * @default false
        */
       summary?: boolean;
-    } | 'auto';
+    } | Mode;
     /**
      * @docid
      * @type_function_param1 rowElement:DxElement
@@ -3694,11 +3704,11 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
 
 export interface ExcelCellInfo {
   readonly component: dxDataGrid;
-  horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
-  verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
+  horizontalAlignment?: ExcelCellHorizontalAlignment;
+  verticalAlignment?: ExcelCellVerticalAlignment;
   wrapTextEnabled?: boolean;
   backgroundColor?: string;
-  fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
+  fillPatternType?: ExcelCellPatternType;
   fillPatternColor?: string;
   font?: ExcelFont;
   readonly value?: string | number | Date;
@@ -3717,11 +3727,11 @@ export interface Export {
    * @deprecated
    * @type_function_param1 options:object
    * @type_function_param1_field1 component:dxDataGrid
-   * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
-   * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
+   * @type_function_param1_field2 horizontalAlignment:ExcelCellHorizontalAlignment
+   * @type_function_param1_field3 verticalAlignment:ExcelCellVerticalAlignment
    * @type_function_param1_field4 wrapTextEnabled:boolean
    * @type_function_param1_field5 backgroundColor:string
-   * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
+   * @type_function_param1_field6 fillPatternType:ExcelCellPatternType
    * @type_function_param1_field7 fillPatternColor:string
    * @type_function_param1_field8 font:ExcelFont
    * @type_function_param1_field9 value:string|number|date
@@ -3802,10 +3812,9 @@ export interface GroupPanel {
   emptyPanelText?: string;
   /**
    * @docid dxDataGridOptions.groupPanel.visible
-   * @type boolean|Enums.Mode
    * @default false
    */
-  visible?: boolean | 'auto';
+  visible?: boolean | Mode;
 }
 
 export interface Grouping {
@@ -3827,10 +3836,9 @@ export interface Grouping {
   /**
    * @docid dxDataGridOptions.grouping.expandMode
    * @default 'rowClick' &for(mobile_devices)
-   * @type Enums.GridGroupingExpandMode
    * @default "buttonClick"
    */
-  expandMode?: 'buttonClick' | 'rowClick';
+  expandMode?: GridGroupingExpandMode;
   /**
    * @docid dxDataGridOptions.grouping.texts
    * @type object
@@ -3896,11 +3904,10 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
     groupColumn?: string;
     /**
      * @docid dxDataGridOptions.sortByGroupSummaryInfo.sortOrder
-     * @type Enums.SortOrder
      * @default undefined
      * @acceptValues undefined
      */
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: SortOrder;
     /**
      * @docid dxDataGridOptions.sortByGroupSummaryInfo.summaryItem
      * @default undefined
@@ -4009,10 +4016,9 @@ export interface SummaryGroupItem {
     skipEmptyValues?: boolean;
     /**
      * @docid dxDataGridOptions.summary.groupItems.summaryType
-     * @type Enums.SummaryType|string
      * @default undefined
      */
-    summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+    summaryType?: SummaryType | string;
     /**
      * @docid dxDataGridOptions.summary.groupItems.valueFormat
      * @default undefined
@@ -4023,10 +4029,9 @@ export interface SummaryGroupItem {
 export interface SummaryTotalItem {
   /**
    * @docid dxDataGridOptions.summary.totalItems.alignment
-   * @type Enums.HorizontalAlignment
    * @default undefined
    */
-  alignment?: 'center' | 'left' | 'right';
+  alignment?: HorizontalAlignment;
   /**
    * @docid dxDataGridOptions.summary.totalItems.column
    * @default undefined
@@ -4066,10 +4071,9 @@ export interface SummaryTotalItem {
   skipEmptyValues?: boolean;
   /**
    * @docid dxDataGridOptions.summary.totalItems.summaryType
-   * @type Enums.SummaryType|string
    * @default undefined
    */
-  summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+  summaryType?: SummaryType | string;
   /**
    * @docid dxDataGridOptions.summary.totalItems.valueFormat
    * @default undefined
@@ -4125,8 +4129,6 @@ export interface SummaryTexts {
     sumOtherColumn?: string;
 }
 
-type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
-
 /**
  * @docid
  * @inherits dxToolbarItem
@@ -4135,7 +4137,6 @@ type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | '
 export interface dxDataGridToolbarItem extends dxToolbarItem {
   /**
    * @docid
-   * @type Enums.DataGridToolbarItem|string
    * @public
    */
   name?: dxDataGridDefaultToolbarItemName | string;
@@ -4149,7 +4150,6 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
 export interface dxDataGridToolbar {
   /**
    * @docid
-   * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
   items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
@@ -4206,11 +4206,10 @@ export type dxDataGridScrolling = Scrolling;
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxDataGridOptions.scrolling.mode
-     * @type Enums.GridScrollingMode
      * @default "standard"
      * @public
      */
-    mode?: 'infinite' | 'standard' | 'virtual';
+    mode?: GridScrollingMode;
 }
 
 /**
@@ -4229,18 +4228,16 @@ export interface Selection extends SelectionBase {
     deferred?: boolean;
     /**
      * @docid dxDataGridOptions.selection.selectAllMode
-     * @type Enums.SelectAllMode
      * @default "allPages"
      * @public
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: SelectAllMode;
     /**
      * @docid dxDataGridOptions.selection.showCheckBoxesMode
-     * @type Enums.GridSelectionShowCheckBoxesMode
      * @default "onClick"
      * @public
      */
-    showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
+    showCheckBoxesMode?: GridSelectionShowCheckBoxesMode;
 }
 /**
  * @docid
@@ -4475,10 +4472,10 @@ export interface dxDataGridColumn extends ColumnBase {
     autoExpandGroup?: boolean;
     /**
      * @docid dxDataGridColumn.buttons
-     * @type Array<Enums.GridColumnButtonName,dxDataGridColumnButton>
+     * @type Array<GridColumnButtonName,dxDataGridColumnButton>
      * @public
      */
-    buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton>;
+    buttons?: Array<GridColumnButtonName | ColumnButton>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
      * @type_function_param1 rowData:object
@@ -4576,10 +4573,9 @@ export interface dxDataGridColumn extends ColumnBase {
     /**
      * @docid dxDataGridColumn.type
      * @publicName type
-     * @type Enums.GridCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
+    type?: GridCommandColumnType;
 }
 
 /**
@@ -4593,10 +4589,9 @@ export type ColumnButton = dxDataGridColumnButton;
 export interface dxDataGridColumnButton extends ColumnButtonBase {
     /**
      * @docid dxDataGridColumnButton.name
-     * @type Enums.GridColumnButtonName|string
      * @public
      */
-    name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    name?: GridColumnButtonName | string;
     /**
      * @docid dxDataGridColumnButton.onClick
      * @type_function_param1 e:object

@@ -33,6 +33,18 @@ import {
     template,
 } from '../core/templates/template';
 
+import {
+    HorizontalAlignment,
+    GridColumnDataType,
+    SortOrder,
+    ToolbarItemLocation,
+    FileManagerSelectionMode,
+    FileManagerToolbarItem,
+    FileManagerContextMenuItem,
+    FileManagerItemViewMode,
+    FileManagerViewArea,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileManager>;
 
@@ -42,14 +54,14 @@ export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemElement: DxElement;
     readonly itemIndex: number;
     readonly fileSystemItem?: FileSystemItem;
-    readonly viewArea: 'navPane' | 'itemView';
+    readonly viewArea: FileManagerViewArea;
 };
 
 /** @public */
 export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager> & {
     readonly fileSystemItem?: FileSystemItem;
     readonly targetElement?: DxElement;
-    readonly viewArea: 'navPane' | 'itemView';
+    readonly viewArea: FileManagerViewArea;
 };
 
 /** @public */
@@ -165,10 +177,9 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
       };
       /**
        * @docid
-       * @type Enums.FileManagerItemViewMode
        * @default "details"
        */
-      mode?: 'details' | 'thumbnails';
+      mode?: FileManagerItemViewMode;
       /**
        * @docid
        * @default true
@@ -208,7 +219,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 fileSystemItem:FileSystemItem
-     * @type_function_param1_field9 viewArea:Enums.FileManagerViewArea
+     * @type_function_param1_field9 viewArea:FileManagerViewArea
      * @action
      * @public
      */
@@ -224,7 +235,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field5 targetElement:DxElement
      * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
+     * @type_function_param1_field8 viewArea:FileManagerViewArea
      * @action
      * @public
      */
@@ -358,11 +369,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     rootFolderName?: string;
     /**
      * @docid
-     * @type Enums.FileManagerSelectionMode
      * @default "multiple"
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: FileManagerSelectionMode;
     /**
      * @docid
      * @default []
@@ -437,11 +447,11 @@ export default class dxFileManager extends Widget<dxFileManagerOptions> {
 export interface dxFileManagerContextMenu {
     /**
      * @docid
-     * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
+     * @type Array<dxFileManagerContextMenuItem,FileManagerContextMenuItem>
      * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
      * @public
      */
-    items?: Array<ContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
+    items?: Array<ContextMenuItem | FileManagerContextMenuItem>;
 }
 
 /**
@@ -463,10 +473,9 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
     items?: Array<ContextMenuItem>;
     /**
      * @docid
-     * @type Enums.FileManagerContextMenuItem|string
      * @public
      */
-    name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
+    name?: FileManagerContextMenuItem | string;
     /**
      * @docid
      * @default undefined
@@ -488,18 +497,18 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
 export interface dxFileManagerToolbar {
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,FileManagerToolbarItem>
      * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clearSelection", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    fileSelectionItems?: Array<ToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
+    fileSelectionItems?: Array<ToolbarItem | FileManagerToolbarItem>;
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,FileManagerToolbarItem>
      * @default [ "showNavPane", "create", "upload", "switchView", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    items?: Array<ToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
+    items?: Array<ToolbarItem | FileManagerToolbarItem >;
 }
 
 /**
@@ -521,18 +530,15 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
     icon?: string;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocation|string
      * @default "before"
-     * @type Enums.ToolbarItemLocation
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
     /**
      * @docid
-     * @type Enums.FileManagerToolbarItem|string
      * @public
      */
-    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator' | string;
+    name?: FileManagerToolbarItem | string;
     /**
      * @docid
      * @default undefined
@@ -564,12 +570,11 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
 export interface dxFileManagerDetailsColumn {
     /**
      * @docid
-     * @type Enums.HorizontalAlignment
      * @default undefined
      * @acceptValues undefined
      * @public
      */
-    alignment?: 'center' | 'left' | 'right' | undefined;
+    alignment?: HorizontalAlignment | undefined;
     /**
      * @docid
      * @default undefined
@@ -590,11 +595,10 @@ export interface dxFileManagerDetailsColumn {
     dataField?: string;
     /**
      * @docid
-     * @type Enums.GridColumnDataType
      * @default undefined
      * @public
      */
-    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+    dataType?: GridColumnDataType;
     /**
      * @docid
      * @default undefined
@@ -609,12 +613,12 @@ export interface dxFileManagerDetailsColumn {
     sortIndex?: number;
     /**
      * @docid
-     * @type Enums.SortOrder
+     * @type SortOrder
      * @default undefined
      * @acceptValues undefined
      * @public
      */
-    sortOrder?: 'asc' | 'desc' | undefined;
+    sortOrder?: SortOrder | undefined;
     /**
      * @docid
      * @default true

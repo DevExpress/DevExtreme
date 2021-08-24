@@ -42,6 +42,16 @@ import {
     DxPromise,
 } from '../core/utils/deferred';
 
+import {
+    ToolbarItemLocation,
+    FirstDayOfWeek,
+    GanttTaskTitlePosition,
+    GanttToolbarItem,
+    GanttContextMenuItem,
+    GanttScaleType,
+    GanttSortingMode,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
 
@@ -776,11 +786,10 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @type Enums.GanttScaleType
      * @default "auto"
      * @public
      */
-    scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+    scaleType?: GanttScaleType;
     /**
      * @docid
      * @default undefined
@@ -807,18 +816,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskListWidth?: number;
     /**
      * @docid
-     * @type Enums.GanttTaskTitlePosition
      * @default "inside"
      * @public
      */
-    taskTitlePosition?: 'inside' | 'outside' | 'none';
+    taskTitlePosition?: GanttTaskTitlePosition;
     /**
      * @docid
-     * @type Enums.FirstDayOfWeek
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: FirstDayOfWeek;
     /**
      * @docid
      * @default null
@@ -1125,10 +1132,10 @@ export default class dxGantt extends Widget<dxGanttOptions> {
 export interface dxGanttToolbar {
     /**
      * @docid
-     * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
+     * @type Array<dxGanttToolbarItem,GanttToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
+    items?: Array<ToolbarItem | GanttToolbarItem | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
 }
 
 /**
@@ -1145,10 +1152,10 @@ export interface dxGanttContextMenu {
     enabled?: boolean;
     /**
      * @docid
-     * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
+     * @type Array<dxGanttContextMenuItem,GanttContextMenuItem>
      * @public
      */
-    items?: Array<ContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
+    items?: Array<ContextMenuItem | GanttContextMenuItem | 'resourceManager'>;
 }
 
 /**
@@ -1164,17 +1171,16 @@ export type ToolbarItem = dxGanttToolbarItem;
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type Enums.GanttToolbarItem|string
+     * @type GanttToolbarItem|string
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
+    name?: GanttToolbarItem | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
     /**
      * @docid
      * @default "before"
-     * @type Enums.ToolbarItemLocation
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
 /**
@@ -1190,10 +1196,10 @@ export type ContextMenuItem = dxGanttContextMenuItem;
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
-     * @type Enums.GanttContextMenuItem|string
+     * @type GanttContextMenuItem|string
      * @public
      */
-    name?: 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager' | string;
+    name?: GanttContextMenuItem | 'resourceManager' | string;
 }
 
 /**
@@ -1253,10 +1259,9 @@ export interface dxGanttSorting {
     descendingText?: string;
     /**
      * @docid
-     * @type Enums.GanttSortingMode|string
      * @default "none"
      */
-    mode?: 'multiple' | 'none' | 'single';
+    mode?: GanttSortingMode;
     /**
      * @docid
      * @default false

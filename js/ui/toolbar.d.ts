@@ -26,6 +26,13 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+    ToolbarItemWidget,
+    ToolbarItemLocation,
+    ToolbarItemLocateInMenuMode,
+    ToolbarItemShowTextMode,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxToolbar>;
 
@@ -117,18 +124,16 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     cssClass?: string;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocateInMenuMode
      * @default 'never'
      * @public
      */
-    locateInMenu?: 'always' | 'auto' | 'never';
+    locateInMenu?: ToolbarItemLocateInMenuMode;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocation
      * @default 'center'
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
@@ -142,17 +147,15 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     options?: any;
     /**
      * @docid
-     * @type Enums.ToolbarItemShowTextMode
      * @default 'always'
      * @public
      */
-    showText?: 'always' | 'inMenu';
+    showText?: ToolbarItemShowTextMode;
     /**
      * @docid
-     * @type Enums.ToolbarItemWidget
      * @public
      */
-    widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+    widget?: ToolbarItemWidget;
 }
 
 /** @public */

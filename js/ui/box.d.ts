@@ -17,6 +17,13 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+    BoxAlign,
+    BoxDirection,
+    BoxCrossAlign,
+    Mode,
+} from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxBox>;
 
@@ -48,18 +55,16 @@ export type OptionChangedEvent = EventInfo<dxBox> & ChangedOptionInfo;
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     /**
      * @docid
-     * @type Enums.BoxAlign
      * @default 'start'
      * @public
      */
-    align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+    align?: BoxAlign;
     /**
      * @docid
-     * @type Enums.BoxCrossAlign
      * @default 'start'
      * @public
      */
-    crossAlign?: 'center' | 'end' | 'start' | 'stretch';
+    crossAlign?: BoxCrossAlign;
     /**
      * @docid
      * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions
@@ -69,11 +74,10 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @type Enums.BoxDirection
      * @default 'row'
      * @public
      */
-    direction?: 'col' | 'row';
+    direction?: BoxDirection;
     /**
      * @docid
      * @type Array<string | dxBoxItem | any>
@@ -105,11 +109,10 @@ export type Item = dxBoxItem;
 export interface dxBoxItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @type number | Enums.Mode
      * @default 0
      * @public
      */
-    baseSize?: number | 'auto';
+    baseSize?: number | Mode;
     /**
      * @docid
      * @default undefined

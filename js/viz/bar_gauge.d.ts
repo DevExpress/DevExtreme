@@ -4,11 +4,6 @@ import {
 } from '../core/element';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType,
-} from './palette';
-
-import {
     template,
 } from '../core/templates/template';
 
@@ -36,6 +31,12 @@ import BaseWidget, {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
+
+import {
+    PaletteType,
+    PaletteExtensionModeType,
+    BarGaugeResolveLabelOverlapping,
+} from '../docEnums';
 
 /**
  * @docid
@@ -252,14 +253,12 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
      * @extends CommonVizPalette
-     * @type Array<string>|Enums.VizPalette
      * @public
      */
     palette?: Array<string> | PaletteType;
     /**
      * @docid
      * @default 'blend'
-     * @type Enums.VizPaletteExtensionMode
      * @public
      */
     paletteExtensionMode?: PaletteExtensionModeType;
@@ -271,11 +270,10 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     relativeInnerRadius?: number;
     /**
      * @docid
-     * @type Enums.BarGaugeResolveLabelOverlapping
      * @default 'hide'
      * @public
      */
-    resolveLabelOverlapping?: 'hide' | 'none';
+    resolveLabelOverlapping?: BarGaugeResolveLabelOverlapping;
     /**
      * @docid
      * @default 0

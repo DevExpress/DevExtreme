@@ -4,11 +4,6 @@ import {
 } from '../../core/element';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType,
-} from '../palette';
-
-import {
     template,
 } from '../../core/templates/template';
 
@@ -47,6 +42,13 @@ import BaseWidget, {
     BaseWidgetAnnotationConfig,
 } from '../core/base_widget';
 
+import {
+    VizAnimationEasing,
+    PaletteType,
+    PaletteExtensionModeType,
+    ChartElementSelectionMode,
+} from '../../docEnums';
+
 export interface PointInteractionInfo {
     readonly target: basePointObject;
 }
@@ -75,10 +77,9 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
       duration?: number;
       /**
        * @docid
-       * @type Enums.VizAnimationEasing
        * @default 'easeOutCubic'
        */
-      easing?: 'easeOutCubic' | 'linear';
+      easing?: VizAnimationEasing;
       /**
        * @docid
        * @default true
@@ -194,24 +195,21 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     /**
      * @docid
      * @extends CommonVizPalette
-     * @type Array<string>|Enums.VizPalette
      * @public
      */
     palette?: Array<string> | PaletteType;
     /**
      * @docid
-     * @type Enums.VizPaletteExtensionMode
      * @default 'blend'
      * @public
      */
     paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid
-     * @type Enums.ChartElementSelectionMode
      * @default 'single'
      * @public
      */
-    pointSelectionMode?: 'multiple' | 'single';
+    pointSelectionMode?: ChartElementSelectionMode;
     /**
      * @docid
      * @default undefined

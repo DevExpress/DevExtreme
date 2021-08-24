@@ -1,5 +1,11 @@
 import DOMComponent from '../core/dom_component';
 
+import {
+    VerticalAlignment,
+    HorizontalAlignment,
+    ExportFormat,
+} from '../docEnums';
+
 /**
  * @docid viz.exportFromMarkup
  * @publicName exportFromMarkup(markup, options)
@@ -40,12 +46,12 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
  * @param1 widgetInstances:Array<Array<DOMComponent>>
  * @param2 options:object
  * @param2_field1 fileName:string
- * @param2_field2 format:Enums.ExportFormat
+ * @param2_field2 format:ExportFormat
  * @param2_field3 backgroundColor:string
  * @param2_field4 margin:number
  * @param2_field5 gridLayout:boolean
- * @param2_field6 verticalAlignment:Enums.VerticalAlignment
- * @param2_field7 horizontalAlignment:Enums.HorizontalAlignment
+ * @param2_field6 verticalAlignment:VerticalAlignment
+ * @param2_field7 horizontalAlignment:HorizontalAlignment
  * @param2_field8 proxyUrl:string:deprecated
  * @param2_field9 onExporting:function(e)
  * @param2_field10 onExported:function
@@ -56,7 +62,7 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
  * @export exportWidgets
  * @public
  */
-export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string; format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG'; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: 'bottom' | 'center' | 'top'; horizontalAlignment?: 'center' | 'left' | 'right'; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
+export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string; format?: ExportFormat; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: VerticalAlignment; horizontalAlignment?: HorizontalAlignment; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
 
 /**
  * @docid viz.getMarkup

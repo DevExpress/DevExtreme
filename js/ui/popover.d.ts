@@ -28,6 +28,8 @@ import dxPopup, {
     TitleRenderedInfo,
 } from './popup';
 
+import { Position } from '../docEnums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPopover>;
 
@@ -101,11 +103,10 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     } | string;
     /**
      * @docid
-     * @type Enums.Position|PositionConfig
      * @default { my: 'top center', at: 'bottom center', collision: 'fit flip' }
      * @public
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
+    position?: Position | PositionConfig;
     /**
      * @docid
      * @default false
