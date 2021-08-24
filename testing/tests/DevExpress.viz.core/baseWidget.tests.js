@@ -617,9 +617,11 @@ QUnit.test('no options', function(assert) {
 });
 
 QUnit.test('no options and container has no sizes', function(assert) {
+    const originalRendererWidth = renderer.fn.width;
+    const originalRendererHeight = renderer.fn.height;
     try {
-        sinon.stub(renderer.fn, 'width').returns(0);
-        sinon.stub(renderer.fn, 'height').returns(0);
+        renderer.fn.width = ()=>0;
+        renderer.fn.height = ()=>0;
         this.onGetDefaultSize = function() {
             return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
         };
@@ -630,16 +632,19 @@ QUnit.test('no options and container has no sizes', function(assert) {
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        renderer.fn.width = originalRendererWidth;
+        renderer.fn.height = originalRendererHeight;
     }
 });
 
 // T665179
 QUnit.test('Do not get size from container if size option is set', function(assert) {
+    const originalRendererWidth = renderer.fn.width;
+    const originalRendererHeight = renderer.fn.height;
     try {
-        const width = sinon.stub(renderer.fn, 'width').returns(0);
-        const height = sinon.stub(renderer.fn, 'height').returns(0);
+        const called = {};
+        renderer.fn.width = () => { called['width'] = true; return 0; };
+        renderer.fn.height = () => { called['height'] = true; return 0; };
 
         this.createWidget({
             size: {
@@ -648,18 +653,20 @@ QUnit.test('Do not get size from container if size option is set', function(asse
             }
         });
 
-        assert.ok(!width.called);
-        assert.ok(!height.called);
+        assert.ok(!called.width);
+        assert.ok(!called.height);
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        renderer.fn.width = originalRendererWidth;
+        renderer.fn.height = originalRendererHeight;
     }
 });
 
 QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
+    const originalRendererWidth = renderer.fn.width;
+    const originalRendererHeight = renderer.fn.height;
     try {
-        sinon.stub(renderer.fn, 'width').returns(-2);
-        sinon.stub(renderer.fn, 'height').returns(-3);
+        renderer.fn.width = () => -2;
+        renderer.fn.height = () => -3;
         this.onGetDefaultSize = function() {
             return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
         };
@@ -670,8 +677,8 @@ QUnit.test('no options and container has negative sizes - get default size (T607
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        renderer.fn.width = originalRendererWidth;
+        renderer.fn.height = originalRendererHeight;
     }
 });
 

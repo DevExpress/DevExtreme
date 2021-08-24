@@ -2797,7 +2797,7 @@ QUnit.module('datebox with time component', {
         const originalWidthFunction = renderer.fn.width;
 
         try {
-            sinon.stub(renderer.fn, 'width').returns(600);
+            renderer.fn.width = ()=>600;
 
             const $element = $('#dateBox').dxDateBox({
                 type: 'datetime',
@@ -2824,7 +2824,7 @@ QUnit.module('datebox with time component', {
         const originalWidthFunction = renderer.fn.width;
 
         try {
-            sinon.stub(renderer.fn, 'width').returns(300);
+            renderer.fn.width = ()=>300;
 
             const $element = $('#dateBox').dxDateBox({
                 type: 'datetime',
@@ -2849,7 +2849,8 @@ QUnit.module('datebox with time component', {
 
     [true, false].forEach((adaptivityEnabledValue) => {
         QUnit.test(`date box should change behavior if adaptivityEnabled option is changed to ${adaptivityEnabledValue} at runtime`, function(assert) {
-            const widthStub = sinon.stub(renderer.fn, 'width').returns(300);
+            const originalRendererWidth = renderer.fn.width;
+            renderer.fn.width = ()=>300;
 
             try {
                 const $element = $('#dateBox').dxDateBox({
@@ -2873,7 +2874,7 @@ QUnit.module('datebox with time component', {
                 assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, (adaptivityEnabledValue ? 1 : 0), timeViewExpectedMessage);
                 assert.strictEqual($clock.length, (adaptivityEnabledValue ? 0 : 1), clockExpectedMessage);
             } finally {
-                widthStub.restore();
+                renderer.fn.width = originalRendererWidth;
             }
         });
     });
@@ -2927,7 +2928,9 @@ QUnit.module('datebox with time component', {
         const LARGE_SCREEN_SIZE = 2000;
         const SMALL_SCREEN_SIZE = 300;
 
-        let stub = sinon.stub(renderer.fn, 'width').returns(LARGE_SCREEN_SIZE);
+        const originalRendererWidth = renderer.fn.width;
+
+        renderer.fn.width = () => LARGE_SCREEN_SIZE;
 
         try {
             const instance = $('#dateBox').dxDateBox({
@@ -2941,13 +2944,12 @@ QUnit.module('datebox with time component', {
 
             instance.close();
 
-            stub.restore();
-            stub = sinon.stub(renderer.fn, 'width').returns(SMALL_SCREEN_SIZE);
+            renderer.fn.width = () => SMALL_SCREEN_SIZE;
 
             instance.open();
             assert.ok(instance._popup.$wrapper().hasClass(DATEBOX_ADAPTIVITY_MODE_CLASS), 'there is the adaptivity class for the small screen');
         } finally {
-            stub.restore();
+            renderer.fn.width = originalRendererWidth;
         }
     });
 

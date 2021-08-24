@@ -496,7 +496,8 @@ QUnit.module('popup options', moduleConfig, () => {
         const editorHeight = this.$element.outerHeight();
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(scrollTopValue);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(windowHeightValue);
+        const originalRendererInnerHeight = renderer.fn.innerHeight;
+        renderer.fn.innerHeight = ()=>windowHeightValue;
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
         const instance = this.$element.dxDropDownBox('instance');
 
@@ -509,7 +510,7 @@ QUnit.module('popup options', moduleConfig, () => {
             assert.roughEqual(Math.floor(maxHeight()), (windowHeightValue - scrollTopValue - editorHeight) * 0.9, 3, 'maxHeight is correct');
         } finally {
             scrollTop.restore();
-            windowHeight.restore();
+            renderer.fn.innerHeight = originalRendererInnerHeight;
             offset.restore();
         }
     });
