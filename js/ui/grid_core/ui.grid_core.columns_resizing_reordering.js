@@ -799,7 +799,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const resizingInfo = this._resizingInfo;
         const columnsController = this._columnsController;
         const visibleColumns = columnsController.getVisibleColumns();
-        const columnsSeparatorWidth = getWidth(this._columnsSeparatorView);
+        const columnsSeparatorWidth = this._columnsSeparatorView.width();
         let contentWidth = this._rowsView.contentWidth();
         const isNextColumnMode = isNextColumnResizingMode(this);
         const adaptColumnWidthByRatio = isNextColumnMode && this.option('adaptColumnWidthByRatio') && !this.option('columnAutoWidth');
@@ -1035,7 +1035,7 @@ const TablePositionViewController = modules.ViewController.inherit({
         const diffOffsetTop = isDefined(top) ? Math.abs(top - offsetTop) : 0;
         const columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0;
         const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
-        const rowsHeight = that._rowsView ? getHeight(that._rowsView) - scrollBarWidth : 0;
+        const rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0;
         const columnsResizerController = that.component.getController('columnsResizer');
         const draggingHeaderView = that.component.getView('draggingHeaderView');
 
