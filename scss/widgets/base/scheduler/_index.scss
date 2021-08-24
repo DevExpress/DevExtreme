@@ -992,6 +992,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-all-day-title-hidden {
     display: none;
+    border: none;
   }
 
   .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
@@ -1000,9 +1001,6 @@ $scheduler-appointment-form-label-padding: 20px;
         display: block;
         background-color: transparent;
         color: transparent;
-        border-left: none;
-        border-right: none;
-        border-bottom: none;
         height: 0;
       }
     }

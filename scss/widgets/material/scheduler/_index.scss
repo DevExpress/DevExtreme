@@ -115,13 +115,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-.dx-scheduler-work-space-week,
-.dx-scheduler-work-space-work-week {
-  .dx-scheduler-all-day-title {
-    top: $material-scheduler-header-height + $material-scheduler-header-panel-table-cell-height;
-  }
-}
-
 .dx-scheduler-all-day-table {
   height: $material-scheduler-all-day-table-cell-height;
 
@@ -252,19 +245,9 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-work-space-day {
-  &:not(.dx-scheduler-work-space-grouped) {
-    .dx-scheduler-all-day-title {
-      top: $material-scheduler-header-height + 1;
-    }
-  }
-
   &.dx-scheduler-work-space-count {
     .dx-scheduler-header-panel {
       margin-top: 0;
-    }
-
-    .dx-scheduler-all-day-title {
-      top: $material-scheduler-header-height + $material-scheduler-header-panel-table-cell-height;
     }
   }
 
