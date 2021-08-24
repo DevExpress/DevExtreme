@@ -58,13 +58,13 @@ test('Navigator can change month when current date interval is more than diff be
   // Navigation `next` must be enabled at default
 
   await t
-    .expect(toolbar.navigator.prevButton.hasClass('dx-state-disabled')).notOk();
+    .expect(toolbar.navigator.nextButton.hasClass('dx-state-disabled')).notOk();
 
   // Navigation `next` must be disabled after change 1 week earlier
 
   await t
-    .click(toolbar.navigator.prevButton)
-    .expect(toolbar.navigator.prevButton.hasClass('dx-state-disabled')).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(toolbar.navigator.nextButton.hasClass('dx-state-disabled')).ok();
 }).before(async () => createScheduler({
   max: new Date(2017, 5, 15),
   currentView: 'month',
