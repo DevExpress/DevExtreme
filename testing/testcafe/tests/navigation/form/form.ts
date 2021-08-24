@@ -11,9 +11,9 @@ fixture`Form`
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/ButtonItem/
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/EmptyItem/
 
-[false, true].forEach((rtlEnabled) => {
-  ['left', 'right', 'top'].forEach((labelLocation) => {
-    [1, 2, 3].forEach((colCount) => {
+[false/* , true */].forEach((rtlEnabled) => {
+  ['left'/* , 'right', 'top' */].forEach((labelLocation) => {
+    [1].forEach((colCount) => { /* , 2, 3 */
       [1, 2, 3, 4, 5, 6].forEach((itemNumber) => {
         const testName = `TextBox_${itemNumber},colCount_${colCount},labelLocation_${labelLocation},rtlEnabled_${rtlEnabled}`;
         test(testName, async (t) => {
