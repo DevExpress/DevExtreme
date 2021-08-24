@@ -130,8 +130,18 @@ export class PdfGrid {
             if(this._pages.indexOf(page) > 0) {
                 doc.addPage();
             }
+
             page._tables.forEach((table) => {
-                table.drawTo(doc, styles);
+                table.drawTo(doc, styles, {
+                    skipDrawingCustomBorders: true
+                });
+            });
+
+            page._tables.forEach((table) => {
+                table.drawTo(doc, styles, {
+                    skipDrawingBorders: true,
+                    skipDrawingCellContent: true
+                });
             });
         });
 

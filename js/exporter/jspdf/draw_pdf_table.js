@@ -3,38 +3,21 @@ import { isDefined } from '../../core/utils/type';
 import { drawLine, drawRect, drawTextInRect } from './pdf_utils';
 
 // this function is large and will grow
-export function drawPdfTable(doc, styles, table) {
+export function drawPdfTable(doc, styles, table, options) {
     if(!isDefined(doc)) {
         throw 'doc is required';
     }
 
-    function specifyCellStyles(cell) {
+    const {
+        skipDrawingBorders,
+        skipDrawingCustomBorders,
+        skipDrawingCellContent
+    } = options ?? {};
+
+    function drawBackColor(doc, cell) {
         if(isDefined(cell.backgroundColor)) {
             doc.setFillColor(cell.backgroundColor);
             drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
-        }
-
-        const borderColor = isDefined(cell.borderColor) ? cell.borderColor : styles.borderColor;
-        if(borderColor !== doc.getDrawColor()) {
-            doc.setDrawColor(borderColor);
-        }
-
-        const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
-        const docFont = doc.getFont();
-        if(
-            font.name !== docFont.fontName ||
-            font.style !== docFont.fontStyle ||
-            isDefined(font.weight) // fontWeight logic, https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line4842
-        ) {
-            doc.setFont(font.name, font.style, font.weight);
-        }
-        if(font.size !== doc.getFontSize()) {
-            doc.setFontSize(font.size);
-        }
-
-        const textColor = isDefined(cell.textColor) ? cell.textColor : styles.textColor;
-        if(textColor !== doc.getTextColor()) {
-            doc.setTextColor(textColor);
         }
     }
 
@@ -82,12 +65,40 @@ export function drawPdfTable(doc, styles, table) {
                 throw 'cell._rect is required';
             }
 
-            specifyCellStyles(cell);
+            if(skipDrawingCellContent !== true) {
+                drawBackColor(doc, cell);
 
-            if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                drawTextInRect(doc, cell.text, cell._rect, cell.textOptions);
+                const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
+                const docFont = doc.getFont();
+                if(
+                    font.name !== docFont.fontName ||
+                        font.style !== docFont.fontStyle ||
+                        isDefined(font.weight) // fontWeight logic, https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line4842
+                ) {
+                    doc.setFont(font.name, font.style, font.weight);
+                }
+                if(font.size !== doc.getFontSize()) {
+                    doc.setFontSize(font.size);
+                }
+
+                const textColor = isDefined(cell.textColor) ? cell.textColor : styles.textColor;
+                if(textColor !== doc.getTextColor()) {
+                    doc.setTextColor(textColor);
+                }
+
+                if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
+                    drawTextInRect(doc, cell.text, cell._rect, cell.textOptions);
+                }
             }
-            drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
+
+            const skipBorder = isDefined(cell.borderColor) ? skipDrawingCustomBorders === true : skipDrawingBorders === true;
+            if(!skipBorder) {
+                const borderColor = isDefined(cell.borderColor) ? cell.borderColor : styles.borderColor;
+                if(borderColor !== doc.getDrawColor()) {
+                    doc.setDrawColor(borderColor);
+                }
+                drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
+            }
         });
     }
 
@@ -98,14 +109,13 @@ export function drawPdfTable(doc, styles, table) {
         throw 'table.rect is required';
     }
 
-    const cells = [].concat(...table.rows).sort((a, b) => {
-        const aValue = isDefined(a.borderColor) ? 1 : 0;
-        const bValue = isDefined(b.borderColor) ? 1 : 0;
-        return aValue - bValue;
-    });
-    drawRow(cells);
+    if(isDefined(table.rows)) {
+        for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
+            drawRow(table.rows[rowIndex]);
+        }
+    }
 
-    if(isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0)) {
+    if(skipDrawingBorders !== true && (isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0))) {
         drawBorder(table.rect);
     }
 }
