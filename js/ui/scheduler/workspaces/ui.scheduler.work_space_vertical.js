@@ -14,6 +14,11 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
             isGenerateTimePanelData: true,
         };
     }
+
+    _isRenderHeaderPanelEmptyCell() {
+        return true;
+    }
+
 }
 
 export default SchedulerWorkspaceVertical;

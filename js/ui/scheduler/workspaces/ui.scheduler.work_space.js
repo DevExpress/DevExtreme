@@ -659,7 +659,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _updateHeaderEmptyCellWidth() {
-        if(hasWindow()) {
+        if(hasWindow() && this._isRenderHeaderPanelEmptyCell()) {
             const timePanelWidth = getBoundingRect(this._$timePanel.get(0)).width;
             const groupPanelWidth = getBoundingRect(this._$groupTable.get(0)).width;
 
@@ -2059,6 +2059,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     // We do not need these methods in renovation
     // --------------
 
+    _isRenderHeaderPanelEmptyCell() {
+        return this._isVerticalGroupedWorkSpace();
+    }
+
     _dispose() {
         super._dispose();
 
@@ -2372,7 +2376,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
 
             this._$headerTablesContainer.append(this._$headerPanel);
-            this._$headerPanelContainer.append(this._$headerPanelEmptyCell, this._$headerTablesContainer);
+            this._appendHeaderPanelEmptyCellIfNecessary();
+            this._$headerPanelContainer.append(this._$headerTablesContainer);
 
             this.$element().append(
                 this._$fixedContainer,
@@ -2383,7 +2388,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTableContainer);
 
             this._$headerTablesContainer.append(this._$headerPanel, this._$allDayPanel);
-            this._$headerPanelContainer.append(this._$headerPanelEmptyCell, this._$headerTablesContainer);
+            this._appendHeaderPanelEmptyCellIfNecessary();
+            this._$headerPanelContainer.append(this._$headerTablesContainer);
 
             this.$element().append(
                 this._$fixedContainer,
@@ -2401,7 +2407,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._createHeaderScrollable();
 
         this._headerScrollable.$content().append(this._$headerPanel);
-        this._$headerPanelContainer.append(this._$headerPanelEmptyCell, this._$headerTablesContainer);
+        this._appendHeaderPanelEmptyCellIfNecessary();
+        this._$headerPanelContainer.append(this._$headerTablesContainer);
 
         this.$element().append(this._$headerPanelContainer);
         this.$element().append(this._$flexContainer);
@@ -2419,6 +2426,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this._sidebarScrollable.$content().append(this._$timePanel);
+    }
+
+    _appendHeaderPanelEmptyCellIfNecessary() {
+        this._isRenderHeaderPanelEmptyCell() && this._$headerPanelContainer.append(this._$headerPanelEmptyCell);
     }
 
     _createHeaderScrollable() {
