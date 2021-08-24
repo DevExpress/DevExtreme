@@ -1,4 +1,4 @@
-import { getHeight, getWidth } from 'utils/size';
+import { getHeight, getWidth } from './utils/size';
 import $ from '../core/renderer';
 import { getWindow, getNavigator, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
