@@ -1411,6 +1411,10 @@ $scheduler-appointment-form-label-padding: 20px;
       position: relative;
     }
 
+    .dx-scheduler-date-table-scrollable {
+      padding-top: $scheduler-header-panel-top-gap;
+    }
+
     .dx-scheduler-time-panel-cell {
       vertical-align: top;
     }
