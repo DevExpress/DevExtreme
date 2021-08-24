@@ -140,20 +140,21 @@ export const getVisibleHeight = function(element) {
     return 0;
 };
 
-export const getWidth = (el) => elementSize(el, 'width');
-export const setWidth = (el, value) => elementSize(el, 'width', value);
-export const getHeight = (el) => elementSize(el, 'height');
-export const setHeight = (el, value) => elementSize(el, 'height', value);
-export const getOuterWidth = (el) => elementSize(el, 'outerWidth');
-export const setOuterWidth = (el, value) => elementSize(el, 'outerWidth', value);
-export const getOuterHeight = (el) => elementSize(el, 'outerHeight');
-export const setOuterHeight = (el, value) => elementSize(el, 'outerHeight', value);
-export const getInnerWidth = (el) => elementSize(el, 'innerWidth');
-export const setInnerWidth = (el, value) => elementSize(el, 'innerWidth', value);
-export const getInnerHeight = (el) => elementSize(el, 'innerHeight');
-export const setInnerHeight = (el, value) => elementSize(el, 'innerHeight', value);
+export const getWidth = function(el, value) { return arguments.length === 1 ? elementSize(el, 'width') : elementSize(el, 'width', value); };
+export const setWidth = function(el, value) { return elementSize(el, 'width', value); };
+export const getHeight = function(el, value) { return arguments.length === 1 ? elementSize(el, 'height') : elementSize(el, 'height', value); };
+export const setHeight = function(el, value) { return elementSize(el, 'height', value); };
+export const getOuterWidth = function(el, value) { return arguments.length === 1 ? elementSize(el, 'outerWidth') : elementSize(el, 'outerWidth', value); };
+export const setOuterWidth = function(el, value) { return elementSize(el, 'outerWidth', value); };
+export const getOuterHeight = function(el, value) { return arguments.length === 1 ? elementSize(el, 'outerHeight') : elementSize(el, 'outerHeight', value); };
+export const setOuterHeight = function(el, value) { return elementSize(el, 'outerHeight', value); };
+export const getInnerWidth = function(el, value) { return arguments.length === 1 ? elementSize(el, 'innerWidth') : elementSize(el, 'innerWidth', value); };
+export const setInnerWidth = function(el, value) { return elementSize(el, 'innerWidth', value); };
+export const getInnerHeight = function(el, value) { return arguments.length === 1 ? elementSize(el, 'innerHeight') : elementSize(el, 'innerHeight', value); };
+export const setInnerHeight = function(el, value) { return elementSize(el, 'innerHeight', value); };
 
 export const elementSize = function(el, sizeProperty, value) {
+    // debugger;
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;
@@ -161,15 +162,13 @@ export const elementSize = function(el, sizeProperty, value) {
     const isGetter = arguments.length === 2 || typeof value === 'boolean';
 
     if(isRenderer(el)) {
-        if(el.length > 1) {
-            if(!isGetter) {
-                for(let innerIndex = 0; innerIndex < el.length; innerIndex++) {
-                    elementSize(el[innerIndex], sizeProperty, value);
-                }
-                return;
+        if(el.length > 1 && !isGetter) {
+            for(let innerIndex = 0; innerIndex < el.length; innerIndex++) {
+                elementSize(el[innerIndex], sizeProperty, value);
             }
-            el = el[0];
+            return;
         }
+        el = el[0];
     }
 
     if(!el) return;
