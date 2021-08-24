@@ -415,14 +415,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-.dx-scheduler-header-panel { // stylelint-disable-line no-duplicate-selectors
-  .dx-scheduler-group-row {
-    &::before {
-      border-right: 1px solid $scheduler-base-border-color;
-    }
-  }
-}
-
 .dx-scheduler-all-day-panel {
   background-color: $scheduler-alldaypanel-bg;
 
@@ -443,11 +435,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   &.dx-scheduler-work-space-grouped {
-    .dx-scheduler-all-day-title {
-      border-top: baseScheduler.$scheduler-base-border;
-    }
-
-
     .dx-scheduler-date-table-cell {
       border-left: baseScheduler.$scheduler-base-border;
     }
@@ -606,10 +593,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-work-space-both-scrollbar {
   .dx-scheduler-all-day-title {
     background-color: $scheduler-alldaypanel-bg;
-
-    &::before {
-      background-color: $scheduler-workspace-background-color,;
-    }
   }
 }
 
