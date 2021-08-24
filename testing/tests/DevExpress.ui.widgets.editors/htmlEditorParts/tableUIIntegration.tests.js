@@ -3,6 +3,7 @@ import 'ui/html_editor';
 
 
 const tableMarkup = '\
+    before table text<br>\
     <table>\
         <tr>\
             <td>0_0 content</td>\
@@ -23,7 +24,7 @@ const tableMarkup = '\
             <td style="text-align: right;">2_3</td>\
         </tr>\
     </table>\
-    <br><br>';
+    <br>after table text';
 
 const { test, module } = QUnit;
 
@@ -34,7 +35,7 @@ module('Table resizing integration', {
 
         this.$element = $('#htmlEditor');
         this.options = {
-            // tableContextMenuEnabled: true,
+            tableContextMenu: { enabled: true },
             value: tableMarkup
         };
 
@@ -52,10 +53,69 @@ module('Table resizing integration', {
         this.clock.restore();
     }
 }, () => {
-    module('table context menu initialization', {}, () => {
-        test('Frame is created for table by default if the tableResizing option is enabled', function(assert) {
-            this.createWidget();
-            assert.ok(true);
-        });
+    test('Context menu should be created on table click', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('td').eq(0);
+        $tableElement.trigger('dxcontextmenu');
+        this.clock.tick();
+        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+
+        assert.ok($contextMenu.length);
+    });
+
+    test('Context menu should not be created on click out of the table', function(assert) {
+        this.createWidget();
+
+        this.$element.find('p').eq(0).trigger('dxcontextmenu');
+        this.clock.tick();
+        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+
+        assert.strictEqual($contextMenu.length, 0);
+    });
+
+    test('Context menu should be one', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('td').eq(0);
+
+        $tableElement.trigger('dxcontextmenu');
+        this.clock.tick();
+
+        this.$element.trigger('dxclick');
+
+        $tableElement.trigger('dxcontextmenu');
+        this.clock.tick();
+
+        $tableElement.trigger('dxcontextmenu');
+        this.clock.tick();
+
+        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+
+        assert.strictEqual($contextMenu.length, 1);
+    });
+
+
+    test('Context menu should have some items and submenu', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('td').eq(0);
+
+        $tableElement.trigger('dxcontextmenu');
+        this.clock.tick();
+
+        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+
+        const $textItems = $contextMenu.find('.dx-menu-item-has-text');
+
+        const $subMenuItems = $contextMenu.find('.dx-menu-item-has-text');
+
+        assert.strictEqual($textItems.length, 2);
+        assert.strictEqual($subMenuItems.length, 2);
+    });
+
+    test('Check context menu item actions', function(assert) {
+        this.createWidget();
+        assert.ok(true);
     });
 });

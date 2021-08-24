@@ -15,18 +15,6 @@ const moduleConfig = {
                     <td>0_2</td>\
                     <td>0_3</td>\
                 </tr>\
-                <tr>\
-                    <td>1_0</td>\
-                    <td>1_1</td>\
-                    <td>1_2</td>\
-                    <td>1_3</td>\
-                </tr>\
-                <tr>\
-                    <td>2_0</td>\
-                    <td>2_1</td>\
-                    <td>2_2</td>\
-                    <td>2_3</td>\
-                </tr>\
             </table>\
             ').appendTo(this.$element);
 
@@ -44,13 +32,6 @@ const moduleConfig = {
             editorInstance: {
                 on: () => {},
                 off: () => {},
-                // addContentInitializedCallback: (callback) => { setTimeout(callback, 0); },
-                // addCleanCallback: () => {},
-                // option: (optionName) => {
-                //     if(optionName === 'rtlEnabled') {
-                //         return false;
-                //     }
-                // },
                 $element: () => this.$element,
                 _createComponent: ($element, widget, options) => new widget($element, options),
                 _getContent: () => this.$element,
@@ -61,9 +42,6 @@ const moduleConfig = {
         this.attachSpies = (instance) => {
             this.attachEventsSpy = sinon.spy(instance, '_attachEvents');
             this.detachEventsSpy = sinon.spy(instance, '_detachEvents');
-            // this.createFrameSpy = sinon.spy(instance, '_createResizeFrames');
-            // this.updateFrameSpy = sinon.spy(instance, '_updateFramePosition');
-            // this.detachSeparatorEventsSpy = sinon.spy(instance, '_detachSeparatorEvents');
         };
 
     },
@@ -77,37 +55,17 @@ const { test, module } = QUnit;
 module('Table UI module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const tableUIInstance = new TableUI(this.quillMock, this.options);
-
-        // this.clock.tick();
-        // assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 0, 'There is no resize frame element');
-        assert.notOk(tableUIInstance.enabled, 'module is disabled if option is not defined');
-    });
-
-    test('create module instance with enabled: false', function(assert) {
-        this.options.enabled = true;
-        const tableUIInstance = new TableUI(this.quillMock, this.options);
-
-        // assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 1, 'There is resize frame element');
-        assert.ok(tableUIInstance.enabled, 'module is enabled if the option is defined as true');
-    });
-
-
-    test('events should be attached on module init', function(assert) {
-        const tableUIInstance = new TableUI(this.quillMock, this.options);
-
         this.attachSpies(tableUIInstance);
 
+        assert.notOk(tableUIInstance.enabled, 'module is disabled if option is not defined');
         assert.strictEqual(this.attachEventsSpy.callCount, 0, 'Events are not attached on module initialization');
     });
 
-    test('events should be attached on module init if the option is true', function(assert) {
+    test('create enabled module instance', function(assert) {
         this.options.enabled = true;
         const tableUIInstance = new TableUI(this.quillMock, this.options);
 
-        this.attachSpies(tableUIInstance);
-
-        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are not detached on module initialization');
-        assert.strictEqual(this.attachEventsSpy.callCount, 0, 'Events are attached on module initialization');
+        assert.ok(tableUIInstance.enabled, 'module is enabled if the option is defined as true');
     });
 
     test('events should be attached on module init if the option is enabled at runtime', function(assert) {
@@ -128,6 +86,4 @@ module('Table UI module', moduleConfig, () => {
 
         assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module deinitialization at runtime');
     });
-
-
 });

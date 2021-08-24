@@ -48,7 +48,7 @@ const HtmlEditor = Editor.inherit({
             tableResizing: null,
             mentions: null,
             customizeModules: null,
-            tableContextMenuEnabled: true,
+            tableContextMenu: null,
             allowSoftLineBreak: false,
 
             formDialogOptions: null,
@@ -295,7 +295,7 @@ const HtmlEditor = Editor.inherit({
             // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
             tableResizing: this._getModuleConfigByOption('tableResizing'),
-            tableContextMenu: this._getModuleConfigByOption('tableContextMenuEnabled'),
+            tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
                 onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
@@ -484,9 +484,9 @@ const HtmlEditor = Editor.inherit({
             case 'formDialogOptions':
                 this._renderFormDialog();
                 break;
-            case 'tableContextMenuEnabled':
-                if(this._quillInstance?.getModule('tableResizing')) {
-                    this._quillInstance?.getModule('tableResizing').option(args.name, args.value);
+            case 'tableContextMenu':
+                if(this._quillInstance?.getModule('tableContextMenu')) {
+                    this._quillInstance?.getModule('tableContextMenu').option(args.name, args.value);
                 } else {
                     this._invalidate();
                 }

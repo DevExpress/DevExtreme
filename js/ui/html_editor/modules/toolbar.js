@@ -20,6 +20,8 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
+import { showCellProperties, showTableProperties, getTableOperationHandler } from './tableOperations';
+
 let ToolbarModule = BaseModule;
 
 if(Quill) {
@@ -184,15 +186,15 @@ if(Quill) {
                 superscript: this._prepareShortcutHandler('script', 'super'),
                 subscript: this._prepareShortcutHandler('script', 'sub'),
                 insertTable: this._prepareInsertTableHandler(),
-                insertRowAbove: this._getTableOperationHandler('insertRowAbove'),
-                insertRowBelow: this._getTableOperationHandler('insertRowBelow'),
-                insertColumnLeft: this._getTableOperationHandler('insertColumnLeft'),
-                insertColumnRight: this._getTableOperationHandler('insertColumnRight'),
-                deleteColumn: this._getTableOperationHandler('deleteColumn'),
-                deleteRow: this._getTableOperationHandler('deleteRow'),
-                deleteTable: this._getTableOperationHandler('deleteTable'),
-                cellProperties: () => {},
-                tableProperties: () => {}
+                insertRowAbove: getTableOperationHandler(this.quill, 'insertRowAbove'),
+                insertRowBelow: getTableOperationHandler(this.quill, 'insertRowBelow'),
+                insertColumnLeft: getTableOperationHandler(this.quill, 'insertColumnLeft'),
+                insertColumnRight: getTableOperationHandler(this.quill, 'insertColumnRight'),
+                deleteColumn: getTableOperationHandler(this.quill, 'deleteColumn'),
+                deleteRow: getTableOperationHandler(this.quill, 'deleteRow'),
+                deleteTable: getTableOperationHandler(this.quill, 'deleteTable'),
+                cellProperties: () => { showCellProperties(); },
+                tableProperties: () => { showTableProperties(); }
             };
         }
 
