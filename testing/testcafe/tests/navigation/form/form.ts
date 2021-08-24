@@ -30,7 +30,7 @@ fixture`Form`
           colCount,
           rtlEnabled,
           labelLocation,
-          items: Array(itemNumber).fill(null).map((_, i) => ({ dataField: `TextBox_${i}` })),
+          items: Array(itemNumber).fill(null).map((_, i) => ({ dataField: `TextBox_${i + 1}` })),
         }));
       });
     });
