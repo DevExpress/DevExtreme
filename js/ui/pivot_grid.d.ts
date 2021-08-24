@@ -583,7 +583,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       /**
        * @docid
        * @type_function_param1 state:object
-       * @return void
+       * @type_function_return void
        */
       customSave?: ((state: any) => any);
       /**
