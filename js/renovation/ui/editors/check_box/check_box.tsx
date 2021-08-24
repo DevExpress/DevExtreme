@@ -5,21 +5,16 @@ import {
   OneWay,
   TwoWay,
   Ref,
-  Effect,
   RefObject,
   Fragment,
   Method,
 } from '@devextreme-generator/declarations';
-import { createDefaultOptionRules } from '../../../core/options/utils';
-import getElementComputedStyle from '../../utils/get_computed_style';
-import { isMaterial, current } from '../../../ui/themes';
-import devices from '../../../core/devices';
-import { Editor, EditorProps } from './internal/editor';
-import BaseComponent from '../../component_wrapper/editors/check_box';
-import { normalizeStyleProp } from '../../../core/utils/style';
-import { combineClasses } from '../../utils/combine_classes';
-import { EffectReturn } from '../../utils/effect_return.d';
-import { hasWindow } from '../../../core/utils/window';
+import { createDefaultOptionRules } from '../../../../core/options/utils';
+import devices from '../../../../core/devices';
+import { Editor, EditorProps } from '../internal/editor';
+import BaseComponent from '../../../component_wrapper/editors/check_box';
+import { combineClasses } from '../../../utils/combine_classes';
+import { CheckBoxIcon } from './check_box_icon';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -49,8 +44,8 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       disabled, readOnly, visible,
       width, height,
       onFocusIn,
+      iconSize,
     },
-    iconRef, iconStyles,
     restAttributes,
     cssClasses: classes, aria,
     onWidgetClick: onClick, keyDown: onKeyDown,
@@ -89,7 +84,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <input type="hidden" value={`${value}`} {...name && { name }} />
         <div className="dx-checkbox-container">
-          <span className="dx-checkbox-icon" ref={iconRef} style={iconStyles} />
+          <CheckBoxIcon size={iconSize} />
           {text && (<span className="dx-checkbox-text">{text}</span>)}
         </div>
       </Fragment>
@@ -131,8 +126,6 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Ref() editorRef!: RefObject<Editor>;
 
-  @Ref() iconRef!: RefObject<HTMLDivElement>;
-
   @Method()
   focus(): void {
     this.editorRef.current!.focus();
@@ -141,35 +134,6 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Method()
   blur(): void {
     this.editorRef.current!.blur();
-  }
-
-  @Effect()
-  updateIconFontSize(): EffectReturn {
-    const iconElement = this.iconRef?.current;
-    const { iconSize } = this.props;
-
-    if (iconElement && hasWindow()) {
-      const isCompactTheme = current()?.includes('compact');
-      const defaultFontSize = isCompactTheme ? 12 : 16;
-      const isMaterialTheme = isMaterial(current());
-      let defaultIconSize = isMaterialTheme ? 18 : 22;
-      if (isCompactTheme) {
-        defaultIconSize = 16;
-      }
-      const iconFontSizeRatio = defaultFontSize / defaultIconSize;
-
-      const getIconComputedStyle = (): CSSStyleDeclaration => {
-        const computedStyle = getElementComputedStyle(iconElement) ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` } as CSSStyleDeclaration;
-        return computedStyle;
-      };
-
-      const computedIconSize = typeof iconSize === 'number' ? iconSize : parseInt(getIconComputedStyle().width, 10);
-      const computedFontSize = `${Math.ceil(computedIconSize * iconFontSizeRatio)}px`;
-
-      iconElement.style.fontSize = computedFontSize;
-    }
-
-    return undefined;
   }
 
   onWidgetClick(event: Event): void {
@@ -201,14 +165,6 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
 
     return undefined;
-  }
-
-  get iconStyles(): { [key: string]: string | number } {
-    const { iconSize } = this.props;
-    const width = normalizeStyleProp('width', iconSize);
-    const height = normalizeStyleProp('height', iconSize);
-
-    return { height, width };
   }
 
   get cssClasses(): string {

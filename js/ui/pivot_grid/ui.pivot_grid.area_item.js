@@ -607,9 +607,9 @@ export const AreaItem = Class.inherit({
         if(scrollable) {
             if(this.option('rtlEnabled')) {
                 if(this._getAreaName() === 'column') {
-                    scrollablePos = this._getMaxLeftOffset(scrollable) - pos;
+                    scrollablePos = this._getMaxLeftOffset(scrollable) - pos.left;
                 } else if(this._getAreaName() === 'data') {
-                    scrollablePos = { x: this._getMaxLeftOffset(scrollable) - pos.x, y: pos.y };
+                    scrollablePos = { left: this._getMaxLeftOffset(scrollable) - pos.left, top: pos.top };
                 }
             }
             scrollable.scrollTo(scrollablePos);

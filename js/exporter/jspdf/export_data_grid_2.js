@@ -58,7 +58,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 let rowHeight = isDefined(currentRowInfo.rowHeight)
                     ? currentRowInfo.rowHeight
-                    : calculateRowHeight(doc, currentRowInfo.cellsInfo);
+                    : calculateRowHeight(doc, currentRowPdfCells);
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);

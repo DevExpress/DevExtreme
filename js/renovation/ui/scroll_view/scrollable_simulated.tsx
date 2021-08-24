@@ -83,6 +83,7 @@ import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { getDevicePixelRatio } from './utils/get_device_pixel_ratio';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
+import { clampIntoRange } from './utils/clamp_into_range';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -340,8 +341,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Method()
   release(): void {
     this.updateSizes();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.releaseHandler() as undefined);
+
+    this.hScrollbarRef.current?.releaseHandler();
+    this.vScrollbarRef.current?.releaseHandler();
   }
 
   @Method()
@@ -351,8 +353,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    const { direction } = this.props;
-    const distance = getOffsetDistance(targetLocation, direction, this.scrollOffset());
+    const distance = getOffsetDistance(targetLocation, this.props.direction, this.scrollOffset());
 
     this.scrollBy(distance);
   }
@@ -557,37 +558,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     this.updateHandler();
-
     this.prepareDirections(true);
     this.onStart();
 
-    this.eventHandler(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (scrollbar: any): void => scrollbar.scrollByHandler({
-        x: this.calcScrollByDeltaX(left),
-        y: this.calcScrollByDeltaY(top),
-      }) as undefined,
+    const scrollOffset = this.scrollOffset();
+
+    this.hScrollbarRef.current?.scrollTo(
+      clampIntoRange(scrollOffset.left + left, getScrollLeftMax(this.containerElement), 0),
     );
-  }
-
-  calcScrollByDeltaY(top: number): number {
-    if (this.direction.isVertical) {
-      const scrollbar = this.vScrollbarRef.current!;
-
-      return scrollbar.getLocationWithinRange(top + this.vScrollLocation) - this.vScrollLocation;
-    }
-
-    return top;
-  }
-
-  calcScrollByDeltaX(left: number): number {
-    if (this.direction.isHorizontal) {
-      const scrollbar = this.hScrollbarRef.current!;
-
-      return scrollbar.getLocationWithinRange(left + this.hScrollLocation) - this.hScrollLocation;
-    }
-
-    return left;
+    this.vScrollbarRef.current?.scrollTo(
+      clampIntoRange(scrollOffset.top + top, getScrollTopMax(this.containerElement), 0),
+    );
   }
 
   updateHandler(): void {
@@ -733,17 +714,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     const crossThumbScrolling = this.isCrossThumbScrolling(event);
 
-    this.eventHandler(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (scrollbar: any): void => scrollbar.initHandler(event, crossThumbScrolling) as undefined,
-    );
+    this.hScrollbarRef.current?.initHandler(event, crossThumbScrolling);
+    this.vScrollbarRef.current?.initHandler(event, crossThumbScrolling);
   }
 
   handleStart(event: DxMouseEvent): void {
     this.eventForUserAction = event;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.startHandler() as undefined);
+    this.hScrollbarRef.current?.startHandler();
+    this.vScrollbarRef.current?.startHandler();
 
     this.onStart();
   }
@@ -759,31 +738,28 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.moveHandler(e.delta) as undefined);
+    this.hScrollbarRef.current?.moveHandler(e.delta);
+    this.vScrollbarRef.current?.moveHandler(e.delta);
   }
 
   handleEnd(event: DxMouseEvent): void {
     this.adjustDistance(event, 'velocity');
     this.eventForUserAction = event;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.endHandler(
-      event.velocity,
-      true,
-    ) as undefined);
+
+    this.hScrollbarRef.current?.endHandler(event.velocity, true);
+    this.vScrollbarRef.current?.endHandler(event.velocity, true);
   }
 
   handleStop(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.stopHandler() as undefined);
+    this.hScrollbarRef.current?.stopHandler();
+    this.vScrollbarRef.current?.stopHandler();
   }
 
   handleCancel(event: DxMouseEvent): void {
     this.eventForUserAction = event;
-    this.eventHandler(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (scrollbar: any): void => scrollbar.endHandler({ x: 0, y: 0 }, false) as undefined,
-    );
+
+    this.hScrollbarRef.current?.endHandler({ x: 0, y: 0 }, false);
+    this.vScrollbarRef.current?.endHandler({ x: 0, y: 0 }, false);
   }
 
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
@@ -827,25 +803,30 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     this.prepareDirections(false);
 
+    const { target } = event.originalEvent;
+
     if (this.direction.isVertical) {
-      const isValid = this.validateEvent(event, this.vScrollbarRef.current!);
-      this.validDirections[DIRECTION_VERTICAL] = isValid;
+      const scrollbar = this.vScrollbarRef.current!;
+
+      this.validDirections[DIRECTION_VERTICAL] = this.validateEvent(
+        this.isContent(target),
+        scrollbar.isScrollbar(target),
+        scrollbar.isThumb(target),
+      );
     }
     if (this.direction.isHorizontal) {
-      const isValid = this.validateEvent(event, this.hScrollbarRef.current!);
-      this.validDirections[DIRECTION_HORIZONTAL] = isValid;
+      const scrollbar = this.hScrollbarRef.current!;
+      this.validDirections[DIRECTION_HORIZONTAL] = this.validateEvent(
+        this.isContent(target),
+        scrollbar.isScrollbar(target),
+        scrollbar.isThumb(target),
+      );
     }
   }
 
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  validateEvent(event: DxMouseEvent, scrollbarRef: any): boolean {
-    const { scrollByThumb, scrollByContent } = this.props;
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (scrollByThumb && scrollbarRef.validateEvent(event))
-    || (scrollByContent && this.isContent(event.originalEvent.target));
+  validateEvent(isContent: boolean, isScrollbar: boolean, isThumb: boolean): boolean {
+    return (this.props.scrollByThumb && (isScrollbar || isThumb))
+    || (this.props.scrollByContent && isContent);
   }
 
   prepareDirections(value: boolean): void {
@@ -861,17 +842,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     return false;
-  }
-
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  eventHandler(handler: (scrollbarInstance: any) => void): void {
-    if (this.direction.isHorizontal) {
-      handler(this.hScrollbarRef.current!);
-    }
-    if (this.direction.isVertical) {
-      handler(this.vScrollbarRef.current!);
-    }
   }
 
   tryGetAllowedDirection(event: DxMouseWheelEvent): ScrollableDirection | undefined {
@@ -911,7 +881,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   validateWheel(event: DxMouseWheelEvent): boolean {
-    const scrollbar = this.wheelDirection(event) === 'horizontal'
+    const scrollbar = this.wheelDirection(event) === DIRECTION_HORIZONTAL
       ? this.hScrollbarRef.current!
       : this.vScrollbarRef.current!;
 
