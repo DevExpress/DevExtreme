@@ -12,8 +12,9 @@ fixture`Form`
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/EmptyItem/
 
 // TODO: cancel-in-progress: false
+// TODO: ARGS: [ --componentFolder=navigation ]
 
-[true].forEach((rtlEnabled) => { // TODO: false, true
+[false, true].forEach((rtlEnabled) => { // TODO: false, true
   ['left', 'right', 'top'].forEach((labelLocation) => { // TODO: 'left', 'right', 'top'
     [1, 2, 3].forEach((colCount) => {
       [1, 2, 3, 4, 5, 6].forEach((itemNumber) => {
