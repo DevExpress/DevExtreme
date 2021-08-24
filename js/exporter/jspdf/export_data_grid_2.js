@@ -22,6 +22,7 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
+            const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
             const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
 
             pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
@@ -37,7 +38,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 const currentRowPdfCells = [];
                 currentRowInfo.cellsInfo.forEach(cellInfo => {
-                    const pdfCell = createPdfCell(cellInfo);
+                    const pdfCell = createPdfCell(cellInfo, wordWrapEnabled);
                     if(options.customizeCell) {
                         options.customizeCell({ gridCell: cellInfo.gridCell, pdfCell });
                     }
@@ -58,7 +59,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 let rowHeight = isDefined(currentRowInfo.rowHeight)
                     ? currentRowInfo.rowHeight
-                    : calculateRowHeight(doc, currentRowPdfCells);
+                    : calculateRowHeight(doc, currentRowPdfCells, options.columnWidths);
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);
