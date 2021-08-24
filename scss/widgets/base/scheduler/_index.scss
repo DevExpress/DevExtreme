@@ -1407,6 +1407,10 @@ $scheduler-appointment-form-label-padding: 20px;
       height: 0;
     }
 
+    .dx-scheduler-agenda-date-table-container {
+      position: relative;
+    }
+
     .dx-scheduler-time-panel-cell {
       vertical-align: top;
     }

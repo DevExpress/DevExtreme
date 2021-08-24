@@ -875,8 +875,7 @@ module('Integration: Agenda', moduleConfig, () => {
         const agenda = instance.getWorkSpace();
         const rowHeight = 77;
         const $element = instance.$element();
-        const timePanelWidth = $element.find('.dx-scheduler-time-panel').outerWidth();
-        const expectedWidth = $element.find('.dx-scheduler-date-table').outerWidth() - timePanelWidth;
+        const expectedWidth = $element.find('.dx-scheduler-date-table').outerWidth();
         const agendaStub = sinon.stub(agenda, '_getRowHeight').returns(rowHeight);
 
         try {
