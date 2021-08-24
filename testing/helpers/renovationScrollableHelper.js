@@ -17,17 +17,10 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
             reRender();
         };
 
-        const updateScrollbarSize = scrollable.updateScrollbarSize;
+        // const updateScrollbarSize = scrollable.updateScrollbarSize;
 
-        scrollable.updateScrollbarSize = function() {
-            updateScrollbarSize.apply(this, arguments);
-            reRender();
-        };
-
-        // const handleScroll = scrollable.handleScroll;
-
-        // scrollable.handleScroll = function() {
-        //     handleScroll.apply(this, arguments);
+        // scrollable.updateScrollbarSize = function() {
+        //     updateScrollbarSize.apply(this, arguments);
         //     reRender();
         // };
 
