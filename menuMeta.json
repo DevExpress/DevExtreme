@@ -1050,7 +1050,6 @@
           {
             "Title": "Running Totals",
             "Name": "RunningTotals",
-            "DocUrl": "ApiReference/Data_Layer/PivotGridDataSource/Configuration/fields/#runningTotal",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
