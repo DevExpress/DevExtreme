@@ -64,7 +64,7 @@ class App extends React.Component {
           <TextArea
             height={90}
             value={this.state.valueForEditableTestArea}
-            readonly={true}
+            readOnly={true}
             valueChangeEvent={this.state.eventValue} />
         </div>
       </React.Fragment>
