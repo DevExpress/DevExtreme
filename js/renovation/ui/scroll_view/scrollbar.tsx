@@ -35,6 +35,7 @@ import { ScrollableProps } from './scrollable_props';
 import { BaseWidgetProps } from '../common/base_props';
 import { inRange } from '../../../core/utils/math';
 import { DxMouseEvent } from './types.d';
+import { clampIntoRange } from './utils/clamp_into_range';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
 export const THUMB_MIN_SIZE = 15;
@@ -149,18 +150,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  validateEvent(event: DxMouseEvent): boolean {
-    const { target } = event.originalEvent;
-
-    return this.isThumb(target) || this.isScrollbar(target);
-  }
-
-  @Method()
-  getLocationWithinRange(value: number): number {
-    return Math.max(Math.min(value, this.maxOffset), this.minOffset);
-  }
-
-  @Method()
   getMinOffset(): number {
     return this.minOffset;
   }
@@ -227,8 +216,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  scrollByHandler(delta: { x: number; y: number }): void {
-    this.scrollBy(delta);
+  scrollTo(value: number): void {
+    this.moveTo(-value);
     this.needRiseEnd = true;
     this.stopScrolling();
   }
@@ -253,11 +242,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   scrollStep(delta: number): void {
+    const moveToValue = this.props.scrollLocation + delta;
+
     /* istanbul ignore next */
     if (this.props.bounceEnabled) {
-      this.moveTo(this.props.scrollLocation + delta);
+      this.moveTo(moveToValue);
     } else {
-      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation + delta));
+      this.moveTo(clampIntoRange(moveToValue, this.maxOffset, this.minOffset));
     }
   }
 
@@ -407,7 +398,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       this.prevContainerSize = this.props.containerSize;
 
       if (this.props.scrollLocation <= this.maxOffset) {
-        let newScrollLocation = this.getLocationWithinRange(this.props.scrollLocation);
+        let newScrollLocation = clampIntoRange(
+          this.props.scrollLocation, this.maxOffset, this.minOffset,
+        );
 
         if (this.isHorizontal && this.props.rtlEnabled) {
           newScrollLocation = this.minOffset - this.rightScrollLocation;
