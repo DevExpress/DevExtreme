@@ -8,7 +8,7 @@ import { DataGridEditing, DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
-import { getUpdatedOptions } from '../utils/get_updated_options';
+import { getUpdatedOptions } from '../../../common/utils/get_updated_options';
 import { convertRulesToOptions } from '../../../../../core/options/utils';
 import devices from '../../../../../core/devices';
 import { current } from '../../../../../ui/themes';
@@ -43,7 +43,7 @@ jest.mock('../datagrid_component', () => ({
     return component;
   }),
 }));
-jest.mock('../utils/get_updated_options');
+jest.mock('../../../common/utils/get_updated_options');
 jest.mock('../../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../../core/devices').default;
   const real = actualDevices.real.bind(actualDevices);

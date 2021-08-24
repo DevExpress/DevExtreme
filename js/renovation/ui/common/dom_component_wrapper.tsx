@@ -17,6 +17,7 @@ import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback';
 import { renderTemplate } from '../../utils/render_template';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { getUpdatedOptions } from './utils/get_updated_options';
 
 export const viewFunction = ({
   widgetRef,
@@ -57,6 +58,8 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Mutable()
   instance!: DomComponent | null;
 
+  @Mutable() prevProps!: Record<string, unknown>;
+
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
@@ -88,7 +91,18 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
 
   @Effect()
   updateWidget(): void {
-    this.getInstance()?.option(this.properties);
+    const instance = this.getInstance();
+    if (!instance) {
+      return;
+    }
+
+    const updatedOptions = getUpdatedOptions(this.prevProps || {}, this.properties);
+    if (updatedOptions.length) {
+      instance.beginUpdate();
+      updatedOptions.forEach(({ path, value }) => { instance.option(path, value); });
+      instance.endUpdate();
+    }
+    this.prevProps = this.properties;
   }
 
   get properties(): Record<string, unknown> {
