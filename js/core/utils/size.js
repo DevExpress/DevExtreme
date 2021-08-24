@@ -154,7 +154,6 @@ export const getInnerHeight = function(el, value) { return arguments.length === 
 export const setInnerHeight = function(el, value) { return elementSize(el, 'innerHeight', value); };
 
 export const elementSize = function(el, sizeProperty, value) {
-    // debugger;
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;

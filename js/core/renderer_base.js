@@ -167,7 +167,7 @@ initRender.prototype.toggleClass = function(className, value) {
 
 ['width', 'height', 'outerWidth', 'outerHeight', 'innerWidth', 'innerHeight'].forEach(function(methodName) {
     initRender.prototype[methodName] = function(value) {
-        const result = elementSize(this, methodName, value);
+        const result = arguments.length ? elementSize(this, methodName, value) : elementSize(this, methodName);
 
         if(arguments.length === 0 || typeof value === 'boolean') {
             return result;

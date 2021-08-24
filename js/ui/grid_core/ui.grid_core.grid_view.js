@@ -595,7 +595,7 @@ const ResizingController = modules.ViewController.inherit({
         }
 
         deferRender(function() {
-            setHeight(rowsView, null, hasHeight);
+            rowsView.height(null, hasHeight);
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
