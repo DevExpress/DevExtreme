@@ -943,8 +943,6 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
   }
 
   .dx-#{$widget-name}-pager {
-    border-top: 3px double $datagrid-border-color;
-
     .dx-page,
     .dx-page-size,
     .dx-navigate-button {
