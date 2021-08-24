@@ -5,16 +5,26 @@ function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
-function calculateTextHeight(doc, text) {
-    return doc.getTextDimensions(text).h * doc.getLineHeightFactor();
+function getTextLines(text) {
+    return text.split('\n');
+}
+
+function calculateTextHeight(doc, text, font) {
+    const height = doc.getTextDimensions(text, {
+        fontSize: font?.size || doc.getFontSize()
+    }).h;
+
+    const linesCount = getTextLines(text).length;
+    return height * linesCount * doc.getLineHeightFactor();
 }
 
 function calculateRowHeight(doc, cells) {
     let rowHeight = 0;
     for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
         const cellText = cells[cellIndex].text;
+        const font = cells[cellIndex].font;
         if(isDefined(cellText)) {
-            const cellHeight = calculateTextHeight(doc, cellText);
+            const cellHeight = calculateTextHeight(doc, cellText, font);
             if(rowHeight < cellHeight) {
                 rowHeight = cellHeight;
             }
@@ -36,10 +46,10 @@ function drawRect(doc, x, y, width, height, style) {
 }
 
 function drawTextInRect(doc, text, rect, options) {
-    const textArray = text.split('\n');
+    const textArray = getTextLines(text);
     const linesCount = textArray.length;
 
-    const heightOfOneLine = calculateTextHeight(doc, textArray[0]);
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont());
 
     // TODO: check lineHeightFactor - https://github.com/MrRio/jsPDF/issues/3234
     const y = rect.y + (rect.h / 2)
