@@ -1941,9 +1941,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRAllDayPanel() {
-        const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
+        const visible = this.isAllDayPanelVisible && !this.isGroupedAllDayPanel();
 
-        if(this.supportAllDayRow() && !this._isVerticalGroupedWorkSpace()) {
+        if(visible) {
             this._toggleAllDayVisibility(false);
 
             const options = {

@@ -435,6 +435,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   &.dx-scheduler-work-space-grouped {
+    .dx-scheduler-all-day-title {
+      border-top: baseScheduler.$scheduler-base-border;
+    }
+
     .dx-scheduler-date-table-cell {
       border-left: baseScheduler.$scheduler-base-border;
     }

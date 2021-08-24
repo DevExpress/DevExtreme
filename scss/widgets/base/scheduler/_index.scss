@@ -426,6 +426,10 @@ $scheduler-appointment-form-label-padding: 20px;
     float: left;
 
     &.dx-scheduler-timeline-month:not(.dx-scheduler-agenda) {
+      .dx-scheduler-all-day-title {
+        border-top: $scheduler-base-border;
+      }
+
       .dx-scheduler-date-table-cell {
         border-right: none;
       }
@@ -569,6 +573,17 @@ $scheduler-appointment-form-label-padding: 20px;
         border-left: none;
         border-right: none;
       }
+
+      &:not(.dx-scheduler-work-space-grouped) {
+        .dx-scheduler-header-panel-empty-cell {
+          border-right: none;
+        }
+
+        .dx-scheduler-all-day-table-cell {
+          border-top: none;
+          border-left: none;
+        }
+      }
     }
 
     &:not(.dx-scheduler-work-space-grouped) {
@@ -591,12 +606,11 @@ $scheduler-appointment-form-label-padding: 20px;
     border-top: $scheduler-base-border;
   }
 
-  .dx-scheduler-work-space-day { // stylelint-disable-line no-duplicate-selectors
-    &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
-      .dx-scheduler-all-day-table-cell {
-        border-top: none;
-        border-left: none;
-      }
+  .dx-scheduler-work-space-week,
+  .dx-scheduler-work-space-work-week,
+  .dx-scheduler-work-space-day.dx-scheduler-work-space-count {
+    .dx-scheduler-all-day-title {
+      border-top: $scheduler-base-border;
     }
   }
 
@@ -952,6 +966,10 @@ $scheduler-appointment-form-label-padding: 20px;
         height: 0;
       }
     }
+
+    &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
+      border: none;
+    }
   }
 
   .dx-scheduler-work-space-both-scrollbar {
@@ -962,6 +980,10 @@ $scheduler-appointment-form-label-padding: 20px;
 
     .dx-scheduler-all-day-panel {
       margin-left: 0;
+    }
+
+    .dx-scheduler-all-day-title {
+      border-right: $scheduler-base-border;
     }
 
     .dx-scheduler-date-table {
@@ -1033,6 +1055,7 @@ $scheduler-appointment-form-label-padding: 20px;
     position: relative;
     line-height: $scheduler-all-day-table-cell-height;
     text-align: center;
+    border-bottom: 2px solid $scheduler-base-border-color;
 
     @include user-select(none);
 
@@ -1570,6 +1593,8 @@ $scheduler-appointment-form-label-padding: 20px;
         top: 0;
         height: 50px !important; // stylelint-disable-line declaration-no-important
         line-height: 50px !important; // stylelint-disable-line declaration-no-important
+        border-bottom: none;
+        border-right: none;
       }
     }
 
@@ -1645,6 +1670,10 @@ $scheduler-appointment-form-label-padding: 20px;
       border-right: none;
     }
 
+    &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
+      border-left: none;
+    }
+
     .dx-scheduler-work-space-vertical-grouped .dx-scheduler-group-row:last-child {
       border-right: none;
       border-left: $scheduler-base-border;
@@ -1710,6 +1739,16 @@ $scheduler-appointment-form-label-padding: 20px;
       }
     }
 
+    .dx-scheduler-work-space-day {
+      &:not(.dx-scheduler-work-space-count) {
+        &:not(.dx-scheduler-work-space-grouped) {
+          .dx-scheduler-header-panel-empty-cell {
+            border-left: none;
+          }
+        }
+      }
+    }
+
     .dx-scheduler-work-space-week .dx-scheduler-all-day-table-cell,
     .dx-scheduler-work-space-work-week .dx-scheduler-all-day-table-cell {
       border-right: $scheduler-base-border;
@@ -1717,6 +1756,11 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     &.dx-scheduler-work-space-both-scrollbar {
+      .dx-scheduler-all-day-title {
+        border-left: $scheduler-base-border;
+        border-right: none;
+      }
+
       .dx-scheduler-time-panel {
         border-left: $scheduler-base-border;
         border-right: none;

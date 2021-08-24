@@ -194,6 +194,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
   &.dx-scheduler-work-space-grouped {
+    .dx-scheduler-all-day-title {
+      border-top: baseScheduler.$scheduler-base-border;
+    }
+
     .dx-scheduler-date-table-cell {
       border-left: baseScheduler.$scheduler-base-border;
     }
