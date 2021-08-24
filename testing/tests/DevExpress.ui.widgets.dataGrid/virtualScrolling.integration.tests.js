@@ -3852,6 +3852,52 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.strictEqual(dataGrid.getView('footerView').element().children().scrollLeft(), footerScrollLeft, 'scrollLeft restored');
     });
+
+    ['virtual', 'infinite'].forEach(scrollingMode => {
+        QUnit.testInActiveWindow(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, function(assert) {
+            // arrange
+            const getData = function(count) {
+                const items = [];
+                for(let i = 0; i < count; i++) {
+                    items.push({
+                        ID: i + 1,
+                        Name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const itemsCount = 30;
+            const dataGrid = createDataGrid({
+                dataSource: getData(itemsCount),
+                keyExpr: 'ID',
+                focusedRowEnabled: true,
+                focusedRowIndex: 20,
+                scrolling: {
+                    mode: scrollingMode,
+                    useNative: false,
+                    minGap: 10
+                }
+            });
+            this.clock.tick(300);
+
+            let visibleRowsCount = dataGrid.getVisibleRows().length;
+            let $rowElement = $(dataGrid.getRowElement(20));
+
+            // assert
+            assert.equal(visibleRowsCount, itemsCount, 'initial items count');
+            assert.ok($rowElement.hasClass('dx-row-focused'), 'initial focused row');
+
+            // act
+            dataGrid.getDataSource().reload();
+            this.clock.tick(300);
+            visibleRowsCount = dataGrid.getVisibleRows().length;
+            $rowElement = $(dataGrid.getRowElement(20));
+
+            // assert
+            assert.equal(visibleRowsCount, itemsCount, 'final items count');
+            assert.ok($rowElement.hasClass('dx-row-focused'), 'final focused row');
+        });
+    });
 });
 
 
