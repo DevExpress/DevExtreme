@@ -3903,7 +3903,6 @@ QUnit.module('Async tests', {}, () => {
         dataSourceLoadedDeferred.promise().done(() => {
             const scrollableContentTop = $scrollableContent.position().top;
             list.scrollToItem(selectedItem);
-
             const expectedScrollableContentTop = $scrollableContent.position().top;
             assert.equal(scrollableContentTop, expectedScrollableContentTop, 'list is scrolled to the selected item');
 
