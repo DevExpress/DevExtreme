@@ -68,7 +68,7 @@ function drawTextInRect(doc, text, rect, wordWrapEnabled, options) {
 
     // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
     const textOptions = extend({ baseline: 'middle' }, options);
-    doc.text(textArray, round(rect.x), round(y), textOptions);
+    doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
 export { calculateRowHeight, drawLine, drawRect, drawTextInRect };
