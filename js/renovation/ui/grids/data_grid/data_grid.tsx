@@ -13,7 +13,7 @@ import { Widget } from '../../common/widget';
 import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance, DataGridForComponentWrapper } from './common/types';
-import { getUpdatedOptions } from './utils/get_updated_options';
+import { getUpdatedOptions } from '../../common/utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
 import { hasWindow } from '../../../../core/utils/window';
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named

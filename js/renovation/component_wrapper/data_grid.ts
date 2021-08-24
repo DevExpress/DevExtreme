@@ -7,7 +7,7 @@ import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent, Option } from './common/types';
 import type { ExcelCellInfo, Export, OptionChangedEvent } from '../../ui/data_grid';
-import { getUpdatedOptions } from '../ui/grids/data_grid/utils/get_updated_options';
+import { getUpdatedOptions } from '../ui/common/utils/get_updated_options';
 
 import { themeReadyCallback } from '../../ui/themes_callback';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
