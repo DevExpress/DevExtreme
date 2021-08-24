@@ -1155,21 +1155,21 @@ describe('Scrollbar', () => {
         expect(viewModel.hideScrollbarTimer).toBe(undefined);
       });
 
-      it('scrollByHandler(delta)', () => {
+      it('scrollTo(delta)', () => {
         const onInertiaAnimatorStart = jest.fn();
-        const delta = { x: 50, y: 70 };
+        const delta = 50;
         const viewModel = new Scrollbar({
           direction,
           onAnimatorStart: onInertiaAnimatorStart,
         });
 
-        viewModel.scrollBy = jest.fn();
+        viewModel.moveTo = jest.fn();
         viewModel.stopScrolling = jest.fn();
 
-        viewModel.scrollByHandler(delta);
+        viewModel.scrollTo(delta);
 
-        expect(viewModel.scrollBy).toBeCalledTimes(1);
-        expect(viewModel.scrollBy).toHaveBeenCalledWith(delta);
+        expect(viewModel.moveTo).toBeCalledTimes(1);
+        expect(viewModel.moveTo).toHaveBeenCalledWith(-delta);
         expect(viewModel.stopScrolling).toBeCalledTimes(1);
       });
 

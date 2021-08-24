@@ -808,10 +808,10 @@ QUnit.test('scroll should restore on second dxshown', function(assert) {
     triggerHidingEvent($scrollable);
     triggerShownEvent($scrollable);
 
-    scrollable.scrollTo({ left: 0, top: 0 });
+    scrollable.scrollTo({ left: 1, top: 1 });
     triggerShownEvent($scrollable);
 
-    assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 0 }, 'scroll position was not changed');
+    assert.deepEqual(scrollable.scrollOffset(), { left: 1, top: 1 }, 'scroll position was not changed');
 });
 
 QUnit.test('scroll should save position on dxhiding when scroll is hidden', function(assert) {

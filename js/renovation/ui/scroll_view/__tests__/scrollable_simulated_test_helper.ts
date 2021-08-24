@@ -53,8 +53,6 @@ class ScrollableTestHelper {
 
   stopHandlerMock?: jest.Mock;
 
-  scrollByHandlerMock?: jest.Mock;
-
   scrollBarHandlers?: { name: string }[];
 
   actionHandlers: { [key: string]: any };
@@ -276,16 +274,15 @@ class ScrollableTestHelper {
       { name: 'cancel' },
       { name: 'stop' },
       { name: 'move' },
-      { name: 'scrollBy' },
       { name: 'release' }];
 
-    this.scrollBarHandlers.forEach((handler) => {
-      this[`${handler.name}HandlerMock`] = jest.fn();
+    this.scrollBarHandlers.forEach(({ name }) => {
+      this[`${name}HandlerMock`] = jest.fn();
       if (this.isVertical) {
-        this.getVScrollbar()[`${handler.name}Handler`] = this[`${handler.name}HandlerMock`];
+        this.getVScrollbar()[`${name}Handler`] = this[`${name}HandlerMock`];
       }
       if (this.isHorizontal) {
-        this.getHScrollbar()[`${handler.name}Handler`] = this[`${handler.name}HandlerMock`];
+        this.getHScrollbar()[`${name}Handler`] = this[`${name}HandlerMock`];
       }
     });
   }
