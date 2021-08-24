@@ -76,7 +76,7 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

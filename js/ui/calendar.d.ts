@@ -89,7 +89,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

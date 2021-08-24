@@ -1005,15 +1005,15 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
     showColumnHeaders?: boolean;
     /**
      * @docid
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @default true
      * @public
      */
     showColumnLines?: boolean;
     /**
      * @docid
-     * @default true [for](iOS)
-     * @default true [for](Material)
+     * @default true &for(iOS)
+     * @default true &for(Material)
      * @default false
      * @public
      */
@@ -1257,7 +1257,7 @@ export interface HeaderFilter {
     allowSearch?: boolean;
     /**
      * @docid GridBaseOptions.headerFilter.height
-     * @default 315 [for](Material)
+     * @default 315 &for(Material)
      * @default 325
      */
     height?: number;
@@ -1598,7 +1598,7 @@ export interface EditingBase {
     texts?: EditingTextsBase;
     /**
      * @docid GridBaseOptions.editing.useIcons
-     * @default true [for](Material)
+     * @default true &for(Material)
      * @default false
      * @public
      */
@@ -1778,7 +1778,7 @@ export interface ScrollingBase {
     scrollByThumb?: boolean;
     /**
      * @docid GridBaseOptions.scrolling.showScrollbar
-     * @default 'onHover' [for](desktop)
+     * @default 'onHover' &for(desktop)
      * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
      * @public
@@ -3810,7 +3810,7 @@ export interface Grouping {
   contextMenuEnabled?: boolean;
   /**
    * @docid dxDataGridOptions.grouping.expandMode
-   * @default 'rowClick' [for](mobile_devices)
+   * @default 'rowClick' &for(mobile_devices)
    * @type Enums.GridGroupingExpandMode
    * @default "buttonClick"
    */

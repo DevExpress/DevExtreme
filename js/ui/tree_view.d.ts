@@ -373,7 +373,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid
      * @default true
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @public
      */
     useNativeScrolling?: boolean;

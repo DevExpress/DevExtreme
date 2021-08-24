@@ -69,7 +69,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     /**
      * @docid
      * @default 300
-     * @default 200 [for](Material)
+     * @default 200 &for(Material)
      * @public
      */
     animationDuration?: number;
@@ -94,7 +94,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     deferRendering?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

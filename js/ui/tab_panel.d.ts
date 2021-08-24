@@ -83,7 +83,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid
      * @default false
-     * @default true [for](Android|iOS)
+     * @default true &for(Android|iOS)
      * @public
      */
     animationEnabled?: boolean;
@@ -184,7 +184,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     showNavButtons?: boolean;
     /**
      * @docid
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @public
      */
     swipeEnabled?: boolean;

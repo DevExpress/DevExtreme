@@ -141,7 +141,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @docid
      * @type Enums.FormLabelLocation
      * @default "left"
-     * @default "top" [for](Material)
+     * @default "top" &for(Material)
      * @public
      */
     labelLocation?: 'left' | 'right' | 'top';
@@ -215,7 +215,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @default true
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     showColonAfterLabel?: boolean;
