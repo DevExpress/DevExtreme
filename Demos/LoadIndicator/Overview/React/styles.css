@@ -28,3 +28,8 @@
     vertical-align: middle;
     margin-right: 5px;
 }
+
+.indicators {
+    display: flex;
+    align-items: center;
+}

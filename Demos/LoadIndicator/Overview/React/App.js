@@ -19,11 +19,11 @@ class App extends React.Component {
     return (
       <div className="form">
         <div className="label">Custom size</div>
-
-        <LoadIndicator id="small-indicator" height={20} width={20} />
-        <LoadIndicator id="medium-indicator" height={40} width={40} />
-        <LoadIndicator id="large-indicator" height={60} width={60} />
-
+        <div className="indicators">
+          <LoadIndicator id="small-indicator" height={20} width={20} />
+          <LoadIndicator id="medium-indicator" height={40} width={40} />
+          <LoadIndicator id="large-indicator" height={60} width={60} />
+        </div>
         <div className="label">Custom image</div>
 
         <LoadIndicator id="image-indicator" indicatorSrc="../../../../images/Loading.gif" />

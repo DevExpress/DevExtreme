@@ -23,3 +23,8 @@
     vertical-align: middle;
     margin-right: 5px;
 }
+
+::ng-deep .indicators {
+    display: flex;
+    align-items: center;
+}
