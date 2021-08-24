@@ -103,26 +103,22 @@ export class ResourceManager {
     }
 
     getEditors() {
-        const result = [];
-        const that = this;
-
-        each(this.getResources(), function(i, resource) {
+        return this.getResources().map(resource => {
             const field = getFieldExpr(resource);
-            const currentResourceItems = that._getResourceDataByField(field);
+            // const currentResourceItems = this._getResourceDataByField(field);
 
-            result.push({
+            return {
                 editorOptions: {
-                    dataSource: currentResourceItems.length ? currentResourceItems : getWrappedDataSource(resource.dataSource),
+                    // dataSource: currentResourceItems.length ? currentResourceItems : getWrappedDataSource(resource.dataSource),
+                    dataSource: getWrappedDataSource(resource.dataSource),
                     displayExpr: getDisplayExpr(resource),
                     valueExpr: getValueExpr(resource)
                 },
                 dataField: field,
                 editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
                 label: { text: resource.label || field }
-            });
+            };
         });
-
-        return result;
     }
 
     getResourceDataByValue(field, value) {
@@ -354,6 +350,7 @@ export class ResourceManager {
 
     _getResourceDataByField(fieldName) {
         const loadedResources = this.getResourcesData();
+
         let currentResourceData = [];
 
         for(let i = 0, resourceCount = loadedResources.length; i < resourceCount; i++) {
