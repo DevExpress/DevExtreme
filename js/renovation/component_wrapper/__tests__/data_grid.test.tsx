@@ -340,6 +340,15 @@ describe('DataGrid Wrapper', () => {
       expect(prevProps.dataSource.store.data).toEqual([1]);
     });
 
+    it('integrationOptions changed', () => {
+      const component: any = createDataGrid();
+      const options = { option: 'value' };
+      component.__options = options;
+      component.viewRef.prevProps = options;
+      component._optionChanging('integrationOptions', undefined, { template: { 'some.nested.string': 'value' } });
+      expect(options).not.toContain('integrationOptions');
+    });
+
     it('editing complex option changed', () => {
       const component: any = createDataGrid();
       const prevProps = { editing: { editRowKey: null } };
