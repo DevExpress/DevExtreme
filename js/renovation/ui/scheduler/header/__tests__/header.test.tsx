@@ -21,13 +21,12 @@ describe('Scheduler Toolbar', () => {
     );
 
     it('should render correct markup and pass correct props to the Toolbar', () => {
-      const tree = render({ items: 'items', props: { rtlEnabled: true } });
+      const tree = render({ items: 'items' });
       const toolbar = tree.childAt(0);
 
       expect(tree.hasClass(HEADER_CLASS)).toBe(true);
       expect(toolbar.is(Toolbar)).toBe(true);
       expect(toolbar.prop('items')).toEqual('items');
-      expect(toolbar.props().rtlEnabled).toBe(true);
     });
   });
 
