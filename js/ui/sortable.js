@@ -260,7 +260,7 @@ const Sortable = Draggable.inherit({
             const { left, right, top, bottom } = getScrollableBoundary($scrollable);
             const toIndex = this.option('toIndex');
             const itemPoints = this.option('itemPoints');
-            const itemPoint = itemPoints?.[toIndex];
+            const itemPoint = itemPoints?.filter(item => item.index === toIndex)[0];
 
             if(itemPoint) {
                 const isVertical = this._isVerticalOrientation();
