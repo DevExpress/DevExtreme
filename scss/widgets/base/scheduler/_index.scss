@@ -1670,6 +1670,10 @@ $scheduler-appointment-form-label-padding: 20px;
       border-right: none;
     }
 
+    .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+      direction: rtl;
+    }
+
     &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
       border-left: none;
     }
