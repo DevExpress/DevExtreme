@@ -105,12 +105,11 @@ export class ResourceManager {
     getEditors() {
         return this.getResources().map(resource => {
             const field = getFieldExpr(resource);
-            // const currentResourceItems = this._getResourceDataByField(field);
+            const currentResourceItems = this._getResourceDataByField(field);
 
             return {
                 editorOptions: {
-                    // dataSource: currentResourceItems.length ? currentResourceItems : getWrappedDataSource(resource.dataSource),
-                    dataSource: getWrappedDataSource(resource.dataSource),
+                    dataSource: currentResourceItems.length ? currentResourceItems : getWrappedDataSource(resource.dataSource),
                     displayExpr: getDisplayExpr(resource),
                     valueExpr: getValueExpr(resource)
                 },
@@ -122,33 +121,32 @@ export class ResourceManager {
     }
 
     getResourceDataByValue(field, value) {
-        const that = this;
         const result = new Deferred();
 
-        each(this.getResources(), function(_, resource) {
+        this.getResources().forEach(resource => {
             const resourceField = getFieldExpr(resource);
+
             if(resourceField === field) {
                 const dataSource = getWrappedDataSource(resource.dataSource);
                 const valueExpr = getValueExpr(resource);
 
-                if(!that._resourceLoader[field]) {
-                    that._resourceLoader[field] = dataSource.load();
+                if(!this._resourceLoader[field]) {
+                    this._resourceLoader[field] = dataSource.load();
                 }
 
-                that._resourceLoader[field]
-                    .done(function(data) {
+                this._resourceLoader[field]
+                    .done(data => {
                         const filteredData = query(data)
                             .filter(valueExpr, value)
                             .toArray();
 
-                        delete that._resourceLoader[field];
+                        delete this._resourceLoader[field];
                         result.resolve(filteredData[0]);
                     })
-                    .fail(function() {
-                        delete that._resourceLoader[field];
+                    .fail(() => {
+                        delete this._resourceLoader[field];
                         result.reject();
                     });
-                return false;
             }
         });
 
