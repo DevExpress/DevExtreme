@@ -12,10 +12,9 @@ import {
 
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
 
-// TODO: https://trello.com/c/Y1xf4hkH/2155-allow-to-change-elementattr-for-a-root-element-of-button-in-buttongroup-via-toolbar-element-declaration
-// const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
-// const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
-// const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
+const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
+const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
+const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
 
 const DIRECTION_LEFT: Direction = -1;
 const DIRECTION_RIGHT: Direction = 1;
@@ -24,7 +23,7 @@ const getPreviousButtonOptions = (
   isPreviousButtonDisabled: boolean,
 ): ToolbarButtonGroupItemPropsType => ({
   icon: 'chevronprev',
-  // elementAttr: { class: PREVIOUS_BUTTON_CLASS },
+  elementAttr: { class: PREVIOUS_BUTTON_CLASS },
   disabled: isPreviousButtonDisabled,
 });
 
@@ -32,14 +31,14 @@ const getCalendarButtonOptions = (
   captionText: string,
 ): ToolbarButtonGroupItemPropsType => ({
   text: captionText,
-  // elementAttr: { class: CALENDAR_BUTTON_CLASS },
+  elementAttr: { class: CALENDAR_BUTTON_CLASS },
 });
 
 const getNextButtonOptions = (
   isNextButtonDisabled: boolean,
 ): ToolbarButtonGroupItemPropsType => ({
   icon: 'chevronnext',
-  // elementAttr: { class: NEXT_BUTTON_CLASS },
+  elementAttr: { class: NEXT_BUTTON_CLASS },
   disabled: isNextButtonDisabled,
 });
 
@@ -50,6 +49,7 @@ export const getDateNavigator = (
   updateDateByDirection: (direction: Direction) => void,
   isPreviousButtonDisabled: boolean,
   isNextButtonDisabled: boolean,
+  rtlEnabled: boolean | undefined,
 ): ToolbarItem => {
   const items = [
     getPreviousButtonOptions(isPreviousButtonDisabled),
@@ -81,6 +81,7 @@ export const getDateNavigator = (
             break;
         }
       },
+      rtlEnabled,
     },
     ...item,
   } as ToolbarItem;

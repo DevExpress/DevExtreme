@@ -105,6 +105,7 @@ export const viewFunction = ({
         firstDayOfWeek={firstDayOfWeek}
         useDropDownViewSwitcher={useDropDownViewSwitcher}
         customizationFunction={customizeDateNavigatorText}
+        rtlEnabled={rtlEnabled}
       />
       <WorkSpace
         firstDayOfWeek={firstDayOfWeek}

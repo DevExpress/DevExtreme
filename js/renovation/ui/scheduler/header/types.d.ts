@@ -12,6 +12,7 @@ export interface ItemOptions {
   updateDateByDirection: (direction: Direction) => void;
   isPreviousButtonDisabled: boolean;
   isNextButtonDisabled: boolean;
+  rtlEnabled: boolean | undefined;
 }
 
 export interface ItemView {

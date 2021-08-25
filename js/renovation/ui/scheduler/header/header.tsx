@@ -39,6 +39,7 @@ export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => (
   >
     <Toolbar
       items={viewModel.items}
+      rtlEnabled={viewModel.props.rtlEnabled}
     />
   </div>
 );
@@ -69,7 +70,7 @@ export class SchedulerToolbarBaseProps {
 }
 
 export type SchedulerToolbarProps = SchedulerToolbarBaseProps
-& Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
+& Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher' | 'rtlEnabled'>;
 
 @Component({ view: viewFunction })
 export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
@@ -199,6 +200,7 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
       updateDateByDirection: (direction) => this.updateDateByDirection(direction),
       isPreviousButtonDisabled: this.isPreviousButtonDisabled(),
       isNextButtonDisabled: this.isNextButtonDisabled(),
+      rtlEnabled: this.props.rtlEnabled,
     };
 
     return this.props.items

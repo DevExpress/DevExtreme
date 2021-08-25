@@ -31,6 +31,7 @@ export const formToolbarItem = (
     updateDateByDirection,
     isPreviousButtonDisabled,
     isNextButtonDisabled,
+    rtlEnabled,
   } = options;
 
   if (item[DEFAULT_ELEMENT]) {
@@ -39,10 +40,20 @@ export const formToolbarItem = (
     switch (defaultElementType) {
       case VIEW_SWITCHER:
         if (useDropDownViewSwitcher) {
-          return getDropDownViewSwitcher(item as ToolbarItem, selectedView, views, setCurrentView);
+          return getDropDownViewSwitcher(
+            item as ToolbarItem,
+            selectedView, views,
+            setCurrentView,
+            rtlEnabled,
+          );
         }
 
-        return getViewSwitcher(item as ToolbarItem, selectedView, views, setCurrentView);
+        return getViewSwitcher(
+          item as ToolbarItem,
+          selectedView, views,
+          setCurrentView,
+          rtlEnabled,
+        );
       case DATE_NAVIGATOR:
         return getDateNavigator(
           item as ToolbarItem,
@@ -50,6 +61,7 @@ export const formToolbarItem = (
           updateDateByDirection,
           isPreviousButtonDisabled,
           isNextButtonDisabled,
+          rtlEnabled,
         );
       default:
         break;
