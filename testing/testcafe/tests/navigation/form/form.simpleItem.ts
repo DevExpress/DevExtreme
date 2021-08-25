@@ -5,8 +5,6 @@ import createWidget from '../../../helpers/createWidget';
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
 
-// TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/GroupItem/
-// TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/TabbedItem/
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/ButtonItem/
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/EmptyItem/
 
@@ -17,7 +15,7 @@ fixture`Form`
   ['left', 'right', 'top'].forEach((labelLocation) => {
     [1, 2, 3].forEach((colCount) => {
       [1, 2, 3, 4, 5, 6].forEach((itemsCount) => {
-        const testName = `SimpleItem_rtl_${rtlEnabled},labelLocation_${labelLocation},colCount_${colCount},itemsCount_${itemsCount}`;
+        const testName = `SimpleItem,rtl_${rtlEnabled},labelLocation_${labelLocation},colCount_${colCount},itemsCount_${itemsCount}`;
         test(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
