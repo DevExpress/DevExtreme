@@ -107,6 +107,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
 /**
  * @docid
  * @inherits DOMComponent
+ * @extension
  * @module ui/validator
  * @export default
  * @namespace DevExpress.ui
