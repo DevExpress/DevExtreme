@@ -4,8 +4,10 @@ import {
   JSXComponent,
   OneWay,
   Event,
+  Consumer,
 } from '@devextreme-generator/declarations';
-
+import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
+import { resolveRtlEnabled } from '../../../utils/resolve_rtl';
 import devices from '../../../../core/devices';
 
 import { Toolbar } from '../../toolbar/toolbar';
@@ -39,7 +41,6 @@ export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => (
   >
     <Toolbar
       items={viewModel.items}
-      rtlEnabled={viewModel.props.rtlEnabled}
     />
   </div>
 );
@@ -74,6 +75,9 @@ export type SchedulerToolbarProps = SchedulerToolbarBaseProps
 
 @Component({ view: viewFunction })
 export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   cssClass = 'dx-scheduler-header';
 
   get step(): string {
@@ -189,6 +193,11 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
     // TODO
   }
 
+  get rtl(): boolean {
+    const { rtlEnabled } = this.props;
+    return !!resolveRtlEnabled(rtlEnabled, this.config);
+  }
+
   get items(): ToolbarItem[] {
     const options: ItemOptions = {
       useDropDownViewSwitcher: this.props.useDropDownViewSwitcher,
@@ -200,7 +209,7 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
       updateDateByDirection: (direction) => this.updateDateByDirection(direction),
       isPreviousButtonDisabled: this.isPreviousButtonDisabled(),
       isNextButtonDisabled: this.isNextButtonDisabled(),
-      rtlEnabled: this.props.rtlEnabled,
+      rtlEnabled: this.rtl,
     };
 
     return this.props.items

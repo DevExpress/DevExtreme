@@ -280,8 +280,6 @@ export class SchedulerProps extends BaseWidgetProps {
   @Nested()
   resources: ResourceProps[] = [];
 
-  @OneWay() rtlEnabled = false;
-
   @Nested()
   scrolling: ScrollingProps = { mode: 'standard' };
 
