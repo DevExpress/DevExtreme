@@ -80,20 +80,36 @@ export class ResourceManager {
         return this._resources || [];
     }
 
-    getEditors() {
+    getEditors() { // TODO used in Form
         return this.getResources().map(resource => {
             const dataField = getFieldExpr(resource);
-            const currentResourceItems = this._getResourceDataByField(dataField);
+            const dataSource = this._getResourceDataByField(dataField);
 
             return {
                 editorOptions: {
-                    dataSource: currentResourceItems.length ? currentResourceItems : getWrappedDataSource(resource.dataSource),
+                    dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
                     displayExpr: getDisplayExpr(resource),
                     valueExpr: getValueExpr(resource)
                 },
                 dataField,
                 editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
                 label: { text: resource.label || dataField }
+            };
+        });
+    }
+
+    getEditors2() {
+        return this.getResources().map(resource => {
+            const dataField = getFieldExpr(resource);
+            const dataSource = this._getResourceDataByField(dataField);
+
+            return {
+                allowMultiple: resource.allowMultiple,
+                label: resource.label,
+                dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
+                displayExpr: getDisplayExpr(resource),
+                valueExpr: getValueExpr(resource),
+                dataField
             };
         });
     }
@@ -142,7 +158,7 @@ export class ResourceManager {
         }
     }
 
-    getResourcesFromItem(itemData, wrapOnlyMultipleResources) {
+    getResourcesFromItem(itemData, wrapOnlyMultipleResources) { // TODO used in Popup
         let result = null;
 
         if(!isDefined(wrapOnlyMultipleResources)) {
@@ -186,11 +202,18 @@ export class ResourceManager {
         const valueGetter = compileGetter(getValueExpr(resource));
         const displayGetter = compileGetter(getDisplayExpr(resource));
 
-        return data.map(item => ({
-            id: valueGetter(item),
-            text: displayGetter(item),
-            color: item.color
-        }));
+        return data.map(item => {
+            const result = {
+                id: valueGetter(item),
+                text: displayGetter(item),
+            };
+
+            if(item.color) { // TODO for passed tests
+                result.color = item.color;
+            }
+
+            return result;
+        });
     }
 
     loadResources(groups) {
