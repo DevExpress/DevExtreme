@@ -4,8 +4,14 @@ import { mount, shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
 import { renderTemplate } from '../../../utils/render_template';
+import { getUpdatedOptions } from '../utils/get_updated_options';
 
 jest.mock('../../../utils/render_template', () => ({ renderTemplate: jest.fn() }));
+
+jest.mock('../utils/get_updated_options', () => {
+  const defaultImplementation = jest.requireActual('../utils/get_updated_options');
+  return defaultImplementation;
+});
 
 describe('DomComponentWrapper', () => {
   describe('View', () => {
@@ -178,12 +184,43 @@ describe('DomComponentWrapper', () => {
       it('updateWidget. Widget is initialized', () => {
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
-        const instance = { option: jest.fn() };
+        const instance = { option: jest.fn(), beginUpdate: jest.fn(), endUpdate: jest.fn() };
         component.instance = instance as any;
 
         component.updateWidget();
 
-        expect(instance.option).toBeCalledWith(spy.mock.results[0].value);
+        expect(instance.beginUpdate).toBeCalledTimes(1);
+        expect(spy.mock.results[0].value).toEqual(component.properties);
+        expect(instance.endUpdate).toBeCalledTimes(1);
+      });
+
+      it('updateWidget. Properties are not changed', () => {
+        const component = createWidget();
+        const instance = { option: jest.fn(), beginUpdate: jest.fn(), endUpdate: jest.fn() };
+        component.instance = instance as any;
+
+        (getUpdatedOptions as jest.Mock) = jest.fn(() => []);
+        component.updateWidget();
+
+        expect(instance.beginUpdate).toBeCalledTimes(0);
+        expect(instance.option).toBeCalledTimes(0);
+        expect(instance.endUpdate).toBeCalledTimes(0);
+      });
+
+      it('updateWidget. Properties are changed', () => {
+        const component = createWidget();
+        const instance = { option: jest.fn(), beginUpdate: jest.fn(), endUpdate: jest.fn() };
+        component.instance = instance as any;
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (getUpdatedOptions as jest.Mock) = jest.fn(() => [
+          { path: 'someProp', value: 'someValue' },
+        ]);
+        component.updateWidget();
+
+        expect(instance.beginUpdate).toBeCalledTimes(1);
+        expect(instance.option).toBeCalledWith('someProp', 'someValue');
+        expect(instance.endUpdate).toBeCalledTimes(1);
       });
 
       it('setRootElementRef, set rootElementRef to div ref', () => {

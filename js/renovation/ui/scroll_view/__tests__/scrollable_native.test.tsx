@@ -1323,6 +1323,7 @@ describe('Scrollbar integration', () => {
         direction,
         useSimulatedScrollbar,
         showScrollbar: 'onScroll',
+        needRenderScrollbars: true,
       });
       (viewModel as any).contentRef = React.createRef();
       (viewModel as any).containerRef = React.createRef();

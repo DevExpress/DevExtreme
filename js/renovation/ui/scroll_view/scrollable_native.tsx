@@ -85,7 +85,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     props: {
       aria, activeStateUnit, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
-      needScrollViewLoadPanel,
+      needScrollViewLoadPanel, needRenderScrollbars,
       pullingDownText, pulledDownText, refreshingText, reachBottomText,
       pullDownEnabled, reachBottomEnabled, showScrollbar,
     },
@@ -154,7 +154,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           visible={isLoadPanelVisible}
         />
       )}
-      { showScrollbar !== 'never' && useSimulatedScrollbar && direction.isHorizontal && (
+      { needRenderScrollbars && showScrollbar !== 'never' && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
           direction="horizontal"
           ref={hScrollbarRef}
@@ -164,7 +164,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           forceVisibility={needForceScrollbarsVisibility}
         />
       )}
-      { showScrollbar !== 'never' && useSimulatedScrollbar && direction.isVertical && (
+      { needRenderScrollbars && showScrollbar !== 'never' && useSimulatedScrollbar && direction.isVertical && (
         <Scrollbar
           direction="vertical"
           ref={vScrollbarRef}

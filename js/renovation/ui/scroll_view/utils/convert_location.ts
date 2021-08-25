@@ -19,14 +19,14 @@ export function convertToLocation(
     const left = ensureDefined(location.left, location.x);
     const top = ensureDefined(location.top, location.y);
     return {
-      left: isDefined(left) ? -left : undefined,
-      top: isDefined(top) ? -top : undefined,
+      left: isDefined(left) ? left : undefined,
+      top: isDefined(top) ? top : undefined,
     };
   }
 
   const { isVertical, isHorizontal } = new ScrollDirection(direction);
   return {
-    left: isHorizontal && isDefined(location) ? -location : undefined,
-    top: isVertical && isDefined(location) ? -location : undefined,
+    left: isHorizontal && isDefined(location) ? location : undefined,
+    top: isVertical && isDefined(location) ? location : undefined,
   };
 }
