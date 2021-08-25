@@ -2,7 +2,7 @@ import { wrapToArray, inArray } from '../../../core/utils/array';
 import { grep } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { each, map } from '../../../core/utils/iterator';
+import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import query from '../../../data/query';
 import { compileGetter, compileSetter } from '../../../core/utils/data';
@@ -29,24 +29,6 @@ export class ResourceManager {
         this.agendaProcessor = new AgendaResourceProcessor();
 
         this.setResources(resources);
-    }
-
-    _mapResourceData(resource, data) {
-        const valueGetter = compileGetter(getValueExpr(resource));
-        const displayGetter = compileGetter(getDisplayExpr(resource));
-
-        return map(data, function(item) {
-            const result = {
-                id: valueGetter(item),
-                text: displayGetter(item)
-            };
-
-            if(item.color) {
-                result.color = item.color;
-            }
-
-            return result;
-        });
     }
 
     _isMultipleResource(resourceField) {
@@ -82,14 +64,14 @@ export class ResourceManager {
             setter: {}
         };
 
-        this._resourceFields = map(resources || [], (function(resource) {
+        this._resourceFields = (resources || []).map(resource => {
             const field = getFieldExpr(resource);
 
             this._dataAccessors.getter[field] = compileGetter(field);
             this._dataAccessors.setter[field] = compileSetter(field);
 
             return field;
-        }).bind(this));
+        });
 
         this.agendaProcessor.initializeState(resources);
     }
@@ -200,28 +182,39 @@ export class ResourceManager {
         return isDefined(this.loadedResources);
     }
 
+    _mapResourceData(resource, data) {
+        const valueGetter = compileGetter(getValueExpr(resource));
+        const displayGetter = compileGetter(getDisplayExpr(resource));
+
+        return data.map(item => ({
+            id: valueGetter(item),
+            text: displayGetter(item),
+            color: item.color
+        }));
+    }
+
     loadResources(groups) {
         const result = new Deferred();
         const deferreds = [];
 
-        this.getResourcesByFields(groups).forEach(resource => {
-            const deferred = new Deferred();
-            const field = getFieldExpr(resource);
-            deferreds.push(deferred);
+        this.getResourcesByFields(groups)
+            .forEach(resource => {
+                const deferred = new Deferred();
+                const name = getFieldExpr(resource);
+                deferreds.push(deferred);
 
-            getWrappedDataSource(resource.dataSource)
-                .load()
-                .done(data => {
-                    deferred.resolve({
-                        name: field,
-                        items: this._mapResourceData(resource, data),
-                        data
-                    });
-                }).fail(() => deferred.reject());
-        });
+                getWrappedDataSource(resource.dataSource)
+                    .load()
+                    .done(data => {
+                        const items = this._mapResourceData(resource, data);
+
+                        deferred.resolve({ name, items, data });
+                    })
+                    .fail(() => deferred.reject());
+            });
 
         if(!deferreds.length) {
-            this._resourcesData = [];
+            this.loadedResources = [];
             return result.resolve([]);
         }
 
