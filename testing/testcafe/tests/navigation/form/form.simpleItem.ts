@@ -5,12 +5,6 @@ import createWidget from '../../../helpers/createWidget';
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
 
-// TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/ButtonItem/
-// TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/EmptyItem/
-
-// eslint-disable-next-line max-len
-// TODO: ARGS: [ --componentFolder=dataGrid --quarantineMode=true, --componentFolder=scheduler --quarantineMode=true, --componentFolder=editors, --componentFolder=navigation ]
-
 [false, true].forEach((rtlEnabled) => {
   ['left', 'right', 'top'].forEach((labelLocation) => {
     [1, 2, 3].forEach((colCount) => {
