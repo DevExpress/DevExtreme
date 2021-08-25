@@ -85,6 +85,10 @@ export default class DataGridWrapper extends Component {
       const name = getPathParts(fullName)[0];
       const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
 
+      if (name === 'integrationOptions') {
+        return;
+      }
+
       if (name === 'editing' && name !== fullName) {
         // T751778
         // TODO remove when silent assign will be removed from editing
