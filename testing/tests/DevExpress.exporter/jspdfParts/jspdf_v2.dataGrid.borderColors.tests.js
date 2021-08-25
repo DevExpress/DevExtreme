@@ -24,7 +24,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header' && gridCell.column.index === 1) {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -65,7 +65,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -109,7 +109,7 @@ const JSPdfBorderColorsTests = {
 
                 const colors = ['#ff0000', '#00ff00', '#0000ff'];
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = colors[gridCell.column.index];
                     }
@@ -155,7 +155,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(pdfCell.text === 'f1_2') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -200,7 +200,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.column.dataField === 'f2') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -249,7 +249,7 @@ const JSPdfBorderColorsTests = {
                 const colors = ['#ff0000', '#00ff00', '#0000ff'];
                 let rowIndex = 0;
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.column.dataField === 'f2') {
                         pdfCell.borderColor = colors[rowIndex];
                         rowIndex += 1;
@@ -297,7 +297,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -341,7 +341,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawLeftBorder = false;
                     pdfCell.drawRightBorder = false;
                     if(gridCell.rowType === 'header') {
@@ -382,7 +382,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawTopBorder = false;
                     pdfCell.drawBottomBorder = false;
                     if(gridCell.rowType === 'header') {
@@ -423,7 +423,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'data') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -462,7 +462,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawLeftBorder = false;
                     pdfCell.drawRightBorder = false;
                     if(gridCell.rowType === 'data') {
@@ -503,7 +503,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawTopBorder = false;
                     pdfCell.drawBottomBorder = false;
                     if(gridCell.rowType === 'data') {
@@ -546,7 +546,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -591,7 +591,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group' && gridCell.column.dataField === 'f1') {
                         pdfCell.borderColor = '#ff0000';
                     } else if(gridCell.rowType === 'data' && gridCell.column.dataField === 'f2') {
@@ -643,7 +643,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -692,7 +692,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group') {
                         pdfCell.borderColor = gridCell.groupIndex === 0 ? '#dddd00' : '#00dddd';
                     }
@@ -741,7 +741,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'groupFooter') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -792,7 +792,7 @@ const JSPdfBorderColorsTests = {
 
                 let groupFooterCells = 0;
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'groupFooter') {
                         pdfCell.borderColor = groupFooterCells < 2 ? '#dddd00' : '#00dddd';
                         groupFooterCells += 1;
@@ -842,7 +842,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'totalFooter') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -886,7 +886,7 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.textOptions = { baseline: 'alphabetic' };
+                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'totalFooter') {
                         pdfCell.borderColor = '#dddd00';
                     }
