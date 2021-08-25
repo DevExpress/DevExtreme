@@ -2,10 +2,10 @@ import { Component } from '../../core/component';
 import DataHelperMixin from '../../data_helper';
 
 class DataOption extends Component {
-    constructor(optionName, loadPanel, dataSourceChangedCallback) {
+    constructor(optionName, getLoadPanel, dataSourceChangedCallback) {
         super();
         this._optionName = optionName;
-        this._loadPanel = loadPanel;
+        this._getLoadPanel = getLoadPanel;
         this._dataSourceChangedCallback = dataSourceChangedCallback;
     }
     insert(data, callback, errorCallback) {
@@ -67,10 +67,10 @@ class DataOption extends Component {
         }
     }
     _showLoadPanel() {
-        this._loadPanel.show();
+        this._getLoadPanel()?.show();
     }
     _hideLoadPanel() {
-        this._loadPanel.hide();
+        this._getLoadPanel()?.hide();
     }
     _getStore() {
         return this._dataSource.store();

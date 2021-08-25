@@ -41,8 +41,12 @@ const GANTT_NEW_TASK_CACHE_KEY = 'gantt_new_task_key';
 class Gantt extends Widget {
     _init() {
         super._init();
+        this._initGantt();
         this._isGanttRendered = false;
         this._initHelpers();
+    }
+    _initGantt() {
+        this._refreshDataSources();
     }
     _initMarkup() {
         super._initMarkup();
@@ -73,11 +77,6 @@ class Gantt extends Widget {
             .appendTo(this.$element());
         this._$contextMenu = $('<div>')
             .appendTo(this.$element());
-
-        this._refreshDataSource(GANTT_TASKS);
-        this._refreshDataSource(GANTT_DEPENDENCIES);
-        this._refreshDataSource(GANTT_RESOURCES);
-        this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
     _clean() {
         this._ganttView?._ganttViewCore.cleanMarkup();
@@ -89,6 +88,12 @@ class Gantt extends Widget {
     _refresh() {
         this._isGanttRendered = false;
         super._refresh();
+    }
+    _refreshDataSources() {
+        this._refreshDataSource(GANTT_TASKS);
+        this._refreshDataSource(GANTT_DEPENDENCIES);
+        this._refreshDataSource(GANTT_RESOURCES);
+        this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
     _renderContent() {
@@ -185,7 +190,7 @@ class Gantt extends Widget {
             delete this[`_${name}`];
         }
 
-        dataOption = new DataOption(name, this._getLoadPanel(), (name, data) => {
+        dataOption = new DataOption(name, this._getLoadPanel.bind(this), (name, data) => {
             this._dataSourceChanged(name, data);
         });
         dataOption.option('dataSource', this._getSpecificDataSourceOption(name));
@@ -563,6 +568,17 @@ class Gantt extends Widget {
         return new Promise((resolve) => {
             const doc = this._ganttView?._ganttViewCore.exportToPdf(fullOptions);
             resolve(doc);
+        });
+    }
+    refresh() {
+        return new Promise((resolve, reject) => {
+            try {
+                this._refreshDataSources();
+                this._refresh();
+                resolve();
+            } catch(e) {
+                reject(e.message);
+            }
         });
     }
     expandAll() {
