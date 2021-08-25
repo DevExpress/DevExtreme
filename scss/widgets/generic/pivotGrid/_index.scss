@@ -35,6 +35,7 @@
   $pivotgrid-dimension-image: $pivotgrid-dimension-image,
   $pivotgrid-hierarchy-image: $pivotgrid-hierarchy-image,
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
+  $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
 
 // adduse
@@ -54,10 +55,6 @@
     .dx-pivotgrid-toolbar {
       .dx-button-content {
         padding: 5px;
-      }
-
-      .dx-button {
-        margin-top: 10px;
       }
     }
   }

@@ -24,6 +24,7 @@ $pivotgrid-area-data-image: null !default;
 $pivotgrid-dimension-image: null !default;
 $pivotgrid-hierarchy-image: null !default;
 $pivotgrid-empty-area-text-padding: null !default;
+$pivotgrid-button-top-padding: null !default;
 
 @use "../mixins" as *;
 @use "../icons" as *;
@@ -141,6 +142,10 @@ $pivotgrid-expand-icon-text-offset: 0;
       margin-right: 10px;
       float: right;
       display: inline-block;
+
+      .dx-button {
+        margin-top: $pivotgrid-button-top-padding;
+      }
 
       .dx-pivotgrid-field-chooser-button {
         margin-right: 4px;
