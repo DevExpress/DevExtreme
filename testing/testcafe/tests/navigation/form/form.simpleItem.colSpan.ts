@@ -12,7 +12,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(testItem1ColSpan2, '#container'))
+        .expect(await takeScreenshot(`${testItem1ColSpan2}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -28,7 +28,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(testItem1ColSpan2Item2, '#container'))
+        .expect(await takeScreenshot(`${testItem1ColSpan2Item2}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -47,7 +47,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(testItem1Item2ColSpan2, '#container'))
+        .expect(await takeScreenshot(`${testItem1Item2ColSpan2}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -66,7 +66,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(testItem1ColSpan2Item2ColSpan2, '#container'))
+        .expect(await takeScreenshot(`${testItem1ColSpan2Item2ColSpan2}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
