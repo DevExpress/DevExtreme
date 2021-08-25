@@ -17,7 +17,7 @@ fixture`Form`
   ['left', 'right', 'top'].forEach((labelLocation) => {
     [1, 2, 3].forEach((colCount) => {
       [1, 2, 3, 4, 5, 6].forEach((itemsCount) => {
-        const testName = `rtl_${rtlEnabled},labelLocation_${labelLocation},colCount_${colCount},itemsCount_${itemsCount}`;
+        const testName = `SimpleItem_rtl_${rtlEnabled},labelLocation_${labelLocation},colCount_${colCount},itemsCount_${itemsCount}`;
         test(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
