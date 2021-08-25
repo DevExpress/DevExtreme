@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 
@@ -24,21 +24,14 @@ fixture`Form`
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
-        }).before(async () => {
-          await ClientFunction(() => {
-            $('#container').css({
-              border: '1px solid black',
-              width: '250px',
-              height: '250px',
-            });
-          })();
-          return createWidget('dxForm', {
-            colCount,
-            rtlEnabled,
-            labelLocation,
-            items: Array(itemNumber).fill(null).map((_, i) => ({ dataField: `TextBox_${i + 1}` })),
-          });
-        });
+        }).before(async () => createWidget('dxForm', {
+          width: 500,
+          height: 500,
+          colCount,
+          rtlEnabled,
+          labelLocation,
+          items: Array(itemNumber).fill(null).map((_, i) => ({ dataField: `TextBox_${i + 1}` })),
+        }));
       });
     });
   });
