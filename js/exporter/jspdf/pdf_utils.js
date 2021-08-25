@@ -7,6 +7,7 @@ function round(value) {
 
 function getTextLines(doc, text, font, { wordWrapEnabled, columnWidth }) {
     if(wordWrapEnabled) {
+        // it also splits text by '\n' automatically
         return doc.splitTextToSize(text, columnWidth, {
             fontSize: font?.size || doc.getFontSize()
         });
