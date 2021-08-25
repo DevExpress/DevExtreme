@@ -17,7 +17,7 @@
 }
 
 .dx-checkbox-icon {
-  display: inline-block;
+  flex-shrink: 0;
   position: relative;
   background-position: 0 0;
   background-size: cover;
@@ -29,27 +29,17 @@
 
   height: 100%;
   width: 100%;
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-overflow: clip;
 }
 
-.dx-checkbox-has-text {
-  .dx-checkbox-icon,
-  .dx-checkbox-text {
-    vertical-align: middle;
-  }
-}
-
 .dx-checkbox-text {
-  display: inline-block;
-  vertical-align: middle;
   text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: normal;
-  height: 100%;
-  width: 100%;
   padding-left: 5px;
 
   @at-root #{selector-append(".dx-rtl", &)},
