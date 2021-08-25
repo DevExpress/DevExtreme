@@ -12570,6 +12570,14 @@ declare module DevExpress.ui {
      * [descr:dxGantt.refresh()]
      */
     refresh(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxGantt.showResources(value)]
+     */
+    showResources(value: boolean): void;
+    /**
+     * [descr:dxGantt.showDependencies(value)]
+     */
+    showDependencies(value: boolean): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
@@ -13084,6 +13092,10 @@ declare module DevExpress.ui {
      */
     showResources?: boolean;
     /**
+     * [descr:dxGanttOptions.showDependencies]
+     */
+    showDependencies?: boolean;
+    /**
      * [descr:dxGanttOptions.showRowLines]
      */
     showRowLines?: boolean;
@@ -13271,6 +13283,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
+      | 'toggleResources'
+      | 'toggleDependencies'
     >;
   }
   /**
@@ -13294,6 +13308,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
+      | 'toggleResources'
+      | 'toggleDependencies'
       | string;
     /**
      * [descr:dxGanttToolbarItem.location]
