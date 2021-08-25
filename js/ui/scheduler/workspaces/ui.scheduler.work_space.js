@@ -551,6 +551,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._setTableSizes();
         }
 
+        this._updateHeaderEmptyCellWidth();
+
         this.cache.clear();
     }
 
