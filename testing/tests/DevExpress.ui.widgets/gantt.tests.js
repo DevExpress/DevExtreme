@@ -24,7 +24,7 @@ import './ganttParts/fullScreenMode.tests.js';
 import './ganttParts/repaint.tests.js';
 import './ganttParts/validateDependencies.tests.js';
 import './ganttParts/sorting.tests.js';
-
+import './ganttParts/refresh.tests.js';
 
 QUnit.testStart(() => {
     const markup = '<div id="gantt"></div>';
