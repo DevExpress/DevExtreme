@@ -87,7 +87,7 @@ export function drawPdfTable(doc, styles, table, options) {
                 }
 
                 if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                    drawTextInRect(doc, cell.text, cell._rect, cell.textOptions);
+                    drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
                 }
             }
 
