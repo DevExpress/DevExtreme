@@ -17,4 +17,6 @@ test('Empty form', async (t) => {
 }).before(async () => createWidget('dxForm', {
   width: 100,
   height: 100,
+  colCount: 2,
+  items: Array(4).fill(null).map((_, i) => ({ dataField: `TextBox_${i + 1}` })),
 }));
