@@ -1,7 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector, ClientFunction } from 'testcafe';
+// import { Selector, ClientFunction } from 'testcafe';
+import { appendElementTo } from '../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
@@ -20,25 +21,25 @@ fixture`Form`
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           await t
-            .expect(await takeScreenshot(`${testName}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`${testName}.png`, '#form1'))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }).before(async () => {
-          await ClientFunction(() => {
-            $('#container').css({
-              border: '1px solid black',
-              width: '250px',
-              height: '250px',
-            });
-          })();
+          await appendElementTo('#container', 'div', 'form1', {
+            width: '250px',
+            height: '250px',
+            border: '1px solid #0b837a',
+          });
+
           return createWidget('dxForm', {
             colCount,
             rtlEnabled,
             labelLocation,
             items: Array(itemNumber).fill(null).map((_, i) => ({ dataField: `TextBox_${i + 1}` })),
-          });
-        });
+          },
+          true, '#form1');
+        }).after(async () => disposeWidgets());
       });
     });
   });
