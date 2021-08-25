@@ -11,7 +11,7 @@ fixture`Form`
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/ButtonItem/
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/EmptyItem/
 
-[false].forEach((rtlEnabled) => { // TODO: false, true
+[false, true].forEach((rtlEnabled) => {
   ['left'].forEach((labelLocation) => { // TODO: 'left', 'right', 'top'
     [1].forEach((colCount) => { // TODO: 1, 2, 3
       [1].forEach((itemNumber) => { // TODO: 1, 2, 3, 4, 5, 6
