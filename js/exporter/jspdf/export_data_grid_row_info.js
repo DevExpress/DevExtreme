@@ -23,7 +23,7 @@ function createRowInfo({ dataProvider, rowIndex, rowOptions, prevRowInfo }) {
     return rowInfo;
 }
 
-function createPdfCell(cellInfo, wordWrapEnabled) {
+function createPdfCell(cellInfo) {
     return {
         text: cellInfo.text,
         rowSpan: cellInfo.rowSpan,
@@ -31,7 +31,6 @@ function createPdfCell(cellInfo, wordWrapEnabled) {
         drawLeftBorder: cellInfo.drawLeftBorder,
         drawRightBorder: cellInfo.drawRightBorder,
         backgroundColor: cellInfo.backgroundColor,
-        wordWrapEnabled
     };
 }
 

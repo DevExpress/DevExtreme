@@ -38,7 +38,8 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 const currentRowPdfCells = [];
                 currentRowInfo.cellsInfo.forEach(cellInfo => {
-                    const pdfCell = createPdfCell(cellInfo, wordWrapEnabled);
+                    const pdfCell = createPdfCell(cellInfo);
+                    pdfCell.wordWrapEnabled = wordWrapEnabled;
                     if(options.customizeCell) {
                         options.customizeCell({ gridCell: cellInfo.gridCell, pdfCell });
                     }

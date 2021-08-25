@@ -477,6 +477,50 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 col - 3 text lines with line breaks. fontSize default, height auto', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: false,
+                    columns: [{ caption: 'very long line\nvery long line very long line' }]
+                });
+
+                const expectedLog = [
+                    'text,very long line\nvery long line very long line,10,24.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,36.8'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 3 text lines with line breaks. fontSize default, height auto, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'very long line\nvery long line very long line' }]
+                });
+
+                const expectedLog = [
+                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,55.2'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 3 text lines. fontSize 20', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
