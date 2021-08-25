@@ -2,7 +2,7 @@ name: TestCafe tests
 
 concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 on: [pull_request]
 
@@ -10,7 +10,7 @@ jobs:
   testcafe:
     strategy:
       matrix:
-        ARGS: [ --componentFolder=navigation ]
+        ARGS: [ --componentFolder=dataGrid --quarantineMode=true, --componentFolder=scheduler --quarantineMode=true, --componentFolder=editors, --componentFolder=navigation ]
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
