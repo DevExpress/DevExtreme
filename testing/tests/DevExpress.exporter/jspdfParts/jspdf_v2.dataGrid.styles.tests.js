@@ -8,7 +8,7 @@ const JSPdfStylesTests = {
             pdfCell.drawRightBorder = false;
             pdfCell.drawTopBorder = false;
             pdfCell.drawBottomBorder = false;
-            pdfCell.textOptions = { baseline: 'alphabetic' };
+            pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
         };
 
         QUnit.module('Styles - Background color', moduleConfig, () => {
