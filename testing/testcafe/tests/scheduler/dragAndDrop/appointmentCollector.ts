@@ -11,7 +11,7 @@ fixture`Drag-and-drop behaviour for the appointment tooltip`
 test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Approve Personal Computer Upgrade Plan');
-  const collector = scheduler.getAppointmentCollector('2');
+  const collector = scheduler.collectors.find('2');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
 
@@ -43,7 +43,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
 
 test('Drag-n-drop in same table cell', async (t) => {
   const scheduler = new Scheduler('#container');
-  const collector = scheduler.getAppointmentCollector('2');
+  const collector = scheduler.collectors.find('2');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
 
@@ -64,7 +64,7 @@ test('Drag-n-drop in same table cell', async (t) => {
 
 test('Drag-n-drop to the cell below should work in month view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const collector = scheduler.getAppointmentCollector('1 more');
+  const collector = scheduler.collectors.find('1 more');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
 
@@ -106,7 +106,7 @@ test('Drag-n-drop to the cell below should work in month view (T1005115)', async
 
 test('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const collector = scheduler.getAppointmentCollector('1');
+  const collector = scheduler.collectors.find('1');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
 

@@ -7,24 +7,24 @@ fixture`Layout:Appointments:AllDay`
   .page(url(__dirname, '../../../../container.html'));
 
 test('Long all day appointment should be render, if him ended on next view day in currentView: \'day\'(T1021963)', async (t) => {
-  const scheduler = new Scheduler('#container');
+  const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(scheduler.getToolbar().getNavigator().prevDuration)
-    .expect(await takeScreenshot('27-march-day-view.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.prevButton)
+    .expect(await takeScreenshot('27-march-day-view.png', workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration)
-    .expect(await takeScreenshot('28-march-day-view.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(await takeScreenshot('28-march-day-view.png', workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration)
-    .expect(await takeScreenshot('29-march-day-view.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(await takeScreenshot('29-march-day-view.png', workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration)
-    .expect(await takeScreenshot('30-march-day-view.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(await takeScreenshot('30-march-day-view.png', workSpace)).ok();
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -45,20 +45,20 @@ test('Long all day appointment should be render, if him ended on next view day i
 });
 
 test('Long all day appointment should be render, if him ended on next view day in currentView:', async (t) => {
-  const scheduler = new Scheduler('#container');
+  const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(scheduler.getToolbar().getNavigator().prevDuration)
-    .expect(await takeScreenshot('21-27-march-week-view.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.prevButton)
+    .expect(await takeScreenshot('21-27-march-week-view.png', workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration)
-    .expect(await takeScreenshot('28-march-3-apr-week-view.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(await takeScreenshot('28-march-3-apr-week-view.png', workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration)
-    .expect(await takeScreenshot('4-10-apr-week-view.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(await takeScreenshot('4-10-apr-week-view.png', workSpace)).ok();
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
