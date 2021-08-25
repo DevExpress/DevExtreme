@@ -27,6 +27,7 @@ describe('Scheduler Toolbar', () => {
       expect(tree.hasClass(HEADER_CLASS)).toBe(true);
       expect(toolbar.is(Toolbar)).toBe(true);
       expect(toolbar.prop('items')).toEqual('items');
+      expect(toolbar.props().rtlEnabled).toBe(true);
     });
   });
 
@@ -373,16 +374,18 @@ describe('Scheduler Toolbar', () => {
             const toolbar = createToolbar();
 
             const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const prevButton = dateNavigatorOptions.items![0];
 
-            expect(dateNavigatorOptions.items![0].icon).toBe('chevronprev');
+            expect(prevButton.icon).toBe('chevronprev');
           });
 
           it('should return correct dateNavigator previous button class', () => {
             const toolbar = createToolbar();
 
             const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const prevButton = dateNavigatorOptions.items![0];
 
-            expect(dateNavigatorOptions.items![0].elementAttr)
+            expect(prevButton.elementAttr)
               .toEqual({ class: PREVIOUS_BUTTON_CLASS });
           });
 
@@ -390,16 +393,18 @@ describe('Scheduler Toolbar', () => {
             const toolbar = createToolbar();
 
             const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const calendarButton = dateNavigatorOptions.items![1];
 
-            expect(dateNavigatorOptions.items![1].text).toBe('7 August 2021');
+            expect(calendarButton.text).toBe('7 August 2021');
           });
 
           it('should return correct dateNavigator calendar button class', () => {
             const toolbar = createToolbar();
 
             const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const calendarButton = dateNavigatorOptions.items![1];
 
-            expect(dateNavigatorOptions.items![1].elementAttr)
+            expect(calendarButton.elementAttr)
               .toEqual({ class: CALENDAR_BUTTON_CLASS });
           });
 
@@ -407,16 +412,18 @@ describe('Scheduler Toolbar', () => {
             const toolbar = createToolbar();
 
             const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const nextButton = dateNavigatorOptions.items![2];
 
-            expect(dateNavigatorOptions.items![2].icon).toBe('chevronnext');
+            expect(nextButton.icon).toBe('chevronnext');
           });
 
           it('should return correct dateNavigator next button class', () => {
             const toolbar = createToolbar();
 
             const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const nextButton = dateNavigatorOptions.items![2];
 
-            expect(dateNavigatorOptions.items![2].elementAttr)
+            expect(nextButton.elementAttr)
               .toEqual({ class: NEXT_BUTTON_CLASS });
           });
         });
