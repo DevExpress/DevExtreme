@@ -9,9 +9,9 @@ export function drawPdfTable(doc, styles, table, options) {
     }
 
     const {
-        skipDrawingBorders,
-        skipDrawingCustomBorders,
-        skipDrawingCellContent
+        allowDrawBorders,
+        allowDrawCustomBorders,
+        allowDrawCellContent
     } = options ?? {};
 
     function drawBackColor(doc, cell) {
@@ -65,7 +65,7 @@ export function drawPdfTable(doc, styles, table, options) {
                 throw 'cell._rect is required';
             }
 
-            if(skipDrawingCellContent !== true) {
+            if(allowDrawCellContent === true) {
                 drawBackColor(doc, cell);
 
                 const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
@@ -91,8 +91,8 @@ export function drawPdfTable(doc, styles, table, options) {
                 }
             }
 
-            const skipBorder = isDefined(cell.borderColor) ? skipDrawingCustomBorders === true : skipDrawingBorders === true;
-            if(!skipBorder) {
+            const isDrawBorders = isDefined(cell.borderColor) ? allowDrawCustomBorders === true : allowDrawBorders === true;
+            if(isDrawBorders) {
                 const borderColor = isDefined(cell.borderColor) ? cell.borderColor : styles.borderColor;
                 if(borderColor !== doc.getDrawColor()) {
                     doc.setDrawColor(borderColor);
@@ -115,7 +115,7 @@ export function drawPdfTable(doc, styles, table, options) {
         }
     }
 
-    if(skipDrawingBorders !== true && (isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0))) {
+    if(allowDrawBorders === true && (isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0))) {
         drawBorder(table.rect);
     }
 }

@@ -133,14 +133,17 @@ export class PdfGrid {
 
             page._tables.forEach((table) => {
                 table.drawTo(doc, styles, {
-                    skipDrawingCustomBorders: true
+                    allowDrawBorders: true,
+                    allowDrawCellContent: true,
+                    allowDrawCustomBorders: false
                 });
             });
 
             page._tables.forEach((table) => {
                 table.drawTo(doc, styles, {
-                    skipDrawingBorders: true,
-                    skipDrawingCellContent: true
+                    allowDrawBorders: false,
+                    allowDrawCellContent: false,
+                    allowDrawCustomBorders: true
                 });
             });
         });
