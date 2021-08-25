@@ -321,16 +321,14 @@ export class ResourceManager {
     }
 
     _getResourceDataByField(fieldName) {
-        let currentResourceData = [];
-
-        for(let i = 0, resourceCount = this.loadedResources.length; i < resourceCount; i++) {
-            if(this.loadedResources[i].name === fieldName) {
-                currentResourceData = this.loadedResources[i].data;
-                break;
+        for(let i = 0; i < this.loadedResources.length; i++) {
+            const resource = this.loadedResources[i];
+            if(resource.name === fieldName) {
+                return resource.data;
             }
         }
 
-        return currentResourceData;
+        return [];
     }
 
     getResourceTreeLeaves(tree, appointmentResources, result) {
