@@ -1,5 +1,5 @@
 import ValidationMessage from 'ui/validation_message';
-import renderer from '../../../js/core/renderer';
+import renderer from 'core/renderer';
 import $ from 'jquery';
 
 const moduleSetup = {
