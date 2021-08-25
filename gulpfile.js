@@ -13,7 +13,6 @@ gulp.task('clean', function(callback) {
     callback();
 });
 
-require('./build/gulp/pre-commit');
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
