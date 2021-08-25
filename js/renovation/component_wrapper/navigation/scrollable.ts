@@ -1,5 +1,5 @@
 import type { Scrollable } from '../../ui/scroll_view/scrollable';
-import { DxMouseEvent } from '../../ui/scroll_view/types';
+import { DxMouseEvent } from '../../ui/scroll_view/common/types';
 import Component from '../common/component';
 import { Option } from '../common/types';
 import { Deferred } from '../../../core/utils/deferred';

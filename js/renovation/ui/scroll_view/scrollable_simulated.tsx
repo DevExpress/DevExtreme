@@ -32,7 +32,7 @@ import {
   isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
 } from '../../../events/utils/index';
 import { isDefined } from '../../../core/utils/type';
-import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
+import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
@@ -64,7 +64,7 @@ import {
   DxMouseEvent,
   DxMouseWheelEvent,
   DxKeyboardEvent,
-} from './types.d';
+} from './common/types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
 import {
@@ -73,8 +73,8 @@ import {
   getElementOverflowY,
 } from './utils/get_element_style';
 
-import { TopPocket } from './top_pocket';
-import { BottomPocket } from './bottom_pocket';
+import { TopPocket } from './internal/top_pocket';
+import { BottomPocket } from './internal/bottom_pocket';
 
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { convertToLocation } from './utils/convert_location';
@@ -241,8 +241,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   view: viewFunction,
 })
 
-export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
-  // https://trello.com/c/psOGNvMc/2745-renovation-type-for-timers
+export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>() {
   @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;

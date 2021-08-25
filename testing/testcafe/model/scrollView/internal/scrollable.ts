@@ -1,5 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { ScrollableProps } from '../../../../../js/renovation/ui/scroll_view/scrollable_props';
+import { BaseScrollableProps } from '../../../../../js/renovation/ui/scroll_view/common/base_scrollable_props';
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
 
@@ -14,7 +14,7 @@ export default class Scrollable extends Widget {
 
   name: string;
 
-  constructor(id: string | Selector, options: Partial<ScrollableProps>, name = 'dxScrollable') {
+  constructor(id: string | Selector, options: Partial<BaseScrollableProps>, name = 'dxScrollable') {
     super(id);
 
     this.element = Selector(`.${CLASS.scrollable}`);

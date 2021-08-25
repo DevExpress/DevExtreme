@@ -704,17 +704,48 @@ testComponentDefaults(Scrollable,
     }
 );
 
-testComponentDefaults(ScrollView,
+testComponentDefaults(Scrollable,
     {},
-    { refreshStrategy: 'swipeDown' },
-    function() {
-        this._originalRealDevice = devices.real();
-        devices.real({ platform: 'android' });
+    {
+        useNative: false,
     },
     function() {
-        devices.real(this._originalRealDevice);
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
     }
 );
+
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: false
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = true;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+if(!Scrollable.IS_RENOVATED_WIDGET) {
+    testComponentDefaults(ScrollView,
+        {},
+        { refreshStrategy: 'swipeDown' },
+        function() {
+            this._originalRealDevice = devices.real();
+            devices.real({ platform: 'android' });
+        },
+        function() {
+            devices.real(this._originalRealDevice);
+        }
+    );
+}
 
 testComponentDefaults(ScrollView,
     {},

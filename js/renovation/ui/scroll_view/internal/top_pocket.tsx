@@ -7,11 +7,9 @@ import {
   RefObject,
   Ref,
 } from '@devextreme-generator/declarations';
-import { LoadIndicator } from '../load_indicator';
-import { isDefined } from '../../../core/utils/type';
-import messageLocalization from '../../../localization/message';
-import { BaseWidgetProps } from '../common/base_props';
-import { combineClasses } from '../../utils/combine_classes';
+import { LoadIndicator } from '../../load_indicator';
+import { combineClasses } from '../../../utils/combine_classes';
+import messageLocalization from '../../../../localization/message';
 
 import {
   PULLDOWN_ICON_CLASS,
@@ -24,17 +22,20 @@ import {
   SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
   TopPocketState,
-} from './common/consts';
+} from '../common/consts';
 import {
   RefreshStrategy,
-} from './types.d';
+} from '../common/types.d';
+import { current, isMaterial } from '../../../../ui/themes';
 
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {
     releaseVisibleClass, readyVisibleClass, refreshVisibleClass,
-    topPocketClasses, pullDownClasses, pullingDownText, pulledDownText, refreshingText,
+    topPocketClasses, pullDownClasses,
     pullDownStyles, pullDownIconStyles, pullDownRef, topPocketStyles,
-    props: { topPocketRef, refreshStrategy },
+    props: {
+      topPocketRef, refreshStrategy, pullingDownText, pulledDownText, refreshingText,
+    },
   } = viewModel;
 
   return (
@@ -69,11 +70,11 @@ export class TopPocketProps {
 
   @OneWay() refreshStrategy?: RefreshStrategy;
 
-  @OneWay() pullingDownText?: string;
+  @OneWay() pullingDownText: string = isMaterial(current()) ? '' : messageLocalization.format('dxScrollView-pullingDownText');
 
-  @OneWay() pulledDownText?: string;
+  @OneWay() pulledDownText: string = isMaterial(current()) ? '' : messageLocalization.format('dxScrollView-pulledDownText');
 
-  @OneWay() refreshingText?: string;
+  @OneWay() refreshingText: string = isMaterial(current()) ? '' : messageLocalization.format('dxScrollView-refreshingText');
 
   @OneWay() pocketState: number = TopPocketState.STATE_RELEASED;
 
@@ -86,15 +87,16 @@ export class TopPocketProps {
   @OneWay() pocketTop = 0;
 
   @OneWay() topPocketTranslateTop = 0;
+
+  @OneWay() visible = true;
 }
 
-export type TopPocketPropsType = TopPocketProps & Pick<BaseWidgetProps, 'visible'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 
-export class TopPocket extends JSXComponent<TopPocketPropsType>() {
+export class TopPocket extends JSXComponent<TopPocketProps>() {
   @Ref() pullDownRef!: RefObject<HTMLDivElement>;
 
   get releaseVisibleClass(): string | undefined {
@@ -113,36 +115,6 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
     return this.props.pocketState === TopPocketState.STATE_REFRESHING
       ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
       : undefined;
-  }
-
-  get pullingDownText(): string | undefined {
-    const { pullingDownText } = this.props;
-
-    if (isDefined(pullingDownText)) {
-      return pullingDownText;
-    }
-
-    return messageLocalization.format('dxScrollView-pullingDownText');
-  }
-
-  get pulledDownText(): string | undefined {
-    const { pulledDownText } = this.props;
-
-    if (isDefined(pulledDownText)) {
-      return pulledDownText;
-    }
-
-    return messageLocalization.format('dxScrollView-pulledDownText');
-  }
-
-  get refreshingText(): string | undefined {
-    const { refreshingText } = this.props;
-
-    if (isDefined(refreshingText)) {
-      return refreshingText;
-    }
-
-    return messageLocalization.format('dxScrollView-refreshingText');
   }
 
   get pullDownClasses(): string {

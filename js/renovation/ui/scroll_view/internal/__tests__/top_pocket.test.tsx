@@ -10,13 +10,14 @@ import {
 
 import {
   TopPocketState,
-} from '../common/consts';
+} from '../../common/consts';
 
-jest.mock('../../../../core/devices', () => {
-  const actualDevices = jest.requireActual('../../../../core/devices').default;
-  actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
-  return actualDevices;
-});
+import { current } from '../../../../../ui/themes';
+
+jest.mock('../../../../../ui/themes', () => ({
+  ...jest.requireActual('../../../../../ui/themes'),
+  current: jest.fn(() => 'generic'),
+}));
 
 describe('TopPocket', () => {
   describe('View', () => {
@@ -30,7 +31,11 @@ describe('TopPocket', () => {
         pullDownIconAngle: 0,
         pullDownOpacity: 0,
         pullDownTranslateTop: 0,
+        pulledDownText: 'Release to refresh...',
+        pullingDownText: 'Pull down to refresh...',
+        refreshingText: 'Refreshing...',
         topPocketTranslateTop: 0,
+        visible: true,
       });
     });
   });
@@ -89,6 +94,28 @@ describe('TopPocket', () => {
             expect(textElement.length).toBe(0);
           }
         });
+      });
+    });
+  });
+
+  describe('Default options', () => {
+    each(['generic', 'material']).describe('currentTheme: %o', (currentTheme) => {
+      const getDefaultOptions = (): TopPocketProps => new TopPocketProps();
+
+      it(`theme: ${currentTheme}, check default values for text options`, () => {
+        (current as jest.Mock).mockImplementation(() => currentTheme);
+
+        const isMaterial = currentTheme === 'material';
+
+        if (isMaterial) {
+          expect(getDefaultOptions().pullingDownText).toBe('');
+          expect(getDefaultOptions().pulledDownText).toBe('');
+          expect(getDefaultOptions().refreshingText).toBe('');
+        } else {
+          expect(getDefaultOptions().pullingDownText).toBe('Pull down to refresh...');
+          expect(getDefaultOptions().pulledDownText).toBe('Release to refresh...');
+          expect(getDefaultOptions().refreshingText).toBe('Refreshing...');
+        }
       });
     });
   });
