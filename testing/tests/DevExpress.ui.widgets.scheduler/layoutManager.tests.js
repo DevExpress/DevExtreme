@@ -54,19 +54,24 @@ QUnit.test('RenderingStrategy should be initialized', function(assert) {
 QUnit.test('Scheduler should have a right rendering strategy for timeline views', function(assert) {
     this.createInstance({
         views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
-        currentView: 'timelineDay'
+        currentView: 'timelineDay',
+        dataSource: [{
+            startDate: new Date(2021, 7, 8, 9),
+            endDate: new Date(2021, 7, 8, 10),
+            text: 'Test'
+        }]
     });
 
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineDay strategy is OK');
 
     this.instance.option('currentView', 'timelineWeek');
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWeek strategy is OK');
 
     this.instance.option('currentView', 'timelineWorkWeek');
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWorkWeek strategy is OK');
 
     this.instance.option('currentView', 'timelineMonth');
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'Strategy is OK');
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
 });
 
 QUnit.test('Scheduler should have a right rendering strategy for views with config', function(assert) {
@@ -78,7 +83,12 @@ QUnit.test('Scheduler should have a right rendering strategy for views with conf
             name: 'WeekView',
             type: 'week'
         }],
-        currentView: 'WeekView'
+        currentView: 'WeekView',
+        dataSource: [{
+            startDate: new Date(2021, 7, 8, 9),
+            endDate: new Date(2021, 7, 8, 10),
+            text: 'Test'
+        }]
     });
 
     assert.ok(this.instance.getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, 'Strategy is OK');

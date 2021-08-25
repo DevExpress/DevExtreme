@@ -174,6 +174,15 @@ describe('DataGrid Wrapper', () => {
     });
   });
 
+  it('should not fail on server side rendering', () => {
+    const component = new DataGridComponent({} as any, {});
+    // It's server side rendering
+    component._getInternalInstance = () => undefined as any;
+    // It's first render
+    component._isNodeReplaced = false;
+    expect(() => component._renderWrapper({})).not.toThrow();
+  });
+
   it('deprecated options', () => {
     const component = createDataGrid();
 
@@ -329,6 +338,15 @@ describe('DataGrid Wrapper', () => {
       expect(options.dataSource.store).not.toBe(prevProps.dataSource.store);
       expect(options.dataSource.store.data).not.toBe(prevProps.dataSource.store.data);
       expect(prevProps.dataSource.store.data).toEqual([1]);
+    });
+
+    it('integrationOptions changed', () => {
+      const component: any = createDataGrid();
+      const options = { option: 'value' };
+      component.__options = options;
+      component.viewRef.prevProps = options;
+      component._optionChanging('integrationOptions', undefined, { template: { 'some.nested.string': 'value' } });
+      expect(options).not.toContain('integrationOptions');
     });
 
     it('editing complex option changed', () => {

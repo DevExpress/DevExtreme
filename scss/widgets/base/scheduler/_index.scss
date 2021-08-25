@@ -546,7 +546,6 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 }
 
-
 @mixin scheduler-mixin() {
   .dx-scheduler-pseudo-cell {
     @include dx-scheduler-pseudo-cell-mixin();
@@ -554,6 +553,12 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-header {
     @include header-base($scheduler-base-border);
+  }
+
+  .dx-scheduler-view-switcher-dropdown-button-content {
+    .dx-list-item {
+      display: list-item;
+    }
   }
 
   .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
@@ -943,10 +948,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-scrollable-fixed-content {
-    height: 100%;
-  }
-
   .dx-scheduler-work-space-month {
     .dx-scheduler-all-day-title {
       display: none;
@@ -996,10 +997,8 @@ $scheduler-appointment-form-label-padding: 20px;
       min-height: $scheduler-month-workspace-date-table-height;
     }
 
-    .dx-scrollable-native .dx-scrollable-content {
-      &.dx-scheduler-scrollable-fixed-content {
-        height: 100%;
-      }
+    &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-vertical-grouped) .dx-scrollable-content {
+      height: 100%;
     }
 
     .dx-scheduler-date-table-cell {

@@ -45,8 +45,6 @@ class ScrollableTestHelper {
 
   constructor(props: Partial<ScrollableNativePropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
-    this.options.direction = this.options.direction ?? 'vertical';
-
     this.actionHandlers = this.getActionHandlers(this.options);
 
     this.viewModel = new Scrollable({
@@ -54,6 +52,7 @@ class ScrollableTestHelper {
       onUpdated: this.actionHandlers.onUpdated,
       onPullDown: this.actionHandlers.onPullDown,
       onReachBottom: this.actionHandlers.onReachBottom,
+      needRenderScrollbars: true,
       ...this.options,
     }) as any;
     this.viewModel.scrollableRef = React.createRef() as RefObject<HTMLDivElement>;

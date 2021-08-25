@@ -4880,6 +4880,11 @@ declare module DevExpress.ui {
      * [descr:dxButtonGroupItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * [descr:dxButtonGroupItem.elementAttr]
+     */
+    elementAttr?: { [key: string]: any };
   }
   /**
    * @deprecated use Properties instead
@@ -4932,7 +4937,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.selectionMode]
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: 'multiple' | 'single' | 'none';
     /**
      * [descr:dxButtonGroupOptions.stylingMode]
      */
@@ -5095,7 +5100,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCheckBox]
    */
-  export class dxCheckBox extends Editor<dxCheckBoxOptions> {}
+  export class dxCheckBox extends Editor<dxCheckBoxOptions> {
+    /**
+     * [descr:dxCheckBox.blur()]
+     */
+    blur(): void;
+  }
   module dxCheckBox {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCheckBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxCheckBox>;
@@ -12532,6 +12542,34 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showResourceManagerDialog()]
      */
     showResourceManagerDialog(): void;
+    /**
+     * [descr:dxGantt.expandAll()]
+     */
+    expandAll(): void;
+    /**
+     * [descr:dxGantt.collapseAll()]
+     */
+    collapseAll(): void;
+    /**
+     * [descr:dxGantt.expandAllToLevel(level)]
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * [descr:dxGantt.expandToTask(key)]
+     */
+    expandToTask(key: any): void;
+    /**
+     * [descr:dxGantt.collapseTask(key)]
+     */
+    collapseTask(key: any): void;
+    /**
+     * [descr:dxGantt.expandTask(key)]
+     */
+    expandTask(key: any): void;
+    /**
+     * [descr:dxGantt.refresh()]
+     */
+    refresh(): DevExpress.core.utils.DxPromise<void>;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
@@ -12840,7 +12878,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.sorting]
      */
-    sorting?: Sorting;
+    sorting?: dxGanttSorting;
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
      */
@@ -13154,6 +13192,40 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.rootValue]
      */
     rootValue?: any;
+    /**
+     * [descr:dxGanttOptions.startDateRange]
+     */
+    startDateRange?: Date;
+    /**
+     * [descr:dxGanttOptions.endDateRange]
+     */
+    endDateRange?: Date;
+  }
+  /**
+   * [descr:dxGanttSorting]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttSorting {
+    /**
+     * [descr:dxGanttSorting.ascendingText]
+     */
+    ascendingText?: string;
+    /**
+     * [descr:dxGanttSorting.clearText]
+     */
+    clearText?: string;
+    /**
+     * [descr:dxGanttSorting.descendingText]
+     */
+    descendingText?: string;
+    /**
+     * [descr:dxGanttSorting.mode]
+     */
+    mode?: 'multiple' | 'none' | 'single';
+    /**
+     * [descr:dxGanttSorting.showSortIndexes]
+     */
+    showSortIndexes?: boolean;
   }
   /**
    * [descr:dxGanttStripLine]
@@ -20831,6 +20903,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
     virtualModeEnabled?: boolean;
+    /**
+     * [descr:dxTreeViewOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
   }
   /**
    * [descr:dxValidationGroup]
@@ -22037,32 +22113,6 @@ declare module DevExpress.ui {
      * [descr:SearchBoxMixinOptions.searchValue]
      */
     searchValue?: string;
-  }
-  /**
-   * [descr:Sorting]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface Sorting {
-    /**
-     * [descr:Sorting.ascendingText]
-     */
-    ascendingText?: string;
-    /**
-     * [descr:Sorting.clearText]
-     */
-    clearText?: string;
-    /**
-     * [descr:Sorting.descendingText]
-     */
-    descendingText?: string;
-    /**
-     * [descr:Sorting.mode]
-     */
-    mode?: 'multiple' | 'none' | 'single';
-    /**
-     * [descr:Sorting.showSortIndexes]
-     */
-    showSortIndexes?: boolean;
   }
   /**
    * [descr:StringLengthRule]
@@ -33819,9 +33869,6 @@ declare module DevExpress.viz.dxBarGauge {
   export type LegendItem = BarGaugeLegendItem;
 }
 declare module DevExpress.viz.dxFunnel {
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type Item = dxFunnelItem;
   export type LegendItem = FunnelLegendItem;
 }

@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 
 import { RefObject } from '@devextreme-generator/declarations';
 import {
-  clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
+  clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
 
 import {
@@ -130,7 +130,7 @@ describe('Scrollbar', () => {
 
     it('should subscribe to pointerDown event', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
+      scrollbar.scrollRef = { current: {} as HTMLElement } as RefObject;
       scrollbar.expand = jest.fn();
 
       scrollbar.pointerDownEffect();
@@ -139,20 +139,9 @@ describe('Scrollbar', () => {
       expect(scrollbar.expand).toHaveBeenCalledTimes(1);
     });
 
-    it('pointerDownEffect should return unsubscribe callback', () => {
-      const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
-
-      const detach = scrollbar.pointerDownEffect();
-
-      expect(getEventHandlers('dxpointerdown').length).toBe(1);
-      detach();
-      expect(getEventHandlers('dxpointerdown').length).toBe(0);
-    });
-
     it('Down & Up effects should add & remove scroll active class', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
+      scrollbar.scrollRef = { current: {} as HTMLElement } as RefObject;
 
       scrollbar.pointerDownEffect();
       emit('dxpointerdown');
@@ -175,17 +164,6 @@ describe('Scrollbar', () => {
       emit('dxpointerup');
 
       expect(scrollbar.collapse).toHaveBeenCalledTimes(1);
-    });
-
-    it('pointerUpEffect should return unsubscribe callback', () => {
-      const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
-
-      const detach = scrollbar.pointerUpEffect();
-
-      expect(getEventHandlers('dxpointerup').length).toBe(1);
-      detach();
-      expect(getEventHandlers('dxpointerup').length).toBe(0);
     });
 
     each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
@@ -611,7 +589,7 @@ describe('Scrollbar', () => {
 
       each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
         each([300, 360, 600]).describe('visibleScrollAreaSize: %o', (visibleScrollAreaSize) => {
-          each([-100, -300, -359.4, -359.6, -500]).describe('scrollLocation: %o', (scrollLocation) => {
+          each([-100, -300, -359.9, -360, -360.1, -500]).describe('scrollLocation: %o', (scrollLocation) => {
             it('isReachBottom()', () => {
               const topPocketSize = 85;
               const bottomPocketSize = 55;
@@ -629,7 +607,7 @@ describe('Scrollbar', () => {
               });
 
               if (reachBottomEnabled
-              && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0.5) {
+                && ((scrollLocation as number) + (visibleScrollAreaSize as number)) <= 0) {
                 expect(viewModel.isReachBottom).toBe(true);
               } else {
                 expect(viewModel.isReachBottom).toBe(false);
@@ -1177,21 +1155,21 @@ describe('Scrollbar', () => {
         expect(viewModel.hideScrollbarTimer).toBe(undefined);
       });
 
-      it('scrollByHandler(delta)', () => {
+      it('scrollTo(delta)', () => {
         const onInertiaAnimatorStart = jest.fn();
-        const delta = { x: 50, y: 70 };
+        const delta = 50;
         const viewModel = new Scrollbar({
           direction,
           onAnimatorStart: onInertiaAnimatorStart,
         });
 
-        viewModel.scrollBy = jest.fn();
+        viewModel.moveTo = jest.fn();
         viewModel.stopScrolling = jest.fn();
 
-        viewModel.scrollByHandler(delta);
+        viewModel.scrollTo(delta);
 
-        expect(viewModel.scrollBy).toBeCalledTimes(1);
-        expect(viewModel.scrollBy).toHaveBeenCalledWith(delta);
+        expect(viewModel.moveTo).toBeCalledTimes(1);
+        expect(viewModel.moveTo).toHaveBeenCalledWith(-delta);
         expect(viewModel.stopScrolling).toBeCalledTimes(1);
       });
 

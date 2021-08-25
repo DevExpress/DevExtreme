@@ -8,6 +8,7 @@ QUnit.testStart(function() {
 ';
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 import 'generic_light.css!';
@@ -229,7 +230,8 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             paging: { pageSize: 2, pageIndex: 1 },
             columns: ['name', 'age'],
             scrolling: {
-                useNative: false
+                useNative: false,
+                minGap: 0
             },
             dataSource: [
                 { id: 1, parentId: 0, name: 'Name 1', age: 19 },
@@ -250,7 +252,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.equal(treeList.option('scrolling.mode'), 'virtual', 'scrolling mode is virtual');
         const $rowsViewTables = $(treeList.$element().find('.dx-treelist-rowsview table'));
         assert.equal($rowsViewTables.length, 1, 'one table are rendered');
-        assert.equal($rowsViewTables.eq(0).find('.dx-data-row').length, 4, 'data rows in table');
+        assert.equal($rowsViewTables.eq(0).find('.dx-data-row').length, 2, 'data rows in table');
         assert.equal($rowsViewTables.eq(0).find('.dx-virtual-row').length, 2, 'two virtual rows in table');
         assert.equal($rowsViewTables.eq(0).find('.dx-freespace-row').length, 1, 'one freespace row in table');
     });
@@ -1201,7 +1203,8 @@ QUnit.module('Expand/Collapse rows', () => {
                 pageSize: 2
             },
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                minGap: 0
             },
             expandedRowKeys: [1],
             dataSource: [
@@ -1435,7 +1438,10 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 pageSize: 4
             },
             focusedRowEnabled: true,
-            focusedRowKey: 12
+            focusedRowKey: 12,
+            scrolling: {
+                minGap: 0
+            }
         });
 
         this.clock.tick();
@@ -1457,7 +1463,10 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 pageSize: 4
             },
             focusedRowEnabled: true,
-            focusedRowKey: 12
+            focusedRowKey: 12,
+            scrolling: {
+                minGap: 0
+            }
         });
 
         this.clock.tick();
@@ -1724,7 +1733,9 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                     pageSize: 4
                 },
                 scrolling: {
-                    mode: scrollingMode
+                    mode: scrollingMode,
+                    minGap: 0,
+                    useNative: true
                 },
                 focusedRowEnabled: true,
                 focusedRowKey: 12,
@@ -1847,7 +1858,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
         setTimeout(function() {
             // assert
-            assert.strictEqual(treeList.pageIndex(), 2, 'page index');
+            assert.strictEqual(treeList.pageIndex(), 1, 'page index');
             done();
         }, 1000);
     });
@@ -2141,6 +2152,7 @@ QUnit.module('Virtual scrolling', defaultModuleConfig, () => {
         assert.strictEqual($(treeList.getCellElement(0, 0)).find('.dx-treelist-collapsed').length, 1, 'row collapsed');
     });
 });
+
 
 QUnit.module('Row dragging', defaultModuleConfig, () => {
 

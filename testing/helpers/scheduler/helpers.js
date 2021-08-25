@@ -25,13 +25,13 @@ export const CLASSES = {
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
     navigatorPrevButton: '.dx-scheduler-navigator-previous',
-    navigatorCalendarButton: '.dx-scheduler-navigator-calendar-button',
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
     viewSwitcher: '.dx-scheduler-view-switcher',
     viewSwitcherDropDownButton: '.dx-scheduler-view-switcher-dropdown-button',
+    viewSwitcherDropDownButtonContent: '.dx-scheduler-view-switcher-dropdown-button-content',
 
     calendar: '.dx-scheduler-navigator-calendar',
     calendarToday: '.dx-calendar-today',
@@ -173,7 +173,6 @@ class ElementWrapper {
         return this.getElement().hasClass(className);
     }
 }
-
 class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
@@ -341,7 +340,7 @@ class NavigatorWrapper extends ElementWrapper {
     }
 
     get calendarButton() {
-        return new ClickElementWrapper(CLASSES.navigatorCalendarButton);
+        return new ClickElementWrapper(CLASSES.navigatorCaption);
     }
 
     get nextButton() {
@@ -359,7 +358,9 @@ class ViewSwitcherWrapper extends ElementWrapper {
     }
 
     get dropDownButton() {
-        return new ElementWrapper(CLASSES.viewSwitcherDropDownButton);
+        const dropDown = new ClickElementWrapper(CLASSES.viewSwitcherDropDownButton);
+
+        return new ClickElementWrapper(CLASSES.button, dropDown.getElement());
     }
 
     get selectedButton() {
@@ -574,7 +575,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
             getCancelButton: () => this.appointmentPopup.getPopup().find('.dx-popup-cancel'),
             clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger('dxclick'),
-            saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
+            saveAppointmentData: () => this.instance._appointmentPopup.saveEditDataAsync.call(this.instance._appointmentPopup),
 
             hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0,
 

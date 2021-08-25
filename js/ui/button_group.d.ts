@@ -127,7 +127,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: 'multiple' | 'single' | 'none';
     /**
      * @docid
      * @type Enums.ButtonStylingMode
@@ -174,6 +174,12 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * @docid
+     * @public
+     */
+    elementAttr?: { [key: string]: any };
 }
 
 /** @public */

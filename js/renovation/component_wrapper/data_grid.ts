@@ -7,7 +7,7 @@ import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent, Option } from './common/types';
 import type { ExcelCellInfo, Export, OptionChangedEvent } from '../../ui/data_grid';
-import { getUpdatedOptions } from '../ui/grids/data_grid/utils/get_updated_options';
+import { getUpdatedOptions } from '../ui/common/utils/get_updated_options';
 
 import { themeReadyCallback } from '../../ui/themes_callback';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
@@ -85,6 +85,10 @@ export default class DataGridWrapper extends Component {
       const name = getPathParts(fullName)[0];
       const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
 
+      if (name === 'integrationOptions') {
+        return;
+      }
+
       if (name === 'editing' && name !== fullName) {
         // T751778
         // TODO remove when silent assign will be removed from editing
@@ -158,9 +162,10 @@ export default class DataGridWrapper extends Component {
 
   _renderWrapper(props: Record<string, unknown>): void {
     const isFirstRender = !this._isNodeReplaced;
+
     super._renderWrapper(props);
     if (isFirstRender) {
-      this._getInternalInstance().on('optionChanged', this._internalOptionChangedHandler.bind(this));
+      this._getInternalInstance()?.on('optionChanged', this._internalOptionChangedHandler.bind(this));
     }
   }
 

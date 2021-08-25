@@ -1,6 +1,7 @@
 import dateUtils from '../../../../../core/utils/date';
 import { getGroupCount } from '../../../../../ui/scheduler/resources/utils';
 import { GroupOrientation } from '../../types';
+import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
 import { Group } from '../types';
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 
@@ -60,3 +61,5 @@ export const createCellElementMetaData = (
   left: cellRect.left - tableRect.left,
   top: cellRect.top - tableRect.top,
 });
+
+export const getDateForHeaderText: GetDateForHeaderText = (_, date) => date;

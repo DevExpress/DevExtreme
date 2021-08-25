@@ -6,6 +6,8 @@ const CLASS = {
   popupWrapper: 'dx-popup-wrapper',
   cancelButton: 'dx-popup-cancel.dx-button',
   stateInvisible: 'dx-state-invisible',
+  recurrenceEditor: 'dx-recurrence-editor',
+  textEditorInput: 'dx-texteditor-input',
 };
 
 export default class AppointmentPopup {
@@ -31,6 +33,8 @@ export default class AppointmentPopup {
 
   freqElement: Selector;
 
+  endRepeatDateElement: Selector;
+
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
     this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
@@ -46,6 +50,8 @@ export default class AppointmentPopup {
 
     this.doneButton = this.wrapper.find('.dx-popup-done.dx-button');
     this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
+
+    this.endRepeatDateElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(2);
   }
 
   isVisible(): Promise<boolean> {

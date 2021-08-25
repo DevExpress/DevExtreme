@@ -122,9 +122,10 @@ export const VirtualScrollController = Class.inherit((function() {
         ctor: function(component, dataOptions, isVirtual) {
             this._dataOptions = dataOptions;
             this.component = component;
-            this._viewportSize = 0;
+            this._viewportSize = component.option(NEW_SCROLLING_MODE) ? 15 : 0;
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
+            this._position = 0;
             this._contentSize = 0;
             this._itemSizes = {};
             this._sizeRatio = 1;
@@ -147,12 +148,19 @@ export const VirtualScrollController = Class.inherit((function() {
 
         virtualItemsCount: function() {
             if(isVirtualMode(this)) {
-                const totalItemsCount = this._dataOptions.totalItemsCount();
+                const dataOptions = this._dataOptions;
+                const totalItemsCount = dataOptions.totalItemsCount();
                 if(this.option(NEW_SCROLLING_MODE) && totalItemsCount !== -1) {
                     const viewportParams = this.getViewportParams();
-                    const endItemsCount = totalItemsCount - (viewportParams.skip + viewportParams.take);
+                    const loadedOffset = dataOptions.loadedOffset();
+                    const loadedItemCount = dataOptions.loadedItemCount();
+
+                    const skip = Math.max(viewportParams.skip, loadedOffset);
+                    const take = Math.min(viewportParams.take, loadedItemCount);
+
+                    const endItemsCount = totalItemsCount - (skip + take);
                     return {
-                        begin: viewportParams.skip,
+                        begin: skip,
                         end: endItemsCount
                     };
                 }
@@ -183,11 +191,11 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         getViewportPosition: function() {
-            return this._position || 0;
+            return this._position;
         },
 
-        getItemIndexByPosition: function() {
-            const position = this._position;
+        getItemIndexByPosition: function(position) {
+            position = position ?? this._position;
             const defaultItemSize = this.getItemSize();
             let offset = 0;
             let itemOffset = 0;
@@ -297,7 +305,12 @@ export const VirtualScrollController = Class.inherit((function() {
             }
             return this._viewportSize;
         },
+        viewportHeight: function(height) {
+            const begin = this.getItemIndexByPosition();
+            const end = this.getItemIndexByPosition(this._position + height);
 
+            this.viewportSize(Math.ceil(end - begin));
+        },
         reset: function(isRefresh) {
             this._dataLoader.reset();
             if(!isRefresh) {
@@ -333,16 +346,19 @@ export const VirtualScrollController = Class.inherit((function() {
 
         // new mode
         getViewportParams: function() {
-            const topIndex = this._viewportItemIndex;
+            const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
+            const totalItemsCount = this._dataOptions.totalItemsCount();
+            const topIndex = virtualMode
+                ? Math.min(this._viewportItemIndex, Math.max(0, totalItemsCount - this._viewportSize))
+                : this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.pageSize();
             const minGap = this.option('scrolling.minGap');
-            const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
             const skip = Math.floor(Math.max(0, topIndex - minGap) / maxGap) * maxGap;
             let take = Math.ceil((bottomIndex + minGap) / maxGap) * maxGap - skip;
 
             if(virtualMode) {
-                const remainedItems = this._dataOptions.totalItemsCount() - skip;
+                const remainedItems = Math.max(0, totalItemsCount - skip);
                 take = Math.min(take, remainedItems);
             }
 

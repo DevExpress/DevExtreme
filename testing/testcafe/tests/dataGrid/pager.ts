@@ -22,7 +22,7 @@ async function createDataGridWithPager(): Promise<any> {
     },
   });
 }
-fixture.disablePageReloads`Pager`
+fixture`Pager`
   .page(url(__dirname, '../container.html'))
   .beforeEach(createDataGridWithPager)
   .afterEach(async () => disposeWidgets());
@@ -74,7 +74,6 @@ test('Compact pager', async (t) => {
   const pageIndexWidget = new TextBox(pager.element.find('.dx-page-index.dx-numberbox') as any);
   await t
     .typeText(pageIndexWidget.input, '7', { replace: true })
-    .click(pageSizeWidget.dropDownButton)
     .click(pageSizeWidget.dropDownButton)
     .pressKey('down')
     .pressKey('enter')

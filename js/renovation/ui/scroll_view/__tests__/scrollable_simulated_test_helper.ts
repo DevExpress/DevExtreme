@@ -30,7 +30,6 @@ const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
 
 interface Mock extends jest.Mock {}
-
 class ScrollableTestHelper {
   options: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
 
@@ -54,15 +53,12 @@ class ScrollableTestHelper {
 
   stopHandlerMock?: jest.Mock;
 
-  scrollByHandlerMock?: jest.Mock;
-
   scrollBarHandlers?: { name: string }[];
 
   actionHandlers: { [key: string]: any };
 
   constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
-    this.options.direction = this.options.direction ?? 'vertical';
     this.actionHandlers = this.getActionHandlers(this.options);
 
     this.viewModel = new Scrollable({
@@ -74,6 +70,7 @@ class ScrollableTestHelper {
       onReachBottom: this.actionHandlers.onReachBottom,
       onBounce: this.actionHandlers.onBounce,
       onVisibilityChange: this.actionHandlers.onVisibilityChange,
+      needRenderScrollbars: true,
       ...this.options,
     });
     this.viewModel.scrollableRef = React.createRef() as RefObject<HTMLDivElement>;
@@ -277,16 +274,15 @@ class ScrollableTestHelper {
       { name: 'cancel' },
       { name: 'stop' },
       { name: 'move' },
-      { name: 'scrollBy' },
       { name: 'release' }];
 
-    this.scrollBarHandlers.forEach((handler) => {
-      this[`${handler.name}HandlerMock`] = jest.fn();
+    this.scrollBarHandlers.forEach(({ name }) => {
+      this[`${name}HandlerMock`] = jest.fn();
       if (this.isVertical) {
-        this.getVScrollbar()[`${handler.name}Handler`] = this[`${handler.name}HandlerMock`];
+        this.getVScrollbar()[`${name}Handler`] = this[`${name}HandlerMock`];
       }
       if (this.isHorizontal) {
-        this.getHScrollbar()[`${handler.name}Handler`] = this[`${handler.name}HandlerMock`];
+        this.getHScrollbar()[`${name}Handler`] = this[`${name}HandlerMock`];
       }
     });
   }
