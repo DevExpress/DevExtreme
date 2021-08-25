@@ -57,7 +57,7 @@ function drawRect(doc, x, y, width, height, style) {
     }
 }
 
-function drawTextInRect(doc, text, rect, wordWrapEnabled, options) {
+function drawTextInRect(doc, text, rect, wordWrapEnabled, jsPdfTextOptions) {
     const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, columnWidth: rect.w });
     const linesCount = textArray.length;
 
@@ -68,7 +68,7 @@ function drawTextInRect(doc, text, rect, wordWrapEnabled, options) {
         - heightOfOneLine * (linesCount - 1) / 2;
 
     // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
-    const textOptions = extend({ baseline: 'middle' }, options);
+    const textOptions = extend({ baseline: 'middle' }, jsPdfTextOptions);
     doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
