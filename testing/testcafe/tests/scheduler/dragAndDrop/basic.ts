@@ -34,6 +34,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
   views: ['month'],
   currentView: 'month',
   dataSource,
+  height: 834,
 }));
 
 test('Drag-n-drop when browser has horizontal scroll', async (t) => {
