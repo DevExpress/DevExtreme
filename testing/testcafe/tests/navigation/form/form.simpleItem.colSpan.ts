@@ -7,7 +7,7 @@ fixture`Form`
 
 ['left', 'right', 'top'].forEach((labelLocation) => {
   [1, 2, 3, 4].forEach((colCount) => {
-    const testItem1ColSpan2 = `SimpleItem,colCount_${colCount},item1_colSpan_2`;
+    const testItem1ColSpan2 = `SimpleItem_colSpan,item1_colSpan_2,colCount_${colCount}`;
     test(testItem1ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -23,7 +23,7 @@ fixture`Form`
       items: [{ dataField: 'item_1', colSpan: 2 }],
     }));
 
-    const testItem1ColSpan2Item2 = `SimpleItem,colCount_${colCount},item1_colSpan_2,item2_colSpan_1`;
+    const testItem1ColSpan2Item2 = `SimpleItem_colSpan,item1_colSpan_2,item2_colSpan_1,colCount_${colCount}`;
     test(testItem1ColSpan2Item2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -42,7 +42,7 @@ fixture`Form`
       ],
     }));
 
-    const testItem1Item2ColSpan2 = `SimpleItem,colCount_${colCount},item1_colSpan_1,item2_colSpan_2`;
+    const testItem1Item2ColSpan2 = `SimpleItem_colSpan,item1_colSpan_1,item2_colSpan_2,colCount_${colCount}`;
     test(testItem1Item2ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -61,7 +61,7 @@ fixture`Form`
       ],
     }));
 
-    const testItem1ColSpan2Item2ColSpan2 = `SimpleItem,colCount_${colCount},item1_colSpan_2,item2_colSpan_2`;
+    const testItem1ColSpan2Item2ColSpan2 = `SimpleItem_colSpan,item1_colSpan_2,item2_colSpan_2,colCount_${colCount}`;
     test(testItem1ColSpan2Item2ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
