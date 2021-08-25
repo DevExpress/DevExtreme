@@ -11,6 +11,9 @@ import NavigationList from './NavigationList.js';
 class App extends React.Component {
   constructor() {
     super();
+    this.openedStateRadioButtons = ['push', 'shrink', 'overlap'];
+    this.positionRadioButtons = ['top', 'bottom'];
+    this.revealModeRadioButtons = ['slide', 'expand'];
 
     this.state = {
       opened: false,
@@ -31,6 +34,7 @@ class App extends React.Component {
     this.onOpenedStateModeChanged = this.onOpenedStateModeChanged.bind(this);
     this.onRevealModeChanged = this.onRevealModeChanged.bind(this);
     this.onPositionChanged = this.onPositionChanged.bind(this);
+    this.onOutsideClick = this.onOutsideClick.bind(this);
   }
 
   onOpenedStateModeChanged({ value }) {
@@ -45,21 +49,24 @@ class App extends React.Component {
     this.setState({ position: value });
   }
 
+  onOutsideClick() {
+    this.setState({ opened: false });
+  }
+
   render() {
     const { opened, openedStateMode, position, revealMode } = this.state;
-
     return (
       <React.Fragment>
         <Toolbar items={this.toolbarItems} />
         <Drawer
           opened={opened}
+          closeOnOutsideClick={this.onOutsideClick}
           openedStateMode={openedStateMode}
           position={position}
           component={NavigationList}
           revealMode={revealMode}
           height={400}
-          maxSize={200}
-          closeOnOutsideClick={true}>
+          maxSize={200}>
           <div id="content" className="dx-theme-background-color">
             {HTMLReactParser(text)}
           </div>
@@ -69,7 +76,7 @@ class App extends React.Component {
           <div className="option">
             <label>Opened state mode</label>
             <RadioGroup
-              items={['push', 'shrink', 'overlap']}
+              items={this.openedStateRadioButtons}
               layout="horizontal"
               value={openedStateMode}
               onValueChanged={this.onOpenedStateModeChanged}
@@ -79,7 +86,7 @@ class App extends React.Component {
           <div className="option">
             <label>Position</label>
             <RadioGroup
-              items={['top', 'bottom']}
+              items={this.positionRadioButtons}
               layout="horizontal"
               value={position}
               onValueChanged={this.onPositionChanged}
@@ -89,7 +96,7 @@ class App extends React.Component {
           {openedStateMode !== 'push' && (<div className="option">
             <label>Reveal mode</label>
             <RadioGroup
-              items={['slide', 'expand']}
+              items={this.revealModeRadioButtons}
               layout="horizontal"
               value={revealMode}
               onValueChanged={this.onRevealModeChanged}
