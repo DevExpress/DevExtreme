@@ -53,7 +53,7 @@ describe('CheckBoxIconIcon', () => {
         });
 
         it('should set icon font size', () => {
-          const checkBoxIcon = new CheckBoxIcon({ size: 22 });
+          const checkBoxIcon = new CheckBoxIcon({ size: 22, isChecked: true });
           checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
           const icon = checkBoxIcon.elementRef.current!;
 
@@ -64,7 +64,7 @@ describe('CheckBoxIconIcon', () => {
 
         it('should set default generic theme font-size if theme is not defined (e.g. in SSR)', () => {
           (current as Mock).mockReturnValue(undefined);
-          const checkBoxIcon = new CheckBoxIcon({ size: 22 });
+          const checkBoxIcon = new CheckBoxIcon({ size: 22, isChecked: true });
           checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
           const icon = checkBoxIcon.elementRef.current!;
 
@@ -75,41 +75,44 @@ describe('CheckBoxIconIcon', () => {
 
         each(['material', 'generic', 'material-compact', 'generic-compact'])
           .describe('%s theme', (theme) => {
-            it('should set fontSize properly when size is specified', () => {
-              (current as Mock).mockReturnValue(theme);
-              const iconSize = getDefaultIconSize();
+            each([true, false])
+              .describe('isChecked=%s', (isChecked) => {
+                it('should set fontSize properly when size is specified', () => {
+                  (current as Mock).mockReturnValue(theme);
+                  const iconSize = getDefaultIconSize();
 
-              const checkBoxIcon = new CheckBoxIcon({ size: iconSize });
-              checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-              const icon = checkBoxIcon.elementRef.current!;
+                  const checkBoxIcon = new CheckBoxIcon({ size: iconSize, isChecked });
+                  checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
+                  const icon = checkBoxIcon.elementRef.current!;
 
-              checkBoxIcon.updateFontSize();
+                  checkBoxIcon.updateFontSize();
 
-              const expectedValue = `${getFontSizeByIconSize(iconSize)}px`;
-              expect(icon.style.fontSize).toEqual(expectedValue);
-            });
+                  const expectedValue = `${getFontSizeByIconSize(iconSize, isChecked)}px`;
+                  expect(icon.style.fontSize).toEqual(expectedValue);
+                });
 
-            it('should set fontSize properly when size is not speified', () => {
-              (current as Mock).mockReturnValue(theme);
-              const iconSize = getDefaultIconSize();
-              (getElementComputedStyle as Mock).mockReturnValue({ width: iconSize });
+                it('should set fontSize properly when size is not specified', () => {
+                  (current as Mock).mockReturnValue(theme);
+                  const iconSize = getDefaultIconSize();
+                  (getElementComputedStyle as Mock).mockReturnValue({ width: iconSize });
 
-              const checkBoxIcon = new CheckBoxIcon({});
-              checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-              const icon = checkBoxIcon.elementRef.current!;
+                  const checkBoxIcon = new CheckBoxIcon({ isChecked });
+                  checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
+                  const icon = checkBoxIcon.elementRef.current!;
 
-              checkBoxIcon.updateFontSize();
+                  checkBoxIcon.updateFontSize();
 
-              const expectedValue = `${getFontSizeByIconSize(iconSize)}px`;
-              expect(icon.style.fontSize).toEqual(expectedValue);
-            });
+                  const expectedValue = `${getFontSizeByIconSize(iconSize, isChecked)}px`;
+                  expect(icon.style.fontSize).toEqual(expectedValue);
+                });
+              });
           });
 
         it('should update icon font size correctly if size prop is specified as a pixel string', () => {
           const iconSize = '22px';
           (getElementComputedStyle as Mock).mockReturnValue({ width: iconSize });
 
-          const checkBoxIcon = new CheckBoxIcon({ size: iconSize });
+          const checkBoxIcon = new CheckBoxIcon({ size: iconSize, isChecked: true });
           checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
           const icon = checkBoxIcon.elementRef.current!;
 
