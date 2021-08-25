@@ -128,12 +128,12 @@ test('With a large browser width, should be visible common appointment instead o
 
     .expect(roughEqual(await scheduler.getAppointmentCollector('1').element.getBoundingClientRectProperty('top'), 138))
     .ok()
-    .expect(roughEqual(await scheduler.getAppointmentCollector('1').element.getBoundingClientRectProperty('left'), 101))
+    .expect(roughEqual(await scheduler.getAppointmentCollector('1').element.getBoundingClientRectProperty('left'), 51))
     .ok()
 
     .expect(roughEqual(await scheduler.getAppointmentCollector('2').element.getBoundingClientRectProperty('top'), 250))
     .ok()
-    .expect(roughEqual(await scheduler.getAppointmentCollector('2').element.getBoundingClientRectProperty('left'), 101))
+    .expect(roughEqual(await scheduler.getAppointmentCollector('2').element.getBoundingClientRectProperty('left'), 51))
     .ok();
 
   await t.resizeWindow(700, 600);
@@ -144,11 +144,11 @@ test('With a large browser width, should be visible common appointment instead o
 
     .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty('top'), 137.5))
     .ok()
-    .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty('left'), 215))
+    .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty('left'), 115))
     .ok()
 
     .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty('top'), 256))
     .ok()
-    .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty('left'), 236.5))
+    .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty('left'), 136.5))
     .ok();
 }).before(async () => createScheduler(sampleData));
