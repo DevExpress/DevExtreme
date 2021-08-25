@@ -2570,7 +2570,12 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('Adaptive menu should not flick when the window has been resized with jQuery 3.3.1', function(assert) {
-        const outerWidth = sinon.spy(renderer.fn, 'outerWidth');
+        const initialRendererOuterWidth = renderer.fn.outerWidth;
+        let outerWidthCallCount = 0;
+        renderer.fn.outerWidth = function() {
+            outerWidthCallCount++;
+            return this.base(...arguments);
+        };
 
         try {
             new Menu(this.$element, {
@@ -2578,12 +2583,12 @@ QUnit.module('adaptivity: behavior', {
                 adaptivityEnabled: true
             });
 
-            assert.equal(outerWidth.callCount, 3, 'itemWidth has been called for each item and container on render');
+            assert.equal(outerWidthCallCount, 3, 'itemWidth has been called for each item and container on render');
 
             resizeCallbacks.fire();
-            assert.equal(outerWidth.callCount, 4, 'itemWidth has been called just for container on dimension change');
+            assert.equal(outerWidthCallCount, 4, 'itemWidth has been called just for container on dimension change');
         } finally {
-            outerWidth.restore();
+            renderer.fn.outerWidth = initialRendererOuterWidth;
         }
     });
 
