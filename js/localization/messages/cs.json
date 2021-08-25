@@ -531,6 +531,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Srovnat vzestupně",
         "dxGantt-sortingDescendingText": "Srovnat sestupně",
-        "dxGantt-sortingClearText": "Zrušit rovnání"
+        "dxGantt-sortingClearText": "Zrušit rovnání",
+        "dxGantt-toggleResources": "TODO",
+        "dxGantt-toggleDependencies": "TODO"
     }
 }
