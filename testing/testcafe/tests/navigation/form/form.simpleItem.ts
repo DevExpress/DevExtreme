@@ -11,10 +11,10 @@ fixture`Form`
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/ButtonItem/
 // TODO: https://js.devexpress.com/Documentation/21_2/ApiReference/UI_Components/dxForm/Item_Types/EmptyItem/
 
-[false, true].forEach((rtlEnabled) => {
-  ['left', 'right', 'top'].forEach((labelLocation) => {
-    [1, 2, 3].forEach((colCount) => {
-      [1, 2, 3, 4, 5, 6].forEach((itemNumber) => {
+[false].forEach((rtlEnabled) => { // TODO: false, true
+  ['left'].forEach((labelLocation) => { // TODO: 'left', 'right', 'top'
+    [1].forEach((colCount) => { // TODO: 1, 2, 3
+      [1].forEach((itemNumber) => { // TODO: 1, 2, 3, 4, 5, 6
         const testName = `TextBox_${itemNumber},colCount_${colCount},labelLocation_${labelLocation},rtlEnabled_${rtlEnabled}`;
         test(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
