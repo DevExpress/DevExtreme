@@ -99,13 +99,13 @@ export class ResourceManager {
     }
 
     getResourcesData() {
-        return this._resourcesData || [];
+        return this.loadedResources;
     }
 
     getEditors() {
         return this.getResources().map(resource => {
-            const field = getFieldExpr(resource);
-            const currentResourceItems = this._getResourceDataByField(field);
+            const dataField = getFieldExpr(resource);
+            const currentResourceItems = this._getResourceDataByField(dataField);
 
             return {
                 editorOptions: {
@@ -113,9 +113,9 @@ export class ResourceManager {
                     displayExpr: getDisplayExpr(resource),
                     valueExpr: getValueExpr(resource)
                 },
-                dataField: field,
+                dataField,
                 editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
-                label: { text: resource.label || field }
+                label: { text: resource.label || dataField }
             };
         });
     }
@@ -206,59 +206,36 @@ export class ResourceManager {
 
     loadResources(groups) {
         const result = new Deferred();
-
-        this.loadResourcesCore(groups).done((resources) => {
-
-            this.loadedResources = resources;
-
-            result.resolve(resources);
-        });
-
-        return result.promise();
-    }
-    loadResourcesCore(groups) {
-        const result = new Deferred();
-        const that = this;
         const deferreds = [];
 
-        each(this.getResourcesByFields(groups), function(i, resource) {
+        this.getResourcesByFields(groups).forEach(resource => {
             const deferred = new Deferred();
             const field = getFieldExpr(resource);
             deferreds.push(deferred);
 
             getWrappedDataSource(resource.dataSource)
                 .load()
-                .done(function(data) {
+                .done(data => {
                     deferred.resolve({
                         name: field,
-                        items: that._mapResourceData(resource, data),
-                        data: data
+                        items: this._mapResourceData(resource, data),
+                        data
                     });
-                }).fail(function() {
-                    deferred.reject();
-                });
-
+                }).fail(() => deferred.reject());
         });
 
         if(!deferreds.length) {
-            that._resourcesData = [];
+            this._resourcesData = [];
             return result.resolve([]);
         }
 
-        when.apply(null, deferreds).done(function() {
-            const data = Array.prototype.slice.call(arguments);
-            const mapFunction = function(obj) {
-                return { name: obj.name, items: obj.items, data: obj.data };
-            };
+        when.apply(null, deferreds).done((...data) => {
+            const isValidResources = this._isValidResourcesForGrouping(data);
 
-            const isValidResources = that._isValidResourcesForGrouping(data);
+            this.loadedResources = isValidResources ? data : [];
 
-            that._resourcesData = isValidResources ? data : [];
-
-            result.resolve(isValidResources ? data.map(mapFunction) : []);
-        }).fail(function() {
-            result.reject();
-        });
+            result.resolve(this.loadedResources);
+        }).fail(() => result.reject());
 
         return result.promise();
     }
