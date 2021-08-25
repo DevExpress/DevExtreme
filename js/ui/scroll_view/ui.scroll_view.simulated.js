@@ -1,4 +1,4 @@
-import { getHeight } from '../../core/utils/size';
+import { getHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { each } from '../../core/utils/iterator';
@@ -63,8 +63,10 @@ const ScrollViewScroller = Scroller.inherit({
     _updateBounds: function() {
         const considerPockets = this._direction !== 'horizontal';
 
-        this._topPocketSize = considerPockets ? Math.round(this._$topPocket[this._dimension]()) : 0;
-        this._bottomPocketSize = considerPockets ? Math.round(this._$bottomPocket[this._dimension]()) : 0;
+
+        const dimensionGetter = this._dimension === 'width' ? getWidth : getHeight;
+        this._topPocketSize = considerPockets ? Math.round(dimensionGetter(this._$topPocket)) : 0;
+        this._bottomPocketSize = considerPockets ? Math.round(dimensionGetter(this._$bottomPocket)) : 0;
 
         this.callBase();
         this._bottomBound = this._minOffset + this._bottomPocketSize;
