@@ -20,8 +20,8 @@ const defaultFontSizes = {
   true: {
     generic: 16,
     material: 16,
-    'generic-compact': 14,
-    'material-compact': 10,
+    'generic-compact': 10,
+    'material-compact': 14,
   },
   false: {
     generic: 12,
