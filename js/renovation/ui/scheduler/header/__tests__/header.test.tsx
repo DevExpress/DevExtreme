@@ -9,6 +9,10 @@ const HEADER_CLASS = 'dx-scheduler-header';
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 
+const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
+const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
+const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
+
 describe('Scheduler Toolbar', () => {
   describe('Render', () => {
     const defaultProps: any = { items: [] };
@@ -16,8 +20,8 @@ describe('Scheduler Toolbar', () => {
       <ViewFunction {...{ ...defaultProps, ...viewModel }} />,
     );
 
-    it('should render and pass', () => {
-      const tree = render({ items: 'items' });
+    it('should render correct markup and pass correct props to the Toolbar', () => {
+      const tree = render({ items: 'items', props: { rtlEnabled: true } });
       const toolbar = tree.childAt(0);
 
       expect(tree.hasClass(HEADER_CLASS)).toBe(true);
@@ -368,25 +372,52 @@ describe('Scheduler Toolbar', () => {
           it('should return correct dateNavigator previous button icon', () => {
             const toolbar = createToolbar();
 
-            const previousButton = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
 
-            expect(previousButton.items![0].icon).toBe('chevronprev');
+            expect(dateNavigatorOptions.items![0].icon).toBe('chevronprev');
+          });
+
+          it('should return correct dateNavigator previous button class', () => {
+            const toolbar = createToolbar();
+
+            const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+
+            expect(dateNavigatorOptions.items![0].elementAttr)
+              .toEqual({ class: PREVIOUS_BUTTON_CLASS });
           });
 
           it('should return correct dateNavigator calendar button text', () => {
             const toolbar = createToolbar();
 
-            const previousButton = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
 
-            expect(previousButton.items![1].text).toBe('7 August 2021');
+            expect(dateNavigatorOptions.items![1].text).toBe('7 August 2021');
+          });
+
+          it('should return correct dateNavigator calendar button class', () => {
+            const toolbar = createToolbar();
+
+            const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+
+            expect(dateNavigatorOptions.items![1].elementAttr)
+              .toEqual({ class: CALENDAR_BUTTON_CLASS });
           });
 
           it('should return correct dateNavigator next button icon', () => {
             const toolbar = createToolbar();
 
-            const previousButton = toolbar.items[0].options as ToolbarButtonGroupProps;
+            const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
 
-            expect(previousButton.items![2].icon).toBe('chevronnext');
+            expect(dateNavigatorOptions.items![2].icon).toBe('chevronnext');
+          });
+
+          it('should return correct dateNavigator next button class', () => {
+            const toolbar = createToolbar();
+
+            const dateNavigatorOptions = toolbar.items[0].options as ToolbarButtonGroupProps;
+
+            expect(dateNavigatorOptions.items![2].elementAttr)
+              .toEqual({ class: NEXT_BUTTON_CLASS });
           });
         });
 

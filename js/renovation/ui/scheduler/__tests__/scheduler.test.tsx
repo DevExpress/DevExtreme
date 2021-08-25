@@ -119,6 +119,7 @@ describe('Scheduler', () => {
           },
         ],
         customizeDateNavigatorText: () => {},
+        rtlEnabled: true,
       };
       const setCurrentDate = () => {};
       const setCurrentView = () => {};
@@ -147,6 +148,7 @@ describe('Scheduler', () => {
           onCurrentViewUpdate: setCurrentView,
           onCurrentDateUpdate: setCurrentDate,
           startViewDate,
+          rtlEnabled: props.rtlEnabled,
         });
     });
   });
