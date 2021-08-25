@@ -5,26 +5,38 @@ function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
-function getTextLines(text) {
+function getTextLines(doc, text, font, { wordWrapEnabled, columnWidth }) {
+    if(wordWrapEnabled) {
+        // it also splits text by '\n' automatically
+        return doc.splitTextToSize(text, columnWidth, {
+            fontSize: font?.size || doc.getFontSize()
+        });
+    }
     return text.split('\n');
 }
 
-function calculateTextHeight(doc, text, font) {
+function calculateTextHeight(doc, text, font, { wordWrapEnabled, columnWidth }) {
     const height = doc.getTextDimensions(text, {
         fontSize: font?.size || doc.getFontSize()
     }).h;
 
-    const linesCount = getTextLines(text).length;
+    const linesCount = getTextLines(doc, text, font, { wordWrapEnabled, columnWidth }).length;
     return height * linesCount * doc.getLineHeightFactor();
 }
 
-function calculateRowHeight(doc, cells) {
+function calculateRowHeight(doc, cells, columnWidths) {
+    if(cells.length !== columnWidths.length) {
+        throw 'the cells count must be equal to the count of the columns';
+    }
+
     let rowHeight = 0;
     for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
         const cellText = cells[cellIndex].text;
         const font = cells[cellIndex].font;
+        const wordWrapEnabled = cells[cellIndex].wordWrapEnabled;
+        const columnWidth = columnWidths[cellIndex];
         if(isDefined(cellText)) {
-            const cellHeight = calculateTextHeight(doc, cellText, font);
+            const cellHeight = calculateTextHeight(doc, cellText, font, { wordWrapEnabled, columnWidth });
             if(rowHeight < cellHeight) {
                 rowHeight = cellHeight;
             }
@@ -45,11 +57,11 @@ function drawRect(doc, x, y, width, height, style) {
     }
 }
 
-function drawTextInRect(doc, text, rect, options) {
-    const textArray = getTextLines(text);
+function drawTextInRect(doc, text, rect, wordWrapEnabled, options) {
+    const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, columnWidth: rect.w });
     const linesCount = textArray.length;
 
-    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont());
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
 
     // TODO: check lineHeightFactor - https://github.com/MrRio/jsPDF/issues/3234
     const y = rect.y + (rect.h / 2)
@@ -57,7 +69,7 @@ function drawTextInRect(doc, text, rect, options) {
 
     // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
     const textOptions = extend({ baseline: 'middle' }, options);
-    doc.text(text, round(rect.x), round(y), textOptions);
+    doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
 export { calculateRowHeight, drawLine, drawRect, drawTextInRect };
