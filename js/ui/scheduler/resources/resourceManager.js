@@ -98,10 +98,6 @@ export class ResourceManager {
         return this._resources || [];
     }
 
-    getResourcesData() {
-        return this.loadedResources;
-    }
-
     getEditors() {
         return this.getResources().map(resource => {
             const dataField = getFieldExpr(resource);
@@ -240,6 +236,14 @@ export class ResourceManager {
         return result.promise();
     }
 
+    _isValidResourcesForGrouping(resources) {
+        const result = resources.reduce((isValidResources, currentResource) => {
+            return isValidResources && currentResource.items.length > 0;
+        }, true);
+
+        return result;
+    }
+
     getResourcesByFields(fields) {
         return grep(this.getResources(), (function(resource) {
             const field = getFieldExpr(resource);
@@ -324,13 +328,11 @@ export class ResourceManager {
     }
 
     _getResourceDataByField(fieldName) {
-        const loadedResources = this.getResourcesData();
-
         let currentResourceData = [];
 
-        for(let i = 0, resourceCount = loadedResources.length; i < resourceCount; i++) {
-            if(loadedResources[i].name === fieldName) {
-                currentResourceData = loadedResources[i].data;
+        for(let i = 0, resourceCount = this.loadedResources.length; i < resourceCount; i++) {
+            if(this.loadedResources[i].name === fieldName) {
+                currentResourceData = this.loadedResources[i].data;
                 break;
             }
         }
@@ -363,7 +365,7 @@ export class ResourceManager {
     groupAppointmentsByResources(appointments, groups) {
         let result = { '0': appointments };
 
-        if(groups && groups.length && this.getResourcesData().length) {
+        if(groups && groups.length && this.loadedResources.length) {
             result = this.groupAppointmentsByResourcesCore(appointments, this.loadedResources);
         }
 
@@ -494,10 +496,8 @@ export class ResourceManager {
     }
 
     getResourcesDataByGroups(groups) {
-        const resourcesData = this.getResourcesData();
-
         if(!groups || !groups.length) {
-            return resourcesData;
+            return this.loadedResources;
         }
 
         const fieldNames = {};
@@ -507,7 +507,7 @@ export class ResourceManager {
             each(group, (name, value) => fieldNames[name] = value);
         });
 
-        const resourceData = resourcesData.filter(({ name }) => isDefined(fieldNames[name]));
+        const resourceData = this.loadedResources.filter(({ name }) => isDefined(fieldNames[name]));
         resourceData.forEach(
             data => currentResourcesData.push(extend({}, data))
         );
@@ -544,14 +544,6 @@ export class ResourceManager {
         });
 
         return currentResourcesData;
-    }
-
-    _isValidResourcesForGrouping(resources) {
-        const result = resources.reduce((isValidResources, currentResource) => {
-            return isValidResources && currentResource.items.length > 0;
-        }, true);
-
-        return result;
     }
 
     createReducedResourcesTree(appointments) {
