@@ -68,7 +68,7 @@ export function drawPdfTable(doc, styles, table, options) {
             if(allowDrawCellContent === true) {
                 drawBackColor(doc, cell);
 
-                drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.textOptions);
+                drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
                 const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
                 const docFont = doc.getFont();
                 if(
@@ -88,7 +88,7 @@ export function drawPdfTable(doc, styles, table, options) {
                 }
 
                 if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                    drawTextInRect(doc, cell.text, cell._rect, cell.textOptions);
+                    drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
                 }
             }
 
