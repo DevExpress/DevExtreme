@@ -454,6 +454,7 @@ const HtmlEditor = Editor.inherit({
             case 'toolbar':
             case 'mentions':
             case 'customizeModules':
+            case 'allowSoftBreak':
                 this._invalidate();
                 break;
             case 'tableResizing':
