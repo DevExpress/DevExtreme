@@ -96,7 +96,10 @@ export default SelectionStrategy.inherit({
 
         let deselectedItems = [];
         if(isDeselect) {
-            deselectedItems = combinedFilter ? dataQuery(this.options.selectedItems).filter(combinedFilter).toArray() : this.options.selectedItems.slice(0);
+            const selectedItems = this.options.selectedItems;
+            deselectedItems = combinedFilter && keys.length !== selectedItems.length
+                ? dataQuery(selectedItems).filter(combinedFilter).toArray()
+                : selectedItems.slice(0);
         }
 
         let filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems(true).filter(this.options.isSelectableItem).map(this.options.getItemData);
