@@ -1687,6 +1687,49 @@ const JSPdfWordWrapTests = {
                 });
             });
         });
+
+        QUnit.module('WordWrap with Bands', moduleConfig, () => {
+            QUnit.test('[f1, band1-[f2, band1_1-[f3,f4], band2_2-[f5,f6],f7]] - height auto', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        'f1',
+                        {
+                            caption: 'Band1 line',
+                            columns: [
+                                'f2',
+                                { caption: 'Band1_1 long line very long line',
+                                    columns: [
+                                        { dataField: 'f3', caption: 'f3  long line' },
+                                        { dataField: 'f4', caption: 'f4  long line very long line' }
+                                    ] },
+                                { caption: 'Band1_2', columns: [{ dataField: 'f5', caption: 'f5 long line very long line' }, 'f6'] },
+                                { caption: 'f7 long line very long line', dataField: 'f7' }
+                            ]
+                        }
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1_1 line',
+                            f2: 'f2_1 long line very long line',
+                            f3: 'f3_1',
+                            f4: 'f4_1 very long line very long line very long line',
+                            f5: 'f5_1 long line', f6: 'f6_1', f7: 'f7_1 line'
+                        }],
+                });
+
+                const expectedLog = [
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ] }).then(() => {
+                    doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+        });
     }
 };
 
