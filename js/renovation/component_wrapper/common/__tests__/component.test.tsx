@@ -113,12 +113,15 @@ describe('Misc cases', () => {
     expect(apiCallResult).toBe('check api - 1 - 2');
   });
 
-  it('setAria throws Error', () => {
-    $('#component').dxTestWidget({});
+  it('setAria pass aria prop to the widget', () => {
+    const $component = $('#component');
+    $component.dxTestWidget();
 
-    expect(() => {
-      $('#component').dxTestWidget('setAria');
-    }).toThrowError('"setAria" method is deprecated, use "aria" property instead');
+    $component.dxTestWidget('setAria', 'role', 'custom');
+
+    expect($component.dxTestWidget('getLastPassedProps')).toMatchObject({
+      aria: { role: 'custom' },
+    });
   });
 
   describe('API with Element type params/return type', () => {

@@ -15,6 +15,7 @@ import { Editor, EditorProps } from '../internal/editor';
 import BaseComponent from '../../../component_wrapper/editors/check_box';
 import { combineClasses } from '../../../utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
+import { WidgetProps } from '../../common/widget';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -109,6 +110,9 @@ export class CheckBoxProps extends EditorProps {
   @OneWay() saveValueChangeEvent?: (event: Event) => void;
 }
 
+export type CheckBoxPropsType = CheckBoxProps
+& Pick<WidgetProps, 'aria'>;
+
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
@@ -123,7 +127,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   view: viewFunction,
 })
 
-export class CheckBox extends JSXComponent(CheckBoxProps) {
+export class CheckBox extends JSXComponent<CheckBoxPropsType>() {
   @Ref() editorRef!: RefObject<Editor>;
 
   @Method()
@@ -176,9 +180,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const checked = value === true;
     const indeterminate = value === null;
 
-    return {
+    const result = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
     };
+
+    return { ...result, ...this.props.aria };
   }
 }
