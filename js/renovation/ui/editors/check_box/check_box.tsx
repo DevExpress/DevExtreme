@@ -17,7 +17,7 @@ import { combineClasses } from '../../../utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
 import { WidgetProps } from '../../common/widget';
 
-const getCssClasses = (model: CheckBoxProps): string => {
+const getCssClasses = (model: CheckBoxPropsType): string => {
   const {
     text, value,
   } = model;
@@ -113,7 +113,7 @@ export class CheckBoxProps extends EditorProps {
 export type CheckBoxPropsType = CheckBoxProps
 & Pick<WidgetProps, 'aria'>;
 
-export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
+export const defaultOptionRules = createDefaultOptionRules<CheckBoxPropsType>([{
   device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
 }]);
