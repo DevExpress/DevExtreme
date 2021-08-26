@@ -164,22 +164,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
   &.dx-editor-filled,
   &.dx-editor-outlined {
-    .dx-texteditor-buttons-container {
-      right: $material-filled-texteditor-input-horizontal-padding;
-    }
-
-    &.dx-show-clear-button {
-      .dx-texteditor-input {
-        padding-right: $material-filled-texteditor-input-horizontal-padding;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          padding: $material-filled-texteditor-input-padding;
-          padding-left: $material-filled-texteditor-input-horizontal-padding;
-        }
-      }
-    }
-
     .dx-placeholder {
       &::before {
         padding: $material-filled-texteditor-input-padding;
@@ -188,14 +172,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
     .dx-texteditor-input {
       padding: $material-filled-texteditor-input-padding;
-    }
-
-    .dx-rtl &,
-    &.dx-rtl {
-      .dx-texteditor-buttons-container {
-        left: $material-filled-texteditor-input-horizontal-padding;
-        right: auto;
-      }
     }
   }
 
@@ -228,10 +204,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
   &.dx-editor-underlined {
     background-color: transparent;
 
-    .dx-texteditor-buttons-container {
-      right: $material-base-standard-texteditor-input-horizontal-padding;
-    }
-
     &::after {
       border-bottom: 1px solid $texteditor-border-color;
     }
@@ -250,14 +222,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
     .dx-texteditor-input {
       padding: $material-standard-texteditor-input-padding;
-    }
-
-    .dx-rtl &,
-    &.dx-rtl {
-      .dx-texteditor-buttons-container {
-        left: $material-base-standard-texteditor-input-horizontal-padding;
-        right: auto;
-      }
     }
 
     &.dx-state-disabled,
@@ -407,7 +371,8 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
         margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
       }
 
-      > .dx-clear-button-area:last-child {
+      > .dx-clear-button-area:last-child,
+      > .dx-clear-button-area + div:empty:last-child {
         margin-right: $material-filled-texteditor-input-button-horizontal-padding;
       }
     }
@@ -445,13 +410,14 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
           }
         }
 
-        > .dx-dropdowneditor-button:last-child {
-          margin-left: $material-filled-texteditor-input-horizontal-padding;
+        > .dx-dropdowneditor-button:last-child,
+        > .dx-numberbox-spin-container:last-child {
+          margin-left: $material-filled-texteditor-spin-button-horizontal-padding;
           margin-right: 0;
         }
 
         > .dx-clear-button-area:last-child,
-        > .dx-numberbox-spin-container:last-child {
+        > .dx-clear-button-area + div:empty:last-child {
           margin-left: $material-filled-texteditor-input-button-horizontal-padding;
           margin-right: 0;
         }
