@@ -305,6 +305,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       ...this._props,
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
+      aria: this._aria,
     });
     this._propsInfo.templates.forEach((template) => {
       options[template] = this._componentTemplates[template];
@@ -323,7 +324,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         .trim(),
       class: '',
       ...this._actionsMap,
-      aria: this._aria,
     });
   }
 
