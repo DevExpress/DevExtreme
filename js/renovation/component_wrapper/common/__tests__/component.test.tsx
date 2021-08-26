@@ -10,6 +10,7 @@ import './utils/test_components/templated';
 import './utils/test_components/non_templated';
 import './utils/test_components/children';
 import './utils/test_components/invalid';
+import './utils/test_components/aria';
 import {
   defaultEvent,
   emitKeyboard,
@@ -39,6 +40,7 @@ const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrap
   dxTemplatedTestWidget: any;
   dxNonTemplatedTestWidget: any;
   dxChildrenTestWidget: any;
+  dxAriaTestWidget: any;
 };
 
 beforeEach(() => {
@@ -115,11 +117,11 @@ describe('Misc cases', () => {
 
   it('setAria pass aria prop to the widget', () => {
     const $component = $('#component');
-    $component.dxTestWidget();
+    $component.dxAriaTestWidget();
 
-    $component.dxTestWidget('setAria', 'role', 'custom');
+    $component.dxAriaTestWidget('setAria', 'role', 'custom');
 
-    expect($component.dxTestWidget('getLastPassedProps')).toMatchObject({
+    expect($component.dxAriaTestWidget('getLastPassedProps')).toMatchObject({
       aria: { role: 'custom' },
     });
   });
