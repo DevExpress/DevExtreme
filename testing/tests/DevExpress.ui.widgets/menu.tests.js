@@ -2154,18 +2154,19 @@ QUnit.module('adaptivity: render', {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700);
+        const initialRendererInnerHeight = renderer.fn.innerHeight;
+        renderer.fn.innerHeight = () => 700;
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         try {
             const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
             const maxHeight = overlay.option('maxHeight');
 
-            assert.ok(Math.floor(maxHeight()) < windowHeight(), 'maxHeight is correct');
+            assert.ok(Math.floor(maxHeight()) < 700, 'maxHeight is correct');
             assert.ok(overlay.$wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), 'special class for overlay wrapper');
         } finally {
             scrollTop.restore();
-            windowHeight.restore();
+            renderer.fn.innerHeight = initialRendererInnerHeight;
             offset.restore();
         }
     });

@@ -768,15 +768,15 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         let counter = 0;
         const originalWidthFn = renderer.fn.width;
 
-        sinon.stub(renderer.fn, 'width', function(value) {
+        renderer.fn.width = function(value) {
             if(value === 999 && !counter) {
                 const $headerTable = $('#scheduler').find('table').first();
                 assert.notOk($headerTable.attr('class'), 'Header table doesn\'t have any css classes yet');
                 counter++;
             } else {
-                return originalWidthFn.apply(this, arguments);
+                this.base(...arguments);
             }
-        });
+        };
 
         try {
             createWrapper({
@@ -787,7 +787,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                 width: 999
             });
         } finally {
-            renderer.fn.width.restore();
+            renderer.fn.width = originalWidthFn;
         }
     });
 

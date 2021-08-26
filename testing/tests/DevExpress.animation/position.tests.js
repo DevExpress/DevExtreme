@@ -967,7 +967,8 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;
 
-        const heightStub = sinon.stub(renderer.fn, 'height').returns(1000);
+        const initialRendererHeight = renderer.fn.height;
+        renderer.fn.height = () => 1000;
 
         try {
             window.innerHeight = 500;
@@ -981,7 +982,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
-            heightStub.restore();
+            renderer.fn.height = initialRendererHeight;
         }
     });
 
@@ -995,8 +996,8 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const $what = $('#what').width(300);
         const initialInnerWidth = window.innerWidth;
         const initialOuterWidth = window.outerWidth;
-
-        const widthStub = sinon.stub(renderer.fn, 'width').returns(1000);
+        const initialRendererWidth = renderer.fn.width;
+        renderer.fn.width = () => 1000;
 
         try {
             window.innerWidth = 500;
@@ -1010,7 +1011,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             window.innerWidth = initialInnerWidth;
             window.outerWidth = initialOuterWidth;
-            widthStub.restore();
+            renderer.fn.width = initialRendererWidth;
         }
     });
 

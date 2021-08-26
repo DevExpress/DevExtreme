@@ -248,7 +248,8 @@ QUnit.module('Rendering', function() {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(300);
+        const initialRendererInnerHeight = renderer.fn.innerHeight;
+        renderer.fn.innerHeight = () => 300;
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         const $operationButton = container.find('.' + FILTER_BUILDER_ITEM_OPERATION_CLASS);
@@ -259,11 +260,11 @@ QUnit.module('Rendering', function() {
             const maxHeight = popup.option('maxHeight');
             const positionCollision = popup.option('position.collision');
 
-            assert.ok(Math.floor(maxHeight()) < windowHeight(), 'maxHeight is correct');
+            assert.ok(Math.floor(maxHeight()) < 300, 'maxHeight is correct');
             assert.equal(positionCollision, 'flip', 'collision is correct');
         } finally {
             scrollTop.restore();
-            windowHeight.restore();
+            renderer.fn.innerHeight = initialRendererInnerHeight;
             offset.restore();
         }
     });
