@@ -75,7 +75,6 @@ test('Compact pager', async (t) => {
   await t
     .typeText(pageIndexWidget.input, '7', { replace: true })
     .click(pageSizeWidget.dropDownButton)
-    .click(pageSizeWidget.dropDownButton)
     .pressKey('down')
     .pressKey('enter')
     .expect(pageSizeWidget.input.value)
