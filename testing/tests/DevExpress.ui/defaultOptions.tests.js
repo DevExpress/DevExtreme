@@ -741,7 +741,7 @@ testComponentDefaults(Scrollable,
     {},
     {
         useNative: true,
-        useSimulatedScrollbar: true
+        useSimulatedScrollbar: !browser.mozilla
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
