@@ -11,8 +11,8 @@ fixture`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'));
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
-  [true, false].forEach((useNative) => {
-    [true, false].forEach((rtlEnabled) => {
+  [true].forEach((useNative) => {
+    [true].forEach((rtlEnabled) => {
       [
         { initialScrollOffset: { top: 80, left: 80 }, position: 'elementInsideContainer' },
         { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTopLCorner' },
