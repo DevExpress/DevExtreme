@@ -24,16 +24,16 @@ import {
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_FIELD_ITEM_COL_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS,
     FORM_UNDERLINED_CLASS
 } from 'ui/form/constants';
 
 import {
-    DEBUG_GET_LABEL_WIDTH_BY_TEXT_CLASS,
+    GET_LABEL_WIDTH_BY_TEXT_CLASS,
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+    FIELD_ITEM_LABEL_TEXT_CLASS,
 } from 'ui/form/components/label';
 
 import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
@@ -1019,7 +1019,7 @@ QUnit.test('Align labels in column', function(assert) {
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col3 item ' + i);
     }
 
-    assert.equal($('.' + DEBUG_GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels in column when labels text is identical', function(assert) {
@@ -1332,7 +1332,7 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + DEBUG_GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels when layout is changed when small window size by default_T306106', function(assert) {
@@ -1372,7 +1372,7 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + DEBUG_GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top', function(assert) {

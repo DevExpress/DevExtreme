@@ -2,9 +2,7 @@ import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 
-import {
-    FIELD_BUTTON_ITEM_CLASS,
-} from '../constants';
+const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
 
 export function renderButtonItemTo({
     item,
