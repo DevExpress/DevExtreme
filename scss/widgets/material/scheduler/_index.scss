@@ -99,6 +99,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   height: $material-scheduler-workspace-date-table-cell-height;
 }
 
+.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
+  border-right: baseScheduler.$scheduler-base-border;
+}
+
 .dx-scheduler-all-day-title {
   height: $material-scheduler-all-day-table-cell-height;
   line-height: $material-scheduler-all-day-table-cell-height;
@@ -424,6 +428,13 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
+  .dx-scheduler-header-panel {
+    .dx-scheduler-group-header {
+      border-left: baseScheduler.$scheduler-base-border;
+      border-right: none;
+    }
+  }
+
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
     .dx-scheduler-header-panel {
       border-bottom-width: 1px;
@@ -598,6 +609,22 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-all-day-title {
     background-color: $scheduler-alldaypanel-bg;
   }
+
+  &.dx-scheduler-work-space-all-day {
+    .dx-scheduler-header-panel-empty-cell {
+      border-right: baseScheduler.$scheduler-base-border;
+    }
+
+    .dx-scheduler-all-day-title {
+      border-right: none;
+    }
+  }
+
+  .dx-scheduler-header-panel {
+    .dx-scheduler-group-header:first-child {
+      border-left: none;
+    }
+  }
 }
 
 .dx-scheduler-agenda {
@@ -669,6 +696,32 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-icon {
       @include dx-icon-sizing($material-base-icon-size);
+    }
+  }
+}
+
+.dx-rtl {
+  .dx-scheduler-header-panel .dx-scheduler-group-header {
+    border-right: baseScheduler.$scheduler-base-border;
+    border-left: none;
+  }
+
+  .dx-scheduler-work-space-both-scrollbar {
+    .dx-scheduler-work-space-all-day {
+      .dx-scheduler-header-panel-empty-cell {
+        border-right: none;
+        border-left: baseScheduler.$scheduler-base-border;
+      }
+
+      .dx-scheduler-all-day-title {
+        border-left: none;
+      }
+    }
+
+    .dx-scheduler-header-panel {
+      .dx-scheduler-group-header:first-child {
+        border-right: none;
+      }
     }
   }
 }
