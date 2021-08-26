@@ -768,7 +768,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         let counter = 0;
         const originalWidthFn = renderer.fn.width;
 
-        renderer.fn.width = function(value) {
+        renderer.fn.width = function(element, fieldName, value) {
             if(value === 999 && !counter) {
                 const $headerTable = $('#scheduler').find('table').first();
                 assert.notOk($headerTable.attr('class'), 'Header table doesn\'t have any css classes yet');
