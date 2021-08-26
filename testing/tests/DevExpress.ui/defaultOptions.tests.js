@@ -704,17 +704,70 @@ testComponentDefaults(Scrollable,
     }
 );
 
-testComponentDefaults(ScrollView,
+testComponentDefaults(Scrollable,
     {},
-    { refreshStrategy: 'swipeDown' },
+    {
+        useNative: false,
+    },
     function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: false
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
         this._originalRealDevice = devices.real();
-        devices.real({ platform: 'android' });
+        devices.real({ platform: 'generic' });
+        support.nativeScrolling = true;
     },
     function() {
         devices.real(this._originalRealDevice);
+        support.nativeScrolling = this._supportNativeScrolling;
     }
 );
+
+
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: !browser.mozilla
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+        support.nativeScrolling = true;
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+if(!Scrollable.IS_RENOVATED_WIDGET) {
+    testComponentDefaults(ScrollView,
+        {},
+        { refreshStrategy: 'swipeDown' },
+        function() {
+            this._originalRealDevice = devices.real();
+            devices.real({ platform: 'android' });
+        },
+        function() {
+            devices.real(this._originalRealDevice);
+        }
+    );
+}
 
 testComponentDefaults(ScrollView,
     {},

@@ -6,26 +6,23 @@ import {
   ForwardRef,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { LoadIndicator } from '../load_indicator';
-import { isDefined } from '../../../core/utils/type';
+import { LoadIndicator } from '../../load_indicator';
 
 import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_REACHBOTTOM_CLASS,
   SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS,
   SCROLLVIEW_REACHBOTTOM_TEXT_CLASS,
-} from './common/consts';
+} from '../common/consts';
 
-import messageLocalization from '../../../localization/message';
-
-import { BaseWidgetProps } from '../common/base_props';
-
-import { combineClasses } from '../../utils/combine_classes';
+import { current, isMaterial } from '../../../../ui/themes';
+import { combineClasses } from '../../../utils/combine_classes';
+import messageLocalization from '../../../../localization/message';
 
 export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
   const {
-    reachBottomText, reachBottomClasses,
-    props: { bottomPocketRef },
+    reachBottomClasses,
+    props: { bottomPocketRef, reachBottomText },
   } = viewModel;
 
   return (
@@ -46,27 +43,17 @@ export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
 export class BottomPocketProps {
   @ForwardRef() bottomPocketRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() reachBottomText?: string;
-}
+  @OneWay() reachBottomText: string = isMaterial(current()) ? '' : messageLocalization.format('dxScrollView-reachBottomText');
 
-export type BottomPocketPropsType = BottomPocketProps & Pick<BaseWidgetProps, 'visible'>;
+  @OneWay() visible = true;
+}
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 
-export class BottomPocket extends JSXComponent<BottomPocketPropsType>() {
-  get reachBottomText(): string | undefined {
-    const { reachBottomText } = this.props;
-
-    if (isDefined(reachBottomText)) {
-      return reachBottomText;
-    }
-
-    return messageLocalization.format('dxScrollView-reachBottomText');
-  }
-
+export class BottomPocket extends JSXComponent<BottomPocketProps>() {
   get reachBottomClasses(): string {
     const { visible } = this.props;
 

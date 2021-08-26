@@ -20,7 +20,7 @@ import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
 import { TimePaneLayoutProps } from './base/time_panel/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
-import { ScrollableDirection } from '../../scroll_view/types';
+import { ScrollableDirection } from '../../scroll_view/common/types';
 
 @ComponentBindings()
 export class WorkSpaceProps extends BaseWidgetProps {

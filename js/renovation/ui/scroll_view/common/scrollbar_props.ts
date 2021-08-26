@@ -3,9 +3,9 @@ import {
   OneWay,
   Event,
 } from '@devextreme-generator/declarations';
-import { EventCallback } from '../common/event_callback';
+import { EventCallback } from '../../common/event_callback';
 
-import { TopPocketState } from './common/consts';
+import { TopPocketState } from './consts';
 
 @ComponentBindings()
 export class ScrollbarProps {
