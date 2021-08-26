@@ -20,7 +20,9 @@ const COMMANDS = {
     fullScreen: 10,
     collapseAll: 11,
     expandAll: 12,
-    resourceManager: 13
+    resourceManager: 13,
+    toggleResources: 14,
+    toggleDependencies: 15
 };
 
 class Bar {
@@ -66,6 +68,9 @@ class Bar {
             case 'fullscreen': return this._createDefaultItem(COMMANDS.fullScreen, messageLocalization.format('dxGantt-fullScreen'), this._getIcon('full-screen'));
             case 'taskdetails': return this._createDefaultItem(COMMANDS.taskInformation, messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', this._getIcon('task-details'));
             case 'resourcemanager': return this._createDefaultItem(COMMANDS.resourceManager, messageLocalization.format('dxGantt-dialogResourceManagerTitle'), this._getIcon('resource-manager'));
+            case 'toggleresources': return this._createDefaultItem(COMMANDS.toggleResources, messageLocalization.format('dxGantt-toggleResources'), this._getIcon('toggle-resources'));
+            case 'toggledependencies': return this._createDefaultItem(COMMANDS.toggleDependencies, messageLocalization.format('dxGantt-toggleDependencies'), this._getIcon('toggle-dependencies'));
+
             default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
         }
     }
@@ -139,10 +144,23 @@ export class GanttToolbar extends Bar {
             onItemClick: (e) => {
                 const commandId = e.itemData.commandId;
                 if(commandId !== undefined) {
-                    this._owner._executeCoreCommand(e.itemData.commandId);
+                    this._executeCommand(e.itemData.commandId);
                 }
             }
         });
+    }
+
+    _executeCommand(commandId) {
+        switch(commandId) {
+            case COMMANDS.toggleResources:
+                this._owner.option('showResources', !this._owner.option('showResources'));
+                break;
+            case COMMANDS.toggleDependencies:
+                this._owner.option('showDependencies', !this._owner.option('showDependencies'));
+                break;
+            default:
+                this._owner._executeCoreCommand(commandId);
+        }
     }
 
     _createDefaultItem(commandId, hint, icon) {
