@@ -48,7 +48,7 @@ const HtmlEditor = Editor.inherit({
             tableResizing: null,
             mentions: null,
             customizeModules: null,
-            allowSoftBreak: false,
+            allowSoftLineBreak: false,
 
             formDialogOptions: null,
 
@@ -311,7 +311,7 @@ const HtmlEditor = Editor.inherit({
                     ['p.MsoListParagraphCxSpLast', wordListMatcher]
                 ]
             },
-            multiline: Boolean(this.option('allowSoftBreak'))
+            multiline: Boolean(this.option('allowSoftLineBreak'))
         }, this._getCustomModules());
 
         return modulesConfig;
@@ -454,7 +454,7 @@ const HtmlEditor = Editor.inherit({
             case 'toolbar':
             case 'mentions':
             case 'customizeModules':
-            case 'allowSoftBreak':
+            case 'allowSoftLineBreak':
                 this._invalidate();
                 break;
             case 'tableResizing':

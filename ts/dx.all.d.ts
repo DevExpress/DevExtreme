@@ -13587,9 +13587,9 @@ declare module DevExpress.ui {
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
-     * [descr:dxHtmlEditorOptions.allowSoftBreak]
+     * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
      */
-    allowSoftBreak?: boolean;
+    allowSoftLineBreak?: boolean;
     /**
      * [descr:dxHtmlEditorOptions.customizeModules]
      */

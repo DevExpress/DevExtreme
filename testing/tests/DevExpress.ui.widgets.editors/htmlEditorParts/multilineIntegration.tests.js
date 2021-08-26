@@ -25,7 +25,7 @@ export default function() {
         beforeEach: function() {
             this.initialEditorDefaults = HtmlEditor._classCustomRules; // Save initial defaults
             HtmlEditor.defaultOptions({
-                options: { allowSoftBreak: true }
+                options: { allowSoftLineBreak: true }
             });
         },
         afterEach: function() {

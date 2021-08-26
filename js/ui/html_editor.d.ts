@@ -66,7 +66,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default false
      * @public
      */
-    allowSoftBreak?: boolean;
+    allowSoftLineBreak?: boolean;
     /**
      * @docid
      * @type_function_param1 config:object
