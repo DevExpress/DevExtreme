@@ -36,7 +36,7 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
   color: $popup-title-color;
 
   &.dx-toolbar {
-    @include dx-toolbar-sizing($material-toolbar-height, $material-popup-toolbartop-padding, $material-popup-toolbar-label-font-size, $material-popup-toolbar-item-spacing );
+    @include dx-toolbar-sizing($material-popup-toolbar-height, $material-popup-toolbartop-padding, $material-popup-toolbar-label-font-size, $material-popup-toolbar-item-spacing );
 
     box-shadow: none;
 
