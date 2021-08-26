@@ -584,6 +584,8 @@
         "dxGantt-quarter": "Q{0}",
         "dxGantt-sortingAscendingText": "昇順に並べ替え",
         "dxGantt-sortingDescendingText": "降順に並べ替え",
-        "dxGantt-sortingClearText": "並べ替えをクリア"
+        "dxGantt-sortingClearText": "並べ替えをクリア",
+        "dxGantt-toggleResources": "TODO",
+        "dxGantt-toggleDependencies": "TODO"
     }
 }
