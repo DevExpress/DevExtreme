@@ -20,6 +20,7 @@ jobs:
         node-version: '15'
 
     - name: Restore npm cache
+      if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, '[CI] no cache')
       uses: actions/cache@v2
       with:
         path: ./node_modules
@@ -48,6 +49,7 @@ jobs:
         node-version: '15'
 
     - name: Restore npm cache
+      if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, '[CI] no cache')
       uses: actions/cache@v2
       with:
         path: ./node_modules
@@ -76,6 +78,7 @@ jobs:
         node-version: '15'
 
     - name: Restore npm cache
+      if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, '[CI] no cache')
       uses: actions/cache@v2
       with:
         path: ./node_modules
@@ -101,6 +104,7 @@ jobs:
         node-version: '15'
     
     - name: Restore npm cache
+      if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, '[CI] no cache')
       uses: actions/cache@v2
       with:
         path: ./node_modules
