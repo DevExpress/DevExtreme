@@ -98,21 +98,21 @@ export class ResourceManager {
         });
     }
 
-    getEditors2() {
-        return this.getResources().map(resource => {
-            const dataField = getFieldExpr(resource);
-            const dataSource = this._getResourceDataByField(dataField);
+    // getEditors() { // TODO sketch of new implementation of getEditors method
+    //     return this.getResources().map(resource => {
+    //         const dataField = getFieldExpr(resource);
+    //         const dataSource = this._getResourceDataByField(dataField);
 
-            return {
-                allowMultiple: resource.allowMultiple,
-                label: resource.label,
-                dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
-                displayExpr: getDisplayExpr(resource),
-                valueExpr: getValueExpr(resource),
-                dataField
-            };
-        });
-    }
+    //         return {
+    //             allowMultiple: resource.allowMultiple,
+    //             label: resource.label,
+    //             dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
+    //             displayExpr: getDisplayExpr(resource),
+    //             valueExpr: getValueExpr(resource),
+    //             dataField
+    //         };
+    //     });
+    // }
 
     getResourceDataByValue(field, value) {
         const result = new Deferred();
