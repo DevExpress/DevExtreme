@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, OneWay, Slot, Event,
+  ComponentBindings, OneWay, Event,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
@@ -11,8 +11,6 @@ import messageLocalization from '../../../../localization/message';
 
 @ComponentBindings()
 export class BaseScrollableProps extends WidgetProps {
-  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
-
   @OneWay() useNative = getDefaultUseNative();
 
   @OneWay() addWidgetClass = false;

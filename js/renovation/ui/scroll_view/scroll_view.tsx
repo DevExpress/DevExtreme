@@ -21,7 +21,6 @@ import { ScrollViewProps } from './common/scrollview_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
-
     scrollableRef,
     reachBottomEnabled,
     props: {
