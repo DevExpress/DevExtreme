@@ -572,7 +572,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 _renderIcons: function($iconContainer, options) {
                     this.callBase.apply(this, arguments);
 
-                    if(this.option('selection.mode') === 'multiple') {
+                    if(!options.row.isNewRow && this.option('selection.mode') === 'multiple') {
                         this.getController('selection').renderSelectCheckBoxContainer($iconContainer, options);
                     }
 
