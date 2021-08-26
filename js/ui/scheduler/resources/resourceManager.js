@@ -57,14 +57,14 @@ export class ResourceManager {
         return result;
     }
 
-    setResources(resources) {
+    setResources(resources = []) {
         this._resources = resources;
         this._dataAccessors = {
             getter: {},
             setter: {}
         };
 
-        this._resourceFields = (resources || []).map(resource => {
+        this._resourceFields = resources.map(resource => {
             const field = getFieldExpr(resource);
 
             this._dataAccessors.getter[field] = compileGetter(field);
@@ -241,23 +241,15 @@ export class ResourceManager {
             return result.resolve([]);
         }
 
-        when.apply(null, deferreds).done((...data) => {
-            const isValidResources = this._isValidResourcesForGrouping(data);
+        when.apply(null, deferreds).done((...resources) => {
+            const hasEmpty = resources.some(r => r.items.length === 0);
 
-            this.loadedResources = isValidResources ? data : [];
+            this.loadedResources = hasEmpty ? [] : resources;
 
             result.resolve(this.loadedResources);
         }).fail(() => result.reject());
 
         return result.promise();
-    }
-
-    _isValidResourcesForGrouping(resources) {
-        const result = resources.reduce((isValidResources, currentResource) => {
-            return isValidResources && currentResource.items.length > 0;
-        }, true);
-
-        return result;
     }
 
     getResourcesByFields(fields) {
