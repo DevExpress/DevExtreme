@@ -1680,17 +1680,23 @@ $scheduler-appointment-form-label-padding: 20px;
       border-right: none;
     }
 
-    .dx-scheduler-date-table-scrollable .dx-scrollable-content {
-      direction: rtl;
+    .dx-scheduler-date-table-scrollable,
+    .dx-scheduler-sidebar-scrollable {
+      .dx-scrollable-content {
+        direction: rtl;
+      }
     }
 
     &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
       border-left: none;
     }
 
-    .dx-scheduler-work-space-vertical-grouped .dx-scheduler-group-row:last-child {
-      border-right: none;
-      border-left: $scheduler-base-border;
+    .dx-scheduler-work-space-vertical-grouped,
+    .dx-scheduler-sidebar-scrollable {
+      .dx-scheduler-group-row:last-child {
+        border-right: none;
+        border-left: $scheduler-base-border;
+      }
     }
 
     .dx-scheduler-header-panel {
