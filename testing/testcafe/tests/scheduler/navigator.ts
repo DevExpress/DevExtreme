@@ -17,76 +17,72 @@ const createScheduler = async (options = {}): Promise<void> => {
 };
 
 test('Navigator can change week when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getToolbar().getNavigator();
+  const { toolbar } = new Scheduler('#container');
 
   // Navigation `next` must be enabled at default
 
   await t
-    .expect(navigator.nextDuration.hasClass('dx-state-disabled')).notOk();
+    .expect(toolbar.navigator.nextButton.hasClass('dx-state-disabled')).notOk();
 
   // Navigation `next` must be disabled after change 1 week earlier
 
   await t
-    .click(navigator.nextDuration)
-    .expect(navigator.nextDuration.hasClass('dx-state-disabled')).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(toolbar.navigator.nextButton.hasClass('dx-state-disabled')).ok();
 }).before(async () => createScheduler({
   max: new Date(2017, 4, 24),
   currentView: 'week',
 }));
 
 test('Navigator can change week when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getToolbar().getNavigator();
+  const { toolbar } = new Scheduler('#container');
 
   // Navigation `prev` must be enabled at default
 
   await t
-    .expect(navigator.prevDuration.hasClass('dx-state-disabled')).notOk();
+    .expect(toolbar.navigator.prevButton.hasClass('dx-state-disabled')).notOk();
 
   // Navigation `prev` must be disabled after change 1 week later
 
   await t
-    .click(navigator.prevDuration)
-    .expect(navigator.prevDuration.hasClass('dx-state-disabled')).ok();
+    .click(toolbar.navigator.prevButton)
+    .expect(toolbar.navigator.prevButton.hasClass('dx-state-disabled')).ok();
 }).before(async () => createScheduler({
   min: new Date(2017, 4, 13),
   currentView: 'week',
 }));
 
 test('Navigator can change month when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getToolbar().getNavigator();
+  const { toolbar } = new Scheduler('#container');
 
   // Navigation `next` must be enabled at default
 
   await t
-    .expect(navigator.nextDuration.hasClass('dx-state-disabled')).notOk();
+    .expect(toolbar.navigator.nextButton.hasClass('dx-state-disabled')).notOk();
 
   // Navigation `next` must be disabled after change 1 week earlier
 
   await t
-    .click(navigator.nextDuration)
-    .expect(navigator.nextDuration.hasClass('dx-state-disabled')).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(toolbar.navigator.nextButton.hasClass('dx-state-disabled')).ok();
 }).before(async () => createScheduler({
   max: new Date(2017, 5, 15),
   currentView: 'month',
 }));
 
 test('Navigator can change month when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getToolbar().getNavigator();
+  const { toolbar } = new Scheduler('#container');
 
   // Navigation `prev` must be enabled at default
 
   await t
-    .expect(navigator.prevDuration.hasClass('dx-state-disabled')).notOk();
+    .expect(toolbar.navigator.prevButton.hasClass('dx-state-disabled')).notOk();
 
   // Navigation `prev` must be disabled after change 1 week later
 
   await t
-    .click(navigator.prevDuration)
-    .expect(navigator.prevDuration.hasClass('dx-state-disabled')).ok();
+    .click(toolbar.navigator.prevButton)
+    .expect(toolbar.navigator.prevButton.hasClass('dx-state-disabled')).ok();
 }).before(async () => createScheduler({
   min: new Date(2017, 3, 28),
   currentView: 'month',

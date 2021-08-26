@@ -689,22 +689,60 @@ if(!Scrollable.IS_RENOVATED_WIDGET) {
             support.nativeScrolling = this._supportNativeScrolling;
         }
     );
+}
 
-    testComponentDefaults(Scrollable,
-        {},
-        { useSimulatedScrollbar: !browser.mozilla },
-        function() {
-            this._supportNativeScrolling = support.nativeScrolling;
-            support.nativeScrolling = true;
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android', version: [4] });
-        },
-        function() {
-            support.nativeScrolling = this._supportNativeScrolling;
-            devices.real(this._originalRealDevice);
-        }
-    );
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: false,
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
 
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: false
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'generic' });
+        support.nativeScrolling = true;
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: !browser.mozilla
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+        support.nativeScrolling = true;
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+if(!Scrollable.IS_RENOVATED_WIDGET) {
     testComponentDefaults(ScrollView,
         {},
         { refreshStrategy: 'swipeDown' },
@@ -716,25 +754,24 @@ if(!Scrollable.IS_RENOVATED_WIDGET) {
             devices.real(this._originalRealDevice);
         }
     );
-
-
-    testComponentDefaults(ScrollView,
-        {},
-        {
-            pullingDownText: '',
-            pulledDownText: '',
-            refreshingText: '',
-            reachBottomText: ''
-        },
-        function() {
-            this.origIsMaterial = themes.isMaterial;
-            themes.isMaterial = function() { return true; };
-        },
-        function() {
-            themes.isMaterial = this.origIsMaterial;
-        }
-    );
 }
+
+testComponentDefaults(ScrollView,
+    {},
+    {
+        pullingDownText: '',
+        pulledDownText: '',
+        refreshingText: '',
+        reachBottomText: ''
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
 
 testComponentDefaults(TagBox,
     { platform: 'android' },

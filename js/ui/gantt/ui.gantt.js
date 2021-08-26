@@ -41,8 +41,12 @@ const GANTT_NEW_TASK_CACHE_KEY = 'gantt_new_task_key';
 class Gantt extends Widget {
     _init() {
         super._init();
+        this._initGantt();
         this._isGanttRendered = false;
         this._initHelpers();
+    }
+    _initGantt() {
+        this._refreshDataSources();
     }
     _initMarkup() {
         super._initMarkup();
@@ -73,11 +77,6 @@ class Gantt extends Widget {
             .appendTo(this.$element());
         this._$contextMenu = $('<div>')
             .appendTo(this.$element());
-
-        this._refreshDataSource(GANTT_TASKS);
-        this._refreshDataSource(GANTT_DEPENDENCIES);
-        this._refreshDataSource(GANTT_RESOURCES);
-        this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
     _clean() {
         this._ganttView?._ganttViewCore.cleanMarkup();
@@ -89,6 +88,12 @@ class Gantt extends Widget {
     _refresh() {
         this._isGanttRendered = false;
         super._refresh();
+    }
+    _refreshDataSources() {
+        this._refreshDataSource(GANTT_TASKS);
+        this._refreshDataSource(GANTT_DEPENDENCIES);
+        this._refreshDataSource(GANTT_RESOURCES);
+        this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
     _renderContent() {
@@ -146,6 +151,7 @@ class Gantt extends Widget {
             allowSelection: this.option('allowSelection'),
             selectedRowKey: this.option('selectedRowKey'),
             showResources: this.option('showResources'),
+            showDependencies: this.option('showDependencies'),
             startDateRange: this.option('startDateRange'),
             endDateRange: this.option('endDateRange'),
             taskTitlePosition: this.option('taskTitlePosition'),
@@ -184,7 +190,7 @@ class Gantt extends Widget {
             delete this[`_${name}`];
         }
 
-        dataOption = new DataOption(name, this._getLoadPanel(), (name, data) => {
+        dataOption = new DataOption(name, this._getLoadPanel.bind(this), (name, data) => {
             this._dataSourceChanged(name, data);
         });
         dataOption.option('dataSource', this._getSpecificDataSourceOption(name));
@@ -564,6 +570,17 @@ class Gantt extends Widget {
             resolve(doc);
         });
     }
+    refresh() {
+        return new Promise((resolve, reject) => {
+            try {
+                this._refreshDataSources();
+                this._refresh();
+                resolve();
+            } catch(e) {
+                reject(e.message);
+            }
+        });
+    }
     expandAll() {
         this._expandAll();
     }
@@ -582,6 +599,14 @@ class Gantt extends Widget {
     }
     expandTask(key) {
         this._treeList.expandRow(key);
+    }
+
+    showResources(value) {
+        this.option('showResources', value);
+    }
+
+    showDependencies(value) {
+        this.option('showDependencies', value);
     }
 
     _getDefaultOptions() {
@@ -609,6 +634,9 @@ class Gantt extends Widget {
                 break;
             case 'showResources':
                 this._setGanttViewOption('showResources', args.value);
+                break;
+            case 'showDependencies':
+                this._setGanttViewOption('showDependencies', args.value);
                 break;
             case 'taskTitlePosition':
                 this._setGanttViewOption('taskTitlePosition', args.value);

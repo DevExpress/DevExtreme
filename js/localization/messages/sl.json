@@ -528,6 +528,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Razvrsti naraščajoče",
         "dxGantt-sortingDescendingText": "Razvrsti padajoče",
-        "dxGantt-sortingClearText": "Brez razvrščanja"
+        "dxGantt-sortingClearText": "Brez razvrščanja",
+        "dxGantt-toggleResources": "TODO",
+        "dxGantt-toggleDependencies": "TODO"
     }
 }

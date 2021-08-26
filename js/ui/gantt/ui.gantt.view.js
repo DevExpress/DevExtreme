@@ -26,6 +26,7 @@ export class GanttView extends Widget {
         const GanttView = getGanttViewCore();
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option('showResources'),
+            showDependencies: this.option('showDependencies'),
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
             firstDayOfWeek: this._getFirstDayOfWeek(this.option('firstDayOfWeek')),
             allowSelectTask: this.option('allowSelection'),
@@ -176,6 +177,9 @@ export class GanttView extends Widget {
                 break;
             case 'showResources':
                 this._ganttViewCore.setShowResources(args.value);
+                break;
+            case 'showDependencies':
+                this._ganttViewCore.setShowDependencies(args.value);
                 break;
             case 'taskTitlePosition':
                 this._ganttViewCore.setTaskTitlePosition(this._getTaskTitlePosition(args.value));
