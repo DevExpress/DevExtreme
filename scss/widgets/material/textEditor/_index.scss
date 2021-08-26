@@ -18,6 +18,7 @@ $material-texteditor-icon-container-size: $material-base-icon-size - 2px;
 $material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;
 $material-editor-custom-button-margin: 5px;
 $material-filled-texteditor-input-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 4px;
+$material-filled-texteditor-spin-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 8px;
 
 
 @mixin dx-texteditor-icon() {
@@ -401,12 +402,12 @@ $material-filled-texteditor-input-button-horizontal-padding: $material-filled-te
         }
       }
 
-      > .dx-dropdowneditor-button:last-child {
-        margin-right: $material-filled-texteditor-input-horizontal-padding;
+      > .dx-dropdowneditor-button:last-child,
+      > .dx-numberbox-spin-container:last-child {
+        margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
       }
 
-      > .dx-clear-button-area:last-child,
-      > .dx-numberbox-spin-container:last-child {
+      > .dx-clear-button-area:last-child {
         margin-right: $material-filled-texteditor-input-button-horizontal-padding;
       }
     }
