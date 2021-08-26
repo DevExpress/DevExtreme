@@ -374,7 +374,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         if(hasWindow() && this._isRenderHeaderPanelEmptyCell()) {
             const groupPanelWidth = getBoundingRect(this._$sidebarTable.get(0)).width;
 
-            this._$headerPanelEmptyCell.width(groupPanelWidth);
+            this._$headerPanelEmptyCell.css('width', groupPanelWidth);
         }
     }
 
