@@ -12,7 +12,6 @@ import Validator from '../../validator';
 
 import {
     FLEX_LAYOUT_CLASS,
-    FIELD_ITEM_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
     FIELD_ITEM_REQUIRED_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
@@ -29,7 +28,7 @@ import { renderLabel } from './label';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const INVALID_CLASS = 'dx-invalid';
 
-export function renderFieldItem({
+export function renderFieldItemTo({
     $container,
     containerCssClass,
     parentComponent,
@@ -52,13 +51,12 @@ export function renderFieldItem({
     //
 
     $container
-        .addClass(FIELD_ITEM_CLASS)
         .addClass(containerCssClass)
         .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');// TODO: this is a part of Form markup settings, move it to form.js
 
     $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
     if(isSimpleItem && useFlexLayout) {
-        $container.addClass(FLEX_LAYOUT_CLASS);
+        $container.addClass(FLEX_LAYOUT_CLASS); // TODO:
     }
     if(isSimpleItem && labelNeedBaselineAlign) {
         // TODO: label related code, execute ony if needRenderLabel ?

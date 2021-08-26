@@ -4,13 +4,14 @@ import { isDefined } from '../../../core/utils/type';
 import {
     WIDGET_CLASS,
     FIELD_ITEM_LABEL_TEXT_CLASS,
-    HIDDEN_LABEL_CLASS,
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_REQUIRED_MARK_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_CLASS,
 } from '../constants';
+
+const GET_LABEL_WIDTH_BY_TEXT_CLASS = 'dx-layout-manager-hidden-label';
 
 export function renderLabel({ text, id, location, alignment, labelID = null, markOptions = {} }) {
     if(!isDefined(text) || text.length <= 0) {
@@ -43,7 +44,7 @@ function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, option
 export function getLabelWidthByText(renderLabelOptions) {
     const $hiddenContainer = $('<div>')
         .addClass(WIDGET_CLASS)
-        .addClass(HIDDEN_LABEL_CLASS)
+        .addClass(GET_LABEL_WIDTH_BY_TEXT_CLASS)
         .appendTo('body');
 
     const $label = renderLabel(renderLabelOptions).appendTo($hiddenContainer);
@@ -57,3 +58,7 @@ export function getLabelWidthByText(renderLabelOptions) {
 
     return result;
 }
+
+///#DEBUG
+export const DEBUG_GET_LABEL_WIDTH_BY_TEXT_CLASS = GET_LABEL_WIDTH_BY_TEXT_CLASS;
+///#ENDDEBUG

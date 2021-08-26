@@ -4,10 +4,9 @@ import { extend } from '../../../core/utils/extend';
 
 import {
     FIELD_BUTTON_ITEM_CLASS,
-    FIELD_ITEM_CLASS,
 } from '../constants';
 
-export function renderButtonItem({
+export function renderButtonItemTo({
     item,
     $container,
     validationGroup,
@@ -17,9 +16,7 @@ export function renderButtonItem({
     $container
         .addClass(FIELD_BUTTON_ITEM_CLASS)
         .css('textAlign', convertAlignmentToTextAlign(item.horizontalAlignment))
-        .addClass(FIELD_ITEM_CLASS)
-        .addClass(cssItemClass)
-        .addClass(isDefined(item.col) ? 'dx-col-' + item.col : ''); // TODO: this is a part of Form markup settings, move it to form.js
+        .addClass(cssItemClass);
 
     // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
     $container.parent().css('justifyContent', convertAlignmentToJustifyContent(item.verticalAlignment));
