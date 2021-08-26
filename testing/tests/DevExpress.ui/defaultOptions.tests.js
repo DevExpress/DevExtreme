@@ -726,9 +726,31 @@ testComponentDefaults(Scrollable,
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'generic' });
         support.nativeScrolling = true;
     },
     function() {
+        devices.real(this._originalRealDevice);
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: true
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+        support.nativeScrolling = true;
+    },
+    function() {
+        devices.real(this._originalRealDevice);
         support.nativeScrolling = this._supportNativeScrolling;
     }
 );
