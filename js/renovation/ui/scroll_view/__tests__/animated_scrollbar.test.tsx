@@ -23,16 +23,15 @@ describe('Public methods', () => {
     { name: 'scrollStep', calledWith: ['arg1'] },
     { name: 'moveTo', calledWith: ['arg1'] },
     { name: 'stopAnimator', calledWith: ['arg1'] },
-    { name: 'getLocationWithinRange', calledWith: ['arg1'] },
     { name: 'getMinOffset', calledWith: [] },
-    { name: 'validateEvent', calledWith: ['arg1'] },
+    { name: 'isScrollbar', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
     { name: 'initHandler', calledWith: ['arg1', 'arg2'] },
     { name: 'startHandler', calledWith: [] },
     { name: 'moveHandler', calledWith: ['arg1'] },
     { name: 'endHandler', calledWith: ['arg1', 'arg2'] },
     { name: 'stopHandler', calledWith: [] },
-    { name: 'scrollByHandler', calledWith: ['arg1'] },
+    { name: 'scrollTo', calledWith: ['arg1'] },
     { name: 'releaseHandler', calledWith: [] },
   ]).describe('Method: %o', (methodInfo) => {
     it(`${methodInfo.name}() method should call according scrollbar method`, () => {
@@ -70,9 +69,11 @@ describe('Public methods', () => {
           current: {
             stopAnimator: stopAnimatorHandler,
             moveTo: scrollbarMoveToHandler,
-            getLocationWithinRange: () => -700,
           },
         };
+        viewModel.getMaxOffset = jest.fn(() => 0);
+        viewModel.getMinOffset = jest.fn(() => -700);
+
         Object.defineProperties(viewModel, {
           isFinished: { get() { return true; } },
           isBounceAnimator: { get() { return isBounceAnimator; } },
@@ -186,13 +187,9 @@ describe('Animator', () => {
       const viewModel = new AnimatedScrollbar({
         scrollLocation: -1500,
       });
-
       viewModel.stepCore = jest.fn();
-      (viewModel as any).scrollbarRef = {
-        current: {
-          getLocationWithinRange: () => -700,
-        },
-      };
+      viewModel.getMaxOffset = jest.fn(() => 0);
+      viewModel.getMinOffset = jest.fn(() => -700);
 
       viewModel.start('bounce');
 

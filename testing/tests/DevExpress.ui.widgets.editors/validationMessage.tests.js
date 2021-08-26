@@ -1,4 +1,5 @@
 import ValidationMessage from 'ui/validation_message';
+import renderer from 'core/renderer';
 import $ from 'jquery';
 
 const moduleSetup = {
@@ -21,8 +22,10 @@ QUnit.module('options', moduleSetup, () => {
 
     QUnit.test('maxWidth option should be updated after target option change', function(assert) {
         const $target = $('<div>').attr('id', 'target');
-        $target.outerWidth = () => {
-            return 120;
+        const initialRendererOuterWidth = renderer.fn.outerWidth;
+        renderer.fn.outerWidth = function() {
+            if(arguments[0] === $target) { return 120; }
+            return this.base(...arguments);
         };
 
         try {
@@ -31,6 +34,7 @@ QUnit.module('options', moduleSetup, () => {
             assert.strictEqual(this._validationMessage.option('maxWidth'), 120, 'maxWidth was updated');
         } finally {
             $target.remove();
+            renderer.fn.outerWidth = initialRendererOuterWidth;
         }
     });
 

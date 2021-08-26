@@ -4,6 +4,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
+import { isRenderer } from '../../../../js/core/utils/type.js';
 
 const { test } = QUnit;
 
@@ -21,18 +22,20 @@ const moduleConfig = {
         this.originalWidth = renderer.fn.width;
         this.originalHeight = renderer.fn.height;
 
-        renderer.fn.width = function() {
-            if(this[0] && this[0] instanceof Window) {
+        renderer.fn.width = function(element) {
+            const uw = (isRenderer(element) && element[0]) || element;
+            if(uw instanceof Window) {
                 return that.currentWidth;
             }
-            return that.originalWidth.apply(renderer.fn, arguments);
+            return this.base(...arguments);
         };
 
-        renderer.fn.height = function() {
-            if(this[0] && this[0] instanceof Window) {
+        renderer.fn.height = function(element) {
+            const uw = (isRenderer(element) && element[0]) || element;
+            if(uw instanceof Window) {
                 return that.currentHeight;
             }
-            return that.originalHeight.apply(renderer.fn, arguments);
+            return this.base(...arguments);
         };
 
         this.$element = $('#fileManager')
@@ -166,7 +169,7 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         this.clock.tick(400);
 
         const contentPane = this.wrapper.getNavPaneDrawerPanelContent();
-        assert.roughEqual(this.wrapper.getSplitterPosition(), contentPane.outerWidth(), 0.2, 'Splitter is on the correct position');
+        assert.roughEqual(this.wrapper.getSplitterPosition(), contentPane.outerWidth(), 0.5, 'Splitter is on the correct position');
     });
 
 });

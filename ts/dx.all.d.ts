@@ -12566,6 +12566,10 @@ declare module DevExpress.ui {
      * [descr:dxGantt.expandTask(key)]
      */
     expandTask(key: any): void;
+    /**
+     * [descr:dxGantt.refresh()]
+     */
+    refresh(): DevExpress.core.utils.DxPromise<void>;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;

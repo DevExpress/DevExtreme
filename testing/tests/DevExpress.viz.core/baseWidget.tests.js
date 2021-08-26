@@ -666,7 +666,6 @@ QUnit.test('Do not get size from container if size option is set', function(asse
 QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
     const originalRendererWidth = renderer.fn.width;
     const originalRendererHeight = renderer.fn.height;
-
     try {
         renderer.fn.width = () => -2;
         renderer.fn.height = () => -3;

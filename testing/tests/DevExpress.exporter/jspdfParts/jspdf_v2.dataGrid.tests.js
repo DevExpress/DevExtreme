@@ -1000,7 +1000,6 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 15, y: 20 }
         }];
 
@@ -1037,7 +1036,6 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 15, y: 20 }
         }];
 
@@ -1072,11 +1070,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1126,11 +1122,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1171,11 +1165,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1219,11 +1211,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1276,11 +1266,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1327,11 +1315,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1380,11 +1366,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1433,11 +1417,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1454,11 +1436,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.drawNewTableFromThisRow.tableTopLeft = { x: 10, y: 56 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 11, y: 57 }
                 }, {
                     columnIndex: 2,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 12, y: 58 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
@@ -1509,11 +1489,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1554,11 +1532,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1574,11 +1550,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.drawNewTableFromThisRow.tableTopLeft = { x: 12, y: 22 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 13, y: 23 }
                 }, {
                     columnIndex: 2,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 14, y: 24 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
@@ -1628,11 +1602,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1648,11 +1620,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.drawNewTableFromThisRow.tableTopLeft = { x: 12, y: 22 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 13, y: 23 }
                 }, {
                     columnIndex: 2,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 14, y: 24 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {

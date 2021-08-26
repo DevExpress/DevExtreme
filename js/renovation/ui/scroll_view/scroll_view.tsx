@@ -125,69 +125,69 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       this.toggleLoading(!preventScrollBottom);
     }
 
-    this.scrollable.release();
+    this.scrollableRef.current!.release();
   }
 
   @Method()
   refresh(): void {
     if (this.props.pullDownEnabled) {
-      this.scrollable.refresh();
+      this.scrollableRef.current!.refresh();
     }
   }
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollable.content() as HTMLDivElement;
+    return this.scrollableRef.current!.content();
   }
 
   @Method()
   scrollBy(distance: number | Partial<ScrollOffset>): void {
-    this.scrollable.scrollBy(distance);
+    this.scrollableRef.current!.scrollBy(distance);
   }
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    this.scrollable.scrollTo(targetLocation);
+    this.scrollableRef.current!.scrollTo(targetLocation);
   }
 
   @Method()
   scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
-    this.scrollable.scrollToElement(element, offset);
+    this.scrollableRef.current!.scrollToElement(element, offset);
   }
 
   @Method()
   scrollHeight(): number {
-    return this.scrollable.scrollHeight() as number;
+    return this.scrollableRef.current!.scrollHeight();
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollable.scrollWidth() as number;
+    return this.scrollableRef.current!.scrollWidth();
   }
 
   @Method()
   scrollOffset(): ScrollOffset {
-    return this.scrollable.scrollOffset() as ScrollOffset;
+    return this.scrollableRef.current!.scrollOffset();
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollable.scrollTop() as number;
+    return this.scrollableRef.current!.scrollTop();
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollable.scrollLeft() as number;
+    return this.scrollableRef.current!.scrollLeft();
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollable.clientHeight() as number;
+    return this.scrollableRef.current!.clientHeight();
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollable.clientWidth() as number;
+    return this.scrollableRef.current!.clientWidth();
   }
 
   @Method()
@@ -205,16 +205,16 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   startLoading(): void {
-    this.scrollable.startLoading();
+    this.scrollableRef.current!.startLoading();
   }
 
   @Method()
   finishLoading(): void {
-    this.scrollable.finishLoading();
+    this.scrollableRef.current!.finishLoading();
   }
 
   updateHandler(): void {
-    this.scrollable.updateHandler();
+    this.scrollableRef.current!.updateHandler();
   }
 
   get reachBottomEnabled(): boolean {
@@ -265,8 +265,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get scrollable(): any {
-    return this.scrollableRef.current!;
-  }
+  // get scrollable(): any {
+  //   return this.scrollableRef.current!;
+  // }
 }

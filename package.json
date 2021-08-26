@@ -160,6 +160,7 @@
     "run-sequence": "^1.1.5",
     "sass": "^1.38.0",
     "shelljs": "^0.8.3",
+    "staged-git-files": "^1.2.0",
     "string-replace-loader": "^3.0.3",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^20.0.0",
@@ -195,6 +196,7 @@
     "lint-renovation": "eslint --ext .tsx,.ts,.d.ts ./js/renovation",
     "lint-dts": "eslint js --ext .d.ts --ignore-pattern ./js/renovation/",
     "lint-staged": "lint-staged",
+    "pre-commit": "node build/pre-commit.js",
     "build": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
     "build:dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true gulp default",
     "build-npm-devextreme": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true SKIP_THEMEBUILDER=true gulp default",
@@ -233,5 +235,8 @@
       "node_modules"
     ]
   },
-  "pre-commit": "lint-staged"
+  "pre-commit": [
+    "lint-staged",
+    "pre-commit"
+  ]
 }

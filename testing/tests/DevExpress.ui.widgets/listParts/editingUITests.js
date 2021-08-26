@@ -946,7 +946,7 @@ QUnit.test('multiple swipes should not break deletion', function(assert) {
 
 QUnit.test('optimizations', function(assert) {
     const origOuterWidth = renderer.fn.outerWidth;
-    const outerWidthStub = sinon.stub();
+    let outerWidthCallCount = 0;
 
     try {
         const $list = $('#templated-list').dxList({
@@ -960,14 +960,14 @@ QUnit.test('optimizations', function(assert) {
         const pointer = pointerMock($item);
 
         renderer.fn.outerWidth = function() {
-            outerWidthStub();
-            return origOuterWidth.apply(this, arguments);
+            outerWidthCallCount++;
+            return this.base(...arguments);
         };
 
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     } finally {
-        assert.strictEqual(outerWidthStub.callCount, 2, 'outerWidth should be calculated only once for item and button');
+        assert.strictEqual(outerWidthCallCount, 2, 'outerWidth should be calculated only once for item and button');
         renderer.fn.outerWidth = origOuterWidth;
     }
 });

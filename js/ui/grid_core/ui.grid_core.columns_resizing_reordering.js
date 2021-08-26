@@ -622,7 +622,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     _moveSeparator: function(args) {
         const e = args.event;
         const that = e.data;
-        const columnsSeparatorWidth = getWidth(that._columnsSeparatorView);
+        const columnsSeparatorWidth = that._columnsSeparatorView.width();
         const isNextColumnMode = isNextColumnResizingMode(that);
         const deltaX = columnsSeparatorWidth / 2;
         const parentOffset = that._$parentContainer.offset();
@@ -720,7 +720,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             if(that._isHeadersRowArea(eventData.y)) {
                 that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData.x, COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH);
                 if(that._targetPoint) {
-                    that._columnsSeparatorView.moveByX(that._targetPoint.x - getWidth(that._columnsSeparatorView) / 2);
+                    that._columnsSeparatorView.moveByX(that._targetPoint.x - that._columnsSeparatorView.width() / 2);
                     that._isReadyResizing = true;
                 }
             } else {
@@ -799,7 +799,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const resizingInfo = this._resizingInfo;
         const columnsController = this._columnsController;
         const visibleColumns = columnsController.getVisibleColumns();
-        const columnsSeparatorWidth = getWidth(this._columnsSeparatorView);
+        const columnsSeparatorWidth = this._columnsSeparatorView.width();
         let contentWidth = this._rowsView.contentWidth();
         const isNextColumnMode = isNextColumnResizingMode(this);
         const adaptColumnWidthByRatio = isNextColumnMode && this.option('adaptColumnWidthByRatio') && !this.option('columnAutoWidth');
@@ -1035,7 +1035,7 @@ const TablePositionViewController = modules.ViewController.inherit({
         const diffOffsetTop = isDefined(top) ? Math.abs(top - offsetTop) : 0;
         const columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0;
         const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
-        const rowsHeight = that._rowsView ? getHeight(that._rowsView) - scrollBarWidth : 0;
+        const rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0;
         const columnsResizerController = that.component.getController('columnsResizer');
         const draggingHeaderView = that.component.getView('draggingHeaderView');
 
@@ -1258,7 +1258,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
                 } else {
                     that.hideSeparators('block');
                     that.getController('tablePosition').update(parameters.posY);
-                    separator.moveByX(parameters.posX - getWidth(separator));
+                    separator.moveByX(parameters.posX - separator.width());
                     separator.show();
                 }
             } else {

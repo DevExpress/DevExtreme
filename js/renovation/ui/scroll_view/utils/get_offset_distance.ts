@@ -15,8 +15,8 @@ export function getOffsetDistance(
   { left: number; top: number } {
   const location = convertToLocation(targetLocation, direction);
 
-  const top = -scrollOffset.top - ensureDefined(location.top, -scrollOffset.top);
-  const left = -scrollOffset.left - ensureDefined(location.left, -scrollOffset.left);
+  const top = ensureDefined(location.top, scrollOffset.top) - scrollOffset.top;
+  const left = ensureDefined(location.left, scrollOffset.left) - scrollOffset.left;
 
   return { top, left };
 }

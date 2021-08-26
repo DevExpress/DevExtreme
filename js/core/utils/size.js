@@ -3,6 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import { isWindow, isString, isNumeric, isRenderer } from '../utils/type';
 
 const window = getWindow();
+export const hooks = {};
 
 const SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
 
@@ -153,7 +154,7 @@ export const setInnerWidth = function(el, value) { return elementSize(el, 'inner
 export const getInnerHeight = function(el, value) { return arguments.length === 1 ? elementSize(el, 'innerHeight') : elementSize(el, 'innerHeight', value); };
 export const setInnerHeight = function(el, value) { return elementSize(el, 'innerHeight', value); };
 
-export const elementSize = function(el, sizeProperty, value) {
+const elementSizeWithoutHooks = function(el, sizeProperty, value) {
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;
@@ -218,6 +219,13 @@ export const elementSize = function(el, sizeProperty, value) {
     domAdapter.setStyle(el, propName, value);
 
     return null;
+};
+
+export const elementSize = function(el, sizeProperty, value) {
+    if(hooks[sizeProperty]) {
+        return hooks[sizeProperty].apply({ base: elementSizeWithoutHooks }, arguments);
+    }
+    return elementSizeWithoutHooks(...arguments);
 };
 
 export const getWindowByElement = (el) => {

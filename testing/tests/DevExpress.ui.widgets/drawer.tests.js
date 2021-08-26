@@ -1673,7 +1673,7 @@ QUnit.module('Overlap mode', {
                 openedStateMode: 'overlap',
                 contentTemplate: 'contentTemplate',
                 width: 800,
-                template: $content => $('<div/>').css({ height: 200, width: 300 })
+                template: $content => $('<div id="myElement1"/>').css({ height: 200, width: 300 })
             }, options)).dxDrawer('instance');
         };
 
@@ -1744,7 +1744,7 @@ QUnit.module('Overlap mode', {
         const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
-        const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
+        const $overlayContent = $('#myElement1').parent().eq(0);
 
         assert.equal($content.position().left, 0, 'content has correct left when minSize and max size are set');
         assert.equal($content.css('paddingLeft'), '50px', 'content has correct padding when minSize and max size are set');
@@ -1770,7 +1770,7 @@ QUnit.module('Overlap mode', {
         const $element = this.instance.$element();
         const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
-        const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
+        const $overlayContent = $('#myElement1').parent().eq(0);
 
         assert.equal($content.position().left, 0, 'content has correct left when minSize and max size are set');
         assert.equal($panel.position().left, -250, 'panel has correct left when minSize and max size are set');
@@ -1796,7 +1796,7 @@ QUnit.module('Overlap mode', {
         const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
-        const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
+        const $overlayContent = $('#myElement1').parent().eq(0);
 
         assert.equal($content.position().left, 0, 'content has correct left when minSize and max size are set');
         assert.equal($content.css('paddingRight'), '50px', 'content has correct padding when minSize and max size are set');
@@ -1823,7 +1823,7 @@ QUnit.module('Overlap mode', {
         const $element = this.instance.$element();
         const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS).eq(0);
         const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
-        const $overlayContent = $('.dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content').eq(0);
+        const $overlayContent = $('#myElement1').parent().eq(0);
 
         assert.equal($content.position().left, 0, 'content has correct left when minSize is set');
         assert.equal($panel.position().left, 1050, 'panel has correct left when minSize is set');
