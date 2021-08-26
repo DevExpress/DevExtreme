@@ -4,6 +4,7 @@ import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import { isDefined, isObject, isFunction, isString, isEmptyObject } from '../../core/utils/type';
+import { resetActiveElement } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import modules from './ui.grid_core.modules';
@@ -3012,6 +3013,9 @@ export default {
                     const startEditAction = this.option('editing.startEditAction') || 'click';
 
                     if(eventName === 'down') {
+                        if((devices.real().ios || devices.real().android) && !isEditedCell) {
+                            resetActiveElement();
+                        }
                         return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
                     }
 
