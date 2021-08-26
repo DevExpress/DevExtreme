@@ -1243,8 +1243,6 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
@@ -1283,8 +1281,6 @@ QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div',
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
