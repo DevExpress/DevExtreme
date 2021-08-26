@@ -339,6 +339,10 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-timeline-work-week,
   .dx-scheduler-timeline-day,
   .dx-scheduler-timeline-month {
+    .dx-scheduler-header-panel-empty-cell {
+      border-bottom: none;
+    }
+
     .dx-scheduler-header-panel {
       @include flex-container(row, nowrap);
 
@@ -1021,6 +1025,12 @@ $scheduler-appointment-form-label-padding: 20px;
     .dx-scheduler-all-day-table-row .dx-scheduler-all-day-table-cell {
       &:first-child {
         border-left: none;
+      }
+    }
+
+    &.dx-scheduler-timeline {
+      .dx-scheduler-header-panel-empty-cell {
+        border-bottom: 1px solid $scheduler-accent-border-color;
       }
     }
   }
