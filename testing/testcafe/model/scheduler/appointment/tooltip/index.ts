@@ -1,5 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
-import AppointmentTooltipListItem from './listItem';
+import ListItem from './listItem';
 
 const CLASS = {
   appointmentTooltipWrapper: 'dx-scheduler-appointment-tooltip-wrapper',
@@ -7,29 +7,28 @@ const CLASS = {
   tooltip: 'dx-tooltip',
   tooltipWrapper: 'dx-tooltip-wrapper',
   tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
-
   mobileTooltip: '.dx-scheduler-overlay-panel > .dx-overlay-content',
 };
 
 export default class AppointmentTooltip {
-  element: Selector;
+  readonly element: Selector;
 
-  mobileElement: Selector;
+  readonly mobileElement: Selector;
 
-  deleteElement: Selector;
+  readonly deleteButton: Selector;
 
-  wrapper: Selector;
+  readonly wrapper: Selector;
 
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.tooltip}.${CLASS.appointmentTooltipWrapper}`);
     this.mobileElement = Selector(CLASS.mobileTooltip);
 
-    this.deleteElement = Selector(`.${CLASS.tooltipDeleteButton}`);
+    this.deleteButton = Selector(`.${CLASS.tooltipDeleteButton}`);
     this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
   }
 
-  getListItem(title: string, index = 0): AppointmentTooltipListItem {
-    return new AppointmentTooltipListItem(this.wrapper, title, index);
+  getListItem(title: string, index = 0): ListItem {
+    return new ListItem(this.wrapper, title, index);
   }
 
   isVisible(): Promise<boolean> {

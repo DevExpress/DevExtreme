@@ -11,6 +11,7 @@ import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v2.dataGrid.summaries.tests.js';
 import { JSPdfStylesTests } from './jspdf_v2.dataGrid.styles.tests.js';
+import { JSPdfBorderColorsTests } from './jspdf_v2.dataGrid.borderColors.tests.js';
 import { JSPdfMultilineTests } from './jspdf_v2.dataGrid.multiline.tests.js';
 
 import 'generic_light.css!';
@@ -1668,4 +1669,5 @@ JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfStylesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfBorderColorsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfMultilineTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
