@@ -971,8 +971,8 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         renderer.fn.height = () => 1000;
 
         try {
-            window.innerHeight = 500;
-            window.outerHeight = 500;
+            window.innerHeight = () => 500;
+            window.outerHeight = () => 500;
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
@@ -1000,8 +1000,8 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         renderer.fn.width = () => 1000;
 
         try {
-            window.innerWidth = 500;
-            window.outerWidth = 500;
+            window.innerWidth = () => 500;
+            window.outerWidth = () => 500;
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
