@@ -1771,11 +1771,11 @@ class Scheduler extends Widget {
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
 
+        const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
+        delete singleRawAppointment[keyPropertyName];
+
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
-            const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
-            delete singleRawAppointment[keyPropertyName];
-
             this.addAppointment(singleRawAppointment);
         }
 
