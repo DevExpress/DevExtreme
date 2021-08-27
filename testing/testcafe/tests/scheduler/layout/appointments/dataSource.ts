@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import Scheduler from '../../../model/scheduler';
-import url from '../../../helpers/getPageUrl';
+import Scheduler from '../../../../model/scheduler';
+import url from '../../../../helpers/getPageUrl';
 
 fixture`DataSource`
   .page(url(__dirname, './pages/containerWithArrayStore.html'));
