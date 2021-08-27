@@ -78,7 +78,7 @@ class BaseRenderingStrategy {
         for(let i = 0; i < length; i++) {
             let coordinates = this._getItemPosition(items[i]);
 
-            if(this._isRtl()) {
+            if(coordinates.length && this._isRtl()) {
                 coordinates = this._correctRtlCoordinates(coordinates);
             }
 
