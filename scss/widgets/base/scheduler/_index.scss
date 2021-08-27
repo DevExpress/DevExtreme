@@ -593,6 +593,10 @@ $scheduler-appointment-form-label-padding: 20px;
           border-top: none;
           border-left: none;
         }
+
+        .dx-scheduler-time-panel {
+          border: none;
+        }
       }
 
       .dx-scheduler-header-panel-empty-cell {
@@ -1732,6 +1736,10 @@ $scheduler-appointment-form-label-padding: 20px;
         &:not(.dx-scheduler-work-space-grouped) {
           .dx-scheduler-header-panel-empty-cell {
             border-left: none;
+          }
+
+          .dx-scheduler-time-panel {
+            border: none;
           }
         }
       }
