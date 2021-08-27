@@ -11,6 +11,7 @@ import {
   SCROLLABLE_SCROLLBAR_CLASS,
   DIRECTION_BOTH,
   TopPocketState,
+  HOVER_ENABLED_STATE,
 } from '../common/consts';
 
 import devices from '../../../../core/devices';
@@ -175,6 +176,59 @@ describe('Simulated > Render', () => {
 
           expect(helper.viewModel.containerStyles).toEqual({ touchAction: expectedTouchAction });
         });
+      });
+    });
+
+    each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
+      it('should render scrollbars', () => {
+        const helper = new ScrollableTestHelper({
+          direction,
+          showScrollbar,
+          scrollByThumb: true,
+          rtlEnabled: true,
+          forceGeneratePockets: true,
+          bounceEnabled: true,
+        });
+
+        const scrollbars = helper.getScrollbars();
+        const commonOptions = {
+          scrollByThumb: true,
+          isScrollableHovered: false,
+          bounceEnabled: true,
+          showScrollbar,
+        };
+
+        const isHoverable = showScrollbar === 'onHover' || showScrollbar === 'always';
+        const vScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+        const hScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+
+        if (helper.isBoth) {
+          expect(scrollbars.length).toEqual(2);
+          expect(scrollbars.at(0).props())
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+          expect(scrollbars.at(1).props())
+            .toMatchObject({
+              ...commonOptions,
+              direction: DIRECTION_VERTICAL,
+              forceGeneratePockets: true,
+            });
+          expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
+          expect(scrollbars.at(1).getDOMNode().className).toBe(vScrollbarClasses);
+        } else if (helper.isVertical) {
+          expect(scrollbars.length).toEqual(1);
+          expect(scrollbars.at(0).props())
+            .toMatchObject({
+              ...commonOptions,
+              direction: DIRECTION_VERTICAL,
+              forceGeneratePockets: true,
+            });
+          expect(scrollbars.at(0).getDOMNode().className).toBe(vScrollbarClasses);
+        } else if (helper.isHorizontal) {
+          expect(scrollbars.length).toEqual(1);
+          expect(scrollbars.at(0).props())
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+          expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
+        }
       });
     });
   });

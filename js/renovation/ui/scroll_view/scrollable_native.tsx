@@ -153,6 +153,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { needRenderScrollbars && showScrollbar !== 'never' && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
           direction="horizontal"
+          showScrollbar="onScroll"
           ref={hScrollbarRef}
           contentSize={contentClientWidth}
           containerSize={containerClientWidth}
@@ -163,6 +164,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { needRenderScrollbars && showScrollbar !== 'never' && useSimulatedScrollbar && direction.isVertical && (
         <Scrollbar
           direction="vertical"
+          showScrollbar="onScroll"
           ref={vScrollbarRef}
           contentSize={contentClientHeight}
           containerSize={containerClientHeight}
@@ -494,6 +496,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   handleScroll(event: DxMouseEvent): void {
     this.eventForUserAction = event;
+
     if (this.props.useSimulatedScrollbar) {
       this.moveScrollbars();
     }
