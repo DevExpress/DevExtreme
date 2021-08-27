@@ -9,6 +9,12 @@ function createEmptyArray(length) {
     return Array.from({ length: length }, () => 0);
 }
 
+function getArrayMaxValue(array) {
+    return array.length
+        ? Math.max(...array)
+        : 0;
+}
+
 function getTextLines(doc, text, font, { wordWrapEnabled, columnWidth }) {
     if(wordWrapEnabled) {
         // it also splits text by '\n' automatically
@@ -31,7 +37,7 @@ function calculateTextHeight(doc, text, font, { wordWrapEnabled, columnWidth }) 
     return height * linesCount * doc.getLineHeightFactor();
 }
 
-function calculateRowHeightInfo(doc, cells, columnWidths, rowsCount, rowIndex, prevRowInfo) {
+function calculateRowHeightInfo(doc, cells, columnWidths, rowsCount, rowIndex, customerHeight, prevRowInfo) {
     if(cells.length !== columnWidths.length) {
         throw 'the cells count must be equal to the count of the columns';
     }
@@ -50,9 +56,9 @@ function calculateRowHeightInfo(doc, cells, columnWidths, rowsCount, rowIndex, p
         .filter(c => !isDefined(c.rowSpan))
         .map(c => c.height);
 
-    const maxHeightWithoutMergedRows = heightsWithoutMergedRows.length
-        ? Math.max(...heightsWithoutMergedRows)
-        : 0;
+    const maxHeightWithoutMergedRows = isDefined(customerHeight)
+        ? customerHeight
+        : getArrayMaxValue(heightsWithoutMergedRows);
 
     const additionalSpacesArray = createEmptyArray(rowsCount);
     const prevAdditionalSpaces = prevRowInfo?.heightInfo?.additionalSpacesArray || createEmptyArray(rowsCount);

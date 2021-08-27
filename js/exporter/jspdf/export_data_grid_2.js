@@ -58,14 +58,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, null, null, firstColumnWidth);
                 }
 
-                const customerHeight = currentRowInfo.rowHeight;
-                currentRowInfo.heightInfo = calculateRowHeightInfo(doc, currentRowPdfCells,
-                    calculateColumnWidthsByColSpanAndSplitInfo(pdfGrid, currentRowInfo), dataRowsCount, rowIndex, prevRowInfo);
-
-                let rowHeight = isDefined(customerHeight)
-                    ? customerHeight
-                    : currentRowInfo.heightInfo.rowHeight;
-
+                let customerHeight = currentRowInfo.rowHeight;
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);
@@ -75,9 +68,17 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
 
                     if(isDefined(args.rowHeight)) {
-                        rowHeight = args.rowHeight;
+                        customerHeight = args.rowHeight;
                     }
                 }
+
+                currentRowInfo.heightInfo = calculateRowHeightInfo(doc, currentRowPdfCells,
+                    calculateColumnWidthsByColSpanAndSplitInfo(pdfGrid, currentRowInfo),
+                    dataRowsCount, rowIndex, customerHeight, prevRowInfo);
+
+                const rowHeight = isDefined(customerHeight)
+                    ? customerHeight
+                    : currentRowInfo.heightInfo.rowHeight;
 
                 pdfGrid.addRow(currentRowPdfCells, rowHeight);
             }
