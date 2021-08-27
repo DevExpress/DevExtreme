@@ -1,3 +1,4 @@
+import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -7,6 +8,8 @@ import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
+import Button from '../button';
+import DropDownButton from '../drop_down_button';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const DATAGRID_EXPORT_ICON = 'export-to';
@@ -706,17 +709,24 @@ dataGridCore.registerModule('export', {
                     let widgetOptions;
 
                     if(items.length === 1) {
-                        widget = 'dxButton';
+                        widget = Button;
                         widgetOptions = items[0];
+                        widgetOptions.elementAttr = {
+                            class: 'dx-datagrid-export-button'
+                        };
+
                         widgetOptions.hint = widgetOptions.text;
                         delete widgetOptions.text;
-                        widgetOptions.icon = 'export';
                     } else {
-                        widget = 'dxDropDownButton';
+                        widget = DropDownButton;
                         widgetOptions = {
                             icon: 'export',
                             displayExpr: 'text',
                             items: items,
+                            hint: 'Export',
+                            elementAttr: {
+                                class: 'dx-datagrid-export-button'
+                            },
                             dropDownOptions: {
                                 wrapperAttr: { 'class': 'dx-datagrid-export-menu' },
                                 width: 'auto'
@@ -725,7 +735,13 @@ dataGridCore.registerModule('export', {
                     }
 
                     const toolbarButtonOptions = {
-                        widget: widget,
+                        template: (_data, _index, container) => {
+                            this._createComponent($(container), widget, widgetOptions);
+                        },
+                        menuItemTemplate: (_data, _index, container) => {
+                            widgetOptions = { ...widgetOptions, text: widgetOptions.hint };
+                            this._createComponent($(container), widget, widgetOptions);
+                        },
                         options: widgetOptions,
                         location: 'after',
                         locateInMenu: 'auto',
@@ -743,7 +759,7 @@ dataGridCore.registerModule('export', {
                     if(exportOptions.enabled) {
                         items.push({
                             text: texts.exportAll,
-                            icon: 'exportxlsx',
+                            icon: 'xlsxfile',
                             onClick: () => {
                                 this._exportController.exportToExcel();
                             }
