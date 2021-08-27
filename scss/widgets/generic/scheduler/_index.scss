@@ -198,11 +198,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       border-top: baseScheduler.$scheduler-base-border;
     }
 
-    .dx-scheduler-date-table-cell {
-      border-left: baseScheduler.$scheduler-base-border;
-    }
-
-
     &.dx-scheduler-agenda {
       .dx-scheduler-date-table-cell {
         border: none;
@@ -222,11 +217,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   .dx-scheduler-date-table-row:first-child {
     border-top: none;
   }
-}
-
-.dx-scheduler-date-table-cell { // stylelint-disable-line no-duplicate-selectors
-  border-left: baseScheduler.$scheduler-base-border;
-  border-right: baseScheduler.$scheduler-base-border;
 }
 
 .dx-scheduler-all-day-table-cell,
