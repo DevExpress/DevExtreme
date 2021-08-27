@@ -806,6 +806,8 @@ declare module DevExpress {
   > extends Component<TProperties> {
     _templateManager: DevExpress.core.TemplateManager;
 
+    _cancelOptionChange?: string;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
