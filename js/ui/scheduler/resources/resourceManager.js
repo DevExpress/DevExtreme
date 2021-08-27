@@ -1,5 +1,4 @@
 import { wrapToArray, inArray } from '../../../core/utils/array';
-import { grep } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
 import { deepExtendArraySafe } from '../../../core/utils/object';
 import { each } from '../../../core/utils/iterator';
@@ -16,6 +15,7 @@ import {
     getFieldExpr,
     getValueExpr,
     getWrappedDataSource,
+    getResourceByField
 } from './utils';
 
 export class ResourceManager {
@@ -80,40 +80,6 @@ export class ResourceManager {
         return this._resources || [];
     }
 
-    getEditors() { // TODO used in Form
-        return this.getResources().map(resource => {
-            const dataField = getFieldExpr(resource);
-            const dataSource = this._getResourceDataByField(dataField);
-
-            return {
-                editorOptions: {
-                    dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
-                    displayExpr: getDisplayExpr(resource),
-                    valueExpr: getValueExpr(resource)
-                },
-                dataField,
-                editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
-                label: { text: resource.label || dataField }
-            };
-        });
-    }
-
-    // getEditors() { // TODO sketch of new implementation of getEditors method
-    //     return this.getResources().map(resource => {
-    //         const dataField = getFieldExpr(resource);
-    //         const dataSource = this._getResourceDataByField(dataField);
-
-    //         return {
-    //             allowMultiple: resource.allowMultiple,
-    //             label: resource.label,
-    //             dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
-    //             displayExpr: getDisplayExpr(resource),
-    //             valueExpr: getValueExpr(resource),
-    //             dataField
-    //         };
-    //     });
-    // }
-
     getResourceDataByValue(field, value) {
         const result = new Deferred();
 
@@ -158,12 +124,8 @@ export class ResourceManager {
         }
     }
 
-    getResourcesFromItem(itemData, wrapOnlyMultipleResources) { // TODO used in Popup
+    getResourcesFromItem2(itemData, wrapOnlyMultipleResources = false) { // TODO
         let result = null;
-
-        if(!isDefined(wrapOnlyMultipleResources)) {
-            wrapOnlyMultipleResources = false;
-        }
 
         this._resourceFields.forEach(field => {
             each(itemData, (fieldName, fieldValue) => {
@@ -178,6 +140,7 @@ export class ResourceManager {
                     if(resourceData.length === 1) {
                         resourceData = resourceData[0];
                     }
+
                     if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
                         this.getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
                     } else {
@@ -189,6 +152,33 @@ export class ResourceManager {
                     return true;
                 }
             });
+        });
+
+        return result;
+    }
+
+    getResourcesFromItem(itemData, wrapOnlyMultipleResources = false) { // TODO
+        let result = null;
+
+        this._resourceFields.forEach(field => {
+            let resourceValue = this.getDataAccessors(field, 'getter')(itemData);
+
+            if(isDefined(resourceValue)) {
+                if(!result) {
+                    result = {};
+                }
+
+                result[field] = resourceValue;
+
+                if(resourceValue.length === 1) {
+                    resourceValue = resourceValue[0];
+                }
+                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
+                    this.getDataAccessors(field, 'setter')(result, wrapToArray(resourceValue));
+                } else {
+                    this.getDataAccessors(field, 'setter')(result, resourceValue);
+                }
+            }
         });
 
         return result;
@@ -252,11 +242,11 @@ export class ResourceManager {
         return result.promise();
     }
 
-    getResourcesByFields(fields) {
-        return grep(this.getResources(), (function(resource) {
+    getResourcesByFields(fields) { // TODO rename
+        return this.getResources().filter(resource => {
             const field = getFieldExpr(resource);
-            return inArray(field, fields) > -1;
-        }).bind(this));
+            return fields.indexOf(field) > -1;
+        });
     }
 
     getResourceByField(field) {
@@ -270,7 +260,7 @@ export class ResourceManager {
         const colorGetter = compileGetter(colorExpr);
 
         const result = new Deferred();
-        const resourceData = this._getResourceDataByField(field);
+        const resourceData = getResourceByField(field, this.loadedResources);
         const resourceDataLength = resourceData.length;
         let color;
 
@@ -333,17 +323,6 @@ export class ResourceManager {
 
     _createPlainResourcesByAppointmentAsync(rawAppointment) {
         return this.agendaProcessor.createListAsync(rawAppointment);
-    }
-
-    _getResourceDataByField(fieldName) {
-        for(let i = 0; i < this.loadedResources.length; i++) {
-            const resource = this.loadedResources[i];
-            if(resource.name === fieldName) {
-                return resource.data;
-            }
-        }
-
-        return [];
     }
 
     getResourceTreeLeaves(tree, appointmentResources, result) {

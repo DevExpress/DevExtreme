@@ -146,3 +146,32 @@ export const getAllGroups = (groups) => {
         return getGroupsObjectFromGroupsArray(groupsArray);
     });
 };
+
+export const getResourceByField = (fieldName, loadedResources) => {
+    for(let i = 0; i < loadedResources.length; i++) {
+        const resource = loadedResources[i];
+        if(resource.name === fieldName) {
+            return resource.data;
+        }
+    }
+
+    return [];
+};
+
+export const createResourceEditorModel = (resources, loadedResources) => {
+    return resources.map(resource => {
+        const dataField = getFieldExpr(resource);
+        const dataSource = getResourceByField(dataField, loadedResources);
+
+        return {
+            editorOptions: {
+                dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
+                displayExpr: getDisplayExpr(resource),
+                valueExpr: getValueExpr(resource)
+            },
+            dataField,
+            editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
+            label: { text: resource.label || dataField }
+        };
+    });
+};
