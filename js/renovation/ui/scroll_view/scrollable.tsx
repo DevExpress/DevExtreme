@@ -35,7 +35,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
     },
     restAttributes,
   } = viewModel;
@@ -107,6 +107,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
 
+        // uses in dateview rollers only
+        onVisibilityChange={onVisibilityChange}
         inertiaEnabled={inertiaEnabled}
         bounceEnabled={bounceEnabled}
         scrollByContent={scrollByContent}

@@ -14,6 +14,8 @@ export class BaseScrollableProps {
 
   @OneWay() aria?: Record<string, string> = {};
 
+  @OneWay() useNative = getDefaultUseNative();
+
   @OneWay() addWidgetClass = false;
 
   @OneWay() disabled = false;
@@ -29,8 +31,6 @@ export class BaseScrollableProps {
   @OneWay() classes?: string = '';
 
   @OneWay() activeStateUnit?: string;
-
-  @OneWay() useNative = getDefaultUseNative();
 
   @OneWay() direction: ScrollableDirection = 'vertical';
 
