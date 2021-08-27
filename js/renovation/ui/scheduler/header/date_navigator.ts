@@ -49,7 +49,6 @@ export const getDateNavigator = (
   updateDateByDirection: (direction: Direction) => void,
   isPreviousButtonDisabled: boolean,
   isNextButtonDisabled: boolean,
-  rtlEnabled: boolean | undefined,
 ): ToolbarItem => {
   const items = [
     getPreviousButtonOptions(isPreviousButtonDisabled),
@@ -81,7 +80,6 @@ export const getDateNavigator = (
             break;
         }
       },
-      rtlEnabled,
     },
     ...item,
   } as ToolbarItem;

@@ -10,7 +10,6 @@ export const getViewSwitcher = (
   selectedView: string,
   views: ItemView[],
   setCurrentView: (view: ItemView) => void,
-  rtlEnabled: boolean | undefined,
 ): ToolbarItem => ({
   widget: 'dxButtonGroup',
   locateInMenu: 'auto',
@@ -24,7 +23,6 @@ export const getViewSwitcher = (
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       setCurrentView(e.itemData);
     },
-    rtlEnabled,
   },
   ...item,
 } as ToolbarItem);
@@ -34,7 +32,6 @@ export const getDropDownViewSwitcher = (
   selectedView: string,
   views: ItemView[],
   setCurrentView: (view: ItemView) => void,
-  rtlEnabled: boolean | undefined,
 ): ToolbarItem => ({
   widget: 'dxDropDownButton',
   locateInMenu: 'never',
@@ -58,7 +55,6 @@ export const getDropDownViewSwitcher = (
         class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS,
       },
     },
-    rtlEnabled,
   },
   ...item,
 } as ToolbarItem);
