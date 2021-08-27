@@ -9,7 +9,6 @@ import support from 'core/utils/support';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import initMobileViewport from 'mobile/init_mobile_viewport';
-import RenovatedScrollable from 'renovation/ui/scroll_view/scrollable';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {
@@ -609,8 +608,6 @@ const testDefaultValue = function(realDevice, currentDevice, realVersion) {
         version: realVersion
     });
     devices.current({ platform: currentDevice });
-
-    RenovatedScrollable.defaultOptions({});
 
     $('#scrollable').dxScrollable({});
 
