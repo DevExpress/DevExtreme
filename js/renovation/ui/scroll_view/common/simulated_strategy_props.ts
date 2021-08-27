@@ -5,13 +5,20 @@ import { EventCallback } from '../../common/event_callback';
 import {
   BaseScrollableProps,
 } from './base_scrollable_props';
-import { ScrollEventArgs } from './types.d';
+import {
+  ScrollEventArgs, ScrollableShowScrollbar,
+} from './types.d';
+import { isDesktop } from '../utils/get_default_option_value';
 
 @ComponentBindings()
 export class ScrollableSimulatedProps extends BaseScrollableProps {
   @OneWay() inertiaEnabled = true;
 
   @OneWay() useKeyboard = true;
+
+  @OneWay() showScrollbar: ScrollableShowScrollbar = isDesktop() ? 'onHover' : 'onScroll';
+
+  @OneWay() scrollByThumb = isDesktop();
 
   @Event() onVisibilityChange?: (args: boolean) => void;
 

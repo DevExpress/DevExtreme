@@ -73,8 +73,6 @@ describe('Native > View', () => {
       refreshingText: 'Refreshing...',
       rtlEnabled: false,
       scrollByContent: true,
-      scrollByThumb: false,
-      showScrollbar: 'onScroll',
       useNative: true,
       useSimulatedScrollbar: false,
       visible: true,
@@ -1331,7 +1329,6 @@ describe('Scrollbar integration', () => {
       const viewModel = new Scrollable({
         direction,
         useSimulatedScrollbar,
-        showScrollbar: 'onScroll',
         needRenderScrollbars: true,
       });
       (viewModel as any).contentRef = React.createRef();
@@ -1360,6 +1357,48 @@ describe('Scrollbar integration', () => {
       expect(scrollBar.length).toBe(expectedScrollbarsCount);
     });
 
+  each(optionValues.direction).describe('direction: %o', (direction) => {
+    it('should render and pass showScrollbar: "onScroll" value to scrollbars', () => {
+      const helper = new ScrollableTestHelper({
+        direction,
+        useSimulatedScrollbar: true,
+        showScrollbar: 'always', // should not affect
+      });
+
+      const scrollbars = helper.getScrollbars();
+
+      const commonOptions = {
+        containerSize: 0,
+        contentSize: 0,
+        scrollLocation: 0,
+        forceVisibility: false,
+        showScrollbar: 'onScroll',
+      };
+      const vScrollbarClasses = 'dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical dx-state-invisible';
+      const hScrollbarClasses = 'dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal dx-state-invisible';
+
+      if (helper.isBoth) {
+        expect(scrollbars.length).toEqual(2);
+        expect(scrollbars.at(0).props())
+          .toEqual({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
+        expect(scrollbars.at(1).props())
+          .toEqual({ ...commonOptions, direction: DIRECTION_VERTICAL });
+        expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
+        expect(scrollbars.at(1).getDOMNode().className).toBe(vScrollbarClasses);
+      } else if (helper.isVertical) {
+        expect(scrollbars.length).toEqual(1);
+        expect(scrollbars.at(0).props())
+          .toEqual({ ...commonOptions, direction: DIRECTION_VERTICAL });
+        expect(scrollbars.at(0).getDOMNode().className).toBe(vScrollbarClasses);
+      } else if (helper.isHorizontal) {
+        expect(scrollbars.length).toEqual(1);
+        expect(scrollbars.at(0).props())
+          .toEqual({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
+        expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
+      }
+    });
+  });
+
   test.each(getPermutations([
     optionValues.direction,
     optionValues.useSimulatedScrollbar,
@@ -1372,7 +1411,6 @@ describe('Scrollbar integration', () => {
 
       const viewModel = new Scrollable({
         useSimulatedScrollbar,
-        showScrollbar: 'onScroll',
         direction,
       });
 

@@ -66,8 +66,8 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
-& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableProps, 'direction' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
+& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,

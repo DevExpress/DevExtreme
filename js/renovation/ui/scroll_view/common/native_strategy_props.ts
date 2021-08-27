@@ -9,4 +9,6 @@ import {
 @ComponentBindings()
 export class ScrollableNativeProps extends BaseScrollableProps {
   @OneWay() useSimulatedScrollbar: boolean = getDefaultUseSimulatedScrollbar();
+
+  @OneWay() showScrollbar = 'onScroll';
 }

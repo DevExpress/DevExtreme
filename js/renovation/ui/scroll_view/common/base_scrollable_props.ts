@@ -2,7 +2,7 @@ import {
   ComponentBindings, OneWay, Event, Slot,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
-import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
+import { ScrollableDirection, ScrollEventArgs } from './types.d';
 import { touch } from '../../../../core/utils/support';
 import { getDefaultBounceEnabled, getDefaultUseNative, isDesktop } from '../utils/get_default_option_value';
 import { current, isMaterial } from '../../../../ui/themes';
@@ -34,13 +34,9 @@ export class BaseScrollableProps {
 
   @OneWay() direction: ScrollableDirection = 'vertical';
 
-  @OneWay() showScrollbar: ScrollableShowScrollbar = isDesktop() ? 'onHover' : 'onScroll';
-
   @OneWay() bounceEnabled = getDefaultBounceEnabled();
 
   @OneWay() scrollByContent: boolean = isDesktop() ? touch : true;
-
-  @OneWay() scrollByThumb = isDesktop();
 
   @OneWay() pullDownEnabled = false;
 
