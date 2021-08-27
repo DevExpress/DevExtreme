@@ -972,7 +972,7 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
-      border: none;
+      border-bottom: none;
     }
   }
 
@@ -984,10 +984,6 @@ $scheduler-appointment-form-label-padding: 20px;
 
     .dx-scheduler-all-day-panel {
       margin-left: 0;
-    }
-
-    .dx-scheduler-all-day-title {
-      border-right: $scheduler-base-border;
     }
 
     .dx-scheduler-date-table {
@@ -1604,7 +1600,6 @@ $scheduler-appointment-form-label-padding: 20px;
         height: 50px !important; // stylelint-disable-line declaration-no-important
         line-height: 50px !important; // stylelint-disable-line declaration-no-important
         border-bottom: none;
-        border-right: none;
       }
     }
 
@@ -1776,11 +1771,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     &.dx-scheduler-work-space-both-scrollbar {
-      .dx-scheduler-all-day-title {
-        border-left: $scheduler-base-border;
-        border-right: none;
-      }
-
       .dx-scheduler-time-panel {
         border-left: $scheduler-base-border;
         border-right: none;

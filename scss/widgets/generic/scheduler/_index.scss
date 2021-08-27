@@ -398,10 +398,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 .dx-scheduler-work-space-both-scrollbar {
   .dx-scheduler-all-day-title {
     background-color: $scheduler-alldaypanel-bg;
-
-    &::before {
-      background-color: $scheduler-workspace-background-color,;
-    }
   }
 }
 
