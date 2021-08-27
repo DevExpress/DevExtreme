@@ -2137,7 +2137,7 @@ export const editingModule = {
                 },
                 _updateItemsCore: function(change) {
                     this.callBase(change);
-                    this._updateEditRow(this.items());
+                    this._updateEditRow(this.items(true));
                 },
                 _applyChangeUpdate: function(change) {
                     this._updateEditRow(change.items);
