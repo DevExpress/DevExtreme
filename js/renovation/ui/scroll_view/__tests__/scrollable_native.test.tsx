@@ -73,6 +73,7 @@ describe('Native > View', () => {
       refreshingText: 'Refreshing...',
       rtlEnabled: false,
       scrollByContent: true,
+      showScrollbar: 'onScroll',
       useNative: true,
       useSimulatedScrollbar: false,
       visible: true,
