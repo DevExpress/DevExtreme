@@ -594,6 +594,10 @@ $scheduler-appointment-form-label-padding: 20px;
           border-left: none;
         }
       }
+
+      .dx-scheduler-header-panel-empty-cell {
+        margin-top: 0;
+      }
     }
 
     &:not(.dx-scheduler-work-space-grouped) {
@@ -1439,6 +1443,7 @@ $scheduler-appointment-form-label-padding: 20px;
     .dx-scheduler-time-panel {
       margin-top: 0;
       width: $scheduler-agenda-left-column-width;
+      border: none;
     }
 
     .dx-scheduler-time-panel-cell,
@@ -1656,6 +1661,12 @@ $scheduler-appointment-form-label-padding: 20px;
     .dx-scheduler-sidebar-scrollable {
       .dx-scrollable-content {
         direction: rtl;
+      }
+    }
+
+    .dx-scheduler-agenda {
+      .dx-scheduler-time-panel {
+        border: none;
       }
     }
 
