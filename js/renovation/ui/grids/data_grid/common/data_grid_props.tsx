@@ -535,7 +535,7 @@ export class DataGridEditing {
   useIcons? = isMaterial(current());
 
   @TwoWay()
-  changes?: [] = [];
+  changes?: any[] = [];
 
   @TwoWay()
   editRowKey?: any = null;
