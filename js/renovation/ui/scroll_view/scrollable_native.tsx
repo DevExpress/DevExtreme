@@ -858,7 +858,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar !== 'never' && this.props.useSimulatedScrollbar,
       [SCROLLABLE_SCROLLBARS_HIDDEN]: showScrollbar === 'never',
-      [`${classes}`]: !!classes,
+      [String(classes)]: !!classes,
     };
     return combineClasses(classesMap);
   }

@@ -17,7 +17,8 @@ import {
 import {
   ScrollOffset,
 } from './common/types.d';
-import { ScrollViewProps } from './common/scrollview_props';
+
+import { ScrollableProps } from './common/scrollable_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
@@ -83,6 +84,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 };
 
 @Component({
+  defaultOptionRules: null,
   jQuery: {
     register: true,
     component: ScrollViewWrapper,
@@ -90,7 +92,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   view: viewFunction,
 })
 
-export class ScrollView extends JSXComponent<ScrollViewProps>() {
+export class ScrollView extends JSXComponent<ScrollableProps>() {
   @Ref() scrollableRef!: RefObject<Scrollable>;
 
   @InternalState() forceReachBottom?: boolean;

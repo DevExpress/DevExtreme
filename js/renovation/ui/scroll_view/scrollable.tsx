@@ -35,7 +35,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
     },
     restAttributes,
   } = viewModel;
@@ -107,7 +107,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
 
-        onVisibilityChange={onVisibilityChange}
         inertiaEnabled={inertiaEnabled}
         bounceEnabled={bounceEnabled}
         scrollByContent={scrollByContent}
@@ -124,6 +123,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 @Component({
+  defaultOptionRules: null,
   jQuery: {
     register: true,
     component: ScrollableWrapper,

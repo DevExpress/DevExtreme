@@ -1063,8 +1063,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     } else {
       this.savedScrollOffset = this.scrollOffset();
     }
-
-    this.props.onVisibilityChange?.(visible);
   }
 
   updateSizes(): void {
@@ -1148,7 +1146,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
-      [`${classes}`]: !!classes,
+      [String(classes)]: !!classes,
     };
     return combineClasses(classesMap);
   }

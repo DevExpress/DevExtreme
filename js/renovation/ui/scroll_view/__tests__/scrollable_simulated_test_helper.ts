@@ -69,7 +69,6 @@ class ScrollableTestHelper {
       onPullDown: this.actionHandlers.onPullDown,
       onReachBottom: this.actionHandlers.onReachBottom,
       onBounce: this.actionHandlers.onBounce,
-      onVisibilityChange: this.actionHandlers.onVisibilityChange,
       needRenderScrollbars: true,
       ...this.options,
     });
@@ -357,8 +356,8 @@ class ScrollableTestHelper {
 
   // eslint-disable-next-line class-methods-use-this
   getActionHandlers(
-    props: Pick<ScrollableSimulatedProps, 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce' | 'onVisibilityChange'>,
-  ): { [T in 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce' | 'onVisibilityChange']: any } {
+    props: Pick<ScrollableSimulatedProps, 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce'>,
+  ): { [T in 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce']: any } {
     const actionHandlers = {
       onStart: jest.fn(),
       onScroll: jest.fn(),
@@ -367,7 +366,6 @@ class ScrollableTestHelper {
       onPullDown: jest.fn(),
       onReachBottom: jest.fn(),
       onBounce: jest.fn(),
-      onVisibilityChange: jest.fn(),
     };
 
     Object.keys(actionHandlers).forEach((key) => {
