@@ -1,19 +1,36 @@
 import {
-  ComponentBindings, OneWay, Event,
+  ComponentBindings, OneWay, Event, Slot,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 import { touch } from '../../../../core/utils/support';
-import { WidgetProps } from '../../common/widget';
 import { getDefaultBounceEnabled, getDefaultUseNative, isDesktop } from '../utils/get_default_option_value';
 import { current, isMaterial } from '../../../../ui/themes';
 import messageLocalization from '../../../../localization/message';
 
 @ComponentBindings()
-export class BaseScrollableProps extends WidgetProps {
-  @OneWay() useNative = getDefaultUseNative();
+export class BaseScrollableProps {
+  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
+
+  @OneWay() aria?: Record<string, string> = {};
 
   @OneWay() addWidgetClass = false;
+
+  @OneWay() disabled = false;
+
+  @OneWay() height?: string | number | (() => (string | number));
+
+  @OneWay() width?: string | number | (() => (string | number));
+
+  @OneWay() visible = true;
+
+  @OneWay() rtlEnabled = false;
+
+  @OneWay() classes?: string = '';
+
+  @OneWay() activeStateUnit?: string;
+
+  @OneWay() useNative = getDefaultUseNative();
 
   @OneWay() direction: ScrollableDirection = 'vertical';
 
@@ -24,8 +41,6 @@ export class BaseScrollableProps extends WidgetProps {
   @OneWay() scrollByContent: boolean = isDesktop() ? touch : true;
 
   @OneWay() scrollByThumb = isDesktop();
-
-  @OneWay() classes?: string;
 
   @OneWay() pullDownEnabled = false;
 

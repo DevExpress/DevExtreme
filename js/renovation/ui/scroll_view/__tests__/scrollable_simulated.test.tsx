@@ -73,30 +73,28 @@ describe('Simulated > View', () => {
     const props = new ScrollableSimulatedProps();
     const scrollable = mount<Scrollable>(<Scrollable {...props} />);
 
-    expect(scrollable.props()).toMatchObject({
-      activeStateEnabled: false,
+    expect(scrollable.props()).toEqual({
       addWidgetClass: false,
       aria: {},
       bounceEnabled: true,
-      className: '',
       classes: '',
-      cssText: '',
       direction: 'vertical',
       disabled: false,
-      focusStateEnabled: false,
       forceGeneratePockets: false,
-      hoverStateEnabled: false,
       inertiaEnabled: true,
-      name: '',
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
+      pulledDownText: 'Release to refresh...',
+      pullingDownText: 'Pull down to refresh...',
       reachBottomEnabled: false,
+      reachBottomText: 'Loading...',
+      refreshingText: 'Refreshing...',
+      rtlEnabled: false,
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      tabIndex: 0,
       useKeyboard: true,
       useNative: false,
       visible: true,
@@ -1171,9 +1169,7 @@ describe('Simulated > Behavior', () => {
 
       each([{ top: 1, left: 1 }, undefined]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
         test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
-          const viewModel = new Scrollable({
-            onVisibilityChange: actionHandler,
-          });
+          const viewModel = new Scrollable({});
 
           viewModel.savedScrollOffset = initialSavedScrollOffset;
           viewModel.scrollOffset = jest.fn(() => ({ top: 5, left: 10 }));
@@ -1186,11 +1182,6 @@ describe('Simulated > Behavior', () => {
           } as RefObject<HTMLDivElement>;
 
           viewModel.onVisibilityChangeHandler(visible);
-
-          if (actionHandler) {
-            expect(actionHandler).toHaveBeenCalledTimes(1);
-            expect(actionHandler).toHaveBeenLastCalledWith(visible);
-          }
 
           let expectedContainerScrollTop = 10;
           let expectedContainerScrollLeft = 20;
