@@ -255,17 +255,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     }
   }
 
-  &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
-    .dx-scheduler-date-table-cell,
-    .dx-scheduler-all-day-table-cell {
-      border-left: baseScheduler.$scheduler-base-border;
-
-      .dx-rtl & {
-        border-right: baseScheduler.$scheduler-base-border;
-      }
-    }
-  }
-
   .dx-scheduler-header-panel {
     .dx-scheduler-group-row {
       &:not(:first-child) {
