@@ -5,6 +5,10 @@ function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
+function createEmptyArray(length) {
+    return Array.from({ length: length }, () => 0);
+}
+
 function getTextLines(doc, text, font, { wordWrapEnabled, columnWidth }) {
     if(wordWrapEnabled) {
         // it also splits text by '\n' automatically
@@ -16,6 +20,9 @@ function getTextLines(doc, text, font, { wordWrapEnabled, columnWidth }) {
 }
 
 function calculateTextHeight(doc, text, font, { wordWrapEnabled, columnWidth }) {
+    if(!isDefined(text)) {
+        return 0;
+    }
     const height = doc.getTextDimensions(text, {
         fontSize: font?.size || doc.getFontSize()
     }).h;
@@ -24,25 +31,67 @@ function calculateTextHeight(doc, text, font, { wordWrapEnabled, columnWidth }) 
     return height * linesCount * doc.getLineHeightFactor();
 }
 
-function calculateRowHeight(doc, cells, columnWidths) {
+function calculateRowHeightInfo(doc, cells, columnWidths, rowsCount, rowIndex, prevRowInfo) {
     if(cells.length !== columnWidths.length) {
         throw 'the cells count must be equal to the count of the columns';
     }
 
-    let rowHeight = 0;
-    for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-        const cellText = cells[cellIndex].text;
-        const font = cells[cellIndex].font;
-        const wordWrapEnabled = cells[cellIndex].wordWrapEnabled;
-        const columnWidth = columnWidths[cellIndex];
-        if(isDefined(cellText)) {
-            const cellHeight = calculateTextHeight(doc, cellText, font, { wordWrapEnabled, columnWidth });
-            if(rowHeight < cellHeight) {
-                rowHeight = cellHeight;
+    const heightsInfo = cells.map((cell, index) => {
+        return {
+            rowSpan: cell.rowSpan,
+            height: calculateTextHeight(doc, cell.text, cell.font, {
+                wordWrapEnabled: cell.wordWrapEnabled,
+                columnWidth: columnWidths[index]
+            })
+        };
+    });
+
+    const heightsWithoutMergedRows = heightsInfo
+        .filter(c => !isDefined(c.rowSpan))
+        .map(c => c.height);
+
+    const maxHeightWithoutMergedRows = heightsWithoutMergedRows.length
+        ? Math.max(...heightsWithoutMergedRows)
+        : 0;
+
+    const additionalSpacesArray = createEmptyArray(rowsCount);
+    const prevAdditionalSpaces = prevRowInfo?.heightInfo?.additionalSpacesArray || createEmptyArray(rowsCount);
+    heightsInfo
+        .filter(c => isDefined(c.rowSpan))
+        .forEach((c) => {
+            let delta = (c.height - maxHeightWithoutMergedRows) / (c.rowSpan);
+            for(let index = rowIndex + 1; index <= rowIndex + c.rowSpan; index++) {
+                const freeSpace = Math.max(prevAdditionalSpaces[index], Math.max(additionalSpacesArray[rowIndex], delta));
+                if(delta > 0) {
+                    additionalSpacesArray[index] = freeSpace;
+                }
+                delta -= freeSpace;
             }
-        }
-    }
-    return rowHeight;
+        });
+
+    return {
+        rowHeight: Math.max(maxHeightWithoutMergedRows, prevAdditionalSpaces[rowIndex] ?? 0),
+        additionalSpacesArray,
+    };
+}
+
+function calculateColumnWidthsByColSpanAndSplitInfo(pdfGrid, currentRowInfo) {
+    const widthsArray = pdfGrid._currentHorizontalTables.flatMap((table) => table.columnWidths);
+    const splitIndexes = pdfGrid._splitByColumns.map(splitInfo => splitInfo.columnIndex).sort();
+    return widthsArray
+        .map((value, index) => {
+            const cell = currentRowInfo.cellsInfo[index];
+            const collSpan = cell.colSpan || 0;
+            let columnWidth = 0;
+            for(let cellIndex = index; cellIndex <= index + collSpan; cellIndex++) {
+                columnWidth += widthsArray[cellIndex];
+                if(splitIndexes[0] === cellIndex + 1) {
+                    splitIndexes.splice(0, 1);
+                    break;
+                }
+            }
+            return columnWidth;
+        });
 }
 
 function drawLine(doc, startX, startY, endX, endY) {
@@ -72,4 +121,4 @@ function drawTextInRect(doc, text, rect, wordWrapEnabled, jsPdfTextOptions) {
     doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
-export { calculateRowHeight, drawLine, drawRect, drawTextInRect };
+export { calculateRowHeightInfo, drawLine, drawRect, drawTextInRect, calculateColumnWidthsByColSpanAndSplitInfo };
