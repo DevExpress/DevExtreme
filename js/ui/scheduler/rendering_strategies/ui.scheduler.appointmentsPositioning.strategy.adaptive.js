@@ -29,7 +29,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     getCollectorLeftOffset() {
         const collectorWidth = this.getRenderingStrategy().getDropDownAppointmentWidth();
 
-        return (this.getRenderingStrategy().cellWidth - collectorWidth) / 2;
+        return (this.getRenderingStrategy().getDefaultCellWidth() - collectorWidth) / 2;
     }
 
     getAppointmentDefaultOffset() {
