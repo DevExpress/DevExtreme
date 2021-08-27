@@ -707,7 +707,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-work-space-both-scrollbar {
-    .dx-scheduler-work-space-all-day {
+    &.dx-scheduler-work-space-all-day {
       .dx-scheduler-header-panel-empty-cell {
         border-right: none;
         border-left: baseScheduler.$scheduler-base-border;
