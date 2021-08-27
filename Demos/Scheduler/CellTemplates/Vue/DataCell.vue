@@ -15,7 +15,7 @@ export default {
     markDataCell(cellData) {
       const date = cellData.startDate;
       const isDisableDate = Utils.isHoliday(date) || Utils.isWeekend(date);
-      const isDinner = Utils.isDinner(date);
+      const isDinner = !isDisableDate && Utils.isDinner(date);
 
       return {
         'disable-date': isDisableDate,

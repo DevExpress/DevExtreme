@@ -71,6 +71,10 @@ export class AppComponent {
         return day === 0 || day === 6;
     }
 
+    isDisableDate(date: Date) {
+        return this.isHoliday(date) || this.isWeekend(date);
+    }
+
     isDinner(date: Date) {
         const hours = date.getHours();
         const dinnerTime = this.dataService.getDinnerTime();

@@ -17,8 +17,8 @@
 
     <div *dxTemplate="let dataCell of 'dataCellTemplate'"
       [ngClass]="{
-        'disable-date': isHoliday(dataCell.startDate) || isWeekend(dataCell.startDate),
-        'dinner': isDinner(dataCell.startDate)
+        'disable-date': isDisableDate(dataCell.startDate),
+        'dinner': !isDisableDate(dataCell.startDate) && isDinner(dataCell.startDate)
       }">
     </div>
 
