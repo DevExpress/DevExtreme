@@ -10,10 +10,8 @@ import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
 import Button from '../button';
 import DropDownButton from '../drop_down_button';
+import List from '../list';
 import { when, Deferred } from '../../core/utils/deferred';
-
-const DATAGRID_EXPORT_ICON = 'export-to';
-const DATAGRID_EXPORT_EXCEL_BUTTON_ICON = 'export-excel-button';
 
 export const DataProvider = Class.inherit({
     ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
@@ -705,48 +703,46 @@ dataGridCore.registerModule('export', {
                         return null;
                     }
 
-                    let widget;
-                    let widgetOptions;
-
-                    if(items.length === 1) {
-                        widget = Button;
-                        widgetOptions = items[0];
-                        widgetOptions.elementAttr = {
-                            class: 'dx-datagrid-export-button'
-                        };
-
-                        widgetOptions.hint = widgetOptions.text;
-                        delete widgetOptions.text;
-                    } else {
-                        widget = DropDownButton;
-                        widgetOptions = {
-                            icon: 'export',
-                            displayExpr: 'text',
-                            items: items,
-                            hint: 'Export',
-                            elementAttr: {
-                                class: 'dx-datagrid-export-button'
-                            },
-                            dropDownOptions: {
-                                wrapperAttr: { 'class': 'dx-datagrid-export-menu' },
-                                width: 'auto'
-                            }
-                        };
-                    }
-
                     const toolbarButtonOptions = {
-                        template: (_data, _index, container) => {
-                            this._createComponent($(container), widget, widgetOptions);
-                        },
-                        menuItemTemplate: (_data, _index, container) => {
-                            widgetOptions = { ...widgetOptions, text: widgetOptions.hint };
-                            this._createComponent($(container), widget, widgetOptions);
-                        },
-                        options: widgetOptions,
+                        name: 'exportButton',
                         location: 'after',
                         locateInMenu: 'auto',
-                        sortIndex: 30
+                        sortIndex: 30,
+                        showText: 'inMenu'
                     };
+
+                    if(items.length === 1) {
+                        const widgetOptions = {
+                            ...items[0],
+                            elementAttr: {
+                                class: 'dx-datagrid-export-button'
+                            }
+                        };
+
+                        toolbarButtonOptions.template = (_data, _index, container) => {
+                            this._createComponent($(container), Button, widgetOptions);
+                        };
+                    } else {
+                        toolbarButtonOptions.template = (_data, _index, container) => {
+                            this._createComponent($(container), DropDownButton, {
+                                icon: 'export',
+                                displayExpr: 'text',
+                                items: items,
+                                hint: 'Export',
+                                elementAttr: {
+                                    class: 'dx-datagrid-export-button'
+                                },
+                                dropDownOptions: {
+                                    wrapperAttr: { 'class': 'dx-datagrid-export-menu' },
+                                    width: 'auto'
+                                }
+                            });
+                        };
+
+                        toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
+                            this._createComponent($(container), List, { items });
+                        };
+                    }
 
                     return toolbarButtonOptions;
                 },
@@ -797,12 +793,12 @@ dataGridCore.registerModule('export', {
                     if(allowExportSelected) {
                         options = {
                             hint: texts.exportTo,
-                            icon: DATAGRID_EXPORT_ICON
+                            icon: 'export-to'
                         };
                     } else {
                         options = {
                             hint: texts.exportAll,
-                            icon: DATAGRID_EXPORT_EXCEL_BUTTON_ICON,
+                            icon: 'export-excel-button',
                             onClick: function() {
                                 that._exportController.exportToExcel();
                             }
