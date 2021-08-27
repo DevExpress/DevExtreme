@@ -13,6 +13,8 @@ export class ScrollableSimulatedProps extends BaseScrollableProps {
 
   @OneWay() useKeyboard = true;
 
+  @Event() onVisibilityChange?: (args: boolean) => void;
+
   @Event() onStart?: EventCallback<ScrollEventArgs>;
 
   @Event() onEnd?: EventCallback<ScrollEventArgs>;

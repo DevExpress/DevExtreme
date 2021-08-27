@@ -1063,6 +1063,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     } else {
       this.savedScrollOffset = this.scrollOffset();
     }
+
+    this.props.onVisibilityChange?.(visible);
   }
 
   updateSizes(): void {

@@ -18,7 +18,7 @@ import {
   ScrollOffset,
 } from './common/types.d';
 
-import { ScrollableProps } from './common/scrollable_props';
+import { ScrollViewProps } from './common/scrollview_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
@@ -92,7 +92,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   view: viewFunction,
 })
 
-export class ScrollView extends JSXComponent<ScrollableProps>() {
+export class ScrollView extends JSXComponent<ScrollViewProps>() {
   @Ref() scrollableRef!: RefObject<Scrollable>;
 
   @InternalState() forceReachBottom?: boolean;
