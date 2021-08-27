@@ -1169,7 +1169,9 @@ describe('Simulated > Behavior', () => {
 
       each([{ top: 1, left: 1 }, undefined]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
         test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
-          const viewModel = new Scrollable({});
+          const viewModel = new Scrollable({
+            onVisibilityChange: actionHandler,
+          });
 
           viewModel.savedScrollOffset = initialSavedScrollOffset;
           viewModel.scrollOffset = jest.fn(() => ({ top: 5, left: 10 }));
@@ -1182,6 +1184,11 @@ describe('Simulated > Behavior', () => {
           } as RefObject<HTMLDivElement>;
 
           viewModel.onVisibilityChangeHandler(visible);
+
+          if (actionHandler) {
+            expect(actionHandler).toHaveBeenCalledTimes(1);
+            expect(actionHandler).toHaveBeenLastCalledWith(visible);
+          }
 
           let expectedContainerScrollTop = 10;
           let expectedContainerScrollLeft = 20;
