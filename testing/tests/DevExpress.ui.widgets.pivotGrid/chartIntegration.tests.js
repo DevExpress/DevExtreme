@@ -2,8 +2,6 @@ import $ from 'jquery';
 import PivotGridDataSource from 'ui/pivot_grid/data_source';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-import 'viz/core/themes/generic.light'; // remove
-
 /* global orders */
 import '../../../testing/content/orders.js';
 
