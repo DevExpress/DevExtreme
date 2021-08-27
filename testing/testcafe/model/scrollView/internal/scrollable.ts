@@ -1,5 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { ScrollableProps } from '../../../../../js/renovation/ui/scroll_view/scrollable_props';
+
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
 
@@ -14,7 +14,8 @@ export default class Scrollable extends Widget {
 
   name: string;
 
-  constructor(id: string | Selector, options: Partial<ScrollableProps>, name = 'dxScrollable') {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  constructor(id: string | Selector, options: any, name = 'dxScrollable') {
     super(id);
 
     this.element = Selector(`.${CLASS.scrollable}`);

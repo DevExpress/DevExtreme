@@ -15,12 +15,12 @@ import { isDefined } from '../../../core/utils/type';
 
 import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
-import { ScrollbarProps } from './scrollbar_props';
-import { ScrollableSimulatedProps } from './scrollable_simulated_props';
+import { ScrollbarProps } from './common/scrollbar_props';
+import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
 import { EventCallback } from '../common/event_callback';
-import { ScrollableProps } from './scrollable_props';
+import { BaseScrollableProps } from './common/base_scrollable_props';
 import { inRange } from '../../../core/utils/math';
-import { DxMouseEvent } from './types';
+import { DxMouseEvent } from './common/types.d';
 import { clampIntoRange } from './utils/clamp_into_range';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
@@ -99,7 +99,7 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
+& Pick<BaseScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({

@@ -13,16 +13,16 @@ import {
 import {
   ScrollViewLoadPanel,
 } from '../load_panel';
-import { ScrollableProps } from '../scrollable_props';
 import { ScrollableNative } from '../scrollable_native';
 import { ScrollableSimulated } from '../scrollable_simulated';
 
 import { Widget } from '../../common/widget';
-import { ScrollableDirection, ScrollOffset } from '../types.d';
+import { ScrollableDirection, ScrollOffset } from '../common/types.d';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
 import * as ElementLocationModule from '../utils/get_element_location_internal';
 import { DIRECTION_BOTH, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
+import { ScrollableProps } from '../common/scrollable_props';
 
 jest.mock('../utils/get_element_location_internal', () => ({
   ...jest.requireActual('../utils/get_element_location_internal'),
@@ -40,19 +40,31 @@ describe('Scrollable', () => {
     const props = new ScrollableProps();
     const viewModel = mount<Scrollable>(<Scrollable {...props} />);
 
-    expect(viewModel.props()).toEqual({
-      bounceEnabled: true,
+    expect(viewModel.props()).toMatchObject({
+      activeStateEnabled: false,
+      addWidgetClass: false,
+      aria: {},
+      bounceEnabled: false,
+      className: '',
+      classes: '',
+      cssText: '',
       direction: 'vertical',
+      disabled: false,
+      focusStateEnabled: false,
       forceGeneratePockets: false,
+      hoverStateEnabled: false,
+      name: '',
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
       reachBottomEnabled: false,
-      scrollByContent: true,
-      scrollByThumb: false,
-      showScrollbar: 'onScroll',
-      useNative: true,
+      scrollByContent: false,
+      scrollByThumb: true,
+      showScrollbar: 'onHover',
+      tabIndex: 0,
+      useNative: false,
+      visible: true,
     });
   });
 
