@@ -232,6 +232,11 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
     - name: Set default run status
       run: echo "default" > last_run_status
 
