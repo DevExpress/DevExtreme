@@ -124,55 +124,18 @@ export class ResourceManager {
         }
     }
 
-    getResourcesFromItem2(itemData, wrapOnlyMultipleResources = false) { // TODO
-        let result = null;
-
-        this._resourceFields.forEach(field => {
-            each(itemData, (fieldName, fieldValue) => {
-                const tempObject = {};
-                tempObject[fieldName] = fieldValue;
-
-                let resourceData = this.getDataAccessors(field, 'getter')(tempObject);
-                if(isDefined(resourceData)) {
-                    if(!result) {
-                        result = {};
-                    }
-                    if(resourceData.length === 1) {
-                        resourceData = resourceData[0];
-                    }
-
-                    if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
-                        this.getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
-                    } else {
-                        this.getDataAccessors(field, 'setter')(tempObject, resourceData);
-                    }
-
-                    extend(result, tempObject);
-
-                    return true;
-                }
-            });
-        });
-
-        return result;
-    }
-
-    getResourcesFromItem(itemData, wrapOnlyMultipleResources = false) { // TODO
-        let result = null;
+    getResourcesFromItem(itemData, wrapOnlyMultipleResources = false) {
+        const result = { ...itemData };
 
         this._resourceFields.forEach(field => {
             let resourceValue = this.getDataAccessors(field, 'getter')(itemData);
 
             if(isDefined(resourceValue)) {
-                if(!result) {
-                    result = {};
-                }
-
-                result[field] = resourceValue;
 
                 if(resourceValue.length === 1) {
                     resourceValue = resourceValue[0];
                 }
+
                 if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
                     this.getDataAccessors(field, 'setter')(result, wrapToArray(resourceValue));
                 } else {
@@ -290,6 +253,7 @@ export class ResourceManager {
     }
 
     getResourceForPainting(groups) {
+        // debugger;
         let resources = this.getResources();
         let result;
 
