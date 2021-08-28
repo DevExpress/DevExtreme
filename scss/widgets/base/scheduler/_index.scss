@@ -569,14 +569,20 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-work-space-day {
     &:not(.dx-scheduler-work-space-count) {
-      .dx-scheduler-date-table-cell {
-        border-left: none;
-        border-right: none;
-      }
-
       &:not(.dx-scheduler-work-space-grouped) {
+        &:not(.dx-scheduler-work-space-all-day) {
+          .dx-scheduler-header-panel-container {
+            display: none;
+          }
+        }
+
         .dx-scheduler-header-panel-empty-cell {
+          border: none;
+        }
+
+        .dx-scheduler-date-table-cell {
           border-right: none;
+          border-left: none;
         }
 
         .dx-scheduler-all-day-table-cell {
@@ -586,6 +592,12 @@ $scheduler-appointment-form-label-padding: 20px;
 
         .dx-scheduler-time-panel {
           border: none;
+        }
+      }
+
+      &.dx-scheduler-work-space-vertical-grouped {
+        .dx-scheduler-header-panel-container {
+          display: none;
         }
       }
 
@@ -613,11 +625,15 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-all-day-table-cell,
   .dx-scheduler-header-panel-cell {
     border-left: $scheduler-base-border;
-    border-top: $scheduler-base-border;
 
     &:first-child {
       border-left: none;
     }
+  }
+
+  .dx-scheduler-date-table-cell,
+  .dx-scheduler-all-day-table-cell {
+    border-top: $scheduler-base-border;
   }
 
   .dx-scheduler-date-table-cell,
