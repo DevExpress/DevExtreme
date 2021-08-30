@@ -224,8 +224,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       label?: {
         /**
          * @docid
-         * @default '#767676' [prop](color)
-         * @default 600 [prop](weight)
+         * @default '#767676' &prop(color)
+         * @default 600 &prop(weight)
          */
         font?: Font;
         /**
@@ -468,8 +468,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       label?: {
         /**
          * @docid
-         * @default '#FFFFFF' [prop](color)
-         * @default 300 [prop](weight)
+         * @default '#FFFFFF' &prop(color)
+         * @default 300 &prop(weight)
          */
         font?: Font;
         /**

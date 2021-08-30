@@ -24,7 +24,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

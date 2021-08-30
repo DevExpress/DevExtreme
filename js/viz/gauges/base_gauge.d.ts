@@ -329,7 +329,7 @@ export interface BaseGaugeScaleLabel {
     customizeText?: ((scaleValue: { value?: number; valueText?: string }) => string);
     /**
      * @docid BaseGaugeOptions.scale.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -473,8 +473,8 @@ export interface CommonIndicator {
     /**
      * @docid
      * @type Enums.HorizontalEdge
-     * @default 'right' [for](value_indicators)
-     * @default 'left' [for](subvalue_indicators)
+     * @default 'right' &for(value_indicators)
+     * @default 'left' &for(subvalue_indicators)
      * @propertyOf linearRangeBar
      * @public
      */
@@ -560,7 +560,7 @@ export interface CommonIndicator {
       /**
        * @docid
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-       * @default 14 [prop](size)
+       * @default 14 &prop(size)
        */
       font?: Font;
       /**
@@ -579,8 +579,8 @@ export interface CommonIndicator {
     /**
      * @docid
      * @type Enums.VerticalEdge
-     * @default 'bottom' [for](value_indicators)
-     * @default 'top' [for](subvalue_indicators)
+     * @default 'bottom' &for(value_indicators)
+     * @default 'top' &for(subvalue_indicators)
      * @propertyOf linearRangeBar
      * @public
      */

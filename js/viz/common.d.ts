@@ -100,7 +100,7 @@ export interface BaseLegend {
     columnItemSpacing?: number;
     /**
      * @docid
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -196,9 +196,9 @@ export interface BaseLegend {
     title?: {
       /**
        * @docid
-       * @default '#232323' [prop](color)
-       * @default 18 [prop](size)
-       * @default 200 [prop](weight)
+       * @default '#232323' &prop(color)
+       * @default 18 &prop(size)
+       * @default 200 &prop(weight)
        * @extends CommonVizLightFontFamily
        */
       font?: Font;
@@ -244,9 +244,9 @@ export interface BaseLegend {
       subtitle?: {
         /**
          * @docid
-         * @default '#232323' [prop](color)
-         * @default 14 [prop](size)
-         * @default 200 [prop](weight)
+         * @default '#232323' &prop(color)
+         * @default 14 &prop(size)
+         * @default 200 &prop(weight)
          * @extends CommonVizLightFontFamily
          */
         font?: Font;

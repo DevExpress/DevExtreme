@@ -79,7 +79,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

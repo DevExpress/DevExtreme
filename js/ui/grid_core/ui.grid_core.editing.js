@@ -1166,7 +1166,10 @@ const EditingController = modules.ViewController.inherit((function() {
             const editColumnIndex = this._getVisibleEditColumnIndex();
 
             $editCell = $editCell || rowsView && rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
-            this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+
+            if($editCell) {
+                this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+            }
         },
 
         deleteRow: function(rowIndex) {
@@ -2134,7 +2137,7 @@ export const editingModule = {
                 },
                 _updateItemsCore: function(change) {
                     this.callBase(change);
-                    this._updateEditRow(this.items());
+                    this._updateEditRow(this.items(true));
                 },
                 _applyChangeUpdate: function(change) {
                     this._updateEditRow(change.items);

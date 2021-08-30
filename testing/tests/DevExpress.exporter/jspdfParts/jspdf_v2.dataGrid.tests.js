@@ -11,6 +11,8 @@ import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v2.dataGrid.summaries.tests.js';
 import { JSPdfStylesTests } from './jspdf_v2.dataGrid.styles.tests.js';
+import { JSPdfBorderColorsTests } from './jspdf_v2.dataGrid.borderColors.tests.js';
+import { JSPdfMultilineTests } from './jspdf_v2.dataGrid.multiline.tests.js';
 
 import 'generic_light.css!';
 
@@ -75,6 +77,12 @@ function createMockPdfDoc() {
     result.setFontSize = function() {
         this.__log.push('setFontSize,' + argumentsToString.apply(null, arguments));
         this.__setFontSize.apply(this, arguments);
+    };
+
+    result.__setLineHeightFactor = result.setLineHeightFactor;
+    result.setLineHeightFactor = function() {
+        this.__log.push('setLineHeightFactor,' + argumentsToString.apply(null, arguments));
+        this.__setLineHeightFactor.apply(this, arguments);
     };
 
     result.__setTextColor = result.setTextColor;
@@ -993,7 +1001,6 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 15, y: 20 }
         }];
 
@@ -1030,7 +1037,6 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 15, y: 20 }
         }];
 
@@ -1065,11 +1071,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1119,11 +1123,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1164,11 +1166,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1212,11 +1212,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1269,11 +1267,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1320,11 +1316,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1373,11 +1367,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1426,11 +1418,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1447,11 +1437,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.drawNewTableFromThisRow.tableTopLeft = { x: 10, y: 56 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 11, y: 57 }
                 }, {
                     columnIndex: 2,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 12, y: 58 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
@@ -1502,11 +1490,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1547,11 +1533,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1567,11 +1551,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.drawNewTableFromThisRow.tableTopLeft = { x: 12, y: 22 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 13, y: 23 }
                 }, {
                     columnIndex: 2,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 14, y: 24 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
@@ -1621,11 +1603,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
 
         const splitToTablesByColumns = [{
             columnIndex: 1,
-            drawOnNewPage: true,
             tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
-            drawOnNewPage: true,
             tableTopLeft: { x: 12, y: 22 }
         }];
 
@@ -1641,11 +1621,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.drawNewTableFromThisRow.tableTopLeft = { x: 12, y: 22 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 13, y: 23 }
                 }, {
                     columnIndex: 2,
-                    drawOnNewPage: true,
                     tableTopLeft: { x: 14, y: 24 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
@@ -1691,3 +1669,5 @@ JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfStylesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfBorderColorsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfMultilineTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

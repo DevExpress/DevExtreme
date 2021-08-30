@@ -173,10 +173,10 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @docid
      * @type Enums.DateBoxPickerType
      * @default 'calendar'
-     * @default 'native' [for](iOS)
-     * @default 'native' [for](Android)
-     * @default 'rollers' [for](Android_below_version_4.4)
-     * @default 'rollers' [for](mobile_devices)
+     * @default 'native' &for(iOS)
+     * @default 'native' &for(Android)
+     * @default 'rollers' &for(Android_below_version_4.4)
+     * @default 'rollers' &for(mobile_devices)
      * @public
      */
     pickerType?: 'calendar' | 'list' | 'native' | 'rollers';

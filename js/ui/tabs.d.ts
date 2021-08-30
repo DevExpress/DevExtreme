@@ -63,7 +63,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -89,7 +89,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @public
      */
     scrollByContent?: boolean;
@@ -114,7 +114,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid
      * @default true
-     * @default false [for](mobile_devices)
+     * @default false &for(mobile_devices)
      * @public
      */
     showNavButtons?: boolean;
