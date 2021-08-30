@@ -1,7 +1,6 @@
 import { locate, move } from '../../animation/translator';
 import domAdapter from '../../core/dom_adapter';
-import { getOffset } from '../../core/utils/size';
-import $ from '../../core/renderer';
+import { getOffset, getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import { fitIntoRange } from '../../core/utils/math';
 import { isWindow } from '../../core/utils/type';
 import eventsEngine from '../../events/core/events_engine';
@@ -13,25 +12,34 @@ import { addNamespace } from '../../events/utils/index';
 
 class OverlayDrag {
     constructor(options) {
-        const { dragEnabled, dragTarget, dragContainer, outsideMultiplayer, draggableElement, updatePositionChangeHandled } = options;
+        const { dragEnabled, handle, container, draggableElement, outsideMultiplayer, updatePositionChangeHandled } = options;
         const namespace = 'overlayDrag';
         const startEventName = addNamespace(dragEventStart, namespace);
         const updateEventName = addNamespace(dragEventMove, namespace);
 
-        eventsEngine.off(dragTarget, startEventName);
-        eventsEngine.off(dragTarget, updateEventName);
-
-        this._$container = dragContainer;
-        this._outsideMultiplayer = outsideMultiplayer;
-        this._$draggableElement = draggableElement;
+        this.container = container;
+        this.outsideMultiplayer = outsideMultiplayer;
+        this._draggableElement = draggableElement;
+        this._handle = handle;
         this._updatePositionChangeHandled = updatePositionChangeHandled;
+
+        this.unsubscribe();
 
         if(!dragEnabled) {
             return;
         }
 
-        eventsEngine.on(dragTarget, startEventName, (e) => { this._dragStartHandler(e); });
-        eventsEngine.on(dragTarget, updateEventName, (e) => { this._dragUpdateHandler(e); });
+        eventsEngine.on(handle, startEventName, (e) => { this._dragStartHandler(e); });
+        eventsEngine.on(handle, updateEventName, (e) => { this._dragUpdateHandler(e); });
+    }
+
+    unsubscribe() {
+        const namespace = 'overlayDrag';
+        const startEventName = addNamespace(dragEventStart, namespace);
+        const updateEventName = addNamespace(dragEventMove, namespace);
+
+        eventsEngine.off(this._handle, startEventName);
+        eventsEngine.off(this._handle, updateEventName);
     }
 
     moveTo(top, left, e) {
@@ -58,28 +66,35 @@ class OverlayDrag {
         e.maxRightOffset = allowedOffsets.right;
     }
 
-    _deltaSize() {
-        const $draggableElement = this._$draggableElement;
-        const $container = this._$container;
-
-        const contentWidth = $draggableElement.outerWidth();
-        const contentHeight = $draggableElement.outerHeight();
-        let containerWidth = $container.outerWidth();
-        let containerHeight = $container.outerHeight();
+    _getContainerDimensions() {
+        const container = this.container;
+        let containerWidth = getOuterWidth(container);
+        let containerHeight = getOuterHeight(container);
         const document = domAdapter.getDocument();
-        if(this._isWindow($container)) {
-            const fullPageHeight = Math.max($(document).outerHeight(), containerHeight);
-            const fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
+        if(this._isWindow(container)) {
+            const fullPageHeight = Math.max(document.body.clientHeight, containerHeight);
+            const fullPageWidth = Math.max(document.body.clientWidth, containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;
         }
 
-        const outsideMultiplayer = this.outsideMultiplayer() ?? 0;
+        return {
+            width: containerWidth,
+            height: containerHeight
+        };
+    }
+
+    _deltaSize() {
+        const draggableElement = this._draggableElement;
+        const draggableElementWidth = draggableElement.offsetWidth;
+        const draggableElementHeight = draggableElement.offsetHeight;
+        const containerDimensions = this._getContainerDimensions();
+        const outsideMultiplayer = this.outsideMultiplayer;
 
         return {
-            width: containerWidth - contentWidth + (contentWidth * outsideMultiplayer),
-            height: containerHeight - contentHeight + (contentHeight * outsideMultiplayer),
+            width: containerDimensions.width - draggableElementWidth + (draggableElementWidth * outsideMultiplayer),
+            height: containerDimensions.height - draggableElementHeight + (draggableElementHeight * outsideMultiplayer),
         };
     }
 
@@ -97,17 +112,17 @@ class OverlayDrag {
     }
 
     _allowedOffsets() {
-        const overlayPosition = getOffset(this._$draggableElement.get(0));
-        const dragAreaPosition = this._isWindow(this._$container)
+        const overlayPosition = getOffset(this._draggableElement);
+        const dragAreaPosition = this._isWindow(this._container)
             ? { top: 0, left: 0 }
-            : getOffset(this._$container.get(0));
+            : getOffset(this._container);
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
 
-        const dragAreaOffsetMultiplayer = this.outsideMultiplayer() ?? 0;
+        const dragAreaOffsetMultiplayer = this.outsideMultiplayer;
         const dragAreaOffset = {
-            width: this._$draggableElement.outerWidth() * dragAreaOffsetMultiplayer,
-            height: this._$draggableElement.outerHeight() * dragAreaOffsetMultiplayer
+            width: this._draggableElement.offsetWidth * dragAreaOffsetMultiplayer,
+            height: this._draggableElement.offsetHeight * dragAreaOffsetMultiplayer
         };
 
         return {
@@ -119,28 +134,20 @@ class OverlayDrag {
     }
 
     _changePosition(offset) {
-        const position = locate(this._$draggableElement);
+        const position = locate(this._draggableElement);
         const resultPosition = {
             left: position.left + offset.left,
             top: position.top + offset.top
         };
 
-        move(this._$draggableElement, resultPosition);
+        move(this._draggableElement, resultPosition);
         this._updatePositionChangeHandled(true);
 
         return { h: { location: resultPosition.left }, v: { location: resultPosition.top } };
     }
 
-    _isWindow($element) {
-        return !!$element && isWindow($element.get(0));
-    }
-
-    updateDragContainer($element) {
-        this._$container = $element;
-    }
-
-    updateOutsideMultiplayer(value) {
-        this._outsideMultiplayer = value;
+    _isWindow(element) {
+        return !!element && isWindow(element);
     }
 
     renderPositionHandler() {
@@ -152,12 +159,20 @@ class OverlayDrag {
         });
     }
 
-    $container() {
-        return this._$container;
+    get container() {
+        return this._container;
     }
 
-    outsideMultiplayer() {
-        return this._outsideMultiplayer;
+    set container(element) {
+        this._container = element;
+    }
+
+    get outsideMultiplayer() {
+        return this._outsideMultiplayer ?? 0;
+    }
+
+    set outsideMultiplayer(value) {
+        this._outsideMultiplayer = value;
     }
 }
 

@@ -983,16 +983,14 @@ const Overlay = Widget.inherit({
             this._positionChangeHandled = value;
         }.bind(this);
 
-        const config = {
+        this._draggable = new OverlayDrag({
             dragEnabled: this.option('dragEnabled'),
-            dragTarget: $dragTarget,
-            dragContainer: this._getDragResizeContainer(),
-            outsideMultiplayer: 0,
-            draggableElement: this._$content,
+            handle: $dragTarget.get(0),
+            container: this._getDragResizeContainer().get(0),
+            draggableElement: this._$content.get(0),
+            outsideMultiplayer: this.option('dragArea')?.outsideMultiplayer ?? 0,
             updatePositionChangeHandled
-        };
-
-        this._draggable = new OverlayDrag(config);
+        });
     },
 
     _renderResize: function() {
@@ -1421,8 +1419,11 @@ const Overlay = Widget.inherit({
                 this._initContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
-                if(this.option('dragEnabled') && !this.option('dragArea')) {
-                    this._draggable?.updateDragContainer(this._getDragResizeContainer());
+                if(this.option('dragEnabled') && !this.option('dragArea')?.container) {
+                    this._draggable.container = this._getDragResizeContainer().get(0);
+                }
+                if(this.option('resizeEnabled') && !this.option('dragArea')?.container) {
+                    this._resizable.option('area', this._getDragResizeContainer());
                 }
                 break;
             case 'innerOverlay':
@@ -1463,10 +1464,10 @@ const Overlay = Widget.inherit({
                     this._resizable.option('area', this._getDragResizeContainer());
                 }
                 if(this.option('dragEnabled')) {
-                    this._draggable.updateDragContainer(this._getDragResizeContainer());
-                    this._draggable.updateOutsideMultiplayer(this.option('dragAndResizeArea').outsideMultiplayer);
+                    this._draggable.container = this._getDragResizeContainer().get(0);
+                    this._draggable.outsideMultiplayer = this.option('dragAndResizeArea').outsideMultiplayer;
                 }
-                this._renderGeometry();
+                this._positionContent();
                 break;
             default:
                 this.callBase(args);
