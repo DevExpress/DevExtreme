@@ -175,3 +175,12 @@ export const createResourceEditorModel = (resources, loadedResources) => {
         };
     });
 };
+
+export const isResourceMultiple = resourceField => {
+    const resource = this.getResources().find(resource => {
+        const field = getFieldExpr(resource);
+        return field === resourceField;
+    });
+
+    return !!resource?.allowMultiple;
+};

@@ -15,7 +15,8 @@ import {
     getFieldExpr,
     getValueExpr,
     getWrappedDataSource,
-    getResourceByField
+    getResourceByField,
+    isResourceMultiple
 } from './utils';
 
 export class ResourceManager {
@@ -29,20 +30,6 @@ export class ResourceManager {
         this.agendaProcessor = new AgendaResourceProcessor();
 
         this.setResources(resources);
-    }
-
-    _isMultipleResource(resourceField) {
-        let result = false;
-
-        each(this.getResources(), (function(_, resource) {
-            const field = getFieldExpr(resource);
-            if(field === resourceField) {
-                result = resource.allowMultiple;
-                return false;
-            }
-        }).bind(this));
-
-        return result;
     }
 
     getDataAccessors(field, type) {
@@ -119,12 +106,49 @@ export class ResourceManager {
         for(const name in resources) {
             if(Object.prototype.hasOwnProperty.call(resources, name)) {
                 const resourceData = resources[name];
-                resourcesSetter[name](itemData, this._isMultipleResource(name) ? wrapToArray(resourceData) : resourceData);
+                resourcesSetter[name](itemData, isResourceMultiple(name) ? wrapToArray(resourceData) : resourceData);
             }
         }
     }
 
-    getResourcesFromItem(itemData, wrapOnlyMultipleResources = false) {
+    getResourcesFromItem(itemData, wrapOnlyMultipleResources) { // TODO used in Popup
+        let result = null;
+
+        if(!isDefined(wrapOnlyMultipleResources)) {
+            wrapOnlyMultipleResources = false;
+        }
+
+        this._resourceFields.forEach(field => {
+            each(itemData, (fieldName, fieldValue) => {
+                const tempObject = {};
+                tempObject[fieldName] = fieldValue;
+
+                let resourceData = this.getDataAccessors(field, 'getter')(tempObject);
+                if(isDefined(resourceData)) {
+                    if(!result) {
+                        result = {};
+                    }
+                    if(resourceData.length === 1) {
+                        resourceData = resourceData[0];
+                    }
+                    if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(field))) {
+                        this.getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
+                    } else {
+                        this.getDataAccessors(field, 'setter')(tempObject, resourceData);
+                    }
+
+                    extend(result, tempObject);
+
+                    return true;
+                }
+            });
+        });
+
+        return result;
+    }
+
+    // TODO
+    getResourcesFromItem2(itemData, wrapOnlyMultipleResources = false) {
         const result = { ...itemData };
 
         this._resourceFields.forEach(field => {
@@ -136,7 +160,7 @@ export class ResourceManager {
                     resourceValue = resourceValue[0];
                 }
 
-                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
+                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(field))) {
                     this.getDataAccessors(field, 'setter')(result, wrapToArray(resourceValue));
                 } else {
                     this.getDataAccessors(field, 'setter')(result, resourceValue);

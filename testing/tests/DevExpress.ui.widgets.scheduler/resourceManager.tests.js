@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getWrappedDataSource, createResourcesTree } from 'ui/scheduler/resources/utils';
+import { getWrappedDataSource, createResourcesTree, createResourceEditorModel } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
@@ -147,7 +147,8 @@ QUnit.test('Set/Get resources', function(assert) {
 
 QUnit.test('Get editors for resources', function(assert) {
     this.createInstance(resourceData);
-    const editors = this.instance.getEditors();
+
+    const editors = createResourceEditorModel(this.instance.getResources(), this.instance.loadedResources);
 
     assert.equal(editors[0].dataField, 'roomId');
     assert.equal(editors[0].editorType, 'dxSelectBox');
@@ -176,7 +177,8 @@ QUnit.test('Resource editor should always have label', function(assert) {
         dataSource: testData.rooms
     }]);
 
-    assert.equal(this.instance.getEditors()[0].label.text, 'roomId');
+    const editors = createResourceEditorModel(this.instance.getResources(), this.instance.loadedResources);
+    assert.equal(editors[0].label.text, 'roomId');
 });
 
 QUnit.test('Get resource by field name and value', function(assert) {
