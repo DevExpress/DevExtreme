@@ -81,6 +81,8 @@ export default {
 
 .option {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .caption {
@@ -89,7 +91,7 @@ export default {
 }
 
 .option > span {
-    margin-right: 14px;
+    margin-right: 10px;
 }
 
 .option > .dx-widget {
