@@ -6,8 +6,10 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { EventCallback } from '../common/event_callback';
 import { BaseWidgetProps } from '../common/base_props';
 
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
+
 function today(): Date { return new Date(); }
-function TruePredicate(): boolean { return true; }
+function hasFocus(element: JQuery): boolean { return element.hasClass(FOCUSED_STATE_CLASS); }
 
 export const viewFunction = ({
   props,
@@ -40,7 +42,7 @@ export class CalendarProps extends BaseWidgetProps {
   // Scheduler private API
   @OneWay() _todayDate? = today;
 
-  @OneWay() hasFocus?: (e: HTMLElement) => boolean = TruePredicate;
+  @OneWay() hasFocus?: (e: JQuery) => boolean = hasFocus;
 }
 @Component({
   defaultOptionRules: null,

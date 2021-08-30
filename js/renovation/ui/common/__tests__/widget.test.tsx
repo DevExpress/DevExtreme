@@ -909,6 +909,7 @@ describe('Widget', () => {
         classes: '',
         className: '',
         name: '',
+        rtlEnabled: false,
       });
     });
   });

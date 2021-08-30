@@ -26,7 +26,7 @@ export class BaseWidgetProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() onKeyDown?: (e: any) => any;
 
-  @OneWay() rtlEnabled?: boolean;
+  @OneWay() rtlEnabled?: boolean = false;
 
   @OneWay() tabIndex?: number = 0;
 
