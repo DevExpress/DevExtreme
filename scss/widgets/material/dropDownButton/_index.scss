@@ -67,6 +67,20 @@ $material-dropdownbutton-horizontal-padding: 8px;
       }
     }
   }
+
+  .dx-rtl & {
+    .dx-button-has-text:not(.dx-button-mode-text) .dx-button-content {
+      padding-right: $material-button-horizontal-padding;
+    }
+
+    .dx-button-has-icon.dx-button-has-text:not(.dx-button-mode-text) .dx-button-content {
+      padding-right: $material-button-icon-text-padding;
+    }
+
+    .dx-button-mode-text .dx-button-content {
+      padding-right: $material-text-button-horizontal-padding;
+    }
+  }
 }
 
 .dx-dropdownbutton-popup-wrapper {
