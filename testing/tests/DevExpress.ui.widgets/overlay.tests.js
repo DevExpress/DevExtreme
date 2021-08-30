@@ -3124,6 +3124,29 @@ testModule('drag', moduleConfig, () => {
         assert.strictEqual(startEvent.maxRightOffset, 0, 'overlay should not be dragged horizontally');
     });
 
+    test('overlay can be dragged when container size less than overlay content but outsideMultiplayer is enabled', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(10).width(10);
+        const $overlay = $('#overlay').dxOverlay({
+            dragEnabled: true,
+            visible: true,
+            height: 10,
+            width: 10,
+            container: $container,
+            position: { of: $container },
+            dragArea: { outsideMultiplayer: 0 }
+        });
+
+        const $overlayContent = $overlay.dxOverlay('$content');
+        const pointer = pointerMock($overlayContent);
+
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxTopOffset, 10, 'overlay can dragged vertically');
+        assert.strictEqual(startEvent.maxBottomOffset, 10, 'overlay can be dragged vertically');
+        assert.strictEqual(startEvent.maxLeftOffset, 10, 'overlay can be dragged horizontally');
+        assert.strictEqual(startEvent.maxRightOffset, 10, 'overlay can be dragged horizontally');
+    });
+
     test('overlay should be dragged correctly when position.of and shading (T534551)', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(0).width(200);
         $container.css('margin-left', '200px');
@@ -3169,6 +3192,23 @@ testModule('drag', moduleConfig, () => {
         overlay.option('position.offset', '0 20');
 
         assert.strictEqual($content.position().top, 20, 'overlay positioned correctly after change the \'position\' option');
+    });
+
+    test('should reposition after dragging if position is outside of drag area', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({
+            visible: true,
+            dragEnabled: true
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $content = overlay.$content();
+        const startOverlayPosition = $content.position().left;
+        const pointer = pointerMock($content);
+
+        pointer.start().down().move(10, 10).move(-10, -10).up();
+        const newOverlayPosition = $content.position().left;
+
+        assert.notStrictEqual(startOverlayPosition, newOverlayPosition, 'overlay repositioned after dragging');
+        assert.ok(newOverlayPosition < -9000, 'overlay now is positioned in viewport');
     });
 });
 
