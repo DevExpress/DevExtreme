@@ -7,11 +7,13 @@
 @use "../button/mixins" as *;
 @use "../button/sizes" as *;
 @use "../common/mixins" as *;
-@use "../../base/dropDownButton";
+@use "../../base/dropDownButton" as *;
 
 // adduse
 
 $material-dropdownbutton-horizontal-padding: 8px;
+
+@include dx-dropdown-button($material-dropdownbutton-horizontal-padding);
 
 @mixin dx-size-dropdownbutton() {
   min-width: 0;
@@ -19,9 +21,6 @@ $material-dropdownbutton-horizontal-padding: 8px;
 }
 
 .dx-dropdownbutton-toggle {
-  display: flex;
-  flex: 0 0 auto;
-
   @include dx-size-dropdownbutton();
 
   &.dx-button {
@@ -55,7 +54,6 @@ $material-dropdownbutton-horizontal-padding: 8px;
     min-width: 0;
 
     .dx-button-content {
-      padding-left: $material-dropdownbutton-horizontal-padding;
       padding-right: 2px;
 
       .dx-icon.dx-icon-right.dx-icon-spindown {
@@ -66,16 +64,6 @@ $material-dropdownbutton-horizontal-padding: 8px;
 
       .dx-rtl & {
         padding-left: 2px;
-        padding-right: $material-dropdownbutton-horizontal-padding;
-      }
-    }
-  }
-
-  &:not(.dx-dropdownbutton-has-arrow) {
-    .dx-button.dx-button-has-text {
-      .dx-button-content {
-        padding-left: $material-dropdownbutton-horizontal-padding;
-        padding-right: $material-dropdownbutton-horizontal-padding;
       }
     }
   }
