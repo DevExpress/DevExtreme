@@ -15,7 +15,7 @@ import {
     getFieldExpr,
     getValueExpr,
     getWrappedDataSource,
-    getResourceByField,
+    // getResourceByField,
     isResourceMultiple,
     filterResources,
     getPaintedResources
@@ -221,7 +221,6 @@ export class ResourceManager {
         }
 
         when.apply(null, deferreds).done((...resources) => {
-            // debugger;
             const hasEmpty = resources.some(r => r.items.length === 0);
 
             this.loadedResources = hasEmpty ? [] : resources;
@@ -232,42 +231,50 @@ export class ResourceManager {
         return result.promise();
     }
 
-    getResourceByField(field) {
-        return filterResources(this.getResources(), [field])[0] || {};
-    }
-
     getResourceColor(field, value) {
-        const valueExpr = this.getResourceByField(field).valueExpr || 'id';
-        const valueGetter = compileGetter(valueExpr);
-        const colorExpr = this.getResourceByField(field).colorExpr || 'color';
+        // debugger;
+        const result = new Deferred();
+
+        const resource = filterResources(this.getResources(), [field])[0] || {};
+
+        // const valueExpr = resource.valueExpr || 'id';
+        // const valueGetter = compileGetter(valueExpr);
+
+        const colorExpr = resource.colorExpr || 'color';
         const colorGetter = compileGetter(colorExpr);
 
-        const result = new Deferred();
-        const resourceData = getResourceByField(field, this.loadedResources);
-        const resourceDataLength = resourceData.length;
-        let color;
+        // const resourceData = getResourceByField(field, this.loadedResources);
 
-        if(resourceDataLength) {
-            for(let i = 0; i < resourceDataLength; i++) {
-                if(valueGetter(resourceData[i]) === value) {
-                    color = colorGetter(resourceData[i]);
-                    break;
+        // if(resourceData.length) {
+        //     for(let i = 0; i < resourceData.length; i++) {
+        //         if(valueGetter(resourceData[i]) === value) {
+        //             color = colorGetter(resourceData[i]);
+        //             break;
+        //         }
+        //     }
+        //     result.resolve(color);
+        // } else {
+        //     this.getResourceDataByValue(field, value)
+        //         .done(resourceData => {
+        //             if(resourceData) {
+        //                 color = colorGetter(resourceData);
+        //             }
+
+        //             result.resolve(color);
+        //         })
+        //         .fail(() => result.reject());
+        // }
+
+        this.getResourceDataByValue(field, value)
+            .done(resourceData => {
+                let color;
+                if(resourceData) {
+                    color = colorGetter(resourceData);
                 }
-            }
-            result.resolve(color);
-        } else {
-            this.getResourceDataByValue(field, value)
-                .done(function(resourceData) {
-                    if(resourceData) {
-                        color = colorGetter(resourceData);
-                    }
 
-                    result.resolve(color);
-                })
-                .fail(function() {
-                    result.reject();
-                });
-        }
+                result.resolve(color);
+            })
+            .fail(() => result.reject());
 
         return result.promise();
     }
@@ -359,29 +366,17 @@ export class ResourceManager {
         return result;
     }
 
-    getAppointmentColor(options) {
-        // itemData: this.rawAppointment,
-        // groupIndex,
-        // groups: this.modelGroups
+    getAppointmentColor({ groupIndex, itemData, groups }) {
         // debugger;
-        const {
-            groupIndex,
-            itemData,
-            groups
-        } = options;
+        const paintedResources = getPaintedResources(this.getResources(), groups);
 
-        const resourceForPainting = getPaintedResources(this.getResources(), groups);
-        let response = new Deferred().resolve().promise();
-
-        if(resourceForPainting) {
-            const field = getFieldExpr(resourceForPainting);
+        if(paintedResources) {
+            const field = getFieldExpr(paintedResources);
 
             const cellGroups = getCellGroups(groupIndex, this.loadedResources);
             const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(itemData));
 
-            let groupId = resourceValues.length
-                ? resourceValues[0]
-                : undefined;
+            let groupId = resourceValues[0];
 
             for(let i = 0; i < cellGroups.length; i++) {
                 if(cellGroups[i].name === field) {
@@ -390,10 +385,10 @@ export class ResourceManager {
                 }
             }
 
-            response = this.getResourceColor(field, groupId);
+            return this.getResourceColor(field, groupId);
         }
 
-        return response;
+        return new Deferred().resolve().promise();
     }
 
     reduceResourcesTree(tree, existingAppointments, _result) {
@@ -472,7 +467,7 @@ export class ResourceManager {
                 name: resourceName
             } = currentResource;
 
-            const resource = this.getResourceByField(resourceName);
+            const resource = filterResources(this.getResources(), [resourceName])[0] || {};
             const valueExpr = getValueExpr(resource);
             const filteredItems = [];
             const filteredData = [];
