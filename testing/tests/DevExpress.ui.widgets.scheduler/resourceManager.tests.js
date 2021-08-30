@@ -1,6 +1,12 @@
 import $ from 'jquery';
 import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getWrappedDataSource, createResourcesTree, createResourceEditorModel, getPaintedResources } from 'ui/scheduler/resources/utils';
+import {
+    getWrappedDataSource,
+    createResourcesTree,
+    createResourceEditorModel,
+    getPaintedResources,
+    filterResources
+} from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
@@ -505,7 +511,7 @@ QUnit.test('Color for undefined resource should be undefined', function(assert) 
 
 QUnit.test('Get resources by fields', function(assert) {
     this.createInstance(resourceData);
-    const resources = this.instance.getResourcesByFields(['ownerId', 'groupId']);
+    const resources = filterResources(this.instance.getResources(), ['ownerId', 'groupId']);
 
     assert.deepEqual(resources, [resourceData[1]], 'Resources were found');
 });
