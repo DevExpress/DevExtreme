@@ -191,3 +191,17 @@ export const filterResources = (resources, fields) => {
         return fields.indexOf(field) > -1;
     });
 };
+
+export const getPaintedResources = (resources, groups) => {
+    const result = resources.find(resource => resource.useColorAsDefault);
+
+    if(!result) {
+        let newResources = resources;
+        if(Array.isArray(groups)) { // TODO
+            newResources = filterResources(resources, groups);
+        }
+        return newResources[resources.length - 1];
+    }
+
+    return result;
+};

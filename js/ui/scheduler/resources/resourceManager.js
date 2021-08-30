@@ -17,7 +17,8 @@ import {
     getWrappedDataSource,
     getResourceByField,
     isResourceMultiple,
-    filterResources
+    filterResources,
+    getPaintedResources
 } from './utils';
 
 export class ResourceManager {
@@ -107,7 +108,7 @@ export class ResourceManager {
         for(const name in resources) {
             if(Object.prototype.hasOwnProperty.call(resources, name)) {
                 const resourceData = resources[name];
-                resourcesSetter[name](itemData, isResourceMultiple(name) ? wrapToArray(resourceData) : resourceData);
+                resourcesSetter[name](itemData, isResourceMultiple(this.getResources(), name) ? wrapToArray(resourceData) : resourceData);
             }
         }
     }
@@ -271,28 +272,6 @@ export class ResourceManager {
         return result.promise();
     }
 
-    getResourceForPainting(groups) {
-        // debugger;
-        let resources = this.getResources();
-        let result;
-
-        each(resources, function(index, resource) {
-            if(resource.useColorAsDefault) {
-                result = resource;
-                return false;
-            }
-        });
-
-        if(!result) {
-            if(Array.isArray(groups) && groups.length) {
-                resources = filterResources(this.getResources(), groups);
-            }
-            result = resources[resources.length - 1];
-        }
-
-        return result;
-    }
-
     _hasGroupItem(appointmentResources, groupName, itemValue) {
         const group = this.getDataAccessors(groupName, 'getter')(appointmentResources);
 
@@ -391,10 +370,9 @@ export class ResourceManager {
             groups
         } = options;
 
-        const resourceForPainting = this.getResourceForPainting(groups);
+        const resourceForPainting = getPaintedResources(this.getResources(), groups);
         let response = new Deferred().resolve().promise();
 
-        // debugger;
         if(resourceForPainting) {
             const field = getFieldExpr(resourceForPainting);
 

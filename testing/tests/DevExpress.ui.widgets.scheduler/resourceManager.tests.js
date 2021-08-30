@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getWrappedDataSource, createResourcesTree, createResourceEditorModel } from 'ui/scheduler/resources/utils';
+import { getWrappedDataSource, createResourcesTree, createResourceEditorModel, getPaintedResources } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
@@ -516,8 +516,10 @@ QUnit.test('Get resource for painting', function(assert) {
         { field: 'ownerId' }
     ]);
 
-    assert.equal(this.instance.getResourceForPainting().field, 'ownerId', 'Resource is right');
-    assert.equal(this.instance.getResourceForPainting([]).field, 'ownerId', 'Resource is right');
+    const resources = this.instance.getResources();
+
+    assert.equal(getPaintedResources(resources).field, 'ownerId', 'Resource is right');
+    assert.equal(getPaintedResources(resources, []).field, 'ownerId', 'Resource is right');
 });
 
 QUnit.test('Get resource for painting by group', function(assert) {
@@ -527,7 +529,9 @@ QUnit.test('Get resource for painting by group', function(assert) {
         { field: 'managerId' }
     ]);
 
-    assert.equal(this.instance.getResourceForPainting(['ownerId', 'roomId']).field, 'roomId', 'Resource is right');
+    const resources = this.instance.getResources();
+
+    assert.equal(getPaintedResources(resources, ['ownerId', 'roomId']).field, 'roomId', 'Resource is right');
 });
 
 QUnit.test('Get resource for painting by the \'useColorAsDefault\' field', function(assert) {
@@ -538,8 +542,10 @@ QUnit.test('Get resource for painting by the \'useColorAsDefault\' field', funct
         { field: 'groupId', useColorAsDefault: true }
     ]);
 
-    assert.equal(this.instance.getResourceForPainting().field, 'managerId', 'Resource is right');
-    assert.equal(this.instance.getResourceForPainting(['ownerId', 'roomId']).field, 'managerId', 'Resource is right');
+    const resources = this.instance.getResources();
+
+    assert.equal(getPaintedResources(resources).field, 'managerId', 'Resource is right');
+    assert.equal(getPaintedResources(resources, ['ownerId', 'roomId']).field, 'managerId', 'Resource is right');
 });
 
 QUnit.test('Get appointments by certain resources', function(assert) {
