@@ -738,11 +738,11 @@ dataGridCore.registerModule('export', {
                                 }
                             });
                         };
-
-                        toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
-                            this._createComponent($(container), List, { items });
-                        };
                     }
+
+                    toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
+                        this._createComponent($(container), List, { items });
+                    };
 
                     return toolbarButtonOptions;
                 },
