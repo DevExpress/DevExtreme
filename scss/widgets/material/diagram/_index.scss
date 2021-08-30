@@ -404,6 +404,10 @@ $diagram-toolbox-title-size: 18px;
   .dx-texteditor.dx-editor-filled,
   .dx-dropdowneditor.dx-editor-filled {
     background-color: transparent;
+
+    &::after {
+      border-bottom-color: transparent;
+    }
   }
 
   .dx-diagram-toolbar-separator {

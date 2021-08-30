@@ -17,7 +17,8 @@ module.exports = {
         plugins: common.plugins.concat([
             ['add-module-exports', { addDefaultProperty: true }],
             ['@babel/plugin-transform-modules-commonjs', { strict: true }],
-            ['@babel/plugin-transform-classes', { loose: true }]
+            ['@babel/plugin-transform-classes', { loose: true }],
+            '@babel/plugin-transform-property-mutators'
         ])
     }),
 

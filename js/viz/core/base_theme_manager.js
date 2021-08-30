@@ -11,17 +11,6 @@ const _removeCacheItem = removeCacheItem;
 const _extend = extend;
 const _each = each;
 
-// register themes
-import './themes/generic.light';
-import './themes/generic.dark';
-import './themes/generic.contrast';
-import './themes/generic.carmine';
-import './themes/generic.darkmoon';
-import './themes/generic.softblue';
-import './themes/generic.darkviolet';
-import './themes/generic.greenmist';
-import './themes/material';
-
 function getThemePart(theme, path) {
     let _theme = theme;
     path && _each(path.split('.'), function(_, pathItem) {

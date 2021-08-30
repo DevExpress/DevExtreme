@@ -449,8 +449,8 @@ const dxPieChart = BaseChart.inherit({
                 points.right.reverse();
             }
 
-            overlapped = overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, shiftCallback);
-            return overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, shiftCallback) || overlapped;
+            overlapped = overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, false, shiftCallback);
+            return overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, false, shiftCallback) || overlapped;
         }
 
         function shiftFunction(box, length) {

@@ -666,7 +666,6 @@ if(!Scrollable.IS_RENOVATED_WIDGET) {
     );
 }
 
-
 testComponentDefaults(Scrollable,
     [
         { platform: 'generic', deviceType: 'desktop' }
