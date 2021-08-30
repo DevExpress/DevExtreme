@@ -1005,6 +1005,13 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-header-panel {
         width: 100%;
       }
+
+      &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
+        .dx-scheduler-time-panel,
+        .dx-scheduler-header-panel-empty-cell {
+          border-right: $scheduler-base-border;
+        }
+      }
     }
 
     &.dx-scheduler-work-space-month {
@@ -1749,6 +1756,14 @@ $scheduler-appointment-form-label-padding: 20px;
 
           .dx-scheduler-time-panel {
             border: none;
+          }
+
+          &.dx-scheduler-work-space-both-scrollbar {
+            .dx-scheduler-time-panel,
+            .dx-scheduler-header-panel-empty-cell {
+              border-left: $scheduler-base-border;
+              border-right: none;
+            }
           }
         }
       }
