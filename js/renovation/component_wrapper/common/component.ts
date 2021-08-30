@@ -45,6 +45,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     [name: string]: Function;
   };
 
+  _aria!: Record<string, string>;
+
   customKeyHandlers!: Record<string, Function>;
 
   defaultKeyHandlers!: Record<string, Function>;
@@ -303,6 +305,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       ...this._props,
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
+      aria: this._aria,
     });
     this._propsInfo.templates.forEach((template) => {
       options[template] = this._componentTemplates[template];
@@ -371,6 +374,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = this._optionsWithDefaultTemplates(this.option());
     this._actionsMap = {};
+    this._aria = {};
 
     this._componentTemplates = {};
     this._propsInfo.templates.forEach((template) => {
@@ -531,10 +535,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   // NOTE: this method will be deprecated
   //       aria changes should be defined in declaration or passed through property
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAria(_name: string, _value: string): void {
-    throw new Error(
-      '"setAria" method is deprecated, use "aria" property instead',
-    );
+  setAria(name: string, value: string): void {
+    this._aria[name] = value;
+    this.repaint();
   }
 }
 
