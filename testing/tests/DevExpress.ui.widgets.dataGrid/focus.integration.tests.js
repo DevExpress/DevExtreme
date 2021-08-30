@@ -3665,7 +3665,9 @@ QUnit.module('View\'s focus', {
         for(let i = 0; i < 2; i++) {
             for(let j = 0; j < 2; j++) {
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 if(i === 0 && j === 0) {
@@ -3711,7 +3713,7 @@ QUnit.module('View\'s focus', {
         this.clock.tick();
 
         $(this.dataGrid.element()).find('.dx-datagrid-addrow-button').trigger('dxclick');
-        this.clock.tick(10);
+        this.clock.tick();
 
         // assert
         assert.ok(this.dataGrid.getVisibleRows()[0].isNewRow, 'the first new row');
@@ -3725,7 +3727,9 @@ QUnit.module('View\'s focus', {
                 }
 
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 // assert
