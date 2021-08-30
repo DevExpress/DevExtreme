@@ -68,7 +68,6 @@ window.config = {
     /**/
 
     /** devextreme-intl */
-    'devextreme-intl': 'npm:devextreme-intl',
     'json': 'npm:systemjs-plugin-json/json.js',
     /**/
 
