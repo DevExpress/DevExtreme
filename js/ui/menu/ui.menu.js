@@ -62,8 +62,8 @@ const TREEVIEW_SYNC_OPTIONS = [
 ];
 const TREEVIEW_SYNC_ACTIONS = ['onItemContextMenu', 'onSelectionChanged'];
 function isTreeViewSyncOption(optionName) {
-    return TREEVIEW_SYNC_OPTIONS.find(syncOptionName => optionName.startsWith(syncOptionName)) ||
-        TREEVIEW_SYNC_ACTIONS.find(syncOptionName => optionName.startsWith(syncOptionName));
+    return TREEVIEW_SYNC_OPTIONS.filter(syncOptionName => optionName.startsWith(syncOptionName)).length ||
+        TREEVIEW_SYNC_ACTIONS.filter(syncOptionName => optionName.startsWith(syncOptionName)).length;
 }
 
 class Menu extends MenuBase {
@@ -960,9 +960,5 @@ class Menu extends MenuBase {
 }
 
 registerComponent('dxMenu', Menu);
-
-///#DEBUG
-Menu.TREEVIEW_SYNC_OPTIONS = TREEVIEW_SYNC_OPTIONS;
-///#ENDDEBUG
 
 export default Menu;
