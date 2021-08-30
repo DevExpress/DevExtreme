@@ -24,7 +24,7 @@ import {
 export class ResourceManager {
     constructor(resources) {
         this.loadedResources = [];
-        this._resourceLoader = {};
+        this._resourceLoader = new Map();
         this._dataAccessors = {
             getter: {},
             setter: {}
@@ -79,21 +79,21 @@ export class ResourceManager {
                 const dataSource = getWrappedDataSource(resource.dataSource);
                 const valueExpr = getValueExpr(resource);
 
-                if(!this._resourceLoader[field]) {
-                    this._resourceLoader[field] = dataSource.load();
+                if(!this._resourceLoader.has(field)) {
+                    this._resourceLoader.set(field, dataSource.load());
                 }
 
-                this._resourceLoader[field]
+                this._resourceLoader.get(field)
                     .done(data => {
                         const filteredData = query(data)
                             .filter(valueExpr, value)
                             .toArray();
 
-                        delete this._resourceLoader[field];
+                        // this._resourceLoader.delete(field);
                         result.resolve(filteredData[0]);
                     })
                     .fail(() => {
-                        delete this._resourceLoader[field];
+                        this._resourceLoader.delete(field);
                         result.reject();
                     });
             }
@@ -205,8 +205,10 @@ export class ResourceManager {
                 const name = getFieldExpr(resource);
                 deferreds.push(deferred);
 
-                getWrappedDataSource(resource.dataSource)
-                    .load()
+                const dataSourcePromise = getWrappedDataSource(resource.dataSource).load();
+                this._resourceLoader.set(name, dataSourcePromise);
+
+                dataSourcePromise
                     .done(data => {
                         const items = this._mapResourceData(resource, data);
 
@@ -267,7 +269,7 @@ export class ResourceManager {
 
         this.getResourceDataByValue(field, value)
             .done(resourceData => {
-                let color;
+                let color; // TODO
                 if(resourceData) {
                     color = colorGetter(resourceData);
                 }
