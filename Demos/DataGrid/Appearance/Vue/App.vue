@@ -35,29 +35,34 @@
 
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="showColumnLines"
-          text="Show Column Lines"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="showRowLines"
-          text="Show Row Lines"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="showBorders"
-          text="Show Borders"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="rowAlternationEnabled"
-          text="Alternating Row Color"
-        />
+      <div class="options-container">
+        <div class="option">
+          <DxCheckBox
+            v-model:value="showColumnLines"
+            text="Show Column Lines"
+          />
+        </div>
+        &nbsp;
+        <div class="option">
+          <DxCheckBox
+            v-model:value="showRowLines"
+            text="Show Row Lines"
+          />
+        </div>
+        &nbsp;
+        <div class="option">
+          <DxCheckBox
+            v-model:value="showBorders"
+            text="Show Borders"
+          />
+        </div>
+        &nbsp;
+        <div class="option">
+          <DxCheckBox
+            v-model:value="rowAlternationEnabled"
+            text="Alternating Row Color"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -100,6 +105,10 @@ export default {
   width: 24%;
   display: inline-block;
   margin-top: 10px;
-  margin-right: 4px;
+}
+
+.options-container {
+    display: flex;
+    align-items: center;
 }
 </style>
