@@ -2353,20 +2353,34 @@ QUnit.module('adaptivity: transfer options', {
         assert.equal(menu._treeView, null, 'menu._treeView');
     });
 
-    QUnit.test('Call option(items[0].disabled, true), adaptivityEnabled:true', function(assert) {
-        const items = [
-            { text: 'item1', disabled: false },
-            { text: 'item2', disabled: false },
-        ];
-
+    QUnit.test('Call option(items[0].disabled, true), items, adaptivityEnabled:true', function(assert) {
         const menu = new Menu(this.$element, {
             adaptivityEnabled: true,
-            items: items,
+            items: [
+                { text: 'item1', disabled: false },
+                { text: 'item2', disabled: false },
+            ],
         });
 
         menu.option('items[0].disabled', true);
         assert.strictEqual(menu.option('items[0].disabled'), true, 'menu.option(items[0].disabled)');
         assert.strictEqual(menu._treeView.option('items[0].disabled'), true, 'menu._treeView.option(items[0].disabled)');
+        // TODO: TreeView log is empty - assert.strictEqual(treeViewOptionChangedLog, 'item[0].disabled', 'treeViewOptionChangedLog');
+    });
+
+    QUnit.test('Call option(items[0].disabled, true), dataSource, adaptivityEnabled:true', function(assert) {
+        const menu = new Menu(this.$element, {
+            adaptivityEnabled: true,
+            dataSource: [
+                { text: 'item1', disabled: false },
+                { text: 'item2', disabled: false },
+            ],
+        });
+
+        menu.option('items[0].disabled', true);
+        assert.strictEqual(menu.option('items[0].disabled'), true, 'menu.option(items[0].disabled)');
+        assert.strictEqual(menu._treeView.option('items[0].disabled'), true, 'menu._treeView.option(items[0].disabled)');
+        // TODO: TreeView log is empty - assert.strictEqual(treeViewOptionChangedLog, 'item[0].disabled', 'treeViewOptionChangedLog');
     });
 
     QUnit.test('selectByClick option should be transferred to the treeview', function(assert) {
