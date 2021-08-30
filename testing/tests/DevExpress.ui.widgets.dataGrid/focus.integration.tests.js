@@ -3532,9 +3532,11 @@ QUnit.module('View\'s focus', {
         const $inputElement = $(this.dataGrid.element()).find('input');
 
         // act
+        $inputElement.trigger('dxpointerdown');
+        this.clock.tick();
         $inputElement.focus();
         this.clock.tick();
-        $inputElement.trigger('dxpointerdown').trigger('dxclick');
+        $inputElement.trigger('dxclick');
         this.clock.tick();
 
         // assert
@@ -3766,7 +3768,7 @@ QUnit.module('View\'s focus', {
         this.clock.tick();
 
         $(this.dataGrid.element()).find('.dx-datagrid-addrow-button').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.dataGrid.getVisibleRows()[0].isNewRow, 'the first new row');
