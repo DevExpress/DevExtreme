@@ -353,6 +353,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
+    this.updateHandler();
+
     const distance = getOffsetDistance(targetLocation, this.props.direction, this.scrollOffset());
 
     this.scrollBy(distance);
@@ -370,7 +372,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   scrollOffset(): ScrollOffset {
-    const { scrollTop, scrollLeft } = this.containerElement;
+    const { scrollTop, scrollLeft } = this.containerRef.current!;
 
     return {
       top: scrollTop,
