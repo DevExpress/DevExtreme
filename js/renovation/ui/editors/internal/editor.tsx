@@ -77,7 +77,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
       <Fragment>
         {children}
 
-        {showValidationMessage
+        {viewModel.shouldShowValidationMessage
         && (
         <ValidationMessage
           validationErrors={validationErrors}
