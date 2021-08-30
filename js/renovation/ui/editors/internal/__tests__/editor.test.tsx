@@ -13,8 +13,10 @@ jest.mock('../../../overlays/validation_message', () => ({ ValidationMessage: ()
 describe('Editor', () => {
   describe('Render', () => {
     it('should pass all necessary properties to Widget', () => {
+      const onRootElementRendered = (): null => null;
       const renderOptions = {
         aria: { role: 'aria' },
+        onRootElementRendered,
       };
       const keyDown = (): null => null;
       const onWidgetClick = (): null => null;
@@ -36,9 +38,7 @@ describe('Editor', () => {
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
-      const target = {};
       const checkBox = mount(viewFunction({
-        rootElementRef: target,
         ...renderOptions,
         props: renderProps,
         restAttributes,
@@ -54,13 +54,13 @@ describe('Editor', () => {
 
     describe('validation', () => {
       it('widget should pass correct props to validationMessage', () => {
-        const ref = { current: {} } as RefObject<HTMLDivElement>;
+        const rootElement = {} as RefObject<HTMLDivElement>;
+
         const validationErrors = [{ message: 'error message' }];
-        const CustomTree = ({ target }: any) => (
-          <div ref={ref}>
+        const CustomTree = () => (
+          <div>
             {viewFunction({
-              showValidationMessage: true,
-              target,
+              rootElement,
               validationErrors,
               props: {
                 isValid: false,
@@ -70,45 +70,68 @@ describe('Editor', () => {
                 rtlEnabled: false,
               },
               shouldShowValidationMessage: true,
-              targetCurrent: target?.current,
             } as any)}
           </div>
         );
         const tree = mount(<CustomTree />);
-        tree.setProps({ target: ref });
-        tree.update();
 
         const validationMessage = tree.find(ValidationMessage);
         const props = validationMessage.props();
-        expect(props.container).toBe(ref.current);
-        expect(props.target).toBe(ref.current);
-        expect(props.boundary).toBe(ref.current);
+        expect(props.container).toBe(rootElement);
+        expect(props.target).toBe(rootElement);
+        expect(props.boundary).toBe(rootElement);
         expect(props.positionRequest).toBe('below');
         expect(props.mode).toBe('always');
         expect(props.rtlEnabled).toBe(false);
         expect(props.validationErrors).toEqual(validationErrors);
       });
 
-      it('validationMessage should not be rendered when widget is not rendered yet', () => {
-        const ref = React.createRef();
-        const validationErrors = [{ message: 'error message' }];
-        const CustomTree = ({ target }: any) => (
-          <div ref={ref as any}>
+      it('should render ValidationMessage if rootElement is specified and shouldRenderValidationMessage=true', () => {
+        const rootElement = {} as RefObject<HTMLDivElement>;
+
+        const CustomTree = () => (
+          <div>
             {viewFunction({
-              showValidationMessage: false,
-              target,
-              validationErrors,
-              props: {
-                isValid: false,
-                validationErrors,
-                validationStatus: 'invalid',
-              },
+              rootElement,
+              shouldShowValidationMessage: true,
+              props: {},
             } as any)}
           </div>
         );
         const tree = mount(<CustomTree />);
-        tree.setProps({ target: ref.current });
-        tree.update();
+
+        const validationMessage = tree.find(ValidationMessage);
+        expect(validationMessage.exists()).toBe(true);
+      });
+
+      it('should not render ValidationMessage if rootElement is not specified', () => {
+        const CustomTree = () => (
+          <div>
+            {viewFunction({
+              shouldShowValidationMessage: true,
+              props: {},
+            } as any)}
+          </div>
+        );
+        const tree = mount(<CustomTree />);
+
+        const validationMessage = tree.find(ValidationMessage);
+        expect(validationMessage.exists()).toBe(false);
+      });
+
+      it('should not render ValidationMessage if shouldRenderValidationMessage=false', () => {
+        const rootElement = {} as RefObject<HTMLDivElement>;
+
+        const CustomTree = () => (
+          <div>
+            {viewFunction({
+              rootElement,
+              shouldShowValidationMessage: false,
+              props: {},
+            } as any)}
+          </div>
+        );
+        const tree = mount(<CustomTree />);
 
         const validationMessage = tree.find(ValidationMessage);
         expect(validationMessage.exists()).toBe(false);
@@ -117,57 +140,6 @@ describe('Editor', () => {
   });
 
   describe('Behavior', () => {
-    describe('Effects', () => {
-      describe('updateValidationMessageVisibility', () => {
-        it('should set showValidationMessage to true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
-          const editor = new Editor({
-            isValid: false,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
-          });
-
-          editor.updateValidationMessageVisibility();
-
-          expect(editor.showValidationMessage).toBe(true);
-        });
-
-        it('should set showValidationMessage to false if there is no validation errors', () => {
-          const editor = new Editor({
-            isValid: false,
-            validationStatus: 'invalid',
-          });
-
-          editor.updateValidationMessageVisibility();
-
-          expect(editor.showValidationMessage).toBe(false);
-        });
-
-        it('should set showValidationMessage to false if validationStatus is not invalid but isValid=false', () => {
-          const editor = new Editor({
-            isValid: false,
-            validationStatus: 'pending',
-            validationErrors: [{ message: 'error message' }],
-          });
-
-          editor.updateValidationMessageVisibility();
-
-          expect(editor.showValidationMessage).toBe(true);
-        });
-
-        it('should set showValidationMessage to false if isValid is true but validationStatus="invalid"', () => {
-          const editor = new Editor({
-            isValid: true,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
-          });
-
-          editor.updateValidationMessageVisibility();
-
-          expect(editor.showValidationMessage).toBe(true);
-        });
-      });
-    });
-
     describe('Methods', () => {
       describe('focus', () => {
         it('should call widget focus method', () => {
@@ -187,6 +159,17 @@ describe('Editor', () => {
           editor.blur();
 
           expect(editor.widgetRef.current?.blur).toHaveBeenCalledTimes(1);
+        });
+      });
+
+      describe('onRootElementRendered', () => {
+        it('should set rootElement to passed parameter', () => {
+          const editor = new Editor({});
+          const rootElement = {} as HTMLDivElement;
+
+          editor.onRootElementRendered(rootElement);
+
+          expect(editor.rootElement).toEqual(rootElement);
         });
       });
     });
@@ -287,23 +270,6 @@ describe('Editor', () => {
           expect(aria.describedby).not.toBeUndefined();
         });
         /* eslint-enable spellcheck/spell-checker */
-      });
-
-      describe('targetCurrent', () => {
-        it('should return "this.target.current" value when it is specified', () => {
-          const editor = new Editor({});
-          const expectedCurrent = {};
-          const ref = { current: expectedCurrent } as RefObject<HTMLDivElement>;
-          editor.target = ref;
-
-          expect(editor.targetCurrent).toEqual(expectedCurrent);
-        });
-
-        it('should return undefined when target is not specified', () => {
-          const editor = new Editor({});
-
-          expect(editor.targetCurrent).toEqual(undefined);
-        });
       });
 
       describe('shouldShowValidationMessage', () => {
