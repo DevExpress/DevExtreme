@@ -132,7 +132,7 @@ export class ResourceManager {
                     if(resourceData.length === 1) {
                         resourceData = resourceData[0];
                     }
-                    if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(field))) {
+                    if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(this.getResources(), field))) {
                         this.getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
                     } else {
                         this.getDataAccessors(field, 'setter')(tempObject, resourceData);
@@ -220,6 +220,7 @@ export class ResourceManager {
         }
 
         when.apply(null, deferreds).done((...resources) => {
+            // debugger;
             const hasEmpty = resources.some(r => r.items.length === 0);
 
             this.loadedResources = hasEmpty ? [] : resources;
@@ -380,16 +381,23 @@ export class ResourceManager {
     }
 
     getAppointmentColor(options) {
-        const { groups } = options;
+        // itemData: this.rawAppointment,
+        // groupIndex,
+        // groups: this.modelGroups
+        // debugger;
+        const {
+            groupIndex,
+            itemData,
+            groups
+        } = options;
+
         const resourceForPainting = this.getResourceForPainting(groups);
         let response = new Deferred().resolve().promise();
 
+        // debugger;
         if(resourceForPainting) {
             const field = getFieldExpr(resourceForPainting);
-            const {
-                groupIndex,
-                itemData
-            } = options;
+
             const cellGroups = getCellGroups(groupIndex, this.loadedResources);
             const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(itemData));
 
