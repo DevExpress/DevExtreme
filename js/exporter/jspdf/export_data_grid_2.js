@@ -2,7 +2,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { PdfGrid } from './pdf_grid';
 import { createRowInfo, createPdfCell } from './export_data_grid_row_info';
-import { calculateRowHeightInfo, calculateColumnWidthsByColSpanAndSplitInfo } from './pdf_utils';
+import { calculateRowHeight, calculateColumnWidthsByColSpanAndSplitInfo } from './pdf_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -32,6 +32,7 @@ function exportDataGrid(doc, dataGrid, options) {
             let currentRowInfo;
             let prevRowInfo;
 
+            const additionalRowHeights = Array.from({ length: dataRowsCount }, () => 0);
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 prevRowInfo = currentRowInfo;
                 currentRowInfo = createRowInfo({ dataProvider, rowIndex, rowOptions, prevRowInfo });
@@ -72,13 +73,13 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
                 }
 
-                currentRowInfo.heightInfo = calculateRowHeightInfo(doc, currentRowPdfCells,
+                const autoCalculatedHeight = calculateRowHeight(doc, currentRowPdfCells,
                     calculateColumnWidthsByColSpanAndSplitInfo(pdfGrid, currentRowInfo),
-                    dataRowsCount, rowIndex, customerHeight, prevRowInfo);
+                    rowIndex, customerHeight, additionalRowHeights);
 
                 const rowHeight = isDefined(customerHeight)
                     ? customerHeight
-                    : currentRowInfo.heightInfo.rowHeight;
+                    : autoCalculatedHeight;
 
                 pdfGrid.addRow(currentRowPdfCells, rowHeight);
             }

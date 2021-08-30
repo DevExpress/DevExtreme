@@ -5,10 +5,6 @@ function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
-function createEmptyArray(length) {
-    return Array.from({ length: length }, () => 0);
-}
-
 function getArrayMaxValue(array) {
     return array.length
         ? Math.max(...array)
@@ -37,7 +33,7 @@ function calculateTextHeight(doc, text, font, { wordWrapEnabled, columnWidth }) 
     return height * linesCount * doc.getLineHeightFactor();
 }
 
-function calculateRowHeightInfo(doc, cells, columnWidths, rowsCount, rowIndex, customerHeight, prevRowInfo) {
+function calculateRowHeight(doc, cells, columnWidths, rowIndex, customerHeight, additionalRowHeights) {
     if(cells.length !== columnWidths.length) {
         throw 'the cells count must be equal to the count of the columns';
     }
@@ -53,32 +49,31 @@ function calculateRowHeightInfo(doc, cells, columnWidths, rowsCount, rowIndex, c
     });
 
     const heightsWithoutMergedRows = heightsInfo
-        .filter(c => !isDefined(c.rowSpan))
-        .map(c => c.height);
+        .filter(cell => !isDefined(cell.rowSpan))
+        .map(cell => cell.height);
 
     const maxHeightWithoutMergedRows = isDefined(customerHeight)
         ? customerHeight
         : getArrayMaxValue(heightsWithoutMergedRows);
 
-    const additionalSpacesArray = createEmptyArray(rowsCount);
-    const prevAdditionalSpaces = prevRowInfo?.heightInfo?.additionalSpacesArray || createEmptyArray(rowsCount);
+    if(additionalRowHeights[rowIndex] > 0) {
+        additionalRowHeights[rowIndex] -= Math.min(maxHeightWithoutMergedRows, additionalRowHeights[rowIndex]);
+    }
+
     heightsInfo
-        .filter(c => isDefined(c.rowSpan))
-        .forEach((c) => {
-            let delta = (c.height - maxHeightWithoutMergedRows) / (c.rowSpan);
-            for(let index = rowIndex + 1; index <= rowIndex + c.rowSpan; index++) {
-                const freeSpace = Math.max(prevAdditionalSpaces[index], Math.max(additionalSpacesArray[rowIndex], delta));
+        .filter(cell => isDefined(cell.rowSpan))
+        .forEach((cell) => {
+            let delta = (cell.height - maxHeightWithoutMergedRows) / (cell.rowSpan);
+            for(let index = rowIndex + 1; index <= rowIndex + cell.rowSpan; index++) {
+                const freeSpace = Math.max(additionalRowHeights[rowIndex], delta);
                 if(delta > 0) {
-                    additionalSpacesArray[index] = freeSpace;
+                    additionalRowHeights[index] = freeSpace;
                 }
                 delta -= freeSpace;
             }
         });
 
-    return {
-        rowHeight: Math.max(maxHeightWithoutMergedRows, prevAdditionalSpaces[rowIndex] ?? 0),
-        additionalSpacesArray,
-    };
+    return maxHeightWithoutMergedRows + additionalRowHeights[rowIndex];
 }
 
 function calculateColumnWidthsByColSpanAndSplitInfo(pdfGrid, currentRowInfo) {
@@ -127,4 +122,4 @@ function drawTextInRect(doc, text, rect, wordWrapEnabled, jsPdfTextOptions) {
     doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
-export { calculateRowHeightInfo, drawLine, drawRect, drawTextInRect, calculateColumnWidthsByColSpanAndSplitInfo };
+export { calculateRowHeight, drawLine, drawRect, drawTextInRect, calculateColumnWidthsByColSpanAndSplitInfo };
