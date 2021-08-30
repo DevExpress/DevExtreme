@@ -11,6 +11,7 @@ import {
   ForwardRef,
   RefObject,
   Fragment,
+  InternalState,
 } from '@devextreme-generator/declarations';
 import Guid from '../../../../core/guid';
 import { Widget, WidgetProps } from '../../common/widget';
@@ -134,6 +135,8 @@ export class Editor extends JSXComponent<EditorPropsType>() {
 
   @ForwardRef() target!: RefObject<HTMLDivElement>;
 
+  @InternalState() validationMessageGuid: string | null = null;
+
   showValidationMessage = false;
 
   @Effect()
@@ -141,6 +144,17 @@ export class Editor extends JSXComponent<EditorPropsType>() {
     this.showValidationMessage = this.shouldShowValidationMessage;
 
     return undefined;
+  }
+
+  @Effect()
+  updateValidationMessageGuid(): void {
+    if (this.shouldShowValidationMessage) {
+      if (!this.validationMessageGuid) {
+        this.validationMessageGuid = `dx-${new Guid()}`;
+      }
+    } else {
+      this.validationMessageGuid = null;
+    }
   }
 
   @Method()
@@ -180,8 +194,8 @@ export class Editor extends JSXComponent<EditorPropsType>() {
       invalid: !isValid ? 'true' : 'false',
     };
 
-    if (this.shouldShowValidationMessage) {
-      result.describedBy = `dx-${new Guid()}`;
+    if (this.validationMessageGuid) {
+      result.describedBy = this.validationMessageGuid;
     }
 
     return { ...result, ...this.props.aria };

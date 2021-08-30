@@ -166,6 +166,44 @@ describe('Editor', () => {
           expect(editor.showValidationMessage).toBe(true);
         });
       });
+
+      describe('updateValidationMessageGuid', () => {
+        it('should set validationMessageGuid to null if shouldShowValidationMessage=false', () => {
+          const editor = new Editor({
+            isValid: true,
+          });
+
+          editor.validationMessageGuid = 'guid';
+          editor.updateValidationMessageGuid();
+
+          expect(editor.validationMessageGuid).toBe(null);
+        });
+
+        it('should not update validationMessageGuid if it is already specified and shouldShowValidationMessage=true', () => {
+          const editor = new Editor({
+            isValid: false,
+            validationError: {},
+          });
+          const initialGuid = 'guid';
+
+          editor.validationMessageGuid = initialGuid;
+          editor.updateValidationMessageGuid();
+
+          expect(editor.validationMessageGuid).toBe(initialGuid);
+        });
+
+        it('should update validationMessageGuid if it is not specified and shouldShowValidationMessage=true', () => {
+          const editor = new Editor({
+            isValid: false,
+            validationError: {},
+          });
+
+          editor.validationMessageGuid = null;
+          editor.updateValidationMessageGuid();
+
+          expect(editor.validationMessageGuid).not.toBe(null);
+        });
+      });
     });
 
     describe('Methods', () => {
@@ -262,28 +300,26 @@ describe('Editor', () => {
               .toMatchObject({ invalid: `${!isValid}` });
           });
 
-        it('should have no "describedBy" when widget is valid', () => {
-          expect(new Editor({}).aria)
-            .not.toHaveProperty('describedBy');
-        });
-
-        it('should have no "describedBy" when widget "validationStatus" is not "invalid"', () => {
-          expect(new Editor({ isValid: false, validationStatus: 'pending' }).aria)
-            .not.toHaveProperty('describedBy');
-        });
-
-        it('should have no "describedBy" when there is no validation errors', () => {
-          expect(new Editor({ isValid: false, validationStatus: 'invalid' }).aria)
-            .not.toHaveProperty('describedBy');
-        });
-
-        it('should have "describedBy" when widget is invalid', () => {
-          const { aria } = new Editor({
+        it('should have "describedBy" equal to validationMessageGuid if it is specified', () => {
+          const editor = new Editor({
             isValid: false,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
+            validationError: {},
           });
-          expect(aria.describedBy).not.toBeUndefined();
+
+          editor.validationMessageGuid = 'guid';
+
+          expect(editor.aria.describedBy).toBe('guid');
+        });
+
+        it('should not have "describedBy" if validationMessageGuid is null', () => {
+          const editor = new Editor({
+            isValid: false,
+            validationError: {},
+          });
+
+          editor.validationMessageGuid = null;
+
+          expect(editor.aria).not.toHaveProperty('describedBy');
         });
       });
 
