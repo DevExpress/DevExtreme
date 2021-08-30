@@ -18,4 +18,3 @@ export const getTableOperationHandler = (quill, operationName, ...rest) => {
         return table[operationName](...rest);
     };
 };
-
