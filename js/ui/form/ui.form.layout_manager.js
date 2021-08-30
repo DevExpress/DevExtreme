@@ -20,6 +20,7 @@ import {
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS,
     SIMPLE_ITEM_TYPE,
+    FIELD_ITEM_CLASS
 } from './constants';
 
 import '../text_box';
@@ -29,9 +30,9 @@ import '../date_box';
 import '../button';
 
 import { getLabelWidthByText } from './components/label';
-import { renderFieldItem } from './components/field_item.js';
-import { renderButtonItem } from './components/button_item.js';
-import { renderEmptyItem } from './components/empty_item.js';
+import { renderFieldItemTo } from './components/field_item.js';
+import { renderButtonItemTo } from './components/button_item.js';
+import { renderEmptyItemTo } from './components/empty_item.js';
 import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
@@ -529,11 +530,15 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderEmptyItem: function($container) {
-        renderEmptyItem({ $container });
+        renderEmptyItemTo({ $container });
     },
 
     _renderButtonItem: function(item, $container) {
-        const instance = renderButtonItem({
+        $container
+            .addClass(FIELD_ITEM_CLASS)
+            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
+
+        const instance = renderButtonItemTo({
             item,
             $container,
             validationGroup: this.option('validationGroup'),
@@ -560,7 +565,11 @@ const LayoutManager = Widget.inherit({
 
         const name = item.dataField || item.name;
 
-        const { $fieldEditorContainer, instance } = renderFieldItem(convertToRenderFieldItemOptions({
+        $container
+            .addClass(FIELD_ITEM_CLASS)
+            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
+
+        const { $fieldEditorContainer, instance } = renderFieldItemTo(convertToRenderFieldItemOptions({
             $container,
             item,
             name,
