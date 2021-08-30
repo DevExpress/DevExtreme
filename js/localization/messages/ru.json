@@ -583,7 +583,7 @@
         "dxGantt-sortingAscendingText": "Сортировать по возрастанию",
         "dxGantt-sortingDescendingText": "Сортировать по убыванию",
         "dxGantt-sortingClearText": "Сбросить сортировку",
-        "dxGantt-toggleResources": "TODO",
-        "dxGantt-toggleDependencies": "TODO"
+        "dxGantt-showResources": "Отображать Ресурсы",
+        "dxGantt-showDependencies": "Отображать Зависимости"
     }
 }
