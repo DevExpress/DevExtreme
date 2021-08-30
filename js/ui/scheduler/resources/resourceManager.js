@@ -47,6 +47,7 @@ export class ResourceManager {
 
     setResources(resources = []) {
         this._resources = resources;
+        this.resourceLoaderMap = new Map();
         this._dataAccessors = {
             getter: {},
             setter: {}
