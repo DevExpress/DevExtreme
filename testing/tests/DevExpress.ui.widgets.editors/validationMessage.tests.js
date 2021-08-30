@@ -195,7 +195,7 @@ QUnit.module('content id', moduleSetup, () => {
         const contentId = 'guid';
         this._validationMessage.option('contentId', contentId);
 
-        assert.strictEqual(this._$validationMessage.$content().attr('id'), contentId);
+        assert.strictEqual(this._validationMessage.$content().attr('id'), contentId);
     });
 
     QUnit.test('validation message should update content id after container option change if contentId is not specified', function(assert) {
@@ -207,7 +207,7 @@ QUnit.module('content id', moduleSetup, () => {
         try {
             this._validationMessage.option('container', $container);
 
-            assert.strictEqual(this._$validationMessage.$content().attr('id'), contentId);
+            assert.strictEqual(this._validationMessage.$content().attr('id'), contentId);
         } finally {
             $container.remove();
         }
