@@ -1417,7 +1417,7 @@ const Overlay = Widget.inherit({
                 this._initContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
-                if(this.option('dragEnabled') && !this.option('dragArea')?.container) {
+                if(this.option('dragEnabled') && this._drag && !this.option('dragArea')?.container) {
                     this._drag.container = this._getDragResizeContainer().get(0);
                 }
                 if(this.option('resizeEnabled') && !this.option('dragArea')?.container) {
