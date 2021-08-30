@@ -16,7 +16,8 @@ import {
     getValueExpr,
     getWrappedDataSource,
     getResourceByField,
-    isResourceMultiple
+    isResourceMultiple,
+    filterResources
 } from './utils';
 
 export class ResourceManager {
@@ -160,7 +161,7 @@ export class ResourceManager {
                     resourceValue = resourceValue[0];
                 }
 
-                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(field))) {
+                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(this.getResources(), field))) {
                     this.getDataAccessors(field, 'setter')(result, wrapToArray(resourceValue));
                 } else {
                     this.getDataAccessors(field, 'setter')(result, resourceValue);
@@ -197,7 +198,7 @@ export class ResourceManager {
         const result = new Deferred();
         const deferreds = [];
 
-        this.getResourcesByFields(groups)
+        filterResources(this.getResources(), groups)
             .forEach(resource => {
                 const deferred = new Deferred();
                 const name = getFieldExpr(resource);
@@ -229,15 +230,8 @@ export class ResourceManager {
         return result.promise();
     }
 
-    getResourcesByFields(fields) { // TODO rename
-        return this.getResources().filter(resource => {
-            const field = getFieldExpr(resource);
-            return fields.indexOf(field) > -1;
-        });
-    }
-
     getResourceByField(field) {
-        return this.getResourcesByFields([field])[0] || {};
+        return filterResources(this.getResources(), [field])[0] || {};
     }
 
     getResourceColor(field, value) {
@@ -290,7 +284,7 @@ export class ResourceManager {
 
         if(!result) {
             if(Array.isArray(groups) && groups.length) {
-                resources = this.getResourcesByFields(groups);
+                resources = filterResources(this.getResources(), groups);
             }
             result = resources[resources.length - 1];
         }

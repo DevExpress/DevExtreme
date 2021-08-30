@@ -176,11 +176,18 @@ export const createResourceEditorModel = (resources, loadedResources) => {
     });
 };
 
-export const isResourceMultiple = resourceField => {
-    const resource = this.getResources().find(resource => {
+export const isResourceMultiple = (resources, resourceField) => {
+    const resource = resources.find(resource => {
         const field = getFieldExpr(resource);
         return field === resourceField;
     });
 
     return !!resource?.allowMultiple;
+};
+
+export const filterResources = (resources, fields) => {
+    return resources.filter(resource => {
+        const field = getFieldExpr(resource);
+        return fields.indexOf(field) > -1;
+    });
 };
