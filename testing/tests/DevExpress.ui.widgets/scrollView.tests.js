@@ -10,7 +10,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 import 'generic_light.css!';
 import ScrollView from 'ui/scroll_view';
-import RenovationScrollView from 'renovation/ui/scroll_view/scroll_view';
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
@@ -50,8 +49,6 @@ const getScrollOffset = function($scrollView) {
 themes.setDefaultTimeout(0);
 
 devices.current('iPhone');
-
-RenovationScrollView.defaultOptions({});
 
 const moduleConfig = {
     beforeEach: function() {
