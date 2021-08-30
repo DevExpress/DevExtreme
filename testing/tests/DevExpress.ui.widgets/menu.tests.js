@@ -2260,19 +2260,15 @@ QUnit.module('adaptivity: transfer options', {
     });
 
     QUnit.test('Some menu options should be transferred to the treeview as is on init', function(assert) {
-        const options = [
-            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation',
-            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
-            'itemsExpr', 'itemTemplate', 'selectedExpr',
-            'selectionMode', 'tabIndex', 'visible'
-        ];
         const menuOptions = {
             items: this.items,
             adaptivityEnabled: true
         };
 
-        $.each(options, function(_, option) {
-            menuOptions[option] = 'value';
+        $.each(Menu.TREEVIEW_SYNC_OPTIONS, function(_, option) {
+            if(option !== 'dataSource' && option !== 'items') {
+                menuOptions[option] = 'value';
+            }
         });
 
         new Menu(this.$element, menuOptions);
@@ -2280,32 +2276,61 @@ QUnit.module('adaptivity: transfer options', {
         const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
         const treeview = $treeview.dxTreeView('instance');
 
-        $.each(options, function(_, option) {
-            assert.equal(treeview.option(option), 'value', 'option ' + option + ' was transferred on init');
+        $.each(Menu.TREEVIEW_SYNC_OPTIONS, function(_, option) {
+            if(option !== 'dataSource' && option !== 'items') {
+                assert.equal(treeview.option(option), 'value', 'option ' + option + ' was transferred on init');
+            }
         });
     });
 
     QUnit.test('Some menu options should be transferred to the treeview as is on optionChanged', function(assert) {
-        const options = [
-            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation',
-            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
-            'itemsExpr', 'itemTemplate', 'selectedExpr',
-            'selectionMode', 'tabIndex', 'visible'
-        ];
-
         const menu = new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
         });
         const that = this;
 
-        $.each(options, function(_, option) {
-            menu.option(option, 'value2');
+        $.each(Menu.TREEVIEW_SYNC_OPTIONS, function(_, option) {
+            if(option === 'dataSource') {
+                return;
+            }
+            const newValue = (option === 'items' || option === 'dataSource') ? ['value2'] : 'value2';
+            menu.option(option, newValue);
             const $treeview = that.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
             const treeview = $treeview.dxTreeView('instance');
 
-            assert.equal(treeview.option(option), 'value2', 'option ' + option + ' was transferred dynamically');
+            assert.equal(treeview.option(option), newValue, 'option ' + option + ' was transferred dynamically');
         });
+    });
+
+    QUnit.test('Call option(items[0].disabled, true), adaptivityEnabled: false', function(assert) {
+        const menu = new Menu(this.$element, {
+            adaptivityEnabled: false,
+            items: [
+                { text: 'item1', disabled: false },
+                { text: 'item2', disabled: false },
+            ],
+        });
+
+        menu.option('items[0].disabled', true);
+        assert.strictEqual(menu.option('items[0].disabled'), true, 'menu.option(items[0].disabled)');
+        assert.equal(menu._treeView, null, 'menu._treeView');
+    });
+
+    QUnit.test('Call option(items[0].disabled, true), adaptivityEnabled:true', function(assert) {
+        const items = [
+            { text: 'item1', disabled: false },
+            { text: 'item2', disabled: false },
+        ];
+
+        const menu = new Menu(this.$element, {
+            adaptivityEnabled: true,
+            items: items,
+        });
+
+        menu.option('items[0].disabled', true);
+        assert.strictEqual(menu.option('items[0].disabled'), true, 'menu.option(items[0].disabled)');
+        assert.strictEqual(menu._treeView.option('items[0].disabled'), true, 'menu._treeView.option(items[0].disabled)');
     });
 
     QUnit.test('selectByClick option should be transferred to the treeview', function(assert) {

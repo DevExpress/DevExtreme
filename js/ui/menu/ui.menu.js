@@ -54,6 +54,18 @@ const DEFAULT_DELAY = {
 
 const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged', 'onItemRendered'];
 
+const TREEVIEW_SYNC_OPTIONS = [
+    'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
+    'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
+    'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
+    'selectionMode', 'tabIndex', 'visible', 'selectByClick'
+];
+const TREEVIEW_SYNC_ACTIONS = ['onItemContextMenu', 'onSelectionChanged'];
+function isTreeViewSyncOption(optionName) {
+    return TREEVIEW_SYNC_OPTIONS.find(syncOptionName => optionName.startsWith(syncOptionName)) ||
+        TREEVIEW_SYNC_ACTIONS.find(syncOptionName => optionName.startsWith(syncOptionName));
+}
+
 class Menu extends MenuBase {
 
     _getDefaultOptions() {
@@ -355,19 +367,12 @@ class Menu extends MenuBase {
 
     _getTreeViewOptions() {
         const menuOptions = {};
-        const optionsToTransfer = [
-            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
-            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
-            'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
-            'selectionMode', 'tabIndex', 'visible'
-        ];
-        const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged'];
 
-        each(optionsToTransfer, (_, option) => {
+        each(TREEVIEW_SYNC_OPTIONS, (_, option) => {
             menuOptions[option] = this.option(option);
         });
 
-        each(actionsToTransfer, (_, actionName) => {
+        each(TREEVIEW_SYNC_ACTIONS, (_, actionName) => {
             menuOptions[actionName] = (e) => {
                 this._actions[actionName](e);
             };
@@ -930,8 +935,8 @@ class Menu extends MenuBase {
                 super._optionChanged(args);
                 break;
             default:
-                if(this._isAdaptivityEnabled()) {
-                    this._treeView.option(args.name, args.value);
+                if(this._isAdaptivityEnabled() && isTreeViewSyncOption(args.fullName)) {
+                    this._treeView.option(args.fullName, args.value);
                 }
                 super._optionChanged(args);
         }
@@ -955,5 +960,9 @@ class Menu extends MenuBase {
 }
 
 registerComponent('dxMenu', Menu);
+
+///#DEBUG
+Menu.TREEVIEW_SYNC_OPTIONS = TREEVIEW_SYNC_OPTIONS;
+///#ENDDEBUG
 
 export default Menu;
