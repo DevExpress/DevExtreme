@@ -202,5 +202,5 @@ export const getPaintedResources = (resources, groups = []) => {
         filterResources(resources, groups) :
         resources;
 
-    return newResources[resources.length - 1];
+    return newResources[newResources.length - 1];
 };
