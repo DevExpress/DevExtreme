@@ -62,8 +62,8 @@ const TREEVIEW_SYNC_OPTIONS = [
 ];
 const TREEVIEW_SYNC_ACTIONS = ['onItemContextMenu', 'onSelectionChanged'];
 function isTreeViewSyncOption(optionName) {
-    return TREEVIEW_SYNC_OPTIONS.filter(syncOptionName => optionName.startsWith(syncOptionName)).length ||
-        TREEVIEW_SYNC_ACTIONS.filter(syncOptionName => optionName.startsWith(syncOptionName)).length;
+    return TREEVIEW_SYNC_OPTIONS.filter(syncOptionName => (optionName.indexOf(syncOptionName) === 0)).length ||
+        TREEVIEW_SYNC_ACTIONS.filter(syncOptionName => (optionName.indexOf(syncOptionName) === 0)).length;
 }
 
 class Menu extends MenuBase {
