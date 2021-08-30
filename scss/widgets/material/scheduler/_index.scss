@@ -262,6 +262,13 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       }
     }
   }
+
+  &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
+    .dx-scheduler-time-panel,
+    .dx-scheduler-header-panel-empty-cell {
+      border-right: baseScheduler.$scheduler-base-border;
+    }
+  }
 }
 
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
@@ -601,15 +608,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       border-left: none;
     }
   }
-
-  &.dx-scheduler-work-space-day {
-    &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
-      .dx-scheduler-time-panel,
-      .dx-scheduler-header-panel-empty-cell {
-        border-right: baseScheduler.$scheduler-base-border;
-      }
-    }
-  }
 }
 
 .dx-scheduler-agenda {
@@ -705,14 +703,14 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         border-right: none;
       }
     }
+  }
 
-    &.dx-scheduler-work-space-day {
-      &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
-        .dx-scheduler-time-panel,
-        .dx-scheduler-header-panel-empty-cell {
-          border-left: baseScheduler.$scheduler-base-border;
-          border-right: none;
-        }
+  &.dx-scheduler-work-space-day {
+    &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
+      .dx-scheduler-time-panel,
+      .dx-scheduler-header-panel-empty-cell {
+        border-left: baseScheduler.$scheduler-base-border;
+        border-right: none;
       }
     }
   }
