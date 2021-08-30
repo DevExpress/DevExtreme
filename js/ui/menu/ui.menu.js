@@ -54,18 +54,6 @@ const DEFAULT_DELAY = {
 
 const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged', 'onItemRendered'];
 
-const TREEVIEW_SYNC_OPTIONS = [
-    'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
-    'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
-    'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
-    'selectionMode', 'tabIndex', 'visible', 'selectByClick'
-];
-const TREEVIEW_SYNC_ACTIONS = ['onItemContextMenu', 'onSelectionChanged'];
-function isTreeViewSyncOption(optionName) {
-    return TREEVIEW_SYNC_OPTIONS.filter(syncOptionName => (optionName.indexOf(syncOptionName) === 0)).length ||
-        TREEVIEW_SYNC_ACTIONS.filter(syncOptionName => (optionName.indexOf(syncOptionName) === 0)).length;
-}
-
 class Menu extends MenuBase {
 
     _getDefaultOptions() {
@@ -367,12 +355,19 @@ class Menu extends MenuBase {
 
     _getTreeViewOptions() {
         const menuOptions = {};
+        const optionsToTransfer = [
+            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
+            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
+            'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
+            'selectionMode', 'tabIndex', 'visible'
+        ];
+        const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged'];
 
-        each(TREEVIEW_SYNC_OPTIONS, (_, option) => {
+        each(optionsToTransfer, (_, option) => {
             menuOptions[option] = this.option(option);
         });
 
-        each(TREEVIEW_SYNC_ACTIONS, (_, actionName) => {
+        each(actionsToTransfer, (_, actionName) => {
             menuOptions[actionName] = (e) => {
                 this._actions[actionName](e);
             };
@@ -935,7 +930,7 @@ class Menu extends MenuBase {
                 super._optionChanged(args);
                 break;
             default:
-                if(this._isAdaptivityEnabled() && isTreeViewSyncOption(args.fullName)) {
+                if(this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
                     this._treeView.option(args.fullName, args.value);
                 }
                 super._optionChanged(args);
