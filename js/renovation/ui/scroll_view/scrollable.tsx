@@ -10,23 +10,16 @@ import {
   DxMouseEvent,
   ScrollableDirection,
   ScrollOffset,
-} from './types.d';
+} from './common/types.d';
 
-import { BaseWidgetProps } from '../common/base_props';
-import {
-  ScrollableProps,
-} from './scrollable_props';
-
-import { ScrollableNative, ScrollableNativeProps } from './scrollable_native';
+import { ScrollableNative } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
-import { createDefaultOptionRules } from '../../../core/options/utils';
-import devices from '../../../core/devices';
-import { nativeScrolling, touch } from '../../../core/utils/support';
 import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable';
-import { WidgetProps } from '../common/widget';
-import { ScrollableSimulatedProps } from './scrollable_simulated_props';
+import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { hasWindow } from '../../../core/utils/window';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
+import { ScrollableProps } from './common/scrollable_props';
 
 let isServerSide = !hasWindow();
 
@@ -130,34 +123,15 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     );
 };
 
-type ScrollablePropsType = ScrollableProps
-& Pick<WidgetProps, 'aria' | 'activeStateUnit' | 'onVisibilityChange'>
-& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
-& Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
-
-export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
-  device: (device): boolean => !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic',
-  options: {
-    bounceEnabled: false,
-    scrollByContent: touch,
-    scrollByThumb: true,
-    showScrollbar: 'onHover',
-  },
-}, {
-  device: (): boolean => !nativeScrolling,
-  options: {
-    useNative: false,
-  },
-}]);
-
 @Component({
-  defaultOptionRules,
-  jQuery: { register: true, component: ScrollableWrapper },
+  jQuery: {
+    register: true,
+    component: ScrollableWrapper,
+  },
   view: viewFunction,
 })
 
-export class Scrollable extends JSXComponent<ScrollablePropsType>() {
+export class Scrollable extends JSXComponent<ScrollableProps>() {
   @Ref() scrollableNativeRef!: RefObject<ScrollableNative>;
 
   @Ref() scrollableSimulatedRef!: RefObject<ScrollableSimulated>;
@@ -202,8 +176,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement): void {
-    this.scrollableRef.scrollToElement(element);
+  scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
+    if (!this.content().contains(element)) {
+      return;
+    }
+
+    const scrollPosition = { top: 0, left: 0 };
+    const { direction } = this.props;
+
+    if (direction !== DIRECTION_VERTICAL) {
+      scrollPosition.left = this.getScrollElementPosition(element, DIRECTION_HORIZONTAL, offset);
+    }
+    if (direction !== DIRECTION_HORIZONTAL) {
+      scrollPosition.top = this.getScrollElementPosition(element, DIRECTION_VERTICAL, offset);
+    }
+
+    this.scrollTo(scrollPosition);
   }
 
   @Method()
@@ -241,15 +229,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth() as number;
   }
 
+  // TODO: decorator uses for DataGrid. It's internal method
   @Method()
-  // TODO: it uses for DataGrid only
-  getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
-    return this.scrollableRef.getElementLocation(element, direction) as boolean;
-  }
+  getScrollElementPosition(
+    targetElement: HTMLElement,
+    direction: ScrollableDirection,
+    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
+  ): number {
+    const scrollOffset = this.scrollOffset();
 
-  @Method()
-  scrollToElementTopLeft(element: HTMLElement): void {
-    this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
+    return getElementLocationInternal(
+      targetElement,
+      direction,
+      this.container(),
+      scrollOffset,
+      offset,
+    );
   }
 
   @Method()

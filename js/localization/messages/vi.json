@@ -530,6 +530,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Sắp xếp Tăng dần",
         "dxGantt-sortingDescendingText": "Sắp xếp Giảm dần",
-        "dxGantt-sortingClearText": "Loại bỏ việc sắp xếp"
+        "dxGantt-sortingClearText": "Loại bỏ việc sắp xếp",
+        "dxGantt-toggleResources": "TODO",
+        "dxGantt-toggleDependencies": "TODO"
     }
 }

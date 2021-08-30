@@ -117,12 +117,16 @@ QUnit.module('DataGrid markup', {
     });
 
     QUnit.test('markup with virtual scrolling', function(assert) {
+        const items = [];
+        for(let i = 0; i < 30; i++) {
+            items.push({});
+        }
         const $element = $('#dataGrid').dxDataGrid({
             height: 100,
             paging: { pageSize: 4 },
             scrolling: { mode: 'virtual' },
             columns: ['id'],
-            dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+            dataSource: items
         });
 
         this.clock.tick(300);

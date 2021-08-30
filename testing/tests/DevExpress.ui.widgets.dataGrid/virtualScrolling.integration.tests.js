@@ -36,6 +36,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
@@ -153,7 +154,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
-    ['standard', 'infinite', 'virtual'].forEach((scrollingMode) => {
+    ['standard', 'virtual'].forEach((scrollingMode) => {
         ['standard', 'virtual'].forEach((rowRenderingMode) => {
             QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${rowRenderingMode} (T836612)`, function(assert) {
                 // arrange
@@ -167,10 +168,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                     height: 200,
                     keyExpr: 'id',
                     dataSource: data,
+                    showRowLines: false,
                     scrolling: {
-                        mode: 'virtual',
+                        mode: scrollingMode,
                         rowRenderingMode,
-                        useNative: false
+                        useNative: false,
+                        minGap: 0,
                     },
                     loadingTimeout: null
                 }).dxDataGrid('instance');
@@ -328,7 +331,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             },
             columns: [
                 'value',
@@ -373,13 +377,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
+            showRowLines: false,
             height: 80,
             dataSource: data,
             keyExpr: 'name',
             paging: { pageSize: 2 },
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
         const keyboardController = dataGrid.getController('keyboardNavigation');
@@ -389,9 +394,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
+        assert.equal(dataGrid.pageIndex(), 1, 'Page index');
         assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Visible row index');
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(5, 1), 'Navigation row is visible');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey('Zeb'), 1), 'Navigation row is visible');
     });
 
     QUnit.test('DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling', function(assert) {
@@ -517,7 +522,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             paging: { pageSize: 2 },
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
@@ -534,7 +539,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         row = rowsView.element().find('.dx-data-row').eq(0);
-        assert.equal(row.attr('aria-rowindex'), 89, 'aria-index is correct after scrolling');
+        assert.equal(row.attr('aria-rowindex'), 87, 'aria-index is correct after scrolling');
     });
 
     // T595044
@@ -596,9 +601,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 12, 'visible row count');
+        assert.equal(visibleRows.length, 10, 'visible row count');
         assert.equal(visibleRows[0].key, 3, 'first visible row key');
-        assert.equal(visibleRows[visibleRows.length - 1].key, 14, 'last visible row key');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 12, 'last visible row key');
     });
 
     QUnit.test('DataGrid should expand the row in the onContentReady method in virtual scroll mode (T826930)', function(assert) {
@@ -663,9 +668,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, 'visible row count');
-        assert.equal(visibleRows[0].key, 1, 'first visible row key');
-        assert.equal(visibleRows[visibleRows.length - 1].key, 15, 'last visible row key');
+        assert.equal(visibleRows.length, 10, 'visible row count');
+        assert.equal(visibleRows[0].key, 3, 'first visible row key');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 12, 'last visible row key');
     });
 
     QUnit.test('scroll position should not be reseted if virtual scrolling and cell template cause relayout', function(assert) {
@@ -684,7 +689,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             loadingTimeout: null,
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             },
             columns: [{
                 dataField: 'id',
@@ -695,13 +700,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }]
         }).dxDataGrid('instance');
 
+        this.clock.tick(500);
+
         // act
-        dataGrid.getView('rowsView')._isScrollByEvent = true;
         dataGrid.getScrollable().scrollTo({ y: 2000 });
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 2000, 'scrollTop is not reseted');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, 'first visible row key');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 56, 'first visible row key');
     });
 
     // T117114
@@ -958,6 +964,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     // T583229
     QUnit.test('The same page should not load when scrolling in virtual mode', function(assert) {
         const pageIndexesForLoad = [];
+        const pageCountForLoad = [];
 
         const generateDataSource = function(count) {
             const result = [];
@@ -976,7 +983,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: {
                 load: function(loadOptions) {
                     const d = $.Deferred();
-
+                    pageCountForLoad.push(loadOptions.take / 20);
                     pageIndexesForLoad.push(loadOptions.skip / 20);
                     setTimeout(function() {
                         d.resolve({
@@ -1009,9 +1016,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(200);
 
         // assert
-        assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
-        assert.strictEqual(dataGrid.getVisibleRows().length, 60);
-        assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
+        assert.deepEqual(pageCountForLoad, [1, 2, 1]);
+        assert.deepEqual(pageIndexesForLoad, [0, 0, 2]);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 15);
+        assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 140);
     });
 
     QUnit.test('The freeSpace row height should not be more than 1 pixel when any command column is enabled with virtual row rendering mode (T881439)', function(assert) {
@@ -1069,7 +1077,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     const realSetTimeout = window.setTimeout;
 
     // T644981
-    QUnit.test('ungrouping after grouping and scrolling should works correctly with large amount of data if row rendering mode is virtual', function(assert) {
+    QUnit.test('ungrouping after grouping and scrolling should work correctly with large amount of data if row rendering mode is virtual', function(assert) {
         this.clock.restore();
         const done = assert.async();
         // arrange, act
@@ -1115,14 +1123,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ top: 1000000 });
-        const scrollTop = scrollable.scrollTop();
 
         realSetTimeout(function() {
+            const topVisibleRowKey = dataGrid.getTopVisibleRowData().key;
             // act
             dataGrid.clearGrouping();
 
             // assert
-            assert.equal(scrollable.scrollTop(), scrollTop, 'scroll position is not changed');
+            assert.equal(dataGrid.getTopVisibleRowData().id, topVisibleRowKey, 'top visible item is not changed');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').first().height() <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
             done();
@@ -1199,6 +1207,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(200);
 
         dataGrid.getScrollable().scrollTo(11000);
+
+        this.clock.tick(500);
 
         // assert
         assert.ok(dataGrid.getTopVisibleRowData().key > 110, 'top visible row is correct');
@@ -1417,7 +1427,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.$element().find('.dx-header-row').length, 1, 'header row is rendered');
     });
 
-    QUnit.test('contentReady should be fired asynchronously if scrolling mode is virtual', function(assert) {
+    QUnit.test('contentReady should fire once synchronously after scrolling', function(assert) {
         let contentReadyCount = 0;
         const array = [];
         for(let i = 0; i < 50; i++) {
@@ -1446,13 +1456,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo({ left: 0, top: 1000 });
 
         // assert
-        assert.equal(contentReadyCount, 0, 'contentReady is not fired');
+        assert.equal(contentReadyCount, 1, 'contentReady fired');
 
         // act
         this.clock.tick(301);
 
         // assert
-        assert.equal(contentReadyCount, 1, 'contentReady is fired asynchronously');
+        assert.equal(contentReadyCount, 1, 'contentReady fired once');
     });
 
     QUnit.test('synchronous render and asynchronous updateDimensions during paging if virtual scrolling is enabled', function(assert) {
@@ -1471,7 +1481,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             },
             paging: {
                 pageSize: 5
@@ -1493,7 +1504,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.pageIndex(5);
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 10, 'row count');
+        assert.equal(dataGrid.getVisibleRows().length, 5, 'row count');
         assert.equal(dataGrid.getVisibleRows()[0].data.test, 25, 'top visible row');
         assert.equal(resizingController.updateDimensions.callCount, 0, 'updateDimensions is not called');
         assert.equal(contentReadyCount, 0, 'contentReady is called not called');
@@ -1518,7 +1529,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             }
         });
 
@@ -1534,7 +1546,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 20 * 1000 + 1, 'first visible row is correct');
-        assert.equal(dataGrid.getScrollable().scrollTop(), scrollTop, 'scroll top is not changed');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollTop, 1.1, 'scroll top is not changed');
     });
 
     // T945892
@@ -1674,7 +1686,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             }
         });
 
@@ -1689,7 +1702,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, 'first visible row is correct');
-        assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible rows');
     });
 
     QUnit.test('scroll to far should works correctly if rendering time is large and virtual scrolling and rendering are enabled', function(assert) {
@@ -1706,7 +1719,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             }
         });
 
@@ -1734,11 +1748,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             height: 500,
             onRowPrepared: function(e) {
                 $(e.rowElement).css('height', 50);
-                clock.tick(5);
+                clock.tick(10);
             },
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             }
         });
 
@@ -1772,7 +1787,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
                 useNative: false,
-                renderingThreshold: 10000
+                renderingThreshold: 10000,
+                minGap: 0
             }
         });
 
@@ -1810,7 +1826,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         const $dataRows = $(dataGrid.$element()).find('.dx-data-row');
-        assert.equal($dataRows.length, 20, 'rendered data row count');
+        assert.equal($dataRows.length, 15, 'rendered data row count');
         assert.equal($dataRows.filter(':contains(Test)').length, 1, 'only one row contains text \'Test\'');
     });
 
@@ -1913,7 +1929,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             reshapeOnPush: true
         });
         const dataGrid = createDataGrid({
-            height: 50,
+            height: 200,
             loadingTimeout: null,
             repaintChangesOnly: true,
             scrolling: {
@@ -2005,7 +2021,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: generateDataSource(100),
             scrolling: {
                 mode: 'virtual',
-                timeout: 0
+                timeout: 0,
+                minGap: 0
             }
         });
 
@@ -2143,21 +2160,21 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             columns: [{ dataField: 'name', width: 100 }, 'description'],
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'standard'
+                rowRenderingMode: 'standard',
+                minGap: 0,
+                useNative: false
             }
         });
         const instance = dataGrid.dxDataGrid('instance');
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
-        const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         scrollable.scrollTo({ y: 1440 });
-        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
         const rowHeight = rowsView._rowHeight;
         assert.ok(rowHeight > 50, 'rowHeight > 50');
-        assert.strictEqual(instance.getVisibleRows().length, 6, 'row count');
+        assert.strictEqual(instance.getVisibleRows().length, 4, 'row count');
         assert.strictEqual(instance.pageIndex(), 10, 'current page index');
         assert.strictEqual(instance.getTopVisibleRowData().name, 'name20', 'top visible row');
 
@@ -2179,14 +2196,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
-        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
-        assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
-        assert.strictEqual(instance.getTopVisibleRowData().name, 'name40', 'top visible row is changed');
+        assert.strictEqual(instance.pageIndex(), 10, 'current page index is not changed'); // T881314
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name25', 'top visible row is changed');
         assert.notStrictEqual(rowsView._rowHeight, rowHeight, 'row height has changed');
         assert.ok(rowsView._rowHeight < 50, 'rowHeight < 50');
-        assert.strictEqual(instance.getVisibleRows().length, 8, 'row count');
+        assert.strictEqual(instance.getVisibleRows().length, 6, 'row count');
         // T835869
         assert.strictEqual(loadingSpy.callCount, 1, 'data is loaded once');
     });
@@ -2480,6 +2496,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // arrange, act
         const loadedPages = [];
         const data = [];
+        const pageCountForLoad = [];
 
         for(let i = 0; i < 10; i++) {
             data.push({ field: 'text' });
@@ -2490,6 +2507,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             dataSource: {
                 load: function(loadOptions) {
+                    pageCountForLoad.push(loadOptions.take / 10);
                     loadedPages.push(loadOptions.skip / 10);
 
                     const d = $.Deferred();
@@ -2523,13 +2541,15 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(250);
 
         // assert
-        assert.deepEqual(loadedPages, [0, 1, 2, 3, 4], 'all pages are unique');
+        assert.deepEqual(pageCountForLoad, [1, 1, 2, 3, 3, 4, 4], 'page count for load');
+        assert.deepEqual(loadedPages, [0, 1, 1, 1, 2, 2, 3], 'all pages are unique');
     });
 
-    function fastScrollTest(assert, that, responseTime, scrollStep, expectedLoadedPages) {
+    function fastScrollTest(assert, that, responseTime, scrollStep, expectedLoadedPages, expectedPageCountForLoad) {
         // arrange
         const data = [];
         const loadedPages = [];
+        const pageCountForLoad = [];
 
         for(let i = 0; i < 20; i++) {
             data.push({ field: 'someData' });
@@ -2541,7 +2561,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: {
                 load: function(loadOptions) {
                     const d = $.Deferred();
-
+                    pageCountForLoad.push(loadOptions.take / 20);
                     loadedPages.push(loadOptions.skip / 20);
 
                     setTimeout(function() {
@@ -2568,7 +2588,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         that.clock.tick(100);
 
         // assert
-        assert.deepEqual(loadedPages, [0, 1], 'loaded pages');
+        assert.deepEqual(loadedPages, [0], 'loaded pages');
+        assert.deepEqual(pageCountForLoad, [1], 'page count for load');
 
         // act
         for(let i = 1; i <= 5; i++) {
@@ -2580,16 +2601,17 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.deepEqual(loadedPages, expectedLoadedPages);
+        assert.deepEqual(pageCountForLoad, expectedPageCountForLoad);
     }
 
     // T815141
     QUnit.test('Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow', function(assert) {
-        fastScrollTest(assert, this, 500, 1200, [0, 1, 3, 8, 9]);
+        fastScrollTest(assert, this, 500, 1200, [0, 1, 3, 5, 7, 8, 8, 8], [1, 2, 1, 1, 1, 2, 3, 4]);
     });
 
     // T815141
     QUnit.test('Pages should be loaded while scrolling fast if remoteOperations is true and server is fast', function(assert) {
-        fastScrollTest(assert, this, 50, 700, [0, 1, 2, 3, 4, 5, 6]);
+        fastScrollTest(assert, this, 50, 700, [0, 0, 2, 3, 4, 5], [1, 2, 1, 1, 1, 1]);
     });
 
     // T815141
@@ -2597,6 +2619,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // arrange
         const data = [];
         const loadedPages = [];
+        const pageCountForLoad = [];
         const responseTime = 500;
         const that = this;
         let oldVirtualRowHeight;
@@ -2611,7 +2634,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: {
                 load: function(loadOptions) {
                     const d = $.Deferred();
-
+                    pageCountForLoad.push(loadOptions.take / 100);
                     loadedPages.push(loadOptions.skip / 100);
 
                     setTimeout(function() {
@@ -2638,20 +2661,26 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const $dataGrid = $(dataGrid.element());
         const scrollable = dataGrid.getScrollable();
+        const getTopVirtualRowHeight = () => {
+            return $dataGrid.find('.dx-datagrid-rowsview .dx-row').first().filter('.dx-virtual-row').height() || 0;
+        };
 
-        oldVirtualRowHeight = $dataGrid.find('.dx-virtual-row').first().height();
+        oldVirtualRowHeight = getTopVirtualRowHeight();
 
         for(let i = 1; i <= 10; i++) {
             // act
             scrollable.scrollTo({ y: 200 * i });
 
-            const virtualRowHeight = $dataGrid.find('.dx-virtual-row').first().height();
+            const virtualRowHeight = getTopVirtualRowHeight();
 
             // assert
-            assert.deepEqual(loadedPages, [0, 1], 'loaded pages');
+            assert.deepEqual(loadedPages, [0], 'loaded pages');
+            assert.deepEqual(pageCountForLoad, [1], 'page count for load');
             assert.ok(virtualRowHeight <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
             assert.equal($dataGrid.find('.dx-data-row').length, 15, 'data rows count');
-            assert.notEqual(virtualRowHeight, oldVirtualRowHeight, 'virtual row height was changed');
+            if(i > 1) {
+                assert.notEqual(virtualRowHeight, oldVirtualRowHeight, 'virtual row height was changed');
+            }
 
             oldVirtualRowHeight = virtualRowHeight;
         }
@@ -2903,6 +2932,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 this.clock.tick();
                 dataGrid.getScrollable().scrollTo({ top: scrollTopPosition });
                 this.clock.tick();
+                dataGrid.getScrollable().scrollTo({ top: scrollTopPosition });
+                this.clock.tick();
 
                 // assert
                 assert.deepEqual(dataGrid.getScrollable().scrollTop(), scrollTopPosition, 'correct scroll position');
@@ -2952,7 +2983,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             },
             paging: {
                 pageIndex: 2
@@ -2964,7 +2996,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
-        assert.equal(visibleRows.length, 20, 'rendered data rows');
+        assert.equal(visibleRows.length, 15, 'rendered data rows');
         assert.equal(visibleRows[0].key, 41, 'the first row key');
     });
 
@@ -2978,7 +3010,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
+                minGap: 0
             },
             paging: {
                 pageIndex: 2
@@ -3004,7 +3037,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
-        assert.equal(visibleRows.length, 20, 'rendered data rows');
+        assert.equal(visibleRows.length, 15, 'rendered data rows');
         assert.equal(visibleRows[0].key, 41, 'the first row key');
     });
 
@@ -3017,7 +3050,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageIndex: 5
             },
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                minGap: 0
             }
         });
 
@@ -3900,7 +3934,9 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 timeout: 0,
                 mode: 'infinite',
-                useNative: false
+                useNative: false,
+                minGap: 10,
+                rowPageSize: 20
             }
         });
 
@@ -3908,21 +3944,22 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo({ y: 3000 });
 
         // assert
-        assert.strictEqual(dataGrid.getVisibleRows().length, 120);
-        assert.strictEqual(dataGrid.getVisibleRows()[0].data.key, 1);
-        assert.strictEqual(dataGrid.getVisibleRows()[40].data.key, 21);
-        assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 80);
+        assert.strictEqual(dataGrid.getVisibleRows()[0].data.key, 21);
+        assert.strictEqual(dataGrid.getVisibleRows()[40].data.key, 41);
     });
 
     // T748954
-    QUnit.test('Scroll to second page should works if scrolling mode is infinite, summary is defined and server returns totalCount', function(assert) {
+    QUnit.test('Scroll to second page should work if scrolling mode is infinite, summary is defined and server returns totalCount', function(assert) {
         const dataGrid = createDataGrid({
             height: 100,
             loadingTimeout: null,
             scrolling: {
                 timeout: 0,
                 mode: 'infinite',
-                useNative: false
+                useNative: false,
+                minGap: 10,
+                rowPageSize: 20
             },
             remoteOperations: true,
             dataSource: {
@@ -3954,7 +3991,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleRows()[39].key, 40);
     });
 
-    QUnit.test('Scroll to second page should works if scrolling mode is infinite and local data source returns totalCount', function(assert) {
+    QUnit.test('Scroll to second page should work if scrolling mode is infinite and local data source returns totalCount', function(assert) {
         // arrange
         const data = [];
 
@@ -3968,7 +4005,9 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 timeout: 0,
                 mode: 'infinite',
-                useNative: false
+                useNative: false,
+                minGap: 10,
+                rowPageSize: 20
             },
             dataSource: {
                 key: 'id',
@@ -3990,12 +4029,13 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
     });
 
     // T742926
-    QUnit.test('Scroll should works if error occurs during third page loading if scrolling mode is infinite', function(assert) {
+    QUnit.test('Scroll should work if error occurs during third page loading if scrolling mode is infinite', function(assert) {
         let error = false;
         const dataGrid = createDataGrid({
             height: 300,
             loadingTimeout: null,
             dataSource: {
+                key: 'id',
                 load: function(options) {
                     if(error) {
                         return $.Deferred().reject('Load error');
@@ -4023,6 +4063,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 20);
+        assert.strictEqual(dataGrid.getVisibleRows()[0].key, 1);
         assert.strictEqual($(dataGrid.$element()).find('.dx-error-row').length, 1, 'error row is visible');
 
 
@@ -4030,12 +4071,13 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo({ y: 10000 });
 
         // assert
-        assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 15);
+        assert.strictEqual(dataGrid.getVisibleRows()[0].key, 11);
         assert.strictEqual($(dataGrid.$element()).find('.dx-error-row').length, 0, 'error row is hidden');
     });
 
     // T641931
-    QUnit.test('Infinite scrolling should works correctly', function(assert) {
+    QUnit.test('Infinite scrolling should work correctly', function(assert) {
         // arrange, act
         const data = [];
 
@@ -4058,7 +4100,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         }).dxDataGrid('instance');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible rows');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
 
@@ -4068,7 +4110,15 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, 'top visible row');
-        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
+
+        // act
+        dataGrid.getScrollable().scrollTo(10000);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 16, 'top visible row');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'no bottom loading');
     });
 
     // T710048
@@ -4219,14 +4269,15 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 newMode: true,
-                useNative: false
+                useNative: false,
+                minGap: 5
             }
         });
 
         this.clock.tick();
 
         // act
-        [930, 1100, 1400, 1600, 1800].forEach((top) => {
+        [930, 1100, 1400, 1600].forEach((top) => {
             dataGrid.getScrollable().scrollTo({ top });
             this.clock.tick();
         });
@@ -4283,7 +4334,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 newMode: true,
-                useNative: false
+                useNative: false,
+                minGap: 5
             },
             editing: {
                 mode: 'batch',
@@ -4313,34 +4365,29 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         this.clock.tick();
 
+        const scrollTo = (positions) => {
+            positions.forEach(top => {
+                dataGrid.getScrollable().scrollTo({ top });
+                this.clock.tick();
+            });
+        };
+
         let $newRow = $(dataGrid.element()).find('.dx-row-inserted');
 
         // assert
-        assert.equal($newRow.length, 2, 'the first new row is rendered');
+        assert.equal($newRow.length, 1, 'the first new row is rendered');
         assert.strictEqual($($newRow.get(0)).attr('aria-rowindex'), '1', 'the first new row index');
-        assert.strictEqual($($newRow.get(1)).attr('aria-rowindex'), '22', 'the last new row index');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1080 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1250 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1650 });
-        this.clock.tick();
+        scrollTo([1080, 1250, 1650]);
         $newRow = $(dataGrid.element()).find('.dx-row-inserted');
 
         // assert
-        assert.equal($newRow.length, 2, 'the second new row is rendered');
+        assert.equal($newRow.length, 1, 'the second new row is rendered');
         assert.strictEqual($($newRow.get(0)).attr('aria-rowindex'), '51', 'the second new row index');
-        assert.strictEqual($($newRow.get(1)).attr('aria-rowindex'), '62', 'the last new row index');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1960 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 2600 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 3300 });
-        this.clock.tick();
+        scrollTo([1960, 2600, 3300, 3400, 3500]);
         $newRow = $(dataGrid.element()).find('.dx-row-inserted');
 
         // assert
@@ -4360,7 +4407,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 newMode: true,
-                useNative: false
+                useNative: false,
+                minGap: 5
             },
             masterDetail: {
                 enabled: true,
@@ -4375,6 +4423,13 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         this.clock.tick();
 
+        const scrollTo = (positions) => {
+            positions.forEach(top => {
+                dataGrid.getScrollable().scrollTo({ top });
+                this.clock.tick();
+            });
+        };
+
         // act
         dataGrid.expandRow(1);
         this.clock.tick();
@@ -4385,12 +4440,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.strictEqual($detailRow.find('.myclass').text(), '1', 'the first detail row text');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1080 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1250 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1650 });
-        this.clock.tick();
+        scrollTo([1080, 1250, 1650]);
         dataGrid.expandRow(50);
         this.clock.tick();
         $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
@@ -4400,12 +4450,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.strictEqual($detailRow.find('.myclass').text(), '50', 'the second detail row text');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1960 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 2600 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 3300 });
-        this.clock.tick();
+        scrollTo([1960, 2600, 3300, 3500]);
         dataGrid.expandRow(100);
         this.clock.tick();
         $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
@@ -4428,7 +4473,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 newMode: true,
-                useNative: false
+                useNative: false,
+                minGap: 5
             },
             columnHidingEnabled: true,
             customizeColumns: function(columns) {
@@ -4437,6 +4483,13 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         });
 
         this.clock.tick();
+
+        const scrollTo = (positions) => {
+            positions.forEach(top => {
+                dataGrid.getScrollable().scrollTo({ top });
+                this.clock.tick();
+            });
+        };
 
         // act
         $(dataGrid.getRowElement(0)).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
@@ -4447,12 +4500,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.ok($adaptiveRow.hasClass('dx-adaptive-detail-row'), 'the first adaptive row is rendered');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1080 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1250 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1650 });
-        this.clock.tick();
+        scrollTo([1080, 1250, 1650]);
         $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
         this.clock.tick();
         $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
@@ -4461,14 +4509,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.ok($adaptiveRow.hasClass('dx-adaptive-detail-row'), 'the second adaptive row is rendered');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1960 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 2600 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 2700 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 3400 });
-        this.clock.tick();
+        scrollTo([1960, 2600, 2700, 3400, 3500]);
         $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
         this.clock.tick();
         $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
@@ -4564,7 +4605,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 newMode: true,
-                useNative: false
+                useNative: false,
+                minGap: 5
             },
             columns: ['ID', 'Name', {
                 dataField: 'Category',
@@ -4573,6 +4615,12 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         });
 
         this.clock.tick();
+        const scrollTo = (positions) => {
+            positions.forEach(top => {
+                dataGrid.getScrollable().scrollTo({ top });
+                this.clock.tick();
+            });
+        };
         let visibleRows = dataGrid.getVisibleRows();
         let visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
@@ -4591,95 +4639,85 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
 
         // act (scroll down middle)
-        dataGrid.getScrollable().scrollTo({ top: 979 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 980 }); // immitate the second async scroll
-        this.clock.tick();
-
-        dataGrid.getScrollable().scrollTo({ top: 1399 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1400 }); // immitate the second async scroll
-        this.clock.tick();
-
-        dataGrid.getScrollable().scrollTo({ top: 1899 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 1900 }); // immitate the second async scroll
-        this.clock.tick();
+        scrollTo([
+            979, 980, // immitate the second async scroll
+            1399, 1400, // immitate the second async scroll
+            1899, 1900 // immitate the second async scroll
+        ]);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
         assert.equal(loadSpy.callCount, 4, 'fourth call');
-        assert.equal(visibleRows.length, 18, 'visible rows on the second load');
-        assert.equal(visibleGroupRowCount, 3, 'group count on the second load');
+        assert.equal(visibleRows.length, 24, 'visible rows on the second load');
+        assert.equal(visibleGroupRowCount, 4, 'group count on the second load');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the fourth load');
         assert.deepEqual(visibleRows[0].key, ['Category 17'], 'first group row key on the fourth load');
         assert.strictEqual(visibleRows[6].rowType, 'group', 'seventh group row on the fourth load');
         assert.deepEqual(visibleRows[6].key, ['Category 18'], 'seventh group row key on the fourth load');
         assert.strictEqual(visibleRows[12].rowType, 'group', 'thirteenth group row on the fourth load');
         assert.deepEqual(visibleRows[12].key, ['Category 19'], 'thirteenth group row key on the fourth load');
+        assert.strictEqual(visibleRows[18].rowType, 'group', 'nineteenth group row on the fourth load');
+        assert.deepEqual(visibleRows[18].key, ['Category 2'], 'nineteenth group row key on the fourth load');
 
 
         // act (scroll down bottom)
-        dataGrid.getScrollable().scrollTo({ top: 2199 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 2200 }); // immitate the second async scroll
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 3189 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 3190 }); // immitate the second async scroll
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 3599 });
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 3600 }); // immitate the second async scroll
-        this.clock.tick();
+        scrollTo([
+            2199, 2200, // immitate the second async scroll
+            3189, 3190, // immitate the second async scroll
+            3599, 3600 // immitate the second async scroll
+        ]);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
         assert.equal(loadSpy.callCount, 7, 'seventh call');
-        assert.equal(visibleRows.length, 18, 'visible rows on the seventh load');
-        assert.equal(visibleGroupRowCount, 3, 'group count on the seventh load');
+        assert.equal(visibleRows.length, 24, 'visible rows on the seventh load');
+        assert.equal(visibleGroupRowCount, 4, 'group count on the seventh load');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the seventh load');
-        assert.deepEqual(visibleRows[0].key, ['Category 7'], 'first group row key on the seventh load');
+        assert.deepEqual(visibleRows[0].key, ['Category 6'], 'first group row key on the seventh load');
         assert.strictEqual(visibleRows[6].rowType, 'group', 'seventh group row on the seventh load');
-        assert.deepEqual(visibleRows[6].key, ['Category 8'], 'seventh group row key on the seventh load');
+        assert.deepEqual(visibleRows[6].key, ['Category 7'], 'seventh group row key on the seventh load');
         assert.strictEqual(visibleRows[12].rowType, 'group', 'thirteenth group row on the seventh load');
-        assert.deepEqual(visibleRows[12].key, ['Category 9'], 'thirteenth group row key on the seventh load');
+        assert.deepEqual(visibleRows[12].key, ['Category 8'], 'thirteenth group row key on the seventh load');
+        assert.strictEqual(visibleRows[18].rowType, 'group', 'nineteenth group row on the seventh load');
+        assert.deepEqual(visibleRows[18].key, ['Category 9'], 'nineteenth group row key on the seventh load');
 
 
         // act (scroll up middle)
-        dataGrid.getScrollable().scrollTo({ top: 1900 });
-        this.clock.tick();
+        scrollTo([1900]);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
         assert.equal(loadSpy.callCount, 7, 'call count is not changed on scrolling up to the middle');
-        assert.equal(visibleRows.length, 18, 'visible rows on the scrolling up to the middle');
-        assert.equal(visibleGroupRowCount, 3, 'group count on the scrolling up to the middle');
+        assert.equal(visibleRows.length, 24, 'visible rows on the scrolling up to the middle');
+        assert.equal(visibleGroupRowCount, 4, 'group count on the scrolling up to the middle');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the scrolling up to the middle');
         assert.deepEqual(visibleRows[0].key, ['Category 17'], 'first group row key on the scrolling up to the middle');
         assert.strictEqual(visibleRows[6].rowType, 'group', 'seventh group row on the scrolling up to the middle');
         assert.deepEqual(visibleRows[6].key, ['Category 18'], 'seventh group row key on the scrolling up to the middle');
         assert.strictEqual(visibleRows[12].rowType, 'group', 'thirteenth group row on the scrolling up to the middle');
         assert.deepEqual(visibleRows[12].key, ['Category 19'], 'thirteenth group row key on the scrolling up to the middle');
+        assert.strictEqual(visibleRows[18].rowType, 'group', 'nineteenth group row on the scrolling up to the middle');
+        assert.deepEqual(visibleRows[18].key, ['Category 2'], 'nineteenth group row key on the scrolling up to the middle');
 
 
         // act (scroll up top)
-        dataGrid.getScrollable().scrollTo({ top: 0 });
-        this.clock.tick();
+        scrollTo([0]);
         visibleRows = dataGrid.getVisibleRows();
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
         assert.equal(loadSpy.callCount, 7, 'call count is not changed on scrolling up to the top');
-        assert.equal(visibleRows.length, 12, 'visible rows on scrolling up to the top');
-        assert.equal(visibleGroupRowCount, 2, 'group count on scrolling up to the top');
+        assert.equal(visibleRows.length, 18, 'visible rows on scrolling up to the top');
+        assert.equal(visibleGroupRowCount, 3, 'group count on scrolling up to the top');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on scrolling up to the top');
         assert.deepEqual(visibleRows[0].key, ['Category 1'], 'first group row key on scrolling up to the top');
         assert.strictEqual(visibleRows[6].rowType, 'group', 'seventh group row on scrolling up to the top');
         assert.deepEqual(visibleRows[6].key, ['Category 10'], 'seventh group row key on scrolling up to the top');
+        assert.strictEqual(visibleRows[12].rowType, 'group', 'thirteenth group row on the first load');
+        assert.deepEqual(visibleRows[12].key, ['Category 11'], 'thirteenth group row key on the first load');
     });
 
     QUnit.test('New mode. Data should be loaded without a delay on scroll', function(assert) {

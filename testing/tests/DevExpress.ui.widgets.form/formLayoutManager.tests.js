@@ -1,9 +1,13 @@
 import $ from 'jquery';
 import {
     FIELD_ITEM_CLASS,
+    FIELD_ITEM_LABEL_CLASS,
+} from 'ui/form/constants';
+
+import {
     FLEX_LAYOUT_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_LABEL_CLASS } from 'ui/form/constants';
+} from 'ui/form/components/field_item';
 
 import 'ui/form';
 import 'ui/switch';

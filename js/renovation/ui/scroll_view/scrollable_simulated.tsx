@@ -26,15 +26,13 @@ import { AnimatedScrollbar } from './animated_scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { getBoundaryProps } from './utils/get_boundary_props';
-import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import {
   isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
 } from '../../../events/utils/index';
-import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
-import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
+import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
@@ -66,22 +64,26 @@ import {
   DxMouseEvent,
   DxMouseWheelEvent,
   DxKeyboardEvent,
-} from './types.d';
+} from './common/types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
 import {
-  getElementPaddingBottom, getElementOverflowX, getElementOverflowY,
+  getElementPadding,
+  getElementOverflowX,
+  getElementOverflowY,
 } from './utils/get_element_style';
 
-import { TopPocket } from './top_pocket';
-import { BottomPocket } from './bottom_pocket';
+import { TopPocket } from './internal/top_pocket';
+import { BottomPocket } from './internal/bottom_pocket';
 
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { convertToLocation } from './utils/convert_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
+import { getDevicePixelRatio } from './utils/get_device_pixel_ratio';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
+import { clampIntoRange } from './utils/clamp_into_range';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -239,8 +241,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   view: viewFunction,
 })
 
-export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
-  // https://trello.com/c/psOGNvMc/2745-renovation-type-for-timers
+export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>() {
   @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;
@@ -339,8 +340,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Method()
   release(): void {
     this.updateSizes();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.releaseHandler() as undefined);
+
+    this.hScrollbarRef.current?.releaseHandler();
+    this.vScrollbarRef.current?.releaseHandler();
   }
 
   @Method()
@@ -350,68 +352,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    const { direction } = this.props;
-    const distance = getOffsetDistance(targetLocation, direction, this.scrollOffset());
+    const distance = getOffsetDistance(targetLocation, this.props.direction, this.scrollOffset());
 
     this.scrollBy(distance);
-  }
-
-  @Method()
-  /* istanbul ignore next */
-  scrollToElement(
-    element: HTMLElement,
-    scrollToOptions: {
-      block: 'start' | 'center' | 'end' | 'nearest';
-      inline: 'start' | 'center' | 'end' | 'nearest';
-      behavior: 'auto'; 'smooth';
-    },
-  ): void {
-    if (!isDefined(element)) {
-      return;
-    }
-
-    const { top, left } = this.scrollOffset();
-    element.scrollIntoView(scrollToOptions || { block: 'nearest', inline: 'nearest' });
-
-    const containerEl = this.containerElement;
-
-    const { direction } = this.props;
-    const distance = getOffsetDistance({ top, left }, direction, this.scrollOffset());
-
-    if (!this.direction.isHorizontal) {
-      containerEl.scrollLeft += distance.left;
-    }
-
-    if (!this.direction.isVertical) {
-      containerEl.scrollTop += distance.top;
-    }
-
-    const { scrollLeft, scrollTop } = containerEl;
-
-    this.vScrollLocation = -scrollTop;
-    this.hScrollLocation = -scrollLeft;
-  }
-
-  @Method()
-  // TODO: it uses for DataGrid only
-  /* istanbul ignore next */
-  getElementLocation(
-    element: HTMLElement,
-    direction: ScrollableDirection,
-    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
-  ): number {
-    return getElementLocationInternal(
-      element,
-      {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        ...offset,
-      },
-      direction,
-      this.containerElement,
-    );
   }
 
   @Method()
@@ -579,7 +522,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect() effectResetInactiveState(): void {
     if (this.props.direction === DIRECTION_BOTH
-      || !isDefined(this.containerElement)) { // || !hasWindow()
+      || !isDefined(this.containerElement)) {
       return;
     }
 
@@ -587,8 +530,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect({ run: 'always' }) updateScrollbarSize(): void {
-    this.scrollableOffsetLeft = this.scrollableOffset.left;
-    this.scrollableOffsetTop = this.scrollableOffset.top;
+    const { left, top } = getElementOffset(this.scrollableRef.current);
+
+    this.scrollableOffsetLeft = left;
+    this.scrollableOffsetTop = top;
 
     this.updateSizes();
   }
@@ -612,37 +557,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     this.updateHandler();
-
     this.prepareDirections(true);
     this.onStart();
 
-    this.eventHandler(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (scrollbar: any): void => scrollbar.scrollByHandler({
-        x: this.calcScrollByDeltaX(left),
-        y: this.calcScrollByDeltaY(top),
-      }) as undefined,
+    const scrollOffset = this.scrollOffset();
+
+    this.hScrollbarRef.current?.scrollTo(
+      clampIntoRange(scrollOffset.left + left, getScrollLeftMax(this.containerElement), 0),
     );
-  }
-
-  calcScrollByDeltaY(top: number): number {
-    if (this.direction.isVertical) {
-      const scrollbar = this.vScrollbarRef.current!;
-
-      return scrollbar.getLocationWithinRange(top + this.vScrollLocation) - this.vScrollLocation;
-    }
-
-    return top;
-  }
-
-  calcScrollByDeltaX(left: number): number {
-    if (this.direction.isHorizontal) {
-      const scrollbar = this.hScrollbarRef.current!;
-
-      return scrollbar.getLocationWithinRange(left + this.hScrollLocation) - this.hScrollLocation;
-    }
-
-    return left;
+    this.vScrollbarRef.current?.scrollTo(
+      clampIntoRange(scrollOffset.top + top, getScrollTopMax(this.containerElement), 0),
+    );
   }
 
   updateHandler(): void {
@@ -788,17 +713,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     const crossThumbScrolling = this.isCrossThumbScrolling(event);
 
-    this.eventHandler(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (scrollbar: any): void => scrollbar.initHandler(event, crossThumbScrolling) as undefined,
-    );
+    this.hScrollbarRef.current?.initHandler(event, crossThumbScrolling);
+    this.vScrollbarRef.current?.initHandler(event, crossThumbScrolling);
   }
 
   handleStart(event: DxMouseEvent): void {
     this.eventForUserAction = event;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.startHandler() as undefined);
+    this.hScrollbarRef.current?.startHandler();
+    this.vScrollbarRef.current?.startHandler();
 
     this.onStart();
   }
@@ -814,31 +737,28 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.moveHandler(e.delta) as undefined);
+    this.hScrollbarRef.current?.moveHandler(e.delta);
+    this.vScrollbarRef.current?.moveHandler(e.delta);
   }
 
   handleEnd(event: DxMouseEvent): void {
     this.adjustDistance(event, 'velocity');
     this.eventForUserAction = event;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.endHandler(
-      event.velocity,
-      true,
-    ) as undefined);
+
+    this.hScrollbarRef.current?.endHandler(event.velocity, true);
+    this.vScrollbarRef.current?.endHandler(event.velocity, true);
   }
 
   handleStop(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.eventHandler((scrollbar: any): void => scrollbar.stopHandler() as undefined);
+    this.hScrollbarRef.current?.stopHandler();
+    this.vScrollbarRef.current?.stopHandler();
   }
 
   handleCancel(event: DxMouseEvent): void {
     this.eventForUserAction = event;
-    this.eventHandler(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (scrollbar: any): void => scrollbar.endHandler({ x: 0, y: 0 }, false) as undefined,
-    );
+
+    this.hScrollbarRef.current?.endHandler({ x: 0, y: 0 }, false);
+    this.vScrollbarRef.current?.endHandler({ x: 0, y: 0 }, false);
   }
 
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
@@ -866,8 +786,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     distance.x *= this.validDirections[DIRECTION_HORIZONTAL] ? 1 : 0;
     distance.y *= this.validDirections[DIRECTION_VERTICAL] ? 1 : 0;
 
-    const devicePixelRatio = this.tryGetDevicePixelRatio();
-    if (devicePixelRatio && isDxMouseWheelEvent(event.originalEvent)) {
+    if (isDxMouseWheelEvent(event.originalEvent)) {
+      const devicePixelRatio = getDevicePixelRatio();
+
       distance.x = Math.round((distance.x / devicePixelRatio) * 100) / 100;
       distance.y = Math.round((distance.y / devicePixelRatio) * 100) / 100;
     }
@@ -881,25 +802,30 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     this.prepareDirections(false);
 
+    const { target } = event.originalEvent;
+
     if (this.direction.isVertical) {
-      const isValid = this.validateEvent(event, this.vScrollbarRef.current!);
-      this.validDirections[DIRECTION_VERTICAL] = isValid;
+      const scrollbar = this.vScrollbarRef.current!;
+
+      this.validDirections[DIRECTION_VERTICAL] = this.validateEvent(
+        this.isContent(target),
+        scrollbar.isScrollbar(target),
+        scrollbar.isThumb(target),
+      );
     }
     if (this.direction.isHorizontal) {
-      const isValid = this.validateEvent(event, this.hScrollbarRef.current!);
-      this.validDirections[DIRECTION_HORIZONTAL] = isValid;
+      const scrollbar = this.hScrollbarRef.current!;
+      this.validDirections[DIRECTION_HORIZONTAL] = this.validateEvent(
+        this.isContent(target),
+        scrollbar.isScrollbar(target),
+        scrollbar.isThumb(target),
+      );
     }
   }
 
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  validateEvent(event: DxMouseEvent, scrollbarRef: any): boolean {
-    const { scrollByThumb, scrollByContent } = this.props;
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (scrollByThumb && scrollbarRef.validateEvent(event))
-    || (scrollByContent && this.isContent(event.originalEvent.target));
+  validateEvent(isContent: boolean, isScrollbar: boolean, isThumb: boolean): boolean {
+    return (this.props.scrollByThumb && (isScrollbar || isThumb))
+    || (this.props.scrollByContent && isContent);
   }
 
   prepareDirections(value: boolean): void {
@@ -915,17 +841,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     return false;
-  }
-
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  eventHandler(handler: (scrollbarInstance: any) => void): void {
-    if (this.direction.isHorizontal) {
-      handler(this.hScrollbarRef.current!);
-    }
-    if (this.direction.isVertical) {
-      handler(this.vScrollbarRef.current!);
-    }
   }
 
   tryGetAllowedDirection(event: DxMouseWheelEvent): ScrollableDirection | undefined {
@@ -965,7 +880,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   validateWheel(event: DxMouseWheelEvent): boolean {
-    const scrollbar = this.wheelDirection(event) === 'horizontal'
+    const scrollbar = this.wheelDirection(event) === DIRECTION_HORIZONTAL
       ? this.hScrollbarRef.current!
       : this.vScrollbarRef.current!;
 
@@ -1069,20 +984,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   scrollByLine(lines: { x?: number; y?: number }): void {
-    const devicePixelRatio = this.tryGetDevicePixelRatio();
-    let scrollOffset = SCROLL_LINE_HEIGHT;
-    if (devicePixelRatio) {
-      scrollOffset = Math.abs((scrollOffset / devicePixelRatio) * 100) / 100;
-    }
+    const scrollOffset = Math.abs((SCROLL_LINE_HEIGHT / getDevicePixelRatio()) * 100) / 100;
+
     this.scrollBy({
       top: (lines.y ?? 0) * scrollOffset,
       left: (lines.x ?? 0) * scrollOffset,
     });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  tryGetDevicePixelRatio(): number | undefined {
-    return hasWindow() ? getWindow().devicePixelRatio : undefined;
   }
 
   scrollByPage(page: number): void {
@@ -1187,53 +1094,31 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
     }
 
-    this.contentPaddingBottom = getElementPaddingBottom(contentEl);
+    this.contentPaddingBottom = getElementPadding(contentEl, 'bottom');
   }
 
   get containerElement(): HTMLDivElement {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.containerRef.current!;
+  }
+
+  get contentHeight(): number {
+    // T320141
+    return getElementOverflowY(this.contentRef?.current) === 'hidden'
+      ? this.contentClientHeight
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollHeight, this.contentClientHeight);
+  }
+
+  get contentWidth(): number {
+    // T320141
+    return getElementOverflowX(this.contentRef?.current) === 'hidden'
+      ? this.contentClientWidth
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollWidth, this.contentClientWidth);
   }
 
   get containerHasSizes(): boolean {
     return this.containerClientHeight > 0 && this.containerClientWidth > 0;
-  }
-
-  get contentWidth(): number {
-    if (!isDefined(this.contentRef?.current)) {
-      return 0;
-    }
-
-    // T320141
-    /* istanbul ignore next */
-    if (getElementOverflowX(this.contentRef.current) === 'hidden') {
-      return this.contentClientWidth;
-    }
-
-    const containerScrollSize = this.contentScrollWidth;
-    // for position absolute elements inside content
-    return Math.max(containerScrollSize, this.contentClientWidth);
-  }
-
-  get contentHeight(): number {
-    if (!isDefined(this.contentRef?.current)) {
-      return 0;
-    }
-
-    // T320141
-    /* istanbul ignore next */
-    if (getElementOverflowY(this.contentRef.current) === 'hidden') {
-      return this.contentClientHeight;
-    }
-
-    const containerScrollSize = this.contentScrollHeight;
-    // for position absolute elements inside content
-    return Math.max(containerScrollSize, this.contentClientHeight);
-  }
-
-  /* istanbul ignore next */
-  get scrollableOffset(): { left: number; top: number } {
-    return getElementOffset(this.scrollableRef.current);
   }
 
   get contentStyles(): { [key: string]: string } {

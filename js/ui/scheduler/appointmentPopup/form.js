@@ -56,8 +56,9 @@ const createDateBoxEditor = (dataField, colSpan, firstDayOfWeek, label, onValueC
             calendarOptions: {
                 firstDayOfWeek
             },
-            onValueChanged
-        }
+            onValueChanged,
+            useMaskBehavior: true
+        },
     };
 };
 

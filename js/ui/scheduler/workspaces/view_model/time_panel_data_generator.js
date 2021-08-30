@@ -1,5 +1,5 @@
-import { getDisplayedRowCount } from '../utils/base';
-import { getTimePanelCellText } from '../utils/week';
+import { getDisplayedRowCount } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getTimePanelCellText } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/week';
 
 export class TimePanelDataGenerator {
     constructor(viewDataGenerator) {

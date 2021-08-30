@@ -713,3 +713,46 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
   })();
   await disposeWidgets();
 });
+
+['virtual', 'infinite'].forEach((scrollingMode) => {
+  test(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const reloadDataSource = ClientFunction(() => (window as any).widget.getDataSource().reload());
+    const getVisibleRowCount = ClientFunction(() => (window as any).widget.getVisibleRows().length);
+
+    // assert
+    await t
+      .expect(getVisibleRowCount()).eql(30)
+      .expect(dataGrid.getDataRow(20).isFocusedRow).ok();
+
+    // act
+    await reloadDataSource();
+
+    // assert
+    await t
+      .expect(getVisibleRowCount()).eql(30)
+      .expect(dataGrid.getDataRow(20).isFocusedRow).ok();
+  }).before(async () => {
+    const data = ((): Record<string, unknown>[] => {
+      const result: { ID: number; Name: string }[] = [];
+      for (let i = 0; i < 30; i += 1) {
+        result.push({
+          ID: i + 1,
+          Name: `Name ${i + 1}`,
+        });
+      }
+      return result;
+    })();
+    return createWidget('dxDataGrid', {
+      dataSource: data,
+      keyExpr: 'ID',
+      focusedRowEnabled: true,
+      focusedRowIndex: 20,
+      scrolling: {
+        mode: scrollingMode,
+        useNative: false,
+        minGap: 10,
+      },
+    });
+  });
+});

@@ -68,7 +68,7 @@ import {
 } from './instanceFactory';
 import { getCellGroups } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
-import { validateDayHours } from './workspaces/utils/base';
+import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 
 // STYLE scheduler
@@ -1009,9 +1009,9 @@ class Scheduler extends Widget {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
             timeZone: this.option('timeZone'),
-            getDataAccessors: function(key) {
+            getDataAccessors: (key) => {
                 return utils.dataAccessors.combine(key, this._dataAccessors);
-            }.bind(this),
+            },
         });
     }
 
@@ -1771,11 +1771,11 @@ class Scheduler extends Widget {
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
 
+        const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
+        delete singleRawAppointment[keyPropertyName];
+
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
-            const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
-            delete singleRawAppointment[keyPropertyName];
-
             this.addAppointment(singleRawAppointment);
         }
 

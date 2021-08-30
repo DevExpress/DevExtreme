@@ -1,6 +1,8 @@
+import { isDefined } from '../../../core/utils/type';
 import Component from '../common/component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
+// eslint-disable-next-line import/named
 import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
@@ -80,6 +82,27 @@ export default class Editor extends Component {
     innerWidget.on('optionChanged', syncOptions);
   }
 
+  _raiseValidation(value: unknown, previousValue: unknown): void {
+    const areValuesEmpty = !isDefined(value) && !isDefined(previousValue);
+
+    if (value !== previousValue && !areValuesEmpty) {
+      this.validationRequest.fire({
+        value,
+        editor: this,
+      });
+    }
+  }
+
+  _raiseValueChangeAction(value: unknown, previousValue: unknown): void {
+    this._valueChangeAction?.({
+      element: this.$element(),
+      previousValue,
+      value,
+      event: this._valueChangeEventInstance,
+    });
+    this._valueChangeEventInstance = undefined;
+  }
+
   _optionChanged(option: Option): void {
     const { name, value, previousValue } = option;
 
@@ -89,12 +112,13 @@ export default class Editor extends Component {
 
     switch (name) {
       case 'value':
-        if (value !== previousValue) {
-          this.validationRequest.fire({
-            value,
-            editor: this,
-          });
-        }
+        this._raiseValidation(value, previousValue);
+        this._raiseValueChangeAction(value, previousValue);
+        break;
+      case 'onValueChanged':
+        this._valueChangeAction = this._createActionByOption('onValueChanged', {
+          excludeValidators: ['disabled', 'readOnly'],
+        });
         break;
       case 'isValid':
       case 'validationError':
@@ -127,5 +151,6 @@ export default class Editor extends Component {
 
 const prevIsEditor = (OldEditor as unknown as { isEditor: (instance: Component) => boolean })
   .isEditor;
-(OldEditor as unknown as { isEditor: (instance: Component) => boolean })
-  .isEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;
+const newIsEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;
+(Editor as unknown as { isEditor: (instance: Component) => boolean }).isEditor = newIsEditor;
+(OldEditor as unknown as { isEditor: (instance: Component) => boolean }).isEditor = newIsEditor;
