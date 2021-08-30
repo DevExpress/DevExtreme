@@ -101,7 +101,7 @@ const Overlay = Widget.inherit({
                 return;
             }
 
-            this._draggable.moveTo(top, left, e);
+            this._drag.moveTo(top, left, e);
         };
         return extend(this.callBase(), {
             escape: function() {
@@ -979,11 +979,9 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        const updatePositionChangeHandled = function(value) {
-            this._positionChangeHandled = value;
-        }.bind(this);
+        const updatePositionChangeHandled = (value) => this._positionChangeHandled = value;
 
-        this._draggable = new OverlayDrag({
+        this._drag = new OverlayDrag({
             dragEnabled: this.option('dragEnabled'),
             handle: $dragTarget.get(0),
             container: this._getDragResizeContainer().get(0),
@@ -1246,7 +1244,7 @@ const Overlay = Widget.inherit({
     _renderPosition: function() {
         let resultPosition;
         if(this._positionChangeHandled) {
-            resultPosition = this._draggable?.renderPositionHandler();
+            resultPosition = this._drag?.renderPositionHandler();
         } else {
             const position = this._position;
             this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
@@ -1420,7 +1418,7 @@ const Overlay = Widget.inherit({
                 this._invalidate();
                 this._toggleSafariScrolling();
                 if(this.option('dragEnabled') && !this.option('dragArea')?.container) {
-                    this._draggable.container = this._getDragResizeContainer().get(0);
+                    this._drag.container = this._getDragResizeContainer().get(0);
                 }
                 if(this.option('resizeEnabled') && !this.option('dragArea')?.container) {
                     this._resizable.option('area', this._getDragResizeContainer());
@@ -1464,8 +1462,8 @@ const Overlay = Widget.inherit({
                     this._resizable.option('area', this._getDragResizeContainer());
                 }
                 if(this.option('dragEnabled')) {
-                    this._draggable.container = this._getDragResizeContainer().get(0);
-                    this._draggable.outsideMultiplayer = this.option('dragAndResizeArea').outsideMultiplayer;
+                    this._drag.container = this._getDragResizeContainer().get(0);
+                    this._drag.outsideMultiplayer = this.option('dragAndResizeArea').outsideMultiplayer;
                 }
                 this._positionContent();
                 break;

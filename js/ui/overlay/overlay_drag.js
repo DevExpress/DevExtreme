@@ -117,7 +117,7 @@ class OverlayDrag {
             ? { top: 0, left: 0 }
             : getOffset(this._container);
         const deltaSize = this._deltaSize();
-        const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
+        const isDragAllowed = deltaSize.height >= 0 && deltaSize.width >= 0;
 
         const dragAreaOffsetMultiplayer = this.outsideMultiplayer;
         const dragAreaOffset = {
@@ -126,10 +126,10 @@ class OverlayDrag {
         };
 
         return {
-            top: isAllowedDrag ? overlayPosition.top - dragAreaPosition.top + dragAreaOffset.height : 0,
-            bottom: isAllowedDrag ? -overlayPosition.top + dragAreaPosition.top + deltaSize.height : 0,
-            left: isAllowedDrag ? overlayPosition.left - dragAreaPosition.left + dragAreaOffset.width : 0,
-            right: isAllowedDrag ? -overlayPosition.left + dragAreaPosition.left + deltaSize.width : 0
+            top: isDragAllowed ? overlayPosition.top - dragAreaPosition.top + dragAreaOffset.height : 0,
+            bottom: isDragAllowed ? -overlayPosition.top + dragAreaPosition.top + deltaSize.height : 0,
+            left: isDragAllowed ? overlayPosition.left - dragAreaPosition.left + dragAreaOffset.width : 0,
+            right: isDragAllowed ? -overlayPosition.left + dragAreaPosition.left + deltaSize.width : 0
         };
     }
 
