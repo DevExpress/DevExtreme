@@ -27,6 +27,12 @@ const tableMarkup = '\
 
 const { test, module } = QUnit;
 
+const CONTEXT_MENU_OVERLAY_SELECTOR = '.dx-context-menu.dx-overlay-content';
+const ITEM_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
+const ITEM_HAS_TEXT_CLASS = 'dx-menu-item-has-text';
+const SUBMENU_CLASS = 'dx-submenu';
+const SUBMENU_ITEMS_SELECTOR = `.${SUBMENU_CLASS} .${SUBMENU_CLASS} .${ITEM_HAS_TEXT_CLASS}`;
+
 module('Table resizing integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -52,11 +58,11 @@ module('Table resizing integration', {
             $tableElement.trigger('dxcontextmenu');
             this.clock.tick();
 
-            const $contextMenu = $('.dx-context-menu.dx-overlay-content');
-            const $ItemsHasSubmenu = $contextMenu.find('.dx-menu-item-has-submenu');
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
             $ItemsHasSubmenu.eq(firstMenuItemIndex).trigger('dxclick');
             this.clock.tick();
-            return $contextMenu.find('.dx-submenu .dx-submenu .dx-menu-item-has-text');
+            return $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
         };
     },
     afterEach: function() {
@@ -70,7 +76,7 @@ module('Table resizing integration', {
         const $tableElement = this.$element.find('td').eq(0);
         $tableElement.trigger('dxcontextmenu');
         this.clock.tick();
-        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
         assert.ok($contextMenu.length);
     });
@@ -80,7 +86,7 @@ module('Table resizing integration', {
 
         this.$element.find('p').eq(0).trigger('dxcontextmenu');
         this.clock.tick();
-        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
         assert.strictEqual($contextMenu.length, 0);
     });
@@ -101,7 +107,7 @@ module('Table resizing integration', {
         $tableElement.trigger('dxcontextmenu');
         this.clock.tick();
 
-        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
         assert.strictEqual($contextMenu.length, 1);
     });
@@ -115,11 +121,11 @@ module('Table resizing integration', {
         $tableElement.trigger('dxcontextmenu');
         this.clock.tick();
 
-        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
-        const $textItems = $contextMenu.find('.dx-menu-item-has-text');
+        const $textItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
-        const $ItemsHasSubmenu = $contextMenu.find('.dx-menu-item-has-submenu');
+        const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
 
         assert.strictEqual($textItems.length, 2, 'text items count is correct');
         assert.strictEqual($ItemsHasSubmenu.length, 2, 'submenu items count is correct');
@@ -133,14 +139,14 @@ module('Table resizing integration', {
         $tableElement.trigger('dxcontextmenu');
         this.clock.tick();
 
-        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
-        const $ItemsHasSubmenu = $contextMenu.find('.dx-menu-item-has-submenu');
+        const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
 
         $ItemsHasSubmenu.eq(0).trigger('dxclick');
         this.clock.tick();
 
-        const $submenuItems = $contextMenu.find('.dx-submenu .dx-submenu .dx-menu-item-has-text');
+        const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
 
         assert.strictEqual($submenuItems.length, 4);
     });
@@ -153,14 +159,14 @@ module('Table resizing integration', {
         $tableElement.trigger('dxcontextmenu');
         this.clock.tick();
 
-        const $contextMenu = $('.dx-context-menu.dx-overlay-content');
+        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
-        const $ItemsHasSubmenu = $contextMenu.find('.dx-menu-item-has-submenu');
+        const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
 
         $ItemsHasSubmenu.eq(1).trigger('dxclick');
         this.clock.tick();
 
-        const $submenuItems = $contextMenu.find('.dx-submenu .dx-submenu .dx-menu-item-has-text');
+        const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
 
         assert.strictEqual($submenuItems.length, 3);
     });
@@ -252,5 +258,4 @@ module('Table resizing integration', {
 
         assert.strictEqual($table.length, 0, 'Table is deleted');
     });
-
 });
