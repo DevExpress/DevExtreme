@@ -181,8 +181,7 @@ export class Editor extends JSXComponent<EditorPropsType>() {
     };
 
     if (this.shouldShowValidationMessage) {
-      // eslint-disable-next-line spellcheck/spell-checker
-      result.describedby = `dx-${new Guid()}`;
+      result.describedBy = `dx-${new Guid()}`;
     }
 
     return { ...result, ...this.props.aria };
