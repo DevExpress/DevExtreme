@@ -218,6 +218,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   scrollTo(value: number): void {
+    this.onReachBottomWasFiredOnce = false;
     this.moveTo(-value);
     this.needRiseEnd = true;
     this.stopScrolling();
