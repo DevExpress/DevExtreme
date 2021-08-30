@@ -28,7 +28,7 @@ describe('Calendar', () => {
     it('props defaults', () => {
       const props = new CalendarProps();
       const element = {
-        hasClass: () => true,
+        classList: { contains: () => true },
       };
 
       expect(props.hasFocus?.(element as any)).toEqual(true);
