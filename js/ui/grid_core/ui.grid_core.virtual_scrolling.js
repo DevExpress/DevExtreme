@@ -1182,18 +1182,18 @@ export const virtualScrollingModule = {
                             const loadedPageParams = this.getLoadPageParams(true);
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
                             const dataSourceAdapter = this._dataSource;
+                            const isLoading = this._isLoading;
+                            const loadedParamsChanged = !isLoading && (pageIndex !== loadedPageParams.pageIndex || loadPageCount !== loadedPageParams.loadPageCount);
+                            const loadingParamsChanged = isLoading && (pageIndex !== dataSourceAdapter.pageIndex() || loadPageCount !== dataSourceAdapter.loadPageCount());
 
-                            if(isVirtualPaging && (
-                                pageIndex !== loadedPageParams.pageIndex ||
-                                loadPageCount !== loadedPageParams.loadPageCount
-                            )) {
+                            if(isVirtualPaging && (loadedParamsChanged || loadingParamsChanged)) {
                                 dataSourceAdapter.pageIndex(pageIndex);
                                 dataSourceAdapter.loadPageCount(loadPageCount);
                                 this._repaintChangesOnly = true;
                                 this.load().always(() => {
                                     this._repaintChangesOnly = undefined;
                                 });
-                            } else if(!this._isLoading) {
+                            } else if(!isLoading) {
                                 this.updateItems({
                                     repaintChangesOnly: true
                                 });
