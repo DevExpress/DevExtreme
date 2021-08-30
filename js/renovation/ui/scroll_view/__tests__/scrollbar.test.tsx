@@ -20,7 +20,7 @@ import {
   optionValues,
   getPermutations,
 } from './utils';
-import { ScrollbarProps } from '../scrollbar_props';
+import { ScrollbarProps } from '../common/scrollbar_props';
 
 describe('Scrollbar', () => {
   it('render scrollbar with defaults', () => {

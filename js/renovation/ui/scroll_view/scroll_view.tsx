@@ -4,37 +4,23 @@ import {
   Ref,
   Method,
   RefObject,
-  ComponentBindings,
   InternalState,
 } from '@devextreme-generator/declarations';
 
 import { ScrollViewWrapper } from '../../component_wrapper/navigation/scroll_view';
-import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';
 
 import {
   Scrollable,
-  defaultOptionRules,
 } from './scrollable';
 
 import {
   ScrollOffset,
-} from './types.d';
-
-import { BaseWidgetProps } from '../common/base_props';
-import {
-  ScrollableProps,
-} from './scrollable_props';
-import { WidgetProps } from '../common/widget';
-import { ScrollableNativeProps } from './scrollable_native';
-import { ScrollableSimulatedProps } from './scrollable_simulated_props';
+} from './common/types.d';
+import { ScrollViewProps } from './common/scrollview_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
-    pulledDownText,
-    refreshingText,
-    pullingDownText,
-    reachBottomText,
     scrollableRef,
     reachBottomEnabled,
     props: {
@@ -44,6 +30,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       scrollByContent, useKeyboard, pullDownEnabled,
       useSimulatedScrollbar, inertiaEnabled,
       onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
+      pulledDownText, refreshingText, pullingDownText, reachBottomText,
     },
     restAttributes,
   } = viewModel;
@@ -95,18 +82,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   );
 };
 
-@ComponentBindings()
-export class ScrollViewProps extends ScrollableProps {}
-
-type ScrollViewPropsType =
-Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 'needScrollViewLoadPanel'>
-& Pick<WidgetProps, 'aria' | 'activeStateUnit'>
-& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
-& Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
-
 @Component({
-  defaultOptionRules,
   jQuery: {
     register: true,
     component: ScrollViewWrapper,
@@ -114,7 +90,7 @@ Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 
   view: viewFunction,
 })
 
-export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
+export class ScrollView extends JSXComponent<ScrollViewProps>() {
   @Ref() scrollableRef!: RefObject<Scrollable>;
 
   @InternalState() forceReachBottom?: boolean;
@@ -222,46 +198,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       return this.forceReachBottom;
     }
     return this.props.reachBottomEnabled;
-  }
-
-  get pullingDownText(): string | undefined {
-    const { pullingDownText } = this.props;
-
-    if (isDefined(pullingDownText)) {
-      return pullingDownText;
-    }
-
-    return isMaterial(current()) ? '' : undefined;
-  }
-
-  get pulledDownText(): string | undefined {
-    const { pulledDownText } = this.props;
-
-    if (isDefined(pulledDownText)) {
-      return pulledDownText;
-    }
-
-    return isMaterial(current()) ? '' : undefined;
-  }
-
-  get refreshingText(): string | undefined {
-    const { refreshingText } = this.props;
-
-    if (isDefined(refreshingText)) {
-      return refreshingText;
-    }
-
-    return isMaterial(current()) ? '' : undefined;
-  }
-
-  get reachBottomText(): string | undefined {
-    const { reachBottomText } = this.props;
-
-    if (isDefined(reachBottomText)) {
-      return reachBottomText;
-    }
-
-    return isMaterial(current()) ? '' : undefined;
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react

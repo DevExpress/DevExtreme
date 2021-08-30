@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
-import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/types.d';
+import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types.d';
 
 fixture`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'));

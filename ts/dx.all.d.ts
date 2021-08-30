@@ -806,6 +806,8 @@ declare module DevExpress {
   > extends Component<TProperties> {
     _templateManager: DevExpress.core.TemplateManager;
 
+    _cancelOptionChange?: string;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
@@ -13602,6 +13604,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+    /**
+     * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
+     */
+    allowSoftLineBreak?: boolean;
     /**
      * [descr:dxHtmlEditorOptions.customizeModules]
      */

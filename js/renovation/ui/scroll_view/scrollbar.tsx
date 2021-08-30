@@ -15,7 +15,7 @@ import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { isDefined } from '../../../core/utils/type';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
-import { ScrollbarProps } from './scrollbar_props';
+import { ScrollbarProps } from './common/scrollbar_props';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS, TopPocketState,
   SCROLLABLE_SCROLL_CLASS,
@@ -30,11 +30,11 @@ import {
   subscribeToDXPointerUpEvent,
 } from '../../utils/subscribe_to_event';
 
-import { ScrollableSimulatedProps } from './scrollable_simulated_props';
-import { ScrollableProps } from './scrollable_props';
+import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
+import { BaseScrollableProps } from './common/base_scrollable_props';
 import { BaseWidgetProps } from '../common/base_props';
 import { inRange } from '../../../core/utils/math';
-import { DxMouseEvent } from './types.d';
+import { DxMouseEvent } from './common/types.d';
 import { clampIntoRange } from './utils/clamp_into_range';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
@@ -66,7 +66,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
+& Pick<BaseScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
 & Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,

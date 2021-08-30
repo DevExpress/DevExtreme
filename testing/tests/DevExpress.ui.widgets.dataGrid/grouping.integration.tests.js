@@ -847,6 +847,31 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(visibleColumns[1].dataField, 'field2', 'dataField of the second column');
         assert.strictEqual(visibleColumns[1].groupIndex, 1, 'groupIndex of the second column');
     });
+
+    QUnit.test('Changing grouping.autoExpandAll after column\'s groupIndex', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: ['field1', 'field2'],
+            groupPanel: { visible: true },
+            grouping: {
+                autoExpandAll: true
+            },
+            dataSource: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }, { field1: '5', field2: '6' }]
+        }).dxDataGrid('instance');
+
+        this.clock.tick();
+
+        // act
+        dataGrid.columnOption(0, { groupIndex: 0 });
+        dataGrid.option('grouping.autoExpandAll', false);
+        this.clock.tick();
+
+        // assert
+        const $groupPanelItems = $('#dataGrid').find('.dx-group-panel-item');
+
+        assert.equal($groupPanelItems.length, 1, 'count of group panel items');
+    });
+
 });
 
 

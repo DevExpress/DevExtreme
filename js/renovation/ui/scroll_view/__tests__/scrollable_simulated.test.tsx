@@ -30,7 +30,7 @@ import {
 
 import {
   ScrollableSimulatedProps,
-} from '../scrollable_simulated_props';
+} from '../common/simulated_strategy_props';
 
 import {
   optionValues,
@@ -40,7 +40,7 @@ import {
 import { ScrollableTestHelper } from './scrollable_simulated_test_helper';
 import {
   DxKeyboardEvent, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs,
-} from '../types.d';
+} from '../common/types.d';
 import { AnimatedScrollbar } from '../animated_scrollbar';
 import { getElementOffset } from '../../../utils/get_element_offset';
 import { isDefined, isPlainObject } from '../../../../core/utils/type';
@@ -73,11 +73,21 @@ describe('Simulated > View', () => {
     const props = new ScrollableSimulatedProps();
     const scrollable = mount<Scrollable>(<Scrollable {...props} />);
 
-    expect(scrollable.props()).toEqual({
+    expect(scrollable.props()).toMatchObject({
+      activeStateEnabled: false,
+      addWidgetClass: false,
+      aria: {},
       bounceEnabled: true,
+      className: '',
+      classes: '',
+      cssText: '',
       direction: 'vertical',
+      disabled: false,
+      focusStateEnabled: false,
       forceGeneratePockets: false,
+      hoverStateEnabled: false,
       inertiaEnabled: true,
+      name: '',
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
@@ -86,8 +96,10 @@ describe('Simulated > View', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
+      tabIndex: 0,
       useKeyboard: true,
-      useNative: true,
+      useNative: false,
+      visible: true,
     });
   });
 });
