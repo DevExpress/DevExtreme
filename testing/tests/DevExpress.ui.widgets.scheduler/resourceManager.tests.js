@@ -5,7 +5,8 @@ import {
     createResourcesTree,
     createResourceEditorModel,
     getPaintedResources,
-    filterResources
+    filterResources,
+    getResourceDataByValue
 } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -139,7 +140,7 @@ QUnit.test('Resources dataSource should not be wrapped if it\'s instance of the 
         dataSource: dataSource
     }]);
 
-    this.instance.getResourceDataByValue('roomId', 1).done(function() {
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'roomId', 1).done(function() {
         assert.equal(dataSource.items().length, testData.rooms.length, 'DS items are OK');
         done();
     });
@@ -191,7 +192,7 @@ QUnit.test('Get resource by field name and value', function(assert) {
     this.createInstance(resourceData);
     const done = assert.async();
 
-    this.instance.getResourceDataByValue('roomId', 2).done(function(data) {
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'roomId', 2).done(function(data) {
         assert.deepEqual(data, resourceData[0].dataSource[1], 'Resource was found');
         done();
     });
@@ -432,7 +433,7 @@ QUnit.test('Get resources data with long resource dataSource', function(assert) 
         promiseData.load();
     });
 
-    this.instance.getResourceDataByValue('roomId', 2).done(function(data) {
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'roomId', 2).done(function(data) {
         assert.deepEqual(data, {
             id: 2,
             text: 'Room2',
@@ -737,7 +738,7 @@ QUnit.test('Resource data should be loaded correctly is data source is config ob
 
     const done = assert.async();
 
-    this.instance.getResourceDataByValue('ownerId', 1).done(function(result) {
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1).done(function(result) {
         assert.deepEqual(result, {
             id: 1
         }, 'Resource data is right');
@@ -764,7 +765,7 @@ QUnit.test('Resource data should be loaded correctly is data source is string', 
 
     const done = assert.async();
 
-    this.instance.getResourceDataByValue('ownerId', 1).done(function(result) {
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1).done(function(result) {
         assert.deepEqual(result, {
             id: 1
         }, 'Resource data is right');
@@ -793,11 +794,11 @@ QUnit.test('Load should be called once for several resources', function(assert) 
     }]
     );
 
-    this.instance.getResourceDataByValue('ownerId', 1).done(function(res) {
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1).done(function(res) {
         assert.deepEqual(res, { text: 'o1', id: 1 }, 'Resource data is right');
     });
-    this.instance.getResourceDataByValue('ownerId', 2);
-    this.instance.getResourceDataByValue('ownerId', 1);
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 2);
+    getResourceDataByValue(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1);
 
     deferred.resolve([{ text: 'o1', id: 1 }, { text: 'o2', id: 2 }]);
 

@@ -3,7 +3,6 @@ import { isDefined } from '../../../core/utils/type';
 import { deepExtendArraySafe } from '../../../core/utils/object';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
-import query from '../../../data/query';
 import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { when, Deferred } from '../../../core/utils/deferred';
 
@@ -15,7 +14,7 @@ import {
     getFieldExpr,
     getValueExpr,
     getWrappedDataSource,
-    // getResourceByField,
+    getResourceColor,
     isResourceMultiple,
     filterResources,
     getPaintedResources
@@ -24,7 +23,7 @@ import {
 export class ResourceManager {
     constructor(resources) {
         this.loadedResources = [];
-        this._resourceLoader = new Map();
+        this.resourceLoaderMap = new Map();
         this._dataAccessors = {
             getter: {},
             setter: {}
@@ -69,39 +68,6 @@ export class ResourceManager {
         return this._resources || [];
     }
 
-    getResourceDataByValue(field, value) {
-        const result = new Deferred();
-
-        this.getResources().forEach(resource => {
-            const resourceField = getFieldExpr(resource);
-
-            if(resourceField === field) {
-                const dataSource = getWrappedDataSource(resource.dataSource);
-                const valueExpr = getValueExpr(resource);
-
-                if(!this._resourceLoader.has(field)) {
-                    this._resourceLoader.set(field, dataSource.load());
-                }
-
-                this._resourceLoader.get(field)
-                    .done(data => {
-                        const filteredData = query(data)
-                            .filter(valueExpr, value)
-                            .toArray();
-
-                        // this._resourceLoader.delete(field);
-                        result.resolve(filteredData[0]);
-                    })
-                    .fail(() => {
-                        this._resourceLoader.delete(field);
-                        result.reject();
-                    });
-            }
-        });
-
-        return result.promise();
-    }
-
     setResourcesToItem(itemData, resources) {
         const resourcesSetter = this._dataAccessors.setter;
 
@@ -113,12 +79,8 @@ export class ResourceManager {
         }
     }
 
-    getResourcesFromItem(itemData, wrapOnlyMultipleResources) { // TODO used in Popup
+    getResourcesFromItem(itemData, wrapOnlyMultipleResources = false) {
         let result = null;
-
-        if(!isDefined(wrapOnlyMultipleResources)) {
-            wrapOnlyMultipleResources = false;
-        }
 
         this._resourceFields.forEach(field => {
             each(itemData, (fieldName, fieldValue) => {
@@ -144,30 +106,6 @@ export class ResourceManager {
                     return true;
                 }
             });
-        });
-
-        return result;
-    }
-
-    // TODO
-    getResourcesFromItem2(itemData, wrapOnlyMultipleResources = false) {
-        const result = { ...itemData };
-
-        this._resourceFields.forEach(field => {
-            let resourceValue = this.getDataAccessors(field, 'getter')(itemData);
-
-            if(isDefined(resourceValue)) {
-
-                if(resourceValue.length === 1) {
-                    resourceValue = resourceValue[0];
-                }
-
-                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(this.getResources(), field))) {
-                    this.getDataAccessors(field, 'setter')(result, wrapToArray(resourceValue));
-                } else {
-                    this.getDataAccessors(field, 'setter')(result, resourceValue);
-                }
-            }
         });
 
         return result;
@@ -206,7 +144,7 @@ export class ResourceManager {
                 deferreds.push(deferred);
 
                 const dataSourcePromise = getWrappedDataSource(resource.dataSource).load();
-                this._resourceLoader.set(name, dataSourcePromise);
+                this.resourceLoaderMap.set(name, dataSourcePromise);
 
                 dataSourcePromise
                     .done(data => {
@@ -229,54 +167,6 @@ export class ResourceManager {
 
             result.resolve(this.loadedResources);
         }).fail(() => result.reject());
-
-        return result.promise();
-    }
-
-    getResourceColor(field, value) {
-        // debugger;
-        const result = new Deferred();
-
-        const resource = filterResources(this.getResources(), [field])[0] || {};
-
-        // const valueExpr = resource.valueExpr || 'id';
-        // const valueGetter = compileGetter(valueExpr);
-
-        const colorExpr = resource.colorExpr || 'color';
-        const colorGetter = compileGetter(colorExpr);
-
-        // const resourceData = getResourceByField(field, this.loadedResources);
-
-        // if(resourceData.length) {
-        //     for(let i = 0; i < resourceData.length; i++) {
-        //         if(valueGetter(resourceData[i]) === value) {
-        //             color = colorGetter(resourceData[i]);
-        //             break;
-        //         }
-        //     }
-        //     result.resolve(color);
-        // } else {
-        //     this.getResourceDataByValue(field, value)
-        //         .done(resourceData => {
-        //             if(resourceData) {
-        //                 color = colorGetter(resourceData);
-        //             }
-
-        //             result.resolve(color);
-        //         })
-        //         .fail(() => result.reject());
-        // }
-
-        this.getResourceDataByValue(field, value)
-            .done(resourceData => {
-                let color; // TODO
-                if(resourceData) {
-                    color = colorGetter(resourceData);
-                }
-
-                result.resolve(color);
-            })
-            .fail(() => result.reject());
 
         return result.promise();
     }
@@ -369,7 +259,6 @@ export class ResourceManager {
     }
 
     getAppointmentColor({ groupIndex, itemData, groups }) {
-        // debugger;
         const paintedResources = getPaintedResources(this.getResources(), groups);
 
         if(paintedResources) {
@@ -387,7 +276,7 @@ export class ResourceManager {
                 }
             }
 
-            return this.getResourceColor(field, groupId);
+            return getResourceColor(this.getResources(), field, groupId);
         }
 
         return new Deferred().resolve().promise();

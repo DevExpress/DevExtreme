@@ -1,5 +1,8 @@
 import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import { DataSource } from '../../../data/data_source/data_source';
+import { Deferred } from '../../../core/utils/deferred';
+import query from '../../../data/query';
+import { compileGetter } from '../../../core/utils/data';
 
 export const getValueExpr = resource => resource.valueExpr || 'id';
 export const getDisplayExpr = resource => resource.displayExpr || 'text';
@@ -203,4 +206,51 @@ export const getPaintedResources = (resources, groups = []) => {
         resources;
 
     return newResources[newResources.length - 1];
+};
+
+export const getResourceDataByValue = (resources, resourceLoaderMap, field, value) => {
+    const result = new Deferred();
+
+    resources.forEach(resource => {
+        const resourceField = getFieldExpr(resource);
+
+        if(resourceField === field) {
+            const dataSource = getWrappedDataSource(resource.dataSource);
+            const valueExpr = getValueExpr(resource);
+
+            if(!resourceLoaderMap.has(field)) {
+                resourceLoaderMap.set(field, dataSource.load());
+            }
+
+            resourceLoaderMap.get(field)
+                .done(data => {
+                    const filteredData = query(data)
+                        .filter(valueExpr, value)
+                        .toArray();
+
+                    result.resolve(filteredData[0]);
+                })
+                .fail(() => {
+                    resourceLoaderMap.delete(field);
+                    result.reject();
+                });
+        }
+    });
+
+    return result.promise();
+};
+
+export const getResourceColor = (resources, field, value) => {
+    const result = new Deferred();
+
+    const resource = filterResources(resources, [field])[0] || {};
+
+    const colorExpr = resource.colorExpr || 'color';
+    const colorGetter = compileGetter(colorExpr);
+
+    getResourceDataByValue(resources, this.resourceLoaderMap, field, value)
+        .done(resource => result.resolve(colorGetter(resource)))
+        .fail(() => result.reject());
+
+    return result.promise();
 };
