@@ -1090,6 +1090,7 @@ class ScrollableTestHelper {
 
             QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right), content.width:100, container.width(75) -> container.width(50) -> container.width(100)`, function() {
                 const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
+
                 helper.setContainerWidth(75);
                 helper.checkScrollOffset({ left: 25, top: 0, maxScrollOffset: 25 }, 'scrolled to max right position after resize to 75px');
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 19 });
