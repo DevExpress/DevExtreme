@@ -806,6 +806,8 @@ declare module DevExpress {
   > extends Component<TProperties> {
     _templateManager: DevExpress.core.TemplateManager;
 
+    _cancelOptionChange?: string;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
@@ -5150,7 +5152,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBoxOptions.value]
      */
-    value?: boolean | undefined;
+    value?: boolean | null | undefined;
   }
   /**
    * [descr:dxColorBox]

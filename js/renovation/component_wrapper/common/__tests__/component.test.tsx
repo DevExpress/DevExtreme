@@ -10,6 +10,7 @@ import './utils/test_components/templated';
 import './utils/test_components/non_templated';
 import './utils/test_components/children';
 import './utils/test_components/invalid';
+import './utils/test_components/aria';
 import {
   defaultEvent,
   emitKeyboard,
@@ -39,6 +40,7 @@ const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrap
   dxTemplatedTestWidget: any;
   dxNonTemplatedTestWidget: any;
   dxChildrenTestWidget: any;
+  dxAriaTestWidget: any;
 };
 
 beforeEach(() => {
@@ -113,12 +115,15 @@ describe('Misc cases', () => {
     expect(apiCallResult).toBe('check api - 1 - 2');
   });
 
-  it('setAria throws Error', () => {
-    $('#component').dxTestWidget({});
+  it('setAria pass aria prop to the widget', () => {
+    const $component = $('#component');
+    $component.dxAriaTestWidget();
 
-    expect(() => {
-      $('#component').dxTestWidget('setAria');
-    }).toThrowError('"setAria" method is deprecated, use "aria" property instead');
+    $component.dxAriaTestWidget('setAria', 'role', 'custom');
+
+    expect($component.dxAriaTestWidget('getLastPassedProps')).toMatchObject({
+      aria: { role: 'custom' },
+    });
   });
 
   describe('API with Element type params/return type', () => {

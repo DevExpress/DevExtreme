@@ -3,12 +3,11 @@ import Component from '../common/component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
 // eslint-disable-next-line import/named
-import $, { dxElementWrapper } from '../../../core/renderer';
+import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
 import { Option } from '../common/types';
-import { addAttributes, getAriaName } from '../utils/utils';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
@@ -51,14 +50,6 @@ export default class Editor extends Component {
     };
 
     return props;
-  }
-
-  setAria(name: string, value: string): void {
-    const attrName = getAriaName(name);
-    addAttributes(
-      this.$element() as unknown as dxElementWrapper,
-      [{ name: attrName, value }],
-    );
   }
 
   _init(): void {
