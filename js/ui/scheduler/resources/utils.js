@@ -240,7 +240,7 @@ export const getResourceDataByValue = (resources, resourceLoaderMap, field, valu
     return result.promise();
 };
 
-export const getResourceColor = (resources, field, value) => {
+export const getResourceColor = (resources, resourceLoaderMap, field, value) => {
     const result = new Deferred();
 
     const resource = filterResources(resources, [field])[0] || {};
@@ -248,7 +248,7 @@ export const getResourceColor = (resources, field, value) => {
     const colorExpr = resource.colorExpr || 'color';
     const colorGetter = compileGetter(colorExpr);
 
-    getResourceDataByValue(resources, this.resourceLoaderMap, field, value)
+    getResourceDataByValue(resources, resourceLoaderMap, field, value)
         .done(resource => result.resolve(colorGetter(resource)))
         .fail(() => result.reject());
 

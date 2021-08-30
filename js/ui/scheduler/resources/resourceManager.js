@@ -277,7 +277,7 @@ export class ResourceManager {
                 }
             }
 
-            return getResourceColor(this.getResources(), field, groupId);
+            return getResourceColor(this.getResources(), this.resourceLoaderMap, field, groupId);
         }
 
         return new Deferred().resolve().promise();
