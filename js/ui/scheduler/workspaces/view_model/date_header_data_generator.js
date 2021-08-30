@@ -1,6 +1,12 @@
 import dateUtils from '../../../../core/utils/date';
 import { getGroupCount } from '../../resources/utils';
-import { getHeaderCellText, formatWeekdayAndDay, getHorizontalGroupCount, getTotalCellCountByCompleteData, getDisplayedCellCount } from '../utils/base';
+import {
+    getHeaderCellText,
+    formatWeekdayAndDay,
+    getHorizontalGroupCount,
+    getTotalCellCountByCompleteData,
+    getDisplayedCellCount,
+} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 export class DateHeaderDataGenerator {
     constructor(viewDataGenerator) {

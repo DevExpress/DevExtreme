@@ -195,4 +195,31 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         assert.equal(tasks.length, tasksCount - 1, 'task was deleted');
         assert.equal(tasks[2].progress, values.progress, 'onTaskUpdated is triggrered');
     });
+    test('onTaskUpdated is triggered after child is updated when auto update parents on', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        let values;
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 10 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 20 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 40 },
+            { 'my_id': 4, 'parentId': 2, 'title': 'Determine project scope 2', 'start': start, 'end': end, 'progress': 80 },
+
+        ];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.instance.option('onTaskUpdated', (e) => { values = e.values; });
+        this.clock.tick();
+        this.instance.updateTask(4, { 'end': new Date('2020-02-20') });
+        this.clock.tick();
+
+        assert.notDeepEqual(tasks[2].end, values.end, 'onTaskUpdated is triggrered');
+    });
 });

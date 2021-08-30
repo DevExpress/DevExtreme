@@ -202,4 +202,56 @@ QUnit.module('Actions', moduleConfig, () => {
         assert.equal(ganttView.width(), splitter.width());
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
     });
+    test('expand api', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
+        this.clock.tick();
+        this.instance.collapseAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+
+        this.clock.tick();
+        this.instance.expandAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
+
+        this.instance.expandAllToLevel(1);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+
+        this.instance.expandToTask(7);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
+
+        this.instance.expandToTask(2);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+
+        this.instance.expandTask(2);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
+
+        this.instance.collapseTask(2);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+    });
+    test('showResources()', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, data.resourceAssignments.length);
+        this.instance.showResources(false);
+        assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, 0);
+        this.instance.showResources(true);
+        assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, data.resourceAssignments.length);
+    });
+    test('showDependencies()', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
+        this.instance.showDependencies(false);
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, 0);
+        this.instance.showDependencies(true);
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
+    });
 });

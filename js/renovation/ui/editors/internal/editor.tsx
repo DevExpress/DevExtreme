@@ -148,6 +148,11 @@ export class Editor extends JSXComponent<EditorPropsType>() {
     this.widgetRef.current!.focus();
   }
 
+  @Method()
+  blur(): void {
+    this.widgetRef.current!.blur();
+  }
+
   onFocusIn(event: Event): void {
     const { onFocusIn } = this.props;
 
@@ -162,8 +167,8 @@ export class Editor extends JSXComponent<EditorPropsType>() {
   get shouldShowValidationMessage(): boolean {
     const { isValid, validationStatus } = this.props;
     const validationErrors = this.validationErrors ?? [];
-    return !isValid
-        && validationStatus === 'invalid'
+    const isEditorValid = isValid && validationStatus !== 'invalid';
+    return !isEditorValid
         && validationErrors.length > 0;
   }
 

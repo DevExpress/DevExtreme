@@ -9,6 +9,8 @@ import './utils/test_components/options';
 import './utils/test_components/templated';
 import './utils/test_components/non_templated';
 import './utils/test_components/children';
+import './utils/test_components/invalid';
+import './utils/test_components/aria';
 import {
   defaultEvent,
   emitKeyboard,
@@ -18,6 +20,7 @@ import { setPublicElementWrapper } from '../../../../core/element';
 import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
 import registerEvent from '../../../../events/core/event_registrator';
 import { one } from '../../../../events';
+import KeyboardProcessor from '../../../../events/core/keyboard_processor';
 
 const fakeEventSingleton = new class {
   handlerCount = 0;
@@ -32,10 +35,12 @@ registerEvent('dxFakeEvent', fakeEventSingleton);
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
   dxTestWidget: any;
+  dxInvalidTestWidget: any;
   dxOptionsTestWidget: any;
   dxTemplatedTestWidget: any;
   dxNonTemplatedTestWidget: any;
   dxChildrenTestWidget: any;
+  dxAriaTestWidget: any;
 };
 
 beforeEach(() => {
@@ -110,12 +115,15 @@ describe('Misc cases', () => {
     expect(apiCallResult).toBe('check api - 1 - 2');
   });
 
-  it('setAria throws Error', () => {
-    $('#component').dxTestWidget({});
+  it('setAria pass aria prop to the widget', () => {
+    const $component = $('#component');
+    $component.dxAriaTestWidget();
 
-    expect(() => {
-      $('#component').dxTestWidget('setAria');
-    }).toThrowError('"setAria" method is deprecated, use "aria" property instead');
+    $component.dxAriaTestWidget('setAria', 'role', 'custom');
+
+    expect($component.dxAriaTestWidget('getLastPassedProps')).toMatchObject({
+      aria: { role: 'custom' },
+    });
   });
 
   describe('API with Element type params/return type', () => {
@@ -330,6 +338,14 @@ describe('Widget\'s container manipulations', () => {
       class: '',
       'data-custom-attr': 'attr-value',
     });
+  });
+
+  it('should convert elementAttr.style string to the cssText prop', () => {
+    const instance = $('#component')
+      .dxTestWidget({ elementAttr: { style: 'background-color: red;' } })
+      .dxTestWidget('instance');
+
+    expect(instance._viewRef.current.props.cssText).toStrictEqual('background-color: red;');
   });
 
   it('widget does not show className option', () => {
@@ -678,7 +694,7 @@ describe('templates and slots', () => {
 
     $('#component').dxTemplatedTestWidget({});
 
-    expect(($('#component').children('') as any).length).toBe(1);
+    expect($('#component').children('').length).toBe(1);
     expect($('#component')[0].innerHTML).toBe('<span>Default slot</span>');
   });
 
@@ -1022,6 +1038,26 @@ describe('registerKeyHandler', () => {
     expect(supportedKeys.enter()).toBe('custom enter handler');
     expect(supportedKeys.space()).toBe('custom space handler');
     expect(supportedKeys.arrowUp()).toBe('default arrow up handler');
+  });
+
+  it('should throw exception if the component has key handlers but does not have keyDown event', () => {
+    expect(() => $('#component').dxInvalidTestWidget({})).toThrow(
+      'Component\'s declaration must have \'keyDown\' method.',
+    );
+  });
+
+  it('Default key handlers should call keyDown method', () => {
+    const mockFunction = jest.fn();
+    const instance = $('#component').dxTestWidget({}).dxTestWidget('instance');
+    const supportedKeys = instance._supportedKeys();
+
+    instance._viewRef.current.keyDown = mockFunction;
+    supportedKeys.space(defaultEvent);
+
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+    expect(mockFunction).toHaveBeenCalledWith(
+      (KeyboardProcessor as any).createKeyDownOptions(defaultEvent),
+    );
   });
 
   it('call custom handler only', () => {

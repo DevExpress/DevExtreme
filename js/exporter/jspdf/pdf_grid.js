@@ -1,17 +1,13 @@
 import { isDefined } from '../../core/utils/type';
+import { PdfPage } from './pdf_page';
 import { PdfTable } from './pdf_table';
 
 export class PdfGrid {
     constructor(splitByColumns, columnWidths) {
         this._splitByColumns = splitByColumns ?? [];
         this._columnWidths = columnWidths ?? [];
-        this._newPageTables = [];
-        this._tables = [];
+        this._pages = [new PdfPage()];
         this._currentHorizontalTables = null;
-    }
-
-    _addLastTableToNewPages() {
-        this._newPageTables.push(this._currentHorizontalTables[this._currentHorizontalTables.length - 1]);
     }
 
     startNewTable(drawTableBorder, firstTableTopLeft, firstTableOnNewPage, splitByColumns, firstColumnWidth) {
@@ -24,9 +20,12 @@ export class PdfGrid {
         if(isDefined(firstColumnWidth)) {
             firstTableColumnWidths[0] = firstColumnWidth;
         }
-        this._currentHorizontalTables = [new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths)];
+        const newTable = new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths);
+        this._currentHorizontalTables = [newTable];
         if(firstTableOnNewPage) {
-            this._addLastTableToNewPages();
+            this._pages.push(new PdfPage(newTable));
+        } else {
+            this._pages[this._pages.length - 1].addTable(newTable);
         }
 
         if(isDefined(this._splitByColumns)) {
@@ -34,16 +33,11 @@ export class PdfGrid {
                 const beginColumnIndex = this._splitByColumns[i].columnIndex;
                 const endColumnIndex = this._splitByColumns[i + 1]?.columnIndex ?? this._columnWidths.length;
 
-                this._currentHorizontalTables.push(
-                    new PdfTable(drawTableBorder, this._splitByColumns[i].tableTopLeft, this._columnWidths.slice(beginColumnIndex, endColumnIndex))
-                );
-                if(this._splitByColumns[i].drawOnNewPage) {
-                    this._addLastTableToNewPages();
-                }
+                const newSplitByColumnTable = new PdfTable(drawTableBorder, this._splitByColumns[i].tableTopLeft, this._columnWidths.slice(beginColumnIndex, endColumnIndex));
+                this._currentHorizontalTables.push(newSplitByColumnTable);
+                this._pages.push(new PdfPage(newSplitByColumnTable));
             }
         }
-
-        this._tables.push(...this._currentHorizontalTables);
     }
 
     addRow(cells, rowHeight) {
@@ -98,43 +92,59 @@ export class PdfGrid {
     }
 
     mergeCellsBySpanAttributes() {
-        this._tables.forEach((table) => {
-            for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
-                for(let cellIndex = 0; cellIndex < table.rows[rowIndex].length; cellIndex++) {
-                    const cell = table.rows[rowIndex][cellIndex];
-                    if(!cell.skip) {
-                        if(isDefined(cell.rowSpan)) {
-                            for(let i = 1; i <= cell.rowSpan; i++) {
-                                const mergedCell = table.rows[rowIndex + i][cellIndex];
-                                if(isDefined(mergedCell)) {
-                                    cell._rect.h += mergedCell._rect.h;
-                                    mergedCell.skip = true;
+        this._pages.forEach((page) => {
+            page._tables.forEach((table) => {
+                for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
+                    for(let cellIndex = 0; cellIndex < table.rows[rowIndex].length; cellIndex++) {
+                        const cell = table.rows[rowIndex][cellIndex];
+                        if(!cell.skip) {
+                            if(isDefined(cell.rowSpan)) {
+                                for(let i = 1; i <= cell.rowSpan; i++) {
+                                    const mergedCell = table.rows[rowIndex + i][cellIndex];
+                                    if(isDefined(mergedCell)) {
+                                        cell._rect.h += mergedCell._rect.h;
+                                        mergedCell.skip = true;
+                                    }
                                 }
                             }
-                        }
-                        if(isDefined(cell.colSpan)) {
-                            for(let i = 1; i <= cell.colSpan; i++) {
-                                const mergedCell = table.rows[rowIndex][cellIndex + i];
-                                if(isDefined(mergedCell)) {
-                                    cell._rect.w += mergedCell._rect.w;
-                                    mergedCell.skip = true;
+                            if(isDefined(cell.colSpan)) {
+                                for(let i = 1; i <= cell.colSpan; i++) {
+                                    const mergedCell = table.rows[rowIndex][cellIndex + i];
+                                    if(isDefined(mergedCell)) {
+                                        cell._rect.w += mergedCell._rect.w;
+                                        mergedCell.skip = true;
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
+            });
         });
     }
 
     drawTo(doc) {
         const styles = this._getDocumentStyles(doc);
 
-        this._tables.forEach((table) => {
-            if(this._newPageTables.indexOf(table) !== -1) {
+        this._pages.forEach((page) => {
+            if(this._pages.indexOf(page) > 0) {
                 doc.addPage();
             }
-            table.drawTo(doc, styles);
+            page._tables.forEach((table) => {
+                table.drawTo(doc, styles, {
+                    allowDrawBorders: true,
+                    allowDrawCellContent: true,
+                    allowDrawCustomBorders: false
+                });
+            });
+
+            page._tables.forEach((table) => {
+                table.drawTo(doc, styles, {
+                    allowDrawBorders: false,
+                    allowDrawCellContent: false,
+                    allowDrawCustomBorders: true
+                });
+            });
         });
 
         this._setDocumentStyles(doc, styles);

@@ -4,7 +4,6 @@ import {
   Effect,
   InternalState,
   JSXComponent,
-  JSXTemplate,
   Method,
 } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -16,20 +15,23 @@ import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
-import { WorkSpaceProps, CurrentViewConfigType } from './workspaces/props';
-import { WorkSpaceWeek } from './workspaces/week/work_space';
+import { CurrentViewConfigType } from './workspaces/props';
 import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
+import { WorkSpace } from './workspaces/base/work_space';
+import SchedulerToolbar from './header/header';
+import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
 
 export const viewFunction = ({
   restAttributes,
-  workSpace: WorkSpace,
   currentViewConfig,
   onViewRendered,
+  setCurrentDate,
+  setCurrentView,
+  startViewDate,
   props: {
     accessKey,
     activeStateEnabled,
     disabled,
-    focusStateEnabled,
     height,
     hint,
     hoverStateEnabled,
@@ -38,6 +40,13 @@ export const viewFunction = ({
     visible,
     width,
     className,
+    toolbar: toolbarItems,
+    views,
+    currentView,
+    useDropDownViewSwitcher,
+    customizeDateNavigatorText,
+    min,
+    max,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -62,7 +71,7 @@ export const viewFunction = ({
     indicatorTime,
     allowMultipleCellSelection,
     allDayPanelExpanded,
-
+    type,
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -70,7 +79,7 @@ export const viewFunction = ({
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
-      focusStateEnabled={focusStateEnabled}
+      focusStateEnabled={false}// TODO: waiting for a toolbar wrapper rerender fix
       height={height}
       hint={hint}
       hoverStateEnabled={hoverStateEnabled}
@@ -82,6 +91,21 @@ export const viewFunction = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
+      <SchedulerToolbar
+        items={toolbarItems}
+        views={views}
+        currentView={currentView}
+        onCurrentViewUpdate={setCurrentView}
+        currentDate={currentDate}
+        onCurrentDateUpdate={setCurrentDate}
+        startViewDate={startViewDate}
+        min={min}
+        max={max}
+        intervalCount={intervalCount}
+        firstDayOfWeek={firstDayOfWeek}
+        useDropDownViewSwitcher={useDropDownViewSwitcher}
+        customizationFunction={customizeDateNavigatorText}
+      />
       <WorkSpace
         firstDayOfWeek={firstDayOfWeek}
         startDayHour={startDayHour}
@@ -100,6 +124,7 @@ export const viewFunction = ({
         crossScrollingEnabled={crossScrollingEnabled}
         hoursInterval={hoursInterval}
         groups={groups}
+        type={type}
 
         indicatorTime={indicatorTime}
         allowMultipleCellSelection={allowMultipleCellSelection}
@@ -132,9 +157,28 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return getCurrentViewConfig(this.currentViewProps, this.props);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  get workSpace(): JSXTemplate<WorkSpaceProps, 'currentDate' | 'onViewRendered'> {
-    return WorkSpaceWeek;
+  get startViewDate(): Date {
+    const type = this.props.currentView;
+    const {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+    } = this.currentViewConfig;
+
+    const options = {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+    };
+
+    const viewDataGenerator = getViewDataGeneratorByViewType(type);
+    const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
+
+    return startViewDate;
   }
 
   @Method()
@@ -214,5 +258,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   onViewRendered(viewMetaData: ViewMetaData): void {
     this.viewDataProvider = viewMetaData.viewDataProvider;
     this.cellsMetaData = viewMetaData.cellsMetaData;
+  }
+
+  setCurrentView(view: string): void {
+    this.props.currentView = view;
+  }
+
+  setCurrentDate(date: Date): void {
+    this.props.currentDate = date;
   }
 }

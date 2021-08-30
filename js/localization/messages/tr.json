@@ -489,6 +489,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Artan Sıralama",
         "dxGantt-sortingDescendingText": "Azalan Sıralama",
-        "dxGantt-sortingClearText": "Sıralamayı Temizle"
+        "dxGantt-sortingClearText": "Sıralamayı Temizle",
+        "dxGantt-toggleResources": "TODO",
+        "dxGantt-toggleDependencies": "TODO"
     }
 }

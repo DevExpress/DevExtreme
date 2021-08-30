@@ -10,7 +10,7 @@ import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 import timeZoneUtils from '../../utils.timeZone';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../workspaces/utils/base';
+import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -21,6 +21,15 @@ const RECURRENCE_FREQ = 'freq';
 const FilterStrategies = {
     virtual: 'virtual',
     standard: 'standard'
+};
+
+const getTrimDates = (min, max) => {
+    const newMin = dateUtils.trimTime(min);
+    const newMax = dateUtils.trimTime(max);
+
+    newMax.setDate(newMax.getDate() + 1);
+
+    return [newMin, newMax];
 };
 
 class AppointmentFilterHelper {
@@ -116,7 +125,7 @@ class FilterMaker {
 
                 this._filterRegistry.date = [
                     [
-                        [endDate, '>', min],
+                        [endDate, '>=', min],
                         [startDate, '<', max]
                     ],
                     'or',
@@ -188,7 +197,7 @@ export class AppointmentFilterBaseStrategy {
 
     filter() {
         const dateRange = this.workspace.getDateRange();
-        const resources = this.resourceManager.getResourcesData();
+        const resources = this.resourceManager.loadedResources;
 
         let allDay;
 
@@ -253,10 +262,10 @@ export class AppointmentFilterBaseStrategy {
             return;
         }
 
-        const trimmedDates = this._trimDates(min, max);
+        const [trimMin, trimMax] = getTrimDates(min, max);
 
         if(!this.filterMaker.isRegistered()) {
-            this._createFilter(trimmedDates.min, trimmedDates.max, remoteFiltering, dateSerializationFormat);
+            this._createFilter(trimMin, trimMax, remoteFiltering, dateSerializationFormat);
         } else {
             if(this.dataSource.filter()?.length > 1) {
                 // TODO: serialize user filter value only necessary for case T838165(details in note)
@@ -264,7 +273,7 @@ export class AppointmentFilterBaseStrategy {
                 this.filterMaker.make('user', userFilter);
             }
             if(remoteFiltering) {
-                this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max]);
+                this.filterMaker.make('date', [trimMin, trimMax]);
                 this.dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
             }
         }
@@ -379,6 +388,7 @@ export class AppointmentFilterBaseStrategy {
     _createCombinedFilter(filterOptions) {
         const min = new Date(filterOptions.min);
         const max = new Date(filterOptions.max);
+
         const {
             startDayHour,
             endDayHour,
@@ -388,11 +398,11 @@ export class AppointmentFilterBaseStrategy {
             firstDayOfWeek,
             checkIntersectViewport
         } = filterOptions;
-        const that = this;
-        const trimmedMinMax = this._trimDates(min, max);
+
+        const [trimMin, trimMax] = getTrimDates(min, max);
         const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
 
-        return [[(appointment) => {
+        return [[appointment => {
             const appointmentVisible = appointment.visible ?? true;
 
             if(!appointmentVisible) {
@@ -406,9 +416,9 @@ export class AppointmentFilterBaseStrategy {
             } = appointment;
 
             if(!hasRecurrenceRule) {
-                if(!(endDate > trimmedMinMax.min && startDate < trimmedMinMax.max ||
-                    dateUtils.sameDate(endDate, trimmedMinMax.min) &&
-                    dateUtils.sameDate(startDate, trimmedMinMax.min))
+                if(!(endDate >= trimMin && startDate < trimMax ||
+                    dateUtils.sameDate(endDate, trimMin) &&
+                    dateUtils.sameDate(startDate, trimMin))
                 ) {
                     return false;
                 }
@@ -419,12 +429,12 @@ export class AppointmentFilterBaseStrategy {
                 recurrenceRule = appointment.recurrenceRule;
             }
 
-            const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
-            const appointmentTakesSeveralDays = that.appointmentTakesSeveralDays(appointment);
+            const appointmentTakesAllDay = this.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
+            const appointmentTakesSeveralDays = this.appointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;
-            const appointmentIsLong = appointmentTakesSeveralDays || appointmentTakesAllDay;
+            const isLongAppointment = appointmentTakesSeveralDays || appointmentTakesAllDay;
 
-            if(resources?.length && !that._filterAppointmentByResources(appointment.rawAppointment, resources)) {
+            if(resources?.length && !this._filterAppointmentByResources(appointment.rawAppointment, resources)) {
                 return false;
             }
 
@@ -434,9 +444,9 @@ export class AppointmentFilterBaseStrategy {
 
             if(hasRecurrenceRule) {
                 const recurrenceException = this.getRecurrenceException(appointment);
-                if(!that._filterAppointmentByRRule({
-                    startDate: startDate,
-                    endDate: endDate,
+                if(!this._filterAppointmentByRRule({
+                    startDate,
+                    endDate,
                     recurrenceRule,
                     recurrenceException,
                     allDay: appointmentTakesAllDay
@@ -446,7 +456,7 @@ export class AppointmentFilterBaseStrategy {
             }
 
             // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min
-            if(endDate < min && appointmentIsLong && !isAllDay && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
+            if(endDate < min && isLongAppointment && !isAllDay && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
                 return false;
             }
 
@@ -547,18 +557,6 @@ export class AppointmentFilterBaseStrategy {
         }
     }
 
-    _trimDates(min, max) {
-        const minCopy = dateUtils.trimTime(new Date(min));
-        const maxCopy = dateUtils.trimTime(new Date(max));
-
-        maxCopy.setDate(maxCopy.getDate() + 1);
-
-        return {
-            min: minCopy,
-            max: maxCopy
-        };
-    }
-
     _filterAppointmentByResources(appointment, resources) {
         const checkAppointmentResourceValues = (resourceName, resourceIndex) => {
             const resourceGetter = this.dataAccessors.getter.resources[resourceName];
@@ -616,10 +614,10 @@ export class AppointmentFilterBaseStrategy {
         const recurrenceProcessor = getRecurrenceProcessor();
 
         if(allDay || this._appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
-            const trimmedDates = this._trimDates(min, max);
+            const [trimMin, trimMax] = getTrimDates(min, max);
 
-            min = trimmedDates.min;
-            max = new Date(trimmedDates.max.getTime() - toMs('minute'));
+            min = trimMin;
+            max = new Date(trimMax.getTime() - toMs('minute'));
         }
 
         if(recurrenceRule && !recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {

@@ -19,7 +19,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     getCollectorTopOffset(allDay) {
         const renderingStrategy = this.getRenderingStrategy();
 
-        if(renderingStrategy.hasAllDayAppointments() && allDay) {
+        if(renderingStrategy.allDaySupported() && allDay) {
             return (renderingStrategy.allDayHeight - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
         } else {
             return this.getRenderingStrategy().cellHeight - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
@@ -27,7 +27,9 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     }
 
     getCollectorLeftOffset() {
-        return (this.getRenderingStrategy().cellWidth - COLLECTOR_ADAPTIVE_SIZE) / 2;
+        const collectorWidth = this.getRenderingStrategy().getDropDownAppointmentWidth();
+
+        return (this.getRenderingStrategy().cellWidth - collectorWidth) / 2;
     }
 
     getAppointmentDefaultOffset() {
@@ -37,7 +39,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     getDynamicAppointmentCountPerCell() {
         const renderingStrategy = this.getRenderingStrategy();
 
-        if(renderingStrategy.hasAllDayAppointments()) {
+        if(renderingStrategy.allDaySupported()) {
             return {
                 allDay: 0,
                 simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
@@ -58,7 +60,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     _getAppointmentDefaultWidth() {
         const renderingStrategy = this.getRenderingStrategy();
 
-        if(renderingStrategy.hasAllDayAppointments()) {
+        if(renderingStrategy.allDaySupported()) {
             return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
         }
 

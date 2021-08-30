@@ -531,6 +531,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Ordinamento ascendente",
         "dxGantt-sortingDescendingText": "Ordinamento discendente",
-        "dxGantt-sortingClearText": "Annulla ordinamento"
+        "dxGantt-sortingClearText": "Annulla ordinamento",
+        "dxGantt-toggleResources": "TODO",
+        "dxGantt-toggleDependencies": "TODO"
     }
 }

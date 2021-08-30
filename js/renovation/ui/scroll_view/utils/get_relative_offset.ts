@@ -1,11 +1,11 @@
 export function getRelativeOffset(
-  targetElement: HTMLElement | null, sourceElement: HTMLElement,
+  targetElement: HTMLDivElement | HTMLElement | null, sourceElement: HTMLDivElement | HTMLElement,
 ): { top: number; left: number } {
   const offset = { left: 0, top: 0 };
 
   let currentElement = sourceElement;
 
-  while (currentElement && currentElement !== targetElement) {
+  while (currentElement?.offsetParent && currentElement !== targetElement) {
     const parentOffsetElement = currentElement.offsetParent as HTMLElement;
 
     const currentElementRect = currentElement.getBoundingClientRect();

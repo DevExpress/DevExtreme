@@ -10,7 +10,6 @@ import {
 import {
   ScrollableNative as Scrollable,
   viewFunction,
-  ScrollableNativePropsType,
   ScrollableNative,
 } from '../scrollable_native';
 
@@ -22,6 +21,7 @@ import {
 } from '../common/consts';
 
 import { Scrollbar, ScrollbarPropsType } from '../scrollbar';
+import { ScrollableNativeProps } from '../common/native_strategy_props';
 
 jest.mock('../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
 jest.mock('../../scroll_view/load_panel', () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
@@ -29,7 +29,7 @@ jest.mock('../../scroll_view/load_panel', () => ({ ScrollViewLoadPanel: React.fo
 const BOTTOM_POCKET_HEIGHT = 55;
 
 class ScrollableTestHelper {
-  options: Partial<ScrollableNativePropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
+  options: Partial<ScrollableNativeProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
 
   viewModel: ScrollableNative;
 
@@ -43,7 +43,7 @@ class ScrollableTestHelper {
 
   actionHandlers: { [key: string]: any };
 
-  constructor(props: Partial<ScrollableNativePropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
+  constructor(props: Partial<ScrollableNativeProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
     this.actionHandlers = this.getActionHandlers(this.options);
 
@@ -52,6 +52,7 @@ class ScrollableTestHelper {
       onUpdated: this.actionHandlers.onUpdated,
       onPullDown: this.actionHandlers.onPullDown,
       onReachBottom: this.actionHandlers.onReachBottom,
+      needRenderScrollbars: true,
       ...this.options,
     }) as any;
     this.viewModel.scrollableRef = React.createRef() as RefObject<HTMLDivElement>;
@@ -255,7 +256,7 @@ class ScrollableTestHelper {
 
   // eslint-disable-next-line class-methods-use-this
   getActionHandlers(
-    props: Pick<ScrollableNativePropsType, 'onScroll' | 'onUpdated' | 'onPullDown' | 'onReachBottom'>,
+    props: Pick<ScrollableNativeProps, 'onScroll' | 'onUpdated' | 'onPullDown' | 'onReachBottom'>,
   ): { [T in 'onScroll' | 'onUpdated' | 'onPullDown' | 'onReachBottom']: any } {
     const actionHandlers = {
       onScroll: jest.fn(),

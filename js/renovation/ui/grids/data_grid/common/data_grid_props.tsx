@@ -97,6 +97,17 @@ import type { Format } from '../../../../../localization';
 import type { dxFormSimpleItem, dxFormOptions } from '../../../../../ui/form';
 import type Store from '../../../../../data/abstract_store';
 import messageLocalization from '../../../../../localization/message';
+import devices from '../../../../../core/devices';
+import browser from '../../../../../core/utils/browser';
+import { isMaterial, current } from '../../../../../ui/themes';
+
+function getDefaultShowRowLines(): boolean {
+  return devices.real().platform === 'ios' || isMaterial(current());
+}
+
+function getDefaultShowColumnLines(): boolean {
+  return !isMaterial(current());
+}
 
 @ComponentBindings()
 export class DataGridColumnButton {
@@ -521,10 +532,10 @@ export class DataGridEditing {
   };
 
   @OneWay()
-  useIcons? = false;
+  useIcons? = isMaterial(current());
 
   @TwoWay()
-  changes?: [] = [];
+  changes?: any[] = [];
 
   @TwoWay()
   editRowKey?: any = null;
@@ -1187,7 +1198,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     allowAdding: false,
     allowUpdating: false,
     allowDeleting: false,
-    useIcons: false,
+    useIcons: isMaterial(current()),
     selectTextOnEditStart: false,
     confirmDelete: true,
     form: {
@@ -1237,7 +1248,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     autoExpandAll: true,
     allowCollapsing: true,
     contextMenuEnabled: false,
-    expandMode: 'buttonClick',
+    expandMode: devices.real().deviceType !== 'desktop' ? 'rowClick' : 'buttonClick',
     texts: {
       groupContinuesMessage: messageLocalization.format('dxDataGrid-groupContinuesMessage'),
       groupContinuedMessage: messageLocalization.format('dxDataGrid-groupContinuedMessage'),
@@ -1267,7 +1278,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     columnPageSize: 5,
     columnRenderingThreshold: 300,
     useNative: 'auto',
-    newMode: false,
+    newMode: true,
     minGap: 1,
   };
 
@@ -1361,7 +1372,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() headerFilter?: DataGridHeaderFilter = {
     visible: false,
     width: 252,
-    height: 325,
+    height: isMaterial(current()) ? 315 : 325,
     allowSearch: false,
     searchTimeout: 500,
     texts: {
@@ -1524,15 +1535,15 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() showColumnHeaders?: boolean = true;
 
-  @OneWay() showColumnLines?: boolean = true;
+  @OneWay() showColumnLines?: boolean = getDefaultShowColumnLines();
 
-  @OneWay() showRowLines?: boolean = false;
+  @OneWay() showRowLines?: boolean = getDefaultShowRowLines();
 
   @OneWay() twoWayBindingEnabled?: boolean = true;
 
   @OneWay() wordWrapEnabled?: boolean = false;
 
-  @OneWay() loadingTimeout?: number = 0;
+  @OneWay() loadingTimeout?: number = browser.webkit ? 30 /* T344031 */ : 0;
 
   @OneWay() commonColumnSettings?: DataGridCommonColumnSettings = {
     allowExporting: true,
