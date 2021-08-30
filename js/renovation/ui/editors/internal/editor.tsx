@@ -47,7 +47,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
     },
     widgetRef, target,
     aria, cssClasses: classes,
-    validationErrors, targetCurrent, showValidationMessage,
+    validationErrors, targetCurrent, showValidationMessage, validationMessageGuid,
     onFocusIn,
     restAttributes,
   } = viewModel;
@@ -88,6 +88,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
           target={targetCurrent}
           boundary={targetCurrent}
           container={targetCurrent}
+          contentId={validationMessageGuid}
         />
         )}
       </Fragment>
@@ -135,7 +136,7 @@ export class Editor extends JSXComponent<EditorPropsType>() {
 
   @ForwardRef() target!: RefObject<HTMLDivElement>;
 
-  @InternalState() validationMessageGuid: string | null = null;
+  @InternalState() validationMessageGuid?: string;
 
   showValidationMessage = false;
 
@@ -153,7 +154,7 @@ export class Editor extends JSXComponent<EditorPropsType>() {
         this.validationMessageGuid = `dx-${new Guid()}`;
       }
     } else {
-      this.validationMessageGuid = null;
+      this.validationMessageGuid = undefined;
     }
   }
 

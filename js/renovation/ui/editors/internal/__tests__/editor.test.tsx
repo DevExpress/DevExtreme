@@ -168,7 +168,7 @@ describe('Editor', () => {
       });
 
       describe('updateValidationMessageGuid', () => {
-        it('should set validationMessageGuid to null if shouldShowValidationMessage=false', () => {
+        it('should set validationMessageGuid to undefined if shouldShowValidationMessage=false', () => {
           const editor = new Editor({
             isValid: true,
           });
@@ -176,7 +176,7 @@ describe('Editor', () => {
           editor.validationMessageGuid = 'guid';
           editor.updateValidationMessageGuid();
 
-          expect(editor.validationMessageGuid).toBe(null);
+          expect(editor.validationMessageGuid).toBe(undefined);
         });
 
         it('should not update validationMessageGuid if it is already specified and shouldShowValidationMessage=true', () => {
@@ -198,10 +198,10 @@ describe('Editor', () => {
             validationError: {},
           });
 
-          editor.validationMessageGuid = null;
+          editor.validationMessageGuid = undefined;
           editor.updateValidationMessageGuid();
 
-          expect(editor.validationMessageGuid).not.toBe(null);
+          expect(editor.validationMessageGuid).not.toBe(undefined);
         });
       });
     });
@@ -311,13 +311,13 @@ describe('Editor', () => {
           expect(editor.aria.describedBy).toBe('guid');
         });
 
-        it('should not have "describedBy" if validationMessageGuid is null', () => {
+        it('should not have "describedBy" if validationMessageGuid is undefined', () => {
           const editor = new Editor({
             isValid: false,
             validationError: {},
           });
 
-          editor.validationMessageGuid = null;
+          editor.validationMessageGuid = undefined;
 
           expect(editor.aria).not.toHaveProperty('describedBy');
         });
