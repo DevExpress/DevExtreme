@@ -67,20 +67,21 @@ class App extends React.Component {
         </PivotGrid>
         <div className="options">
           <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox
-              value={allowSearch}
-              text="Allow Search"
-              onValueChanged={this.onAllowSearchChanged}
-            />
-          </div>
-          &nbsp;
-          <div className="option">
-            <CheckBox
-              value={showRelevantValues}
-              text="Show Relevant Values"
-              onValueChanged={this.onShowRelevantValuesChanged}
-            />
+          <div className="options-container">
+            <div className="option">
+              <CheckBox
+                value={allowSearch}
+                text="Allow Search"
+                onValueChanged={this.onAllowSearchChanged}
+              />
+            </div>
+            <div className="option">
+              <CheckBox
+                value={showRelevantValues}
+                text="Show Relevant Values"
+                onValueChanged={this.onShowRelevantValuesChanged}
+              />
+            </div>
           </div>
         </div>
       </div>

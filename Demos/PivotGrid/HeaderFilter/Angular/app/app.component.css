@@ -15,3 +15,7 @@
     display: inline-block;
     margin-top: 10px;
 }
+::ng-deep .options-container {
+    display: flex;
+    align-items: center;
+}
