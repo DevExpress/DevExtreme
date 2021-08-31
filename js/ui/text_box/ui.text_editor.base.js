@@ -653,7 +653,8 @@ const TextEditorBase = Editor.inherit({
 
     _valueChangeEventHandler: function(e, formattedValue) {
         this._saveValueChangeEvent(e);
-        this.option('value', arguments.length > 1 ? formattedValue : this._input().val());
+        const value = this._input().val() ? this._input().val() : this.option('value');
+        this.option('value', arguments.length > 1 ? formattedValue : value);
         this._saveValueChangeEvent(undefined);
     },
 
