@@ -4,7 +4,7 @@ concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
   cancel-in-progress: true
 
-on: [pull_request]
+on: [pull_request, push]
 
 jobs:
   build:
@@ -92,7 +92,7 @@ jobs:
         ]
 
     steps:
-# Prepare fast re-run start
+    # Prepare fast re-run start
     - name: Set default run status
       run: echo "default" > last_run_status
 
@@ -110,7 +110,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: devextreme-artifacts
-# Prepare fast re-run end
+    # Prepare fast re-run end
 
     - name: Setup firefox profile
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -184,3 +184,19 @@ jobs:
     - name: Save run status
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: echo "::set-output name=last_run_status::success" > last_run_status
+
+  notify:
+    runs-on: ubuntu-latest
+    name: Send notifications
+    needs: [build, qunit-tests]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 21_2
