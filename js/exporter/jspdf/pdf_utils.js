@@ -45,25 +45,6 @@ function calculateRowHeight(doc, cells, columnWidths) {
     return rowHeight;
 }
 
-function calculateColumnWidthsByColSpanAndSplitInfo(pdfGrid, currentRowInfo) {
-    const widthsArray = pdfGrid._currentHorizontalTables.flatMap((table) => table.columnWidths);
-    const splitIndexes = pdfGrid._splitByColumns.map(splitInfo => splitInfo.columnIndex).sort();
-    return widthsArray
-        .map((value, index) => {
-            const cell = currentRowInfo.cellsInfo[index];
-            const collSpan = cell.colSpan || 0;
-            let columnWidth = 0;
-            for(let cellIndex = index; cellIndex <= index + collSpan; cellIndex++) {
-                columnWidth += widthsArray[cellIndex];
-                if(splitIndexes[0] === cellIndex + 1) {
-                    splitIndexes.splice(0, 1);
-                    break;
-                }
-            }
-            return columnWidth;
-        });
-}
-
 function drawLine(doc, startX, startY, endX, endY) {
     doc.line(round(startX), round(startY), round(endX), round(endY));
 }
@@ -91,4 +72,4 @@ function drawTextInRect(doc, text, rect, wordWrapEnabled, jsPdfTextOptions) {
     doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
-export { calculateRowHeight, calculateColumnWidthsByColSpanAndSplitInfo, drawLine, drawRect, drawTextInRect };
+export { calculateRowHeight, drawLine, drawRect, drawTextInRect };
