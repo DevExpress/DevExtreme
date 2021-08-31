@@ -4121,6 +4121,48 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'no bottom loading');
     });
 
+    QUnit.test('Infinite scrolling should works correctly if row heights are different (T1013838)', function(assert) {
+        // arrange, act
+        const data = [];
+
+        for(let i = 0; i < 5; i++) {
+            data.push({ id: i + 1 });
+        }
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 200,
+            dataSource: data,
+            keyExpr: 'id',
+            loadingTimeout: null,
+            scrolling: {
+                updateTimeout: 0,
+                useNative: false,
+                mode: 'infinite',
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                pageSize: 2
+            },
+            onRowPrepared: function(e) {
+                if(e.rowType === 'data' && e.key <= 2) {
+                    $(e.rowElement).css('height', 100);
+                }
+            }
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 2, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
+
+        // act
+        dataGrid.getScrollable().scrollTo(10000);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
+    });
+
     // T710048
     QUnit.test('Current row position should not be changed after expand if scrolling mode is infinite', function(assert) {
         // arrange, act
