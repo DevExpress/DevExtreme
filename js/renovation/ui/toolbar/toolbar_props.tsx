@@ -114,6 +114,8 @@ export class ToolbarTextBoxProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() onValueChanged?: EventCallback<any>;
 
+  @OneWay()
+  rtlEnabled?: boolean | undefined;
   // TODO: other props
 }
 
@@ -136,6 +138,8 @@ export class ToolbarCheckBoxProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() onValueChanged?: EventCallback<any>;
 
+  @OneWay()
+  rtlEnabled?: boolean | undefined;
   // TODO: other props
 }
 
@@ -221,6 +225,8 @@ export class ToolbarButtonGroupProps {
   @OneWay()
   stylingMode?: ToolbarButtonStylingMode;
 
+  @OneWay()
+  rtlEnabled?: boolean | undefined;
   // TODO: other props
 }
 
@@ -274,6 +280,9 @@ export class ToolbarButtonProps {
 
   @OneWay()
   stylingMode?: ToolbarButtonStylingMode;
+
+  @OneWay()
+  rtlEnabled?: boolean | undefined;
 
   // TODO: other props
 }
@@ -402,6 +411,9 @@ export class ToolbarDropDownButtonProps {
 
   @OneWay()
   wrapItemText?: boolean;
+
+  @OneWay()
+  rtlEnabled?: boolean | undefined;
 }
 
 @ComponentBindings()
