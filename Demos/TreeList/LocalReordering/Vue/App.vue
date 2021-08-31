@@ -34,23 +34,25 @@
 
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="allowDropInsideItem"
-          text="Allow Drop Inside Item"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="allowReordering"
-          text="Allow Reordering"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="showDragIcons"
-          text="Show Drag Icons"
-        />
+      <div class="options-container">
+        <div class="option">
+          <DxCheckBox
+            v-model:value="allowDropInsideItem"
+            text="Allow Drop Inside Item"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            v-model:value="allowReordering"
+            text="Allow Reordering"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            v-model:value="showDragIcons"
+            text="Show Drag Icons"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -146,11 +148,16 @@ export default {
 
 .option {
    margin-top: 10px;
-   margin-right: 44px;
+   margin-right: 40px;
    display: inline-block;
 }
 
 .option:last-child {
     margin-right: 0;
+}
+
+.options-container {
+    display: flex;
+    align-items: center;
 }
 </style>

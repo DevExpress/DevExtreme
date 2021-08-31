@@ -27,3 +27,8 @@
 .option:last-child {
     margin-right: 0;
 }
+
+.options-container {
+    display: flex;
+    align-items: center;
+}
