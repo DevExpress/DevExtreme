@@ -116,7 +116,8 @@ export class DataGridColumnButton
   <TRowData,
    TKey,
    TCellValue,
-   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]
+   =(Column<TRowData, TKey, any> | string)[],
   > {
   @OneWay()
   name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
@@ -490,7 +491,8 @@ export class DataGridEditingTexts {
 export class DataGridEditing
   <TRowData,
    TKey,
-   TColumns extends Column<TRowData, TKey, any>[] = Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]
+   = (Column<TRowData, TKey, any> | string)[],
   > {
   @OneWay()
   allowAdding? = false;
@@ -1206,10 +1208,11 @@ export class DataGridToolbar {
 
 @ComponentBindings()
 export class DataGridProps
-  <TRowData,
-   TKeyExpr extends string | string[],
+  <TRowData = any,
+   TKeyExpr extends string | string[] = string | string[],
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   TColumns extends Column<TRowData, TKey, any>[]= Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]
+   = (Column<TRowData, TKey, any> | string)[],
    TSelectionDeferred extends boolean=boolean,
    TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
   >
@@ -1312,7 +1315,7 @@ export class DataGridProps
     allowSelectAll: true,
     selectAllMode: 'allPages',
     maxFilterLengthInRequest: 1500,
-    deferred: false,
+    deferred: false as TSelectionDeferred,
   };
 
   @Nested() sortByGroupSummaryInfo?: DataGridSortByGroupSummaryInfoItem[];

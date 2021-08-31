@@ -9,7 +9,7 @@ export class DataGridViewProps
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
   > {
   @OneWay() instance!: GridInstance<TRowData, TKeyExpr, TKey, TColumns>;
 }

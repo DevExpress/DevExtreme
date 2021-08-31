@@ -116,10 +116,12 @@ export class DataGrid
    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]
+   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+   =(Column<TRowData, TKey, any> | string)[],
   >
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  extends JSXComponent<DataGridProps<any, string, any, Column<any, any, any>[]>>()
+  extends JSXComponent<DataGridProps>()
   implements DataGridForComponentWrapper<TRowData, TKeyExpr, TKey, TColumns> {
   @ForwardRef() widgetElementRef?: RefObject<HTMLDivElement>;
 
@@ -206,17 +208,22 @@ export class DataGrid
     optionValue?: T extends keyof Column<TRowData, TKey, any>
       ? Column<TRowData, TKey, any>[T]
       : any,
-  ): T extends keyof Column<TRowData, TKey, any> ? Column<TRowData, TKey, any>[T] : any {
+  ): (T extends keyof Column<TRowData, TKey, any> ? Column<TRowData, TKey, any>[T] : any)
+    | undefined {
     if (this.instance) {
       if (arguments.length === 1 || optionName === undefined) {
-        return this.instance.columnOption(id);
-      } if (arguments.length === 2) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return this.instance.columnOption(id) as any;
+      }
+      if (arguments.length === 2) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return this.instance.columnOption(id, optionName);
       }
-      return this.instance.columnOption(id, optionName, optionValue);
+      if (arguments.length === 3) {
+        this.instance.columnOption(id, optionName, optionValue as any);
+      }
     }
-    return null;
+    return undefined;
   }
 
   @Method()

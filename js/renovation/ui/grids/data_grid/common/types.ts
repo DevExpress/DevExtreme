@@ -8,7 +8,7 @@ export interface GridInstance
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
   > extends dxDataGrid<TRowData, TKeyExpr, TKey, TColumns>, ComponentExt {
   isReady: () => boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,7 +30,7 @@ export interface DataGridForComponentWrapper
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
   > {
   getComponentInstance: () => GridInstance<TRowData, TKeyExpr, TKey, TColumns>;
   prevProps: DataGridProps<TRowData, TKeyExpr, TKey, TColumns>;

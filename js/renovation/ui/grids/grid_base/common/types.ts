@@ -1,7 +1,13 @@
 // eslint-disable-next-line import/named
-import { GridBase } from '../../../../../ui/data_grid';
+import { GridBase, Column } from '../../../../../ui/data_grid';
 
-export interface GridBaseInstance extends GridBase {
+export interface GridBaseInstance
+  <TRowData,
+   TKey,
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   TColumns extends (Column<TRowData, TKey, any> | string)[]
+   =(Column<TRowData, TKey, any> | string)[],
+  > extends GridBase<TRowData, TKey, TColumns> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getView: (name: string) => any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -29,7 +29,9 @@ export default class DataGridWrapper
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   TColumns extends Column<TRowData, TKey, any>[]=Column<TRowData, TKey, any>[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   = (Column<TRowData, TKey, any> | string)[],
   > extends Component {
   static registerModule = gridCore.registerModule.bind(gridCore);
 
