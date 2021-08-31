@@ -398,6 +398,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
           if (newScrollLocation >= 0) {
             newScrollLocation = 0;
           }
+
+          if (newScrollLocation <= this.minOffset) {
+            newScrollLocation = this.minOffset;
+          }
         }
 
         this.moveTo(newScrollLocation);
