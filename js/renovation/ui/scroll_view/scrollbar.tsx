@@ -407,24 +407,25 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   updateContentTranslate(): void {
-    let contentTranslateOffset = Number.NaN;
+    this.wasInit = true;
+    this.props.contentTranslateOffsetChange?.(this.scrollProp, this.contentTransform);
+  }
+
+  get contentTransform(): number {
     const location = this.props.scrollLocation;
+    let transformValue = location % 1;
 
     if (location > 0) {
-      contentTranslateOffset = location;
+      transformValue = location;
     } else if (location <= this.minOffset) {
-      contentTranslateOffset = location - this.minOffset;
-    } else {
-      contentTranslateOffset = location % 1;
+      transformValue = location - this.minOffset;
     }
-
-    this.wasInit = true;
 
     if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
-      contentTranslateOffset -= this.props.topPocketSize;
+      transformValue -= this.props.topPocketSize;
     }
 
-    this.props.contentTranslateOffsetChange?.(this.scrollProp, contentTranslateOffset);
+    return transformValue;
   }
 
   hide(): void {
