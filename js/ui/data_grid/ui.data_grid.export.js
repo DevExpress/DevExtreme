@@ -708,12 +708,13 @@ dataGridCore.registerModule('export', {
                         location: 'after',
                         locateInMenu: 'auto',
                         sortIndex: 30,
-                        showText: 'inMenu'
                     };
 
                     if(items.length === 1) {
                         const widgetOptions = {
                             ...items[0],
+                            hint: items[0].text,
+                            text: undefined,
                             elementAttr: {
                                 class: 'dx-datagrid-export-button'
                             }
