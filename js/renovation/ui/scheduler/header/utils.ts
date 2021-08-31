@@ -13,6 +13,8 @@ import {
   getViewText, getViewType,
 } from '../../../../ui/scheduler/header/utils';
 
+import devices from '../../../../core/devices';
+
 const DEFAULT_ELEMENT = 'defaultElement';
 const VIEW_SWITCHER = 'viewSwitcher';
 const DATE_NAVIGATOR = 'dateNavigator';
@@ -71,3 +73,5 @@ export const formatViews = (views: (ViewType | ViewProps)[]): ItemView[] => {
 };
 
 export const isMonthView = (currentView: string): boolean => getViewType(currentView) as string === 'month';
+
+export const isMobileLayout = (): boolean => !devices.current().generic;

@@ -4,6 +4,8 @@ import {
   JSXComponent,
   OneWay,
   Event,
+  Ref,
+  RefObject,
 } from '@devextreme-generator/declarations';
 
 import devices from '../../../../core/devices';
@@ -30,18 +32,33 @@ import { ViewType } from '../types.d';
 import { SchedulerProps, ViewProps } from '../props';
 import { SchedulerToolbarItem } from './props';
 import { ToolbarItem } from '../../toolbar/toolbar_props';
+import { SchedulerCalendar } from './calendar';
 
 const { trimTime } = dateUtils;
 
-export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => (
-  <div
-    className="dx-scheduler-header"
-  >
-    <Toolbar
-      items={viewModel.items}
-    />
-  </div>
-);
+export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => {
+  const {
+    currentDate, min, max, firstDayOfWeek,
+  } = viewModel.props;
+
+  return (
+    <div
+      className="dx-scheduler-header"
+    >
+      <SchedulerCalendar
+        currentDate={currentDate}
+        min={min}
+        max={max}
+        firstDayOfWeek={firstDayOfWeek}
+        onCurrentDateUpdate={viewModel.setCurrentDate}
+        ref={viewModel.calendarRef}
+      />
+      <Toolbar
+        items={viewModel.items}
+      />
+    </div>
+  );
+};
 
 @ComponentBindings()
 export class SchedulerToolbarBaseProps {
@@ -59,7 +76,7 @@ export class SchedulerToolbarBaseProps {
 
   @OneWay() intervalCount = 1;
 
-  @OneWay() firstDayOfWeek = 0;
+  @OneWay() firstDayOfWeek!: number; // TODO: don't 'Pick' default value
 
   @OneWay() agendaDuration = 7;
 
@@ -72,7 +89,9 @@ export type SchedulerToolbarProps = SchedulerToolbarBaseProps
 & Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
 
 @Component({ view: viewFunction })
-export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
+export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate' | 'firstDayOfWeek'>() {
+  @Ref() calendarRef!: RefObject<SchedulerCalendar>;
+  
   cssClass = 'dx-scheduler-header';
 
   get step(): string {
@@ -183,9 +202,8 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
     return nextDate > max;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   showCalendar(): void {
-    // TODO
+    this.calendarRef.current?.show();
   }
 
   get items(): ToolbarItem[] {
