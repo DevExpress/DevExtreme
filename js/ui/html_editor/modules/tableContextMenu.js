@@ -50,8 +50,8 @@ if(Quill) {
                 target: this._quillContainer,
                 showEvent: 'dxdbclick',
                 dataSource: [
-                    { text: 'Cell Properties', onClick: () => { showCellProperties(); } },
-                    { text: 'Table Properties', onClick: () => { showTableProperties(); } },
+                    { text: 'Cell Properties', onClick: () => { this._contextMenu.hide(); showCellProperties(this.editorInstance); } },
+                    { text: 'Table Properties', onClick: () => { this._contextMenu.hide(); showTableProperties(this.editorInstance); } },
                     { text: 'Insert', items: [
                         { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
                         { text: 'Insert Row Below', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
