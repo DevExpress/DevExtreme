@@ -642,6 +642,13 @@ QUnit.module('options changing', moduleConfig, () => {
         });
     });
 
+    QUnit.test('editor should not change value if it is readOnly (T1022447)', function(assert) {
+        this.instance.option({ value: null, readOnly: true });
+        this.keyboard.type('f').change();
+
+        assert.strictEqual(this.instance.option('value'), null);
+    });
+
     QUnit.test('Click on \'clear\' button', function(assert) {
         const $element = $('#texteditor').dxTextEditor({
             showClearButton: true,
@@ -831,13 +838,6 @@ QUnit.module('options changing', moduleConfig, () => {
         this.keyboard.triggerEvent('keydown', { key: 'Enter', ctrlKey: true });
         assert.ok(valueChangedStub.calledOnce, 'there is no extra calls');
         assert.ok(changeStub.calledOnce, 'there is no extra calls');
-    });
-
-    QUnit.test('the "value" should not change after typing something in empty readOnly input (T1022447)', function(assert) {
-        this.instance.option({ value: null, readOnly: true });
-        this.keyboard.type('f').change();
-
-        assert.strictEqual(this.instance.option('value'), null);
     });
 });
 
