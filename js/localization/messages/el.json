@@ -530,6 +530,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Ταξινόμηση αύξουσα",
         "dxGantt-sortingDescendingText": "Ταξινόμηση φθήνουσα",
-        "dxGantt-sortingClearText": "Εκκαθάριση ταξινόμισης"
+        "dxGantt-sortingClearText": "Εκκαθάριση ταξινόμισης",
+        "dxGantt-toggleResources": "TODO",
+        "dxGantt-toggleDependencies": "TODO"
     }
 }

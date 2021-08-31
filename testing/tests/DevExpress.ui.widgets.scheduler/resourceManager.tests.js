@@ -807,10 +807,10 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
     const done = assert.async();
 
     this.instance.loadResources(['roomId']).done($.proxy(function(groups) {
-        assert.deepEqual(this.instance.getResourcesData(), groups, 'getResourcesData works correctly');
+        assert.deepEqual(this.instance.loadedResources, groups, 'getResourcesData works correctly');
 
         this.instance.loadResources([]).done($.proxy(function(groups) {
-            assert.deepEqual(this.instance.getResourcesData(), [], 'getResourcesData works correctly');
+            assert.deepEqual(this.instance.loadedResources, [], 'getResourcesData works correctly');
             done();
         }, this));
     }, this));

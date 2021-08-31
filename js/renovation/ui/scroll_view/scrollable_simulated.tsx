@@ -32,7 +32,7 @@ import {
   isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
 } from '../../../events/utils/index';
 import { isDefined } from '../../../core/utils/type';
-import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
+import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
@@ -64,7 +64,7 @@ import {
   DxMouseEvent,
   DxMouseWheelEvent,
   DxKeyboardEvent,
-} from './types.d';
+} from './common/types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
 import {
@@ -73,8 +73,8 @@ import {
   getElementOverflowY,
 } from './utils/get_element_style';
 
-import { TopPocket } from './top_pocket';
-import { BottomPocket } from './bottom_pocket';
+import { TopPocket } from './internal/top_pocket';
+import { BottomPocket } from './internal/bottom_pocket';
 
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { convertToLocation } from './utils/convert_location';
@@ -125,12 +125,13 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       height={height}
       width={width}
       visible={visible}
-      onKeyDown={useKeyboard ? handleKeyDown : undefined}
       onHoverStart={cursorEnterHandler}
       onHoverEnd={cursorLeaveHandler}
       onDimensionChanged={updateHandler}
       onVisibilityChange={onVisibilityChangeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+      // onKeyDown exist in restAttributes and has undefined value
+      onKeyDown={useKeyboard ? handleKeyDown : undefined}
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div
@@ -241,8 +242,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   view: viewFunction,
 })
 
-export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
-  // https://trello.com/c/psOGNvMc/2745-renovation-type-for-timers
+export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>() {
   @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;
@@ -1149,7 +1149,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
-      [`${classes}`]: !!classes,
+      [String(classes)]: !!classes,
     };
     return combineClasses(classesMap);
   }

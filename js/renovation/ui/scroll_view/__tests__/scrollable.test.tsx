@@ -13,16 +13,16 @@ import {
 import {
   ScrollViewLoadPanel,
 } from '../load_panel';
-import { ScrollableProps } from '../scrollable_props';
 import { ScrollableNative } from '../scrollable_native';
 import { ScrollableSimulated } from '../scrollable_simulated';
 
 import { Widget } from '../../common/widget';
-import { ScrollableDirection, ScrollOffset } from '../types.d';
+import { ScrollableDirection, ScrollOffset } from '../common/types.d';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
 import * as ElementLocationModule from '../utils/get_element_location_internal';
 import { DIRECTION_BOTH, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
+import { ScrollableProps } from '../common/scrollable_props';
 
 jest.mock('../utils/get_element_location_internal', () => ({
   ...jest.requireActual('../utils/get_element_location_internal'),
@@ -41,18 +41,31 @@ describe('Scrollable', () => {
     const viewModel = mount<Scrollable>(<Scrollable {...props} />);
 
     expect(viewModel.props()).toEqual({
-      bounceEnabled: true,
+      addWidgetClass: false,
+      aria: {},
+      bounceEnabled: false,
+      classes: '',
       direction: 'vertical',
+      disabled: false,
       forceGeneratePockets: false,
+      inertiaEnabled: true,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
+      pulledDownText: 'Release to refresh...',
+      pullingDownText: 'Pull down to refresh...',
       reachBottomEnabled: false,
-      scrollByContent: true,
-      scrollByThumb: false,
-      showScrollbar: 'onScroll',
-      useNative: true,
+      reachBottomText: 'Loading...',
+      refreshingText: 'Refreshing...',
+      rtlEnabled: false,
+      scrollByContent: false,
+      scrollByThumb: true,
+      showScrollbar: 'onHover',
+      useKeyboard: true,
+      useNative: false,
+      useSimulatedScrollbar: false,
+      visible: true,
     });
   });
 

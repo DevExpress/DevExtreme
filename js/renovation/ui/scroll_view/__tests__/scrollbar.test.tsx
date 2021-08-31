@@ -20,7 +20,7 @@ import {
   optionValues,
   getPermutations,
 } from './utils';
-import { ScrollbarProps } from '../scrollbar_props';
+import { ScrollbarProps } from '../common/scrollbar_props';
 
 describe('Scrollbar', () => {
   it('render scrollbar with defaults', () => {
@@ -1165,9 +1165,11 @@ describe('Scrollbar', () => {
 
         viewModel.moveTo = jest.fn();
         viewModel.stopScrolling = jest.fn();
+        viewModel.onReachBottomWasFiredOnce = true;
 
         viewModel.scrollTo(delta);
 
+        expect(viewModel.onReachBottomWasFiredOnce).toEqual(false);
         expect(viewModel.moveTo).toBeCalledTimes(1);
         expect(viewModel.moveTo).toHaveBeenCalledWith(-delta);
         expect(viewModel.stopScrolling).toBeCalledTimes(1);

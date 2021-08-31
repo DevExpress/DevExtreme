@@ -72,10 +72,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onSelectionChanged: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemReordered
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -87,10 +91,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onItemReordered: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleting
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -101,10 +109,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onItemDeleting: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleted
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
