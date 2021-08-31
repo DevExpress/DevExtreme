@@ -35,35 +35,37 @@
     </div>
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <span>Show Check Boxes Mode:</span>
-        <DxSelectBox
-          :items="showCheckBoxesModes"
-          v-model:value="showCheckBoxesModeValue"
-          @value-changed="showCheckBoxesModeValueChanged"
-        />
-      </div>
-      <div class="option">
-        <span>Selection Mode:</span>
-        <DxSelectBox
-          :items="selectionModes"
-          v-model:value="selectionModeValue"
-          :disabled="isSelectionModeDisabled"
-          @value-changed="selectionModeValueChanged"
-        />
-      </div>
-      <div class="option recursive-option">
-        <DxCheckBox
-          text="Select Nodes Recursive"
-          :disabled="isRecursiveDisabled"
-          v-model:value="selectNodesRecursiveValue"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          text="Select By Click"
-          v-model:value="selectByClickValue"
-        />
+      <div class="options-container">
+        <div class="option">
+          <span>Show Check Boxes Mode:</span>
+          <DxSelectBox
+            :items="showCheckBoxesModes"
+            v-model:value="showCheckBoxesModeValue"
+            @value-changed="showCheckBoxesModeValueChanged"
+          />
+        </div>
+        <div class="option">
+          <span>Selection Mode:</span>
+          <DxSelectBox
+            :items="selectionModes"
+            v-model:value="selectionModeValue"
+            :disabled="isSelectionModeDisabled"
+            @value-changed="selectionModeValueChanged"
+          />
+        </div>
+        <div class="option recursive-option">
+          <DxCheckBox
+            text="Select Nodes Recursive"
+            :disabled="isRecursiveDisabled"
+            v-model:value="selectNodesRecursiveValue"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            text="Select By Click"
+            v-model:value="selectByClickValue"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -184,7 +186,7 @@ export default {
     width: 24%;
     display: inline-block;
     margin-top: 10px;
-    margin-right: 9px;
+    margin-right: 5px;
     box-sizing: border-box;
 }
 
@@ -194,5 +196,10 @@ export default {
 
 .option:last-of-type {
     margin-right: 0px;
+}
+
+.options-container {
+  display: flex;
+  align-items: center;
 }
 </style>

@@ -50,3 +50,8 @@
 .option:last-of-type {
     margin-right: 0px;
 }
+
+.options-container {
+    display: flex;
+    align-items: center;
+}
