@@ -38,11 +38,13 @@ type DataGridPropsType
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
+   TColumns extends (Column<TRowData, TKey, any> | string)[]
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   =(Column<TRowData, TKey, any> | string)[],
   > = Pick<DataGridProps<TRowData, TKeyExpr, TKey, TColumns>, 'showBorders'> & DataGridViewProps<TRowData, TKeyExpr, TKey, TColumns>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class DataGridViews extends JSXComponent<DataGridPropsType<unknown, string, unknown>, 'instance'>() {
+export class DataGridViews extends JSXComponent<DataGridPropsType<unknown, string | string[], unknown>, 'instance'>() {
   get views(): { name: string; view: GridBaseView }[] {
     if (!this.props.instance) {
       return [];

@@ -3043,7 +3043,7 @@ export type InitNewRowEvent<TRowData, TKey> = EventInfo<dxDataGrid<TRowData, str
 export type KeyDownEvent<TRowData, TKey> = NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & KeyDownInfo;
 
 /** @public */
-export type OptionChangedEvent<TRowData, TKey> = EventInfo<dxDataGrid<TRowData, string, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TRowData, TKey> = EventInfo<dxDataGrid<TRowData, string | string[], TKey>> & ChangedOptionInfo;
 
 /** @public */
 export type RowClickEvent
