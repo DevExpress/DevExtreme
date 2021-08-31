@@ -208,7 +208,7 @@ export const getPaintedResources = (resources, groups = []) => {
     return newResources[newResources.length - 1];
 };
 
-export const getResourceDataByValue = (resources, resourceLoaderMap, field, value) => {
+export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value) => {
     const result = new Deferred();
 
     resources.forEach(resource => {
@@ -248,7 +248,7 @@ export const getResourceColor = (resources, resourceLoaderMap, field, value) => 
     const colorExpr = resource.colorExpr || 'color';
     const colorGetter = compileGetter(colorExpr);
 
-    getResourceDataByValue(resources, resourceLoaderMap, field, value)
+    getOrLoadResourceItem(resources, resourceLoaderMap, field, value)
         .done(resource => result.resolve(colorGetter(resource)))
         .fail(() => result.reject());
 
