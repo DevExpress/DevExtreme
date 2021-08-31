@@ -13285,8 +13285,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
-      | 'toggleResources'
-      | 'toggleDependencies'
+      | 'showResources'
+      | 'showDependencies'
     >;
   }
   /**
