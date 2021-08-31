@@ -832,6 +832,13 @@ QUnit.module('options changing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce, 'there is no extra calls');
         assert.ok(changeStub.calledOnce, 'there is no extra calls');
     });
+
+    QUnit.test('the "value" should not change after typing something in empty readOnly input (T1022447)', function(assert) {
+        this.instance.option({ value: null, readOnly: true });
+        this.keyboard.type('f').change();
+
+        assert.strictEqual(this.instance.option('value'), null);
+    });
 });
 
 QUnit.module('api', moduleConfig, () => {
