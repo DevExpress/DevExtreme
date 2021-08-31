@@ -1709,3 +1709,41 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
     },
   }));
 });
+
+['Batch', 'Cell'].forEach((editMode) => {
+  test(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const firstCell = dataGrid.getDataCell(0, 0);
+    const secondCell = dataGrid.getDataCell(0, 1);
+
+    // act
+    await t
+      .click(firstCell.element);
+
+    // assert
+    await t
+      .expect(firstCell.isEditCell).ok()
+      .expect(firstCell.isFocused).ok()
+      .expect(firstCell.getEditor().element.focused)
+      .ok();
+
+    // act
+    await t
+      .typeText(firstCell.getEditor().element, '123', { replace: true })
+      .click(secondCell.getEditor().element);
+
+    // assert
+    await t
+      .expect(dataGrid.apiGetCellValue(0, 0)).eql('123');
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, field1: 'test', field2: true },
+    ],
+    keyExpr: 'id',
+    columns: ['field1', 'field2'],
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
+    },
+  }));
+});
