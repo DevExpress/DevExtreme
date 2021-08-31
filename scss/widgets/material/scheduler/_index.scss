@@ -424,13 +424,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
-  .dx-scheduler-header-panel {
-    .dx-scheduler-group-header {
-      border-left: baseScheduler.$scheduler-base-border;
-      border-right: none;
-    }
-  }
-
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
     .dx-scheduler-header-panel {
       border-bottom-width: 1px;
@@ -685,11 +678,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-rtl {
-  .dx-scheduler-header-panel .dx-scheduler-group-header {
-    border-right: baseScheduler.$scheduler-base-border;
-    border-left: none;
-  }
-
   .dx-scheduler-work-space-both-scrollbar {
     &.dx-scheduler-work-space-all-day {
       .dx-scheduler-header-panel-empty-cell {
