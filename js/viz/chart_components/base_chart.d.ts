@@ -106,7 +106,8 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     customizePoint?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint);
     /**
      * @docid BaseChartOptions.dataSource
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -193,7 +194,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -271,7 +272,8 @@ export interface BaseChartLegend extends BaseLegend {
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
-     * @extends CommonVizFormat
+     * @type format
+     * @default undefined
      * @public
      */
     argumentFormat?: format;

@@ -221,7 +221,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       negativesAsZeroes?: boolean;
       /**
        * @docid
-       * @extends CommonVizPalette
+       * @default "Material"
        * @type Array<string>|Enums.VizPalette
        */
       palette?: Array<string> | PaletteType;
@@ -306,7 +306,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     containerBackgroundColor?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -444,7 +445,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         font?: Font;
         /**
          * @docid
-         * @extends CommonVizFormat
+         * @type format
+         * @default undefined
          */
         format?: format;
         /**
@@ -493,7 +495,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
           customizeText?: ((markerValue: { value?: Date | number; valueText?: string }) => string);
           /**
            * @docid
-           * @extends CommonVizFormat
+           * @type format
+           * @default undefined
            */
           format?: format;
         };
@@ -718,7 +721,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       font?: Font;
       /**
        * @docid
-       * @extends CommonVizFormat
+       * @type format
+       * @default undefined
        */
       format?: format;
       /**

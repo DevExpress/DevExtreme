@@ -79,7 +79,8 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     barPositiveColor?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;

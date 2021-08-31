@@ -153,7 +153,8 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     colorField?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -376,7 +377,8 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       font?: Font;
       /**
        * @docid
-       * @extends CommonVizFormat
+       * @type format
+       * @default undefined
        */
       format?: format;
       /**
@@ -494,7 +496,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
