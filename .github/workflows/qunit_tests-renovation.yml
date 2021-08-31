@@ -4,7 +4,10 @@ concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
   cancel-in-progress: true
 
-on: [pull_request, push]
+on:
+  pull_request:
+  push:
+    branches: [21_2]
 
 jobs:
   build:
