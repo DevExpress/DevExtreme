@@ -134,7 +134,7 @@ export class ResourceManager {
         });
     }
 
-    loadResources(groups) {
+    loadResources(groups = []) {
         const result = new Deferred();
         const deferreds = [];
 
