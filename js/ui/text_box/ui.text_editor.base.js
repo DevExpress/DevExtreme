@@ -627,9 +627,11 @@ const TextEditorBase = Editor.inherit({
     },
 
     _valueChangeEventHandler: function(e, formattedValue) {
+        if(this.option('readOnly')) {
+            return;
+        }
         this._saveValueChangeEvent(e);
-        const value = this._input().val() ? this._input().val() : this.option('value');
-        this.option('value', arguments.length > 1 ? formattedValue : value);
+        this.option('value', arguments.length > 1 ? formattedValue : this._input().val());
         this._saveValueChangeEvent(undefined);
     },
 
