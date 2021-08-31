@@ -377,7 +377,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       font?: Font;
       /**
        * @docid
-       * @type Format
+       * @type format
        * @default undefined
        */
       format?: format;

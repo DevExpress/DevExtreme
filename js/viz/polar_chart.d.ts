@@ -641,7 +641,7 @@ export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSet
     customizeText?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.format
-     * @type Format
+     * @type format
      * @default undefined
      * @public
      */
@@ -1272,7 +1272,7 @@ export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettin
     customizeText?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.valueAxis.label.format
-     * @type Format
+     * @type format
      * @default undefined
      * @public
      */
@@ -1854,7 +1854,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat
-     * @type Format
+     * @type format
      * @default undefined
      * @public
      */
@@ -1934,7 +1934,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     font?: Font;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format
-     * @type Format
+     * @type format
      * @default undefined
      * @public
      */

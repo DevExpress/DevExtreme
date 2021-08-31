@@ -335,7 +335,7 @@ export interface BaseGaugeScaleLabel {
     font?: Font;
     /**
      * @docid BaseGaugeOptions.scale.label.format
-     * @type Format
+     * @type format
      * @default undefined
      * @public
      */
@@ -566,7 +566,7 @@ export interface CommonIndicator {
       font?: Font;
       /**
        * @docid
-       * @type Format
+       * @type format
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */

@@ -196,7 +196,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       font?: Font;
       /**
        * @docid
-       * @type Format
+       * @type format
        * @default undefined
        */
       format?: format;
@@ -329,7 +329,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
     customizeText?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
     /**
      * @docid dxBarGaugeOptions.legend.itemTextFormat
-     * @type Format
+     * @type format
      * @default undefined
      * @public
      */
