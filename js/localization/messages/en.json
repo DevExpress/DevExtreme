@@ -617,7 +617,7 @@
         "dxGantt-sortingAscendingText": "Sort Ascending",
         "dxGantt-sortingDescendingText": "Sort Descending",
         "dxGantt-sortingClearText": "Clear Sorting",
-        "dxGantt-toggleResources": "Toggle Resources",
-        "dxGantt-toggleDependencies": "Toggle Dependencies"
+        "dxGantt-showResources": "Show Resources",
+        "dxGantt-showDependencies": "Show Dependencies"
       }
 }

@@ -585,7 +585,7 @@
         "dxGantt-sortingAscendingText": "昇順に並べ替え",
         "dxGantt-sortingDescendingText": "降順に並べ替え",
         "dxGantt-sortingClearText": "並べ替えをクリア",
-        "dxGantt-toggleResources": "TODO",
-        "dxGantt-toggleDependencies": "TODO"
+        "dxGantt-showResources": "リソースを表示",
+        "dxGantt-showDependencies": "依存関係を表示"
     }
 }
