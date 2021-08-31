@@ -17,7 +17,8 @@ import {
     getResourceColor,
     isResourceMultiple,
     filterResources,
-    getPaintedResources
+    getPaintedResources,
+    getResourcesFromItem
 } from './utils';
 
 export class ResourceManager {
@@ -78,38 +79,6 @@ export class ResourceManager {
                 resourcesSetter[name](itemData, isResourceMultiple(this.getResources(), name) ? wrapToArray(resourceData) : resourceData);
             }
         }
-    }
-
-    getResourcesFromItem(itemData, wrapOnlyMultipleResources = false) {
-        let result = null;
-
-        this._resourceFields.forEach(field => {
-            each(itemData, (fieldName, fieldValue) => {
-                const tempObject = {};
-                tempObject[fieldName] = fieldValue;
-
-                let resourceData = this.getDataAccessors(field, 'getter')(tempObject);
-                if(isDefined(resourceData)) {
-                    if(!result) {
-                        result = {};
-                    }
-                    if(resourceData.length === 1) {
-                        resourceData = resourceData[0];
-                    }
-                    if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(this.getResources(), field))) {
-                        this.getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
-                    } else {
-                        this.getDataAccessors(field, 'setter')(tempObject, resourceData);
-                    }
-
-                    extend(result, tempObject);
-
-                    return true;
-                }
-            });
-        });
-
-        return result;
     }
 
     isLoaded() {
@@ -209,41 +178,48 @@ export class ResourceManager {
         return result;
     }
 
-    groupAppointmentsByResources(appointments, groups) {
+    // TODO
+    groupAppointmentsByResources(appointments, groups = []) {
         let result = { '0': appointments };
 
-        if(groups && groups.length && this.loadedResources.length) {
+        if(groups.length && this.loadedResources.length) {
             result = this.groupAppointmentsByResourcesCore(appointments, this.loadedResources);
         }
 
         let totalResourceCount = 0;
 
-        each(this.loadedResources, function(i, resource) {
-            if(!i) {
+        this.loadedResources.forEach(function(resource, index) {
+            if(!index) {
                 totalResourceCount = resource.items.length;
             } else {
                 totalResourceCount *= resource.items.length;
             }
         });
 
-        for(let j = 0; j < totalResourceCount; j++) {
-            const index = j.toString();
+        for(let index = 0; index < totalResourceCount; index++) {
+            const key = index.toString();
 
-            if(result[index]) {
+            if(result[key]) {
                 continue;
             }
 
-            result[index] = [];
+            result[key] = [];
         }
 
         return result;
     }
+
     groupAppointmentsByResourcesCore(appointments, resources) {
         const tree = createResourcesTree(resources);
         const result = {};
 
-        each(appointments, (function(_, appointment) {
-            const appointmentResources = this.getResourcesFromItem(appointment);
+        appointments.forEach(appointment => {
+            const appointmentResources = getResourcesFromItem(
+                this._resourceFields,
+                this.getResources(),
+                (field, action) => this.getDataAccessors(field, action),
+                appointment);
+
             const treeLeaves = this.getResourceTreeLeaves(tree, appointmentResources);
 
             for(let i = 0; i < treeLeaves.length; i++) {
@@ -254,7 +230,7 @@ export class ResourceManager {
                 // NOTE: check appointment before pushing
                 result[treeLeaves[i]].push(deepExtendArraySafe({}, appointment, true));
             }
-        }).bind(this));
+        });
 
         return result;
     }

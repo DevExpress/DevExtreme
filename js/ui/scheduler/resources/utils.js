@@ -3,6 +3,10 @@ import { DataSource } from '../../../data/data_source/data_source';
 import { Deferred } from '../../../core/utils/deferred';
 import query from '../../../data/query';
 import { compileGetter } from '../../../core/utils/data';
+import { each } from '../../../core/utils/iterator';
+import { extend } from '../../../core/utils/extend';
+import { isDefined } from '../../../core/utils/type';
+import { wrapToArray } from '../../../core/utils/array';
 
 export const getValueExpr = resource => resource.valueExpr || 'id';
 export const getDisplayExpr = resource => resource.displayExpr || 'text';
@@ -253,4 +257,36 @@ export const getResourceColor = (resources, resourceLoaderMap, field, value) => 
         .fail(() => result.reject());
 
     return result.promise();
+};
+
+export const getResourcesFromItem = (_resourceFields, resources, getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
+    let result = null;
+
+    _resourceFields.forEach(field => {
+        each(itemData, (fieldName, fieldValue) => {
+            const tempObject = {};
+            tempObject[fieldName] = fieldValue;
+
+            let resourceData = getDataAccessors(field, 'getter')(tempObject);
+            if(isDefined(resourceData)) {
+                if(!result) {
+                    result = {};
+                }
+                if(resourceData.length === 1) {
+                    resourceData = resourceData[0];
+                }
+                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field))) {
+                    getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
+                } else {
+                    getDataAccessors(field, 'setter')(tempObject, resourceData);
+                }
+
+                extend(result, tempObject);
+
+                return true;
+            }
+        });
+    });
+
+    return result;
 };
