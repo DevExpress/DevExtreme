@@ -29,7 +29,7 @@ import { LayoutProps } from './layout_props';
 import { TimePaneLayoutProps } from './time_panel/layout';
 import { AllDayPanelTitle } from './date_table/all_day_panel/title';
 import { AllDayPanelLayout } from './date_table/all_day_panel/layout';
-import { ScrollableDirection } from '../../../scroll_view/types';
+import { ScrollableDirection } from '../../../scroll_view/common/types';
 
 export const viewFunction = ({
   classes,

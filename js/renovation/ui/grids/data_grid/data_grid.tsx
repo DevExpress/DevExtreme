@@ -13,7 +13,7 @@ import { Widget } from '../../common/widget';
 import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance, DataGridForComponentWrapper } from './common/types';
-import { getUpdatedOptions } from './utils/get_updated_options';
+import { getUpdatedOptions } from '../../common/utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
 import { hasWindow } from '../../../../core/utils/window';
 import { UserDefinedElement, UserDefinedElementsArray, DxElement } from '../../../../core/element'; // eslint-disable-line import/named
@@ -22,10 +22,6 @@ import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import type {
   OptionChangedEvent, Column, RowObject,
 } from '../../../../ui/data_grid';
-import { createDefaultOptionRules } from '../../../../core/options/utils';
-import devices from '../../../../core/devices';
-import browser from '../../../../core/utils/browser';
-import { isMaterial, current } from '../../../../ui/themes';
 import { FilterDescriptor } from '../../../../data';
 import DataSource from '../../../../data/data_source';
 import dxScrollable from '../../../../ui/scroll_view/ui.scrollable';
@@ -110,40 +106,7 @@ export const viewFunction = <TRowData, TKey>({
   </Widget>
   );
 
-export const defaultOptionRules = createDefaultOptionRules<
-DataGridProps<unknown, string, unknown>
->([{
-  device: (): boolean => devices.real().platform === 'ios',
-  options: { showRowLines: true },
-}, {
-  device: (): boolean => devices.real().deviceType !== 'desktop',
-  options: {
-    grouping: {
-      expandMode: 'rowClick',
-    },
-  },
-}, {
-  device: (): boolean => isMaterial(current()),
-  options: {
-    showRowLines: true,
-    showColumnLines: false,
-    headerFilter: {
-      height: 315,
-    },
-    editing: {
-      useIcons: true,
-    },
-  },
-},
-{
-  device: () => browser.webkit === true,
-  options: {
-    loadingTimeout: 30, // T344031
-  },
-},
-]);
 @Component({
-  defaultOptionRules,
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })

@@ -71,7 +71,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @default false
      * @public
      */
-    value?: boolean | undefined;
+    value?: boolean | null | undefined;
 }
 /**
  * @docid

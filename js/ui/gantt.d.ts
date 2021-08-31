@@ -798,6 +798,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default true
      * @public
      */
+     showDependencies?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
     showRowLines?: boolean;
     /**
      * @docid
@@ -1155,6 +1161,27 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @public
      */
     expandTask(key: any): void;
+    /**
+     * @docid
+     * @publicName refresh()
+     * @return Promise<void>
+     * @public
+     */
+    refresh(): DxPromise<void>;
+    /**
+     * @docid
+     * @publicName showResources(value)
+     * @param1 value:boolean
+     * @public
+     */
+     showResources(value: boolean): void;
+     /**
+     * @docid
+     * @publicName showDependencies(value)
+     * @param1 value:boolean
+     * @public
+     */
+      showDependencies(value: boolean): void;
 }
 
 /**
@@ -1168,7 +1195,7 @@ export interface dxGanttToolbar {
      * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
+    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies'>;
 }
 
 /**
@@ -1207,7 +1234,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @type Enums.GanttToolbarItem|string
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
+    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies' | string;
     /**
      * @docid
      * @default "before"

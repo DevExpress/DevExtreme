@@ -79,10 +79,14 @@ const Sortable = Draggable.inherit({
             onRemove: null,
             onReorder: null,
             /**
+             * @section Utils
+             * @default null
              * @name dxSortableOptions.onPlaceholderPrepared
              * @type function(e)
-             * @extends Action
              * @type_function_param1 e:object
+             * @type_function_param1_field1 component:this
+             * @type_function_param1_field2 element:DxElement
+             * @type_function_param1_field3 model:object
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 cancel:boolean
              * @type_function_param1_field6 itemData:any
@@ -251,15 +255,25 @@ const Sortable = Draggable.inherit({
         }
     },
 
-    _isInsideTargetDraggable: function(event) {
-        const $targetDraggable = this._getTargetDraggable().$element();
+    _allowDrop: function(event) {
+        const targetDraggable = this._getTargetDraggable();
+        const $targetDraggable = targetDraggable.$element();
         const $scrollable = this._getScrollable($targetDraggable);
 
         if($scrollable) {
             const { left, right, top, bottom } = getScrollableBoundary($scrollable);
-            const validX = left <= event.pageX && event.pageX <= right;
-            const validY = top <= event.pageY && event.pageY <= bottom;
-            return validY && validX;
+            const toIndex = this.option('toIndex');
+            const itemPoints = this.option('itemPoints');
+            const itemPoint = itemPoints?.filter(item => item.index === toIndex)[0];
+
+            if(itemPoint) {
+                const isVertical = this._isVerticalOrientation();
+                if(isVertical) {
+                    return top <= itemPoint.top && itemPoint.top <= bottom;
+                } else {
+                    return left <= itemPoint.left && itemPoint.left <= right;
+                }
+            }
         }
 
         return true;
@@ -270,9 +284,9 @@ const Sortable = Draggable.inherit({
         const sourceDraggable = this._getSourceDraggable();
         const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
         const toIndex = this.option('toIndex');
-        const isInsideTargetDraggable = this._isInsideTargetDraggable(sourceEvent.event);
+        const allowDrop = this._allowDrop(sourceEvent.event);
 
-        if(toIndex !== null && toIndex >= 0 && isInsideTargetDraggable) {
+        if(toIndex !== null && toIndex >= 0 && allowDrop) {
             let cancelAdd;
             let cancelRemove;
 

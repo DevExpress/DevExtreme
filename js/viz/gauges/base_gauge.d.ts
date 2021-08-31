@@ -158,7 +158,7 @@ export interface BaseGaugeRangeContainer {
     offset?: number;
     /**
      * @docid BaseGaugeOptions.rangeContainer.palette
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -335,7 +335,8 @@ export interface BaseGaugeScaleLabel {
     font?: Font;
     /**
      * @docid BaseGaugeOptions.scale.label.format
-     * @extends CommonVizFormat
+     * @type Format
+     * @default undefined
      * @public
      */
     format?: Format;
@@ -499,7 +500,7 @@ export interface CommonIndicator {
     offset?: number;
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -564,7 +565,8 @@ export interface CommonIndicator {
       font?: Font;
       /**
        * @docid
-       * @extends CommonVizFormat
+       * @type Format
+       * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
       format?: Format;

@@ -7,7 +7,7 @@ import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent, Option } from './common/types';
 import type { ExcelCellInfo, Export, OptionChangedEvent } from '../../ui/data_grid';
-import { getUpdatedOptions } from '../ui/grids/data_grid/utils/get_updated_options';
+import { getUpdatedOptions } from '../ui/common/utils/get_updated_options';
 
 import { themeReadyCallback } from '../../ui/themes_callback';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
@@ -84,6 +84,10 @@ export default class DataGridWrapper extends Component {
     if (this.viewRef && prevValue !== value) {
       const name = getPathParts(fullName)[0];
       const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
+
+      if (name === 'integrationOptions') {
+        return;
+      }
 
       if (name === 'editing' && name !== fullName) {
         // T751778
@@ -171,9 +175,9 @@ export default class DataGridWrapper extends Component {
     if (isSecondLevelOption && e.value !== e.previousValue) {
       if (e.fullName.startsWith('columns[')) {
         if (this.option(e.fullName) !== e.value) {
-          this._skipInvalidate = true;
+          this._cancelOptionChange = e.fullName;
           this._notifyOptionChanged(e.fullName, e.value, e.previousValue);
-          this._skipInvalidate = false;
+          this._cancelOptionChange = undefined;
         }
       } else {
         this._skipInvalidate = true;

@@ -15,7 +15,6 @@ import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { isDefined } from '../../../core/utils/type';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
-import { ScrollbarProps } from './scrollbar_props';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS, TopPocketState,
   SCROLLABLE_SCROLL_CLASS,
@@ -30,11 +29,13 @@ import {
   subscribeToDXPointerUpEvent,
 } from '../../utils/subscribe_to_event';
 
-import { ScrollableSimulatedProps } from './scrollable_simulated_props';
-import { ScrollableProps } from './scrollable_props';
 import { BaseWidgetProps } from '../common/base_props';
 import { inRange } from '../../../core/utils/math';
-import { DxMouseEvent } from './types.d';
+import { DxMouseEvent } from './common/types.d';
+import { clampIntoRange } from './utils/clamp_into_range';
+import { ScrollbarProps } from './common/scrollbar_props';
+import { ScrollableProps } from './common/scrollable_props';
+import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
 export const THUMB_MIN_SIZE = 15;
@@ -65,8 +66,9 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
-& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableProps, 'direction' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
+& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
@@ -149,18 +151,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  validateEvent(event: DxMouseEvent): boolean {
-    const { target } = event.originalEvent;
-
-    return this.isThumb(target) || this.isScrollbar(target);
-  }
-
-  @Method()
-  getLocationWithinRange(value: number): number {
-    return Math.max(Math.min(value, this.maxOffset), this.minOffset);
-  }
-
-  @Method()
   getMinOffset(): number {
     return this.minOffset;
   }
@@ -227,8 +217,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  scrollByHandler(delta: { x: number; y: number }): void {
-    this.scrollBy(delta);
+  scrollTo(value: number): void {
+    this.onReachBottomWasFiredOnce = false;
+    this.moveTo(-value);
     this.needRiseEnd = true;
     this.stopScrolling();
   }
@@ -253,11 +244,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   scrollStep(delta: number): void {
+    const moveToValue = this.props.scrollLocation + delta;
+
     /* istanbul ignore next */
     if (this.props.bounceEnabled) {
-      this.moveTo(this.props.scrollLocation + delta);
+      this.moveTo(moveToValue);
     } else {
-      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation + delta));
+      this.moveTo(clampIntoRange(moveToValue, this.maxOffset, this.minOffset));
     }
   }
 
@@ -407,7 +400,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       this.prevContainerSize = this.props.containerSize;
 
       if (this.props.scrollLocation <= this.maxOffset) {
-        let newScrollLocation = this.getLocationWithinRange(this.props.scrollLocation);
+        let newScrollLocation = clampIntoRange(
+          this.props.scrollLocation, this.maxOffset, this.minOffset,
+        );
 
         if (this.isHorizontal && this.props.rtlEnabled) {
           newScrollLocation = this.minOffset - this.rightScrollLocation;
@@ -664,11 +659,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get cssClasses(): string {
-    const { direction } = this.props;
-
     const classesMap = {
       [SCROLLABLE_SCROLLBAR_CLASS]: true,
-      [`dx-scrollbar-${direction}`]: true,
+      [`dx-scrollbar-${this.props.direction}`]: true,
       [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: !!this.expanded,
       [HOVER_ENABLED_STATE]: !!this.hoverStateEnabled,
     };

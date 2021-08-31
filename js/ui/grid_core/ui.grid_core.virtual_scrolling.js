@@ -792,8 +792,9 @@ export const virtualScrollingModule = {
                     initVirtualRows: function() {
                         const virtualRowsRendering = gridCoreUtils.isVirtualRowRendering(this);
 
+                        this._allItems = null;
+
                         if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || !this.option('scrolling.rowPageSize')) {
-                            this._allItems = null;
                             this._visibleItems = null;
                             this._rowsScrollController = null;
                             return;
@@ -804,7 +805,6 @@ export const virtualScrollingModule = {
                         this._visibleItems = this.option(NEW_SCROLLING_MODE) ? null : [];
                         this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
                         this._viewportChanging = false;
-                        this._allItems = [];
 
                         this._rowsScrollController.positionChanged.add(() => {
                             if(this.option(NEW_SCROLLING_MODE)) {

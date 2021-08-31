@@ -32,6 +32,16 @@
       min-height: $material-base-inline-widget-height;
     }
   }
+
+  &.dx-state-disabled {
+    .dx-tag-content {
+      background-color: $tagbox-tag-disabled-bg;
+
+      .dx-tag-remove-button::before {
+        color: $tagbox-tag-disabled-bg;
+      }
+    }
+  }
 }
 
 .dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {

@@ -1378,7 +1378,8 @@ const dxChart = AdvancedChart.inherit({
 
         _each(that._getStackPoints(), function(_, stacks) {
             _each(stacks, function(_, points) {
-                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, shiftDirection, (a, b) => {
+                const isInverted = points[0].series.getValueAxis().getOptions().inverted;
+                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, isInverted, shiftDirection, (a, b) => {
                     const coordPosition = isRotated ? 1 : 0;
                     const figureCenter1 = a.labels[0].getFigureCenter()[coordPosition];
                     const figureCenter12 = b.labels[0].getFigureCenter()[coordPosition];

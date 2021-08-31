@@ -177,8 +177,8 @@ class DateViewRoller extends Scrollable {
 
         const location = this.scrollOffset();
         const delta = {
-            x: location.left + left,
-            y: location.top + top
+            x: location.left - left,
+            y: location.top - top
         };
 
         if(this._isVisible() && (delta.x || delta.y)) {

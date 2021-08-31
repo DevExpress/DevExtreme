@@ -105,7 +105,7 @@ function checkStackOverlap(rollingStocks) {
     return overlap;
 }
 
-function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction, customSorting = () => 0) {
+function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, isInverted, shiftFunction, customSorting = () => 0) {
     const rollingStocks = [];
     const stubCanvas = {
         start: isRotated ? canvas.left : canvas.top,
@@ -123,7 +123,7 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     });
 
     if(hasStackedSeries) {
-        !isRotated && rollingStocks.reverse();
+        (!isRotated ^ isInverted) && rollingStocks.reverse();
     } else {
         const rollingStocksTmp = rollingStocks.slice();
         rollingStocks.sort(function(a, b) {

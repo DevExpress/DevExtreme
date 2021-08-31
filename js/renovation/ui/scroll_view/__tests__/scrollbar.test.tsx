@@ -20,7 +20,7 @@ import {
   optionValues,
   getPermutations,
 } from './utils';
-import { ScrollbarProps } from '../scrollbar_props';
+import { ScrollbarProps } from '../common/scrollbar_props';
 
 describe('Scrollbar', () => {
   it('render scrollbar with defaults', () => {
@@ -1155,21 +1155,23 @@ describe('Scrollbar', () => {
         expect(viewModel.hideScrollbarTimer).toBe(undefined);
       });
 
-      it('scrollByHandler(delta)', () => {
+      it('scrollTo(delta)', () => {
         const onInertiaAnimatorStart = jest.fn();
-        const delta = { x: 50, y: 70 };
+        const delta = 50;
         const viewModel = new Scrollbar({
           direction,
           onAnimatorStart: onInertiaAnimatorStart,
         });
 
-        viewModel.scrollBy = jest.fn();
+        viewModel.moveTo = jest.fn();
         viewModel.stopScrolling = jest.fn();
+        viewModel.onReachBottomWasFiredOnce = true;
 
-        viewModel.scrollByHandler(delta);
+        viewModel.scrollTo(delta);
 
-        expect(viewModel.scrollBy).toBeCalledTimes(1);
-        expect(viewModel.scrollBy).toHaveBeenCalledWith(delta);
+        expect(viewModel.onReachBottomWasFiredOnce).toEqual(false);
+        expect(viewModel.moveTo).toBeCalledTimes(1);
+        expect(viewModel.moveTo).toHaveBeenCalledWith(-delta);
         expect(viewModel.stopScrolling).toBeCalledTimes(1);
       });
 
