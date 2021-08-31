@@ -1,12 +1,8 @@
 import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 import BaseModule from './base';
-// import PopupModule from './popup';
 import eventsEngine from '../../../events/core/events_engine';
-// import ContextMenu from '../../context_menu';
 import { addNamespace } from '../../../events/utils/index';
-// import { extend } from '../../../core/utils/extend';
-// import Popup from '../../popup';
 import ContextMenu from '../../context_menu';
 import { getTableOperationHandler } from './tableOperations';
 
