@@ -2348,7 +2348,7 @@ QUnit.module('Export menu', {
 
         const $exportButton = $container.find('.dx-datagrid-export-button');
         assert.equal($exportButton.length, 1, 'export button is contained in a DOM');
-        assert.equal($exportButton.text(), 'Export all data', 'hint of button');
+        assert.equal($exportButton.attr('title'), 'Export all data', 'hint of button');
     });
 
     QUnit.test('Export menu elements doesn\'t leak', function(assert) {
