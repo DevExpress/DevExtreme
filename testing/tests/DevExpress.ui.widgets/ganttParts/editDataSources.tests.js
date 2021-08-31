@@ -3,7 +3,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import ArrayStore from 'data/array_store';
 import 'ui/gantt';
-import { getGanttViewCore } from '../../../helpers/ganttHelpers.js';
+import { Consts, getGanttViewCore } from '../../../helpers/ganttHelpers.js';
 const { test } = QUnit;
 
 const moduleConfig = {
@@ -316,5 +316,47 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         this.instance.deleteTask('4');
         this.clock.tick();
         assert.equal(this.instance._treeList.getVisibleRows().length, 3, 'tasks removed');
+    });
+    test('check render for ds with delay T1024748', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const ds = new CustomStore({
+            key: 'id',
+            load: function(loadOptions) {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(tasks);
+                }, 100);
+                return d.promise();
+            },
+        });
+
+        const options = {
+            tasks: {
+                dataSource: ds
+            },
+            columns: [
+                { dataField: 'title', caption: 'Subject' },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End Date' }
+            ],
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick(200);
+
+        const titleText = $(this.instance._treeList.getCellElement(0, 0)).text();
+        assert.equal(titleText, tasks[0].title, 'title cell text is right');
+
+        this.clock.tick(200);
+        const taskText = this.$element.find(Consts.TASK_WRAPPER_SELECTOR).first().text();
+        assert.equal(taskText, tasks[0].title, 'Custom task text works correctly');
     });
 });
