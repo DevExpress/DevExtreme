@@ -6,7 +6,8 @@ import {
     createResourceEditorModel,
     getPaintedResources,
     filterResources,
-    getResourceDataByValue
+    getResourceDataByValue,
+    getResourceColor
 } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -447,7 +448,7 @@ QUnit.test('Get color for resource', function(assert) {
     this.createInstance(resourceData);
     const done = assert.async();
 
-    this.instance.getResourceColor('ownerId', 2).done(function(color) {
+    getResourceColor(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 2).done(function(color) {
         assert.equal(color, testData.owners[1].color, 'Color is OK');
         done();
     });
@@ -470,7 +471,7 @@ QUnit.test('Get color for resource with colorExpr', function(assert) {
     this.createInstance([roomData]);
     const done = assert.async();
 
-    this.instance.getResourceColor('roomId', 1).done(function(color) {
+    getResourceColor(this.instance.getResources(), this.instance.resourceLoaderMap, 'roomId', 1).done(function(color) {
         assert.equal(color, roomData.dataSource[0].color1, 'Color is OK');
         done();
     });
@@ -493,7 +494,7 @@ QUnit.test('Get color for resource with valueExpr', function(assert) {
     const done = assert.async();
 
     this.instance.loadResources(['roomId']).done($.proxy(function(groups) {
-        this.instance.getResourceColor('roomId', 1).done(function(color) {
+        getResourceColor(this.instance.getResources(), this.instance.resourceLoaderMap, 'roomId', 1).done(function(color) {
             assert.equal(color, roomData.dataSource[0].color, 'Color is OK');
             done();
         });
@@ -504,7 +505,7 @@ QUnit.test('Color for undefined resource should be undefined', function(assert) 
     this.createInstance(resourceData);
     const done = assert.async();
 
-    this.instance.getResourceColor('ownerId', 777).done(function(color) {
+    getResourceColor(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 777).done(function(color) {
         assert.strictEqual(color, undefined, 'Color for undefined resource is undefined');
         done();
     });
