@@ -23,26 +23,28 @@
 
 <div class="options">
     <div class="caption">Options</div>
-    <div class="option">
-        <dx-check-box class="checkbox"
-            text="Enable Breaks"
-            [(value)]="autoBreaksEnabledValue">
-        </dx-check-box>
-    </div>
-    <div class="option center">
-        <span>Max Count</span>
-        <dx-select-box
-            [items]="breaksCount"
-            [(value)]="breaksCountValue"
-            [width]="80">
-        </dx-select-box>
-    </div>
-    <div class="option right">
-        <span>Style</span>
-        <dx-select-box
-            [items]="lineStyles"
-            [(value)]="lineStyleValue"
-            [width]="120">
-        </dx-select-box>
+    <div class="options-container">
+        <div class="option">
+            <dx-check-box class="checkbox"
+                text="Enable Breaks"
+                [(value)]="autoBreaksEnabledValue">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <span>Max Count</span>
+            <dx-select-box
+                [items]="breaksCount"
+                [(value)]="breaksCountValue"
+                [width]="80">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <span>Style</span>
+            <dx-select-box
+                [items]="lineStyles"
+                [(value)]="lineStyleValue"
+                [width]="120">
+            </dx-select-box>
+        </div>
     </div>
 </div>

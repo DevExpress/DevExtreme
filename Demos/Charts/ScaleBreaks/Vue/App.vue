@@ -22,28 +22,30 @@
     </DxChart>
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="autoBreaksEnabledValue"
-          class="checkbox"
-          text="Enable Breaks"
-        />
-      </div>
-      <div class="option center">
-        <span>Max Count </span>
-        <DxSelectBox
-          :items="breaksCount"
-          v-model:value="breaksCountValue"
-          :width="80"
-        />
-      </div>
-      <div class="option right">
-        <span>Style </span>
-        <DxSelectBox
-          :items="lineStyles"
-          v-model:value="lineStyleValue"
-          :width="120"
-        />
+      <div class="options-container">
+        <div class="option">
+          <DxCheckBox
+            v-model:value="autoBreaksEnabledValue"
+            class="checkbox"
+            text="Enable Breaks"
+          />
+        </div>
+        <div class="option">
+          <span>Max Count </span>
+          <DxSelectBox
+            :items="breaksCount"
+            v-model:value="breaksCountValue"
+            :width="80"
+          />
+        </div>
+        <div class="option">
+          <span>Style </span>
+          <DxSelectBox
+            :items="lineStyles"
+            v-model:value="lineStyleValue"
+            :width="120"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -122,7 +124,9 @@ export default {
     display: inline-block;
     vertical-align: middle;
 }
-.center, .right {
-  margin-left: 4px;
+
+.options-container {
+  display: flex;
+  align-items: center;
 }
 </style>
