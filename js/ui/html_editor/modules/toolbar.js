@@ -20,7 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-import { showCellProperties, showTableProperties, getTableOperationHandler } from './tableOperations';
+import { getTableOperationHandler } from './tableOperations';
 
 let ToolbarModule = BaseModule;
 
@@ -61,9 +61,7 @@ if(Quill) {
         'insertColumnRight',
         'deleteColumn',
         'deleteRow',
-        'deleteTable',
-        'cellProperties',
-        'tableProperties'
+        'deleteTable'
     ];
 
     const USER_ACTION = 'user';
@@ -192,9 +190,7 @@ if(Quill) {
                 insertColumnRight: getTableOperationHandler(this.quill, 'insertColumnRight'),
                 deleteColumn: getTableOperationHandler(this.quill, 'deleteColumn'),
                 deleteRow: getTableOperationHandler(this.quill, 'deleteRow'),
-                deleteTable: getTableOperationHandler(this.quill, 'deleteTable'),
-                cellProperties: () => { showCellProperties(); },
-                tableProperties: () => { showTableProperties(); }
+                deleteTable: getTableOperationHandler(this.quill, 'deleteTable')
             };
         }
 
@@ -682,16 +678,6 @@ if(Quill) {
                     }
                 },
                 deleteTable: {
-                    options: {
-                        disabled: true
-                    }
-                },
-                cellProperties: {
-                    options: {
-                        disabled: true
-                    }
-                },
-                tableProperties: {
                     options: {
                         disabled: true
                     }

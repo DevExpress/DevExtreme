@@ -8,7 +8,7 @@ import { addNamespace } from '../../../events/utils/index';
 // import { extend } from '../../../core/utils/extend';
 // import Popup from '../../popup';
 import ContextMenu from '../../context_menu';
-import { showCellProperties, showTableProperties, getTableOperationHandler } from './tableOperations';
+import { getTableOperationHandler } from './tableOperations';
 
 
 const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
@@ -50,8 +50,6 @@ if(Quill) {
                 target: this._quillContainer,
                 showEvent: 'dxdbclick',
                 dataSource: [
-                    { text: 'Cell Properties', onClick: () => { showCellProperties(); } },
-                    { text: 'Table Properties', onClick: () => { showTableProperties(); } },
                     { text: 'Insert', items: [
                         { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
                         { text: 'Insert Row Below', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
