@@ -144,104 +144,6 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends Widget {
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
-            /**
-                * @pseudo StartDayHour
-                * @type number
-                * @default 0
-                */
-
-            /**
-                * @pseudo EndDayHour
-                * @type number
-                * @default 24
-                */
-
-            /**
-                * @pseudo Groups
-                * @type Array<string>
-                * @default []
-                */
-
-            /**
-                * @pseudo CellDuration
-                * @type number
-                * @default 30
-                */
-
-            /**
-                * @pseudo AppointmentTemplate
-                * @type template|function
-                * @default "item"
-                * @type_function_param1 model:object
-                * @type_function_param1_field1 appointmentData:object
-                * @type_function_param1_field2 targetedAppointmentData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo AppointmentTooltipTemplate
-                * @type template|function
-                * @default "appointmentTooltip"
-                * @type_function_param1 model:object
-                * @type_function_param1_field1 appointmentData:object
-                * @type_function_param1_field2 targetedAppointmentData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo DateCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo DataCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo TimeCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo ResourceCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo AppointmentCollectorTemplate
-                * @type template|function
-                * @default "appointmentCollector"
-                * @type_function_param1 data:object
-                * @type_function_param1_field1 appointmentCount:number
-                * @type_function_param1_field2 isCompact:boolean
-                * @type_function_param2 collectorElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
 
             views: ['day', 'week'],
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
@@ -1771,11 +1673,11 @@ class Scheduler extends Widget {
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
 
+        const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
+        delete singleRawAppointment[keyPropertyName];
+
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
-            const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
-            delete singleRawAppointment[keyPropertyName];
-
             this.addAppointment(singleRawAppointment);
         }
 

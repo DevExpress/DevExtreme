@@ -111,7 +111,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     colCount?: number | 'auto';
     /**
      * @docid
-     * @extends ColCountResponsibleType
+     * @type object
      * @inherits ColCountResponsible
      * @default undefined
      * @public
@@ -488,7 +488,7 @@ export interface dxFormGroupItem {
     colCount?: number;
     /**
      * @docid
-     * @extends ColCountResponsibleType
+     * @type object
      * @inherits ColCountResponsible
      * @default undefined
      * @public
@@ -748,7 +748,7 @@ export interface dxFormTabbedItem {
       colCount?: number;
       /**
        * @docid
-       * @extends ColCountResponsibleType
+       * @type object
        * @inherits ColCountResponsible
        * @default undefined
        */

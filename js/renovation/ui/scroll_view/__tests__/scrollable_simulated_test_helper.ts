@@ -20,7 +20,7 @@ import {
 } from '../common/consts';
 
 import { Scrollbar, ScrollbarPropsType } from '../scrollbar';
-import { ScrollableSimulatedPropsType } from '../scrollable_simulated_props';
+import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 import { AnimatedScrollbar } from '../animated_scrollbar';
 
 jest.mock('../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
@@ -31,7 +31,7 @@ const BOTTOM_POCKET_HEIGHT = 55;
 
 interface Mock extends jest.Mock {}
 class ScrollableTestHelper {
-  options: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
+  options: Partial<ScrollableSimulatedProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
 
   viewModel: ScrollableSimulated;
 
@@ -57,7 +57,7 @@ class ScrollableTestHelper {
 
   actionHandlers: { [key: string]: any };
 
-  constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
+  constructor(props: Partial<ScrollableSimulatedProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
     this.actionHandlers = this.getActionHandlers(this.options);
 
@@ -357,7 +357,7 @@ class ScrollableTestHelper {
 
   // eslint-disable-next-line class-methods-use-this
   getActionHandlers(
-    props: Pick<ScrollableSimulatedPropsType, 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce' | 'onVisibilityChange'>,
+    props: Pick<ScrollableSimulatedProps, 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce' | 'onVisibilityChange'>,
   ): { [T in 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce' | 'onVisibilityChange']: any } {
     const actionHandlers = {
       onStart: jest.fn(),

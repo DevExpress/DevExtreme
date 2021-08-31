@@ -531,6 +531,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Sorteer Oplopend",
         "dxGantt-sortingDescendingText": "Sorteer Aflopend",
-        "dxGantt-sortingClearText": "Sortering wissen"
+        "dxGantt-sortingClearText": "Sortering wissen",
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO"
     }
 }

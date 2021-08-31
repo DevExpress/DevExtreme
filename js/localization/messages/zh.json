@@ -530,6 +530,8 @@
     "dxGantt-quarter": "TODO",
     "dxGantt-sortingAscendingText": "升序排序",
     "dxGantt-sortingDescendingText": "降序排序",
-    "dxGantt-sortingClearText": "清除排序"
+    "dxGantt-sortingClearText": "清除排序",
+    "dxGantt-showResources": "TODO",
+    "dxGantt-showDependencies": "TODO"
 }
 }

@@ -582,6 +582,8 @@
         "dxGantt-quarter": "{0}-й кв.",
         "dxGantt-sortingAscendingText": "Сортировать по возрастанию",
         "dxGantt-sortingDescendingText": "Сортировать по убыванию",
-        "dxGantt-sortingClearText": "Сбросить сортировку"
+        "dxGantt-sortingClearText": "Сбросить сортировку",
+        "dxGantt-showResources": "Отображать Ресурсы",
+        "dxGantt-showDependencies": "Отображать Зависимости"
     }
 }

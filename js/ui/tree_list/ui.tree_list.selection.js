@@ -130,18 +130,23 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 isSelectAll: function() {
+                    const selectedRowKeys = this.option('selectedRowKeys') || [];
+                    if(selectedRowKeys.length === 0) return false;
+
                     const component = this.component;
                     const visibleKeys = this._getSelectAllNodeKeys();
+                    const isRecursiveSelection = this.isRecursiveSelection();
+                    let hasIndeterminateState = false;
 
                     const selectedVisibleKeys = visibleKeys.filter(function(key) {
-                        return component.isRowSelected(key);
+                        const isRowSelected = component.isRowSelected(key, isRecursiveSelection);
+                        if(isRowSelected === undefined) {
+                            hasIndeterminateState = true;
+                        }
+                        return isRowSelected;
                     });
 
                     if(!selectedVisibleKeys.length) {
-                        const hasIndeterminateState = visibleKeys.some(function(key) {
-                            return component.isRowSelected(key) === undefined;
-                        });
-
                         return hasIndeterminateState ? undefined : false;
                     } else if(selectedVisibleKeys.length === visibleKeys.length) {
                         return true;
@@ -467,13 +472,16 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     const removedItemKeys = options.removedItemKeys || [];
                     const selectedItemKeys = options.selectedItemKeys || [];
 
-                    this._updateSelectionStateCore(removedItemKeys, false);
-                    this._updateSelectionStateCore(selectedItemKeys, true);
+                    if(this.isRecursiveSelection()) {
+                        this._updateSelectionStateCore(removedItemKeys, false);
+                        this._updateSelectionStateCore(selectedItemKeys, true);
+                    }
                 },
 
-                isRowSelected: function(key) {
+                isRowSelected: function(key, isRecursiveSelection) {
                     const result = this.callBase.apply(this, arguments);
-                    const isRecursiveSelection = this.isRecursiveSelection();
+
+                    isRecursiveSelection = isRecursiveSelection ?? this.isRecursiveSelection();
 
                     if(!result && isRecursiveSelection) {
                         if(key in this._selectionStateByKey) {
@@ -572,7 +580,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 _renderIcons: function($iconContainer, options) {
                     this.callBase.apply(this, arguments);
 
-                    if(this.option('selection.mode') === 'multiple') {
+                    if(!options.row.isNewRow && this.option('selection.mode') === 'multiple') {
                         this.getController('selection').renderSelectCheckBoxContainer($iconContainer, options);
                     }
 

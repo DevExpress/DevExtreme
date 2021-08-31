@@ -388,22 +388,20 @@ QUnit.module('Checkbox', function() {
 
                 QUnit.test('checkbox icon\'s font-size should be Math.ceil(iconSize * 16 / 22)', function(assert) {
                     const iconSize = 50;
-                    const initialFontSize = this.$element.find(ICON_SELECTOR).css('font-size');
 
-                    this.instance.option({ iconSize });
+                    this.instance.option({ iconSize, value: true });
 
                     const newFontSize = this.$element.find(ICON_SELECTOR).css('font-size');
                     const iconFontSizeRatio = 16 / 22;
                     const expectedFontSize = `${Math.ceil(iconSize * iconFontSizeRatio)}px`;
 
-                    assert.notStrictEqual(initialFontSize, newFontSize, 'font-size is changed');
                     assert.strictEqual(newFontSize, expectedFontSize, 'font-size has correct value');
                 });
 
                 QUnit.test('checkbox icon\'s font-size should decrease if "iconSize" option decrease', function(assert) {
                     const iconSize = 10;
 
-                    this.instance.option({ iconSize });
+                    this.instance.option({ iconSize, value: true });
 
                     assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), '8px', 'font-size was decreased');
                 });
@@ -411,7 +409,7 @@ QUnit.module('Checkbox', function() {
                 QUnit.test('checkbox icon\'s font-size should increase if "iconSize" option increase', function(assert) {
                     const iconSize = 30;
 
-                    this.instance.option({ iconSize });
+                    this.instance.option({ iconSize, value: true });
 
                     assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), '22px', 'font-size was increased');
                 });

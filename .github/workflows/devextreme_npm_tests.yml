@@ -4,7 +4,10 @@ concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
   cancel-in-progress: true
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches: [21_2]
 
 jobs:
   build:
@@ -232,6 +235,11 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
     - name: Set default run status
       run: echo "default" > last_run_status
 
@@ -271,7 +279,7 @@ jobs:
     - name: Install devextreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
-      run: npm install $(find . -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install --legacy-peer-deps $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Prepare JS
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -309,3 +317,19 @@ jobs:
     - name: Save run status
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: echo "::set-output name=last_run_status::success" > last_run_status
+
+  notify:
+    runs-on: ubuntu-latest
+    name: Send notifications
+    needs: [build, test_angular, test_bundlers, test_demos]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 21_2
