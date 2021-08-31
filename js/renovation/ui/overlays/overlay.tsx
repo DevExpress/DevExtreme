@@ -62,7 +62,6 @@ export class OverlayProps extends BaseWidgetProps {
   @OneWay() maxWidth?: number | string | (() => number | string) | null = null;
 }
 @Component({
-  defaultOptionRules: null,
   view: viewFunction,
 })
 export class Overlay extends JSXComponent(OverlayProps) { }
