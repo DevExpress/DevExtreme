@@ -433,6 +433,15 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    _tableContextMenuOptionChanged: function(args) {
+        const contextMenuModule = this._quillInstance?.getModule('tableContextMenu');
+        if(contextMenuModule) {
+            contextMenuModule.option(args.name, args.value);
+        } else {
+            this._invalidate();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'value':
@@ -485,11 +494,7 @@ const HtmlEditor = Editor.inherit({
                 this._renderFormDialog();
                 break;
             case 'tableContextMenu':
-                if(this._quillInstance?.getModule('tableContextMenu')) {
-                    this._quillInstance?.getModule('tableContextMenu').option(args.name, args.value);
-                } else {
-                    this._invalidate();
-                }
+                this._tableContextMenuOptionChanged();
                 break;
             case 'mediaResizing':
                 if(!args.previousValue || !args.value) {

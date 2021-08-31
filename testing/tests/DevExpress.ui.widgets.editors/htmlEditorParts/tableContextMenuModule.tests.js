@@ -68,7 +68,7 @@ module('Table UI module', moduleConfig, () => {
         assert.ok(tableUIInstance.enabled, 'module is enabled if the option is defined as true');
     });
 
-    test('events should be attached on module init if the option is enabled at runtime', function(assert) {
+    test('events should be attached if the option is enabled at runtime', function(assert) {
         const tableUIInstance = new TableUI(this.quillMock, this.options);
 
         this.attachSpies(tableUIInstance);
@@ -77,7 +77,7 @@ module('Table UI module', moduleConfig, () => {
         assert.strictEqual(this.attachEventsSpy.callCount, 1, 'Events are attached on module initialization at runtime');
     });
 
-    test('events should be attached on module init if the option is disabled at runtime', function(assert) {
+    test('events should be detached if the option is disabled at runtime', function(assert) {
         this.options.enabled = true;
         const tableUIInstance = new TableUI(this.quillMock, this.options);
 

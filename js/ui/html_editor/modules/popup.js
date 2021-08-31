@@ -34,7 +34,7 @@ if(Quill) {
 
         renderList($container, options) {
             const $list = $('<div>')
-                .addClass(this._getListClass())
+                .addClass(SUGGESTION_LIST_CLASS)
                 .appendTo($container);
             this._list = this.options.editorInstance._createComponent($list, List, options);
         }
@@ -45,10 +45,6 @@ if(Quill) {
             const popupConfig = this._getPopupConfig();
 
             return editorInstance._createComponent($container, Popup, popupConfig);
-        }
-
-        _getListClass() {
-            return SUGGESTION_LIST_CLASS;
         }
 
         _getPopupConfig() {

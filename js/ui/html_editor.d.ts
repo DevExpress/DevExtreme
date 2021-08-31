@@ -102,7 +102,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default true
      * @public
      */
-    tableContextMenuEnabled?: dxHtmlEditorTableContextMenu;
+    tableContextMenu?: dxHtmlEditorTableContextMenu;
     /**
      * @docid
      * @hidden false

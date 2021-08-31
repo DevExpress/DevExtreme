@@ -20,11 +20,8 @@ let TableContextMenuModule = BaseModule;
 if(Quill) {
     TableContextMenuModule = class TableContextMenuModule extends BaseModule {
         constructor(quill, options) {
-
             super(quill, options);
-
             this.enabled = !!options.enabled;
-
             this._quillContainer = this.editorInstance._getQuillContainer();
 
             if(this.enabled) {
@@ -43,7 +40,6 @@ if(Quill) {
 
         _createContextMenu() {
             const $container = $('<div>').appendTo(this.editorInstance.$element());
-
             const menuConfig = this._getMenuConfig();
 
             return this.editorInstance._createComponent($container, ContextMenu, menuConfig);
