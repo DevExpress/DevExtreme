@@ -688,11 +688,16 @@ const VirtualScrollingRowsViewExtender = (function() {
             that.callBase.apply(that, arguments);
 
             if(that._rowHeight) {
-
                 that._updateContentPosition();
 
                 const viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
-                that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
+                const dataController = this._dataController;
+                const itemsCount = dataController.items().length;
+                const $tableElement = this.getTableElement();
+                const rowsHeight = this._getRowsHeight($tableElement);
+                const rowHeight = itemsCount ? (rowsHeight / itemsCount) : this._rowHeight;
+
+                dataController.viewportSize(Math.ceil(viewportHeight / rowHeight));
             }
         },
 
