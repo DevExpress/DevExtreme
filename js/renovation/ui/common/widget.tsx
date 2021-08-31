@@ -110,6 +110,8 @@ export class WidgetProps extends BaseWidgetProps {
   @Event() onHoverStart?: (e: Event) => void;
 
   @Event() onHoverEnd?: (e: Event) => void;
+
+  @Event() onRootElementRendered?: (rootElement: HTMLDivElement) => void;
 }
 
 @Component({
@@ -144,10 +146,11 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect({ run: 'once' }) setRootElementRef(): void {
-    const { rootElementRef } = this.props;
+    const { rootElementRef, onRootElementRendered } = this.props;
     if (rootElementRef) {
       rootElementRef.current = this.widgetElementRef.current;
     }
+    onRootElementRendered?.(this.widgetElementRef.current!);
   }
 
   @Effect()
