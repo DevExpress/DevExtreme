@@ -131,7 +131,7 @@ export class DataGrid
 
   @Mutable() isTwoWayPropUpdating = false;
 
-  @Mutable() prevProps!: DataGridProps<TRowData, TKeyExpr, TKey, TColumns>;
+  @Mutable() prevProps!: DataGridProps;
 
   get initializedInstance(): GridInstance<TRowData, TKeyExpr, TKey, TColumns> | undefined {
     return this.initialized ? this.instance : undefined;

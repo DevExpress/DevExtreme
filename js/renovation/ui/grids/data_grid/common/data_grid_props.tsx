@@ -1587,7 +1587,7 @@ export class DataGridProps
 
   @OneWay() toolbar?: DataGridToolbar;
 
-  @TwoWay() filterValue?: FilterDescriptor;
+  @TwoWay() filterValue: FilterDescriptor = [];
 
   @TwoWay() focusedColumnIndex = -1;
 
