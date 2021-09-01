@@ -1,9 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getRowsInitialData } from './row_initial_data';
-import { getRowsSizedData } from './row_sized_data';
-import { getPdfTableData } from './pdf_table_data';
-import { getPdfPageData } from './pdf_page_data';
+import { getRows } from './pdf_rows';
+import { drawPDF } from './draw_pdf';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -23,14 +21,8 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            const rowsInitialData = getRowsInitialData(dataProvider, dataGrid, options);
-            const rowsSizedInfo = getRowsSizedData(rowsInitialData, options);
-            const pdfTables = getPdfTableData(rowsSizedInfo, options);
-            const pdfPages = getPdfPageData(pdfTables, options);
-
-            pdfPages.forEach(page => {
-                page.draw(doc);
-            });
+            const rows = getRows(doc, dataProvider, dataGrid, options);
+            drawPDF(doc, rows, options);
             resolve();
         });
     });
