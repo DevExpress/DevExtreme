@@ -2407,14 +2407,7 @@ QUnit.module('list options', {
     });
 });
 
-QUnit.module('Native scrolling', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
+QUnit.module('Native scrolling', () => {
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
         const data = [];
         const done = assert.async();
@@ -2455,8 +2448,6 @@ QUnit.module('Native scrolling', {
             assert.roughEqual(listInstance.scrollTop(), scrollTop, 2, 'scrollTop is correctly after new page load');
             done();
         });
-
-        this.clock.tick();
     });
 
     QUnit.test('Popup height should be decrease after a loading of new page and searching', function(assert) {
