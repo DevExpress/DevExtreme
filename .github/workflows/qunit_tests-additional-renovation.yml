@@ -61,6 +61,7 @@ jobs:
       fail-fast: false
       matrix:
         envs: [
+          { TARGET: ts, name: 'ts' },
           { CONSTEL: "misc", TZ: 'PST8PDT', name: 'misc-PST8PDT' },
           { CONSTEL: "misc", TZ: 'Japan', name: 'misc-Japan' },
           { CONSTEL: "misc", TZ: 'Australia/ACT', name: 'misc-Australia' },
