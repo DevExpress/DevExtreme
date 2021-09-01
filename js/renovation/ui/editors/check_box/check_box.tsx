@@ -85,7 +85,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <input type="hidden" value={`${value}`} {...name && { name }} />
         <div className="dx-checkbox-container">
-          <CheckBoxIcon size={iconSize} />
+          <CheckBoxIcon size={iconSize} isChecked={value === true} />
           {text && (<span className="dx-checkbox-text">{text}</span>)}
         </div>
       </Fragment>

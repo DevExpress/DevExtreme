@@ -532,7 +532,7 @@
         "dxGantt-sortingAscendingText": "Lajittele nouseva",
         "dxGantt-sortingDescendingText": "Lajittele laskeva",
         "dxGantt-sortingClearText": "Tyhjennä lajittelu",
-        "dxGantt-toggleResources": "TODO",
-        "dxGantt-toggleDependencies": "TODO"
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO"
     }
 }
