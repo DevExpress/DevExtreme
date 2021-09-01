@@ -4594,7 +4594,7 @@ declare class dxDataGrid
  */
 export type Column<TRowData = any, TKey=any, TCellValue=any> = dxDataGridColumn<TRowData, TKey, TCellValue>;
 
-type ColumnValueType<TColumns extends (Column<any, any, string> | string)[]> = TColumns[number] extends Column<any, any, string> ? (TColumns[number]['calculateCellValue'] extends Function ? ReturnType<TColumns[number]['calculateCellValue']> : any) : any;
+type ColumnValueType<TColumns extends (ColumnBase | string)[]> = TColumns[number] extends ColumnBase ? Required<TColumns[number]>['calculateCellValue'] extends (...args: any) => infer T ? T : any : any;
 
 /**
  * @namespace DevExpress.ui
