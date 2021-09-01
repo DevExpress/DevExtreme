@@ -598,6 +598,23 @@ describe('Widget', () => {
           component.setRootElementRef();
           expect(component.props.rootElementRef?.current).toBeUndefined();
         });
+
+        it('calls onRootElementRendered handler', () => {
+          const onRootElementRendered = jest.fn();
+          const component = new Widget({ onRootElementRendered });
+          component.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
+
+          component.setRootElementRef();
+
+          expect(onRootElementRendered).toBeCalledTimes(1);
+          expect(onRootElementRendered).toBeCalledWith(component.widgetElementRef.current);
+        });
+
+        it('does not raise any error if onRootElementRendered is not passed', () => {
+          const component = new Widget({});
+
+          expect(() => { component.setRootElementRef(); }).not.toThrow();
+        });
       });
 
       describe('checkDeprecation', () => {

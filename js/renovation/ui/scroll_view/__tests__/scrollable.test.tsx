@@ -40,30 +40,31 @@ describe('Scrollable', () => {
     const props = new ScrollableProps();
     const viewModel = mount<Scrollable>(<Scrollable {...props} />);
 
-    expect(viewModel.props()).toMatchObject({
-      activeStateEnabled: false,
+    expect(viewModel.props()).toEqual({
       addWidgetClass: false,
       aria: {},
       bounceEnabled: false,
-      className: '',
       classes: '',
-      cssText: '',
       direction: 'vertical',
       disabled: false,
-      focusStateEnabled: false,
       forceGeneratePockets: false,
-      hoverStateEnabled: false,
-      name: '',
+      inertiaEnabled: true,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
+      pulledDownText: 'Release to refresh...',
+      pullingDownText: 'Pull down to refresh...',
       reachBottomEnabled: false,
+      reachBottomText: 'Loading...',
+      refreshingText: 'Refreshing...',
+      rtlEnabled: false,
       scrollByContent: false,
       scrollByThumb: true,
       showScrollbar: 'onHover',
-      tabIndex: 0,
+      useKeyboard: true,
       useNative: false,
+      useSimulatedScrollbar: false,
       visible: true,
     });
   });

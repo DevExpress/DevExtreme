@@ -107,6 +107,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
 
+        // uses in dateview rollers only
         onVisibilityChange={onVisibilityChange}
         inertiaEnabled={inertiaEnabled}
         bounceEnabled={bounceEnabled}
@@ -124,6 +125,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 @Component({
+  defaultOptionRules: null,
   jQuery: {
     register: true,
     component: ScrollableWrapper,

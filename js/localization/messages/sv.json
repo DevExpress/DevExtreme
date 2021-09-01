@@ -528,7 +528,7 @@
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
         "dxGantt-quarter": "TODO",
-        "dxGantt-toggleResources": "TODO",
-        "dxGantt-toggleDependencies": "TODO"
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO"
     }
 }

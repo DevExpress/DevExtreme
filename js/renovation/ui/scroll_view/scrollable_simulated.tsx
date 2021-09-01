@@ -125,12 +125,13 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       height={height}
       width={width}
       visible={visible}
-      onKeyDown={useKeyboard ? handleKeyDown : undefined}
       onHoverStart={cursorEnterHandler}
       onHoverEnd={cursorLeaveHandler}
       onDimensionChanged={updateHandler}
       onVisibilityChange={onVisibilityChangeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+      // onKeyDown exist in restAttributes and has undefined value
+      onKeyDown={useKeyboard ? handleKeyDown : undefined}
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div
@@ -1148,7 +1149,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
-      [`${classes}`]: !!classes,
+      [String(classes)]: !!classes,
     };
     return combineClasses(classesMap);
   }

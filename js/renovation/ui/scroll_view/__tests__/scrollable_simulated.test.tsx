@@ -11,6 +11,7 @@ import {
   SCROLLABLE_SCROLLBAR_CLASS,
   DIRECTION_BOTH,
   TopPocketState,
+  HOVER_ENABLED_STATE,
 } from '../common/consts';
 
 import devices from '../../../../core/devices';
@@ -73,30 +74,28 @@ describe('Simulated > View', () => {
     const props = new ScrollableSimulatedProps();
     const scrollable = mount<Scrollable>(<Scrollable {...props} />);
 
-    expect(scrollable.props()).toMatchObject({
-      activeStateEnabled: false,
+    expect(scrollable.props()).toEqual({
       addWidgetClass: false,
       aria: {},
       bounceEnabled: true,
-      className: '',
       classes: '',
-      cssText: '',
       direction: 'vertical',
       disabled: false,
-      focusStateEnabled: false,
       forceGeneratePockets: false,
-      hoverStateEnabled: false,
       inertiaEnabled: true,
-      name: '',
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
+      pulledDownText: 'Release to refresh...',
+      pullingDownText: 'Pull down to refresh...',
       reachBottomEnabled: false,
+      reachBottomText: 'Loading...',
+      refreshingText: 'Refreshing...',
+      rtlEnabled: false,
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      tabIndex: 0,
       useKeyboard: true,
       useNative: false,
       visible: true,
@@ -177,6 +176,59 @@ describe('Simulated > Render', () => {
 
           expect(helper.viewModel.containerStyles).toEqual({ touchAction: expectedTouchAction });
         });
+      });
+    });
+
+    each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
+      it('should render scrollbars', () => {
+        const helper = new ScrollableTestHelper({
+          direction,
+          showScrollbar,
+          scrollByThumb: true,
+          rtlEnabled: true,
+          forceGeneratePockets: true,
+          bounceEnabled: true,
+        });
+
+        const scrollbars = helper.getScrollbars();
+        const commonOptions = {
+          scrollByThumb: true,
+          isScrollableHovered: false,
+          bounceEnabled: true,
+          showScrollbar,
+        };
+
+        const isHoverable = showScrollbar === 'onHover' || showScrollbar === 'always';
+        const vScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+        const hScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+
+        if (helper.isBoth) {
+          expect(scrollbars.length).toEqual(2);
+          expect(scrollbars.at(0).props())
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+          expect(scrollbars.at(1).props())
+            .toMatchObject({
+              ...commonOptions,
+              direction: DIRECTION_VERTICAL,
+              forceGeneratePockets: true,
+            });
+          expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
+          expect(scrollbars.at(1).getDOMNode().className).toBe(vScrollbarClasses);
+        } else if (helper.isVertical) {
+          expect(scrollbars.length).toEqual(1);
+          expect(scrollbars.at(0).props())
+            .toMatchObject({
+              ...commonOptions,
+              direction: DIRECTION_VERTICAL,
+              forceGeneratePockets: true,
+            });
+          expect(scrollbars.at(0).getDOMNode().className).toBe(vScrollbarClasses);
+        } else if (helper.isHorizontal) {
+          expect(scrollbars.length).toEqual(1);
+          expect(scrollbars.at(0).props())
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+          expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
+        }
       });
     });
   });

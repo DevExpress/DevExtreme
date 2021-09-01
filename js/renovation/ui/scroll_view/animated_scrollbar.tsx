@@ -18,7 +18,6 @@ import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/
 import { ScrollbarProps } from './common/scrollbar_props';
 import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
 import { EventCallback } from '../common/event_callback';
-import { BaseScrollableProps } from './common/base_scrollable_props';
 import { inRange } from '../../../core/utils/math';
 import { DxMouseEvent } from './common/types.d';
 import { clampIntoRange } from './utils/clamp_into_range';
@@ -99,8 +98,8 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<BaseScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableSimulatedProps, 'direction' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
+| 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,
