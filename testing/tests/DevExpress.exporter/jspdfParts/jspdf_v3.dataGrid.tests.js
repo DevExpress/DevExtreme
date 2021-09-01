@@ -7,6 +7,7 @@ import 'ui/data_grid';
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid_3';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
+import { JSPdfMultilineTests } from './jspdf_v3.dataGrid.multiline.tests.js';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -455,3 +456,5 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 });
+
+JSPdfMultilineTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
