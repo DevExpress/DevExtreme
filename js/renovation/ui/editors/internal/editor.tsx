@@ -6,7 +6,6 @@ import {
   OneWay,
   TwoWay,
   Ref,
-  Effect,
   Event,
   RefObject,
   Fragment,
@@ -133,20 +132,9 @@ export type EditorPropsType = EditorProps
 export class Editor extends JSXComponent<EditorPropsType>() {
   @Ref() widgetRef!: RefObject<Widget>;
 
-  @InternalState() validationMessageGuid?: string;
+  @InternalState() validationMessageGuid = `dx-${new Guid()}`;
 
   @InternalState() rootElement!: HTMLDivElement;
-
-  @Effect()
-  updateValidationMessageGuid(): void {
-    if (this.shouldShowValidationMessage) {
-      if (!this.validationMessageGuid) {
-        this.validationMessageGuid = `dx-${new Guid()}`;
-      }
-    } else {
-      this.validationMessageGuid = undefined;
-    }
-  }
 
   @Method()
   focus(): void {
@@ -190,7 +178,7 @@ export class Editor extends JSXComponent<EditorPropsType>() {
       invalid: !isValid ? 'true' : 'false',
     };
 
-    if (this.validationMessageGuid) {
+    if (this.shouldShowValidationMessage) {
       result.describedBy = this.validationMessageGuid;
     }
 

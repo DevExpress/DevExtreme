@@ -671,21 +671,21 @@ QUnit.module('validation', {
 
         QUnit.test('should be correct after repaint', function(assert) {
             const $editor = this.editor.$element();
+            const describedBy = $editor.attr('aria-describedby');
 
             this.editor.repaint();
 
-            const $validationMessageContent = this.getValidationMessage().$content();
-            assert.strictEqual($editor.attr('aria-describedby'), $validationMessageContent.attr('id'), 'is equal to validation message content id');
+            assert.strictEqual($editor.attr('aria-describedby'), describedBy, 'describedby is correct');
         });
 
-        QUnit.test('should be updated after validation state change', function(assert) {
+        QUnit.test('should be the same after validation state change', function(assert) {
             const $editor = this.editor.$element();
             const describedBy = $editor.attr('aria-describedby');
 
             this.editor.option('isValid', true);
             this.editor.option('isValid', false);
 
-            assert.notEqual($editor.attr('aria-describedby'), describedBy, 'attr was changed');
+            assert.strictEqual($editor.attr('aria-describedby'), describedBy, 'describedby is correct');
         });
     });
 });
