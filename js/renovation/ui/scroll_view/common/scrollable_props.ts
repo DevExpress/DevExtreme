@@ -11,5 +11,5 @@ import { nativeScrolling } from '../../../../core/utils/support';
 export class ScrollableProps extends ScrollableSimulatedProps {
   @OneWay() useSimulatedScrollbar = !!nativeScrolling
   && devices.real().platform === 'android'
-  && !browser.mozilla;;
+  && !browser.mozilla;
 }

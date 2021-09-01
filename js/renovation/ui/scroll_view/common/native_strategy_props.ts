@@ -10,7 +10,7 @@ import {
 
 @ComponentBindings()
 export class ScrollableNativeProps extends BaseScrollableProps {
-  @OneWay() useSimulatedScrollbar: boolean = !nativeScrolling
+  @OneWay() useSimulatedScrollbar: boolean = !!nativeScrolling
   && devices.real().platform === 'android'
   && !browser.mozilla;
 
