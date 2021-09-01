@@ -7,7 +7,7 @@ import {
 import LegacyToolbar from '../../../ui/toolbar';
 
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
-import { ToolbarItemType, ToolbarProps } from './toolbar_props';
+import { ToolbarProps } from './toolbar_props';
 import { isDefined } from '../../../core/utils/type';
 
 export const viewFunction = ({
@@ -17,8 +17,8 @@ export const viewFunction = ({
   const { rtlEnabled, items } = props;
 
   items?.forEach((item) => {
-    const toolbarItem = item as ToolbarItemType;
-    if (isDefined(toolbarItem)) {
+    if (typeof item !== 'string') {
+      const toolbarItem = item;
       if (!isDefined(toolbarItem.options)) {
         toolbarItem.options = {};
       }

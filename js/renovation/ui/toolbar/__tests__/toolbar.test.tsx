@@ -44,6 +44,37 @@ describe('Toolbar', () => {
       });
     });
 
+    it('pass items as string', () => {
+      const toolbarProps = new ToolbarProps();
+      toolbarProps.items = ['item1', 'item2'];
+
+      const props = {
+        props: toolbarProps,
+        restAttributes: { 'rest-attributes': 'true' },
+      } as Partial<Toolbar>;
+      const tree = shallow(<ToolbarView {...props as any} /> as any);
+
+      expect(tree.find(DomComponentWrapper).props()).toMatchObject({
+        componentProps: toolbarProps,
+        componentType: LegacyToolbar,
+        'rest-attributes': 'true',
+      });
+    });
+
+    it('not crash without items', () => {
+      const toolbarProps = new ToolbarProps();
+      const initialProps = {
+        props: toolbarProps,
+        restAttributes: { 'rest-attributes': 'true' },
+      } as Partial<Toolbar>;
+      const tree = shallow(<ToolbarView {...initialProps as any} /> as any);
+
+      expect(tree.find(DomComponentWrapper).props()).toMatchObject({
+        componentType: LegacyToolbar,
+        'rest-attributes': 'true',
+      });
+    });
+
     each([false, true, undefined]).describe('rtlEnabled: %o', (isRtlEnabled) => {
       it('correctly pass rtlEnabled', () => {
         const buttonItem = new ToolbarItem();
