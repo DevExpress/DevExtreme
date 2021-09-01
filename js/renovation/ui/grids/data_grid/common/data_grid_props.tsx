@@ -8,7 +8,6 @@ import {
   Nested,
   Template,
 } from '@devextreme-generator/declarations';
-import { FilterDescriptor } from '../../../../../data';
 import type { dxToolbarItem } from '../../../../../ui/toolbar';
 import type { dxLoadPanelAnimation } from '../../../../../ui/load_panel';
 import DxDataGrid from '../../../../../ui/data_grid';
@@ -40,7 +39,6 @@ import type {
   RowDraggingMoveEvent,
   RowDraggingStartEvent,
   EditingStartEvent,
-  EditorOptions,
   EditorPreparedEvent,
   EditorPreparingEvent,
   ExportedEvent,
@@ -112,43 +110,38 @@ function getDefaultShowColumnLines(): boolean {
 }
 
 @ComponentBindings()
-export class DataGridColumnButton
-  <TRowData,
-   TKey,
-   TCellValue,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]
-   =(Column<TRowData, TKey, any> | string)[],
-  > {
+export class DataGridColumnButton {
   @OneWay()
   name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
 
   @Event()
   onClick?:
-  | ((e: ColumnButtonClickEvent<TRowData, TKey, TCellValue, TColumns>) => any);
+  | ((e: ColumnButtonClickEvent) => any);
 
   @OneWay()
   template?:
   | template
   | ((
     cellElement: DxElement,
-    cellInfo: ColumnButtonTemplateData<TRowData, TKey, TCellValue, TColumns>,
+    cellInfo: ColumnButtonTemplateData,
   ) => string | UserDefinedElement);
 
   @OneWay()
   visible?:
   | boolean
   | ((options: {
-    component?: DxDataGrid<TRowData, string, TKey, TColumns>;
-    row?: RowObject<TRowData, TKey, TColumns>;
-    column?: Column<TRowData, TKey, TCellValue>;
+    component?: DxDataGrid;
+    row?: RowObject;
+    column?: Column;
   }) => boolean);
 
   @OneWay()
-  disabled?: boolean
+  disabled?:
+  | boolean
   | ((options: {
-    component?: DxDataGrid<TRowData, string, TKey, TColumns>;
-    row?: RowObject<TRowData, TKey, TColumns>;
-    column?: Column<TRowData, TKey, TCellValue>;
+    component?: DxDataGrid;
+    row?: RowObject;
+    column?: Column;
   }) => boolean);
 }
 
@@ -197,7 +190,7 @@ export class DataGridColumnLookup {
 }
 
 @ComponentBindings()
-export class DataGridColumn<TRowData, TKey, TCellValue> {
+export class DataGridColumn {
   @OneWay()
   alignment?: 'center' | 'left' | 'right';
 
@@ -229,20 +222,20 @@ export class DataGridColumn<TRowData, TKey, TCellValue> {
   allowSorting?: boolean;
 
   @Event()
-  calculateCellValue?: (rowData: TRowData) => TCellValue;
+  calculateCellValue?: (rowData: any) => any;
 
   @Event()
-  calculateDisplayValue?: string | ((rowData: TRowData) => any);
+  calculateDisplayValue?: string | ((rowData: any) => any);
 
   @Event()
   calculateFilterExpression?: (
-    filterValue: TCellValue | TCellValue[],
+    filterValue: any,
     selectedFilterOperation: string,
-    target: 'filterRow' | 'headerFilter' | 'filterBuilder' | 'search'
-  ) => FilterDescriptor;
+    target: string,
+  ) => string | any[] | ((...args: any[]) => any);
 
   @Event()
-  calculateSortValue?: string | ((rowData: TRowData) => any);
+  calculateSortValue?: string | ((rowData: any) => any);
 
   @OneWay()
   caption?: string;
@@ -260,7 +253,7 @@ export class DataGridColumn<TRowData, TKey, TCellValue> {
   dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
 
   @OneWay()
-  editorOptions?: EditorOptions;
+  editorOptions?: any;
 
   @OneWay()
   encodeHtml?: boolean;
@@ -290,10 +283,10 @@ export class DataGridColumn<TRowData, TKey, TCellValue> {
   filterType?: 'exclude' | 'include';
 
   @OneWay()
-  filterValue?: TCellValue;
+  filterValue?: any;
 
   @OneWay()
-  filterValues?: TCellValue[];
+  filterValues?: any[];
 
   @OneWay()
   fixed?: boolean;
@@ -347,9 +340,9 @@ export class DataGridColumn<TRowData, TKey, TCellValue> {
 
   @Event()
   setCellValue?: (
-    newData: TRowData,
-    value: TCellValue,
-    currentRowData: TRowData,
+    newData: any,
+    value: any,
+    currentRowData: any,
   ) => undefined | DxPromise;
 
   @OneWay()
@@ -365,7 +358,7 @@ export class DataGridColumn<TRowData, TKey, TCellValue> {
   sortOrder?: 'asc' | 'desc';
 
   @Event()
-  sortingMethod?: (value1: TCellValue, value2: TCellValue) => number;
+  sortingMethod?: (value1: any, value2: any) => number;
 
   @OneWay()
   trueText?: string;
@@ -401,37 +394,37 @@ export class DataGridColumn<TRowData, TKey, TCellValue> {
   autoExpandGroup?: boolean;
 
   @Nested()
-  buttons?: ('cancel' | 'delete' | 'edit' | 'save' | 'undelete' | DataGridColumnButton<TRowData, TKey, TCellValue>)[];
+  buttons?: ('cancel' | 'delete' | 'edit' | 'save' | 'undelete' | DataGridColumnButton)[];
 
   @OneWay()
-  calculateGroupValue?: string | ((rowData: TRowData) => any);
+  calculateGroupValue?: string | ((rowData: any) => any);
 
   @OneWay()
   cellTemplate?:
   | template
   | ((
     cellElement: DxElement,
-    cellInfo: ColumnCellTemplateData<TRowData, TKey, TCellValue>,
-  ) => string | UserDefinedElement);
+    cellInfo: ColumnCellTemplateData,
+  ) => any);
 
   @OneWay()
-  columns?: (Column<TRowData, TKey, any> | string)[];
+  columns?: (Column | string)[];
 
   @OneWay()
   editCellTemplate?:
   | template
   | ((
     cellElement: DxElement,
-    cellInfo: ColumnEditCellTemplateData<TRowData, TKey, TCellValue>,
-  ) => string | UserDefinedElement);
+    cellInfo: ColumnEditCellTemplateData,
+  ) => any);
 
   @OneWay()
   groupCellTemplate?:
   | template
   | ((
     cellElement: DxElement,
-    cellInfo: ColumnGroupCellTemplateData<TRowData, TKey, TCellValue>,
-  ) => string | UserDefinedElement);
+    cellInfo: ColumnGroupCellTemplateData,
+  ) => any);
 
   @OneWay()
   groupIndex?: number;
@@ -441,8 +434,8 @@ export class DataGridColumn<TRowData, TKey, TCellValue> {
   | template
   | ((
     columnHeader: DxElement,
-    headerInfo: ColumnHeaderCellTemplateData<TRowData, TKey, TCellValue>,
-  ) => string | UserDefinedElement);
+    headerInfo: ColumnHeaderCellTemplateData,
+  ) => any);
 
   @OneWay()
   showWhenGrouped?: boolean;
@@ -488,30 +481,19 @@ export class DataGridEditingTexts {
 }
 
 @ComponentBindings()
-export class DataGridEditing
-  <TRowData,
-   TKey,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]
-   = (Column<TRowData, TKey, any> | string)[],
-  > {
+export class DataGridEditing {
   @OneWay()
   allowAdding? = false;
 
   @OneWay()
   allowDeleting?:
   | boolean
-  | ((options: {
-    component?: DxDataGrid<TRowData, string, TKey>;
-    row?: RowObject<TRowData, TKey, TColumns>;
-  }) => boolean) = false;
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
 
   @OneWay()
   allowUpdating?:
   | boolean
-  | ((options: {
-    component?: DxDataGrid<TRowData, string, TKey>;
-    row?: RowObject<TRowData, TKey, TColumns>;
-  }) => boolean) = false;
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
 
   @OneWay()
   confirmDelete? = true;
@@ -556,7 +538,7 @@ export class DataGridEditing
   changes?: any[] = [];
 
   @TwoWay()
-  editRowKey?: TKey | null = null;
+  editRowKey?: any = null;
 
   @TwoWay()
   editColumnName?: string | null = null;
@@ -625,7 +607,7 @@ export class DataGridScrolling {
 }
 
 @ComponentBindings()
-export class DataGridSelection<TDeferred extends boolean> {
+export class DataGridSelection {
   @OneWay()
   allowSelectAll?: boolean;
 
@@ -633,7 +615,7 @@ export class DataGridSelection<TDeferred extends boolean> {
   mode?: 'multiple' | 'none' | 'single';
 
   @OneWay()
-  deferred?: TDeferred;
+  deferred?: boolean;
 
   @OneWay()
   selectAllMode?: 'allPages' | 'page';
@@ -772,9 +754,9 @@ export class DataGridSummaryTotalItem {
 }
 
 @ComponentBindings()
-export class DataGridSummary<TKey, TRowData> {
+export class DataGridSummary {
   @Event()
-  calculateCustomSummary?: (options: CustomSummaryInfo<TKey, TRowData>) => any;
+  calculateCustomSummary?: (options: CustomSummaryInfo) => any;
 
   @Nested()
   groupItems?: DataGridSummaryGroupItem[];
@@ -827,7 +809,7 @@ export class DataGridPager {
 }
 
 @ComponentBindings()
-export class DataGridMasterDetail<TRowData, TKey> {
+export class DataGridMasterDetail {
   @OneWay()
   autoExpandAll?: boolean;
 
@@ -839,12 +821,12 @@ export class DataGridMasterDetail<TRowData, TKey> {
   | template
   | ((
     detailElement: DxElement,
-    detailInfo: MasterDetailTemplateData<TRowData, TKey>,
-  ) => string | UserDefinedElement);
+    detailInfo: MasterDetailTemplateData,
+  ) => any);
 }
 
 @ComponentBindings()
-export class DataGridRowDragging<TKey, TRowData> {
+export class DataGridRowDragging {
   @OneWay()
   allowDropInsideItem?: boolean;
 
@@ -864,7 +846,7 @@ export class DataGridRowDragging<TKey, TRowData> {
   cursorOffset?: string | { x?: number; y?: number };
 
   @OneWay()
-  data?: TRowData;
+  data?: any;
 
   @OneWay()
   dragDirection?: 'both' | 'horizontal' | 'vertical';
@@ -873,7 +855,7 @@ export class DataGridRowDragging<TKey, TRowData> {
   dragTemplate?:
   | template
   | ((
-    dragInfo: RowDraggingTemplateData<TRowData>,
+    dragInfo: RowDraggingTemplateData,
     containerElement: DxElement,
   ) => string | UserDefinedElement);
 
@@ -890,25 +872,25 @@ export class DataGridRowDragging<TKey, TRowData> {
   handle?: string;
 
   @Event()
-  onAdd?: (e: RowDraggingAddEvent<TKey, TRowData>) => void;
+  onAdd?: (e: RowDraggingAddEvent) => void;
 
   @Event()
-  onDragChange?: (e: RowDraggingChangeEvent<TKey, TRowData>) => void;
+  onDragChange?: (e: RowDraggingChangeEvent) => void;
 
   @Event()
-  onDragEnd?: (e: RowDraggingEndEvent<TKey, TRowData>) => void;
+  onDragEnd?: (e: RowDraggingEndEvent) => void;
 
   @Event()
-  onDragMove?: (e: RowDraggingMoveEvent<TKey, TRowData>) => void;
+  onDragMove?: (e: RowDraggingMoveEvent) => void;
 
   @Event()
-  onDragStart?: (e: RowDraggingStartEvent<TKey, TRowData>) => void;
+  onDragStart?: (e: RowDraggingStartEvent) => void;
 
   @Event()
-  onRemove?: (e: RowDraggingRemoveEvent<TKey, TRowData>) => void;
+  onRemove?: (e: RowDraggingRemoveEvent) => void;
 
   @Event()
-  onReorder?: (e: RowDraggingReorderEvent<TKey, TRowData>) => void;
+  onReorder?: (e: RowDraggingReorderEvent) => void;
 
   @OneWay()
   scrollSensitivity?: number;
@@ -1007,12 +989,12 @@ export class DataGridSorting {
 }
 
 @ComponentBindings()
-export class DataGridStateStoring<TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'> {
+export class DataGridStateStoring {
   @Event()
-  customLoad?: TStateStoringType extends 'custom' ? (() => PromiseLike<any>) : never;
+  customLoad?: () => DxPromise<any>;
 
   @Event()
-  customSave?: TStateStoringType extends 'custom' ? ((gridState: any) => void) : never;
+  customSave?: (gridState: any) => any;
 
   @OneWay()
   enabled?: boolean;
@@ -1021,16 +1003,16 @@ export class DataGridStateStoring<TStateStoringType extends 'custom' | 'localSto
   savingTimeout?: number;
 
   @OneWay()
-  storageKey?: TStateStoringType extends 'localStorage' | 'sessionStorage' ? string : never;
+  storageKey?: string;
 
   @OneWay()
   type?: 'custom' | 'localStorage' | 'sessionStorage';
 }
 
 @ComponentBindings()
-export class DataGridFilterPanel<TRowData, TKey> {
+export class DataGridFilterPanel {
   @Event()
-  customizeText?: (e: FilterPanelCustomizeTextArg<DxDataGrid<TRowData, string, TKey>>) => string;
+  customizeText?: (e: FilterPanelCustomizeTextArg<DxDataGrid>) => string;
 
   @OneWay()
   filterEnabled?: boolean;
@@ -1156,10 +1138,10 @@ export class DataGridLoadPanel {
 }
 
 @ComponentBindings()
-export class DataGridExport<TKey, TRowData> {
+export class DataGridExport {
   @OneWay() allowExportSelectedData?: boolean;
 
-  @Event() customizeExcelCell?: (options: ExcelCellInfo<TKey, TRowData>) => void;
+  @Event() customizeExcelCell?: (options: ExcelCellInfo) => any;
 
   @OneWay() enabled?: boolean;
 
@@ -1207,19 +1189,10 @@ export class DataGridToolbar {
 }
 
 @ComponentBindings()
-export class DataGridProps
-  <TRowData = any,
-   TKeyExpr extends string | string[] = string | string[],
-   TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]
-   = (Column<TRowData, TKey, any> | string)[],
-   TSelectionDeferred extends boolean=boolean,
-   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
-  >
-  extends BaseWidgetProps /* implements Options */ {
-  @Nested() columns?: TColumns;
+export class DataGridProps extends BaseWidgetProps /* implements Options */ {
+  @Nested() columns?: (DataGridColumn | string)[];
 
-  @Nested() editing?: DataGridEditing<TKey, TRowData> = {
+  @Nested() editing?: DataGridEditing = {
     mode: 'row',
     refreshMode: 'full',
     allowAdding: false,
@@ -1251,7 +1224,7 @@ export class DataGridProps
     },
   };
 
-  @OneWay() export?: DataGridExport<TKey, TRowData> = {
+  @OneWay() export?: DataGridExport = {
     enabled: false,
     fileName: 'DataGrid',
     excelFilterEnabled: false,
@@ -1285,7 +1258,7 @@ export class DataGridProps
     },
   };
 
-  @Nested() masterDetail?: DataGridMasterDetail<TRowData, TKey> = {
+  @Nested() masterDetail?: DataGridMasterDetail = {
     enabled: false,
     autoExpandAll: false,
   };
@@ -1309,18 +1282,18 @@ export class DataGridProps
     minGap: 1,
   };
 
-  @Nested() selection?: DataGridSelection<TSelectionDeferred> = {
+  @Nested() selection?: DataGridSelection = {
     mode: 'none',
     showCheckBoxesMode: 'onClick',
     allowSelectAll: true,
     selectAllMode: 'allPages',
     maxFilterLengthInRequest: 1500,
-    deferred: false as TSelectionDeferred,
+    deferred: false,
   };
 
   @Nested() sortByGroupSummaryInfo?: DataGridSortByGroupSummaryInfoItem[];
 
-  @Nested() summary?: DataGridSummary<TKey, TRowData> = {
+  @Nested() summary?: DataGridSummary = {
     groupItems: undefined,
     totalItems: undefined,
     calculateCustomSummary: undefined,
@@ -1360,7 +1333,7 @@ export class DataGridProps
     },
   };
 
-  @Nested() filterPanel?: DataGridFilterPanel<TKey, TRowData> = {
+  @Nested() filterPanel?: DataGridFilterPanel = {
     visible: false,
     filterEnabled: true,
     texts: {
@@ -1438,7 +1411,7 @@ export class DataGridProps
     enabled: true,
   };
 
-  @Nested() rowDragging?: DataGridRowDragging<TKey, TRowData> = {
+  @Nested() rowDragging?: DataGridRowDragging = {
     showDragIcons: true,
     dropFeedbackMode: 'indicate',
     allowReordering: false,
@@ -1463,22 +1436,20 @@ export class DataGridProps
     showSortIndexes: true,
   };
 
-  @Nested() stateStoring?: DataGridStateStoring<TStateStoringType> = {
+  @Nested() stateStoring?: DataGridStateStoring = {
     enabled: false,
     type: 'localStorage',
     savingTimeout: 2000,
   };
 
-  @Template() rowTemplate?: template | (
-    (rowElement: DxElement, rowInfo: TRowData) => string | UserDefinedElement
-  );
+  @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any);
 
-  @OneWay() customizeColumns?: (columns: TColumns) => void;
+  @OneWay() customizeColumns?: (columns: Column[]) => any;
 
   @OneWay() customizeExportData?: (
-    columns: TColumns,
-    rows: RowObject<TRowData, TKey, TColumns>[],
-  ) => void;
+    columns: Column[],
+    rows: RowObject[],
+  ) => any;
 
   @OneWay() keyExpr?: string | string[];
 
@@ -1514,7 +1485,7 @@ export class DataGridProps
 
   @OneWay() columnWidth?: number;
 
-  @OneWay() dataSource?: string | TRowData[] | Store | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | any[] | Store | DataSource | DataSourceOptions;
 
   @OneWay() dateSerializationFormat?: string;
 
@@ -1587,93 +1558,92 @@ export class DataGridProps
 
   @OneWay() toolbar?: DataGridToolbar;
 
-  @TwoWay() filterValue: FilterDescriptor = [];
+  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 
   @TwoWay() focusedColumnIndex = -1;
 
   @TwoWay() focusedRowIndex = -1;
 
-  @TwoWay() focusedRowKey: TKey | null = null;
+  @TwoWay() focusedRowKey: any = null;
 
-  @TwoWay() selectedRowKeys: TKey[] = [];
+  @TwoWay() selectedRowKeys: any[] = [];
 
-  @TwoWay() selectionFilter: FilterDescriptor = [];
+  @TwoWay() selectionFilter: string | any[] | ((...args: any[]) => any) = [];
 
   @Event() onCellClick?:
-  | ((e: CellClickEvent<TKey, TRowData>) => void);
+  | ((e: CellClickEvent) => any);
 
-  @Event() onCellDblClick?: (e: CellDblClickEvent<TKey, TRowData>) => void;
+  @Event() onCellDblClick?: (e: CellDblClickEvent) => void;
 
-  @Event() onCellHoverChanged?: (e: CellHoverChangedEvent<TKey, TRowData>) => void;
+  @Event() onCellHoverChanged?: (e: CellHoverChangedEvent) => void;
 
-  @Event() onCellPrepared?: (e: CellPreparedEvent<TKey, TRowData>) => void;
+  @Event() onCellPrepared?: (e: CellPreparedEvent) => void;
 
-  @Event() onContextMenuPreparing?: (e: ContextMenuPreparingEvent<TKey, TRowData>) => void;
+  @Event() onContextMenuPreparing?: (e: ContextMenuPreparingEvent) => void;
 
-  @Event() onEditingStart?: (e: EditingStartEvent<TKey, TRowData>) => void;
+  @Event() onEditingStart?: (e: EditingStartEvent) => void;
 
-  @Event() onEditorPrepared?: (options: EditorPreparedEvent<TKey, TRowData>) => void;
+  @Event() onEditorPrepared?: (options: EditorPreparedEvent) => void;
 
-  @Event() onEditorPreparing?: (e: EditorPreparingEvent<TKey, TRowData>) => void;
+  @Event() onEditorPreparing?: (e: EditorPreparingEvent) => void;
 
-  @Event() onExported?: (e: ExportedEvent<TKey, TRowData>) => void;
+  @Event() onExported?: (e: ExportedEvent) => void;
 
-  @Event() onExporting?: (e: ExportingEvent<TKey, TRowData>) => void;
+  @Event() onExporting?: (e: ExportingEvent) => void;
 
-  @Event() onFileSaving?: (e: FileSavingEvent<TKey, TRowData>) => void;
+  @Event() onFileSaving?: (e: FileSavingEvent) => void;
 
-  @Event() onFocusedCellChanged?: (e: FocusedCellChangedEvent<TKey, TRowData>) => void;
+  @Event() onFocusedCellChanged?: (e: FocusedCellChangedEvent) => void;
 
-  @Event() onFocusedCellChanging?: (e: FocusedCellChangingEvent<TKey, TRowData>) => void;
+  @Event() onFocusedCellChanging?: (e: FocusedCellChangingEvent) => void;
 
-  @Event() onFocusedRowChanged?: (e: FocusedRowChangedEvent<TKey, TRowData>) => void;
+  @Event() onFocusedRowChanged?: (e: FocusedRowChangedEvent) => void;
 
-  @Event() onFocusedRowChanging?: (e: FocusedRowChangingEvent<TKey, TRowData>) => void;
+  @Event() onFocusedRowChanging?: (e: FocusedRowChangingEvent) => void;
 
-  @Event() onRowClick?: (e: RowClickEvent<TKey, TRowData>) => void;
+  @Event() onRowClick?: (e: RowClickEvent) => void;
 
-  @Event() onRowDblClick?: (e: RowDblClickEvent<TKey, TRowData>) => void;
+  @Event() onRowDblClick?: (e: RowDblClickEvent) => void;
 
-  @Event() onRowPrepared?: (e: RowPreparedEvent<TKey, TRowData>) => void;
+  @Event() onRowPrepared?: (e: RowPreparedEvent) => void;
 
-  @Event() onAdaptiveDetailRowPreparing?:
-  (e: AdaptiveDetailRowPreparingEvent<TKey, TRowData>) => void;
+  @Event() onAdaptiveDetailRowPreparing?: (e: AdaptiveDetailRowPreparingEvent) => void;
 
-  @Event() onDataErrorOccurred?: (e: DataErrorOccurredEvent<TKey, TRowData>) => void;
+  @Event() onDataErrorOccurred?: (e: DataErrorOccurredEvent) => void;
 
-  @Event() onInitNewRow?: (e: InitNewRowEvent<TKey, TRowData>) => void;
+  @Event() onInitNewRow?: (e: InitNewRowEvent) => void;
 
-  @Event() onKeyDown?: (e: KeyDownEvent<TKey, TRowData>) => void;
+  @Event() onKeyDown?: (e: KeyDownEvent) => void;
 
-  @Event() onRowCollapsed?: (e: RowCollapsedEvent<TKey, TRowData>) => void;
+  @Event() onRowCollapsed?: (e: RowCollapsedEvent) => void;
 
-  @Event() onRowCollapsing?: (e: RowCollapsingEvent<TKey, TRowData>) => void;
+  @Event() onRowCollapsing?: (e: RowCollapsingEvent) => void;
 
-  @Event() onRowExpanded?: (e: RowExpandedEvent<TKey, TRowData>) => void;
+  @Event() onRowExpanded?: (e: RowExpandedEvent) => void;
 
-  @Event() onRowExpanding?: (e: RowExpandingEvent<TKey, TRowData>) => void;
+  @Event() onRowExpanding?: (e: RowExpandingEvent) => void;
 
-  @Event() onRowInserted?: (e: RowInsertedEvent<TKey, TRowData>) => void;
+  @Event() onRowInserted?: (e: RowInsertedEvent) => void;
 
-  @Event() onRowInserting?: (e: RowInsertingEvent<TKey, TRowData>) => void;
+  @Event() onRowInserting?: (e: RowInsertingEvent) => void;
 
-  @Event() onRowRemoved?: (e: RowRemovedEvent<TKey, TRowData>) => void;
+  @Event() onRowRemoved?: (e: RowRemovedEvent) => void;
 
-  @Event() onRowRemoving?: (e: RowRemovingEvent<TKey, TRowData>) => void;
+  @Event() onRowRemoving?: (e: RowRemovingEvent) => void;
 
-  @Event() onRowUpdated?: (e: RowUpdatedEvent<TKey, TRowData>) => void;
+  @Event() onRowUpdated?: (e: RowUpdatedEvent) => void;
 
-  @Event() onRowUpdating?: (e: RowUpdatingEvent<TKey, TRowData>) => void;
+  @Event() onRowUpdating?: (e: RowUpdatingEvent) => void;
 
-  @Event() onRowValidating?: (e: RowValidatingEvent<TKey, TRowData>) => void;
+  @Event() onRowValidating?: (e: RowValidatingEvent) => void;
 
-  @Event() onSelectionChanged?: (e: SelectionChangedEvent<TKey, TRowData>) => void;
+  @Event() onSelectionChanged?: (e: SelectionChangedEvent) => void;
 
-  @Event() onToolbarPreparing?: (e: ToolbarPreparingEvent<TKey, TRowData>) => void;
+  @Event() onToolbarPreparing?: (e: ToolbarPreparingEvent) => void;
 
-  @Event() onSaving?: (e: SavingEvent<TKey, TRowData>) => void;
+  @Event() onSaving?: (e: SavingEvent) => void;
 
-  @Event() onSaved?: (e: SavedEvent<TKey, TRowData>) => void;
+  @Event() onSaved?: (e: SavedEvent) => void;
 
   // private
   @OneWay() adaptColumnWidthByRatio?: boolean = true;

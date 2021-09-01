@@ -8,7 +8,6 @@ import { gridViewModule } from '../../../../ui/grid_core/ui.grid_core.grid_view'
 import { DataGridProps } from './common/data_grid_props';
 import { deferRender } from '../../../../core/utils/common';
 import { hasWindow } from '../../../../core/utils/window';
-import { Column } from '../../../../ui/data_grid';
 
 const { VIEW_NAMES } = gridViewModule;
 
@@ -32,19 +31,10 @@ export const viewFunction = ({
   />
 );
 
-type DataGridPropsType
-  <TRowData,
-   TKeyExpr extends string | string[],
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   TColumns extends (Column<TRowData, TKey, any> | string)[]
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   =(Column<TRowData, TKey, any> | string)[],
-  > = Pick<DataGridProps<TRowData, TKeyExpr, TKey, TColumns>, 'showBorders'> & DataGridViewProps<TRowData, TKeyExpr, TKey, TColumns>;
+type DataGridPropsType = Pick<DataGridProps, 'showBorders'> & DataGridViewProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class DataGridViews extends JSXComponent<DataGridPropsType<unknown, string | string[], unknown>, 'instance'>() {
+export class DataGridViews extends JSXComponent<DataGridPropsType, 'instance'>() {
   get views(): { name: string; view: GridBaseView }[] {
     if (!this.props.instance) {
       return [];

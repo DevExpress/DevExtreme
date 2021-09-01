@@ -16,15 +16,10 @@ import { GridInstance, DataGridForComponentWrapper } from './common/types';
 import { getUpdatedOptions } from '../../common/utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
 import { hasWindow } from '../../../../core/utils/window';
-import { UserDefinedElement, UserDefinedElementsArray, DxElement } from '../../../../core/element'; // eslint-disable-line import/named
+import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
-import type {
-  OptionChangedEvent, Column, RowObject,
-} from '../../../../ui/data_grid';
-import { FilterDescriptor } from '../../../../data';
-import DataSource from '../../../../data/data_source';
-import dxScrollable from '../../../../ui/scroll_view/ui.scrollable';
+import type { OptionChangedEvent } from '../../../../ui/data_grid';
 
 const aria = { role: 'presentation' };
 
@@ -51,7 +46,7 @@ function normalizeProps(props: Record<string, unknown>): Record<string, unknown>
   return result;
 }
 
-export const viewFunction = <TRowData, TKey>({
+export const viewFunction = ({
   initializedInstance,
   widgetElementRef,
   onHoverStart,
@@ -74,7 +69,7 @@ export const viewFunction = <TRowData, TKey>({
     className,
   },
   restAttributes,
-}: DataGrid<TRowData, string, TKey>): JSX.Element => (
+}: DataGrid): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
     rootElementRef={widgetElementRef}
     accessKey={accessKey}
@@ -99,46 +94,33 @@ export const viewFunction = <TRowData, TKey>({
     {...restAttributes}
   >
     <DataGridViews
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      instance={initializedInstance as any}
+      instance={initializedInstance}
       showBorders={showBorders}
     />
   </Widget>
-  );
+);
 
 @Component({
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })
-export class DataGrid
-  <TRowData,
-   TKeyExpr extends string | string[],
-   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-   TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-   TColumns extends (Column<TRowData, TKey, any> | string)[]
-   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-   =(Column<TRowData, TKey, any> | string)[],
-  >
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  extends JSXComponent<DataGridProps>()
-  implements DataGridForComponentWrapper<TRowData, TKeyExpr, TKey, TColumns> {
+export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
   @ForwardRef() widgetElementRef?: RefObject<HTMLDivElement>;
 
-  @Mutable() instance!: GridInstance<TRowData, TKeyExpr, TKey, TColumns>;
+  @Mutable() instance!: GridInstance;
 
   @InternalState() initialized = false;
 
   @Mutable() isTwoWayPropUpdating = false;
 
-  @Mutable() prevProps!: DataGridProps<TRowData, TKeyExpr, TKey, TColumns>;
+  @Mutable() prevProps!: DataGridProps;
 
-  get initializedInstance(): GridInstance<TRowData, TKeyExpr, TKey, TColumns> | undefined {
+  get initializedInstance(): GridInstance | undefined {
     return this.initialized ? this.instance : undefined;
   }
 
   @Method()
-  getComponentInstance(): GridInstance<TRowData, TKeyExpr, TKey, TColumns> {
+  getComponentInstance(): GridInstance {
     return this.instance;
   }
 
@@ -152,7 +134,7 @@ export class DataGrid
   }
 
   @Method()
-  byKey(key: TKey): DxPromise<TRowData> {
+  byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -162,13 +144,8 @@ export class DataGrid
   }
 
   @Method()
-  cellValue(
-    rowIndex: number,
-    dataField: string | number,
-    value?: TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any,
-  ): TColumns[number] extends Column<TRowData, TKey, infer T> ? T : any {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.instance?.cellValue(rowIndex, dataField as any, value as any) as any;
+  cellValue(rowIndex: number, dataField: string | number, value: any): any {
+    return this.instance?.cellValue(rowIndex, dataField as any, value);
   }
 
   @Method()
@@ -202,28 +179,16 @@ export class DataGrid
   }
 
   @Method()
-  columnOption<T extends string>(
-    id: number | string,
-    optionName?: T,
-    optionValue?: T extends keyof Column<TRowData, TKey, any>
-      ? Column<TRowData, TKey, any>[T]
-      : any,
-  ): (T extends keyof Column<TRowData, TKey, any> ? Column<TRowData, TKey, any>[T] : any)
-    | undefined {
+  columnOption(id: number | string, optionName?: string, optionValue?: unknown): any {
     if (this.instance) {
       if (arguments.length === 1 || optionName === undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return this.instance.columnOption(id) as any;
-      }
-      if (arguments.length === 2) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return this.instance.columnOption(id);
+      } if (arguments.length === 2) {
         return this.instance.columnOption(id, optionName);
       }
-      if (arguments.length === 3) {
-        this.instance.columnOption(id, optionName, optionValue as any);
-      }
+      return this.instance.columnOption(id, optionName, optionValue);
     }
-    return undefined;
+    return null;
   }
 
   @Method()
@@ -242,7 +207,7 @@ export class DataGrid
   }
 
   @Method()
-  deselectRows(keys: TKey[]): DxPromise<TRowData[]> {
+  deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -262,12 +227,12 @@ export class DataGrid
   }
 
   @Method()
-  expandAdaptiveDetailRow(key: TKey): void {
+  expandAdaptiveDetailRow(key: any): void {
     return this.instance?.expandAdaptiveDetailRow(key);
   }
 
   @Method()
-  filter(filterExpr: FilterDescriptor): void {
+  filter(filterExpr: any): void {
     return this.instance?.filter(filterExpr);
   }
 
@@ -279,22 +244,22 @@ export class DataGrid
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
-  ): DxElement | undefined {
+  ): any/* DxElement | undefined */ {
     return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
   @Method()
-  getCombinedFilter(returnDataField?: boolean): FilterDescriptor {
+  getCombinedFilter(returnDataField?: boolean): any {
     return this.instance?.getCombinedFilter(returnDataField as boolean);
   }
 
   @Method()
-  getDataSource(): DataSource<TKey, TRowData> /* DataSource */ {
+  getDataSource(): any /* DataSource */ {
     return this.instance?.getDataSource();
   }
 
   @Method()
-  getKeyByRowIndex(rowIndex: number): TKey {
+  getKeyByRowIndex(rowIndex: number): any {
     return this.instance?.getKeyByRowIndex(rowIndex);
   }
 
@@ -304,12 +269,12 @@ export class DataGrid
   }
 
   @Method()
-  getRowIndexByKey(key: TKey): number {
+  getRowIndexByKey(key: any | string | number): number {
     return this.instance?.getRowIndexByKey(key);
   }
 
   @Method()
-  getScrollable(): dxScrollable /* dxScrollable */ {
+  getScrollable(): any /* dxScrollable */ {
     return this.instance?.getScrollable();
   }
 
@@ -329,27 +294,27 @@ export class DataGrid
   }
 
   @Method()
-  isAdaptiveDetailRowExpanded(key: TKey): boolean {
+  isAdaptiveDetailRowExpanded(key: any): boolean {
     return this.instance?.isAdaptiveDetailRowExpanded(key);
   }
 
   @Method()
-  isRowFocused(key: TKey): boolean {
+  isRowFocused(key: any): boolean {
     return this.instance?.isRowFocused(key);
   }
 
   @Method()
-  isRowSelected(key: TKey): boolean {
+  isRowSelected(key: any): boolean {
     return this.instance?.isRowSelected(key);
   }
 
   @Method()
-  keyOf(obj: TRowData): TKey {
+  keyOf(obj: any): any {
     return this.instance?.keyOf(obj);
   }
 
   @Method()
-  navigateToRow(key: TKey): DxPromise {
+  navigateToRow(key: any): DxPromise {
     return this.instance?.navigateToRow(key);
   }
 
@@ -399,13 +364,13 @@ export class DataGrid
 
   @Method()
   selectRows(
-    keys: TKey[], preserve: boolean,
-  ): DxPromise<TRowData[]> {
+    keys: any[], preserve: boolean,
+  ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  selectRowsByIndexes(indexes: number[]): DxPromise<TRowData[]> {
+  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -414,11 +379,11 @@ export class DataGrid
     return this.instance?.showColumnChooser();
   }
 
-  // @Method()
-  // state(state?: State<TKey, TRowData, dxDataGrid<TKey, TRowData>>):
-  // State<TKey, TRowData, dxDataGrid> | void {
-  //   return this.instance?.state(state);
-  // }
+  /*
+  @Method()
+  state(state: any): any {
+    return this.instance?.state();
+  } */
 
   @Method()
   undeleteRow(rowIndex: number): void {
@@ -436,7 +401,7 @@ export class DataGrid
   }
 
   @Method()
-  addColumn(columnOptions: Column<TRowData, TKey, any> | string): void {
+  addColumn(columnOptions: any | string): void {
     return this.instance?.addColumn(columnOptions);
   }
 
@@ -456,7 +421,7 @@ export class DataGrid
   }
 
   @Method()
-  collapseRow(key: TKey): DxPromise {
+  collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -466,7 +431,7 @@ export class DataGrid
   }
 
   @Method()
-  expandRow(key: TKey): DxPromise {
+  expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
 
@@ -476,12 +441,12 @@ export class DataGrid
   }
 
   @Method()
-  getSelectedRowKeys(): TKey[] | DxPromise<TKey[]> {
+  getSelectedRowKeys(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
-  getSelectedRowsData(): TKey[] | DxPromise<TKey[]> {
+  getSelectedRowsData(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowsData();
   }
 
@@ -491,17 +456,17 @@ export class DataGrid
   }
 
   @Method()
-  getVisibleColumns(headerLevel?: number): TColumns {
+  getVisibleColumns(headerLevel?: number): any /* dxDataGridColumn[] */ {
     return this.instance?.getVisibleColumns(headerLevel as number);
   }
 
   @Method()
-  getVisibleRows(): RowObject<TRowData, TKey, TColumns>[] /* dxDataGridRowObject[] */ {
+  getVisibleRows(): any /* dxDataGridRowObject[] */ {
     return this.instance?.getVisibleRows();
   }
 
   @Method()
-  isRowExpanded(key: TKey): boolean {
+  isRowExpanded(key: any): boolean {
     return this.instance?.isRowExpanded(key);
   }
 
@@ -516,7 +481,7 @@ export class DataGrid
   }
 
   @Method()
-  getTopVisibleRowData(): TRowData {
+  getTopVisibleRowData(): any {
     return this.instance?.getTopVisibleRowData();
   }
 
@@ -544,12 +509,10 @@ export class DataGrid
         this.instance._options.silent(path, previousValue);
         this.instance.option(path, value);
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.prevProps = this.props as any;
+      this.prevProps = this.props;
       this.instance.endUpdate();
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.prevProps = this.props as any;
+      this.prevProps = this.props;
     }
   }
 
@@ -569,7 +532,7 @@ export class DataGrid
 
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onInitialized: (e: { component: GridInstance<TRowData, TKeyExpr, TKey, TColumns> }) => {
+      onInitialized: (e: { component: GridInstance }) => {
         this.instance = e.component;
 
         (onInitialized as (e: unknown) => void)?.(e);
@@ -580,7 +543,7 @@ export class DataGrid
     new DataGridComponent(
       element,
       normalizeProps(restProps),
-    ) as unknown as GridInstance<TRowData, TKeyExpr, TKey, TColumns>;
+    ) as unknown as GridInstance;
     if (hasWindow()) {
       this.instance.getController('resizing').updateSize(element);
     }
@@ -589,7 +552,7 @@ export class DataGrid
     this.initialized = true;
   }
 
-  instanceOptionChangedHandler(e: OptionChangedEvent<TKey, TRowData>): void {
+  instanceOptionChangedHandler(e: OptionChangedEvent): void {
     try {
       this.isTwoWayPropUpdating = true;
       this.updateTwoWayValue(e);
@@ -598,7 +561,7 @@ export class DataGrid
     }
   }
 
-  updateTwoWayValue(e: OptionChangedEvent<TKey, TRowData>): void {
+  updateTwoWayValue(e: OptionChangedEvent): void {
     // T867777
     const optionValue = e.component.option(e.fullName);
     const isValueCorrect = e.value === optionValue;
