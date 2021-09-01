@@ -54,9 +54,11 @@ export function getOptionValue(options, optionPath) {
 
     optionPath.split(".").forEach((p) => {
         const optionInfo = getOptionInfo(p);
-        value = optionInfo.isCollection ?
-            value[optionInfo.name] && value[optionInfo.name][optionInfo.index] :
-            value[optionInfo.name];
+        if (value) {
+            value = optionInfo.isCollection ?
+                value[optionInfo.name] && value[optionInfo.name][optionInfo.index] :
+                value[optionInfo.name];
+        }
     });
 
     return value;
