@@ -1,7 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getRows, calculateWidths, calculateHeights, calculateCoordinates } from './pdf_rows';
-import { drawRows } from './draw_pdf_rows';
+import { getRows, calculateWidths, calculateHeights, calculateCoordinates } from './row_utils';
+import { drawRows } from './draw_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);

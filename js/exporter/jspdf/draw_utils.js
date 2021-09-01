@@ -25,26 +25,7 @@ function drawCell(doc, cell, docStyles) {
     drawRect(doc, pdfCell._rect.x, pdfCell._rect.y, pdfCell._rect.w, pdfCell._rect.h);
 }
 
-function getDocumentStyles(doc) {
-    const docFont = doc.getFont();
-
-    return {
-        borderColor: doc.getDrawColor(),
-        font: {
-            name: docFont.fontName,
-            style: docFont.fontStyle,
-            size: doc.getFontSize()
-        },
-        textColor: doc.getTextColor()
-    };
-}
-
 function specifyCellStyles(doc, cell, styles) {
-    const borderColor = isDefined(cell.borderColor) ? cell.borderColor : styles.borderColor;
-    if(borderColor !== doc.getDrawColor()) {
-        doc.setDrawColor(borderColor);
-    }
-
     const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
     const docFont = doc.getFont();
     if(
@@ -57,11 +38,20 @@ function specifyCellStyles(doc, cell, styles) {
     if(font.size !== doc.getFontSize()) {
         doc.setFontSize(font.size);
     }
+}
 
-    const textColor = isDefined(cell.textColor) ? cell.textColor : styles.textColor;
-    if(textColor !== doc.getTextColor()) {
-        doc.setTextColor(textColor);
-    }
+function getDocumentStyles(doc) {
+    const docFont = doc.getFont();
+
+    return {
+        borderColor: doc.getDrawColor(),
+        font: {
+            name: docFont.fontName,
+            style: docFont.fontStyle,
+            size: doc.getFontSize()
+        },
+        textColor: doc.getTextColor()
+    };
 }
 
 function setDocumentStyles(doc, styles) {
