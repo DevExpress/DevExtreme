@@ -28,6 +28,8 @@ export class AppointmentViewModel {
             ? filteredItems.slice()
             : [];
 
+        this.initRenderingStrategy(options);
+
         const positionMap = this.getRenderingStrategy().createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
         let viewModel = this.postProcess(appointments, positionMap, viewRenderingStrategyName, isRenovatedAppointments);
 
