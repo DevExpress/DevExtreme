@@ -9,14 +9,13 @@ import { ToolbarProps } from './toolbar_props';
 import { isDefined, isString } from '../../../core/utils/type';
 import { ConfigContext, ConfigContextValue } from '../../common/config_context';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
-import { extend } from '../../../core/utils/extend';
 
 export const viewFunction = ({ props, rtl, restAttributes }: Toolbar): JSX.Element => {
-  const clonedProps = extend({}, props) as ToolbarProps;
-  if (isDefined(clonedProps.items)) {
+  const { items } = props;
+  if (isDefined(items)) {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let index = 0; index < clonedProps.items.length; index += 1) {
-      const item = clonedProps.items[index];
+    for (let index = 0; index < items.length; index += 1) {
+      const item = items[index];
       if (!isString(item)) {
         if (!isDefined(item.options)) {
           item.options = {};
@@ -29,7 +28,7 @@ export const viewFunction = ({ props, rtl, restAttributes }: Toolbar): JSX.Eleme
   return (
     <DomComponentWrapper
       componentType={LegacyToolbar}
-      componentProps={clonedProps}
+      componentProps={props}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     />
