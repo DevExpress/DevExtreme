@@ -1323,6 +1323,8 @@ class Scheduler extends Widget {
 
         this._toggleAdaptiveClass();
 
+        this._workSpace.updateHeaderEmptyCellWidth(); s;
+
         super._render();
     }
 

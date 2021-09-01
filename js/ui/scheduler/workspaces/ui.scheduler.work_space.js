@@ -551,7 +551,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._setTableSizes();
         }
 
-        this._updateHeaderEmptyCellWidth();
+        this.updateHeaderEmptyCellWidth();
 
         this.cache.clear();
     }
@@ -660,7 +660,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
-    _updateHeaderEmptyCellWidth() {
+    updateHeaderEmptyCellWidth() {
         if(hasWindow() && this._isRenderHeaderPanelEmptyCell()) {
             const timePanelWidth = getBoundingRect(this._$timePanel.get(0)).width;
             const groupPanelWidth = getBoundingRect(this._$groupTable.get(0)).width;
@@ -2532,7 +2532,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.renderWorkSpace();
 
         this._updateGroupTableHeight();
-        this._updateHeaderEmptyCellWidth();
+        this.updateHeaderEmptyCellWidth();
 
         this._shader = new VerticalShader(this);
     }
