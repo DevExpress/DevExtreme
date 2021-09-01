@@ -24,7 +24,7 @@ function drawCell(doc, cell, rect, docStyles) {
     specifyCellStyles(doc, pdfCell, docStyles);
 
     if(isDefined(pdfCell.text) && pdfCell.text !== '') { // TODO: use cell.text.trim() ?
-        drawTextInRect(doc, pdfCell.text, rect, false, pdfCell.jsPdfTextOptions);
+        drawTextInRect(doc, pdfCell.text, rect, pdfCell.wordWrapEnabled, pdfCell.jsPdfTextOptions);
     }
 
     doc.setLineWidth(1);

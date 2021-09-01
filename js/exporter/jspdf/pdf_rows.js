@@ -17,9 +17,10 @@ function createRows(options, dataProvider, dataGrid) {
     const rowOptions = options.rowOptions || {};
     const rowsCount = dataProvider.getRowsCount();
 
+    const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         previousRow = currentRow;
-        currentRow = createRow(dataProvider, rowIndex, rowOptions, previousRow);
+        currentRow = createRow(dataProvider, rowIndex, rowOptions, previousRow, wordWrapEnabled);
 
         currentRow.cells.forEach(cellInfo => {
             if(options.customizeCell) {
@@ -42,7 +43,7 @@ function createRows(options, dataProvider, dataGrid) {
     return rows;
 }
 
-function createRow(dataProvider, rowIndex, rowOptions, previousRow) {
+function createRow(dataProvider, rowIndex, rowOptions, previousRow, wordWrapEnabled) {
     const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
     let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
     if(rowType === 'groupFooter' && previousRow?.rowType === 'groupFooter') {
@@ -57,17 +58,17 @@ function createRow(dataProvider, rowIndex, rowOptions, previousRow) {
     };
 
     const columns = dataProvider.getColumns();
-    fillCells(rowInfo, rowOptions, dataProvider, columns);
+    fillCells(rowInfo, rowOptions, dataProvider, columns, wordWrapEnabled);
 
     return rowInfo;
 }
 
-function fillCells(rowInfo, rowOptions, dataProvider, columns) {
+function fillCells(rowInfo, rowOptions, dataProvider, columns, wordWrapEnabled) {
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
         const cellInfo = {
             gridCell: cellData.cellSourceData,
-            pdfCell: { text: cellData.value }
+            pdfCell: { text: cellData.value, wordWrapEnabled }
         };
         rowInfo.cells.push(cellInfo);
     }
@@ -85,6 +86,7 @@ function calculateHeights(doc, rows, options) {
     rows.forEach(row => {
         const pdfCells = row.cells.map(c => c.pdfCell);
         const widths = pdfCells.map(c => c._width);
+
         row.height = isDefined(row.customerHeight)
             ? row.customerHeight
             : calculateRowHeight(doc, pdfCells, widths);
