@@ -680,12 +680,12 @@ QUnit.module('validation', {
 
         QUnit.test('should be the same after validation state change', function(assert) {
             const $editor = this.editor.$element();
-            const describedBy = $editor.attr('aria-describedby');
 
             this.editor.option('isValid', true);
             this.editor.option('isValid', false);
 
-            assert.strictEqual($editor.attr('aria-describedby'), describedBy, 'describedby is correct');
+            const validationMessageContentId = this.getValidationMessage().$content().attr('id');
+            assert.strictEqual($editor.attr('aria-describedby'), validationMessageContentId, 'describedby is correct');
         });
     });
 });
