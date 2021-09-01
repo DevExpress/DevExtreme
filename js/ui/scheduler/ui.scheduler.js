@@ -1009,7 +1009,7 @@ class Scheduler extends Widget {
 
         const { filteredItems } = getAppointmentDataProvider(this.key);
 
-        this.getLayoutManager().initRenderingStrategy();
+        // this.getLayoutManager().initRenderingStrategy();
 
         workspace.option(
             'allDayExpanded',
@@ -1017,7 +1017,7 @@ class Scheduler extends Widget {
         );
 
         let viewModel = [];
-        if(filteredItems.length && this._isVisible()) {
+        if(this._isVisible()) {
             viewModel = this._getAppointmentsToRepaint();
         }
 
