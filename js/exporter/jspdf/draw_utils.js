@@ -2,9 +2,10 @@ import { isDefined } from '../../core/utils/type';
 import { drawTextInRect, drawRect } from './pdf_utils';
 import { extend } from '../../core/utils/extend';
 
+const defaultBorderLineWidth = 1;
+
 function drawRows(doc, rows, options) {
     const docStyles = getDocumentStyles(doc);
-
     rows.forEach(row => {
         row.cells.forEach(cell => {
             drawCell(doc, cell, docStyles);
@@ -21,7 +22,7 @@ function drawCell(doc, cell, docStyles) {
         drawTextInRect(doc, pdfCell.text, pdfCell._rect, pdfCell.wordWrapEnabled, pdfCell.jsPdfTextOptions);
     }
 
-    doc.setLineWidth(1);
+    doc.setLineWidth(defaultBorderLineWidth);
     drawRect(doc, pdfCell._rect.x, pdfCell._rect.y, pdfCell._rect.w, pdfCell._rect.h);
 }
 
