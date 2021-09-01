@@ -16,37 +16,39 @@
     />
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="allowAdding"
-          text="Allow adding"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="allowDeleting"
-          text="Allow deleting"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          v-model:value="allowUpdating"
-          text="Allow updating"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          :disabled="!allowUpdating"
-          v-model:value="allowResizing"
-          text="Allow resizing"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          :disabled="!allowUpdating"
-          v-model:value="allowDragging"
-          text="Allow dragging"
-        />
+      <div class="options-container">
+        <div class="option">
+          <DxCheckBox
+            v-model:value="allowAdding"
+            text="Allow adding"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            v-model:value="allowDeleting"
+            text="Allow deleting"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            v-model:value="allowUpdating"
+            text="Allow updating"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            :disabled="!allowUpdating"
+            v-model:value="allowResizing"
+            text="Allow resizing"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            :disabled="!allowUpdating"
+            v-model:value="allowDragging"
+            text="Allow dragging"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -123,8 +125,12 @@ export default {
 
   .option {
     margin-top: 10px;
-    margin-right: 4px;
     display: inline-block;
     width: 19%;
+  }
+
+  .options-container {
+    display: flex;
+    align-items: center;
   }
 </style>

@@ -20,19 +20,21 @@
 </dx-scheduler>
 <div class="options">
     <div class="caption">Options</div>
-    <div class="option">
-        <dx-check-box text="Allow adding" [(value)]="editingOptions.allowAdding"></dx-check-box>
-    </div>
-    <div class="option">    
-        <dx-check-box text="Allow deleting" [(value)]="editingOptions.allowDeleting"></dx-check-box>
-    </div>
-    <div class="option">    
-        <dx-check-box text="Allow updating" [(value)]="editingOptions.allowUpdating"></dx-check-box>
-    </div>
-    <div class="option">    
-        <dx-check-box text="Allow resizing" [(value)]="editingOptions.allowResizing" [disabled]="!editingOptions.allowUpdating"></dx-check-box>
-    </div>
-    <div class="option">    
-        <dx-check-box text="Allow dragging" [(value)]="editingOptions.allowDragging" [disabled]="!editingOptions.allowUpdating"></dx-check-box>
+    <div class="options-container">
+        <div class="option">
+            <dx-check-box text="Allow adding" [(value)]="editingOptions.allowAdding"></dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box text="Allow deleting" [(value)]="editingOptions.allowDeleting"></dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box text="Allow updating" [(value)]="editingOptions.allowUpdating"></dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box text="Allow resizing" [(value)]="editingOptions.allowResizing" [disabled]="!editingOptions.allowUpdating"></dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box text="Allow dragging" [(value)]="editingOptions.allowDragging" [disabled]="!editingOptions.allowUpdating"></dx-check-box>
+        </div>
     </div>
 </div>

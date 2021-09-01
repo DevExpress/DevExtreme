@@ -12,3 +12,7 @@
     display: inline-block;
     width: 19%;
 }
+::ng-deep .options-container {
+    display: flex;
+    align-items: center;
+}
