@@ -671,11 +671,11 @@ QUnit.module('validation', {
 
         QUnit.test('should be correct after repaint', function(assert) {
             const $editor = this.editor.$element();
-            const describedBy = $editor.attr('aria-describedby');
 
             this.editor.repaint();
 
-            assert.strictEqual($editor.attr('aria-describedby'), describedBy, 'describedby is correct');
+            const validationMessageContentId = this.getValidationMessage().$content().attr('id');
+            assert.strictEqual($editor.attr('aria-describedby'), validationMessageContentId, 'describedby is correct');
         });
 
         QUnit.test('should be the same after validation state change', function(assert) {
