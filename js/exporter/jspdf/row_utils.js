@@ -14,11 +14,11 @@ function getRows(doc, dataProvider, dataGrid, options) {
         previousRow = currentRow;
         currentRow = createRow(dataProvider, rowIndex, rowOptions, previousRow, wordWrapEnabled);
 
-        currentRow.cells.forEach(cellInfo => {
-            if(options.customizeCell) {
+        if(options.customizeCell) {
+            currentRow.cells.forEach(cellInfo => {
                 options.customizeCell({ gridCell: cellInfo.gridCell, pdfCell: cellInfo.pdfCell });
-            }
-        });
+            });
+        }
 
         currentRow.customerHeight = currentRow.rowHeight;
         if(options.onRowExporting) {
