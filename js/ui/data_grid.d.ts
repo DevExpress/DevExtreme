@@ -467,7 +467,7 @@ export interface GridBaseOptions
   <TComponent extends GridBase<TRowData, TKey>,
    TRowData=any,
    TKey=any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
+   TColumns extends (ColumnBase<TRowData, any> | string)[]=(ColumnBase<TRowData, any> | string)[],
    TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
   > extends WidgetOptions<TComponent> {
     /**
