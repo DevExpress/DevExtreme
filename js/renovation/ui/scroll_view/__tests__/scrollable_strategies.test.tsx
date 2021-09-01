@@ -424,16 +424,21 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
         it('should raise scrollAction when canRiseScrollAction is true', () => {
           const onScrollHandler = jest.fn();
-          const scrollable = new Scrollable({ onScroll: onScrollHandler });
+          const viewModel = new Scrollable({
+            onScroll: (args) => {
+              expect(viewModel.canRiseScrollAction).toEqual(false);
+              onScrollHandler(args);
+            },
+          });
 
-          scrollable.canRiseScrollAction = true;
-          scrollable.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
+          viewModel.canRiseScrollAction = true;
+          viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
-          scrollable.riseScroll();
+          viewModel.riseScroll();
 
+          viewModel.canRiseScrollAction = false;
           expect(onScrollHandler).toBeCalledTimes(1);
           expect(onScrollHandler).toBeCalledWith({ scrollOffset: { top: 5, left: 10 } });
-          scrollable.canRiseScrollAction = false;
         });
       });
     });
