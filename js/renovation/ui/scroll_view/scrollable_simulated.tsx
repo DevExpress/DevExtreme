@@ -412,8 +412,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   // run always: effect doesn't rise always after change state canRiseScrollAction in QUnit tests
   @Effect({ run: 'always' }) riseScroll(): void {
     if (this.canRiseScrollAction) {
-      this.props.onScroll?.(this.getEventArgs());
       this.canRiseScrollAction = false;
+      this.props.onScroll?.(this.getEventArgs());
     }
   }
 

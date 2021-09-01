@@ -366,8 +366,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Effect({ run: 'always' }) riseScroll(): void {
     if (this.canRiseScrollAction) {
-      this.props.onScroll?.(this.getEventArgs());
       this.canRiseScrollAction = false;
+      this.props.onScroll?.(this.getEventArgs());
     }
   }
 
