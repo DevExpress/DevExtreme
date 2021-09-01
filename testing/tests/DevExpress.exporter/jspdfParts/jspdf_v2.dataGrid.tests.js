@@ -12,6 +12,7 @@ import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v2.dataGrid.summaries.tests.js';
 import { JSPdfStylesTests } from './jspdf_v2.dataGrid.styles.tests.js';
 import { JSPdfMultilineTests } from './jspdf_v2.dataGrid.multiline.tests.js';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
