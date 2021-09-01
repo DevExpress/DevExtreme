@@ -163,7 +163,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(helper.popup.content());
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.scrollView.scrollTo({ top: 50 });
+        helper.setPosition($scrollableContainer, 50);
 
         const pointer = nativePointerMock(helper.$editorContent);
 
@@ -181,7 +181,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(helper.popup.content());
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.scrollView.scrollTo({ top: 25 });
+        helper.setPosition($scrollableContainer, 25);
         helper.setPosition(helper.$editorContent, helper.maxScrollValue);
 
         const pointer = nativePointerMock(helper.$editorContent);
@@ -200,7 +200,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(helper.popup.content());
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.scrollView.scrollTo({ top: 50 });
+        helper.setPosition($scrollableContainer, 50);
         helper.setPosition(helper.$editorContent, helper.maxScrollValue / 2);
 
         const pointer = nativePointerMock(helper.$editorContent);
