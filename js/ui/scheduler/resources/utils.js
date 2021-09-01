@@ -6,7 +6,8 @@ import { compileGetter } from '../../../core/utils/data';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { isDefined } from '../../../core/utils/type';
-import { wrapToArray } from '../../../core/utils/array';
+import { wrapToArray, inArray } from '../../../core/utils/array';
+import { deepExtendArraySafe } from '../../../core/utils/object';
 
 export const getValueExpr = resource => resource.valueExpr || 'id';
 export const getDisplayExpr = resource => resource.displayExpr || 'text';
@@ -289,4 +290,147 @@ export const getResourcesFromItem = (_resourceFields, resources, getDataAccessor
     });
 
     return result;
+};
+
+export const groupAppointmentsByResources = (config, appointments, groups = []) => {
+    let result = { '0': appointments };
+
+    if(groups.length && config.loadedResources.length) {
+        result = groupAppointmentsByResourcesCore(config, appointments, config.loadedResources);
+    }
+
+    let totalResourceCount = 0;
+
+    config.loadedResources.forEach((resource, index) => {
+        if(!index) {
+            totalResourceCount = resource.items.length;
+        } else {
+            totalResourceCount *= resource.items.length;
+        }
+    });
+
+    for(let index = 0; index < totalResourceCount; index++) {
+        const key = index.toString();
+
+        if(result[key]) {
+            continue;
+        }
+
+        result[key] = [];
+    }
+
+    return result;
+};
+
+export const groupAppointmentsByResourcesCore = (config, appointments, resources) => {
+    const tree = createResourcesTree(resources);
+    const result = {};
+
+    appointments.forEach(appointment => {
+        const appointmentResources = getResourcesFromItem(
+            config._resourceFields,
+            () => config.getResources(),
+            (field, action) => config.getDataAccessors(field, action),
+            appointment
+        );
+
+        const treeLeaves = getResourceTreeLeaves((field, action) => config.getDataAccessors(field, action), tree, appointmentResources);
+
+        for(let i = 0; i < treeLeaves.length; i++) {
+            if(!result[treeLeaves[i]]) {
+                result[treeLeaves[i]] = [];
+            }
+
+            // NOTE: check appointment before pushing
+            result[treeLeaves[i]].push(deepExtendArraySafe({}, appointment, true));
+        }
+    });
+
+    return result;
+};
+
+export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResources, result) => {
+    result = result || [];
+
+    for(let i = 0; i < tree.length; i++) {
+        if(!hasGroupItem(getDataAccessors, appointmentResources, tree[i].name, tree[i].value)) {
+            continue;
+        }
+
+        if(isDefined(tree[i].leafIndex)) {
+            result.push(tree[i].leafIndex);
+        }
+
+        if(tree[i].children) {
+            getResourceTreeLeaves(tree[i].children, appointmentResources, result);
+        }
+    }
+
+    return result;
+};
+
+const hasGroupItem = (getDataAccessors, appointmentResources, groupName, itemValue) => {
+    const group = getDataAccessors(groupName, 'getter')(appointmentResources);
+
+    if(group) {
+        if(inArray(itemValue, group) > -1) {
+            return true;
+        }
+    }
+    return false;
+};
+
+export const createReducedResourcesTree = (loadedResources, getDataAccessors, appointments) => {
+    const tree = createResourcesTree(loadedResources);
+    return reduceResourcesTree(getDataAccessors, tree, appointments);
+};
+
+export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments, _result) => {
+    _result = _result ? _result.children : [];
+
+    tree.forEach(function(node, index) {
+        let ok = false;
+        const resourceName = node.name;
+        const resourceValue = node.value;
+        const resourceTitle = node.title;
+        const resourceData = node.data;
+        const resourceGetter = getDataAccessors(resourceName, 'getter');
+
+        existingAppointments.forEach(function(appointment) {
+            if(!ok) {
+                const resourceFromAppointment = resourceGetter(appointment);
+
+                if(Array.isArray(resourceFromAppointment)) {
+                    if(resourceFromAppointment.indexOf(resourceValue) > -1) {
+                        _result.push({
+                            name: resourceName,
+                            value: resourceValue,
+                            title: resourceTitle,
+                            data: resourceData,
+                            children: []
+                        });
+                        ok = true;
+                    }
+                } else {
+                    if(resourceFromAppointment === resourceValue) {
+                        _result.push({
+                            name: resourceName,
+                            value: resourceValue,
+                            title: resourceTitle,
+                            data: resourceData,
+                            children: []
+                        });
+                        ok = true;
+                    }
+                }
+            }
+        });
+
+        if(ok && node.children && node.children.length) {
+            reduceResourcesTree(getDataAccessors, node.children, existingAppointments, _result[index]);
+        }
+
+    });
+
+    return _result;
 };

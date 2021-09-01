@@ -1,6 +1,5 @@
-import { wrapToArray, inArray } from '../../../core/utils/array';
+import { wrapToArray } from '../../../core/utils/array';
 import { isDefined } from '../../../core/utils/type';
-import { deepExtendArraySafe } from '../../../core/utils/object';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { compileGetter, compileSetter } from '../../../core/utils/data';
@@ -8,7 +7,6 @@ import { when, Deferred } from '../../../core/utils/deferred';
 
 import { AgendaResourceProcessor } from './agendaResourceProcessor';
 import {
-    createResourcesTree,
     getCellGroups,
     getDisplayExpr,
     getFieldExpr,
@@ -18,7 +16,6 @@ import {
     isResourceMultiple,
     filterResources,
     getPaintedResources,
-    getResourcesFromItem
 } from './utils';
 
 export class ResourceManager {
@@ -141,98 +138,8 @@ export class ResourceManager {
         return result.promise();
     }
 
-    _hasGroupItem(appointmentResources, groupName, itemValue) {
-        const group = this.getDataAccessors(groupName, 'getter')(appointmentResources);
-
-        if(group) {
-            if(inArray(itemValue, group) > -1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     _createPlainResourcesByAppointmentAsync(rawAppointment) {
         return this.agendaProcessor.createListAsync(rawAppointment);
-    }
-
-    getResourceTreeLeaves(tree, appointmentResources, result) {
-        result = result || [];
-
-        for(let i = 0; i < tree.length; i++) {
-
-            if(!this._hasGroupItem(appointmentResources, tree[i].name, tree[i].value)) {
-                continue;
-            }
-
-            if(isDefined(tree[i].leafIndex)) {
-                result.push(tree[i].leafIndex);
-            }
-
-            if(tree[i].children) {
-                this.getResourceTreeLeaves(tree[i].children, appointmentResources, result);
-            }
-
-        }
-
-        return result;
-    }
-
-    // TODO
-    groupAppointmentsByResources(appointments, groups = []) {
-        let result = { '0': appointments };
-
-        if(groups.length && this.loadedResources.length) {
-            result = this.groupAppointmentsByResourcesCore(appointments, this.loadedResources);
-        }
-
-        let totalResourceCount = 0;
-
-        this.loadedResources.forEach(function(resource, index) {
-            if(!index) {
-                totalResourceCount = resource.items.length;
-            } else {
-                totalResourceCount *= resource.items.length;
-            }
-        });
-
-        for(let index = 0; index < totalResourceCount; index++) {
-            const key = index.toString();
-
-            if(result[key]) {
-                continue;
-            }
-
-            result[key] = [];
-        }
-
-        return result;
-    }
-
-    groupAppointmentsByResourcesCore(appointments, resources) {
-        const tree = createResourcesTree(resources);
-        const result = {};
-
-        appointments.forEach(appointment => {
-            const appointmentResources = getResourcesFromItem(
-                this._resourceFields,
-                this.getResources(),
-                (field, action) => this.getDataAccessors(field, action),
-                appointment);
-
-            const treeLeaves = this.getResourceTreeLeaves(tree, appointmentResources);
-
-            for(let i = 0; i < treeLeaves.length; i++) {
-                if(!result[treeLeaves[i]]) {
-                    result[treeLeaves[i]] = [];
-                }
-
-                // NOTE: check appointment before pushing
-                result[treeLeaves[i]].push(deepExtendArraySafe({}, appointment, true));
-            }
-        });
-
-        return result;
     }
 
     getAppointmentColor({ groupIndex, itemData, groups }) {
@@ -257,58 +164,6 @@ export class ResourceManager {
         }
 
         return new Deferred().resolve().promise();
-    }
-
-    reduceResourcesTree(tree, existingAppointments, _result) {
-        _result = _result ? _result.children : [];
-
-        const that = this;
-
-        tree.forEach(function(node, index) {
-            let ok = false;
-            const resourceName = node.name;
-            const resourceValue = node.value;
-            const resourceTitle = node.title;
-            const resourceData = node.data;
-            const resourceGetter = that.getDataAccessors(resourceName, 'getter');
-
-            existingAppointments.forEach(function(appointment) {
-                if(!ok) {
-                    const resourceFromAppointment = resourceGetter(appointment);
-
-                    if(Array.isArray(resourceFromAppointment)) {
-                        if(resourceFromAppointment.indexOf(resourceValue) > -1) {
-                            _result.push({
-                                name: resourceName,
-                                value: resourceValue,
-                                title: resourceTitle,
-                                data: resourceData,
-                                children: []
-                            });
-                            ok = true;
-                        }
-                    } else {
-                        if(resourceFromAppointment === resourceValue) {
-                            _result.push({
-                                name: resourceName,
-                                value: resourceValue,
-                                title: resourceTitle,
-                                data: resourceData,
-                                children: []
-                            });
-                            ok = true;
-                        }
-                    }
-                }
-            });
-
-            if(ok && node.children && node.children.length) {
-                that.reduceResourcesTree(node.children, existingAppointments, _result[index]);
-            }
-
-        });
-
-        return _result;
     }
 
     getResourcesDataByGroups(groups) {
@@ -360,10 +215,5 @@ export class ResourceManager {
         });
 
         return currentResourcesData;
-    }
-
-    createReducedResourcesTree(appointments) {
-        const tree = createResourcesTree(this.loadedResources);
-        return this.reduceResourcesTree(tree, appointments);
     }
 }

@@ -3,6 +3,7 @@ import { each } from '../../../../core/utils/iterator';
 import { merge } from '../../../../core/utils/array';
 import BaseRenderingStrategy from './strategy.base';
 import { ExpressionUtils } from '../../expressionUtils';
+import { groupAppointmentsByResources } from '../../resources/utils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     get agendaDuration() { return this.options.agendaDuration; }
@@ -26,7 +27,15 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         const resourceManager = this.instance.fire('getResourceManager');
         const groups = this.instance._getCurrentViewOption('groups');
 
-        return resourceManager.groupAppointmentsByResources(
+        const config = {
+            loadedResources: resourceManager.loadedResources,
+            _resourceFields: resourceManager._resourceFields,
+            getResources: () => resourceManager.getResources(),
+            getDataAccessors: (field, action) => resourceManager.getDataAccessors(field, action)
+        };
+
+        return groupAppointmentsByResources(
+            config,
             appointments,
             groups
         );
