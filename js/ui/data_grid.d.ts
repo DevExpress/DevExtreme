@@ -2807,12 +2807,11 @@ export type CellClickEvent
   > = NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
-  // readonly value?: TColumns[number] extends Column<TRowData, TKey, string, infer T> ? T : any;
   readonly value?: ColumnValueType<TColumns>;
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
-  readonly column: TColumns[number] extends Column<TRowData, TKey, infer TCellValue> ? Column<TRowData, TKey, TCellValue> : TColumns[number];
+  readonly column: Column<TRowData, TKey, ColumnValueType<TColumns>>;
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
@@ -2831,7 +2830,7 @@ export type CellDblClickEvent
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
-  readonly column: TColumns[number] extends Column<TRowData, TKey, infer TCellValue> ? Column<TRowData, TKey, TCellValue> : TColumns[number];
+  readonly column: Column<TRowData, TKey, ColumnValueType<TColumns>>;
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
@@ -2852,7 +2851,7 @@ export type CellHoverChangedEvent
   readonly displayValue?: any;
   readonly columnIndex: number;
   readonly rowIndex: number;
-  readonly column: TColumns[number] extends Column<TRowData, TKey, infer TCellValue> ? Column<TRowData, TKey, TCellValue> : TColumns[number];
+  readonly column: Column<TRowData, TKey, ColumnValueType<TColumns>>;
   readonly rowType: string;
   readonly cellElement: DxElement;
   readonly row: RowObject<TRowData, TKey, TColumns>;
@@ -2870,7 +2869,7 @@ export type CellPreparedEvent
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
-  readonly column: TColumns[number] extends Column<TRowData, TKey, infer TCellValue> ? Column<TRowData, TKey, TCellValue> : TColumns[number];
+  readonly column: Column<TRowData, TKey, ColumnValueType<TColumns>>;
   readonly rowIndex: number;
   readonly rowType: string;
   readonly row: RowObject<TRowData, TKey, TColumns>;
@@ -2920,7 +2919,7 @@ export type EditingStartEvent
   > = Cancelable & EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
-  readonly column: TColumns[number] extends Column<TRowData, TKey, infer TCellValue> ? Column<TRowData, TKey, TCellValue> : TColumns[number];
+  readonly column: Column<TRowData, TKey, ColumnValueType<TColumns>>;
 };
 
 /** @public */
