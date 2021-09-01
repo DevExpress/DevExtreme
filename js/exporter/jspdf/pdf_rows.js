@@ -2,14 +2,6 @@ import { isDefined } from '../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils';
 
 function getRows(doc, dataProvider, dataGrid, options) {
-    const rows = createRows(options, dataProvider, dataGrid);
-    calculateWidths(doc, rows, options);
-    calculateHeights(doc, rows, options);
-
-    return rows;
-}
-
-function createRows(options, dataProvider, dataGrid) {
     const rows = [];
 
     let previousRow;
@@ -68,7 +60,7 @@ function fillCells(rowInfo, rowOptions, dataProvider, columns, wordWrapEnabled) 
         const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
         const cellInfo = {
             gridCell: cellData.cellSourceData,
-            pdfCell: { text: cellData.value, wordWrapEnabled }
+            pdfCell: { text: cellData.value, wordWrapEnabled, _rect: {} }
         };
         rowInfo.cells.push(cellInfo);
     }
@@ -77,7 +69,7 @@ function fillCells(rowInfo, rowOptions, dataProvider, columns, wordWrapEnabled) 
 function calculateWidths(doc, rows, options) {
     rows.forEach(row => {
         row.cells.forEach((cell, index) => {
-            cell.pdfCell._width = options.columnWidths[index];
+            cell.pdfCell._rect.w = options.columnWidths[index];
         });
     });
 }
@@ -85,15 +77,28 @@ function calculateWidths(doc, rows, options) {
 function calculateHeights(doc, rows, options) {
     rows.forEach(row => {
         const pdfCells = row.cells.map(c => c.pdfCell);
-        const widths = pdfCells.map(c => c._width);
+        const widths = pdfCells.map(c => c._rect.w);
 
         row.height = isDefined(row.customerHeight)
             ? row.customerHeight
             : calculateRowHeight(doc, pdfCells, widths);
         pdfCells.forEach(cell => {
-            cell._height = row.height;
+            cell._rect.h = row.height;
         });
     });
 }
 
-export { getRows };
+function calculateCoordinates(doc, rows, options) {
+    let y = options?.topLeft?.y ?? 0;
+    rows.forEach(row => {
+        let x = options?.topLeft?.x ?? 0;
+        row.cells.forEach(cell => {
+            cell.pdfCell._rect.x = x;
+            cell.pdfCell._rect.y = y;
+            x += cell.pdfCell._rect.w;
+        });
+        y += row.height;
+    });
+}
+
+export { getRows, calculateWidths, calculateHeights, calculateCoordinates };

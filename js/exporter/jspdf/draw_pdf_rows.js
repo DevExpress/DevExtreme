@@ -2,33 +2,27 @@ import { isDefined } from '../../core/utils/type';
 import { drawTextInRect, drawRect } from './pdf_utils';
 import { extend } from '../../core/utils/extend';
 
-function drawPDF(doc, rows, options) {
+function drawRows(doc, rows, options) {
     const docStyles = getDocumentStyles(doc);
 
-    let y = options?.topLeft?.y ?? 0;
     rows.forEach(row => {
-        let x = options?.topLeft?.x ?? 0;
         row.cells.forEach(cell => {
-            const pdfCell = cell.pdfCell;
-            const rect = { x, y, w: pdfCell._width, h: pdfCell._height };
-            drawCell(doc, cell, rect, docStyles);
-            x += pdfCell._width;
+            drawCell(doc, cell, docStyles);
         });
-        y += row.height;
     });
     setDocumentStyles(doc, docStyles);
 }
 
-function drawCell(doc, cell, rect, docStyles) {
+function drawCell(doc, cell, docStyles) {
     const pdfCell = cell.pdfCell;
     specifyCellStyles(doc, pdfCell, docStyles);
 
     if(isDefined(pdfCell.text) && pdfCell.text !== '') { // TODO: use cell.text.trim() ?
-        drawTextInRect(doc, pdfCell.text, rect, pdfCell.wordWrapEnabled, pdfCell.jsPdfTextOptions);
+        drawTextInRect(doc, pdfCell.text, pdfCell._rect, pdfCell.wordWrapEnabled, pdfCell.jsPdfTextOptions);
     }
 
     doc.setLineWidth(1);
-    drawRect(doc, rect.x, rect.y, rect.w, rect.h);
+    drawRect(doc, pdfCell._rect.x, pdfCell._rect.y, pdfCell._rect.w, pdfCell._rect.h);
 }
 
 function getDocumentStyles(doc) {
@@ -98,5 +92,5 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawPDF };
+export { drawRows };
 
