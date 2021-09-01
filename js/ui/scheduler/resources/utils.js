@@ -436,3 +436,54 @@ export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments
 
     return _result;
 };
+
+export const getResourcesDataByGroups = (loadedResources, resources, groups) => {
+    if(!groups || !groups.length) {
+        return loadedResources;
+    }
+
+    const fieldNames = {};
+    const currentResourcesData = [];
+
+    groups.forEach(group => {
+        each(group, (name, value) => fieldNames[name] = value);
+    });
+
+    const resourceData = loadedResources.filter(({ name }) => isDefined(fieldNames[name]));
+    resourceData.forEach(
+        data => currentResourcesData.push(extend({}, data))
+    );
+
+    currentResourcesData.forEach(currentResource => {
+        const {
+            items,
+            data,
+            name: resourceName
+        } = currentResource;
+
+        const resource = filterResources(resources, [resourceName])[0] || {};
+        const valueExpr = getValueExpr(resource);
+        const filteredItems = [];
+        const filteredData = [];
+
+        groups
+            .filter(group => isDefined(group[resourceName]))
+            .forEach(group => {
+                each(group, (name, value) => {
+
+                    if(!filteredItems.filter(item => item.id === value && item[valueExpr] === name).length) {
+                        const currentItems = items.filter(item => item.id === value);
+                        const currentData = data.filter(item => item[valueExpr] === value);
+
+                        filteredItems.push(...currentItems);
+                        filteredData.push(...currentData);
+                    }
+                });
+            });
+
+        currentResource.items = filteredItems;
+        currentResource.data = filteredData;
+    });
+
+    return currentResourcesData;
+};

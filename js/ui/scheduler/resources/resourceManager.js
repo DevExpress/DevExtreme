@@ -1,7 +1,6 @@
 import { wrapToArray } from '../../../core/utils/array';
 import { isDefined } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
-import { extend } from '../../../core/utils/extend';
 import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { when, Deferred } from '../../../core/utils/deferred';
 
@@ -165,56 +164,5 @@ export class ResourceManager {
         }
 
         return new Deferred().resolve().promise();
-    }
-
-    getResourcesDataByGroups(groups) {
-        if(!groups || !groups.length) {
-            return this.loadedResources;
-        }
-
-        const fieldNames = {};
-        const currentResourcesData = [];
-
-        groups.forEach(group => {
-            each(group, (name, value) => fieldNames[name] = value);
-        });
-
-        const resourceData = this.loadedResources.filter(({ name }) => isDefined(fieldNames[name]));
-        resourceData.forEach(
-            data => currentResourcesData.push(extend({}, data))
-        );
-
-        currentResourcesData.forEach(currentResource => {
-            const {
-                items,
-                data,
-                name: resourceName
-            } = currentResource;
-
-            const resource = filterResources(this.getResources(), [resourceName])[0] || {};
-            const valueExpr = getValueExpr(resource);
-            const filteredItems = [];
-            const filteredData = [];
-
-            groups
-                .filter(group => isDefined(group[resourceName]))
-                .forEach(group => {
-                    each(group, (name, value) => {
-
-                        if(!filteredItems.filter(item => item.id === value && item[valueExpr] === name).length) {
-                            const currentItems = items.filter(item => item.id === value);
-                            const currentData = data.filter(item => item[valueExpr] === value);
-
-                            filteredItems.push(...currentItems);
-                            filteredData.push(...currentData);
-                        }
-                    });
-                });
-
-            currentResource.items = filteredItems;
-            currentResource.data = filteredData;
-        });
-
-        return currentResourcesData;
     }
 }
