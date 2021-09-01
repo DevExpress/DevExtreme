@@ -5870,7 +5870,6 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             paging: {
                 pageSize: 2
             },
-            loadingTimeout: 0,
             editing: {
                 allowDeleting: true,
                 confirmDelete: false,
@@ -5880,12 +5879,9 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 e.cancel = true;
                 e.promise = $.Deferred();
 
-                setTimeout(function() {
-                    items.splice(0, 1);
-                    e.component.option('dataSource', e.component.option('dataSource'));
-                    e.promise.resolve();
-                });
-
+                items.splice(0, 1);
+                e.component.option('dataSource', e.component.option('dataSource'));
+                e.promise.resolve();
             },
         });
         this.clock.tick();
