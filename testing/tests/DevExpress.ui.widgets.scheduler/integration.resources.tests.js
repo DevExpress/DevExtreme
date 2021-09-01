@@ -14,6 +14,8 @@ import { getResourceManager } from 'ui/scheduler/instanceFactory';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
+import { getOrLoadResourceItem } from 'ui/scheduler/resources/utils';
+
 QUnit.testStart(() => initTestMarkup());
 
 const moduleConfig = {
@@ -362,7 +364,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.strictEqual(taskDetailsView.option('formData').Movie.ID, 3, 'Value is OK');
     });
 
-    QUnit.test('Alias for getResourceDataByValue method', function(assert) {
+    QUnit.test('Alias for getOrLoadResourceItem method', function(assert) {
         const { instance } = createWrapper({
             resources: [{
                 field: 'ownerId',
@@ -378,7 +380,13 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const done = assert.async();
 
-        getResourceManager(instance.key).getResourceDataByValue('ownerId', 1).done(function(resource) {
+        const resourceManager = getResourceManager(instance.key);
+        getOrLoadResourceItem(
+            resourceManager.getResources(),
+            resourceManager.resourceLoaderMap,
+            'ownerId',
+            1
+        ).done(function(resource) {
             assert.deepEqual(resource, {
                 text: 'Jack',
                 id: 1,
