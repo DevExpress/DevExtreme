@@ -66,3 +66,8 @@
 .option > span {
     margin-right: 10px;
 }
+
+.options-container {
+    display: flex;
+    align-items: center;
+}

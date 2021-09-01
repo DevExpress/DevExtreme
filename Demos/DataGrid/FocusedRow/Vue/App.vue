@@ -31,22 +31,24 @@
 
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <span>Focused Row Key </span>
-        <DxNumberBox
-          id="taskId"
-          :ref="taskIdEditorRefName"
-          :min="1"
-          :max="183"
-          :step="0"
-          v-model:value="focusedRowKey"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          :text="'Auto Navigate To Focused Row'"
-          v-model:value="autoNavigateToFocusedRow"
-        />
+      <div class="options-container">
+        <div class="option">
+          <span>Focused Row Key </span>
+          <DxNumberBox
+            id="taskId"
+            :ref="taskIdEditorRefName"
+            :min="1"
+            :max="183"
+            :step="0"
+            v-model:value="focusedRowKey"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            :text="'Auto Navigate To Focused Row'"
+            v-model:value="autoNavigateToFocusedRow"
+          />
+        </div>
       </div>
     </div>
   </div>

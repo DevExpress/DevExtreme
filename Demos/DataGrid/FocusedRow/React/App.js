@@ -125,24 +125,25 @@ class App extends React.Component {
 
         <div className="options">
           <div className="caption">Options</div>
-          <div className="option">
-            <span>Focused Row Key </span>
-            <NumberBox
-              id="taskId"
-              min={1}
-              max={183}
-              step={0}
-              value={this.state.focusedRowKey}
-              onValueChanged={this.onTaskIdChanged}>
-            </NumberBox>
-          </div>
-          &nbsp;
-          <div className="option">
-            <CheckBox
-              text="Auto Navigate To Focused Row"
-              value={this.state.autoNavigateToFocusedRow}
-              onValueChanged={this.onAutoNavigateToFocusedRowChanged}>
-            </CheckBox>
+          <div className="options-container">
+            <div className="option">
+              <span>Focused Row Key </span>
+              <NumberBox
+                id="taskId"
+                min={1}
+                max={183}
+                step={0}
+                value={this.state.focusedRowKey}
+                onValueChanged={this.onTaskIdChanged}>
+              </NumberBox>
+            </div>
+            <div className="option">
+              <CheckBox
+                text="Auto Navigate To Focused Row"
+                value={this.state.autoNavigateToFocusedRow}
+                onValueChanged={this.onAutoNavigateToFocusedRowChanged}>
+              </CheckBox>
+            </div>
           </div>
         </div>
       </div>
