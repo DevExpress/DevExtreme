@@ -80,7 +80,7 @@ import {
 
 import { dxContextMenuItem } from './context_menu';
 
-import { FilterDescriptor } from '../data';
+import { FilterDescriptor } from '../data/index';
 
 import { Properties as DateBoxProperties } from './date_box';
 import { Properties as NumberBoxProperties } from './number_box';
