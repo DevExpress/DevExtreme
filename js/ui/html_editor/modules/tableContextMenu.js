@@ -44,7 +44,7 @@ if(Quill) {
         _getMenuConfig(options) {
             return {
                 target: this._quillContainer,
-                showEvent: 'dxdbclick',
+                showEvent: '',
                 dataSource: [
                     { text: 'Insert', items: [
                         { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
