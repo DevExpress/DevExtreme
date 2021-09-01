@@ -20,15 +20,6 @@ function getRows(doc, dataProvider, dataGrid, options) {
             });
         }
 
-        currentRow.customerHeight = currentRow.rowHeight;
-        if(options.onRowExporting) {
-            const pdfCells = currentRow.cells.map(cellInfo => cellInfo.pdfCell);
-            const args = { rowCells: pdfCells };
-            options.onRowExporting(args);
-            if(isDefined(args.rowHeight)) {
-                currentRow.customerHeight = args.rowHeight;
-            }
-        }
         rows.push(currentRow);
     }
 
@@ -45,7 +36,6 @@ function createRow(dataProvider, rowIndex, rowOptions, previousRow, wordWrapEnab
         rowType: rowType,
         indentLevel: indentLevel,
         cells: [],
-        customerHeight: rowOptions.rowHeight,
         rowIndex
     };
 
@@ -77,11 +67,19 @@ function calculateWidths(doc, rows, options) {
 function calculateHeights(doc, rows, options) {
     rows.forEach(row => {
         const pdfCells = row.cells.map(c => c.pdfCell);
-        const widths = pdfCells.map(c => c._rect.w);
 
-        row.height = isDefined(row.customerHeight)
-            ? row.customerHeight
-            : calculateRowHeight(doc, pdfCells, widths);
+        let customerHeight;
+        if(options.onRowExporting) {
+            const args = { rowCells: pdfCells };
+            options.onRowExporting(args);
+            if(isDefined(args.rowHeight)) {
+                customerHeight = args.rowHeight;
+            }
+        }
+
+        row.height = isDefined(customerHeight)
+            ? customerHeight
+            : calculateRowHeight(doc, pdfCells, pdfCells.map(c => c._rect.w));
         pdfCells.forEach(cell => {
             cell._rect.h = row.height;
         });
