@@ -95,6 +95,21 @@ describe('Toolbar', () => {
           expect(item.options.rtlEnabled).toEqual(isRtlEnabled ?? false);
         });
       });
+
+      it('rtlEnabled from item options is not overridden', () => {
+        const buttonItem = new ToolbarItem();
+        buttonItem.options = { rtlEnabled: true };
+        const toolbarProps = new ToolbarProps();
+        toolbarProps.items = [buttonItem];
+        toolbarProps.rtlEnabled = isRtlEnabled;
+        const viewModel = new Toolbar(toolbarProps);
+
+        const tree = mount(ToolbarView(viewModel));
+        const resultProps = tree.find(DomComponentWrapper).props().componentProps;
+        resultProps.items.forEach((item) => {
+          expect(item.options.rtlEnabled).toEqual(true);
+        });
+      });
     });
   });
 });
