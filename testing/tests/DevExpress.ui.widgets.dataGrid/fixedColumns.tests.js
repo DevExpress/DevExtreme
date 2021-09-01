@@ -2013,8 +2013,8 @@ QUnit.module('Fixed columns', {
 
         // arrange
         that.rowsView.scrollTo(600);
-        that.clock.restore();
 
+        that.clock.restore();
         setTimeout(function() {
             const positionTop = $fixedTable.position().top;
 
