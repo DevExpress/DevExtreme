@@ -29,7 +29,7 @@ const PagerView = modules.View.inherit({
                 } else {
                     this.render();
                 }
-            } else if(!e || e.changeType !== 'update' && e.changeType !== 'updateSelection') {
+            } else if(!e || e.changeType !== 'update' && e.changeType !== 'updateSelection' && e.changeType !== 'updateFocusedRow') {
                 this.render();
             }
         });

@@ -5860,4 +5860,41 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             });
         });
     });
+
+    QUnit.test('Pager should not be hidden after delete row using onSaving event handler', function(assert) {
+        // arrange
+        const items = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+        $('#dataGrid').dxDataGrid({
+            keyExpr: 'id',
+            dataSource: items,
+            paging: {
+                pageSize: 2
+            },
+            loadingTimeout: 0,
+            editing: {
+                allowDeleting: true,
+                confirmDelete: false,
+            },
+            repaintChangesOnly: true,
+            onSaving: function(e) {
+                e.cancel = true;
+                e.promise = $.Deferred();
+
+                setTimeout(function() {
+                    items.splice(0, 1);
+                    e.component.option('dataSource', e.component.option('dataSource'));
+                    e.promise.resolve();
+                });
+
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $('#dataGrid .dx-link-delete').eq(0).trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.ok($('#dataGrid .dx-datagrid-pager').is(':visible'), 'Pager is visible');
+    });
 });
