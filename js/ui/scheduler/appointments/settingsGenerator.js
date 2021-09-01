@@ -3,7 +3,7 @@ import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
 import timeZoneUtils from '../utils.timeZone.js';
-import { createResourcesTree, getGroupCount, getResourcesFromItem } from '../resources/utils';
+import { createResourcesTree, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
 import { ExpressionUtils } from '../expressionUtils';
@@ -434,7 +434,11 @@ export class DateGeneratorBaseStrategy {
         if(appointmentResources && resourceManager.loadedResources.length) {
             const tree = createResourcesTree(resourceManager.loadedResources);
 
-            result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);
+            result = getResourceTreeLeaves(
+                (field, action) => resourceManager.getDataAccessors(field, action),
+                tree,
+                appointmentResources
+            );
         }
 
         return result;
