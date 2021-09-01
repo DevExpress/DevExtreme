@@ -216,7 +216,9 @@ export const VirtualScrollController = Class.inherit((function() {
                 offset += itemSize;
                 itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
             }
-            return Math.round(itemOffset * 50) / 50;
+            // Virtual Scrolling: scroll position should not be changed after change sorting if row count is large and virtual scrolling is enabled
+            // in FF Math.round(itemOffset * 50) / 50 is 1999.92
+            return Math.round(Math.round(itemOffset * 50) / 50);
         },
 
         _setViewportPositionCore: function(position) {
