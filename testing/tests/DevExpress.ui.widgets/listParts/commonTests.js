@@ -3068,7 +3068,6 @@ QUnit.module('scrollView integration', {
         }).dxList('instance');
 
         list.scrollToItem(5);
-
         assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
@@ -3083,7 +3082,6 @@ QUnit.module('scrollView integration', {
         list.on('scroll', scrollActionSpy);
 
         list.scrollToItem(5);
-
         assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
@@ -3148,7 +3146,6 @@ QUnit.module('scrollView integration', {
         }).dxList('instance');
 
         list.scrollToItem(items[1]);
-
         assert.expect(0);
     });
 

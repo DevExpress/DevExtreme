@@ -382,7 +382,7 @@ QUnit.test('showScrollbar: never -> onScroll, useNative: true, useSimulatedScrol
 
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true);
 
-    $scrollable.dxScrollable('option', 'showScrollbar', true);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'onScroll');
 
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false);
 });
@@ -395,7 +395,7 @@ QUnit.test('showScrollbar: never -> onScroll, useNative: false, should not add d
 
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false);
 
-    $scrollable.dxScrollable('option', 'showScrollbar', isRenovation ? 'onScroll' : true);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'onScroll');
 
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false);
 });
@@ -480,8 +480,7 @@ QUnit.test('changing option showScrollbar does not duplicate scrollbar', functio
     assert.equal($scrollbars.length, 1, 'scrollbar is not duplicated');
 });
 
-// bug in generators
-QUnit.skip('switching useNative to false turns off native scrolling', function(assert) {
+QUnit.test('switching useNative to false turns off native scrolling', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
@@ -541,12 +540,6 @@ QUnit.test('scrollToElement when item height is greater than scroll height', fun
 });
 
 QUnit.test('scrollToElement with offset', function(assert) {
-    if(isRenovation) {
-        // scrollToElement() doesn't support offset
-        assert.ok(true);
-        return;
-    }
-
     const bottomOffset = 70;
     const $scrollable = $('#scrollable').empty().height(100);
     const $item1 = $('<div>').height(50).appendTo($scrollable);
@@ -563,13 +556,6 @@ QUnit.test('scrollToElement with offset', function(assert) {
 });
 
 QUnit.test('scrollToElement with offset in opposite direction', function(assert) {
-    if(isRenovation) {
-        // scrollToElement() doesn't support offset
-        assert.ok(true);
-        return;
-    }
-
-
     const topOffset = 30;
     const $scrollable = $('#scrollable').empty().height(100);
     const $item1 = $('<div>').height(50).appendTo($scrollable);
