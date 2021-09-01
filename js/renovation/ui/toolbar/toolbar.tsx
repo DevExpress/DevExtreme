@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+/* eslint-disable no-param-reassign */
 
 import {
   Component, JSXComponent,
@@ -18,11 +18,10 @@ export const viewFunction = ({
 
   items?.forEach((item) => {
     if (typeof item !== 'string') {
-      const toolbarItem = item;
-      if (!isDefined(toolbarItem.options)) {
-        toolbarItem.options = {};
+      if (!isDefined(item.options)) {
+        item.options = {};
       }
-      toolbarItem.options.rtlEnabled = rtlEnabled ?? false;
+      item.options.rtlEnabled = rtlEnabled ?? false;
     }
   });
   return (
