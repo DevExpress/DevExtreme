@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import { Toolbar, viewFunction as ToolbarView } from '../toolbar';
 import {
@@ -87,13 +87,9 @@ describe('Toolbar', () => {
           dropDownButtonItem, checkBoxItem, textBoxItem];
 
         toolbarProps.rtlEnabled = isRtlEnabled;
+        const viewModel = new Toolbar(toolbarProps);
 
-        const initialProps = {
-          props: toolbarProps,
-          restAttributes: { 'rest-attributes': 'true' },
-        } as Partial<Toolbar>;
-        const tree = shallow(<ToolbarView {...initialProps as any} /> as any);
-
+        const tree = mount(ToolbarView(viewModel));
         const resultProps = tree.find(DomComponentWrapper).props().componentProps;
         resultProps.items.forEach((item) => {
           expect(item.options.rtlEnabled).toEqual(isRtlEnabled ?? false);

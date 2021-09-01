@@ -105,17 +105,21 @@ export class CollectionWidgetItem {
   ];
   <Toolbar items={toolbarItems}></Toolbar>
 */
+
+@ComponentBindings()
+export class ToolbarItemOptionProps {
+  rtlEnabled?: boolean | undefined;
+}
+
 // TODO: it is not a 'native' way
 @ComponentBindings()
-export class ToolbarTextBoxProps {
+export class ToolbarTextBoxProps extends ToolbarItemOptionProps {
   @OneWay() value: (string | null) = '';
 
   // TODO:  EventCallback<TextBoxValueChanged>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() onValueChanged?: EventCallback<any>;
 
-  @OneWay()
-  rtlEnabled?: boolean | undefined;
   // TODO: other props
 }
 
@@ -132,14 +136,12 @@ export class ToolbarTextBoxProps {
 */
 // TODO: it is not a 'native' way
 @ComponentBindings()
-export class ToolbarCheckBoxProps {
+export class ToolbarCheckBoxProps extends ToolbarItemOptionProps {
   @OneWay() value: (boolean | null) = false;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() onValueChanged?: EventCallback<any>;
 
-  @OneWay()
-  rtlEnabled?: boolean | undefined;
   // TODO: other props
 }
 
@@ -192,7 +194,7 @@ export type ToolbarButtonGroupSelectionMode = 'multiple' | 'single';
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarButtonGroupProps {
+export class ToolbarButtonGroupProps extends ToolbarItemOptionProps {
   //
   // Use cases:
   //
@@ -225,8 +227,6 @@ export class ToolbarButtonGroupProps {
   @OneWay()
   stylingMode?: ToolbarButtonStylingMode;
 
-  @OneWay()
-  rtlEnabled?: boolean | undefined;
   // TODO: other props
 }
 
@@ -245,7 +245,7 @@ export type ToolbarButtonType = 'back' | 'danger' | 'default' | 'normal' | 'succ
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarButtonProps {
+export class ToolbarButtonProps extends ToolbarItemOptionProps {
   //
   // Use cases:
   //
@@ -280,9 +280,6 @@ export class ToolbarButtonProps {
 
   @OneWay()
   stylingMode?: ToolbarButtonStylingMode;
-
-  @OneWay()
-  rtlEnabled?: boolean | undefined;
 
   // TODO: other props
 }
@@ -352,7 +349,7 @@ export type ToolbarDropDownButtonItemPropsType = ToolbarDropDownButtonItemProps;
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarDropDownButtonProps {
+export class ToolbarDropDownButtonProps extends ToolbarItemOptionProps {
   @OneWay()
   dataSource?: (string | ToolbarDropDownButtonItemPropsType)[];
 
@@ -411,9 +408,6 @@ export class ToolbarDropDownButtonProps {
 
   @OneWay()
   wrapItemText?: boolean;
-
-  @OneWay()
-  rtlEnabled?: boolean | undefined;
 }
 
 @ComponentBindings()
