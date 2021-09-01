@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>John Heart</h1>
-
-    <DxButton
-      :on-click="showLoadPanel"
-      text="Load Data"
-    />
-
+    <div class="header-container">
+      <h1>John Heart</h1>
+      <DxButton
+        :on-click="showLoadPanel"
+        text="Load Data"
+      />
+    </div>
     <div id="employee">
       <p>
         Birth date: <b>{{ employeeInfo.Birth_Date }}</b>
@@ -111,8 +111,8 @@ export default {
 h1 {
   display: inline-block;
   vertical-align: middle;
-  padding: 10px;
-  margin: 0 0.1em 0 0;
+  padding: 10px 14px 10px 10px;
+  margin: 0;
 }
 
 #employee {
@@ -149,6 +149,11 @@ h1 {
 
 .option {
   margin-top: 10px;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
 }
 </style>
 
