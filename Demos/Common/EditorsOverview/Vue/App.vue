@@ -149,14 +149,15 @@ export default {
     padding: 5px 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .settings .column .field .label {
-    width: 75px;
+    padding-right: 10px;
 }
 
 .settings .column .field .value {
-    width: 200px;
+    width: 155px;
 }
 
 .dx-theme-generic .settings .column .field .value .dx-switch {
