@@ -261,6 +261,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Mutable() savedScrollOffset?: { top: number; left: number };
 
+  @Mutable() pendingScrollAction = false;
+
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
@@ -281,7 +283,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @InternalState() isHovered = false;
 
-  @InternalState() canRiseScrollAction = false;
+  @InternalState() needRiseScrollAction = false;
 
   @InternalState() scrollableOffsetLeft = 0;
 
@@ -409,11 +411,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     return subscribeToScrollEvent(this.containerElement, () => { this.handleScroll(); });
   }
 
-  // run always: effect doesn't rise always after change state canRiseScrollAction in QUnit tests
+  // run always: effect doesn't rise always after change state needRiseScrollAction in QUnit tests
   @Effect({ run: 'always' }) riseScroll(): void {
-    if (this.canRiseScrollAction) {
-      this.canRiseScrollAction = false;
+    if (this.needRiseScrollAction && !this.pendingScrollAction) {
+      this.pendingScrollAction = true;
       this.props.onScroll?.(this.getEventArgs());
+      this.needRiseScrollAction = false;
     }
   }
 
@@ -580,7 +583,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   handleScroll(): void {
     this.handleTabKey();
-    this.canRiseScrollAction = true;
+    this.pendingScrollAction = false;
+    this.needRiseScrollAction = true;
   }
 
   startLoading(): void {
