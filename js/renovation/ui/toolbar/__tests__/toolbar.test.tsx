@@ -47,20 +47,10 @@ describe('Toolbar', () => {
     each([false, true, undefined]).describe('rtlEnabled: %o', (isRtlEnabled) => {
       it('correctly pass rtlEnabled', () => {
         const buttonItem = new ToolbarItem();
-        buttonItem.options = new ToolbarButtonProps();
-
         const buttonGroupItem = new ToolbarItem();
-        buttonGroupItem.options = new ToolbarButtonGroupProps();
-
         const dropDownButtonItem = new ToolbarItem();
-        dropDownButtonItem.options = new ToolbarDropDownButtonProps();
-
         const checkBoxItem = new ToolbarItem();
-        checkBoxItem.options = new ToolbarCheckBoxProps();
-
         const textBoxItem = new ToolbarItem();
-        textBoxItem.options = new ToolbarTextBoxProps();
-
         const toolbarProps = new ToolbarProps();
         toolbarProps.items = [buttonItem, buttonGroupItem,
           dropDownButtonItem, checkBoxItem, textBoxItem];
