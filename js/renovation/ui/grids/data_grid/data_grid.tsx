@@ -441,12 +441,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  getSelectedRowKeys(): any[] & DxPromise<any> {
+  getSelectedRowKeys(): any[] | DxPromise<any> {
     return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
-  getSelectedRowsData(): any[] & DxPromise<any> {
+  getSelectedRowsData(): any[] | DxPromise<any> {
     return this.instance?.getSelectedRowsData();
   }
 
