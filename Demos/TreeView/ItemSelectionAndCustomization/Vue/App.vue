@@ -53,14 +53,14 @@
             @value-changed="selectionModeValueChanged"
           />
         </div>
-        <div class="option recursive-option">
+        <div class="option option-checkbox">
           <DxCheckBox
             text="Select Nodes Recursive"
             :disabled="isRecursiveDisabled"
             v-model:value="selectNodesRecursiveValue"
           />
         </div>
-        <div class="option">
+        <div class="option option-checkbox">
           <DxCheckBox
             text="Select By Click"
             v-model:value="selectByClickValue"
@@ -186,20 +186,16 @@ export default {
     width: 24%;
     display: inline-block;
     margin-top: 10px;
-    margin-right: 5px;
     box-sizing: border-box;
 }
 
-.recursive-option {
-    padding-left: 10px;
-}
-
-.option:last-of-type {
-    margin-right: 0px;
+.option-checkbox {
+    margin-bottom: 5px;
 }
 
 .options-container {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 }
 </style>

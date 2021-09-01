@@ -52,14 +52,14 @@
                 (onValueChanged)="selectionModeValueChanged($event)"
             ></dx-select-box>        
         </div>
-        <div class="option recursive-option">
+        <div class="option option-checkbox">
             <dx-check-box
                 text="Select Nodes Recursive"
                 [disabled]="isRecursiveDisabled"
                 [(value)]="selectNodesRecursive"
             ></dx-check-box>
         </div>            
-        <div class="option">
+        <div class="option option-checkbox">
             <dx-check-box 
                 text="Select By Click"
                 [(value)]="selectByClick"

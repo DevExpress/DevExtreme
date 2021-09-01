@@ -82,14 +82,14 @@ class App extends React.Component {
                 disabled={this.state.isSelectionModeDisabled}
                 onValueChanged={this.selectionModeValueChanged} />
             </div>
-            <div className="option recursive-option">
+            <div className="option option-checkbox">
               <CheckBox
                 text="Select Nodes Recursive"
                 value={this.state.selectNodesRecursive}
                 disabled={this.state.isRecursiveDisabled}
                 onValueChanged={this.selectNodesRecursiveValueChanged} />
             </div>
-            <div className="option">
+            <div className="option option-checkbox">
               <CheckBox
                 text="Select By Click"
                 value={this.state.selectByClick}

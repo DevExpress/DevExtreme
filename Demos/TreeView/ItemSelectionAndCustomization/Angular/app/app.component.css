@@ -39,19 +39,15 @@
     width: 24%;
     display: inline-block;
     margin-top: 10px;
-    margin-right: 5px;
     box-sizing: border-box;
 }
 
-::ng-deep .recursive-option {
-    padding-left: 10px;
+::ng-deep .option-checkbox {
+    margin-bottom: 5px;
 }
 
-::ng-deep .option:last-of-type {
-    margin-right: 0px;
-}
-
-.options-container {
+::ng-deep .options-container {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: space-between;
 }
