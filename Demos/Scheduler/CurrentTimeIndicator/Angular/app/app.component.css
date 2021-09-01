@@ -11,6 +11,8 @@
 ::ng-deep .options {
     background-color: rgba(191, 191, 191, 0.15);
     margin-top: 20px;
+    display: flex;
+    align-items: flex-start;
 }
 
 ::ng-deep .column {
@@ -23,6 +25,8 @@
 
 ::ng-deep .option {
     padding: 5px 0;
+    display: flex;
+    align-items: center;
 }
 
 ::ng-deep .label, .value {

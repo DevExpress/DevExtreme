@@ -121,6 +121,8 @@ export default {
   .options {
     background-color: rgba(191, 191, 191, 0.15);
     margin-top: 20px;
+    display:flex;
+    align-items: flex-start;
   }
 
   .column {
@@ -131,13 +133,11 @@ export default {
     vertical-align: top;
   }
 
-  .column:last-child .option {
-      margin-left: 4px;
-  }
-
   .option {
     padding: 5px 0;
-  }
+    display: flex;
+    align-items: center;
+}
 
   .label, .value {
     display: inline-block;
@@ -145,7 +145,7 @@ export default {
   }
 
   .label {
-    width: 184px;
+    width: 180px;
   }
 
   .value {
