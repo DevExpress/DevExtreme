@@ -474,6 +474,7 @@ class Scheduler extends Widget {
 
                 this._postponeResourceLoading().done((resources) => {
                     this._refreshWorkSpace(resources);
+                    this.getLayoutManager().initRenderingStrategy();
                     this._updateHeader();
                     this._filterAppointmentsByDate();
                     this._appointments.option('allowAllDayResize', value !== 'day');
