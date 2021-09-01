@@ -1,5 +1,8 @@
 import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import { DataSource } from '../../../data/data_source/data_source';
+import { Deferred } from '../../../core/utils/deferred';
+import query from '../../../data/query';
+import { compileGetter } from '../../../core/utils/data';
 
 export const getValueExpr = resource => resource.valueExpr || 'id';
 export const getDisplayExpr = resource => resource.displayExpr || 'text';
@@ -145,4 +148,109 @@ export const getAllGroups = (groups) => {
 
         return getGroupsObjectFromGroupsArray(groupsArray);
     });
+};
+
+export const getResourceByField = (fieldName, loadedResources) => {
+    for(let i = 0; i < loadedResources.length; i++) {
+        const resource = loadedResources[i];
+        if(resource.name === fieldName) {
+            return resource.data;
+        }
+    }
+
+    return [];
+};
+
+export const createResourceEditorModel = (resources, loadedResources) => {
+    return resources.map(resource => {
+        const dataField = getFieldExpr(resource);
+        const dataSource = getResourceByField(dataField, loadedResources);
+
+        return {
+            editorOptions: {
+                dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
+                displayExpr: getDisplayExpr(resource),
+                valueExpr: getValueExpr(resource)
+            },
+            dataField,
+            editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
+            label: { text: resource.label || dataField }
+        };
+    });
+};
+
+export const isResourceMultiple = (resources, resourceField) => {
+    const resource = resources.find(resource => {
+        const field = getFieldExpr(resource);
+        return field === resourceField;
+    });
+
+    return !!resource?.allowMultiple;
+};
+
+export const filterResources = (resources, fields) => {
+    return resources.filter(resource => {
+        const field = getFieldExpr(resource);
+        return fields.indexOf(field) > -1;
+    });
+};
+
+export const getPaintedResources = (resources, groups = []) => {
+    const result = resources.find(resource => resource.useColorAsDefault);
+    if(result) {
+        return result;
+    }
+
+    const newResources = groups.length ?
+        filterResources(resources, groups) :
+        resources;
+
+    return newResources[newResources.length - 1];
+};
+
+export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value) => {
+    const result = new Deferred();
+
+    resources.forEach(resource => {
+        const resourceField = getFieldExpr(resource);
+
+        if(resourceField === field) {
+            const dataSource = getWrappedDataSource(resource.dataSource);
+            const valueExpr = getValueExpr(resource);
+
+            if(!resourceLoaderMap.has(field)) {
+                resourceLoaderMap.set(field, dataSource.load());
+            }
+
+            resourceLoaderMap.get(field)
+                .done(data => {
+                    const filteredData = query(data)
+                        .filter(valueExpr, value)
+                        .toArray();
+
+                    result.resolve(filteredData[0]);
+                })
+                .fail(() => {
+                    resourceLoaderMap.delete(field);
+                    result.reject();
+                });
+        }
+    });
+
+    return result.promise();
+};
+
+export const getResourceColor = (resources, resourceLoaderMap, field, value) => {
+    const result = new Deferred();
+
+    const resource = filterResources(resources, [field])[0] || {};
+
+    const colorExpr = resource.colorExpr || 'color';
+    const colorGetter = compileGetter(colorExpr);
+
+    getOrLoadResourceItem(resources, resourceLoaderMap, field, value)
+        .done(resource => result.resolve(colorGetter(resource)))
+        .fail(() => result.reject());
+
+    return result.promise();
 };

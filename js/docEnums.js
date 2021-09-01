@@ -1170,7 +1170,7 @@
 
 /**
  * @typedef {string} Enums.GanttToolbarItem
- * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'| 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies'}
+ * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'| 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies'}
  */
 
 /**

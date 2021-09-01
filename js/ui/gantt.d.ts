@@ -1195,7 +1195,7 @@ export interface dxGanttToolbar {
      * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies'>;
+    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies'>;
 }
 
 /**

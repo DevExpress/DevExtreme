@@ -68,8 +68,8 @@ class Bar {
             case 'fullscreen': return this._createDefaultItem(COMMANDS.fullScreen, messageLocalization.format('dxGantt-fullScreen'), this._getIcon('full-screen'));
             case 'taskdetails': return this._createDefaultItem(COMMANDS.taskInformation, messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', this._getIcon('task-details'));
             case 'resourcemanager': return this._createDefaultItem(COMMANDS.resourceManager, messageLocalization.format('dxGantt-dialogResourceManagerTitle'), this._getIcon('resource-manager'));
-            case 'toggleresources': return this._createDefaultItem(COMMANDS.toggleResources, messageLocalization.format('dxGantt-toggleResources'), this._getIcon('toggle-resources'));
-            case 'toggledependencies': return this._createDefaultItem(COMMANDS.toggleDependencies, messageLocalization.format('dxGantt-toggleDependencies'), this._getIcon('toggle-dependencies'));
+            case 'showresources': return this._createDefaultItem(COMMANDS.toggleResources, messageLocalization.format('dxGantt-showResources'), this._getIcon('toggle-resources'));
+            case 'showdependencies': return this._createDefaultItem(COMMANDS.toggleDependencies, messageLocalization.format('dxGantt-showDependencies'), this._getIcon('toggle-dependencies'));
 
             default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
         }
