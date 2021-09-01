@@ -9,7 +9,7 @@ import support from 'core/utils/support';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import initMobileViewport from 'mobile/init_mobile_viewport';
-import 'ui/scroll_view/ui.scrollable';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {
     calculateInertiaDistance,
@@ -56,6 +56,8 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
+
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('markup', moduleConfig);
 
@@ -509,6 +511,11 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
 });
 
 QUnit.test('simulated scrollable should stop animators on disposing', function(assert) {
+    if(isRenovation) {
+        assert.ok(true);
+        return;
+    }
+
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         direction: 'both'

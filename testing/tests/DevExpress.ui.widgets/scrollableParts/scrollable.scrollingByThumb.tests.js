@@ -3,6 +3,7 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -15,6 +16,8 @@ import {
     SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
     SCROLLABLE_SCROLLBAR_ACTIVE_CLASS
 } from './scrollable.constants.js';
+
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -51,15 +54,21 @@ const getScrollOffset = function($scrollable) {
 QUnit.module('scrolling by thumb', moduleConfig);
 
 QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
+    if(isRenovation) {
+        // test not relevant for renovated scrollable
+        assert.ok(true);
+        return;
+    }
+
     const $scrollable = $('#scrollable').dxScrollable({
-        showScrollbar: 'onScroll',
+        showScrollbar: true,
         useNative: false
     });
 
     let scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'onScroll', 'true normalize to onScroll');
 
-    $scrollable.dxScrollable('option', 'showScrollbar', 'never');
+    $scrollable.dxScrollable('option', 'showScrollbar', false);
 
     scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'never', 'true normalize to onScroll');
@@ -373,9 +382,9 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 
-    $wrapScrollable.height(10);
-    $scrollable.height(20);
-    $scrollable.children().height(30);
+    $wrapScrollable.height(100);
+    $scrollable.height(200);
+    $scrollable.children().height(300);
 
     const scrollableOption = {
         useNative: false,
