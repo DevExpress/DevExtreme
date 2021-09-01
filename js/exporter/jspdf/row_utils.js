@@ -6,13 +6,12 @@ function getRows(doc, dataProvider, dataGrid, options) {
 
     let previousRow;
     let currentRow;
-    const rowOptions = options.rowOptions || {};
     const rowsCount = dataProvider.getRowsCount();
-
     const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
+
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         previousRow = currentRow;
-        currentRow = createRow(dataProvider, rowIndex, rowOptions, previousRow, wordWrapEnabled);
+        currentRow = createRow(dataProvider, rowIndex, previousRow, wordWrapEnabled);
 
         if(options.customizeCell) {
             currentRow.cells.forEach(cellInfo => {
@@ -26,7 +25,7 @@ function getRows(doc, dataProvider, dataGrid, options) {
     return rows;
 }
 
-function createRow(dataProvider, rowIndex, rowOptions, previousRow, wordWrapEnabled) {
+function createRow(dataProvider, rowIndex, previousRow, wordWrapEnabled) {
     const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
     let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
     if(rowType === 'groupFooter' && previousRow?.rowType === 'groupFooter') {
@@ -40,12 +39,12 @@ function createRow(dataProvider, rowIndex, rowOptions, previousRow, wordWrapEnab
     };
 
     const columns = dataProvider.getColumns();
-    fillCells(rowInfo, rowOptions, dataProvider, columns, wordWrapEnabled);
+    fillCells(rowInfo, dataProvider, columns, wordWrapEnabled);
 
     return rowInfo;
 }
 
-function fillCells(rowInfo, rowOptions, dataProvider, columns, wordWrapEnabled) {
+function fillCells(rowInfo, dataProvider, columns, wordWrapEnabled) {
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
         const cellInfo = {
