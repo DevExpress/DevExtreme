@@ -343,6 +343,13 @@ $scheduler-appointment-form-label-padding: 20px;
       border-bottom: none;
     }
 
+    // This is a WA for existing behaviour. Refactor with setTableSizes
+    .dx-scheduler-date-table-scrollable-content,
+    .dx-scheduler-date-table-container {
+      min-height: 100%;
+      height: 100%;
+    }
+
     .dx-scheduler-header-panel {
       @include flex-container(row, nowrap);
 

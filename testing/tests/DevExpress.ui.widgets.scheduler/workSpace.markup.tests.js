@@ -271,10 +271,9 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
         QUnit.test('Scheduler workspace parts should be wrapped by scrollable', function(assert) {
             const $element = this.instance.$element();
 
-            assert.ok($element.find('.dx-scheduler-time-panel').parent().hasClass('dx-scrollable-content'), 'Scrollable contains the time panel');
+            assert.ok($element.find('.dx-scheduler-time-panel').parent().parent().hasClass('dx-scrollable-content'), 'Scrollable contains the time panel');
             assert.ok(
-                $element.find('.dx-scheduler-date-table').parent().hasClass('dx-scrollable-content')
-                || $element.find('.dx-scheduler-date-table-container').parent().hasClass('dx-scrollable-content'),
+                $element.find('.dx-scheduler-date-table-container').parent().parent().hasClass('dx-scrollable-content'),
                 'Scrollable contains date table',
             );
         });
