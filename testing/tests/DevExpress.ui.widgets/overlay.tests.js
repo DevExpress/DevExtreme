@@ -3124,7 +3124,7 @@ testModule('drag', moduleConfig, () => {
         assert.strictEqual(startEvent.maxRightOffset, 0, 'overlay should not be dragged horizontally');
     });
 
-    test('overlay can be dragged when container size less than overlay content but outsideMultiplayer is enabled', function(assert) {
+    test('overlay can be dragged when container size less than overlay content and outsideDragFactor is enabled', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(10).width(10);
         const $overlay = $('#overlay').dxOverlay({
             dragEnabled: true,
@@ -3133,7 +3133,7 @@ testModule('drag', moduleConfig, () => {
             width: 10,
             container: $container,
             position: { of: $container },
-            dragArea: { outsideMultiplayer: 0 }
+            outsideDragFactor: 1
         });
 
         const $overlayContent = $overlay.dxOverlay('$content');
@@ -3145,6 +3145,71 @@ testModule('drag', moduleConfig, () => {
         assert.strictEqual(startEvent.maxBottomOffset, 10, 'overlay can be dragged vertically');
         assert.strictEqual(startEvent.maxLeftOffset, 10, 'overlay can be dragged horizontally');
         assert.strictEqual(startEvent.maxRightOffset, 10, 'overlay can be dragged horizontally');
+    });
+
+    test('overlay will use window as drag container and 1 as outsideDragFactor value if allowDragOutside is enabled', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(10).width(10);
+        const overlay = $('#overlay').dxOverlay({
+            dragEnabled: true,
+            visible: true,
+            height: 10,
+            width: 10,
+            container: $container,
+            outsideDragFactor: 0.5,
+            position: { of: $container },
+            allowDragOutside: true
+        }).dxOverlay('instance');
+
+        assert.strictEqual(overlay._drag.container, window, 'window is a drag container');
+        assert.strictEqual(overlay._drag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
+    });
+
+    test('overlay should use drag container element in right priority', function(assert) {
+
+
+        try {
+            const $container = $('<div>').appendTo('#qunit-fixture').height(100).width(100);
+            const dragAndResizeArea = $('<div>').appendTo('#qunit-fixture').height(50).width(50).get(0);
+            const overlay = $('#overlay').dxOverlay({
+                dragEnabled: true,
+                visible: true,
+                container: $container,
+                dragAndResizeArea: dragAndResizeArea
+            }).dxOverlay('instance');
+
+            assert.strictEqual(overlay._drag.container, dragAndResizeArea, 'drag container is dragAndResizeArea if it defined');
+
+            overlay.option('dragAndResizeArea', undefined);
+
+            assert.strictEqual(overlay._drag.container, $container.get(0), 'drag container is container if dragAndResizeArea is not defined');
+
+            overlay.option('container', undefined);
+
+            assert.strictEqual(overlay._drag.container, viewPort().get(0), 'drag container is viewport if container is not defined');
+
+            viewPort(null);
+            overlay._drag.container = overlay._getDragResizeContainer().get(0);
+
+            assert.strictEqual(overlay._drag.container, window, 'drag container is window if there is no vieport');
+        } finally {
+            viewPort(toSelector(VIEWPORT_CLASS));
+        }
+    });
+
+    test('overlay will use initial drag container and outsideDragFactor value after allowDragOutside runtime change', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(10).width(10);
+        const overlay = $('#overlay').dxOverlay({
+            dragEnabled: true,
+            visible: true,
+            container: $container,
+            outsideDragFactor: 0,
+            allowDragOutside: true
+        }).dxOverlay('instance');
+
+        overlay.option('allowDragOutside', false);
+
+        assert.strictEqual(overlay._drag.container, $container.get(0), 'overlay container is a drag container');
+        assert.strictEqual(overlay._drag.outsideDragFactor, 0, 'outsideDragFactor equals 0');
     });
 
     test('overlay should be dragged correctly when position.of and shading (T534551)', function(assert) {

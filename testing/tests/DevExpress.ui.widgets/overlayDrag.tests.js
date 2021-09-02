@@ -32,7 +32,7 @@ QUnit.module('overlay_drag', {
                 handle: this.handle,
                 container,
                 draggableElement: this.draggableElement,
-                outsideMultiplayer: 0,
+                outsideDragFactor: 0,
                 updatePositionChangeHandled: () => {}
             });
             const expectedWidth = $(container).outerWidth();
@@ -44,27 +44,27 @@ QUnit.module('overlay_drag', {
     });
 
     [
-        { container: '#container', outsideMultiplayer: 0 },
-        { container: '#container2', outsideMultiplayer: 0.5 },
-        { container: '#qunit-fixture', outsideMultiplayer: 0.75 },
-        { container: 'window', outsideMultiplayer: 1 }
+        { container: '#container', outsideDragFactor: 0 },
+        { container: '#container2', outsideDragFactor: 0.5 },
+        { container: '#qunit-fixture', outsideDragFactor: 0.75 },
+        { container: 'window', outsideDragFactor: 1 }
     ].forEach((value) => {
-        QUnit.test(`calculates delta size properly for ${value.container} container and ${value.outsideMultiplayer} outsideMultiplayer`,
+        QUnit.test(`calculates delta size properly for ${value.container} container and ${value.outsideDragFactor} outsideDragFactor`,
             function(assert) {
                 const container = value.container === 'window' ? window : $(value.container).get(0);
-                const outsideMultiplayer = value.outsideMultiplayer;
+                const outsideDragFactor = value.outsideDragFactor;
                 const drag = new OverlayDrag({
                     dragEnabled: true,
                     handle: this.handle,
                     container,
                     draggableElement: this.draggableElement,
-                    outsideMultiplayer,
+                    outsideDragFactor,
                     updatePositionChangeHandled: () => {}
                 });
                 const draggableElementWidth = this.draggableElement.offsetWidth;
                 const draggableElementHeight = this.draggableElement.offsetHeight;
-                const expectedDeltaWidth = $(container).outerWidth() - draggableElementWidth + (draggableElementWidth * outsideMultiplayer);
-                const expectedDeltaHeight = $(container).outerHeight() - draggableElementHeight + (draggableElementHeight * outsideMultiplayer);
+                const expectedDeltaWidth = $(container).outerWidth() - draggableElementWidth + (draggableElementWidth * outsideDragFactor);
+                const expectedDeltaHeight = $(container).outerHeight() - draggableElementHeight + (draggableElementHeight * outsideDragFactor);
 
                 assert.strictEqual(expectedDeltaWidth, drag._deltaSize().width, 'delta width is correct');
                 assert.strictEqual(expectedDeltaHeight, drag._deltaSize().height, 'delta height is correct');
@@ -77,7 +77,7 @@ QUnit.module('overlay_drag', {
             handle: this.handle,
             container: this.container,
             draggableElement: this.draggableElement,
-            outsideMultiplayer: 0,
+            outsideDragFactor: 0,
             updatePositionChangeHandled: () => {}
         });
         const startPosition = this.draggableElement.getBoundingClientRect();
@@ -96,7 +96,7 @@ QUnit.module('overlay_drag', {
                 handle: this.handle,
                 container,
                 draggableElement: this.draggableElement,
-                outsideMultiplayer: 0,
+                outsideDragFactor: 0,
                 updatePositionChangeHandled: () => {}
             });
             const draggableElementPosition = this.draggableElement.getBoundingClientRect();
