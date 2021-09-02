@@ -37,17 +37,30 @@
 
 ::ng-deep .option {
     width: 24%;
-    display: inline-block;
     margin-top: 10px;
+    margin-right: 9px;
     box-sizing: border-box;
-}
-
-::ng-deep .option-checkbox {
-    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 ::ng-deep .options-container {
     display: flex;
-    align-items: flex-end;
     justify-content: space-between;
+    align-items: stretch;
+}
+
+::ng-deep .editor-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .editor-container>*{
+  width: 100%;
+}
+
+::ng-deep .option:last-of-type {
+    margin-right: 0px;
 }

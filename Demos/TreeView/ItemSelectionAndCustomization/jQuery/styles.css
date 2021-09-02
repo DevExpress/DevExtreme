@@ -20,7 +20,6 @@
     margin-top: 20px;
 }
 
-
 .dx-list-item-content {
     padding-left: 0;
 }
@@ -39,17 +38,30 @@
 
 .option {
     width: 24%;
-    display: inline-block;
     margin-top: 10px;
+    margin-right: 9px;
     box-sizing: border-box;
-}
-
-.option-checkbox {
-    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .options-container {
     display: flex;
-    align-items: flex-end;
     justify-content: space-between;
+    align-items: stretch;
+}
+
+.editor-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.editor-container>*{
+  width: 100%;
+}
+
+.option:last-of-type {
+    margin-right: 0px;
 }
