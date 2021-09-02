@@ -1209,6 +1209,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo(11000);
 
         this.clock.tick(500);
+        this.clock.tick(500);
 
         // assert
         assert.ok(dataGrid.getTopVisibleRowData().key > 110, 'top visible row is correct');
@@ -2606,12 +2607,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     // T815141
     QUnit.test('Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow', function(assert) {
-        fastScrollTest(assert, this, 500, 1200, [0, 1, 3, 5, 7, 8, 8, 8], [1, 2, 1, 1, 1, 2, 3, 4]);
+        fastScrollTest(assert, this, 500, 1200, [0, 1, 8, 8], [1, 2, 3, 4 ]);
     });
 
     // T815141
     QUnit.test('Pages should be loaded while scrolling fast if remoteOperations is true and server is fast', function(assert) {
-        fastScrollTest(assert, this, 50, 700, [0, 0, 2, 3, 4, 5], [1, 2, 1, 1, 1, 1]);
+        fastScrollTest(assert, this, 50, 700, [0, 0, 5], [1, 2, 2]);
     });
 
     // T815141

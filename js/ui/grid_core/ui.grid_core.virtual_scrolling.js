@@ -803,6 +803,7 @@ export const virtualScrollingModule = {
                         this._visibleItems = this.option(NEW_SCROLLING_MODE) ? null : [];
                         this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
                         this._viewportChanging = false;
+                        this._needUpdateViewportAfterLoading = false;
 
                         this._rowsScrollController.positionChanged.add(() => {
                             if(this.option(NEW_SCROLLING_MODE)) {
@@ -1175,7 +1176,7 @@ export const virtualScrollingModule = {
                             skipForCurrentPage: Math.max(0, skipForCurrentPage)
                         };
                     },
-                    loadViewport: function() {
+                    loadViewport: function(checkLoadedParamsOnly) {
                         const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
                         if(isVirtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
@@ -1184,16 +1185,23 @@ export const virtualScrollingModule = {
                             const dataSourceAdapter = this._dataSource;
                             const isLoading = this._isLoading;
                             const loadedParamsChanged = !isLoading && (pageIndex !== loadedPageParams.pageIndex || loadPageCount !== loadedPageParams.loadPageCount);
-                            const loadingParamsChanged = isLoading && (pageIndex !== dataSourceAdapter.pageIndex() || loadPageCount !== dataSourceAdapter.loadPageCount());
 
-                            if(isVirtualPaging && (loadedParamsChanged || loadingParamsChanged)) {
+                            if(isVirtualPaging && isLoading) {
+                                this._needUpdateViewportAfterLoading = true;
+                            }
+                            if(isVirtualPaging && loadedParamsChanged) {
                                 dataSourceAdapter.pageIndex(pageIndex);
                                 dataSourceAdapter.loadPageCount(loadPageCount);
                                 this._repaintChangesOnly = true;
                                 this.load().always(() => {
                                     this._repaintChangesOnly = undefined;
+                                }).done(function() {
+                                    if(this._needUpdateViewportAfterLoading) {
+                                        this._needUpdateViewportAfterLoading = false;
+                                        this.loadViewport(true);
+                                    }
                                 });
-                            } else if(!isLoading) {
+                            } else if(!isLoading && !checkLoadedParamsOnly) {
                                 this.updateItems({
                                     repaintChangesOnly: true
                                 });
@@ -1261,7 +1269,6 @@ export const virtualScrollingModule = {
                         const rowsScrollController = this._rowsScrollController;
 
                         rowsScrollController && rowsScrollController.dispose();
-
                         this.callBase.apply(this, arguments);
                     },
                     topItemIndex: function() {
