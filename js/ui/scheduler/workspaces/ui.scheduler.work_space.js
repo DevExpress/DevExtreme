@@ -1084,8 +1084,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(this._needCreateCrossScrolling()) {
                 return getBoundingRect(this._$dateTable.get(0)).width;
             }
+            const totalWidth = getBoundingRect(this.$element().get(0)).width;
+            const timePanelWidth = this.getTimePanelWidth();
+            const groupTableWidth = this.getGroupTableWidth();
 
-            return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
+            return totalWidth - timePanelWidth - groupTableWidth;
         });
     }
 
@@ -1425,7 +1428,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     // NOTE: refactor leftIndex calculation
     getCellIndexByCoordinates(coordinates, allDay) {
         const cellCount = this._getTotalCellCount(this._getGroupCount());
-        const cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount);
+        const cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount); // TODO
         const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
         const leftOffset = this._isRTL() || this.option('crossScrollingEnabled') ? 0 : this.getWorkSpaceLeftOffset();
         const topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight));
