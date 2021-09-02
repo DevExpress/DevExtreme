@@ -6,7 +6,7 @@ import LegacyToolbar from '../../../ui/toolbar';
 
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { ToolbarProps } from './toolbar_props';
-import { isDefined, isString } from '../../../core/utils/type';
+import { isDefined, isObject } from '../../../core/utils/type';
 import { ConfigContext, ConfigContextValue } from '../../common/config_context';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 
@@ -16,10 +16,8 @@ export const viewFunction = ({ props, rtl, restAttributes }: Toolbar): JSX.Eleme
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < items.length; index += 1) {
       const item = items[index];
-      if (!isString(item)) {
-       item.options = item.options ?? {};
-          item.options = {};
-        }
+      if (isObject(item)) {
+        item.options = item.options ?? {};
         item.options.rtlEnabled = item.options.rtlEnabled ?? rtl;
       }
     }
