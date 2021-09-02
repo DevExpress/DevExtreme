@@ -3551,9 +3551,11 @@ QUnit.module('View\'s focus', {
         const $inputElement = $(this.dataGrid.element()).find('input');
 
         // act
+        $inputElement.trigger('dxpointerdown');
+        this.clock.tick();
         $inputElement.focus();
         this.clock.tick();
-        $inputElement.trigger('dxpointerdown').trigger('dxclick');
+        $inputElement.trigger('dxclick');
         this.clock.tick();
 
         // assert
@@ -3739,7 +3741,9 @@ QUnit.module('View\'s focus', {
         for(let i = 0; i < 2; i++) {
             for(let j = 0; j < 2; j++) {
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 if(i === 0 && j === 0) {
@@ -3799,7 +3803,9 @@ QUnit.module('View\'s focus', {
                 }
 
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 // assert

@@ -79,8 +79,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() crossThumbScrolling = false;
 
-  @Mutable() initialTopPocketSize = 0;
-
   @Mutable() rightScrollLocation = 0;
 
   @Mutable() prevScrollLocation = 0;
@@ -357,22 +355,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
   }
 
-  @Effect()
-  updateContentTranslate(): void {
-    if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
-      if (this.initialTopPocketSize !== this.props.topPocketSize) {
-        this.updateContent(this.props.scrollLocation);
-        this.initialTopPocketSize = this.props.topPocketSize;
-      }
-    }
-  }
-
   @Method()
   moveTo(location: number): void {
     const scrollDelta = Math.abs(this.prevScrollLocation - location);
     // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
     this.props.scrollLocationChange?.(this.fullScrollProp, location);
-    this.updateContent(location);
+
     if (scrollDelta >= 1) {
       this.props.onScroll?.();
     }
@@ -415,6 +403,29 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         this.moveTo(newScrollLocation);
       }
     }
+  }
+
+  @Effect()
+  updateContentTranslate(): void {
+    this.wasInit = true;
+    this.props.contentTranslateOffsetChange?.(this.scrollProp, this.contentTransform);
+  }
+
+  get contentTransform(): number {
+    const location = this.props.scrollLocation;
+    let transformValue = location % 1;
+
+    if (location > 0) {
+      transformValue = location;
+    } else if (location <= this.minOffset) {
+      transformValue = location - this.minOffset;
+    }
+
+    if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
+      transformValue -= this.props.topPocketSize;
+    }
+
+    return transformValue;
   }
 
   hide(): void {
@@ -543,26 +554,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.moveTo(Math.round(Math.max(Math.min(-delta, 0), -this.visibleScrollAreaSize)));
   }
 
-  updateContent(location: number): void {
-    let contentTranslateOffset = Number.NaN;
-
-    if (location > 0) {
-      contentTranslateOffset = location;
-    } else if (location <= this.minOffset) {
-      contentTranslateOffset = location - this.minOffset;
-    } else {
-      contentTranslateOffset = location % 1;
-    }
-
-    this.wasInit = true;
-
-    if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
-      contentTranslateOffset -= this.props.topPocketSize;
-    }
-
-    this.props.contentTranslateOffsetChange?.(this.scrollProp, contentTranslateOffset);
-  }
-
   onRelease(): void {
     this.setPocketState(TopPocketState.STATE_RELEASED);
     this.props.onRelease?.();
@@ -583,6 +574,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   get isPullDown(): boolean {
     return this.props.pullDownEnabled
+      && this.props.topPocketSize !== 0
       && this.props.bounceEnabled
       && (this.props.scrollLocation - this.props.topPocketSize) >= 0;
   }

@@ -490,7 +490,7 @@
         "dxGantt-sortingAscendingText": "Artan Sıralama",
         "dxGantt-sortingDescendingText": "Azalan Sıralama",
         "dxGantt-sortingClearText": "Sıralamayı Temizle",
-        "dxGantt-toggleResources": "TODO",
-        "dxGantt-toggleDependencies": "TODO"
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO"
     }
 }

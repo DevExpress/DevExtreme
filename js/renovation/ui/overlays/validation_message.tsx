@@ -32,6 +32,8 @@ export class ValidationMessageProps extends BaseWidgetProps {
   @OneWay() target?: string | Element | null;
 
   @OneWay() offset?: Record<string, number> = { h: 0, v: 0 };
+
+  @OneWay() contentId?: string;
 }
 @Component({
   defaultOptionRules: null,

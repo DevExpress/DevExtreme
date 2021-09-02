@@ -28,3 +28,19 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: lgtm.sarif
+
+  notify:
+    runs-on: ubuntu-latest
+    name: Send notifications
+    needs: [lgtm-sync]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 21_2

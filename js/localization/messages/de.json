@@ -585,7 +585,7 @@
         "dxGantt-sortingAscendingText": "Aufsteigend sortieren",
         "dxGantt-sortingDescendingText": "Absteigend sortieren",
         "dxGantt-sortingClearText": "Sortierung aufheben",
-        "dxGantt-toggleResources": "TODO",
-        "dxGantt-toggleDependencies": "TODO"
+        "dxGantt-showResources": "Ressourcen Anzeigen",
+        "dxGantt-showDependencies": "Abhängigkeiten Anzeigen"
     }
 }
