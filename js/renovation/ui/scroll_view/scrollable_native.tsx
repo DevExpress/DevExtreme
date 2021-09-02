@@ -462,6 +462,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     return isDefined(this.tryGetAllowedDirection());
   }
 
+  @Method()
   updateHandler(): void {
     this.updateSizes();
     this.onUpdated();

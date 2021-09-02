@@ -369,6 +369,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Method()
+  updateHandler(): void {
+    this.updateSizes();
+    this.onUpdated();
+  }
+
+  @Method()
   scrollHeight(): number {
     return this.content().offsetHeight;
   }
@@ -586,11 +592,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.vScrollbarRef.current?.scrollTo(
       clampIntoRange(scrollTop + top, getScrollTopMax(containerEl), 0),
     );
-  }
-
-  updateHandler(): void {
-    this.updateSizes();
-    this.onUpdated();
   }
 
   handleScroll(): void {

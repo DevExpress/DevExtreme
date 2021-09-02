@@ -191,6 +191,7 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
     this.scrollableRef.current!.finishLoading();
   }
 
+  @Method()
   updateHandler(): void {
     this.scrollableRef.current!.updateHandler();
   }
