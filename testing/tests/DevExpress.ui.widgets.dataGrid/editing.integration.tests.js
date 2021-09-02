@@ -30,6 +30,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 import $ from 'jquery';
@@ -2768,6 +2769,57 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // assert
             assert.strictEqual(insertSpy.callCount, 1, 'insert is called after the last click');
             assert.strictEqual(insertSpy.args[0][0].field2, true, 'insert is called with valid value');
+        });
+    });
+
+    ['Batch', 'Cell'].forEach((editMode) => {
+        QUnit.testInActiveWindow(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, function(assert) {
+            if(devices.real().deviceType === 'desktop') {
+                assert.ok(true, 'test only for mobile devices');
+                return;
+            }
+            const data = [
+                { id: 1, field1: 'test', field2: true }
+            ];
+            const dataGrid = createDataGrid({
+                dataSource: data,
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true
+                }
+            });
+            this.clock.tick();
+            dataGrid.editCell(0, 0);
+            this.clock.tick();
+
+            // act
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+            const $firstInput = $firstCell.find('input.dx-texteditor-input');
+            $firstInput.focus();
+            this.clock.tick();
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-focused'));
+            assert.ok($firstInput.is(':focus'), 'input is focused');
+
+            // act
+            // mock for real blur
+            $firstInput.on('blur', function(e) {
+                $(e.target).trigger('change');
+            });
+            $firstInput.val('123');
+            let $secondCell = $(dataGrid.getCellElement(0, 1));
+            $secondCell.find('.dx-checkbox').trigger(pointerEvents.down);
+            this.clock.tick();
+            $secondCell = $(dataGrid.getCellElement(0, 1));
+            $secondCell.find('.dx-checkbox').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'first cell value');
+            assert.strictEqual(dataGrid.cellValue(0, 1), false, 'second cell value');
         });
     });
 });

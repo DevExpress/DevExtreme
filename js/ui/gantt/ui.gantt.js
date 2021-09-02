@@ -219,7 +219,8 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = validatedData;
-            this._ganttTreeList?.updateDataSource(validatedData);
+            const forceUpdate = !this._ganttTreeList?.getDataSource() && !this._ganttView;
+            this._ganttTreeList?.updateDataSource(validatedData, forceUpdate);
         }
     }
     _validateSourceData(dataSourceName, data) {

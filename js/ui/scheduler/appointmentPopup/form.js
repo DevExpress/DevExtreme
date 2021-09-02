@@ -97,11 +97,9 @@ export class AppointmentForm {
         const recurrenceEditorVisibility = !!formData[expr.recurrenceRuleExpr]; // TODO
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
-        const resourceManager = this.scheduler.getResourceManager();
-
         const mainItems = [
             ...this._createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing),
-            ...resourceManager.getEditors()
+            ...this.scheduler.createResourceEditorModel()
         ];
 
         changeSize(recurrenceEditorVisibility);

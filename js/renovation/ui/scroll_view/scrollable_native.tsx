@@ -217,6 +217,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Mutable() locationTop = 0;
 
+  @Mutable() pendingScrollAction = false;
+
   @InternalState() containerClientWidth = 0;
 
   @InternalState() containerClientHeight = 0;
@@ -227,7 +229,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @InternalState() needForceScrollbarsVisibility = false;
 
-  @InternalState() canRiseScrollAction = false;
+  @InternalState() needRiseScrollAction = false;
 
   @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
@@ -364,10 +366,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       });
   }
 
+  // run always: effect doesn't rise always after change state needRiseScrollAction in QUnit tests
   @Effect({ run: 'always' }) riseScroll(): void {
-    if (this.canRiseScrollAction) {
+    if (this.needRiseScrollAction && !this.pendingScrollAction) {
+      this.pendingScrollAction = true;
       this.props.onScroll?.(this.getEventArgs());
-      this.canRiseScrollAction = false;
+      this.needRiseScrollAction = false;
     }
   }
 
@@ -501,7 +505,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       this.moveScrollbars();
     }
 
-    this.canRiseScrollAction = true;
+    this.pendingScrollAction = false;
+    this.needRiseScrollAction = true;
 
     this.handlePocketState();
   }

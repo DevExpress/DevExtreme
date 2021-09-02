@@ -4625,6 +4625,10 @@ declare module DevExpress.ui {
      * [descr:dxActionSheetItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    /**
+     * [descr:dxActionSheetItem.stylingMode]
+     */
+    stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
    * @deprecated use Properties instead
@@ -8695,11 +8699,8 @@ declare module DevExpress.ui {
         | 'bold'
         | 'italic'
         | 'underline'
-        | 'fontColor'
         | 'lineStyle'
         | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
         | 'textAlignLeft'
         | 'textAlignCenter'
         | 'textAlignRight'
