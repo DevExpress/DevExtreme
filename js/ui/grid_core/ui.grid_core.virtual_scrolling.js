@@ -1195,7 +1195,7 @@ export const virtualScrollingModule = {
                                 this._repaintChangesOnly = true;
                                 this.load().always(() => {
                                     this._repaintChangesOnly = undefined;
-                                }).done(function() {
+                                }).done(() => {
                                     if(this._needUpdateViewportAfterLoading) {
                                         this._needUpdateViewportAfterLoading = false;
                                         this.loadViewport(true);
