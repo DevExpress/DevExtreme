@@ -12,56 +12,6 @@ import LegacyToolbar from '../../../../ui/toolbar';
 describe('Toolbar', () => {
   describe('View', () => {
     it('default render', () => {
-      const buttonItem = new ToolbarItem();
-      buttonItem.options = new ToolbarButtonProps();
-
-      const buttonGroupItem = new ToolbarItem();
-      buttonGroupItem.options = new ToolbarButtonGroupProps();
-
-      const dropDownButtonItem = new ToolbarItem();
-      dropDownButtonItem.options = new ToolbarDropDownButtonProps();
-
-      const checkBoxItem = new ToolbarItem();
-      checkBoxItem.options = new ToolbarCheckBoxProps();
-
-      const textBoxItem = new ToolbarItem();
-      textBoxItem.options = new ToolbarTextBoxProps();
-
-      const componentProps = new ToolbarProps();
-      componentProps.items = [buttonItem, buttonGroupItem,
-        dropDownButtonItem, checkBoxItem, textBoxItem];
-
-      const props = {
-        props: componentProps,
-        restAttributes: { 'rest-attributes': 'true' },
-      } as Partial<Toolbar>;
-      const tree = shallow(<ToolbarView {...props as any} /> as any);
-
-      expect(tree.find(DomComponentWrapper).props()).toMatchObject({
-        componentProps,
-        componentType: LegacyToolbar,
-        'rest-attributes': 'true',
-      });
-    });
-
-    it('pass items as string', () => {
-      const toolbarProps = new ToolbarProps();
-      toolbarProps.items = ['item1', 'item2'];
-
-      const props = {
-        props: toolbarProps,
-        restAttributes: { 'rest-attributes': 'true' },
-      } as Partial<Toolbar>;
-      const tree = shallow(<ToolbarView {...props as any} /> as any);
-
-      expect(tree.find(DomComponentWrapper).props()).toMatchObject({
-        componentProps: toolbarProps,
-        componentType: LegacyToolbar,
-        'rest-attributes': 'true',
-      });
-    });
-
-    it('not crash without items', () => {
       const toolbarProps = new ToolbarProps();
       const initialProps = {
         props: toolbarProps,
@@ -73,6 +23,18 @@ describe('Toolbar', () => {
         componentType: LegacyToolbar,
         'rest-attributes': 'true',
       });
+    });
+
+    it('pass items as string', () => {
+      const toolbarProps = new ToolbarProps();
+      toolbarProps.items = ['item1', 'item2'];
+
+      const viewModel = new Toolbar(toolbarProps);
+      const tree = mount(ToolbarView(viewModel));
+
+      const resultProps = tree.find(DomComponentWrapper).props().componentProps;
+      expect(resultProps.items[0]).toEqual('item1');
+      expect(resultProps.items[1]).toEqual('item2');
     });
 
     each([false, true, undefined]).describe('rtlEnabled: %o', (isRtlEnabled) => {
@@ -98,9 +60,24 @@ describe('Toolbar', () => {
 
       it('rtlEnabled from item options is not overridden', () => {
         const buttonItem = new ToolbarItem();
-        buttonItem.options = { rtlEnabled: true };
+        buttonItem.options = { rtlEnabled: true } as ToolbarButtonProps;
+
+        const buttonGroupItem = new ToolbarItem();
+        buttonGroupItem.options = { rtlEnabled: true } as ToolbarButtonGroupProps;
+
+        const dropDownButtonItem = new ToolbarItem();
+        dropDownButtonItem.options = { rtlEnabled: true } as ToolbarDropDownButtonProps;
+
+        const checkBoxItem = new ToolbarItem();
+        checkBoxItem.options = { rtlEnabled: true } as ToolbarCheckBoxProps;
+
+        const textBoxItem = new ToolbarItem();
+        textBoxItem.options = { rtlEnabled: true } as ToolbarTextBoxProps;
+
         const toolbarProps = new ToolbarProps();
-        toolbarProps.items = [buttonItem];
+        toolbarProps.items = [buttonItem, buttonGroupItem,
+          dropDownButtonItem, checkBoxItem, textBoxItem];
+
         toolbarProps.rtlEnabled = isRtlEnabled;
         const viewModel = new Toolbar(toolbarProps);
 
