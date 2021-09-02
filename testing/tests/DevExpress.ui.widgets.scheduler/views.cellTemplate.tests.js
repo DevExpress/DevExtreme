@@ -1872,7 +1872,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     if(!cellIndex) {
                         assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
                         assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Time cell height is OK');
-                        assert.equal($(cellElement).outerWidth(), 100, 'Time cell width is OK');
+                        assert.roughEqual($(cellElement).outerWidth(), 100, 1.01, 'Time cell width is OK');
                     }
                 }
             });

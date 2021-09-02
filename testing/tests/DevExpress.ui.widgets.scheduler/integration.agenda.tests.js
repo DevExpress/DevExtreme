@@ -716,7 +716,7 @@ module('Integration: Agenda', moduleConfig, () => {
         }]);
 
         const $groupTable = instance.$element().find('.dx-scheduler-group-table');
-        const $container = instance.$element().find('.dx-scheduler-date-table-scrollable .dx-scrollable-content');
+        const $container = instance.$element().find('.dx-scheduler-date-table-scrollable-content');
 
         assert.equal($groupTable.length, 1, 'Group table was rendered');
         assert.equal($container.children().get(0), $groupTable.get(0), 'Group table was rendered in right place');
