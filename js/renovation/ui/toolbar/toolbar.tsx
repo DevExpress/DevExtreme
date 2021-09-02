@@ -10,10 +10,10 @@ import { isObject } from '../../../core/utils/type';
 import { ConfigContext, ConfigContextValue } from '../../common/config_context';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 
-export const viewFunction = ({ fixedProps, restAttributes }: Toolbar): JSX.Element => (
+export const viewFunction = ({ componentProps, restAttributes }: Toolbar): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyToolbar}
-    componentProps={fixedProps}
+    componentProps={componentProps}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -28,22 +28,22 @@ export class Toolbar extends JSXComponent<ToolbarProps>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  get fixedProps(): ToolbarProps {
+  get componentProps(): ToolbarProps {
     const { items } = this.props;
-    const fixedItems = items?.map((item) => {
+    const toolbarItems = items?.map((item) => {
       if (!isObject(item)) {
         return item;
       }
 
       const options = (item.options ?? {}) as BaseToolbarItemOptionProps;
-      options.rtlEnabled = options.rtlEnabled ?? this.rtl;
+      options.rtlEnabled = options.rtlEnabled ?? this.resolvedRtlEnabled;
       return { ...item, options };
     });
 
-    return { ...this.props, items: fixedItems };
+    return { ...this.props, items: toolbarItems };
   }
 
-  get rtl(): boolean {
+  get resolvedRtlEnabled(): boolean {
     const { rtlEnabled } = this.props;
     return !!resolveRtlEnabled(rtlEnabled, this.config);
   }
