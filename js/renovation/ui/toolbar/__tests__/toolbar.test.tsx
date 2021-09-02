@@ -37,6 +37,16 @@ describe('Toolbar', () => {
       expect(resultProps.items[1]).toEqual('item2');
     });
 
+    it('Not crashed if items is undefined', () => {
+      const toolbarProps = new ToolbarProps();
+
+      const viewModel = new Toolbar(toolbarProps);
+      const tree = mount(ToolbarView(viewModel));
+
+      const resultProps = tree.find(DomComponentWrapper).props().componentProps;
+      expect(resultProps.items).toEqual(undefined);
+    });
+
     each([false, true, undefined]).describe('rtlEnabled: %o', (isRtlEnabled) => {
       it('correctly pass rtlEnabled', () => {
         const buttonItem = new ToolbarItem();
