@@ -197,6 +197,13 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    /**
+     * @docid
+     * @type Enums.ButtonStylingMode
+     * @default 'outlined'
+     * @public
+     */
+    stylingMode?: 'text' | 'outlined' | 'contained' ;
 }
 
 /** @public */
