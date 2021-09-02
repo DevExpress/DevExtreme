@@ -15,7 +15,7 @@ test('Should drag appoinment to the previous day`s cell (T1025952)', async (t) =
   await t
     .dragToElement(appointment.element, scheduler.getDateTableCell(1, 1))
 
-    .expect(await takeScreenshot('drag-n-drop-.png', scheduler.workSpace))
+    .expect(await takeScreenshot('drag-n-drop-previous-day-cell.png', scheduler.workSpace))
     .ok()
 
     .expect(compareResults.isValid())
