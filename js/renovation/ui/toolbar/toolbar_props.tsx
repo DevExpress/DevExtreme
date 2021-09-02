@@ -107,7 +107,7 @@ export class CollectionWidgetItem {
 */
 
 @ComponentBindings()
-export class ToolbarItemOptionProps {
+export class BaseToolbarItemOptionProps {
   rtlEnabled?: boolean | undefined;
 }
 
