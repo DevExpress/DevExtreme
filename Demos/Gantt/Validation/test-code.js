@@ -159,20 +159,21 @@ testUtils.importAnd(()=>'devextreme/ui/gantt', ()=>DevExpress.ui.dxGantt, functi
 		'progress': 0
 	}];
 
+	fake_tasks.forEach(t => {
+		t['ID'] = t.id;
+		t['ParentId'] = t.parentId;
+		t['Title'] = t.title;
+		t['Start'] = t.start;
+		t['End'] = t.end;
+		t['Progress'] = t.progress;
+	})
+
 	return testUtils
         .postponeUntilFound('.dx-gantt', 100, 10000)
         .then(() => {
             const instance = dxGantt.getInstance(document.querySelector('.dx-gantt'));
 			if(instance) {
-            	instance.option("tasks", { 
-					dataSource: fake_tasks,
-					keyExpr: 'id',
-					parentIdExpr: 'parentId',
-					titleExpr: 'title',
-					startExpr: 'start',
-					endExpr: 'end',
-					progressExpr: 'progress'
-				});
+            	instance.option("tasks", {	dataSource: fake_tasks	});
 				instance.option("onContentReady", function() { 
 					instance.option = function () { };
 				});
