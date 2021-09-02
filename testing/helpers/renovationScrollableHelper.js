@@ -79,9 +79,5 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
         super.scrollToElement.apply(this, arguments);
         reRender();
     }
-
-    getScrollElementPosition() {
-        return super.getScrollElementPosition.apply(this, arguments);
-    }
 };
 
