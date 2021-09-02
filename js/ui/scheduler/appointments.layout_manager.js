@@ -202,15 +202,11 @@ class AppointmentLayoutManager {
     getRenderingStrategyInstance() {
         const renderingStrategy = this.appointmentViewModel.getRenderingStrategy();
         if(!renderingStrategy) {
-            this.initRenderingStrategy();
+            const options = this._getRenderingStrategyOptions();
+            this.appointmentViewModel.initRenderingStrategy(options);
         }
 
         return this.appointmentViewModel.getRenderingStrategy();
-    }
-
-    initRenderingStrategy() {
-        const options = this._getRenderingStrategyOptions();
-        this.appointmentViewModel.initRenderingStrategy(options);
     }
 }
 
