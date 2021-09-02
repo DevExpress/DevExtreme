@@ -54,18 +54,18 @@ if(Quill) {
                 showEvent: null,
                 dataSource: [
                     { text: 'Insert', items: [
-                        { text: 'Insert Header Row', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
-                        { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
-                        { text: 'Insert Row Below', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
-                        { text: 'Insert Column Left', onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
-                        { text: 'Insert Column Right', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
+                        { text: 'Insert Header Row', icon: 'header', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
+                        { text: 'Insert Row Above', icon: 'insertrowabove', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
+                        { text: 'Insert Row Below', icon: 'insertrowbelow', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
+                        { text: 'Insert Column Left', icon: 'insertcolumnleft', onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
+                        { text: 'Insert Column Right', icon: 'insertcolumnright', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
                     ] },
                     {
                         text: 'Delete',
                         items: [
-                            { text: 'Delete Column', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
-                            { text: 'Delete Row', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
-                            { text: 'Delete Table', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
+                            { text: 'Delete Column', icon: 'deletecolumn', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
+                            { text: 'Delete Row', icon: 'deleterow', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
+                            { text: 'Delete Table', icon: 'deletetable', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
                         ]
                     }
                 ],
