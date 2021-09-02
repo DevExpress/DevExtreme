@@ -84,6 +84,7 @@ import { getDevicePixelRatio } from './utils/get_device_pixel_ratio';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
 import { clampIntoRange } from './utils/clamp_into_range';
+import { getTranslateValues } from './utils/get_translate_values';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -374,11 +375,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   scrollOffset(): ScrollOffset {
+    const { top, left } = getTranslateValues(this.contentRef.current);
     const { scrollTop, scrollLeft } = this.containerRef.current!;
 
     return {
-      top: scrollTop,
-      left: scrollLeft,
+      top: scrollTop - top,
+      left: scrollLeft - left,
     };
   }
 
