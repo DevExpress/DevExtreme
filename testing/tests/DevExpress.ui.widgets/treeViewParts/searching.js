@@ -497,3 +497,38 @@ QUnit.test('apply search after searchTimeout', function(assert) {
     assert.equal($items.length, 4, 'filter was applied after timeout');
     this.clock.restore();
 });
+
+['none', 'selectAll', 'normal'].forEach(selectionMode => {
+    QUnit.test(`focusIn -> search -> focusIn -> clearSearch -> focusIn. selectionMode: ${selectionMode}`, function(assert) {
+        const treeView = initTree({
+            items: [{ id: 1, text: 'item1' }, { id: 2, text: 'item2' }],
+            searchEnabled: true
+        }).dxTreeView('instance');
+
+        const isNodeFocused = (id) => treeView.$element().find(`[data-item-id="${id}"]`).hasClass('dx-state-focused');
+        const triggerFocus = () => treeView._focusInHandler({});
+
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after initialization');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after initialization');
+
+        triggerFocus();
+        assert.equal(isNodeFocused(1), true, 'item1 is focused after focus');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after focus');
+
+        treeView.option('searchValue', '2');
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after search');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after search');
+
+        triggerFocus();
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after searching and focus');
+        assert.equal(isNodeFocused(2), true, 'item2 is focused after search and focus');
+
+        treeView.option('searchValue', '');
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after clearing search');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after clearing search');
+
+        triggerFocus();
+        assert.equal(isNodeFocused(1), true, 'item1 is focused after clearing search and focus');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after clearing search and focus');
+    });
+});
