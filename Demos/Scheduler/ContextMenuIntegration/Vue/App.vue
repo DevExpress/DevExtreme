@@ -58,7 +58,7 @@ export default {
       views: ['day', 'month'],
       currentDate: new Date(2020, 10, 25),
       dataSource: data,
-      groups: null,
+      groups: undefined,
       crossScrollingEnabled: false,
       resourcesData: resourcesData,
       disabled: true,

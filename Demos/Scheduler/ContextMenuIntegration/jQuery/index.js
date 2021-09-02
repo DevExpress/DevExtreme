@@ -9,7 +9,6 @@ $(function() {
         currentView: "month",
         currentDate: new Date(2020, 10, 25),
         startDayHour: 9,
-        groups: undefined,
         recurrenceEditMode: "series",
         onAppointmentContextMenu: function (e) {
             updateContextMenu(false, appointmentContextMenuItems, appointmentClassName, itemTemplate, onItemClick(e));
