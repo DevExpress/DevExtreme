@@ -11,14 +11,26 @@ import {
 import { addNamespace } from '../../events/utils/index';
 
 class OverlayDrag {
-    constructor(options) {
-        const { dragEnabled, handle, container, draggableElement, outsideMultiplayer, updatePositionChangeHandled } = options;
+    constructor(config) {
+        this.init(config);
+    }
+
+    getEventNames() {
         const namespace = 'overlayDrag';
         const startEventName = addNamespace(dragEventStart, namespace);
         const updateEventName = addNamespace(dragEventMove, namespace);
 
+        return {
+            startEventName,
+            updateEventName
+        };
+    }
+
+    init(config) {
+        const { dragEnabled, handle, container, draggableElement, outsideDragFactor, updatePositionChangeHandled } = config;
+
         this.container = container;
-        this.outsideMultiplayer = outsideMultiplayer;
+        this.outsideDragFactor = outsideDragFactor;
         this._draggableElement = draggableElement;
         this._handle = handle;
         this._updatePositionChangeHandled = updatePositionChangeHandled;
@@ -29,17 +41,21 @@ class OverlayDrag {
             return;
         }
 
-        eventsEngine.on(handle, startEventName, (e) => { this._dragStartHandler(e); });
-        eventsEngine.on(handle, updateEventName, (e) => { this._dragUpdateHandler(e); });
+        this.subscribe();
+    }
+
+    subscribe() {
+        const eventNames = this.getEventNames();
+
+        eventsEngine.on(this._handle, eventNames.startEventName, (e) => { this._dragStartHandler(e); });
+        eventsEngine.on(this._handle, eventNames.updateEventName, (e) => { this._dragUpdateHandler(e); });
     }
 
     unsubscribe() {
-        const namespace = 'overlayDrag';
-        const startEventName = addNamespace(dragEventStart, namespace);
-        const updateEventName = addNamespace(dragEventMove, namespace);
+        const eventNames = this.getEventNames();
 
-        eventsEngine.off(this._handle, startEventName);
-        eventsEngine.off(this._handle, updateEventName);
+        eventsEngine.off(this._handle, eventNames.startEventName);
+        eventsEngine.off(this._handle, eventNames.updateEventName);
     }
 
     moveTo(top, left, e) {
@@ -96,10 +112,10 @@ class OverlayDrag {
         const draggableElementWidth = draggableElement.offsetWidth;
         const draggableElementHeight = draggableElement.offsetHeight;
         const containerDimensions = this._getContainerDimensions();
-        const outsideMultiplayer = this.outsideMultiplayer;
+        const outsideDragFactor = this.outsideDragFactor;
         const outOfContainerOffset = {
-            width: draggableElementWidth * outsideMultiplayer,
-            height: draggableElementHeight * outsideMultiplayer
+            width: draggableElementWidth * outsideDragFactor,
+            height: draggableElementHeight * outsideDragFactor
         };
 
         return {
@@ -127,10 +143,10 @@ class OverlayDrag {
         const deltaSize = this._deltaSize();
         const isDragAllowed = deltaSize.height >= 0 && deltaSize.width >= 0;
 
-        const dragAreaOffsetMultiplayer = this.outsideMultiplayer;
+        const dragAreaOffsetFactor = this.outsideDragFactor;
         const dragAreaOffset = {
-            width: this._draggableElement.offsetWidth * dragAreaOffsetMultiplayer,
-            height: this._draggableElement.offsetHeight * dragAreaOffsetMultiplayer
+            width: this._draggableElement.offsetWidth * dragAreaOffsetFactor,
+            height: this._draggableElement.offsetHeight * dragAreaOffsetFactor
         };
 
         return {
@@ -171,12 +187,12 @@ class OverlayDrag {
         this._container = element;
     }
 
-    get outsideMultiplayer() {
-        return this._outsideMultiplayer ?? 0;
+    get outsideDragFactor() {
+        return this._outsideDragFactor ?? 0;
     }
 
-    set outsideMultiplayer(value) {
-        this._outsideMultiplayer = value;
+    set outsideDragFactor(value) {
+        this._outsideDragFactor = value;
     }
 }
 

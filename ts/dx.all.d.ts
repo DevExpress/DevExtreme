@@ -15343,6 +15343,10 @@ declare module DevExpress.ui {
   export interface dxOverlayOptions<TComponent>
     extends WidgetOptions<TComponent> {
     /**
+     * [descr:dxOverlayOptions.allowDragOutside]
+     */
+    allowDragOutside?: boolean;
+    /**
      * [descr:dxOverlayOptions.animation]
      */
     animation?: dxOverlayAnimation;
@@ -15368,6 +15372,10 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.deferRendering]
      */
     deferRendering?: boolean;
+    /**
+     * [descr:dxOverlayOptions.dragAndResizeArea]
+     */
+    dragAndResizeArea?: DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxOverlayOptions.dragEnabled]
      */
@@ -16395,6 +16403,10 @@ declare module DevExpress.ui {
   export interface dxPopupOptions<TComponent>
     extends dxOverlayOptions<TComponent> {
     /**
+     * [descr:dxPopupOptions.allowDragOutside]
+     */
+    allowDragOutside?: boolean;
+    /**
      * [descr:dxPopupOptions.animation]
      */
     animation?: dxPopupAnimation;
@@ -16402,6 +16414,10 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.container]
      */
     container?: string | DevExpress.core.UserDefinedElement;
+    /**
+     * [descr:dxPopupOptions.dragAndResizeArea]
+     */
+    dragAndResizeArea?: DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxPopupOptions.dragEnabled]
      */

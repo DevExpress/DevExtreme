@@ -168,6 +168,8 @@ const Overlay = Widget.inherit({
                 }
             },
 
+            allowDragOutside: false,
+
             closeOnOutsideClick: false,
 
             copyRootClassesToWrapper: false,
@@ -185,6 +187,8 @@ const Overlay = Widget.inherit({
             dragEnabled: false,
 
             dragAndResizeArea: undefined,
+
+            outsideDragFactor: null,
 
             resizeEnabled: false,
             onResizeStart: null,
@@ -980,15 +984,20 @@ const Overlay = Widget.inherit({
         }
 
         const updatePositionChangeHandled = (value) => this._positionChangeHandled = value;
-
-        this._drag = new OverlayDrag({
+        const config = {
             dragEnabled: this.option('dragEnabled'),
             handle: $dragTarget.get(0),
             container: this._getDragResizeContainer().get(0),
             draggableElement: this._$content.get(0),
-            outsideMultiplayer: this.option('dragArea')?.outsideMultiplayer ?? 0,
+            outsideDragFactor: this.option('allowDragOutside') ? 1 : this.option('outsideDragFactor'),
             updatePositionChangeHandled
-        });
+        };
+
+        if(this._drag) {
+            this._drag.init(config);
+        } else {
+            this._drag = new OverlayDrag(config);
+        }
     },
 
     _renderResize: function() {
@@ -1060,9 +1069,12 @@ const Overlay = Widget.inherit({
     },
 
     _getDragResizeContainer: function() {
-        const { dragAndResizeArea } = this.option();
-        if(dragAndResizeArea?.container) {
-            return dragAndResizeArea.container;
+        const { dragAndResizeArea, allowDragOutside } = this.option();
+        if(allowDragOutside) {
+            return $(window);
+        }
+        if(dragAndResizeArea) {
+            return $(dragAndResizeArea);
         }
         const isContainerDefined = originalViewPort().get(0) || this.option('container');
         const $container = !isContainerDefined ? $(window) : this._$container;
@@ -1417,10 +1429,10 @@ const Overlay = Widget.inherit({
                 this._initContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
-                if(this.option('dragEnabled') && this._drag && !this.option('dragArea')?.container) {
-                    this._drag.container = this._getDragResizeContainer().get(0);
+                if(this.option('dragEnabled') && this._drag && !this.option('dragAndResizeArea')) {
+                    this._drag.container = this._getDragResizeContainer()?.get(0);
                 }
-                if(this.option('resizeEnabled') && !this.option('dragArea')?.container) {
+                if(this.option('resizeEnabled') && !this.option('dragAndResizeArea')) {
                     this._resizable.option('area', this._getDragResizeContainer());
                 }
                 break;
@@ -1463,9 +1475,22 @@ const Overlay = Widget.inherit({
                 }
                 if(this.option('dragEnabled')) {
                     this._drag.container = this._getDragResizeContainer().get(0);
-                    this._drag.outsideMultiplayer = this.option('dragAndResizeArea').outsideMultiplayer;
                 }
                 this._positionContent();
+                break;
+            case 'allowDragOutside':
+                if(this.option('resizeEnabled')) {
+                    this._resizable.option('area', this._getDragResizeContainer());
+                }
+                if(this.option('dragEnabled')) {
+                    this._drag.container = this._getDragResizeContainer().get(0);
+                    this._drag.outsideDragFactor = args.value ? 1 : this.option('outsideDragFactor');
+                }
+                break;
+            case 'outsideDragFactor':
+                if(this.option('dragEnabled') && !this.option('allowDragOutside')) {
+                    this._drag.outsideDragFactor = args.value;
+                }
                 break;
             default:
                 this.callBase(args);
