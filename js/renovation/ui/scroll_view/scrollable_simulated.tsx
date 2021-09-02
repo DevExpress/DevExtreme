@@ -95,7 +95,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     isHovered, contentTranslateOffsetChange, scrollLocationChange,
     scrollableOffsetLeft, scrollableOffsetTop,
     contentWidth, containerClientWidth, contentHeight, containerClientHeight,
-    scrollableRef, updateHandler, contentStyles, containerStyles, onBounce,
+    scrollableRef, updateHandleInternal, contentStyles, containerStyles, onBounce,
     onReachBottom, onRelease, onPullDown, onScroll, onEnd, direction, topPocketState,
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
@@ -128,7 +128,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       visible={visible}
       onHoverStart={cursorEnterHandler}
       onHoverEnd={cursorLeaveHandler}
-      onDimensionChanged={updateHandler}
+      onDimensionChanged={updateHandleInternal}
       onVisibilityChange={onVisibilityChangeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
       // onKeyDown exist in restAttributes and has undefined value
@@ -370,8 +370,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   updateHandler(): void {
-    this.updateSizes();
-    this.onUpdated();
+    this.updateHandleInternal();
   }
 
   @Method()
@@ -559,6 +558,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.scrollableOffsetTop = top;
 
     this.updateSizes();
+  }
+
+  updateHandleInternal(): void {
+    this.updateSizes();
+    this.onUpdated();
   }
 
   scrollByLocation(location: Partial<ScrollOffset>): void {

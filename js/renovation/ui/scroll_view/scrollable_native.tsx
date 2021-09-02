@@ -72,7 +72,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, topPocketRef, bottomPocketRef, direction,
     hScrollbarRef, vScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
-    updateHandler, needForceScrollbarsVisibility,
+    updateHandleInternal, needForceScrollbarsVisibility,
     scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
     pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
     topPocketHeight, contentStyles, scrollViewContentRef, contentTranslateTop,
@@ -100,7 +100,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       height={height}
       width={width}
       visible={visible}
-      onDimensionChanged={updateHandler}
+      onDimensionChanged={updateHandleInternal}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -464,6 +464,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Method()
   updateHandler(): void {
+    this.updateHandleInternal();
+  }
+
+  updateHandleInternal(): void {
     this.updateSizes();
     this.onUpdated();
   }
