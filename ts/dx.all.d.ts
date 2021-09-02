@@ -12581,6 +12581,22 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showDependencies(value)]
      */
     showDependencies(value: boolean): void;
+    /**
+     * [descr:dxGantt.zoomIn()]
+     */
+    zoomIn(): void;
+    /**
+     * [descr:dxGantt.zoomOut()]
+     */
+    zoomOut(): void;
+    /**
+     * [descr:dxGantt.unassignAllResourcesFromTask(taskKey)]
+     */
+    unassignAllResourcesFromTask(taskKey: any): void;
+    /**
+     * [descr:dxGantt.showTaskDetailsDialog(taskKey)]
+     */
+    showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
