@@ -1103,7 +1103,6 @@
           {
             "Title": "State Persistence",
             "Name": "StatePersistence",
-            "DocUrl": "ApiReference/UI_Components/dxPivotGrid/Configuration/stateStoring/",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
