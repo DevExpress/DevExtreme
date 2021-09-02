@@ -155,12 +155,12 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  moveHandler(delta: { x: number; y: number }): void {
+  moveHandler(delta: number): void {
     this.scrollbarRef.current!.moveHandler(delta);
   }
 
   @Method()
-  endHandler(velocity: { x: number; y: number }, needRiseEnd: boolean): void {
+  endHandler(velocity: number, needRiseEnd: boolean): void {
     this.scrollbarRef.current!.endHandler(velocity, needRiseEnd);
   }
 
