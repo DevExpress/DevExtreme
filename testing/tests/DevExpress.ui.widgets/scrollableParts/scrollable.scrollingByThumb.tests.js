@@ -378,7 +378,7 @@ QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
         .up();
 });
 
-QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for single scrollable nested in another scrollable', function(assert) {
+QUnit.skip('thumb is visible on mouseenter when thumbMode=\'onHover\' only for single scrollable nested in another scrollable', function(assert) {
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 

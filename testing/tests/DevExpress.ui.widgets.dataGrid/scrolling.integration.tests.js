@@ -36,10 +36,8 @@ import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 if('chrome' in window && devices.real().deviceType !== 'desktop') {
     // Chrome DevTools device emulation
@@ -220,7 +218,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(scrollable.scrollLeft(), 300, 'scroll position');
 
-        this.clock.restore();
         scrollable.scrollTo({ x: 100 });
         const scrollRight = getRightScrollOffset(scrollable);
 
@@ -237,6 +234,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 done();
             });
         });
+
+        this.clock.tick();
     });
 
     QUnit.test('Scroller state', function(assert) {
@@ -302,19 +301,18 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             columns: ['column1', 'column2', 'column3']
         });
 
+        this.clock.tick(400);
+
         const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
-        const $scrollContainer = $(dataGrid.$element().find('.dx-datagrid-rowsview .dx-scrollable-container'));
+        const rowsViewScrollable = $(dataGrid.$element().find('.dx-datagrid-rowsview')).dxScrollable('instance');
 
         // act
-        $scrollContainer.scrollLeft(50);
-        $scrollContainer.trigger('scroll');
-
-        $scrollContainer.scrollLeft(60);
-        $scrollContainer.trigger('scroll');
+        rowsViewScrollable.scrollTo({ left: 50 });
+        rowsViewScrollable.scrollTo({ left: 60 });
 
         // assert
         assert.equal($headerScrollContainer.scrollLeft(), 60, 'headersView scrollleft');
-        assert.equal($scrollContainer.scrollLeft(), 60, 'rowsview scrollleft');
+        assert.equal($(rowsViewScrollable.container()).scrollLeft(), 60, 'rowsview scrollleft');
     });
 
     // T608687
@@ -955,7 +953,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo(100.7);
 
         // assert
-        assert.equal(scrollable.scrollLeft(), isRenovation ? 100 : 100.7);
+        assert.equal(scrollable.scrollLeft(), 100.7);
         assert.equal($(scrollable.container()).scrollLeft(), 100);
 
         const $headersScrollable = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
