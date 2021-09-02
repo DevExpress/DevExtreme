@@ -160,6 +160,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         _handleDataChanged: function(e) {
             if(this.option(NEW_SCROLLING_MODE)) {
+                this._items = this._dataSource.items().slice();
                 this.callBase.apply(this, arguments);
                 return;
             }
@@ -178,9 +179,6 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             this.callBase.apply(this, arguments);
         },
         items: function() {
-            if(this.option(NEW_SCROLLING_MODE)) {
-                return this._dataSource.items();
-            }
             return this._items;
         },
         itemsCount: function(isBase) {
