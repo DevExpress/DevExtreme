@@ -499,15 +499,14 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-date-table-scrollable-content {
-    position: relative;
+  .dx-scheduler-date-table-scrollable-content,
+  .dx-scheduler-side-bar-scrollable-content {
     display: flex;
     align-items: flex-start;
   }
 
-  .dx-scheduler-sidebar-scrollable .dx-scrollable-content {
-    display: flex;
-    align-items: flex-start;
+  .dx-scheduler-date-table-scrollable-content {
+    position: relative;
   }
 
   .dx-scheduler-date-table-cell {
@@ -1689,13 +1688,8 @@ $scheduler-appointment-form-label-padding: 20px;
       border-right: none;
     }
 
-    .dx-scheduler-sidebar-scrollable {
-      .dx-scrollable-content {
-        direction: rtl;
-      }
-    }
-
-    .dx-scheduler-date-table-scrollable-content {
+    .dx-scheduler-date-table-scrollable-content,
+    .dx-scheduler-side-bar-scrollable-content {
       direction: rtl;
     }
 
