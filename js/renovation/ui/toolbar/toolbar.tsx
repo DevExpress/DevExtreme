@@ -17,7 +17,7 @@ export const viewFunction = ({ props, rtl, restAttributes }: Toolbar): JSX.Eleme
     for (let index = 0; index < items.length; index += 1) {
       const item = items[index];
       if (!isString(item)) {
-        if (!isDefined(item.options)) {
+       item.options = item.options ?? {};
           item.options = {};
         }
         item.options.rtlEnabled = item.options.rtlEnabled ?? rtl;
