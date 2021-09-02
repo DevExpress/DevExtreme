@@ -60,19 +60,24 @@ describe('Toolbar', () => {
 
       it('rtlEnabled from item options is not overridden', () => {
         const buttonItem = new ToolbarItem();
-        buttonItem.options = { rtlEnabled: true } as ToolbarButtonProps;
+        buttonItem.options = new ToolbarButtonProps();
+        buttonItem.options.rtlEnabled = true;
 
         const buttonGroupItem = new ToolbarItem();
-        buttonGroupItem.options = { rtlEnabled: true } as ToolbarButtonGroupProps;
+        buttonGroupItem.options = new ToolbarButtonGroupProps();
+        buttonGroupItem.options.rtlEnabled = true;
 
         const dropDownButtonItem = new ToolbarItem();
-        dropDownButtonItem.options = { rtlEnabled: true } as ToolbarDropDownButtonProps;
+        dropDownButtonItem.options = new ToolbarDropDownButtonProps();
+        dropDownButtonItem.options.rtlEnabled = true;
 
         const checkBoxItem = new ToolbarItem();
-        checkBoxItem.options = { rtlEnabled: true } as ToolbarCheckBoxProps;
+        checkBoxItem.options = new ToolbarCheckBoxProps();
+        checkBoxItem.options.rtlEnabled = true;
 
         const textBoxItem = new ToolbarItem();
-        textBoxItem.options = { rtlEnabled: true } as ToolbarTextBoxProps;
+        textBoxItem.options = new ToolbarTextBoxProps();
+        textBoxItem.options.rtlEnabled = true;
 
         const toolbarProps = new ToolbarProps();
         toolbarProps.items = [buttonItem, buttonGroupItem,
