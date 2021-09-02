@@ -22,41 +22,41 @@
     </DxPivotGrid>
     <div class="options">
       <div class="caption">Options</div>
-        <div class="option">
-          <DxCheckBox
-            id="show-data-fields"
-            :value="true"
-            :on-value-changed="OnShowColumnFieldsChanged"
-            text="Show Data Fields"
-          />
-        </div>
-        {{ ' ' }}
-        <div class="option">
-          <DxCheckBox
-            id="show-row-fields"
-            :value="true"
-            :on-value-changed="OnShowDataFieldsChanged"
-            text="Show Row Fields"
-          />
-        </div>
-        {{ ' ' }}
-        <div class="option">
-          <DxCheckBox
-            id="show-column-fields"
-            :value="true"
-            :on-value-changed="OnShowFilterFieldsChanged"
-            text="Show Column Fields"
-          />
-        </div>
-        {{ ' ' }}
-        <div class="option">
-          <DxCheckBox
-            id="show-filter-fields"
-            :value="true"
-            :on-value-changed="OnShowRowFieldsChanged"
-            text="Show Filter Fields"
-          />
-        </div>
+      <div class="option">
+        <DxCheckBox
+          id="show-data-fields"
+          :value="true"
+          :on-value-changed="OnShowColumnFieldsChanged"
+          text="Show Data Fields"
+        />
+      </div>
+      {{ ' ' }}
+      <div class="option">
+        <DxCheckBox
+          id="show-row-fields"
+          :value="true"
+          :on-value-changed="OnShowDataFieldsChanged"
+          text="Show Row Fields"
+        />
+      </div>
+      {{ ' ' }}
+      <div class="option">
+        <DxCheckBox
+          id="show-column-fields"
+          :value="true"
+          :on-value-changed="OnShowFilterFieldsChanged"
+          text="Show Column Fields"
+        />
+      </div>
+      {{ ' ' }}
+      <div class="option">
+        <DxCheckBox
+          id="show-filter-fields"
+          :value="true"
+          :on-value-changed="OnShowRowFieldsChanged"
+          text="Show Filter Fields"
+        />
+      </div>
 
     </div>
   </div>
