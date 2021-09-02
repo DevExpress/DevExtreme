@@ -654,6 +654,40 @@ QUnit.module('validation', {
             assert.strictEqual($validationMessage.text(), message, 'validation overlay text was render correctly');
         });
     });
+
+    QUnit.module('aria-describedby attribute', () => {
+        QUnit.test('should be added if editor is invalid', function(assert) {
+            assert.ok(this.editor.$element().attr('aria-describedby'));
+        });
+
+        QUnit.test('should not be updated after option change without validation state change', function(assert) {
+            const $editor = this.editor.$element();
+            const describedBy = $editor.attr('aria-describedby');
+
+            this.editor.option('value', true);
+
+            assert.strictEqual($editor.attr('aria-describedby'), describedBy, 'attr was not changed');
+        });
+
+        QUnit.test('should be correct after repaint', function(assert) {
+            const $editor = this.editor.$element();
+
+            this.editor.repaint();
+
+            const validationMessageContentId = this.getValidationMessage().$content().attr('id');
+            assert.strictEqual($editor.attr('aria-describedby'), validationMessageContentId, 'describedby is correct');
+        });
+
+        QUnit.test('should be the same after validation state change', function(assert) {
+            const $editor = this.editor.$element();
+
+            this.editor.option('isValid', true);
+            this.editor.option('isValid', false);
+
+            const validationMessageContentId = this.getValidationMessage().$content().attr('id');
+            assert.strictEqual($editor.attr('aria-describedby'), validationMessageContentId, 'describedby is correct');
+        });
+    });
 });
 
 QUnit.module('aria accessibility', moduleConfig, () => {
