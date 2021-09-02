@@ -54,6 +54,7 @@ if(Quill) {
                 showEvent: null,
                 dataSource: [
                     { text: 'Insert', items: [
+                        { text: 'Insert Header Row', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
                         { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
                         { text: 'Insert Row Below', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
                         { text: 'Insert Column Left', onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },

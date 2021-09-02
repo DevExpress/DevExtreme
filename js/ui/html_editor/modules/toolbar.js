@@ -184,6 +184,7 @@ if(Quill) {
                 superscript: this._prepareShortcutHandler('script', 'super'),
                 subscript: this._prepareShortcutHandler('script', 'sub'),
                 insertTable: this._prepareInsertTableHandler(),
+                insertHeaderRow: getTableOperationHandler(this.quill, 'insertHeaderRow'),
                 insertRowAbove: getTableOperationHandler(this.quill, 'insertRowAbove'),
                 insertRowBelow: getTableOperationHandler(this.quill, 'insertRowBelow'),
                 insertColumnLeft: getTableOperationHandler(this.quill, 'insertColumnLeft'),
