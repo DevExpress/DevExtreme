@@ -19,15 +19,22 @@ if(Quill) {
             super(quill, options);
             this.enabled = !!options.enabled;
             this._quillContainer = this.editorInstance._getQuillContainer();
+            this.addCleanCallback(this.prepareCleanCallback());
 
             if(this.enabled) {
-                this._contextMenu = this._createContextMenu();
-                this._attachEvents();
+                this._enableContextMenu();
             }
         }
 
+        _enableContextMenu() {
+            if(!this._contextMenu) {
+                this._contextMenu = this._createContextMenu();
+            }
+            this._attachEvents();
+        }
+
         _attachEvents() {
-            eventsEngine.on(this.editorInstance._getContent(), CONTEXT_MENU_EVENT, this._openTableContextMenu.bind(this));
+            eventsEngine.on(this.editorInstance._getContent(), CONTEXT_MENU_EVENT, this._prepareContextMenuHandler());
         }
 
         _detachEvents() {
@@ -44,7 +51,7 @@ if(Quill) {
         _getMenuConfig(options) {
             return {
                 target: this._quillContainer,
-                showEvent: '',
+                showEvent: null,
                 dataSource: [
                     { text: 'Insert', items: [
                         { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
@@ -76,18 +83,19 @@ if(Quill) {
             };
         }
 
-        _openTableContextMenu(event) {
-            if(this._isTableTarget(event.target)) {
-                this._setContextMenuPosition(event);
-                this._contextMenu.show();
-                event.preventDefault();
-            }
-
+        _prepareContextMenuHandler() {
+            return (event) => {
+                if(this._isTableTarget(event.target)) {
+                    this._setContextMenuPosition(event);
+                    this._contextMenu.show();
+                    event.preventDefault();
+                }
+            };
         }
 
         _setContextMenuPosition(event) {
             const startPosition = this._quillContainer.get(0).getBoundingClientRect();
-            this?._contextMenu.option({
+            this._contextMenu.option({
                 position: {
                     my: 'left top',
                     at: 'left top',
@@ -98,19 +106,18 @@ if(Quill) {
         }
 
         _isTableTarget(targetElement) {
-            return targetElement.tagName.toUpperCase() === 'TD' || targetElement.tagName.toUpperCase() === 'TH';
+            return ['TD', 'TH'].indexOf(targetElement.tagName) !== -1;
         }
 
         option(option, value) {
-
             if(option === 'enabled') {
                 this.enabled = value;
-                value ? this._attachEvents(true) : this.clean();
+                value ? this._enableContextMenu() : this._detachEvents();
             }
         }
 
-        clean() {
-            this._detachEvents();
+        prepareCleanCallback() {
+            return () => { this._detachEvents(); };
         }
     };
 }
