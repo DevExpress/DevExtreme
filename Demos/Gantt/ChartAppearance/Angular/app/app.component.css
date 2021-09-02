@@ -4,9 +4,7 @@
 
 .options {
     margin-bottom: 20px;
-    padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);
-    position: relative;
 }
 
 .caption {
@@ -14,14 +12,29 @@
     font-weight: 500;
 }
 
-.option {
-    margin-top: 10px;
-    margin-right: 40px;
+.column {
+    width: 40%;
     display: inline-block;
+    margin: 15px 3%;
+    text-align: left;
+    vertical-align: top;
 }
 
-.option:last-child {
-    margin-right: 0;
+.option {
+    padding: 5px 0;
+}
+
+.label, .value {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.label {
+    width: 180px;
+}
+
+.value {
+    width: 45%;
 }
 
 .custom-task-edit-tooltip {

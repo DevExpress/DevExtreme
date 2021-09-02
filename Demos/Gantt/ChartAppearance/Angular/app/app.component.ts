@@ -2,7 +2,7 @@ import { ViewEncapsulation } from '@angular/compiler/src/core';
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxGanttModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxGanttModule, DxCheckBoxModule, DxSelectBoxModule, DxDateBoxModule } from 'devextreme-angular';
 import { Service, Task, Dependency, Resource, ResourceAssignment } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -26,6 +26,8 @@ export class AppComponent {
     titlePosition: string;
     showResources: boolean;
     showCustomTaskTooltip: boolean;
+    startDateRange: Date;
+    endDateRange: Date;
 
     constructor(service: Service) {
         this.tasks = service.getTasks();
@@ -36,6 +38,8 @@ export class AppComponent {
         this.titlePosition = "outside";
         this.showResources = true;
         this.showCustomTaskTooltip = true;
+        this.startDateRange = new Date(2018, 11, 1);
+        this.endDateRange = new Date(2019, 11, 1);
     }
 
     getTimeEstimate(task) {
@@ -53,7 +57,8 @@ export class AppComponent {
         BrowserModule,
         DxGanttModule,
         DxCheckBoxModule,
-        DxSelectBoxModule
+        DxSelectBoxModule,
+        DxDateBoxModule
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]
