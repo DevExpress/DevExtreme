@@ -1015,7 +1015,7 @@ class Scheduler extends Widget {
         );
 
         let viewModel = [];
-        if(filteredItems.length && this._isVisible()) {
+        if(this._isVisible()) {
             viewModel = this._getAppointmentsToRepaint();
         }
 
