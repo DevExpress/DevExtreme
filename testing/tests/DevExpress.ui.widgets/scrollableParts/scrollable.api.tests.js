@@ -1008,6 +1008,7 @@ class ScrollableTestHelper {
         QUnit.module(`ScrollPosition after update(), native: ${useNative}`, moduleConfig, () => {
             QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: false -> scrollTo(left: center) -> scrollTo(left: max)`, function() {
                 const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: false });
+
                 helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 0 });
 
@@ -1028,6 +1029,7 @@ class ScrollableTestHelper {
 
             QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: true -> scrollTo(left: center) -> scrollTo(left: 0)`, function() {
                 const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
+
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
@@ -1048,6 +1050,7 @@ class ScrollableTestHelper {
 
             QUnit.test(`Change content size, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, direction: horizontal, rtl: false -> change content size`, function() {
                 const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: false });
+
                 helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 0 });
 
@@ -1062,6 +1065,7 @@ class ScrollableTestHelper {
 
             QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: true -> change content size`, function() {
                 const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
+
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
@@ -1110,6 +1114,7 @@ class ScrollableTestHelper {
 
             QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right), content.width:100, container.width(50) -> container.width(100) -> container.width(75)`, function() {
                 const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
+
                 helper.setContainerWidth(50);
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 }, 'scrolled to max right position after resize to 50px');
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });

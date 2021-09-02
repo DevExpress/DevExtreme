@@ -42,10 +42,8 @@ import numberLocalization from 'localization/number';
 import virtualScrollingCore from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import ODataStore from 'data/odata/store';
 import ArrayStore from 'data/array_store';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
-const isScrollableRenovated = !!Scrollable.IS_RENOVATED_WIDGET;
 
 function getText(element) {
     return $(element).text();
@@ -243,7 +241,7 @@ QUnit.module('Rows view', {
         assert.strictEqual(scrollable.option('showScrollbar'), 'always', 'scrollable showScrollbar');
         assert.strictEqual(scrollable.option('test'), 'test', 'scrollable test');
         // T654402
-        !isScrollableRenovated && assert.strictEqual(scrollable.option('updateManually'), false, 'scrollable updateManually');
+        assert.strictEqual(!!scrollable.option('updateManually'), false, 'scrollable updateManually');
     });
 
     QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {

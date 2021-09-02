@@ -61,7 +61,7 @@ QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
     }
 
     const $scrollable = $('#scrollable').dxScrollable({
-        showScrollbar: 'onScroll',
+        showScrollbar: true,
         useNative: false
     });
 
@@ -382,9 +382,9 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 
-    $wrapScrollable.height(10);
-    $scrollable.height(20);
-    $scrollable.children().height(30);
+    $wrapScrollable.height(100);
+    $scrollable.height(200);
+    $scrollable.children().height(300);
 
     const scrollableOption = {
         useNative: false,

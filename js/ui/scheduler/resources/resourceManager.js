@@ -134,11 +134,12 @@ export class ResourceManager {
         });
     }
 
-    loadResources(groups = []) {
+    loadResources(groups) {
         const result = new Deferred();
         const deferreds = [];
+        const newGroups = groups || [];
 
-        filterResources(this.getResources(), groups)
+        filterResources(this.getResources(), newGroups)
             .forEach(resource => {
                 const deferred = new Deferred();
                 const name = getFieldExpr(resource);
