@@ -1,7 +1,6 @@
 /* global DATA, initTree */
 
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
-import eventsEngine from 'events/core/events_engine';
 import $ from 'jquery';
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
@@ -509,8 +508,7 @@ QUnit.test('apply search after searchTimeout', function(assert) {
         }).dxTreeView('instance');
 
         const isNodeFocused = (id) => treeView.$element().find(`[data-item-id="${id}"]`).hasClass('dx-state-focused');
-        const triggerFocus = () => eventsEngine
-            .trigger(treeView.$element().find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`), 'focusin');
+        const triggerFocus = () => $(treeView.$element().find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`)).trigger('focusin');
 
         assert.equal(isNodeFocused(1), false, 'item1 is not focused after initialization');
         assert.equal(isNodeFocused(2), false, 'item2 is not focused after initialization');
