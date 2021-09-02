@@ -1009,8 +1009,6 @@ class Scheduler extends Widget {
 
         const { filteredItems } = getAppointmentDataProvider(this.key);
 
-        // this.getLayoutManager().initRenderingStrategy();
-
         workspace.option(
             'allDayExpanded',
             this._isAllDayExpanded(filteredItems)
