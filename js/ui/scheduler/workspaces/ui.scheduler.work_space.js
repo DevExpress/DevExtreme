@@ -959,10 +959,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getFormat() { return abstract(); }
 
     getWorkArea() {
-        if(this._needCreateCrossScrolling()) {
-            return this._dateTableScrollable.$content();
-        }
-
         return this._$dateTableContainer;
     }
 
@@ -2331,6 +2327,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._$fixedContainer = $('<div>').addClass(FIXED_CONTAINER_CLASS);
         this._$allDayContainer = $('<div>').addClass(ALL_DAY_CONTAINER_CLASS);
+        this._$dateTableScrollableContent = $('<div>').addClass('dx-scheduler-date-table-scrollable-content');
 
         this._initAllDayPanelElements();
 
@@ -2371,10 +2368,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this._isVerticalGroupedWorkSpace()) {
             this._$dateTableContainer.append(this._$allDayContainer);
-            this._dateTableScrollable.$content().append(
+            this._$dateTableScrollableContent.append(
                 this._$groupTable,
                 this._$timePanel,
                 this._$dateTableContainer,
+            );
+            this._dateTableScrollable.$content().append(
+                this._$dateTableScrollableContent,
             );
 
             this._$headerTablesContainer.append(this._$headerPanel);
@@ -2387,7 +2387,11 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._dateTableScrollable.$element(),
             );
         } else {
-            this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTableContainer);
+            this._$dateTableScrollableContent.append(
+                this._$timePanel,
+                this._$dateTableContainer,
+            );
+            this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
             this._$headerTablesContainer.append(this._$headerPanel, this._$allDayPanel);
             this._appendHeaderPanelEmptyCellIfNecessary();
@@ -2418,10 +2422,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._createSidebarScrollable();
         this._$flexContainer.append(this._dateTableScrollable.$element());
 
-        this._dateTableScrollable.$content().append(this._$dateTable);
+        this._$dateTableContainer.append(this._$dateTable);
+        this._$dateTableScrollableContent.append(this._$dateTableContainer);
+
+        this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
         if(this._isVerticalGroupedWorkSpace()) {
-            this._dateTableScrollable.$content().prepend(this._$allDayContainer);
+            this._$dateTableScrollableContent.prepend(this._$allDayContainer);
             this._sidebarScrollable.$content().append(this._$groupTable, this._$timePanel);
         } else {
             this._headerScrollable.$content().append(this._$allDayContainer, this._$allDayPanel);
