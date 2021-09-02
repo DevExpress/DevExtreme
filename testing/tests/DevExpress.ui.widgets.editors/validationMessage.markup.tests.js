@@ -44,14 +44,15 @@ QUnit.module('markup', moduleSetup, () => {
         assert.ok(this._validationMessage.$content().hasClass('dx-invalid-message-content'), 'overlay content has correct class');
     });
 
-    QUnit.test('overlay content should have id attr equal to described element "aria-describedby" attr', function(assert) {
-        const $describedElement = $('<div>').attr('aria-describedby', 'some_id');
-        this._validationMessage = new ValidationMessage(this._$validationMessage, { describedElement: $describedElement });
 
-        assert.strictEqual(this._validationMessage.$content().attr('id'), 'some_id', 'overlay content has correct id attr');
+    QUnit.test('overlay content should have id equal to passed contentId prop value', function(assert) {
+        const contentId = 'guid';
+        this._validationMessage = new ValidationMessage(this._$validationMessage, { contentId });
+
+        assert.strictEqual(this._validationMessage.$content().attr('id'), contentId, 'overlay content has correct id attr');
     });
 
-    QUnit.test('overlay content should have id attr equal to container element "aria-describedby" attr if described element is not specified', function(assert) {
+    QUnit.test('overlay content should have id attr equal to container element "aria-describedby" attr if contentId is not specified', function(assert) {
         const $container = $('<div>').attr('aria-describedby', 'some_id');
         this._validationMessage = new ValidationMessage(this._$validationMessage, { container: $container });
 

@@ -428,6 +428,26 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(values.resourceId, toDelete.resourceId, 'resource id in event');
         assert.equal(values.taskId, toDelete.taskId, 'task id in event');
     });
+    test('unassignAllResourcesFromTask', function(assert) {
+        let values;
+        this.createInstance(options.allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceUnassigned', (e) => {
+            values = e.values;
+        });
+        this.clock.tick();
+
+        const count = data.resourceAssignments.length;
+        const toDelete = data.resourceAssignments[count - 1];
+        // eslint-disable-next-line spellcheck/spell-checker
+        this.instance.unassignAllResourcesFromTask(toDelete.taskId);
+        this.clock.tick();
+
+        assert.equal(data.resourceAssignments.length, count - 2, 'resources were deassigned');
+        const removedAssignments = data.resourceAssignments.filter((t) => t.taskId === toDelete.taskId);
+        assert.equal(removedAssignments.length, 0, 'assigmnents were removed');
+        assert.equal(values.taskId, toDelete.taskId, 'task id in event');
+    });
     test('getTaskData', function(assert) {
         this.createInstance(options.allSourcesOptions);
         const task = {
