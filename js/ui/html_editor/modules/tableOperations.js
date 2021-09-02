@@ -7,7 +7,7 @@ import $ from '../../../core/renderer';
 let formPopup;
 
 const createFormPopup = (editorInstance) => {
-    const $popup = $('<div>');
+    const $popup = $('<div>').appendTo(editorInstance._$element);
     formPopup = editorInstance._createComponent($popup, Popup, {
         contentTemplate: () => {},
         // deferRendering: false,
@@ -19,10 +19,10 @@ const createFormPopup = (editorInstance) => {
         closeOnOutsideClick: true,
         onShowing: () => {
         },
-        animation: {
-            show: { type: 'fade', duration: 0, from: 0, to: 1 },
-            hide: { type: 'fade', duration: 400, from: 1, to: 0 }
-        },
+        // animation: {
+        //     show: { type: 'fade', duration: 0, from: 0, to: 1 },
+        //     hide: { type: 'fade', duration: 400, from: 1, to: 0 }
+        // },
         fullScreen: false,
         // maxHeight: () => {
         //     const window = getWindow();
@@ -54,8 +54,8 @@ export const showTableProperties = (editorInstance) => {
 
     };
 
-    formPopup.option('contentTemplate', () => {
-        const $form = $('<div>');
+    formPopup.option('contentTemplate', (container) => {
+        const $form = $('<div>').appendTo(container);
         editorInstance._createComponent($form, Form, formOptions);
 
         return $form;
@@ -88,7 +88,7 @@ export const showCellProperties = (editorInstance) => {
 
     };
 
-    this._formPopup.option('contentTemplate', () => {
+    this._formPopup.option('contentTemplate', (e) => {
         const $form = $('<div>');
         // .addClass(SUGGESTION_LIST_CLASS)
         // .appendTo($container);
