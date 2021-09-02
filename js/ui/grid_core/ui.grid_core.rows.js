@@ -922,10 +922,7 @@ export const rowsModule = {
 
                     if(dxScrollable) {
                         dxScrollable.update();
-                        // TODO: seems that it method doesn't need for renovated widget
-                        if(!dxScrollable._isNodeReplaced) {
-                            this._updateHorizontalScrollPosition();
-                        }
+                        this._updateHorizontalScrollPosition();
                     }
                 },
 
