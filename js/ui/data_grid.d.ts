@@ -1855,7 +1855,7 @@ export interface SelectionBase {
 export interface GridBase
   <TRowData=any,
    TKey=any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string>=Array<Column<TRowData, TKey, any> | string>,
   > {
     /**
      * @docid
@@ -2803,7 +2803,7 @@ export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey=any> = EventInf
 export type CellClickEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
@@ -2822,7 +2822,7 @@ export type CellClickEvent
 export type CellDblClickEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
@@ -2841,7 +2841,7 @@ export type CellDblClickEvent
 export type CellHoverChangedEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly eventType: string;
   readonly data: TRowData;
@@ -2861,7 +2861,7 @@ export type CellHoverChangedEvent
 export type CellPreparedEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
@@ -2888,7 +2888,7 @@ export type ContentReadyEvent<TRowData, TKey> = EventInfo<dxDataGrid<TRowData, s
 export type ContextMenuPreparingEvent
 <TRowData = any,
  TKey = any,
- TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+ TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
 > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   items?: dxContextMenuItem[];
   readonly target: string;
@@ -2915,7 +2915,7 @@ export type EditCancelingEvent<TRowData = any, TKey=any> = Cancelable & EventInf
 export type EditingStartEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = Cancelable & EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
@@ -2926,7 +2926,7 @@ export type EditingStartEvent
 export type EditorPreparedEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly parentType: string;
   readonly value?: ColumnValueType<TColumns>;
@@ -2945,7 +2945,7 @@ export type EditorPreparedEvent
 export type EditorPreparingEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly parentType: string;
   readonly value?: ColumnValueType<TColumns>;
@@ -2984,20 +2984,20 @@ export type FileSavingEvent<TRowData = any, TKey=any> = Cancelable & {
 export type FocusedCellChangedEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly cellElement: DxElement;
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly row?: RowObject<TRowData, TKey, TColumns>;
-  readonly column?: TColumns[number];
+  // readonly column?: TColumns[number];
 };
 
 /** @public */
 export type FocusedCellChangingEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = Cancelable & NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly cellElement: DxElement;
   readonly prevColumnIndex: number;
@@ -3013,7 +3013,7 @@ export type FocusedCellChangingEvent
 export type FocusedRowChangedEvent
 <TRowData = any,
  TKey = any,
- TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+ TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
 > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly rowElement: DxElement;
   readonly rowIndex: number;
@@ -3024,7 +3024,7 @@ export type FocusedRowChangedEvent
 export type FocusedRowChangingEvent
 <TRowData = any,
  TKey = any,
- TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+ TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
 > = Cancelable & NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly rowElement: DxElement;
   readonly prevRowIndex: number;
@@ -3048,7 +3048,7 @@ export type OptionChangedEvent<TRowData = any, TKey=any> = EventInfo<dxDataGrid<
 export type RowClickEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
@@ -3074,7 +3074,7 @@ export type RowCollapsingEvent<TRowData = any, TKey=any> = Cancelable & EventInf
 export type RowDblClickEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
@@ -3105,7 +3105,7 @@ export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
 export type RowPreparedEvent
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = EventInfo<dxDataGrid<TRowData, string, TKey>> & {
   readonly data: TRowData;
   readonly key: TKey;
@@ -3173,7 +3173,7 @@ export type ColumnButtonClickEvent
   <TRowData = any,
    TKey = any,
    TCellValue = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = NativeEventInfo<dxDataGrid<TRowData, string, TKey>> & {
   row?: RowObject<TRowData, TKey, TColumns>;
   column?: Column<TRowData, TKey, TCellValue>;
@@ -3184,7 +3184,7 @@ export interface ColumnButtonTemplateData
 <TRowData = any,
  TKey = any,
  TCellValue = any,
- TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+ TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
 > {
   readonly component: dxDataGrid<TRowData, string, TKey>;
   readonly data?: TRowData;
@@ -3201,7 +3201,7 @@ export interface ColumnCellTemplateData
 <TRowData = any,
  TKey = any,
  TCellValue = any,
- TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+ TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
 > {
   readonly data?: TRowData;
   readonly component: dxDataGrid<TRowData, string, TKey>;
@@ -3222,7 +3222,7 @@ export interface ColumnEditCellTemplateData
 <TRowData = any,
  TKey = any,
  TCellValue = any,
- TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+ TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
 > {
   readonly setValue?: (newValue: TCellValue, displayValue?: any) => void;
   readonly data?: TRowData;
@@ -3243,7 +3243,7 @@ export interface ColumnGroupCellTemplateData
 <TRowData = any,
  TKey = any,
  TCellValue = any,
- TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+ TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
 > {
   readonly data?: TRowData;
   readonly component: dxDataGrid<TRowData, string, TKey>;
@@ -3280,7 +3280,7 @@ export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataMod
 export type RowTemplateData
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = {
   readonly key: TKey;
   readonly data: TRowData;
@@ -3300,9 +3300,9 @@ export type RowTemplateData
  */
 export interface dxDataGridOptions
   <TRowData = any,
-   TKeyExpr extends string | string[] = string | string[],
+   TKeyExpr extends string | Array<string> = string | Array<string>,
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string>=Array<Column<TRowData, TKey, any> | string>,
    TSelectionDeferred extends boolean=boolean,
    TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
   > extends GridBaseOptions<dxDataGrid<TRowData, TKeyExpr, TKey>, TRowData, TKey, TColumns, TStateStoringType> {
@@ -4280,12 +4280,12 @@ export interface dxDataGridToolbar {
  * @namespace DevExpress.ui
  * @deprecated
  */
-export type dxDataGridEditing<TRowData = any, TKey = any, TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[]> = Editing<TRowData, TKey, TColumns>;
+export type dxDataGridEditing<TRowData = any, TKey = any, TColumns extends Array<Column<TRowData, TKey, any> | string>=Array<Column<TRowData, TKey, any> | string>> = Editing<TRowData, TKey, TColumns>;
 
 export interface Editing
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
@@ -4390,7 +4390,7 @@ declare class dxDataGrid
   <TRowData = any,
    TKeyExpr extends string | string[] = string | string[],
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string>=Array<Column<TRowData, TKey, any> | string>,
    TSelectionDeferred extends boolean=boolean,
    TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
   > extends Widget<dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred, TStateStoringType>> implements GridBase<TRowData, TKey, TColumns> {
@@ -4660,7 +4660,7 @@ export interface dxDataGridColumn
      * @default undefined
      * @public
      */
-    columns?: (Column<TRowData, TKey, any> | string)[];
+    columns?: Array<Column<TRowData, TKey, any> | string>;
     /**
      * @docid dxDataGridColumn.editCellTemplate
      * @type_function_param1 cellElement:DxElement
@@ -4734,7 +4734,7 @@ export interface dxDataGridColumn
 /**
  * @public
  */
-export type ColumnButton<TRowData = any, TKey = any, TCellValue = any, TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[]> = dxDataGridColumnButton<TRowData, TKey, TCellValue, TColumns>;
+export type ColumnButton<TRowData = any, TKey = any, TCellValue = any, TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>> = dxDataGridColumnButton<TRowData, TKey, TCellValue, TColumns>;
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the DataGrid's ColumnButton type instead
@@ -4743,7 +4743,7 @@ export interface dxDataGridColumnButton
   <TRowData = any,
    TKey = any,
    TCellValue = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]= (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > extends ColumnButtonBase {
     /**
      * @docid dxDataGridColumnButton.name
@@ -4808,7 +4808,7 @@ export interface dxDataGridColumnButton
  * @namespace DevExpress.ui
  * @deprecated
  */
-export type dxDataGridRowObject<TRowData = any, TKey = any, TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[]> = RowObject<TRowData, TKey, TColumns>;
+export type dxDataGridRowObject<TRowData = any, TKey = any, TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>> = RowObject<TRowData, TKey, TColumns>;
 
 /**
  * @docid dxDataGridRowObject
@@ -4817,7 +4817,7 @@ export type dxDataGridRowObject<TRowData = any, TKey = any, TColumns extends (Co
 export interface RowObject
   <TRowData = any,
    TKey = any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[]=(Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string>=Array<Column<TRowData, TKey, any> | string>,
    > {
     /**
      * @docid dxDataGridRowObject.data
@@ -4876,7 +4876,7 @@ export type Properties
   <TRowData = any,
    TKeyExpr extends string | string[] = string | string[],
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns>;
 
 /** @deprecated use Properties instead */
@@ -4884,7 +4884,7 @@ export type Options
   <TRowData,
    TKeyExpr extends string | string[],
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns>;
 
 /** @deprecated use Properties instead */
@@ -4892,7 +4892,7 @@ export type IOptions
   <TRowData,
    TKeyExpr extends string | string[],
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
-   TColumns extends (Column<TRowData, TKey, any> | string)[] = (Column<TRowData, TKey, any> | string)[],
+   TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
   > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns>;
 
 export default dxDataGrid;
