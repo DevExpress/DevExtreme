@@ -139,7 +139,8 @@ class VerticalGroupedStrategy extends GroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return cache.get('groupBoundsOffset', () => {
+        const groupIndex = coordinates.groupIndex;
+        return cache.get(`groupBoundsOffset${groupIndex}`, () => {
             const groupIndex = coordinates.groupIndex;
             const startOffset = $cells.eq(0).offset().left;
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
