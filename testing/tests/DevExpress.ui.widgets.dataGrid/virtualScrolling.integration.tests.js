@@ -3942,6 +3942,77 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getVisibleRows().map(it => it.key), [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'rendered item keys after scrolling');
     });
 
+    QUnit.test('New mode. A new request should not be sent until the previous request is finished on the fast scrolling', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData(100)
+        });
+
+        const requestState = [];
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: function(loadOptions) {
+                    const d = $.Deferred();
+                    requestState.push('begin');
+                    setTimeout(() => {
+                        store.load(loadOptions).done(function() {
+                            requestState.push('end');
+                            d.resolve.apply(d, arguments);
+                        });
+                    }, 500);
+                    return d.promise();
+                },
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 300,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        // act
+        this.clock.tick(500);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 20, 'initially rendered items');
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ top: 1580 });
+        this.clock.tick(200);
+        scrollable.scrollTo({ top: 3250 });
+        this.clock.tick(1000);
+
+        // assert
+        assert.deepEqual(requestState, ['begin', 'end', 'begin', 'end', 'begin', 'end'], 'requests order after scrolling to the bottom');
+
+        // act
+        scrollable.scrollTo({ top: 0 });
+        this.clock.tick(1000);
+
+        // assert
+        assert.deepEqual(requestState, ['begin', 'end', 'begin', 'end', 'begin', 'end'], 'requests order after scrolling to the top');
+    });
+
+
     // T996914
     QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
         // arrange
