@@ -2013,7 +2013,7 @@ testModule('reset focus', moduleConfig, () => {
 testModule('close on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2033,7 +2033,7 @@ testModule('close on target scroll', moduleConfig, () => {
         fx.off = false;
 
         const overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2052,7 +2052,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
     test('overlay should be hidden if any of jQuery Event target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2070,7 +2070,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
     test('overlay should not be hidden on any target\'s parents scroll events if option set to false', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: false,
+            hideOnParentScroll: false,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2096,7 +2096,7 @@ testModule('close on target scroll', moduleConfig, () => {
             devices.real({ platform: 'generic', deviceType: 'desktop' });
 
             const $overlay = $('#overlay').dxOverlay({
-                closeOnTargetScroll: true
+                hideOnParentScroll: true
             });
 
             const overlay = $overlay.dxOverlay('instance');
@@ -2121,7 +2121,7 @@ testModule('close on target scroll', moduleConfig, () => {
             devices.real({ platform: 'ios', deviceType: 'phone' });
 
             const $overlay = $('#overlay').dxOverlay({
-                closeOnTargetScroll: true
+                hideOnParentScroll: true
             });
 
             const overlay = $overlay.dxOverlay('instance');
@@ -2141,7 +2141,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
         const $overlay = $('#overlay').dxOverlay({
             visible: true,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2166,7 +2166,7 @@ testModule('close on target scroll', moduleConfig, () => {
         const $container = $('#test');
 
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $container,
             position: {
                 my: 'left top',
@@ -2188,13 +2188,13 @@ testModule('close on target scroll', moduleConfig, () => {
         const container = $('#overlayInputTarget');
 
         const $overlay1 = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             visible: true,
             container
         });
 
         const $overlay2 = $('#overlay2').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             visible: true,
             container
         });
@@ -2208,7 +2208,7 @@ testModule('close on target scroll', moduleConfig, () => {
         const $target = $('#overlayInputTarget');
 
         const $overlay1 = $('#overlay').dxOverlay({
-            closeOnTargetScroll: function() {
+            hideOnParentScroll: function() {
                 return $overlay2.dxOverlay('option', 'visible');
             },
             container: $('#test'),
@@ -2219,7 +2219,7 @@ testModule('close on target scroll', moduleConfig, () => {
         });
 
         const $overlay2 = $('#overlay2').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#overlay'),
             position: {
                 of: $target

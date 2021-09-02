@@ -337,7 +337,7 @@ class Menu extends MenuBase {
             deferRendering: false,
             shading: false,
             animation: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             onHidden: () => {
                 this._toggleHamburgerActiveState(false);
             },

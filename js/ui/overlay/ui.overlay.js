@@ -205,7 +205,7 @@ const Overlay = Widget.inherit({
             container: undefined,
 
             hideTopOverlayHandler: () => { this.hide(); },
-            closeOnTargetScroll: false,
+            hideOnParentScroll: false,
             onPositioned: null,
             propagateOutsideClick: false,
             ignoreChildEvents: true,
@@ -869,7 +869,7 @@ const Overlay = Widget.inherit({
 
         eventsEngine.off(prevTargets, scrollEvent, handler);
 
-        const closeOnScroll = this.option('closeOnTargetScroll');
+        const closeOnScroll = this.option('hideOnParentScroll');
         if(needSubscribe && closeOnScroll) {
             let $parents = getElement(this._$wrapper).parents();
             if(devices.real().deviceType === 'desktop') {
@@ -882,7 +882,7 @@ const Overlay = Widget.inherit({
 
     _targetParentsScrollHandler: function(e) {
         let closeHandled = false;
-        const closeOnScroll = this.option('closeOnTargetScroll');
+        const closeOnScroll = this.option('hideOnParentScroll');
         if(isFunction(closeOnScroll)) {
             closeHandled = closeOnScroll(e);
         }
@@ -1521,7 +1521,7 @@ const Overlay = Widget.inherit({
                 this._initHideTopOverlayHandler(args.value);
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
-            case 'closeOnTargetScroll':
+            case 'hideOnParentScroll':
                 this._toggleParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':

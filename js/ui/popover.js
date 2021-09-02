@@ -215,7 +215,7 @@ const Popover = Popup.inherit({
             */
 
             fullScreen: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
 
