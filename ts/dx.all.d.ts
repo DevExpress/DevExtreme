@@ -4625,6 +4625,10 @@ declare module DevExpress.ui {
      * [descr:dxActionSheetItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    /**
+     * [descr:dxActionSheetItem.stylingMode]
+     */
+    stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
    * @deprecated use Properties instead
@@ -8695,11 +8699,8 @@ declare module DevExpress.ui {
         | 'bold'
         | 'italic'
         | 'underline'
-        | 'fontColor'
         | 'lineStyle'
         | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
         | 'textAlignLeft'
         | 'textAlignCenter'
         | 'textAlignRight'
@@ -12580,6 +12581,22 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showDependencies(value)]
      */
     showDependencies(value: boolean): void;
+    /**
+     * [descr:dxGantt.zoomIn()]
+     */
+    zoomIn(): void;
+    /**
+     * [descr:dxGantt.zoomOut()]
+     */
+    zoomOut(): void;
+    /**
+     * [descr:dxGantt.unassignAllResourcesFromTask(taskKey)]
+     */
+    unassignAllResourcesFromTask(taskKey: any): void;
+    /**
+     * [descr:dxGantt.showTaskDetailsDialog(taskKey)]
+     */
+    showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;

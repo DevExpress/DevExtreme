@@ -22,6 +22,7 @@ const ACTION_SHEET_CANCEL_BUTTON_CLASS = 'dx-actionsheet-cancel';
 const ACTION_SHEET_ITEM_CLASS = 'dx-actionsheet-item';
 const ACTION_SHEET_ITEM_DATA_KEY = 'dxActionSheetItemData';
 const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
+const ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE = 'outlined';
 
 
 const ActionSheet = CollectionWidget.inherit({
@@ -133,9 +134,12 @@ const ActionSheet = CollectionWidget.inherit({
         */
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate(function($container, data) {
-                const button = new Button($('<div>'), extend({ onClick: data && data.click }, data));
+                const button = new Button($('<div>'), extend({
+                    onClick: data && data.click,
+                    stylingMode: data && data.stylingMode || ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE
+                }, data));
                 $container.append(button.$element());
-            }, ['disabled', 'icon', 'text', 'type', 'onClick', 'click'], this.option('integrationOptions.watchMethod'))
+            }, ['disabled', 'icon', 'text', 'type', 'onClick', 'click', 'stylingMode'], this.option('integrationOptions.watchMethod'))
         });
     },
 
@@ -308,6 +312,7 @@ const ActionSheet = CollectionWidget.inherit({
                 .appendTo(this._popup && this._popup.$content());
             this._createComponent(this._$cancelButton, Button, {
                 disabled: false,
+                stylingMode: ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE,
                 text: this.option('cancelText'),
                 onClick: function(e) {
                     const hidingArgs = { event: e, cancel: false };
