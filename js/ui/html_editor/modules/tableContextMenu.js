@@ -8,7 +8,7 @@ import { addNamespace } from '../../../events/utils/index';
 // import { extend } from '../../../core/utils/extend';
 // import Popup from '../../popup';
 import ContextMenu from '../../context_menu';
-import { showCellProperties, showTableProperties, getTableOperationHandler } from './tableOperations';
+import { showCellPropertiesForm, showTablePropertiesForm, getTableOperationHandler } from './tableOperations';
 
 
 const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
@@ -45,13 +45,27 @@ if(Quill) {
             return this.editorInstance._createComponent($container, ContextMenu, menuConfig);
         }
 
+        showTableProperties(e) {
+            const $table = $(this._targetElement).closest('table');
+            this._contextMenu.hide();
+            showTablePropertiesForm(this.editorInstance, $table);
+            this._targetElement = null;
+        }
+
+        showCellProperties(e) {
+            const $cell = $(this._targetElement);
+            this._contextMenu.hide();
+            showCellPropertiesForm(this.editorInstance, $cell);
+            this._targetElement = null;
+        }
+
         _getMenuConfig(options) {
             return {
                 target: this._quillContainer,
                 showEvent: 'dxdbclick',
                 dataSource: [
-                    { text: 'Cell Properties', onClick: () => { this._contextMenu.hide(); showCellProperties(this.editorInstance); } },
-                    { text: 'Table Properties', onClick: () => { this._contextMenu.hide(); showTableProperties(this.editorInstance); } },
+                    { text: 'Cell Properties', onClick: (e) => { this.showCellProperties(e); } },
+                    { text: 'Table Properties', onClick: (e) => { this.showTableProperties(e); } },
                     { text: 'Insert', items: [
                         { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
                         { text: 'Insert Row Below', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
@@ -84,6 +98,7 @@ if(Quill) {
 
         _openTableContextMenu(event) {
             if(this._isTableTarget(event.target)) {
+                this._targetElement = event.target;
                 this._setContextMenuPosition(event);
                 this._contextMenu.show();
                 event.preventDefault();
