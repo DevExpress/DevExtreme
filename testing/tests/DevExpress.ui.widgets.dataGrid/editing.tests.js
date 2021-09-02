@@ -44,6 +44,7 @@ QUnit.testStart(function() {
 </div>';
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 
@@ -14134,10 +14135,11 @@ QUnit.module('Editing with validation', {
             assert.strictEqual($('.dx-selectbox-popup-wrapper').length, 1, 'has selectbox popup');
 
             // act
-            $cellElements.find('.dx-texteditor-input').last().focus();
             $cellElements.find('.dx-texteditor-input').last().trigger('dxpointerdown');
-            $cellElements.find('.dx-texteditor-input').last().trigger('dxclick');
             this.clock.tick();
+            $cellElements.find('.dx-texteditor-input').last().focus();
+            this.clock.tick();
+            $cellElements.find('.dx-texteditor-input').last().trigger('dxclick');
 
             // assert
             assert.strictEqual($cellElements.first().find('.dx-overlay.dx-datagrid-invalid-message').length, 0, 'hasn\'t invalid message');

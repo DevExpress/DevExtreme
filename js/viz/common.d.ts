@@ -199,7 +199,7 @@ export interface BaseLegend {
        * @default '#232323' &prop(color)
        * @default 18 &prop(size)
        * @default 200 &prop(weight)
-       * @extends CommonVizLightFontFamily
+       * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
        */
       font?: Font;
       /**
@@ -247,7 +247,7 @@ export interface BaseLegend {
          * @default '#232323' &prop(color)
          * @default 14 &prop(size)
          * @default 200 &prop(weight)
-         * @extends CommonVizLightFontFamily
+         * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
          */
         font?: Font;
         /**

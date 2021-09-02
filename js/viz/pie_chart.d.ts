@@ -227,7 +227,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -608,7 +608,8 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     label?: {
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
-       * @extends CommonVizFormat
+       * @type format
+       * @default undefined
        */
       argumentFormat?: format;
       /**
@@ -677,7 +678,8 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       font?: Font;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
-       * @extends CommonVizFormat
+       * @type format
+       * @default undefined
        */
       format?: format;
       /**

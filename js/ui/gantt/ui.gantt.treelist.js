@@ -151,10 +151,10 @@ export class GanttTreeList {
         }
     }
 
-    updateDataSource(data, forceUpdate = false) {
-        if(!this._skipUpdateTreeListDataSource()) {
+    updateDataSource(data, forceUpdate = false, forceCustomData = false) {
+        if(!this._skipUpdateTreeListDataSource() || forceUpdate) {
             this.setOption('dataSource', data);
-        } else if(forceUpdate) {
+        } else if(forceCustomData) {
             const data = this._treeList.option('dataSource');
             this._gantt._onParentTasksRecalculated(data);
         }
@@ -219,5 +219,8 @@ export class GanttTreeList {
         }
         this.selectRows(GanttHelper.getArrayFromOneElement(insertedId));
         this.setOption('focusedRowKey', insertedId);
+    }
+    getDataSource() {
+        return this._treeList?.getDataSource();
     }
 }
