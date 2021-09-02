@@ -172,7 +172,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     const isRecursiveSelection = this.isRecursiveSelection();
                     const normalizedArgs = isRecursiveSelection && that._normalizeSelectionArgs({
                         keys: isDefined(value) ? value : []
-                    }, !isDeselect);
+                    }, preserve, !isDeselect);
 
                     if(normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
                         that._isSelectionNormalizing = true;
@@ -332,11 +332,11 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     });
                 },
 
-                _normalizeSelectedRowKeysCore: function(keys, args, isSelect) {
+                _normalizeSelectedRowKeysCore: function(keys, args, preserve, isSelect) {
                     const that = this;
 
                     keys.forEach(function(key) {
-                        if(that.isRowSelected(key) === isSelect) {
+                        if(preserve && that.isRowSelected(key) === isSelect) {
                             return;
                         }
 
@@ -358,7 +358,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     });
                 },
 
-                _normalizeSelectionArgs: function(args, isSelect) {
+                _normalizeSelectionArgs: function(args, preserve, isSelect) {
                     let result;
                     const keys = Array.isArray(args.keys) ? args.keys : [args.keys];
                     const selectedRowKeys = this.option('selectedRowKeys') || [];
@@ -367,10 +367,10 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         result = {
                             currentSelectedRowKeys: [],
                             currentDeselectedRowKeys: [],
-                            selectedRowKeys: selectedRowKeys.slice(0)
+                            selectedRowKeys: preserve ? selectedRowKeys.slice(0) : []
                         };
 
-                        this._normalizeSelectedRowKeysCore(keys, result, isSelect);
+                        this._normalizeSelectedRowKeysCore(keys, result, preserve, isSelect);
                     }
 
                     return result;
