@@ -229,6 +229,30 @@ QUnit.module('action sheet', {
         assert.equal($('.dx-actionsheet-cancel').length, 1, 'there is only one \'cancel\' button');
     });
 
+    QUnit.test('render items with the right stylingMode', function(assert) {
+        const items = [
+            {
+                text: 'Action 1'
+            },
+            {
+                text: 'Action 2',
+                stylingMode: 'text'
+            }
+        ];
+
+        this.instance.option('items', items);
+        this.instance.show();
+
+        const itemElements = $('.dx-actionsheet-item', $($('.dx-popup', this.element).dxPopup('instance').$content()));
+        assert.equal(itemElements.length, 2, 'correct items count');
+
+        const first = itemElements.find('.dx-button').eq(0);
+        assert.equal(first.dxButton('instance').option('stylingMode'), 'outlined', 'default stylingMode is correct');
+
+        const second = itemElements.find('.dx-button').eq(-1);
+        assert.equal(second.dxButton('instance').option('stylingMode'), items[1].stylingMode, 'correct stylingMode is set by option');
+    });
+
     QUnit.test('\'onItemHold\' should be fired after hold (T106668)', function(assert) {
         assert.expect(2);
 
