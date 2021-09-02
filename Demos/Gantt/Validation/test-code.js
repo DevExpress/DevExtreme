@@ -164,7 +164,15 @@ testUtils.importAnd(()=>'devextreme/ui/gantt', ()=>DevExpress.ui.dxGantt, functi
         .then(() => {
             const instance = dxGantt.getInstance(document.querySelector('.dx-gantt'));
 			if(instance) {
-            	instance.option("tasks", { dataSource: fake_tasks});
+            	instance.option("tasks", { 
+					dataSource: fake_tasks,
+					keyExpr: 'id',
+					parentIdExpr: 'parentId',
+					titleExpr: 'title',
+					startExpr: 'start',
+					endExpr: 'end',
+					progressExpr: 'progress'
+				});
 				instance.option("onContentReady", function() { 
 					instance.option = function () { };
 				});
