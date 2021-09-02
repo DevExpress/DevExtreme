@@ -57,7 +57,7 @@ if(Quill) {
                         { text: 'Insert Header Row', icon: 'header', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
                         { text: 'Insert Row Above', icon: 'insertrowabove', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
                         { text: 'Insert Row Below', icon: 'insertrowbelow', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
-                        { text: 'Insert Column Left', icon: 'insertcolumnleft', onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
+                        { text: 'Insert Column Left', icon: 'insertcolumnleft', beginGroup: true, onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
                         { text: 'Insert Column Right', icon: 'insertcolumnright', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
                     ] },
                     {
