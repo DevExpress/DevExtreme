@@ -15445,6 +15445,10 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
+    /**
+     * [descr:dxOverlayOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPivotGrid]
@@ -16339,6 +16343,10 @@ declare module DevExpress.ui {
      * [descr:dxPopoverOptions.width]
      */
     width?: number | string | (() => number | string);
+    /**
+     * [descr:dxPopoverOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPopup]
