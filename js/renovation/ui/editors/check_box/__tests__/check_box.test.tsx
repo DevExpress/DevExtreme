@@ -132,13 +132,14 @@ describe('CheckBox', () => {
       });
     });
 
-    it('should pass iconSize to CheckBoxIcon', () => {
+    it('should pass iconSize and isChecked to CheckBoxIcon', () => {
       const iconSize = 15;
       const checkBox = mount(viewFunction({
-        props: { iconSize },
+        props: { iconSize, value: true },
       } as any));
       expect(checkBox.find(CheckBoxIcon).props()).toMatchObject({
         size: iconSize,
+        isChecked: true,
       });
     });
   });
