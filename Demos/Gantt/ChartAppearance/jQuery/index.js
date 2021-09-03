@@ -6,7 +6,7 @@ $(function() {
             dataSource: tasks
         },
         startDateRange: new Date(2018, 11, 1),
-        endDateRange: new Date(2019, 7, 1),
+        endDateRange: new Date(2019, 11, 1),
         dependencies: {
             dataSource: dependencies
         },
