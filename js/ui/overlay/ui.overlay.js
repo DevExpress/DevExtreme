@@ -93,24 +93,15 @@ ready(() => {
 });
 
 const Overlay = Widget.inherit({
-
     _supportedKeys: function() {
-        const offsetSize = 5;
-        const move = function(top, left, e) {
-            if(!this.option('dragEnabled')) {
-                return;
-            }
-
-            this._drag.moveTo(top, left, e);
-        };
         return extend(this.callBase(), {
             escape: function() {
                 this.hide();
             },
-            upArrow: (e) => { move.call(this, -offsetSize, 0, e); },
-            downArrow: (e) => { move.call(this, offsetSize, 0, e); },
-            leftArrow: (e) => { move.call(this, 0, -offsetSize, e); },
-            rightArrow: (e) => { move.call(this, 0, offsetSize, e); }
+            upArrow: (e) => { this._drag.moveUp(e); },
+            downArrow: (e) => { this._drag.moveDown(e); },
+            leftArrow: (e) => { this._drag.moveLeft(e); },
+            rightArrow: (e) => { this._drag.moveRight(e); }
         });
     },
 
