@@ -623,6 +623,31 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 col - 3 text lines. onRowExporting.setfontSize=20, height auto, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'long line long line long line' }]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,69',
+                    'setFontSize,16'
+                ];
+
+                const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('2 col - 1 text line. col1.fontSize default, col2.fontSize 20', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
