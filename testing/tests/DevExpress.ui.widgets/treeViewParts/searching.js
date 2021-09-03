@@ -6,8 +6,6 @@ const createInstance = (options) => new TreeViewTestWrapper(options);
 
 QUnit.module('searching');
 
-const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
-
 ['dataSource', 'items'].forEach((optionName) => {
     QUnit.test(`Search works even with loop/cycle in ${optionName} option (T832760)`, function(assert) {
         const options = { dataStructure: 'plain', rootValue: 1, searchEnabled: true };
@@ -507,8 +505,20 @@ QUnit.test('apply search after searchTimeout', function(assert) {
             searchEnabled: true
         }).dxTreeView('instance');
 
-        const isNodeFocused = (id) => treeView.$element().find(`[data-item-id="${id}"]`).hasClass('dx-state-focused');
-        const triggerFocus = () => $(treeView.$element().find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`)).trigger('focusin');
+        const $treeView = $(treeView.$element());
+        const $searchEditor = $($treeView.children('.dx-treeview-search'));
+        $searchEditor.on('keydown', function(e) {
+            if(e.key === 'Tab') {
+                $treeView.find('[tabIndex]:not(:focus)').first().focus();
+            }
+        });
+
+        const isNodeFocused = (id) => $treeView.find(`[data-item-id="${id}"]`).hasClass('dx-state-focused');
+        const triggerFocus = () => {
+            $searchEditor.find('input').focus();
+            $searchEditor.trigger($.Event('keydown', { key: 'Tab' }));
+        };
+
 
         assert.equal(isNodeFocused(1), false, 'item1 is not focused after initialization');
         assert.equal(isNodeFocused(2), false, 'item2 is not focused after initialization');
