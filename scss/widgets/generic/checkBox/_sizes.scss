@@ -10,14 +10,14 @@ $generic-checkbox-size: null !default;
 
 @if $size == "default" {
   $generic-checkbox-arrow-icon-size: 1em !default;
-  $generic-checkbox-indeterminate-icon-size: 0.75em !default;
-  $generic-checkbox-indeterminate-icon-margin: 0.25em !default;
+  $generic-checkbox-indeterminate-icon-size: 1em !default;
+  $generic-checkbox-indeterminate-icon-margin: 0.33em !default;
   $generic-checkbox-size: 22px !default;
 }
 
 @else if $size == "compact" {
-  $generic-checkbox-arrow-icon-size: 0.625em !default;
-  $generic-checkbox-indeterminate-icon-size: 0.5em !default;
-  $generic-checkbox-indeterminate-icon-margin: 0.1875em !default;
+  $generic-checkbox-arrow-icon-size: 1em !default;
+  $generic-checkbox-indeterminate-icon-size: 1em !default;
+  $generic-checkbox-indeterminate-icon-margin: 0.375em !default;
   $generic-checkbox-size: 16px !default;
 }

@@ -148,7 +148,7 @@ module('Table resizing integration', {
 
         const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
 
-        assert.strictEqual($submenuItems.length, 4);
+        assert.strictEqual($submenuItems.length, 5);
     });
 
     test('Context menu Delete submenu should have some items', function(assert) {
@@ -171,12 +171,25 @@ module('Table resizing integration', {
         assert.strictEqual($submenuItems.length, 3);
     });
 
-    test('Check context menu Insert Row Above action', function(assert) {
+    test('Check context menu Insert Header Row action', function(assert) {
         this.createWidget();
 
         const $submenuItems = this.getSubmenuItems(0);
 
         $submenuItems.eq(0).trigger('dxclick');
+
+        const $table = this.$element.find('table');
+
+        assert.strictEqual($table.find('tr').length, 4, 'Row is added');
+        assert.strictEqual($table.find('th').length, 4, 'Header row elements is added');
+    });
+
+    test('Check context menu Insert Row Above action', function(assert) {
+        this.createWidget();
+
+        const $submenuItems = this.getSubmenuItems(0);
+
+        $submenuItems.eq(1).trigger('dxclick');
 
         const $table = this.$element.find('table');
 
@@ -189,7 +202,7 @@ module('Table resizing integration', {
 
         const $submenuItems = this.getSubmenuItems(0);
 
-        $submenuItems.eq(1).trigger('dxclick');
+        $submenuItems.eq(2).trigger('dxclick');
 
         const $table = this.$element.find('table');
 
@@ -202,7 +215,7 @@ module('Table resizing integration', {
 
         const $submenuItems = this.getSubmenuItems(0);
 
-        $submenuItems.eq(2).trigger('dxclick');
+        $submenuItems.eq(3).trigger('dxclick');
 
         const $table = this.$element.find('table');
 
@@ -215,7 +228,7 @@ module('Table resizing integration', {
 
         const $submenuItems = this.getSubmenuItems(0);
 
-        $submenuItems.eq(3).trigger('dxclick');
+        $submenuItems.eq(4).trigger('dxclick');
 
         const $table = this.$element.find('table');
 

@@ -33,6 +33,7 @@ const moduleConfig = {
                 on: () => {},
                 off: () => {},
                 $element: () => this.$element,
+                addCleanCallback: () => {},
                 _createComponent: ($element, widget, options) => new widget($element, options),
                 _getContent: () => this.$element,
                 _getQuillContainer: () => this.$element
@@ -52,7 +53,7 @@ const moduleConfig = {
 
 const { test, module } = QUnit;
 
-module('Table UI module', moduleConfig, () => {
+module('Table Context Menu module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const tableUIInstance = new TableUI(this.quillMock, this.options);
         this.attachSpies(tableUIInstance);

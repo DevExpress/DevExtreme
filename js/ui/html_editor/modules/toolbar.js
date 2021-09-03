@@ -20,7 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-import { showCellProperties, showTableProperties, getTableOperationHandler } from './tableOperations';
+import { showCellPropertiesForm, showTablePropertiesForm, getTableOperationHandler } from './tableOperations';
 
 let ToolbarModule = BaseModule;
 
@@ -186,6 +186,7 @@ if(Quill) {
                 superscript: this._prepareShortcutHandler('script', 'super'),
                 subscript: this._prepareShortcutHandler('script', 'sub'),
                 insertTable: this._prepareInsertTableHandler(),
+                insertHeaderRow: getTableOperationHandler(this.quill, 'insertHeaderRow'),
                 insertRowAbove: getTableOperationHandler(this.quill, 'insertRowAbove'),
                 insertRowBelow: getTableOperationHandler(this.quill, 'insertRowBelow'),
                 insertColumnLeft: getTableOperationHandler(this.quill, 'insertColumnLeft'),
@@ -193,8 +194,8 @@ if(Quill) {
                 deleteColumn: getTableOperationHandler(this.quill, 'deleteColumn'),
                 deleteRow: getTableOperationHandler(this.quill, 'deleteRow'),
                 deleteTable: getTableOperationHandler(this.quill, 'deleteTable'),
-                cellProperties: () => { showCellProperties(); },
-                tableProperties: () => { showTableProperties(); }
+                cellProperties: () => { showCellPropertiesForm(this.editorInstance); },
+                tableProperties: () => { showTablePropertiesForm(this.editorInstance); }
             };
         }
 

@@ -1,5 +1,21 @@
 import { isMaterial, isCompact, current } from '../../../../ui/themes';
 
+const defaultIconSizes = [
+  [22, 16], // generic, generic-compact
+  [18, 16], // material, material-compact
+];
+
+const defaultFontSizes = [
+  [ // for not checked checkbox
+    [12, 8], // generic, generic-compact
+    [20, 18], // material, material-compact
+  ],
+  [ // for checked checkbox
+    [16, 10], // generic, generic-compact
+    [16, 14], // material, material-compact
+  ],
+];
+
 function getThemeType(): { isMaterialTheme: boolean; isCompactTheme: boolean } {
   const theme = current();
 
@@ -12,25 +28,20 @@ function getThemeType(): { isMaterialTheme: boolean; isCompactTheme: boolean } {
 function getDefaultIconSize(): number {
   const { isMaterialTheme, isCompactTheme } = getThemeType();
 
-  let defaultIconSize = 22;
-  if (isCompactTheme) {
-    defaultIconSize = 16;
-  } else if (isMaterialTheme) {
-    defaultIconSize = 18;
-  }
-
-  return defaultIconSize;
+  return defaultIconSizes[+isMaterialTheme][+isCompactTheme];
 }
 
-function getDefaultFontSize(): number {
-  const { isCompactTheme } = getThemeType();
+function getDefaultFontSize(isChecked: boolean): number {
+  const { isMaterialTheme, isCompactTheme } = getThemeType();
 
-  const defaultFontSize = isCompactTheme ? 12 : 16;
-  return defaultFontSize;
+  return defaultFontSizes[+isChecked][+isMaterialTheme][+isCompactTheme];
 }
 
-function getFontSizeByIconSize(iconSize: number): number {
-  const defaultFontSize = getDefaultFontSize();
+function getFontSizeByIconSize(
+  iconSize: number,
+  isChecked: boolean,
+): number {
+  const defaultFontSize = getDefaultFontSize(isChecked);
   const defaultIconSize = getDefaultIconSize();
 
   const fontToIconSizeRatio = defaultFontSize / defaultIconSize;
@@ -39,6 +50,7 @@ function getFontSizeByIconSize(iconSize: number): number {
 }
 
 export {
+  getDefaultFontSize,
   getDefaultIconSize,
   getFontSizeByIconSize,
 };

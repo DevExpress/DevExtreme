@@ -1,12 +1,8 @@
 import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 import BaseModule from './base';
-// import PopupModule from './popup';
 import eventsEngine from '../../../events/core/events_engine';
-// import ContextMenu from '../../context_menu';
 import { addNamespace } from '../../../events/utils/index';
-// import { extend } from '../../../core/utils/extend';
-// import Popup from '../../popup';
 import ContextMenu from '../../context_menu';
 import { showCellPropertiesForm, showTablePropertiesForm, getTableOperationHandler } from './tableOperations';
 
@@ -23,15 +19,22 @@ if(Quill) {
             super(quill, options);
             this.enabled = !!options.enabled;
             this._quillContainer = this.editorInstance._getQuillContainer();
+            this.addCleanCallback(this.prepareCleanCallback());
 
             if(this.enabled) {
-                this._contextMenu = this._createContextMenu();
-                this._attachEvents();
+                this._enableContextMenu();
             }
         }
 
+        _enableContextMenu() {
+            if(!this._contextMenu) {
+                this._contextMenu = this._createContextMenu();
+            }
+            this._attachEvents();
+        }
+
         _attachEvents() {
-            eventsEngine.on(this.editorInstance._getContent(), CONTEXT_MENU_EVENT, this._openTableContextMenu.bind(this));
+            eventsEngine.on(this.editorInstance._getContent(), CONTEXT_MENU_EVENT, this._prepareContextMenuHandler());
         }
 
         _detachEvents() {
@@ -62,24 +65,25 @@ if(Quill) {
         _getMenuConfig(options) {
             return {
                 target: this._quillContainer,
-                showEvent: 'dxdbclick',
+                showEvent: null,
                 dataSource: [
-                    { text: 'Cell Properties', onClick: (e) => { this.showCellProperties(e); } },
-                    { text: 'Table Properties', onClick: (e) => { this.showTableProperties(e); } },
                     { text: 'Insert', items: [
-                        { text: 'Insert Row Above', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
-                        { text: 'Insert Row Below', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
-                        { text: 'Insert Column Left', onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
-                        { text: 'Insert Column Right', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
+                        { text: 'Insert Header Row', icon: 'header', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
+                        { text: 'Insert Row Above', icon: 'insertrowabove', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
+                        { text: 'Insert Row Below', icon: 'insertrowbelow', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
+                        { text: 'Insert Column Left', icon: 'insertcolumnleft', beginGroup: true, onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
+                        { text: 'Insert Column Right', icon: 'insertcolumnright', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
                     ] },
                     {
                         text: 'Delete',
                         items: [
-                            { text: 'Delete Column', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
-                            { text: 'Delete Row', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
-                            { text: 'Delete Table', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
+                            { text: 'Delete Column', icon: 'deletecolumn', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
+                            { text: 'Delete Row', icon: 'deleterow', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
+                            { text: 'Delete Table', icon: 'deletetable', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
                         ]
-                    }
+                    },
+                    { text: 'Cell Properties', onClick: (e) => { this.showCellProperties(e); } },
+                    { text: 'Table Properties', onClick: (e) => { this.showTableProperties(e); } },
                 ],
             };
         }
@@ -96,19 +100,20 @@ if(Quill) {
             };
         }
 
-        _openTableContextMenu(event) {
-            if(this._isTableTarget(event.target)) {
-                this._targetElement = event.target;
-                this._setContextMenuPosition(event);
-                this._contextMenu.show();
-                event.preventDefault();
-            }
-
+        _prepareContextMenuHandler() {
+            return (event) => {
+                if(this._isTableTarget(event.target)) {
+                    this._targetElement = event.target;
+                    this._setContextMenuPosition(event);
+                    this._contextMenu.show();
+                    event.preventDefault();
+                }
+            };
         }
 
         _setContextMenuPosition(event) {
             const startPosition = this._quillContainer.get(0).getBoundingClientRect();
-            this?._contextMenu.option({
+            this._contextMenu.option({
                 position: {
                     my: 'left top',
                     at: 'left top',
@@ -119,19 +124,18 @@ if(Quill) {
         }
 
         _isTableTarget(targetElement) {
-            return targetElement.tagName.toUpperCase() === 'TD' || targetElement.tagName.toUpperCase() === 'TH';
+            return ['TD', 'TH'].indexOf(targetElement.tagName) !== -1;
         }
 
         option(option, value) {
-
             if(option === 'enabled') {
                 this.enabled = value;
-                value ? this._attachEvents(true) : this.clean();
+                value ? this._enableContextMenu() : this._detachEvents();
             }
         }
 
-        clean() {
-            this._detachEvents();
+        prepareCleanCallback() {
+            return () => { this._detachEvents(); };
         }
     };
 }
