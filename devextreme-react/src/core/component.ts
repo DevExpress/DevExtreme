@@ -18,7 +18,7 @@ class Component<P> extends ComponentBase<P> {
     this._createExtensions();
   }
 
-  protected renderChildren(): Record<string, unknown>[]|null| undefined {
+  protected renderChildren(): Record<string, unknown>[] | null | undefined {
     return React.Children.map(
       this.props.children,
       (child) => {

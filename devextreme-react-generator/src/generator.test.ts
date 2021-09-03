@@ -140,9 +140,40 @@ describe('collectIndependentEvents', () => {
         props: [],
         firedEvents: [],
       },
+      {
+        name: 'valueChange',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      },
+      {
+        name: 'onSomeValueChanged',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+          {
+            type: 'Number',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      },
     ];
     const independentEvents = collectIndependentEvents(options);
-    expect(independentEvents.length).toBe(2);
+    expect(independentEvents.length).toBe(3);
     expect(independentEvents[0]).toEqual(options[1]);
     expect(independentEvents[1]).toEqual(options[6]);
   });

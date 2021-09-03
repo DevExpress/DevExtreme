@@ -157,7 +157,7 @@ export function collectIndependentEvents(options: IProp[]): IProp[] {
     if (option.types.filter((type) => type.type === 'Function').length === 1
         && (!option.firedEvents || option.firedEvents.length === 0)
         && option.name.substr(0, 2) === 'on'
-        && !option.name.endsWith('Changed')
+        && !option.name.match(/^(?!.*Value).*Changed/)
     ) {
       acc.push(option);
     }
