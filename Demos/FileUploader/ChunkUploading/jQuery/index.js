@@ -9,7 +9,7 @@ $(function () {
     });
 });
 
-function onUploadStarted(e) {
+function onUploadStarted() {
 	getChunkPanel().innerHTML = '';
 }
 function onUploadProgress(e) {

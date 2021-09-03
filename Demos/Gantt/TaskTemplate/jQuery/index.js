@@ -1,5 +1,5 @@
 $(function() {
-    var gantt = $("#gantt").dxGantt({
+    $("#gantt").dxGantt({
         taskTitlePosition: "outside",
         scaleType: "days",
         tasks: {
@@ -39,7 +39,7 @@ $(function() {
         return img;
     }
 
-    function getTaskContentTemplate(item, container) {
+    function getTaskContentTemplate(item) {
         var resource = item.taskResources[0];
         var img = getImagePath(item.taskData.id);
         var color = item.taskData.id % 6;

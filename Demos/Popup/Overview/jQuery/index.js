@@ -32,7 +32,7 @@ $(function(){
         options: {
           icon: "email",
           text: "Send",
-          onClick: function(e) {
+          onClick: function() {
             const message = `Email is sent to ${employee.FirstName} ${employee.LastName}`;
             DevExpress.ui.notify({
               message: message,
@@ -49,7 +49,7 @@ $(function(){
         location: "after",
         options: {
           text: "Close",
-          onClick: function(e) {
+          onClick: function() {
             popup.hide();
           }
         }

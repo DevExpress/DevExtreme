@@ -33,7 +33,7 @@ $(function() {
             }
         ],
         expandedRowKeys: [1, 2, 10],
-        onSelectionChanged: function(selectedItems) {
+        onSelectionChanged: function() {
             var selectedData = treeList.getSelectedRowsData(selectionMode);
             $("#selected-items-container").text(getEmployeeNames(selectedData));
         }

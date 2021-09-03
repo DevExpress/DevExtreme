@@ -59,13 +59,13 @@ $(function() {
             style["fill"] = "#f3f3f3";
         return style;
     }
-    function linkStyleExpr(obj) {
+    function linkStyleExpr() {
         return { "stroke": "#444444" };
     }
-    function linkFromLineEndExpr(obj) {
+    function linkFromLineEndExpr() {
         return "none";
     }
-    function linkToLineEndExpr(obj) {
+    function linkToLineEndExpr() {
         return "none";
     }
 });

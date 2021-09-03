@@ -138,7 +138,7 @@ $(function(){
             onValueChanged: function(e) {
                 cellInfo.setValue(e.value)
             },
-            onSelectionChanged: function(e) {
+            onSelectionChanged: function() {
                 cellInfo.component.updateDimensions();
             }
         });

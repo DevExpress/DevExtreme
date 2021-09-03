@@ -3,8 +3,8 @@ $(function(){
         scale: {
             startValue: 0,
             endValue: 5,
-    		tickInterval: 2.5,
-    		minorTickInterval: 0.625,
+            tickInterval: 2.5,
+            minorTickInterval: 0.625,
             minorTick: {
                 visible: true
             }

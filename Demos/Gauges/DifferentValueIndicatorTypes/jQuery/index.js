@@ -2,12 +2,12 @@ $(function(){
     var options = {
         geometry: {
             startAngle: 180, 
-    		endAngle: 0
+            endAngle: 0
         },
         scale: {
             startValue: 0,
-    		endValue: 100,
-    		tickInterval: 50,
+            endValue: 100,
+            tickInterval: 50,
             label: {
                 customizeText: function (arg) {
                     return arg.valueText + " %";

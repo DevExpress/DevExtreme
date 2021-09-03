@@ -3,7 +3,7 @@ $(function(){
         scale: {
             startValue: 0,
             endValue: 100,
-    		tickInterval: 10,
+            tickInterval: 10,
             label: {
                 customizeText: function (arg) {
                     return arg.valueText + " %";

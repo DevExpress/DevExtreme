@@ -2,7 +2,6 @@ $(function() {
     $("#chart").dxChart({
         dataSource: dataSource,
         title: "Damped Sine Wave",
-        dataSource: dataSource,
         panes: [
             { name: "top" },
             { name: "bottom" }

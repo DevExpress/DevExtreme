@@ -41,7 +41,7 @@ $(function () {
             $("<i>")
               .addClass("dx-icon")
               .addClass("dx-icon-close")
-              .click(function(e) { closeButtonHandler(itemData); })
+              .click(function() { closeButtonHandler(itemData); })
           );
       }
   }

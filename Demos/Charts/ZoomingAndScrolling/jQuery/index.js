@@ -1,6 +1,5 @@
 $(function(){
-    
-    var zoomedChart = $("#chart").dxChart({
+    $("#chart").dxChart({
         palette: "Harmony Light",
         dataSource: zoomingData,
         series: [{
@@ -26,5 +25,4 @@ $(function(){
             visible: false
         }
     }).dxChart("instance");
-    
 });

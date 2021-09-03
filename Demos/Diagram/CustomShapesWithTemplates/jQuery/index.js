@@ -1,5 +1,5 @@
 $(function() {
-    var diagram = $("#diagram").dxDiagram({
+    $("#diagram").dxDiagram({
         readOnly: true,
         customShapes: employees.map(
             function(emp) {
@@ -21,7 +21,7 @@ $(function() {
                 "<text class='template-button' x='50%' y='85%'>Show Details</text>" +
                 "</svg >");
             $container.append($content);
-            $content.find(".template-button").click(function(evt) {
+            $content.find(".template-button").click(function() {
                 showInfo(employee);
             });
         },

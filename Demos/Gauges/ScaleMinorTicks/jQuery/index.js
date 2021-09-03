@@ -10,8 +10,8 @@ $(function(){
                 color: "#9c9c9c",
                 visible: true
             },
-    		tickInterval: 100,
-    		minorTickInterval: 25
+            tickInterval: 100,
+            minorTickInterval: 25
         },
         rangeContainer: {
             backgroundColor: "none"

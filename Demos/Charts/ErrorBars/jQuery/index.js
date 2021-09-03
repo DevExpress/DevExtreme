@@ -35,10 +35,10 @@ $(function(){
             label: {
                 displayMode: "stagger"
             }
-    	},
-    	"export": {
-    	    enabled: true
-    	},
+        },
+        "export": {
+            enabled: true
+        },
         valueAxis: [{
             pane: "top",
             grid: {

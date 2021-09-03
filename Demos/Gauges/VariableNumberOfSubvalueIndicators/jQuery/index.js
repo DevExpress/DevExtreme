@@ -2,7 +2,7 @@ $(function(){
     var gauge = $("#gauge").dxLinearGauge({
         scale: {
             startValue: 0, 
-    		endValue: 10,
+            endValue: 10,
             tickInterval: 2,
             label: {
                 customizeText: function (arg) {

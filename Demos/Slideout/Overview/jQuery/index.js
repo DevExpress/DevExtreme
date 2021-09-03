@@ -22,7 +22,7 @@ $(function(){
                         }
                     }, { 
                         location: "center",
-                        template: function(e) {
+                        template: function() {
                             return "<p>" + itemData.text + "</p>";
                         }
                     }]

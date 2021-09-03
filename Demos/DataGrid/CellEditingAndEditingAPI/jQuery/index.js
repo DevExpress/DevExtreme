@@ -60,8 +60,6 @@ $(function(){
             },
         ],
         onToolbarPreparing: function(e) {
-            var dataGrid = e.component;
-            
             e.toolbarOptions.items[0].showText = 'always';
 
             e.toolbarOptions.items.push({
@@ -74,6 +72,4 @@ $(function(){
             deleteButton.option("disabled", !data.selectedRowsData.length);
         },
     }).dxDataGrid("instance");
-    
-    
 });

@@ -105,7 +105,7 @@ $(function() {
                     var range = component.getArgumentAxis().visualRange();
                     onVisualRangeChanged(range, component);
                 },
-                function(reason) {
+                function() {
                     packetsLock--;
                     dataSource.reload();
                 });

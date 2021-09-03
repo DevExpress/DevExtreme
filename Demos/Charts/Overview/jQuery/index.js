@@ -6,7 +6,7 @@ $(function () {
             return prevValue + item.count;
         }, 0),
         cumulativeCount = 0,
-        dataSource = data.map(function (item, index) {
+        dataSource = data.map(function (item) {
             cumulativeCount += item.count;
             return {
                 complaint: item.complaint,

@@ -2,7 +2,7 @@ $(function(){
     $("#gauge").dxCircularGauge({
         scale: {
             startValue: 0, 
-    		endValue: 3000,
+            endValue: 3000,
             tickInterval: 500,
             label: {
                 customizeText: function (arg) {

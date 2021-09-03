@@ -15,7 +15,7 @@ $(function(){
             allowSearch: true
         },
         fieldPanel: {
-          	visible: true  
+            visible: true  
         },
         dataSource: {
             fields: [

@@ -3,13 +3,13 @@ $(function(){
         dataSource: new DevExpress.data.DataSource({
             store: new DevExpress.data.ArrayStore({
                 key: "id",
-            	data: tasks
+                data: tasks
             })
         }),
         height: 400,
         showSelectionControls: true,
         selectionMode: "all",
-        onSelectionChanged: function(data) {
+        onSelectionChanged: function() {
             $("#selectedItemKeys").text(listWidget.option("selectedItemKeys").join(", "));
         }
     }).dxList("instance");

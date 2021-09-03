@@ -60,7 +60,7 @@ $(function(){
         text: "Apply",
         visible: false,
         type: "default",
-        onClick: function(data) {
+        onClick: function() {
             salesFieldChooser.applyChanges();
         }
     }).dxButton("instance");
@@ -68,7 +68,7 @@ $(function(){
     var cancelButton = $("#cancelButton").dxButton({
         text: "Cancel",
         visible: false,
-        onClick: function(data) {
+        onClick: function() {
             salesFieldChooser.cancelChanges();
         }
     }).dxButton("instance");

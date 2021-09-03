@@ -5,7 +5,7 @@ $(function(){
         visible: true,
         showTitle: false,
         closeOnOutsideClick: false,
-        contentTemplate: function (container) {
+        contentTemplate: function () {
             var scrollView = $('<div />');
 
             scrollView.append($('<img />', { src: '../../../../images/Popup-Scrolling-Image.jpg', class: 'center' }));

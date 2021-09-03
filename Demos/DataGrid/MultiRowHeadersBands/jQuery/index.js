@@ -38,25 +38,25 @@ $(function(){
                     dataField: "GDP_Agriculture",
                     width: 95,
                     format: {
-    					type: "percent",
-    					precision: 1
-    				}
+                        type: "percent",
+                        precision: 1
+                    }
                 }, {
                     caption: "Industry",
                     dataField: "GDP_Industry",
                     width: 80,
                     format: {
-    					type: "percent",
-    					precision: 1
-    				}
+                        type: "percent",
+                        precision: 1
+                    }
                 }, {
                     caption: "Services",
                     dataField: "GDP_Services",
                     width: 85,
                     format: {
-    					type: "percent",
-    					precision: 1
-    				}
+                        type: "percent",
+                        precision: 1
+                    }
                 }]
             }]
         }]

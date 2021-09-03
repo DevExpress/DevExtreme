@@ -2,12 +2,12 @@ $(function(){
     var options = {
         geometry: {
             startAngle: 180, 
-    		endAngle: 0
+            endAngle: 0
         },
         scale: {
             startValue: 0, 
-    		endValue: 10,
-    		tickInterval: 1
+            endValue: 10,
+            tickInterval: 1
         }
     };
     

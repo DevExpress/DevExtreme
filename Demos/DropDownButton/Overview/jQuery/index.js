@@ -124,4 +124,4 @@ function applyColor($element, color){
     } else {
         $element.addClass("dx-theme-text-color");
     }
-};
+}

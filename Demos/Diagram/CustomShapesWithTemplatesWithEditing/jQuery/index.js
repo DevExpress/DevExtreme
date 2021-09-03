@@ -9,7 +9,7 @@ $(function() {
             values.Title = values.Title || "Employee's Title";
         }
     });
-    var diagram = $("#diagram").dxDiagram({
+    $("#diagram").dxDiagram({
         customShapes: [{
             type: "employee",
             category: "employee",
@@ -53,7 +53,6 @@ $(function() {
             $container.append($content); 
         },
         customShapeToolboxTemplate: function(item, $container) {
-            var employee = item.dataItem;
             var $content = $("<svg class='template'>" +
                 "<text x='50%' y='40%'>New</text>" +
                 "<text x='50%' y='70%'>Employee</text>" +
@@ -63,7 +62,7 @@ $(function() {
         nodes: {
             dataSource: store,
             keyExpr: "ID",
-            typeExpr: function(obj) { return "employee"; },
+            typeExpr: function() { return "employee"; },
             parentKeyExpr: "Head_ID",
             customDataExpr: function(obj, value) {
                 if(value === undefined) {

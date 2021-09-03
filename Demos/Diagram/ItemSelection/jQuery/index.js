@@ -1,5 +1,5 @@
 $(function() {
-    var diagram = $("#diagram").dxDiagram({
+    $("#diagram").dxDiagram({
         nodes: {
             dataSource: new DevExpress.data.ArrayStore({
                 key: "ID",

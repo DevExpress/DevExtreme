@@ -2,8 +2,8 @@ $(function(){
     $("#gauge").dxLinearGauge({
         scale: {
             startValue: 0, 
-    		endValue: 30,
-    		tickInterval: 5,
+            endValue: 30,
+            tickInterval: 5,
             tick: {
                 color: "#536878"
             },

@@ -12,7 +12,7 @@ $(function(){
         width: "100%",
         loop: true,
         showIndicator: false,
-        itemTemplate: function (item, index) {
+        itemTemplate: function (item) {
             var result = $("<div>");
             $("<img>").attr("src", item.Image).appendTo(result);
             $("<div>").addClass("item-price").text(formatCurrency(item.Price, "USD")).appendTo(result);

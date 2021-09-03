@@ -1,5 +1,5 @@
 $(function(){
-    var scheduler = $("#scheduler").dxScheduler({
+    $("#scheduler").dxScheduler({
         timeZone: "America/Los_Angeles",
         dataSource: data,
         views: [{

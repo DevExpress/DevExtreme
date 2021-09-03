@@ -4,7 +4,7 @@ var generateData = function (rowCount, columnCount) {
 
     for (i = 0; i < rowCount; i++) {
         var item = {};
-	    for (j = 0; j < columnCount; j++) {
+        for (j = 0; j < columnCount; j++) {
             item["field" + (j + 1)] = (i + 1) + "-" + (j + 1);
         }
         items.push(item);

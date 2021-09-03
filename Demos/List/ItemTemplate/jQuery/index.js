@@ -9,7 +9,7 @@ $(function(){
     $("#listWidget").dxList({
         dataSource: products,
         height: "100%",
-        itemTemplate: function(data, index) {
+        itemTemplate: function(data) {
             var result = $("<div>").addClass("product");
     
             $("<img>").attr("src", data.ImageSrc).appendTo(result);
