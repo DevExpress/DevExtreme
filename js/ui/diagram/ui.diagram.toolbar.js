@@ -145,12 +145,13 @@ class DiagramToolbar extends DiagramPanel {
         });
 
         const isSelectButton = items && items.every(i => i.icon !== undefined);
+        const nullIconClass = 'dx-diagram-i-selectbox-null-icon dx-diagram-i';
         if(isSelectButton) {
             options = extend(true, options, {
                 options: {
                     fieldTemplate: (data, container) => {
                         $('<i>')
-                            .addClass(data && data.icon)
+                            .addClass((data && data.icon) || nullIconClass)
                             .appendTo(container);
                         $('<div>').dxTextBox({
                             readOnly: true,
