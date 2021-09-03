@@ -3501,23 +3501,19 @@ testModule('keyboard navigation', {
         assert.strictEqual(this.$overlayContent.position().left, this.position.left + offset, 'overlay position was change after pressing right arrow');
     });
 
-    test('arrows handling with dragEnable = false', function(assert) {
+    test('arrows handling with dragEnabled = false', function(assert) {
         this.overlay.option('dragEnabled', false);
 
         this.keyboard.keyDown('left');
-        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was change after pressing left arrow');
-        this.position = this.$overlayContent.position();
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was not changed after pressing left arrow');
 
         this.keyboard.keyDown('down');
-        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was change after pressing down arrow');
-        this.position = this.$overlayContent.position();
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was not changed after pressing down arrow');
 
         this.keyboard.keyDown('right');
-        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was change after pressing right arrow');
-        this.position = this.$overlayContent.position();
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was not changed after pressing right arrow');
 
-        this.keyboard.keyDown('up');
-        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was change after pressing up arrow');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was not changed after pressing up arrow');
     });
 
     test('overlay have focus on show click', function(assert) {

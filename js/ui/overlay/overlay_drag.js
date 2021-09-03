@@ -10,20 +10,11 @@ import {
 } from '../../events/drag';
 import { addNamespace } from '../../events/utils/index';
 
+const KEYBOARD_DRAG_STEP = 5;
+
 class OverlayDrag {
     constructor(config) {
         this.init(config);
-    }
-
-    getEventNames() {
-        const namespace = 'overlayDrag';
-        const startEventName = addNamespace(dragEventStart, namespace);
-        const updateEventName = addNamespace(dragEventMove, namespace);
-
-        return {
-            startEventName,
-            updateEventName
-        };
     }
 
     init(config) {
@@ -33,6 +24,7 @@ class OverlayDrag {
         this.outsideDragFactor = outsideDragFactor;
         this._draggableElement = draggableElement;
         this._handle = handle;
+        this.dragEnabled = dragEnabled;
         this._updatePositionChangeHandled = updatePositionChangeHandled;
 
         this.unsubscribe();
@@ -44,21 +36,52 @@ class OverlayDrag {
         this.subscribe();
     }
 
+    moveDown(e) {
+        this.moveTo(KEYBOARD_DRAG_STEP, 0, e);
+    }
+
+    moveUp(e) {
+        this.moveTo(-KEYBOARD_DRAG_STEP, 0, e);
+    }
+
+    moveLeft(e) {
+        this.moveTo(0, -KEYBOARD_DRAG_STEP, e);
+    }
+
+    moveRight(e) {
+        this.moveTo(0, KEYBOARD_DRAG_STEP, e);
+    }
+
+    _getEventNames() {
+        const namespace = 'overlayDrag';
+        const startEventName = addNamespace(dragEventStart, namespace);
+        const updateEventName = addNamespace(dragEventMove, namespace);
+
+        return {
+            startEventName,
+            updateEventName
+        };
+    }
+
     subscribe() {
-        const eventNames = this.getEventNames();
+        const eventNames = this._getEventNames();
 
         eventsEngine.on(this._handle, eventNames.startEventName, (e) => { this._dragStartHandler(e); });
         eventsEngine.on(this._handle, eventNames.updateEventName, (e) => { this._dragUpdateHandler(e); });
     }
 
     unsubscribe() {
-        const eventNames = this.getEventNames();
+        const eventNames = this._getEventNames();
 
         eventsEngine.off(this._handle, eventNames.startEventName);
         eventsEngine.off(this._handle, eventNames.updateEventName);
     }
 
     moveTo(top, left, e) {
+        if(!this.dragEnabled) {
+            return;
+        }
+
         e.preventDefault();
         e.stopPropagation();
 
