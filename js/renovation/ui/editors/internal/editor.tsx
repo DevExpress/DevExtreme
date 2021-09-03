@@ -6,10 +6,10 @@ import {
   OneWay,
   TwoWay,
   Ref,
-  InternalState,
   Event,
   RefObject,
   Fragment,
+  InternalState,
 } from '@devextreme-generator/declarations';
 import Guid from '../../../../core/guid';
 import { Widget, WidgetProps } from '../../common/widget';
@@ -44,7 +44,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
     },
     widgetRef,
     aria, cssClasses: classes,
-    validationErrors, shouldShowValidationMessage,
+    validationErrors, shouldShowValidationMessage, validationMessageGuid,
     onFocusIn,
     restAttributes,
     onRootElementRendered, rootElement,
@@ -86,6 +86,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
           target={rootElement}
           boundary={rootElement}
           container={rootElement}
+          contentId={validationMessageGuid}
         />
         )}
       </Fragment>
@@ -130,6 +131,8 @@ export type EditorPropsType = EditorProps
 
 export class Editor extends JSXComponent<EditorPropsType>() {
   @Ref() widgetRef!: RefObject<Widget>;
+
+  @InternalState() validationMessageGuid = `dx-${new Guid()}`;
 
   @InternalState() rootElement!: HTMLDivElement;
 
@@ -176,8 +179,7 @@ export class Editor extends JSXComponent<EditorPropsType>() {
     };
 
     if (this.shouldShowValidationMessage) {
-      // eslint-disable-next-line spellcheck/spell-checker
-      result.describedby = `dx-${new Guid()}`;
+      result.describedBy = this.validationMessageGuid;
     }
 
     return { ...result, ...this.props.aria };

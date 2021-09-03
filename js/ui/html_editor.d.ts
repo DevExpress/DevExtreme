@@ -99,6 +99,12 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     mentions?: Array<dxHtmlEditorMention>;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    tableContextMenu?: dxHtmlEditorTableContextMenu;
+    /**
+     * @docid
      * @hidden false
      * @public
      */
@@ -418,6 +424,15 @@ export interface dxHtmlEditorMediaResizing {
    */
   enabled?: boolean;
 }
+
+export interface dxHtmlEditorTableContextMenu {
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    enabled?: boolean;
+  }
 
 /**
  * @docid

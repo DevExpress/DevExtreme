@@ -1209,6 +1209,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo(11000);
 
         this.clock.tick(500);
+        this.clock.tick(500);
 
         // assert
         assert.ok(dataGrid.getTopVisibleRowData().key > 110, 'top visible row is correct');
@@ -2606,12 +2607,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     // T815141
     QUnit.test('Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow', function(assert) {
-        fastScrollTest(assert, this, 500, 1200, [0, 1, 3, 5, 7, 8, 8, 8], [1, 2, 1, 1, 1, 2, 3, 4]);
+        fastScrollTest(assert, this, 500, 1200, [0, 1, 8, 8], [1, 2, 3, 4 ]);
     });
 
     // T815141
     QUnit.test('Pages should be loaded while scrolling fast if remoteOperations is true and server is fast', function(assert) {
-        fastScrollTest(assert, this, 50, 700, [0, 0, 2, 3, 4, 5], [1, 2, 1, 1, 1, 1]);
+        fastScrollTest(assert, this, 50, 700, [0, 0, 5], [1, 2, 2]);
     });
 
     // T815141
@@ -3800,6 +3801,217 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.notOk($(dataGrid.element()).find('.dx-loadpanel-content').first().is(':visible'), 'load panel is hidden after scroll');
     });
+
+    QUnit.test('New mode. The load method should not be called with the same skip/take parameters (scroll when loaded)', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData(100)
+        });
+
+        const skipTakeItems = [];
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: function(loadOptions) {
+                    const d = $.Deferred();
+                    skipTakeItems.push({
+                        skip: loadOptions.skip,
+                        take: loadOptions.take
+                    });
+                    setTimeout(() => {
+                        store.load(loadOptions).done(function() {
+                            d.resolve.apply(d, arguments);
+                        });
+                    }, 500);
+                    return d.promise();
+                },
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 300,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        // act
+        this.clock.tick(500);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 20, 'initially rendered items');
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ top: 407 });
+        this.clock.tick(500);
+        scrollable.scrollTo({ top: 415 });
+        this.clock.tick(500);
+        scrollable.scrollTo({ top: 425 });
+        this.clock.tick(500);
+        scrollable.scrollTo({ top: 430 });
+        this.clock.tick(500);
+
+        // assert
+        assert.deepEqual(skipTakeItems, [{ skip: 0, take: 20 }, { skip: 0, take: 40 }], 'load params after scrolling');
+        assert.deepEqual(dataGrid.getVisibleRows().map(it => it.key), [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'rendered item keys after scrolling');
+    });
+
+    QUnit.test('New mode. The load method should not be called with the same skip/take parameters (scroll on loading)', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData(100)
+        });
+
+        const skipTakeItems = [];
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: function(loadOptions) {
+                    const d = $.Deferred();
+                    skipTakeItems.push({
+                        skip: loadOptions.skip,
+                        take: loadOptions.take
+                    });
+                    setTimeout(() => {
+                        store.load(loadOptions).done(function() {
+                            d.resolve.apply(d, arguments);
+                        });
+                    }, 500);
+                    return d.promise();
+                },
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 300,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        // act
+        this.clock.tick(500);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 20, 'initially rendered items');
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ top: 407 });
+        this.clock.tick();
+        scrollable.scrollTo({ top: 415 });
+        this.clock.tick();
+        scrollable.scrollTo({ top: 425 });
+        this.clock.tick();
+        scrollable.scrollTo({ top: 430 });
+        this.clock.tick(500);
+
+        // assert
+        assert.deepEqual(skipTakeItems, [{ skip: 0, take: 20 }, { skip: 0, take: 40 }], 'load params after scrolling');
+        assert.deepEqual(dataGrid.getVisibleRows().map(it => it.key), [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'rendered item keys after scrolling');
+    });
+
+    QUnit.test('New mode. A new request should not be sent until the previous request is finished on the fast scrolling', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData(100)
+        });
+
+        const requestState = [];
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: function(loadOptions) {
+                    const d = $.Deferred();
+                    requestState.push('begin');
+                    setTimeout(() => {
+                        store.load(loadOptions).done(function() {
+                            requestState.push('end');
+                            d.resolve.apply(d, arguments);
+                        });
+                    }, 500);
+                    return d.promise();
+                },
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 300,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        // act
+        this.clock.tick(500);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 20, 'initially rendered items');
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ top: 1580 });
+        this.clock.tick(200);
+        scrollable.scrollTo({ top: 3250 });
+        this.clock.tick(1000);
+
+        // assert
+        assert.deepEqual(requestState, ['begin', 'end', 'begin', 'end', 'begin', 'end'], 'requests order after scrolling to the bottom');
+
+        // act
+        scrollable.scrollTo({ top: 0 });
+        this.clock.tick(1000);
+
+        // assert
+        assert.deepEqual(requestState, ['begin', 'end', 'begin', 'end', 'begin', 'end'], 'requests order after scrolling to the top');
+    });
+
 
     // T996914
     QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
