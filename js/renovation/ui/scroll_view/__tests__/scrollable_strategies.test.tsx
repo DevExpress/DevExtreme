@@ -31,6 +31,13 @@ import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
 import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './scrollable_simulated_test_helper';
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './scrollable_native_test_helper';
 
+import { getTranslateValues } from '../utils/get_translate_values';
+
+jest.mock('../utils/get_translate_values', () => ({
+  ...jest.requireActual('../utils/get_translate_values'),
+  getTranslateValues: jest.fn(() => ({ top: 0, left: 0 })),
+}));
+
 jest.mock('../../../../core/utils/scroll_rtl_behavior');
 jest.mock('../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
@@ -275,6 +282,8 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                       return value;
                     };
 
+                    const isPullDown = Scrollable === ScrollableSimulated
+                      && pullDownEnabled && forceGeneratePockets;
                     each([
                       [{ top: -81, left: getRequiredOffsetLeft(-81) }, {
                         scrollOffset: { top: -81, left: -81 },
@@ -353,6 +362,10 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                         // ie11 - true [max -> 0] - {decreasing: false, positive: true}
                         (getScrollRtlBehavior as jest.Mock)
                           .mockReturnValue(rtlBehavior);
+                        (getTranslateValues as jest.Mock).mockReturnValue({
+                          top: isPullDown ? -80 : 0,
+                          left: 0,
+                        });
 
                         const onScrollHandler = jest.fn();
 

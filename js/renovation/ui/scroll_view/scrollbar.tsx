@@ -175,19 +175,14 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  moveHandler(delta: { x: number; y: number }): void {
+  moveHandler(delta: number): void {
     if (this.crossThumbScrolling) {
       return;
     }
-    const distance = delta;
 
-    if (this.thumbScrolling) {
-      distance[this.axis] = -Math.round(
-        distance[this.axis] / this.containerToContentRatio,
-      );
-    }
-
-    this.scrollBy(distance);
+    this.scrollBy(this.thumbScrolling
+      ? -Math.round(delta / this.containerToContentRatio)
+      : delta);
   }
 
   @Effect({ run: 'once' })
@@ -196,10 +191,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  endHandler(velocity: { x: number; y: number }, needRiseEnd: boolean): void {
+  endHandler(velocity: number, needRiseEnd: boolean): void {
     this.needRiseEnd = needRiseEnd;
 
-    this.onInertiaAnimatorStart(velocity[this.axis]);
+    this.onInertiaAnimatorStart(velocity);
 
     this.isScrolling = false;
 
@@ -244,12 +239,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   scrollStep(delta: number): void {
     const moveToValue = this.props.scrollLocation + delta;
 
-    /* istanbul ignore next */
-    if (this.props.bounceEnabled) {
-      this.moveTo(moveToValue);
-    } else {
-      this.moveTo(clampIntoRange(moveToValue, this.maxOffset, this.minOffset));
-    }
+    this.moveTo(this.props.bounceEnabled
+      ? moveToValue
+      : clampIntoRange(moveToValue, this.maxOffset, this.minOffset));
   }
 
   @Effect()
@@ -496,12 +488,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.crossThumbScrolling = false;
   }
 
-  scrollBy(delta: { x: number; y: number }): void {
-    let distance = delta[this.axis];
-    if (!this.inRange) {
-      distance *= OUT_BOUNDS_ACCELERATION;
-    }
-    this.scrollStep(distance);
+  scrollBy(delta: number): void {
+    this.scrollStep(this.inRange
+      ? delta
+      : delta * OUT_BOUNDS_ACCELERATION);
   }
 
   cancelScrolling(): void {
