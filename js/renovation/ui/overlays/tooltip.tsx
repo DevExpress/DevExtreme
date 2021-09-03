@@ -10,6 +10,7 @@ import {
   Slot,
   Mutable,
   Effect,
+  TwoWay,
 } from '@devextreme-generator/declarations';
 import devices from '../../../core/devices';
 import LegacyTooltip from '../../../ui/tooltip';
@@ -123,7 +124,7 @@ export class TooltipProps extends BaseWidgetProps {
 
   @OneWay() target?: string | Element; // Todo: default value
 
-  @OneWay() visible = false;
+  @TwoWay() visible!: boolean;
 
   @OneWay() width?: number | string | (() => number | string) = 'auto';
 
@@ -133,7 +134,7 @@ export class TooltipProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Tooltip extends JSXComponent(TooltipProps) {
+export class Tooltip extends JSXComponent<TooltipProps, 'visible'>() {
   @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
 
   @Mutable() // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,5 +143,13 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   saveInstance(): void {
     this.instance = this.wrapperRef.current?.getInstance();
+  }
+
+  @Effect()
+  setListeners(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    this.instance.option('onHiding', () => {
+      this.props.visible = false;
+    });
   }
 }
