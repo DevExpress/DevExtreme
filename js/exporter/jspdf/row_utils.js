@@ -2,8 +2,8 @@ import { isDefined } from '../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils';
 
 
-function setCellWidth(rows, columnWidths) {
-    // TODO: colSpan
+function initializeCellsWidth(rows, columnWidths) {
+    // TODO: handle colSpan in this method !!!!
     rows.forEach(row => {
         row.cells.forEach((cell, index) => {
             cell.width = columnWidths[index];
@@ -46,4 +46,4 @@ function calculateCoordinates(doc, rows, options) {
     });
 }
 
-export { setCellWidth, calculateHeights, calculateCoordinates };
+export { initializeCellsWidth, calculateHeights, calculateCoordinates };
