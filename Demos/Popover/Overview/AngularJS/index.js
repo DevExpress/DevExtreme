@@ -22,7 +22,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     };
     
     $scope.withAnimationOptions = {
-    	target: "#link3",
+        target: "#link3",
         showEvent: "mouseenter",
         hideEvent: "mouseleave",
         position: "top",
@@ -43,7 +43,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     };
     
     $scope.withShadingOptions = {
-    	target: "#link4",
+        target: "#link4",
         showEvent: "dxclick",
         position: "top",
         width: 300,

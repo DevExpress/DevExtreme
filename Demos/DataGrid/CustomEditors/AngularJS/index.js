@@ -101,7 +101,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             onValueChanged: function(e) {
                 data.setValue(e.value);
             },
-            onSelectionChanged: function(e) {
+            onSelectionChanged: function() {
                 data.component.updateDimensions();
             }
         }

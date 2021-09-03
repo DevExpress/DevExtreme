@@ -5,7 +5,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         icon: "check",
         type: "success",
         text: "Done",
-        onClick: function(e) { 
+        onClick: function() { 
             DevExpress.ui.notify("The Done button was clicked");
         }
     };
@@ -13,7 +13,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.weatherButton = {
         icon: "../../../../images/icons/weather.png",
         text: "Weather",
-        onClick: function(e) { 
+        onClick: function() { 
             DevExpress.ui.notify("The Weather button was clicked");
         }
     };
@@ -21,21 +21,21 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.sendButton = {
         icon: 'fa fa-envelope-o',
         text: "Send",
-        onClick: function(e) { 
+        onClick: function() { 
             DevExpress.ui.notify("The Send button was clicked");
         }
     };
 
     $scope.plusButton = {
         icon: "plus",
-        onClick: function(e) { 
+        onClick: function() { 
             DevExpress.ui.notify("The button was clicked");
         }
     };
 
     $scope.backButton = {
         icon: "back",
-        onClick: function(e) { 
+        onClick: function() { 
             DevExpress.ui.notify("The button was clicked");
         }
     };

@@ -49,40 +49,40 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 width: 125
             },     
         ],
-        onEditingStart: function(e) {
+        onEditingStart: function() {
             logEvent("EditingStart");
         },
-        onInitNewRow: function(e) {
+        onInitNewRow: function() {
             logEvent("InitNewRow");
         },
-        onRowInserting: function(e) {
+        onRowInserting: function() {
             logEvent("RowInserting");
         },
-        onRowInserted: function(e) {
+        onRowInserted: function() {
             logEvent("RowInserted");
         },
-        onRowUpdating: function(e) {
+        onRowUpdating: function() {
             logEvent("RowUpdating");
         },
-        onRowUpdated: function(e) {
+        onRowUpdated: function() {
             logEvent("RowUpdated");
         },
-        onRowRemoving: function(e) {
+        onRowRemoving: function() {
             logEvent("RowRemoving");
         },
-        onRowRemoved: function(e) {
+        onRowRemoved: function() {
             logEvent("RowRemoved");
         },
-        onSaving: function(e) {
+        onSaving: function() {
             logEvent("Saving");
         },
-        onSaved: function(e) {
+        onSaved: function() {
             logEvent("Saved");
         },
-        onEditCanceling: function(e) {
+        onEditCanceling: function() {
             logEvent("EditCanceling");
         },
-        onEditCanceled: function(e) {
+        onEditCanceled: function() {
             logEvent("EditCanceled");
         }
     };

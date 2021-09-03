@@ -30,7 +30,7 @@ DemoApp.controller('DemoController', function DemoController($scope, $http, $q) 
                     summary: response.data.summary,
                     groupCount: response.data.groupCount
                 };
-            }, function (response) {
+            }, function () {
                 return $q.reject("Data Loading Error");
             });
         }

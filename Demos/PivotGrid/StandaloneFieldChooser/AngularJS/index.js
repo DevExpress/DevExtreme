@@ -73,7 +73,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.applyButtonOptions = {
         text: "Apply",
         type: "default",
-        onClick: function(data) {
+        onClick: function() {
             pivotGridDataSource.state($scope.state);
         },
         bindingOptions: {
@@ -83,7 +83,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     $scope.cancelButtonOptions = {
         text: "Cancel",
-        onClick: function(data) {
+        onClick: function() {
             $scope.state = pivotGridDataSource.state();
         },
         bindingOptions: {

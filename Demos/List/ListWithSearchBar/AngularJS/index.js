@@ -20,6 +20,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         bindingOptions: {
             value: "searchMode"
         },
-    	dataSource: ["contains", "startsWith", 'equals']
+        dataSource: ["contains", "startsWith", 'equals']
     };
 });

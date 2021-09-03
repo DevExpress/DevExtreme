@@ -129,7 +129,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         bindingOptions: {
             value: "filterRow.visible"
         },
-        onValueChanged: function(data) {
+        onValueChanged: function() {
             dataGrid.clearFilter();
         }
     };

@@ -5,7 +5,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         dataSource: contextMenuItems,
         width: 200,
         target: '#image',
-        itemTemplate: function (itemData, itemIndex, itemElement) {
+        itemTemplate: function (itemData) {
             var template = $('<div></div>');
             if(itemData.icon){
                 template.append('<span class="' + itemData.icon + '"><span>');

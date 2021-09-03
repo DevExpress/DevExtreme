@@ -8,7 +8,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.loop = false;
     
     $scope.tabPanelOptions = {
-    	height: 260,
+        height: 260,
         dataSource: tabPanelItems,
         itemTemplate: "customer",
         bindingOptions: {

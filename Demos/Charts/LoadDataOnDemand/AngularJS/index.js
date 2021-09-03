@@ -117,7 +117,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
                     onVisualRangeChanged();
                 },
-                function(reason) {
+                function() {
                     packetsLock--;
                     dataSource.reload();
                 });

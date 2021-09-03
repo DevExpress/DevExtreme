@@ -65,7 +65,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.editButton = {
         text: "Apply",
         width: 100,
-        onClick: function(e) {
+        onClick: function() {
              $scope.additionalGenerators = [$scope.subValueOne, $scope.subValueTwo];        
              $scope.gauge = {
                  value: $scope.mainGenerator,

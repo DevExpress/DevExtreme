@@ -71,7 +71,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             enabled: true,
             shared: true,
             argumentFormat: "shortDateShortTime",
-            contentTemplate: function (pointInfo, element) {
+            contentTemplate: function (pointInfo) {
                 var volume = pointInfo.points.filter(function(point) {
                     return point.seriesName === "Volume";
                 })[0];

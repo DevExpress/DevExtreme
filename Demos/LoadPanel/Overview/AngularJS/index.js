@@ -12,16 +12,16 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         shadingColor: "rgba(0,0,0,0.4)",
         position: { of: "#employee" },
         bindingOptions: {
-        	visible: "loadingVisible",
-    	    showIndicator: "showIndicator",
-    	    showPane: "showPane",
-    	    shading: "shading",
-    	    closeOnOutsideClick: "closeOnOutsideClick"
+            visible: "loadingVisible",
+            showIndicator: "showIndicator",
+            showPane: "showPane",
+            shading: "shading",
+            closeOnOutsideClick: "closeOnOutsideClick"
         },       
         onShown: function(){
             setTimeout(function () { 
                 $scope.$apply(function() {
-            		 $scope.loadingVisible = false;
+                     $scope.loadingVisible = false;
                 });           
             }, 3000);
         },

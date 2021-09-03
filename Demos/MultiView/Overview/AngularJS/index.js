@@ -7,7 +7,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.loop = false;
     
     $scope.multiViewOptions = {
-    	height: 300,
+        height: 300,
         dataSource: multiViewItems,
         itemTemplate: "customer",
         bindingOptions: {

@@ -21,7 +21,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             allowSearch: true
         },
         fieldPanel: {
-          	visible: true  
+            visible: true  
         },
         dataSource: {
             fields: [

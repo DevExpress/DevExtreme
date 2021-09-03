@@ -59,7 +59,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 aggregation: {
                     enabled: true,
                     method: "custom",
-                    calculate: function(aggregationInfo, series) {
+                    calculate: function(aggregationInfo) {
                         if(!aggregationInfo.data.length) {
                             return;
                         }

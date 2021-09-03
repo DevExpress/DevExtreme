@@ -78,7 +78,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }, true);
     };
 
-    var groupCell = function(e) {
+    var groupCell = function() {
         if($scope.groups && $scope.groups.length) {
             $scope.crossScrolling = false;
             $scope.groups = undefined;
@@ -88,7 +88,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }
     }
 
-    var showCurrentDate = function(e) {
+    var showCurrentDate = function() {
         $scope.currentDate = new Date();
     }
 

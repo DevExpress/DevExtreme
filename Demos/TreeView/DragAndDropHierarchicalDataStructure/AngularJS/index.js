@@ -24,7 +24,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 items: itemsName
             }            
         };
-    };
+    }
 
     function createSortableOptions(driveName) {
         return {
@@ -70,7 +70,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 toTreeView.scrollToItem(toTopVisibleNode);
             }
         };
-    };
+    }
 
     
     function getTreeView(driveName) {

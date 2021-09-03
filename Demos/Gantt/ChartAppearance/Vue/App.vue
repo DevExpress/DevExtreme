@@ -1,6 +1,6 @@
 <template>
   <div id="form-demo">
-    <div class='options'>
+    <div class="options">
       <div class="caption">Options</div>
       <div class="column">
         <div class="option">
@@ -51,13 +51,13 @@
             />
           </div>
         </div>
-          <div class="option">
-            <div class="label">Customize Task Tooltip:</div>
-            <div class="value">
-              <DxCheckBox
-                v-model:value="showCustomTaskTooltip"
-              />
-            </div>
+        <div class="option">
+          <div class="label">Customize Task Tooltip:</div>
+          <div class="value">
+            <DxCheckBox
+              v-model:value="showCustomTaskTooltip"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@
         :start-date-range="startDateRange"
         :end-date-range="endDateRange"
         :task-tooltip-content-template="showCustomTaskTooltip ? 'taskTooltipContentTemplate' : ''"
-        >
+      >
 
         <DxTasks :data-source="tasks"/>
         <DxDependencies :data-source="dependencies"/>

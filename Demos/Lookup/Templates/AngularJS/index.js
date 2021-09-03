@@ -15,18 +15,18 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     };
     
     $scope.lookupItemTemplateOptions = {
-	    items: employees,
-	    searchExpr: ["FirstName", "LastName", "Prefix"],
-	    valueExpr: "ID",
+        items: employees,
+        searchExpr: ["FirstName", "LastName", "Prefix"],
+        valueExpr: "ID",
         displayExpr: getDisplayExpr,
         dropDownOptions: {
             title: "Select employee"
         },
-	    placeholder: "Select employee",
-	    itemTemplate: function(data) {
-	        return getTemplateMarkup(data, "custom-item");
-	    }
-	};
+        placeholder: "Select employee",
+        itemTemplate: function(data) {
+            return getTemplateMarkup(data, "custom-item");
+        }
+    };
     
     function getTemplateMarkup(data, containerClass) {
         return "<div class='" + containerClass + "'><img src='" + 

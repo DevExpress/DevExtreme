@@ -14,11 +14,11 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }
     }
 
-    $scope.$watch("recursiveSelectionEnabled", function(value) {
+    $scope.$watch("recursiveSelectionEnabled", function() {
         $scope.selectedRowKeys = [];
     });
 
-    $scope.$watch("selectionMode", function(value) {
+    $scope.$watch("selectionMode", function() {
         $scope.selectedRowKeys = [];
     });
 

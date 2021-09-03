@@ -15,7 +15,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         dropDownOptions: {
             showTitle: false
         },
-	    placeholder: "Select employee",
+        placeholder: "Select employee",
         onValueChanged: function(data) {
             $scope.selectedEmployee = data.value;
         }

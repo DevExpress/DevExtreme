@@ -27,7 +27,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }
     };
 
-    $scope.getTabPanelOptions = function(masterDetailData) {
+    $scope.getTabPanelOptions = function() {
         return {
             items: [{
                 title: "Orders",
@@ -62,7 +62,7 @@ DemoApp.controller("OrdersTabController", function OrdersTabController($scope) {
         });
     }
 
-    $scope.getOrdersTabOptions = function(masterDetailData) {
+    $scope.getOrdersTabOptions = function() {
         return {
             labelLocation: "top",
             items: [{

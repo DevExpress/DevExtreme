@@ -95,18 +95,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     };
     
     $scope.getMovieById = getMovieById; 
-    
-    function getDataObj(objData) {
-        var result;
-        for(var i = 0; i < data.length; i++) {
-            if(data[i].startDate.getTime() === objData.startDate.getTime() && data[i].theatreId === objData.theatreId) {
-                result = data[i];
-                break;
-            }
-        }
-        return result;
-    }
-    
+
     function getMovieById(id) {
         return DevExpress.data.query(moviesData)
                 .filter("id", id)

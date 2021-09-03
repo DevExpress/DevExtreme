@@ -12,22 +12,22 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         filterValue: ["City", "=", "Bentonville"],
         showBorders: true,
         columns:  [{
-            dataField: "Full_Name",
-            dataType: "string"
-        }, {
+            dataField: "Full_Name",
+            dataType: "string"
+        }, {
             dataField: "Title",
             caption: "Position",
             dataType: "string"
         }, {
-            dataField: "City",
-            dataType: "string"
-        }, {
-            dataField: "State",
-            dataType: "string"
-        }, {
-            dataField: "Mobile_Phone",
-            dataType: "string"
-        }, {
+            dataField: "City",
+            dataType: "string"
+        }, {
+            dataField: "State",
+            dataType: "string"
+        }, {
+            dataField: "Mobile_Phone",
+            dataType: "string"
+        }, {
             dataField: "Hire_Date",
             dataType: "date"
         }]

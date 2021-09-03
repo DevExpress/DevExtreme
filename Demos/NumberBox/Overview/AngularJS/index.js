@@ -51,7 +51,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }
     };
     
-    $scope.$watch("salesValue", function(value) {
+    $scope.$watch("salesValue", function() {
         $scope.stockValue = totalProductQuantity - $scope.salesValue;
     });
 });

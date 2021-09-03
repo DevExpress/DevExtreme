@@ -31,7 +31,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             options: {
               icon: "email",
               text: "Send",
-              onClick: function(e) {
+              onClick: function() {
                 const message = `Email is sent to ${$scope.currentEmployee.FirstName} ${$scope.currentEmployee.LastName}`;
                 DevExpress.ui.notify({
                   message: message,
@@ -48,7 +48,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             location: "after",
             options: {
               text: "Close",
-              onClick: function(e) {
+              onClick: function() {
                 $scope.visiblePopup = false;
               }
             }
