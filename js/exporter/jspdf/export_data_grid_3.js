@@ -23,7 +23,7 @@ function exportDataGrid(doc, dataGrid, options) {
         dataProvider.ready().done(() => {
             const rows = getRows(doc, dataProvider, dataGrid, options);
             calculateWidths(doc, rows, options);
-            calculateHeights(doc, rows, options);
+            calculateHeights(doc, rows);
             calculateCoordinates(doc, rows, options);
 
             const pdfCells = rows.map(row => row.cells.map(cell => cell.pdfCell));
