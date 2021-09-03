@@ -5,7 +5,7 @@ import {
 import LegacyToolbar from '../../../ui/toolbar';
 
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
-import { BaseToolbarItemOptionProps, ToolbarProps } from './toolbar_props';
+import { BaseToolbarItemProps, ToolbarProps } from './toolbar_props';
 import { isObject } from '../../../core/utils/type';
 import { ConfigContext, ConfigContextValue } from '../../common/config_context';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
@@ -35,7 +35,7 @@ export class Toolbar extends JSXComponent<ToolbarProps>() {
         return item;
       }
 
-      const options = (item.options ?? {}) as BaseToolbarItemOptionProps;
+      const options = (item.options ?? {}) as BaseToolbarItemProps;
       options.rtlEnabled = options.rtlEnabled ?? this.resolvedRtlEnabled;
       return { ...item, options };
     });
