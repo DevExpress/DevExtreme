@@ -3,9 +3,10 @@ import { calculateRowHeight } from './pdf_utils';
 
 
 function setCellWidth(rows, columnWidths) {
+    // TODO: colSpan
     rows.forEach(row => {
         row.cells.forEach((cell, index) => {
-            cell.pdfCell.width = columnWidths[index];
+            cell.width = columnWidths[index];
         });
     });
 }

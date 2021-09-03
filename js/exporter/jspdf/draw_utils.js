@@ -6,10 +6,8 @@ const defaultBorderLineWidth = 1;
 
 function drawPdfCells(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
-    cellsArray.forEach(row => {
-        row.forEach(cell => {
-            drawCell(doc, cell, docStyles);
-        });
+    cellsArray.forEach(cell => {
+        drawCell(doc, cell, docStyles);
     });
     setDocumentStyles(doc, docStyles);
 }
@@ -18,7 +16,16 @@ function drawCell(doc, cell, docStyles) {
     setCurrentFont(doc, cell, docStyles);
 
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-        drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        if(cell.customDrawCellContent) {
+            cell.customDrawCellContent({
+                doc,
+                cell, // pass the same object that was passed to 'customizeCell'
+                rect: cell._rect, // explicitly pass the cell rect
+                jsPdfTextOptions: cell.jsPdfTextOptions, // explicitly pass our calculated options
+            });
+        } else {
+            drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        }
     }
 
     doc.setLineWidth(defaultBorderLineWidth);
