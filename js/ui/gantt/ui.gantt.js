@@ -549,6 +549,9 @@ class Gantt extends Widget {
         // eslint-disable-next-line spellcheck/spell-checker
         this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
+    unassignAllResourcesFromTask(taskKey) {
+        this._ganttView._ganttViewCore.unassignAllResourcesFromTask(taskKey);
+    }
     updateDimensions() {
         this._sizeHelper.onAdjustControl();
     }
@@ -557,6 +560,9 @@ class Gantt extends Widget {
     }
     showResourceManagerDialog() {
         this._ganttView._ganttViewCore.showResourcesDialog();
+    }
+    showTaskDetailsDialog(taskKey) {
+        this._ganttView._ganttViewCore.showTaskDetailsDialog(taskKey);
     }
     exportToPdf(options) {
         this._exportHelper.reset();
@@ -608,6 +614,13 @@ class Gantt extends Widget {
 
     showDependencies(value) {
         this.option('showDependencies', value);
+    }
+
+    zoomIn() {
+        this._ganttView._ganttViewCore.zoomIn();
+    }
+    zoomOut() {
+        this._ganttView._ganttViewCore.zoomOut();
     }
 
     _getDefaultOptions() {
