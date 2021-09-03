@@ -41,13 +41,13 @@ function exportDataGrid(doc, dataGrid, options) {
                 ));
             }
 
-            setCellWidth(rowsInfo, options.columnWidths);
+            setCellWidth(rowsInfo, options.columnWidths); //
 
-            // TODO setColSpanRowSpan(rows);
+            // TODO set/update/initColSpanRowSpan(rows);
 
-            calculateHeights(doc, rowsInfo, options);
+            calculateHeights(doc, rowsInfo, options); // set/update/initCellHeight
 
-            // TODO setBorders(rows);
+            // TODO set/update/initBorders(rows);
 
             calculateCoordinates(doc, rowsInfo, options);
 
@@ -58,8 +58,10 @@ function exportDataGrid(doc, dataGrid, options) {
                     });
                 })
             );
-            drawPdfCells(doc, pdfCellsInfo);
-            // drawGrid();???
+            drawPdfCells(doc, pdfCellsInfo); // content only?
+
+            // drawGridLines();???
+
             resolve();
         });
     });
