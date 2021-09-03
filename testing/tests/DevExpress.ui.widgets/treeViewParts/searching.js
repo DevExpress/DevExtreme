@@ -507,6 +507,12 @@ QUnit.test('apply search after searchTimeout', function(assert) {
             searchEnabled: true
         }).dxTreeView('instance');
 
+        if(!treeView.option('focusStateEnabled')) {
+            // not run if focus state is disabled
+            assert.ok(true);
+            return;
+        }
+
         const $treeView = $(treeView.$element());
 
         const isNodeFocused = (id) => $treeView.find(`[data-item-id="${id}"]`).hasClass('dx-state-focused');
