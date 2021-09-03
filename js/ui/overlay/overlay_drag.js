@@ -18,13 +18,14 @@ class OverlayDrag {
     }
 
     init(config) {
+        // TODO: get rid of dragEnabled, updatePositionChangeHandled
         const { dragEnabled, handle, container, draggableElement, outsideDragFactor, updatePositionChangeHandled } = config;
 
-        this.container = container;
-        this.outsideDragFactor = outsideDragFactor;
+        this._container = container;
+        this._outsideDragFactor = outsideDragFactor ?? 0;
         this._draggableElement = draggableElement;
         this._handle = handle;
-        this.dragEnabled = dragEnabled;
+        this._dragEnabled = dragEnabled;
         this._updatePositionChangeHandled = updatePositionChangeHandled;
 
         this.unsubscribe();
@@ -37,30 +38,19 @@ class OverlayDrag {
     }
 
     moveDown(e) {
-        this.moveTo(KEYBOARD_DRAG_STEP, 0, e);
+        this._moveTo(KEYBOARD_DRAG_STEP, 0, e);
     }
 
     moveUp(e) {
-        this.moveTo(-KEYBOARD_DRAG_STEP, 0, e);
+        this._moveTo(-KEYBOARD_DRAG_STEP, 0, e);
     }
 
     moveLeft(e) {
-        this.moveTo(0, -KEYBOARD_DRAG_STEP, e);
+        this._moveTo(0, -KEYBOARD_DRAG_STEP, e);
     }
 
     moveRight(e) {
-        this.moveTo(0, KEYBOARD_DRAG_STEP, e);
-    }
-
-    _getEventNames() {
-        const namespace = 'overlayDrag';
-        const startEventName = addNamespace(dragEventStart, namespace);
-        const updateEventName = addNamespace(dragEventMove, namespace);
-
-        return {
-            startEventName,
-            updateEventName
-        };
+        this._moveTo(0, KEYBOARD_DRAG_STEP, e);
     }
 
     subscribe() {
@@ -77,45 +67,81 @@ class OverlayDrag {
         eventsEngine.off(this._handle, eventNames.updateEventName);
     }
 
-    moveTo(top, left, e) {
-        if(!this.dragEnabled) {
-            return;
-        }
+    get container() {
+        return this._container;
+    }
 
-        e.preventDefault();
-        e.stopPropagation();
+    set container(element) {
+        this._container = element;
+    }
 
-        const allowedOffsets = this._allowedOffsets();
-        const offset = {
-            top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
-            left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
+    get outsideDragFactor() {
+        return this._outsideDragFactor;
+    }
+
+    set outsideDragFactor(value) {
+        this._outsideDragFactor = value;
+    }
+
+    _getEventNames() {
+        const namespace = 'overlayDrag';
+        const startEventName = addNamespace(dragEventStart, namespace);
+        const updateEventName = addNamespace(dragEventMove, namespace);
+
+        return {
+            startEventName,
+            updateEventName
         };
-        this._changePosition(offset);
     }
 
     _dragStartHandler(e) {
-        e.targetElements = [];
+        const allowedOffsets = this._getAllowedOffsets();
 
         this._prevOffset = { x: 0, y: 0 };
 
-        const allowedOffsets = this._allowedOffsets();
+        e.targetElements = [];
         e.maxTopOffset = allowedOffsets.top;
         e.maxBottomOffset = allowedOffsets.bottom;
         e.maxLeftOffset = allowedOffsets.left;
         e.maxRightOffset = allowedOffsets.right;
     }
 
-    _getContainerDimensions() {
-        const container = this.container;
-        let containerWidth = getOuterWidth(container);
-        let containerHeight = getOuterHeight(container);
-        const document = domAdapter.getDocument();
-        if(isWindow(container)) {
-            const fullPageHeight = Math.max(document.body.clientHeight, containerHeight);
-            const fullPageWidth = Math.max(document.body.clientWidth, containerWidth);
+    _dragUpdateHandler(e) {
+        const targetOffset = {
+            top: e.offset.y - this._prevOffset.y,
+            left: e.offset.x - this._prevOffset.x
+        };
 
-            containerHeight = fullPageHeight;
-            containerWidth = fullPageWidth;
+        this._moveByOffset(targetOffset);
+
+        this._prevOffset = e.offset;
+    }
+
+    _moveTo(top, left, e) {
+        if(!this._dragEnabled) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const allowedOffsets = this._getAllowedOffsets();
+        const offset = {
+            top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
+            left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
+        };
+
+        this._moveByOffset(offset);
+    }
+
+    _getContainerDimensions() {
+        const document = domAdapter.getDocument();
+
+        let containerWidth = getOuterWidth(this._container);
+        let containerHeight = getOuterHeight(this._container);
+        if(isWindow(this._container)) {
+            containerHeight = Math.max(document.body.clientHeight, containerHeight);
+            containerWidth = Math.max(document.body.clientWidth, containerWidth);
         }
 
         return {
@@ -130,92 +156,93 @@ class OverlayDrag {
             : getOffset(this._container);
     }
 
-    _deltaSize() {
-        const draggableElement = this._draggableElement;
-        const draggableElementWidth = draggableElement.offsetWidth;
-        const draggableElementHeight = draggableElement.offsetHeight;
+    _getElementPosition() {
+        return getOffset(this._draggableElement);
+    }
+
+    _getInnerDelta() {
         const containerDimensions = this._getContainerDimensions();
-        const outsideDragFactor = this.outsideDragFactor;
-        const outOfContainerOffset = {
-            width: draggableElementWidth * outsideDragFactor,
-            height: draggableElementHeight * outsideDragFactor
-        };
+        const elementDimensions = this._getElementDimensions();
 
         return {
-            width: containerDimensions.width - draggableElementWidth + outOfContainerOffset.width,
-            height: containerDimensions.height - draggableElementHeight + outOfContainerOffset.height,
+            x: containerDimensions.width - elementDimensions.width,
+            y: containerDimensions.height - elementDimensions.height,
         };
     }
 
-    _dragUpdateHandler(e) {
-        const offset = e.offset;
-        const prevOffset = this._prevOffset;
-        const targetOffset = {
-            top: offset.y - prevOffset.y,
-            left: offset.x - prevOffset.x
-        };
-
-        this._changePosition(targetOffset);
-
-        this._prevOffset = offset;
-    }
-
-    _allowedOffsets() {
-        const draggableElementPosition = getOffset(this._draggableElement);
-        const dragAreaPosition = this._getContainerPosition();
-        const deltaSize = this._deltaSize();
-        const isDragAllowed = deltaSize.height >= 0 && deltaSize.width >= 0;
-
-        const dragAreaOffsetFactor = this.outsideDragFactor;
-        const dragAreaOffset = {
-            width: this._draggableElement.offsetWidth * dragAreaOffsetFactor,
-            height: this._draggableElement.offsetHeight * dragAreaOffsetFactor
-        };
+    _getOuterDelta() {
+        const { width, height } = this._getElementDimensions();
 
         return {
-            top: isDragAllowed ? draggableElementPosition.top - dragAreaPosition.top + dragAreaOffset.height : 0,
-            bottom: isDragAllowed ? -draggableElementPosition.top + dragAreaPosition.top + deltaSize.height : 0,
-            left: isDragAllowed ? draggableElementPosition.left - dragAreaPosition.left + dragAreaOffset.width : 0,
-            right: isDragAllowed ? -draggableElementPosition.left + dragAreaPosition.left + deltaSize.width : 0
+            x: width * this._outsideDragFactor,
+            y: height * this._outsideDragFactor
         };
     }
 
-    _changePosition(offset) {
-        const position = locate(this._draggableElement);
-        const resultPosition = {
-            left: position.left + offset.left,
-            top: position.top + offset.top
+    _getFullDelta() {
+        const fullDelta = this._getInnerDelta();
+        const outerDelta = this._getOuterDelta();
+
+        return {
+            x: fullDelta.x + outerDelta.x,
+            y: fullDelta.y + outerDelta.y,
+        };
+    }
+
+    _getElementDimensions() {
+        return {
+            width: this._draggableElement.offsetWidth,
+            height: this._draggableElement.offsetHeight
+        };
+    }
+
+    _getAllowedOffsets() {
+        const fullDelta = this._getFullDelta();
+        const isDragAllowed = fullDelta.y >= 0 && fullDelta.x >= 0;
+        if(!isDragAllowed) {
+            return {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+            };
+        }
+
+        const elementPosition = this._getElementPosition();
+        const containerPosition = this._getContainerPosition();
+        const outerDelta = this._getOuterDelta();
+
+        return {
+            top: elementPosition.top - containerPosition.top + outerDelta.y,
+            bottom: -elementPosition.top + containerPosition.top + fullDelta.y,
+            left: elementPosition.left - containerPosition.left + outerDelta.x,
+            right: -elementPosition.left + containerPosition.left + fullDelta.x
+        };
+    }
+
+    _moveByOffset(offset) {
+        const currentPosition = locate(this._draggableElement);
+        const newPosition = {
+            left: currentPosition.left + offset.left,
+            top: currentPosition.top + offset.top
         };
 
-        move(this._draggableElement, resultPosition);
+        move(this._draggableElement, newPosition);
+
+        // TODO: remove
         this._updatePositionChangeHandled(true);
 
-        return { h: { location: resultPosition.left }, v: { location: resultPosition.top } };
+        return { h: { location: newPosition.left }, v: { location: newPosition.top } };
     }
 
+    // TO REMOVE
     renderPositionHandler() {
-        const allowedOffsets = this._allowedOffsets();
+        const allowedOffsets = this._getAllowedOffsets();
 
-        return this._changePosition({
+        return this._moveByOffset({
             top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
             left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
         });
-    }
-
-    get container() {
-        return this._container;
-    }
-
-    set container(element) {
-        this._container = element;
-    }
-
-    get outsideDragFactor() {
-        return this._outsideDragFactor ?? 0;
-    }
-
-    set outsideDragFactor(value) {
-        this._outsideDragFactor = value;
     }
 }
 

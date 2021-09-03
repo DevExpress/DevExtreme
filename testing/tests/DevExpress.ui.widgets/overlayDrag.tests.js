@@ -80,7 +80,7 @@ QUnit.module('overlay_drag', {
     });
 
     ['#container', '#container2', '#qunit-fixture', 'window'].forEach((value) => {
-        QUnit.test(`calculates container dimensions for ${value}`, function(assert) {
+        QUnit.skip(`calculates container dimensions for ${value}`, function(assert) {
             const container = value === 'window' ? window : $(value).get(0);
             const drag = new OverlayDrag({
                 dragEnabled: true,
@@ -104,7 +104,7 @@ QUnit.module('overlay_drag', {
         { container: '#qunit-fixture', outsideDragFactor: 0.75 },
         { container: 'window', outsideDragFactor: 1 }
     ].forEach((value) => {
-        QUnit.test(`calculates delta size properly for ${value.container} container and ${value.outsideDragFactor} outsideDragFactor`,
+        QUnit.skip(`calculates delta size properly for ${value.container} container and ${value.outsideDragFactor} outsideDragFactor`,
             function(assert) {
                 const container = value.container === 'window' ? window : $(value.container).get(0);
                 const outsideDragFactor = value.outsideDragFactor;
@@ -126,7 +126,7 @@ QUnit.module('overlay_drag', {
             });
     });
 
-    QUnit.test('changes draggableElement position', function(assert) {
+    QUnit.skip('changes draggableElement position', function(assert) {
         const drag = new OverlayDrag({
             dragEnabled: true,
             handle: this.handle,
@@ -144,7 +144,7 @@ QUnit.module('overlay_drag', {
     });
 
     ['#container', '#container2', '#qunit-fixture', 'window'].forEach((value) => {
-        QUnit.test(`calculates allowed offsets properly for draggableElement and ${value} container`, function(assert) {
+        QUnit.skip(`calculates allowed offsets properly for draggableElement and ${value} container`, function(assert) {
             const container = value === 'window' ? window : $(value).get(0);
             const drag = new OverlayDrag({
                 dragEnabled: true,
