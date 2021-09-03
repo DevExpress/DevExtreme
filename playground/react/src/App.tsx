@@ -1,13 +1,9 @@
 import React from 'react';
-import Button from './artifacts/react/renovation/ui/button';
+import Scheduler from './artifacts/react/renovation/ui/scheduler/scheduler';
 
 function App() {
     return (
-        <Button
-            text={'Click Me!'}
-            icon={'download'}
-            onClick={() => alert('Clicked!')}
-        ></Button>
+        <Scheduler />
     );
 }
 

@@ -2,9 +2,9 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-  Event,
   OneWay,
   TwoWay,
+  Fragment,
 } from '@devextreme-generator/declarations';
 import { isMobileLayout } from './utils';
 import { Popup } from '../../overlays/popup';
@@ -24,37 +24,61 @@ export const viewFunction = ({
     visible,
   },
   updateDate,
-  overlayProps,
-  overlay: Overlay,
-}: SchedulerCalendar): JSX.Element => (
-  <Overlay
-    target={`.${CAPTION_CLASS}`}
-    className={CALENDAR_POPOVER_CLASS}
-    showTitle={false}
-    closeOnOutsideClick={true}
-    visible={visible}
-    {...overlayProps}
-  >
+  updateVisible,
+  isMobile,
+}: SchedulerCalendar): JSX.Element => {
+  const children = (
     <div
       className={CALENDAR_CLASS}
     >
       <Calendar
         value={currentDate}
+        valueChange={updateDate}
         min={min}
         max={max}
         firstDayOfWeek={firstDayOfWeek}
-        valueChange={updateDate}
         width="100%"
       />
     </div>
-  </Overlay>
-);
+  );
+
+  return (
+    <Fragment>
+      {isMobile
+        && (
+          <Popup
+            className={CALENDAR_POPOVER_CLASS}
+            showTitle={false}
+            closeOnOutsideClick
+            visible={visible}
+            visibleChange={updateVisible}
+            showCloseButton
+            fullScreen
+            toolbarItems={[{ shortcut: 'cancel' }]}
+          >
+            {children}
+          </Popup>
+        )}
+      {!isMobile
+        && (
+          <Popover
+            target={`.${CAPTION_CLASS}`}
+            className={CALENDAR_POPOVER_CLASS}
+            showTitle={false}
+            closeOnOutsideClick
+            visible={visible}
+            visibleChange={updateVisible}
+          >
+            {children}
+          </Popover>
+        )}
+    </Fragment>
+  );
+};
 
 @ComponentBindings()
 export class SchedulerCalendarProps {
-  @Event() onCurrentDateUpdate!: (date: Date) => void;
-
-  @OneWay() currentDate!: Date;
+  @TwoWay() currentDate!: Date;
 
   @OneWay() firstDayOfWeek!: number;
 
@@ -69,26 +93,15 @@ export class SchedulerCalendarProps {
 
 @Component({ view: viewFunction })
 export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps, 'currentDate' | 'firstDayOfWeek' | 'visible'>() {
-  get overlay(): typeof Popup | typeof Popover {
-    return this.props.isMobileLayout ? Popup : Popover;
+  get isMobile(): boolean {
+    return this.props.isMobileLayout;
   }
 
-  get overlayProps(): {
-    fullScreen?: boolean;
-    showCloseButton?: boolean;
-    toolbarItems?: any;
-  } {
-    return this.props.isMobileLayout
-      ? {
-        showCloseButton: true,
-        fullScreen: true,
-        toolbarItems: [{ shortcut: 'cancel' }],
-      }
-      : {};
+  updateVisible(visible: boolean): void {
+    this.props.visible = visible;
   }
 
   updateDate(date: Date): void {
-    this.props.onCurrentDateUpdate(date);
-    this.props.visible = false;
+    this.props.currentDate = date;
   }
 }

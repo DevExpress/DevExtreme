@@ -39,7 +39,7 @@ export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => {
     currentDate, min, max, firstDayOfWeek,
   } = viewModel.props;
   const {
-    setCurrentDate, calendarVisible, hideCalendar, items,
+    changeCalendarDate, calendarVisible, changeCalendarVisible, items,
   } = viewModel;
 
   return (
@@ -48,12 +48,12 @@ export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => {
     >
       <SchedulerCalendar
         currentDate={currentDate}
-        currentDateChange={setCurrentDate}
+        currentDateChange={changeCalendarDate}
         min={min}
         max={max}
         firstDayOfWeek={firstDayOfWeek}
         visible={calendarVisible}
-        visibleChange={hideCalendar}
+        visibleChange={changeCalendarVisible}
       />
       <Toolbar
         items={items}
@@ -204,12 +204,17 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
     return nextDate > max;
   }
 
-  hideCalendar(): void {
+  changeCalendarDate(date: Date): void {
     this.calendarVisible = false;
+    this.setCurrentDate(date);
+  }
+
+  changeCalendarVisible(visible: boolean): void {
+    this.calendarVisible = visible;
   }
 
   showCalendar(): void {
-    this.calendarVisible = true;
+    this.changeCalendarVisible(true);
   }
 
   get items(): ToolbarItem[] {

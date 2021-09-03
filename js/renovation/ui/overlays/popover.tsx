@@ -10,6 +10,7 @@ import {
   Slot,
   Mutable,
   Effect,
+  TwoWay,
 } from '@devextreme-generator/declarations';
 import devices from '../../../core/devices';
 import LegacyPopover from '../../../ui/popover';
@@ -21,7 +22,6 @@ import { PositionConfig } from '../../../animation/position';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseWidgetProps } from '../common/base_props';
-import { ToolbarItem } from '../toolbar/toolbar_props';
 
 const isDesktop = !(!devices.real().generic || devices.isSimulator());
 
@@ -131,9 +131,9 @@ export class PopoverProps extends BaseWidgetProps {
 
   @Template() titleTemplate: template | ((contentElement: DxElement) => string | UserDefinedElement) = 'title';
 
-  @OneWay() toolbarItems?: ToolbarItem[];
+  @OneWay() toolbarItems? = []; // TODO: default value
 
-  @OneWay() visible = false;
+  @TwoWay() visible!: boolean;
 
   @OneWay() width: number | string | (() => number | string) = 'auto';
 
@@ -142,7 +142,7 @@ export class PopoverProps extends BaseWidgetProps {
 @Component({
   view: viewFunction,
 })
-export class Popover extends JSXComponent(PopoverProps) {
+export class Popover extends JSXComponent<PopoverProps, 'visible'>() {
   @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
 
   @Mutable() // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -151,5 +151,13 @@ export class Popover extends JSXComponent(PopoverProps) {
   @Effect()
   saveInstance(): void {
     this.instance = this.wrapperRef.current?.getInstance();
+  }
+
+  @Effect()
+  setListeners(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    this.instance.option('onHiding', () => {
+      this.props.visible = false;
+    });
   }
 }
