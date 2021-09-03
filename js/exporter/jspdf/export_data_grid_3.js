@@ -33,7 +33,12 @@ function exportDataGrid(doc, dataGrid, options) {
 
             setCellWidth(rows, options.columnWidths);
 
+            // TODO setColSpanRowSpan(rows);
+
             calculateHeights(doc, rows, options);
+
+            // TODO setBorders(rows);
+
             calculateCoordinates(doc, rows, options);
 
             const pdfCells = rows.map(row => row.cells.map(cell => cell.pdfCell));

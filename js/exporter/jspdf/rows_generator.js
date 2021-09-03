@@ -37,11 +37,14 @@ function generateRows(dataProvider, dataGrid) {
     return rows;
 }
 
-function generateIndentCell() {
+function generateIndentCell(indentLevel) {
+    // or row.indentLevel ?
     return {
-        isIndentCell: true,
         gridCell: null,
-        pdfCell: { text: null }
+        pdfCell: {
+            isIndentCell: true,
+            indentLevel,
+        }
     };
 }
 
