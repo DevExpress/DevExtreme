@@ -11,7 +11,13 @@ function getRows(doc, dataProvider, dataGrid, options) {
 
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         previousRow = currentRow;
-        currentRow = createRow(dataProvider, rowIndex, previousRow, wordWrapEnabled);
+
+        const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
+        let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
+        if(rowType === 'groupFooter' && previousRow?.rowType === 'groupFooter') {
+            indentLevel = previousRow.indentLevel - 1;
+        }
+        currentRow = createRow(dataProvider, rowIndex, rowType, indentLevel, wordWrapEnabled);
 
         if(options.customizeCell) {
             currentRow.cells.forEach(cellInfo => {
@@ -25,12 +31,7 @@ function getRows(doc, dataProvider, dataGrid, options) {
     return rows;
 }
 
-function createRow(dataProvider, rowIndex, previousRow, wordWrapEnabled) {
-    const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
-    let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
-    if(rowType === 'groupFooter' && previousRow?.rowType === 'groupFooter') {
-        indentLevel = previousRow.indentLevel - 1;
-    }
+function createRow(dataProvider, rowIndex, rowType, indentLevel, wordWrapEnabled) {
     const rowInfo = {
         rowType: rowType,
         indentLevel: indentLevel,
@@ -38,8 +39,7 @@ function createRow(dataProvider, rowIndex, previousRow, wordWrapEnabled) {
         rowIndex
     };
 
-    const columns = dataProvider.getColumns();
-    fillCells(rowInfo, dataProvider, columns, wordWrapEnabled);
+    fillCells(rowInfo, dataProvider, dataProvider.getColumns(), wordWrapEnabled);
 
     return rowInfo;
 }

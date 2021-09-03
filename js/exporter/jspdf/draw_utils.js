@@ -4,10 +4,10 @@ import { extend } from '../../core/utils/extend';
 
 const defaultBorderLineWidth = 1;
 
-function drawRows(doc, rows, options) {
+function drawPdfCells(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
-    rows.forEach(row => {
-        row.cells.forEach(cell => {
+    cellsArray.forEach(row => {
+        row.forEach(cell => {
             drawCell(doc, cell, docStyles);
         });
     });
@@ -15,18 +15,17 @@ function drawRows(doc, rows, options) {
 }
 
 function drawCell(doc, cell, docStyles) {
-    const pdfCell = cell.pdfCell;
-    specifyCellStyles(doc, pdfCell, docStyles);
+    setCurrentFont(doc, cell, docStyles);
 
-    if(isDefined(pdfCell.text) && pdfCell.text !== '') { // TODO: use cell.text.trim() ?
-        drawTextInRect(doc, pdfCell.text, pdfCell._rect, pdfCell.wordWrapEnabled, pdfCell.jsPdfTextOptions);
+    if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
+        drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 
     doc.setLineWidth(defaultBorderLineWidth);
-    drawRect(doc, pdfCell._rect.x, pdfCell._rect.y, pdfCell._rect.w, pdfCell._rect.h);
+    drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
 }
 
-function specifyCellStyles(doc, cell, styles) {
+function setCurrentFont(doc, cell, styles) {
     const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
     const docFont = doc.getFont();
     if(
@@ -83,5 +82,5 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawRows };
+export { drawPdfCells };
 

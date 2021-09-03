@@ -1,7 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getRows, calculateWidths, calculateHeights, calculateCoordinates } from './row_utils';
-import { drawRows } from './draw_utils';
+import { drawPdfCells } from './draw_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -26,7 +26,8 @@ function exportDataGrid(doc, dataGrid, options) {
             calculateHeights(doc, rows, options);
             calculateCoordinates(doc, rows, options);
 
-            drawRows(doc, rows, options);
+            const pdfCells = rows.map(row => row.cells.map(cell => cell.pdfCell));
+            drawPdfCells(doc, pdfCells);
             resolve();
         });
     });
