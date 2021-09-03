@@ -1,4 +1,4 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from '../../../helpers/screenshot-comparer';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
