@@ -1,6 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getRows, calculateWidths, calculateHeights, calculateCoordinates } from './row_utils';
+import { setCellWidth, calculateHeights, calculateCoordinates } from './row_utils';
+import { generateRows } from './rows_generator';
 import { drawPdfCells } from './draw_utils';
 
 function _getFullOptions(options) {
@@ -21,8 +22,17 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            const rows = getRows(doc, dataProvider, dataGrid, options);
-            calculateWidths(doc, rows, options);
+            const rows = generateRows(dataProvider, dataGrid);
+
+            if(options.customizeCell) {
+                rows.forEach(row => row.cells.forEach(cell =>
+                    // if(!cell.isIndentCell) ?
+                    options.customizeCell(cell)
+                ));
+            }
+
+            setCellWidth(rows, options.columnWidths);
+
             calculateHeights(doc, rows, options);
             calculateCoordinates(doc, rows, options);
 
