@@ -8,8 +8,8 @@ import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
-import Button from '../button';
-import DropDownButton from '../drop_down_button';
+import '../button';
+import '../drop_down_button';
 import List from '../list';
 import { when, Deferred } from '../../core/utils/deferred';
 
@@ -708,6 +708,7 @@ dataGridCore.registerModule('export', {
                         location: 'after',
                         locateInMenu: 'auto',
                         sortIndex: 30,
+                        options: { items }
                     };
 
                     if(items.length === 1) {
@@ -720,25 +721,26 @@ dataGridCore.registerModule('export', {
                             }
                         };
 
-                        toolbarButtonOptions.template = (_data, _index, container) => {
-                            this._createComponent($(container), Button, widgetOptions);
-                        };
+
+                        toolbarButtonOptions.widget = 'dxButton';
+                        toolbarButtonOptions.options = widgetOptions;
                     } else {
-                        toolbarButtonOptions.template = (_data, _index, container) => {
-                            this._createComponent($(container), DropDownButton, {
-                                icon: 'export',
-                                displayExpr: 'text',
-                                items: items,
-                                hint: 'Export',
-                                elementAttr: {
-                                    class: 'dx-datagrid-export-button'
-                                },
-                                dropDownOptions: {
-                                    wrapperAttr: { 'class': 'dx-datagrid-export-menu' },
-                                    width: 'auto'
-                                }
-                            });
+                        const widgetOptions = {
+                            icon: 'export',
+                            displayExpr: 'text',
+                            items: items,
+                            hint: 'Export',
+                            elementAttr: {
+                                class: 'dx-datagrid-export-button'
+                            },
+                            dropDownOptions: {
+                                wrapperAttr: { 'class': 'dx-datagrid-export-menu' },
+                                width: 'auto'
+                            }
                         };
+
+                        toolbarButtonOptions.options = widgetOptions;
+                        toolbarButtonOptions.widget = 'dxDropDownButton';
                     }
 
                     toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {

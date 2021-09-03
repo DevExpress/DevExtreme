@@ -2382,12 +2382,24 @@ QUnit.module('Export menu', {
         this.headerPanel.render($container);
         $exportButton = $container.find('.dx-datagrid-export-button');
 
-        assert.ok(!$exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled'), 'Export button is enabled before editing start');
+        assert.ok(
+            !(
+                $exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled')
+                || $exportButton.hasClass('dx-state-disabled')
+            ),
+            'Export button is enabled before editing start'
+        );
 
         this.editingController.hasChanges = function() { return true; };
         this.editingController._updateEditButtons();
 
-        assert.ok($exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled'), 'Export button is disabled after editing');
+        $exportButton = $container.find('.dx-datagrid-export-button');
+
+        assert.ok(
+            $exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled')
+            || $exportButton.hasClass('dx-state-disabled'),
+            'Export button is disabled after editing'
+        );
 
         this.editingController.hasChanges = function() { return false; };
         this.editingController._updateEditButtons();
