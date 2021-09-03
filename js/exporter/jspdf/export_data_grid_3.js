@@ -41,15 +41,16 @@ function exportDataGrid(doc, dataGrid, options) {
                 ));
             }
 
-            setCellWidth(rowsInfo, options.columnWidths); //
+            setCellWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
 
             // TODO set/update/initColSpanRowSpan(rows);
 
-            calculateHeights(doc, rowsInfo, options); // set/update/initCellHeight
+            // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled or use value from customizeCell
+            calculateHeights(doc, rowsInfo, options);
 
             // TODO set/update/initBorders(rows);
 
-            calculateCoordinates(doc, rowsInfo, options);
+            calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
 
             const pdfCellsInfo = [].concat.apply([],
                 rowsInfo.map(rowInfo => {
@@ -58,9 +59,9 @@ function exportDataGrid(doc, dataGrid, options) {
                     });
                 })
             );
-            drawPdfCells(doc, pdfCellsInfo); // content only?
+            drawPdfCells(doc, pdfCellsInfo); // draw content only ???
 
-            // drawGridLines();???
+            // drawGridLines(); draw grid lines only ???
 
             resolve();
         });
