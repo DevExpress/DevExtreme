@@ -4,22 +4,6 @@ $(function(){
         data: employees
     });
     
-    var deleteButton;
-    var deleteButtonOptions = {
-        text: "Delete Selected Records",
-        icon: "trash",
-        disabled: true,
-        onClick: function() {
-            dataGrid.getSelectedRowKeys().forEach((key) => {
-                employeesStore.remove(key);
-            });
-            dataGrid.refresh();
-        },
-        onInitialized: function(e) {
-            deleteButton = e.component;
-        }
-    };
-    
     var dataGrid = $("#gridContainer").dxDataGrid({
         dataSource: employeesStore,
         showBorders: true,
@@ -59,17 +43,30 @@ $(function(){
                 dataType: "date"
             },
         ],
-        onToolbarPreparing: function(e) {
-            e.toolbarOptions.items[0].showText = 'always';
-
-            e.toolbarOptions.items.push({
-                location: "after",
-                widget: "dxButton",
-                options: deleteButtonOptions
-            });
+        toolbar: {
+            items: [
+                {
+                    name: "addRowButton",
+                    showText: "always"
+                }, {
+                    location: "after",
+                    widget: "dxButton",    
+                    options: {
+                        text: "Delete Selected Records",
+                        icon: "trash",
+                        disabled: true,
+                        onClick: function() {
+                            dataGrid.getSelectedRowKeys().forEach((key) => {
+                                employeesStore.remove(key);
+                            });
+                            dataGrid.refresh();
+                        },
+                    }
+                }
+            ]
         },
         onSelectionChanged: function(data) {
-            deleteButton.option("disabled", !data.selectedRowsData.length);
+            dataGrid.option("toolbar.items[1].options.disabled", !data.selectedRowsData.length);
         },
     }).dxDataGrid("instance");
 });

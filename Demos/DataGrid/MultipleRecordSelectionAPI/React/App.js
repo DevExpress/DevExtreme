@@ -2,7 +2,9 @@
 
 import DataGrid, {
   Column,
-  Selection
+  Selection,
+  Toolbar,
+  Item
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
@@ -17,6 +19,7 @@ class App extends React.Component {
 
     this.state = {
       prefix: '',
+      prefixOptions: ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'],
       selectedEmployeeNames: 'Nobody has been selected',
       selectedRowKeys: []
     };
@@ -27,24 +30,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { prefix, selectedRowKeys, selectedEmployeeNames } = this.state;
+    const { prefix, selectedRowKeys, selectedEmployeeNames, prefixOptions } = this.state;
 
     return (
       <div>
-        <div id="grid">
-          <SelectBox
-            id="select-prefix"
-            dataSource={['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.']}
-            onValueChanged={this.onSelectionFilterChanged}
-            placeholder="Select title"
-            value={prefix}
-          />{' '}
-          <Button
-            disabled={!selectedRowKeys.length}
-            onClick={this.onClearButtonClicked}
-            text="Clear Selection"
-          />
-        </div>
         <DataGrid
           id="grid-container"
           dataSource={employees}
@@ -61,6 +50,24 @@ class App extends React.Component {
           <Column dataField="Position" width={180} />
           <Column dataField="BirthDate" dataType="date" width={125} />
           <Column dataField="HireDate" dataType="date" width={125} />
+          <Toolbar>
+            <Item location="before">
+              <SelectBox
+                dataSource={prefixOptions}
+                onValueChanged={this.onSelectionFilterChanged}
+                placeholder="Select title"
+                width={150}
+                value={prefix}
+              />
+            </Item>
+            <Item location="before">
+              <Button
+                disabled={!selectedRowKeys.length}
+                onClick={this.onClearButtonClicked}
+                text="Clear Selection"
+              />
+            </Item>
+          </Toolbar>
         </DataGrid>
         <div className="selected-data">
           <span className="caption">Selected Records:</span>{' '}

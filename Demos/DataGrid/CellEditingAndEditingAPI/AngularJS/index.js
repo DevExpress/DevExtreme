@@ -9,20 +9,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.selectedItemKeys = [];
     $scope.disabled = true;
 
-    $scope.buttonOptions = {
-        text: "Delete Selected Records",
-        icon: "trash",
-        onClick: function () {
-            $.each($scope.selectedItemKeys, function() {
-                employeesStore.remove(this);
-            });
-            $("#gridContainer").dxDataGrid("instance").refresh();
-        },
-        bindingOptions: {
-            disabled: "disabled"
-        }
-    };   
-    
     $scope.dataGridOptions = {
         dataSource: employeesStore,
         showBorders: true,
@@ -66,14 +52,29 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 dataType: "date"
             }
         ],
-        onToolbarPreparing: function(e) {
-            e.toolbarOptions.items[0].showText = 'always';
-
-            e.toolbarOptions.items.push({
-                location: "after",
-                widget: "dxButton",
-                options: $scope.buttonOptions
-            });
+        toolbar: {
+            items: [
+                {
+                    name: "addRowButton",
+                    showText: "always"
+                }, {
+                    location: "after",
+                    widget: "dxButton",    
+                    options: {
+                        text: "Delete Selected Records",
+                        icon: "trash",
+                        onClick: function () {
+                            $.each($scope.selectedItemKeys, function() {
+                                employeesStore.remove(this);
+                            });
+                            $("#gridContainer").dxDataGrid("instance").refresh();
+                        },
+                        bindingOptions: {
+                            disabled: "disabled"
+                        }
+                    }
+                }
+            ]
         }
     };
     

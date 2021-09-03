@@ -1,16 +1,3 @@
-<div id="grid">
-    <dx-select-box id="select-prefix"
-        [dataSource]="['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.']"
-        placeholder= "Select title"
-        [value]="prefix"
-        (onValueChanged)="filterSelected($event)">
-    </dx-select-box>
-    <dx-button
-        text="Clear Selection"
-        [disabled]="!selectedRows?.length"
-        (onClick)="grid.instance.clearSelection()">
-    </dx-button>
-</div>
 <dx-data-grid #grid
     id="grid-container"
     [dataSource]="employees"
@@ -29,6 +16,24 @@
     <dxi-column dataField="Position" [width]="180"></dxi-column>
     <dxi-column dataField="BirthDate" dataType="date" [width]="125"></dxi-column>
     <dxi-column dataField="HireDate" dataType="date" [width]="125"></dxi-column>
+    <dxo-toolbar>
+        <dxi-item location="before">
+            <dx-select-box
+                [dataSource]="prefixOptions"
+                placeholder= "Select title"
+                [width]="150"
+                [value]="prefix"
+                (onValueChanged)="filterSelected($event)">
+            </dx-select-box>
+        </dxi-item>
+        <dxi-item location="before">
+            <dx-button
+                text="Clear Selection"
+                [disabled]="!selectedRows?.length"
+                (onClick)="grid.instance.clearSelection()">
+            </dx-button>
+        </dxi-item>
+    </dxo-toolbar>
 </dx-data-grid>
 <div class="selected-data">
     <span class="caption">Selected Records:</span>

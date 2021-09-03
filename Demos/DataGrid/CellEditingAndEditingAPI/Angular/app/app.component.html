@@ -3,8 +3,7 @@
         id="gridContainer"
         [dataSource]="dataSource"
         [showBorders]="true"
-        (onSelectionChanged)="selectionChanged($event)"
-        (onToolbarPreparing)="onToolbarPreparing($event)">
+        (onSelectionChanged)="selectionChanged($event)">
         
         <dxo-paging [enabled]="false"></dxo-paging>
         <dxo-editing 
@@ -34,14 +33,20 @@
             dataType="date">
         </dxi-column>
 
-        <dx-button
-            *dxTemplate="let data of 'deleteButton'"
-            (onClick)="deleteRecords()"
-            [disabled]="!selectedItemKeys.length"
-            icon="trash"
-            text="Delete Selected Records">
-        </dx-button>
-
+        <dxo-toolbar>
+            <dxi-item
+                name="addRowButton"
+                showText="always">
+            </dxi-item>
+            <dxi-item location="after">
+                <dx-button
+                    (onClick)="deleteRecords()"
+                    [disabled]="!selectedItemKeys.length"
+                    icon="trash"
+                    text="Delete Selected Records">
+                </dx-button>
+            </dxi-item>
+        </dxo-toolbar>
     </dx-data-grid>
 </div>
 

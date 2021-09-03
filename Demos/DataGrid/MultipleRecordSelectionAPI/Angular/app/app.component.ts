@@ -18,6 +18,7 @@ if(!/localhost/.test(document.location.host)) {
 export class AppComponent {
     employees: Employee[];
     prefix: string;
+    prefixOptions: string[] = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
     selectedRows: number[] = [];
     selectionChangedBySelectbox: boolean;
 

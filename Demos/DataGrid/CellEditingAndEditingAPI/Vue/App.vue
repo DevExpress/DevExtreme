@@ -6,7 +6,6 @@
       :show-borders="true"
       :selected-row-keys="selectedItemKeys"
       @selection-changed="selectionChanged"
-      @toolbar-preparing="onToolbarPreparing"
     >
       <DxEditing
         :allow-updating="true"
@@ -46,14 +45,20 @@
         data-field="BirthDate"
         data-type="date"
       />
-      <template #deleteButton>
-        <DxButton
-          @click="deleteRecords()"
-          :disabled="!selectedItemKeys.length"
-          icon="trash"
-          text="Delete Selected Records"
+      <DxToolbar>
+        <DxItem
+          name="addRowButton"
+          show-text="always"
         />
-      </template>
+        <DxItem location="after">
+          <DxButton
+            @click="deleteRecords()"
+            :disabled="!selectedItemKeys.length"
+            icon="trash"
+            text="Delete Selected Records"
+          />
+        </DxItem>
+      </DxToolbar>
     </DxDataGrid>
   </div>
 </template>
@@ -64,7 +69,9 @@ import {
   DxPaging,
   DxEditing,
   DxSelection,
-  DxLookup
+  DxLookup,
+  DxToolbar,
+  DxItem
 } from 'devextreme-vue/data-grid';
 
 import { DxButton } from 'devextreme-vue/button';
@@ -81,7 +88,9 @@ export default {
     DxEditing,
     DxSelection,
     DxLookup,
-    DxButton
+    DxButton,
+    DxToolbar,
+    DxItem
   },
   data() {
     return {
@@ -104,16 +113,6 @@ export default {
         this.dataSource.reload();
       }
     };
-  },
-  methods: {
-    onToolbarPreparing(e) {
-      e.toolbarOptions.items[0].showText = 'always';
-
-      e.toolbarOptions.items.push({
-        location: 'after',
-        template: 'deleteButton'
-      });
-    }
   }
 };
 </script>

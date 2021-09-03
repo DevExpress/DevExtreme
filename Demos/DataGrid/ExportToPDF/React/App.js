@@ -5,7 +5,9 @@ import DataGrid, {
   Grouping,
   GroupPanel,
   Paging,
-  SearchPanel
+  SearchPanel,
+  Toolbar,
+  Item
 } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import { customers } from './data.js';
@@ -31,33 +33,34 @@ export default function App() {
   });
 
   return (
-    <React.Fragment>
-      <div>
-        <Button
-          id='exportButton'
-          icon='exportpdf'
-          text='Export to PDF'
-          onClick={exportGrid}
-        />
-        <DataGrid
-          ref={dataGridRef}
-          dataSource={customers}
-          keyExpr="ID"
-          allowColumnReordering={true}
-          showBorders={true}
-        >
-          <GroupPanel visible={true} />
-          <SearchPanel visible={true} />
-          <Grouping autoExpandAll={true} />
-          <Paging defaultPageSize={10} />
+    <DataGrid
+      ref={dataGridRef}
+      dataSource={customers}
+      keyExpr="ID"
+      allowColumnReordering={true}
+      showBorders={true}
+    >
+      <GroupPanel visible={true} />
+      <SearchPanel visible={true} />
+      <Grouping autoExpandAll={true} />
+      <Paging defaultPageSize={10} />
 
-          <Column dataField='CompanyName' dataType='string' />
-          <Column dataField='Phone' dataType='string' />
-          <Column dataField='Fax' dataType='string' />
-          <Column dataField='City' dataType='string' />
-          <Column dataField='State' dataType='string' groupIndex={0} />
-        </DataGrid>
-      </div>
-    </React.Fragment>
+      <Column dataField='CompanyName' dataType='string' />
+      <Column dataField='Phone' dataType='string' />
+      <Column dataField='Fax' dataType='string' />
+      <Column dataField='City' dataType='string' />
+      <Column dataField='State' dataType='string' groupIndex={0} />
+      <Toolbar>
+        <Item name="groupPanel" />
+        <Item location="after">
+          <Button
+            icon='exportpdf'
+            text='Export to PDF'
+            onClick={exportGrid}
+          />
+        </Item>
+        <Item name="searchPanel" />
+      </Toolbar>
+    </DataGrid>
   );
 }

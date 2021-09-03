@@ -58,8 +58,7 @@ class App extends React.Component {
         ref={(ref) => window.dataGrid = this.dataGrid = ref}
         dataSource={this.orders}
         keyExpr="ID"
-        showBorders={true}
-        onToolbarPreparing={this.onToolbarPreparing}>
+        showBorders={true}>
         <Grouping autoExpandAll={this.state.expanded} />
         <ColumnChooser enabled={true} />
         <LoadPanel enabled={true} />

@@ -1,12 +1,5 @@
 <template>
   <div>
-    <DxButton
-      id="exportButton"
-      icon="exportpdf"
-      text="Export to PDF"
-      @click="exportGrid()"
-    />
-
     <DxDataGrid
       :ref="dataGridRef"
       :allow-column-reordering="true"
@@ -28,6 +21,17 @@
       <DxGrouping :auto-expand-all="true"/>
       <DxPaging :page-size="10"/>
       <DxSearchPanel :visible="true"/>
+      <DxToolbar>
+        <DxItem name="groupPanel"/>
+        <DxItem location="after">
+          <DxButton
+            icon="exportpdf"
+            text="Export to PDF"
+            @click="exportGrid()"
+          />
+        </DxItem>
+        <DxItem name="searchPanel"/>
+      </DxToolbar>
     </DxDataGrid>
   </div>
 </template>
@@ -40,7 +44,9 @@ import {
   DxGrouping,
   DxGroupPanel,
   DxSearchPanel,
-  DxPaging
+  DxPaging,
+  DxToolbar,
+  DxItem
 } from 'devextreme-vue/data-grid';
 
 import { jsPDF } from 'jspdf';
@@ -57,7 +63,9 @@ export default {
     DxGrouping,
     DxPaging,
     DxSearchPanel,
-    DxDataGrid
+    DxDataGrid,
+    DxToolbar,
+    DxItem
   },
   data() {
     return {

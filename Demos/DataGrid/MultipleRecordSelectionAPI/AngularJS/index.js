@@ -5,6 +5,44 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.selectedPrefix = null;
     $scope.clearButtonDisabled = true;
     
+    $scope.selectPrefixOptions = {
+        dataSource: ["All", "Dr.", "Mr.", "Mrs.", "Ms."],
+        placeholder: "Select title",
+        width: 150,
+        bindingOptions: {
+            value: "selectedPrefix"
+        },
+        onValueChanged: function (data) {
+            var dataGrid = $("#grid-container").dxDataGrid("instance"); 
+    
+            if(!data.value)
+                return;
+    
+            if (data.value == "All") {
+                dataGrid.selectAll();
+            } else {
+                var employeesToSelect = $.map($.grep(dataGrid.option("dataSource"), function(item) {
+                    return item.Prefix === data.value;
+                }), function(item) {
+                    return item.ID;
+                });
+                dataGrid.selectRows(employeesToSelect);
+            }
+    
+            $scope.selectedPrefix = data.value;
+        }
+    };
+    
+    $scope.clearButtonOptions = {
+        text: "Clear Selection",
+        bindingOptions: {
+            disabled: "clearButtonDisabled"
+        },
+        onClick: function () {
+            $("#grid-container").dxDataGrid("instance").clearSelection();
+        }
+    };
+
     $scope.gridOptions = {
         dataSource: employees,
         keyExpr: "ID",
@@ -43,44 +81,20 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     
             $scope.selectedPrefix = null;
             $scope.clearButtonDisabled = !data.length;
-        }
-    };
-    
-    $scope.selectPrefixOptions = {
-        dataSource: ["All", "Dr.", "Mr.", "Mrs.", "Ms."],
-        placeholder: "Select title",
-        bindingOptions: {
-            value: "selectedPrefix"
         },
-        onValueChanged: function (data) {
-            var dataGrid = $("#grid-container").dxDataGrid("instance"); 
-    
-            if(!data.value)
-                return;
-    
-            if (data.value == "All") {
-                dataGrid.selectAll();
-            } else {
-                var employeesToSelect = $.map($.grep(dataGrid.option("dataSource"), function(item) {
-                    return item.Prefix === data.value;
-                }), function(item) {
-                    return item.ID;
-                });
-                dataGrid.selectRows(employeesToSelect);
-            }
-    
-            $scope.selectedPrefix = data.value;
+        toolbar: {
+            items: [
+                {
+                    widget: 'dxSelectBox',
+                    location: 'before',
+                    options: $scope.selectPrefixOptions
+                },
+                {
+                    widget: 'dxButton',
+                    location: 'before',
+                    options: $scope.clearButtonOptions
+                },
+            ]
         }
-    };
-    
-    $scope.clearButtonOptions = {
-        text: "Clear Selection",
-        bindingOptions: {
-            disabled: "clearButtonDisabled"
-        },
-        onClick: function () {
-            $("#grid-container").dxDataGrid("instance").clearSelection();
-        }
-    };
-    
+    }; 
 });

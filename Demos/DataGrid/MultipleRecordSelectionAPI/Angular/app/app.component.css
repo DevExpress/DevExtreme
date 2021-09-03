@@ -2,11 +2,6 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-  }
-
-::ng-deep #select-prefix {
-    width: 150px;
-    margin-right: 8px;
 }
 
 ::ng-deep .selected-data {

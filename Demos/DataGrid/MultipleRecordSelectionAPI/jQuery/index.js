@@ -38,38 +38,49 @@ $(function(){
             else 
                 $("#selected-items-container").text("Nobody has been selected");
             if(!changedBySelectBox)
-                $("#select-prefix").dxSelectBox("instance").option("value", null);
+                dataGrid.option("toolbar.items[0].options.value", null);
     
             changedBySelectBox = false;
-            clearButton.option("disabled", !data.length);
+            dataGrid.option("toolbar.items[1].options.disabled", !data.length);
+        },
+        toolbar: {
+            items: [
+                {
+                    widget: 'dxSelectBox',
+                    location: 'before',
+                    options: {
+                        dataSource: ["All", "Dr.", "Mr.", "Mrs.", "Ms."],
+                        placeholder: "Select title",
+                        width: "150px",
+                        onValueChanged: function (data) {
+                            if(!data.value)
+                                return;
+                            changedBySelectBox = true;
+                            if (data.value == "All") {
+                                dataGrid.selectAll();
+                            } else {
+                                var employeesToSelect = $.map($.grep(dataGrid.option("dataSource"), function(item) {
+                                    return item.Prefix === data.value;
+                                }), function(item) {
+                                    return item.ID;
+                                });
+                                dataGrid.selectRows(employeesToSelect);
+                            }
+                        }
+                    }
+                },
+                {
+                    widget: 'dxButton',
+                    location: 'before',
+                    options: {
+                        text: "Clear Selection",
+                        disabled: true,
+                        onClick: function () {
+                            dataGrid.clearSelection();
+                        }
+                    }
+                }
+            ]
         }
     }).dxDataGrid("instance");
-    
-    $("#select-prefix").dxSelectBox({
-        dataSource: ["All", "Dr.", "Mr.", "Mrs.", "Ms."],
-        placeholder: "Select title",
-        onValueChanged: function (data) {
-            if(!data.value)
-                return;
-            changedBySelectBox = true;
-            if (data.value == "All") {
-                dataGrid.selectAll();
-            } else {
-                var employeesToSelect = $.map($.grep(dataGrid.option("dataSource"), function(item) {
-                    return item.Prefix === data.value;
-                }), function(item) {
-                    return item.ID;
-                });
-                dataGrid.selectRows(employeesToSelect);
-            }
-        }
-    });
-    
-    var clearButton = $("#gridClearSelection").dxButton({
-        text: "Clear Selection",
-        disabled: true,
-        onClick: function () {
-            dataGrid.clearSelection();
-        }
-    }).dxButton("instance");
 });
