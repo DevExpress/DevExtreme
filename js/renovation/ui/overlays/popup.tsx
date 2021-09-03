@@ -10,6 +10,7 @@ import {
   Slot,
   Mutable,
   Effect,
+  TwoWay,
 } from '@devextreme-generator/declarations';
 import { getWindow } from '../../../core/utils/window';
 import devices from '../../../core/devices';
@@ -22,7 +23,6 @@ import { PositionConfig } from '../../../animation/position';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseWidgetProps } from '../common/base_props';
-import { ToolbarItem } from '../toolbar/toolbar_props';
 
 const isDesktop = !(!devices.real().generic || devices.isSimulator());
 const window = getWindow();
@@ -157,9 +157,9 @@ export class PopupProps extends BaseWidgetProps {
 
   @Template() titleTemplate: template | ((contentElement: DxElement) => string | UserDefinedElement) = 'title';
 
-  @OneWay() toolbarItems?: ToolbarItem[];
+  @OneWay() toolbarItems? = []; // TODO: default value
 
-  @OneWay() visible = false;
+  @TwoWay() visible!: boolean;
 
   @OneWay() width?: number | string | (() => number | string); // TODO: default value
 
@@ -168,7 +168,7 @@ export class PopupProps extends BaseWidgetProps {
 @Component({
   view: viewFunction,
 })
-export class Popup extends JSXComponent(PopupProps) {
+export class Popup extends JSXComponent<PopupProps, 'visible'>() {
   @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
 
   @Mutable() // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -177,5 +177,13 @@ export class Popup extends JSXComponent(PopupProps) {
   @Effect()
   saveInstance(): void {
     this.instance = this.wrapperRef.current?.getInstance();
+  }
+
+  @Effect()
+  setListeners(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    this.instance.option('onHiding', () => {
+      this.props.visible = false;
+    });
   }
 }
