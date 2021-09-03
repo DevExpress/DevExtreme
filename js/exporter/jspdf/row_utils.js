@@ -25,6 +25,14 @@ function getRows(doc, dataProvider, dataGrid, options) {
             });
         }
 
+        if(options.onRowExporting) {
+            const args = { rowCells: currentRow.cells.map(c => c.pdfCell) };
+            options.onRowExporting(args);
+            if(isDefined(args.rowHeight)) {
+                currentRow.customerHeight = args.rowHeight;
+            }
+        }
+
         rows.push(currentRow);
     }
 
@@ -63,21 +71,12 @@ function calculateWidths(doc, rows, options) {
     });
 }
 
-function calculateHeights(doc, rows, options) {
+function calculateHeights(doc, rows) {
     rows.forEach(row => {
         const pdfCells = row.cells.map(c => c.pdfCell);
 
-        let customerHeight;
-        if(options.onRowExporting) {
-            const args = { rowCells: pdfCells };
-            options.onRowExporting(args);
-            if(isDefined(args.rowHeight)) {
-                customerHeight = args.rowHeight;
-            }
-        }
-
-        row.height = isDefined(customerHeight)
-            ? customerHeight
+        row.height = isDefined(row.customerHeight)
+            ? row.customerHeight
             : calculateRowHeight(doc, pdfCells, pdfCells.map(c => c._rect.w));
         pdfCells.forEach(cell => {
             cell._rect.h = row.height;
