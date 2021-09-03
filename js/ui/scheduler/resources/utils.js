@@ -195,14 +195,16 @@ export const filterResources = (resources, fields) => {
     });
 };
 
-export const getPaintedResources = (resources, groups = []) => {
+export const getPaintedResources = (resources, groups) => {
+    const newGroups = groups || [];
+
     const result = resources.find(resource => resource.useColorAsDefault);
     if(result) {
         return result;
     }
 
-    const newResources = groups.length ?
-        filterResources(resources, groups) :
+    const newResources = newGroups.length ?
+        filterResources(resources, newGroups) :
         resources;
 
     return newResources[newResources.length - 1];
