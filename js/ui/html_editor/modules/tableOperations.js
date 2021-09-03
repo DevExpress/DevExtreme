@@ -5,6 +5,7 @@ import { getWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 
 const MIN_HEIGHT = 250;
+const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
 let formPopup;
 
 const createFormPopup = (editorInstance) => {
@@ -13,7 +14,7 @@ const createFormPopup = (editorInstance) => {
         contentTemplate: () => {},
         deferRendering: false,
         showTitle: false,
-        width: 300,
+        width: 600,
         height: 'auto',
         shading: false,
         closeOnTargetScroll: true,
@@ -30,7 +31,7 @@ const createFormPopup = (editorInstance) => {
 const getMaxHeight = () => {
     const window = getWindow();
     const windowHeight = window && $(window).height() || 0;
-    return Math.max(MIN_HEIGHT, windowHeight * 0.5);
+    return Math.max(MIN_HEIGHT, windowHeight * 0.9);
 };
 
 const applyDimensionChanges = ($target, newHeight, newWidth) => {
@@ -57,14 +58,37 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         formData: {
             width: startTableWidth,
             height: $table.outerHeight(),
-            backgroundColor: tableStyles.backgroundColor
+            backgroundColor: tableStyles.backgroundColor,
+            borderStyle: tableStyles.borderStyle,
+            borderColor: tableStyles.borderColor,
+            borderWidth: tableStyles.borderWidth,
+            alignment: tableStyles.textAlign,
         },
         items: [{
             itemType: 'group',
-            caption: 'Dimentions',
-            colCount: 2,
+            caption: 'Border',
+            colCount: 3,
             items: [
-                'width', 'height'
+                {
+                    dataField: 'borderStyle',
+                    caption: 'Style',
+                    editorType: 'dxSelectBox',
+                    editorOptions: {
+                        items: BORDER_STYLES
+                    }
+                },
+                {
+                    dataField: 'borderColor',
+                    caption: 'Color',
+                    editorType: 'dxColorBox',
+                    editorOptions: {
+                        editAlphaChannel: true
+                    }
+                },
+                {
+                    dataField: 'borderWidth',
+                    caption: 'Width'
+                }
             ]
         }, {
             itemType: 'group',
@@ -72,7 +96,24 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             items: [
                 {
                     dataField: 'backgroundColor',
-                    editorType: 'dxColorBox'
+                    caption: 'Color',
+                    editorType: 'dxColorBox',
+                    editorOptions: {
+                        editAlphaChannel: true
+                    }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: 'Dimentions',
+            colCount: 3,
+            items: [
+                'width', 'height', {
+                    dataField: 'alignment',
+                    editorType: 'dxSelectBox', // todo use buttons group
+                    editorOptions: {
+                        items: ['left', 'center', 'right']
+                    }
                 }
             ]
         }, {
@@ -82,19 +123,24 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                 text: 'Ok',
                 type: 'success',
                 onClick: (e) => {
-                    // console.log('save changes');
                     const formData = formInstance.option('formData');
                     const widthArg = formData.width === startTableWidth ? undefined : formData.width;
                     applyDimensionChanges($table, formData.height, widthArg);
-                    $table.css('backgroundColor', formData.backgroundColor);
+                    $table.css({
+                        'backgroundColor': formData.backgroundColor,
+                        'borderStyle': formData.borderStyle,
+                        'borderColor': formData.borderColor,
+                        'borderWidth': formData.borderWidth,
+                        'textAlign': formData.alignment
+                    });
+
                     formPopup.hide();
                 }
             }
         }],
-        // showColonAfterLabel: true,
+        showColonAfterLabel: true,
         labelLocation: 'top',
         minColWidth: 300,
-
     };
 
     formPopup.option('contentTemplate', (container) => {
@@ -115,31 +161,113 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
         createFormPopup(editorInstance);
     }
 
+    const window = getWindow();
+
     let formInstance;
+    const startCellWidth = $cell.outerWidth();
+    const cellStyles = window.getComputedStyle($cell.get(0));
 
     const formOptions = {
         formData: {
-            width: $cell.outerWidth(),
-            height: $cell.outerHeight()
+            width: startCellWidth,
+            height: $cell.outerHeight(),
+            backgroundColor: cellStyles.backgroundColor,
+            borderStyle: cellStyles.borderStyle,
+            borderColor: cellStyles.borderColor,
+            borderWidth: cellStyles.borderWidth,
+            alignment: cellStyles.textAlign,
+            verticalAlignment: cellStyles.verticalAlign,
+            padding: cellStyles.padding,
         },
         items: [{
             itemType: 'group',
-            caption: 'Dimentions',
-            colCount: 2,
-            items: [ 'width', 'height', {
-                itemType: 'button',
-                horizontalAlignment: 'left',
-                buttonOptions: {
-                    text: 'Ok',
-                    type: 'success',
-                    onClick: (e) => {
-                        applyDimensionChanges($cell, formInstance.option('formData').height, formInstance.option('formData').width);
-                        formPopup.hide();
+            caption: 'Border',
+            colCount: 3,
+            items: [
+                {
+                    dataField: 'borderStyle',
+                    caption: 'Style',
+                    editorType: 'dxSelectBox',
+                    editorOptions: {
+                        items: BORDER_STYLES
+                    }
+                },
+                {
+                    dataField: 'borderColor',
+                    caption: 'Color',
+                    editorType: 'dxColorBox',
+                    editorOptions: {
+                        editAlphaChannel: true
+                    }
+                },
+                {
+                    dataField: 'borderWidth',
+                    caption: 'Width'
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: 'Background',
+            items: [
+                {
+                    dataField: 'backgroundColor',
+                    caption: 'Color',
+                    editorType: 'dxColorBox',
+                    editorOptions: {
+                        editAlphaChannel: true
                     }
                 }
-            }]
+            ]
+        }, {
+            itemType: 'group',
+            caption: 'Dimentions',
+            colCount: 3,
+            items: [
+                'width', 'height', 'padding'
+            ]
+        }, {
+            itemType: 'group',
+            caption: 'Alignment',
+            colCount: 3,
+            items: [
+                {
+                    dataField: 'alignment',
+                    editorType: 'dxSelectBox', // todo use buttons group
+                    editorOptions: {
+                        items: ['left', 'center', 'right']
+                    }
+                },
+                {
+                    dataField: 'verticalAlignment',
+                    editorType: 'dxSelectBox', // todo use buttons group
+                    editorOptions: {
+                        items: ['top', 'middle', 'bottom']
+                    }
+                }
+            ]
+        }, {
+            itemType: 'button',
+            horizontalAlignment: 'left',
+            buttonOptions: {
+                text: 'Ok',
+                type: 'success',
+                onClick: (e) => {
+                    const formData = formInstance.option('formData');
+                    const widthArg = formData.width === startCellWidth ? undefined : formData.width;
+                    applyDimensionChanges($cell, formData.height, widthArg);
+                    $cell.css({
+                        'backgroundColor': formData.backgroundColor,
+                        'borderStyle': formData.borderStyle,
+                        'borderColor': formData.borderColor,
+                        'borderWidth': formData.borderWidth,
+                        'textAlign': formData.alignment
+                    });
+
+                    formPopup.hide();
+                }
+            }
         }],
-        // showColonAfterLabel: true,
+        showColonAfterLabel: true,
         labelLocation: 'top',
         minColWidth: 300,
 
