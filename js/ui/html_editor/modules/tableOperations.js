@@ -47,33 +47,49 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         createFormPopup(editorInstance);
     }
 
+    const window = getWindow();
+
     let formInstance;
     const startTableWidth = $table.outerWidth();
+    const tableStyles = window.getComputedStyle($table.get(0));
 
     const formOptions = {
         formData: {
             width: startTableWidth,
-            height: $table.outerHeight()
+            height: $table.outerHeight(),
+            backgroundColor: tableStyles.backgroundColor
         },
         items: [{
             itemType: 'group',
             caption: 'Dimentions',
             colCount: 2,
-            items: [ 'width', 'height', {
-                itemType: 'button',
-                horizontalAlignment: 'left',
-                buttonOptions: {
-                    text: 'Ok',
-                    type: 'success',
-                    onClick: (e) => {
-                        // console.log('save changes');
-                        const formDataWidth = formInstance.option('formData').width;
-                        const widthArg = formDataWidth === startTableWidth ? undefined : formDataWidth;
-                        applyDimensionChanges($table, formInstance.option('formData').height, widthArg);
-                        formPopup.hide();
-                    }
+            items: [
+                'width', 'height'
+            ]
+        }, {
+            itemType: 'group',
+            caption: 'Background',
+            items: [
+                {
+                    dataField: 'backgroundColor',
+                    editorType: 'dxColorBox'
                 }
-            }]
+            ]
+        }, {
+            itemType: 'button',
+            horizontalAlignment: 'left',
+            buttonOptions: {
+                text: 'Ok',
+                type: 'success',
+                onClick: (e) => {
+                    // console.log('save changes');
+                    const formData = formInstance.option('formData');
+                    const widthArg = formData.width === startTableWidth ? undefined : formData.width;
+                    applyDimensionChanges($table, formData.height, widthArg);
+                    $table.css('backgroundColor', formData.backgroundColor);
+                    formPopup.hide();
+                }
+            }
         }],
         // showColonAfterLabel: true,
         labelLocation: 'top',
