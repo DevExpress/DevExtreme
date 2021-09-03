@@ -75,7 +75,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default undefined
      * @public
      */
-    dragAndResizeArea?: UserDefinedElement;
+    dragAndResizeArea?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
