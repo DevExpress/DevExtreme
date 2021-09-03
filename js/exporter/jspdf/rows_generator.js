@@ -1,13 +1,19 @@
 import { isDefined } from '../../core/utils/type';
 
-// Returns IPdfRow[]
+// Returns IPdfRowInfo[]
 // [
 //    {
-//      rowType,
-//      rowIndex,
-//      indentLevel,
-//      cells: [
-//        { gridCell, text, wordWrapEnabled }
+//      rowType, - readonly
+//      rowIndex, - readonly
+//      indentLevel, - readonly
+//      cells: [ - readonly
+//        {
+//          gridCell, - readonly
+//          colSpan, - readonly (for internal use/hide from api/useless???)
+//          rowSpan, - readonly (for internal use/hide from api/useless???)
+//          text,
+//          wordWrapEnabled,
+//        }
 //      ],
 //    }
 // ]
