@@ -4,7 +4,7 @@ window.onload = function() {
             icon: "check",
             type: "success",
             text: "Done",
-            onClick: function(e) { 
+            onClick: function() { 
                 DevExpress.ui.notify("The Done button was clicked");
             }
         },
@@ -12,7 +12,7 @@ window.onload = function() {
         weatherButton: {
             icon: "../../../../images/icons/weather.png",
             text: "Weather",
-            onClick: function(e) { 
+            onClick: function() { 
                 DevExpress.ui.notify("The Weather button was clicked");
             }
         },
@@ -20,21 +20,21 @@ window.onload = function() {
         sendButton: {
             icon: 'fa fa-envelope-o',
             text: "Send",
-            onClick: function(e) { 
+            onClick: function() { 
                 DevExpress.ui.notify("The Send button was clicked");
             }
         },
         
         plusButton: {
             icon: "plus",
-            onClick: function(e) { 
+            onClick: function() { 
                 DevExpress.ui.notify("The button was clicked");
             }
         },
 
         backButton: {
             icon: "back",
-            onClick: function(e) { 
+            onClick: function() { 
                 DevExpress.ui.notify("The button was clicked");
             }
         },        

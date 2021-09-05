@@ -30,7 +30,7 @@ window.onload = function() {
                 options: {
                   icon: "email",
                   text: "Send",
-                  onClick: function(e) {
+                  onClick: function() {
                     const message = `Email is sent to ${that.employee().FirstName} ${that.employee().LastName}`;
                     DevExpress.ui.notify({
                       message: message,
@@ -47,7 +47,7 @@ window.onload = function() {
                 location: "after",
                 options: {
                   text: "Close",
-                  onClick: function(e) {
+                  onClick: function() {
                     that.visiblePopup(false);
                   }
                 }

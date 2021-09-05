@@ -8,9 +8,9 @@ window.onload = function() {
             searchEnabled: true,
             searchExpr: "Name",
             searchMode: searchMode,
-    	    itemTemplate: function(data) {
-    	        return $("<div>").text(data.Name);
-    	    }
+            itemTemplate: function(data) {
+                return $("<div>").text(data.Name);
+            }
         },
         searchModeOptions: {
             dataSource: ["contains", "startsWith", "equals"],

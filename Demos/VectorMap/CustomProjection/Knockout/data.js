@@ -3,11 +3,13 @@ var coordLinesData = {
     features: []
 };
 
+var longitude;
+var latitude;
 
 //add meridians
-for (var longitude = -180; longitude <= 180; longitude += 30) {
+for (longitude = -180; longitude <= 180; longitude += 30) {
     var lineCoords = [];
-    for (var latitude = -90; latitude <= 90; latitude += 5) {
+    for (latitude = -90; latitude <= 90; latitude += 5) {
         lineCoords.push([longitude, latitude]);
     }
 
@@ -20,7 +22,7 @@ for (var longitude = -180; longitude <= 180; longitude += 30) {
 }
 
 //add parallels
-for (var latitude = -90; latitude <= 90; latitude += 30) {
+for (latitude = -90; latitude <= 90; latitude += 30) {
     coordLinesData.features.push({
         geometry: {
             type: "LineString",

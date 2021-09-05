@@ -1,7 +1,7 @@
 window.onload = function() {
     var viewModel = {
-    	gridOptions: {
-    	    dataSource: orders, 
+        gridOptions: {
+            dataSource: orders, 
             columnHidingEnabled: true,
             showBorders: true,
             editing: {
@@ -50,7 +50,7 @@ window.onload = function() {
                 dataField: "SaleAmount",
                 format: "currency"
             }]
-    	}
+        }
     };
     
     ko.applyBindings(viewModel, document.getElementById("grid"));

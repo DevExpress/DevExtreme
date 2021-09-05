@@ -31,7 +31,7 @@ window.onload = function() {
             onKeyPress: function(e) {
                 var event = e.event,
                     str = event.key || String.fromCharCode(event.which);
-                if(/^[\.\,e]$/.test(str))
+                if(/^[.,e]$/.test(str))
                     event.preventDefault();
             }
         },

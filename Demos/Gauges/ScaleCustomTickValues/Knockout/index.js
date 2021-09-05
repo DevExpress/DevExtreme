@@ -1,6 +1,6 @@
 window.onload = function() {
     var viewModel = {
-    	gaugeOptions: {
+        gaugeOptions: {
             geometry: { orientation: "vertical" },
             scale: {
                 startValue: 0,

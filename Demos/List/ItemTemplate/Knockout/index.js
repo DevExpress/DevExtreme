@@ -2,7 +2,7 @@ window.onload = function() {
     var viewModel = {
         listOptions: {
             dataSource: products,
-    	    height: "100%"
+            height: "100%"
         },
         formatCurrency: new Intl.NumberFormat('en-US', {
             style: 'currency',

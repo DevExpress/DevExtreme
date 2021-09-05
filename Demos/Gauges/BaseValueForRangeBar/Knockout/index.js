@@ -1,6 +1,6 @@
 window.onload = function() {
     var viewModel = {
-    	circularGaugeOptions: {
+        circularGaugeOptions: {
             geometry: {
                 startAngle: 135,
                 endAngle: 45

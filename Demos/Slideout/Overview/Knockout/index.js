@@ -15,7 +15,7 @@ window.onload = function() {
             location: "center",
             template: "title"
         }];
-        that.showMenu = function (e) {
+        that.showMenu = function () {
             that.menuVisible(!that.menuVisible());
         };
     }

@@ -84,7 +84,6 @@ window.onload = function() {
         searchTimeoutOptions: {
             min: 0,
             max: 5000,
-            value: 200,
             showSpinButtons: true,
             step: 100,
             value: searchTimeoutOption
@@ -92,12 +91,10 @@ window.onload = function() {
         minSearchLengthOptions: {
             min: 0,
             max: 5,
-            value: 0,
             showSpinButtons: true,
             value: minSearchLengthOption
         },
         showDataBeforeSearchOptions: {
-            value: false,
             text: "Show Data Before Search",
             value: showDataBeforeSearchOption
         }

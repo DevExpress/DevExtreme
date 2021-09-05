@@ -1,13 +1,13 @@
 window.onload = function() {
-    var treeListData = $.map(tasks, function(task, _) {
+    var treeListData = $.map(tasks, function(task) {
         task.Task_Assigned_Employee = null;
         $.each(employees, function(_, employee) {
             if(employee.ID == task.Task_Assigned_Employee_ID)
                 task.Task_Assigned_Employee = employee;
         });
         return task;
-	});
-	
+    });
+    
     var viewModel = {
         treeListOptions: {
             dataSource: treeListData,

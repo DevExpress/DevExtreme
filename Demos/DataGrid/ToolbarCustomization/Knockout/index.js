@@ -68,7 +68,7 @@ window.onload = function() {
                     options: {
                         text: expandButtonText,
                         width: 136,
-                        onClick: function(e) {
+                        onClick: function() {
                             expanded(!expanded());
                         }
                     }

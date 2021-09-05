@@ -6,7 +6,7 @@ window.onload = function() {
         options: {
             dataSource: new DevExpress.data.DataSource({
                 store: new DevExpress.data.CustomStore({
-                    load: function(options) {
+                    load: function() {
                         var result = $.Deferred();
                         $.ajax({
                             data: {showDeleted: false},

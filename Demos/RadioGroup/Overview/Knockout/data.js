@@ -4,7 +4,7 @@ var priorities = ["Low", "Normal", "Urgent", "High"],
         { id: 1, text: "Normal" },
         { id: 2, text: "Urgent" },
         { id: 3, text: "High" },
-    ];
+    ],
     tasks = [{
         subject: "Choose between PPO and HMO Health Plan",
         priority: 3

@@ -116,7 +116,7 @@ window.onload = function() {
         filterVisibleOptions: {
             text: "Filter Row",
             value: filterRowVisible,
-            onValueChanged: function(data) {
+            onValueChanged: function() {
                 dataGrid.clearFilter();
             }
         },
