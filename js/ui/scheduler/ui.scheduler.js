@@ -2112,7 +2112,7 @@ class Scheduler extends Widget {
         const result = {};
         const toMs = dateUtils.dateToMilliseconds;
 
-        const startDate = this.option('currentDate');
+        const startDate = new Date(this.option('currentDate'));
         const endDate = new Date(startDate.getTime() + this.option('cellDuration') * toMs('minute'));
 
         ExpressionUtils.setField(this.key, 'startDate', result, startDate);
