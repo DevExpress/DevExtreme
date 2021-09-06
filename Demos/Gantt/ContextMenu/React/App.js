@@ -1,7 +1,11 @@
 import React from 'react';
-import Gantt, { Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, ContextMenu } from 'devextreme-react/gantt';
+import Gantt, {
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, ContextMenu,
+} from 'devextreme-react/gantt';
 import CheckBox from 'devextreme-react/check-box';
-import { tasks, dependencies, resources, resourceAssignments } from './data.js';
+import {
+  tasks, dependencies, resources, resourceAssignments,
+} from './data.js';
 
 class App extends React.Component {
   constructor() {
@@ -9,7 +13,7 @@ class App extends React.Component {
     this.state = {
       showResources: true,
       disableContextMenu: false,
-      contextMenuItems: this.getContextMenuItems()
+      contextMenuItems: this.getContextMenuItems(),
     };
     this.onPreventContextMenuShowing = this.onPreventContextMenuShowing.bind(this);
     this.onCustomizeContextMenu = this.onCustomizeContextMenu.bind(this);
@@ -21,7 +25,7 @@ class App extends React.Component {
     const {
       showResources,
       disableContextMenu,
-      contextMenuItems
+      contextMenuItems,
     } = this.state;
     return (
       <div id="form-demo">
@@ -70,26 +74,31 @@ class App extends React.Component {
       </div>
     );
   }
+
   onContextMenuPreparing(e) {
     e.cancel = this.state.disableContextMenu;
   }
+
   onCustomizeContextMenu(e) {
     this.setState({
-      contextMenuItems: e.value ? this.getContextMenuItems() : undefined
+      contextMenuItems: e.value ? this.getContextMenuItems() : undefined,
     });
   }
+
   onPreventContextMenuShowing(e) {
     this.setState({
-      disableContextMenu: e.value
+      disableContextMenu: e.value,
     });
   }
+
   onCustomCommandClick(e) {
-    if(e.name == 'ToggleDisplayOfResources') {
+    if (e.name == 'ToggleDisplayOfResources') {
       this.setState({
-        showResources: !this.state.showResources
+        showResources: !this.state.showResources,
       });
     }
   }
+
   getContextMenuItems() {
     return [
       'addTask',
@@ -97,8 +106,8 @@ class App extends React.Component {
       'deleteTask',
       {
         name: 'ToggleDisplayOfResources',
-        text: 'Toggle Display of Resources'
-      }
+        text: 'Toggle Display of Resources',
+      },
     ];
   }
 }

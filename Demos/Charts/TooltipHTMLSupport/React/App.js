@@ -3,7 +3,7 @@ import React from 'react';
 import PieChart, {
   Series,
   Tooltip,
-  Export
+  Export,
 } from 'devextreme-react/pie-chart';
 
 import { populationData } from './data.js';

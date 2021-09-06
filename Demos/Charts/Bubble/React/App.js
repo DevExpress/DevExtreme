@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import {
   Chart,
@@ -10,7 +10,7 @@ import {
   Label,
   Border,
   Tooltip,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 
 import { dataSource } from './data.js';
@@ -74,7 +74,7 @@ export default function App() {
 
 function customizeTooltip(pointInfo) {
   return {
-    text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`
+    text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
   };
 }
 

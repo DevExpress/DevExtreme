@@ -1,16 +1,21 @@
 import React from 'react';
-import RangeSelector, { Chart as RsChart, Series as RsSeries, Scale, Label as RsLabel, SliderMarker, Behavior } from 'devextreme-react/range-selector';
-import Chart, { ArgumentAxis, Legend, Series, Label, Grid, MinorGrid } from 'devextreme-react/chart';
+import RangeSelector, {
+  Chart as RsChart, Series as RsSeries, Scale, Label as RsLabel, SliderMarker, Behavior,
+} from 'devextreme-react/range-selector';
+import Chart, {
+  ArgumentAxis, Legend, Series, Label, Grid, MinorGrid,
+} from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      range: []
+      range: [],
     };
     this.updateRange = this.updateRange.bind(this);
   }
+
   render() {
     return (
       <React.Fragment>
@@ -52,7 +57,7 @@ class App extends React.Component {
 
   updateRange(data) {
     this.setState({
-      range: data.value
+      range: data.value,
     });
   }
 }

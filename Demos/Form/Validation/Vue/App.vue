@@ -131,7 +131,7 @@ import DxForm, {
   DxStringLengthRule,
   DxPatternRule,
   DxEmailRule,
-  DxAsyncRule
+  DxAsyncRule,
 } from 'devextreme-vue/form';
 import DxAutocomplete from 'devextreme-vue/autocomplete';
 
@@ -142,7 +142,7 @@ import service from './data.js';
 const sendRequest = function(value) {
   const validEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
-    setTimeout(function() {
+    setTimeout(() => {
       resolve(value === validEmail);
     }, 1000);
   });
@@ -163,7 +163,7 @@ export default {
     DxForm,
     DxAutocomplete,
     DxAsyncRule,
-    notify
+    notify,
   },
   data() {
     return {
@@ -171,38 +171,38 @@ export default {
       buttonOptions: {
         text: 'Register',
         type: 'success',
-        useSubmitBehavior: true
+        useSubmitBehavior: true,
       },
       passwordOptions: {
-        mode: 'password'
+        mode: 'password',
       },
       dateBoxOptions: {
         invalidDateMessage:
-          'The date must have the following format: MM/dd/yyyy'
+          'The date must have the following format: MM/dd/yyyy',
       },
       checkBoxOptions: {
         text: 'I agree to the Terms and Conditions',
-        value: false
+        value: false,
       },
       phoneEditorOptions: {
         mask: '+1 (X00) 000-0000',
         maskRules: {
-          X: /[02-9]/
+          X: /[02-9]/,
         },
         useMaskedValue: true,
-        maskInvalidMessage: 'The phone must have a correct USA phone format'
+        maskInvalidMessage: 'The phone must have a correct USA phone format',
       },
-      cityEditorOptions:{
+      cityEditorOptions: {
         dataSource: service.getCities(),
-        minSearchLength: 2
+        minSearchLength: 2,
       },
       countryEditorOptions: {
-        dataSource: service.getCountries()
+        dataSource: service.getCountries(),
       },
       maxDate: new Date().setFullYear(new Date().getFullYear() - 21),
       namePattern: /^[^0-9]+$/,
       cityPattern: /^[^0-9]+$/,
-      phonePattern:  /^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/
+      phonePattern: /^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/,
     };
   },
   methods: {
@@ -220,12 +220,12 @@ export default {
         message: 'You have submitted the form',
         position: {
           my: 'center top',
-          at: 'center top'
-        }
+          at: 'center top',
+        },
       }, 'success', 3000);
       e.preventDefault();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

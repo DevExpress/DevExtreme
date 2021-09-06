@@ -53,7 +53,9 @@
   </div>
 </template>
 <script>
-import { DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting,
+} from 'devextreme-vue/data-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { tasks, employees, statuses } from './data.js';
 
@@ -65,14 +67,14 @@ export default {
     DxScrolling,
     DxRowDragging,
     DxSorting,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
       tasks,
       employees,
       statuses,
-      showDragIcons: true
+      showDragIcons: true,
     };
   },
   methods: {
@@ -86,7 +88,7 @@ export default {
       newTasks.splice(toIndex, 0, e.itemData);
 
       this.tasks = newTasks;
-    }
+    },
   },
 };
 </script>

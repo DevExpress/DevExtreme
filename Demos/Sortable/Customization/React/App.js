@@ -26,7 +26,7 @@ class App extends React.Component {
       scrollSensitivity: 60,
       handle: '',
       dragComponent: null,
-      cursorOffset: null
+      cursorOffset: null,
     };
 
     this.onDragStart = this.onDragStart.bind(this);
@@ -50,7 +50,7 @@ class App extends React.Component {
       scrollSensitivity,
       handle,
       dragComponent,
-      cursorOffset
+      cursorOffset,
     } = this.state;
     return (
       <div id="demo-container">
@@ -74,7 +74,7 @@ class App extends React.Component {
               onDragStart={this.onDragStart}
               onReorder={this.onReorder}
             >
-              {items.map(item => (
+              {items.map((item) => (
                 <Item
                   key={item.Task_ID}
                   text={item.Task_Subject}
@@ -147,61 +147,61 @@ class App extends React.Component {
   }
 
   onReorder(e) {
-    let items = this.state.items;
+    let { items } = this.state;
 
     items = [...items.slice(0, e.fromIndex), ...items.slice(e.fromIndex + 1)];
     items = [
       ...items.slice(0, e.toIndex),
       e.itemData,
-      ...items.slice(e.toIndex)
+      ...items.slice(e.toIndex),
     ];
 
     this.setState({
-      items
+      items,
     });
   }
 
   onDropFeedbackModeChanged(e) {
     this.setState({
-      dropFeedbackMode: e.value
+      dropFeedbackMode: e.value,
     });
   }
 
   onItemOrientationChanged(e) {
     this.setState({
       itemOrientation: e.value,
-      dragDirection: 'both'
+      dragDirection: 'both',
     });
   }
 
   onDragDirectionChanged(e) {
     this.setState({
-      dragDirection: e.value
+      dragDirection: e.value,
     });
   }
 
   onScrollSpeedChanged(e) {
     this.setState({
-      scrollSpeed: e.value
+      scrollSpeed: e.value,
     });
   }
 
   onScrollSensitivityChanged(e) {
     this.setState({
-      scrollSensitivity: e.value
+      scrollSensitivity: e.value,
     });
   }
 
   onHandleChanged(e) {
     this.setState({
-      handle: e.value ? '.handle' : ''
+      handle: e.value ? '.handle' : '',
     });
   }
 
   onDragTemplateChanged(e) {
     this.setState({
       dragComponent: e.value ? DragItem : null,
-      cursorOffset: e.value ? { x: 10, y: 20 } : null
+      cursorOffset: e.value ? { x: 10, y: 20 } : null,
     });
   }
 }

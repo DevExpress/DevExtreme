@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import TreeView from 'devextreme-react/tree-view';
 import SelectBox from 'devextreme-react/select-box';
@@ -12,7 +12,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      value: 'contains'
+      value: 'contains',
     };
     this.valueChanged = this.valueChanged.bind(this);
   }
@@ -41,6 +41,7 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+
   valueChanged(e) {
     this.setState({ value: e.value });
   }

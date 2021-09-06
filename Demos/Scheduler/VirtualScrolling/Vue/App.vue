@@ -42,7 +42,7 @@ export default {
     DxScheduler,
     DxResource,
     DxView,
-    DxScrolling
+    DxScrolling,
   },
   data() {
     return {

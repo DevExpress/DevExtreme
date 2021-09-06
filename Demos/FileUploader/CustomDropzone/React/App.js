@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 import ProgressBar from 'devextreme-react/progress-bar';
 
@@ -11,7 +11,7 @@ class App extends React.Component {
       imageSource: '',
       textVisible: true,
       progressVisible: false,
-      progressValue: 0
+      progressValue: 0,
     };
     this.allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
@@ -23,14 +23,16 @@ class App extends React.Component {
   }
 
   render() {
-    const { isDropZoneActive, imageSource, textVisible, progressVisible, progressValue } = this.state;
+    const {
+      isDropZoneActive, imageSource, textVisible, progressVisible, progressValue,
+    } = this.state;
     return (
       <div className="widget-container flex-box">
         <span>Profile Picture</span>
         <div id="dropzone-external" className={`flex-box ${isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color'}`}>
           {imageSource && <img id="dropzone-image" src={imageSource} alt="" />}
-          {textVisible &&
-          <div id="dropzone-text" className="flex-box">
+          {textVisible
+          && <div id="dropzone-text" className="flex-box">
             <span>Drag & Drop the desired file</span>
             <span>…or click to browse for a file instead.</span>
           </div>}
@@ -64,31 +66,31 @@ class App extends React.Component {
   }
 
   onDropZoneEnter(e) {
-    if(e.dropZoneElement.id === 'dropzone-external') {
+    if (e.dropZoneElement.id === 'dropzone-external') {
       this.setState({ isDropZoneActive: true });
     }
   }
 
   onDropZoneLeave(e) {
-    if(e.dropZoneElement.id === 'dropzone-external') {
+    if (e.dropZoneElement.id === 'dropzone-external') {
       this.setState({ isDropZoneActive: false });
     }
   }
 
   onUploaded(e) {
-    const file = e.file;
+    const { file } = e;
     const fileReader = new FileReader();
     fileReader.onload = () => {
       this.setState({
         isDropZoneActive: false,
-        imageSource: fileReader.result
+        imageSource: fileReader.result,
       });
     };
     fileReader.readAsDataURL(file);
     this.setState({
       textVisible: false,
       progressVisible: false,
-      progressValue: 0
+      progressValue: 0,
     });
   }
 
@@ -99,7 +101,7 @@ class App extends React.Component {
   onUploadStarted() {
     this.setState({
       imageSource: '',
-      progressVisible: true
+      progressVisible: true,
     });
   }
 }

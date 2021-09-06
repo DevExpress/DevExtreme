@@ -1,5 +1,7 @@
 import React from 'react';
-import { PivotGrid, HeaderFilter, FieldChooser, FieldPanel } from 'devextreme-react/pivot-grid';
+import {
+  PivotGrid, HeaderFilter, FieldChooser, FieldPanel,
+} from 'devextreme-react/pivot-grid';
 import { CheckBox } from 'devextreme-react/check-box';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -14,20 +16,20 @@ const dataSource = new PivotGridDataSource({
     {
       dataField: '[Customer].[Country]',
       area: 'filter',
-      filterValues: ['[Customer].[Country].&[United Kingdom]']
+      filterValues: ['[Customer].[Country].&[United Kingdom]'],
     },
     {
       dataField: '[Ship Date].[Calendar Year]',
       area: 'filter',
-      filterValues: ['[Ship Date].[Calendar Year].&[2004]']
-    }
+      filterValues: ['[Ship Date].[Calendar Year].&[2004]'],
+    },
   ],
   store: new XmlaStore({
     type: 'xmla',
     url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
     catalog: 'Adventure Works DW Standard Edition',
-    cube: 'Adventure Works'
-  })
+    cube: 'Adventure Works',
+  }),
 });
 
 class App extends React.Component {
@@ -36,12 +38,13 @@ class App extends React.Component {
 
     this.state = {
       allowSearch: true,
-      showRelevantValues: true
+      showRelevantValues: true,
     };
 
     this.onAllowSearchChanged = this.onAllowSearchChanged.bind(this);
     this.onShowRelevantValuesChanged = this.onShowRelevantValuesChanged.bind(this);
   }
+
   render() {
     const { allowSearch, showRelevantValues } = this.state;
 
@@ -87,14 +90,16 @@ class App extends React.Component {
       </div>
     );
   }
+
   onAllowSearchChanged(data) {
     this.setState({
-      allowSearch: data.value
+      allowSearch: data.value,
     });
   }
+
   onShowRelevantValuesChanged(data) {
     this.setState({
-      showRelevantValues: data.value
+      showRelevantValues: data.value,
     });
   }
 }

@@ -1,29 +1,29 @@
 export const employees = [{
   text: 'John Heart',
   team: 'Engineering',
-  icon: '../../../../images/mentions/John-Heart.png'
+  icon: '../../../../images/mentions/John-Heart.png',
 }, {
   text: 'Kevin Carter',
   team: 'Engineering',
-  icon: '../../../../images/mentions/Kevin-Carter.png'
+  icon: '../../../../images/mentions/Kevin-Carter.png',
 }, {
   text: 'Olivia Peyton',
   team: 'Management',
-  icon: '../../../../images/mentions/Olivia-Peyton.png'
+  icon: '../../../../images/mentions/Olivia-Peyton.png',
 }, {
   text: 'Robert Reagan',
   team: 'Management',
-  icon: '../../../../images/mentions/Robert-Reagan.png'
+  icon: '../../../../images/mentions/Robert-Reagan.png',
 }, {
   text: 'Cynthia Stanwick',
   team: 'Engineering',
-  icon: '../../../../images/mentions/Cynthia-Stanwick.png'
+  icon: '../../../../images/mentions/Cynthia-Stanwick.png',
 }, {
   text: 'Brett Wade ',
   team: 'Analysis',
-  icon: '../../../../images/mentions/Brett-Wade.png'
+  icon: '../../../../images/mentions/Brett-Wade.png',
 }, {
   text: 'Greta Sims',
   team: 'QA',
-  icon: '../../../../images/mentions/Greta-Sims.png'
+  icon: '../../../../images/mentions/Greta-Sims.png',
 }];

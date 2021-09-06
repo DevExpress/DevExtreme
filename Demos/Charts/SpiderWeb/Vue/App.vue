@@ -23,7 +23,7 @@ import {
   DxCommonSeriesSettings,
   DxSeries,
   DxExport,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/polar-chart';
 
 import { fruitSources, productionData } from './data.js';
@@ -35,15 +35,15 @@ export default {
     DxCommonSeriesSettings,
     DxSeries,
     DxExport,
-    DxTooltip
+    DxTooltip,
   },
 
   data() {
     return {
       fruitSources,
-      productionData
+      productionData,
     };
-  }
+  },
 };
 </script>
 <style>

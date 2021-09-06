@@ -66,7 +66,9 @@
   </DxDataGrid>
 </template>
 <script>
-import { DxDataGrid, DxColumn, DxGrouping, DxColumnChooser, DxLoadPanel, DxToolbar, DxItem } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxGrouping, DxColumnChooser, DxLoadPanel, DxToolbar, DxItem,
+} from 'devextreme-vue/data-grid';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxButton } from 'devextreme-vue/button';
 import query from 'devextreme/data/query';
@@ -74,7 +76,7 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDataGrid, DxColumn, DxGrouping, DxColumnChooser, DxLoadPanel, DxToolbar, DxItem, DxSelectBox, DxButton
+    DxDataGrid, DxColumn, DxGrouping, DxColumnChooser, DxLoadPanel, DxToolbar, DxItem, DxSelectBox, DxButton,
   },
   data() {
     return {
@@ -84,10 +86,10 @@ export default {
       totalCount: 0,
       groupingValues: [{
         value: 'CustomerStoreState',
-        text: 'Grouping by State'
+        text: 'Grouping by State',
       }, {
         value: 'Employee',
-        text: 'Grouping by Employee'
+        text: 'Grouping by Employee',
       }],
     };
   },
@@ -108,13 +110,13 @@ export default {
     collapseAllClick(e) {
       this.expanded = !this.expanded;
       e.component.option({
-        text: this.expanded ? 'Collapse All' : 'Expand All'
+        text: this.expanded ? 'Collapse All' : 'Expand All',
       });
     },
     refreshDataGrid() {
       this.$refs[this.gridRefName].instance.refresh();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

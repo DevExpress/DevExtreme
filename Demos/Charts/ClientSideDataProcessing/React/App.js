@@ -10,7 +10,7 @@ import Chart, {
   Series,
   Size,
   Export,
-  LoadingIndicator
+  LoadingIndicator,
 } from 'devextreme-react/chart';
 
 import SelectBox from 'devextreme-react/select-box';
@@ -23,15 +23,13 @@ class App extends React.Component {
     this.paletteIndex = 0;
     this.monthWeather = new DataSource({
       store: new CustomStore({
-        load: () => {
-          return fetch('../../../../data/monthWeather.json')
-            .then(e => e.json())
-            .catch(() => { throw 'Data Loading Error'; });
-        },
-        loadMode: 'raw'
+        load: () => fetch('../../../../data/monthWeather.json')
+          .then((e) => e.json())
+          .catch(() => { throw 'Data Loading Error'; }),
+        loadMode: 'raw',
       }),
       filter: ['t', '>', '2'],
-      paginate: false
+      paginate: false,
     });
 
     this.customizePoint = () => {

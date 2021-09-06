@@ -96,12 +96,12 @@
 import { DxSlider } from 'devextreme-vue/slider';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 
-const format = value => `${value}%`;
+const format = (value) => `${value}%`;
 
 export default {
   components: {
     DxSlider,
-    DxNumberBox
+    DxNumberBox,
   },
   data() {
     return {
@@ -109,16 +109,16 @@ export default {
       label: {
         visible: true,
         position: 'top',
-        format
+        format,
       },
       tooltip: {
         enabled: true,
         showMode: 'always',
         position: 'bottom',
-        format
-      }
+        format,
+      },
     };
-  }
+  },
 };
 </script>
 <style scoped>

@@ -1,18 +1,18 @@
-var DemoApp = angular.module('DemoApp', ['dx']);
+const DemoApp = angular.module('DemoApp', ['dx']);
 
-DemoApp.controller('DemoController', function DemoController($scope) {
-    $scope.treeViewOptions = {
-        createChildren: function(parent) {
-            var parentId = parent ? parent.itemData.id : "";
+DemoApp.controller('DemoController', ($scope) => {
+  $scope.treeViewOptions = {
+    createChildren(parent) {
+      const parentId = parent ? parent.itemData.id : '';
 
-            return $.ajax({
-                url: "https://js.devexpress.com/Demos/Mvc/api/TreeViewData",
-                dataType: "json",
-                data: { parentId: parentId }
-            });
-        },
-        rootValue: "",
-        dataStructure: "plain",
-        height: 500
-    }; 
+      return $.ajax({
+        url: 'https://js.devexpress.com/Demos/Mvc/api/TreeViewData',
+        dataType: 'json',
+        data: { parentId },
+      });
+    },
+    rootValue: '',
+    dataStructure: 'plain',
+    height: 500,
+  };
 });

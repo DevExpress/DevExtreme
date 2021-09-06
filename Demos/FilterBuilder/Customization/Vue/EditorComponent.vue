@@ -13,23 +13,23 @@ import { categories } from './data.js';
 
 export default {
   components: {
-    DxTagBox
+    DxTagBox,
   },
   props: {
     conditionInfo: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
-      categories
+      categories,
     };
   },
   methods: {
     onValueChanged(e) {
       this.conditionInfo.setValue(e.value && e.value.length ? e.value : null);
-    }
-  }
+    },
+  },
 };
 </script>

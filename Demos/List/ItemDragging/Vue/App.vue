@@ -41,12 +41,12 @@ import { doingTasks, plannedTasks } from './data.js';
 export default {
   components: {
     DxList,
-    DxItemDragging
+    DxItemDragging,
   },
   data() {
     return {
       doingTasks,
-      plannedTasks
+      plannedTasks,
     };
   },
   methods: {
@@ -62,8 +62,8 @@ export default {
       const data = [...this[e.fromData]];
       data.splice(e.fromIndex, 1);
       this[e.fromData] = data;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

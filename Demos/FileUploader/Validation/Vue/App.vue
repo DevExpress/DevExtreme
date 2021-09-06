@@ -34,8 +34,8 @@ import DxFileUploader from 'devextreme-vue/file-uploader';
 
 export default {
   components: {
-    DxFileUploader
-  }
+    DxFileUploader,
+  },
 };
 </script>
 <style>

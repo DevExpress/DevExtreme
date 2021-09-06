@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, {
   Column,
   MasterDetail,
-  Selection
+  Selection,
 } from 'devextreme-react/data-grid';
 import { employees } from './data.js';
 
@@ -12,6 +12,7 @@ class App extends React.Component {
     this.contentReady = this.contentReady.bind(this);
     this.selectionChanged = this.selectionChanged.bind(this);
   }
+
   render() {
     return (
       <DataGrid
@@ -33,10 +34,11 @@ class App extends React.Component {
       </DataGrid>
     );
   }
+
   contentReady(e) {
-    if (!e.component.getSelectedRowKeys().length)
-    { e.component.selectRowsByIndexes(0); }
+    if (!e.component.getSelectedRowKeys().length) { e.component.selectRowsByIndexes(0); }
   }
+
   selectionChanged(e) {
     e.component.collapseAll(-1);
     e.component.expandRow(e.currentSelectedRowKeys[0]);
@@ -44,7 +46,7 @@ class App extends React.Component {
 }
 
 function renderDetail(props) {
-  let { Picture, Notes } = props.data;
+  const { Picture, Notes } = props.data;
   return (
     <div className="employee-info">
       <img className="employee-photo" src={Picture} />

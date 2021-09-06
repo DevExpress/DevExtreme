@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Column, Export, Selection, GroupPanel, Grouping } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, Export, Selection, GroupPanel, Grouping,
+} from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
@@ -45,8 +47,8 @@ class App extends React.Component {
 
     exportDataGrid({
       component: e.component,
-      worksheet: worksheet,
-      autoFilterEnabled: true
+      worksheet,
+      autoFilterEnabled: true,
     }).then(() => {
       workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');

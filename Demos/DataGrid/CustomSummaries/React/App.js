@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Column, Selection, Paging, Summary, TotalItem } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, Selection, Paging, Summary, TotalItem,
+} from 'devextreme-react/data-grid';
 import service from './data.js';
 
 class App extends React.Component {
@@ -7,20 +9,23 @@ class App extends React.Component {
     super(props);
     this.orders = service.getOrders();
   }
+
   calculateSelectedRow(options) {
     if (options.name === 'SelectedRowsSummary') {
       if (options.summaryProcess === 'start') {
         options.totalValue = 0;
       } else if (options.summaryProcess === 'calculate') {
         if (options.component.isRowSelected(options.value.ID)) {
-          options.totalValue = options.totalValue + options.value.SaleAmount;
+          options.totalValue += options.value.SaleAmount;
         }
       }
     }
   }
+
   onSelectionChanged(e) {
     e.component.refresh(true);
   }
+
   render() {
     return (
       <React.Fragment>

@@ -7,13 +7,14 @@ import Chart, {
   ValueAxis,
   Label,
   Export,
-  Tick
+  Tick,
 } from 'devextreme-react/chart';
 
 class App extends React.Component {
   customizeText(e) {
     return `Day ${e.value}`;
   }
+
   render() {
     return (
       <Chart

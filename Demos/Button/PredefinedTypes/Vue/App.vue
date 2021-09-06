@@ -142,7 +142,7 @@ import notify from 'devextreme/ui/notify';
 
 export default {
   components: {
-    DxButton
+    DxButton,
   },
   methods: {
     onClick(e) {
@@ -151,8 +151,8 @@ export default {
     },
     capitalize(text) {
       return text.charAt(0).toUpperCase() + text.slice(1);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -56,7 +56,7 @@ import {
   DxColumn,
   DxSelection,
   DxSummary,
-  DxTotalItem
+  DxTotalItem,
 } from 'devextreme-vue/data-grid';
 import { formatDate } from 'devextreme/localization';
 
@@ -68,19 +68,19 @@ export default {
     DxColumn,
     DxSelection,
     DxSummary,
-    DxTotalItem
+    DxTotalItem,
   },
   data() {
     return {
-      orders: service.getOrders()
+      orders: service.getOrders(),
     };
   },
   methods: {
-    formatDate: formatDate,
+    formatDate,
     customizeDate(data) {
-      return `First: ${ formatDate(data.value, 'MMM dd, yyyy')}`;
-    }
-  }
+      return `First: ${formatDate(data.value, 'MMM dd, yyyy')}`;
+    },
+  },
 };
 </script>
 <style scoped>

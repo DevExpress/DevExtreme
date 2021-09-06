@@ -1,12 +1,12 @@
 import React from 'react';
-import { employees } from './data.js';
 import HtmlEditor from 'devextreme-react/html-editor';
+import { employees } from './data.js';
 
 const mentionsConfig = [{
   dataSource: employees,
   searchExpr: 'text',
   displayExpr: 'text',
-  valueExpr: 'text'
+  valueExpr: 'text',
 }];
 
 class App extends React.Component {

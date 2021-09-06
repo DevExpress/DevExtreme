@@ -6,7 +6,7 @@ import { service } from './data.js';
 class App extends React.Component {
   customizeTooltip(arg) {
     return {
-      text: `Current t&#176: ${arg.value} &#176C<br>Average t&#176:${arg.target}&#176C`
+      text: `Current t&#176: ${arg.value} &#176C<br>Average t&#176:${arg.target}&#176C`,
     };
   }
 
@@ -22,25 +22,21 @@ class App extends React.Component {
               <th>July</th>
               <th>August</th>
             </tr>
-            {service.getWeeksData().map((week, i) =>
-              <tr key={i}>
-                <th>{`${week.weekCount} week`}</th>
-                {week.bulletsData.map((data, i) => {
-                  return <td key={i}>
-                    <Bullet
-                      className="bullet"
-                      startScaleValue={0}
-                      endScaleValue={35}
-                      value={data.value}
-                      target={data.target}
-                      color={data.color}
-                    >
-                      <Tooltip customizeTooltip={this.customizeTooltip} />
-                    </Bullet>
-                  </td>;
-                })}
-              </tr>
-            )}
+            {service.getWeeksData().map((week, i) => <tr key={i}>
+              <th>{`${week.weekCount} week`}</th>
+              {week.bulletsData.map((data, i) => <td key={i}>
+                <Bullet
+                  className="bullet"
+                  startScaleValue={0}
+                  endScaleValue={35}
+                  value={data.value}
+                  target={data.target}
+                  color={data.color}
+                >
+                  <Tooltip customizeTooltip={this.customizeTooltip} />
+                </Bullet>
+              </td>)}
+            </tr>)}
           </tbody>
         </table>
       </div>

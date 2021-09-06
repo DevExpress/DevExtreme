@@ -20,14 +20,14 @@ export default {
   props: {
     appointmentModel: {
       type: Object,
-      default: () => { }
-    }
+      default: () => { },
+    },
   },
   data() {
     return {
-      moviesData: moviesData,
-      movieInfo: getMovieInfo(this.appointmentModel.appointmentData)
+      moviesData,
+      movieInfo: getMovieInfo(this.appointmentModel.appointmentData),
     };
-  }
+  },
 };
 </script>

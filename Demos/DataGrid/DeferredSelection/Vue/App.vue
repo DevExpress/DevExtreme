@@ -66,7 +66,9 @@
 </template>
 <script>
 
-import { DxDataGrid, DxColumn, DxFilterRow, DxSelection } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxFilterRow, DxSelection,
+} from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import query from 'devextreme/data/query';
 import 'devextreme/data/odata/store';
@@ -80,7 +82,7 @@ export default {
     DxFilterRow,
     DxSelection,
     DxButton,
-    query
+    query,
   },
   data() {
     return {
@@ -88,7 +90,7 @@ export default {
         store: {
           type: 'odata',
           url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-          key: 'Task_ID'
+          key: 'Task_ID',
         },
         expand: 'ResponsibleEmployee',
         select: [
@@ -97,14 +99,14 @@ export default {
           'Task_Start_Date',
           'Task_Due_Date',
           'Task_Status',
-          'ResponsibleEmployee/Employee_Full_Name'
-        ]
+          'ResponsibleEmployee/Employee_Full_Name',
+        ],
       },
       selectionFilter: ['Task_Status', '=', 'Completed'],
       dataGrid: {},
       taskCount: 0,
       peopleCount: 0,
-      avgDuration: 0
+      avgDuration: 0,
     };
   },
   methods: {
@@ -113,13 +115,13 @@ export default {
       this.calculateStatistics();
     },
     calculateStatistics() {
-      this.dataGrid.getSelectedRowsData().then(rowData => {
-        var commonDuration = 0;
+      this.dataGrid.getSelectedRowsData().then((rowData) => {
+        let commonDuration = 0;
 
-        for (var i = 0; i < rowData.length; i++) {
+        for (let i = 0; i < rowData.length; i++) {
           commonDuration += rowData[i].Task_Due_Date - rowData[i].Task_Start_Date;
         }
-        commonDuration = commonDuration / MILLISECONDS_IN_DAY;
+        commonDuration /= MILLISECONDS_IN_DAY;
         this.taskCount = rowData.length;
         this.peopleCount = query(rowData)
           .groupBy('ResponsibleEmployee.Employee_Full_Name')
@@ -127,8 +129,8 @@ export default {
           .length;
         this.avgDuration = Math.round(commonDuration / rowData.length) || 0;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -104,9 +104,9 @@ export default {
       argumentPosition: 0,
       argumentOffset: 0,
       valuePosition: 0,
-      valueOffset: 0
+      valueOffset: 0,
     };
-  }
+  },
 };
 </script>
 <style>

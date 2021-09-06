@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Form, {
   ButtonItem,
   GroupItem,
@@ -10,7 +10,7 @@ import Form, {
   RangeRule,
   RequiredRule,
   StringLengthRule,
-  AsyncRule
+  AsyncRule,
 } from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
 import 'devextreme-react/autocomplete';
@@ -22,37 +22,37 @@ class App extends React.Component {
     this.buttonOptions = {
       text: 'Register',
       type: 'success',
-      useSubmitBehavior: true
+      useSubmitBehavior: true,
     };
     this.checkBoxOptions = {
       text: 'I agree to the Terms and Conditions',
-      value: false
+      value: false,
     };
     this.cityEditorOptions = {
       dataSource: service.getCities(),
-      minSearchLength: 2
+      minSearchLength: 2,
     };
     this.countryEditorOptions = {
-      dataSource: service.getCountries()
+      dataSource: service.getCountries(),
     };
     this.passwordOptions = {
-      mode: 'password'
+      mode: 'password',
     };
     this.phoneEditorOptions = {
       mask: '+1 (X00) 000-0000',
       maskRules: {
-        X: /[02-9]/
+        X: /[02-9]/,
       },
       useMaskedValue: true,
-      maskInvalidMessage: 'The phone must have a correct USA phone format'
+      maskInvalidMessage: 'The phone must have a correct USA phone format',
     };
     this.maxDate = new Date().setFullYear(new Date().getFullYear() - 21);
     this.dateBoxOptions = {
       invalidDateMessage:
-        'The date must have the following format: MM/dd/yyyy'
+        'The date must have the following format: MM/dd/yyyy',
     };
     this.state = {
-      customer: service.getCustomer()
+      customer: service.getCustomer(),
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.passwordComparison = this.passwordComparison.bind(this);
@@ -60,7 +60,7 @@ class App extends React.Component {
 
   render() {
     const {
-      customer
+      customer,
     } = this.state;
     return (
       <React.Fragment>
@@ -154,11 +154,12 @@ class App extends React.Component {
       message: 'You have submitted the form',
       position: {
         my: 'center top',
-        at: 'center top'
-      }
+        at: 'center top',
+      },
     }, 'success', 3000);
     e.preventDefault();
   }
+
   passwordComparison() {
     return this.state.customer.Password;
   }
@@ -167,7 +168,7 @@ class App extends React.Component {
 function sendRequest(value) {
   const validEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
-    setTimeout(function() {
+    setTimeout(() => {
       resolve(value === validEmail);
     }, 1000);
   });

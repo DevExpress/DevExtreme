@@ -2,7 +2,7 @@ import React from 'react';
 
 import VectorMap, {
   Layer,
-  Export
+  Export,
 } from 'devextreme-react/vector-map';
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
 
@@ -20,7 +20,7 @@ const customProjection = {
     const t = y / Math.PI;
     return [
       x / Math.PI * Math.sqrt(1 - 3 * t * t),
-      y * 2 / Math.PI
+      y * 2 / Math.PI,
     ];
   },
   from([x, y]) {
@@ -28,9 +28,9 @@ const customProjection = {
     const t = y / 2;
     return [
       x * Math.PI / Math.sqrt(1 - 3 * t * t) / RADIANS,
-      y * Math.PI / 2 / RADIANS
+      y * Math.PI / 2 / RADIANS,
     ];
-  }
+  },
 };
 
 export default function App() {

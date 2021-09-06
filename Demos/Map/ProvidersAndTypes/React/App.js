@@ -9,19 +9,20 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mapTypeValue: mapTypes[0].key
+      mapTypeValue: mapTypes[0].key,
     };
     this.keys = {
       // Specify your API keys for each map provider:
-      //bing: "YOUR_BING_MAPS_API_KEY",
-      //google: "YOUR_GOOGLE_MAPS_API_KEY",
-      //googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"
+      // bing: "YOUR_BING_MAPS_API_KEY",
+      // google: "YOUR_GOOGLE_MAPS_API_KEY",
+      // googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"
     };
     this.onMapTypeChanged = this.onMapTypeChanged.bind(this);
   }
+
   onMapTypeChanged(e) {
     this.setState({
-      mapTypeValue: e.value
+      mapTypeValue: e.value,
     });
   }
 

@@ -4,14 +4,14 @@ export const dataSource = [{
   Fe: 79.39,
   Ni: 5.2,
   S: 2.3,
-  O: 4.1
+  O: 4.1,
 }, {
   arg: 'Outer Core',
   Si: 7.33,
   Fe: 78.56,
   Ni: 5.2,
   S: 2.7,
-  O: 4.2
+  O: 4.2,
 }, {
   arg: 'Lower Mantle',
   Si: 21.5,
@@ -21,7 +21,7 @@ export const dataSource = [{
   Al: 2.2,
   Ca: 2.3,
   Na: 0.3,
-  K: 0.03
+  K: 0.03,
 }, {
   arg: 'Upper Mantle',
   Si: 28.1,
@@ -30,7 +30,7 @@ export const dataSource = [{
   Al: 1.2,
   Ca: 2.2,
   O: 40.3,
-  Na: 0.2
+  Na: 0.2,
 }, {
   arg: 'Lower Crust',
   O: 46.6,
@@ -40,7 +40,7 @@ export const dataSource = [{
   Ca: 3.6,
   Na: 2.8,
   K: 2.6,
-  Mg: 1.5
+  Mg: 1.5,
 }, {
   arg: 'Upper Crust',
   O: 47,
@@ -50,6 +50,6 @@ export const dataSource = [{
   Ca: 2.96,
   Na: 2.5,
   K: 2.5,
-  Mg: 1.87
+  Mg: 1.87,
 }];
 

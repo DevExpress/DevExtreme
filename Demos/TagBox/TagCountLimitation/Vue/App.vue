@@ -57,7 +57,7 @@ import { products } from './data.js';
 
 export default {
   components: {
-    DxTagBox
+    DxTagBox,
   },
   data() {
     return {
@@ -67,14 +67,14 @@ export default {
         const selectedItemsLength = args.selectedItems.length;
         const totalCount = 5;
 
-        if(selectedItemsLength < totalCount) {
+        if (selectedItemsLength < totalCount) {
           args.cancel = true;
         } else {
-          args.text = `All selected (${ selectedItemsLength })`;
+          args.text = `All selected (${selectedItemsLength})`;
         }
-      }
+      },
     };
-  }
+  },
 };
 </script>
 <style scoped>

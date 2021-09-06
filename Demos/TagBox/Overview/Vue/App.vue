@@ -109,7 +109,7 @@ import { simpleProducts, products } from './data.js';
 export default {
   components: {
     DxTagBox,
-    Item
+    Item,
   },
   data() {
     return {
@@ -118,16 +118,16 @@ export default {
       editableProducts: simpleProducts.slice(),
       data: new ArrayStore({
         data: products,
-        key: 'ID'
+        key: 'ID',
       }),
       value: simpleProducts[0],
       onCustomItemCreating: (args) => {
         const newValue = args.text;
         args.customItem = newValue;
         this.editableProducts.unshift(newValue);
-      }
+      },
     };
-  }
+  },
 };
 </script>
 <style scoped>

@@ -4,25 +4,25 @@ import PieChart, {
   Series,
   Legend,
   Label,
-  Connector
+  Connector,
 } from 'devextreme-react/pie-chart';
 
 import { data } from './data.js';
 import CenterTemplate from './CenterTemplate.js';
-const countries = Array.from(new Set(data.map(item => item.country)));
+
+const countries = Array.from(new Set(data.map((item) => item.country)));
 
 class App extends React.Component {
-
   customizeLabel(e) {
     return `${e.argumentText}\n${e.valueText}`;
   }
 
   render() {
-    const pies = countries.map(country => (
+    const pies = countries.map((country) => (
       <PieChart
         id="pie-chart"
         key={country}
-        dataSource={data.filter(i => i.country === country)}
+        dataSource={data.filter((i) => i.country === country)}
         resolveLabelOverlapping="shift"
         sizeGroup="piesGroup"
         innerRadius={0.65}

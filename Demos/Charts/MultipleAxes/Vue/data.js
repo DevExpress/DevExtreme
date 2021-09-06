@@ -4,7 +4,7 @@ export const continentSources = [
   { value: 'europe', name: 'Europe' },
   { value: 'latinamerica', name: 'Latin America & Caribbean' },
   { value: 'northamerica', name: 'Northern America' },
-  { value: 'oceania', name: 'Oceania' }
+  { value: 'oceania', name: 'Oceania' },
 ];
 
 export const populationData = [{
@@ -15,7 +15,7 @@ export const populationData = [{
   latinamerica: 16000000,
   northamerica: 2000000,
   oceania: 2000000,
-  total: 791000000
+  total: 791000000,
 }, {
   year: '1800',
   africa: 107000000,
@@ -24,7 +24,7 @@ export const populationData = [{
   latinamerica: 24000000,
   northamerica: 7000000,
   oceania: 2000000,
-  total: 978000000
+  total: 978000000,
 }, {
   year: '1850',
   africa: 111000000,
@@ -33,7 +33,7 @@ export const populationData = [{
   latinamerica: 38000000,
   northamerica: 26000000,
   oceania: 2000000,
-  total: 1262000000
+  total: 1262000000,
 }, {
   year: '1900',
   africa: 133000000,
@@ -42,7 +42,7 @@ export const populationData = [{
   latinamerica: 74000000,
   northamerica: 82000000,
   oceania: 6000000,
-  total: 1650000000
+  total: 1650000000,
 }, {
   year: '1950',
   africa: 229895000,
@@ -51,7 +51,7 @@ export const populationData = [{
   latinamerica: 167368000,
   northamerica: 171614000,
   oceania: 12675000,
-  total: 2532227000
+  total: 2532227000,
 }, {
   year: '2000',
   africa: 811101000,
@@ -60,7 +60,7 @@ export const populationData = [{
   latinamerica: 521419000,
   northamerica: 313289000,
   oceania: 31130000,
-  total: 6122770000
+  total: 6122770000,
 }, {
   year: '2050',
   africa: 2191599000,
@@ -69,5 +69,5 @@ export const populationData = [{
   latinamerica: 750956000,
   northamerica: 446862000,
   oceania: 55223000,
-  total: 9306128000
+  total: 9306128000,
 }];

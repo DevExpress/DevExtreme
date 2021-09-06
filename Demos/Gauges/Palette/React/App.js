@@ -1,10 +1,11 @@
 import React from 'react';
-import { BarGauge, Label, Export, Title, Font } from 'devextreme-react/bar-gauge';
+import {
+  BarGauge, Label, Export, Title, Font,
+} from 'devextreme-react/bar-gauge';
 
 const values = [-21.3, 14.8, -30.9, 45.2];
 
 class App extends React.Component {
-
   render() {
     return (
       <BarGauge

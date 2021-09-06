@@ -96,9 +96,9 @@ export default {
     DxNumberBox,
     DxSwitch,
     DxSelectBox,
-    SuperheroLogo
+    SuperheroLogo,
   },
-  data: function() {
+  data() {
     return {
       color: '#f05b41',
       text: 'UI Superhero',
@@ -111,8 +111,8 @@ export default {
           key: 'Flip',
           items: [
             { name: '0 degrees', value: 'scaleX(1)' },
-            { name: '180 degrees', value: 'scaleX(-1)' }
-          ]
+            { name: '180 degrees', value: 'scaleX(-1)' },
+          ],
         },
         {
           key: 'Rotate',
@@ -121,10 +121,10 @@ export default {
             { name: '15 degrees', value: 'rotate(15deg)' },
             { name: '30 degrees', value: 'rotate(30deg)' },
             { name: '-15 degrees', value: 'rotate(-15deg)' },
-            { name: '-30 degrees', value: 'rotate(-30deg)' }
-          ]
-        }
-      ]
+            { name: '-30 degrees', value: 'rotate(-30deg)' },
+          ],
+        },
+      ],
     };
   },
   watch: {
@@ -133,8 +133,8 @@ export default {
     },
     width(val) {
       this.height = val * 26 / 37;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

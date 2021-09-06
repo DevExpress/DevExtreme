@@ -68,7 +68,7 @@ import {
   DxLabel,
   DxBorder,
   DxTooltip,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
 
@@ -84,18 +84,18 @@ export default {
     DxLabel,
     DxBorder,
     DxTooltip,
-    DxExport
+    DxExport,
   },
   data() {
     return {
       dataSource,
-      palette: ['#00ced1', '#008000', '#ffd700', '#ff7f50']
+      palette: ['#00ced1', '#008000', '#ffd700', '#ff7f50'],
     };
   },
   methods: {
     customizeTooltip(pointInfo) {
       return {
-        text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`
+        text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
       };
     },
     seriesClick(e) {
@@ -108,8 +108,8 @@ export default {
     },
     customizeText(e) {
       return `${e.value}M`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

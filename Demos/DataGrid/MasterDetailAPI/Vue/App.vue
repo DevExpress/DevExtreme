@@ -47,7 +47,7 @@
 import DxDataGrid, {
   DxColumn,
   DxMasterDetail,
-  DxSelection
+  DxSelection,
 } from 'devextreme-vue/data-grid';
 import { employees } from './data.js';
 
@@ -56,23 +56,22 @@ export default {
     DxDataGrid,
     DxColumn,
     DxMasterDetail,
-    DxSelection
+    DxSelection,
   },
   data() {
     return {
-      dataSource: employees
+      dataSource: employees,
     };
   },
   methods: {
     contentReady(e) {
-      if (!e.component.getSelectedRowKeys().length)
-      { e.component.selectRowsByIndexes(0); }
+      if (!e.component.getSelectedRowKeys().length) { e.component.selectRowsByIndexes(0); }
     },
     selectionChanged(e) {
       e.component.collapseAll(-1);
       e.component.expandRow(e.currentSelectedRowKeys[0]);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

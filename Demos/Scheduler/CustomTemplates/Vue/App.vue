@@ -51,11 +51,11 @@
 
 <script>
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
+import Query from 'devextreme/data/query';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';
 
 import { data, moviesData, theatreData } from './data.js';
-import Query from 'devextreme/data/query';
 
 const getMovieById = function(resourceId) {
   return Query(moviesData)
@@ -68,7 +68,7 @@ export default {
     DxScheduler,
     DxResource,
     AppointmentTemplate,
-    AppointmentTooltipTemplate
+    AppointmentTooltipTemplate,
   },
   data() {
     return {
@@ -77,9 +77,9 @@ export default {
       scheduler: null,
       currentDate: new Date(2021, 3, 27),
       dataSource: data,
-      moviesData: moviesData,
-      theatreData: theatreData,
-      editing: { allowAdding: false }
+      moviesData,
+      theatreData,
+      editing: { allowAdding: false },
     };
   },
   methods: {
@@ -87,13 +87,13 @@ export default {
       this.scheduler = e.component;
     },
     onAppointmentFormOpening(data) {
-      let form = data.form,
-        movieInfo = getMovieById(data.appointmentData.movieId) || {},
-        startDate = data.appointmentData.startDate;
+      const { form } = data;
+      let movieInfo = getMovieById(data.appointmentData.movieId) || {};
+      let { startDate } = data.appointmentData;
 
       form.option('items', [{
         label: {
-          text: 'Movie'
+          text: 'Movie',
         },
         editorType: 'dxSelectBox',
         dataField: 'movieId',
@@ -101,34 +101,34 @@ export default {
           items: moviesData,
           displayExpr: 'text',
           valueExpr: 'id',
-          onValueChanged: function(args) {
+          onValueChanged(args) {
             movieInfo = getMovieById(args.value);
 
             form.updateData('director', movieInfo.director);
             form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
-          }
+          },
         },
       }, {
         label: {
-          text: 'Director'
+          text: 'Director',
         },
         name: 'director',
         editorType: 'dxTextBox',
         editorOptions: {
           value: movieInfo.director,
-          readOnly: true
-        }
+          readOnly: true,
+        },
       }, {
         dataField: 'startDate',
         editorType: 'dxDateBox',
         editorOptions: {
           width: '100%',
           type: 'datetime',
-          onValueChanged: function(args) {
+          onValueChanged(args) {
             startDate = args.value;
             form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
-          }
-        }
+          },
+        },
       }, {
         name: 'endDate',
         dataField: 'endDate',
@@ -136,20 +136,20 @@ export default {
         editorOptions: {
           width: '100%',
           type: 'datetime',
-          readOnly: true
-        }
+          readOnly: true,
+        },
       }, {
         dataField: 'price',
         editorType: 'dxRadioGroup',
         editorOptions: {
           dataSource: [5, 10, 15, 20],
-          itemTemplate: function(itemData) {
+          itemTemplate(itemData) {
             return '$'.concat(itemData);
-          }
-        }
-      }
+          },
+        },
+      },
       ]);
-    }
+    },
   },
 };
 </script>

@@ -1,31 +1,29 @@
-window.onload = function() {
-    var palette = ko.observable(paletteCollection[0]),
-        paletteExtensionMode = ko.observable("Blend"),
-        viewModel = {
-            chartOptions: {
-                palette: palette,
-                dataSource: dataSource,
-                series: {},
-                paletteExtensionMode: paletteExtensionMode,
-                legend: {
-                    visible: false
-                }
-            },
+window.onload = function () {
+  const palette = ko.observable(paletteCollection[0]);
+  const paletteExtensionMode = ko.observable('Blend');
+  const viewModel = {
+    chartOptions: {
+      palette,
+      dataSource,
+      series: {},
+      paletteExtensionMode,
+      legend: {
+        visible: false,
+      },
+    },
 
-            paletteSelectBoxOptions: {
-                items: paletteCollection,
-                value: palette
-            },
+    paletteSelectBoxOptions: {
+      items: paletteCollection,
+      value: palette,
+    },
 
-            extensionModeSelectBoxOptions: {
-                items: paletteExtensionModes,
-                value: paletteExtensionMode
-            },
+    extensionModeSelectBoxOptions: {
+      items: paletteExtensionModes,
+      value: paletteExtensionMode,
+    },
 
-            baseColors: ko.computed(function() { 
-                return DevExpress.viz.getPalette(palette()).simpleSet; 
-            })
-        };
+    baseColors: ko.computed(() => DevExpress.viz.getPalette(palette()).simpleSet),
+  };
 
-    ko.applyBindings(viewModel, document.getElementById("chart-demo"));
+  ko.applyBindings(viewModel, document.getElementById('chart-demo'));
 };

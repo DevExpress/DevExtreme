@@ -83,7 +83,7 @@ export default {
     DxNumberBox,
     DxTextBoxButton,
     DxNumberBoxButton,
-    DxDateBoxButton
+    DxDateBoxButton,
   },
   data() {
     return {
@@ -93,7 +93,7 @@ export default {
         type: 'default',
         onClick: () => {
           this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
-        }
+        },
       },
       currencyFormat: '$ #.##',
       currencyValue: 14500.55,
@@ -102,10 +102,10 @@ export default {
         stylingMode: 'text',
         width: 32,
         elementAttr: {
-          class: 'currency'
+          class: 'currency',
         },
         onClick: (e) => {
-          if(e.component.option('text') === '$') {
+          if (e.component.option('text') === '$') {
             e.component.option('text', '€');
             this.currencyFormat = '$ #.##';
             this.currencyValue /= 0.836;
@@ -114,31 +114,31 @@ export default {
             this.currencyFormat = '€ #.##';
             this.currencyValue *= 0.836;
           }
-        }
+        },
       },
       dateValue: new Date().getTime(),
       todayButton: {
         text: 'Today',
         onClick: () => {
           this.dateValue = new Date().getTime();
-        }
+        },
       },
       prevDateButton: {
         icon: 'spinprev',
         stylingMode: 'text',
         onClick: () => {
           this.dateValue -= millisecondsInDay;
-        }
+        },
       },
       nextDateButton: {
         icon: 'spinnext',
         stylingMode: 'text',
         onClick: () => {
           this.dateValue += millisecondsInDay;
-        }
-      }
+        },
+      },
     };
-  }
+  },
 };
 </script>
 <style>

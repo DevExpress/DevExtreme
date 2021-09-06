@@ -1,78 +1,78 @@
-$(function(){
-    var selectedEmployeesList = $("#selected-employees").dxList({
-        width: 400,
-        height: 200,
-        showScrollbar: "always",
-        itemTemplate: function(item) {
-            return "<div>" + item.prefix + " " + item.fullName + " (" + item.position + ")</div>";
-        }
-    }).dxList("instance");
+$(() => {
+  const selectedEmployeesList = $('#selected-employees').dxList({
+    width: 400,
+    height: 200,
+    showScrollbar: 'always',
+    itemTemplate(item) {
+      return `<div>${item.prefix} ${item.fullName} (${item.position})</div>`;
+    },
+  }).dxList('instance');
 
-    var treeView = $("#treeview").dxTreeView({ 
-        items: employees,
-        width: 340,
-        height: 320,
-        showCheckBoxesMode: "normal",
-        onSelectionChanged: function(e) {
-            syncSelection(e.component);
-        },
-        onContentReady: function(e) {
-            syncSelection(e.component);
-        },
-        itemTemplate: function(item) {
-            return "<div>" + item.fullName + " (" + item.position + ")</div>";
-        }
-    }).dxTreeView('instance');
+  const treeView = $('#treeview').dxTreeView({
+    items: employees,
+    width: 340,
+    height: 320,
+    showCheckBoxesMode: 'normal',
+    onSelectionChanged(e) {
+      syncSelection(e.component);
+    },
+    onContentReady(e) {
+      syncSelection(e.component);
+    },
+    itemTemplate(item) {
+      return `<div>${item.fullName} (${item.position})</div>`;
+    },
+  }).dxTreeView('instance');
 
-    function syncSelection(treeView){
-        var selectedEmployees = treeView.getSelectedNodes()
-            .map(function(node) { return node.itemData; });
+  function syncSelection(treeView) {
+    const selectedEmployees = treeView.getSelectedNodes()
+      .map((node) => node.itemData);
 
-        selectedEmployeesList.option("items", selectedEmployees);
-    }
+    selectedEmployeesList.option('items', selectedEmployees);
+  }
 
-    $("#showCheckBoxesMode").dxSelectBox({
-        items: ["selectAll", "normal", "none"],
-        value: "normal",
-        onValueChanged: function(e) {
-            treeView.option("showCheckBoxesMode", e.value);
+  $('#showCheckBoxesMode').dxSelectBox({
+    items: ['selectAll', 'normal', 'none'],
+    value: 'normal',
+    onValueChanged(e) {
+      treeView.option('showCheckBoxesMode', e.value);
 
-            if(e.value === 'selectAll') {
-                selectionModeSelectBox.option('value', 'multiple');
-                recursiveCheckBox.option('disabled', false);
-            }
-            selectionModeSelectBox.option('disabled', e.value === 'selectAll');
-        }
-    });   
+      if (e.value === 'selectAll') {
+        selectionModeSelectBox.option('value', 'multiple');
+        recursiveCheckBox.option('disabled', false);
+      }
+      selectionModeSelectBox.option('disabled', e.value === 'selectAll');
+    },
+  });
 
-    var selectionModeSelectBox = $("#selectionMode").dxSelectBox({
-        items: ["multiple", "single"],
-        value: "multiple",
-        onValueChanged: function(e) {
-            treeView.option("selectionMode", e.value);
+  var selectionModeSelectBox = $('#selectionMode').dxSelectBox({
+    items: ['multiple', 'single'],
+    value: 'multiple',
+    onValueChanged(e) {
+      treeView.option('selectionMode', e.value);
 
-            if(e.value === 'single') {
-                recursiveCheckBox.option('value', false);
-                treeView.unselectAll();
-            }
+      if (e.value === 'single') {
+        recursiveCheckBox.option('value', false);
+        treeView.unselectAll();
+      }
 
-            recursiveCheckBox.option('disabled', e.value === 'single');
-        }
-    }).dxSelectBox('instance');
+      recursiveCheckBox.option('disabled', e.value === 'single');
+    },
+  }).dxSelectBox('instance');
 
-    var recursiveCheckBox = $("#selectNodesRecursive").dxCheckBox({
-        text: "Select Nodes Recursive",
-        value: true,
-        onValueChanged: function(e) {
-            treeView.option("selectNodesRecursive", e.value);
-        }
-    }).dxCheckBox('instance');
-    
-    $("#selectByClick").dxCheckBox({
-        text: "Select By Click",
-        value: false,
-        onValueChanged: function(e) {
-            treeView.option("selectByClick", e.value);
-        }
-    });    
+  var recursiveCheckBox = $('#selectNodesRecursive').dxCheckBox({
+    text: 'Select Nodes Recursive',
+    value: true,
+    onValueChanged(e) {
+      treeView.option('selectNodesRecursive', e.value);
+    },
+  }).dxCheckBox('instance');
+
+  $('#selectByClick').dxCheckBox({
+    text: 'Select By Click',
+    value: false,
+    onValueChanged(e) {
+      treeView.option('selectByClick', e.value);
+    },
+  });
 });

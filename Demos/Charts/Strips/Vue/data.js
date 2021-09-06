@@ -18,7 +18,7 @@ export const temperaturesData = [
   { temperature: 58, day: '17' },
   { temperature: 63, day: '18' },
   { temperature: 64, day: '19' },
-  { temperature: 52, day: '20' }
+  { temperature: 52, day: '20' },
 ];
 
 export const highAverage = 60.8;

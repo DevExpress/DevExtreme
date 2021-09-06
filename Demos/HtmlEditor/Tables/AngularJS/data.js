@@ -1,4 +1,4 @@
-var markup = `
+const markup = `
     <h2>
         Hardware Upgrade
     </h2>

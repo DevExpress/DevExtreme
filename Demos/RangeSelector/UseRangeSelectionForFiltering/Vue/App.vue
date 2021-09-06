@@ -28,16 +28,16 @@
   </div>
 </template>
 <script>
-import { employees } from './data.js';
 import {
   DxRangeSelector,
   DxMargin,
   DxScale,
   DxLabel,
   DxFormat,
-  DxBehavior
+  DxBehavior,
 } from 'devextreme-vue/range-selector';
 import { DxDataGrid } from 'devextreme-vue/data-grid';
+import { employees } from './data.js';
 
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
     DxScale,
     DxLabel,
     DxFormat,
-    DxBehavior
+    DxBehavior,
   },
   data() {
     return {
@@ -55,15 +55,15 @@ export default {
       range: [],
       columns: ['FirstName', 'LastName', 'BirthYear', 'City', 'Title'],
       format: {
-        type: 'decimal'
-      }
+        type: 'decimal',
+      },
     };
   },
   computed: {
     selectedEmployees() {
-      return employees.filter(employee => employee.BirthYear >= this.range[0] && employee.BirthYear <= this.range[1] || !this.range.length);
-    }
-  }
+      return employees.filter((employee) => employee.BirthYear >= this.range[0] && employee.BirthYear <= this.range[1] || !this.range.length);
+    },
+  },
 };
 </script>
 <style scoped>

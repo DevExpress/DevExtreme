@@ -1,12 +1,16 @@
-﻿import React from 'react';
-import DataGrid, { Column, Summary, TotalItem, MasterDetail, Paging } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, Summary, TotalItem, MasterDetail, Paging,
+} from 'devextreme-react/data-grid';
 import { Slider, Tooltip } from 'devextreme-react/slider';
-import { productsStore, ordersStore, getOrderCount, addOrder } from './data.js';
 import DataSource from 'devextreme/data/data_source';
+import {
+  productsStore, ordersStore, getOrderCount, addOrder,
+} from './data.js';
 
 const dataSource = new DataSource({
   store: productsStore,
-  reshapeOnPush: true
+  reshapeOnPush: true,
 });
 
 class App extends React.Component {
@@ -14,18 +18,18 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      updateFrequency: 100
+      updateFrequency: 100,
     };
 
     this.onUpdateFrequencyChanged = this.onUpdateFrequencyChanged.bind(this);
     this.detailRender = this.detailRender.bind(this);
 
     setInterval(() => {
-      if(getOrderCount() > 500000) {
+      if (getOrderCount() > 500000) {
         return;
       }
 
-      for(var i = 0; i < this.state.updateFrequency / 20; i++) {
+      for (let i = 0; i < this.state.updateFrequency / 20; i++) {
         addOrder();
       }
     }, 50);
@@ -132,7 +136,7 @@ class App extends React.Component {
 
   onUpdateFrequencyChanged(e) {
     this.setState({
-      updateFrequency: e.value
+      updateFrequency: e.value,
     });
   }
 
@@ -140,7 +144,7 @@ class App extends React.Component {
     return {
       store: ordersStore,
       reshapeOnPush: true,
-      filter: ['ProductID', '=', product.ProductID]
+      filter: ['ProductID', '=', product.ProductID],
     };
   }
 

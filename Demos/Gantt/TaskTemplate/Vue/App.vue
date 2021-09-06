@@ -62,14 +62,14 @@ import {
   DxResources,
   DxResourceAssignments,
   DxColumn,
-  DxEditing
+  DxEditing,
 } from 'devextreme-vue/gantt';
 
 import {
   tasks,
   dependencies,
   resources,
-  resourceAssignments
+  resourceAssignments,
 } from './data.js';
 
 export default {
@@ -80,14 +80,14 @@ export default {
     DxResources,
     DxResourceAssignments,
     DxColumn,
-    DxEditing
+    DxEditing,
   },
   data() {
     return {
-      tasks: tasks,
-      dependencies: dependencies,
-      resources: resources,
-      resourceAssignments: resourceAssignments,
+      tasks,
+      dependencies,
+      resources,
+      resourceAssignments,
     };
   },
   methods: {
@@ -100,8 +100,8 @@ export default {
     getTaskColor(taskId) {
       const color = taskId % 6;
       return `custom-task-color-${color}`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

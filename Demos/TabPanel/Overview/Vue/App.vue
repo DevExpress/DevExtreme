@@ -79,7 +79,7 @@ import { multiViewItems } from './data.js';
 export default {
   components: {
     DxCheckBox,
-    DxTabPanel
+    DxTabPanel,
   },
   data() {
     return {
@@ -87,9 +87,9 @@ export default {
       loop: false,
       animationEnabled: true,
       swipeEnabled: true,
-      companies: multiViewItems
+      companies: multiViewItems,
     };
-  }
+  },
 };
 </script>
 <style>

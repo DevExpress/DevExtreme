@@ -30,13 +30,13 @@
 </template>
 <script>
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
-import { employeesList, employeesTasks } from './data.js';
 import DataSource from 'devextreme/data/data_source';
+import { employeesList, employeesTasks } from './data.js';
 
 export default {
   components: {
     DxLookup,
-    DxDropDownOptions
+    DxDropDownOptions,
   },
   data() {
     return {
@@ -44,10 +44,10 @@ export default {
       employeesTasks: new DataSource({
         store: employeesTasks,
         key: 'ID',
-        group: 'Assigned'
-      })
+        group: 'Assigned',
+      }),
     };
-  }
+  },
 };
 </script>
 

@@ -12,12 +12,12 @@ export default {
   props: {
     cellData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
-      dayOfWeekNames: dayOfWeekNames,
+      dayOfWeekNames,
     };
   },
 };

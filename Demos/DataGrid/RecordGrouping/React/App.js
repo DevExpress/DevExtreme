@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
@@ -15,7 +15,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      autoExpandAll: true
+      autoExpandAll: true,
     };
 
     this.onAutoExpandAllChanged = this.onAutoExpandAllChanged.bind(this);
@@ -56,7 +56,7 @@ class App extends React.Component {
 
   onAutoExpandAllChanged() {
     this.setState({
-      autoExpandAll: !this.state.autoExpandAll
+      autoExpandAll: !this.state.autoExpandAll,
     });
   }
 }

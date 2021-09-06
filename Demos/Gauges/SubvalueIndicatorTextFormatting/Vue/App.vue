@@ -36,25 +36,27 @@
   </div>
 </template>
 <script>
-import { DxCircularGauge, DxScale, DxLabel, DxSubvalueIndicator, DxText, DxExport, DxTitle, DxFont } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxLabel, DxSubvalueIndicator, DxText, DxExport, DxTitle, DxFont,
+} from 'devextreme-vue/circular-gauge';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxLabel, DxSubvalueIndicator, DxText, DxExport, DxTitle, DxFont
+    DxCircularGauge, DxScale, DxLabel, DxSubvalueIndicator, DxText, DxExport, DxTitle, DxFont,
   },
   data() {
     return {
       format: {
         type: 'thousands',
-        precision: 1
-      }
+        precision: 1,
+      },
     };
   },
   methods: {
     customizeText({ valueText }) {
       return `${valueText} °C`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

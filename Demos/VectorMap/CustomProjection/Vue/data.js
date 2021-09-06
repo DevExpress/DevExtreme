@@ -1,9 +1,9 @@
 export const coordLinesData = {
   type: 'FeatureCollection',
-  features: []
+  features: [],
 };
 
-//add meridians
+// add meridians
 for (let longitude = -180; longitude <= 180; longitude += 30) {
   const lineCoords = [];
   for (let latitude = -90; latitude <= 90; latitude += 5) {
@@ -13,17 +13,17 @@ for (let longitude = -180; longitude <= 180; longitude += 30) {
   coordLinesData.features.push({
     geometry: {
       type: 'LineString',
-      coordinates: lineCoords
-    }
+      coordinates: lineCoords,
+    },
   });
 }
 
-//add parallels
+// add parallels
 for (let latitude = -90; latitude <= 90; latitude += 30) {
   coordLinesData.features.push({
     geometry: {
       type: 'LineString',
-      coordinates: [[ -180, latitude ], [ 180, latitude]]
-    }
+      coordinates: [[-180, latitude], [180, latitude]],
+    },
   });
 }

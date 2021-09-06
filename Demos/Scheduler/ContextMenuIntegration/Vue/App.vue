@@ -60,7 +60,7 @@ export default {
       dataSource: data,
       groups: undefined,
       crossScrollingEnabled: false,
-      resourcesData: resourcesData,
+      resourcesData,
       disabled: true,
       contextMenuItems: [],
       target: appointmentClassName,
@@ -71,11 +71,10 @@ export default {
       const scheduler = this.$refs.scheduler.instance;
       const resourceItems = resourcesData.map((item) => ({
         ...item,
-        onItemClick: ({ itemData }) =>
-          scheduler.updateAppointment(appointmentData, {
-            ...appointmentData,
-            ...{ roomId: [itemData.id] },
-          }),
+        onItemClick: ({ itemData }) => scheduler.updateAppointment(appointmentData, {
+          ...appointmentData,
+          ...{ roomId: [itemData.id] },
+        }),
       }));
       this.target = appointmentClassName;
       this.disabled = false;
@@ -91,11 +90,10 @@ export default {
         {
           text: 'Repeat Weekly',
           beginGroup: true,
-          onItemClick: () =>
-            scheduler.updateAppointment(appointmentData, {
-              startDate: targetedAppointmentData.startDate,
-              recurrenceRule: 'FREQ=WEEKLY',
-            }),
+          onItemClick: () => scheduler.updateAppointment(appointmentData, {
+            startDate: targetedAppointmentData.startDate,
+            recurrenceRule: 'FREQ=WEEKLY',
+          }),
         },
         { text: 'Set Room', beginGroup: true, disabled: true },
         ...resourceItems,
@@ -108,22 +106,20 @@ export default {
       this.contextMenuItems = [
         {
           text: 'New Appointment',
-          onItemClick: () =>
-            scheduler.showAppointmentPopup(
-              { startDate: cellData.startDate },
-              true
-            ),
+          onItemClick: () => scheduler.showAppointmentPopup(
+            { startDate: cellData.startDate },
+            true,
+          ),
         },
         {
           text: 'New Recurring Appointment',
-          onItemClick: () =>
-            scheduler.showAppointmentPopup(
-              {
-                startDate: cellData.startDate,
-                recurrenceRule: 'FREQ=DAILY',
-              },
-              true
-            ),
+          onItemClick: () => scheduler.showAppointmentPopup(
+            {
+              startDate: cellData.startDate,
+              recurrenceRule: 'FREQ=DAILY',
+            },
+            true,
+          ),
         },
         {
           text: 'Group by Room/Ungroup',

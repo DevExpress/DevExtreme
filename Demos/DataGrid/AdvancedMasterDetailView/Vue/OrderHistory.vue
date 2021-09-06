@@ -49,7 +49,7 @@ import {
   DxPaging,
   DxSummary,
   DxTotalItem,
-  DxValueFormat
+  DxValueFormat,
 } from 'devextreme-vue/data-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
@@ -63,13 +63,13 @@ export default {
     DxPaging,
     DxSummary,
     DxTotalItem,
-    DxValueFormat
+    DxValueFormat,
   },
   props: {
     productId: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     orderHistoryStore() {
@@ -77,10 +77,10 @@ export default {
         store: createStore({
           key: 'OrderID',
           loadParams: { ProductID: this.productId },
-          loadUrl: `${url}/GetOrdersByProduct`
-        })
+          loadUrl: `${url}/GetOrdersByProduct`,
+        }),
       };
-    }
-  }
+    },
+  },
 };
 </script>

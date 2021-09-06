@@ -1,7 +1,7 @@
 import React from 'react';
-import { tasks, employees } from './data.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
+import { tasks, employees } from './data.js';
 
 const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 
@@ -13,7 +13,9 @@ function Card({ task, employeesMap }) {
   </div>;
 }
 
-function List({ title, index, tasks, employeesMap, onTaskDragStart, onTaskDrop }) {
+function List({
+  title, index, tasks, employeesMap, onTaskDragStart, onTaskDrop,
+}) {
   return <div className="list">
     <div className="list-title dx-theme-text-color">{title}</div>
     <ScrollView
@@ -27,13 +29,11 @@ function List({ title, index, tasks, employeesMap, onTaskDragStart, onTaskDrop }
         onDragStart={onTaskDragStart}
         onReorder={onTaskDrop}
         onAdd={onTaskDrop}>
-        {tasks.map(task =>
-          <Card
-            key={task.Task_ID}
-            task={task}
-            employeesMap={employeesMap}>
-          </Card>
-        )}
+        {tasks.map((task) => <Card
+          key={task.Task_ID}
+          task={task}
+          employeesMap={employeesMap}>
+        </Card>)}
       </Sortable>
     </ScrollView>
   </div>;
@@ -45,26 +45,27 @@ class App extends React.Component {
 
     const employeesMap = {};
 
-    employees.forEach(employee => {
+    employees.forEach((employee) => {
       employeesMap[employee.ID] = employee.Name;
     });
 
     const lists = [];
 
-    statuses.forEach(status => {
-      lists.push(tasks.filter(task => task.Task_Status === status));
+    statuses.forEach((status) => {
+      lists.push(tasks.filter((task) => task.Task_Status === status));
     });
 
     this.state = {
       statuses,
       lists,
-      employeesMap
+      employeesMap,
     };
 
     this.onListReorder = this.onListReorder.bind(this);
     this.onTaskDragStart = this.onTaskDragStart.bind(this);
     this.onTaskDrop = this.onTaskDrop.bind(this);
   }
+
   render() {
     const { lists, statuses, employeesMap } = this.state;
     return (
@@ -99,7 +100,7 @@ class App extends React.Component {
   onListReorder(e) {
     this.setState({
       lists: this.reorder(this.state.lists, this.state.lists[e.fromIndex], e.fromIndex, e.toIndex),
-      statuses: this.reorder(this.state.statuses, this.state.statuses[e.fromIndex], e.fromIndex, e.toIndex)
+      statuses: this.reorder(this.state.statuses, this.state.statuses[e.fromIndex], e.fromIndex, e.toIndex),
     });
   }
 
@@ -113,11 +114,11 @@ class App extends React.Component {
   }
 
   reorder(items, item, fromIndex, toIndex) {
-    if(fromIndex >= 0) {
+    if (fromIndex >= 0) {
       items = [...items.slice(0, fromIndex), ...items.slice(fromIndex + 1)];
     }
 
-    if(toIndex >= 0) {
+    if (toIndex >= 0) {
       items = [...items.slice(0, toIndex), item, ...items.slice(toIndex)];
     }
 
@@ -130,7 +131,7 @@ class App extends React.Component {
     lists[listIndex] = this.reorder(lists[listIndex], itemData, fromIndex, toIndex);
 
     this.setState({
-      lists
+      lists,
     });
   }
 }

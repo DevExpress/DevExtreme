@@ -40,7 +40,7 @@ import DxPieChart, {
   DxMargin,
   DxExport,
   DxLegend,
-  DxAnimation
+  DxAnimation,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 
@@ -55,20 +55,20 @@ export default {
     DxExport,
     DxLegend,
     DxAnimation,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       dataSource,
       resolveModes: ['shift', 'hide', 'none'],
-      resolveMode: 'shift'
+      resolveMode: 'shift',
     };
   },
   methods: {
     formatText(pointInfo) {
       return `${pointInfo.argumentText} (${pointInfo.percentText})`;
-    }
-  }
+    },
+  },
 };
 </script>
 

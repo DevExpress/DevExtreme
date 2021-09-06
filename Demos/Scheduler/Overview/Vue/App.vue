@@ -48,7 +48,7 @@ export default {
     DxScheduler,
     DxResource,
     DataCell,
-    ResourceCell
+    ResourceCell,
   },
   data() {
     return {
@@ -56,9 +56,9 @@ export default {
       views: ['month'],
       currentDate: new Date(2021, 5, 2, 11, 30),
       employees,
-      dataSource: data
+      dataSource: data,
     };
-  }
+  },
 };
 </script>
 <style>

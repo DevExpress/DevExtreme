@@ -2,24 +2,24 @@ import React from 'react';
 
 import {
   PivotGrid,
-  FieldChooser
+  FieldChooser,
 } from 'devextreme-react/pivot-grid';
 
 import {
   PivotGridFieldChooser,
-  Texts
+  Texts,
 } from 'devextreme-react/pivot-grid-field-chooser';
 
 import {
-  SelectBox
+  SelectBox,
 } from 'devextreme-react/select-box';
 
 import {
-  Button
+  Button,
 } from 'devextreme-react/button';
 
 import {
-  RadioGroup
+  RadioGroup,
 } from 'devextreme-react/radio-group';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -32,7 +32,7 @@ class App extends React.Component {
 
     this.state = {
       applyChangesMode: 'instantly',
-      layout: 0
+      layout: 0,
     };
 
     this.changeMode = this.changeMode.bind(this);
@@ -77,8 +77,8 @@ class App extends React.Component {
               filterFields="Filter"
             ></Texts>
           </PivotGridFieldChooser>
-          { this.state.applyChangesMode === 'onDemand' &&
-                <div className="bottom-bar">
+          { this.state.applyChangesMode === 'onDemand'
+                && <div className="bottom-bar">
                   <Button
                     text="Apply"
                     type="default"
@@ -125,13 +125,13 @@ class App extends React.Component {
 
   changeMode(e) {
     this.setState({
-      applyChangesMode: e.value
+      applyChangesMode: e.value,
     });
   }
 
   changeLayout(e) {
     this.setState({
-      layout: e.value
+      layout: e.value,
     });
   }
 
@@ -151,32 +151,32 @@ const dataSource = new PivotGridDataSource({
     dataField: 'region',
     area: 'row',
     headerFilter: {
-      allowSearch: true
-    }
+      allowSearch: true,
+    },
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
     area: 'row',
     headerFilter: {
-      allowSearch: true
+      allowSearch: true,
     },
-    selector: function(data) {
-      return `${data.city } (${ data.country })`;
-    }
+    selector(data) {
+      return `${data.city} (${data.country})`;
+    },
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     caption: 'Sales',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }],
-  store: service.getSales()
+  store: service.getSales(),
 });
 
 const applyChangesModes = ['instantly', 'onDemand'];

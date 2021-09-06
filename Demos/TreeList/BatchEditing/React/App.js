@@ -1,5 +1,7 @@
 import React from 'react';
-import { TreeList, Editing, Column, RequiredRule, Lookup } from 'devextreme-react/tree-list';
+import {
+  TreeList, Editing, Column, RequiredRule, Lookup,
+} from 'devextreme-react/tree-list';
 import { tasks, employees } from './data.js';
 
 const statuses = [
@@ -7,7 +9,7 @@ const statuses = [
   'Need Assistance',
   'In Progress',
   'Deferred',
-  'Completed'
+  'Completed',
 ];
 
 class App extends React.Component {
@@ -63,6 +65,7 @@ class App extends React.Component {
       </div>
     );
   }
+
   onInitNewRow(e) {
     e.data.Task_Status = 'Not Started';
     e.data.Task_Start_Date = new Date();

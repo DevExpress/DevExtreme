@@ -51,32 +51,33 @@
 
 <script>
 import DxSparkline, {
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/sparkline';
 
 import {
   oilCosts,
   goldCosts,
-  silverCosts } from './data.js';
+  silverCosts,
+} from './data.js';
 
 export default {
   components: {
     DxSparkline,
-    DxTooltip
+    DxTooltip,
   },
   props: {
-    year:{
+    year: {
       type: String,
-      default() {}
-    }
+      default() {},
+    },
   },
   data() {
     return {
       oilCosts,
       goldCosts,
-      silverCosts
+      silverCosts,
     };
-  }
+  },
 };
 </script>
 

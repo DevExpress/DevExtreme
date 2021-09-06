@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 
@@ -19,12 +19,12 @@ import Globalize from 'globalize';
 import service from './data.js';
 
 const editPopupOptions = {
-  width:700,
-  height:345
+  width: 700,
+  height: 345,
 };
 const amountEditorOptions = {
   format: 'currency',
-  showClearButton: true
+  showClearButton: true,
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 
@@ -32,38 +32,43 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      locale: this.getLocale()
+      locale: this.getLocale(),
     };
     this.locales = service.getLocales();
     this.payments = service.getPayments();
     this.initGlobalize();
     this.changeLocale = this.changeLocale.bind(this);
   }
+
   getLocale() {
     const locale = sessionStorage.getItem('locale');
     return locale != null ? locale : 'en';
   }
+
   setLocale(locale) {
     sessionStorage.setItem('locale', locale);
   }
+
   initGlobalize() {
     Globalize.load(
       deCldrData,
       ruCldrData,
-      supplementalCldrData
+      supplementalCldrData,
     );
     Globalize.loadMessages(deMessages);
     Globalize.loadMessages(ruMessages);
     Globalize.loadMessages(service.getDictionary());
     Globalize.locale(this.state.locale);
   }
+
   changeLocale(e) {
     this.setState({
-      locale: e.value
+      locale: e.value,
     });
     this.setLocale(e.value);
     document.location.reload();
   }
+
   render() {
     return (
       <div>

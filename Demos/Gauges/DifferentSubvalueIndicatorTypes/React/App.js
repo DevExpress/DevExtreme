@@ -1,8 +1,9 @@
 import React from 'react';
-import { CircularGauge, Scale, Geometry, SubvalueIndicator } from 'devextreme-react/circular-gauge';
+import {
+  CircularGauge, Scale, Geometry, SubvalueIndicator,
+} from 'devextreme-react/circular-gauge';
 
 class App extends React.Component {
-
   render() {
     return (
       <div>

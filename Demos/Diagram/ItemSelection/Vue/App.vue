@@ -28,31 +28,31 @@
   </div>
 </template>
 <script>
-import { DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel } from 'devextreme-vue/diagram';
+import {
+  DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
+} from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
 export default {
   components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel
+    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
   },
   data() {
     return {
       dataSource: new ArrayStore({
         key: 'ID',
-        data: service.getEmployees()
+        data: service.getEmployees(),
       }),
-      selectedItemNames: 'Nobody has been selected'
+      selectedItemNames: 'Nobody has been selected',
     };
   },
   methods: {
     onContentReady(e) {
-      var diagram = e.component;
+      const diagram = e.component;
       // preselect some shape
-      var items = diagram.getItems().filter(function(item) {
-        return item.itemType === 'shape' && (item.text === 'Greta Sims');
-      });
-      if(items.length > 0) {
+      const items = diagram.getItems().filter((item) => item.itemType === 'shape' && (item.text === 'Greta Sims'));
+      if (items.length > 0) {
         diagram.setSelectedItems(items);
         diagram.scrollToItem(items[0]);
         diagram.focus();
@@ -61,13 +61,13 @@ export default {
     onSelectionChanged({ items }) {
       this.selectedItemNames = 'Nobody has been selected';
       items = items
-        .filter(function(item) { return item.itemType === 'shape'; })
-        .map(function(item) { return item.text; });
-      if(items.length > 0) {
+        .filter((item) => item.itemType === 'shape')
+        .map((item) => item.text);
+      if (items.length > 0) {
         this.selectedItemNames = items.join(', ');
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

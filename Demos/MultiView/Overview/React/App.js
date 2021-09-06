@@ -12,29 +12,33 @@ class App extends React.Component {
     this.state = {
       animationEnabled: true,
       loop: false,
-      selectedIndex: 0
+      selectedIndex: 0,
     };
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
     this.onLoopChanged = this.onLoopChanged.bind(this);
     this.onAnimationEnabledChanged = this.onAnimationEnabledChanged.bind(this);
   }
+
   onSelectionChanged(args) {
-    if(args.name == 'selectedIndex') {
+    if (args.name == 'selectedIndex') {
       this.setState({
-        selectedIndex: args.value
+        selectedIndex: args.value,
       });
     }
   }
+
   onLoopChanged(args) {
     this.setState({
-      loop: args.value
+      loop: args.value,
     });
   }
+
   onAnimationEnabledChanged(args) {
     this.setState({
-      animationEnabled: args.value
+      animationEnabled: args.value,
     });
   }
+
   render() {
     return (
       <div id="multiview">

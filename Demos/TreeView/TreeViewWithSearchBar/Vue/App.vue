@@ -29,15 +29,15 @@ import { products } from './data.js';
 export default {
   components: {
     DxSelectBox,
-    DxTreeView
+    DxTreeView,
   },
   data() {
     return {
-      products: products,
+      products,
       options: ['contains', 'startswith', 'equals'],
-      searchMode: 'contains'
+      searchMode: 'contains',
     };
-  }
+  },
 };
 </script>
 <style scoped>

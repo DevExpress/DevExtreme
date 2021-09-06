@@ -11,21 +11,21 @@
   </div>
 </template>
 <script>
-import ProductInfo from './ProductInfo.vue';
 import DxList from 'devextreme-vue/list';
+import ProductInfo from './ProductInfo.vue';
 
 import { products } from './data.js';
 
 export default {
   components: {
     DxList,
-    ProductInfo
+    ProductInfo,
   },
   data() {
     return {
-      dataSource: products
+      dataSource: products,
     };
-  }
+  },
 };
 </script>
 <style>

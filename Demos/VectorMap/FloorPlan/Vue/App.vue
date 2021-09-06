@@ -32,7 +32,7 @@ import {
   DxVectorMap,
   DxLayer,
   DxLabel,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/vector-map';
 
 import { roomsData, buildingData } from './data.js';
@@ -42,7 +42,7 @@ export default {
     DxVectorMap,
     DxLayer,
     DxLabel,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
@@ -50,8 +50,8 @@ export default {
       buildingData,
       projection: {
         to: ([l, lt]) => [l / 100, lt / 100],
-        from: ([x, y]) => [x * 100, y * 100]
-      }
+        from: ([x, y]) => [x * 100, y * 100],
+      },
     };
   },
 
@@ -60,8 +60,8 @@ export default {
       if (info.layer.name === 'rooms') {
         return { text: `Square: ${info.attribute('square')} ft&#178` };
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

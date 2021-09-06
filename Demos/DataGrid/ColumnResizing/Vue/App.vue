@@ -36,21 +36,21 @@ import orders from './data.js';
 export default {
   components: {
     DxSelectBox,
-    DxDataGrid
+    DxDataGrid,
   },
   data() {
     return {
-      orders: orders,
+      orders,
       columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
       resizingModes: ['nextColumn', 'widget'],
-      currentMode: 'nextColumn'
+      currentMode: 'nextColumn',
     };
   },
   methods: {
     changeResizingMode(data) {
       this.currentMode = data.value;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -65,8 +65,8 @@ export default {
 }
 
 .caption {
-	font-weight: 500;
-	font-size: 18px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .option {

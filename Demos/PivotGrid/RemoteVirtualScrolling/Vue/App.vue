@@ -31,7 +31,7 @@ import DxPivotGrid, {
   DxFieldPanel,
   DxFieldChooser,
   DxHeaderFilter,
-  DxScrolling
+  DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -43,7 +43,7 @@ export default {
     DxFieldPanel,
     DxFieldChooser,
     DxHeaderFilter,
-    DxScrolling
+    DxScrolling,
   },
   data() {
     return {
@@ -53,17 +53,17 @@ export default {
           { dataField: '[Customer].[Customer]', area: 'row' },
           { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
           { dataField: '[Ship Date].[Month of Year]', area: 'column' },
-          { dataField: '[Measures].[Internet Sales Amount]', area: 'data' }
+          { dataField: '[Measures].[Internet Sales Amount]', area: 'data' },
         ],
         store: new XmlaStore({
           type: 'xmla',
           url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
           catalog: 'Adventure Works DW Standard Edition',
-          cube: 'Adventure Works'
-        })
-      })
+          cube: 'Adventure Works',
+        }),
+      }),
     };
-  }
+  },
 };
 </script>
 <style scoped>

@@ -1,10 +1,11 @@
 import React from 'react';
-import { CircularGauge, Scale, Tooltip, Font, Export, Title } from 'devextreme-react/circular-gauge';
+import {
+  CircularGauge, Scale, Tooltip, Font, Export, Title,
+} from 'devextreme-react/circular-gauge';
 
 const subvalues = [8, 18];
 
 class App extends React.Component {
-
   render() {
     return (
       <CircularGauge
@@ -26,7 +27,7 @@ class App extends React.Component {
 
   customizeTooltip({ valueText }) {
     return {
-      text: `${valueText} ohm`
+      text: `${valueText} ohm`,
     };
   }
 }

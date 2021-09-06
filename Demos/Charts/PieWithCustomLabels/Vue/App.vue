@@ -40,7 +40,7 @@ import DxPieChart, {
   DxLabel,
   DxConnector,
   DxFont,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/pie-chart';
 
 import { dataSource } from './data.js';
@@ -53,18 +53,18 @@ export default {
     DxLabel,
     DxConnector,
     DxFont,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
     formatLabel(pointInfo) {
       return `${pointInfo.valueText} (${pointInfo.percentText})`;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -37,9 +37,7 @@ import { data, locations } from './data.js';
 
 const getLocations = function(date) {
   const timeZones = timeZoneUtils.getTimeZones(date);
-  return timeZones.filter((timeZone) => {
-    return locations.indexOf(timeZone.id) !== -1;
-  });
+  return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
 };
 
 const currentDate = new Date(2021, 3, 27);
@@ -49,20 +47,20 @@ export default {
   components: {
     DxScheduler,
     DxSelectBox,
-    DxEditing
+    DxEditing,
   },
   data() {
     return {
       views: ['workWeek'],
-      currentDate: currentDate,
+      currentDate,
       timezone: demoLocations[0].id,
       dataSource: data,
-      locationsData: demoLocations
+      locationsData: demoLocations,
     };
   },
   methods: {
-    onAppointmentFormOpening: function(args) {
-      const form = args.form;
+    onAppointmentFormOpening(args) {
+      const { form } = args;
 
       const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
       const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
@@ -75,12 +73,12 @@ export default {
       startDateDataSource.load();
       endDateDataSource.load();
     },
-    onOptionChanged: function(args) {
-      if(args.name === 'currentDate') {
+    onOptionChanged(args) {
+      if (args.name === 'currentDate') {
         this.locationsData = getLocations(args.value);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

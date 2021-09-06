@@ -1,9 +1,13 @@
 import React from 'react';
-import Gantt, { Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing } from 'devextreme-react/gantt';
+import Gantt, {
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing,
+} from 'devextreme-react/gantt';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import DateBox from 'devextreme-react/date-box';
-import { tasks, dependencies, resources, resourceAssignments } from './data.js';
+import {
+  tasks, dependencies, resources, resourceAssignments,
+} from './data.js';
 import TaskTooltipTemplate from './TaskTooltipTemplate.js';
 
 class App extends React.Component {
@@ -15,7 +19,7 @@ class App extends React.Component {
       showResources: true,
       showCustomTaskTooltip: true,
       startDateRange: new Date(2018, 11, 1),
-      endDateRange: new Date(2019, 11, 1)
+      endDateRange: new Date(2019, 11, 1),
     };
     this.onScaleTypeChanged = this.onScaleTypeChanged.bind(this);
     this.onTaskTitlePositionChanged = this.onTaskTitlePositionChanged.bind(this);
@@ -32,7 +36,7 @@ class App extends React.Component {
       showResources,
       showCustomTaskTooltip,
       startDateRange,
-      endDateRange
+      endDateRange,
     } = this.state;
     return (
       <div id="form-demo">
@@ -137,35 +141,39 @@ class App extends React.Component {
 
   onScaleTypeChanged(e) {
     this.setState({
-      scaleType: e.value
-    });
-  }
-  onTaskTitlePositionChanged(e) {
-    this.setState({
-      taskTitlePosition: e.value
-    });
-  }
-  onShowResourcesChanged(e) {
-    this.setState({
-      showResources: e.value
-    });
-  }
-  onShowCustomTaskTooltip(e) {
-    this.setState({
-      showCustomTaskTooltip: e.value
-    });
-  }
-  onStartDateValueChanged(e) {
-    this.setState({
-      startDateRange: e.value
-    });
-  }
-  onEndDateValueChanged(e) {
-    this.setState({
-      endDateRange: e.value
+      scaleType: e.value,
     });
   }
 
+  onTaskTitlePositionChanged(e) {
+    this.setState({
+      taskTitlePosition: e.value,
+    });
+  }
+
+  onShowResourcesChanged(e) {
+    this.setState({
+      showResources: e.value,
+    });
+  }
+
+  onShowCustomTaskTooltip(e) {
+    this.setState({
+      showCustomTaskTooltip: e.value,
+    });
+  }
+
+  onStartDateValueChanged(e) {
+    this.setState({
+      startDateRange: e.value,
+    });
+  }
+
+  onEndDateValueChanged(e) {
+    this.setState({
+      endDateRange: e.value,
+    });
+  }
 }
 
 export default App;

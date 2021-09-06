@@ -1,16 +1,15 @@
-﻿import React from 'react';
+import React from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
   SelectionStyle,
   Hatching,
   Legend,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 import { catBreedsData } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart

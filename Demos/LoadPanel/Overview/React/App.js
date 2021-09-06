@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { Button } from 'devextreme-react/button';
 import { CheckBox } from 'devextreme-react/check-box';
@@ -8,7 +8,6 @@ import { employee } from './data.js';
 const position = { of: '#employee' };
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +16,7 @@ class App extends React.Component {
       showIndicator: true,
       shading: true,
       showPane: true,
-      closeOnOutsideClick: false
+      closeOnOutsideClick: false,
     };
 
     this.onClick = this.onClick.bind(this);
@@ -107,7 +106,7 @@ class App extends React.Component {
   onClick() {
     this.setState({
       employeeInfo: {},
-      loadPanelVisible: true
+      loadPanelVisible: true,
     }, () => {
       setTimeout(this.hideLoadPanel, 3000);
     });
@@ -116,31 +115,31 @@ class App extends React.Component {
   hideLoadPanel() {
     this.setState({
       loadPanelVisible: false,
-      employeeInfo: employee
+      employeeInfo: employee,
     });
   }
 
   onShowIndicatorChange(e) {
     this.setState({
-      showIndicator: e.value
+      showIndicator: e.value,
     });
   }
 
   onShadingChange(e) {
     this.setState({
-      shading: e.value
+      shading: e.value,
     });
   }
 
   onShowPaneChange(e) {
     this.setState({
-      showPane: e.value
+      showPane: e.value,
     });
   }
 
   onCloseOnOutsideClickChange(e) {
     this.setState({
-      closeOnOutsideClick: e.value
+      closeOnOutsideClick: e.value,
     });
   }
 }

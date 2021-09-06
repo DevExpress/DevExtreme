@@ -16,33 +16,33 @@
   </div>
 </template>
 <script>
-import ProductInfo from './ProductInfo.vue';
 import DxList from 'devextreme-vue/list';
 
 import DataSource from 'devextreme/data/data_source';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+import ProductInfo from './ProductInfo.vue';
 
 const dataSource = new DataSource({
   store: createStore({
     key: 'ProductID',
-    loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders'
+    loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders',
   }),
   sort: 'ProductName',
   group: 'Category.CategoryName',
   paginate: true,
   pageSize: 1,
-  filter: ['UnitPrice', '>', 15]
+  filter: ['UnitPrice', '>', 15],
 });
 
 export default {
   components: {
     DxList,
-    ProductInfo
+    ProductInfo,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>

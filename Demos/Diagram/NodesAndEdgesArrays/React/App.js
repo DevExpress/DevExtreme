@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import Diagram, { Nodes, Edges, AutoLayout, Toolbox, Group } from 'devextreme-react/diagram';
+import React from 'react';
+import Diagram, {
+  Nodes, Edges, AutoLayout, Toolbox, Group,
+} from 'devextreme-react/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
@@ -9,11 +11,11 @@ class App extends React.Component {
 
     this.flowNodesDataSource = new ArrayStore({
       key: 'id',
-      data: service.getFlowNodes()
+      data: service.getFlowNodes(),
     });
     this.flowEdgesDataSource = new ArrayStore({
       key: 'id',
-      data: service.getFlowEdges()
+      data: service.getFlowEdges(),
     });
   }
 

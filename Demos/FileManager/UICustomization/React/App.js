@@ -1,6 +1,8 @@
 import React from 'react';
 
-import FileManager, { Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column } from 'devextreme-react/file-manager';
+import FileManager, {
+  Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column,
+} from 'devextreme-react/file-manager';
 
 import { fileItems } from './data.js';
 
@@ -18,20 +20,20 @@ class App extends React.Component {
           items: [
             {
               text: 'Text Document',
-              extension: '.txt'
+              extension: '.txt',
             },
             {
               text: 'RTF Document',
-              extension: '.rtf'
+              extension: '.rtf',
             },
             {
               text: 'Spreadsheet',
-              extension: '.xls'
-            }
-          ]
-        }
+              extension: '.xls',
+            },
+          ],
+        },
       ],
-      onItemClick: this.onItemClick.bind(this)
+      onItemClick: this.onItemClick.bind(this),
     };
     this.changeCategoryMenuOptions = {
       items: [
@@ -41,30 +43,31 @@ class App extends React.Component {
           items: [
             {
               text: 'Work',
-              category: 'Work'
+              category: 'Work',
             },
             {
               text: 'Important',
-              category: 'Important'
+              category: 'Important',
             },
             {
               text: 'Home',
-              category: 'Home'
+              category: 'Home',
             },
             {
               text: 'None',
-              category: ''
-            }
-          ]
-        }
+              category: '',
+            },
+          ],
+        },
       ],
-      onItemClick: this.onItemClick.bind(this)
+      onItemClick: this.onItemClick.bind(this),
     };
 
     this.onItemClick = this.onItemClick.bind(this);
     this.createFile = this.createFile.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
   }
+
   render() {
     return (
       <FileManager
@@ -132,37 +135,36 @@ class App extends React.Component {
   onItemClick({ itemData, viewArea, fileSystemItem }) {
     let updated = false;
 
-    if(itemData.extension) {
+    if (itemData.extension) {
       updated = this.createFile(itemData.extension, fileSystemItem);
-    } else if(itemData.category !== undefined) {
+    } else if (itemData.category !== undefined) {
       updated = this.updateCategory(itemData.category, fileSystemItem, viewArea);
     }
 
-    if(updated) {
+    if (updated) {
       this.fileManager.refresh();
     }
   }
 
   createFile(fileExtension, directory) {
-    var newItem = {
+    const newItem = {
       __KEY__: Date.now(),
-      name: `New file${ fileExtension}`,
+      name: `New file${fileExtension}`,
       isDirectory: false,
-      size: 0
+      size: 0,
     };
 
     directory = directory || this.fileManager.getCurrentDirectory();
-    if(!directory.isDirectory) {
+    if (!directory.isDirectory) {
       return false;
     }
 
-    var array = null;
-    if(!directory.dataItem) {
+    let array = null;
+    if (!directory.dataItem) {
       array = fileItems;
-    }
-    else {
+    } else {
       array = directory.dataItem.items;
-      if(!array) {
+      if (!array) {
         directory.dataItem.items = array = [];
       }
     }
@@ -172,16 +174,16 @@ class App extends React.Component {
   }
 
   updateCategory(newCategory, directory, viewArea) {
-    var items = null;
+    let items = null;
 
-    if(viewArea === 'navPane') {
-      items = [ directory ];
+    if (viewArea === 'navPane') {
+      items = [directory];
     } else {
       items = this.fileManager.getSelectedItems();
     }
 
-    items.forEach(function(item) {
-      if(item.dataItem) {
+    items.forEach((item) => {
+      if (item.dataItem) {
         item.dataItem.category = newCategory;
       }
     });

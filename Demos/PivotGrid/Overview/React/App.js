@@ -10,19 +10,18 @@ import Chart, {
 } from 'devextreme-react/chart';
 
 import PivotGrid, {
-  FieldChooser
+  FieldChooser,
 } from 'devextreme-react/pivot-grid';
 
 import { sales } from './data.js';
 
 class App extends React.Component {
-
   componentDidMount() {
     this._pivotGrid.bindChart(this._chart, {
       dataFieldsDisplayMode: 'splitPanes',
-      alternateDataFields: false
+      alternateDataFields: false,
     });
-    setTimeout(function() {
+    setTimeout(() => {
       dataSource.expandHeaderItem('row', ['North America']);
       dataSource.expandHeaderItem('column', [2013]);
     });
@@ -63,43 +62,43 @@ const dataSource = new PivotGridDataSource({
     width: 120,
     dataField: 'region',
     area: 'row',
-    sortBySummaryField: 'Total'
+    sortBySummaryField: 'Total',
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
-    area: 'row'
+    area: 'row',
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     groupName: 'date',
     groupInterval: 'month',
-    visible: false
+    visible: false,
   }, {
     caption: 'Total',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }],
-  store: sales
+  store: sales,
 });
 
 const currencyFormatter = new Intl.NumberFormat(
   'en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 0
-  }
+    minimumFractionDigits: 0,
+  },
 );
 
 function customizeTooltip(args) {
   const valueText = currencyFormatter.format(args.originalValue);
   return {
-    html: `${args.seriesName} | Total<div class="currency">${valueText}</div>`
+    html: `${args.seriesName} | Total<div class="currency">${valueText}</div>`,
   };
 }
 

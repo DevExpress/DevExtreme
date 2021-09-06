@@ -1,16 +1,20 @@
-﻿import React from 'react';
-import DataGrid, { Column, Selection, Summary, TotalItem } from 'devextreme-react/data-grid';
-import service from './data.js';
+import React from 'react';
+import DataGrid, {
+  Column, Selection, Summary, TotalItem,
+} from 'devextreme-react/data-grid';
 import { formatDate } from 'devextreme/localization';
+import service from './data.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.orders = service.getOrders();
   }
+
   customizeDate(data) {
-    return `First: ${ formatDate(data.value, 'MMM dd, yyyy')}`;
+    return `First: ${formatDate(data.value, 'MMM dd, yyyy')}`;
   }
+
   render() {
     return (
       <React.Fragment>

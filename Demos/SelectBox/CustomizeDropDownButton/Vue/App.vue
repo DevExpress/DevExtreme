@@ -87,7 +87,7 @@ import { products, simpleProducts } from './data.js';
 export default {
   components: {
     DxSelectBox,
-    DxLoadIndicator
+    DxLoadIndicator,
   },
   data() {
     return {
@@ -98,7 +98,7 @@ export default {
         loadMode: 'raw',
         load: () => {
           this.isLoaded = false;
-          var promise = new Promise((resolve) => {
+          const promise = new Promise((resolve) => {
             setTimeout(() => {
               resolve(simpleProducts);
               this.isLoaded = true;
@@ -106,11 +106,11 @@ export default {
           });
 
           return promise;
-        }
+        },
       },
-      selectedItem: products[0]
+      selectedItem: products[0],
     };
-  }
+  },
 };
 </script>
 <style scoped>

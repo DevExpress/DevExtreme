@@ -50,26 +50,28 @@
   </div>
 </template>
 <script>
+import {
+  DxTreeList, DxSearchPanel, DxColumn, DxLookup,
+} from 'devextreme-vue/tree-list';
 import { tasks, employees } from './data.js';
-import { DxTreeList, DxSearchPanel, DxColumn, DxLookup } from 'devextreme-vue/tree-list';
 
 export default {
   components: {
-    DxTreeList, DxSearchPanel, DxColumn, DxLookup
+    DxTreeList, DxSearchPanel, DxColumn, DxLookup,
   },
   data() {
     return {
-      tasks: tasks,
-      employees: employees,
+      tasks,
+      employees,
       dataSource: [
         'Not Started',
         'Need Assistance',
         'In Progress',
         'Deferred',
-        'Completed'
-      ]
+        'Completed',
+      ],
     };
-  }
+  },
 };
 </script>
 <style scoped>

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { markup } from './data.js';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
+import { markup } from './data.js';
 
 const headerValues = [false, 1, 2, 3];
 

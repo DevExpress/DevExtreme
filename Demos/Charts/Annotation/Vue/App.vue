@@ -47,26 +47,28 @@
   </DxChart>
 </template>
 <script>
+import {
+  DxChart, DxTitle, DxCommonSeriesSettings, DxSeries, DxLegend, DxArgumentAxis, DxValueAxis, DxCommonAnnotationSettings, DxFont, DxImage, DxAnnotation,
+} from 'devextreme-vue/chart';
 import { dataSource, annotationSources } from './data.js';
-import { DxChart, DxTitle, DxCommonSeriesSettings, DxSeries, DxLegend, DxArgumentAxis, DxValueAxis, DxCommonAnnotationSettings, DxFont, DxImage, DxAnnotation } from 'devextreme-vue/chart';
 
 export default {
   components: {
-    DxChart, DxTitle, DxCommonSeriesSettings, DxSeries, DxLegend, DxArgumentAxis, DxValueAxis, DxCommonAnnotationSettings, DxFont, DxImage, DxAnnotation
+    DxChart, DxTitle, DxCommonSeriesSettings, DxSeries, DxLegend, DxArgumentAxis, DxValueAxis, DxCommonAnnotationSettings, DxFont, DxImage, DxAnnotation,
   },
   data() {
     return {
       dataSource,
-      annotationSources
+      annotationSources,
     };
   },
   methods: {
     customizeTooltip(annotation) {
       return {
-        html: `<div class='tooltip'>${annotation.description}</div>`
+        html: `<div class='tooltip'>${annotation.description}</div>`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -48,17 +48,19 @@
   </div>
 </template>
 <script>
+import {
+  DxTreeList, DxSelection, DxFilterRow, DxStateStoring, DxColumn,
+} from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
-import { DxTreeList, DxSelection, DxFilterRow, DxStateStoring, DxColumn } from 'devextreme-vue/tree-list';
 
 export default {
   components: {
-    DxTreeList, DxSelection, DxFilterRow, DxStateStoring, DxColumn
+    DxTreeList, DxSelection, DxFilterRow, DxStateStoring, DxColumn,
   },
   data() {
     return {
-      employees: employees,
-      expandedRowKeys: [1, 2, 10]
+      employees,
+      expandedRowKeys: [1, 2, 10],
     };
   },
   methods: {
@@ -66,9 +68,9 @@ export default {
       window.location.reload();
     },
     onStateResetClick() {
-      this.$refs['treeList'].instance.state(null);
-    }
-  }
+      this.$refs.treeList.instance.state(null);
+    },
+  },
 };
 </script>
 <style scoped>

@@ -9,5 +9,5 @@ export const data = [
   { source: 'United States of America', target: 'New Zealand', weight: 5 },
   { source: 'United States of America', target: 'Japan', weight: 3 },
   { source: 'Great Britain', target: 'New Zealand', weight: 4 },
-  { source: 'Great Britain', target: 'Japan', weight: 1 }
+  { source: 'Great Britain', target: 'Japan', weight: 1 },
 ];

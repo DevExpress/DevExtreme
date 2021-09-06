@@ -61,7 +61,7 @@ import {
   DxDataGrid,
   DxColumn,
   DxPaging,
-  DxSearchPanel
+  DxSearchPanel,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 
@@ -73,22 +73,22 @@ export default {
     DxColumn,
     DxPaging,
     DxSearchPanel,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       dataSource: service.getEuropeanUnion(),
       languages: ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'],
       placeholder: 'Search...',
-      rtlEnabled: false
+      rtlEnabled: false,
     };
   },
   methods: {
     selectLanguage(e) {
       this.rtlEnabled = e.value === this.languages[0];
       this.placeholder = this.rtlEnabled ? 'بحث' : 'Search...';
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

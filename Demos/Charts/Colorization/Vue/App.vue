@@ -31,7 +31,7 @@
 <script>
 import DxTreeMap,
 {
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/tree-map';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { salesAmount, colorizationOptions } from './data.js';
@@ -40,24 +40,24 @@ export default {
   components: {
     DxTreeMap,
     DxTooltip,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       salesAmount,
       colorizationOptions,
-      typeOptions: colorizationOptions[2].options
+      typeOptions: colorizationOptions[2].options,
     };
   },
   methods: {
     customizeTooltip(arg) {
-      const data = arg.node.data;
+      const { data } = arg.node;
 
       return {
-        text: arg.node.isLeaf() ? `<span class='product'>${data.name}</span><br/>Sales Amount: ${arg.valueText}` : null
+        text: arg.node.isLeaf() ? `<span class='product'>${data.name}</span><br/>Sales Amount: ${arg.valueText}` : null,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

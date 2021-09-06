@@ -80,11 +80,11 @@ import {
   DxLoadingIndicator,
   DxPane,
   DxTooltip,
-  DxCrosshair
+  DxCrosshair,
 } from 'devextreme-vue/chart';
 import CustomStore from 'devextreme/data/custom_store';
-import TooltipTemplate from './TooltipTemplate.vue';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
+import TooltipTemplate from './TooltipTemplate.vue';
 
 export default {
   components: {
@@ -100,34 +100,34 @@ export default {
     DxPane,
     DxTooltip,
     DxCrosshair,
-    TooltipTemplate
+    TooltipTemplate,
   },
 
   data() {
     return {
       connectionStarted: false,
-      dataSource: null
+      dataSource: null,
     };
   },
 
   mounted() {
-    var hubConnection = new HubConnectionBuilder()
+    const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
         skipNegotiation: true,
-        transport: HttpTransportType.WebSockets
+        transport: HttpTransportType.WebSockets,
       })
       .build();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
       load: () => hubConnection.invoke('getAllData'),
-      key: 'date'
+      key: 'date',
     });
 
     hubConnection
       .start()
       .then(() => {
         hubConnection.on('updateStockPrice', (data) => {
-          store.push([{ type: 'insert', key: data.date, data: data }]);
+          store.push([{ type: 'insert', key: data.date, data }]);
         });
         this.dataSource = store;
         this.connectionStarted = true;
@@ -136,27 +136,27 @@ export default {
 
   methods: {
     calculateCandle(e) {
-      const prices = e.data.map(d => d.price);
+      const prices = e.data.map((d) => d.price);
       if (prices.length) {
         return {
           date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
           open: prices[0],
           high: Math.max.apply(null, prices),
           low: Math.min.apply(null, prices),
-          close: prices[prices.length - 1]
+          close: prices[prices.length - 1],
         };
       }
     },
 
     customizePoint(pointInfo) {
-      if(pointInfo.seriesName === 'Volume') {
+      if (pointInfo.seriesName === 'Volume') {
         const point = this.$refs.chart.instance.getAllSeries()[0].getPointsByArg(pointInfo.argument)[0].data;
-        if(point.close >= point.open) {
+        if (point.close >= point.open) {
           return { color: '#1db2f5' };
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -12,15 +12,17 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      searchMode: 'contains'
+      searchMode: 'contains',
     };
     this.onSearchModeChange = this.onSearchModeChange.bind(this);
   }
+
   onSearchModeChange(args) {
     this.setState({
-      searchMode: args.value
+      searchMode: args.value,
     });
   }
+
   render() {
     return (
       <React.Fragment>

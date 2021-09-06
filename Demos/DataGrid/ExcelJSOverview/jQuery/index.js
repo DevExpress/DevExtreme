@@ -1,28 +1,28 @@
-$(function(){
+$(() => {
   $('#gridContainer').dxDataGrid({
     dataSource: employees,
-    keyExpr: "ID",
+    keyExpr: 'ID',
     showBorders: true,
     selection: {
-      mode: 'multiple'
+      mode: 'multiple',
     },
     groupPanel: {
-      visible: true
+      visible: true,
     },
     export: {
       enabled: true,
-      allowExportSelectedData: true
+      allowExportSelectedData: true,
     },
-    onExporting: function(e) {
-      var workbook = new ExcelJS.Workbook();
-      var worksheet = workbook.addWorksheet('Employees');
-      
+    onExporting(e) {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Employees');
+
       DevExpress.excelExporter.exportDataGrid({
         component: e.component,
-        worksheet: worksheet,
-        autoFilterEnabled: true
-      }).then(function() {
-        workbook.xlsx.writeBuffer().then(function(buffer) {
+        worksheet,
+        autoFilterEnabled: true,
+      }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Employees.xlsx');
         });
       });
@@ -34,19 +34,19 @@ $(function(){
       'City',
       {
         dataField: 'State',
-        groupIndex: 0 
+        groupIndex: 0,
       }, {
         dataField: 'Position',
-        width: 130
+        width: 130,
       }, {
         dataField: 'BirthDate',
         dataType: 'date',
-        width: 100
+        width: 100,
       }, {
         dataField: 'HireDate',
         dataType: 'date',
-        width: 100
-      }
-    ]
+        width: 100,
+      },
+    ],
   });
 });

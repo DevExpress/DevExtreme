@@ -10,7 +10,7 @@ import { roomsData, buildingData } from './data.js';
 
 const projection = {
   to: ([l, lt]) => [l / 100, lt / 100],
-  from: ([x, y]) => [x * 100, y * 100]
+  from: ([x, y]) => [x * 100, y * 100],
 };
 
 export default function App() {

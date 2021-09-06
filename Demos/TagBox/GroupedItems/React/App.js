@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { TagBox } from 'devextreme-react/tag-box';
 import DataSource from 'devextreme/data/data_source';
 import Group from './Group.js';
@@ -12,9 +12,10 @@ class App extends React.Component {
     this.products = new DataSource({
       store: productsData,
       key: 'ID',
-      group: 'Category'
+      group: 'Category',
     });
   }
+
   render() {
     return (
       <div className="dx-fieldset">

@@ -8,7 +8,7 @@
 import {
   DxSparkline,
   DxSize,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/sparkline';
 import { formatNumber } from 'devextreme/localization';
 
@@ -20,13 +20,13 @@ export default {
   components: {
     DxSparkline,
     DxSize,
-    DxTooltip
+    DxTooltip,
   },
   props: {
     cellData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
     className(value) {
@@ -40,7 +40,7 @@ export default {
     },
     fixed(value, precision) {
       return value.toFixed(precision);
-    }
-  }
+    },
+  },
 };
 </script>

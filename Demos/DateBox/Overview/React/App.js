@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DateBox from 'devextreme-react/date-box';
 
 import service from './data.js';
@@ -7,7 +7,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: new Date(1981, 3, 27)
+      value: new Date(1981, 3, 27),
     };
     this.now = new Date();
     this.firstWorkDay2017 = new Date(2017, 0, 3);
@@ -16,14 +16,17 @@ class App extends React.Component {
     this.disabledDates = service.getFederalHolidays();
     this.onValueChanged = this.onValueChanged.bind(this);
   }
+
   get diffInDay() {
-    return `${Math.floor(Math.abs(((new Date()).getTime() - this.state.value.getTime()) / (24 * 60 * 60 * 1000))) } days`;
+    return `${Math.floor(Math.abs(((new Date()).getTime() - this.state.value.getTime()) / (24 * 60 * 60 * 1000)))} days`;
   }
+
   onValueChanged(e) {
     this.setState({
-      value: e.value
+      value: e.value,
     });
   }
+
   render() {
     return (
       <div>

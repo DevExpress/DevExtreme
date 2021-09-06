@@ -24,7 +24,7 @@
 import DxSankey, {
   DxTooltip,
   DxNode,
-  DxLink
+  DxLink,
 } from 'devextreme-vue/sankey';
 
 import { data } from './data.js';
@@ -34,20 +34,20 @@ export default {
     DxSankey,
     DxTooltip,
     DxNode,
-    DxLink
+    DxLink,
   },
   data() {
     return {
-      data
+      data,
     };
   },
   methods: {
     customizeLinkTooltip(info) {
       return {
-        html: `<b>From:</b> ${info.source}<br/><b>To:</b> ${info.target}<br/><b>Weight:</b> ${info.weight}`
+        html: `<b>From:</b> ${info.source}<br/><b>To:</b> ${info.target}<br/><b>Weight:</b> ${info.weight}`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

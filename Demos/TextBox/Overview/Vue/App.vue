@@ -84,19 +84,19 @@ import DxTextBox from 'devextreme-vue/text-box';
 
 export default {
   components: {
-    DxTextBox
+    DxTextBox,
   },
   data() {
     return {
       emailValue: 'smith@corp.com',
-      rules: { 'X': /[02-9]/ }
+      rules: { X: /[02-9]/ },
     };
   },
   methods: {
     valueChanged(data) {
-      this.emailValue = `${data.value.replace(/\s/g, '').toLowerCase() }@corp.com`;
-    }
-  }
+      this.emailValue = `${data.value.replace(/\s/g, '').toLowerCase()}@corp.com`;
+    },
+  },
 };
 </script>
 

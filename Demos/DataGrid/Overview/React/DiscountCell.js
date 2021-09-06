@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import Bullet, { Font, Margin, Size, Tooltip } from 'devextreme-react/bullet';
+import Bullet, {
+  Font, Margin, Size, Tooltip,
+} from 'devextreme-react/bullet';
 
 export default function DiscountCell(cellData) {
   return (
@@ -27,6 +29,6 @@ export default function DiscountCell(cellData) {
 
 function customizeTooltip(data) {
   return {
-    text: `${parseInt(data.value)}%`
+    text: `${parseInt(data.value)}%`,
   };
 }

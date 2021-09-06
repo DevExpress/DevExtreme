@@ -16,12 +16,12 @@ import { navigation } from './data.js';
 
 export default {
   components: {
-    DxList
+    DxList,
   },
   data() {
     return {
-      navigation
+      navigation,
     };
-  }
+  },
 };
 </script>

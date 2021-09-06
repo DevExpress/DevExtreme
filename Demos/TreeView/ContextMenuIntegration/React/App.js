@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import ContextMenu from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
@@ -15,7 +15,7 @@ class App extends React.Component {
       products: service.getProducts(),
       menuItems: service.getMenuItems(),
       logItems: [],
-      selectedTreeItem: undefined
+      selectedTreeItem: undefined,
     };
 
     this.treeViewItemContextMenu = this.treeViewItemContextMenu.bind(this);
@@ -74,7 +74,7 @@ class App extends React.Component {
 
   contextMenuItemClick(e) {
     let logEntry = '';
-    switch(e.itemData.id) {
+    switch (e.itemData.id) {
       case 'expand': {
         logEntry = `The '${this.state.selectedTreeItem.text}' group was expanded`;
         this.treeView.expandItem(this.state.selectedTreeItem.id);
@@ -97,7 +97,7 @@ class App extends React.Component {
     const logItems = this.state.logItems.concat([logEntry]);
 
     this.setState({
-      logItems: logItems
+      logItems,
     });
   }
 }

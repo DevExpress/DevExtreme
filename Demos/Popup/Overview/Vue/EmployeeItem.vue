@@ -17,26 +17,26 @@ import { DxButton } from 'devextreme-vue/button';
 
 export default {
   components: {
-    DxButton
+    DxButton,
   },
 
   props: {
     employee: {
       type: Object,
       required: true,
-      default: () => ({})
+      default: () => ({}),
     },
     showInfo: {
       type: Function,
       required: true,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
 
   methods: {
     showEmployeeInfo() {
       this.showInfo(this.employee);
-    }
-  }
+    },
+  },
 };
 </script>

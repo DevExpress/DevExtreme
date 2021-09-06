@@ -112,29 +112,29 @@
 import DxRangeSlider from 'devextreme-vue/range-slider';
 import DxNumberBox from 'devextreme-vue/number-box';
 
-const format = value => `${value}%`;
+const format = (value) => `${value}%`;
 
 export default {
   components: {
     DxRangeSlider,
-    DxNumberBox
+    DxNumberBox,
   },
   data() {
     return {
       label: {
         visible: true,
         format,
-        position: 'top'
+        position: 'top',
       },
       tooltip: {
         enabled: true,
         format,
         showMode: 'always',
-        position: 'bottom'
+        position: 'bottom',
       },
-      range: [10, 90]
+      range: [10, 90],
     };
-  }
+  },
 };
 </script>
 

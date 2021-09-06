@@ -1,8 +1,9 @@
 import React from 'react';
-import { LinearGauge, Scale, Label, SubvalueIndicator } from 'devextreme-react/linear-gauge';
+import {
+  LinearGauge, Scale, Label, SubvalueIndicator,
+} from 'devextreme-react/linear-gauge';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
   }

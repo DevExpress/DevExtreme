@@ -64,12 +64,12 @@ export default {
     DxTabPanel,
     DxDataGrid,
     DxSortable,
-    EmployeeTemplate
+    EmployeeTemplate,
   },
   data() {
     return {
       employees: allEmployees.slice(0, 3),
-      selectedIndex: 0
+      selectedIndex: 0,
     };
   },
   methods: {
@@ -83,7 +83,7 @@ export default {
     },
 
     addButtonHandler() {
-      const newItem = allEmployees.filter(employee => this.employees.every(item => employee.ID !== item.ID))[0];
+      const newItem = allEmployees.filter((employee) => this.employees.every((item) => employee.ID !== item.ID))[0];
 
       this.selectedIndex = this.employees.length;
       this.employees = [...this.employees, newItem];
@@ -92,8 +92,8 @@ export default {
     closeButtonHandler(itemData) {
       const index = this.employees.indexOf(itemData);
 
-      this.employees = this.employees.filter(e => e != itemData);
-      if(index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
+      this.employees = this.employees.filter((e) => e != itemData);
+      if (index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
     },
 
     disableButton() {
@@ -102,8 +102,8 @@ export default {
 
     showCloseButton() {
       return this.employees.length > 1;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

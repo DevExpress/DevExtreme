@@ -63,7 +63,7 @@ import {
   DxResourceAssignments,
   DxColumn,
   DxEditing,
-  DxContextMenu
+  DxContextMenu,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 
@@ -71,7 +71,7 @@ import {
   tasks,
   dependencies,
   resources,
-  resourceAssignments
+  resourceAssignments,
 } from './data.js';
 
 export default {
@@ -84,17 +84,17 @@ export default {
     DxColumn,
     DxEditing,
     DxCheckBox,
-    DxContextMenu
+    DxContextMenu,
   },
   data() {
     return {
-      tasks: tasks,
-      dependencies: dependencies,
-      resources: resources,
-      resourceAssignments: resourceAssignments,
+      tasks,
+      dependencies,
+      resources,
+      resourceAssignments,
       showResources: true,
       disableContextMenu: false,
-      contextMenuItems: this.getContextMenuItems()
+      contextMenuItems: this.getContextMenuItems(),
     };
   },
   methods: {
@@ -108,7 +108,7 @@ export default {
       this.disableContextMenu = e.value;
     },
     onCustomCommandClick(e) {
-      if(e.name == 'ToggleDisplayOfResources') {
+      if (e.name == 'ToggleDisplayOfResources') {
         this.showResources = !this.showResources;
       }
     },
@@ -119,11 +119,11 @@ export default {
         'deleteTask',
         {
           name: 'ToggleDisplayOfResources',
-          text: 'Toggle Display of Resources'
-        }
+          text: 'Toggle Display of Resources',
+        },
       ];
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

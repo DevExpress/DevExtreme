@@ -1,10 +1,10 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
   Selection,
   Toolbar,
-  Item
+  Item,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
@@ -21,7 +21,7 @@ class App extends React.Component {
       prefix: '',
       prefixOptions: ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'],
       selectedEmployeeNames: 'Nobody has been selected',
-      selectedRowKeys: []
+      selectedRowKeys: [],
     };
 
     this.onClearButtonClicked = this.onClearButtonClicked.bind(this);
@@ -30,7 +30,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { prefix, selectedRowKeys, selectedEmployeeNames, prefixOptions } = this.state;
+    const {
+      prefix, selectedRowKeys, selectedEmployeeNames, prefixOptions,
+    } = this.state;
 
     return (
       <div>
@@ -39,7 +41,7 @@ class App extends React.Component {
           dataSource={employees}
           keyExpr="ID"
           onSelectionChanged={this.onSelectionChanged}
-          ref={ref => this.dataGrid = ref}
+          ref={(ref) => this.dataGrid = ref}
           selectedRowKeys={selectedRowKeys}
           showBorders={true}
         >
@@ -85,7 +87,7 @@ class App extends React.Component {
     this.setState({
       prefix: null,
       selectedEmployeeNames: getEmployeeNames(selectedRowsData),
-      selectedRowKeys
+      selectedRowKeys,
     });
   }
 
@@ -96,18 +98,18 @@ class App extends React.Component {
   async onSelectionFilterChanged({ value }) {
     this.selectionChangedBySelectBox = true;
 
-    let prefix = value;
+    const prefix = value;
 
-    if(prefix) {
-      let filteredEmployees = prefix === 'All' ? employees : employees.filter(employee => employee.Prefix === prefix);
+    if (prefix) {
+      const filteredEmployees = prefix === 'All' ? employees : employees.filter((employee) => employee.Prefix === prefix);
 
-      const selectedRowKeys = filteredEmployees.map(employee => employee.ID);
+      const selectedRowKeys = filteredEmployees.map((employee) => employee.ID);
       const selectedRowsData = await this.dataGrid.instance.getDataByKeys(selectedRowKeys);
 
       this.setState({
         prefix,
         selectedRowKeys,
-        selectedEmployeeNames: getEmployeeNames(selectedRowsData)
+        selectedEmployeeNames: getEmployeeNames(selectedRowsData),
       });
     }
   }

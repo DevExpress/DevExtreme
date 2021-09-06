@@ -1,13 +1,13 @@
 const customer = {
-  'Email': '',
-  'Password': '',
-  'Name': 'Peter',
-  'Date': null,
-  'Country': '',
-  'City': '',
-  'Address': '',
-  'Phone': '',
-  'Accepted': false
+  Email: '',
+  Password: '',
+  Name: 'Peter',
+  Date: null,
+  Country: '',
+  City: '',
+  Address: '',
+  Phone: '',
+  Accepted: false,
 };
 
 const countries = [
@@ -26,5 +26,5 @@ export default {
   },
   getCities() {
     return cities;
-  }
+  },
 };

@@ -1,84 +1,90 @@
-$(function(){
-  var priceCaption = "Price";
-  var ratingCaption = "Rating";
+$(() => {
+  const priceCaption = 'Price';
+  const ratingCaption = 'Rating';
 
-  $("#tabPanel").dxTabPanel({
+  $('#tabPanel').dxTabPanel({
     dataSource: [{
       title: priceCaption,
-      template: function() {
+      template() {
         return $("<div id='priceDataGrid'>").dxDataGrid({
-          width: "100%",
+          width: '100%',
           columns: [
-            { dataField: "Product_ID", caption: "ID", width: 50 },
-            { dataField: "Product_Name", caption: "Name" },
-            { dataField: "Product_Sale_Price", caption: "Sale Price", dataType: "number", format: "currency" },
-            { dataField: "Product_Retail_Price", caption: "Retail Price", dataType: "number", format: "currency" }
+            { dataField: 'Product_ID', caption: 'ID', width: 50 },
+            { dataField: 'Product_Name', caption: 'Name' },
+            {
+              dataField: 'Product_Sale_Price', caption: 'Sale Price', dataType: 'number', format: 'currency',
+            },
+            {
+              dataField: 'Product_Retail_Price', caption: 'Retail Price', dataType: 'number', format: 'currency',
+            },
           ],
           showBorders: true,
           rowAlternationEnabled: true,
           dataSource: {
             store: {
-              type: "odata",
-              url: "https://js.devexpress.com/Demos/DevAV/odata/Products",
-              key: 'Product_ID'
+              type: 'odata',
+              url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+              key: 'Product_ID',
             },
-            select: ["Product_ID", "Product_Name", "Product_Sale_Price", "Product_Retail_Price"],
-            filter: ["Product_ID", "<", 10]
-          }
+            select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
+            filter: ['Product_ID', '<', 10],
+          },
         });
-      }
+      },
     }, {
       title: ratingCaption,
-      template: function() {
+      template() {
         return $("<div id='ratingDataGrid'>").dxDataGrid({
-          width: "100%",
+          width: '100%',
           columns: [
-            { dataField: "Product_ID", caption: "ID", width: 50 },
-            { dataField: "Product_Name", caption: "Name" },
-            { dataField: "Product_Consumer_Rating", caption: "Rating" },
-            { dataField: "Product_Category", caption: "Category" }
+            { dataField: 'Product_ID', caption: 'ID', width: 50 },
+            { dataField: 'Product_Name', caption: 'Name' },
+            { dataField: 'Product_Consumer_Rating', caption: 'Rating' },
+            { dataField: 'Product_Category', caption: 'Category' },
           ],
           showBorders: true,
           rowAlternationEnabled: true,
           dataSource: {
             store: {
-              type: "odata",
-              url: "https://js.devexpress.com/Demos/DevAV/odata/Products",
-              key: 'Product_ID'
+              type: 'odata',
+              url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+              key: 'Product_ID',
             },
-            select: ["Product_ID", "Product_Name", "Product_Consumer_Rating", "Product_Category"],
-            filter: ["Product_ID", "<", 10]
-          }
+            select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
+            filter: ['Product_ID', '<', 10],
+          },
         });
-      }
+      },
     }],
-    itemTitleTemplate: function(itemData, itemIndex, itemElement) {
-      itemElement.append("<span class='dx-tab-text'>" + itemData.title + "</span>");
+    itemTitleTemplate(itemData, itemIndex, itemElement) {
+      itemElement.append(`<span class='dx-tab-text'>${itemData.title}</span>`);
     },
-    deferRendering: false
+    deferRendering: false,
   });
 
-  $("#exportButton").dxButton({
-    text: "Export multiple grids",
-    icon: "xlsxfile",
-    onClick: function() {
-      var dataGrid1 = $("#priceDataGrid").dxDataGrid("instance");
-      var dataGrid2 = $("#ratingDataGrid").dxDataGrid("instance");
-      
-      var workbook = new ExcelJS.Workbook();
-      var priceSheet = workbook.addWorksheet(priceCaption);
-      var ratingSheet = workbook.addWorksheet(ratingCaption);
+  $('#exportButton').dxButton({
+    text: 'Export multiple grids',
+    icon: 'xlsxfile',
+    onClick() {
+      const dataGrid1 = $('#priceDataGrid').dxDataGrid('instance');
+      const dataGrid2 = $('#ratingDataGrid').dxDataGrid('instance');
 
-      priceSheet.getRow(2).getCell(2).value = "Price";
-      priceSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: "double" };
+      const workbook = new ExcelJS.Workbook();
+      const priceSheet = workbook.addWorksheet(priceCaption);
+      const ratingSheet = workbook.addWorksheet(ratingCaption);
 
-      ratingSheet.getRow(2).getCell(2).value = "Rating";
-      ratingSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: "double" };
+      priceSheet.getRow(2).getCell(2).value = 'Price';
+      priceSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
+
+      ratingSheet.getRow(2).getCell(2).value = 'Rating';
+      ratingSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
 
       function setAlternatingRowsBackground(gridCell, excelCell) {
-        if(gridCell.rowType === "header" || gridCell.rowType === "data") {
-          if(excelCell.fullAddress.row % 2 === 0) {
-            excelCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "D3D3D3" }, bgColor: { argb: "D3D3D3" }};
+        if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
+          if (excelCell.fullAddress.row % 2 === 0) {
+            excelCell.fill = {
+              type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' },
+            };
           }
         }
       }
@@ -87,23 +93,21 @@ $(function(){
         worksheet: priceSheet,
         component: dataGrid1,
         topLeftCell: { row: 4, column: 2 },
-        customizeCell: function(options) {
-          setAlternatingRowsBackground(options.gridCell, options.excelCell)
-        }
-      }).then(function() {
-        return DevExpress.excelExporter.exportDataGrid({
-          worksheet: ratingSheet,
-          component: dataGrid2,
-          topLeftCell: { row: 4, column: 2 },
-          customizeCell: function(options) {
-            setAlternatingRowsBackground(options.gridCell, options.excelCell)
-          }
+        customizeCell(options) {
+          setAlternatingRowsBackground(options.gridCell, options.excelCell);
+        },
+      }).then(() => DevExpress.excelExporter.exportDataGrid({
+        worksheet: ratingSheet,
+        component: dataGrid2,
+        topLeftCell: { row: 4, column: 2 },
+        customizeCell(options) {
+          setAlternatingRowsBackground(options.gridCell, options.excelCell);
+        },
+      })).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
         });
-      }).then(function() {
-          workbook.xlsx.writeBuffer().then(function(buffer) {
-              saveAs(new Blob([buffer], { type: "application/octet-stream" }), "MultipleGrids.xlsx");
-          });
       });
-    }
+    },
   });
 });

@@ -6,7 +6,7 @@ import Chart, {
   Subtitle,
   CommonSeriesSettings,
   SeriesTemplate,
-  Aggregation
+  Aggregation,
 } from 'devextreme-react/chart';
 
 import { oilProductionData } from './data.js';

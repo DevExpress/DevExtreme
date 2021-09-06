@@ -7,7 +7,7 @@ import Chart, {
   Label,
   Legend,
   Export,
-  Point
+  Point,
 } from 'devextreme-react/chart';
 
 import { medalsInfo } from './data.js';

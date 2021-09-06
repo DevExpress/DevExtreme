@@ -14,7 +14,7 @@ class App extends React.Component {
     this.state = {
       requests: [],
       loadPanelVisible: true,
-      wrapperClassName: ''
+      wrapperClassName: '',
     };
     this.onRequestExecuted = this.onRequestExecuted.bind(this);
 
@@ -29,7 +29,7 @@ class App extends React.Component {
       copyItem,
       moveItem,
       uploadFileChunk,
-      downloadItems
+      downloadItems,
     });
 
     this.checkAzureStatus();
@@ -57,23 +57,21 @@ class App extends React.Component {
           </FileManager>
           <div id="request-panel">
             {
-              this.state.requests.map((r, i) => {
-                return <div key={i} className="request-info">
-                  <div className="parameter-info">
-                    <div className="parameter-name">Method:</div>
-                    <div className="parameter-value dx-theme-accent-as-text-color">{r.method}</div>
-                  </div>
-                  <div className="parameter-info">
-                    <div className="parameter-name">Url path:</div>
-                    <div className="parameter-value dx-theme-accent-as-text-color">{r.urlPath}</div>
-                  </div>
-                  <div className="parameter-info">
-                    <div className="parameter-name">Query string:</div>
-                    <div className="parameter-value dx-theme-accent-as-text-color">{r.queryString}</div>
-                  </div>
-                  <br />
-                </div>;
-              })
+              this.state.requests.map((r, i) => <div key={i} className="request-info">
+                <div className="parameter-info">
+                  <div className="parameter-name">Method:</div>
+                  <div className="parameter-value dx-theme-accent-as-text-color">{r.method}</div>
+                </div>
+                <div className="parameter-info">
+                  <div className="parameter-name">Url path:</div>
+                  <div className="parameter-value dx-theme-accent-as-text-color">{r.urlPath}</div>
+                </div>
+                <div className="parameter-info">
+                  <div className="parameter-name">Query string:</div>
+                  <div className="parameter-value dx-theme-accent-as-text-color">{r.queryString}</div>
+                </div>
+                <br />
+              </div>)
             }
           </div>
         </div>
@@ -90,12 +88,12 @@ class App extends React.Component {
 
   checkAzureStatus() {
     fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
-      .then(response => response.json())
-      .then(result => {
+      .then((response) => response.json())
+      .then((result) => {
         const className = result.active ? 'show-widget' : 'show-message';
         this.setState({
           wrapperClassName: className,
-          loadPanelVisible: false
+          loadPanelVisible: false,
         });
       });
   }
@@ -135,9 +133,9 @@ function moveItem(item, destinationDirectory) {
 function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
   let promise = null;
 
-  if(uploadInfo.chunkIndex === 0) {
+  if (uploadInfo.chunkIndex === 0) {
     const filePath = destinationDirectory.path ? `${destinationDirectory.path}/${fileData.name}` : fileData.name;
-    promise = gateway.getUploadAccessUrl(filePath).done(accessUrl => {
+    promise = gateway.getUploadAccessUrl(filePath).done((accessUrl) => {
       uploadInfo.customData.accessUrl = accessUrl;
     });
   } else {
@@ -146,7 +144,7 @@ function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
 
   promise = promise.then(() => gateway.putBlock(uploadInfo.customData.accessUrl, uploadInfo.chunkIndex, uploadInfo.chunkBlob));
 
-  if(uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
+  if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
     promise = promise.then(() => gateway.putBlockList(uploadInfo.customData.accessUrl, uploadInfo.chunkCount));
   }
 

@@ -45,21 +45,21 @@
 
 import {
   DxVectorMap,
-  DxLayer
+  DxLayer,
 } from 'devextreme-vue/vector-map';
 
 import TextBox from 'devextreme-vue/text-box';
 import SelectBox from 'devextreme-vue/select-box';
 
-import { viewportCoordinates } from './data.js';
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
+import { viewportCoordinates } from './data.js';
 
 export default {
   components: {
     DxVectorMap,
     DxLayer,
     TextBox,
-    SelectBox
+    SelectBox,
   },
   data() {
     return {
@@ -67,20 +67,20 @@ export default {
       world: mapsData.world,
       bounds: [-180, 85, 180, -60],
       center: '0.000, 46.036',
-      zoomFactor: '1.00'
+      zoomFactor: '1.00',
     };
   },
-  methods:{
+  methods: {
     continentChanged({ value }) {
-      this.$refs['map'].instance.viewport(value);
+      this.$refs.map.instance.viewport(value);
     },
     centerChanged({ center }) {
       this.center = `${center[0].toFixed(3)}, ${center[1].toFixed(3)}`;
     },
     zoomFactorChanged({ zoomFactor }) {
       this.zoomFactor = zoomFactor.toFixed(2);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

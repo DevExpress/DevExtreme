@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import TreeList, { RemoteOperations, Column, SearchPanel, HeaderFilter, Editing, RequiredRule, Lookup } from 'devextreme-react/tree-list';
+import TreeList, {
+  RemoteOperations, Column, SearchPanel, HeaderFilter, Editing, RequiredRule, Lookup,
+} from 'devextreme-react/tree-list';
 import AspNetData from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
@@ -11,14 +13,14 @@ const tasksData = AspNetData.createStore({
   insertUrl: `${url}/InsertTask`,
   updateUrl: `${url}/UpdateTask`,
   deleteUrl: `${url}/DeleteTask`,
-  onBeforeSend: function(method, ajaxOptions) {
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const employeesData = AspNetData.createStore({
   key: 'ID',
-  loadUrl: `${url}/TaskEmployees`
+  loadUrl: `${url}/TaskEmployees`,
 });
 
 const statusesData = [
@@ -26,7 +28,7 @@ const statusesData = [
   'Need Assistance',
   'In Progress',
   'Deferred',
-  'Completed'
+  'Completed',
 ];
 
 class App extends React.Component {

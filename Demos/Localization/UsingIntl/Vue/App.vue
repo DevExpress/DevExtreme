@@ -59,7 +59,9 @@
 </template>
 <script>
 
-import { DxDataGrid, DxColumn, DxEditing, DxFilterRow } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxEditing, DxFilterRow,
+} from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 
 import deMessages from 'npm:devextreme/localization/messages/de.json!json';
@@ -75,16 +77,16 @@ export default {
     DxDataGrid,
     DxColumn,
     DxEditing,
-    DxFilterRow
+    DxFilterRow,
   },
   data() {
     return {
       locale: null,
       locales: service.getLocales(),
       payments: service.getPayments(),
-      editPopupOptions: { width:700, height:345 },
+      editPopupOptions: { width: 700, height: 345 },
       amountEditorOptions: { format: 'currency', showClearButton: true },
-      selectBoxInputAttr: { id: 'selectInput' }
+      selectBoxInputAttr: { id: 'selectInput' },
     };
   },
   created() {
@@ -109,8 +111,8 @@ export default {
       this.setLocale(e.value);
       document.location.reload();
     },
-    formatMessage: formatMessage
-  }
+    formatMessage,
+  },
 };
 </script>
 <style scoped>

@@ -106,12 +106,14 @@
 </template>
 <script>
 
-import { DxCircularGauge, DxScale, DxGeometry, DxSubvalueIndicator } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxGeometry, DxSubvalueIndicator,
+} from 'devextreme-vue/circular-gauge';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxGeometry, DxSubvalueIndicator
-  }
+    DxCircularGauge, DxScale, DxGeometry, DxSubvalueIndicator,
+  },
 };
 </script>
 <style scoped>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Button } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 
@@ -6,18 +6,23 @@ class App extends React.Component {
   weatherClick() {
     notify('The Weather button was clicked');
   }
+
   doneClick() {
     notify('The Done button was clicked');
   }
+
   sendClick() {
     notify('The Send button was clicked');
   }
+
   plusClick() {
     notify('The button was clicked');
   }
+
   backClick() {
     notify('The button was clicked');
   }
+
   render() {
     return (
       <div>

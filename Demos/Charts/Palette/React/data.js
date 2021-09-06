@@ -5,7 +5,7 @@ const data = [];
 for (let i = 0; i < 20; i++) {
   data.push({
     arg: `item${i}`,
-    val: 1
+    val: 1,
   });
 }
 export const dataSource = data;

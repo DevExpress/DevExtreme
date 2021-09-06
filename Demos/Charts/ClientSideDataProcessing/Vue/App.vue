@@ -42,7 +42,7 @@ import DxChart, {
   DxExport,
   DxSeries,
   DxSize,
-  DxLoadingIndicator
+  DxLoadingIndicator,
 } from 'devextreme-vue/chart';
 
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -63,28 +63,26 @@ export default {
     DxSeries,
     DxSize,
 
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
-    let paletteIndex = 0;
+    const paletteIndex = 0;
 
     const monthWeather = new DataSource({
       store: new CustomStore({
-        load: () => {
-          return fetch('../../../../data/monthWeather.json')
-            .then(e => e.json())
-            .catch(() => { throw 'Data Loading Error'; });
-        },
-        loadMode: 'raw'
+        load: () => fetch('../../../../data/monthWeather.json')
+          .then((e) => e.json())
+          .catch(() => { throw 'Data Loading Error'; }),
+        loadMode: 'raw',
       }),
       filter: ['t', '>', '2'],
-      paginate: false
+      paginate: false,
     });
 
     return {
       temperature: [2, 4, 6, 8, 9, 10, 11],
       monthWeather,
-      paletteIndex
+      paletteIndex,
     };
   },
   methods: {
@@ -101,7 +99,7 @@ export default {
 
       return { color };
     },
-  }
+  },
 };
 </script>
 <style>

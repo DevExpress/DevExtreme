@@ -14,5 +14,5 @@ export const population = [
   { country: 'Mexico', val: 122273000 },
   { country: 'Ethiopia', val: 104345000 },
   { country: 'Philippines', val: 103906000 },
-  { country: 'Egypt', val: 92847800 }
+  { country: 'Egypt', val: 92847800 },
 ];

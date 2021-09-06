@@ -30,29 +30,29 @@
 <script>
 
 const formatNumber = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 0
+  minimumFractionDigits: 0,
 }).format;
 
 export default {
   props: {
     pieChart: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
-      country: this.pieChart.getAllSeries()[0].getVisiblePoints()[0].data.country
+      country: this.pieChart.getAllSeries()[0].getVisiblePoints()[0].data.country,
     };
   },
   methods: {
     getImagePath(country) {
-      return `../../../../images/flags/${ country.replace(/\s/, '').toLowerCase() }.svg`;
+      return `../../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg`;
     },
 
     calculateTotal(pieChart) {
       return formatNumber(pieChart.getAllSeries()[0].getVisiblePoints().reduce((s, p) => s + p.originalValue, 0));
-    }
-  }
+    },
+  },
 };
 </script>

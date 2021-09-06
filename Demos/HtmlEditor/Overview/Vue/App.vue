@@ -72,10 +72,10 @@ import {
   DxHtmlEditor,
   DxToolbar,
   DxMediaResizing,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/html-editor';
 import {
-  DxCheckBox
+  DxCheckBox,
 } from 'devextreme-vue/check-box';
 import { markup } from './data.js';
 
@@ -85,7 +85,7 @@ export default {
     DxMediaResizing,
     DxToolbar,
     DxItem,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -93,9 +93,9 @@ export default {
       sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
       fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
       headerValues: [false, 1, 2, 3, 4, 5],
-      isMultiline: true
+      isMultiline: true,
     };
-  }
+  },
 };
 </script>
 <style>

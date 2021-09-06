@@ -39,15 +39,15 @@ export default {
   components: {
     DxSelectBox,
     DxCheckBox,
-    DxList
+    DxList,
   },
   data() {
     return {
       tasks,
       allowDeletion: false,
-      itemDeleteMode: 'toggle'
+      itemDeleteMode: 'toggle',
     };
-  }
+  },
 };
 </script>
 <style>

@@ -11,10 +11,10 @@ class App extends React.Component {
     super();
     this.dataSource = new ArrayStore({
       data: products,
-      key: 'Id'
+      key: 'Id',
     });
     this.state = {
-      editableProducts: [...simpleProducts]
+      editableProducts: [...simpleProducts],
     };
     this.onCustomItemCreating = this.onCustomItemCreating.bind(this);
   }
@@ -24,7 +24,7 @@ class App extends React.Component {
 
     args.customItem = newValue;
     this.setState({
-      editableProducts: [newValue, ...this.state.editableProducts]
+      editableProducts: [newValue, ...this.state.editableProducts],
     });
   }
 

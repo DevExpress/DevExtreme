@@ -18,7 +18,7 @@
 <script>
 import DxPivotGrid, {
   DxFieldChooser,
-  DxScrolling
+  DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -28,7 +28,7 @@ export default {
   components: {
     DxPivotGrid,
     DxFieldChooser,
-    DxScrolling
+    DxScrolling,
   },
   data() {
     return {
@@ -38,35 +38,35 @@ export default {
           width: 120,
           dataField: 'region',
           area: 'row',
-          expanded: true
+          expanded: true,
         }, {
           caption: 'City',
           dataField: 'city',
           width: 150,
-          area: 'row'
+          area: 'row',
         }, {
           dataField: 'date',
           dataType: 'date',
-          area: 'column'
+          area: 'column',
         }, {
           groupName: 'date',
           groupInterval: 'year',
-          expanded: true
+          expanded: true,
         }, {
           groupName: 'date',
           groupInterval: 'quarter',
-          expanded: true
+          expanded: true,
         }, {
           caption: 'Total',
           dataField: 'amount',
           dataType: 'number',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }],
-        store: sales
-      })
+        store: sales,
+      }),
     };
-  }
+  },
 };
 </script>

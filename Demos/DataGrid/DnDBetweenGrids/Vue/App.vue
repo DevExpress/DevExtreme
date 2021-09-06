@@ -20,22 +20,22 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/DnDBetweenGrids';
 
 const tasksStore = AspNetData.createStore({
   key: 'ID',
-  loadUrl: `${url }/Tasks`,
-  updateUrl: `${url }/UpdateTask`,
-  onBeforeSend: function(method, ajaxOptions) {
+  loadUrl: `${url}/Tasks`,
+  updateUrl: `${url}/UpdateTask`,
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 export default {
   components: {
-    Grid
+    Grid,
   },
   data() {
     return {
-      tasksStore
+      tasksStore,
     };
-  }
+  },
 };
 </script>
 

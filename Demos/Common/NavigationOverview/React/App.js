@@ -1,19 +1,17 @@
 import React from 'react';
 
-import { continents } from './data.js';
-
 import TreeView from 'devextreme-react/tree-view';
 import TabPanel from 'devextreme-react/tab-panel';
+import { continents } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       tabPanelIndex: 0,
       countryData: continents[0].items[0],
-      citiesData: continents[0].items[0].cities
+      citiesData: continents[0].items[0].cities,
     };
 
     this.handleTreeViewSelectionChange = this.handleTreeViewSelectionChange.bind(this);
@@ -21,7 +19,7 @@ class App extends React.Component {
   }
 
   render() {
-    const countryData = this.state.countryData;
+    const { countryData } = this.state;
     return (
       <div className="container">
         <div className="left-content">
@@ -78,7 +76,7 @@ class App extends React.Component {
       this.setState({
         tabPanelIndex: 0,
         countryData: e.itemData,
-        citiesData: countryData.cities
+        citiesData: countryData.cities,
       });
     }
   }

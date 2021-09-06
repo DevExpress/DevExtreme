@@ -26,7 +26,7 @@ import {
   DxSeries,
   DxArgumentAxis,
   DxExport,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/polar-chart';
 
 import { dataSource } from './data.js';
@@ -38,14 +38,14 @@ export default {
     DxSeries,
     DxArgumentAxis,
     DxExport,
-    DxLegend
+    DxLegend,
   },
 
   data() {
     return {
-      dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>
 <style>

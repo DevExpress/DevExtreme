@@ -6,7 +6,7 @@ import Chart, {
   ValueAxis,
   Label,
   Export,
-  Legend
+  Legend,
 } from 'devextreme-react/chart';
 import { oilPrices } from './data.js';
 

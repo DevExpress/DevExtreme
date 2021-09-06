@@ -111,8 +111,10 @@
 </template>
 
 <script>
-import { DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
-  DxFileSelectionItem, DxItemView, DxDetails, DxColumn } from 'devextreme-vue/file-manager';
+import {
+  DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
+  DxFileSelectionItem, DxItemView, DxDetails, DxColumn,
+} from 'devextreme-vue/file-manager';
 import { fileItems } from './data.js';
 
 export default {
@@ -125,14 +127,14 @@ export default {
     DxFileSelectionItem,
     DxItemView,
     DxDetails,
-    DxColumn
+    DxColumn,
   },
 
   data() {
     return {
       fileItems,
       newFileMenuOptions: this.getNewFileMenuOptions(),
-      changeCategoryMenuOptions: this.getChangeCategoryMenuOptions()
+      changeCategoryMenuOptions: this.getChangeCategoryMenuOptions(),
     };
   },
   methods: {
@@ -141,37 +143,36 @@ export default {
       const extension = itemData.options ? itemData.options.extension : undefined;
       const category = itemData.options ? itemData.options.category : undefined;
 
-      if(extension) {
+      if (extension) {
         updated = this.createFile(extension, fileSystemItem);
-      } else if(category !== undefined) {
+      } else if (category !== undefined) {
         updated = this.updateCategory(category, fileSystemItem, viewArea);
       }
 
-      if(updated) {
+      if (updated) {
         this.$refs.fileManager.instance.refresh();
       }
     },
 
     createFile(fileExtension, directory) {
-      var newItem = {
+      const newItem = {
         __KEY__: Date.now(),
-        name: `New file${ fileExtension}`,
+        name: `New file${fileExtension}`,
         isDirectory: false,
-        size: 0
+        size: 0,
       };
 
       directory = directory || this.$refs.fileManager.instance.getCurrentDirectory();
-      if(!directory.isDirectory) {
+      if (!directory.isDirectory) {
         return false;
       }
 
-      var array = null;
-      if(!directory.dataItem) {
+      let array = null;
+      if (!directory.dataItem) {
         array = this.fileItems;
-      }
-      else {
+      } else {
         array = directory.dataItem.items;
-        if(!array) {
+        if (!array) {
           directory.dataItem.items = array = [];
         }
       }
@@ -181,16 +182,16 @@ export default {
     },
 
     updateCategory(newCategory, directory, viewArea) {
-      var items = null;
+      let items = null;
 
-      if(viewArea === 'navPane') {
-        items = [ directory ];
+      if (viewArea === 'navPane') {
+        items = [directory];
       } else {
         items = this.$refs.fileManager.instance.getSelectedItems();
       }
 
-      items.forEach(function(item) {
-        if(item.dataItem) {
+      items.forEach((item) => {
+        if (item.dataItem) {
           item.dataItem.category = newCategory;
         }
       });
@@ -198,7 +199,7 @@ export default {
       return items.length > 0;
     },
 
-    getNewFileMenuOptions: function() {
+    getNewFileMenuOptions() {
       return {
         items: [
           {
@@ -209,28 +210,28 @@ export default {
                 text: 'Text Document',
                 options: {
                   extension: '.txt',
-                }
+                },
               },
               {
                 text: 'RTF Document',
                 options: {
                   extension: '.rtf',
-                }
+                },
               },
               {
                 text: 'Spreadsheet',
                 options: {
                   extension: '.xls',
-                }
-              }
-            ]
-          }
+                },
+              },
+            ],
+          },
         ],
-        onItemClick: this.onItemClick
+        onItemClick: this.onItemClick,
       };
     },
 
-    getChangeCategoryMenuOptions: function() {
+    getChangeCategoryMenuOptions() {
       return {
         items: [
           {
@@ -240,33 +241,33 @@ export default {
               {
                 text: 'Work',
                 options: {
-                  category: 'Work'
-                }
+                  category: 'Work',
+                },
               },
               {
                 text: 'Important',
                 options: {
-                  category: 'Important'
-                }
+                  category: 'Important',
+                },
               },
               {
                 text: 'Home',
                 options: {
-                  category: 'Home'
-                }
+                  category: 'Home',
+                },
               },
               {
                 text: 'None',
                 options: {
-                  category: ''
-                }
-              }
-            ]
-          }
+                  category: '',
+                },
+              },
+            ],
+          },
         ],
-        onItemClick: this.onItemClick
+        onItemClick: this.onItemClick,
       };
-    }
-  }
+    },
+  },
 };
 </script>

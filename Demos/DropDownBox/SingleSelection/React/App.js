@@ -1,7 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import DropDownBox from 'devextreme-react/drop-down-box';
 import TreeView from 'devextreme-react/tree-view';
-import DataGrid, { Selection, Paging, FilterRow, Scrolling } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Selection, Paging, FilterRow, Scrolling,
+} from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 
@@ -17,7 +19,7 @@ class App extends React.Component {
       treeBoxValue: '1_1',
       gridBoxValue: [3],
       isGridBoxOpened: false,
-      isTreeBoxOpened: false
+      isTreeBoxOpened: false,
     };
     this.treeView_itemSelectionChanged = this.treeView_itemSelectionChanged.bind(this);
     this.syncTreeViewSelection = this.syncTreeViewSelection.bind(this);
@@ -35,10 +37,10 @@ class App extends React.Component {
     return new CustomStore({
       loadMode: 'raw',
       key: 'ID',
-      load: function() {
-        return fetch(`../../../../data/${ jsonFile}`)
-          .then(response => response.json());
-      }
+      load() {
+        return fetch(`../../../../data/${jsonFile}`)
+          .then((response) => response.json());
+      },
     });
   }
 
@@ -120,7 +122,7 @@ class App extends React.Component {
 
   syncTreeViewSelection(e) {
     this.setState({
-      treeBoxValue: e.value
+      treeBoxValue: e.value,
     });
     if (!this.treeView) return;
 
@@ -133,25 +135,25 @@ class App extends React.Component {
 
   syncDataGridSelection(e) {
     this.setState({
-      gridBoxValue: e.value
+      gridBoxValue: e.value,
     });
   }
 
   treeView_itemSelectionChanged(e) {
     this.setState({
-      treeBoxValue: e.component.getSelectedNodeKeys()
+      treeBoxValue: e.component.getSelectedNodeKeys(),
     });
   }
 
   dataGrid_onSelectionChanged(e) {
     this.setState({
       gridBoxValue: e.selectedRowKeys,
-      isGridBoxOpened: false
+      isGridBoxOpened: false,
     });
   }
 
   gridBox_displayExpr(item) {
-    return item && `${item.CompanyName } <${ item.Phone }>`;
+    return item && `${item.CompanyName} <${item.Phone}>`;
   }
 
   treeView_onContentReady(e) {
@@ -160,26 +162,25 @@ class App extends React.Component {
 
   onTreeItemClick() {
     this.setState({
-      isTreeBoxOpened: false
+      isTreeBoxOpened: false,
     });
   }
 
   onGridBoxOpened(e) {
-    if(e.name === 'opened') {
+    if (e.name === 'opened') {
       this.setState({
-        isGridBoxOpened: e.value
+        isGridBoxOpened: e.value,
       });
     }
   }
 
   onTreeBoxOpened(e) {
-    if(e.name === 'opened') {
+    if (e.name === 'opened') {
       this.setState({
-        isTreeBoxOpened: e.value
+        isTreeBoxOpened: e.value,
       });
     }
   }
-
 }
 
 export default App;

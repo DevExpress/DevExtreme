@@ -59,17 +59,17 @@ import productsData from './data.js';
 export default {
   components: {
     DxTagBox,
-    Group
+    Group,
   },
   data() {
     return {
       products: new DataSource({
         store: productsData,
         key: 'ID',
-        group: 'Category'
-      })
+        group: 'Category',
+      }),
     };
-  }
+  },
 };
 </script>
 <style scoped>

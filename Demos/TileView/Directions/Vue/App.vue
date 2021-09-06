@@ -36,7 +36,7 @@ export default {
   components: {
     DxTileView,
     DxSelectBox,
-    HomeItem
+    HomeItem,
   },
   data() {
     return {
@@ -47,9 +47,9 @@ export default {
       baseItemHeight: 120,
       baseItemWidth: 185,
       width: '100%',
-      itemMargin: 10
+      itemMargin: 10,
     };
-  }
+  },
 };
 </script>
 <style>

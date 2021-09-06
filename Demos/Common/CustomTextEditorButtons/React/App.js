@@ -14,7 +14,7 @@ class App extends React.Component {
       passwordMode: 'password',
       currencyFormat: '$ #.##',
       currencyValue: 14500.55,
-      dateValue: new Date().getTime()
+      dateValue: new Date().getTime(),
     };
 
     this.passwordButton = {
@@ -22,9 +22,9 @@ class App extends React.Component {
       type: 'default',
       onClick: () => {
         this.setState({
-          passwordMode: (this.state.passwordMode === 'text' ? 'password' : 'text')
+          passwordMode: (this.state.passwordMode === 'text' ? 'password' : 'text'),
         });
-      }
+      },
     };
 
     this.currencyButton = {
@@ -32,23 +32,23 @@ class App extends React.Component {
       stylingMode: 'text',
       width: 32,
       elementAttr: {
-        class: 'currency'
+        class: 'currency',
       },
       onClick: (e) => {
-        if(e.component.option('text') === '$') {
+        if (e.component.option('text') === '$') {
           e.component.option('text', '€');
           this.setState({
             currencyFormat: '$ #.##',
-            currencyValue: this.state.currencyValue / 0.836
+            currencyValue: this.state.currencyValue / 0.836,
           });
         } else {
           e.component.option('text', '$');
           this.setState({
             currencyFormat: '€ #.##',
-            currencyValue: this.state.currencyValue * 0.836
+            currencyValue: this.state.currencyValue * 0.836,
           });
         }
-      }
+      },
     };
 
     this.changeCurrency = this.changeCurrency.bind(this);
@@ -57,9 +57,9 @@ class App extends React.Component {
       text: 'Today',
       onClick: () => {
         this.setState({
-          dateValue: new Date().getTime()
+          dateValue: new Date().getTime(),
         });
-      }
+      },
     };
 
     this.prevDateButton = {
@@ -67,9 +67,9 @@ class App extends React.Component {
       stylingMode: 'text',
       onClick: () => {
         this.setState({
-          dateValue: this.state.dateValue - millisecondsInDay
+          dateValue: this.state.dateValue - millisecondsInDay,
         });
-      }
+      },
     };
 
     this.nextDateButton = {
@@ -77,21 +77,21 @@ class App extends React.Component {
       stylingMode: 'text',
       onClick: () => {
         this.setState({
-          dateValue: this.state.dateValue + millisecondsInDay
+          dateValue: this.state.dateValue + millisecondsInDay,
         });
-      }
+      },
     };
 
     this.onDateChanged = (e) => {
       this.setState({
-        dateValue: e.value
+        dateValue: e.value,
       });
     };
   }
 
   changeCurrency(data) {
     this.setState({
-      currencyValue: data.value
+      currencyValue: data.value,
     });
   }
 
@@ -163,7 +163,6 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
-
 }
 
 export default App;

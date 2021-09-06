@@ -63,7 +63,7 @@ import {
   DxLegend,
   DxBorder,
   DxExport,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 
 import service from './data.js';
@@ -78,24 +78,24 @@ export default {
     DxLegend,
     DxBorder,
     DxExport,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
-      dataSource: service.getMaleAgeData()
+      dataSource: service.getMaleAgeData(),
     };
   },
   methods: {
     customizeItems(items) {
-      let sortedItems = [];
+      const sortedItems = [];
 
-      items.forEach(function(item) {
+      items.forEach((item) => {
         const startIndex = item.series.stack === 'male' ? 0 : 3;
         sortedItems.splice(startIndex, 0, item);
       });
       return sortedItems;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

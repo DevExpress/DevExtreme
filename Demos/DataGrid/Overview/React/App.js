@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import ODataStore from 'devextreme/data/odata/store';
 
@@ -8,7 +8,7 @@ import DataGrid, {
   GroupPanel,
   Pager,
   Paging,
-  SearchPanel
+  SearchPanel,
 } from 'devextreme-react/data-grid';
 
 import DiscountCell from './DiscountCell.js';
@@ -19,21 +19,22 @@ const dataSourceOptions = {
   store: new ODataStore({
     url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
     key: 'Id',
-    beforeSend: function(request) {
+    beforeSend(request) {
       request.params.startDate = '2020-05-10';
       request.params.endDate = '2020-05-15';
-    }
-  })
+    },
+  }),
 };
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapsed: false
+      collapsed: false,
     };
     this.onContentReady = this.onContentReady.bind(this);
   }
+
   render() {
     return (
       <DataGrid
@@ -81,7 +82,7 @@ class App extends React.Component {
     if (!this.state.collapsed) {
       e.component.expandRow(['EnviroCare']);
       this.setState({
-        collapsed: true
+        collapsed: true,
       });
     }
   }

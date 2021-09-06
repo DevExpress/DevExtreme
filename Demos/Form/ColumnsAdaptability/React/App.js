@@ -1,18 +1,18 @@
-﻿import React from 'react';
+import React from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import Form from 'devextreme-react/form';
 import employee from './data.js';
 
 const colCountByScreen = {
   sm: 2,
-  md: 4
+  md: 4,
 };
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      calculateColCountAutomatically: false
+      calculateColCountAutomatically: false,
     };
     this.onCalculateColCountAutomaticallyChanged = this.onCalculateColCountAutomaticallyChanged.bind(this);
   }
@@ -47,7 +47,7 @@ class App extends React.Component {
 
   onCalculateColCountAutomaticallyChanged(e) {
     this.setState({
-      calculateColCountAutomatically: e.value
+      calculateColCountAutomatically: e.value,
     });
   }
 }

@@ -132,7 +132,9 @@
 </template>
 <script>
 
-import { DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxToolbox } from 'devextreme-vue/diagram';
+import {
+  DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxToolbox,
+} from 'devextreme-vue/diagram';
 import { DxPopup } from 'devextreme-vue/popup';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxButton from 'devextreme-vue/button';
@@ -143,24 +145,24 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxToolbox, CustomShapeTemplate, CustomShapeToolboxTemplate, DxPopup, DxTextBox, DxButton
+    DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxToolbox, CustomShapeTemplate, CustomShapeToolboxTemplate, DxPopup, DxTextBox, DxButton,
   },
   data() {
-    var that = this;
+    const that = this;
     this.generatedID = 100;
     return {
       employees: service.getEmployees(),
       dataSource: new ArrayStore({
         key: 'ID',
         data: service.getEmployees(),
-        onInserting: function(values) {
+        onInserting(values) {
           values.ID = values.ID || that.generatedID++;
           values.Full_Name = values.Full_Name || "Employee's Name";
           values.Title = values.Title || "Employee's Title";
-        }
+        },
       }),
       currentEmployee: {},
-      popupVisible: false
+      popupVisible: false,
     };
   },
   methods: {
@@ -168,48 +170,48 @@ export default {
       return 'employee';
     },
     itemCustomDataExpr(obj, value) {
-      if(value === undefined) {
+      if (value === undefined) {
         return {
-          'Full_Name': obj.Full_Name,
-          'Prefix': obj.Prefix,
-          'Title': obj.Title,
-          'City': obj.City,
-          'State': obj.State,
-          'Email': obj.Email,
-          'Skype': obj.Skype,
-          'Mobile_Phone': obj.Mobile_Phone
+          Full_Name: obj.Full_Name,
+          Prefix: obj.Prefix,
+          Title: obj.Title,
+          City: obj.City,
+          State: obj.State,
+          Email: obj.Email,
+          Skype: obj.Skype,
+          Mobile_Phone: obj.Mobile_Phone,
         };
-      } else {
-        obj.Full_Name = value.Full_Name;
-        obj.Prefix = value.Prefix;
-        obj.Title = value.Title;
-        obj.City = value.City;
-        obj.State = value.State;
-        obj.Email = value.Email;
-        obj.Skype = value.Skype;
-        obj.Mobile_Phone = value.Mobile_Phone;
       }
+      obj.Full_Name = value.Full_Name;
+      obj.Prefix = value.Prefix;
+      obj.Title = value.Title;
+      obj.City = value.City;
+      obj.State = value.State;
+      obj.Email = value.Email;
+      obj.Skype = value.Skype;
+      obj.Mobile_Phone = value.Mobile_Phone;
     },
     onRequestLayoutUpdate(e) {
-      for(var i = 0; i < e.changes.length; i++) {
-        if(e.changes[i].type === 'remove') {
+      for (let i = 0; i < e.changes.length; i++) {
+        if (e.changes[i].type === 'remove') {
           e.allowed = true;
-        } else if(e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
+        } else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
           e.allowed = true;
         }
       }
     },
     editEmployee(employee) {
-      this.currentEmployee = Object.assign({
-        'Full_Name': '',
-        'Prefix': '',
-        'Title': '',
-        'City': '',
-        'State': '',
-        'Email': '',
-        'Skype': '',
-        'Mobile_Phone': ''
-      }, employee);
+      this.currentEmployee = {
+        Full_Name: '',
+        Prefix: '',
+        Title: '',
+        City: '',
+        State: '',
+        Email: '',
+        Skype: '',
+        Mobile_Phone: '',
+        ...employee,
+      };
       this.popupVisible = true;
     },
     deleteEmployee(employee) {
@@ -220,14 +222,14 @@ export default {
         type: 'update',
         key: this.currentEmployee.ID,
         data: {
-          'Full_Name': this.currentEmployee.Full_Name,
-          'Title': this.currentEmployee.Title,
-          'City': this.currentEmployee.City,
-          'State': this.currentEmployee.State,
-          'Email': this.currentEmployee.Email,
-          'Skype': this.currentEmployee.Skype,
-          'Mobile_Phone': this.currentEmployee.Mobile_Phone
-        }
+          Full_Name: this.currentEmployee.Full_Name,
+          Title: this.currentEmployee.Title,
+          City: this.currentEmployee.City,
+          State: this.currentEmployee.State,
+          Email: this.currentEmployee.Email,
+          Skype: this.currentEmployee.Skype,
+          Mobile_Phone: this.currentEmployee.Mobile_Phone,
+        },
       }]);
       this.currentEmployee = {};
       this.popupVisible = false;
@@ -235,8 +237,8 @@ export default {
     cancelEditEmployee() {
       this.currentEmployee = {};
       this.popupVisible = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

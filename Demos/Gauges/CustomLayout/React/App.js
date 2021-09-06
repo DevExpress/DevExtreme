@@ -1,10 +1,11 @@
 import React from 'react';
-import { CircularGauge, Scale, Tick, Label, RangeContainer, Range, ValueIndicator, SubvalueIndicator, Title, Font, Export } from 'devextreme-react/circular-gauge';
+import {
+  CircularGauge, Scale, Tick, Label, RangeContainer, Range, ValueIndicator, SubvalueIndicator, Title, Font, Export,
+} from 'devextreme-react/circular-gauge';
 
 const subvalues = [40, 90];
 
 class App extends React.Component {
-
   render() {
     return (
       <CircularGauge

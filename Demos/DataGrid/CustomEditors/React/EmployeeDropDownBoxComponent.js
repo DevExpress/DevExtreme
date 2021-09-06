@@ -3,7 +3,7 @@ import DataGrid, {
   Column,
   Paging,
   Scrolling,
-  Selection
+  Selection,
 } from 'devextreme-react/data-grid';
 import DropDownBox from 'devextreme-react/drop-down-box';
 
@@ -13,7 +13,7 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentValue: props.data.value
+      currentValue: props.data.value,
     };
     this.dropDownBoxRef = React.createRef();
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
@@ -46,7 +46,7 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
   onSelectionChanged(selectionChangedArgs) {
     this.setState({ currentValue: selectionChangedArgs.selectedRowKeys[0] });
     this.props.data.setValue(this.state.currentValue);
-    if(selectionChangedArgs.selectedRowKeys.length > 0) {
+    if (selectionChangedArgs.selectedRowKeys.length > 0) {
       this.dropDownBoxRef.current.instance.close();
     }
   }

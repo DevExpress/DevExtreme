@@ -8,6 +8,6 @@ export const dataSource = [
   { weight: '7', appleCost: 35, orangeCost: 44 },
   { weight: '8', appleCost: 42, orangeCost: 45 },
   { weight: '9', appleCost: 49, orangeCost: 46 },
-  { weight: '10', appleCost: 60, orangeCost: 47 }
+  { weight: '10', appleCost: 60, orangeCost: 47 },
 ];
 

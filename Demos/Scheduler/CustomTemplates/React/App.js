@@ -15,6 +15,7 @@ class App extends React.Component {
     super(props);
     this.onAppointmentFormOpening = this.onAppointmentFormOpening.bind(this);
   }
+
   render() {
     return (
       <Scheduler
@@ -50,13 +51,13 @@ class App extends React.Component {
   }
 
   onAppointmentFormOpening(data) {
-    let form = data.form,
-      movieInfo = getMovieById(data.appointmentData.movieId) || {},
-      startDate = data.appointmentData.startDate;
+    const { form } = data;
+    let movieInfo = getMovieById(data.appointmentData.movieId) || {};
+    let { startDate } = data.appointmentData;
 
     form.option('items', [{
       label: {
-        text: 'Movie'
+        text: 'Movie',
       },
       editorType: 'dxSelectBox',
       dataField: 'movieId',
@@ -64,34 +65,34 @@ class App extends React.Component {
         items: moviesData,
         displayExpr: 'text',
         valueExpr: 'id',
-        onValueChanged: function(args) {
+        onValueChanged(args) {
           movieInfo = getMovieById(args.value);
 
           form.updateData('director', movieInfo.director);
           form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
-        }
+        },
       },
     }, {
       label: {
-        text: 'Director'
+        text: 'Director',
       },
       name: 'director',
       editorType: 'dxTextBox',
       editorOptions: {
         value: movieInfo.director,
-        readOnly: true
-      }
+        readOnly: true,
+      },
     }, {
       dataField: 'startDate',
       editorType: 'dxDateBox',
       editorOptions: {
         width: '100%',
         type: 'datetime',
-        onValueChanged: function(args) {
+        onValueChanged(args) {
           startDate = args.value;
           form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
-        }
-      }
+        },
+      },
     }, {
       name: 'endDate',
       dataField: 'endDate',
@@ -99,18 +100,18 @@ class App extends React.Component {
       editorOptions: {
         width: '100%',
         type: 'datetime',
-        readOnly: true
-      }
+        readOnly: true,
+      },
     }, {
       dataField: 'price',
       editorType: 'dxRadioGroup',
       editorOptions: {
         dataSource: [5, 10, 15, 20],
-        itemTemplate: function(itemData) {
+        itemTemplate(itemData) {
           return `$${itemData}`;
-        }
-      }
-    }
+        },
+      },
+    },
     ]);
   }
 }

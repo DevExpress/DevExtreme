@@ -1,10 +1,10 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
   FieldPanel,
   FieldChooser,
   HeaderFilter,
-  Scrolling
+  Scrolling,
 } from 'devextreme-react/pivot-grid';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -40,14 +40,14 @@ const dataSource = new PivotGridDataSource({
     { dataField: '[Customer].[Customer]', area: 'row' },
     { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
     { dataField: '[Ship Date].[Month of Year]', area: 'column' },
-    { dataField: '[Measures].[Internet Sales Amount]', area: 'data' }
+    { dataField: '[Measures].[Internet Sales Amount]', area: 'data' },
   ],
   store: new XmlaStore({
     type: 'xmla',
     url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
     catalog: 'Adventure Works DW Standard Edition',
-    cube: 'Adventure Works'
-  })
+    cube: 'Adventure Works',
+  }),
 });
 
 export default App;

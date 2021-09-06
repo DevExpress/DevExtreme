@@ -3,20 +3,20 @@ export const tabs = [
     id: 0,
     text: 'user',
     icon: 'user',
-    content: 'User tab content'
+    content: 'User tab content',
   },
   {
     id: 1,
     text: 'comment',
     icon: 'comment',
-    content: 'Comment tab content'
+    content: 'Comment tab content',
   },
   {
     id: 2,
     text: 'find',
     icon: 'find',
-    content: 'Find tab content'
-  }
+    content: 'Find tab content',
+  },
 ];
 
 export const longtabs = [
@@ -28,5 +28,5 @@ export const longtabs = [
   { text: 'additional' },
   { text: 'clients' },
   { text: 'orders' },
-  { text: 'shipment' }
+  { text: 'shipment' },
 ];

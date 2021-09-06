@@ -60,25 +60,25 @@
 
 <script>
 
-function prepareMarkup(chartSVG, markup) {
-  return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px">'
-  + `${markup}<g transform="translate(305,12)">${chartSVG}</g></svg>`;
-}
-
 import {
   DxChart,
   DxSeries,
   DxCommonSeriesSettings,
   DxLegend,
   DxExport,
-  DxTitle
+  DxTitle,
 } from 'devextreme-vue/chart';
 
 import { exportFromMarkup } from 'devextreme/viz/export';
 import DxButton from 'devextreme-vue/button';
+import toCanvas from 'canvg';
 import { dataSource } from './data.js';
 import Form from './Form.vue';
-import toCanvas from 'canvg';
+
+function prepareMarkup(chartSVG, markup) {
+  return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px">'
+  + `${markup}<g transform="translate(305,12)">${chartSVG}</g></svg>`;
+}
 
 export default {
   components: {
@@ -89,11 +89,11 @@ export default {
     DxExport,
     DxTitle,
     Form,
-    DxButton
+    DxButton,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
@@ -111,12 +111,12 @@ export default {
             toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
               ignoreDimensions: true,
               ignoreClear: true,
-              renderCallback: resolve
+              renderCallback: resolve,
             });
           });
-        }
+        },
       });
-    }
+    },
   },
 };
 </script>

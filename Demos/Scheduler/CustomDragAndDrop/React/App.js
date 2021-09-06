@@ -14,12 +14,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: tasks,
-      appointments: appointments
+      tasks,
+      appointments,
     };
     this.onAppointmentRemove = this.onAppointmentRemove.bind(this);
     this.onAppointmentAdd = this.onAppointmentAdd.bind(this);
   }
+
   render() {
     const { tasks, appointments } = this.state;
     return (
@@ -30,18 +31,16 @@ class App extends React.Component {
             data="dropArea"
             group={draggingGroupName}
             onDragStart={this.onListDragStart}>
-            {tasks.map((task) => {
-              return <Draggable
-                key={task.text}
-                className="item dx-card dx-theme-text-color dx-theme-background-color"
-                clone={true}
-                group={draggingGroupName}
-                data={task}
-                onDragStart={this.onItemDragStart}
-                onDragEnd={this.onItemDragEnd}>
-                {task.text}
-              </Draggable>;
-            })}
+            {tasks.map((task) => <Draggable
+              key={task.text}
+              className="item dx-card dx-theme-text-color dx-theme-background-color"
+              clone={true}
+              group={draggingGroupName}
+              data={task}
+              onDragStart={this.onItemDragStart}
+              onDragEnd={this.onItemDragEnd}>
+              {task.text}
+            </Draggable>)}
           </Draggable>
         </ScrollView>
         <Scheduler
@@ -72,7 +71,7 @@ class App extends React.Component {
 
       this.setState({
         tasks: [...this.state.tasks],
-        appointments: [...this.state.appointments]
+        appointments: [...this.state.appointments],
       });
     }
   }
@@ -86,7 +85,7 @@ class App extends React.Component {
 
       this.setState({
         tasks: [...this.state.tasks],
-        appointments: [...this.state.appointments]
+        appointments: [...this.state.appointments],
       });
     }
   }

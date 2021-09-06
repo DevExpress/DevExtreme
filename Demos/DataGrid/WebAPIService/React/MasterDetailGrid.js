@@ -10,6 +10,7 @@ class MasterDetailGrid extends React.Component {
     super(props);
     this.dataSource = getMasterDetailGridDataSource(props.data.key);
   }
+
   render() {
     return (
       <DataGrid
@@ -27,8 +28,8 @@ function getMasterDetailGridDataSource(id) {
       loadParams: { orderID: id },
       onBeforeSend: (method, ajaxOptions) => {
         ajaxOptions.xhrFields = { withCredentials: true };
-      }
-    })
+      },
+    }),
   };
 }
 

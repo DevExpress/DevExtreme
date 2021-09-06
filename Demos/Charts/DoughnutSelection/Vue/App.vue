@@ -26,7 +26,7 @@ import DxPieChart, {
   DxLegend,
   DxSeries,
   DxExport,
-  DxHoverStyle
+  DxHoverStyle,
 } from 'devextreme-vue/pie-chart';
 
 import { olympicMedals } from './data.js';
@@ -37,18 +37,18 @@ export default {
     DxLegend,
     DxSeries,
     DxExport,
-    DxHoverStyle
+    DxHoverStyle,
   },
   data() {
     return {
-      olympicMedals
+      olympicMedals,
     };
   },
   methods: {
     pointClickHandler({ target }) {
       target.select();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

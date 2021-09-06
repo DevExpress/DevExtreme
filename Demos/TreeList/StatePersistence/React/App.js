@@ -1,5 +1,7 @@
 import React from 'react';
-import { TreeList, Selection, FilterRow, StateStoring, Column } from 'devextreme-react/tree-list';
+import {
+  TreeList, Selection, FilterRow, StateStoring, Column,
+} from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 
 const expandedRowKeys = [1, 2, 10];

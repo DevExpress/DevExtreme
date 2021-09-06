@@ -5,11 +5,11 @@ function getImagePath(data) {
 }
 
 const formatNumber = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 0
+  minimumFractionDigits: 0,
 }).format;
 
 export default function AnnotationTemplate(annotation) {
-  const data = annotation.data;
+  const { data } = annotation;
   return (
     <svg className="annotation">
       <image href={getImagePath(data)} width="60" height="40" />

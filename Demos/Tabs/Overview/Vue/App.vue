@@ -51,15 +51,15 @@ import { tabs, longtabs } from './data.js';
 export default {
   components: {
     DxSelectBox,
-    DxTabs
+    DxTabs,
   },
   data() {
     return {
       selectedIndex: 0,
       tabs,
-      longtabs
+      longtabs,
     };
-  }
+  },
 };
 </script>
 <style>

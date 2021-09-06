@@ -45,7 +45,7 @@ import {
   DxArgumentAxis,
   DxValueAxis,
   DxMargin,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/polar-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 
@@ -61,14 +61,14 @@ export default {
     DxArgumentAxis,
     DxValueAxis,
     DxMargin,
-    DxExport
+    DxExport,
   },
 
   data() {
     return {
       windSources,
       windRoseData,
-      periodValues: windRoseData[0].values
+      periodValues: windRoseData[0].values,
     };
   },
 
@@ -79,8 +79,8 @@ export default {
       } else {
         series.show();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
@@ -93,7 +93,7 @@ export default {
 }
 
 #chart-demo > .center {
-	text-align: center;
+  text-align: center;
 }
 
 #chart-demo > .center > .dx-widget {

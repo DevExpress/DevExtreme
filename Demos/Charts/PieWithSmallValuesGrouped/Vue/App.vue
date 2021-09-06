@@ -40,7 +40,7 @@ import DxPieChart, {
   DxConnector,
   DxSmallValuesGrouping,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/pie-chart';
 
 import { dataSource } from './data.js';
@@ -53,18 +53,18 @@ export default {
     DxConnector,
     DxSmallValuesGrouping,
     DxLegend,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
     formatLabel(pointInfo) {
       return `${pointInfo.argumentText}: ${pointInfo.valueText}%`;
-    }
-  }
+    },
+  },
 };
 </script>
 

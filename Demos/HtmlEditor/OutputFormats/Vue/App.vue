@@ -47,11 +47,11 @@
 import {
   DxHtmlEditor,
   DxToolbar,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/html-editor';
 import {
   DxButtonGroup,
-  DxItem as DxButtonGroupItem
+  DxItem as DxButtonGroupItem,
 } from 'devextreme-vue/button-group';
 
 import { markup } from './data.js';
@@ -64,21 +64,21 @@ export default {
     DxToolbar,
     DxItem,
     DxButtonGroup,
-    DxButtonGroupItem
+    DxButtonGroupItem,
   },
   data() {
     return {
       valueContent: markup,
       selectedItems: [{ text: 'Html' }],
       sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
-      fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']
+      fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
     };
   },
   computed: {
-    editorValueType: function() {
+    editorValueType() {
       return this.selectedItems[0].text.toLowerCase();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

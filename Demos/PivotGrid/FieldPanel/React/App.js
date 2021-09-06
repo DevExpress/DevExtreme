@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
-  FieldPanel
+  FieldPanel,
 } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
 
@@ -17,7 +17,7 @@ class App extends React.Component {
       showColumnFields: true,
       showDataFields: true,
       showFilterFields: true,
-      showRowFields: true
+      showRowFields: true,
     };
     this.onShowColumnFieldsChanged = this.onShowColumnFieldsChanged.bind(this);
     this.onShowDataFieldsChanged = this.onShowDataFieldsChanged.bind(this);
@@ -100,42 +100,42 @@ class App extends React.Component {
   }
 
   onContextMenuPreparing(e) {
-    var sourceField = e.field;
+    const sourceField = e.field;
 
     if (sourceField) {
-      if(!sourceField.groupName || sourceField.groupIndex === 0) {
+      if (!sourceField.groupName || sourceField.groupIndex === 0) {
         e.items.push({
           text: 'Hide field',
-          onItemClick: function() {
-            var fieldIndex;
-            if(sourceField.groupName) {
+          onItemClick() {
+            let fieldIndex;
+            if (sourceField.groupName) {
               fieldIndex = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex].index;
             } else {
               fieldIndex = sourceField.index;
             }
 
             dataSource.field(fieldIndex, {
-              area: null
+              area: null,
             });
             dataSource.load();
-          }
+          },
         });
       }
 
       if (sourceField.dataType === 'number') {
-        var menuItems = [];
+        const menuItems = [];
 
         e.items.push({ text: 'Summary Type', items: menuItems });
-        ['Sum', 'Avg', 'Min', 'Max'].forEach(summaryType => {
-          var summaryTypeValue = summaryType.toLowerCase();
+        ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
+          const summaryTypeValue = summaryType.toLowerCase();
 
           menuItems.push({
             text: summaryType,
             value: summaryType.toLowerCase(),
-            onItemClick: function(args) {
+            onItemClick(args) {
               setSummaryType(args, sourceField);
             },
-            selected: e.field.summaryType === summaryTypeValue
+            selected: e.field.summaryType === summaryTypeValue,
           });
         });
       }
@@ -148,32 +148,32 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     width: 120,
     dataField: 'region',
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
     area: 'row',
-    selector: function(data) {
+    selector(data) {
       return `${data.city} (${data.country})`;
-    }
+    },
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     dataField: 'sales',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }],
-  store: sales
+  store: sales,
 });
 
 function setSummaryType(args, sourceField) {
   dataSource.field(sourceField.index, {
-    summaryType: args.itemData.value
+    summaryType: args.itemData.value,
   });
 
   dataSource.load();

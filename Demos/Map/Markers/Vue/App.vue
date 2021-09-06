@@ -29,11 +29,10 @@
 </template>
 <script>
 
-import { markersData } from './data.js';
-
 import DxMap from 'devextreme-vue/map';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxButton from 'devextreme-vue/button';
+import { markersData } from './data.js';
 
 const markerUrl = 'https://js.devexpress.com/Demos/RealtorApp/images/map-marker.png';
 
@@ -41,12 +40,12 @@ export default {
   components: {
     DxMap,
     DxCheckBox,
-    DxButton
+    DxButton,
   },
-  data: function() {
+  data() {
     return {
       markersData,
-      markersIcon: markerUrl
+      markersIcon: markerUrl,
     };
   },
   methods: {
@@ -55,13 +54,13 @@ export default {
       this.markersData = markersData;
     },
     showTooltips() {
-      this.markersData = this.markersData.map(function(item) {
-        let newItem = JSON.parse(JSON.stringify(item));
+      this.markersData = this.markersData.map((item) => {
+        const newItem = JSON.parse(JSON.stringify(item));
         newItem.tooltip.isShown = true;
         return newItem;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

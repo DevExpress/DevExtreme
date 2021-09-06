@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import RangeSlider from 'devextreme-react/range-slider';
 import NumberBox from 'devextreme-react/number-box';
 
@@ -7,12 +7,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       startValue: 10,
-      endValue: 90
+      endValue: 90,
     };
     this.onRangeChanged = this.onRangeChanged.bind(this);
     this.onStartChanged = this.onStartChanged.bind(this);
     this.onEndChanged = this.onEndChanged.bind(this);
   }
+
   render() {
     return (
       <div className="form">
@@ -29,7 +30,7 @@ class App extends React.Component {
               <RangeSlider min={0} max={100} defaultValue={[35, 65]} label={{
                 visible: true,
                 format,
-                position: 'top'
+                position: 'top',
               }} />
             </div>
           </div>
@@ -40,7 +41,7 @@ class App extends React.Component {
                 enabled: true,
                 format,
                 showMode: 'always',
-                position: 'bottom'
+                position: 'bottom',
               }} />
             </div>
           </div>
@@ -84,20 +85,23 @@ class App extends React.Component {
       </div>
     );
   }
+
   onRangeChanged(data) {
     this.setState({
       startValue: data.start,
-      endValue: data.end
+      endValue: data.end,
     });
   }
+
   onStartChanged(data) {
     this.setState({
-      startValue: data.value
+      startValue: data.value,
     });
   }
+
   onEndChanged(data) {
     this.setState({
-      endValue: data.value
+      endValue: data.value,
     });
   }
 }

@@ -4,16 +4,20 @@ import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';
 import { NumberBox } from 'devextreme-react/number-box';
 import { DateBox } from 'devextreme-react/date-box';
-import { Gantt, Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item } from 'devextreme-react/gantt';
-
-import { tasks, dependencies, resources, resourceAssignments } from './data.js';
+import {
+  Gantt, Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item,
+} from 'devextreme-react/gantt';
 
 import { jsPDF } from 'jspdf';
+import {
+  tasks, dependencies, resources, resourceAssignments,
+} from './data.js';
+
 import 'jspdf-autotable';
 
 const formats = ['A0', 'A1', 'A2', 'A3', 'A4', 'Auto'];
-const exportModes = ['All', 'Chart', 'Tree List' ];
-const dateRanges = [ 'All', 'Visible', 'Custom' ];
+const exportModes = ['All', 'Chart', 'Tree List'];
+const dateRanges = ['All', 'Visible', 'Custom'];
 
 class App extends React.Component {
   constructor(props) {
@@ -31,13 +35,13 @@ class App extends React.Component {
       endTaskIndex: 3,
       startDate: tasks[0].start,
       endDate: tasks[0].end,
-      customRangeDisabled: true
+      customRangeDisabled: true,
     };
     this.exportButtonOptions = {
       icon: 'exportpdf',
       hint: 'Export to PDF',
       stylingMode: 'text',
-      onClick: this.exportButtonClick.bind(this)
+      onClick: this.exportButtonClick.bind(this),
     };
     this.formatBoxSelectionChanged = this.formatBoxSelectionChanged.bind(this);
     this.exportModeBoxSelectionChanged = this.exportModeBoxSelectionChanged.bind(this);
@@ -48,6 +52,7 @@ class App extends React.Component {
     this.startDateValueChanged = this.startDateValueChanged.bind(this);
     this.endDateValueChanged = this.endDateValueChanged.bind(this);
   }
+
   render() {
     return (
       <React.Fragment>
@@ -179,6 +184,7 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+
   exportButtonClick() {
     const gantt = this.ganttRef.current.instance;
     const format = this.state.formatBoxValue.toLowerCase();
@@ -186,50 +192,58 @@ class App extends React.Component {
     const exportMode = this.state.exportModeBoxValue === 'Tree List' ? 'treeList' : this.state.exportModeBoxValue.toLowerCase();
     const dataRangeMode = this.state.dateRangeBoxValue.toLowerCase();
     let dataRange;
-    if(dataRangeMode === 'custom') {
+    if (dataRangeMode === 'custom') {
       dataRange = {
         startIndex: this.state.startTaskIndex,
         endIndex: this.state.endTaskIndex,
-        startDate:  this.state.startDate,
-        endDate: this.state.endDate
+        startDate: this.state.startDate,
+        endDate: this.state.endDate,
       };
-    }
-    else {
+    } else {
       dataRange = dataRangeMode;
     }
     gantt.exportToPdf(
       {
         createDocumentMethod: jsPDF,
-        format: format,
+        format,
         landscape: isLandscape,
-        exportMode: exportMode,
-        dateRange: dataRange
-      }).then(doc => doc.save('gantt.pdf'));
+        exportMode,
+        dateRange: dataRange,
+      },
+    ).then((doc) => doc.save('gantt.pdf'));
   }
+
   formatBoxSelectionChanged(e) {
     this.setState({ formatBoxValue: e.value });
   }
+
   exportModeBoxSelectionChanged(e) {
     this.setState({ exportModeBoxValue: e.value });
   }
+
   dateRangeBoxSelectionChanged(e) {
     this.setState({
       dateRangeBoxValue: e.value,
-      customRangeDisabled: e.value !== 'Custom'
+      customRangeDisabled: e.value !== 'Custom',
     });
   }
+
   onLandscapeCheckBoxChanged(e) {
     this.setState({ landscapeCheckBoxValue: e.value });
   }
+
   startTaskIndexValueChanged(e) {
     this.setState({ startTaskIndex: e.value });
   }
+
   endTaskIndexValueChanged(e) {
     this.setState({ endTaskIndex: e.value });
   }
+
   startDateValueChanged(e) {
     this.setState({ startDate: e.value });
   }
+
   endDateValueChanged(e) {
     this.setState({ startDate: e.value });
   }

@@ -1,5 +1,7 @@
 import React from 'react';
-import { BarGauge, Label, Tooltip, Export, Title, Font, Legend } from 'devextreme-react/bar-gauge';
+import {
+  BarGauge, Label, Tooltip, Export, Title, Font, Legend,
+} from 'devextreme-react/bar-gauge';
 
 const values = [121.4, 135.4, 115.9, 141.1, 127.5];
 
@@ -25,7 +27,7 @@ class App extends React.Component {
 
   customizeTooltip(arg) {
     return {
-      text: getText(arg, arg.valueText)
+      text: getText(arg, arg.valueText),
     };
   }
 

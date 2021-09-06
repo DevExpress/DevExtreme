@@ -1,8 +1,12 @@
 import React from 'react';
 
-import Gantt, { Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing } from 'devextreme-react/gantt';
+import Gantt, {
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing,
+} from 'devextreme-react/gantt';
 
-import { tasks, dependencies, resources, resourceAssignments } from './data.js';
+import {
+  tasks, dependencies, resources, resourceAssignments,
+} from './data.js';
 
 class App extends React.Component {
   render() {

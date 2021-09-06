@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <DxChart
     id="chart"
     :data-source="weatherData"
@@ -65,7 +65,7 @@ import DxChart, {
   DxLegend,
   DxLabel,
   DxTitle,
-  DxGrid
+  DxGrid,
 } from 'devextreme-vue/chart';
 import { weatherData } from './data.js';
 
@@ -80,12 +80,12 @@ export default {
     DxLegend,
     DxLabel,
     DxTitle,
-    DxGrid
+    DxGrid,
   },
 
   data() {
     return {
-      weatherData
+      weatherData,
     };
   },
 
@@ -96,12 +96,12 @@ export default {
 
     precipitationCustomizeText({ valueText }) {
       return `${valueText} mm`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
 #chart {
-	height: 440px;
+  height: 440px;
 }
 </style>

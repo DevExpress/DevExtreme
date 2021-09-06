@@ -18,6 +18,6 @@ export const dataSource = [
   { year: 1990, country: 'Mexico', oil: 146.3 },
   { year: 2000, country: 'Mexico', oil: 171.2 },
   { year: 2008, country: 'Mexico', oil: 157.7 },
-  { year: 2009, country: 'Mexico', oil: 147.5 }
+  { year: 2009, country: 'Mexico', oil: 147.5 },
 ];
 

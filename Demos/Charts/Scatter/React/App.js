@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import {
   Chart,
@@ -11,7 +11,7 @@ import {
   Grid,
   MinorGrid,
   CommonPaneSettings,
-  Border
+  Border,
 } from 'devextreme-react/chart';
 import { generateDataSource } from './data.js';
 

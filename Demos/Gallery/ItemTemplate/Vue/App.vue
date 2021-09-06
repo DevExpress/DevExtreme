@@ -21,11 +21,11 @@ import { gallery } from './data.js';
 
 export default {
   components: {
-    DxGallery
+    DxGallery,
   },
   data() {
     return {
-      dataSource: gallery
+      dataSource: gallery,
     };
   },
   methods: {
@@ -34,10 +34,10 @@ export default {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0
+        maximumFractionDigits: 0,
       }).format(value);
-    }
-  }
+    },
+  },
 };
 </script>
 

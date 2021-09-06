@@ -37,7 +37,7 @@ export default {
     DxFilterBuilder,
     DxButton,
     DxList,
-    CustomItem
+    CustomItem,
   },
   data() {
     return {
@@ -46,8 +46,8 @@ export default {
       filterBuilderRefName: 'filterBuilder',
       filterBuilderInstance: null,
       dataSource: new DataSource({
-        store: products
-      })
+        store: products,
+      }),
     };
   },
   mounted() {
@@ -58,8 +58,8 @@ export default {
     refreshDataSource() {
       this.dataSource.filter(this.filterBuilderInstance.getFilterExpression());
       this.dataSource.load();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

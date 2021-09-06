@@ -35,12 +35,14 @@
   </div>
 </template>
 <script>
-import { DxCircularGauge, DxScale, DxTick, DxMinorTick, DxRangeContainer, DxTitle, DxFont, DxExport } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxTick, DxMinorTick, DxRangeContainer, DxTitle, DxFont, DxExport,
+} from 'devextreme-vue/circular-gauge';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxTick, DxMinorTick, DxRangeContainer, DxTitle, DxFont, DxExport
-  }
+    DxCircularGauge, DxScale, DxTick, DxMinorTick, DxRangeContainer, DxTitle, DxFont, DxExport,
+  },
 };
 </script>
 <style scoped>

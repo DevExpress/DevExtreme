@@ -18,23 +18,23 @@
   </div>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxRangeSelector,
   DxChart,
-  DxSeries
+  DxSeries,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
     DxRangeSelector,
     DxChart,
-    DxSeries
+    DxSeries,
   },
   data() {
     return {
       dataSource,
-      range: []
+      range: [],
     };
   },
   computed: {
@@ -53,13 +53,13 @@ export default {
       return dataSource
         .slice(startIndex, endIndex)
         .reduce((total, item) => total + item.copper, 0);
-    }
+    },
   },
   methods: {
     format: new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0
-    }).format
-  }
+      minimumFractionDigits: 0,
+    }).format,
+  },
 };
 </script>
 <style scoped>

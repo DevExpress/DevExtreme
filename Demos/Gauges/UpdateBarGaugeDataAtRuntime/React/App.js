@@ -6,19 +6,18 @@ import { colors } from './data.js';
 const palette = ['#ff0000', '#00ff00', '#0000ff'];
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       basis: this.getBasicColors(colors[0].code),
-      currentColor: colors[0].code
+      currentColor: colors[0].code,
     };
 
     this.onSelectionChanged = ({ selectedItem: { code } }) => {
       this.setState({
         currentColor: code,
-        basis: this.getBasicColors(code)
+        basis: this.getBasicColors(code),
       });
     };
   }
@@ -59,11 +58,11 @@ class App extends React.Component {
   }
 
   getBasicColors(value) {
-    var code = Number(`0x${ value.slice(1)}`);
+    const code = Number(`0x${value.slice(1)}`);
     return [
       (code >> 16) & 0xff,
       (code >> 8) & 0xff,
-      code & 0xff
+      code & 0xff,
     ];
   }
 }

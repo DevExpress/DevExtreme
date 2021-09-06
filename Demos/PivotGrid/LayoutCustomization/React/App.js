@@ -1,7 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
-  FieldChooser
+  FieldChooser,
 } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
 
@@ -14,7 +14,7 @@ class App extends React.Component {
     this.state = {
       showTotalsPrior: false,
       dataFieldArea: false,
-      rowHeaderLayout: true
+      rowHeaderLayout: true,
     };
     this.onShowTotalsPriorChanged = this.onShowTotalsPriorChanged.bind(this);
     this.onDataFieldAreaChanged = this.onDataFieldAreaChanged.bind(this);
@@ -64,19 +64,19 @@ class App extends React.Component {
 
   onShowTotalsPriorChanged(data) {
     this.setState({
-      showTotalsPrior: data.value
+      showTotalsPrior: data.value,
     });
   }
 
   onDataFieldAreaChanged(data) {
     this.setState({
-      dataFieldArea: data.value
+      dataFieldArea: data.value,
     });
   }
 
   onRowHeaderLayoutChanged(data) {
     this.setState({
-      rowHeaderLayout: data.value
+      rowHeaderLayout: data.value,
     });
   }
 }
@@ -86,36 +86,36 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     dataField: 'region',
     expanded: true,
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'Country',
     dataField: 'country',
     expanded: true,
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'City',
     dataField: 'city',
-    area: 'row'
+    area: 'row',
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     caption: 'Sales',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }, {
     caption: 'Percent',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     summaryDisplayMode: 'percentOfRowGrandTotal',
-    area: 'data'
+    area: 'data',
   }],
-  store: sales
+  store: sales,
 });
 
 export default App;

@@ -52,7 +52,7 @@ import {
   DxTitle,
   DxLegend,
   DxExport,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 
 import service from './data.js';
@@ -66,20 +66,20 @@ export default {
     DxTitle,
     DxLegend,
     DxExport,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
-      dataSource: service.dataSource()
+      dataSource: service.dataSource(),
     };
   },
   methods: {
     customizeTooltip(pointInfo) {
       return {
-        text: `${pointInfo.percentText} years: ${pointInfo.valueText}`
+        text: `${pointInfo.percentText} years: ${pointInfo.valueText}`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

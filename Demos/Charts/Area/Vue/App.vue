@@ -49,7 +49,7 @@ import {
   DxCommonSeriesSettings,
   DxExport,
   DxLegend,
-  DxMargin
+  DxMargin,
 } from 'devextreme-vue/chart';
 
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -65,17 +65,17 @@ export default {
     DxCommonSeriesSettings,
     DxExport,
     DxLegend,
-    DxMargin
+    DxMargin,
   },
   data() {
     const types = ['area', 'stackedarea', 'fullstackedarea'];
 
     return {
-      dataSource: dataSource,
+      dataSource,
       types,
-      type: types[0]
+      type: types[0],
     };
-  }
+  },
 };
 </script>
 <style>

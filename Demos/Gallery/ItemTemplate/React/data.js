@@ -14,7 +14,7 @@ export const galleryData = [{
   YearBuilt: '2008',
   Type: '0',
   Status: '1',
-  Image: '../../../../images/gallery/1.jpg'
+  Image: '../../../../images/gallery/1.jpg',
 },
 {
   ID: '2',
@@ -32,7 +32,7 @@ export const galleryData = [{
   YearBuilt: '2009',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/2.jpg'
+  Image: '../../../../images/gallery/2.jpg',
 },
 {
   ID: '3',
@@ -50,7 +50,7 @@ export const galleryData = [{
   YearBuilt: '2010',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/3.jpg'
+  Image: '../../../../images/gallery/3.jpg',
 },
 {
   ID: '4',
@@ -68,7 +68,7 @@ export const galleryData = [{
   YearBuilt: '2007',
   Type: '0',
   Status: '1',
-  Image: '../../../../images/gallery/4.jpg'
+  Image: '../../../../images/gallery/4.jpg',
 },
 {
   ID: '5',
@@ -86,7 +86,7 @@ export const galleryData = [{
   YearBuilt: '2010',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/5.jpg'
+  Image: '../../../../images/gallery/5.jpg',
 },
 {
   ID: '6',
@@ -104,7 +104,7 @@ export const galleryData = [{
   YearBuilt: '2011',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/6.jpg'
+  Image: '../../../../images/gallery/6.jpg',
 },
 {
   ID: '7',
@@ -122,7 +122,7 @@ export const galleryData = [{
   YearBuilt: '2008',
   Type: '0',
   Status: '1',
-  Image: '../../../../images/gallery/7.jpg'
+  Image: '../../../../images/gallery/7.jpg',
 },
 {
   ID: '8',
@@ -140,7 +140,7 @@ export const galleryData = [{
   YearBuilt: '2010',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/8.jpg'
+  Image: '../../../../images/gallery/8.jpg',
 },
 {
   ID: '9',
@@ -158,6 +158,6 @@ export const galleryData = [{
   YearBuilt: '2011',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/9.jpg'
+  Image: '../../../../images/gallery/9.jpg',
 },
 ];

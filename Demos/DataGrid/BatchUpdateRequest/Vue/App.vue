@@ -40,7 +40,7 @@ const ordersStore = createStore({
   loadUrl: `${URL}/Orders`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 async function sendBatchRequest(url, changes) {
@@ -48,9 +48,9 @@ async function sendBatchRequest(url, changes) {
     method: 'POST',
     body: JSON.stringify(changes),
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8',
     },
-    credentials: 'include'
+    credentials: 'include',
   });
 
   if (!result.ok) {
@@ -70,22 +70,22 @@ export default {
   components: {
     DxDataGrid,
     DxColumn,
-    DxEditing
+    DxEditing,
   },
   data() {
     return {
-      ordersStore
+      ordersStore,
     };
   },
   methods: {
     onSaving(e) {
       e.cancel = true;
 
-      if(e.changes.length) {
+      if (e.changes.length) {
         e.promise = processBatchRequest(`${URL}/Batch`, e.changes, e.component);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

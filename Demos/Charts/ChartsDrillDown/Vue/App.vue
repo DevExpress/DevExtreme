@@ -41,7 +41,7 @@ export default {
     DxSeries,
     DxValueAxis,
     DxLegend,
-    DxButton
+    DxButton,
   },
 
   data() {
@@ -56,8 +56,8 @@ export default {
       return {
         color: colors[Number(this.isFirstLevel)],
         hoverStyle: !this.isFirstLevel ? {
-          hatching: 'none'
-        } : {}
+          hatching: 'none',
+        } : {},
       };
     },
     onPointClick({ target }) {
@@ -71,8 +71,8 @@ export default {
         this.isFirstLevel = true;
         this.dataSource = service.filterData('');
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

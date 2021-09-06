@@ -6,10 +6,10 @@ import { employees } from './data.js';
 
 const columnChooserModes = [{
   key: 'dragAndDrop',
-  name: 'Drag and drop'
+  name: 'Drag and drop',
 }, {
   key: 'select',
-  name: 'Select'
+  name: 'Select',
 }];
 
 const expandedRowKeys = [1];
@@ -20,12 +20,13 @@ class App extends React.Component {
 
     this.state = {
       mode: columnChooserModes[0].key,
-      allowSearch: true
+      allowSearch: true,
     };
 
     this.onModeValueChanged = this.onModeValueChanged.bind(this);
     this.onAllowSearchValueChanged = this.onAllowSearchValueChanged.bind(this);
   }
+
   render() {
     const { mode, allowSearch } = this.state;
 
@@ -79,13 +80,13 @@ class App extends React.Component {
 
   onModeValueChanged(e) {
     this.setState({
-      mode: e.value
+      mode: e.value,
     });
   }
 
   onAllowSearchValueChanged(e) {
     this.setState({
-      allowSearch: e.value
+      allowSearch: e.value,
     });
   }
 }

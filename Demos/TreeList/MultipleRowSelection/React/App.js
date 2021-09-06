@@ -15,7 +15,7 @@ class App extends React.Component {
       selectedRowKeys: [],
       recursive: false,
       selectedEmployeeNames: emptySelectedText,
-      selectionMode: 'all'
+      selectionMode: 'all',
     };
 
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
@@ -24,7 +24,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { selectedRowKeys, recursive, selectionMode, selectedEmployeeNames } = this.state;
+    const {
+      selectedRowKeys, recursive, selectionMode, selectedEmployeeNames,
+    } = this.state;
     return (
       <div>
         <TreeList
@@ -79,7 +81,7 @@ class App extends React.Component {
     const selectedData = e.component.getSelectedRowsData(this.state.selectionMode);
     this.setState({
       selectedRowKeys: e.selectedRowKeys,
-      selectedEmployeeNames: this.getEmployeeNames(selectedData)
+      selectedEmployeeNames: this.getEmployeeNames(selectedData),
     });
   }
 
@@ -87,7 +89,7 @@ class App extends React.Component {
     this.setState({
       recursive: e.value,
       selectedRowKeys: [],
-      selectedEmployeeNames: emptySelectedText
+      selectedEmployeeNames: emptySelectedText,
     });
   }
 
@@ -95,16 +97,15 @@ class App extends React.Component {
     this.setState({
       selectionMode: e.value,
       selectedRowKeys: [],
-      selectedEmployeeNames: emptySelectedText
+      selectedEmployeeNames: emptySelectedText,
     });
   }
 
   getEmployeeNames(employees) {
     if (employees.length > 0) {
-      return employees.map(employee => employee.Full_Name).join(', ');
-    } else {
-      return emptySelectedText;
+      return employees.map((employee) => employee.Full_Name).join(', ');
     }
+    return emptySelectedText;
   }
 }
 

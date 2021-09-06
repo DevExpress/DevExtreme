@@ -64,7 +64,7 @@
 <script>
 import DxPivotGrid, {
   DxFieldChooser,
-  DxFieldPanel
+  DxFieldPanel,
 } from 'devextreme-vue/pivot-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -76,7 +76,7 @@ export default {
     DxPivotGrid,
     DxFieldChooser,
     DxFieldPanel,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -90,28 +90,28 @@ export default {
           caption: 'Region',
           width: 120,
           dataField: 'region',
-          area: 'row'
+          area: 'row',
         }, {
           caption: 'City',
           dataField: 'city',
           width: 150,
           area: 'row',
-          selector: function(data) {
+          selector(data) {
             return `${data.city} (${data.country})`;
-          }
+          },
         }, {
           dataField: 'date',
           dataType: 'date',
-          area: 'column'
+          area: 'column',
         }, {
           dataField: 'sales',
           dataType: 'number',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }],
-        store: sales
-      })
+        store: sales,
+      }),
     };
   },
   methods: {
@@ -128,54 +128,54 @@ export default {
       this.showRowFields = e.value;
     },
     onContextMenuPreparing(e) {
-      var dataSource = e.component.getDataSource(),
-        sourceField = e.field;
+      const dataSource = e.component.getDataSource();
+      const sourceField = e.field;
 
       if (sourceField) {
-        if(!sourceField.groupName || sourceField.groupIndex === 0) {
+        if (!sourceField.groupName || sourceField.groupIndex === 0) {
           e.items.push({
             text: 'Hide field',
-            onItemClick: function() {
-              var fieldIndex;
-              if(sourceField.groupName) {
+            onItemClick() {
+              let fieldIndex;
+              if (sourceField.groupName) {
                 fieldIndex = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex].index;
               } else {
                 fieldIndex = sourceField.index;
               }
 
               dataSource.field(fieldIndex, {
-                area: null
+                area: null,
               });
               dataSource.load();
-            }
+            },
           });
         }
 
         if (sourceField.dataType === 'number') {
-          var setSummaryType = function(args) {
-              dataSource.field(sourceField.index, {
-                summaryType: args.itemData.value
-              });
+          const setSummaryType = function(args) {
+            dataSource.field(sourceField.index, {
+              summaryType: args.itemData.value,
+            });
 
-              dataSource.load();
-            },
-            menuItems = [];
+            dataSource.load();
+          };
+          const menuItems = [];
 
           e.items.push({ text: 'Summary Type', items: menuItems });
 
-          ['Sum', 'Avg', 'Min', 'Max'].forEach(summaryType => {
-            var summaryTypeValue = summaryType.toLowerCase();
+          ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
+            const summaryTypeValue = summaryType.toLowerCase();
 
             menuItems.push({
               text: summaryType,
               value: summaryType.toLowerCase(),
               onItemClick: setSummaryType,
-              selected: e.field.summaryType === summaryTypeValue
+              selected: e.field.summaryType === summaryTypeValue,
             });
           });
         }
       }
-    }
+    },
   },
 };
 </script>

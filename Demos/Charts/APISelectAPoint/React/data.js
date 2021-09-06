@@ -1,46 +1,46 @@
 export const catBreedsData = [{
   breed: 'Domestic Shorthair',
-  count: 61046
+  count: 61046,
 }, {
   breed: 'American Shorthair',
-  count: 37545
+  count: 37545,
 }, {
   breed: 'Domestic Medium Hair',
-  count: 16776
+  count: 16776,
 }, {
   breed: 'Domestic Long Hair',
-  count: 15049
+  count: 15049,
 }, {
   breed: 'Siamese',
-  count: 14582
+  count: 14582,
 }, {
   breed: 'Maine Coon',
-  count: 10852
+  count: 10852,
 }, {
   breed: 'Persian',
-  count: 6717
+  count: 6717,
 }, {
   breed: 'Russian Blue',
-  count: 3864
+  count: 3864,
 }, {
   breed: 'Himalayan',
-  count: 3701
+  count: 3701,
 }, {
   breed: 'Ragdoll',
-  count: 3567
+  count: 3567,
 }, {
   breed: 'Bengal',
-  count: 3118
+  count: 3118,
 }, {
   breed: 'Manx',
-  count: 2349
+  count: 2349,
 }, {
   breed: 'British Shorthair',
-  count: 2171
+  count: 2171,
 }, {
   breed: 'Norwegian Forest Cat',
-  count: 1827
+  count: 1827,
 }, {
   breed: 'Bombay',
-  count: 1580
+  count: 1580,
 }];

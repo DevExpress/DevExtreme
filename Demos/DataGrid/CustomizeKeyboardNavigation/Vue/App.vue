@@ -84,7 +84,7 @@ import {
   DxColumn,
   DxPaging,
   DxEditing,
-  DxLookup
+  DxLookup,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
@@ -99,23 +99,23 @@ export default {
     DxKeyboardNavigation,
     DxLookup,
     DxCheckBox,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       dataSource: employees,
-      states: states,
+      states,
       editOnKeyPress: true,
       enterKeyActions: ['startEdit', 'moveFocus'],
       enterKeyDirections: ['none', 'column', 'row'],
       enterKeyDirection: 'column',
-      enterKeyAction: 'moveFocus'
+      enterKeyAction: 'moveFocus',
     };
   },
   methods: {
     onFocusedCellChanging(e) {
       e.isHighlighted = true;
-    }
-  }
+    },
+  },
 };
 </script>

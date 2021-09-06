@@ -25,23 +25,25 @@
   </div>
 </template>
 <script>
-import { DxBarGauge, DxLabel, DxExport, DxTitle, DxFont } from 'devextreme-vue/bar-gauge';
+import {
+  DxBarGauge, DxLabel, DxExport, DxTitle, DxFont,
+} from 'devextreme-vue/bar-gauge';
 
 export default {
   components: {
-    DxBarGauge, DxLabel, DxExport, DxTitle, DxFont
+    DxBarGauge, DxLabel, DxExport, DxTitle, DxFont,
   },
   data() {
     return {
       startValue: -50,
-      values: [-21.3, 14.8, -30.9, 45.2]
+      values: [-21.3, 14.8, -30.9, 45.2],
     };
   },
   methods: {
     customizeText({ valueText }) {
       return `${valueText} mm`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -37,7 +37,7 @@ const contextMenuRef = 'contextMenu';
 
 export default {
   components: {
-    DxTreeView, DxList, DxContextMenu
+    DxTreeView, DxList, DxContextMenu,
   },
   data() {
     return {
@@ -46,16 +46,16 @@ export default {
       logItems: [],
       selectedTreeItem: undefined,
       treeViewRef,
-      contextMenuRef
+      contextMenuRef,
     };
   },
   computed: {
-    treeView: function() {
+    treeView() {
       return this.$refs[treeViewRef].instance;
     },
-    contextMenu: function() {
+    contextMenu() {
       return this.$refs[contextMenuRef].instance;
-    }
+    },
   },
   methods: {
     treeViewItemContextMenu(e) {
@@ -72,7 +72,7 @@ export default {
     },
     contextMenuItemClick(e) {
       let logEntry = '';
-      switch(e.itemData.id) {
+      switch (e.itemData.id) {
         case 'expand': {
           logEntry = `The '${this.selectedTreeItem.text}' group was expanded`;
           this.treeView.expandItem(this.selectedTreeItem.id);
@@ -93,8 +93,8 @@ export default {
         }
       }
       this.logItems = this.logItems.concat(logEntry);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

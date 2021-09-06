@@ -7,7 +7,7 @@ class Breadcrumb extends React.Component {
   }
 
   render() {
-    const info = this.props.info;
+    const { info } = this.props;
     return (
       <span>
         <span
@@ -28,16 +28,14 @@ class Breadcrumb extends React.Component {
 
 class TreeMapBreadcrumbs extends React.Component {
   render() {
-    const treeInfo = this.props.treeInfo;
+    const { treeInfo } = this.props;
     const lastIndex = treeInfo.length - 1;
     return (
       <div className={this.props.className}>
         {
-          treeInfo.map(function(info, index) {
-            return (
-              <Breadcrumb key={info.text} onClick={this.props.onItemClick} info={info} isLast={index === lastIndex} />
-            );
-          }.bind(this))
+          treeInfo.map((info, index) => (
+            <Breadcrumb key={info.text} onClick={this.props.onItemClick} info={info} isLast={index === lastIndex} />
+          ))
         }
       </div>
     );

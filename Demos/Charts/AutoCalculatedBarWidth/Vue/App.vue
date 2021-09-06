@@ -35,7 +35,7 @@ import {
   DxSeries,
   DxCommonSeriesSettings,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 
 import { dataSource } from './data.js';
@@ -46,13 +46,13 @@ export default {
     DxSeries,
     DxCommonSeriesSettings,
     DxLegend,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      dataSource: dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>
 <style>

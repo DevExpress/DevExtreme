@@ -1,16 +1,15 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Chart,
   CommonSeriesSettings,
   Series,
   Export,
   Legend,
-  Point
+  Point,
 } from 'devextreme-react/chart';
 import { yearSources, grossProductData } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart
@@ -27,9 +26,7 @@ class App extends React.Component {
           <Point hoverMode="allArgumentPoints" />
         </CommonSeriesSettings>
         {
-          yearSources.map(function(item) {
-            return <Series key={item.value} valueField={item.value} name={item.name} />;
-          })
+          yearSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
         }
         <Export enabled={true} />
         <Legend

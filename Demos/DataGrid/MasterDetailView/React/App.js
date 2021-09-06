@@ -1,9 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid,
 {
   Column,
-  MasterDetail
+  MasterDetail,
 } from 'devextreme-react/data-grid';
 
 import DetailTemplate from './DetailTemplate.js';
@@ -13,7 +13,6 @@ import service from './data.js';
 const employees = service.getEmployees();
 
 class App extends React.Component {
-
   render() {
     return (
       <DataGrid id="grid-container"

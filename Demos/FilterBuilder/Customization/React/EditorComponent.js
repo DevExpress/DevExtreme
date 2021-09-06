@@ -7,6 +7,7 @@ export class EditorComponent extends React.Component {
     super(props);
     this.onValueChanged = this.onValueChanged.bind(this);
   }
+
   render() {
     return (
       <TagBox
@@ -17,6 +18,7 @@ export class EditorComponent extends React.Component {
       />
     );
   }
+
   onValueChanged(e) {
     this.props.data.setValue(e.value && e.value.length ? e.value : null);
   }

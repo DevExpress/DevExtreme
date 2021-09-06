@@ -1,37 +1,37 @@
-var DemoApp = angular.module('DemoApp', ['dx']);
+const DemoApp = angular.module('DemoApp', ['dx']);
 
-DemoApp.controller('DemoController', function DemoController($scope) {
-    $scope.chartOptions = {
-        type: "doughnut",
-        palette: "Soft Pastel",
-        dataSource: dataSource,
-        title: "The Population of Continents and Regions",
-        tooltip: {
-            enabled: true,
-            format: "millions",
-            customizeTooltip: function (arg) {
-                return {
-                    text: arg.valueText + " - " + (arg.percent * 100).toFixed(2) + "%"
-                };
-            }
+DemoApp.controller('DemoController', ($scope) => {
+  $scope.chartOptions = {
+    type: 'doughnut',
+    palette: 'Soft Pastel',
+    dataSource,
+    title: 'The Population of Continents and Regions',
+    tooltip: {
+      enabled: true,
+      format: 'millions',
+      customizeTooltip(arg) {
+        return {
+          text: `${arg.valueText} - ${(arg.percent * 100).toFixed(2)}%`,
+        };
+      },
+    },
+    legend: {
+      horizontalAlignment: 'right',
+      verticalAlignment: 'top',
+      margin: 0,
+    },
+    export: {
+      enabled: true,
+    },
+    series: [{
+      argumentField: 'region',
+      label: {
+        visible: true,
+        format: 'millions',
+        connector: {
+          visible: true,
         },
-        legend: {
-            horizontalAlignment: "right",
-            verticalAlignment: "top",
-            margin: 0
-        },
-        "export": {
-            enabled: true
-        },
-        series: [{            
-            argumentField: "region",
-            label: {
-                visible: true,
-                format: "millions",
-                connector: {
-                    visible: true
-                }
-            }
-        }]
-    };
+      },
+    }],
+  };
 });

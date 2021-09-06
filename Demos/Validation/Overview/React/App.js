@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import TextBox from 'devextreme-react/text-box';
@@ -13,7 +13,7 @@ import {
   PatternRule,
   StringLengthRule,
   RangeRule,
-  AsyncRule
+  AsyncRule,
 } from 'devextreme-react/validator';
 
 import notify from 'devextreme/ui/notify';
@@ -29,10 +29,10 @@ class App extends React.Component {
     this.namePattern = /^[^0-9]+$/;
     this.phonePattern = /^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/;
     this.phoneRules = {
-      X: /[02-9]/
+      X: /[02-9]/,
     };
     this.state = {
-      password: ''
+      password: '',
     };
     this.passwordComparison = this.passwordComparison.bind(this);
     this.onPasswordChanged = this.onPasswordChanged.bind(this);
@@ -191,7 +191,7 @@ class App extends React.Component {
 
   onPasswordChanged(e) {
     this.setState({
-      password: e.value
+      password: e.value,
     });
   }
 
@@ -200,8 +200,8 @@ class App extends React.Component {
       message: 'You have submitted the form',
       position: {
         my: 'center top',
-        at: 'center top'
-      }
+        at: 'center top',
+      },
     }, 'success', 3000);
 
     e.preventDefault();
@@ -211,7 +211,7 @@ class App extends React.Component {
 function sendRequest(value) {
   const validEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
-    setTimeout(function() {
+    setTimeout(() => {
       resolve(value === validEmail);
     }, 1000);
   });

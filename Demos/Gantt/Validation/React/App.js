@@ -1,5 +1,7 @@
 import React from 'react';
-import Gantt, { Tasks, Dependencies, Column, Validation, Editing } from 'devextreme-react/gantt';
+import Gantt, {
+  Tasks, Dependencies, Column, Validation, Editing,
+} from 'devextreme-react/gantt';
 import CheckBox from 'devextreme-react/check-box';
 import { tasks, dependencies } from './data.js';
 
@@ -8,7 +10,7 @@ class App extends React.Component {
     super();
     this.state = {
       autoUpdateParentTasks: true,
-      validateDependencies: true
+      validateDependencies: true,
     };
     this.onAutoUpdateParentTasksChanged = this.onAutoUpdateParentTasksChanged.bind(this);
     this.onValidateDependenciesChanged = this.onValidateDependenciesChanged.bind(this);
@@ -17,7 +19,7 @@ class App extends React.Component {
   render() {
     const {
       autoUpdateParentTasks,
-      validateDependencies
+      validateDependencies,
     } = this.state;
     return (
       <div id="form-demo">
@@ -63,12 +65,13 @@ class App extends React.Component {
 
   onAutoUpdateParentTasksChanged(e) {
     this.setState({
-      autoUpdateParentTasks: e.value
+      autoUpdateParentTasks: e.value,
     });
   }
+
   onValidateDependenciesChanged(e) {
     this.setState({
-      validateDependencies: e.value
+      validateDependencies: e.value,
     });
   }
 }

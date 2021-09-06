@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import ActionSheet from 'devextreme-react/action-sheet';
 import List from 'devextreme-react/list';
 
@@ -13,7 +13,7 @@ class App extends React.Component {
 
     this.state = {
       isActionSheetVisible: false,
-      actionSheetTarget: ''
+      actionSheetTarget: '',
     };
 
     this.onActionSheetItemClick = this.onActionSheetItemClick.bind(this);
@@ -46,21 +46,21 @@ class App extends React.Component {
   onListItemClick(e) {
     this.setState({
       isActionSheetVisible: true,
-      actionSheetTarget: e.itemElement
+      actionSheetTarget: e.itemElement,
     });
   }
 
   onActionSheetItemClick(e) {
     this.setState({
-      isActionSheetVisible: false
+      isActionSheetVisible: false,
     });
     notify(`The "${e.itemData.text}" button is clicked.`);
   }
 
   onVisibleChange(isVisible) {
-    if(isVisible !== this.state.isActionSheetVisible) {
+    if (isVisible !== this.state.isActionSheetVisible) {
       this.setState({
-        isActionSheetVisible: isVisible
+        isActionSheetVisible: isVisible,
       });
     }
   }

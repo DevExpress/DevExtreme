@@ -11,11 +11,12 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      columnResizingMode: 'nextColumn'
+      columnResizingMode: 'nextColumn',
     };
 
     this.onResizingModeChanged = this.onResizingModeChanged.bind(this);
   }
+
   render() {
     const { columnResizingMode } = this.state;
 
@@ -58,7 +59,7 @@ class App extends React.Component {
 
   onResizingModeChanged(e) {
     this.setState({
-      columnResizingMode: e.value
+      columnResizingMode: e.value,
     });
   }
 }

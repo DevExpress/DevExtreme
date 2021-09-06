@@ -1,7 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
-  FieldChooser
+  FieldChooser,
 } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -36,28 +36,28 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     width: 120,
     dataField: 'region',
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
     area: 'row',
-    selector: function(data) {
-      return `${data.city } (${ data.country })`;
-    }
+    selector(data) {
+      return `${data.city} (${data.country})`;
+    },
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     caption: 'Sales',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }],
-  store: sales
+  store: sales,
 });
 
 export default App;

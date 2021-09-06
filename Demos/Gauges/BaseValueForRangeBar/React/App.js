@@ -1,15 +1,16 @@
 import React from 'react';
-import { CircularGauge, Geometry, Scale, Label, ValueIndicator } from 'devextreme-react/circular-gauge';
+import {
+  CircularGauge, Geometry, Scale, Label, ValueIndicator,
+} from 'devextreme-react/circular-gauge';
 import {
   LinearGauge,
   Geometry as LinearGaugeGeometry,
   Scale as LinearGaugeScale,
   Label as LinearGaugeLabel,
-  ValueIndicator as LinearValueIndicator
+  ValueIndicator as LinearValueIndicator,
 } from 'devextreme-react/linear-gauge';
 
 class App extends React.Component {
-
   render() {
     return (
       <div>
@@ -43,7 +44,7 @@ class App extends React.Component {
   }
 
   customizeText({ valueText }) {
-    return `${ valueText }°`;
+    return `${valueText}°`;
   }
 }
 

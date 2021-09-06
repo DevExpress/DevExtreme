@@ -4,7 +4,7 @@ import VectorMap, {
   Layer,
   Legend,
   Source,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
@@ -43,7 +43,7 @@ export default function App() {
 function customizeTooltip(arg) {
   if (arg.layer.type === 'marker') {
     return {
-      text: arg.attribute('tooltip')
+      text: arg.attribute('tooltip'),
     };
   }
 }

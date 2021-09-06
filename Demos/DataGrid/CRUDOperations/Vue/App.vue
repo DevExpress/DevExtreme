@@ -89,7 +89,7 @@ import {
   DxScrolling,
   DxSummary,
   DxLookup,
-  DxTotalItem
+  DxTotalItem,
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
@@ -110,7 +110,7 @@ export default {
     DxLookup,
     DxTotalItem,
     DxButton,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
@@ -118,29 +118,29 @@ export default {
         key: 'OrderID',
         load: () => this.sendRequest(`${URL}/Orders`),
         insert: (values) => this.sendRequest(`${URL}/InsertOrder`, 'POST', {
-          values: JSON.stringify(values)
+          values: JSON.stringify(values),
         }),
         update: (key, values) => this.sendRequest(`${URL}/UpdateOrder`, 'PUT', {
-          key: key,
-          values: JSON.stringify(values)
+          key,
+          values: JSON.stringify(values),
         }),
         remove: (key) => this.sendRequest(`${URL}/DeleteOrder`, 'DELETE', {
-          key: key
-        })
+          key,
+        }),
       }),
       customersData: new CustomStore({
         key: 'Value',
         loadMode: 'raw',
-        load: () => this.sendRequest(`${URL}/CustomersLookup`)
+        load: () => this.sendRequest(`${URL}/CustomersLookup`),
       }),
       shippersData: new CustomStore({
         key: 'Value',
         loadMode: 'raw',
-        load: () => this.sendRequest(`${URL}/ShippersLookup`)
+        load: () => this.sendRequest(`${URL}/ShippersLookup`),
       }),
       requests: [],
       refreshMode: 'reshape',
-      refreshModes: ['full', 'reshape', 'repaint']
+      refreshModes: ['full', 'reshape', 'repaint'],
     };
   },
   methods: {
@@ -150,49 +150,44 @@ export default {
 
       this.logRequest(method, url, data);
 
-      const params = Object.keys(data).map((key) => {
-        return `${encodeURIComponent(key) }=${ encodeURIComponent(data[key])}`;
-      }).join('&');
+      const params = Object.keys(data).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
 
-      if(method === 'GET') {
+      if (method === 'GET') {
         return fetch(url, {
-          method: method,
-          credentials: 'include'
-        }).then(result => result.json().then(json => {
-          if(result.ok) return json.data;
+          method,
+          credentials: 'include',
+        }).then((result) => result.json().then((json) => {
+          if (result.ok) return json.data;
           throw json.Message;
         }));
       }
 
       return fetch(url, {
-        method: method,
+        method,
         body: params,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         },
-        credentials: 'include'
-      }).then(result => {
-        if(result.ok) {
-          return result.text().then(text => text && JSON.parse(text));
-        } else {
-          return result.json().then(json => {
-            throw json.Message;
-          });
+        credentials: 'include',
+      }).then((result) => {
+        if (result.ok) {
+          return result.text().then((text) => text && JSON.parse(text));
         }
+        return result.json().then((json) => {
+          throw json.Message;
+        });
       });
     },
     logRequest(method, url, data) {
-      var args = Object.keys(data || {}).map(function(key) {
-        return `${key }=${ data[key]}`;
-      }).join(' ');
+      const args = Object.keys(data || {}).map((key) => `${key}=${data[key]}`).join(' ');
 
-      var time = formatDate(new Date(), 'HH:mm:ss');
+      const time = formatDate(new Date(), 'HH:mm:ss');
 
       this.requests.unshift([time, method, url.slice(URL.length), args].join(' '));
     },
     clearRequests() {
       this.requests = [];
-    }
+    },
   },
 };
 </script>
@@ -209,8 +204,8 @@ export default {
 
 .caption {
     margin-bottom: 10px;
-	font-weight: 500;
-	font-size: 18px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .option {

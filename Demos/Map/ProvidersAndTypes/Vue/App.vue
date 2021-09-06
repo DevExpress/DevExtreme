@@ -32,20 +32,20 @@ import { mapTypes } from './data.js';
 export default {
   components: {
     DxMap,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       keys: {
         // Specify your API keys for each map provider:
-        //bing: "YOUR_BING_MAPS_API_KEY",
-        //google: "YOUR_GOOGLE_MAPS_API_KEY",
-        //googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"
+        // bing: "YOUR_BING_MAPS_API_KEY",
+        // google: "YOUR_GOOGLE_MAPS_API_KEY",
+        // googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"
       },
       mapTypes,
-      mapTypeValue: mapTypes[0].key
+      mapTypeValue: mapTypes[0].key,
     };
-  }
+  },
 };
 </script>
 <style>

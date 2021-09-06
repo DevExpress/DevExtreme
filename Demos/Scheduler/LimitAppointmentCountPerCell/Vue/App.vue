@@ -40,14 +40,14 @@ export default {
   components: {
     DxScheduler,
     DxResource,
-    DxView
+    DxView,
   },
   data() {
     return {
       currentDate: new Date(2021, 2, 25),
       dataSource: data,
-      resourcesData: resourcesData,
+      resourcesData,
     };
-  }
+  },
 };
 </script>

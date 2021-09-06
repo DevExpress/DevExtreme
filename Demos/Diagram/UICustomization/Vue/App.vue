@@ -100,41 +100,41 @@
   </DxDiagram>
 </template>
 <script>
-import { DxDiagram, DxContextMenu, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxHistoryToolbar, DxViewToolbar, DxMainToolbar, DxCommand, DxToolbox } from 'devextreme-vue/diagram';
+import {
+  DxDiagram, DxContextMenu, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxHistoryToolbar, DxViewToolbar, DxMainToolbar, DxCommand, DxToolbox,
+} from 'devextreme-vue/diagram';
 import dialog from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
 
 export default {
   components: {
-    DxDiagram, DxContextMenu, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxHistoryToolbar, DxViewToolbar, DxMainToolbar, DxCommand, DxToolbox
+    DxDiagram, DxContextMenu, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxHistoryToolbar, DxViewToolbar, DxMainToolbar, DxCommand, DxToolbox,
   },
   mounted() {
-    var diagram = this.$refs['diagram'].instance;
+    const diagram = this.$refs.diagram.instance;
     fetch('../../../../data/diagram-flow.json')
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(json) {
+      .then((response) => response.json())
+      .then((json) => {
         diagram.import(JSON.stringify(json));
       })
-      .catch(function() {
+      .catch(() => {
         throw 'Data Loading Error';
       });
   },
   methods: {
     onCustomCommand(e) {
-      if(e.name === 'clear') {
-        var result = dialog.confirm('Are you sure you want to clear the diagram? This action cannot be undone.', 'Warning');
+      if (e.name === 'clear') {
+        const result = dialog.confirm('Are you sure you want to clear the diagram? This action cannot be undone.', 'Warning');
         result.then(
-          function(dialogResult) {
-            if(dialogResult) {
+          (dialogResult) => {
+            if (dialogResult) {
               e.component.import('');
             }
-          }
+          },
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

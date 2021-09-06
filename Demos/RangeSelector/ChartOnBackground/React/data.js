@@ -6,6 +6,6 @@ export const dataSource = [
   { t: new Date(2012, 0, 19), costs: 18, income: 10 },
   { t: new Date(2012, 0, 26), costs: 15, income: 15 },
   { t: new Date(2012, 1, 2), costs: 14, income: 21 },
-  { t: new Date(2012, 1, 9), costs: 14, income: 25 }
+  { t: new Date(2012, 1, 9), costs: 14, income: 25 },
 ];
 

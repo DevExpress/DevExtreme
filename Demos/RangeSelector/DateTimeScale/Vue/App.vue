@@ -27,7 +27,6 @@
   </DxRangeSelector>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxRangeSelector,
   DxMargin,
@@ -37,8 +36,9 @@ import {
   DxScale,
   DxTickInterval,
   DxMinorTickInterval,
-  DxSliderMarker
+  DxSliderMarker,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
@@ -50,14 +50,14 @@ export default {
     DxScale,
     DxTickInterval,
     DxMinorTickInterval,
-    DxSliderMarker
+    DxSliderMarker,
   },
   data() {
     return {
       dataSource,
-      range: ['2013/03/01', '2013/03/07']
+      range: ['2013/03/01', '2013/03/07'],
     };
-  }
+  },
 };
 </script>
 <style scoped>

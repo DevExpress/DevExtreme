@@ -11,7 +11,7 @@ export default createStore({
     orders: [],
     changes: [],
     editRowKey: null,
-    isLoading: false
+    isLoading: false,
   },
   getters: {
     orders(state) {
@@ -19,7 +19,7 @@ export default createStore({
     },
     isLoading(state) {
       return state.isLoading;
-    }
+    },
   },
   mutations: {
     updateIsLoading(state, isLoading) {
@@ -41,7 +41,7 @@ export default createStore({
       } else {
         state.orders = data;
       }
-    }
+    },
   },
   actions: {
     setEditRowKey(context, value) {
@@ -64,7 +64,7 @@ export default createStore({
 
     async insert(context, change) {
       const data = await sendRequest(`${URL}/InsertOrder`, 'POST', {
-        values: JSON.stringify(change.data)
+        values: JSON.stringify(change.data),
       });
 
       context.commit('updateOrders', { change, data });
@@ -73,7 +73,7 @@ export default createStore({
     async update(context, change) {
       const data = await sendRequest(`${URL}/UpdateOrder`, 'PUT', {
         key: change.key,
-        values: JSON.stringify(change.data)
+        values: JSON.stringify(change.data),
       });
 
       context.commit('updateOrders', { change, data });
@@ -107,6 +107,6 @@ export default createStore({
       }
       commit('updateEditRowKey', null);
       commit('updateChanges', []);
-    }
-  }
+    },
+  },
 });

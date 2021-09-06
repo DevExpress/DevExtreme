@@ -2,44 +2,44 @@ export const alignments = [
   {
     icon: 'alignleft',
     alignment: 'left',
-    hint: 'Align left'
+    hint: 'Align left',
   },
   {
     icon: 'aligncenter',
     alignment: 'center',
-    hint: 'Center'
+    hint: 'Center',
   },
   {
     icon: 'alignright',
     alignment: 'right',
-    hint: 'Align right'
+    hint: 'Align right',
   },
   {
     icon: 'alignjustify',
     alignment: 'justify',
-    hint: 'Justify'
-  }
+    hint: 'Justify',
+  },
 ];
 
 export const fontStyles = [
   {
     icon: 'bold',
     style: 'bold',
-    hint: 'Bold'
+    hint: 'Bold',
   },
   {
     icon: 'italic',
     style: 'italic',
-    hint: 'Italic'
+    hint: 'Italic',
   },
   {
     icon: 'underline',
     style: 'underline',
-    hint: 'Underlined'
+    hint: 'Underlined',
   },
   {
     icon: 'strike',
     style: 'strike',
-    hint: 'Strikethrough'
-  }
+    hint: 'Strikethrough',
+  },
 ];

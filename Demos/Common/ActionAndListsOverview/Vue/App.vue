@@ -77,24 +77,24 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
-  maximumFractionDigits: 0
+  maximumFractionDigits: 0,
 });
 
 export default {
   components: {
-    DxTileView, DxList
+    DxTileView, DxList,
   },
-  data: function() {
+  data() {
     return {
       currentHotel: data[0],
       dataSource: {
         store: new ArrayStore({
-          data: data,
-          key: 'Id'
+          data,
+          key: 'Id',
         }),
         group: 'City',
-        searchExpr: ['Hotel_Name', 'City', 'Address']
-      }
+        searchExpr: ['Hotel_Name', 'City', 'Address'],
+      },
     };
   },
   methods: {
@@ -103,8 +103,8 @@ export default {
     },
     listSelectionChanged(e) {
       this.currentHotel = e.addedItems[0];
-    }
-  }
+    },
+  },
 };
 </script>
 <style src="./styles.css"></style>

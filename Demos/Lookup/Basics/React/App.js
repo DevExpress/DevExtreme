@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 import DataSource from 'devextreme/data/data_source';
 import { employeesList, employeesTasks } from './data.js';
@@ -6,13 +6,14 @@ import { employeesList, employeesTasks } from './data.js';
 const groupedData = new DataSource({
   store: employeesTasks,
   key: 'ID',
-  group: 'Assigned'
+  group: 'Assigned',
 });
 
 class App extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <div>

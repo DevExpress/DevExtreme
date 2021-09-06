@@ -1,5 +1,7 @@
 import React from 'react';
-import { TreeList, Scrolling, Paging, Pager, Column, Lookup } from 'devextreme-react/tree-list';
+import {
+  TreeList, Scrolling, Paging, Pager, Column, Lookup,
+} from 'devextreme-react/tree-list';
 import { tasks, employees } from './data.js';
 
 const allowedPageSizes = [5, 10, 20];
@@ -9,7 +11,7 @@ const statuses = [
   'Need Assistance',
   'In Progress',
   'Deferred',
-  'Completed'
+  'Completed',
 ];
 
 class App extends React.Component {

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
@@ -11,7 +11,7 @@ import Chart, {
   Label,
   Title,
   Tooltip,
-  Grid
+  Grid,
 } from 'devextreme-react/chart';
 import { weatherData } from './data.js';
 
@@ -86,7 +86,7 @@ function customizeTooltip(pointInfo) {
   return {
     text: `${pointInfo.seriesName}: ${pointInfo.value
     } (range: ${pointInfo.lowErrorValue
-    } - ${pointInfo.highErrorValue})`
+    } - ${pointInfo.highErrorValue})`,
   };
 }
 

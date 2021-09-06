@@ -8,10 +8,10 @@ import { data, priorityData } from './data.js';
 const currentDate = new Date(2021, 3, 21);
 const views = [{
   type: 'week',
-  name: 'Week'
+  name: 'Week',
 }, {
   type: 'month',
-  name: 'Month'
+  name: 'Month',
 }];
 
 const groups = ['priorityId'];
@@ -21,16 +21,17 @@ class App extends React.Component {
     super();
 
     this.state = {
-      groupByDate: true
+      groupByDate: true,
     };
     this.onGroupByDateChanged = this.onGroupByDateChanged.bind(this);
   }
 
   onGroupByDateChanged(args) {
     this.setState({
-      groupByDate: args.value
+      groupByDate: args.value,
     });
   }
+
   render() {
     return (
       <div id="scheduler">

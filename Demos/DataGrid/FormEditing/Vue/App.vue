@@ -62,7 +62,7 @@ import {
   DxFormItem,
   DxPaging,
   DxEditing,
-  DxLookup
+  DxLookup,
 } from 'devextreme-vue/data-grid';
 import 'devextreme-vue/text-area';
 
@@ -75,14 +75,14 @@ export default {
     DxFormItem,
     DxPaging,
     DxEditing,
-    DxLookup
+    DxLookup,
   },
   data() {
     return {
       dataSource: employees,
-      states: states
+      states,
     };
-  }
+  },
 };
 </script>
 <style>

@@ -1,16 +1,15 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   PolarChart,
   Series,
   ArgumentAxis,
   ValueAxis,
   Export,
-  Legend
+  Legend,
 } from 'devextreme-react/polar-chart';
 import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <PolarChart

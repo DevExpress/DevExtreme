@@ -13,22 +13,22 @@
 <script>
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import Grid from './Grid.vue';
 import Guid from 'devextreme/core/guid';
+import Grid from './Grid.vue';
 
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
-const url = `${BASE_PATH }api/DataGridCollaborativeEditing/`;
+const url = `${BASE_PATH}api/DataGridCollaborativeEditing/`;
 const groupId = new Guid().toJSON();
 
 const createStore = () => AspNetData.createStore({
   key: 'ID',
   loadUrl: url,
-  insertUrl:url,
-  updateUrl:url,
-  deleteUrl:url,
-  onBeforeSend: function(operation, ajaxSettings) {
+  insertUrl: url,
+  updateUrl: url,
+  deleteUrl: url,
+  onBeforeSend(operation, ajaxSettings) {
     ajaxSettings.data.groupId = groupId;
-  }
+  },
 });
 
 const store1 = createStore();
@@ -41,36 +41,36 @@ const updateStores = (events) => {
 
 export default {
   components: {
-    Grid
+    Grid,
   },
   data() {
     return {
       store1,
-      store2
+      store2,
     };
-  }
+  },
 };
 
 const hubUrl = `${BASE_PATH}dataGridCollaborativeEditingHub?GroupId=${groupId}`;
 const connection = new HubConnectionBuilder()
   .withUrl(hubUrl, {
     skipNegotiation: true,
-    transport: HttpTransportType.WebSockets
+    transport: HttpTransportType.WebSockets,
   })
   .build();
 
 connection.start()
-  .then(function() {
-    connection.on('update', function(key, data) {
-      updateStores([{ type: 'update', key: key, data: data }]);
+  .then(() => {
+    connection.on('update', (key, data) => {
+      updateStores([{ type: 'update', key, data }]);
     });
 
-    connection.on('insert', function(data) {
-      updateStores([{ type: 'insert', data: data }]);
+    connection.on('insert', (data) => {
+      updateStores([{ type: 'insert', data }]);
     });
 
-    connection.on('remove', function(key) {
-      updateStores([{ type: 'remove', key: key }]);
+    connection.on('remove', (key) => {
+      updateStores([{ type: 'remove', key }]);
     });
   });
 </script>

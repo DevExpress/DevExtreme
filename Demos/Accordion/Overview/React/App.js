@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Accordion from 'devextreme-react/accordion';
 import CheckBox from 'devextreme-react/check-box';
 import TagBox from 'devextreme-react/tag-box';
@@ -16,7 +16,7 @@ class App extends React.Component {
       selectedItems: [this.companies[0]],
       multiple: false,
       collapsible: false,
-      animationDuration: 300
+      animationDuration: 300,
     };
     this.selectionChanged = this.selectionChanged.bind(this);
     this.selectedItemsChanged = this.selectedItemsChanged.bind(this);
@@ -26,7 +26,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { selectedItems, multiple, collapsible, animationDuration } = this.state;
+    const {
+      selectedItems, multiple, collapsible, animationDuration,
+    } = this.state;
     return (
       <div id="accordion">
         <Accordion
@@ -82,8 +84,8 @@ class App extends React.Component {
 
   selectionChanged(e) {
     let newItems = [...this.state.selectedItems];
-    e.removedItems.forEach(item => {
-      let index = newItems.indexOf(item);
+    e.removedItems.forEach((item) => {
+      const index = newItems.indexOf(item);
       if (index >= 0) {
         newItems.splice(index, 1);
       }
@@ -92,31 +94,31 @@ class App extends React.Component {
       newItems = [...newItems, ...e.addedItems];
     }
     this.setState({
-      selectedItems: newItems
+      selectedItems: newItems,
     });
   }
 
   selectedItemsChanged(e) {
     this.setState({
-      selectedItems: e.value
+      selectedItems: e.value,
     });
   }
 
   multipleChanged(e) {
     this.setState({
-      multiple: e.value
+      multiple: e.value,
     });
   }
 
   collapsibleChanged(e) {
     this.setState({
-      collapsible: e.value
+      collapsible: e.value,
     });
   }
 
   animationDurationChanged(e) {
     this.setState({
-      animationDuration: e.value
+      animationDuration: e.value,
     });
   }
 }

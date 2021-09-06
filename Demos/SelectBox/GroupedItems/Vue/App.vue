@@ -49,24 +49,24 @@ import { ungroupedData, pregroupedData } from './data.js';
 export default {
   components: {
     DxSelectBox,
-    Group
+    Group,
   },
   data() {
     return {
       fromUngroupedData: new DataSource({
         store: ungroupedData,
         key: 'ID',
-        group: 'Category'
+        group: 'Category',
       }),
       fromPregroupedData: new DataSource({
         store: pregroupedData,
-        map: function(item) {
+        map(item) {
           item.key = item.Category;
           item.items = item.Products;
           return item;
-        }
-      })
+        },
+      }),
     };
-  }
+  },
 };
 </script>

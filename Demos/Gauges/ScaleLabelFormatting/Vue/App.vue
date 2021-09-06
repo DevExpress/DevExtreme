@@ -44,17 +44,19 @@
   </div>
 </template>
 <script>
-import { DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxExport, DxTitle, DxFont } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxExport, DxTitle, DxFont,
+} from 'devextreme-vue/circular-gauge';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxExport, DxTitle, DxFont
+    DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxExport, DxTitle, DxFont,
   },
   methods: {
     customizeText({ valueText }) {
       return `${valueText} %`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

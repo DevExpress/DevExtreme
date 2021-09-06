@@ -18,9 +18,7 @@ export default function App() {
               <th>Silver (USD/troy ounce)</th>
             </tr>
             {
-              years.map((year, index) => {
-                return <RowTemplate key={index} year={year} />;
-              })
+              years.map((year, index) => <RowTemplate key={index} year={year} />)
             }
           </tbody>
         </table>

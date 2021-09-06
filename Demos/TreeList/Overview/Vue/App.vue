@@ -87,7 +87,7 @@ import {
   DxHeaderFilter,
   DxSearchPanel,
   DxSelection,
-  DxLookup
+  DxLookup,
 } from 'devextreme-vue/tree-list';
 
 import { tasks, employees, priorities } from './data.js';
@@ -98,7 +98,7 @@ const statuses = [
   'Need Assistance',
   'In Progress',
   'Deferred',
-  'Completed'
+  'Completed',
 ];
 
 export default {
@@ -110,7 +110,7 @@ export default {
     DxSearchPanel,
     DxSelection,
     DxLookup,
-    EmployeeCell
+    EmployeeCell,
   },
   data() {
     return {
@@ -118,25 +118,25 @@ export default {
       selectedRowKeys: [1, 29, 42],
       employees,
       priorities,
-      statuses
+      statuses,
     };
   },
   computed: {
     dataSource() {
-      return tasks.map(function(task) {
-        employees.forEach(function(employee) {
+      return tasks.map((task) => {
+        employees.forEach((employee) => {
           if (task.Task_Assigned_Employee_ID === employee.ID) {
             task.Task_Assigned_Employee = employee;
           }
         });
         return task;
       });
-    }
+    },
   },
   methods: {
     customizeTaskCompletionText(cellInfo) {
       return `${cellInfo.valueText}%`;
-    }
+    },
   },
 };
 </script>

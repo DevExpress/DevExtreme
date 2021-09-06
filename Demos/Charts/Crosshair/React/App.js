@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Chart,
   CommonSeriesSettings,
@@ -13,12 +13,11 @@ import {
   Font,
   Title,
   Subtitle,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/chart';
 import { energySources, countriesInfo } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart
@@ -32,9 +31,7 @@ class App extends React.Component {
           <Point hoverMode="allArgumentPoints" />
         </CommonSeriesSettings>
         {
-          energySources.map(function(item) {
-            return <Series key={item.value} valueField={item.value} name={item.name} />;
-          })
+          energySources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
         }
         <ArgumentAxis
           valueMarginsEnabled={false}

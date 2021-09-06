@@ -33,7 +33,7 @@ import {
   DxLabel,
   DxLayer,
   DxExport,
-  DxTitle
+  DxTitle,
 } from 'devextreme-vue/vector-map';
 
 import { pangaeaBorders, pangaeaContinents } from './data.js';
@@ -44,7 +44,7 @@ export default {
     DxLabel,
     DxLayer,
     DxExport,
-    DxTitle
+    DxTitle,
   },
   data() {
     return {
@@ -52,20 +52,20 @@ export default {
       pangaeaContinents,
       projection: {
         to: ([l, lt]) => [l / 100, lt / 100],
-        from: ([x, y]) => [x * 100, y * 100]
-      }
+        from: ([x, y]) => [x * 100, y * 100],
+      },
     };
   },
   methods: {
     customizeLayer(elements) {
       elements.forEach((element) => {
         element.applySettings({
-          color: element.attribute('color')
+          color: element.attribute('color'),
         });
       });
-    }
+    },
 
-  }
+  },
 };
 </script>
 <style>

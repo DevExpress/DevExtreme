@@ -1,110 +1,108 @@
-window.onload = function() {
-    var treeView;
-    
-    var syncTreeViewSelection = function(treeView, value){
-        if (!treeView) return;
-        
-        if (!value) {
-            treeView.unselectAll();
-            return;
-        }
-        
-        value.forEach(function(key){
-            treeView.selectItem(key);
-        });
-    };
-    
-    var makeAsyncDataSource = function(jsonFile){
-        return new DevExpress.data.CustomStore({
-            loadMode: "raw",
-            key: "ID",
-            load: function() {
-                return $.getJSON("../../../../data/" + jsonFile);
-            }
-        });
-    };
+window.onload = function () {
+  let treeView;
 
-    var getSelectedItemsKeys = function(items) {
-        var result = [];
-        items.forEach(function(item) {
-            if(item.selected) {
-                result.push(item.key);
-            }
-            if(item.items.length) {
-                result = result.concat(getSelectedItemsKeys(item.items));
-            }
-        });
-        return result;
-    };
+  const syncTreeViewSelection = function (treeView, value) {
+    if (!treeView) return;
 
-    var treeDataSource = makeAsyncDataSource("treeProducts.json"),
-        gridDataSource = makeAsyncDataSource("customers.json");
-    
-    var treeBoxOptions = {
-        value: ko.observable(["1_1"]),
-        valueExpr: "ID",
-        displayExpr: "name",
-        placeholder: "Select a value...",
-        showClearButton: true,
-        dataSource: treeDataSource,
-        treeView: {
-            dataSource: treeDataSource,
-            dataStructure: "plain",
-            keyExpr: "ID",
-            parentIdExpr: "categoryId",
-            selectionMode: "multiple",
-            onContentReady: function(e) {
-                treeView = e.component;
-                syncTreeViewSelection(treeView, treeBoxOptions.value());
-            },
-            onItemSelectionChanged: function(args){
-                var nodes = args.component.getNodes(),
-                    value = getSelectedItemsKeys(nodes);
+    if (!value) {
+      treeView.unselectAll();
+      return;
+    }
 
-                treeBoxOptions.value(value);
-            },
-            displayExpr: "name",
-            selectByClick: true,
-            selectNodesRecursive: false,
-            showCheckBoxesMode: "normal"
-        }
-    };
-    
-    var gridBoxValue = ko.observable([3]);
-    
-    var gridBoxOptions = {
-        value: gridBoxValue,
-        valueExpr: "ID",
-        placeholder: "Select a value...",
-        displayExpr: "CompanyName",
-        showClearButton: true,
-        dataSource: gridDataSource,
-        dataGrid: {
-            dataSource: gridDataSource,
-            columns: ["CompanyName", "City", "Phone"],
-            hoverStateEnabled: true,
-            paging: { enabled: true, pageSize: 10 },
-            filterRow: { visible: true },
-            scrolling: { mode: "virtual" },
-            height: 345,
-            selection: { mode: "multiple" },
-            selectedRowKeys: ko.computed(function(){
-                return gridBoxValue() || [];
-            }),
-            onSelectionChanged: function(selectedItems){
-                gridBoxValue(selectedItems.selectedRowKeys);
-            }
-        }
-    };
-    
-    ko.computed(function(){
-        syncTreeViewSelection(treeView, treeBoxOptions.value());
+    value.forEach((key) => {
+      treeView.selectItem(key);
     });
-    
-    var viewModel = {
-        treeBoxOptions: treeBoxOptions,
-        gridBoxOptions: gridBoxOptions
-    };
-    
-    ko.applyBindings(viewModel, document.getElementById("dropdown-box-demo"));
+  };
+
+  const makeAsyncDataSource = function (jsonFile) {
+    return new DevExpress.data.CustomStore({
+      loadMode: 'raw',
+      key: 'ID',
+      load() {
+        return $.getJSON(`../../../../data/${jsonFile}`);
+      },
+    });
+  };
+
+  var getSelectedItemsKeys = function (items) {
+    let result = [];
+    items.forEach((item) => {
+      if (item.selected) {
+        result.push(item.key);
+      }
+      if (item.items.length) {
+        result = result.concat(getSelectedItemsKeys(item.items));
+      }
+    });
+    return result;
+  };
+
+  const treeDataSource = makeAsyncDataSource('treeProducts.json');
+  const gridDataSource = makeAsyncDataSource('customers.json');
+
+  var treeBoxOptions = {
+    value: ko.observable(['1_1']),
+    valueExpr: 'ID',
+    displayExpr: 'name',
+    placeholder: 'Select a value...',
+    showClearButton: true,
+    dataSource: treeDataSource,
+    treeView: {
+      dataSource: treeDataSource,
+      dataStructure: 'plain',
+      keyExpr: 'ID',
+      parentIdExpr: 'categoryId',
+      selectionMode: 'multiple',
+      onContentReady(e) {
+        treeView = e.component;
+        syncTreeViewSelection(treeView, treeBoxOptions.value());
+      },
+      onItemSelectionChanged(args) {
+        const nodes = args.component.getNodes();
+        const value = getSelectedItemsKeys(nodes);
+
+        treeBoxOptions.value(value);
+      },
+      displayExpr: 'name',
+      selectByClick: true,
+      selectNodesRecursive: false,
+      showCheckBoxesMode: 'normal',
+    },
+  };
+
+  const gridBoxValue = ko.observable([3]);
+
+  const gridBoxOptions = {
+    value: gridBoxValue,
+    valueExpr: 'ID',
+    placeholder: 'Select a value...',
+    displayExpr: 'CompanyName',
+    showClearButton: true,
+    dataSource: gridDataSource,
+    dataGrid: {
+      dataSource: gridDataSource,
+      columns: ['CompanyName', 'City', 'Phone'],
+      hoverStateEnabled: true,
+      paging: { enabled: true, pageSize: 10 },
+      filterRow: { visible: true },
+      scrolling: { mode: 'virtual' },
+      height: 345,
+      selection: { mode: 'multiple' },
+      selectedRowKeys: ko.computed(() => gridBoxValue() || []),
+      onSelectionChanged(selectedItems) {
+        gridBoxValue(selectedItems.selectedRowKeys);
+      },
+    },
+  };
+
+  ko.computed(() => {
+    syncTreeViewSelection(treeView, treeBoxOptions.value());
+  });
+
+  const viewModel = {
+    treeBoxOptions,
+    gridBoxOptions,
+  };
+
+  ko.applyBindings(viewModel, document.getElementById('dropdown-box-demo'));
 };

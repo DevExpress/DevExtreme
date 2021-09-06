@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { markup } from './data.js';
 import HtmlEditor, { Toolbar, MediaResizing, Item } from 'devextreme-react/html-editor';
 import CheckBox from 'devextreme-react/check-box';
+import { markup } from './data.js';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
 const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];
@@ -13,11 +13,12 @@ class App extends React.Component {
     super();
 
     this.state = {
-      isMultiline: true
+      isMultiline: true,
     };
 
     this.multilineChanged = this.multilineChanged.bind(this);
   }
+
   render() {
     return (
       <div className="widget-container">
@@ -90,9 +91,10 @@ class App extends React.Component {
       </div>
     );
   }
+
   multilineChanged(e) {
     this.setState({
-      isMultiline: e.value
+      isMultiline: e.value,
     });
   }
 }

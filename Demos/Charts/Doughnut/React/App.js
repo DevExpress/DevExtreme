@@ -7,13 +7,12 @@ import PieChart, {
   Format,
   Label,
   Connector,
-  Export
+  Export,
 } from 'devextreme-react/pie-chart';
 
 import { populationByRegions } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <PieChart
@@ -43,7 +42,7 @@ class App extends React.Component {
 
   customizeTooltip(arg) {
     return {
-      text: `${arg.valueText} - ${(arg.percent * 100).toFixed(2)}%`
+      text: `${arg.valueText} - ${(arg.percent * 100).toFixed(2)}%`,
     };
   }
 }

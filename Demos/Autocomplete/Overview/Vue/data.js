@@ -2,7 +2,7 @@ export const names = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 
 
 export const surnames = ['Anderson', 'Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia', 'Martinez', 'Robinson', 'Clark', 'Rodriguez', 'Lewis', 'Lee',
   'Walker', 'Hall', 'Allen', 'Young', 'Hernandez', 'King', 'Wright', 'Lopez', 'Hill', 'Scott', 'Green', 'Adams', 'Baker', 'Gonzalez', 'Nelson', 'Carter', 'Mitchell', 'Perez', 'Roberts', 'Turner', 'Phillips', 'Campbell',
-  'Parker', 'Evans', 'Edwards', 'Collins'
+  'Parker', 'Evans', 'Edwards', 'Collins',
 ];
 
 export const positions = ['CEO', 'COO', 'CTO', 'CMO', 'HR Manager', 'IT Manager', 'Controller', 'Sales Manager', 'Support Manager'];

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Switch } from 'devextreme-react/switch';
 
 class App extends React.Component {
@@ -6,11 +6,12 @@ class App extends React.Component {
     super();
 
     this.state = {
-      value: false
+      value: false,
     };
 
     this.valueChanged = this.valueChanged.bind(this);
   }
+
   render() {
     return (
       <div>
@@ -49,9 +50,10 @@ class App extends React.Component {
       </div>
     );
   }
+
   valueChanged(e) {
     this.setState({
-      value: e.value
+      value: e.value,
     });
   }
 }

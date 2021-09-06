@@ -29,7 +29,9 @@
   </DxChart>
 </template>
 <script>
-import { DxChart, DxSeries, DxCommonSeriesSettings, DxPoint, DxLegend } from 'devextreme-vue/chart';
+import {
+  DxChart, DxSeries, DxCommonSeriesSettings, DxPoint, DxLegend,
+} from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
 import MarkerTemplate from './MarkerTemplate.vue';
 
@@ -40,18 +42,18 @@ export default {
     DxCommonSeriesSettings,
     DxPoint,
     DxLegend,
-    MarkerTemplate
+    MarkerTemplate,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
     onLegendClick(e) {
       e.target.isVisible() ? e.target.hide() : e.target.show();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

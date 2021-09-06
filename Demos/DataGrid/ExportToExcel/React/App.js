@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Column, Export, Selection, GroupPanel } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, Export, Selection, GroupPanel,
+} from 'devextreme-react/data-grid';
 
 import service from './data.js';
 
@@ -8,6 +10,7 @@ class App extends React.Component {
     super(props);
     this.dataSource = service.getEmployees();
   }
+
   render() {
     return (
       <div>

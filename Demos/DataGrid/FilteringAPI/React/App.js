@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import 'devextreme/data/odata/store';
@@ -7,7 +7,7 @@ const dataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-    key: 'Task_ID'
+    key: 'Task_ID',
   },
   expand: 'ResponsibleEmployee',
   select: [
@@ -15,8 +15,8 @@ const dataSourceOptions = {
     'Task_Subject',
     'Task_Start_Date',
     'Task_Status',
-    'ResponsibleEmployee/Employee_Full_Name'
-  ]
+    'ResponsibleEmployee/Employee_Full_Name',
+  ],
 };
 
 const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
@@ -26,7 +26,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      filterStatus: statuses[0]
+      filterStatus: statuses[0],
     };
 
     this.onValueChanged = this.onValueChanged.bind(this);
@@ -51,7 +51,7 @@ class App extends React.Component {
 
         <DataGrid
           id="gridContainer"
-          ref={ref => this.dataGrid = ref}
+          ref={(ref) => this.dataGrid = ref}
           dataSource={dataSourceOptions}
           columnAutoWidth={true}
           showBorders={true}
@@ -85,13 +85,12 @@ class App extends React.Component {
 
     if (value === 'All') {
       dataGrid.clearFilter();
-    }
-    else {
+    } else {
       dataGrid.filter(['Task_Status', '=', value]);
     }
 
     this.setState({
-      filterStatus: value
+      filterStatus: value,
     });
   }
 }

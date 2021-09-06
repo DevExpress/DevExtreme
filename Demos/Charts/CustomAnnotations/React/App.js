@@ -4,7 +4,7 @@ import Chart, {
   Series,
   Annotation,
   Legend,
-  CommonAnnotationSettings
+  CommonAnnotationSettings,
 } from 'devextreme-react/chart';
 
 import { populationData } from './data.js';
@@ -32,15 +32,14 @@ class App extends React.Component {
           allowDragging={true}
         >
         </CommonAnnotationSettings>
-        {populationData.map(data => {
-          return (
-            <Annotation
-              argument={data.name}
-              key={data.name}
-              data={data}
-            >
-            </Annotation>
-          ); })}
+        {populationData.map((data) => (
+          <Annotation
+            argument={data.name}
+            key={data.name}
+            data={data}
+          >
+          </Annotation>
+        ))}
         <Legend visible={false}></Legend>
       </Chart>
     );

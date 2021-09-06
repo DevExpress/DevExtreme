@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import Diagram, { Nodes, AutoLayout, Toolbox, PropertiesPanel } from 'devextreme-react/diagram';
+import React from 'react';
+import Diagram, {
+  Nodes, AutoLayout, Toolbox, PropertiesPanel,
+} from 'devextreme-react/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
@@ -9,7 +11,7 @@ class App extends React.Component {
 
     this.dataSource = new ArrayStore({
       key: 'ID',
-      data: service.getEmployees()
+      data: service.getEmployees(),
     });
   }
 

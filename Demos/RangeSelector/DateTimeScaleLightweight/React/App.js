@@ -1,5 +1,7 @@
 import React from 'react';
-import { RangeSelector, Margin, Scale, MinorTick, SliderMarker } from 'devextreme-react/range-selector';
+import {
+  RangeSelector, Margin, Scale, MinorTick, SliderMarker,
+} from 'devextreme-react/range-selector';
 
 const startValue = new Date(2011, 1, 1);
 const endValue = new Date(2011, 6, 1);

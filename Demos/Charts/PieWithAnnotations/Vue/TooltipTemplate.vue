@@ -20,14 +20,14 @@ export default {
   props: {
     annotation: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
-      data: this.annotation.data
+      data: this.annotation.data,
     };
-  }
+  },
 };
 </script>
 <style>

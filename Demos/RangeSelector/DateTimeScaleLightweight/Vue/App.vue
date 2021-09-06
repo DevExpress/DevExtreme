@@ -28,7 +28,7 @@ import {
   DxTickInterval,
   DxMinRange,
   DxMaxRange,
-  DxSliderMarker
+  DxSliderMarker,
 } from 'devextreme-vue/range-selector';
 
 export default {
@@ -41,15 +41,15 @@ export default {
     DxTickInterval,
     DxMinRange,
     DxMaxRange,
-    DxSliderMarker
+    DxSliderMarker,
   },
   data() {
     return {
       startValue: new Date(2011, 1, 1),
       endValue: new Date(2011, 6, 1),
-      range: [new Date(2011, 1, 5), new Date(2011, 2, 5)]
+      range: [new Date(2011, 1, 5), new Date(2011, 2, 5)],
     };
-  }
+  },
 };
 </script>
 <style scoped>

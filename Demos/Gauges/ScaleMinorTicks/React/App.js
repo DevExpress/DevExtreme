@@ -1,8 +1,9 @@
 import React from 'react';
-import { CircularGauge, Scale, Tick, MinorTick, RangeContainer, Title, Font, Export } from 'devextreme-react/circular-gauge';
+import {
+  CircularGauge, Scale, Tick, MinorTick, RangeContainer, Title, Font, Export,
+} from 'devextreme-react/circular-gauge';
 
 class App extends React.Component {
-
   render() {
     return (
       <CircularGauge

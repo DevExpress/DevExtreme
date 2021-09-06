@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 
@@ -8,11 +8,10 @@ const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 const resizingModes = ['nextColumn', 'widget'];
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      mode: resizingModes[0]
+      mode: resizingModes[0],
     };
     this.changeResizingMode = this.changeResizingMode.bind(this);
   }

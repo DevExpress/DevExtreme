@@ -1,10 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 
 import service from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.employees = service.getEmployees();

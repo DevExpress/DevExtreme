@@ -79,7 +79,7 @@ import {
   DxSelection,
   DxSummary,
   DxGroupItem,
-  DxSortByGroupSummaryInfo
+  DxSortByGroupSummaryInfo,
 } from 'devextreme-vue/data-grid';
 
 import service from './data.js';
@@ -91,13 +91,13 @@ export default {
     DxSelection,
     DxSummary,
     DxGroupItem,
-    DxSortByGroupSummaryInfo
+    DxSortByGroupSummaryInfo,
   },
   data() {
     return {
-      orders: service.getOrders()
+      orders: service.getOrders(),
     };
-  }
+  },
 };
 </script>
 <style scoped>

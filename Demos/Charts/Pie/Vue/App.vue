@@ -30,7 +30,7 @@ import DxPieChart, {
   DxSeries,
   DxLabel,
   DxConnector,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/pie-chart';
 
 import { areas } from './data.js';
@@ -42,11 +42,11 @@ export default {
     DxSeries,
     DxLabel,
     DxConnector,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      areas
+      areas,
     };
   },
   methods: {
@@ -54,15 +54,15 @@ export default {
       this.toggleVisibility(e.target);
     },
     legendClickHandler(e) {
-      let arg = e.target,
-        item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
+      const arg = e.target;
+      const item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
 
       this.toggleVisibility(item);
     },
     toggleVisibility(item) {
       item.isVisible() ? item.hide() : item.show();
-    }
-  }
+    },
+  },
 };
 </script>
 

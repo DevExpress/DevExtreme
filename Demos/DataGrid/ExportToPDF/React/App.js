@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
@@ -7,7 +7,7 @@ import DataGrid, {
   Paging,
   SearchPanel,
   Toolbar,
-  Item
+  Item,
 } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import { customers } from './data.js';
@@ -26,7 +26,7 @@ export default function App() {
 
     exportDataGridToPdf({
       jsPDFDocument: doc,
-      component: dataGrid
+      component: dataGrid,
     }).then(() => {
       doc.save('Customers.pdf');
     });

@@ -68,14 +68,14 @@ import {
   DxDataGrid,
   DxSelection,
   DxToolbar,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
 function getEmployeeNames(selectedRowsData) {
-  const getEmployeeName = row => `${row.FirstName} ${row.LastName}`;
+  const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
 
   return selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected';
 }
@@ -88,7 +88,7 @@ export default {
     DxSelectBox,
     DxSelection,
     DxToolbar,
-    DxItem
+    DxItem,
   },
   data() {
     return {
@@ -98,7 +98,7 @@ export default {
       prefixOptions: ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'],
       selectedEmployeeNames: 'Nobody has been selected',
       selectedRowKeys: [],
-      selectionChangedBySelectBox: false
+      selectionChangedBySelectBox: false,
     };
   },
   methods: {
@@ -110,14 +110,14 @@ export default {
     filterSelection({ value }) {
       this.selectionChangedBySelectBox = true;
 
-      let prefix = value;
+      const prefix = value;
 
-      if(!prefix) {
+      if (!prefix) {
         return;
-      } else if(prefix === 'All') {
-        this.selectedRowKeys = this.employees.map(employee => employee.ID);
+      } if (prefix === 'All') {
+        this.selectedRowKeys = this.employees.map((employee) => employee.ID);
       } else {
-        this.selectedRowKeys = this.employees.filter(employee => employee.Prefix === prefix).map(employee => employee.ID);
+        this.selectedRowKeys = this.employees.filter((employee) => employee.Prefix === prefix).map((employee) => employee.ID);
       }
 
       this.prefix = prefix;
@@ -130,8 +130,8 @@ export default {
       this.selectedEmployeeNames = getEmployeeNames(selectedRowsData);
       this.selectedRowKeys = selectedRowKeys;
       this.selectionChangedBySelectBox = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

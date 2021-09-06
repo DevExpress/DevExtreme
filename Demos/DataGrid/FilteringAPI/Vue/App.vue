@@ -51,7 +51,7 @@
 <script>
 import {
   DxColumn,
-  DxDataGrid
+  DxDataGrid,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import 'devextreme/data/odata/store';
@@ -60,7 +60,7 @@ export default {
   components: {
     DxSelectBox,
     DxColumn,
-    DxDataGrid
+    DxDataGrid,
   },
   data() {
     return {
@@ -68,7 +68,7 @@ export default {
         store: {
           type: 'odata',
           url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-          key: 'Task_ID'
+          key: 'Task_ID',
         },
         expand: 'ResponsibleEmployee',
         select: [
@@ -76,8 +76,8 @@ export default {
           'Task_Subject',
           'Task_Start_Date',
           'Task_Status',
-          'ResponsibleEmployee/Employee_Full_Name'
-        ]
+          'ResponsibleEmployee/Employee_Full_Name',
+        ],
       },
       statuses: ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'],
       dataGridRefName: 'dataGrid',
@@ -89,12 +89,11 @@ export default {
 
       if (value === 'All') {
         dataGrid.clearFilter();
-      }
-      else {
+      } else {
         dataGrid.filter(['Task_Status', '=', value]);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -1,15 +1,14 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   PolarChart,
   CommonSeriesSettings,
   Series,
   Export,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/polar-chart';
 import { fruitSources, productionData } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <PolarChart
@@ -20,9 +19,7 @@ class App extends React.Component {
       >
         <CommonSeriesSettings type="line" />
         {
-          fruitSources.map(function(item) {
-            return <Series key={item.value} valueField={item.value} name={item.name} />;
-          })
+          fruitSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
         }
         <Export enabled={true} />
         <Tooltip enabled={true} />

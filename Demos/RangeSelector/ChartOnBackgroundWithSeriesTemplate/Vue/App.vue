@@ -24,7 +24,6 @@
   </DxRangeSelector>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxRangeSelector,
   DxMargin,
@@ -33,8 +32,9 @@ import {
   DxSeriesTemplate,
   DxScale,
   DxFormat,
-  DxLabel
+  DxLabel,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
@@ -45,18 +45,18 @@ export default {
     DxSeriesTemplate,
     DxScale,
     DxFormat,
-    DxLabel
+    DxLabel,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
     customizeSeries(seriesName) {
       return seriesName === 'USA' ? { color: 'red' } : {};
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

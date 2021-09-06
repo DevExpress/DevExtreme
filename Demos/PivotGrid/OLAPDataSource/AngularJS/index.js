@@ -1,36 +1,36 @@
-var DemoApp = angular.module('DemoApp', ['dx']);
+const DemoApp = angular.module('DemoApp', ['dx']);
 
-DemoApp.controller('DemoController', function DemoController($scope) {
-    $scope.pivotGridOptions = {
-        allowSortingBySummary: true,
-        allowSorting: true,
-        allowFiltering: true,
-        allowExpandAll: true,
-        height: 570,
-        showBorders: true,
-        fieldChooser: {
-            allowSearch: true
+DemoApp.controller('DemoController', ($scope) => {
+  $scope.pivotGridOptions = {
+    allowSortingBySummary: true,
+    allowSorting: true,
+    allowFiltering: true,
+    allowExpandAll: true,
+    height: 570,
+    showBorders: true,
+    fieldChooser: {
+      allowSearch: true,
+    },
+    dataSource: {
+      fields: [
+        { dataField: '[Product].[Category]', area: 'row' },
+        {
+          dataField: '[Product].[Subcategory]',
+          area: 'row',
+          headerFilter: {
+            allowSearch: true,
+          },
         },
-        dataSource: {
-            fields: [
-                { dataField: "[Product].[Category]", area: "row" },
-                { 
-                    dataField: "[Product].[Subcategory]", 
-                    area: "row",
-                    headerFilter: {
-                        allowSearch: true
-                    } 
-                },
-                { dataField: "[Ship Date].[Calendar Year]", area: "column" },
-                { dataField: "[Ship Date].[Month of Year]", area: "column" },
-                { dataField: "[Measures].[Reseller Freight Cost]", area: "data", format: "currency" }
-            ],
-            store: {
-                type: "xmla",
-                url: "https://demos.devexpress.com/Services/OLAP/msmdpump.dll",
-                catalog: "Adventure Works DW Standard Edition",
-                cube: "Adventure Works"
-            }
-        }
-    };
+        { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
+        { dataField: '[Ship Date].[Month of Year]', area: 'column' },
+        { dataField: '[Measures].[Reseller Freight Cost]', area: 'data', format: 'currency' },
+      ],
+      store: {
+        type: 'xmla',
+        url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
+        catalog: 'Adventure Works DW Standard Edition',
+        cube: 'Adventure Works',
+      },
+    },
+  };
 });

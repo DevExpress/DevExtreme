@@ -57,14 +57,14 @@ export default {
     DxLayer,
     DxLegend,
     DxSource,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
       markers,
       mapsWorld: mapsData.world,
       bounds: [-180, 85, 180, -60],
-      sizeGroups: [0, 8000, 10000, 50000]
+      sizeGroups: [0, 8000, 10000, 50000],
     };
   },
   methods: {
@@ -80,8 +80,8 @@ export default {
 
     customizeItems(items) {
       return items.reverse();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

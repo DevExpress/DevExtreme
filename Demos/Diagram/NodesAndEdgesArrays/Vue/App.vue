@@ -25,26 +25,28 @@
   </DxDiagram>
 </template>
 <script>
-import { DxDiagram, DxNodes, DxAutoLayout, DxEdges, DxToolbox, DxGroup } from 'devextreme-vue/diagram';
+import {
+  DxDiagram, DxNodes, DxAutoLayout, DxEdges, DxToolbox, DxGroup,
+} from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
 export default {
   components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxEdges, DxToolbox, DxGroup
+    DxDiagram, DxNodes, DxAutoLayout, DxEdges, DxToolbox, DxGroup,
   },
   data() {
     return {
       flowNodesDataSource: new ArrayStore({
         key: 'id',
-        data: service.getFlowNodes()
+        data: service.getFlowNodes(),
       }),
       flowEdgesDataSource: new ArrayStore({
         key: 'id',
-        data: service.getFlowEdges()
-      })
+        data: service.getFlowEdges(),
+      }),
     };
-  }
+  },
 };
 </script>
 <style scoped>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import 'devextreme/data/odata/store';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
@@ -7,7 +7,7 @@ const dataSourceOptions = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-    key: 'Product_ID'
+    key: 'Product_ID',
   },
   select: [
     'Product_ID',
@@ -15,9 +15,9 @@ const dataSourceOptions = {
     'Product_Cost',
     'Product_Sale_Price',
     'Product_Retail_Price',
-    'Product_Current_Inventory'
+    'Product_Current_Inventory',
   ],
-  filter: ['Product_Current_Inventory', '>', 0]
+  filter: ['Product_Current_Inventory', '>', 0],
 };
 
 class App extends React.Component {

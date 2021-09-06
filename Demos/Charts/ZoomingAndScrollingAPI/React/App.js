@@ -1,12 +1,11 @@
 import React from 'react';
-import { zoomingData } from './data.js';
 
 import Chart, {
   Series,
   Legend,
   CommonSeriesSettings,
   Point,
-  ArgumentAxis
+  ArgumentAxis,
 } from 'devextreme-react/chart';
 
 import RangeSelector, {
@@ -14,22 +13,22 @@ import RangeSelector, {
   Chart as ChartOptions,
   Margin,
   Scale,
-  Behavior
+  Behavior,
 
 }
   from 'devextreme-react/range-selector';
+import { zoomingData } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      visualRange: { startValue: 10, endValue: 880 }
+      visualRange: { startValue: 10, endValue: 880 },
     };
 
     this.updateVisualRange = this.updateVisualRange.bind(this);
-
   }
+
   updateVisualRange(e) {
     this.setState({ visualRange: e.value });
   }

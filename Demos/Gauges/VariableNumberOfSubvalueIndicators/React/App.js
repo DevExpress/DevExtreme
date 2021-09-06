@@ -1,21 +1,22 @@
 import React from 'react';
-import { LinearGauge, Scale, Label, Tooltip, Export, Title, Font } from 'devextreme-react/linear-gauge';
+import {
+  LinearGauge, Scale, Label, Tooltip, Export, Title, Font,
+} from 'devextreme-react/linear-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
 import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       value: dataSource[0].primary,
-      subvalues: dataSource[0].secondary
+      subvalues: dataSource[0].secondary,
     };
 
     this.onValueChanged = ({ value }) => {
       this.setState({
         value: value.primary,
-        subvalues: value.secondary
+        subvalues: value.secondary,
       });
     };
   }
@@ -54,14 +55,14 @@ class App extends React.Component {
   }
 
   customizeTooltip(arg) {
-    var result = `${arg.valueText} kW`;
+    let result = `${arg.valueText} kW`;
     if (arg.index >= 0) {
       result = `Secondary ${(arg.index + 1)}: ${result}`;
     } else {
       result = `Primary: ${result}`;
     }
     return {
-      text: result
+      text: result,
     };
   }
 }

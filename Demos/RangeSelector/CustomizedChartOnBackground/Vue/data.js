@@ -15,6 +15,6 @@ export const dataSource = [
   { x: 13, y: 0 },
   { x: 14, y: 9 },
   { x: 15, y: 3 },
-  { x: 16, y: 13 }
+  { x: 16, y: 13 },
 ];
 

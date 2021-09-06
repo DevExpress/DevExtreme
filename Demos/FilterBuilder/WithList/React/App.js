@@ -10,16 +10,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.dataSource = new DataSource({
-      store: products
+      store: products,
     });
     this.filterBuilderInstance = null;
     this.state = {
-      value: filter
+      value: filter,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
     this.refreshDataSource = this.refreshDataSource.bind(this);
     this.setFilterBuilderInstance = this.setFilterBuilderInstance.bind(this);
   }
+
   render() {
     return (
       <div>
@@ -40,15 +41,18 @@ class App extends React.Component {
       </div>
     );
   }
+
   setFilterBuilderInstance(ref) {
     this.filterBuilderInstance = ref.instance;
     this.refreshDataSource();
   }
+
   onValueChanged(e) {
     this.setState({
-      value: e.value
+      value: e.value,
     });
   }
+
   refreshDataSource() {
     this.dataSource.filter(this.filterBuilderInstance.getFilterExpression());
     this.dataSource.load();

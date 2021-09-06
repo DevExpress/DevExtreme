@@ -4,7 +4,7 @@ import CircularGauge, {
   Geometry,
   Scale,
   Size,
-  ValueIndicator
+  ValueIndicator,
 } from 'devextreme-react/circular-gauge';
 
 export default function Indicator(props) {

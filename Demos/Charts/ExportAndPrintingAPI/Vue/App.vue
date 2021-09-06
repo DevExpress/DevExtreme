@@ -47,7 +47,7 @@ import DxChart, {
   DxArgumentAxis,
   DxLabel,
   DxValueAxis,
-  DxVisualRange
+  DxVisualRange,
 } from 'devextreme-vue/chart';
 import DxButton from 'devextreme-vue/button';
 import { mountains } from './data.js';
@@ -62,11 +62,11 @@ export default {
     DxLabel,
     DxValueAxis,
     DxVisualRange,
-    DxButton
+    DxButton,
   },
   data() {
     return {
-      mountains
+      mountains,
     };
   },
   methods: {
@@ -82,14 +82,14 @@ export default {
       return {
         text: `<span class='title'>${pointInfo.argumentText
         }</span><br />&nbsp;<br />System: ${pointInfo.point.data.system
-        }<br />Height: ${pointInfo.valueText} m`
+        }<br />Height: ${pointInfo.valueText} m`,
       };
     },
 
     customizeLabelText({ value }) {
       return `${value} m`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

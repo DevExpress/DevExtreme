@@ -130,18 +130,20 @@
 </template>
 <script>
 
-import { DxCircularGauge, DxScale, DxLabel, DxGeometry, DxValueIndicator } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxLabel, DxGeometry, DxValueIndicator,
+} from 'devextreme-vue/circular-gauge';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxLabel, DxGeometry, DxValueIndicator
+    DxCircularGauge, DxScale, DxLabel, DxGeometry, DxValueIndicator,
   },
 
   methods: {
     customizeText({ valueText }) {
       return `${valueText} %`;
-    }
-  }
+    },
+  },
 };
 
 </script>

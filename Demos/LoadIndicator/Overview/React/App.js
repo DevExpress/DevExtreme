@@ -1,15 +1,14 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { Button } from 'devextreme-react/button';
 import { LoadIndicator } from 'devextreme-react/load-indicator';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       loadIndicatorVisible: false,
-      buttonText: 'Send'
+      buttonText: 'Send',
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -47,16 +46,16 @@ class App extends React.Component {
     this.setState(
       {
         loadIndicatorVisible: true,
-        buttonText: 'Sending'
+        buttonText: 'Sending',
       },
       () => {
         setTimeout(() => {
           this.setState({
             loadIndicatorVisible: false,
-            buttonText: 'Send'
+            buttonText: 'Send',
           });
         }, 2000);
-      }
+      },
     );
   }
 }

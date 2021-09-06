@@ -24,19 +24,19 @@ import { contextMenuItems as items } from './data.js';
 
 export default {
   components: {
-    DxContextMenu
+    DxContextMenu,
   },
   data() {
     return {
-      items
+      items,
     };
   },
   methods: {
     itemClick(e) {
       if (!e.itemData.items) {
-        notify(`The "${ e.itemData.text }" item was clicked`, 'success', 1500);
+        notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
       }
-    }
+    },
   },
 };
 </script>

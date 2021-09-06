@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Item({ text, handle, style }) {
   let className = 'item dx-card dx-theme-text-color dx-theme-background-color';
-  if(handle) {
+  if (handle) {
     className += ' item-with-handle';
   }
   return (

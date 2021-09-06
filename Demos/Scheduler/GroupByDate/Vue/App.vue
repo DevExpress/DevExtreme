@@ -50,7 +50,7 @@ export default {
     DxScheduler,
     DxResource,
     DxSwitch,
-    DxView
+    DxView,
   },
   data() {
     return {
@@ -58,9 +58,9 @@ export default {
       groups: ['priorityId'],
       currentDate: new Date(2021, 3, 21),
       dataSource: data,
-      priorityData: priorityData
+      priorityData,
     };
-  }
+  },
 };
 </script>
 

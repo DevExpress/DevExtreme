@@ -56,13 +56,13 @@ import {
   DxDependencies,
   DxColumn,
   DxEditing,
-  DxValidation
+  DxValidation,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 
 import {
   tasks,
-  dependencies
+  dependencies,
 } from './data.js';
 
 export default {
@@ -73,16 +73,16 @@ export default {
     DxColumn,
     DxEditing,
     DxValidation,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
-      tasks: tasks,
-      dependencies: dependencies,
+      tasks,
+      dependencies,
       autoUpdateParentTasks: true,
-      validateDependencies: true
+      validateDependencies: true,
     };
-  }
+  },
 };
 </script>
 <style>

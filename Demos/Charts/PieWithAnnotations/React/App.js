@@ -1,7 +1,4 @@
 import React from 'react';
-import { dataSource, getAnnotationSources } from './data.js';
-import TooltipTemplate from './TooltipTemplate.js';
-
 import PieChart, {
   CommonAnnotationSettings,
   Annotation,
@@ -12,8 +9,10 @@ import PieChart, {
   Label,
   Font,
   Tooltip,
-  Legend
+  Legend,
 } from 'devextreme-react/pie-chart';
+import { dataSource, getAnnotationSources } from './data.js';
+import TooltipTemplate from './TooltipTemplate.js';
 
 const annotationSources = getAnnotationSources();
 
@@ -39,7 +38,7 @@ export default function App() {
         <Border color="transparent" />
       </CommonAnnotationSettings>
       {
-        annotationSources.map(item => (
+        annotationSources.map((item) => (
           <Annotation
             key={item.country}
             argument={item.country}

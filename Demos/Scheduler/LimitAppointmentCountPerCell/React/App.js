@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
 
 import { data, resourcesData } from './data.js';
@@ -7,15 +7,15 @@ const currentDate = new Date(2021, 2, 25);
 const views = [{
   type: 'month',
   name: 'Auto Mode',
-  maxAppointmentsPerCell: 'auto'
+  maxAppointmentsPerCell: 'auto',
 }, {
   type: 'month',
   name: 'Unlimited Mode',
-  maxAppointmentsPerCell: 'unlimited'
+  maxAppointmentsPerCell: 'unlimited',
 }, {
   type: 'month',
   name: 'Numeric Mode',
-  maxAppointmentsPerCell: 2
+  maxAppointmentsPerCell: 2,
 }];
 
 class App extends React.Component {

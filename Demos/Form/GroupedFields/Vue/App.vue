@@ -87,7 +87,9 @@
   </div>
 </template>
 <script>
-import { DxForm, DxSimpleItem, DxGroupItem, DxTabbedItem, DxTabPanelOptions, DxTab } from 'devextreme-vue/form';
+import {
+  DxForm, DxSimpleItem, DxGroupItem, DxTabbedItem, DxTabPanelOptions, DxTab,
+} from 'devextreme-vue/form';
 import service from './data.js';
 import 'devextreme-vue/text-area';
 
@@ -98,19 +100,19 @@ export default {
     DxGroupItem,
     DxTabbedItem,
     DxTabPanelOptions,
-    DxTab
+    DxTab,
   },
   data() {
     const employee = service.getEmployee();
     return {
-      employee
+      employee,
     };
-  }
+  },
 };
 </script>
 <style scoped>
 #form-container {
-	margin: 10px;
+  margin: 10px;
 }
 
 .long-title h3 {

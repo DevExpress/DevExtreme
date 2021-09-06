@@ -5,7 +5,6 @@ import AddressTab from './AddressTab.js';
 import OrdersTab from './OrdersTab.js';
 
 class MasterDetailView extends React.Component {
-
   constructor(props) {
     super(props);
     this.renderOrdersTab = this.renderOrdersTab.bind(this);

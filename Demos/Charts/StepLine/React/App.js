@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Chart,
   Series,
@@ -8,12 +8,11 @@ import {
   Legend,
   Point,
   Label,
-  Format
+  Format,
 } from 'devextreme-react/chart';
 import { medalSources, olympicAchievements } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart
@@ -28,9 +27,7 @@ class App extends React.Component {
           <Point visible={false} />
         </CommonSeriesSettings>
         {
-          medalSources.map(function(item) {
-            return <Series key={item.value} valueField={item.value} name={item.name} color={item.color} />;
-          })
+          medalSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} color={item.color} />)
         }
         <ArgumentAxis>
           <Label>

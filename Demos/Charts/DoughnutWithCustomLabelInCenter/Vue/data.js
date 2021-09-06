@@ -7,5 +7,5 @@ export const data = [
   { country: 'Germany', commodity: 'Wind', total: 78598 },
   { country: 'France', commodity: 'Solar', total: 8160 },
   { country: 'Germany', commodity: 'Solar', total: 38098 },
-  { country: 'France', commodity: 'Tidal, Wave', total: 501 }
+  { country: 'France', commodity: 'Tidal, Wave', total: 501 },
 ];

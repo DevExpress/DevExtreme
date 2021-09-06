@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import 'devextreme/data/odata/store';
 import DataGrid, { Column, Paging, Pager } from 'devextreme-react/data-grid';
@@ -11,7 +11,7 @@ function isNotEmpty(value) {
 
 const store = new CustomStore({
   key: 'OrderNumber',
-  load: function(loadOptions) {
+  load(loadOptions) {
     let params = '?';
     [
       'skip',
@@ -22,24 +22,21 @@ const store = new CustomStore({
       'filter',
       'totalSummary',
       'group',
-      'groupSummary'
-    ].forEach(function(i) {
-      if (i in loadOptions && isNotEmpty(loadOptions[i]))
-      { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
+      'groupSummary',
+    ].forEach((i) => {
+      if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
     });
     params = params.slice(0, -1);
     return fetch(`https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders${params}`)
-      .then(response => response.json())
-      .then((data) => {
-        return {
-          data: data.data,
-          totalCount: data.totalCount,
-          summary: data.summary,
-          groupCount: data.groupCount
-        };
-      })
+      .then((response) => response.json())
+      .then((data) => ({
+        data: data.data,
+        totalCount: data.totalCount,
+        summary: data.summary,
+        groupCount: data.groupCount,
+      }))
       .catch(() => { throw 'Data Loading Error'; });
-  }
+  },
 });
 
 class App extends React.Component {

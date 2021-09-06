@@ -30,11 +30,11 @@ import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
 import {
   DxVectorMap,
   DxLayer,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/vector-map';
 
 import {
-  DxButton
+  DxButton,
 } from 'devextreme-vue/button';
 
 import { markers } from './data.js';
@@ -44,13 +44,13 @@ export default {
     DxVectorMap,
     DxLayer,
     DxTooltip,
-    DxButton
+    DxButton,
   },
   data() {
     return {
       markers,
       mapsWorld: mapsData.world,
-      bounds: [-180, 85, 180, -60]
+      bounds: [-180, 85, 180, -60],
     };
   },
   methods: {
@@ -65,11 +65,11 @@ export default {
       }
     },
     reset() {
-      const vectorMap = this.$refs['vectorMap'].instance;
+      const vectorMap = this.$refs.vectorMap.instance;
       vectorMap.center(null);
       vectorMap.zoomFactor(null);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

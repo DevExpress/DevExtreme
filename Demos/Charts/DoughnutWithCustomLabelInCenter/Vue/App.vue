@@ -35,18 +35,20 @@
   </div>
 </template>
 <script>
+import {
+  DxPieChart, DxSeries, DxExport, DxTooltip, DxLegend, DxLabel, DxConnector,
+} from 'devextreme-vue/pie-chart';
 import { data } from './data.js';
-import { DxPieChart, DxSeries, DxExport, DxTooltip, DxLegend, DxLabel, DxConnector } from 'devextreme-vue/pie-chart';
 import CenterTemplate from './CenterTemplate.vue';
 
 export default {
   components: {
-    DxPieChart, DxSeries, DxExport, DxTooltip, DxLegend, DxLabel, DxConnector, CenterTemplate
+    DxPieChart, DxSeries, DxExport, DxTooltip, DxLegend, DxLabel, DxConnector, CenterTemplate,
   },
   data() {
     return {
-      data: data,
-      countries: Array.from(new Set(data.map(item => item.country)))
+      data,
+      countries: Array.from(new Set(data.map((item) => item.country))),
     };
   },
   methods: {
@@ -54,9 +56,9 @@ export default {
       return `${argumentText}\n${valueText}`;
     },
     getData(country) {
-      return data.filter(i => i.country === country);
-    }
-  }
+      return data.filter((i) => i.country === country);
+    },
+  },
 };
 </script>
 <style scoped>

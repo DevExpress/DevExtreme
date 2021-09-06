@@ -13,7 +13,7 @@ class App extends React.Component {
       animationEnabled: true,
       swipeEnabled: true,
       loop: false,
-      selectedIndex: 0
+      selectedIndex: 0,
     };
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
     this.onLoopChanged = this.onLoopChanged.bind(this);
@@ -22,7 +22,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { animationEnabled, loop, selectedIndex, swipeEnabled } = this.state;
+    const {
+      animationEnabled, loop, selectedIndex, swipeEnabled,
+    } = this.state;
     return (
       <div>
         <TabPanel
@@ -72,28 +74,28 @@ class App extends React.Component {
   }
 
   onSelectionChanged(args) {
-    if(args.name == 'selectedIndex') {
+    if (args.name == 'selectedIndex') {
       this.setState({
-        selectedIndex: args.value
+        selectedIndex: args.value,
       });
     }
   }
 
   onLoopChanged(args) {
     this.setState({
-      loop: args.value
+      loop: args.value,
     });
   }
 
   onAnimationEnabledChanged(args) {
     this.setState({
-      animationEnabled: args.value
+      animationEnabled: args.value,
     });
   }
 
   onSwipeEnabledChanged(args) {
     this.setState({
-      swipeEnabled: args.value
+      swipeEnabled: args.value,
     });
   }
 }

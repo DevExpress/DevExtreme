@@ -256,15 +256,15 @@ export const employees = [{
 }];
 
 export const statuses = [{
-  id: 1, name: 'Not Started'
+  id: 1, name: 'Not Started',
 }, {
-  id: 2, name: 'In Progress'
+  id: 2, name: 'In Progress',
 }, {
-  id: 3, name: 'Deferred'
+  id: 3, name: 'Deferred',
 }, {
-  id: 4, name: 'Need Assistance'
+  id: 4, name: 'Need Assistance',
 }, {
-  id: 5, name: 'Completed'
+  id: 5, name: 'Completed',
 }];
 
 export const tasks = [{
@@ -274,7 +274,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 7,
   OrderIndex: 0,
-  Priority: 3
+  Priority: 3,
 }, {
   ID: 2,
   Subject: 'Prepare 2013 Marketing Plan',
@@ -282,7 +282,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 4,
   OrderIndex: 1,
-  Priority: 4
+  Priority: 4,
 }, {
   ID: 3,
   Subject: 'Update Personnel Files',
@@ -290,7 +290,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 2,
   OrderIndex: 2,
-  Priority: 1
+  Priority: 1,
 }, {
   ID: 4,
   Subject: 'Review Health Insurance Options Under the Affordable Care Act',
@@ -298,7 +298,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 2,
   OrderIndex: 3,
-  Priority: 4
+  Priority: 4,
 }, {
   ID: 5,
   Subject: 'Choose between PPO and HMO Health Plan',
@@ -306,7 +306,7 @@ export const tasks = [{
   Owner: 2,
   AssignedEmployee: 1,
   OrderIndex: 4,
-  Priority: 3
+  Priority: 3,
 }, {
   ID: 6,
   Subject: 'Google AdWords Strategy',
@@ -314,7 +314,7 @@ export const tasks = [{
   Owner: 4,
   AssignedEmployee: 1,
   OrderIndex: 5,
-  Priority: 2
+  Priority: 2,
 }, {
   ID: 7,
   Subject: 'New Brochures',
@@ -322,7 +322,7 @@ export const tasks = [{
   Owner: 4,
   AssignedEmployee: 1,
   OrderIndex: 6,
-  Priority: 1
+  Priority: 1,
 }, {
   ID: 8,
   Subject: '2013 Brochure Designs',
@@ -330,7 +330,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 28,
   OrderIndex: 7,
-  Priority: 1
+  Priority: 1,
 }, {
   ID: 9,
   Subject: 'Brochure Design Review',
@@ -338,7 +338,7 @@ export const tasks = [{
   Owner: 28,
   AssignedEmployee: 29,
   OrderIndex: 8,
-  Priority: 1
+  Priority: 1,
 }, {
   ID: 10,
   Subject: 'Website Re-Design Plan',
@@ -346,7 +346,7 @@ export const tasks = [{
   Owner: 28,
   AssignedEmployee: 29,
   OrderIndex: 9,
-  Priority: 2
+  Priority: 2,
 }, {
   ID: 11,
   Subject: 'Rollout of New Website and Marketing Brochures',
@@ -354,7 +354,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 4,
   OrderIndex: 10,
-  Priority: 2
+  Priority: 2,
 }, {
   ID: 12,
   Subject: 'Update Sales Strategy Documents',
@@ -362,7 +362,7 @@ export const tasks = [{
   Owner: 4,
   AssignedEmployee: 8,
   OrderIndex: 11,
-  Priority: 2
+  Priority: 2,
 }, {
   ID: 13,
   Subject: 'Create 2012 Sales Report',
@@ -370,7 +370,7 @@ export const tasks = [{
   Owner: 8,
   AssignedEmployee: 41,
   OrderIndex: 12,
-  Priority: 4
+  Priority: 4,
 }, {
   ID: 14,
   Subject: 'Direct vs Online Sales Comparison Report',
@@ -378,7 +378,7 @@ export const tasks = [{
   Owner: 41,
   AssignedEmployee: 42,
   OrderIndex: 13,
-  Priority: 3
+  Priority: 3,
 }, {
   ID: 15,
   Subject: 'Review 2012 Sales Report and Approve 2013 Plans',
@@ -386,7 +386,7 @@ export const tasks = [{
   Owner: 41,
   AssignedEmployee: 4,
   OrderIndex: 14,
-  Priority: 3
+  Priority: 3,
 }, {
   ID: 16,
   Subject: 'Deliver R&D Plans for 2013',
@@ -394,7 +394,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 3,
   OrderIndex: 15,
-  Priority: 2
+  Priority: 2,
 }, {
   ID: 17,
   Subject: 'Create 2013 R&D Plans',
@@ -402,7 +402,7 @@ export const tasks = [{
   Owner: 3,
   AssignedEmployee: 32,
   OrderIndex: 16,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 18,
   Subject: '2013 QA Strategy Report',
@@ -410,7 +410,7 @@ export const tasks = [{
   Owner: 32,
   AssignedEmployee: 33,
   OrderIndex: 17,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 19,
   Subject: '2013 Training Events',
@@ -418,7 +418,7 @@ export const tasks = [{
   Owner: 33,
   AssignedEmployee: 31,
   OrderIndex: 18,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 20,
   Subject: 'Approve Hiring of John Jeffers',
@@ -426,7 +426,7 @@ export const tasks = [{
   Owner: 31,
   AssignedEmployee: 5,
   OrderIndex: 19,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 21,
   Subject: 'Non-Compete Agreements',
@@ -434,7 +434,7 @@ export const tasks = [{
   Owner: 5,
   AssignedEmployee: 2,
   OrderIndex: 20,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 22,
   Subject: 'Update NDA Agreement',
@@ -442,7 +442,7 @@ export const tasks = [{
   Owner: 2,
   AssignedEmployee: 1,
   OrderIndex: 21,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 23,
   Subject: 'Update Employee Files with New NDA',
@@ -450,7 +450,7 @@ export const tasks = [{
   Owner: 2,
   AssignedEmployee: 5,
   OrderIndex: 22,
-  Priority: 3
+  Priority: 3,
 }, {
   ID: 24,
   Subject: 'Sign Updated NDA',
@@ -458,7 +458,7 @@ export const tasks = [{
   Owner: 5,
   AssignedEmployee: 6,
   OrderIndex: 23,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 25,
   Subject: 'Sign Updated NDA',
@@ -466,7 +466,7 @@ export const tasks = [{
   Owner: 5,
   AssignedEmployee: 7,
   OrderIndex: 24,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 26,
   Subject: 'Sign Updated NDA',
@@ -474,7 +474,7 @@ export const tasks = [{
   Owner: 5,
   AssignedEmployee: 8,
   OrderIndex: 25,
-  Priority: 1
+  Priority: 1,
 }, {
   ID: 27,
   Subject: 'Sign Updated NDA',
@@ -482,7 +482,7 @@ export const tasks = [{
   Owner: 5,
   AssignedEmployee: 9,
   OrderIndex: 26,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 28,
   Subject: 'Submit Questions Regarding New NDA',
@@ -490,7 +490,7 @@ export const tasks = [{
   Owner: 9,
   AssignedEmployee: 17,
   OrderIndex: 27,
-  Priority: 1
+  Priority: 1,
 }, {
   ID: 29,
   Subject: 'Submit Questions Regarding New NDA',
@@ -498,7 +498,7 @@ export const tasks = [{
   Owner: 9,
   AssignedEmployee: 18,
   OrderIndex: 28,
-  Priority: 1
+  Priority: 1,
 }, {
   ID: 30,
   Subject: 'Submit Questions Regarding New NDA',
@@ -506,7 +506,7 @@ export const tasks = [{
   Owner: 9,
   AssignedEmployee: 19,
   OrderIndex: 29,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 31,
   Subject: 'Submit Signed NDA',
@@ -514,7 +514,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 14,
   OrderIndex: 30,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 32,
   Subject: 'Submit Signed NDA',
@@ -522,7 +522,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 13,
   OrderIndex: 31,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 33,
   Subject: 'Submit Signed NDA',
@@ -530,7 +530,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 15,
   OrderIndex: 32,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 34,
   Subject: 'Submit Signed NDA',
@@ -538,7 +538,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 16,
   OrderIndex: 33,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 35,
   Subject: 'Update Revenue Projections',
@@ -546,7 +546,7 @@ export const tasks = [{
   Owner: 1,
   AssignedEmployee: 7,
   OrderIndex: 34,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 36,
   Subject: 'Review Revenue Projections',
@@ -554,7 +554,7 @@ export const tasks = [{
   Owner: 7,
   AssignedEmployee: 8,
   OrderIndex: 35,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 37,
   Subject: 'Comment on Revenue Projections',
@@ -562,7 +562,7 @@ export const tasks = [{
   Owner: 7,
   AssignedEmployee: 41,
   OrderIndex: 36,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 38,
   Subject: 'Comment on Revenue Projections',
@@ -570,7 +570,7 @@ export const tasks = [{
   Owner: 7,
   AssignedEmployee: 42,
   OrderIndex: 37,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 39,
   Subject: 'Comment on Revenue Projections',
@@ -578,7 +578,7 @@ export const tasks = [{
   Owner: 7,
   AssignedEmployee: 45,
   OrderIndex: 38,
-  Priority: 2
+  Priority: 2,
 }, {
   ID: 40,
   Subject: 'Provide New Health Insurance Docs',
@@ -586,7 +586,7 @@ export const tasks = [{
   Owner: 11,
   AssignedEmployee: 5,
   OrderIndex: 39,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 41,
   Subject: 'Review Changes to Health Insurance Coverage',
@@ -594,7 +594,7 @@ export const tasks = [{
   Owner: 11,
   AssignedEmployee: 10,
   OrderIndex: 40,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 42,
   Subject: 'Scan Health Insurance Forms',
@@ -602,7 +602,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 14,
   OrderIndex: 41,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 43,
   Subject: 'Sign Health Insurance Forms',
@@ -610,7 +610,7 @@ export const tasks = [{
   Owner: 14,
   AssignedEmployee: 15,
   OrderIndex: 42,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 44,
   Subject: 'Sign Health Insurance Forms',
@@ -618,7 +618,7 @@ export const tasks = [{
   Owner: 14,
   AssignedEmployee: 13,
   OrderIndex: 43,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 45,
   Subject: 'Sign Health Insurance Forms',
@@ -626,7 +626,7 @@ export const tasks = [{
   Owner: 14,
   AssignedEmployee: 16,
   OrderIndex: 44,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 46,
   Subject: 'Follow up with West Coast Stores',
@@ -634,7 +634,7 @@ export const tasks = [{
   Owner: 9,
   AssignedEmployee: 18,
   OrderIndex: 45,
-  Priority: 3
+  Priority: 3,
 }, {
   ID: 47,
   Subject: 'Follow up with East Coast Stores',
@@ -642,7 +642,7 @@ export const tasks = [{
   Owner: 9,
   AssignedEmployee: 17,
   OrderIndex: 46,
-  Priority: 3
+  Priority: 3,
 }, {
   ID: 48,
   Subject: 'Send Email to Customers about Recall',
@@ -650,7 +650,7 @@ export const tasks = [{
   Owner: 9,
   AssignedEmployee: 19,
   OrderIndex: 47,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 49,
   Subject: 'Submit Refund Report for 2013 Recall',
@@ -658,7 +658,7 @@ export const tasks = [{
   Owner: 7,
   AssignedEmployee: 9,
   OrderIndex: 48,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 50,
   Subject: 'Give Final Approval for Refunds',
@@ -666,7 +666,7 @@ export const tasks = [{
   Owner: 7,
   AssignedEmployee: 2,
   OrderIndex: 49,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 51,
   Subject: 'Prepare Product Recall Report',
@@ -674,7 +674,7 @@ export const tasks = [{
   Owner: 3,
   AssignedEmployee: 32,
   OrderIndex: 50,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 52,
   Subject: 'Review Product Recall Report by Engineering Team',
@@ -682,7 +682,7 @@ export const tasks = [{
   Owner: 3,
   AssignedEmployee: 1,
   OrderIndex: 51,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 53,
   Subject: 'Create Training Course for New TVs',
@@ -690,7 +690,7 @@ export const tasks = [{
   Owner: 32,
   AssignedEmployee: 31,
   OrderIndex: 52,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 54,
   Subject: 'Review Training Course for any Omissions',
@@ -698,7 +698,7 @@ export const tasks = [{
   Owner: 31,
   AssignedEmployee: 33,
   OrderIndex: 53,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 55,
   Subject: 'Review Overtime Report',
@@ -706,7 +706,7 @@ export const tasks = [{
   Owner: 5,
   AssignedEmployee: 6,
   OrderIndex: 54,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 56,
   Subject: 'Submit Overtime Request Forms',
@@ -714,7 +714,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 21,
   OrderIndex: 55,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 57,
   Subject: 'Submit Overtime Request Forms',
@@ -722,7 +722,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 22,
   OrderIndex: 56,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 58,
   Subject: 'Submit Overtime Request Forms',
@@ -730,7 +730,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 23,
   OrderIndex: 57,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 59,
   Subject: 'Overtime Approval Guidelines',
@@ -738,7 +738,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 2,
   OrderIndex: 58,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 60,
   Subject: 'Refund Request Template',
@@ -746,7 +746,7 @@ export const tasks = [{
   Owner: 12,
   AssignedEmployee: 8,
   OrderIndex: 59,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 61,
   Subject: 'Recall Rebate Form',
@@ -754,7 +754,7 @@ export const tasks = [{
   Owner: 12,
   AssignedEmployee: 8,
   OrderIndex: 60,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 62,
   Subject: 'Create Report on Customer Feedback',
@@ -762,7 +762,7 @@ export const tasks = [{
   Owner: 30,
   AssignedEmployee: 12,
   OrderIndex: 61,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 63,
   Subject: 'Review Customer Feedback Report',
@@ -770,7 +770,7 @@ export const tasks = [{
   Owner: 30,
   AssignedEmployee: 8,
   OrderIndex: 62,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 64,
   Subject: 'Customer Feedback Report Analysis',
@@ -778,7 +778,7 @@ export const tasks = [{
   Owner: 8,
   AssignedEmployee: 1,
   OrderIndex: 63,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 65,
   Subject: 'Prepare Shipping Cost Analysis Report',
@@ -786,7 +786,7 @@ export const tasks = [{
   Owner: 8,
   AssignedEmployee: 10,
   OrderIndex: 64,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 66,
   Subject: 'Provide Feedback on Shippers',
@@ -794,7 +794,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 13,
   OrderIndex: 65,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 67,
   Subject: 'Provide Feedback on Shippers',
@@ -802,7 +802,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 15,
   OrderIndex: 66,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 68,
   Subject: 'Provide Feedback on Shippers',
@@ -810,7 +810,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 16,
   OrderIndex: 67,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 69,
   Subject: 'Select Preferred Shipper',
@@ -818,7 +818,7 @@ export const tasks = [{
   Owner: 10,
   AssignedEmployee: 2,
   OrderIndex: 68,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 70,
   Subject: 'Complete Shipper Selection Form',
@@ -826,7 +826,7 @@ export const tasks = [{
   Owner: 2,
   AssignedEmployee: 1,
   OrderIndex: 69,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 71,
   Subject: 'Upgrade Server Hardware',
@@ -834,7 +834,7 @@ export const tasks = [{
   Owner: 22,
   AssignedEmployee: 6,
   OrderIndex: 70,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 72,
   Subject: 'Upgrade Personal Computers',
@@ -842,7 +842,7 @@ export const tasks = [{
   Owner: 21,
   AssignedEmployee: 6,
   OrderIndex: 71,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 73,
   Subject: 'Approve Personal Computer Upgrade Plan',
@@ -850,7 +850,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 2,
   OrderIndex: 72,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 74,
   Subject: 'Decide on Mobile Devices to Use in the Field',
@@ -858,7 +858,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 3,
   OrderIndex: 73,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 75,
   Subject: 'Upgrade Apps to Windows RT or stay with WinForms',
@@ -866,7 +866,7 @@ export const tasks = [{
   Owner: 24,
   AssignedEmployee: 6,
   OrderIndex: 74,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 76,
   Subject: 'Estimate Time Required to Touch-Enable Apps',
@@ -874,7 +874,7 @@ export const tasks = [{
   Owner: 24,
   AssignedEmployee: 25,
   OrderIndex: 75,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 77,
   Subject: 'Report on Tranistion to Touch-Based Apps',
@@ -882,7 +882,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 23,
   OrderIndex: 76,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 78,
   Subject: 'Try New Touch-Enabled WinForms Apps',
@@ -890,7 +890,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 3,
   OrderIndex: 77,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 79,
   Subject: 'Rollout New Touch-Enabled WinForms Apps',
@@ -898,7 +898,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 24,
   OrderIndex: 78,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 80,
   Subject: 'Site Up-Time Report',
@@ -906,7 +906,7 @@ export const tasks = [{
   Owner: 3,
   AssignedEmployee: 6,
   OrderIndex: 79,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 81,
   Subject: 'Review Site Up-Time Report',
@@ -914,7 +914,7 @@ export const tasks = [{
   Owner: 3,
   AssignedEmployee: 4,
   OrderIndex: 80,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 82,
   Subject: 'Review Online Sales Report',
@@ -922,7 +922,7 @@ export const tasks = [{
   Owner: 4,
   AssignedEmployee: 1,
   OrderIndex: 81,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 83,
   Subject: 'Determine New Online Marketing Strategy',
@@ -930,7 +930,7 @@ export const tasks = [{
   Owner: 4,
   AssignedEmployee: 8,
   OrderIndex: 82,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 84,
   Subject: 'New Online Marketing Strategy',
@@ -938,7 +938,7 @@ export const tasks = [{
   Owner: 8,
   AssignedEmployee: 42,
   OrderIndex: 83,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 85,
   Subject: 'Approve New Online Marketing Strategy',
@@ -946,7 +946,7 @@ export const tasks = [{
   Owner: 8,
   AssignedEmployee: 4,
   OrderIndex: 84,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 86,
   Subject: 'Submit New Website Design',
@@ -954,7 +954,7 @@ export const tasks = [{
   Owner: 8,
   AssignedEmployee: 28,
   OrderIndex: 85,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 87,
   Subject: 'Create Icons for Website',
@@ -962,7 +962,7 @@ export const tasks = [{
   Owner: 28,
   AssignedEmployee: 29,
   OrderIndex: 86,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 88,
   Subject: 'Review PSDs for New Website',
@@ -970,7 +970,7 @@ export const tasks = [{
   Owner: 28,
   AssignedEmployee: 6,
   OrderIndex: 87,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 89,
   Subject: 'Create New Shopping Cart',
@@ -978,7 +978,7 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 24,
   OrderIndex: 88,
-  Priority: 0
+  Priority: 0,
 }, {
   ID: 90,
   Subject: 'Create New Product Pages',
@@ -986,6 +986,6 @@ export const tasks = [{
   Owner: 6,
   AssignedEmployee: 25,
   OrderIndex: 89,
-  Priority: 0
-}
+  Priority: 0,
+},
 ];

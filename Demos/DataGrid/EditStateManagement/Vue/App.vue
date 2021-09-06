@@ -57,11 +57,11 @@ export default {
     DxDataGrid,
     DxColumn,
     DxEditing,
-    DxLoadPanel
+    DxLoadPanel,
   },
   data() {
     return {
-      loadPanelPosition: { of: '#gridContainer' }
+      loadPanelPosition: { of: '#gridContainer' },
     };
   },
   computed: {
@@ -72,7 +72,7 @@ export default {
       },
       set(value) {
         this.setEditRowKey(value);
-      }
+      },
     },
     changes: {
       get() {
@@ -80,17 +80,17 @@ export default {
       },
       set(value) {
         this.setChanges(value);
-      }
+      },
     },
     changesText: {
       get() {
         return JSON.stringify(this.changes.map((change) => ({
           type: change.type,
           key: change.type !== 'insert' ? change.key : undefined,
-          data: change.data
+          data: change.data,
         })), null, ' ');
-      }
-    }
+      },
+    },
   },
   created() {
     this.loadOrders();
@@ -100,8 +100,8 @@ export default {
     onSaving(e) {
       e.cancel = true;
       e.promise = this.saveChange(e.changes[0]);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -117,8 +117,8 @@ export default {
 
 .caption {
     margin-bottom: 10px;
-	font-weight: 500;
-	font-size: 18px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .option {

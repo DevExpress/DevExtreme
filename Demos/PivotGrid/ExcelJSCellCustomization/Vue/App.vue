@@ -19,7 +19,7 @@
 <script>
 import DxPivotGrid, {
   DxExport,
-  DxFieldChooser
+  DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
@@ -32,7 +32,7 @@ export default {
   components: {
     DxPivotGrid,
     DxExport,
-    DxFieldChooser
+    DxFieldChooser,
   },
   data() {
     return {
@@ -41,26 +41,26 @@ export default {
           caption: 'Region',
           dataField: 'region',
           area: 'row',
-          expanded: true
+          expanded: true,
         }, {
           caption: 'City',
           dataField: 'city',
           width: 150,
-          area: 'row'
+          area: 'row',
         }, {
           dataField: 'date',
           dataType: 'date',
-          area: 'column'
+          area: 'column',
         }, {
           caption: 'Sales',
           dataField: 'amount',
           dataType: 'number',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }],
-        store: sales
-      })
+        store: sales,
+      }),
     };
   },
   methods: {
@@ -70,7 +70,7 @@ export default {
 
       exportPivotGrid({
         component: e.component,
-        worksheet: worksheet,
+        worksheet,
         customizeCell: ({ pivotCell, excelCell }) => {
           if (this.isDataCell(pivotCell) || this.isTotalCell(pivotCell)) {
             const appearance = this.getConditionalAppearance(pivotCell);
@@ -82,9 +82,9 @@ export default {
             bottom: borderStyle,
             left: borderStyle,
             right: borderStyle,
-            top: borderStyle
+            top: borderStyle,
           };
-        }
+        },
       }).then(() => {
         workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
@@ -94,12 +94,12 @@ export default {
     },
     onCellPrepared({ cell, area, cellElement }) {
       cell.area = area;
-      if(this.isDataCell(cell) || this.isTotalCell(cell)) {
+      if (this.isDataCell(cell) || this.isTotalCell(cell)) {
         const appearance = this.getConditionalAppearance(cell);
         Object.assign(cellElement.style, this.getCssStyles(appearance));
       }
     },
-    isDataCell: function(cell) {
+    isDataCell(cell) {
       return (cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D');
     },
     isTotalCell(cell) {
@@ -108,30 +108,29 @@ export default {
     getExcelCellFormat({ fill, font, bold }) {
       return {
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: fill } },
-        font: { color: { argb: font }, bold }
+        font: { color: { argb: font }, bold },
       };
     },
     getCssStyles({ fill, font, bold }) {
       return {
         'background-color': `#${fill}`,
         color: `#${font}`,
-        'font-weight': bold ? 'bold' : undefined
+        'font-weight': bold ? 'bold' : undefined,
       };
     },
     getConditionalAppearance(cell) {
-      if(this.isTotalCell(cell)) {
+      if (this.isTotalCell(cell)) {
         return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
-      } else {
-        const { value } = cell;
-        if(value < 20000) {
-          return { font: '9C0006', fill: 'FFC7CE' };
-        }
-        if(value > 50000) {
-          return { font: '006100', fill: 'C6EFCE' };
-        }
-        return { font: '9C6500', fill: 'FFEB9C' };
       }
-    }
-  }
+      const { value } = cell;
+      if (value < 20000) {
+        return { font: '9C0006', fill: 'FFC7CE' };
+      }
+      if (value > 50000) {
+        return { font: '006100', fill: 'C6EFCE' };
+      }
+      return { font: '9C6500', fill: 'FFEB9C' };
+    },
+  },
 };
 </script>

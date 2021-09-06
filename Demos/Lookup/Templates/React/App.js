@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 
 import { employees } from './data.js';
@@ -40,6 +40,7 @@ class App extends React.Component {
       </div>
     );
   }
+
   getDisplayExpr(item) {
     return item ? `${item.FirstName} ${item.LastName}` : '';
   }

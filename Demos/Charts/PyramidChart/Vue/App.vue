@@ -37,7 +37,7 @@ import DxFunnel, {
   DxBorder,
   DxLegend,
   DxLabel,
-  DxFont
+  DxFont,
 } from 'devextreme-vue/funnel';
 
 import { dataSource } from './data.js';
@@ -52,13 +52,13 @@ export default {
     DxBorder,
     DxLegend,
     DxLabel,
-    DxFont
+    DxFont,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>
 

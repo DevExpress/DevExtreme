@@ -8,7 +8,7 @@ import Chart, {
   VisualRange,
   Format,
   Export,
-  Legend
+  Legend,
 } from 'devextreme-react/chart';
 import { inflationData } from './data.js';
 

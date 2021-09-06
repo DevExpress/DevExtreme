@@ -2,7 +2,6 @@ import React from 'react';
 import { CircularGauge, Scale, Geometry } from 'devextreme-react/circular-gauge';
 
 class App extends React.Component {
-
   render() {
     return (
       <div>

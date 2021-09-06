@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import Diagram, { CustomShape, ContextToolbox, PropertiesPanel, Group, Tab, Toolbox, Nodes, AutoLayout } from 'devextreme-react/diagram';
+import React from 'react';
+import Diagram, {
+  CustomShape, ContextToolbox, PropertiesPanel, Group, Tab, Toolbox, Nodes, AutoLayout,
+} from 'devextreme-react/diagram';
 import { Popup } from 'devextreme-react/popup';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
@@ -12,25 +14,25 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    var that = this;
+    const that = this;
     this.generatedID = 100;
     this.employees = service.getEmployees();
     this.diagramRef = React.createRef();
     this.dataSource = new ArrayStore({
       key: 'ID',
       data: this.employees,
-      onInserting: function(values, key) {
+      onInserting(values, key) {
         this.update(key, {
           ID: values.ID || that.generatedID++,
           Full_Name: values.Full_Name || "Employee's Name",
-          Title: values.Title || "Employee's Title"
+          Title: values.Title || "Employee's Title",
         });
-      }
+      },
     });
 
     this.state = {
       currentEmployee: {},
-      popupVisible: false
+      popupVisible: false,
     };
 
     this.onRequestLayoutUpdate = this.onRequestLayoutUpdate.bind(this);
@@ -49,131 +51,143 @@ class App extends React.Component {
     this.handleSkypeChange = this.handleSkypeChange.bind(this);
     this.handlePhoneChange = this.handlePhoneChange.bind(this);
   }
+
   itemTypeExpr() {
     return 'employee';
   }
+
   itemCustomDataExpr(obj, value) {
-    if(value === undefined) {
+    if (value === undefined) {
       return {
-        'Full_Name': obj.Full_Name,
-        'Prefix': obj.Prefix,
-        'Title': obj.Title,
-        'City': obj.City,
-        'State': obj.State,
-        'Email': obj.Email,
-        'Skype': obj.Skype,
-        'Mobile_Phone': obj.Mobile_Phone
+        Full_Name: obj.Full_Name,
+        Prefix: obj.Prefix,
+        Title: obj.Title,
+        City: obj.City,
+        State: obj.State,
+        Email: obj.Email,
+        Skype: obj.Skype,
+        Mobile_Phone: obj.Mobile_Phone,
       };
-    } else {
-      obj.Full_Name = value.Full_Name;
-      obj.Prefix = value.Prefix;
-      obj.Title = value.Title;
-      obj.City = value.City;
-      obj.State = value.State;
-      obj.Email = value.Email;
-      obj.Skype = value.Skype;
-      obj.Mobile_Phone = value.Mobile_Phone;
     }
+    obj.Full_Name = value.Full_Name;
+    obj.Prefix = value.Prefix;
+    obj.Title = value.Title;
+    obj.City = value.City;
+    obj.State = value.State;
+    obj.Email = value.Email;
+    obj.Skype = value.Skype;
+    obj.Mobile_Phone = value.Mobile_Phone;
   }
+
   onRequestLayoutUpdate(e) {
-    for(var i = 0; i < e.changes.length; i++) {
-      if(e.changes[i].type === 'remove') {
+    for (let i = 0; i < e.changes.length; i++) {
+      if (e.changes[i].type === 'remove') {
         e.allowed = true;
-      } else if(e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
+      } else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
         e.allowed = true;
       }
     }
   }
+
   customShapeTemplate(item) {
     return CustomShapeTemplate(item.dataItem,
-      function() { this.editEmployee(item.dataItem); }.bind(this),
-      function() { this.deleteEmployee(item.dataItem); }.bind(this)
-    );
+      () => { this.editEmployee(item.dataItem); },
+      () => { this.deleteEmployee(item.dataItem); });
   }
+
   customShapeToolboxTemplate() {
     return CustomShapeToolboxTemplate();
   }
+
   editEmployee(employee) {
     this.setState({
-      currentEmployee: Object.assign({}, employee),
-      popupVisible: true
+      currentEmployee: { ...employee },
+      popupVisible: true,
     });
   }
+
   deleteEmployee(employee) {
     this.dataSource.push([{ type: 'remove', key: employee.ID }]);
   }
+
   updateEmployee() {
     this.dataSource.push([{
       type: 'update',
       key: this.state.currentEmployee.ID,
       data: {
-        'Full_Name': this.state.currentEmployee.Full_Name,
-        'Title': this.state.currentEmployee.Title,
-        'City': this.state.currentEmployee.City,
-        'State': this.state.currentEmployee.State,
-        'Email': this.state.currentEmployee.Email,
-        'Skype': this.state.currentEmployee.Skype,
-        'Mobile_Phone': this.state.currentEmployee.Mobile_Phone
-      }
+        Full_Name: this.state.currentEmployee.Full_Name,
+        Title: this.state.currentEmployee.Title,
+        City: this.state.currentEmployee.City,
+        State: this.state.currentEmployee.State,
+        Email: this.state.currentEmployee.Email,
+        Skype: this.state.currentEmployee.Skype,
+        Mobile_Phone: this.state.currentEmployee.Mobile_Phone,
+      },
     }]);
     this.setState({
       currentEmployee: {},
-      popupVisible: false
+      popupVisible: false,
     });
   }
+
   cancelEditEmployee() {
     this.setState({
       currentEmployee: {},
-      popupVisible: false
+      popupVisible: false,
     });
   }
 
   handleChange(field, value) {
-    var currentEmployee = Object.assign({}, this.state.currentEmployee);
+    const currentEmployee = { ...this.state.currentEmployee };
     currentEmployee[field] = value;
     this.setState({
-      currentEmployee
+      currentEmployee,
     });
   }
+
   handleNameChange(e) {
     this.handleChange('Full_Name', e.value);
   }
+
   handleTitleChange(e) {
     this.handleChange('Title', e.value);
   }
+
   handleCityChange(e) {
     this.handleChange('City', e.value);
   }
+
   handleStateChange(e) {
     this.handleChange('State', e.value);
   }
+
   handleEmailChange(e) {
     this.handleChange('Email', e.value);
   }
+
   handleSkypeChange(e) {
     this.handleChange('Skype', e.value);
   }
+
   handlePhoneChange(e) {
     this.handleChange('Mobile_Phone', e.value);
   }
 
   render() {
-    var popupContentRender = () => {
-      return (
-        <PopupContentFunc
-          currentEmployee={this.state.currentEmployee}
-          handleNameChange={this.handleNameChange}
-          handleTitleChange={this.handleTitleChange}
-          handleCityChange={this.handleCityChange}
-          handleStateChange={this.handleStateChange}
-          handleEmailChange={this.handleEmailChange}
-          handleSkypeChange={this.handleSkypeChange}
-          handlePhoneChange={this.handlePhoneChange}
-          updateEmployeeClick={this.updateEmployee}
-          cancelEditEmployeeClick={this.cancelEditEmployee}
-        />
-      );
-    };
+    const popupContentRender = () => (
+      <PopupContentFunc
+        currentEmployee={this.state.currentEmployee}
+        handleNameChange={this.handleNameChange}
+        handleTitleChange={this.handleTitleChange}
+        handleCityChange={this.handleCityChange}
+        handleStateChange={this.handleStateChange}
+        handleEmailChange={this.handleEmailChange}
+        handleSkypeChange={this.handleSkypeChange}
+        handlePhoneChange={this.handlePhoneChange}
+        updateEmployeeClick={this.updateEmployee}
+        cancelEditEmployeeClick={this.cancelEditEmployee}
+      />
+    );
     return (
       <div id="container">
         <Diagram id="diagram" ref={this.diagramRef} customShapeRender={this.customShapeTemplate} customShapeToolboxRender={this.customShapeToolboxTemplate} onRequestLayoutUpdate={this.onRequestLayoutUpdate}>

@@ -53,15 +53,15 @@ export default {
     DxScheduler,
     DxDraggable,
     DxScrollView,
-    DxAppointmentDragging
+    DxAppointmentDragging,
   },
   data() {
     return {
       draggingGroupName: 'appointmentsGroup',
       views: [{ type: 'day', intervalCount: 3 }],
       currentDate: new Date(2021, 3, 26),
-      tasks: tasks,
-      appointments: appointments
+      tasks,
+      appointments,
     };
   },
   methods: {
@@ -97,8 +97,8 @@ export default {
       if (e.toData) {
         e.cancel = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

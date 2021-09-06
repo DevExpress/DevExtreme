@@ -44,22 +44,24 @@
   </div>
 </template>
 <script>
+import {
+  DxChart, DxPane, DxSeries, DxCommonAxisSettings, DxValueAxis, DxTooltip, DxCrosshair, DxHorizontalLine, DxLabel, DxLegend,
+} from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
-import { DxChart, DxPane, DxSeries, DxCommonAxisSettings, DxValueAxis, DxTooltip, DxCrosshair, DxHorizontalLine, DxLabel, DxLegend } from 'devextreme-vue/chart';
 
 export default {
   components: {
-    DxChart, DxPane, DxSeries, DxCommonAxisSettings, DxValueAxis, DxTooltip, DxCrosshair, DxHorizontalLine, DxLabel, DxLegend
+    DxChart, DxPane, DxSeries, DxCommonAxisSettings, DxValueAxis, DxTooltip, DxCrosshair, DxHorizontalLine, DxLabel, DxLegend,
   },
   data() {
     return {
-      dataSource: dataSource,
+      dataSource,
       crosshairFormat: {
         type: 'fixedPoint',
-        precision: 2
-      }
+        precision: 2,
+      },
     };
-  }
+  },
 };
 </script>
 <style scoped>

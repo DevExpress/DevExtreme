@@ -20,8 +20,8 @@ export const housesSource = [{
   Agent: {
     Name: 'John Heart',
     Phone: '(213) 555-9392',
-    Picture: '../../../../images/employees/01.png'
-  }
+    Picture: '../../../../images/employees/01.png',
+  },
 },
 {
   ID: '2',
@@ -44,8 +44,8 @@ export const housesSource = [{
   Agent: {
     Name: 'Olivia Peyton',
     Phone: '(310) 555-2728',
-    Picture: '../../../../images/employees/09.png'
-  }
+    Picture: '../../../../images/employees/09.png',
+  },
 },
 {
   ID: '3',
@@ -68,8 +68,8 @@ export const housesSource = [{
   Agent: {
     Name: 'Robert Reagan',
     Phone: '(818) 555-2387',
-    Picture: '../../../../images/employees/03.png'
-  }
+    Picture: '../../../../images/employees/03.png',
+  },
 },
 {
   ID: '4',
@@ -92,8 +92,8 @@ export const housesSource = [{
   Agent: {
     Name: 'Greta Sims',
     Phone: '(818) 555-6546',
-    Picture: '../../../../images/employees/04.png'
-  }
+    Picture: '../../../../images/employees/04.png',
+  },
 },
 {
   ID: '5',
@@ -116,8 +116,8 @@ export const housesSource = [{
   Agent: {
     Name: 'John Heart',
     Phone: '(213) 555-9392',
-    Picture: '../../../../images/employees/01.png'
-  }
+    Picture: '../../../../images/employees/01.png',
+  },
 },
 {
   ID: '6',
@@ -140,8 +140,8 @@ export const housesSource = [{
   Agent: {
     Name: 'Olivia Peyton',
     Phone: '(310) 555-2728',
-    Picture: '../../../../images/employees/09.png'
-  }
+    Picture: '../../../../images/employees/09.png',
+  },
 },
 {
   ID: '7',
@@ -164,8 +164,8 @@ export const housesSource = [{
   Agent: {
     Name: 'Robert Reagan',
     Phone: '(818) 555-2387',
-    Picture: '../../../../images/employees/03.png'
-  }
+    Picture: '../../../../images/employees/03.png',
+  },
 },
 {
   ID: '8',
@@ -188,8 +188,8 @@ export const housesSource = [{
   Agent: {
     Name: 'Greta Sims',
     Phone: '(818) 555-6546',
-    Picture: '../../../../images/employees/04.png'
-  }
+    Picture: '../../../../images/employees/04.png',
+  },
 },
 {
   ID: '9',
@@ -212,7 +212,7 @@ export const housesSource = [{
   Agent: {
     Name: 'John Heart',
     Phone: '(213) 555-9392',
-    Picture: '../../../../images/employees/01.png'
-  }
-}
+    Picture: '../../../../images/employees/01.png',
+  },
+},
 ];

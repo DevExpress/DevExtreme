@@ -67,7 +67,9 @@
 <script>
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import DxTreeView from 'devextreme-vue/tree-view';
-import { DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling,
+} from 'devextreme-vue/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 
@@ -79,7 +81,7 @@ export default {
     DxSelection,
     DxPaging,
     DxFilterRow,
-    DxScrolling
+    DxScrolling,
   },
   data() {
     return {
@@ -88,7 +90,7 @@ export default {
       gridDataSource: null,
       gridBoxValue: [3],
       treeViewName: 'tree-view',
-      gridColumns: ['CompanyName', 'City', 'Phone']
+      gridColumns: ['CompanyName', 'City', 'Phone'],
     };
   },
   created() {
@@ -101,21 +103,21 @@ export default {
       return new CustomStore({
         loadMode: 'raw',
         key: 'ID',
-        load: function() {
-          return fetch(`../../../../data/${ jsonFile}`)
-            .then(response => response.json());
-        }
+        load() {
+          return fetch(`../../../../data/${jsonFile}`)
+            .then((response) => response.json());
+        },
       });
     },
     syncTreeViewSelection(e) {
-      let treeView = (e.component.selectItem && e.component) || (this.$refs[this.treeViewName] && this.$refs[this.treeViewName].instance);
+      const treeView = (e.component.selectItem && e.component) || (this.$refs[this.treeViewName] && this.$refs[this.treeViewName].instance);
 
       if (treeView) {
         if (e.value === null) {
           treeView.unselectAll();
         } else {
-          let values = e.value || this.treeBoxValue;
-          values && values.forEach(function(value) {
+          const values = e.value || this.treeBoxValue;
+          values && values.forEach((value) => {
             treeView.selectItem(value);
           });
         }
@@ -123,8 +125,8 @@ export default {
     },
     treeView_itemSelectionChanged(e) {
       this.treeBoxValue = e.component.getSelectedNodeKeys();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

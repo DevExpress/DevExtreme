@@ -16,7 +16,7 @@ class App extends React.Component {
       allowDeleting: true,
       allowResizing: true,
       allowDragging: true,
-      allowUpdating: true
+      allowUpdating: true,
     };
     this.onAllowAddingChanged = this.onAllowAddingChanged.bind(this);
     this.onAllowDeletingChanged = this.onAllowDeletingChanged.bind(this);

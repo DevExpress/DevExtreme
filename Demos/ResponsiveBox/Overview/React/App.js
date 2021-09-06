@@ -4,7 +4,7 @@ import ResponsiveBox, {
   Row,
   Col,
   Item,
-  Location
+  Location,
 } from 'devextreme-react/responsive-box';
 
 function screen(width) {

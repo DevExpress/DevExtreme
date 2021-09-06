@@ -14,20 +14,19 @@ const formatCurrency = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
-  maximumFractionDigits: 2
+  maximumFractionDigits: 2,
 }).format;
 
 const favButtonAttrs = {
-  class: 'favorites'
+  class: 'favorites',
 };
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      currentHouse: housesSource[0]
+      currentHouse: housesSource[0],
     };
 
     this.renderPopup = this.renderPopup.bind(this);
@@ -40,13 +39,11 @@ class App extends React.Component {
     return (
       <div className="images">
         {
-          housesSource.map((h) =>
-            <House
-              house={h}
-              show={this.showHouse}
-              key={h.ID}
-            />
-          )
+          housesSource.map((h) => <House
+            house={h}
+            show={this.showHouse}
+            key={h.ID}
+          />)
         }
         <Popup
           width={660}
@@ -64,7 +61,7 @@ class App extends React.Component {
   }
 
   renderPopup() {
-    const currentHouse = this.state.currentHouse;
+    const { currentHouse } = this.state;
     return (
       <div className="popup-property-details">
         <div className="large-text">{formatCurrency(currentHouse.Price)}</div>
@@ -89,33 +86,32 @@ class App extends React.Component {
   showHouse(house) {
     this.setState({
       currentHouse: house,
-      popupVisible: true
+      popupVisible: true,
     });
   }
 
   handlePopupHidden() {
     this.setState({
-      popupVisible: false
+      popupVisible: false,
     });
   }
 
   changeFavoriteState() {
-    const currentHouse = this.state.currentHouse;
+    const { currentHouse } = this.state;
     currentHouse.Favorite = !currentHouse.Favorite;
 
     this.renderPopup = this.renderPopup.bind(this);
     this.setState({
-      currentHouse
+      currentHouse,
     });
 
     notify({
       message: `This item has been ${
         currentHouse.Favorite ? 'added to' : 'removed from'
       } the Favorites list!`,
-      width: 450
+      width: 450,
     },
-    currentHouse.Favorite ? 'success' : 'error', 2000
-    );
+    currentHouse.Favorite ? 'success' : 'error', 2000);
   }
 }
 

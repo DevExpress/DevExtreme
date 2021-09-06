@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
@@ -8,12 +8,11 @@ import Chart, {
   Label,
   Format,
   Legend,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 import { versionSources, statisticsData } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart
@@ -28,9 +27,7 @@ class App extends React.Component {
           type="stackedarea"
         />
         {
-          versionSources.map(({ value, name }) => {
-            return <Series key={value} valueField={value} name={name} />;
-          })
+          versionSources.map(({ value, name }) => <Series key={value} valueField={value} name={name} />)
         }
         <CommonAxisSettings valueMarginsEnabled={false} />
         <ArgumentAxis type="discrete" />

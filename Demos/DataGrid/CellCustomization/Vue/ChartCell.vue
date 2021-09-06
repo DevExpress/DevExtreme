@@ -22,20 +22,20 @@
 import {
   DxSparkline,
   DxSize,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/sparkline';
 
 export default {
   components: {
     DxSparkline,
     DxSize,
-    DxTooltip
+    DxTooltip,
   },
   props: {
     cellData: {
       type: Array,
-      default: () => []
-    }
-  }
+      default: () => [],
+    },
+  },
 };
 </script>

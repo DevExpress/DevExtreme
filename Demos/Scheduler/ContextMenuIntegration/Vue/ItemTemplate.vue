@@ -14,14 +14,14 @@ export default {
   props: {
     itemData: {
       type: Object,
-      default: function() { }
+      default() { },
     },
   },
   data() {
     return {
-      styleObject: { backgroundColor: this.itemData.color }
+      styleObject: { backgroundColor: this.itemData.color },
     };
-  }
+  },
 };
 </script>
 

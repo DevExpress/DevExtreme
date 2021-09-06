@@ -53,12 +53,12 @@
 import DxChart, {
   DxSeries,
   DxLabel,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/chart';
 import DxPieChart, {
   DxSeries as DxPieSeries,
   DxLabel as DxPieLabel,
-  DxConnector
+  DxConnector,
 } from 'devextreme-vue/pie-chart';
 import { exportWidgets } from 'devextreme/viz/export';
 import DxButton from 'devextreme-vue/button';
@@ -74,12 +74,12 @@ export default {
     DxPieSeries,
     DxPieLabel,
     DxConnector,
-    DxButton
+    DxButton,
   },
   data() {
     return {
       allMedals,
-      goldMedals
+      goldMedals,
     };
   },
   methods: {
@@ -89,10 +89,10 @@ export default {
 
       exportWidgets([[chartInstance, pieChartInstance]], {
         fileName: 'chart',
-        format: 'PNG'
+        format: 'PNG',
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

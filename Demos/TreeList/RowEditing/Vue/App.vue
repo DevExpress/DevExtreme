@@ -57,33 +57,35 @@
   </div>
 </template>
 <script>
+import {
+  DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxButton,
+} from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
-import { DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxButton } from 'devextreme-vue/tree-list';
 
 export default {
   components: {
-    DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxButton
+    DxTreeList, DxEditing, DxColumn, DxRequiredRule, DxLookup, DxButton,
   },
   data() {
     return {
-      employees: employees,
+      employees,
       expandedRowKeys: [1, 2, 3, 4, 5],
       dataSource: {
         store: employees,
-        sort: 'Full_Name'
-      }
+        sort: 'Full_Name',
+      },
     };
   },
   methods: {
     onEditorPreparing(e) {
-      if(e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+      if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
         e.cancel = true;
       }
     },
     onInitNewRow(e) {
       e.data.Head_ID = 1;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

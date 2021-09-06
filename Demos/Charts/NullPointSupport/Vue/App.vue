@@ -39,7 +39,7 @@ import DxChart, {
   DxSeries,
   DxCommonSeriesSettings,
   DxExport,
-  DxPoint
+  DxPoint,
 } from 'devextreme-vue/chart';
 
 import { medalsInfo } from './data.js';
@@ -53,13 +53,13 @@ export default {
     DxSeries,
     DxCommonSeriesSettings,
     DxExport,
-    DxPoint
+    DxPoint,
   },
   data() {
     return {
-      medalsInfo
+      medalsInfo,
     };
-  }
+  },
 };
 </script>
 <style>

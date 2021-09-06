@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <DxPolarChart
     id="radarChart"
     :data-source="dataSource"
@@ -99,7 +99,7 @@ import {
   DxAnnotation,
   DxArgumentAxis,
   DxStrip,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/polar-chart';
 
 import { dataSource, maxDay, minNight } from './data.js';
@@ -114,7 +114,7 @@ export default {
     DxAnnotation,
     DxArgumentAxis,
     DxStrip,
-    DxLegend
+    DxLegend,
   },
 
   data() {
@@ -123,9 +123,9 @@ export default {
       maxDay,
       minNight,
       maxTempText: `Highest temperature: ${maxDay.day} °C`,
-      minTempText: `Lowest temperature: ${minNight.night} °C`
+      minTempText: `Lowest temperature: ${minNight.night} °C`,
     };
-  }
+  },
 };
 </script>
 <style>

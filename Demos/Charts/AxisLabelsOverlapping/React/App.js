@@ -1,11 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   Chart,
   Series,
   ArgumentAxis,
   Legend,
-  Label
+  Label,
 } from 'devextreme-react/chart';
 import { overlappingModes, population } from './data.js';
 
@@ -13,7 +13,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMode: overlappingModes[0]
+      currentMode: overlappingModes[0],
     };
     this.handleChange = this.handleChange.bind(this);
   }

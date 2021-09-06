@@ -3,7 +3,7 @@ import PieChart, {
   Series,
   Label,
   Legend,
-  Connector
+  Connector,
 } from 'devextreme-react/pie-chart';
 
 function PieChartComponent({ data = [] }) {

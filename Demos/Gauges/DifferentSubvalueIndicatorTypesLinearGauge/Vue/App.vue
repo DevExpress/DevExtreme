@@ -94,17 +94,19 @@
 </template>
 <script>
 
-import { DxLinearGauge, DxScale, DxSubvalueIndicator, DxLabel } from 'devextreme-vue/linear-gauge';
+import {
+  DxLinearGauge, DxScale, DxSubvalueIndicator, DxLabel,
+} from 'devextreme-vue/linear-gauge';
 
 export default {
   components: {
-    DxLinearGauge, DxScale, DxSubvalueIndicator, DxLabel
+    DxLinearGauge, DxScale, DxSubvalueIndicator, DxLabel,
   },
   methods: {
     customizeText({ valueText }) {
       return `$${valueText}`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

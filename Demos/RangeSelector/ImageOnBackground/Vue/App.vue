@@ -44,7 +44,7 @@ import {
   DxScale,
   DxTickInterval,
   DxMinorTickInterval,
-  DxLabel
+  DxLabel,
 } from 'devextreme-vue/range-selector';
 
 export default {
@@ -58,15 +58,15 @@ export default {
     DxScale,
     DxTickInterval,
     DxMinorTickInterval,
-    DxLabel
+    DxLabel,
   },
   data() {
     return {
       startValue: new Date(2012, 8, 29, 0, 0, 0),
       endValue: new Date(2012, 8, 29, 24, 0, 0),
-      range: [new Date(2012, 8, 29, 11, 0, 0), new Date(2012, 8, 29, 17, 0, 0)]
+      range: [new Date(2012, 8, 29, 11, 0, 0), new Date(2012, 8, 29, 17, 0, 0)],
     };
-  }
+  },
 };
 </script>
 <style scoped>

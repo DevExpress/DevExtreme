@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
@@ -8,7 +8,7 @@ import Chart, {
   Legend,
   Label,
   Title,
-  Grid
+  Grid,
 } from 'devextreme-react/chart';
 import { weatherData } from './data.js';
 

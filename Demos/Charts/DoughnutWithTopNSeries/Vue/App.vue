@@ -41,7 +41,7 @@ import DxPieChart, {
   DxFormat,
   DxLabel,
   DxConnector,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/pie-chart';
 
 import { internetLanguages } from './data.js';
@@ -55,18 +55,18 @@ export default {
     DxFormat,
     DxLabel,
     DxConnector,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      internetLanguages
+      internetLanguages,
     };
   },
   methods: {
     customizeLabel(pointInfo) {
       return `${pointInfo.argumentText}: ${pointInfo.valueText}%`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

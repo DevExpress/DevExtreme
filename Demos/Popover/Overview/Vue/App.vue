@@ -118,7 +118,7 @@ import { DxPopover } from 'devextreme-vue/popover';
 
 export default {
   components: {
-    DxPopover
+    DxPopover,
   },
   data() {
     return {
@@ -130,18 +130,18 @@ export default {
         show: {
           type: 'pop',
           from: {
-            scale: 0
+            scale: 0,
           },
           to: {
-            scale: 1
-          }
+            scale: 1,
+          },
         },
         hide: {
           type: 'fade',
           from: 1,
-          to: 0
-        }
-      }
+          to: 0,
+        },
+      },
     };
   },
   methods: {
@@ -159,8 +159,8 @@ export default {
 
     showWithShadingOptions() {
       this.withShadingOptionsVisible = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

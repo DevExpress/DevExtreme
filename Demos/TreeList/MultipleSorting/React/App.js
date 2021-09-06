@@ -1,5 +1,7 @@
 import React from 'react';
-import { TreeList, Sorting, Column, Lookup } from 'devextreme-react/tree-list';
+import {
+  TreeList, Sorting, Column, Lookup,
+} from 'devextreme-react/tree-list';
 import { tasks, employees } from './data.js';
 
 const statuses = [
@@ -7,7 +9,7 @@ const statuses = [
   'Need Assistance',
   'In Progress',
   'Deferred',
-  'Completed'
+  'Completed',
 ];
 
 class App extends React.Component {

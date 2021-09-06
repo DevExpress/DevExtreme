@@ -6,6 +6,6 @@ export const dataSource = [
   { country: 'Australia', copper: 990000 },
   { country: 'Russia', copper: 930000 },
   { country: 'DR Congo', copper: 900000 },
-  { country: 'Finland', copper: 119000 }
+  { country: 'Finland', copper: 119000 },
 ];
 

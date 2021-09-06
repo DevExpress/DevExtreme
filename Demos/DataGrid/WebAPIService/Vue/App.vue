@@ -112,11 +112,11 @@ import {
   DxStringLengthRule,
   DxRequiredRule,
   DxRangeRule,
-  DxValueFormat
+  DxValueFormat,
 } from 'devextreme-vue/data-grid';
 
-import MasterDetailGrid from './MasterDetailGrid.vue';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+import MasterDetailGrid from './MasterDetailGrid.vue';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 
@@ -128,7 +128,7 @@ const dataSource = createStore({
   deleteUrl: `${url}/DeleteOrder`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const customersData = createStore({
@@ -136,7 +136,7 @@ const customersData = createStore({
   loadUrl: `${url}/CustomersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const shippersData = createStore({
@@ -144,7 +144,7 @@ const shippersData = createStore({
   loadUrl: `${url}/ShippersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 export default {
@@ -166,15 +166,15 @@ export default {
     DxRangeRule,
     DxRequiredRule,
     DxValueFormat,
-    MasterDetailGrid
+    MasterDetailGrid,
   },
   data() {
     return {
       url,
       customersData,
       shippersData,
-      dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>

@@ -28,13 +28,13 @@ import { DxProgressBar } from 'devextreme-vue/progress-bar';
 const maxValue = 10;
 
 function statusFormat(value) {
-  return `Loading: ${ value * 100 }%`;
+  return `Loading: ${value * 100}%`;
 }
 
 export default {
   components: {
     DxButton,
-    DxProgressBar
+    DxProgressBar,
   },
   data() {
     return {
@@ -42,17 +42,17 @@ export default {
       seconds: maxValue,
       buttonText: 'Start progress',
       inProgress: false,
-      statusFormat
+      statusFormat,
     };
   },
   computed: {
     progressValue() {
       return maxValue - this.seconds;
-    }
+    },
   },
   methods: {
     time(value) {
-      return `00:00:${ (`0${ value}`).slice(-2)}`;
+      return `00:00:${(`0${value}`).slice(-2)}`;
     },
     onButtonClick() {
       if (this.inProgress) {
@@ -72,14 +72,14 @@ export default {
     },
 
     timer() {
-      this.seconds = this.seconds - 1;
+      this.seconds -= 1;
 
       if (this.seconds == 0) {
         this.buttonText = 'Restart progress';
         this.inProgress = !this.inProgress;
         clearInterval(this.intervalId);
       }
-    }
+    },
   },
 };
 </script>

@@ -1,13 +1,12 @@
 import React from 'react';
-import { zoomingData } from './data.js';
-
 import Chart, {
   ArgumentAxis,
   Series,
   ZoomAndPan,
   Legend,
-  ScrollBar
+  ScrollBar,
 } from 'devextreme-react/chart';
+import { zoomingData } from './data.js';
 
 class App extends React.Component {
   render() {

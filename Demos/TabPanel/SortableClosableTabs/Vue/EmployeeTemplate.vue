@@ -37,22 +37,24 @@ export default {
   props: {
     templateData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
-    const { FirstName, LastName, Picture, Position, Notes } = this.templateData;
-    const employeeTasks = tasks.filter(task => task.EmployeeID === this.templateData.ID);
+    const {
+      FirstName, LastName, Picture, Position, Notes,
+    } = this.templateData;
+    const employeeTasks = tasks.filter((task) => task.EmployeeID === this.templateData.ID);
 
     return {
       dataSource: employeeTasks,
-      completedTasks: employeeTasks.filter(task => task.Status === 'Completed'),
-      detailInfo: `${ FirstName } ${ LastName }'s Tasks:`,
+      completedTasks: employeeTasks.filter((task) => task.Status === 'Completed'),
+      detailInfo: `${FirstName} ${LastName}'s Tasks:`,
       picture: Picture,
       position: Position,
-      notes: Notes
+      notes: Notes,
     };
-  }
+  },
 };
 </script>
 <style>

@@ -1,5 +1,7 @@
 import React from 'react';
-import RangeSelector, { Margin, Scale, Label, Behavior, Format } from 'devextreme-react/range-selector';
+import RangeSelector, {
+  Margin, Scale, Label, Behavior, Format,
+} from 'devextreme-react/range-selector';
 import DataGrid from 'devextreme-react/data-grid';
 import { employees } from './data.js';
 
@@ -10,10 +12,11 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      selectedEmployees: employees
+      selectedEmployees: employees,
     };
     this.filterEmployees = this.filterEmployees.bind(this);
   }
+
   render() {
     return (
       <React.Fragment>
@@ -42,9 +45,10 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+
   filterEmployees({ value }) {
     this.setState({
-      selectedEmployees: employees.filter(employee => employee.BirthYear >= value[0] && employee.BirthYear <= value[1] || !value.length)
+      selectedEmployees: employees.filter((employee) => employee.BirthYear >= value[0] && employee.BirthYear <= value[1] || !value.length),
     });
   }
 }

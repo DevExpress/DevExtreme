@@ -11,7 +11,7 @@ class App extends React.Component {
     super();
 
     this.state = {
-      direction: 'horizontal'
+      direction: 'horizontal',
     };
 
     this.directionChanged = this.directionChanged.bind(this);
@@ -47,7 +47,7 @@ class App extends React.Component {
 
   directionChanged(e) {
     this.setState({
-      direction: e.value
+      direction: e.value,
     });
   }
 }

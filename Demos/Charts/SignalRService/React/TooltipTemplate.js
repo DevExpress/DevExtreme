@@ -1,16 +1,15 @@
 import React from 'react';
 
 const formatCurrency = new Intl.NumberFormat('en-US',
-  { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }
-).format;
+  { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format;
 
 const formatNumber = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 0
+  minimumFractionDigits: 0,
 }).format;
 
 export default function TooltipTemplate(pointInfo) {
-  const volume = pointInfo.points.filter(point => point.seriesName === 'Volume')[0];
-  const prices = pointInfo.points.filter(point => point.seriesName !== 'Volume')[0];
+  const volume = pointInfo.points.filter((point) => point.seriesName === 'Volume')[0];
+  const prices = pointInfo.points.filter((point) => point.seriesName !== 'Volume')[0];
 
   return (
     <div className="tooltip-template">

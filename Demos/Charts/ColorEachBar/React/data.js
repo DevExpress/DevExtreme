@@ -5,5 +5,5 @@ export const dataSource = [
   { age: '35-44', number: 38420000 },
   { age: '45-54', number: 32340000 },
   { age: '55-64', number: 14060000 },
-  { age: '65+', number: 20020000 }
+  { age: '65+', number: 20020000 },
 ];

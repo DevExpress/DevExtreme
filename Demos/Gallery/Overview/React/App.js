@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Gallery from 'devextreme-react/gallery';
 import CheckBox from 'devextreme-react/check-box';
 import { gallery } from './data.js';
@@ -6,7 +6,9 @@ import { gallery } from './data.js';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loop: true, slideShow: true, showNavButtons: true, showIndicator: true };
+    this.state = {
+      loop: true, slideShow: true, showNavButtons: true, showIndicator: true,
+    };
     this.onLoopChanged = this.onLoopChanged.bind(this);
     this.onSlideShowChanged = this.onSlideShowChanged.bind(this);
     this.onShowNavButtonsChanged = this.onShowNavButtonsChanged.bind(this);
@@ -47,22 +49,25 @@ class App extends React.Component {
 
   onLoopChanged(data) {
     this.setState({
-      loop: data.value
+      loop: data.value,
     });
   }
+
   onSlideShowChanged(data) {
     this.setState({
-      slideShow: data.value
+      slideShow: data.value,
     });
   }
+
   onShowNavButtonsChanged(data) {
     this.setState({
-      showNavButtons: data.value
+      showNavButtons: data.value,
     });
   }
+
   onShowIndicatorChanged(data) {
     this.setState({
-      showIndicator: data.value
+      showIndicator: data.value,
     });
   }
 }

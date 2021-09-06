@@ -32,17 +32,17 @@ export default {
   props: {
     scheduler: {
       type: Object,
-      default: () => { }
+      default: () => { },
     },
     templateTooltipModel: {
       type: Object,
-      default: () => { }
-    }
+      default: () => { },
+    },
   },
   data() {
     return {
-      dayOfWeekNames: dayOfWeekNames,
-      movieData: getMovieById(this.templateTooltipModel.appointmentData.movieId)
+      dayOfWeekNames,
+      movieData: getMovieById(this.templateTooltipModel.appointmentData.movieId),
     };
   },
 };

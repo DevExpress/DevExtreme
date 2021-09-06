@@ -7,7 +7,7 @@ import Chart, {
   Label,
   Legend,
   Border,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 
 import { dataSource } from './data.js';

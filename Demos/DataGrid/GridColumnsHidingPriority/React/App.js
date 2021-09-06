@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 
 import service from './data.js';
@@ -8,6 +8,7 @@ class App extends React.Component {
     super(props);
     this.dataSource = service.getOrders();
   }
+
   render() {
     return (
       <div>

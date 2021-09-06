@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Chart, SeriesTemplate, CommonSeriesSettings, Title } from 'devextreme-react/chart';
+import {
+  Chart, SeriesTemplate, CommonSeriesSettings, Title,
+} from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 
 class App extends React.Component {

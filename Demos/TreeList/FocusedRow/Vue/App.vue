@@ -86,7 +86,7 @@ export default {
     DxTreeList,
     DxColumn,
     DxLookup,
-    DxNumberBox
+    DxNumberBox,
   },
   data() {
     return {
@@ -97,24 +97,24 @@ export default {
       taskProgress: '',
       dataSource: AspNetData.createStore({
         key: 'Task_ID',
-        loadUrl: `${url }/Tasks`,
-        onBeforeSend: function(_, ajaxOptions) {
+        loadUrl: `${url}/Tasks`,
+        onBeforeSend(_, ajaxOptions) {
           ajaxOptions.xhrFields = { withCredentials: true };
-        }
+        },
       }),
       taskEmployees: AspNetData.createStore({
         key: 'ID',
         loadMode: 'raw',
-        loadUrl: `${url}/TaskEmployees`
+        loadUrl: `${url}/TaskEmployees`,
       }),
-      focusedRowKey: 4
+      focusedRowKey: 4,
     };
   },
   methods: {
-    onFocusedRowChanged: function(e) {
-      var rowData = e.row && e.row.data,
-        cellValue,
-        assigned;
+    onFocusedRowChanged(e) {
+      const rowData = e.row && e.row.data;
+      let cellValue;
+      let assigned;
 
       if (rowData) {
         cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
@@ -128,10 +128,10 @@ export default {
 
         this.taskStatus = rowData.Task_Status;
         this.taskProgress = rowData.Task_Completion
-          ? `${rowData.Task_Completion }%`
+          ? `${rowData.Task_Completion}%`
           : '';
       }
-    }
-  }
+    },
+  },
 };
 </script>

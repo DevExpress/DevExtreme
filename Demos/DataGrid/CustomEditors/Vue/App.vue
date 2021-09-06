@@ -99,7 +99,7 @@ import {
   DxEditing,
   DxColumn,
   DxLookup,
-  DxRequiredRule
+  DxRequiredRule,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import { statuses } from './data.js';
@@ -110,10 +110,10 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
 
 const employees = createStore({
   key: 'ID',
-  loadUrl: `${url }/Employees`,
-  onBeforeSend: function(method, ajaxOptions) {
+  loadUrl: `${url}/Employees`,
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const tasks = createStore({
@@ -121,9 +121,9 @@ const tasks = createStore({
   loadUrl: `${url}/Tasks`,
   updateUrl: `${url}/UpdateTask`,
   insertUrl: `${url}/InsertTask`,
-  onBeforeSend: function(method, ajaxOptions) {
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 export default {
@@ -137,39 +137,37 @@ export default {
     DxLookup,
     DxRequiredRule,
     EmployeeDropDownBoxComponent,
-    EmployeeTagBoxComponent
+    EmployeeTagBoxComponent,
   },
   data() {
     return {
-      tasks: tasks,
-      employees: employees,
-      statuses: statuses,
+      tasks,
+      employees,
+      statuses,
       dropDownOptions: { width: 400 },
       editorOptions: { itemTemplate: 'statusTemplate' },
-      calculateFilterExpression: function(filterValue, selectedFilterOperation, target) {
-        if(target === 'search' && typeof (filterValue) === 'string') {
+      calculateFilterExpression(filterValue, selectedFilterOperation, target) {
+        if (target === 'search' && typeof (filterValue) === 'string') {
           return [this.dataField, 'contains', filterValue];
         }
         return function(data) {
           return (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
         };
-      }
+      },
     };
   },
   methods: {
     cellTemplate(container, options) {
-      var noBreakSpace = '\u00A0',
-        text = (options.value || []).map(element => {
-          return options.column.lookup.calculateCellValue(element);
-        }).join(', ');
+      const noBreakSpace = '\u00A0';
+      const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
       container.textContent = text || noBreakSpace;
       container.title = text;
     },
     onValueChanged(value, cellInfo) {
       cellInfo.setValue(value);
       cellInfo.component.updateDimensions();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

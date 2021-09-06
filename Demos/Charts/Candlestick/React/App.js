@@ -11,7 +11,7 @@ import Chart, {
   Title,
   Legend,
   Export,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/chart';
 
 import { dataSource } from './data.js';
@@ -65,7 +65,7 @@ class App extends React.Component {
       text: `Open: $${arg.openValue}<br/>
 Close: $${arg.closeValue}<br/>
 High: $${arg.highValue}<br/>
-Low: $${arg.lowValue}<br/>`
+Low: $${arg.lowValue}<br/>`,
     };
   }
 }

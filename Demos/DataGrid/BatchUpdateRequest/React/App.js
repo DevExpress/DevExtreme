@@ -1,16 +1,16 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
-var URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
+const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
 
 const ordersStore = createStore({
   key: 'OrderID',
   loadUrl: `${URL}/Orders`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 async function sendBatchRequest(url, changes) {
@@ -18,9 +18,9 @@ async function sendBatchRequest(url, changes) {
     method: 'POST',
     body: JSON.stringify(changes),
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8',
     },
-    credentials: 'include'
+    credentials: 'include',
   });
 
   if (!result.ok) {

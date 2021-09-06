@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, {
   Paging,
   HeaderFilter,
@@ -6,21 +6,22 @@ import DataGrid, {
   Editing,
   Column,
   Lookup,
-  RequiredRule } from 'devextreme-react/data-grid';
+  RequiredRule,
+} from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+import SelectBox from 'devextreme-react/select-box';
 import { statuses } from './data.js';
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.js';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.js';
-import SelectBox from 'devextreme-react/select-box';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
 
 const employees = createStore({
   key: 'ID',
   loadUrl: `${url}/Employees`,
-  onBeforeSend: function(method, ajaxOptions) {
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const tasks = createStore({
@@ -28,9 +29,9 @@ const tasks = createStore({
   loadUrl: `${url}/Tasks`,
   updateUrl: `${url}/UpdateTask`,
   insertUrl: `${url}/InsertTask`,
-  onBeforeSend: function(method, ajaxOptions) {
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 class App extends React.Component {
@@ -40,16 +41,14 @@ class App extends React.Component {
   }
 
   cellTemplate(container, options) {
-    var noBreakSpace = '\u00A0',
-      text = (options.value || []).map(element => {
-        return options.column.lookup.calculateCellValue(element);
-      }).join(', ');
+    const noBreakSpace = '\u00A0';
+    const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
     container.textContent = text || noBreakSpace;
     container.title = text;
   }
 
   calculateFilterExpression(filterValue, selectedFilterOperation, target) {
-    if(target === 'search' && typeof (filterValue) === 'string') {
+    if (target === 'search' && typeof (filterValue) === 'string') {
       return [this.dataField, 'contains', filterValue];
     }
     return function(data) {
@@ -62,7 +61,7 @@ class App extends React.Component {
   }
 
   statusEditorRender(cell) {
-    let onValueChanged = this.onValueChanged.bind(this, cell);
+    const onValueChanged = this.onValueChanged.bind(this, cell);
     return <SelectBox
       defaultValue={cell.value}
       {...cell.column.lookup}
@@ -72,15 +71,14 @@ class App extends React.Component {
   }
 
   itemRender(data) {
-    let imageSource = `images/icons/status-${ data.id }.svg`;
-    if(data != null) {
+    const imageSource = `images/icons/status-${data.id}.svg`;
+    if (data != null) {
       return <div>
         <img src={imageSource} className="status-icon middle"></img>
         <span className="middle">{data.name}</span>
       </div>;
-    } else {
-      return <span>(All)</span>;
     }
+    return <span>(All)</span>;
   }
 
   onRowInserted(e) {

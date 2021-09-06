@@ -147,7 +147,9 @@ import {
   DxPaging,
 } from 'devextreme-vue/data-grid';
 import { DxSlider, DxTooltip } from 'devextreme-vue/slider';
-import { productsStore, ordersStore, getOrderCount, addOrder } from './data.js';
+import {
+  productsStore, ordersStore, getOrderCount, addOrder,
+} from './data.js';
 
 export default {
   components: {
@@ -176,7 +178,7 @@ export default {
         return;
       }
 
-      for (var i = 0; i < this.updatesPerSecond / 20; i++) {
+      for (let i = 0; i < this.updatesPerSecond / 20; i++) {
         addOrder();
       }
     }, 50);

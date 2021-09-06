@@ -2,8 +2,8 @@ import React from 'react';
 import Chart, { Series, Label, Legend } from 'devextreme-react/chart';
 import PieChart, { Series as PieSeries, Label as PieLabel, Connector } from 'devextreme-react/pie-chart';
 import { Button } from 'devextreme-react/button';
-import { allMedals, goldMedals } from './data.js';
 import { exportWidgets } from 'devextreme/viz/export';
+import { allMedals, goldMedals } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -77,7 +77,7 @@ class App extends React.Component {
   onClick() {
     exportWidgets([[this.chart, this.pieChart]], {
       fileName: 'chart',
-      format: 'PNG'
+      format: 'PNG',
     });
   }
 }

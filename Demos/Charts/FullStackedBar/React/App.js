@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Chart, Series, CommonSeriesSettings, Legend, Export, Tooltip, Title } from 'devextreme-react/chart';
+import {
+  Chart, Series, CommonSeriesSettings, Legend, Export, Tooltip, Title,
+} from 'devextreme-react/chart';
 import service from './data.js';
 
 const dataSource = service.dataSource();
@@ -8,9 +10,10 @@ const dataSource = service.dataSource();
 class App extends React.Component {
   customizeTooltip(arg) {
     return {
-      text: `${arg.percentText} years: ${arg.valueText}`
+      text: `${arg.percentText} years: ${arg.valueText}`,
     };
   }
+
   render() {
     return (
       <Chart

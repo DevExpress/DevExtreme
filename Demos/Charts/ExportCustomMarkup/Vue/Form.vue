@@ -76,7 +76,7 @@ export default {
   methods: {
     getMarkup() {
       return this.$el.innerHTML;
-    }
-  }
+    },
+  },
 };
 </script>

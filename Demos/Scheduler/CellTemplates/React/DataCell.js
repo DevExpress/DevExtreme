@@ -7,9 +7,9 @@ export default function DataCell(props) {
   const isDinner = Utils.isDinner(startDate);
   const cssClasses = [];
 
-  if(isDisableDate) {
+  if (isDisableDate) {
     cssClasses.push('disable-date');
-  } else if(isDinner) {
+  } else if (isDinner) {
     cssClasses.push('dinner');
   }
 

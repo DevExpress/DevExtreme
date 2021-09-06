@@ -11,7 +11,7 @@ import Chart, {
   ZoomAndPan,
   Crosshair,
   Legend,
-  Border
+  Border,
 } from 'devextreme-react/chart';
 
 import Button from 'devextreme-react/button';
@@ -27,7 +27,6 @@ class App extends React.Component {
     this.resetZoom = () => {
       this.chart.resetVisualRange();
     };
-
   }
 
   render() {
@@ -82,9 +81,9 @@ class App extends React.Component {
 }
 
 function customizeTooltip(pointInfo) {
-  const data = pointInfo.point.data;
+  const { data } = pointInfo.point;
   return {
-    text: `${data.country} ${data.year}`
+    text: `${data.country} ${data.year}`,
   };
 }
 

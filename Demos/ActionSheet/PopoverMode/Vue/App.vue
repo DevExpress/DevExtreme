@@ -31,14 +31,14 @@ export default {
   components: {
     DxActionSheet,
     DxList,
-    ContactItem
+    ContactItem,
   },
   data() {
     return {
       actionSheetItems,
       contacts,
       isActionSheetVisible: false,
-      actionSheetTarget: ''
+      actionSheetTarget: '',
     };
   },
   methods: {
@@ -48,7 +48,7 @@ export default {
     },
     showClickNotification(buttonName) {
       notify(`The "${buttonName}" button is clicked.`);
-    }
-  }
+    },
+  },
 };
 </script>

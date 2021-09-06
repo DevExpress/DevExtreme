@@ -1,5 +1,4 @@
 import React from 'react';
-import { dataSource } from './data.js';
 
 import PolarChart, {
   CommonSeriesSettings,
@@ -8,7 +7,7 @@ import PolarChart, {
   ArgumentAxis,
   ValueAxis,
   Export,
-  Legend
+  Legend,
 } from 'devextreme-react/polar-chart';
 
 import RangeSelector, {
@@ -16,15 +15,15 @@ import RangeSelector, {
   Margin,
   Scale,
   MinorTick,
-  Behavior
+  Behavior,
 } from 'devextreme-react/range-selector';
+import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      visualRange: { startValue: 0, endValue: 8 }
+      visualRange: { startValue: 0, endValue: 8 },
     };
 
     this.updateVisualRange = this.updateVisualRange.bind(this);

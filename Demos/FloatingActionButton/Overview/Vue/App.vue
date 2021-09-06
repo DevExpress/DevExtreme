@@ -80,7 +80,7 @@ import {
   DxColumn,
   DxPaging,
   DxEditing,
-  DxTexts
+  DxTexts,
 } from 'devextreme-vue/data-grid';
 
 import DxSpeedDialAction from 'devextreme-vue/speed-dial-action';
@@ -95,24 +95,24 @@ export default {
     DxEditing,
     DxTexts,
     DxSpeedDialAction,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
-      employees: employees,
+      employees,
       gridRefName: 'grid',
       lookup: {
         dataSource: states,
         displayExpr: 'Name',
-        valueExpr: 'ID'
+        valueExpr: 'ID',
       },
-      selectedRowIndex: -1
+      selectedRowIndex: -1,
     };
   },
   computed: {
-    grid: function() {
+    grid() {
       return this.$refs[this.gridRefName].instance;
-    }
+    },
   },
   methods: {
     selectedChanged(e) {
@@ -121,7 +121,7 @@ export default {
 
     directionChanged(e) {
       config({
-        floatingActionButtonConfig: directions[e.selectedItem]
+        floatingActionButtonConfig: directions[e.selectedItem],
       });
 
       repaintFloatingActionButton();
@@ -140,8 +140,8 @@ export default {
     editRow() {
       this.grid.editRow(this.selectedRowIndex);
       this.grid.deselectAll();
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
 export default function CustomShapeTemplate(employee, editEmployee, deleteEmployee) {
-  var employeeName = employee ? employee.Full_Name : 'Employee\'s Name';
-  var employeeTitle = employee ? employee.Title : 'Employee\'s Title';
+  const employeeName = employee ? employee.Full_Name : 'Employee\'s Name';
+  const employeeTitle = employee ? employee.Title : 'Employee\'s Title';
   return (
     <svg className="template">
       <text className="template-name" x="50%" y="20%">{employeeName}</text>

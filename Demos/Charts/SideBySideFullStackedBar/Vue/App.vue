@@ -56,7 +56,7 @@ import {
   DxCommonSeriesSettings,
   DxLegend,
   DxExport,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 
 import service from './data.js';
@@ -68,20 +68,20 @@ export default {
     DxCommonSeriesSettings,
     DxLegend,
     DxExport,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
-      dataSource: service.getMaleAgeData()
+      dataSource: service.getMaleAgeData(),
     };
   },
   methods: {
     customizeTooltip({ percentText, valueText }) {
       return {
-        text: `${percentText} - ${valueText}`
+        text: `${percentText} - ${valueText}`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -66,7 +66,7 @@ import {
   DxFont,
   DxTitle,
   DxSubtitle,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 import { energySources, countriesInfo } from './data.js';
 
@@ -86,15 +86,15 @@ export default {
     DxFont,
     DxTitle,
     DxSubtitle,
-    DxTooltip
+    DxTooltip,
   },
 
   data() {
     return {
       countriesInfo,
-      energySources
+      energySources,
     };
-  }
+  },
 };
 </script>
 <style>

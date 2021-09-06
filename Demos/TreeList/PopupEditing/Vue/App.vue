@@ -81,39 +81,41 @@
   </div>
 </template>
 <script>
+import {
+  DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton,
+} from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
-import { DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton } from 'devextreme-vue/tree-list';
 
 export default {
   components: {
-    DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton
+    DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton,
   },
   data() {
     return {
-      employees: employees,
+      employees,
       expandedRowKeys: [1],
       popupOptions: {
         title: 'Employee Info',
         showTitle: true,
-        width: 700
+        width: 700,
       },
       lookupData: {
         store: employees,
-        sort: 'Full_Name'
-      }
+        sort: 'Full_Name',
+      },
     };
   },
   methods: {
     onEditorPreparing(e) {
-      if(e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+      if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
         e.editorOptions.disabled = true;
         e.editorOptions.value = null;
       }
     },
     onInitNewRow(e) {
       e.data.Head_ID = 1;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import Popup from 'devextreme-react/popup';
 import ScrollView from 'devextreme-react/scroll-view';

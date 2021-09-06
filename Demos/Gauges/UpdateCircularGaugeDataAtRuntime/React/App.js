@@ -1,21 +1,22 @@
 import React from 'react';
-import { CircularGauge, Scale, Label, RangeContainer, Range, Tooltip, Title, Font } from 'devextreme-react/circular-gauge';
+import {
+  CircularGauge, Scale, Label, RangeContainer, Range, Tooltip, Title, Font,
+} from 'devextreme-react/circular-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
 import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       value: dataSource[0].mean,
-      subvalues: [dataSource[0].min, dataSource[0].max]
+      subvalues: [dataSource[0].min, dataSource[0].max],
     };
     this.onSelectionChanged = ({ selectedItem }) => {
       this.setState({
         value: selectedItem.mean,
-        subvalues: [selectedItem.min, selectedItem.max]
+        subvalues: [selectedItem.min, selectedItem.max],
       });
     };
   }

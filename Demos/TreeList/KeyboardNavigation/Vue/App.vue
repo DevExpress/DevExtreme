@@ -39,7 +39,7 @@ import {
   DxFilterPanel,
   DxScrolling,
   DxPager,
-  DxPaging
+  DxPaging,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
 
@@ -52,7 +52,7 @@ export default {
     DxFilterPanel,
     DxScrolling,
     DxPager,
-    DxPaging
+    DxPaging,
   },
   data() {
     return {
@@ -61,12 +61,12 @@ export default {
         'Full_Name',
         {
           dataField: 'Title',
-          caption: 'Position'
+          caption: 'Position',
         },
         'City',
-        'State'
-      ]
+        'State',
+      ],
     };
-  }
+  },
 };
 </script>

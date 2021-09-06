@@ -51,11 +51,11 @@ export default {
   components: {
     DxFileUploader,
     DxTextBox,
-    DxButton
+    DxButton,
   },
   data() {
     return {
-      formRefName: 'tree-view'
+      formRefName: 'tree-view',
     };
   },
   methods: {
@@ -63,8 +63,8 @@ export default {
       notify('Uncomment the line to enable sending a form to the server.');
       // const form = this.$refs[this.formRefName];
       // form.submit();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

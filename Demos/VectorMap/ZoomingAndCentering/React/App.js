@@ -2,7 +2,7 @@ import React from 'react';
 
 import VectorMap, {
   Layer,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/vector-map';
 
 import Button from 'devextreme-react/button';
@@ -25,16 +25,19 @@ class App extends React.Component {
       this.vectorMap.zoomFactor(null);
     };
   }
+
   customizeTooltip(arg) {
     if (arg.layer.type === 'marker') {
       return { text: arg.attribute('name') };
     }
   }
+
   markerClick(e) {
     if (e.target && e.target.layer.type === 'marker') {
       e.component.center(e.target.coordinates()).zoomFactor(10);
     }
   }
+
   render() {
     return (
       <React.Fragment>

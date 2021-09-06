@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { SelectBox } from 'devextreme-react/select-box';
 import DataSource from 'devextreme/data/data_source';
 import Group from './Group.js';
@@ -8,15 +8,15 @@ import { ungroupedData, pregroupedData } from './data.js';
 const fromUngroupedData = new DataSource({
   store: ungroupedData,
   key: 'ID',
-  group: 'Category'
+  group: 'Category',
 });
 const fromPregroupedData = new DataSource({
   store: pregroupedData,
-  map: function(item) {
+  map(item) {
     item.key = item.Category;
     item.items = item.Products;
     return item;
-  }
+  },
 });
 
 class App extends React.Component {

@@ -76,7 +76,7 @@ export default {
   components: {
     DxButton,
     DxCheckBox,
-    DxLoadPanel
+    DxLoadPanel,
   },
 
   data() {
@@ -87,7 +87,7 @@ export default {
       showIndicator: true,
       shading: true,
       showPane: true,
-      closeOnOutsideClick: false
+      closeOnOutsideClick: false,
     };
   },
 
@@ -103,8 +103,8 @@ export default {
     },
     onHidden() {
       this.employeeInfo = employee;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

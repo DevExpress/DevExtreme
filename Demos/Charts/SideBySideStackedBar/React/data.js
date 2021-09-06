@@ -5,7 +5,7 @@ const maleAgeData = [{
   maleolder: 14.472,
   femaleyoung: 28.597,
   femalemiddle: 91.827,
-  femaleolder: 20.362
+  femaleolder: 20.362,
 }, {
   state: 'Brazil',
   maleyoung: 25.607,
@@ -13,7 +13,7 @@ const maleAgeData = [{
   maleolder: 3.727,
   femaleyoung: 24.67,
   femalemiddle: 57.598,
-  femaleolder: 5.462
+  femaleolder: 5.462,
 }, {
   state: 'Russia',
   maleyoung: 13.493,
@@ -21,7 +21,7 @@ const maleAgeData = [{
   maleolder: 5.802,
   femaleyoung: 12.971,
   femalemiddle: 52.14,
-  femaleolder: 12.61
+  femaleolder: 12.61,
 }, {
   state: 'Japan',
   maleyoung: 9.575,
@@ -29,7 +29,7 @@ const maleAgeData = [{
   maleolder: 9.024,
   femaleyoung: 9.105,
   femalemiddle: 42.98,
-  femaleolder: 12.501
+  femaleolder: 12.501,
 }, {
   state: 'Mexico',
   maleyoung: 17.306,
@@ -37,7 +37,7 @@ const maleAgeData = [{
   maleolder: 1.927,
   femaleyoung: 16.632,
   femalemiddle: 31.868,
-  femaleolder: 2.391
+  femaleolder: 2.391,
 }, {
   state: 'Germany',
   maleyoung: 6.679,
@@ -45,7 +45,7 @@ const maleAgeData = [{
   maleolder: 5.133,
   femaleyoung: 6.333,
   femalemiddle: 27.693,
-  femaleolder: 8.318
+  femaleolder: 8.318,
 }, {
   state: 'United Kindom',
   maleyoung: 5.816,
@@ -53,11 +53,11 @@ const maleAgeData = [{
   maleolder: 3.864,
   femaleyoung: 5.519,
   femalemiddle: 19.228,
-  femaleolder: 5.459
+  femaleolder: 5.459,
 }];
 
 export default {
   getMaleAgeData() {
     return maleAgeData;
-  }
+  },
 };

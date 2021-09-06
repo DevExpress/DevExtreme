@@ -75,7 +75,7 @@ import {
   DxGroupPanel,
   DxPager,
   DxPaging,
-  DxSearchPanel
+  DxSearchPanel,
 } from 'devextreme-vue/data-grid';
 
 import DataSource from 'devextreme/data/data_source';
@@ -94,7 +94,7 @@ export default {
     DxPager,
     DxPaging,
     DxSearchPanel,
-    DiscountCell
+    DiscountCell,
   },
   data() {
     return {
@@ -103,20 +103,20 @@ export default {
           type: 'odata',
           url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
           key: 'Id',
-          beforeSend: function(request) {
+          beforeSend(request) {
             request.params.startDate = '2020-05-10';
             request.params.endDate = '2020-05-15';
-          }
-        }
+          },
+        },
       }),
       pageSizes: [10, 25, 50, 100],
-      onContentReady: function(e) {
+      onContentReady(e) {
         if (!collapsed) {
           e.component.expandRow(['EnviroCare']);
           collapsed = true;
         }
-      }
+      },
     };
-  }
+  },
 };
 </script>

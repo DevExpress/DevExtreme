@@ -4,7 +4,7 @@ import CircularGauge, {
   Geometry,
   Scale as CircularScale,
   Size as CircularSize,
-  ValueIndicator as CircularValueIndicator
+  ValueIndicator as CircularValueIndicator,
 } from 'devextreme-react/circular-gauge';
 
 import LinearGauge, {
@@ -12,7 +12,7 @@ import LinearGauge, {
   MinorTick,
   Scale as LinearScale,
   Size as LinearSize,
-  ValueIndicator as LinearValueIndicator
+  ValueIndicator as LinearValueIndicator,
 } from 'devextreme-react/linear-gauge';
 
 import Slider from 'devextreme-react/slider';
@@ -22,12 +22,11 @@ import Indicator from './Indicator.js';
 const color = '#f05b41';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      speedValue: 40
+      speedValue: 40,
     };
 
     this.handleSpeedChange = ({ value }) => {
@@ -36,7 +35,7 @@ class App extends React.Component {
   }
 
   render() {
-    const speedValue = this.state.speedValue;
+    const { speedValue } = this.state;
     return (
       <div id="gauge-demo">
 

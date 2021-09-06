@@ -5,11 +5,13 @@ function formatPrice(price) {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(price);
 }
 
-export default function Item({ Address, City, State, Price, Image }) {
+export default function Item({
+  Address, City, State, Price, Image,
+}) {
   return (
     <div>
       <img src={Image} />

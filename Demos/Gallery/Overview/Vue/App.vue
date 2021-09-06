@@ -49,7 +49,7 @@ import { gallery } from './data.js';
 export default {
   components: {
     DxCheckBox,
-    DxGallery
+    DxGallery,
   },
   data() {
     return {
@@ -57,14 +57,14 @@ export default {
       loop: true,
       slideshowDelay: 2000,
       showNavButtons: true,
-      showIndicator: true
+      showIndicator: true,
     };
   },
   methods: {
     setSlideshowDelay(e) {
       this.slideshowDelay = e.value ? 2000 : 0;
-    }
-  }
+    },
+  },
 };
 </script>
 

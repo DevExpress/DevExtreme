@@ -61,7 +61,7 @@ import {
   DxMargin,
   DxTooltip,
   DxLabel,
-  DxFormat
+  DxFormat,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 
@@ -82,7 +82,7 @@ export default {
     DxMargin,
     DxTooltip,
     DxLabel,
-    DxFormat
+    DxFormat,
   },
 
   data() {
@@ -90,9 +90,9 @@ export default {
       sharingStatisticsInfo,
       architectureSources,
       types: ['spline', 'stackedspline', 'fullstackedspline'],
-      type: 'spline'
+      type: 'spline',
     };
-  }
+  },
 };
 </script>
 <style>

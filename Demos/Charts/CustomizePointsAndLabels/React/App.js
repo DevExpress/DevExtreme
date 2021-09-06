@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import {
   Chart,
@@ -8,17 +8,16 @@ import {
   VisualRange,
   Label,
   ConstantLine,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 import { temperaturesData } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       highAverage: 77,
-      lowAverage: 58
+      lowAverage: 58,
     };
     this.customizeLabel = this.customizeLabel.bind(this);
     this.customizePoint = this.customizePoint.bind(this);
@@ -66,10 +65,9 @@ class App extends React.Component {
   }
 
   customizePoint(arg) {
-
     if (arg.value > this.state.highAverage) {
       return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
-    } else if (arg.value < this.state.lowAverage) {
+    } if (arg.value < this.state.lowAverage) {
       return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } };
     }
   }
@@ -79,15 +77,15 @@ class App extends React.Component {
       return {
         visible: true,
         backgroundColor: '#ff7c7c',
-        customizeText: function(e) {
-          return `${e.valueText }&#176F`;
-        }
+        customizeText(e) {
+          return `${e.valueText}&#176F`;
+        },
       };
     }
   }
 
   customizeText(arg) {
-    return `${arg.valueText }&#176F`;
+    return `${arg.valueText}&#176F`;
   }
 }
 

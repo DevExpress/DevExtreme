@@ -5,20 +5,19 @@ import FileManager, { Permissions, ItemView } from 'devextreme-react/file-manage
 import { fileItems } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      itemViewMode: 'thumbnails'
+      itemViewMode: 'thumbnails',
     };
 
     this.onOptionChanged = this.onOptionChanged.bind(this);
   }
 
   onOptionChanged(e) {
-    if(e.fullName === 'itemView.mode') {
+    if (e.fullName === 'itemView.mode') {
       this.setState({
-        itemViewMode: e.value
+        itemViewMode: e.value,
       });
     }
   }
@@ -47,12 +46,12 @@ class App extends React.Component {
   }
 
   customizeIcon(fileSystemItem) {
-    if(fileSystemItem.isDirectory) {
+    if (fileSystemItem.isDirectory) {
       return '../../../../images/thumbnails/folder.svg';
     }
 
     const fileExtension = fileSystemItem.getFileExtension();
-    switch(fileExtension) {
+    switch (fileExtension) {
       case '.txt':
         return '../../../../images/thumbnails/doc-txt.svg';
       case '.rtf':
@@ -61,7 +60,6 @@ class App extends React.Component {
         return '../../../../images/thumbnails/doc-xml.svg';
     }
   }
-
 }
 
 export default App;

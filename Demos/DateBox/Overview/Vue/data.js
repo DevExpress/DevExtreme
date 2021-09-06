@@ -9,11 +9,11 @@ const federalHolidays = [
   new Date(2017, 9, 9),
   new Date(2017, 10, 11),
   new Date(2017, 10, 23),
-  new Date(2017, 11, 25)
+  new Date(2017, 11, 25),
 ];
 
 export default {
   getFederalHolidays() {
     return federalHolidays;
-  }
+  },
 };

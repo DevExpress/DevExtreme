@@ -22,7 +22,7 @@ import {
   DxChart,
   DxSeriesTemplate,
   DxCommonSeriesSettings,
-  DxTitle
+  DxTitle,
 } from 'devextreme-vue/chart';
 
 import { dataSource } from './data.js';
@@ -32,13 +32,13 @@ export default {
     DxChart,
     DxSeriesTemplate,
     DxCommonSeriesSettings,
-    DxTitle
+    DxTitle,
   },
   data() {
     return {
-      dataSource: dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>
 <style>

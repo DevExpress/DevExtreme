@@ -9,32 +9,37 @@ class App extends React.Component {
     super();
     this.state = {
       plannedTasks,
-      doingTasks
+      doingTasks,
     };
     this.onDragStart = this.onDragStart.bind(this);
     this.onAdd = this.onAdd.bind(this);
     this.onRemove = this.onRemove.bind(this);
     this.onReorder = this.onReorder.bind(this);
   }
+
   onDragStart(e) {
     e.itemData = this.state[e.fromData][e.fromIndex];
   }
+
   onAdd(e) {
     const tasks = this.state[e.toData];
     this.setState({
-      [e.toData]: [...tasks.slice(0, e.toIndex), e.itemData, ...tasks.slice(e.toIndex)]
+      [e.toData]: [...tasks.slice(0, e.toIndex), e.itemData, ...tasks.slice(e.toIndex)],
     });
   }
+
   onRemove(e) {
     const tasks = this.state[e.fromData];
     this.setState({
-      [e.fromData]: [...tasks.slice(0, e.fromIndex), ...tasks.slice(e.fromIndex + 1)]
+      [e.fromData]: [...tasks.slice(0, e.fromIndex), ...tasks.slice(e.fromIndex + 1)],
     });
   }
+
   onReorder(e) {
     this.onRemove(e);
     this.onAdd(e);
   }
+
   render() {
     const { plannedTasks, doingTasks } = this.state;
     return (

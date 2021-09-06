@@ -72,7 +72,7 @@ import {
   DxTreeList,
   DxEditing,
   DxColumn,
-  DxKeyboardNavigation
+  DxKeyboardNavigation,
 } from 'devextreme-vue/tree-list';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -85,7 +85,7 @@ export default {
     DxEditing,
     DxKeyboardNavigation,
     DxCheckBox,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
@@ -95,13 +95,13 @@ export default {
       enterKeyActions: ['startEdit', 'moveFocus'],
       enterKeyDirections: ['none', 'column', 'row'],
       enterKeyDirection: 'column',
-      enterKeyAction: 'moveFocus'
+      enterKeyAction: 'moveFocus',
     };
   },
   methods: {
     onFocusedCellChanging(e) {
       e.isHighlighted = true;
-    }
-  }
+    },
+  },
 };
 </script>

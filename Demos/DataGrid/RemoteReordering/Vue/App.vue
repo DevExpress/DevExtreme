@@ -40,7 +40,9 @@
   </DxDataGrid>
 </template>
 <script>
-import { DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting,
+} from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
@@ -51,7 +53,7 @@ const tasksStore = createStore({
   updateUrl: `${url}/UpdateTask`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const employeesStore = createStore({
@@ -59,7 +61,7 @@ const employeesStore = createStore({
   loadUrl: `${url}/Employees`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 export default {
@@ -69,12 +71,12 @@ export default {
     DxLookup,
     DxScrolling,
     DxRowDragging,
-    DxSorting
+    DxSorting,
   },
   data() {
     return {
       tasksStore,
-      employeesStore
+      employeesStore,
     };
   },
   methods: {
@@ -88,7 +90,7 @@ export default {
 
       await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
       await e.component.refresh();
-    }
+    },
   },
 };
 </script>

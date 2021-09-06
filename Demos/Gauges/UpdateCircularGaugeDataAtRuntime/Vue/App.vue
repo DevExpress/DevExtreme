@@ -54,19 +54,28 @@
   </div>
 </template>
 <script>
-import { dataSource } from './data.js';
-import { DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxTooltip, DxTitle, DxFont } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxTooltip, DxTitle, DxFont,
+} from 'devextreme-vue/circular-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
+import { dataSource } from './data.js';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxTooltip, DxTitle, DxFont,
-    DxSelectBox
+    DxCircularGauge,
+    DxScale,
+    DxLabel,
+    DxRangeContainer,
+    DxRange,
+    DxTooltip,
+    DxTitle,
+    DxFont,
+    DxSelectBox,
   },
   data() {
     return {
-      dataSource: dataSource,
-      value: dataSource[0]
+      dataSource,
+      value: dataSource[0],
     };
   },
   methods: {
@@ -76,8 +85,8 @@ export default {
     onSelectionChanged({ selectedItem }) {
       this.value = selectedItem.mean,
       this.subvalues = [selectedItem.min, selectedItem.max];
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

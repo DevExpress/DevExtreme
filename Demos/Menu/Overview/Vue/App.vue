@@ -53,15 +53,15 @@ import service from './data.js';
 
 export default {
   components: {
-    DxMenu, DxSelectBox, DxCheckBox
+    DxMenu, DxSelectBox, DxCheckBox,
   },
   data() {
     const showSubmenuModes = [{
       name: 'onHover',
-      delay: { show: 0, hide: 500 }
+      delay: { show: 0, hide: 500 },
     }, {
       name: 'onClick',
-      delay: { show: 0, hide: 300 }
+      delay: { show: 0, hide: 300 },
     }];
     return {
       products: service.getProducts(),
@@ -69,16 +69,16 @@ export default {
       showFirstSubmenuModes: showSubmenuModes[1],
       orientation: 'horizontal',
       hideSubmenuOnMouseLeave: false,
-      currentProduct: null
+      currentProduct: null,
     };
   },
   methods: {
     itemClick(e) {
-      if(e.itemData.price) {
+      if (e.itemData.price) {
         this.currentProduct = e.itemData;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

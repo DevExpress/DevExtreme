@@ -31,19 +31,19 @@ export default {
     employee: {
       type: Object,
       required: true,
-      default: () => ({})
+      default: () => ({}),
     },
     showInfo: {
       type: Function,
       required: true,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
     showEmployeeInfo() {
       this.showInfo(this.employee);
-    }
-  }
+    },
+  },
 };
 </script>
 

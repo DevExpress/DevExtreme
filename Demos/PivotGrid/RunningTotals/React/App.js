@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
-  Scrolling
+  Scrolling,
 } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
 
@@ -14,7 +14,7 @@ class App extends React.Component {
     super(props);
     this.changeAllowCrossGroupCalculation = this.changeAllowCrossGroupCalculation.bind(this);
     this.state = {
-      allowCrossGroupCalculation: true
+      allowCrossGroupCalculation: true,
     };
   }
 
@@ -55,31 +55,31 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     width: 120,
     dataField: 'region',
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
-    area: 'row'
+    area: 'row',
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     groupName: 'date',
     groupInterval: 'year',
-    expanded: true
+    expanded: true,
   }, {
     groupName: 'date',
     groupInterval: 'month',
-    visible: false
+    visible: false,
   }, {
     caption: 'Total',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }, {
     caption: 'Running Total',
     dataField: 'amount',
@@ -88,9 +88,9 @@ const dataSource = new PivotGridDataSource({
     format: 'currency',
     area: 'data',
     runningTotal: 'row',
-    allowCrossGroupCalculation: true
+    allowCrossGroupCalculation: true,
   }],
-  store: sales
+  store: sales,
 });
 
 export default App;

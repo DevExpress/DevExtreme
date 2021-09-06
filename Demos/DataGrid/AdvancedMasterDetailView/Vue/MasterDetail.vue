@@ -28,12 +28,14 @@ import OrdersTab from './OrdersTab.vue';
 import AddressTab from './AddressTab.vue';
 
 export default {
-  components: { DxTabPanel, DxItem, OrdersTab, AddressTab },
+  components: {
+    DxTabPanel, DxItem, OrdersTab, AddressTab,
+  },
   props: {
     masterDetailData: {
       type: Object,
-      default: () => ({})
-    }
-  }
+      default: () => ({}),
+    },
+  },
 };
 </script>

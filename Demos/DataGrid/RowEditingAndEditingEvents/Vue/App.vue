@@ -78,7 +78,9 @@
 </template>
 <script>
 import DxButton from 'devextreme-vue/button';
-import { DxDataGrid, DxColumn, DxEditing, DxPaging, DxLookup } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxEditing, DxPaging, DxLookup,
+} from 'devextreme-vue/data-grid';
 import { employees, states } from './data.js';
 
 export default {
@@ -88,13 +90,13 @@ export default {
     DxEditing,
     DxPaging,
     DxButton,
-    DxLookup
+    DxLookup,
   },
   data() {
     return {
-      events:[],
+      events: [],
       dataSource: employees,
-      states: states
+      states,
     };
   },
   methods: {
@@ -103,7 +105,7 @@ export default {
     },
     clearEvents() {
       this.events = [];
-    }
+    },
   },
 };
 </script>

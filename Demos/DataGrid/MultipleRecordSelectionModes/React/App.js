@@ -1,10 +1,10 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
   Selection,
   FilterRow,
-  Paging
+  Paging,
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
 import { sales } from './data.js';
@@ -15,7 +15,7 @@ class App extends React.Component {
 
     this.state = {
       allMode: 'allPages',
-      checkBoxesMode: 'onClick'
+      checkBoxesMode: 'onClick',
     };
 
     this.onCheckBoxesModeChanged = this.onCheckBoxesModeChanged.bind(this);

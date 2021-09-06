@@ -33,7 +33,7 @@
 import DxPieChart, {
   DxSeries,
   DxLabel,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/pie-chart';
 
 import { countries, waterLandRatio } from './data.js';
@@ -43,21 +43,21 @@ export default {
     DxPieChart,
     DxSeries,
     DxLabel,
-    DxLegend
+    DxLegend,
   },
   data() {
     return {
       pieCharts: [{
         title: 'Area of Countries',
         palette: 'Soft',
-        dataSource: countries
+        dataSource: countries,
       }, {
         title: 'Water/Land Ratio',
         palette: 'Soft Pastel',
-        dataSource: waterLandRatio
-      }]
+        dataSource: waterLandRatio,
+      }],
     };
-  }
+  },
 };
 </script>
 

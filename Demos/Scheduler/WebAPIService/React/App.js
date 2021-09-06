@@ -7,13 +7,13 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
 const dataSource = AspNetData.createStore({
   key: 'AppointmentId',
-  loadUrl: `${url }/Get`,
-  insertUrl: `${url }/Post`,
-  updateUrl: `${url }/Put`,
-  deleteUrl: `${url }/Delete`,
+  loadUrl: `${url}/Get`,
+  insertUrl: `${url}/Post`,
+  updateUrl: `${url}/Put`,
+  deleteUrl: `${url}/Delete`,
   onBeforeSend(_, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const currentDate = new Date(2021, 3, 27);

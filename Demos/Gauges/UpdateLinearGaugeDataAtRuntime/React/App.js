@@ -1,32 +1,33 @@
 import React from 'react';
-import { LinearGauge, Title, Font, Geometry, Scale, RangeContainer, Range, ValueIndicator, Label } from 'devextreme-react/linear-gauge';
+import {
+  LinearGauge, Title, Font, Geometry, Scale, RangeContainer, Range, ValueIndicator, Label,
+} from 'devextreme-react/linear-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
 import { cities } from './data.js';
 
 const customTicks = [900, 1000, 1020, 1100];
 
 const pressureLabelFormat = {
-  type: 'decimal'
+  type: 'decimal',
 };
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       selectBoxValue: cities[0].data,
       temperature: cities[0].data.temperature,
       humidity: cities[0].data.humidity,
-      pressure: cities[0].data.pressure
+      pressure: cities[0].data.pressure,
     };
 
     this.onSelectionChanged = (e) => {
-      var weatherData = e.selectedItem.data;
+      const weatherData = e.selectedItem.data;
       this.setState({
         selectBoxValue: weatherData,
         temperature: weatherData.temperature,
         humidity: weatherData.humidity,
-        pressure: weatherData.pressure
+        pressure: weatherData.pressure,
       });
     };
   }

@@ -1,18 +1,18 @@
-$(function () {
-  var chart = $("#chart").dxChart({
+$(() => {
+  const chart = $('#chart').dxChart({
     dataSource: generateDataSource(),
     commonSeriesSettings: {
-      type: "scatter"
+      type: 'scatter',
     },
     series: [{
-      argumentField: "x1",
-      valueField: "y1"
+      argumentField: 'x1',
+      valueField: 'y1',
     }, {
-      argumentField: "x2",
-      valueField: "y2",
+      argumentField: 'x2',
+      valueField: 'y2',
       point: {
-        symbol: "triangleDown"
-      }
+        symbol: 'triangleDown',
+      },
     }],
     argumentAxis: {
       customPosition: 0,
@@ -26,35 +26,35 @@ $(function () {
       offset: 0,
     },
     legend: {
-      visible: false
-    }
+      visible: false,
+    },
   }).dxChart('instance');
-  $("#argumentCustomPosition").dxNumberBox({
+  $('#argumentCustomPosition').dxNumberBox({
     value: 0,
     showSpinButtons: true,
-    onValueChanged: function(e) {
+    onValueChanged(e) {
       chart.option('argumentAxis.customPosition', e.value);
-    }
+    },
   });
-  $("#argumentOffset").dxNumberBox({
+  $('#argumentOffset').dxNumberBox({
     value: 0,
     showSpinButtons: true,
-    onValueChanged: function(e) {
+    onValueChanged(e) {
       chart.option('argumentAxis.offset', e.value);
-    }
+    },
   });
-  $("#valueCustomPosition").dxNumberBox({
+  $('#valueCustomPosition').dxNumberBox({
     value: 0,
     showSpinButtons: true,
-    onValueChanged: function(e) {
+    onValueChanged(e) {
       chart.option('valueAxis.customPosition', e.value);
-    }
+    },
   });
-  $("#valueOffset").dxNumberBox({
+  $('#valueOffset').dxNumberBox({
     value: 0,
     showSpinButtons: true,
-    onValueChanged: function(e) {
+    onValueChanged(e) {
       chart.option('valueAxis.offset', e.value);
-    }
+    },
   });
 });

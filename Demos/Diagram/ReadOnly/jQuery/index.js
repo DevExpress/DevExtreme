@@ -1,13 +1,13 @@
-$(function() {
-    var diagram = $("#diagram").dxDiagram({
-        readOnly: true
-    }).dxDiagram("instance");
+$(() => {
+  const diagram = $('#diagram').dxDiagram({
+    readOnly: true,
+  }).dxDiagram('instance');
 
-    $.ajax({
-        url: "../../../../data/diagram-structure.json",
-        dataType: "text",
-        success: function(data) {
-            diagram.import(data);
-        }
-    });
+  $.ajax({
+    url: '../../../../data/diagram-structure.json',
+    dataType: 'text',
+    success(data) {
+      diagram.import(data);
+    },
+  });
 });

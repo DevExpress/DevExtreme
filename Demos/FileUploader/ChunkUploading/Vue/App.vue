@@ -30,11 +30,11 @@ import DxFileUploader from 'devextreme-vue/file-uploader';
 
 export default {
   components: {
-    DxFileUploader
+    DxFileUploader,
   },
   data() {
     return {
-      chunks: []
+      chunks: [],
     };
   },
   methods: {
@@ -45,10 +45,10 @@ export default {
       this.chunks.push({
         segmentSize: e.segmentSize,
         bytesLoaded: e.bytesLoaded,
-        bytesTotal: e.bytesTotal
+        bytesTotal: e.bytesTotal,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

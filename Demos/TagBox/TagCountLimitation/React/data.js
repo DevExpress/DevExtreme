@@ -6,7 +6,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 10,
   Category: 'Video Players',
-  ImageSrc: 'images/products/1.png'
+  ImageSrc: 'images/products/1.png',
 }, {
   ID: 2,
   Name: 'SuperHD Video Player',
@@ -15,7 +15,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 25,
   Category: 'Video Players',
-  ImageSrc: 'images/products/2.png'
+  ImageSrc: 'images/products/2.png',
 }, {
   ID: 3,
   Name: 'SuperPlasma 50',
@@ -24,7 +24,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Televisions',
-  ImageSrc: 'images/products/3.png'
+  ImageSrc: 'images/products/3.png',
 }, {
   ID: 4,
   Name: 'SuperLED 50',
@@ -33,7 +33,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 55,
   Category: 'Televisions',
-  ImageSrc: 'images/products/4.png'
+  ImageSrc: 'images/products/4.png',
 }, {
   ID: 5,
   Name: 'SuperLED 42',
@@ -42,7 +42,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Televisions',
-  ImageSrc: 'images/products/5.png'
+  ImageSrc: 'images/products/5.png',
 }, {
   ID: 6,
   Name: 'SuperLCD 55',
@@ -51,7 +51,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 5,
   Category: 'Televisions',
-  ImageSrc: 'images/products/6.png'
+  ImageSrc: 'images/products/6.png',
 }, {
   ID: 7,
   Name: 'SuperLCD 42',
@@ -60,7 +60,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 20,
   Category: 'Televisions',
-  ImageSrc: 'images/products/7.png'
+  ImageSrc: 'images/products/7.png',
 }, {
   ID: 8,
   Name: 'SuperPlasma 65',
@@ -69,7 +69,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Televisions',
-  ImageSrc: 'images/products/8.png'
+  ImageSrc: 'images/products/8.png',
 }, {
   ID: 9,
   Name: 'SuperLCD 70',
@@ -78,7 +78,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 5,
   Category: 'Televisions',
-  ImageSrc: 'images/products/9.png'
+  ImageSrc: 'images/products/9.png',
 }, {
   ID: 10,
   Name: 'DesktopLED 21',
@@ -87,7 +87,7 @@ export const products = [{
   Backorder: 425,
   Manufacturing: 75,
   Category: 'Monitors',
-  ImageSrc: 'images/products/10.png'
+  ImageSrc: 'images/products/10.png',
 }, {
   ID: 12,
   Name: 'DesktopLCD 21',
@@ -96,7 +96,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 60,
   Category: 'Monitors',
-  ImageSrc: 'images/products/12.png'
+  ImageSrc: 'images/products/12.png',
 }, {
   ID: 13,
   Name: 'DesktopLCD 19',
@@ -105,7 +105,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 210,
   Category: 'Monitors',
-  ImageSrc: 'images/products/13.png'
+  ImageSrc: 'images/products/13.png',
 }, {
   ID: 14,
   Name: 'Projector Plus',
@@ -114,7 +114,7 @@ export const products = [{
   Backorder: 55,
   Manufacturing: 10,
   Category: 'Projectors',
-  ImageSrc: 'images/products/14.png'
+  ImageSrc: 'images/products/14.png',
 }, {
   ID: 15,
   Name: 'Projector PlusHD',
@@ -123,7 +123,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 90,
   Category: 'Projectors',
-  ImageSrc: 'images/products/15.png'
+  ImageSrc: 'images/products/15.png',
 }, {
   ID: 16,
   Name: 'Projector PlusHT',
@@ -132,7 +132,7 @@ export const products = [{
   Backorder: 75,
   Manufacturing: 57,
   Category: 'Projectors',
-  ImageSrc: 'images/products/16.png'
+  ImageSrc: 'images/products/16.png',
 }, {
   ID: 17,
   Name: 'ExcelRemote IR',
@@ -141,7 +141,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 190,
   Category: 'Automation',
-  ImageSrc: 'images/products/17.png'
+  ImageSrc: 'images/products/17.png',
 }, {
   ID: 18,
   Name: 'ExcelRemote Bluetooth',
@@ -150,7 +150,7 @@ export const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Automation',
-  ImageSrc: 'images/products/18.png'
+  ImageSrc: 'images/products/18.png',
 }, {
   ID: 19,
   Name: 'ExcelRemote IP',
@@ -159,5 +159,5 @@ export const products = [{
   Backorder: 325,
   Manufacturing: 225,
   Category: 'Automation',
-  ImageSrc: 'images/products/19.png'
+  ImageSrc: 'images/products/19.png',
 }];

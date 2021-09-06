@@ -17,13 +17,13 @@ import { homes } from './data.js';
 
 export default {
   components: {
-    DxTileView
+    DxTileView,
   },
   data() {
     return {
-      homes
+      homes,
     };
-  }
+  },
 };
 </script>
 <style>

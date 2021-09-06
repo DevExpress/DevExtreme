@@ -28,7 +28,7 @@ import DxChart, {
   DxSubtitle,
   DxCommonSeriesSettings,
   DxAggregation,
-  DxSeriesTemplate
+  DxSeriesTemplate,
 } from 'devextreme-vue/chart';
 
 import { oilProductionData } from './data.js';
@@ -41,14 +41,14 @@ export default {
     DxSubtitle,
     DxCommonSeriesSettings,
     DxAggregation,
-    DxSeriesTemplate
+    DxSeriesTemplate,
   },
 
   data() {
     return {
-      dataSource: oilProductionData
+      dataSource: oilProductionData,
     };
-  }
+  },
 };
 </script>
 <style>

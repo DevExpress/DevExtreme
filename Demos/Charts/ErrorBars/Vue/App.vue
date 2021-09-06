@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <DxChart
     id="chart"
     :data-source="weatherData"
@@ -74,7 +74,7 @@ import DxChart, {
   DxLabel,
   DxTitle,
   DxTooltip,
-  DxGrid
+  DxGrid,
 } from 'devextreme-vue/chart';
 import { weatherData } from './data.js';
 
@@ -92,12 +92,12 @@ export default {
     DxLabel,
     DxTitle,
     DxTooltip,
-    DxGrid
+    DxGrid,
   },
 
   data() {
     return {
-      weatherData
+      weatherData,
     };
   },
 
@@ -106,14 +106,14 @@ export default {
       return {
         text: `${pointInfo.seriesName}: ${pointInfo.value
         } (range: ${pointInfo.lowErrorValue
-        } - ${pointInfo.highErrorValue})`
+        } - ${pointInfo.highErrorValue})`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
 #chart {
-	height: 440px;
+  height: 440px;
 }
 </style>

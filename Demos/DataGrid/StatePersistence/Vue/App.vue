@@ -51,16 +51,18 @@
   </div>
 </template>
 <script>
-import { DxDataGrid, DxSelection, DxFilterRow, DxGroupPanel, DxStateStoring, DxPager, DxColumn } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxSelection, DxFilterRow, DxGroupPanel, DxStateStoring, DxPager, DxColumn,
+} from 'devextreme-vue/data-grid';
 import service from './data.js';
 
 export default {
   components: {
-    DxDataGrid, DxSelection, DxFilterRow, DxGroupPanel, DxStateStoring, DxPager, DxColumn
+    DxDataGrid, DxSelection, DxFilterRow, DxGroupPanel, DxStateStoring, DxPager, DxColumn,
   },
   data() {
     return {
-      orders: service.getOrders()
+      orders: service.getOrders(),
     };
   },
   methods: {
@@ -68,9 +70,9 @@ export default {
       window.location.reload();
     },
     onStateResetClick() {
-      this.$refs['dataGrid'].instance.state(null);
-    }
-  }
+      this.$refs.dataGrid.instance.state(null);
+    },
+  },
 };
 </script>
 <style scoped>

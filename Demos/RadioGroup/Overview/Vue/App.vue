@@ -75,7 +75,7 @@ import { priorities, priorityEntities, tasks } from './data.js';
 
 export default {
   components: {
-    DxRadioGroup
+    DxRadioGroup,
   },
   data() {
     return {
@@ -83,19 +83,19 @@ export default {
       tasks,
       priorityEntities,
       colorPriority: priorities[2],
-      selectionPriority: priorityEntities[0].id
+      selectionPriority: priorityEntities[0].id,
     };
   },
   computed: {
     selectedTasks() {
-      return tasks.filter(task => task.priority == this.selectionPriority);
-    }
+      return tasks.filter((task) => task.priority == this.selectionPriority);
+    },
   },
   methods: {
     changeSelectionPriority(e) {
       this.selectionPriority = e.value;
-    }
-  }
+    },
+  },
 };
 </script>
 

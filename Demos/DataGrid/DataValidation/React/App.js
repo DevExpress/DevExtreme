@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
@@ -7,7 +7,7 @@ import DataGrid, {
   RequiredRule,
   PatternRule,
   EmailRule,
-  AsyncRule
+  AsyncRule,
 } from 'devextreme-react/data-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
@@ -21,11 +21,10 @@ const dataSource = createStore({
   deleteUrl: url,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 class App extends React.Component {
-
   render() {
     return (
       <React.Fragment>
@@ -74,13 +73,13 @@ function asyncValidation(params) {
   return fetch('https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json;'
+      'Content-Type': 'application/json;',
     },
     body: JSON.stringify({
       id: params.data.ID,
-      email: params.value
-    })
-  }).then(response => response.json());
+      email: params.value,
+    }),
+  }).then((response) => response.json());
 }
 
 export default App;

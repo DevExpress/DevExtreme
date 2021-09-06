@@ -49,22 +49,22 @@ export default {
   props: {
     annotation: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
-      data: this.annotation.data
+      data: this.annotation.data,
     };
   },
   methods: {
     getImagePath() {
       return `../../../../images/flags/${this.data.name.replace(/\s/, '')}.svg`;
     },
-    formatNumber:  new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0
-    }).format
-  }
+    formatNumber: new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 0,
+    }).format,
+  },
 };
 </script>
 <style>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 
 class App extends React.Component {
@@ -18,16 +18,14 @@ class App extends React.Component {
         <span className="note">Maximum file size: <span>4 MB.</span></span>
         <div className="chunk-panel">
           {
-            this.state.chunks.map((c, i) => {
-              return <div key={i}>
-                <span>Chunk size:</span>
-                <span className="segment-size dx-theme-accent-as-text-color">{this.getValueInKb(c.segmentSize)}</span>
-                <span>, Uploaded:</span>
-                <span className="loaded-size dx-theme-accent-as-text-color">{this.getValueInKb(c.bytesLoaded)}</span>
-                <span>/</span>
-                <span className="total-size dx-theme-accent-as-text-color">{this.getValueInKb(c.bytesTotal)}</span>
-              </div>;
-            })
+            this.state.chunks.map((c, i) => <div key={i}>
+              <span>Chunk size:</span>
+              <span className="segment-size dx-theme-accent-as-text-color">{this.getValueInKb(c.segmentSize)}</span>
+              <span>, Uploaded:</span>
+              <span className="loaded-size dx-theme-accent-as-text-color">{this.getValueInKb(c.bytesLoaded)}</span>
+              <span>/</span>
+              <span className="total-size dx-theme-accent-as-text-color">{this.getValueInKb(c.bytesTotal)}</span>
+            </div>)
           }
         </div>
       </React.Fragment>
@@ -38,7 +36,7 @@ class App extends React.Component {
     const chunk = {
       segmentSize: e.segmentSize,
       bytesLoaded: e.bytesLoaded,
-      bytesTotal: e.bytesTotal
+      bytesTotal: e.bytesTotal,
     };
     this.setState({ chunks: [...this.state.chunks, chunk] });
   }

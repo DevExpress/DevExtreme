@@ -45,7 +45,7 @@ import {
   DxCommonSeriesSettings,
   DxMargin,
   DxExport,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/chart';
 
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -62,15 +62,15 @@ export default {
     DxCommonSeriesSettings,
     DxMargin,
     DxExport,
-    DxLegend
+    DxLegend,
   },
   data() {
     return {
-      dataSource: dataSource,
+      dataSource,
       types,
-      type: types[0]
+      type: types[0],
     };
-  }
+  },
 };
 </script>
 <style>

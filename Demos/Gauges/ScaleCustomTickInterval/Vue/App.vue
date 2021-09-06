@@ -28,12 +28,14 @@
   </div>
 </template>
 <script>
-import { DxLinearGauge, DxScale, DxMinorTick, DxExport, DxTitle, DxFont } from 'devextreme-vue/linear-gauge';
+import {
+  DxLinearGauge, DxScale, DxMinorTick, DxExport, DxTitle, DxFont,
+} from 'devextreme-vue/linear-gauge';
 
 export default {
   components: {
-    DxLinearGauge, DxScale, DxMinorTick, DxExport, DxTitle, DxFont
-  }
+    DxLinearGauge, DxScale, DxMinorTick, DxExport, DxTitle, DxFont,
+  },
 };
 </script>
 <style scoped>

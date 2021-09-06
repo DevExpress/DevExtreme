@@ -1,12 +1,12 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 
+import { Template } from 'devextreme-react/core/template';
 import { products, simpleProducts } from './data.js';
 import ImageIcon from './imageIcon.js';
 import IndicatorIcon from './indicatorIcon.js';
 import ConditionalIcon from './conditionalIcon.js';
 import Item from './item.js';
-import { Template } from 'devextreme-react/core/template';
 
 class App extends React.Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class App extends React.Component {
       loadMode: 'raw',
       load: () => {
         this.setState({ isLoaded: false });
-        var promise = new Promise((resolve) => {
+        const promise = new Promise((resolve) => {
           setTimeout(() => {
             resolve(simpleProducts);
             this.setState({ isLoaded: true });
@@ -23,16 +23,17 @@ class App extends React.Component {
         });
 
         return promise;
-      }
+      },
     };
     this.state = {
       selectedItem: products[0],
-      isLoaded: true
+      isLoaded: true,
     };
     this.renderLoadIndicator = this.renderLoadIndicator.bind(this);
     this.renderConditionalIcon = this.renderConditionalIcon.bind(this);
     this.selectionChanged = this.selectionChanged.bind(this);
   }
+
   render() {
     return (
       <div className='dx-fieldset'>
@@ -72,12 +73,15 @@ class App extends React.Component {
       </div>
     );
   }
+
   renderLoadIndicator() {
     return <IndicatorIcon isLoaded={this.state.isLoaded} />;
   }
+
   renderConditionalIcon() {
     return <ConditionalIcon value={this.state.selectedItem} />;
   }
+
   selectionChanged({ selectedItem }) {
     this.setState({ selectedItem });
   }

@@ -3,9 +3,7 @@ import { dinnerTime, holidays } from './data.js';
 export default class Utils {
   static isHoliday(date) {
     const localeDate = date.toLocaleDateString();
-    return holidays.filter(holiday => {
-      return holiday.toLocaleDateString() === localeDate;
-    }).length > 0;
+    return holidays.filter((holiday) => holiday.toLocaleDateString() === localeDate).length > 0;
   }
 
   static isWeekend(date) {
@@ -35,14 +33,14 @@ export default class Utils {
   static isValidAppointmentInterval(startDate, endDate, cellDuration) {
     const edgeEndDate = new Date(endDate.getTime() - 1);
 
-    if(!Utils.isValidAppointmentDate(edgeEndDate)) {
+    if (!Utils.isValidAppointmentDate(edgeEndDate)) {
       return false;
     }
 
     const durationInMs = cellDuration * 60 * 1000;
     const date = startDate;
-    while(date <= endDate) {
-      if(!Utils.isValidAppointmentDate(date)) {
+    while (date <= endDate) {
+      if (!Utils.isValidAppointmentDate(date)) {
         return false;
       }
       const newDateTime = date.getTime() + durationInMs - 1;

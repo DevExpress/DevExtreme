@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import CheckBox from 'devextreme-react/check-box';
 
@@ -12,10 +12,11 @@ class App extends React.Component {
       showColumnLines: false,
       showRowLines: true,
       showBorders: true,
-      rowAlternationEnabled: true
+      rowAlternationEnabled: true,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
   }
+
   onValueChanged(e) {
     let optionName = null;
     switch (e.component.option('text')) {
@@ -37,11 +38,14 @@ class App extends React.Component {
       }
     }
     this.setState({
-      [optionName]: e.value
+      [optionName]: e.value,
     });
   }
+
   render() {
-    const { showColumnLines, showRowLines, showBorders, rowAlternationEnabled } = this.state;
+    const {
+      showColumnLines, showRowLines, showBorders, rowAlternationEnabled,
+    } = this.state;
     return (
       <React.Fragment>
         <DataGrid dataSource={this.employees}

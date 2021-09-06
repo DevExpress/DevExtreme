@@ -1,7 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
-import DataGrid, { Column, Editing, Lookup, Texts } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column, Editing, Lookup, Texts,
+} from 'devextreme-react/data-grid';
 import { SpeedDialAction } from 'devextreme-react/speed-dial-action';
 import { SelectBox } from 'devextreme-react/select-box';
 import { employees, states, directions } from './data.js';
@@ -10,7 +12,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedRowIndex: -1
+      selectedRowIndex: -1,
     };
     this.grid = null;
     this.selectionChanged = this.selectedChanged.bind(this);
@@ -22,13 +24,13 @@ class App extends React.Component {
 
   selectedChanged(e) {
     this.setState({
-      selectedRowIndex: e.component.getRowIndexByKey(e.selectedRowKeys[0])
+      selectedRowIndex: e.component.getRowIndexByKey(e.selectedRowKeys[0]),
     });
   }
 
   directionChanged(e) {
     config({
-      floatingActionButtonConfig: directions[e.selectedItem]
+      floatingActionButtonConfig: directions[e.selectedItem],
     });
 
     repaintFloatingActionButton();
@@ -50,7 +52,7 @@ class App extends React.Component {
   }
 
   render() {
-    var selectedRowIndex = this.state.selectedRowIndex;
+    const { selectedRowIndex } = this.state;
 
     return (
       <div>
@@ -58,7 +60,7 @@ class App extends React.Component {
           id="grid"
           dataSource={employees}
           keyExpr="ID"
-          ref={ref => this.grid = ref}
+          ref={(ref) => this.grid = ref}
           selection={{ mode: 'single' }}
           showBorders={true}
           onSelectionChanged={this.selectionChanged}>

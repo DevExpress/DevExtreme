@@ -1,11 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
   Editing,
   Paging,
   Lookup,
-  KeyboardNavigation
+  KeyboardNavigation,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -19,24 +19,28 @@ class App extends React.Component {
     this.state = {
       editOnKeyPress: true,
       enterKeyAction: 'moveFocus',
-      enterKeyDirection: 'column'
+      enterKeyDirection: 'column',
     };
-    this.onFocusedCellChanging = e => {
+    this.onFocusedCellChanging = (e) => {
       e.isHighlighted = true;
     };
     this.editOnKeyPressChanged = this.editOnKeyPressChanged.bind(this);
     this.enterKeyActionChanged = this.enterKeyActionChanged.bind(this);
     this.enterKeyDirectionChanged = this.enterKeyDirectionChanged.bind(this);
   }
+
   editOnKeyPressChanged(e) {
     this.setState({ editOnKeyPress: e.value });
   }
+
   enterKeyActionChanged(e) {
     this.setState({ enterKeyAction: e.value });
   }
+
   enterKeyDirectionChanged(e) {
     this.setState({ enterKeyDirection: e.value });
   }
+
   render() {
     return (
       <div id="data-grid-demo">

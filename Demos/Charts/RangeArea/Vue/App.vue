@@ -49,7 +49,7 @@ import DxChart, {
   DxVisualRange,
   DxFormat,
   DxExport,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/chart';
 import { inflationData } from './data.js';
 
@@ -64,18 +64,18 @@ export default {
     DxVisualRange,
     DxFormat,
     DxExport,
-    DxLegend
+    DxLegend,
   },
   data() {
     return {
-      inflationData
+      inflationData,
     };
   },
   methods: {
     customizeLabelText({ valueText }) {
       return `${valueText} %`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -31,7 +31,7 @@ import DxChart, {
   DxHatching,
   DxSeries,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 import { catBreedsData } from './data.js';
 
@@ -43,11 +43,11 @@ export default {
     DxHatching,
     DxSeries,
     DxLegend,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      catBreedsData
+      catBreedsData,
     };
   },
   methods: {
@@ -61,8 +61,8 @@ export default {
       } else {
         point.select();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -71,7 +71,7 @@ import {
   DxSelection,
   DxLookup,
   DxToolbar,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/data-grid';
 
 import { DxButton } from 'devextreme-vue/button';
@@ -90,30 +90,30 @@ export default {
     DxLookup,
     DxButton,
     DxToolbar,
-    DxItem
+    DxItem,
   },
   data() {
     return {
       dataSource: new DataSource({
         store: new ArrayStore({
           data: employees,
-          key: 'ID'
-        })
+          key: 'ID',
+        }),
       }),
       selectedItemKeys: [],
-      states: states,
-      selectionChanged: (data)=>{
+      states,
+      selectionChanged: (data) => {
         this.selectedItemKeys = data.selectedRowKeys;
       },
-      deleteRecords:()=>{
+      deleteRecords: () => {
         this.selectedItemKeys.forEach((key) => {
           this.dataSource.store().remove(key);
         });
         this.selectedItemKeys = [];
         this.dataSource.reload();
-      }
+      },
     };
-  }
+  },
 };
 </script>
 <style>

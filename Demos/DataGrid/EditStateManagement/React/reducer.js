@@ -8,7 +8,8 @@ import {
   SAVING_ERROR,
   SAVING_CANCEL,
   SET_CHANGES,
-  SET_EDIT_ROW_KEY } from './actions.js';
+  SET_EDIT_ROW_KEY,
+} from './actions.js';
 
 export default function reducer(state, { type, payload }) {
   let newData;
@@ -22,41 +23,41 @@ export default function reducer(state, { type, payload }) {
         data: newData,
         changes: [],
         editRowKey: null,
-        isLoading: false
+        isLoading: false,
       };
     case SAVING_CANCEL:
       return {
         ...state,
         changes: [],
-        editRowKey: null
+        editRowKey: null,
       };
     case SET_CHANGES:
       return {
         ...state,
-        changes: payload
+        changes: payload,
       };
     case SET_EDIT_ROW_KEY:
       return {
         ...state,
-        editRowKey: payload
+        editRowKey: payload,
       };
     case FETCH_SUCCESS:
       return {
         ...state,
         ...payload,
-        isLoading: false
+        isLoading: false,
       };
     case FETCH_PENDING:
     case SAVING_PENDING:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
       };
     case FETCH_ERROR:
     case SAVING_ERROR:
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
       };
     default:
       return state;

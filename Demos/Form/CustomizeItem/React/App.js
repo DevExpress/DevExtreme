@@ -9,15 +9,15 @@ class App extends React.Component {
     super(props);
     this.employee = service.getEmployee();
     this.positions = service.getPositions();
-    this.rules = { 'X': /[02-9]/ };
+    this.rules = { X: /[02-9]/ };
 
     this.validationRules = {
       position: [
         { type: 'required', message: 'Position is required.' },
       ],
       hireDate: [
-        { type: 'required', message: 'Hire Date is required.' }
-      ]
+        { type: 'required', message: 'Hire Date is required.' },
+      ],
     };
 
     this.validateForm = (e) => {

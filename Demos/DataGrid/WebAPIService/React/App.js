@@ -1,7 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 
 import 'devextreme/data/odata/store';
-import { Column, DataGrid, FilterRow, HeaderFilter, GroupPanel, Scrolling, Editing, Grouping, Lookup, MasterDetail, Summary, RangeRule, RequiredRule, StringLengthRule, GroupItem, TotalItem, ValueFormat } from 'devextreme-react/data-grid';
+import {
+  Column, DataGrid, FilterRow, HeaderFilter, GroupPanel, Scrolling, Editing, Grouping, Lookup, MasterDetail, Summary, RangeRule, RequiredRule, StringLengthRule, GroupItem, TotalItem, ValueFormat,
+} from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetailGrid from './MasterDetailGrid.js';
 
@@ -15,7 +17,7 @@ const dataSource = createStore({
   deleteUrl: `${url}/DeleteOrder`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const customersData = createStore({
@@ -23,7 +25,7 @@ const customersData = createStore({
   loadUrl: `${url}/CustomersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const shippersData = createStore({
@@ -31,7 +33,7 @@ const shippersData = createStore({
   loadUrl: `${url}/ShippersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 class App extends React.Component {

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column, Sorting } from 'devextreme-react/data-grid';
 import CheckBox from 'devextreme-react/check-box';
 import { employees } from './data.js';
@@ -8,7 +8,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      positionDisableSorting: false
+      positionDisableSorting: false,
     };
 
     this.dataGrid = null;
@@ -61,7 +61,7 @@ class App extends React.Component {
 
   onPositionSortingChanged() {
     this.setState({
-      positionDisableSorting: !this.state.positionDisableSorting
+      positionDisableSorting: !this.state.positionDisableSorting,
     });
 
     this.dataGrid.instance.columnOption(5, 'sortOrder', void 0);

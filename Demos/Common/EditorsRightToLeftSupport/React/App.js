@@ -13,11 +13,11 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      rtlEnabled: false
+      rtlEnabled: false,
     };
     this.languages = [
       'Arabic: Right-to-Left direction',
-      'English: Left-to-Right direction'
+      'English: Left-to-Right direction',
     ];
     this.displayExpr = 'nameEn';
     this.textValue = 'text';

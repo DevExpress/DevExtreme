@@ -75,7 +75,7 @@ export default {
     DxCheckBox,
     DxSelectBox,
     DxNumberBox,
-    DxForm
+    DxForm,
   },
   data() {
     const companies = service.getCompanies();
@@ -85,11 +85,11 @@ export default {
       showColon: true,
       minColWidth: 300,
       colCount: 2,
-      companies: companies,
+      companies,
       company: companies[0],
-      width: null
+      width: null,
     };
-  }
+  },
 };
 </script>
 <style scoped>

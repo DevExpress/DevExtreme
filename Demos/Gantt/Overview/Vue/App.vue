@@ -53,14 +53,14 @@ import {
   DxEditing,
   DxValidation,
   DxToolbar,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/gantt';
 
 import {
   tasks,
   dependencies,
   resources,
-  resourceAssignments
+  resourceAssignments,
 } from './data.js';
 
 export default {
@@ -74,16 +74,16 @@ export default {
     DxEditing,
     DxValidation,
     DxToolbar,
-    DxItem
+    DxItem,
   },
   data() {
     return {
-      tasks: tasks,
-      dependencies: dependencies,
-      resources: resources,
-      resourceAssignments: resourceAssignments
+      tasks,
+      dependencies,
+      resources,
+      resourceAssignments,
     };
-  }
+  },
 };
 </script>
 <style>

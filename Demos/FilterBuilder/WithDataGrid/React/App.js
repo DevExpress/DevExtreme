@@ -12,9 +12,9 @@ class App extends React.Component {
     this.dataSource = new DataSource({
       store: new ODataStore({
         fieldTypes: {
-          'Product_Cost': 'Decimal',
-          'Product_Sale_Price': 'Decimal',
-          'Product_Retail_Price': 'Decimal'
+          Product_Cost: 'Decimal',
+          Product_Sale_Price: 'Decimal',
+          Product_Retail_Price: 'Decimal',
         },
         url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
       }),
@@ -24,16 +24,17 @@ class App extends React.Component {
         'Product_Cost',
         'Product_Sale_Price',
         'Product_Retail_Price',
-        'Product_Current_Inventory'
-      ]
+        'Product_Current_Inventory',
+      ],
     });
     this.state = {
       value: filter,
-      gridFilterValue: filter
+      gridFilterValue: filter,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
     this.buttonClick = this.buttonClick.bind(this);
   }
+
   render() {
     const { value, gridFilterValue } = this.state;
     return (
@@ -57,14 +58,16 @@ class App extends React.Component {
       </div>
     );
   }
+
   onValueChanged(e) {
     this.setState({
-      value: e.value
+      value: e.value,
     });
   }
+
   buttonClick() {
     this.setState({
-      gridFilterValue: this.state.value
+      gridFilterValue: this.state.value,
     });
   }
 }

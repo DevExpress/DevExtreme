@@ -36,12 +36,12 @@ import { DxSwitch } from 'devextreme-vue/switch';
 
 export default {
   components: {
-    DxSwitch
+    DxSwitch,
   },
   data() {
     return {
-      value: false
+      value: false,
     };
-  }
+  },
 };
 </script>

@@ -4,7 +4,6 @@ import { Form, Item } from 'devextreme-react/form';
 const items = ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'];
 
 class AddressTab extends React.Component {
-
   render() {
     return (
       <Form
@@ -13,13 +12,11 @@ class AddressTab extends React.Component {
         className="address-form form-container"
       >
         {
-          items.map((item, index) =>
-            <Item
-              dataField={item}
-              key={index}
-              render={this.renderFormItem}
-            />
-          )
+          items.map((item, index) => <Item
+            dataField={item}
+            key={index}
+            render={this.renderFormItem}
+          />)
         }
       </Form>
     );

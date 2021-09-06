@@ -39,18 +39,18 @@ export default {
     employee: {
       type: Object,
       required: true,
-      default: () => ({})
+      default: () => ({}),
     },
     editEmployee: {
       type: Function,
       required: true,
-      default: () => {}
+      default: () => {},
     },
     deleteEmployee: {
       type: Function,
       required: true,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   computed: {
     employeeName() {
@@ -58,7 +58,7 @@ export default {
     },
     employeeTitle() {
       return this.employee && this.employee.Title ? this.employee.Title : 'Employee\'s Title';
-    }
+    },
   },
   methods: {
     editEmployeeFunc() {
@@ -66,8 +66,8 @@ export default {
     },
     deleteEmployeeFunc() {
       this.deleteEmployee(this.employee);
-    }
-  }
+    },
+  },
 };
 </script>
 

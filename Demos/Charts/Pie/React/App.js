@@ -5,7 +5,7 @@ import PieChart, {
   Label,
   Connector,
   Size,
-  Export
+  Export,
 } from 'devextreme-react/pie-chart';
 
 import { areas } from './data.js';
@@ -48,8 +48,8 @@ class App extends React.Component {
   }
 
   legendClickHandler(e) {
-    let arg = e.target;
-    let item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
+    const arg = e.target;
+    const item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
 
     this.toggleVisibility(item);
   }

@@ -46,7 +46,7 @@ import {
   DxSearchPanel,
   DxPaging,
   DxToolbar,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/data-grid';
 
 import { jsPDF } from 'jspdf';
@@ -65,30 +65,30 @@ export default {
     DxSearchPanel,
     DxDataGrid,
     DxToolbar,
-    DxItem
+    DxItem,
   },
   data() {
     return {
       customers,
-      dataGridRef
+      dataGridRef,
     };
   },
   computed: {
-    dataGrid: function() {
+    dataGrid() {
       return this.$refs[dataGridRef].instance;
-    }
+    },
   },
   methods: {
     exportGrid() {
       const doc = new jsPDF();
       exportDataGridToPdf({
         jsPDFDocument: doc,
-        component: this.dataGrid
+        component: this.dataGrid,
       }).then(() => {
         doc.save('Customers.pdf');
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

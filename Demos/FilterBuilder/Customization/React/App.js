@@ -8,7 +8,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: filter
+      value: filter,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
     this.updateTexts = this.updateTexts.bind(this);
@@ -45,12 +45,14 @@ class App extends React.Component {
       </div>
     );
   }
+
   updateTexts(e) {
     this.setState({
       filterText: formatValue(e.component.option('value')),
-      dataSourceText: formatValue(e.component.getFilterExpression())
+      dataSourceText: formatValue(e.component.getFilterExpression()),
     });
   }
+
   onValueChanged(e) {
     this.setState({ value: e.value });
     this.updateTexts(e);
@@ -59,9 +61,7 @@ class App extends React.Component {
 
 function calculateFilterExpression(filterValue, field) {
   return filterValue && filterValue.length
-    && Array.prototype.concat.apply([], filterValue.map(function(value) {
-      return [[field.dataField, '=', value], 'or'];
-    })).slice(0, -1);
+    && Array.prototype.concat.apply([], filterValue.map((value) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
 }
 
 export default App;

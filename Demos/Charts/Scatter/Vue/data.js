@@ -37,7 +37,9 @@ export function generateDataSource() {
     y1 = k1 * x1 + b1 + delta1;
     y2 = k2 * x2 + b2 + delta2;
 
-    ds.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
+    ds.push({
+      x1, y1, x2, y2,
+    });
   }
   return ds;
 }

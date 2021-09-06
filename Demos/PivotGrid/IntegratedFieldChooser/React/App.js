@@ -5,7 +5,7 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import SelectBox from 'devextreme-react/select-box';
 
 import PivotGrid, {
-  FieldChooser
+  FieldChooser,
 } from 'devextreme-react/pivot-grid';
 
 class App extends React.Component {
@@ -13,7 +13,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      applyChangesMode: 'instantly'
+      applyChangesMode: 'instantly',
     };
 
     this.changeMode = this.changeMode.bind(this);
@@ -50,7 +50,7 @@ class App extends React.Component {
 
   changeMode(e) {
     this.setState({
-      applyChangesMode: e.value
+      applyChangesMode: e.value,
     });
   }
 }
@@ -62,19 +62,19 @@ const dataSource = new PivotGridDataSource({
       dataField: '[Product].[Subcategory]',
       area: 'row',
       headerFilter: {
-        allowSearch: true
-      }
+        allowSearch: true,
+      },
     },
     { dataField: '[Ship Date].[Calendar Year]', area: 'column' },
     { dataField: '[Ship Date].[Month of Year]', area: 'column' },
-    { dataField: '[Measures].[Customer Count]', area: 'data' }
+    { dataField: '[Measures].[Customer Count]', area: 'data' },
   ],
   store: {
     type: 'xmla',
     url: 'https://demos.devexpress.com/Services/OLAP/msmdpump.dll',
     catalog: 'Adventure Works DW Standard Edition',
-    cube: 'Adventure Works'
-  }
+    cube: 'Adventure Works',
+  },
 });
 
 const applyChangesModes = ['instantly', 'onDemand'];

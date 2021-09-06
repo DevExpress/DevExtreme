@@ -5,11 +5,10 @@ import ProductSelectBox from './ProductSelectBox.js';
 import OrderHistory from './OrderHistory.js';
 
 class OrdersTab extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      chosenProductId: null
+      chosenProductId: null,
     };
     this.productChanged = this.productChanged.bind(this);
     this.renderSelectBox = this.renderSelectBox.bind(this);
@@ -42,7 +41,7 @@ class OrdersTab extends React.Component {
 
   productChanged(productId) {
     this.setState({
-      chosenProductId: productId
+      chosenProductId: productId,
     });
   }
 }

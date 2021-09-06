@@ -1,5 +1,7 @@
 import React from 'react';
-import PieChart, { Series, Tooltip, Size, Legend } from 'devextreme-react/pie-chart';
+import PieChart, {
+  Series, Tooltip, Size, Legend,
+} from 'devextreme-react/pie-chart';
 import { SelectBox } from 'devextreme-react/select-box';
 import { populationData } from './data.js';
 
@@ -7,7 +9,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedRegion: null
+      selectedRegion: null,
     };
 
     this.pieChartRef = React.createRef();
@@ -66,14 +68,14 @@ class App extends React.Component {
   showTooltip(point) {
     point.showTooltip();
     this.setState({
-      selectedRegion: point.argument
+      selectedRegion: point.argument,
     });
   }
 }
 
 function customizeTooltip(pointInfo) {
   return {
-    text: `${pointInfo.argumentText}<br/>${pointInfo.valueText}`
+    text: `${pointInfo.argumentText}<br/>${pointInfo.valueText}`,
   };
 }
 

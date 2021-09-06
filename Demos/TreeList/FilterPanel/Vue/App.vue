@@ -47,20 +47,22 @@
   </div>
 </template>
 <script>
+import {
+  DxTreeList, DxFilterRow, DxFilterPanel, DxHeaderFilter, DxColumn,
+} from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
-import { DxTreeList, DxFilterRow, DxFilterPanel, DxHeaderFilter, DxColumn } from 'devextreme-vue/tree-list';
 
 export default {
   components: {
-    DxTreeList, DxFilterRow, DxFilterPanel, DxHeaderFilter, DxColumn
+    DxTreeList, DxFilterRow, DxFilterPanel, DxHeaderFilter, DxColumn,
   },
   data() {
     return {
-      employees: employees,
+      employees,
       expandedRowKeys: [1],
-      filterValue: ['City', '=', 'Bentonville']
+      filterValue: ['City', '=', 'Bentonville'],
     };
-  }
+  },
 };
 </script>
 <style scoped>

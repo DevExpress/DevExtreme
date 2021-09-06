@@ -5,5 +5,5 @@ import App from './App.js';
 
 ReactDOM.render(
   <App />,
-  document.getElementById('scheduler')
+  document.getElementById('scheduler'),
 );

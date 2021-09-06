@@ -14,9 +14,9 @@ class App extends React.Component {
       value: true,
       onValueChanged: (e) => {
         this.setState({
-          isHomeAddressVisible: e.component.option('value')
+          isHomeAddressVisible: e.component.option('value'),
         });
-      }
+      },
     };
 
     this.addPhoneButtonOptions = {
@@ -25,12 +25,12 @@ class App extends React.Component {
       onClick: () => {
         this.employee.Phones.push('');
         this.updatePhones();
-      }
+      },
     };
 
     this.state = {
       phoneOptions: this.getPhonesOptions(),
-      isHomeAddressVisible: true
+      isHomeAddressVisible: true,
     };
 
     this.generateNewPhoneOptions = this.generateNewPhoneOptions.bind(this);
@@ -68,14 +68,12 @@ class App extends React.Component {
               name="phones-container">
               <GroupItem
                 name="phones">
-                { this.state.phoneOptions.map((phone, index) =>
-                  <SimpleItem
-                    key = {`Phones${ index}`}
-                    dataField={`Phones[${index}]`}
-                    editorOptions={phone}>
-                    <Label text={`Phone ${ index + 1}`} />
-                  </SimpleItem>
-                )}
+                { this.state.phoneOptions.map((phone, index) => <SimpleItem
+                  key = {`Phones${index}`}
+                  dataField={`Phones[${index}]`}
+                  editorOptions={phone}>
+                  <Label text={`Phone ${index + 1}`} />
+                </SimpleItem>)}
               </GroupItem>
               <SimpleItem itemType="button"
                 horizontalAlignment="left"
@@ -90,8 +88,8 @@ class App extends React.Component {
   }
 
   getPhonesOptions() {
-    var options = [];
-    for (var i = 0; i < this.employee.Phones.length; i++) {
+    const options = [];
+    for (let i = 0; i < this.employee.Phones.length; i++) {
       options.push(this.generateNewPhoneOptions(i));
     }
     return options;
@@ -100,7 +98,7 @@ class App extends React.Component {
   generateNewPhoneOptions(index) {
     return {
       mask: '+1 (X00) 000-0000',
-      maskRules: { 'X': /[01-9]/ },
+      maskRules: { X: /[01-9]/ },
       buttons: [{
         name: 'trash',
         location: 'after',
@@ -110,15 +108,15 @@ class App extends React.Component {
           onClick: () => {
             this.employee.Phones.splice(index, 1);
             this.updatePhones();
-          }
-        }
-      }]
+          },
+        },
+      }],
     };
   }
 
   updatePhones() {
     this.setState({
-      phoneOptions: this.getPhonesOptions()
+      phoneOptions: this.getPhonesOptions(),
     });
   }
 }

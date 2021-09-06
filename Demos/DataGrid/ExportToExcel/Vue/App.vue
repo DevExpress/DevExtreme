@@ -40,17 +40,19 @@
   </div>
 </template>
 <script>
-import { DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel,
+} from 'devextreme-vue/data-grid';
 import service from './data.js';
 
 export default {
   components: {
-    DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel
+    DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel,
   },
   data() {
     return {
-      dataSource: service.getEmployees()
+      dataSource: service.getEmployees(),
     };
-  }
+  },
 };
 </script>

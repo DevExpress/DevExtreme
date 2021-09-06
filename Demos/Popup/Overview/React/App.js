@@ -1,12 +1,13 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { Popup, Position, ToolbarItem } from 'devextreme-react/popup';
+import notify from 'devextreme/ui/notify';
 import { EmployeeItem } from './EmployeeItem.js';
 import { employees } from './data.js';
-import notify from 'devextreme/ui/notify';
 
 class App extends React.Component {
   emailButtonOptions = null;
+
   closeButtonOptions = null;
 
   constructor(props) {
@@ -14,30 +15,28 @@ class App extends React.Component {
     this.state = {
       currentEmployee: {},
       popupVisible: false,
-      positionOf: ''
+      positionOf: '',
     };
     this.showInfo = this.showInfo.bind(this);
     this.hideInfo = this.hideInfo.bind(this);
     this.emailButtonOptions = {
       icon: 'email',
       text: 'Send',
-      onClick: this.sendEmail.bind(this)
+      onClick: this.sendEmail.bind(this),
     };
     this.closeButtonOptions = {
       text: 'Close',
-      onClick: this.hideInfo
+      onClick: this.hideInfo,
     };
   }
 
   render() {
-    const items = employees.map((employee) =>
-      <li key={employee.ID}>
-        <EmployeeItem
-          employee={employee}
-          showInfo={this.showInfo}
-        />
-      </li>
-    );
+    const items = employees.map((employee) => <li key={employee.ID}>
+      <EmployeeItem
+        employee={employee}
+        showInfo={this.showInfo}
+      />
+    </li>);
 
     return (
       <div id="container">
@@ -101,25 +100,25 @@ class App extends React.Component {
     this.setState({
       currentEmployee: employee,
       positionOf: `#image${employee.ID}`,
-      popupVisible: true
+      popupVisible: true,
     });
   }
 
   hideInfo() {
     this.setState({
       currentEmployee: {},
-      popupVisible: false
+      popupVisible: false,
     });
   }
 
   sendEmail() {
     const message = `Email is sent to ${this.state.currentEmployee.FirstName} ${this.state.currentEmployee.LastName}`;
     notify({
-      message: message,
+      message,
       position: {
         my: 'center top',
-        at: 'center top'
-      }
+        at: 'center top',
+      },
     }, 'success', 3000);
   }
 }

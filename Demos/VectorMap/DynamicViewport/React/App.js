@@ -1,7 +1,7 @@
 import React from 'react';
 
 import VectorMap, {
-  Layer
+  Layer,
 } from 'devextreme-react/vector-map';
 import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
@@ -12,35 +12,34 @@ import { viewportCoordinates } from './data.js';
 const bounds = [-180, 85, 180, -60];
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       coordinates: viewportCoordinates[0].coordinates,
       zoomFactor: '1.00',
-      center: '0.000, 46.036'
+      center: '0.000, 46.036',
     };
 
-    this.storeMapInstance = (component) =>{
+    this.storeMapInstance = (component) => {
       this.map = component.instance;
     };
 
     this.continentChanged = ({ value }) => {
       this.setState({
-        coordinates: value
+        coordinates: value,
       });
       this.map.viewport(value);
     };
     this.zoomFactorChanged = ({ zoomFactor }) => {
       this.setState({
-        zoomFactor: zoomFactor.toFixed(2)
+        zoomFactor: zoomFactor.toFixed(2),
       });
     };
 
     this.centerChanged = ({ center }) => {
       const value = `${center[0].toFixed(3)}, ${center[1].toFixed(3)}`;
       this.setState({
-        center: value
+        center: value,
       });
     };
   }

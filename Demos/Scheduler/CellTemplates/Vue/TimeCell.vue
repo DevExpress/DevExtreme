@@ -14,23 +14,23 @@ export default {
   props: {
     cellData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   computed: {
-    isDinner: function() {
-      const date = this.cellData.date;
+    isDinner() {
+      const { date } = this.cellData;
       return Utils.isDinner(date);
     },
-    hasCoffeeCupIcon: function() {
-      const date = this.cellData.date;
+    hasCoffeeCupIcon() {
+      const { date } = this.cellData;
       return Utils.hasCoffeeCupIcon(date);
-    }
+    },
   },
   methods: {
     markTimeCell(cellData) {
-      return { 'dinner': Utils.isDinner(cellData.date) };
-    }
-  }
+      return { dinner: Utils.isDinner(cellData.date) };
+    },
+  },
 };
 </script>

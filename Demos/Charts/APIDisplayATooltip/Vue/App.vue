@@ -37,7 +37,7 @@ import DxPieChart, {
   DxSeries,
   DxTooltip,
   DxSize,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { populationData } from './data.js';
@@ -49,13 +49,13 @@ export default {
     DxSeries,
     DxTooltip,
     DxSize,
-    DxLegend
+    DxLegend,
   },
 
   data() {
     return {
       selectedRegion: null,
-      populationData
+      populationData,
     };
   },
 
@@ -73,20 +73,20 @@ export default {
 
     customizeTooltip(pointInfo) {
       return {
-        text: `${pointInfo.argumentText}<br/>${pointInfo.valueText}`
+        text: `${pointInfo.argumentText}<br/>${pointInfo.valueText}`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
 .controls-pane {
-	margin-top: 20px;
-	text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .dx-selectbox {
-	display: inline-block;
+  display: inline-block;
 }
 </style>
 

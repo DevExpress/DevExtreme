@@ -75,21 +75,28 @@
   </div>
 </template>
 <script>
-import { DxCircularGauge, DxScale, DxLabel, DxTooltip, DxTitle, DxFont } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxLabel, DxTooltip, DxTitle, DxFont,
+} from 'devextreme-vue/circular-gauge';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import { DxButton } from 'devextreme-vue/button';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxLabel, DxTooltip, DxTitle, DxFont,
+    DxCircularGauge,
+    DxScale,
+    DxLabel,
+    DxTooltip,
+    DxTitle,
+    DxFont,
     DxNumberBox,
-    DxButton
+    DxButton,
   },
   data() {
     return {
       additionalGenerator1Value: 12,
       additionalGenerator2Value: 23,
-      mainGeneratorValue: 34
+      mainGeneratorValue: 34,
     };
   },
   mounted() {
@@ -102,8 +109,8 @@ export default {
     updateValues() {
       this.$refs.gauge.instance.value(this.mainGeneratorValue);
       this.$refs.gauge.instance.subvalues([this.additionalGenerator1Value, this.additionalGenerator2Value]);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

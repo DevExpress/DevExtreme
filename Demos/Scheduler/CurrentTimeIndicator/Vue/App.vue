@@ -78,7 +78,7 @@ export default {
     DxResource,
     DxSwitch,
     DxNumberBox,
-    AppointmentTemplate
+    AppointmentTemplate,
   },
   data() {
     return {
@@ -88,22 +88,22 @@ export default {
       shadeUntilCurrentTime: true,
       updateInterval: 10,
       dataSource: data,
-      moviesData: moviesData,
+      moviesData,
     };
   },
   methods: {
-    onContentReady: function(e) {
+    onContentReady(e) {
       e.component.scrollTo(new Date());
     },
 
-    onAppointmentClick: function(e) {
+    onAppointmentClick(e) {
       e.cancel = true;
     },
 
-    onAppointmentDblClick: function(e) {
+    onAppointmentDblClick(e) {
       e.cancel = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

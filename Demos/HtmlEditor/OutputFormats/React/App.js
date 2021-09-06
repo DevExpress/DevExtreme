@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { markup } from './data.js';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import ButtonGroup, { Item as ButtonItem } from 'devextreme-react/button-group';
+import { markup } from './data.js';
 
 import 'devextreme/ui/html_editor/converters/markdown';
 
@@ -15,14 +15,15 @@ class App extends React.Component {
 
     this.state = {
       valueContent: markup,
-      editorValueType: 'html'
+      editorValueType: 'html',
     };
 
     this.valueChanged = this.valueChanged.bind(this);
     this.valueTypeChanged = this.valueTypeChanged.bind(this);
   }
+
   render() {
-    let { valueContent, editorValueType } = this.state;
+    const { valueContent, editorValueType } = this.state;
 
     return (
       <div className="widget-container">
@@ -75,14 +76,16 @@ class App extends React.Component {
       </div>
     );
   }
+
   valueChanged(e) {
     this.setState({
-      valueContent: e.value
+      valueContent: e.value,
     });
   }
+
   valueTypeChanged(e) {
     this.setState({
-      editorValueType: e.addedItems[0].text.toLowerCase()
+      editorValueType: e.addedItems[0].text.toLowerCase(),
     });
   }
 }

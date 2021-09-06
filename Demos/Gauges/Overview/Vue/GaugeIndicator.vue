@@ -22,7 +22,7 @@ import DxCircularGauge, {
   DxSize,
   DxValueIndicator,
   DxGeometry,
-  DxScale
+  DxScale,
 } from 'devextreme-vue/circular-gauge';
 
 export default {
@@ -31,25 +31,25 @@ export default {
     DxSize,
     DxValueIndicator,
     DxGeometry,
-    DxScale
+    DxScale,
   },
   props: {
     value: {
       type: Number,
-      default: 0
+      default: 0,
     },
     startAngle: {
       type: Number,
-      default: 0
+      default: 0,
     },
     endAngle: {
       type: Number,
-      default: 90
+      default: 90,
     },
     inverted: {
       type: Boolean,
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 </script>

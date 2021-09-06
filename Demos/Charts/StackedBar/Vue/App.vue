@@ -45,7 +45,7 @@ import {
   DxTitle,
   DxLegend,
   DxExport,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 
 import service from './data.js';
@@ -59,20 +59,20 @@ export default {
     DxTitle,
     DxLegend,
     DxExport,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
-      dataSource: service.getMaleAgeData()
+      dataSource: service.getMaleAgeData(),
     };
   },
   methods: {
     customizeTooltip(pointInfo) {
       return {
-        text: `${pointInfo.seriesName} years: ${pointInfo.valueText}`
+        text: `${pointInfo.seriesName} years: ${pointInfo.valueText}`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

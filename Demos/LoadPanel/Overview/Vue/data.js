@@ -9,5 +9,5 @@ export const employee = {
   Email: 'jheart@dx-email.com',
   Skype: 'jheart_DX_skype',
   Home_Phone: '(213) 555-9208',
-  Mobile_Phone: '(213) 555-9392'
+  Mobile_Phone: '(213) 555-9392',
 };

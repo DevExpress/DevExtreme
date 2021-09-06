@@ -35,11 +35,11 @@ export const buildingData = {
           [10, -30],
           [-74, -30],
           [-74, -74],
-          [10, -74]
-        ]]
-      }
-    }
-  ]
+          [10, -74],
+        ]],
+      },
+    },
+  ],
 };
 
 export const roomsData = {
@@ -49,7 +49,7 @@ export const roomsData = {
       type: 'Feature',
       properties: {
         name: 'Room 1',
-        square: 576
+        square: 576,
       },
       geometry: {
         type: 'Polygon',
@@ -57,14 +57,14 @@ export const roomsData = {
           [-74, -30],
           [34, -30],
           [34, -74],
-          [-74, -74]
-        ]]
-      }
+          [-74, -74],
+        ]],
+      },
     }, {
       type: 'Feature',
       properties: {
         name: 'Room 2',
-        square: 600
+        square: 600,
       },
       geometry: {
         type: 'Polygon',
@@ -72,14 +72,14 @@ export const roomsData = {
           [-74, 24],
           [34, 24],
           [34, -24],
-          [-74, -24]
-        ]]
-      }
+          [-74, -24],
+        ]],
+      },
     }, {
       type: 'Feature',
       properties: {
         name: 'Room 3',
-        square: 540
+        square: 540,
       },
       geometry: {
         type: 'Polygon',
@@ -87,14 +87,14 @@ export const roomsData = {
           [-74, 74],
           [34, 74],
           [34, 30],
-          [-74, 30]
-        ]]
-      }
+          [-74, 30],
+        ]],
+      },
     }, {
       type: 'Feature',
       properties: {
         name: 'Room 4',
-        square: 288
+        square: 288,
       },
       geometry: {
         type: 'Polygon',
@@ -102,9 +102,9 @@ export const roomsData = {
           [40, -26],
           [94, -26],
           [94, -74],
-          [40, -74]
-        ]]
-      }
-    }
-  ]
+          [40, -74],
+        ]],
+      },
+    },
+  ],
 };

@@ -3,7 +3,7 @@ import React from 'react';
 import Sankey, {
   Tooltip,
   Link,
-  Node
+  Node,
 } from 'devextreme-react/sankey';
 
 import { data } from './data.js';
@@ -39,7 +39,7 @@ class App extends React.Component {
 
 function customizeLinkTooltip(info) {
   return {
-    html: `<b>From:</b> ${info.source}<br/><b>To:</b> ${info.target}<br/><b>Weight:</b> ${info.weight}`
+    html: `<b>From:</b> ${info.source}<br/><b>To:</b> ${info.target}<br/><b>Weight:</b> ${info.weight}`,
   };
 }
 

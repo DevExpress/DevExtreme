@@ -1,7 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import DropDownBox from 'devextreme-react/drop-down-box';
 import TreeView from 'devextreme-react/tree-view';
-import DataGrid, { Selection, Paging, FilterRow, Scrolling } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Selection, Paging, FilterRow, Scrolling,
+} from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 
@@ -15,7 +17,7 @@ class App extends React.Component {
     this.gridDataSource = this.makeAsyncDataSource('customers.json');
     this.state = {
       treeBoxValue: ['1_1'],
-      gridBoxValue: [3]
+      gridBoxValue: [3],
     };
     this.treeView_itemSelectionChanged = this.treeView_itemSelectionChanged.bind(this);
     this.syncTreeViewSelection = this.syncTreeViewSelection.bind(this);
@@ -24,14 +26,15 @@ class App extends React.Component {
     this.treeViewRender = this.treeViewRender.bind(this);
     this.dataGridRender = this.dataGridRender.bind(this);
   }
+
   makeAsyncDataSource(jsonFile) {
     return new CustomStore({
       loadMode: 'raw',
       key: 'ID',
-      load: function() {
-        return fetch(`../../../../data/${ jsonFile}`)
-          .then(response => response.json());
-      }
+      load() {
+        return fetch(`../../../../data/${jsonFile}`)
+          .then((response) => response.json());
+      },
     });
   }
 
@@ -108,14 +111,14 @@ class App extends React.Component {
   }
 
   syncTreeViewSelection(e) {
-    let treeView = (e.component.selectItem && e.component) || (this.treeView && this.treeView.instance);
+    const treeView = (e.component.selectItem && e.component) || (this.treeView && this.treeView.instance);
 
     if (treeView) {
       if (e.value === null) {
         treeView.unselectAll();
       } else {
-        let values = e.value || this.state.treeBoxValue;
-        values && values.forEach(function(value) {
+        const values = e.value || this.state.treeBoxValue;
+        values && values.forEach((value) => {
           treeView.selectItem(value);
         });
       }
@@ -123,26 +126,26 @@ class App extends React.Component {
 
     if (e.value !== undefined) {
       this.setState({
-        treeBoxValue: e.value
+        treeBoxValue: e.value,
       });
     }
   }
 
   syncDataGridSelection(e) {
     this.setState({
-      gridBoxValue: e.value || []
+      gridBoxValue: e.value || [],
     });
   }
 
   treeView_itemSelectionChanged(e) {
     this.setState({
-      treeBoxValue: e.component.getSelectedNodeKeys()
+      treeBoxValue: e.component.getSelectedNodeKeys(),
     });
   }
 
   dataGrid_onSelectionChanged(e) {
     this.setState({
-      gridBoxValue: e.selectedRowKeys.length && e.selectedRowKeys || []
+      gridBoxValue: e.selectedRowKeys.length && e.selectedRowKeys || [],
     });
   }
 }

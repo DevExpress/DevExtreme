@@ -6,7 +6,7 @@ export const windSources = [
   { value: 'val5', name: '19-25 m/s' },
   { value: 'val6', name: '25-32 m/s' },
   { value: 'val7', name: '32-39 m/s' },
-  { value: 'val8', name: '39-47 m/s' }
+  { value: 'val8', name: '39-47 m/s' },
 ];
 
 export const windRoseData = [{
@@ -20,7 +20,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NNE',
     val1: 0.1,
@@ -30,7 +30,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NE',
     val1: 0.3,
@@ -40,7 +40,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'ENE',
     val1: 0.3,
@@ -50,7 +50,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'E',
     val1: 0.7,
@@ -60,7 +60,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'ESE',
     val1: 0.8,
@@ -70,7 +70,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SE',
     val1: 0.3,
@@ -80,7 +80,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SSE',
     val1: 0.1,
@@ -90,7 +90,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'S',
     val1: 1.1,
@@ -100,7 +100,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SSW',
     val1: 0.6,
@@ -110,7 +110,7 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SW',
     val1: 0.8,
@@ -120,7 +120,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'WSW',
     val1: 0.3,
@@ -130,7 +130,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0.1,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'W',
     val1: 0.6,
@@ -140,7 +140,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'WNW',
     val1: 0.7,
@@ -150,7 +150,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NW',
     val1: 1,
@@ -160,7 +160,7 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NNW',
     val1: 0.6,
@@ -170,8 +170,8 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
-  }]
+    val8: 0,
+  }],
 }, {
   period: 'Oct. 1, 2012 -  Nov. 1, 2012',
   values: [{
@@ -183,7 +183,7 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 1,
     val7: 0.4,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NNE',
     val1: 0.3,
@@ -193,7 +193,7 @@ export const windRoseData = [{
     val5: 0.6,
     val6: 0.3,
     val7: 0,
-    val8: 0.1
+    val8: 0.1,
   }, {
     arg: 'NE',
     val1: 0.3,
@@ -203,7 +203,7 @@ export const windRoseData = [{
     val5: 0.6,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'ENE',
     val1: 1,
@@ -213,7 +213,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'E',
     val1: 0.6,
@@ -223,7 +223,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0.1
+    val8: 0.1,
   }, {
     arg: 'ESE',
     val1: 0.1,
@@ -233,7 +233,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0.1,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SE',
     val1: 0.1,
@@ -243,7 +243,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0.1,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SSE',
     val1: 0.4,
@@ -253,7 +253,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0.1,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'S',
     val1: 0,
@@ -263,7 +263,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SSW',
     val1: 0.6,
@@ -273,7 +273,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SW',
     val1: 0.7,
@@ -283,7 +283,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'WSW',
     val1: 0.3,
@@ -293,7 +293,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'W',
     val1: 0,
@@ -303,7 +303,7 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'WNW',
     val1: 0.3,
@@ -313,7 +313,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NW',
     val1: 0.1,
@@ -323,7 +323,7 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NNW',
     val1: 0.3,
@@ -333,8 +333,8 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 0,
     val7: 0,
-    val8: 0
-  }]
+    val8: 0,
+  }],
 }, {
   period: 'Nov. 1, 2012 -  Dec. 1, 2012',
   values: [{
@@ -346,7 +346,7 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NNE',
     val1: 0.4,
@@ -356,7 +356,7 @@ export const windRoseData = [{
     val5: 0.1,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NE',
     val1: 0.5,
@@ -366,7 +366,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'ENE',
     val1: 0.3,
@@ -376,7 +376,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'E',
     val1: 1.2,
@@ -386,7 +386,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'ESE',
     val1: 0.7,
@@ -396,7 +396,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SE',
     val1: 0.1,
@@ -406,7 +406,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SSE',
     val1: 0.3,
@@ -416,7 +416,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'S',
     val1: 0.4,
@@ -426,7 +426,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SSW',
     val1: 0.4,
@@ -436,7 +436,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'SW',
     val1: 0.8,
@@ -446,7 +446,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'WSW',
     val1: 0,
@@ -456,7 +456,7 @@ export const windRoseData = [{
     val5: 0,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'W',
     val1: 0.3,
@@ -466,7 +466,7 @@ export const windRoseData = [{
     val5: 0.4,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'WNW',
     val1: 0.3,
@@ -476,7 +476,7 @@ export const windRoseData = [{
     val5: 0.8,
     val6: 0,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NW',
     val1: 0.3,
@@ -486,7 +486,7 @@ export const windRoseData = [{
     val5: 0.3,
     val6: 0.1,
     val7: 0,
-    val8: 0
+    val8: 0,
   }, {
     arg: 'NNW',
     val1: 0.1,
@@ -496,6 +496,6 @@ export const windRoseData = [{
     val5: 0.7,
     val6: 0.1,
     val7: 0,
-    val8: 0
-  }]
+    val8: 0,
+  }],
 }];

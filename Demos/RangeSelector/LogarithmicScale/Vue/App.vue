@@ -42,7 +42,6 @@
   </div>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxChart,
   DxSeries,
@@ -50,7 +49,7 @@ import {
   DxGrid,
   DxMinorGrid,
   DxLegend,
-  DxLabel
+  DxLabel,
 } from 'devextreme-vue/chart';
 import {
   DxRangeSelector,
@@ -59,8 +58,9 @@ import {
   DxBehavior,
   DxLabel as DxRsLabel,
   DxChart as DxRsChart,
-  DxSeries as DxRsSeries
+  DxSeries as DxRsSeries,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
@@ -77,14 +77,14 @@ export default {
     DxBehavior,
     DxRsLabel,
     DxRsChart,
-    DxRsSeries
+    DxRsSeries,
   },
   data() {
     return {
       dataSource,
-      range: []
+      range: [],
     };
-  }
+  },
 };
 </script>
 <style scoped>

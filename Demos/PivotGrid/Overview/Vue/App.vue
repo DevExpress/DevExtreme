@@ -41,7 +41,7 @@ import {
 
 import {
   DxPivotGrid,
-  DxFieldChooser
+  DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
 
 import { sales } from './data.js';
@@ -49,7 +49,7 @@ import { sales } from './data.js';
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
-  minimumFractionDigits: 0
+  minimumFractionDigits: 0,
 });
 
 export default {
@@ -60,7 +60,7 @@ export default {
     DxSize,
     DxTooltip,
     DxPivotGrid,
-    DxFieldChooser
+    DxFieldChooser,
   },
   data() {
     return {
@@ -70,36 +70,36 @@ export default {
           width: 120,
           dataField: 'region',
           area: 'row',
-          sortBySummaryField: 'Total'
+          sortBySummaryField: 'Total',
         }, {
           caption: 'City',
           dataField: 'city',
           width: 150,
-          area: 'row'
+          area: 'row',
         }, {
           dataField: 'date',
           dataType: 'date',
-          area: 'column'
+          area: 'column',
         }, {
           groupName: 'date',
           groupInterval: 'month',
-          visible: false
+          visible: false,
         }, {
           caption: 'Total',
           dataField: 'amount',
           dataType: 'number',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }],
-        store: sales
+        store: sales,
       },
-      customizeTooltip: function(args) {
+      customizeTooltip(args) {
         const valueText = currencyFormatter.format(args.originalValue);
         return {
-          html: `${args.seriesName} | Total<div class='currency'>${valueText}</div>`
+          html: `${args.seriesName} | Total<div class='currency'>${valueText}</div>`,
         };
-      }
+      },
     };
   },
   mounted() {
@@ -107,14 +107,14 @@ export default {
     const chart = this.$refs.chart.instance;
     pivotGrid.bindChart(chart, {
       dataFieldsDisplayMode: 'splitPanes',
-      alternateDataFields: false
+      alternateDataFields: false,
     });
     const dataSource = pivotGrid.getDataSource();
-    setTimeout(function() {
+    setTimeout(() => {
       dataSource.expandHeaderItem('row', ['North America']);
       dataSource.expandHeaderItem('column', [2013]);
     }, 0);
-  }
+  },
 };
 </script>
 <style>

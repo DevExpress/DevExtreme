@@ -51,7 +51,7 @@ import DxChart, {
   DxTitle,
   DxLegend,
   DxExport,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 
 import { dataSource } from './data.js';
@@ -69,11 +69,11 @@ export default {
     DxTitle,
     DxLegend,
     DxExport,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
@@ -82,10 +82,10 @@ export default {
         text: `Open: $${pointInfo.openValue}<br/>
 Close: $${pointInfo.closeValue}<br/>
 High: $${pointInfo.highValue}<br/>
-Low: $${pointInfo.lowValue}<br/>`
+Low: $${pointInfo.lowValue}<br/>`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -13,7 +13,7 @@ class App extends React.Component {
     this.state = {
       scheduler: null,
       currentDate: new Date(2021, 2, 25),
-      cellDuration: 30
+      cellDuration: 30,
     };
     this.showAppointmentPopup = this.showAppointmentPopup.bind(this);
     this.onContentReady = this.onContentReady.bind(this);
@@ -54,7 +54,7 @@ class App extends React.Component {
   }
 
   onOptionChanged(e) {
-    if(e.name === 'currentDate') {
+    if (e.name === 'currentDate') {
       this.setState({ currentDate: e.value });
     }
   }

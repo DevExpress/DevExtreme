@@ -26,17 +26,19 @@
   </div>
 </template>
 <script>
-import { DxLinearGauge, DxGeometry, DxScale, DxTitle, DxFont, DxExport } from 'devextreme-vue/linear-gauge';
+import {
+  DxLinearGauge, DxGeometry, DxScale, DxTitle, DxFont, DxExport,
+} from 'devextreme-vue/linear-gauge';
 
 export default {
   components: {
-    DxLinearGauge, DxGeometry, DxScale, DxTitle, DxFont, DxExport
+    DxLinearGauge, DxGeometry, DxScale, DxTitle, DxFont, DxExport,
   },
   data() {
     return {
-      customTicks: [0, 10, 25, 50]
+      customTicks: [0, 10, 25, 50],
     };
-  }
+  },
 };
 </script>
 <style scoped>

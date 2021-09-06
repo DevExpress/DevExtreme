@@ -52,13 +52,13 @@ export default {
     DxDataGrid,
     DxColumn,
     DxMasterDetail,
-    DetailTemplate
+    DetailTemplate,
   },
   data() {
     return {
-      dataSource: employees
+      dataSource: employees,
     };
-  }
+  },
 };
 </script>
 <style>

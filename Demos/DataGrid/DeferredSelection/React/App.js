@@ -1,16 +1,16 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column, FilterRow, Selection } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import query from 'devextreme/data/query';
 import 'devextreme/data/odata/store';
 
-var dataGrid;
+let dataGrid;
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 const dataSource = {
   store: {
     type: 'odata',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-    key: 'Task_ID'
+    key: 'Task_ID',
   },
   expand: 'ResponsibleEmployee',
   select: [
@@ -19,8 +19,8 @@ const dataSource = {
     'Task_Start_Date',
     'Task_Due_Date',
     'Task_Status',
-    'ResponsibleEmployee/Employee_Full_Name'
-  ]
+    'ResponsibleEmployee/Employee_Full_Name',
+  ],
 };
 const selectionFilter = ['Task_Status', '=', 'Completed'];
 
@@ -30,7 +30,7 @@ class App extends React.Component {
     this.state = {
       taskCount: 0,
       peopleCount: 0,
-      avgDuration: 0
+      avgDuration: 0,
     };
     this.onInitialized = this.onInitialized.bind(this);
     this.calculateStatistics = this.calculateStatistics.bind(this);
@@ -113,20 +113,20 @@ class App extends React.Component {
   }
 
   calculateStatistics() {
-    dataGrid.getSelectedRowsData().then(rowData => {
-      var commonDuration = 0;
+    dataGrid.getSelectedRowsData().then((rowData) => {
+      let commonDuration = 0;
 
-      for (var i = 0; i < rowData.length; i++) {
+      for (let i = 0; i < rowData.length; i++) {
         commonDuration += rowData[i].Task_Due_Date - rowData[i].Task_Start_Date;
       }
-      commonDuration = commonDuration / MILLISECONDS_IN_DAY;
+      commonDuration /= MILLISECONDS_IN_DAY;
       this.setState({
         taskCount: rowData.length,
         peopleCount: query(rowData)
           .groupBy('ResponsibleEmployee.Employee_Full_Name')
           .toArray()
           .length,
-        avgDuration: Math.round(commonDuration / rowData.length) || 0
+        avgDuration: Math.round(commonDuration / rowData.length) || 0,
       });
     });
   }

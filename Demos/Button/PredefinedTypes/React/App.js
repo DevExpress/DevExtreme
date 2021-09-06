@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Button } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 

@@ -61,7 +61,7 @@ import 'devextreme-vue/text-area';
 export default {
   components: {
     DxForm,
-    DxItem
+    DxItem,
   },
   data() {
     const employee = service.getEmployee();
@@ -74,16 +74,16 @@ export default {
           { type: 'required', message: 'Position is required.' },
         ],
         hireDate: [
-          { type: 'required', message: 'Hire Date is required.' }
-        ]
-      }
+          { type: 'required', message: 'Hire Date is required.' },
+        ],
+      },
     };
   },
   methods: {
     validateForm(e) {
       e.component.validate();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

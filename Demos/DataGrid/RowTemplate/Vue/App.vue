@@ -55,7 +55,7 @@
 <script>
 import {
   DxDataGrid,
-  DxColumn
+  DxColumn,
 } from 'devextreme-vue/data-grid';
 
 import service from './data.js';
@@ -63,16 +63,16 @@ import service from './data.js';
 export default {
   components: {
     DxDataGrid,
-    DxColumn
+    DxColumn,
   },
   data() {
     return {
-      employees: service.getEmployees()
+      employees: service.getEmployees(),
     };
   },
   methods: {
-    formatDate: new Intl.DateTimeFormat('en-US').format
-  }
+    formatDate: new Intl.DateTimeFormat('en-US').format,
+  },
 };
 </script>
 <style scoped>

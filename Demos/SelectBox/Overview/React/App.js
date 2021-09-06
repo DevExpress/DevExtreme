@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import ArrayStore from 'devextreme/data/array_store';
 
@@ -13,18 +13,20 @@ class App extends React.Component {
     this.simpleProducts = service.getSimpleProducts();
     this.data = new ArrayStore({
       data: this.products,
-      key: 'ID'
+      key: 'ID',
     });
     this.state = {
-      value: this.simpleProducts[0]
+      value: this.simpleProducts[0],
     };
     this.onValueChanged = this.onValueChanged.bind(this);
   }
+
   onValueChanged(e) {
     this.setState({
-      value: e.value
+      value: e.value,
     });
   }
+
   render() {
     return (
       <div>

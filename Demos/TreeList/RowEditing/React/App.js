@@ -1,12 +1,14 @@
 import React from 'react';
-import { TreeList, Editing, Column, RequiredRule, Lookup, Button } from 'devextreme-react/tree-list';
+import {
+  TreeList, Editing, Column, RequiredRule, Lookup, Button,
+} from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 
 const expandedRowKeys = [1, 2, 3, 4, 5];
 
 const headDataSource = {
   store: employees,
-  sort: 'Full_Name'
+  sort: 'Full_Name',
 };
 
 class App extends React.Component {
@@ -62,11 +64,13 @@ class App extends React.Component {
       </div>
     );
   }
+
   onEditorPreparing(e) {
-    if(e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+    if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
       e.cancel = true;
     }
   }
+
   onInitNewRow(e) {
     e.data.Head_ID = 1;
   }

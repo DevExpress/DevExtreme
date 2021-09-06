@@ -39,12 +39,12 @@ export default {
     DxTreeMap,
     DxSize,
     DxTitle,
-    DxColorizer
+    DxColorizer,
   },
   data() {
     return {
       drillInfo: [],
-      citiesPopulation
+      citiesPopulation,
     };
   },
   methods: {
@@ -54,25 +54,25 @@ export default {
 
     drill(e) {
       this.drillInfo = [];
-      for(let node = e.node.getParent(); node; node = node.getParent()) {
+      for (let node = e.node.getParent(); node; node = node.getParent()) {
         this.drillInfo.unshift({
           text: node.label() || 'All Continents',
-          node: node
+          node,
         });
       }
-      if(this.drillInfo.length) {
+      if (this.drillInfo.length) {
         this.drillInfo.push({
-          text: e.node.label()
+          text: e.node.label(),
         });
       }
     },
 
     drillInfoClick(node) {
-      if(node) {
+      if (node) {
         node.drillDown();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

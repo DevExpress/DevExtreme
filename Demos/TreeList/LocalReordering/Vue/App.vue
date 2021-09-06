@@ -67,7 +67,7 @@ export default {
     DxTreeList,
     DxColumn,
     DxRowDragging,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -75,14 +75,14 @@ export default {
       allowDropInsideItem: true,
       allowReordering: true,
       showDragIcons: true,
-      expandedRowKeys: [1]
+      expandedRowKeys: [1],
     };
   },
   methods: {
     onDragChange(e) {
-      let visibleRows = e.component.getVisibleRows(),
-        sourceNode = e.component.getNodeByKey(e.itemData.ID),
-        targetNode = visibleRows[e.toIndex].node;
+      const visibleRows = e.component.getVisibleRows();
+      const sourceNode = e.component.getNodeByKey(e.itemData.ID);
+      let targetNode = visibleRows[e.toIndex].node;
 
       while (targetNode && targetNode.data) {
         if (targetNode.data.ID === sourceNode.data.ID) {
@@ -120,7 +120,7 @@ export default {
 
         this.employees = employees;
       }
-    }
+    },
   },
 };
 </script>

@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Column, RowDragging, Scrolling, Lookup, Sorting } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, RowDragging, Scrolling, Lookup, Sorting,
+} from 'devextreme-react/data-grid';
 import { CheckBox } from 'devextreme-react/check-box';
 import { tasks, employees } from './data.js';
 
@@ -11,8 +13,8 @@ class App extends React.Component {
     this.onShowDragIconsChanged = this.onShowDragIconsChanged.bind(this);
 
     this.state = {
-      tasks: tasks,
-      showDragIcons: true
+      tasks,
+      showDragIcons: true,
     };
   }
 
@@ -26,13 +28,13 @@ class App extends React.Component {
     newTasks.splice(toIndex, 0, e.itemData);
 
     this.setState({
-      tasks: newTasks
+      tasks: newTasks,
     });
   }
 
   onShowDragIconsChanged(args) {
     this.setState({
-      showDragIcons: args.value
+      showDragIcons: args.value,
     });
   }
 

@@ -46,7 +46,7 @@ import {
   DxLabel,
   DxConstantLine,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 
 import { temperaturesData } from './data.js';
@@ -61,14 +61,14 @@ export default {
     DxLabel,
     DxConstantLine,
     DxLegend,
-    DxExport
+    DxExport,
   },
 
   data() {
     return {
       highAverage: 77,
       lowAverage: 58,
-      dataSource: temperaturesData
+      dataSource: temperaturesData,
     };
   },
 
@@ -77,7 +77,7 @@ export default {
     customizePoint({ value }) {
       if (value > this.highAverage) {
         return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
-      } else if (value < this.lowAverage) {
+      } if (value < this.lowAverage) {
         return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } };
       }
     },
@@ -87,17 +87,17 @@ export default {
         return {
           visible: true,
           backgroundColor: '#ff7c7c',
-          customizeText: function({ valueText }) {
+          customizeText({ valueText }) {
             return `${valueText}&#176F`;
-          }
+          },
         };
       }
     },
 
     customizeText({ valueText }) {
       return `${valueText}&#176F`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

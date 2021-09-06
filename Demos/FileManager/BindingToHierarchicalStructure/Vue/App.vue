@@ -22,13 +22,13 @@ import { fileItems } from './data.js';
 export default {
   components: {
     DxFileManager,
-    DxPermissions
+    DxPermissions,
   },
 
   data() {
     return {
-      fileItems
+      fileItems,
     };
-  }
+  },
 };
 </script>

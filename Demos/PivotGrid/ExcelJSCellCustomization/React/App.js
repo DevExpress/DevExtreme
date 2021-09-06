@@ -2,7 +2,7 @@ import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
-  Export
+  Export,
 } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
@@ -16,25 +16,25 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     dataField: 'region',
     area: 'row',
-    expanded: true
+    expanded: true,
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
-    area: 'row'
+    area: 'row',
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     caption: 'Sales',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }],
-  store: sales
+  store: sales,
 });
 
 export default function App() {
@@ -44,7 +44,7 @@ export default function App() {
 
     exportPivotGrid({
       component: e.component,
-      worksheet: worksheet,
+      worksheet,
       customizeCell: ({ pivotCell, excelCell }) => {
         if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
           const appearance = getConditionalAppearance(pivotCell);
@@ -56,9 +56,9 @@ export default function App() {
           bottom: borderStyle,
           left: borderStyle,
           right: borderStyle,
-          top: borderStyle
+          top: borderStyle,
         };
-      }
+      },
     }).then(() => {
       workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
@@ -70,7 +70,7 @@ export default function App() {
   const onCellPrepared = React.useCallback(({ cell, area, cellElement }) => {
     cell.area = area;
 
-    if(isDataCell(cell) || isTotalCell(cell)) {
+    if (isDataCell(cell) || isTotalCell(cell)) {
       const appearance = getConditionalAppearance(cell);
       Object.assign(cellElement.style, getCssStyles(appearance));
     }
@@ -87,7 +87,7 @@ export default function App() {
   function getExcelCellFormat({ fill, font, bold }) {
     return {
       fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: fill } },
-      font: { color: { argb: font }, bold }
+      font: { color: { argb: font }, bold },
     };
   }
 
@@ -95,23 +95,22 @@ export default function App() {
     return {
       'background-color': `#${fill}`,
       color: `#${font}`,
-      'font-weight': bold ? 'bold' : undefined
+      'font-weight': bold ? 'bold' : undefined,
     };
   }
 
   function getConditionalAppearance(cell) {
-    if(isTotalCell(cell)) {
+    if (isTotalCell(cell)) {
       return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
-    } else {
-      const { value } = cell;
-      if(value < 20000) {
-        return { font: '9C0006', fill: 'FFC7CE' };
-      }
-      if(value > 50000) {
-        return { font: '006100', fill: 'C6EFCE' };
-      }
-      return { font: '9C6500', fill: 'FFEB9C' };
     }
+    const { value } = cell;
+    if (value < 20000) {
+      return { font: '9C0006', fill: 'FFC7CE' };
+    }
+    if (value > 50000) {
+      return { font: '006100', fill: 'C6EFCE' };
+    }
+    return { font: '9C6500', fill: 'FFEB9C' };
   }
 
   return (

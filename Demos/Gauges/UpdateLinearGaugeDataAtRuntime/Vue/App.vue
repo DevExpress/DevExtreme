@@ -122,25 +122,35 @@
   </div>
 </template>
 <script>
-import { cities } from './data.js';
-import { DxLinearGauge, DxTitle, DxFont, DxGeometry, DxScale, DxRangeContainer, DxRange, DxValueIndicator, DxLabel } from 'devextreme-vue/linear-gauge';
+import {
+  DxLinearGauge, DxTitle, DxFont, DxGeometry, DxScale, DxRangeContainer, DxRange, DxValueIndicator, DxLabel,
+} from 'devextreme-vue/linear-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
+import { cities } from './data.js';
 
 export default {
   components: {
-    DxLinearGauge, DxTitle, DxFont, DxGeometry, DxScale, DxRangeContainer, DxRange, DxValueIndicator, DxLabel,
-    DxSelectBox
+    DxLinearGauge,
+    DxTitle,
+    DxFont,
+    DxGeometry,
+    DxScale,
+    DxRangeContainer,
+    DxRange,
+    DxValueIndicator,
+    DxLabel,
+    DxSelectBox,
   },
   data() {
     return {
-      cities: cities,
+      cities,
       value: cities[0],
       customTicks: [900, 1000, 1020, 1100],
       pressureLabelFormat: {
-        type: 'decimal'
-      }
+        type: 'decimal',
+      },
     };
-  }
+  },
 };
 </script>
 <style scoped>

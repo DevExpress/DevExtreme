@@ -28,12 +28,12 @@ import employee from './data.js';
 export default {
   components: {
     DxCheckBox,
-    DxForm
+    DxForm,
   },
   data() {
     return {
       employee,
-      calculateColCountAutomatically: false
+      calculateColCountAutomatically: false,
     };
   },
   computed: {
@@ -42,15 +42,15 @@ export default {
         ? null
         : {
           sm: 2,
-          md: 4
+          md: 4,
         };
-    }
+    },
   },
   methods: {
     screenByWidth(width) {
       return width < 720 ? 'sm' : 'md';
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

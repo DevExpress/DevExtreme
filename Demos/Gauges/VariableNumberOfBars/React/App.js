@@ -1,32 +1,29 @@
 import React from 'react';
 import { BarGauge, Label } from 'devextreme-react/bar-gauge';
-import { products } from './data.js';
 import { CheckBox } from 'devextreme-react/check-box';
+import { products } from './data.js';
 
 const format = {
   type: 'fixedPoint',
-  precision: 0
+  precision: 0,
 };
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      productsActivity: products.map(p => p.active),
-      values: products.map(p=>p.count)
+      productsActivity: products.map((p) => p.active),
+      values: products.map((p) => p.count),
     };
 
-    this.getValueChangedHandler = (productIndex) => {
-      return (e) => {
-        const productsActivity = this.state.productsActivity.slice();
-        productsActivity[productIndex] = e.value;
-        this.setState({
-          productsActivity,
-          values: products.map((p, i) => productsActivity[i] ? p.count : null).filter(c => c !== null)
-        });
-      };
+    this.getValueChangedHandler = (productIndex) => (e) => {
+      const productsActivity = this.state.productsActivity.slice();
+      productsActivity[productIndex] = e.value;
+      this.setState({
+        productsActivity,
+        values: products.map((p, i) => (productsActivity[i] ? p.count : null)).filter((c) => c !== null),
+      });
     };
   }
 

@@ -24,23 +24,22 @@ export default {
   props: {
     pointInfo: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
-      volume: this.pointInfo.points.filter(point => point.seriesName === 'Volume')[0],
-      prices: this.pointInfo.points.filter(point => point.seriesName !== 'Volume')[0]
+      volume: this.pointInfo.points.filter((point) => point.seriesName === 'Volume')[0],
+      prices: this.pointInfo.points.filter((point) => point.seriesName !== 'Volume')[0],
     };
   },
   methods: {
     formatCurrency: new Intl.NumberFormat('en-US',
-      { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }
-    ).format,
+      { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format,
 
     formatNumber: new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0
-    }).format
+      minimumFractionDigits: 0,
+    }).format,
   },
 };
 </script>

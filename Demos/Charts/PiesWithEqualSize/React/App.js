@@ -3,7 +3,7 @@ import React from 'react';
 import PieChart, {
   Series,
   Label,
-  Legend
+  Legend,
 } from 'devextreme-react/pie-chart';
 
 import { countries, waterLandRatio } from './data.js';
@@ -11,11 +11,11 @@ import { countries, waterLandRatio } from './data.js';
 const pieCharts = [{
   title: 'Area of Countries',
   palette: 'Soft',
-  dataSource: countries
+  dataSource: countries,
 }, {
   title: 'Water/Land Ratio',
   palette: 'Soft Pastel',
-  dataSource: waterLandRatio
+  dataSource: waterLandRatio,
 }];
 
 function App() {

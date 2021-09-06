@@ -1,11 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
   FormItem,
   Editing,
   Paging,
-  Lookup
+  Lookup,
 } from 'devextreme-react/data-grid';
 import 'devextreme-react/text-area';
 

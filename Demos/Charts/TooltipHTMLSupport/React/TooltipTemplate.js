@@ -5,7 +5,7 @@ function getImagePath(point) {
 }
 
 const formatNumber = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 0
+  maximumFractionDigits: 0,
 }).format;
 
 export default function TooltipTemplate(info) {

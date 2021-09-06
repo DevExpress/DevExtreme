@@ -26,7 +26,7 @@ import DxPieChart, {
   DxSeries,
   DxLabel,
   DxLegend,
-  DxConnector
+  DxConnector,
 } from 'devextreme-vue/pie-chart';
 
 export default {
@@ -35,20 +35,20 @@ export default {
     DxSeries,
     DxLabel,
     DxLegend,
-    DxConnector
+    DxConnector,
   },
   props: {
     data: {
       type: Array,
-      default: ()=>[]
-    }
+      default: () => [],
+    },
   },
   methods: {
     customizeText(pointInfo) {
       return `${pointInfo.argument[0].toUpperCase()}${
         pointInfo.argument.slice(1)
       }: $${pointInfo.value}M`;
-    }
+    },
   },
 };
 </script>

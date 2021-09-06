@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   PolarChart,
   CommonSeriesSettings,
@@ -7,7 +7,7 @@ import {
   Annotation,
   ArgumentAxis,
   Strip,
-  Legend
+  Legend,
 } from 'devextreme-react/polar-chart';
 import { dataSource, maxDay, minNight } from './data.js';
 

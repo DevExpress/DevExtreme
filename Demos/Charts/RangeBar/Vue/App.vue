@@ -41,7 +41,7 @@ import DxChart, {
   DxValueAxis,
   DxLabel,
   DxExport,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/chart';
 import { oilPrices } from './data.js';
 
@@ -54,13 +54,13 @@ export default {
     DxValueAxis,
     DxLabel,
     DxExport,
-    DxLegend
+    DxLegend,
   },
   data() {
     return {
-      oilPrices
+      oilPrices,
     };
-  }
+  },
 };
 </script>
 <style>

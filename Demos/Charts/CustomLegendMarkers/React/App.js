@@ -1,11 +1,12 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Chart, Series, CommonSeriesSettings, Point, Legend } from 'devextreme-react/chart';
+import {
+  Chart, Series, CommonSeriesSettings, Point, Legend,
+} from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 import markerTemplate from './MarkerTemplate.js';
 
 class App extends React.Component {
-
   onLegendClick(e) {
     e.target.isVisible() ? e.target.hide() : e.target.show();
   }

@@ -1,5 +1,7 @@
 import React from 'react';
-import RangeSelector, { Margin, Scale, TickInterval, MinorTickInterval, Chart, Series, ValueAxis } from 'devextreme-react/range-selector';
+import RangeSelector, {
+  Margin, Scale, TickInterval, MinorTickInterval, Chart, Series, ValueAxis,
+} from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 
 const range = [new Date(2011, 11, 25), new Date(2012, 0, 1)];

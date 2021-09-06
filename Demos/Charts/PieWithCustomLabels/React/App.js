@@ -1,17 +1,15 @@
 import React from 'react';
-import { dataSource } from './data.js';
-
 import PieChart, {
   Legend,
   Export,
   Series,
   Label,
   Font,
-  Connector
+  Connector,
 } from 'devextreme-react/pie-chart';
+import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <PieChart id="pie"

@@ -69,7 +69,7 @@ import {
   DxColumn,
   DxPaging,
   DxEditing,
-  DxLookup
+  DxLookup,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
@@ -83,16 +83,16 @@ export default {
     DxEditing,
     DxLookup,
     DxCheckBox,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       dataSource: employees,
-      states: states,
+      states,
       selectTextOnEditStart: true,
-      startEditAction: 'click'
+      startEditAction: 'click',
     };
-  }
+  },
 };
 </script>
 <style>

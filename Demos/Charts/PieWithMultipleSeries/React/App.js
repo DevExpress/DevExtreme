@@ -8,7 +8,7 @@ import PieChart, {
   Label,
   Title,
   Tooltip,
-  Subtitle
+  Subtitle,
 } from 'devextreme-react/pie-chart';
 
 import { exportImportData } from './data.js';
@@ -42,7 +42,7 @@ class App extends React.Component {
   }
 
   customizeTooltip(arg) {
-    return { text: `${arg.argumentText }<br>${ arg.seriesName }: ${ arg.valueText }B` };
+    return { text: `${arg.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };
   }
 }
 

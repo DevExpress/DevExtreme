@@ -65,7 +65,7 @@ export default {
   components: {
     DxFileUploader,
     DxSelectBox,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -75,11 +75,11 @@ export default {
       fileTypesSource: [
         { name: 'All types', value: '*' },
         { name: 'Images', value: 'image/*' },
-        { name: 'Videos', value: 'video/*' }
+        { name: 'Videos', value: 'video/*' },
       ],
-      files: []
+      files: [],
     };
-  }
+  },
 };
 </script>
 <style>

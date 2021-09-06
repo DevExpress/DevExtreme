@@ -9,7 +9,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      selectedIndex: 0
+      selectedIndex: 0,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
     this.onTabsSelectionChanged = this.onTabsSelectionChanged.bind(this);
@@ -65,16 +65,16 @@ class App extends React.Component {
   }
 
   onTabsSelectionChanged(args) {
-    if(args.name == 'selectedIndex') {
+    if (args.name == 'selectedIndex') {
       this.setState({
-        selectedIndex: args.value
+        selectedIndex: args.value,
       });
     }
   }
 
   onValueChanged(args) {
     this.setState({
-      selectedIndex: args.value
+      selectedIndex: args.value,
     });
   }
 }

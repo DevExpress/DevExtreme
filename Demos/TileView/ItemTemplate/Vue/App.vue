@@ -23,11 +23,11 @@ import { homes } from './data.js';
 
 export default {
   components: {
-    DxTileView
+    DxTileView,
   },
   data() {
     return {
-      dataSource: homes
+      dataSource: homes,
     };
   },
   methods: {
@@ -36,10 +36,10 @@ export default {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0
+        maximumFractionDigits: 0,
       }).format(value);
-    }
-  }
+    },
+  },
 };
 </script>
 

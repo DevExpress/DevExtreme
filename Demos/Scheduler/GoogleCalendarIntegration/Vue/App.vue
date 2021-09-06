@@ -26,29 +26,29 @@ import CustomStore from 'devextreme/data/custom_store';
 
 export default {
   components: {
-    DxScheduler
+    DxScheduler,
   },
   data() {
     return {
       views: ['day', 'workWeek', 'month'],
       currentDate: new Date(2017, 4, 25),
       dataSource: new CustomStore({
-        load: (options) => this.getData(options, { showDeleted: false })
-      })
+        load: (options) => this.getData(options, { showDeleted: false }),
+      }),
     };
   },
   methods: {
     getData(_, requestOptions) {
-      const PUBLIC_KEY = 'AIzaSyBnNAISIUKe6xdhq1_rjor2rxoI3UlMY7k',
-        CALENDAR_ID = 'f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com';
-      const dataUrl = [ 'https://www.googleapis.com/calendar/v3/calendars/',
+      const PUBLIC_KEY = 'AIzaSyBnNAISIUKe6xdhq1_rjor2rxoI3UlMY7k';
+      const CALENDAR_ID = 'f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com';
+      const dataUrl = ['https://www.googleapis.com/calendar/v3/calendars/',
         CALENDAR_ID, '/events?key=', PUBLIC_KEY].join('');
 
       return fetch(dataUrl, requestOptions).then(
-        (response) => response.json()
+        (response) => response.json(),
       ).then((data) => data.items);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

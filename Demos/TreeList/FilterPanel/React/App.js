@@ -1,5 +1,7 @@
 import React from 'react';
-import { TreeList, FilterRow, FilterPanel, HeaderFilter, Column } from 'devextreme-react/tree-list';
+import {
+  TreeList, FilterRow, FilterPanel, HeaderFilter, Column,
+} from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 
 const expandedRowKeys = [1];

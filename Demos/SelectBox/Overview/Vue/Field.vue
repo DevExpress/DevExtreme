@@ -16,13 +16,13 @@ import DxTextBox from 'devextreme-vue/text-box';
 
 export default {
   components: {
-    DxTextBox
+    DxTextBox,
   },
   props: {
     fieldData: {
       type: Object,
-      default: () => {}
-    }
-  }
+      default: () => {},
+    },
+  },
 };
 </script>

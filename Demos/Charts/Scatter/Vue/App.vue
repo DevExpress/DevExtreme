@@ -37,7 +37,7 @@ import {
   DxGrid,
   DxMinorGrid,
   DxCommonPaneSettings,
-  DxBorder
+  DxBorder,
 } from 'devextreme-vue/chart';
 import { generateDataSource } from './data.js';
 
@@ -53,13 +53,13 @@ export default {
     DxGrid,
     DxMinorGrid,
     DxCommonPaneSettings,
-    DxBorder
+    DxBorder,
   },
   data() {
     return {
-      dataSource: generateDataSource()
+      dataSource: generateDataSource(),
     };
-  }
+  },
 };
 </script>
 <style>

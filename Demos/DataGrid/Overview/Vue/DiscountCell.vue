@@ -31,7 +31,7 @@ import {
   DxFont,
   DxMargin,
   DxSize,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/bullet';
 
 export default {
@@ -40,23 +40,23 @@ export default {
     DxFont,
     DxMargin,
     DxSize,
-    DxTooltip
+    DxTooltip,
   },
   props: {
     cellData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
-      customizeTooltip: function(data) {
+      customizeTooltip(data) {
         return {
-          text: `${parseInt(data.value)}%`
+          text: `${parseInt(data.value)}%`,
         };
-      }
+      },
     };
-  }
+  },
 };
 </script>
 <style>

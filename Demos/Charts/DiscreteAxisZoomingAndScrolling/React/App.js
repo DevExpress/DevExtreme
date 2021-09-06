@@ -1,5 +1,4 @@
 import React from 'react';
-import { series, dataSource } from './data.js';
 
 import Chart, {
   ValueAxis,
@@ -8,7 +7,7 @@ import Chart, {
   ArgumentAxis,
   CommonSeriesSettings,
   Border,
-  Series
+  Series,
 } from 'devextreme-react/chart';
 
 import RangeSelector, {
@@ -18,23 +17,19 @@ import RangeSelector, {
   Scale,
   Behavior,
   CommonSeriesSettings as CommonSeriesSettingsOptions,
-  Series as RsChartSeries
+  Series as RsChartSeries,
 } from 'devextreme-react/range-selector';
+import { series, dataSource } from './data.js';
 
-const seriesList = series.map(item =>
-  <Series valueField={item.valueField} name={item.name} key={item.name} />
-);
+const seriesList = series.map((item) => <Series valueField={item.valueField} name={item.name} key={item.name} />);
 
-const rsChartSeriesList = series.map(item =>
-  <RsChartSeries valueField={item.valueField} name={item.name} key={item.name} />
-);
+const rsChartSeriesList = series.map((item) => <RsChartSeries valueField={item.valueField} name={item.name} key={item.name} />);
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      visualRange: { startValue: 'Inner Core', endValue: 'Upper Crust' }
+      visualRange: { startValue: 'Inner Core', endValue: 'Upper Crust' },
     };
 
     this.updateVisualRange = this.updateVisualRange.bind(this);

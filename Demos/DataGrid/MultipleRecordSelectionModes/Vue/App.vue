@@ -59,15 +59,15 @@
   </div>
 </template>
 <script>
-import { sales } from './data.js';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import {
   DxDataGrid,
   DxColumn,
   DxPaging,
   DxSelection,
-  DxFilterRow
+  DxFilterRow,
 } from 'devextreme-vue/data-grid';
+import { sales } from './data.js';
 
 export default {
   components: {
@@ -76,15 +76,15 @@ export default {
     DxColumn,
     DxPaging,
     DxSelection,
-    DxFilterRow
+    DxFilterRow,
   },
   data() {
     return {
       allMode: 'allPages',
       checkBoxesMode: 'onClick',
-      sales
+      sales,
     };
-  }
+  },
 };
 </script>
 <style scoped>

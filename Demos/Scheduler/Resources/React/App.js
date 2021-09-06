@@ -4,7 +4,9 @@ import Scheduler, { Resource } from 'devextreme-react/scheduler';
 
 import RadioGroup from 'devextreme-react/radio-group';
 
-import { data, assignees, rooms, priorities, resourcesList } from './data.js';
+import {
+  data, assignees, rooms, priorities, resourcesList,
+} from './data.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
@@ -13,7 +15,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      radioGroupValue: resourcesList[0]
+      radioGroupValue: resourcesList[0],
     };
     this.onRadioGroupValueChanged = this.onRadioGroupValueChanged.bind(this);
   }
@@ -68,7 +70,7 @@ class App extends React.Component {
 
   onRadioGroupValueChanged(args) {
     this.setState({
-      radioGroupValue: args.value
+      radioGroupValue: args.value,
     });
   }
 }

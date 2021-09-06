@@ -99,7 +99,7 @@ import {
   DxEditing,
   DxPopup,
   DxLookup,
-  DxForm
+  DxForm,
 } from 'devextreme-vue/data-grid';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxItem } from 'devextreme-vue/form';
@@ -115,14 +115,14 @@ export default {
     DxLookup,
     DxForm,
     DxItem,
-    DxTextArea
+    DxTextArea,
   },
   data() {
     return {
       dataSource: employees,
-      states: states
+      states,
     };
-  }
+  },
 };
 </script>
 <style>

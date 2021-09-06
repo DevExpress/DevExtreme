@@ -1,7 +1,7 @@
-var dataSource = [{
-    arg: 0,
-    val: 0
+const dataSource = [{
+  arg: 0,
+  val: 0,
 }, {
-    arg: 720,
-    val: 2
+  arg: 720,
+  val: 2,
 }];

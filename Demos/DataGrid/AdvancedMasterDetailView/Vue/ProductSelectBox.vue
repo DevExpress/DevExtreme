@@ -21,8 +21,8 @@ export default {
   props: {
     supplierId: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
@@ -30,18 +30,18 @@ export default {
         key: 'ProductID',
         loadParams: { SupplierID: this.supplierId },
         loadUrl: `${url}/GetProductsBySupplier`,
-        onLoaded: this.setDefaultValue
+        onLoaded: this.setDefaultValue,
       }),
-      value: null
+      value: null,
     };
   },
   methods: {
     setDefaultValue(items) {
-      let firstItem = items[0];
-      if(firstItem && this.value === null) {
+      const firstItem = items[0];
+      if (firstItem && this.value === null) {
         this.value = firstItem.ProductID;
       }
-    }
-  }
+    },
+  },
 };
 </script>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { SelectBox } from 'devextreme-react/select-box';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
@@ -9,17 +9,17 @@ import { simpleProducts, products } from './data.js';
 const searchModeItems = ['contains', 'startswith'];
 const searchExprItems = [{
   name: "'Name'",
-  value: 'Name'
+  value: 'Name',
 }, {
   name: "['Name', 'Category']",
-  value: ['Name', 'Category']
+  value: ['Name', 'Category'],
 }];
 const productsDataSource = new DataSource({
   store: {
     data: simpleProducts,
     type: 'array',
-    key: 'ID'
-  }
+    key: 'ID',
+  },
 });
 
 class App extends React.Component {
@@ -32,7 +32,7 @@ class App extends React.Component {
       searchExprOption: 'Name',
       searchTimeoutOption: 200,
       minSearchLengthOption: 0,
-      showDataBeforeSearchOption: false
+      showDataBeforeSearchOption: false,
 
     };
     this.editBoxValueChanged = ({ component }) => {
@@ -61,27 +61,25 @@ class App extends React.Component {
       return;
     }
 
-    const productIds = simpleProducts.map(function(item) {
-      return item.ID;
-    });
+    const productIds = simpleProducts.map((item) => item.ID);
     const incrementedId = Math.max.apply(null, productIds) + 1;
     const newItem = {
       Name: args.text,
-      ID: incrementedId
+      ID: incrementedId,
     };
 
     args.customItem = productsDataSource.store().insert(newItem)
       .then(() => productsDataSource.load())
-      .then(() => {
-        return newItem;
-      })
+      .then(() => newItem)
       .catch((error) => {
         throw error;
       });
   }
 
   render() {
-    let { editBoxValue, searchModeOption, searchExprOption, minSearchLengthOption, showDataBeforeSearchOption, searchTimeoutOption } = this.state;
+    const {
+      editBoxValue, searchModeOption, searchExprOption, minSearchLengthOption, showDataBeforeSearchOption, searchTimeoutOption,
+    } = this.state;
     return (
       <div id="selectbox-demo">
         <div className="widget-container">
@@ -117,9 +115,9 @@ class App extends React.Component {
             </div>
             <div className="dx-field current-product">
               Current product: <span className="current-value">
-                {editBoxValue ?
-                  `${editBoxValue.Name} (ID: ${editBoxValue.ID})` :
-                  'Not selected'}
+                {editBoxValue
+                  ? `${editBoxValue.Name} (ID: ${editBoxValue.ID})`
+                  : 'Not selected'}
               </span>
             </div>
           </div>

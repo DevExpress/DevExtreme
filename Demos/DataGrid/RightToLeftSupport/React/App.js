@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column, Paging, SearchPanel } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 
@@ -12,19 +12,21 @@ class App extends React.Component {
     this.state = {
       placeholder: 'Search...',
       rtlEnabled: false,
-      selectedValue: this.languages[1]
+      selectedValue: this.languages[1],
     };
     this.selectLanguage = this.selectLanguage.bind(this);
     this.headerCellRender = this.headerCellRender.bind(this);
   }
+
   selectLanguage(e) {
-    let newRtlEnabled = e.value === this.languages[0];
+    const newRtlEnabled = e.value === this.languages[0];
     this.setState({
       rtlEnabled: newRtlEnabled,
       placeholder: newRtlEnabled ? 'بحث' : 'Search...',
-      selectedValue: e.value
+      selectedValue: e.value,
     });
   }
+
   headerCellRender() {
     return (
       <div>
@@ -36,6 +38,7 @@ class App extends React.Component {
       </div>
     );
   }
+
   render() {
     const { rtlEnabled, placeholder, selectedValue } = this.state;
     return (

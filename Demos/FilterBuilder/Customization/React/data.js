@@ -4,31 +4,31 @@ export const filter = [
   [
     ['Category', '=', 'Televisions'],
     'and',
-    ['Price', 'between', [2000, 4000]]
-  ]
+    ['Price', 'between', [2000, 4000]],
+  ],
 ];
 export const categories = [
   'Video Players',
   'Televisions',
   'Monitors',
   'Projectors',
-  'Automation'
+  'Automation',
 ];
 export const groupOperations = ['and', 'or'];
 export const fields = [{
-  dataField: 'Name'
+  dataField: 'Name',
 }, {
   dataField: 'Price',
   dataType: 'number',
-  format: 'currency'
+  format: 'currency',
 }, {
   dataField: 'Current_Inventory',
   dataType: 'number',
-  caption: 'Inventory'
+  caption: 'Inventory',
 }, {
   dataField: 'Category',
   filterOperations: ['=', 'anyof'],
   lookup: {
-    dataSource: categories
-  }
+    dataSource: categories,
+  },
 }];

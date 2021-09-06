@@ -1,13 +1,14 @@
 import React from 'react';
 
 import Sparkline, {
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/sparkline';
 
 import {
   copperCosts,
   nickelCosts,
-  palladiumCosts } from './data.js';
+  palladiumCosts,
+} from './data.js';
 
 export default function RowTemplate(props) {
   return (

@@ -24,7 +24,6 @@
   </DxRangeSelector>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxRangeSelector,
   DxMargin,
@@ -33,8 +32,9 @@ import {
   DxMinorTickInterval,
   DxChart,
   DxSeries,
-  DxValueAxis
+  DxValueAxis,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
@@ -45,14 +45,14 @@ export default {
     DxMinorTickInterval,
     DxChart,
     DxSeries,
-    DxValueAxis
+    DxValueAxis,
   },
   data() {
     return {
       dataSource,
-      range: [new Date(2011, 11, 25), new Date(2012, 0, 1)]
+      range: [new Date(2011, 11, 25), new Date(2012, 0, 1)],
     };
-  }
+  },
 };
 </script>
 <style scoped>

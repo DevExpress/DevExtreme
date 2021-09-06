@@ -2,11 +2,11 @@ import React from 'react';
 
 import PieChart, {
   Series,
-  Legend
+  Legend,
 } from 'devextreme-react/pie-chart';
 import SelectBox from 'devextreme-react/select-box';
-import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
 import { getPalette } from 'devextreme/viz/palette';
+import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class App extends React.Component {
 
     this.state = {
       palette: paletteCollection[0],
-      extensionMode: paletteExtensionModes[1]
+      extensionMode: paletteExtensionModes[1],
     };
 
     this.setPalette = this.setPalette.bind(this);
@@ -36,7 +36,7 @@ class App extends React.Component {
           </PieChart>
 
           <div className="palette-container flex-block">
-            {getPalette(this.state.palette).simpleSet.map(color => (
+            {getPalette(this.state.palette).simpleSet.map((color) => (
               <div
                 className="palette-item"
                 style={{ backgroundColor: color }}
@@ -72,13 +72,13 @@ class App extends React.Component {
 
   setPalette(e) {
     this.setState({
-      palette: e.value
+      palette: e.value,
     });
   }
 
   setExtensionMode(e) {
     this.setState({
-      extensionMode: e.value
+      extensionMode: e.value,
     });
   }
 }

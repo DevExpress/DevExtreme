@@ -65,15 +65,15 @@ export default {
   components: {
     DxDataGrid,
     DxColumn,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      countries: countries,
+      countries,
       gdpFormat: {
         type: 'percent',
-        precision: 1
-      }
+        precision: 1,
+      },
     };
   },
   methods: {
@@ -83,8 +83,8 @@ export default {
 
       exportDataGrid({
         component: e.component,
-        worksheet: worksheet,
-        topLeftCell: { row: 4, column: 1 }
+        worksheet,
+        topLeftCell: { row: 4, column: 1 },
       }).then((cellRange) => {
         // header
         const headerRow = worksheet.getRow(2);
@@ -109,8 +109,8 @@ export default {
         });
       });
       e.cancel = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

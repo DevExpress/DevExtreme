@@ -57,26 +57,27 @@ import DxSparkline, {
 import {
   copperCosts,
   nickelCosts,
-  palladiumCosts } from './data.js';
+  palladiumCosts,
+} from './data.js';
 
 export default {
   components: {
     DxSparkline,
-    DxTooltip
+    DxTooltip,
   },
   props: {
-    year:{
+    year: {
       type: String,
-      default() {}
-    }
+      default() {},
+    },
   },
   data() {
     return {
       copperCosts,
       nickelCosts,
-      palladiumCosts
+      palladiumCosts,
     };
-  }
+  },
 };
 </script>
 

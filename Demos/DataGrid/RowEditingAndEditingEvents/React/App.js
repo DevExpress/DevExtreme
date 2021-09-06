@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 import Button from 'devextreme-react/button';
-import DataGrid, { Column, Editing, Paging, Lookup } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column, Editing, Paging, Lookup,
+} from 'devextreme-react/data-grid';
 
 import { employees, states } from './data.js';
 
@@ -26,9 +28,7 @@ class App extends React.Component {
   }
 
   logEvent(eventName) {
-    this.setState((state) => {
-      return { events: [eventName].concat(state.events) };
-    });
+    this.setState((state) => ({ events: [eventName].concat(state.events) }));
   }
 
   clearEvents() {

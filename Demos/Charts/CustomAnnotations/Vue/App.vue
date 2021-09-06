@@ -34,19 +34,21 @@
   </div>
 </template>
 <script>
+import {
+  DxChart, DxSeries, DxLegend, DxAnnotation, DxCommonAnnotationSettings,
+} from 'devextreme-vue/chart';
 import { populationData } from './data.js';
-import { DxChart, DxSeries, DxLegend, DxAnnotation, DxCommonAnnotationSettings } from 'devextreme-vue/chart';
 import AnnotationTemplate from './AnnotationTemplate.vue';
 
 export default {
   components: {
-    DxChart, DxSeries, DxLegend, DxAnnotation, DxCommonAnnotationSettings, AnnotationTemplate
+    DxChart, DxSeries, DxLegend, DxAnnotation, DxCommonAnnotationSettings, AnnotationTemplate,
   },
   data() {
     return {
-      populationData: populationData
+      populationData,
     };
-  }
+  },
 };
 </script>
 <style scoped>

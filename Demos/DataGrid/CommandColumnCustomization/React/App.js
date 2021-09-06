@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Button, Column, Editing, Lookup } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Button, Column, Editing, Lookup,
+} from 'devextreme-react/data-grid';
 
 import service from './data.js';
 
@@ -14,36 +16,43 @@ class App extends React.Component {
     this.isCloneIconVisible = this.isCloneIconVisible.bind(this);
     this.cloneIconClick = this.cloneIconClick.bind(this);
   }
+
   isChief(position) {
     return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
   }
+
   allowDeleting(e) {
     return !this.isChief(e.row.data.Position);
   }
+
   onRowValidating(e) {
     const position = e.newData.Position;
 
-    if(this.isChief(position)) {
-      e.errorText = `The company can have only one ${ position.toUpperCase() }. Please choose another position.`;
+    if (this.isChief(position)) {
+      e.errorText = `The company can have only one ${position.toUpperCase()}. Please choose another position.`;
       e.isValid = false;
     }
   }
+
   onEditorPreparing(e) {
-    if(e.parentType === 'dataRow' && e.dataField === 'Position') {
+    if (e.parentType === 'dataRow' && e.dataField === 'Position') {
       e.editorOptions.readOnly = this.isChief(e.value);
     }
   }
+
   isCloneIconVisible(e) {
     return !e.row.isEditing && !this.isChief(e.row.data.Position);
   }
+
   cloneIconClick(e) {
     const employees = [...this.state.employees];
     const clonedItem = { ...e.row.data, ID: service.getMaxID() };
 
     employees.splice(e.row.rowIndex, 0, clonedItem);
-    this.setState({ employees: employees });
+    this.setState({ employees });
     e.event.preventDefault();
   }
+
   render() {
     return (
       <DataGrid

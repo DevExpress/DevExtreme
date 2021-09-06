@@ -2,17 +2,15 @@ import React from 'react';
 import Scheduler, { Editing } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
 
-import { data, locations } from './data.js';
 import timeZoneUtils from 'devextreme/time_zone_utils';
+import { data, locations } from './data.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
 
 function getLocations(date) {
   const timeZones = timeZoneUtils.getTimeZones(date);
-  return timeZones.filter((timeZone) => {
-    return locations.indexOf(timeZone.id) !== -1;
-  });
+  return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
 }
 
 const demoLocations = getLocations(currentDate);
@@ -22,7 +20,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       timeZone: demoLocations[0].id,
-      demoLocations: demoLocations
+      demoLocations,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
     this.onAppointmentFormOpening = this.onAppointmentFormOpening.bind(this);
@@ -31,12 +29,12 @@ class App extends React.Component {
 
   onValueChanged(e) {
     this.setState({
-      timeZone: e.value
+      timeZone: e.value,
     });
   }
 
   onAppointmentFormOpening(e) {
-    const form = e.form;
+    const { form } = e;
 
     const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
     const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
@@ -51,9 +49,9 @@ class App extends React.Component {
   }
 
   onOptionChanged(e) {
-    if(e.name === 'currentDate') {
+    if (e.name === 'currentDate') {
       this.setState({
-        demoLocations: getLocations(e.value)
+        demoLocations: getLocations(e.value),
       });
     }
   }

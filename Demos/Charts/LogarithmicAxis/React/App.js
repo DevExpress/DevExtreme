@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import {
   Chart,
@@ -12,7 +12,7 @@ import {
   ArgumentAxis,
   Grid,
   Label,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 
@@ -47,7 +47,8 @@ export default function App() {
 }
 
 function customizePoint({ data }) {
-  let color, hoverStyle;
+  let color; let
+    hoverStyle;
   switch (data.type) {
     case 'Star':
       color = 'red';

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { markup } from './data.js';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import Popup from 'devextreme-react/popup';
+import { markup } from './data.js';
 
 const headerValues = [false, 1, 2, 3, 4, 5];
 
@@ -12,20 +12,21 @@ class App extends React.Component {
 
     this.state = {
       value: markup,
-      popupVisible: false
+      popupVisible: false,
     };
 
     this.toolbarButtonOptions = {
       text: 'Show markup',
       stylingMode: 'text',
-      onClick: this.customButtonClick.bind(this)
+      onClick: this.customButtonClick.bind(this),
     };
 
     this.valueChanged = this.valueChanged.bind(this);
     this.popupHiding = this.popupHiding.bind(this);
   }
+
   render() {
-    let { value, popupVisible } = this.state;
+    const { value, popupVisible } = this.state;
 
     return (
       <div className="widget-container">
@@ -69,19 +70,22 @@ class App extends React.Component {
       </div>
     );
   }
+
   valueChanged(e) {
     this.setState({
-      value: e.value
+      value: e.value,
     });
   }
+
   popupHiding() {
     this.setState({
-      popupVisible: false
+      popupVisible: false,
     });
   }
+
   customButtonClick() {
     this.setState({
-      popupVisible: true
+      popupVisible: true,
     });
   }
 }

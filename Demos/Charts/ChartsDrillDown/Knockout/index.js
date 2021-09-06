@@ -1,73 +1,69 @@
-window.onload = function() {
-    var isFirstLevel = ko.observable(true),
-        dataSource = ko.observable(filterData("")),
-        buttonIsVisible = ko.computed(function () {
-            return !isFirstLevel();
-        });
+window.onload = function () {
+  const isFirstLevel = ko.observable(true);
+  const dataSource = ko.observable(filterData(''));
+  const buttonIsVisible = ko.computed(() => !isFirstLevel());
 
-    var viewModel = {
-        chartOptions: {
-            dataSource: dataSource,
-            title: "The Most Populated Countries by Continents",
-            series: {
-                type: "bar"
-            },
-            legend: {
-                visible: false
-            },
-            valueAxis: {
-                showZero: false
-            },
-            onPointClick: function (e) {
-                if (isFirstLevel()) {
-                    isFirstLevel(false);
-                    removePointerCursor();
-                    dataSource(filterData(e.target.originalArgument));
-                }
-            },
-            customizePoint: function () {
-                var pointSettings = {
-                    color: colors[Number(isFirstLevel())]
-                };
-
-                if (!isFirstLevel()) {
-                    pointSettings.hoverStyle = {
-                        hatching: "none"
-                    };
-                }
-
-                return pointSettings;
-            }
-        },
-        buttonOptions: {
-            text: "Back",
-            icon: "chevronleft",
-            visible: buttonIsVisible,
-            onClick: function () {
-                if (!isFirstLevel()) {
-                    isFirstLevel(true);
-                    addPointerCursor();
-                    dataSource(filterData(""));
-                }
-            }
+  const viewModel = {
+    chartOptions: {
+      dataSource,
+      title: 'The Most Populated Countries by Continents',
+      series: {
+        type: 'bar',
+      },
+      legend: {
+        visible: false,
+      },
+      valueAxis: {
+        showZero: false,
+      },
+      onPointClick(e) {
+        if (isFirstLevel()) {
+          isFirstLevel(false);
+          removePointerCursor();
+          dataSource(filterData(e.target.originalArgument));
         }
-    };
-    
-    ko.applyBindings(viewModel, document.getElementById("chart-demo"));
+      },
+      customizePoint() {
+        const pointSettings = {
+          color: colors[Number(isFirstLevel())],
+        };
 
-    addPointerCursor();
+        if (!isFirstLevel()) {
+          pointSettings.hoverStyle = {
+            hatching: 'none',
+          };
+        }
 
-    function filterData(name) {
-        return data.filter(function (item) {
-            return item.parentID === name;
-        });
-    }
+        return pointSettings;
+      },
+    },
+    buttonOptions: {
+      text: 'Back',
+      icon: 'chevronleft',
+      visible: buttonIsVisible,
+      onClick() {
+        if (!isFirstLevel()) {
+          isFirstLevel(true);
+          addPointerCursor();
+          dataSource(filterData(''));
+        }
+      },
+    },
+  };
 
-    function addPointerCursor() {
-        document.getElementById("chart").classList.add("pointer-on-bars");
-    }
+  ko.applyBindings(viewModel, document.getElementById('chart-demo'));
 
-    function removePointerCursor() {
-        document.getElementById("chart").classList.remove("pointer-on-bars");
-    }
+  addPointerCursor();
+
+  function filterData(name) {
+    return data.filter((item) => item.parentID === name);
+  }
+
+  function addPointerCursor() {
+    document.getElementById('chart').classList.add('pointer-on-bars');
+  }
+
+  function removePointerCursor() {
+    document.getElementById('chart').classList.remove('pointer-on-bars');
+  }
 };

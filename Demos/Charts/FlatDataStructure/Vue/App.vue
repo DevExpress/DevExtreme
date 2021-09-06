@@ -22,24 +22,24 @@ import { citiesPopulation } from './data.js';
 export default {
   components: {
     DxTreeMap,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
-      citiesPopulation
+      citiesPopulation,
     };
   },
   methods: {
     customizeTooltip(arg) {
-      const data = arg.node.data;
+      const { data } = arg.node;
 
       return {
-        text: arg.node.isLeaf() ?
-          `<span class="city">${data.name}</span> (${data.country})<br/>Population: ${arg.valueText}` :
-          null
+        text: arg.node.isLeaf()
+          ? `<span class="city">${data.name}</span> (${data.country})<br/>Population: ${arg.valueText}`
+          : null,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

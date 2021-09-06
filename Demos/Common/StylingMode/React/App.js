@@ -16,7 +16,7 @@ class App extends React.Component {
 
     this.state = {
       date: new Date(2020, 4, 3),
-      stylingMode: 'filled'
+      stylingMode: 'filled',
     };
 
     this.validateClick = this.validateClick.bind(this);
@@ -55,7 +55,7 @@ class App extends React.Component {
               placeholder="Start Date"
             />
             <SelectBox
-              items={[ 'High', 'Urgent', 'Normal', 'Low' ]}
+              items={['High', 'Urgent', 'Normal', 'Low']}
               stylingMode={this.state.stylingMode}
               defaultValue="High"
               width="100%"
@@ -64,8 +64,8 @@ class App extends React.Component {
           </div>
           <div className="center">
             <TagBox
-              items={[ 'Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed' ]}
-              defaultValue={[ 'Not Started' ]}
+              items={['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed']}
+              defaultValue={['Not Started']}
               multiline={false}
               stylingMode={this.state.stylingMode}
               width="100%"
@@ -91,7 +91,7 @@ class App extends React.Component {
           <div className="caption">Styling Mode</div>
           <div className="option">
             <SelectBox
-              items={[ 'outlined', 'filled', 'underlined' ]}
+              items={['outlined', 'filled', 'underlined']}
               value={this.state.stylingMode}
               onValueChanged={this.stylingModeChange}
             />
@@ -102,7 +102,7 @@ class App extends React.Component {
   }
 
   validateClick(e) {
-    var result = e.validationGroup.validate();
+    const result = e.validationGroup.validate();
     if (result.isValid) {
       notify('The task was saved successfully.', 'success');
     } else {
@@ -112,7 +112,7 @@ class App extends React.Component {
 
   stylingModeChange(e) {
     this.setState({
-      stylingMode: e.value
+      stylingMode: e.value,
     });
   }
 }

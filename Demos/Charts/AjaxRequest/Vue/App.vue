@@ -42,7 +42,7 @@ import DxChart, {
   DxValueAxis,
   DxLabel,
   DxLegend,
-  DxTick
+  DxTick,
 } from 'devextreme-vue/chart';
 
 export default {
@@ -54,13 +54,13 @@ export default {
     DxValueAxis,
     DxLabel,
     DxLegend,
-    DxTick
+    DxTick,
   },
   methods: {
     customizeLabelText({ valueText }) {
       return `Day ${valueText}`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

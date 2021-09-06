@@ -10,7 +10,9 @@ function EmployeeTemplate(props) {
   const tasks = service
     .getTasks()
     .filter((task) => task.EmployeeID === props.data.ID);
-  const { FirstName, LastName, Picture, Position, Notes } = props.data;
+  const {
+    FirstName, LastName, Picture, Position, Notes,
+  } = props.data;
   const completedTasks = tasks.filter((task) => task.Status === 'Completed');
 
   return (

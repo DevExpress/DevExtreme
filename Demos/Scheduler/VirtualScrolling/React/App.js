@@ -3,7 +3,7 @@ import React from 'react';
 import Scheduler, { Resource, View, Scrolling } from 'devextreme-react/scheduler';
 import {
   resources,
-  generateAppointments
+  generateAppointments,
 } from './data.js';
 
 const currentDate = new Date(2021, 1, 2);

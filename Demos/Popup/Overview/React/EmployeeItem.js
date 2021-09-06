@@ -3,7 +3,6 @@ import React from 'react';
 import { Button } from 'devextreme-react/button';
 
 export class EmployeeItem extends React.Component {
-
   constructor(props) {
     super(props);
 

@@ -8,27 +8,23 @@ import Chart, {
   Tooltip,
   ValueAxis,
   ConstantLine,
-  Label
+  Label,
 } from 'devextreme-react/chart';
 
 import { complaintsData } from './data.js';
 
-const data = complaintsData.sort(function(a, b) {
-  return b.count - a.count;
-});
+const data = complaintsData.sort((a, b) => b.count - a.count);
 
-const totalCount = data.reduce(function(prevValue, item) {
-  return prevValue + item.count;
-}, 0);
+const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
 
 let cumulativeCount = 0;
 
-const dataArray = data.map(function(item) {
+const dataArray = data.map((item) => {
   cumulativeCount += item.count;
   return {
     complaint: item.complaint,
     count: item.count,
-    cumulativePercentage: Math.round(cumulativeCount * 100 / totalCount)
+    cumulativePercentage: Math.round(cumulativeCount * 100 / totalCount),
   };
 });
 
@@ -111,7 +107,7 @@ function customizeTooltip(pointInfo) {
       pointInfo.points[1].seriesName
     }</span>: </div><div class="value-text"><span class='bottom-series-value'>${
       pointInfo.points[1].valueText
-    }</span>% </div></div></div>`
+    }</span>% </div></div></div>`,
   };
 }
 

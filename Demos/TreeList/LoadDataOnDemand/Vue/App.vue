@@ -39,28 +39,28 @@ import 'whatwg-fetch';
 
 export default {
   components: {
-    DxTreeList, DxRemoteOperations, DxColumn
+    DxTreeList, DxRemoteOperations, DxColumn,
   },
   data() {
     return {
       dataSource: {
-        load: function(loadOptions) {
-          let parentIdsParam = loadOptions.parentIds;
+        load(loadOptions) {
+          const parentIdsParam = loadOptions.parentIds;
 
           return fetch(`https://js.devexpress.com/Demos/Mvc/api/treeListData?parentIds=${parentIdsParam}`)
-            .then(response => response.json())
+            .then((response) => response.json())
             .catch(() => { throw 'Data Loading Error'; });
-        }
-      }
+        },
+      },
     };
   },
   methods: {
     customizeText(e) {
-      if(e.value !== null) {
-        return `${Math.ceil(e.value / 1024) } KB`;
+      if (e.value !== null) {
+        return `${Math.ceil(e.value / 1024)} KB`;
       }
-    }
-  }
+    },
+  },
 };
 
 </script>

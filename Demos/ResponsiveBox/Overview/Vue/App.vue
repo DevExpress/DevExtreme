@@ -103,7 +103,9 @@
 
 </template>
 <script>
-import { DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow } from 'devextreme-vue/responsive-box';
+import {
+  DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow,
+} from 'devextreme-vue/responsive-box';
 
 export default {
   components: {
@@ -111,15 +113,15 @@ export default {
     DxItem,
     DxLocation,
     DxCol,
-    DxRow
+    DxRow,
   },
   data() {
     return {
       screen(width) {
         return (width < 700) ? 'sm' : 'lg';
-      }
+      },
     };
-  }
+  },
 };
 </script>
 <style>

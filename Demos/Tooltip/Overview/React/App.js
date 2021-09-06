@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { Tooltip } from 'devextreme-react/tooltip';
 
@@ -7,24 +7,24 @@ const animationConfig = {
     type: 'slide',
     from: {
       top: -100,
-      opacity: 0
+      opacity: 0,
     },
     to: {
       top: 0,
-      opacity: 1
-    }
+      opacity: 1,
+    },
   },
   hide: {
     type: 'pop',
     from: {
       scale: 1,
-      opacity: 1
+      opacity: 1,
     },
     to: {
       scale: 0.1,
-      opacity: 0
-    }
-  }
+      opacity: 0,
+    },
+  },
 };
 
 class App extends React.Component {
@@ -33,13 +33,14 @@ class App extends React.Component {
     this.state = {
       defaultVisible: false,
       withAnimationVisible: false,
-      withTemplateVisible: false
+      withTemplateVisible: false,
     };
 
     this.toggleDefault = this.toggleDefault.bind(this);
     this.toggleWithTemplate = this.toggleWithTemplate.bind(this);
     this.toggleWithAnimation = this.toggleWithAnimation.bind(this);
   }
+
   render() {
     return (
       <div className="form">
@@ -108,19 +109,19 @@ class App extends React.Component {
 
   toggleDefault() {
     this.setState({
-      defaultVisible: !this.state.defaultVisible
+      defaultVisible: !this.state.defaultVisible,
     });
   }
 
   toggleWithTemplate() {
     this.setState({
-      withTemplateVisible: !this.state.withTemplateVisible
+      withTemplateVisible: !this.state.withTemplateVisible,
     });
   }
 
   toggleWithAnimation() {
     this.setState({
-      withAnimationVisible: !this.state.withAnimationVisible
+      withAnimationVisible: !this.state.withAnimationVisible,
     });
   }
 }

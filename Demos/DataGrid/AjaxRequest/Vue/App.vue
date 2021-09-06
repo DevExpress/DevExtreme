@@ -11,12 +11,12 @@ import DxDataGrid from 'devextreme-vue/data-grid';
 
 export default {
   components: {
-    DxDataGrid
+    DxDataGrid,
   },
   data() {
     return {
-      columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax']
+      columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
     };
-  }
+  },
 };
 </script>

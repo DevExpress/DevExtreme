@@ -51,7 +51,7 @@ import DxChart, {
   DxFormat,
   DxValueAxis,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 import { exportData } from './data.js';
 
@@ -64,11 +64,11 @@ export default {
     DxFormat,
     DxValueAxis,
     DxLegend,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      exportData
+      exportData,
     };
   },
   methods: {
@@ -77,13 +77,13 @@ export default {
     },
 
     onLegendClick({ target: series }) {
-      if(series.isVisible()) {
+      if (series.isVisible()) {
         series.hide();
       } else {
         series.show();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

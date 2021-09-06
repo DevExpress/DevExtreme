@@ -33,7 +33,7 @@ export default {
   components: {
     DxFilterBuilder,
     DxButton,
-    DxDataGrid
+    DxDataGrid,
   },
   data() {
     return {
@@ -43,9 +43,9 @@ export default {
       dataSource: new DataSource({
         store: new ODataStore({
           fieldTypes: {
-            'Product_Cost': 'Decimal',
-            'Product_Sale_Price': 'Decimal',
-            'Product_Retail_Price': 'Decimal'
+            Product_Cost: 'Decimal',
+            Product_Sale_Price: 'Decimal',
+            Product_Retail_Price: 'Decimal',
           },
           url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
         }),
@@ -55,16 +55,16 @@ export default {
           'Product_Cost',
           'Product_Sale_Price',
           'Product_Retail_Price',
-          'Product_Current_Inventory'
-        ]
-      })
+          'Product_Current_Inventory',
+        ],
+      }),
     };
   },
   methods: {
     buttonClick() {
       this.gridFilterValue = this.filter;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

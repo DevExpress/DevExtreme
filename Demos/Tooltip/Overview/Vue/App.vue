@@ -69,7 +69,7 @@ import { DxTooltip } from 'devextreme-vue/tooltip';
 
 export default {
   components: {
-    DxTooltip
+    DxTooltip,
   },
 
   data() {
@@ -82,25 +82,25 @@ export default {
           type: 'slide',
           from: {
             top: -100,
-            opacity: 0
+            opacity: 0,
           },
           to: {
             top: 0,
-            opacity: 1
-          }
+            opacity: 1,
+          },
         },
         hide: {
           type: 'pop',
           from: {
             scale: 1,
-            opacity: 1
+            opacity: 1,
           },
           to: {
             scale: 0.1,
-            opacity: 0
-          }
-        }
-      }
+            opacity: 0,
+          },
+        },
+      },
     };
   },
 
@@ -115,8 +115,8 @@ export default {
 
     toggleWithAnimation() {
       this.withAnimationVisible = !this.withAnimationVisible;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

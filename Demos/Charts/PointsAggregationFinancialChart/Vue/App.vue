@@ -68,7 +68,7 @@ import DxChart, {
   DxValueAxis,
   DxMargin,
   DxLegend,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 
 import DxRangeSelector, {
@@ -78,7 +78,7 @@ import DxRangeSelector, {
   DxValueAxis as DxRsValueAxis,
   DxSeries as DxRsSeries,
   DxAggregation as DxRsAggregation,
-  DxBehavior
+  DxBehavior,
 } from 'devextreme-vue/range-selector';
 
 import { dataSource } from './data.js';
@@ -102,14 +102,14 @@ export default {
     DxRsValueAxis,
     DxRsSeries,
     DxRsAggregation,
-    DxBehavior
+    DxBehavior,
   },
   data() {
     return {
       dataSource,
-      visualRange: []
+      visualRange: [],
     };
-  }
+  },
 };
 </script>
 <style>

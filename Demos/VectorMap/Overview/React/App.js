@@ -8,7 +8,7 @@ import Map, {
   Source,
   Subtitle,
   Title,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
@@ -23,9 +23,9 @@ function customizeLayer(elements) {
   });
 }
 
-const format = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 0
-}).format;
+const { format } = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 0,
+});
 
 function customizeLegendText(arg) {
   return `${format(arg.start)} to ${format(arg.end)}`;

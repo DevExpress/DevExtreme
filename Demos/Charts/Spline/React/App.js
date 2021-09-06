@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   Chart,
@@ -12,7 +12,7 @@ import {
   Margin,
   Tooltip,
   Label,
-  Format
+  Format,
 } from 'devextreme-react/chart';
 import { architectureSources, sharingStatisticsInfo } from './data.js';
 
@@ -20,7 +20,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: 'spline'
+      type: 'spline',
     };
     this.types = ['spline', 'stackedspline', 'fullstackedspline'];
     this.handleChange = this.handleChange.bind(this);
@@ -42,9 +42,7 @@ class App extends React.Component {
             <Grid visible={true} />
           </CommonAxisSettings>
           {
-            architectureSources.map(function(item) {
-              return <Series key={item.value} valueField={item.value} name={item.name} />;
-            })
+            architectureSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
           }
           <Margin bottom={20} />
           <ArgumentAxis

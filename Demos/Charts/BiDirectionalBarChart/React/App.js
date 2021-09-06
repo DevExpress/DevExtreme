@@ -6,13 +6,12 @@ import Chart, {
   Label,
   Legend,
   Series,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/chart';
 
 import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart

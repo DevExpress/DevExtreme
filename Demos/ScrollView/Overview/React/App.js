@@ -1,8 +1,8 @@
 import React from 'react';
-import service from './data.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+import service from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class App extends React.Component {
       pullDown: false,
       scrollByContent: true,
       scrollByThumb: true,
-      content: service.getContent()
+      content: service.getContent(),
     };
     this.getInstance = this.getInstance.bind(this);
     this.pullDownValueChanged = this.pullDownValueChanged.bind(this);
@@ -25,8 +25,11 @@ class App extends React.Component {
     this.updateBottomContent = this.updateBottomContent.bind(this);
     this.updateContent = this.updateContent.bind(this);
   }
+
   render() {
-    let { showScrollBarMode, content, scrollByThumb, scrollByContent, pullDown } = this.state;
+    const {
+      showScrollBarMode, content, scrollByThumb, scrollByContent, pullDown,
+    } = this.state;
     return (
       <div id="scrollview-demo">
         <ScrollView id="scrollview" ref={this.getInstance}
@@ -85,65 +88,71 @@ class App extends React.Component {
       </div>
     );
   }
+
   getInstance(ref) {
     this.scrollView = ref.instance;
   }
+
   pullDownValueChanged(args) {
     this.setState({
-      pullDown: args.value
+      pullDown: args.value,
     });
   }
+
   reachBottomValueChanged(args) {
     this.scrollView.option('onReachBottom', args.value ? this.updateBottomContent : null);
   }
+
   scrollbarModelValueChanged(args) {
     this.setState({
-      showScrollBarMode: args.value
+      showScrollBarMode: args.value,
     });
   }
+
   scrollByContentValueChanged(args) {
     this.setState({
-      scrollByContent: args.value
+      scrollByContent: args.value,
     });
   }
+
   scrollByThumbValueChanged(args) {
     this.setState({
-      scrollByThumb: args.value
+      scrollByThumb: args.value,
     });
   }
+
   updateTopContent(args) {
     this.updateContent(args, 'PullDown');
   }
+
   updateBottomContent(args) {
     this.updateContent(args, 'ReachBottom');
   }
-  updateContent(args, eventName) {
 
-    let updateContentText = `\n Content has been updated on the ${ eventName } event.\n\n`;
-    if (this.updateContentTimer)
-    { clearTimeout(this.updateContentTimer); }
+  updateContent(args, eventName) {
+    const updateContentText = `\n Content has been updated on the ${eventName} event.\n\n`;
+    if (this.updateContentTimer) { clearTimeout(this.updateContentTimer); }
     this.updateContentTimer = setTimeout(() => {
       this.setState({
-        content: eventName == 'PullDown' ? updateContentText + this.state.content : this.state.content + updateContentText
+        content: eventName == 'PullDown' ? updateContentText + this.state.content : this.state.content + updateContentText,
       });
       args.component.release();
     }, 500);
   }
-
 }
 
 const showScrollbarModes = [{
   text: 'On Scroll',
-  value: 'onScroll'
+  value: 'onScroll',
 }, {
   text: 'On Hover',
-  value: 'onHover'
+  value: 'onHover',
 }, {
   text: 'Always',
-  value: 'always'
+  value: 'always',
 }, {
   text: 'Never',
-  value: 'never'
+  value: 'never',
 }];
 
 export default App;

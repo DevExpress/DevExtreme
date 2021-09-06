@@ -70,7 +70,9 @@
 <script>
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import DxTreeView from 'devextreme-vue/tree-view';
-import { DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling,
+} from 'devextreme-vue/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 
@@ -82,7 +84,7 @@ export default {
     DxSelection,
     DxPaging,
     DxFilterRow,
-    DxScrolling
+    DxScrolling,
   },
   data() {
     return {
@@ -93,7 +95,7 @@ export default {
       isTreeBoxOpened: false,
       gridBoxValue: [3],
       treeViewRefName: 'tree-view',
-      gridColumns: ['CompanyName', 'City', 'Phone']
+      gridColumns: ['CompanyName', 'City', 'Phone'],
     };
   },
   created() {
@@ -106,10 +108,10 @@ export default {
       return new CustomStore({
         loadMode: 'raw',
         key: 'ID',
-        load: function() {
-          return fetch(`../../../../data/${ jsonFile}`)
-            .then(response => response.json());
-        }
+        load() {
+          return fetch(`../../../../data/${jsonFile}`)
+            .then((response) => response.json());
+        },
       });
     },
     syncTreeViewSelection() {
@@ -124,15 +126,15 @@ export default {
       this.treeBoxValue = e.component.getSelectedNodeKeys();
     },
     gridBoxDisplayExpr(item) {
-      return item && `${item.CompanyName } <${ item.Phone }>`;
+      return item && `${item.CompanyName} <${item.Phone}>`;
     },
     onTreeItemClick() {
       this.isTreeBoxOpened = false;
     },
     onGridSelectionChanged() {
       this.isGridBoxOpened = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

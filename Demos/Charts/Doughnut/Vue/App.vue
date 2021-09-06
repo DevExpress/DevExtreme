@@ -39,7 +39,7 @@ import DxPieChart, {
   DxFormat,
   DxLabel,
   DxConnector,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/pie-chart';
 
 import { populationByRegions } from './data.js';
@@ -53,20 +53,20 @@ export default {
     DxFormat,
     DxLabel,
     DxConnector,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      populationByRegions
+      populationByRegions,
     };
   },
   methods: {
     customizeTooltip({ valueText, percent }) {
       return {
-        text: `${valueText} - ${(percent * 100).toFixed(2)}%`
+        text: `${valueText} - ${(percent * 100).toFixed(2)}%`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

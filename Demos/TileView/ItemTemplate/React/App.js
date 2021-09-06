@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import TileView from 'devextreme-react/tile-view';
 import { homes } from './data.js';
 
@@ -6,13 +6,14 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
-  maximumFractionDigits: 0
+  maximumFractionDigits: 0,
 });
 
 class App extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <TileView items={homes} height={390} baseItemHeight={120} baseItemWidth={185} itemMargin={10} itemComponent={TileViewItem} />

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
@@ -6,7 +6,7 @@ import DataGrid, {
   Popup,
   Paging,
   Lookup,
-  Form
+  Form,
 } from 'devextreme-react/data-grid';
 import 'devextreme-react/text-area';
 import { Item } from 'devextreme-react/form';

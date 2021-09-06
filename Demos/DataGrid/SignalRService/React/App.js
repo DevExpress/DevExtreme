@@ -1,6 +1,6 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, {
-  Column
+  Column,
 } from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
@@ -9,28 +9,27 @@ import PriceCell from './PriceCell.js';
 import ChangeCell from './ChangeCell.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = { connectionStarted: false, dataSource: null };
 
-    var hubConnection = new HubConnectionBuilder()
+    const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
         skipNegotiation: true,
-        transport: HttpTransportType.WebSockets
+        transport: HttpTransportType.WebSockets,
       })
       .build();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
       load: () => hubConnection.invoke('getAllStocks'),
-      key: 'symbol'
+      key: 'symbol',
     });
 
     hubConnection
       .start()
       .then(() => {
         hubConnection.on('updateStockPrice', (data) => {
-          store.push([{ type: 'update', key: data.symbol, data: data }]);
+          store.push([{ type: 'update', key: data.symbol, data }]);
         });
         this.setState({ connectionStarted: true, dataSource: store });
       });
@@ -39,8 +38,8 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        {this.state.connectionStarted &&
-          (<DataGrid
+        {this.state.connectionStarted
+          && (<DataGrid
             id="gridContainer"
             dataSource={this.state.dataSource}
             showBorders={true}

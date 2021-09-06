@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { PivotGrid, Scrolling } from 'devextreme-react/pivot-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
@@ -7,7 +7,7 @@ const dataSource = {
   remoteOperations: true,
   store: createStore({
     key: 'OrderID',
-    loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales/Orders'
+    loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales/Orders',
   }),
   fields: [{
     caption: 'Category',
@@ -17,7 +17,7 @@ const dataSource = {
     sortBySummaryField: 'SalesAmount',
     sortBySummaryPath: [],
     sortOrder: 'desc',
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'Subcategory',
     dataField: 'ProductSubcategoryName',
@@ -25,7 +25,7 @@ const dataSource = {
     sortBySummaryField: 'SalesAmount',
     sortBySummaryPath: [],
     sortOrder: 'desc',
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'Product',
     dataField: 'ProductName',
@@ -33,34 +33,34 @@ const dataSource = {
     sortBySummaryField: 'SalesAmount',
     sortBySummaryPath: [],
     sortOrder: 'desc',
-    width: 250
+    width: 250,
   }, {
     caption: 'Date',
     dataField: 'DateKey',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     caption: 'Amount',
     dataField: 'SalesAmount',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }, {
     caption: 'Store',
-    dataField: 'StoreName'
+    dataField: 'StoreName',
   }, {
     caption: 'Quantity',
     dataField: 'SalesQuantity',
-    summaryType: 'sum'
+    summaryType: 'sum',
   }, {
     caption: 'Unit Price',
     dataField: 'UnitPrice',
     format: 'currency',
-    summaryType: 'sum'
+    summaryType: 'sum',
   }, {
     dataField: 'Id',
-    visible: false
-  }]
+    visible: false,
+  }],
 };
 
 class App extends React.Component {

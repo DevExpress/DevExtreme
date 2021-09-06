@@ -16,16 +16,16 @@ import 'whatwg-fetch';
 
 export default {
   components: {
-    DxTreeView
+    DxTreeView,
   },
   methods: {
-    createChildren: function(parent) {
-      let parentId = parent ? parent.itemData.id : '';
+    createChildren(parent) {
+      const parentId = parent ? parent.itemData.id : '';
 
       return fetch(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`)
-        .then(response => response.json())
+        .then((response) => response.json())
         .catch(() => { throw 'Data Loading Error'; });
-    }
-  }
+    },
+  },
 };
 </script>

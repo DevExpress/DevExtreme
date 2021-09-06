@@ -59,7 +59,7 @@ const endpointUrl = 'https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-
 export default {
   components: {
     DxFileUploader,
-    DxLoadPanel
+    DxLoadPanel,
   },
 
   data() {
@@ -67,7 +67,7 @@ export default {
       loadPanelPosition: { of: '#file-uploader' },
       loadPanelVisible: true,
       wrapperClassName: '',
-      requests: []
+      requests: [],
     };
   },
 
@@ -79,8 +79,8 @@ export default {
     gateway = new AzureGateway(endpointUrl, onRequestExecuted);
 
     fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
-      .then(response => response.json())
-      .then(result => {
+      .then((response) => response.json())
+      .then((result) => {
         this.wrapperClassName = result.active ? 'show-widget' : 'show-message';
         this.loadPanelVisible = false;
       });
@@ -90,8 +90,8 @@ export default {
     uploadChunk(file, uploadInfo) {
       let promise = null;
 
-      if(uploadInfo.chunkIndex === 0) {
-        promise = gateway.getUploadAccessUrl(file.name).done(accessUrl => {
+      if (uploadInfo.chunkIndex === 0) {
+        promise = gateway.getUploadAccessUrl(file.name).done((accessUrl) => {
           uploadInfo.customData.accessUrl = accessUrl;
         });
       } else {
@@ -100,13 +100,13 @@ export default {
 
       promise = promise.then(() => gateway.putBlock(uploadInfo.customData.accessUrl, uploadInfo.chunkIndex, uploadInfo.chunkBlob));
 
-      if(uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
+      if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
         promise = promise.then(() => gateway.putBlockList(uploadInfo.customData.accessUrl, uploadInfo.chunkCount));
       }
 
       return promise;
-    }
-  }
+    },
+  },
 };
 
 let gateway = null;

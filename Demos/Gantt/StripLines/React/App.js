@@ -1,5 +1,7 @@
 import React from 'react';
-import Gantt, { Tasks, Column, Validation, StripLine } from 'devextreme-react/gantt';
+import Gantt, {
+  Tasks, Column, Validation, StripLine,
+} from 'devextreme-react/gantt';
 import { tasks, currentDate } from './data.js';
 
 class App extends React.Component {

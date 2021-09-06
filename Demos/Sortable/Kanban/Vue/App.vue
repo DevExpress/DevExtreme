@@ -46,34 +46,34 @@
   </div>
 </template>
 <script>
-import { tasks, employees } from './data.js';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 import { DxSortable } from 'devextreme-vue/sortable';
+import { tasks, employees } from './data.js';
 
 const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 
 export default {
   components: {
     DxScrollView,
-    DxSortable
+    DxSortable,
   },
   data() {
     const employeesMap = {};
 
-    employees.forEach(employee => {
+    employees.forEach((employee) => {
       employeesMap[employee.ID] = employee.Name;
     });
 
     const lists = [];
 
-    statuses.forEach(status => {
-      lists.push(tasks.filter(task => task.Task_Status === status));
+    statuses.forEach((status) => {
+      lists.push(tasks.filter((task) => task.Task_Status === status));
     });
 
     return {
       statuses,
       lists,
-      employeesMap
+      employeesMap,
     };
   },
   methods: {
@@ -93,8 +93,8 @@ export default {
     },
     getPriorityClass(task) {
       return `priority-${task.Task_Priority}`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

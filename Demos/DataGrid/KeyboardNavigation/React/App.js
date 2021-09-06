@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, {
   Column,
   Lookup,
@@ -7,7 +7,8 @@ import DataGrid, {
   FilterPanel,
   FilterRow,
   Pager,
-  Paging } from 'devextreme-react/data-grid';
+  Paging,
+} from 'devextreme-react/data-grid';
 import { employees, states } from './data.js';
 
 const allowedPageSizes = [5, 10];

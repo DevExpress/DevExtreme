@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 
 import service from './data.js';
@@ -8,7 +8,7 @@ class App extends React.Component {
     super(props);
     this.products = service.getProducts();
     this.state = {
-      currentItem: Object.assign({}, this.products[0])
+      currentItem: { ...this.products[0] },
     };
     this.selectItem = this.selectItem.bind(this);
   }
@@ -25,8 +25,8 @@ class App extends React.Component {
           keyExpr="ID"
           width={300}
           onItemClick={this.selectItem} />
-        {currentItem.price &&
-          <div id="product-details">
+        {currentItem.price
+          && <div id="product-details">
             <img src={currentItem.icon} />
             <div className="name">{currentItem.name}</div>
             <div className="price">{`$${currentItem.price}`}</div>
@@ -38,7 +38,7 @@ class App extends React.Component {
 
   selectItem(e) {
     this.setState({
-      currentItem: Object.assign({}, e.itemData)
+      currentItem: { ...e.itemData },
     });
   }
 }

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 
@@ -10,12 +10,12 @@ import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import service from './data.js';
 
 const editPopupOptions = {
-  width:700,
-  height:345
+  width: 700,
+  height: 345,
 };
 const amountEditorOptions = {
   format: 'currency',
-  showClearButton: true
+  showClearButton: true,
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 
@@ -23,7 +23,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      locale: this.getLocale()
+      locale: this.getLocale(),
     };
     this.locales = service.getLocales();
     this.payments = service.getPayments();
@@ -31,25 +31,30 @@ class App extends React.Component {
     locale(this.state.locale);
     this.changeLocale = this.changeLocale.bind(this);
   }
+
   getLocale() {
     const locale = sessionStorage.getItem('locale');
     return locale != null ? locale : 'en';
   }
+
   setLocale(locale) {
     sessionStorage.setItem('locale', locale);
   }
+
   initMessages() {
     loadMessages(deMessages);
     loadMessages(ruMessages);
     loadMessages(service.getDictionary());
   }
+
   changeLocale(e) {
     this.setState({
-      locale: e.value
+      locale: e.value,
     });
     this.setLocale(e.value);
     document.location.reload();
   }
+
   render() {
     return (
       <div>

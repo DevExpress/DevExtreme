@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import TextBox from 'devextreme-react/text-box';
 import TextArea from 'devextreme-react/text-area';
 

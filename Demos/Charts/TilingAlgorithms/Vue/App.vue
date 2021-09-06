@@ -33,7 +33,7 @@
 import DxTreeMap,
 {
   DxColorizer,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/tree-map';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { populationByAge } from './data.js';
@@ -43,35 +43,35 @@ export default {
     DxTreeMap,
     DxColorizer,
     DxTooltip,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     const algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
     return {
       populationByAge,
       algorithms,
-      selectedAlgorithm: algorithms[2]
+      selectedAlgorithm: algorithms[2],
     };
   },
   computed: {
     currentAlgorithm() {
       let currentAlgorithm = this.selectedAlgorithm;
-      if(currentAlgorithm === 'custom') {
+      if (currentAlgorithm === 'custom') {
         currentAlgorithm = this.customAlgorithm;
       }
 
       return currentAlgorithm;
-    }
+    },
   },
   methods: {
     customizeTooltip(arg) {
-      const data = arg.node.data;
+      const { data } = arg.node;
       const parentData = arg.node.getParent().data;
 
       return {
         text: arg.node.isLeaf()
           ? `<span class='country'>${parentData.name}</span><br />${data.name}<br />${arg.valueText}(${(100 * data.value / parentData.total).toFixed(1)}%)`
-          : `<span class='country'>${data.name}</span>`
+          : `<span class='country'>${data.name}</span>`,
       };
     },
     customAlgorithm(arg) {
@@ -79,7 +79,7 @@ export default {
       let totalSum = arg.sum;
       let side = 0;
 
-      arg.items.forEach(item => {
+      arg.items.forEach((item) => {
         const size = Math.round((totalRect[side + 2] - totalRect[side]) * item.value / totalSum);
         const rect = totalRect.slice();
 
@@ -88,8 +88,8 @@ export default {
         item.rect = rect;
         side = 1 - side;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

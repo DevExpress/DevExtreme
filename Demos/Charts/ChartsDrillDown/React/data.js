@@ -25,13 +25,11 @@ const data = [
   { arg: 'Colombia', val: 48400388, parentID: 'South America' },
   { arg: 'Venezuela', val: 30761000, parentID: 'South America' },
   { arg: 'Peru', val: 28220764, parentID: 'South America' },
-  { arg: 'Chile', val: 18006407, parentID: 'South America' }
+  { arg: 'Chile', val: 18006407, parentID: 'South America' },
 ];
 
 export default {
   filterData(name) {
-    return data.filter(function(item) {
-      return item.parentID === name;
-    });
-  }
+    return data.filter((item) => item.parentID === name);
+  },
 };

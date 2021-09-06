@@ -11,7 +11,7 @@ class ResourceCell extends React.PureComponent {
         <div className="avatar">
           <img src={avatar} />
         </div>
-        <div className="info" style={{ color: color }}>
+        <div className="info" style={{ color }}>
           Age: {age}
           <br />
           <b>{discipline}</b>

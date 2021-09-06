@@ -58,7 +58,7 @@ import {
   DxColumn,
   DxEditing,
   DxSummary,
-  DxTotalItem
+  DxTotalItem,
 } from 'devextreme-vue/data-grid';
 
 import service from './data.js';
@@ -69,13 +69,13 @@ export default {
     DxColumn,
     DxEditing,
     DxSummary,
-    DxTotalItem
+    DxTotalItem,
   },
   data() {
     return {
-      orders: service.getOrders()
+      orders: service.getOrders(),
     };
-  }
+  },
 };
 </script>
 <style scoped>

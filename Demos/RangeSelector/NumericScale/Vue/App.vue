@@ -24,15 +24,15 @@
   </DxRangeSelector>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxRangeSelector,
   DxMargin,
   DxChart,
   DxCommonSeriesSettings,
   DxSeries,
-  DxScale
+  DxScale,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
@@ -41,14 +41,14 @@ export default {
     DxChart,
     DxCommonSeriesSettings,
     DxSeries,
-    DxScale
+    DxScale,
   },
   data() {
     return {
-      dataSource: dataSource,
-      range: ['1', '2']
+      dataSource,
+      range: ['1', '2'],
     };
-  }
+  },
 };
 </script>
 <style scoped>

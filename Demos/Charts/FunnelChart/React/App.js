@@ -1,6 +1,4 @@
 import React from 'react';
-import { dataSource } from './data.js';
-
 import Funnel, {
   Title,
   Margin,
@@ -8,8 +6,9 @@ import Funnel, {
   Tooltip,
   Item,
   Border,
-  Label
+  Label,
 } from 'devextreme-react/funnel';
+import { dataSource } from './data.js';
 
 function App() {
   return (

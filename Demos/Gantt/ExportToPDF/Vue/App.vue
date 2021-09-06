@@ -147,7 +147,7 @@ import {
   DxColumn,
   DxEditing,
   DxToolbar,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/gantt';
 
 import DxCheckBox from 'devextreme-vue/check-box';
@@ -165,7 +165,7 @@ import {
   resourceAssignments,
   formats,
   exportModes,
-  dateRanges
+  dateRanges,
 } from './data.js';
 
 const ganttRef = 'gantt';
@@ -184,26 +184,26 @@ export default {
     DxCheckBox,
     DxNumberBox,
     DxDateBox,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       ganttRef,
-      tasks: tasks,
-      dependencies: dependencies,
-      resources: resources,
-      resourceAssignments: resourceAssignments,
+      tasks,
+      dependencies,
+      resources,
+      resourceAssignments,
       exportButtonOptions: {
         hint: 'Export to PDF',
         icon: 'exportpdf',
         stylingMode: 'text',
         onClick: () => {
           this.exportGantt();
-        }
+        },
       },
-      formats: formats,
-      exportModes: exportModes,
-      dateRanges: dateRanges,
+      formats,
+      exportModes,
+      dateRanges,
 
       dateRangeBoxRefName: 'date-range-box',
 
@@ -217,13 +217,13 @@ export default {
       startDate: null,
       endDate: null,
 
-      customRangeDisabled: true
+      customRangeDisabled: true,
     };
   },
   computed: {
-    gantt: function() {
+    gantt() {
       return this.$refs[ganttRef].instance;
-    }
+    },
   },
   created() {
     this.formatBoxValue = formats[0];
@@ -231,7 +231,6 @@ export default {
     this.dateRangeBoxValue = dateRanges[1];
     this.startDate = tasks[0].start;
     this.endDate = tasks[0].end;
-
   },
   methods: {
     exportGantt() {
@@ -240,24 +239,23 @@ export default {
       const exportMode = this.exportModeBoxValue === 'Tree List' ? 'treeList' : this.exportModeBoxValue.toLowerCase();
       const dataRangeMode = this.dateRangeBoxValue.toLowerCase();
       let dataRange;
-      if(dataRangeMode === 'custom') {
+      if (dataRangeMode === 'custom') {
         dataRange = {
           startIndex: this.startTaskIndex,
           endIndex: this.endTaskIndex,
-          startDate:  this.startDate,
-          endDate: this.endDate
+          startDate: this.startDate,
+          endDate: this.endDate,
         };
-      }
-      else {
+      } else {
         dataRange = dataRangeMode;
       }
       this.gantt.exportToPdf({
         createDocumentMethod: jsPDF,
-        format: format,
+        format,
         landscape: isLandscape,
-        exportMode: exportMode,
-        dateRange: dataRange
-      }).then(doc => doc.save('gantt.pdf'));
+        exportMode,
+        dateRange: dataRange,
+      }).then((doc) => doc.save('gantt.pdf'));
     },
     dateRangeBoxSelectionChanged(e) {
       this.customRangeDisabled = e.value !== 'Custom';
@@ -267,8 +265,8 @@ export default {
     },
     endTaskIndexChanged(e) {
       this.endTaskIndex = e.value;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

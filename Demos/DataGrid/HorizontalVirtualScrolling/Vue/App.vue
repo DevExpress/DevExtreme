@@ -18,13 +18,13 @@ export default {
   components: {
     DxDataGrid,
     DxScrolling,
-    DxPaging
+    DxPaging,
   },
   computed: {
     dataSource() {
       return generateData(50, 500);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

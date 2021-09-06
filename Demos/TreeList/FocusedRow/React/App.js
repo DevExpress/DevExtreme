@@ -4,19 +4,19 @@ import TreeList, { Column, Lookup } from 'devextreme-react/tree-list';
 import { NumberBox } from 'devextreme-react/number-box';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks',
-  dataSourceOptions = AspNetData.createStore({
-    key: 'Task_ID',
-    loadUrl: `${url }/Tasks`,
-    onBeforeSend: function(_, ajaxOptions) {
-      ajaxOptions.xhrFields = { withCredentials: true };
-    }
-  }),
-  taskEmployees = AspNetData.createStore({
-    key: 'ID',
-    loadMode: 'raw',
-    loadUrl: `${url }/TaskEmployees`
-  });
+const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+const dataSourceOptions = AspNetData.createStore({
+  key: 'Task_ID',
+  loadUrl: `${url}/Tasks`,
+  onBeforeSend(_, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
+  },
+});
+const taskEmployees = AspNetData.createStore({
+  key: 'ID',
+  loadMode: 'raw',
+  loadUrl: `${url}/TaskEmployees`,
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -28,25 +28,27 @@ class App extends React.Component {
       startDate: '',
       taskStatus: '',
       taskProgress: '',
-      focusedRowKey: 4
+      focusedRowKey: 4,
     };
 
     this.onFocusedRowChanged = this.onFocusedRowChanged.bind(this);
     this.onTaskIdChanged = this.onTaskIdChanged.bind(this);
   }
+
   onTaskIdChanged(e) {
-    if(e.event && e.value > 0) {
+    if (e.event && e.value > 0) {
       this.setState({ focusedRowKey: e.value });
     }
   }
-  onFocusedRowChanged(e) {
-    var rowData = e.row && e.row.data,
-      progress,
-      cellValue,
-      assigned;
 
-    if(rowData) {
-      progress = rowData.Task_Completion ? `${rowData.Task_Completion }%` : '';
+  onFocusedRowChanged(e) {
+    const rowData = e.row && e.row.data;
+    let progress;
+    let cellValue;
+    let assigned;
+
+    if (rowData) {
+      progress = rowData.Task_Completion ? `${rowData.Task_Completion}%` : '';
       cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
       taskEmployees.byKey(cellValue).done((item) => {
         assigned = item.Name;
@@ -58,10 +60,11 @@ class App extends React.Component {
         startDate: new Date(rowData.Task_Start_Date).toLocaleDateString(),
         taskStatus: e.row.data.Task_Status,
         taskProgress: progress,
-        focusedRowKey: e.component.option('focusedRowKey')
+        focusedRowKey: e.component.option('focusedRowKey'),
       });
     }
   }
+
   render() {
     return (
       <div>

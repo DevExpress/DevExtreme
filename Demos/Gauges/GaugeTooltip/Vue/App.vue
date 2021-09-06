@@ -33,19 +33,21 @@
   </div>
 </template>
 <script>
-import { DxCircularGauge, DxScale, DxTooltip, DxFont, DxExport, DxTitle } from 'devextreme-vue/circular-gauge';
+import {
+  DxCircularGauge, DxScale, DxTooltip, DxFont, DxExport, DxTitle,
+} from 'devextreme-vue/circular-gauge';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxTooltip, DxFont, DxExport, DxTitle
+    DxCircularGauge, DxScale, DxTooltip, DxFont, DxExport, DxTitle,
   },
   methods: {
     customizeTooltip({ valueText }) {
       return {
-        text: `${valueText} ohm`
+        text: `${valueText} ohm`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

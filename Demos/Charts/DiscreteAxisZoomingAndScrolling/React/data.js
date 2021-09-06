@@ -1,46 +1,46 @@
-var series = [{
+const series = [{
   name: 'Si',
-  valueField: 'Si'
+  valueField: 'Si',
 }, {
   name: 'Fe',
-  valueField: 'Fe'
+  valueField: 'Fe',
 }, {
   name: 'Ni',
-  valueField: 'Ni'
+  valueField: 'Ni',
 }, {
   name: 'S',
-  valueField: 'S'
+  valueField: 'S',
 }, {
   name: 'O',
-  valueField: 'O'
+  valueField: 'O',
 }, {
   name: 'Mg',
-  valueField: 'Mg'
+  valueField: 'Mg',
 }, {
   name: 'Al',
-  valueField: 'Al'
+  valueField: 'Al',
 }, {
   name: 'K',
-  valueField: 'K'
+  valueField: 'K',
 }, {
   name: 'Na',
-  valueField: 'Na'
+  valueField: 'Na',
 }];
 
-var dataSource = [{
+const dataSource = [{
   arg: 'Inner Core',
   Si: 7.35,
   Fe: 79.39,
   Ni: 5.2,
   S: 2.3,
-  O: 4.1
+  O: 4.1,
 }, {
   arg: 'Outer Core',
   Si: 7.33,
   Fe: 78.56,
   Ni: 5.2,
   S: 2.7,
-  O: 4.2
+  O: 4.2,
 }, {
   arg: 'Lower Mantle',
   Si: 21.5,
@@ -50,7 +50,7 @@ var dataSource = [{
   Al: 2.2,
   Ca: 2.3,
   Na: 0.3,
-  K: 0.03
+  K: 0.03,
 }, {
   arg: 'Upper Mantle',
   Si: 28.1,
@@ -59,7 +59,7 @@ var dataSource = [{
   Al: 1.2,
   Ca: 2.2,
   O: 40.3,
-  Na: 0.2
+  Na: 0.2,
 }, {
   arg: 'Lower Crust',
   O: 46.6,
@@ -69,7 +69,7 @@ var dataSource = [{
   Ca: 3.6,
   Na: 2.8,
   K: 2.6,
-  Mg: 1.5
+  Mg: 1.5,
 }, {
   arg: 'Upper Crust',
   O: 47,
@@ -79,11 +79,11 @@ var dataSource = [{
   Ca: 2.96,
   Na: 2.5,
   K: 2.5,
-  Mg: 1.87
+  Mg: 1.87,
 }];
 
 export
 {
   series,
-  dataSource
+  dataSource,
 };

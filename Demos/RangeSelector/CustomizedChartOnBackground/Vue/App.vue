@@ -33,7 +33,6 @@
   </DxRangeSelector>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxRangeSelector,
   DxMargin,
@@ -42,8 +41,9 @@ import {
   DxSliderMarker,
   DxBackground,
   DxChart,
-  DxSeries
+  DxSeries,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
@@ -54,19 +54,19 @@ export default {
     DxSliderMarker,
     DxBackground,
     DxChart,
-    DxSeries
+    DxSeries,
   },
   data() {
     return {
       dataSource,
-      range: [0, 5]
+      range: [0, 5],
     };
   },
   methods: {
     customizeText({ valueText }) {
       return `${valueText} s`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

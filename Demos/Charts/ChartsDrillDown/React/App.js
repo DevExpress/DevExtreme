@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Chart, Series, Legend, ValueAxis } from 'devextreme-react/chart';
+import {
+  Chart, Series, Legend, ValueAxis,
+} from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 import service from './data.js';
 
@@ -11,7 +13,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       isFirstLevel: true,
-      data: service.filterData('')
+      data: service.filterData(''),
     };
 
     this.customizePoint = this.customizePoint.bind(this);
@@ -48,8 +50,8 @@ class App extends React.Component {
     return {
       color: colors[Number(this.state.isFirstLevel)],
       hoverStyle: !this.state.isFirstLevel ? {
-        hatching: 'none'
-      } : {}
+        hatching: 'none',
+      } : {},
     };
   }
 
@@ -57,7 +59,7 @@ class App extends React.Component {
     if (this.state.isFirstLevel) {
       this.setState({
         isFirstLevel: false,
-        data: service.filterData(e.target.originalArgument)
+        data: service.filterData(e.target.originalArgument),
       });
     }
   }
@@ -66,7 +68,7 @@ class App extends React.Component {
     if (!this.state.isFirstLevel) {
       this.setState({
         isFirstLevel: true,
-        data: service.filterData('')
+        data: service.filterData(''),
       });
     }
   }

@@ -1,33 +1,33 @@
 export const waterLandRatio = [{
   name: 'Land',
-  area: 0.29
+  area: 0.29,
 }, {
   name: 'Water',
-  area: 0.71
+  area: 0.71,
 }];
 
 export const countries = [{
   name: 'Russia',
-  area: 0.12
+  area: 0.12,
 }, {
   name: 'Canada',
-  area: 0.07
+  area: 0.07,
 }, {
   name: 'USA',
-  area: 0.07
+  area: 0.07,
 }, {
   name: 'China',
-  area: 0.07
+  area: 0.07,
 }, {
   name: 'Brazil',
-  area: 0.06
+  area: 0.06,
 }, {
   name: 'Australia',
-  area: 0.05
+  area: 0.05,
 }, {
   name: 'India',
-  area: 0.02
+  area: 0.02,
 }, {
   name: 'Others',
-  area: 0.55
+  area: 0.55,
 }];

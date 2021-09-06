@@ -1,5 +1,7 @@
 import React from 'react';
-import RangeSelector, { Margin, Scale, Label, SliderMarker, Behavior, Format } from 'devextreme-react/range-selector';
+import RangeSelector, {
+  Margin, Scale, Label, SliderMarker, Behavior, Format,
+} from 'devextreme-react/range-selector';
 
 function App() {
   return (
@@ -22,7 +24,7 @@ function App() {
 }
 
 function formatText({ valueText }) {
-  return `${valueText } mg/L`;
+  return `${valueText} mg/L`;
 }
 
 export default App;

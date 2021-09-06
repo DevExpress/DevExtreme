@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 import VectorMap, {
   Layer,
   CommonAnnotationSettings,
-  Annotation
+  Annotation,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/usa.js';
@@ -25,18 +25,16 @@ export default function App() {
         render={AnnotationTemplate}
       >
       </CommonAnnotationSettings>
-      {statesData.map(state => {
-        return (
-          <Annotation
-            coordinates={state.coordinates}
-            offsetX={state.offsetX}
-            offsetY={state.offsetY}
-            key={state.data.name}
-            data={state.data}
-          >
-          </Annotation>
-        );
-      })
+      {statesData.map((state) => (
+        <Annotation
+          coordinates={state.coordinates}
+          offsetX={state.offsetX}
+          offsetY={state.offsetY}
+          key={state.data.name}
+          data={state.data}
+        >
+        </Annotation>
+      ))
       }
     </VectorMap>
   );

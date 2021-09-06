@@ -1,10 +1,12 @@
 import React from 'react';
-import { Chart, Pane, Series, CommonAxisSettings, ValueAxis, Tooltip, Crosshair, HorizontalLine, Label, Legend } from 'devextreme-react/chart';
+import {
+  Chart, Pane, Series, CommonAxisSettings, ValueAxis, Tooltip, Crosshair, HorizontalLine, Label, Legend,
+} from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 
 const crosshairFormat = {
   type: 'fixedPoint',
-  precision: 2
+  precision: 2,
 };
 
 class App extends React.Component {

@@ -20,22 +20,24 @@
   </DxDiagram>
 </template>
 <script>
-import { DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup } from 'devextreme-vue/diagram';
+import {
+  DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup,
+} from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
 export default {
   components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup
+    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup,
   },
   data() {
     return {
       dataSource: new ArrayStore({
         key: 'ID',
-        data: service.getEmployees()
-      })
+        data: service.getEmployees(),
+      }),
     };
-  }
+  },
 };
 </script>
 <style scoped>

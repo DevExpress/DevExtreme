@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { employee, positions, states } from './data.js';
-
 import Form, {
   SimpleItem,
   GroupItem,
-  Label
+  Label,
 } from 'devextreme-react/form';
+import { employee, positions, states } from './data.js';
+
 import 'devextreme-react/text-area';
 
 class App extends React.Component {
@@ -15,14 +15,15 @@ class App extends React.Component {
     this.birthDateOptions = { width: '100%' };
     this.positionOptions = {
       items: positions,
-      value: ''
+      value: '',
     };
     this.stateOptions = {
-      items: states
+      items: states,
     };
     this.phoneOptions = { mask: '+1 (000) 000-0000' };
     this.notesOptions = { height: 140 };
   }
+
   render() {
     return (
       <Form formData={employee}>

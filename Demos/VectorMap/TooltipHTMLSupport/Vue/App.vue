@@ -53,16 +53,16 @@ import {
   DxSource,
   DxSubtitle,
   DxTitle,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/vector-map';
 
 import TooltipTemplate from './TooltipTemplate.vue';
 
 import { countriesGDP } from './data.js';
 
-const format = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 0
-}).format;
+const { format } = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 0,
+});
 
 export default {
   components: {
@@ -75,13 +75,13 @@ export default {
     DxSubtitle,
     DxTitle,
     DxTooltip,
-    TooltipTemplate
+    TooltipTemplate,
   },
   data() {
     return {
       colorGroups: [0, 10000, 50000, 100000, 500000, 1000000, 10000000, 50000000],
       mapsWorld: mapsData.world,
-      bounds: [-180, 85, 180, -60]
+      bounds: [-180, 85, 180, -60],
     };
   },
   methods: {
@@ -95,18 +95,18 @@ export default {
             visible: true,
             connector: {
               visible: true,
-              width: 1
+              width: 1,
             },
-            customizeText: function(pointInfo) {
+            customizeText(pointInfo) {
               return `${pointInfo.argument[0].toUpperCase()}${
                 pointInfo.argument.slice(1)
               }: $${pointInfo.value}M`;
-            }
-          }
+            },
+          },
         }],
         legend: {
-          visible: false
-        }
+          visible: false,
+        },
       };
     },
     customizeLayer(elements) {
@@ -117,8 +117,8 @@ export default {
     },
     customizeLegendText({ start, end }) {
       return `${format(start)} to ${format(end)}`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

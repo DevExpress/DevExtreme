@@ -7,7 +7,7 @@ import PieChart, {
   Margin,
   Export,
   Legend,
-  Animation
+  Animation,
 } from 'devextreme-react/pie-chart';
 
 import { dataSource } from './data.js';
@@ -19,7 +19,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      resolveMode: resolveModes[0]
+      resolveMode: resolveModes[0],
     };
     this.setResolveMode = this.setResolveMode.bind(this);
   }
@@ -62,7 +62,7 @@ class App extends React.Component {
 
   setResolveMode(data) {
     this.setState({
-      resolveMode: data.value
+      resolveMode: data.value,
     });
   }
 }

@@ -106,7 +106,7 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDateBox
+    DxDateBox,
   },
   data() {
     return {
@@ -115,7 +115,7 @@ export default {
       firstWorkDay2017: new Date(2017, 0, 3),
       min: new Date(1900, 0, 1),
       dateClear: new Date(2015, 11, 1, 6),
-      disabledDates: service.getFederalHolidays()
+      disabledDates: service.getFederalHolidays(),
     };
   },
   computed: {
@@ -123,13 +123,13 @@ export default {
       return (
         `${Math.floor(
           Math.abs(
-            (new Date().getTime() - this.value.getTime()) /
-              (24 * 60 * 60 * 1000)
-          )
-        ) } days`
+            (new Date().getTime() - this.value.getTime())
+              / (24 * 60 * 60 * 1000),
+          ),
+        )} days`
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

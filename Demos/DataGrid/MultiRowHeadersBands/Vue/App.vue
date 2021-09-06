@@ -68,17 +68,17 @@ export default {
   components: {
     DxDataGrid,
     DxColumn,
-    DxColumnChooser
+    DxColumnChooser,
   },
   data() {
     return {
-      countries: countries,
+      countries,
       gdpFormat: {
         type: 'percent',
-        precision: 1
-      }
+        precision: 1,
+      },
     };
-  }
+  },
 };
 </script>
 

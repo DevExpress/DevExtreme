@@ -47,7 +47,7 @@ import {
   DxPager,
   DxPaging,
   DxColumn,
-  DxLookup
+  DxLookup,
 } from 'devextreme-vue/data-grid';
 import { employees, states } from './data.js';
 
@@ -61,13 +61,13 @@ export default {
     DxPager,
     DxPaging,
     DxColumn,
-    DxLookup
+    DxLookup,
   },
   data() {
     return {
       dataSource: employees,
-      states: states
+      states,
     };
-  }
+  },
 };
 </script>

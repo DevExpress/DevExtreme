@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Grid from './Grid.js';
@@ -7,11 +7,11 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/DnDBetweenGrids';
 
 const tasksStore = AspNetData.createStore({
   key: 'ID',
-  loadUrl: `${url }/Tasks`,
-  updateUrl: `${url }/UpdateTask`,
-  onBeforeSend: function(method, ajaxOptions) {
+  loadUrl: `${url}/Tasks`,
+  updateUrl: `${url}/UpdateTask`,
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 class App extends React.Component {

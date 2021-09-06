@@ -93,14 +93,14 @@ import DxCircularGauge, {
   DxSize,
   DxValueIndicator,
   DxGeometry,
-  DxScale
+  DxScale,
 } from 'devextreme-vue/circular-gauge';
 import DxLinearGauge, {
   DxSize as DxLinearSize,
   DxValueIndicator as DxLinearValueIndicator,
   DxScale as DxLinearScale,
   DxMinorTick,
-  DxLabel
+  DxLabel,
 } from 'devextreme-vue/linear-gauge';
 
 import GaugeIndicator from './GaugeIndicator.vue';
@@ -122,13 +122,13 @@ export default {
     DxMinorTick,
     DxLabel,
 
-    GaugeIndicator
+    GaugeIndicator,
   },
-  data: function() {
+  data() {
     return {
-      speedValue: 40
+      speedValue: 40,
     };
-  }
+  },
 };
 </script>
 <style src="./styles.css"></style>

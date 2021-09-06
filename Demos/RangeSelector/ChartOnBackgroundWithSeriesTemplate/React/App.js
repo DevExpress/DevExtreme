@@ -1,5 +1,7 @@
 import React from 'react';
-import RangeSelector, { Margin, Chart, CommonSeriesSettings, SeriesTemplate, Scale, Label, Format } from 'devextreme-react/range-selector';
+import RangeSelector, {
+  Margin, Chart, CommonSeriesSettings, SeriesTemplate, Scale, Label, Format,
+} from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 
 function App() {
@@ -25,7 +27,7 @@ function App() {
 
 function customizeSeries(valueFromNameField) {
   return valueFromNameField === 'USA' ? {
-    color: 'red'
+    color: 'red',
   } : {};
 }
 

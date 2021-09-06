@@ -4,5 +4,5 @@ const countries = [
 export default {
   getCountries() {
     return countries;
-  }
+  },
 };

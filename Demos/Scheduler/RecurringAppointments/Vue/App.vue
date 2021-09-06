@@ -24,15 +24,15 @@ import { data, resourcesData } from './data.js';
 export default {
   components: {
     DxScheduler,
-    DxResource
+    DxResource,
   },
   data() {
     return {
       views: ['day', 'week', 'month'],
       currentDate: new Date(2020, 10, 25),
       dataSource: data,
-      resourcesData: resourcesData
+      resourcesData,
     };
-  }
+  },
 };
 </script>

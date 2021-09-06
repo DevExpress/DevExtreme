@@ -1,5 +1,7 @@
 import React from 'react';
-import RangeSelector, { Margin, Scale, MinorTick, Label, SliderMarker } from 'devextreme-react/range-selector';
+import RangeSelector, {
+  Margin, Scale, MinorTick, Label, SliderMarker,
+} from 'devextreme-react/range-selector';
 
 function App() {
   return (

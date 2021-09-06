@@ -5,7 +5,6 @@ import { createStore } from 'devextreme-aspnet-data-nojquery';
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
 
 class ProductSelectBox extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -13,7 +12,7 @@ class ProductSelectBox extends React.Component {
       key: 'ProductID',
       loadParams: { SupplierID: this.props.supplierId },
       loadUrl: `${url}/GetProductsBySupplier`,
-      onLoaded: this.setDefaultValue.bind(this)
+      onLoaded: this.setDefaultValue.bind(this),
     });
 
     this.valueChanged = this.valueChanged.bind(this);
@@ -33,8 +32,8 @@ class ProductSelectBox extends React.Component {
   }
 
   setDefaultValue(items) {
-    let firstItem = items[0];
-    if(firstItem && this.props.productId === null) {
+    const firstItem = items[0];
+    if (firstItem && this.props.productId === null) {
       this.props.onProductChanged(firstItem.ProductID);
     }
   }

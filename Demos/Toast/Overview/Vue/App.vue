@@ -19,9 +19,9 @@
   </div>
 </template>
 <script>
+import { DxToast } from 'devextreme-vue/toast';
 import { products } from './data.js';
 import ProductItem from './ProductItem.vue';
-import { DxToast } from 'devextreme-vue/toast';
 
 export default {
   components: {

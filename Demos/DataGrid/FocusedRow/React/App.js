@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { DataGrid, Column, Paging } from 'devextreme-react/data-grid';
 import { NumberBox } from 'devextreme-react/number-box';
@@ -9,7 +9,7 @@ const dataSourceOptions = {
   store: {
     type: 'odata',
     key: 'Task_ID',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks'
+    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
   },
   expand: 'ResponsibleEmployee',
   select: [
@@ -19,8 +19,8 @@ const dataSourceOptions = {
     'Task_Status',
     'Task_Description',
     'Task_Completion',
-    'ResponsibleEmployee/Employee_Full_Name'
-  ]
+    'ResponsibleEmployee/Employee_Full_Name',
+  ],
 };
 
 class App extends React.Component {
@@ -33,50 +33,55 @@ class App extends React.Component {
       taskStatus: '',
       taskProgress: '',
       focusedRowKey: 117,
-      autoNavigateToFocusedRow: true
+      autoNavigateToFocusedRow: true,
     };
 
     this.onFocusedRowChanged = this.onFocusedRowChanged.bind(this);
     this.onTaskIdChanged = this.onTaskIdChanged.bind(this);
     this.onAutoNavigateToFocusedRowChanged = this.onAutoNavigateToFocusedRowChanged.bind(this);
   }
+
   onTaskIdChanged(e) {
-    if(e.event && e.value > 0) {
+    if (e.event && e.value > 0) {
       this.setState({ focusedRowKey: e.value });
     }
   }
-  onFocusedRowChanging(e) {
-    var rowsCount = e.component.getVisibleRows().length,
-      pageCount = e.component.pageCount(),
-      pageIndex = e.component.pageIndex(),
-      key = e.event && e.event.key;
 
-    if(key && e.prevRowIndex === e.newRowIndex) {
-      if(e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
-        e.component.pageIndex(pageIndex + 1).done(function() {
+  onFocusedRowChanging(e) {
+    const rowsCount = e.component.getVisibleRows().length;
+    const pageCount = e.component.pageCount();
+    const pageIndex = e.component.pageIndex();
+    const key = e.event && e.event.key;
+
+    if (key && e.prevRowIndex === e.newRowIndex) {
+      if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
+        e.component.pageIndex(pageIndex + 1).done(() => {
           e.component.option('focusedRowIndex', 0);
         });
-      } else if(e.newRowIndex === 0 && pageIndex > 0) {
-        e.component.pageIndex(pageIndex - 1).done(function() {
+      } else if (e.newRowIndex === 0 && pageIndex > 0) {
+        e.component.pageIndex(pageIndex - 1).done(() => {
           e.component.option('focusedRowIndex', rowsCount - 1);
         });
       }
     }
   }
+
   onFocusedRowChanged(e) {
     const dataRow = e.row && e.row.data;
-    const progress = dataRow && dataRow.Task_Completion ? `${dataRow.Task_Completion }%` : '';
+    const progress = dataRow && dataRow.Task_Completion ? `${dataRow.Task_Completion}%` : '';
     this.setState({
       taskSubject: dataRow && dataRow.Task_Subject,
       taskDetails: dataRow && dataRow.Task_Description,
       taskStatus: dataRow && dataRow.Task_Status,
       taskProgress: progress,
-      focusedRowKey: e.component.option('focusedRowKey')
+      focusedRowKey: e.component.option('focusedRowKey'),
     });
   }
+
   onAutoNavigateToFocusedRowChanged(e) {
     this.setState({ autoNavigateToFocusedRow: e.value });
   }
+
   render() {
     return (
       <div>

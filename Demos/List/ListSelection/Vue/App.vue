@@ -46,19 +46,19 @@ import { tasks } from './data.js';
 export default {
   components: {
     DxSelectBox,
-    DxList
+    DxList,
   },
   data() {
     return {
       dataSource: new ArrayStore({
         key: 'id',
-        data: tasks
+        data: tasks,
       }),
       selectedItemKeys: [],
       selectionMode: 'all',
-      selectAllMode: 'page'
+      selectAllMode: 'page',
     };
-  }
+  },
 };
 </script>
 <style>

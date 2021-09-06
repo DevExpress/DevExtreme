@@ -96,18 +96,20 @@
 <script>
 import ODataStore from 'devextreme/data/odata/store';
 import { DxAutocomplete } from 'devextreme-vue/autocomplete';
-import { names, surnames, positions, cities } from './data.js';
+import {
+  names, surnames, positions, cities,
+} from './data.js';
 
 const states = new ODataStore({
   url:
     'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
   key: 'Sate_ID',
-  keyType: 'Int32'
+  keyType: 'Int32',
 });
 
 export default {
   components: {
-    DxAutocomplete
+    DxAutocomplete,
   },
   data() {
     return {
@@ -116,25 +118,25 @@ export default {
       position: positions[0],
       city: '',
       state: '',
-      fullInfo:'',
+      fullInfo: '',
 
       names,
       surnames,
       positions,
       cities,
-      states
+      states,
     };
   },
   methods: {
     updateEmployeeInfo() {
-      var fullInfo = '';
+      let fullInfo = '';
       fullInfo += `${this.firstName || ''} ${this.lastName || ''}`.trim();
       fullInfo += (fullInfo && this.position) ? `, ${this.position}` : this.position;
       fullInfo += (fullInfo && this.city) ? `, ${this.city}` : this.city;
       fullInfo += (fullInfo && this.state) ? `, ${this.state}` : this.state;
       this.fullInfo = fullInfo;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

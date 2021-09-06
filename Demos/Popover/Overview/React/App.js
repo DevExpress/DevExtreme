@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { Popover } from 'devextreme-react/popover';
 
@@ -6,17 +6,17 @@ const animationConfig = {
   show: {
     type: 'pop',
     from: {
-      scale: 0
+      scale: 0,
     },
     to: {
-      scale: 1
-    }
+      scale: 1,
+    },
   },
   hide: {
     type: 'fade',
     from: 1,
-    to: 0
-  }
+    to: 0,
+  },
 };
 
 class App extends React.Component {
@@ -26,7 +26,7 @@ class App extends React.Component {
       defaultVisible: false,
       withTitleVisible: false,
       withAnimationOptionsVisible: false,
-      withShadingOptionsVisible: false
+      withShadingOptionsVisible: false,
     };
 
     this.toggleDefault = this.toggleDefault.bind(this);
@@ -35,6 +35,7 @@ class App extends React.Component {
     this.showWithShadingOptions = this.showWithShadingOptions.bind(this);
     this.hideWithShadingOptions = this.hideWithShadingOptions.bind(this);
   }
+
   render() {
     return (
       <div className="dx-fieldset form">
@@ -157,31 +158,31 @@ class App extends React.Component {
 
   toggleDefault() {
     this.setState({
-      defaultVisible: !this.state.defaultVisible
+      defaultVisible: !this.state.defaultVisible,
     });
   }
 
   toggleWithTitle() {
     this.setState({
-      withTitleVisible: !this.state.withTitleVisible
+      withTitleVisible: !this.state.withTitleVisible,
     });
   }
 
   toggleWithAnimationOptions() {
     this.setState({
-      withAnimationOptionsVisible: !this.state.withAnimationOptionsVisible
+      withAnimationOptionsVisible: !this.state.withAnimationOptionsVisible,
     });
   }
 
   showWithShadingOptions() {
     this.setState({
-      withShadingOptionsVisible: true
+      withShadingOptionsVisible: true,
     });
   }
 
   hideWithShadingOptions() {
     this.setState({
-      withShadingOptionsVisible: false
+      withShadingOptionsVisible: false,
     });
   }
 }

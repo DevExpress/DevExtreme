@@ -35,7 +35,7 @@ import DxFunnel, {
   DxTooltip,
   DxItem,
   DxBorder,
-  DxLabel
+  DxLabel,
 } from 'devextreme-vue/funnel';
 
 import { dataSource } from './data.js';
@@ -49,18 +49,18 @@ export default {
     DxTooltip,
     DxItem,
     DxBorder,
-    DxLabel
+    DxLabel,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
     formatLabel(arg) {
       return `<span class="label">${arg.percentText}</span><br/>${arg.item.argument}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

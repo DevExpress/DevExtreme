@@ -28,29 +28,29 @@ const getMovieById = function(resourceId) {
 
 export default {
   components: {
-    DxButton
+    DxButton,
   },
   props: {
     scheduler: {
       type: Object,
-      default: () => { }
+      default: () => { },
     },
     templateModel: {
       type: Object,
-      default: () => { }
-    }
+      default: () => { },
+    },
   },
   data() {
     return {
-      dayOfWeekNames: dayOfWeekNames,
-      movieData: getMovieById(this.templateModel.appointmentData.movieId)
+      dayOfWeekNames,
+      movieData: getMovieById(this.templateModel.appointmentData.movieId),
     };
   },
   methods: {
     getFormatDate(value) {
       return localization.formatDate(value, 'shortTime');
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

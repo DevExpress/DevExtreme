@@ -16,9 +16,9 @@ function createStore() {
     insertUrl: url,
     updateUrl: url,
     deleteUrl: url,
-    onBeforeSend: function(method, ajaxOptions) {
+    onBeforeSend(method, ajaxOptions) {
       ajaxOptions.xhrFields = { withCredentials: true };
-    }
+    },
   });
 }
 
@@ -27,10 +27,10 @@ const store2 = createStore();
 const currentDate = new Date(2021, 3, 27);
 const views = ['day', 'workWeek'];
 
-var connection = new HubConnectionBuilder()
+const connection = new HubConnectionBuilder()
   .withUrl(`${BASE_PATH}schedulerSignalRHub`, {
     skipNegotiation: true,
-    transport: HttpTransportType.WebSockets
+    transport: HttpTransportType.WebSockets,
   })
   .build();
 
@@ -38,18 +38,18 @@ connection
   .start()
   .then(() => {
     connection.on('update', (key, data) => {
-      store1.push([{ type: 'update', key: key, data: data }]);
-      store2.push([{ type: 'update', key: key, data: data }]);
+      store1.push([{ type: 'update', key, data }]);
+      store2.push([{ type: 'update', key, data }]);
     });
 
     connection.on('insert', (data) => {
-      store1.push([{ type: 'insert', data: data }]);
-      store2.push([{ type: 'insert', data: data }]);
+      store1.push([{ type: 'insert', data }]);
+      store2.push([{ type: 'insert', data }]);
     });
 
     connection.on('remove', (key) => {
-      store1.push([{ type: 'remove', key: key }]);
-      store2.push([{ type: 'remove', key: key }]);
+      store1.push([{ type: 'remove', key }]);
+      store2.push([{ type: 'remove', key }]);
     });
   });
 

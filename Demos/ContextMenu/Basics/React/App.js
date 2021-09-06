@@ -4,14 +4,14 @@ import ContextMenu from 'devextreme-react/context-menu';
 import notify from 'devextreme/ui/notify';
 
 import { contextMenuItems as items } from './data.js';
+
 function itemClick(e) {
   if (!e.itemData.items) {
-    notify(`The "${ e.itemData.text }" item was clicked`, 'success', 1500);
+    notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
   }
 }
 
 class App extends React.Component {
-
   render() {
     return (
       <React.Fragment>

@@ -45,23 +45,24 @@
   </div>
 </template>
 <script>
-import { employees } from './data.js';
 import { DxTreeList, DxColumn } from 'devextreme-vue/tree-list';
 import { DxSelectBox } from 'devextreme-vue/select-box';
+import { employees } from './data.js';
 
 export default {
   components: {
-    DxTreeList, DxColumn,
-    DxSelectBox
+    DxTreeList,
+    DxColumn,
+    DxSelectBox,
   },
   data() {
     return {
-      employees: employees,
+      employees,
       resizingModes: ['nextColumn', 'widget'],
       columnResizingMode: 'nextColumn',
-      expandedRowKeys: [1, 3, 6]
+      expandedRowKeys: [1, 3, 6],
     };
-  }
+  },
 };
 </script>
 <style scoped>
@@ -79,8 +80,8 @@ export default {
 }
 
 .caption {
-	font-weight: 500;
-	font-size: 18px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .option {

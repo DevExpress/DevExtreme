@@ -23,8 +23,8 @@ export default {
   props: {
     info: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     const name = this.info.attribute('name');
@@ -37,17 +37,17 @@ export default {
       pieData: countryGDPData ? [
         { name: 'industry', value: countryGDPData.industry },
         { name: 'services', value: countryGDPData.services },
-        { name: 'agriculture', value: countryGDPData.agriculture }
-      ] : null
+        { name: 'agriculture', value: countryGDPData.agriculture },
+      ] : null,
     };
   },
   methods: {
     format: new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format,
     getTotalGDPText() {
       return `Nominal GDP: $${this.format(this.totalGDP)}M`;
-    }
+    },
   },
 };
 </script>

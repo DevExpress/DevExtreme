@@ -6,7 +6,7 @@ import PieChart, {
   Export,
   Label,
   SmallValuesGrouping,
-  Connector
+  Connector,
 } from 'devextreme-react/pie-chart';
 
 import { internetLanguages } from './data.js';
@@ -38,7 +38,7 @@ class App extends React.Component {
   }
 
   customizeLabel(point) {
-    return `${point.argumentText }: ${ point.valueText }%`;
+    return `${point.argumentText}: ${point.valueText}%`;
   }
 }
 

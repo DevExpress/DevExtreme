@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   Chart,
@@ -7,7 +7,7 @@ import {
   CommonSeriesSettings,
   Export,
   Legend,
-  Margin
+  Margin,
 } from 'devextreme-react/chart';
 
 import { dataSource } from './data.js';
@@ -18,15 +18,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: types[0]
+      type: types[0],
     };
     this.handleChange = this.handleChange.bind(this);
   }
+
   handleChange(e) {
     this.setState({
-      type: e.value
+      type: e.value,
     });
   }
+
   render() {
     return (
       <div id="chart-demo">

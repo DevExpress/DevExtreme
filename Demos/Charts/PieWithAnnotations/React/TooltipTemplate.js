@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function TooltipTemplate(annotation) {
-  const data = annotation.data;
+  const { data } = annotation;
 
   return (
     <div className='medal-tooltip'>

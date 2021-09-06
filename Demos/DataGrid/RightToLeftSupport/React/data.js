@@ -1,11 +1,11 @@
-let europeanUnion = [{
+const europeanUnion = [{
   nameAr: 'النمسا',
   nameEn: 'Austria',
   population: 8451900,
   area: 83855,
   capitalAr: 'فيينا',
   capitalEn: 'Vienna',
-  accession: 1995
+  accession: 1995,
 }, {
   nameAr: 'بلجيكا',
   nameEn: 'Belgium',
@@ -13,7 +13,7 @@ let europeanUnion = [{
   area: 30528,
   capitalAr: 'بروكسل',
   capitalEn: 'Brussels',
-  accession: 1957
+  accession: 1957,
 }, {
   nameAr: 'بلغاريا',
   nameEn: 'Bulgaria',
@@ -21,7 +21,7 @@ let europeanUnion = [{
   area: 110994,
   capitalAr: 'صوفيا',
   capitalEn: 'Sofia',
-  accession: 2007
+  accession: 2007,
 }, {
   nameAr: 'كرواتيا',
   nameEn: 'Croatia',
@@ -29,7 +29,7 @@ let europeanUnion = [{
   area: 56594,
   capitalAr: 'زغرب',
   capitalEn: 'Zagreb',
-  accession: 2013
+  accession: 2013,
 }, {
   nameAr: 'قبرص',
   nameEn: 'Cyprus',
@@ -37,7 +37,7 @@ let europeanUnion = [{
   area: 9251,
   capitalAr: 'نيقوسيا',
   capitalEn: 'Nicosia',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'الجمهورية التشيكية',
   nameEn: 'Czech Republic',
@@ -45,7 +45,7 @@ let europeanUnion = [{
   area: 78866,
   capitalAr: 'براغ',
   capitalEn: 'Prague',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'الدنمارك',
   nameEn: 'Denmark',
@@ -53,7 +53,7 @@ let europeanUnion = [{
   area: 43075,
   capitalAr: 'كوبنهاغن',
   capitalEn: 'Copenhagen',
-  accession: 1973
+  accession: 1973,
 }, {
   nameAr: 'استونيا',
   nameEn: 'Estonia',
@@ -61,7 +61,7 @@ let europeanUnion = [{
   area: 45227,
   capitalAr: 'تالين',
   capitalEn: 'Tallinn',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'فنلندا',
   nameEn: 'Finland',
@@ -69,7 +69,7 @@ let europeanUnion = [{
   area: 338424,
   capitalAr: 'هلسنكي',
   capitalEn: 'Helsinki',
-  accession: 1995
+  accession: 1995,
 }, {
   nameAr: 'فرنسا',
   nameEn: 'France',
@@ -77,7 +77,7 @@ let europeanUnion = [{
   area: 674843,
   capitalAr: 'باريس',
   capitalEn: 'Paris',
-  accession: 1957
+  accession: 1957,
 }, {
   nameAr: 'ألمانيا',
   nameEn: 'Germany',
@@ -85,7 +85,7 @@ let europeanUnion = [{
   area: 357021,
   capitalAr: 'البرلينية',
   capitalEn: 'Berlin',
-  accession: 1957
+  accession: 1957,
 }, {
   nameAr: 'يونان',
   nameEn: 'Greece',
@@ -93,7 +93,7 @@ let europeanUnion = [{
   area: 131990,
   capitalAr: 'أثينا',
   capitalEn: 'Athens',
-  accession: 1981
+  accession: 1981,
 }, {
   nameAr: 'هنغاريا',
   nameEn: 'Hungary',
@@ -101,7 +101,7 @@ let europeanUnion = [{
   area: 93030,
   capitalAr: 'بودابست',
   capitalEn: 'Budapest',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'أيرلندا',
   nameEn: 'Ireland',
@@ -109,7 +109,7 @@ let europeanUnion = [{
   area: 70273,
   capitalAr: 'دبلن',
   capitalEn: 'Dublin',
-  accession: 1973
+  accession: 1973,
 }, {
   nameAr: 'إيطاليا',
   nameEn: 'Italy',
@@ -117,7 +117,7 @@ let europeanUnion = [{
   area: 301338,
   capitalAr: 'روما',
   capitalEn: 'Rome',
-  accession: 1957
+  accession: 1957,
 }, {
   nameAr: 'لاتفيا',
   nameEn: 'Latvia',
@@ -125,7 +125,7 @@ let europeanUnion = [{
   area: 64589,
   capitalAr: 'ريغا',
   capitalEn: 'Riga',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'ليتوانيا',
   nameEn: 'Lithuania',
@@ -133,7 +133,7 @@ let europeanUnion = [{
   area: 65200,
   capitalAr: 'فيلنيوس',
   capitalEn: 'Vilnius',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'لوكسمبورغ',
   nameEn: 'Luxembourg',
@@ -141,7 +141,7 @@ let europeanUnion = [{
   area: 2586.4,
   capitalAr: 'لوكسمبورغ',
   capitalEn: 'Luxembourg',
-  accession: 1957
+  accession: 1957,
 }, {
   nameAr: 'مالطا',
   nameEn: 'Malta',
@@ -149,7 +149,7 @@ let europeanUnion = [{
   area: 316,
   capitalAr: 'فاليتا',
   capitalEn: 'Valletta',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'هولندا',
   nameEn: 'Netherlands',
@@ -157,7 +157,7 @@ let europeanUnion = [{
   area: 41543,
   capitalAr: 'أمستردام',
   capitalEn: 'Amsterdam',
-  accession: 1957
+  accession: 1957,
 }, {
   nameAr: 'بولندا',
   nameEn: 'Poland',
@@ -165,7 +165,7 @@ let europeanUnion = [{
   area: 312685,
   capitalAr: 'وارسو',
   capitalEn: 'Warsaw',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'البرتغال',
   nameEn: 'Portugal',
@@ -173,7 +173,7 @@ let europeanUnion = [{
   area: 92390,
   capitalAr: 'لشبونة',
   capitalEn: 'Lisbon',
-  accession: 1986
+  accession: 1986,
 }, {
   nameAr: 'رومانيا',
   nameEn: 'Romania',
@@ -181,7 +181,7 @@ let europeanUnion = [{
   area: 238391,
   capitalAr: 'بوخارست',
   capitalEn: 'Bucharest',
-  accession: 2007
+  accession: 2007,
 }, {
   nameAr: 'سلوفاكيا',
   nameEn: 'Slovakia',
@@ -189,7 +189,7 @@ let europeanUnion = [{
   area: 49035,
   capitalAr: 'براتيسلافا',
   capitalEn: 'Bratislava',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'سلوفينيا',
   nameEn: 'Slovenia',
@@ -197,7 +197,7 @@ let europeanUnion = [{
   area: 20273,
   capitalAr: 'ليوبليانا',
   capitalEn: 'Ljubljana',
-  accession: 2004
+  accession: 2004,
 }, {
   nameAr: 'إسبانيا',
   nameEn: 'Spain',
@@ -205,7 +205,7 @@ let europeanUnion = [{
   area: 504030,
   capitalAr: 'مدريد',
   capitalEn: 'Madrid',
-  accession: 1986
+  accession: 1986,
 }, {
   nameAr: 'السويد',
   nameEn: 'Sweden',
@@ -213,7 +213,7 @@ let europeanUnion = [{
   area: 449964,
   capitalAr: 'ستوكهولم',
   capitalEn: 'Stockholm',
-  accession: 1995
+  accession: 1995,
 }, {
   nameAr: 'المملكة المتحدة',
   nameEn: 'United Kingdom',
@@ -221,11 +221,11 @@ let europeanUnion = [{
   area: 243610,
   capitalAr: 'لندن',
   capitalEn: 'London',
-  accession: 1973
+  accession: 1973,
 }];
 
 export default {
   getEuropeanUnion() {
     return europeanUnion;
-  }
+  },
 };

@@ -54,7 +54,7 @@ export default {
     DxColumn,
     DxPivotGrid,
     DxFieldChooser,
-    DxPopup
+    DxPopup,
   },
   data() {
     return {
@@ -64,18 +64,18 @@ export default {
             caption: 'Region',
             width: 120,
             dataField: 'region',
-            area: 'row'
+            area: 'row',
           },
           {
             caption: 'City',
             dataField: 'city',
             width: 150,
-            area: 'row'
+            area: 'row',
           },
           {
             dataField: 'date',
             dataType: 'date',
-            area: 'column'
+            area: 'column',
           },
           {
             caption: 'Total',
@@ -83,39 +83,39 @@ export default {
             dataType: 'number',
             summaryType: 'sum',
             format: 'currency',
-            area: 'data'
-          }
+            area: 'data',
+          },
         ],
-        store: sales
+        store: sales,
       }),
       dataGridRefName: 'dataGrid',
       drillDownDataSource: null,
       popupTitle: '',
-      popupVisible: false
+      popupVisible: false,
     };
   },
   computed: {
-    dataGrid: function() {
+    dataGrid() {
       return this.$refs[this.dataGridRefName].instance;
-    }
+    },
   },
   methods: {
     onCellClick(e) {
       if (e.area == 'data') {
-        var pivotGridDataSource = e.component.getDataSource(),
-          rowPathLength = e.cell.rowPath.length,
-          rowPathName = e.cell.rowPath[rowPathLength - 1];
+        const pivotGridDataSource = e.component.getDataSource();
+        const rowPathLength = e.cell.rowPath.length;
+        const rowPathName = e.cell.rowPath[rowPathLength - 1];
         this.drillDownDataSource = pivotGridDataSource.createDrillDownDataSource(e.cell);
         this.popupTitle = `${
-          rowPathName ? rowPathName : 'Total'
+          rowPathName || 'Total'
         } Drill Down Data`;
         this.popupVisible = !this.popupVisible;
       }
     },
     onShown() {
       this.dataGrid.updateDimensions();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

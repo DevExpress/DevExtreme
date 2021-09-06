@@ -50,8 +50,8 @@ import DxTextArea from 'devextreme-vue/text-area';
 
 export default {
   components: {
-    DxTextBox, DxTextArea
-  }
+    DxTextBox, DxTextArea,
+  },
 };
 </script>
 <style scoped>

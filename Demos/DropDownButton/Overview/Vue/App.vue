@@ -71,14 +71,14 @@
 <script>
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
 import DxToolbar from 'devextreme-vue/toolbar';
-import service from './data.js';
 import notify from 'devextreme/ui/notify';
+import service from './data.js';
 import 'whatwg-fetch';
 
 export default {
   components: {
     DxDropDownButton,
-    DxToolbar
+    DxToolbar,
   },
   data() {
     const data = service.getData();
@@ -103,8 +103,8 @@ export default {
             onSelectionChanged: (e) => {
               this.alignment = e.item.name.toLowerCase();
             },
-            items: data.alignments
-          }
+            items: data.alignments,
+          },
         },
         {
           location: 'before',
@@ -117,8 +117,8 @@ export default {
             icon: 'square',
             stylingMode: 'text',
             dropDownOptions: { width: 'auto' },
-            dropDownContentTemplate: 'colorpicker'
-          }
+            dropDownContentTemplate: 'colorpicker',
+          },
         },
         {
           location: 'before',
@@ -130,11 +130,11 @@ export default {
             useSelectMode: true,
             items: data.fontSizes,
             selectedItemKey: 14,
-            onSelectionChanged:(e) => {
-              this.fontSize = `${e.item.size }px`;
+            onSelectionChanged: (e) => {
+              this.fontSize = `${e.item.size}px`;
             },
-            itemTemplate: 'fontItem'
-          }
+            itemTemplate: 'fontItem',
+          },
         },
         {
           location: 'before',
@@ -149,15 +149,15 @@ export default {
             selectedItemKey: 1.35,
             onSelectionChanged: (e) => {
               this.lineHeight = e.item.lineHeight;
-            }
-          }
-        }
-      ]
+            },
+          },
+        },
+      ],
     };
   },
   methods: {
     onButtonClick(e) {
-      notify(`Go to ${ e.component.option('text') }'s profile`, 'success', 600);
+      notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
     },
 
     onItemClick(e) {
@@ -168,8 +168,8 @@ export default {
       this.color = color;
       this.colorPicker.element().getElementsByClassName('dx-icon-square')[0].style.color = color;
       this.colorPicker.close();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

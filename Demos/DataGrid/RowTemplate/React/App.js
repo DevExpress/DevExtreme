@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import DataRow from './DataRow.js';
 
@@ -9,6 +9,7 @@ class App extends React.Component {
     super(props);
     this.employees = service.getEmployees();
   }
+
   render() {
     return (
       <DataGrid id="gridContainer"

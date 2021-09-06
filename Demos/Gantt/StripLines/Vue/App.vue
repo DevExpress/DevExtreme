@@ -37,11 +37,11 @@ import {
   DxTasks,
   DxColumn,
   DxValidation,
-  DxStripLine
+  DxStripLine,
 } from 'devextreme-vue/gantt';
 
 import {
-  tasks
+  tasks,
 } from './data.js';
 
 export default {
@@ -50,14 +50,14 @@ export default {
     DxTasks,
     DxColumn,
     DxValidation,
-    DxStripLine
+    DxStripLine,
   },
   data() {
     return {
-      tasks: tasks,
-      currentTime: new Date()
+      tasks,
+      currentTime: new Date(),
     };
-  }
+  },
 };
 </script>
 <style>

@@ -28,40 +28,40 @@
   </div>
 </template>
 <script>
-import { products } from './data.js';
 import { DxBarGauge, DxLabel } from 'devextreme-vue/bar-gauge';
 import { DxCheckBox } from 'devextreme-vue/check-box';
+import { products } from './data.js';
 
 export default {
   components: {
-    DxBarGauge, DxLabel, DxCheckBox
+    DxBarGauge, DxLabel, DxCheckBox,
   },
   data() {
     return {
-      products: products,
+      products,
       values: [],
       format: {
         type: 'fixedPoint',
-        precision: 0
-      }
+        precision: 0,
+      },
     };
   },
   watch: {
     products: {
-      handler: function() {
+      handler() {
         this.values = this.getActiveItems();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   created() {
     this.values = this.getActiveItems();
   },
   methods: {
     getActiveItems() {
-      return this.products.filter(p=>p.active).map(p=>p.count);
-    }
-  }
+      return this.products.filter((p) => p.active).map((p) => p.count);
+    },
+  },
 };
 </script>
 <style scoped>

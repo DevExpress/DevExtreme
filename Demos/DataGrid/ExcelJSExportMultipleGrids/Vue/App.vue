@@ -98,7 +98,7 @@ export default {
     DxTabPanel,
     DxItem,
     DxDataGrid,
-    DxColumn
+    DxColumn,
   },
   data() {
     return {
@@ -108,29 +108,29 @@ export default {
         store: {
           type: 'odata',
           url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-          key: 'Product_ID'
+          key: 'Product_ID',
         },
         select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
-        filter: ['Product_ID', '<', 10]
+        filter: ['Product_ID', '<', 10],
       },
-      ratingDataSource:{
+      ratingDataSource: {
         store: {
           type: 'odata',
           url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-          key: 'Product_ID'
+          key: 'Product_ID',
         },
         select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
-        filter: ['Product_ID', '<', 10]
-      }
+        filter: ['Product_ID', '<', 10],
+      },
     };
   },
   computed: {
-    priceGridInstance: function() {
+    priceGridInstance() {
       return this.$refs[priceGridRefKey].instance;
     },
-    ratingGridInstance: function() {
+    ratingGridInstance() {
       return this.$refs[ratingGridRefKey].instance;
-    }
+    },
   },
   methods: {
     exportGrids() {
@@ -151,29 +151,29 @@ export default {
         topLeftCell: { row: 4, column: 2 },
         customizeCell: ({ gridCell, excelCell }) => {
           setAlternatingRowsBackground(gridCell, excelCell);
-        }
-      }).then(() => {
-        return exportDataGrid({
-          worksheet: ratingSheet,
-          component: context.ratingGridInstance,
-          topLeftCell: { row: 4, column: 2 },
-          customizeCell: ({ gridCell, excelCell }) => {
-            setAlternatingRowsBackground(gridCell, excelCell);
-          }
-        });
-      }).then(() => {
+        },
+      }).then(() => exportDataGrid({
+        worksheet: ratingSheet,
+        component: context.ratingGridInstance,
+        topLeftCell: { row: 4, column: 2 },
+        customizeCell: ({ gridCell, excelCell }) => {
+          setAlternatingRowsBackground(gridCell, excelCell);
+        },
+      })).then(() => {
         workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
         });
       });
-    }
-  }
+    },
+  },
 };
 
 function setAlternatingRowsBackground(gridCell, excelCell) {
-  if(gridCell.rowType === 'header' || gridCell.rowType === 'data') {
-    if(excelCell.fullAddress.row % 2 === 0) {
-      excelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' } };
+  if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
+    if (excelCell.fullAddress.row % 2 === 0) {
+      excelCell.fill = {
+        type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' },
+      };
     }
   }
 }

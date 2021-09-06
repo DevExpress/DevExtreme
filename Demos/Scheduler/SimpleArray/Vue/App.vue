@@ -17,14 +17,14 @@ import { data } from './data.js';
 
 export default {
   components: {
-    DxScheduler
+    DxScheduler,
   },
   data() {
     return {
       views: ['week', 'month'],
       currentDate: new Date(2021, 2, 28),
-      dataSource: data
+      dataSource: data,
     };
-  }
+  },
 };
 </script>

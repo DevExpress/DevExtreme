@@ -55,7 +55,7 @@ import {
   DxPaging,
   DxSelection,
   DxSummary,
-  DxTotalItem
+  DxTotalItem,
 } from 'devextreme-vue/data-grid';
 
 import service from './data.js';
@@ -67,11 +67,11 @@ export default {
     DxPaging,
     DxSelection,
     DxSummary,
-    DxTotalItem
+    DxTotalItem,
   },
   data() {
     return {
-      orders: service.getOrders()
+      orders: service.getOrders(),
     };
   },
   methods: {
@@ -81,15 +81,15 @@ export default {
           options.totalValue = 0;
         } else if (options.summaryProcess === 'calculate') {
           if (options.component.isRowSelected(options.value.ID)) {
-            options.totalValue = options.totalValue + options.value.SaleAmount;
+            options.totalValue += options.value.SaleAmount;
           }
         }
       }
     },
     onSelectionChanged(e) {
       e.component.refresh(true);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

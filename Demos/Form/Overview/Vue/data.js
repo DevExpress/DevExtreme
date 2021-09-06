@@ -7,7 +7,7 @@ const companies = [{
   ZipCode: 72716,
   Phone: '(800) 555-2797',
   Fax: '(800) 555-2171',
-  Website: 'http://www.nowebsitesupermart.com'
+  Website: 'http://www.nowebsitesupermart.com',
 }, {
   ID: 2,
   Name: 'Electronics Depot',
@@ -17,7 +17,7 @@ const companies = [{
   ZipCode: 30339,
   Phone: '(800) 595-3232',
   Fax: '(800) 595-3231',
-  Website: 'http://www.nowebsitedepot.com'
+  Website: 'http://www.nowebsitedepot.com',
 }, {
   ID: 3,
   Name: 'K&S Music',
@@ -27,7 +27,7 @@ const companies = [{
   ZipCode: 55403,
   Phone: '(612) 304-6073',
   Fax: '(612) 304-6074',
-  Website: 'http://www.nowebsitemusic.com'
+  Website: 'http://www.nowebsitemusic.com',
 }, {
   ID: 4,
   Name: "Tom's Club",
@@ -37,11 +37,11 @@ const companies = [{
   ZipCode: 98027,
   Phone: '(800) 955-2292',
   Fax: '(800) 955-2293',
-  Website: 'http://www.nowebsitetomsclub.com'
+  Website: 'http://www.nowebsitetomsclub.com',
 }];
 
 export default {
   getCompanies() {
     return companies;
-  }
+  },
 };

@@ -5,17 +5,16 @@ import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider
 import { Popup } from 'devextreme-react/popup';
 
 const remoteProvider = new RemoteFileSystemProvider({
-  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-images'
+  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-images',
 });
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       currentPath: 'Widescreen',
       popupVisible: false,
-      imageItemToDisplay: {}
+      imageItemToDisplay: {},
     };
 
     this.displayImagePopup = this.displayImagePopup.bind(this);
@@ -28,20 +27,20 @@ class App extends React.Component {
       popupVisible: true,
       imageItemToDisplay: {
         name: e.file.name,
-        url: e.file.dataItem.url
-      }
+        url: e.file.dataItem.url,
+      },
     });
   }
 
   hideImagePopup() {
     this.setState({
-      popupVisible: false
+      popupVisible: false,
     });
   }
 
   onCurrentDirectoryChanged(e) {
     this.setState({
-      currentPath: e.component.option('currentPath')
+      currentPath: e.component.option('currentPath'),
     });
   }
 

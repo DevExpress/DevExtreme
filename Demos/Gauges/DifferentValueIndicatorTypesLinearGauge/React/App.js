@@ -1,14 +1,14 @@
 import React from 'react';
-import { LinearGauge, Scale, Label, ValueIndicator } from 'devextreme-react/linear-gauge';
+import {
+  LinearGauge, Scale, Label, ValueIndicator,
+} from 'devextreme-react/linear-gauge';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
   }
 
   render() {
-
     return (
       <div>
         <div className="long-title">

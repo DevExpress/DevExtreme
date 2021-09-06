@@ -36,11 +36,13 @@
 </template>
 
 <script>
-import { DxFileManager, DxPermissions, DxItemView, DxDetails, DxColumn } from 'devextreme-vue/file-manager';
+import {
+  DxFileManager, DxPermissions, DxItemView, DxDetails, DxColumn,
+} from 'devextreme-vue/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 const remoteProvider = new RemoteFileSystemProvider({
-  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db'
+  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db',
 });
 
 const allowedFileExtensions = [];
@@ -51,14 +53,14 @@ export default {
     DxPermissions,
     DxItemView,
     DxDetails,
-    DxColumn
+    DxColumn,
   },
 
   data() {
     return {
       remoteProvider,
-      allowedFileExtensions
+      allowedFileExtensions,
     };
-  }
+  },
 };
 </script>

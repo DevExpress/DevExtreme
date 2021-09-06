@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, { Column, Editing, Lookup } from 'devextreme-react/data-grid';
 import service from './data.js';
@@ -11,21 +11,25 @@ class App extends React.Component {
     this.cities = service.getCities();
     this.getFilteredCities = this.getFilteredCities.bind(this);
   }
+
   getFilteredCities(options) {
     return {
       store: this.cities,
-      filter: options.data ? ['StateID', '=', options.data.StateID] : null
+      filter: options.data ? ['StateID', '=', options.data.StateID] : null,
     };
   }
+
   onEditorPreparing(e) {
     if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
       e.editorOptions.disabled = (typeof e.row.data.StateID !== 'number');
     }
   }
+
   setStateValue(rowData, value) {
     rowData.CityID = null;
     this.defaultSetCellValue(rowData, value);
   }
+
   render() {
     return (
       <div id="data-grid-demo">

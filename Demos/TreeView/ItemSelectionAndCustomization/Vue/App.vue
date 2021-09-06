@@ -95,7 +95,7 @@ export default {
     DxTreeView,
     DxList,
     DxSelectBox,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     const selectionModes = ['multiple', 'single'];
@@ -111,13 +111,13 @@ export default {
       isRecursiveDisabled: false,
       selectNodesRecursiveValue: true,
       selectByClickValue: false,
-      treeViewRef
+      treeViewRef,
     };
   },
   computed: {
-    treeView: function() {
+    treeView() {
       return this.$refs[treeViewRef].instance;
-    }
+    },
   },
   methods: {
     treeViewSelectionChanged(e) {
@@ -136,7 +136,7 @@ export default {
     },
 
     showCheckBoxesModeValueChanged(e) {
-      if(e.value === 'selectAll') {
+      if (e.value === 'selectAll') {
         this.selectionModeValue = 'multiple';
         this.isRecursiveDisabled = false;
       }
@@ -144,13 +144,13 @@ export default {
     },
 
     selectionModeValueChanged(e) {
-      if(e.value === 'single') {
+      if (e.value === 'single') {
         this.selectNodesRecursiveValue = false;
         this.treeView.unselectAll();
       }
       this.isRecursiveDisabled = e.value === 'single';
     },
-  }
+  },
 };
 </script>
 <style scoped>

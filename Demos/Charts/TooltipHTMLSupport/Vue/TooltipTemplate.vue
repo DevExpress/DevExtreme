@@ -18,16 +18,16 @@ export default {
   props: {
     info: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
     getImagePath(point) {
       return `../../../../images/flags/${point.data.name.replace(/\s/, '')}.svg`;
     },
-    formatNumber:  new Intl.NumberFormat('en-US', {
-      maximumFractionDigits: 0
-    }).format
+    formatNumber: new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 0,
+    }).format,
   },
 };
 </script>

@@ -22,30 +22,30 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     onValueChanged: {
       type: Function,
-      default: () => function() {}
+      default: () => function() {},
     },
     dataSource: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     dataGridComponent: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
-      currentValue: this.value
+      currentValue: this.value,
     };
   },
   methods: {
     onSelectionChanged() {
       this.dataGridComponent.updateDimensions();
-    }
-  }
+    },
+  },
 };
 </script>

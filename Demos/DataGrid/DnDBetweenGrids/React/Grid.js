@@ -1,18 +1,20 @@
 import React from 'react';
-import DataGrid, { Column, RowDragging, Scrolling, Lookup } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column, RowDragging, Scrolling, Lookup,
+} from 'devextreme-react/data-grid';
 
 class Grid extends React.Component {
   constructor(props) {
     super(props);
 
     this.priorities = [{
-      id: 1, text: 'Low'
+      id: 1, text: 'Low',
     }, {
-      id: 2, text: 'Normal'
+      id: 2, text: 'Normal',
     }, {
-      id: 3, text: 'High'
+      id: 3, text: 'High',
     }, {
-      id: 4, text: 'Urgent'
+      id: 4, text: 'Urgent',
     }];
     this.filterExpr = ['Status', '=', this.props.status];
 
@@ -20,17 +22,17 @@ class Grid extends React.Component {
 
     this.dataSource = {
       store: this.props.tasksStore,
-      reshapeOnPush: true
+      reshapeOnPush: true,
     };
   }
 
   onAdd(e) {
-    var key = e.itemData.ID,
-      values = { Status: e.toData };
+    const key = e.itemData.ID;
+    const values = { Status: e.toData };
 
     this.props.tasksStore.update(key, values).then(() => {
       this.props.tasksStore.push([{
-        type: 'update', key: key, data: values
+        type: 'update', key, data: values,
       }]);
     });
   }

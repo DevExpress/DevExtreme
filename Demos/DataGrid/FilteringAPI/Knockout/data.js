@@ -1,1 +1,1 @@
-var statuses = ["All", "Not Started", "In Progress", "Need Assistance", "Deferred", "Completed"]; 
+const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];

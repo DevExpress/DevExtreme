@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import TreeList, {
   Pager,
   Paging,
@@ -7,7 +7,8 @@ import TreeList, {
   FilterPanel,
   FilterRow,
   Scrolling,
-  Column } from 'devextreme-react/tree-list';
+  Column,
+} from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 
 const allowedPageSizes = [5, 10];

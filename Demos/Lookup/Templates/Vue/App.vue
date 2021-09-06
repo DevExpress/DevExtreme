@@ -49,19 +49,19 @@ export default {
     DxLookup,
     DxDropDownOptions,
     FieldItem,
-    ListItem
+    ListItem,
   },
   data() {
     return {
       lookupValue: employees[0].ID,
-      employees
+      employees,
     };
   },
   methods: {
     getDisplayExpr(item) {
       return item ? `${item.FirstName} ${item.LastName}` : '';
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -30,7 +30,7 @@ import {
   DxVectorMap,
   DxLayer,
   DxLegend,
-  DxSource
+  DxSource,
 } from 'devextreme-vue/vector-map';
 
 import { populations } from './data.js';
@@ -40,13 +40,13 @@ export default {
     DxVectorMap,
     DxLayer,
     DxLegend,
-    DxSource
+    DxSource,
   },
   data() {
     return {
       mapsWorld: mapsData.world,
       bounds: [-180, 85, 180, -60],
-      colorGroups:  [0, 0.5, 0.8, 1, 2, 3, 100]
+      colorGroups: [0, 0.5, 0.8, 1, 2, 3, 100],
     };
   },
   methods: {
@@ -57,16 +57,16 @@ export default {
     },
     customizeText(itemInfo) {
       let text;
-      if(itemInfo.index === 0) {
+      if (itemInfo.index === 0) {
         text = '< 0.5%';
-      } else if(itemInfo.index === 5) {
+      } else if (itemInfo.index === 5) {
         text = '> 3%';
       } else {
         text = `${itemInfo.start}% to ${itemInfo.end}%`;
       }
       return text;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

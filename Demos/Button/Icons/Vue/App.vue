@@ -101,7 +101,7 @@ import notify from 'devextreme/ui/notify';
 
 export default {
   components: {
-    DxButton
+    DxButton,
   },
   methods: {
     weatherClick() {
@@ -118,8 +118,8 @@ export default {
     },
     backClick() {
       notify('The button was clicked');
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

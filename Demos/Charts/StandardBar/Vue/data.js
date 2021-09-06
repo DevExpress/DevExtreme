@@ -1,22 +1,22 @@
 export const dataSource = [{
   day: 'Monday',
-  oranges: 3
+  oranges: 3,
 }, {
   day: 'Tuesday',
-  oranges: 2
+  oranges: 2,
 }, {
   day: 'Wednesday',
-  oranges: 3
+  oranges: 3,
 }, {
   day: 'Thursday',
-  oranges: 4
+  oranges: 4,
 }, {
   day: 'Friday',
-  oranges: 6
+  oranges: 6,
 }, {
   day: 'Saturday',
-  oranges: 11
+  oranges: 11,
 }, {
   day: 'Sunday',
-  oranges: 4
+  oranges: 4,
 }];

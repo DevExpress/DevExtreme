@@ -1,36 +1,36 @@
-var DemoApp = angular.module('DemoApp', ['dx']);
+const DemoApp = angular.module('DemoApp', ['dx']);
 
-DemoApp.controller('DemoController', function DemoController($scope) {
-    $scope.chartOptions = {
-        type: "doughnut",
-        palette: "Soft Pastel",
-        title: "Top Internet Languages",
-        dataSource: dataSource,
-        legend: {
-            horizontalAlignment: "center",
-            verticalAlignment: "bottom"
+DemoApp.controller('DemoController', ($scope) => {
+  $scope.chartOptions = {
+    type: 'doughnut',
+    palette: 'Soft Pastel',
+    title: 'Top Internet Languages',
+    dataSource,
+    legend: {
+      horizontalAlignment: 'center',
+      verticalAlignment: 'bottom',
+    },
+    export: {
+      enabled: true,
+    },
+    series: [{
+      smallValuesGrouping: {
+        mode: 'topN',
+        topCount: 3,
+      },
+      argumentField: 'language',
+      valueField: 'percent',
+      label: {
+        visible: true,
+        format: 'fixedPoint',
+        customizeText(point) {
+          return `${point.argumentText}: ${point.valueText}%`;
         },
-        "export": {
-            enabled: true
+        connector: {
+          visible: true,
+          width: 1,
         },
-        series: [{
-            smallValuesGrouping: {
-                mode: "topN",
-                topCount: 3
-            },            
-            argumentField: "language",
-            valueField: "percent",
-            label: {
-                visible: true,
-                format: "fixedPoint",
-                customizeText: function (point) {
-                    return point.argumentText + ": " + point.valueText + "%";
-                },
-                connector: {
-                    visible: true,
-                    width: 1
-                }
-            }
-        }]
-    };
+      },
+    }],
+  };
 });

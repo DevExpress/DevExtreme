@@ -13,15 +13,15 @@
   </DxChart>
 </template>
 <script>
-import { zoomingData } from './data.js';
 import {
   DxChart,
   DxSeries,
   DxArgumentAxis,
   DxScrollBar,
   DxZoomAndPan,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/chart';
+import { zoomingData } from './data.js';
 
 export default {
   components: {
@@ -30,14 +30,14 @@ export default {
     DxArgumentAxis,
     DxScrollBar,
     DxZoomAndPan,
-    DxLegend
+    DxLegend,
   },
   data() {
     return {
       zoomingData,
-      initialRange: [300, 500]
+      initialRange: [300, 500],
     };
-  }
+  },
 };
 </script>
 <style scoped>

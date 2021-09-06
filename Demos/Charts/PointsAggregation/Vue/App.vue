@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div id="chart-demo">
     <DxChart
       id="chart"
@@ -113,7 +113,7 @@ import DxChart, {
   DxFont,
   DxLegend,
   DxLabel,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -134,7 +134,7 @@ export default {
     DxFont,
     DxLegend,
     DxLabel,
-    DxTooltip
+    DxTooltip,
   },
 
   data() {
@@ -144,56 +144,50 @@ export default {
       weatherData,
       useAggregation: true,
       currentFunction: aggregationFunctions[0].func,
-      currentInterval: aggregationIntervals[0].interval
+      currentInterval: aggregationIntervals[0].interval,
     };
   },
 
   methods: {
     calculateRangeArea(aggregationInfo) {
-      if(!aggregationInfo.data.length) {
+      if (!aggregationInfo.data.length) {
         return;
       }
 
-      let temp = aggregationInfo.data.map(item => item.temp);
+      const temp = aggregationInfo.data.map((item) => item.temp);
       return {
         date: new Date((aggregationInfo.intervalStart.valueOf() + aggregationInfo.intervalEnd.valueOf()) / 2),
         maxTemp: Math.max.apply(null, temp),
-        minTemp: Math.min.apply(null, temp)
+        minTemp: Math.min.apply(null, temp),
       };
     },
 
     customizeTooltip(pointInfo) {
-      const aggregationInfo = pointInfo.point.aggregationInfo;
+      const { aggregationInfo } = pointInfo.point;
       const start = aggregationInfo && aggregationInfo.intervalStart;
       const end = aggregationInfo && aggregationInfo.intervalEnd;
       const handlers = {
-        'Average temperature': arg => {
-          return {
-            text: `${(!aggregationInfo ?
-              `Date: ${arg.argument.toDateString()}` :
-              `Interval: ${start.toDateString()} - ${end.toDateString()}`)
-            }<br/>Temperature: ${arg.value.toFixed(2)} °C`
-          };
-        },
-        'Temperature range': arg => {
-          return {
-            text: `Interval: ${start.toDateString()
-            } - ${end.toDateString()
-            }<br/>Temperature range: ${arg.rangeValue1
-            } - ${arg.rangeValue2} °C`
-          };
-        },
-        'Precipitation': arg => {
-          return {
-            text: `Date: ${arg.argument.toDateString()
-            }<br/>Precipitation: ${arg.valueText} mm`
-          };
-        }
+        'Average temperature': (arg) => ({
+          text: `${(!aggregationInfo
+            ? `Date: ${arg.argument.toDateString()}`
+            : `Interval: ${start.toDateString()} - ${end.toDateString()}`)
+          }<br/>Temperature: ${arg.value.toFixed(2)} °C`,
+        }),
+        'Temperature range': (arg) => ({
+          text: `Interval: ${start.toDateString()
+          } - ${end.toDateString()
+          }<br/>Temperature range: ${arg.rangeValue1
+          } - ${arg.rangeValue2} °C`,
+        }),
+        Precipitation: (arg) => ({
+          text: `Date: ${arg.argument.toDateString()
+          }<br/>Precipitation: ${arg.valueText} mm`,
+        }),
       };
 
       return handlers[pointInfo.seriesName](pointInfo);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

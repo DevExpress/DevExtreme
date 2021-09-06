@@ -36,7 +36,7 @@ import DxChart, {
   DxHatching,
   DxSeries,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 import { medalSources, medalStatistics } from './data.js';
 
@@ -48,12 +48,12 @@ export default {
     DxHatching,
     DxSeries,
     DxLegend,
-    DxExport
+    DxExport,
   },
   data() {
     return {
       medalSources,
-      medalStatistics
+      medalStatistics,
     };
   },
   methods: {
@@ -63,8 +63,8 @@ export default {
       } else {
         point.select();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

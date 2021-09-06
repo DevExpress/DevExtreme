@@ -13,10 +13,11 @@ export function generateData(count) {
   const startBirthDate = Date.parse('1/1/1975');
   const endBirthDate = Date.parse('1/1/1992');
 
-  for(i = 0; i < count; i++) {
+  for (i = 0; i < count; i++) {
     const birthDate = new Date(startBirthDate + Math.floor(
-      random() *
-      (endBirthDate - startBirthDate) / 10));
+      random()
+      * (endBirthDate - startBirthDate) / 10,
+    ));
     birthDate.setHours(12);
 
     const nameIndex = random();
@@ -25,7 +26,7 @@ export function generateData(count) {
       firstName: names[nameIndex],
       lastName: surnames[random()],
       gender: gender[Math.floor(nameIndex / 5)],
-      birthDate: birthDate
+      birthDate,
     };
     items.push(item);
   }

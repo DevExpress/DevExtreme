@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   Chart,
@@ -11,7 +11,7 @@ import {
   Title,
   Subtitle,
   Tooltip,
-  Grid
+  Grid,
 } from 'devextreme-react/chart';
 import service from './data.js';
 
@@ -23,7 +23,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: 'line'
+      type: 'line',
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -40,9 +40,7 @@ class App extends React.Component {
             type={this.state.type}
           />
           {
-            energySources.map(function(item) {
-              return <Series key={item.value} valueField={item.value} name={item.name} />;
-            })
+            energySources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
           }
           <Margin bottom={20} />
           <ArgumentAxis

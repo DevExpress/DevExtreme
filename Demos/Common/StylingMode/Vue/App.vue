@@ -91,25 +91,25 @@ export default {
     DxTagBox,
     DxDateBox,
     DxButton,
-    DxValidator
+    DxValidator,
   },
   data() {
     setTimeout(() => validationEngine.validateGroup());
     return {
       date: new Date(2020, 4, 3),
-      stylingMode: 'filled'
+      stylingMode: 'filled',
     };
   },
   methods: {
     validateClick(e) {
-      var result = e.validationGroup.validate();
+      const result = e.validationGroup.validate();
       if (result.isValid) {
         notify('The task was saved successfully.', 'success');
       } else {
         notify('The task was not saved. Please check if all fields are valid.', 'error');
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

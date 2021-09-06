@@ -1,25 +1,22 @@
 import React from 'react';
 
-import RowTemplate from './RowTemplate.js';
-
 import SelectBox from 'devextreme-react/select-box';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
+import RowTemplate from './RowTemplate.js';
 
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const years = ['2010', '2011', '2012'];
 
 const dataSource = new DataSource({
   store: new CustomStore({
-    load: () => {
-      return fetch('../../../../data/resourceData.json')
-        .then(e => e.json())
-        .catch(() => { throw 'Data Loading Error'; });
-    },
-    loadMode: 'raw'
+    load: () => fetch('../../../../data/resourceData.json')
+      .then((e) => e.json())
+      .catch(() => { throw 'Data Loading Error'; }),
+    loadMode: 'raw',
   }),
   filter: ['month', '<=', '12'],
-  paginate: false
+  paginate: false,
 });
 
 class App extends React.Component {
@@ -46,9 +43,7 @@ class App extends React.Component {
                 <th>Copper (USD/ton)</th>
               </tr>
               {
-                years.map((year, index) => {
-                  return <RowTemplate key={index} year={year} source={this.source} />;
-                })
+                years.map((year, index) => <RowTemplate key={index} year={year} source={this.source} />)
               }
             </tbody>
           </table>

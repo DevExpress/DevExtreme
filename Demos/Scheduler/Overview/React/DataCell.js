@@ -13,15 +13,14 @@ function getCurrentTraining(date, employeeID) {
 }
 
 class DataCell extends React.PureComponent {
-
   render() {
     const { data: { startDate, groups: { employeeID }, text } } = this.props;
     const dayClasses = [
       'day-cell',
-      getCurrentTraining(startDate.getDate(), employeeID)
+      getCurrentTraining(startDate.getDate(), employeeID),
     ];
 
-    const employeeClasses = [ `employee-${employeeID}`, 'dx-template-wrapper' ];
+    const employeeClasses = [`employee-${employeeID}`, 'dx-template-wrapper'];
     if (isWeekEnd(startDate)) {
       employeeClasses.push(`employee-weekend-${employeeID}`);
     }

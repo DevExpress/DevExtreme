@@ -66,7 +66,7 @@ import { data } from './data.js';
 export default {
   components: {
     DxScheduler,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -77,7 +77,7 @@ export default {
       allowDeleting: true,
       allowUpdating: true,
       allowResizing: true,
-      allowDragging: true
+      allowDragging: true,
     };
   },
   computed: {
@@ -87,24 +87,24 @@ export default {
         allowDeleting: this.allowDeleting,
         allowUpdating: this.allowUpdating,
         allowResizing: this.allowResizing,
-        allowDragging: this.allowDragging
+        allowDragging: this.allowDragging,
       };
-    }
+    },
   },
   methods: {
-    showToast: function(event, value, type) {
+    showToast(event, value, type) {
       notify(`${event} "${value}" task`, type, 800);
     },
 
-    showAddedToast: function(e) {
+    showAddedToast(e) {
       this.showToast('Added', e.appointmentData.text, 'success');
     },
 
-    showUpdatedToast: function(e) {
+    showUpdatedToast(e) {
       this.showToast('Updated', e.appointmentData.text, 'info');
     },
 
-    showDeletedToast: function(e) {
+    showDeletedToast(e) {
       this.showToast('Deleted', e.appointmentData.text, 'warning');
     },
   },

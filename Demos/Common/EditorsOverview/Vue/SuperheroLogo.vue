@@ -174,29 +174,29 @@ export default {
   props: {
     color: {
       type: String,
-      default: '#000000'
+      default: '#000000',
     },
     text: {
       type: String,
-      default: ''
+      default: '',
     },
     width: {
       type: Number,
-      default: 100
+      default: 100,
     },
     height: {
       type: Number,
-      default: 100
+      default: 100,
     },
     transform: {
       type: String,
-      default: ''
+      default: '',
     },
     border: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 <style>

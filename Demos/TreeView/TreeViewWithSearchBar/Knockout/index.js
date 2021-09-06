@@ -1,18 +1,18 @@
-window.onload = function() {
-    var searchMode = ko.observable("contains");
-    
-    var viewModel = {
-        treeViewOptions: {
-            items: products,
-            width: 500,
-            searchEnabled: true,
-            searchMode: searchMode
-        },
-        searchModeOptions: {
-            dataSource: ["contains", "startsWith"],
-            value: searchMode
-        }
-    };
-    
-    ko.applyBindings(viewModel);
+window.onload = function () {
+  const searchMode = ko.observable('contains');
+
+  const viewModel = {
+    treeViewOptions: {
+      items: products,
+      width: 500,
+      searchEnabled: true,
+      searchMode,
+    },
+    searchModeOptions: {
+      dataSource: ['contains', 'startsWith'],
+      value: searchMode,
+    },
+  };
+
+  ko.applyBindings(viewModel);
 };

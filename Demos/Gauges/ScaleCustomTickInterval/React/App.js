@@ -1,8 +1,9 @@
 import React from 'react';
-import { LinearGauge, Scale, MinorTick, Export, Title, Font } from 'devextreme-react/linear-gauge';
+import {
+  LinearGauge, Scale, MinorTick, Export, Title, Font,
+} from 'devextreme-react/linear-gauge';
 
 class App extends React.Component {
-
   render() {
     return (
       <LinearGauge

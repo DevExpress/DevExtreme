@@ -53,12 +53,12 @@ import { DxLoadIndicator } from 'devextreme-vue/load-indicator';
 export default {
   components: {
     DxButton,
-    DxLoadIndicator
+    DxLoadIndicator,
   },
   data() {
     return {
       loadIndicatorVisible: false,
-      buttonText: 'Send'
+      buttonText: 'Send',
     };
   },
   methods: {
@@ -70,8 +70,8 @@ export default {
         this.loadIndicatorVisible = false;
         this.buttonText = 'Send';
       }, 2000);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

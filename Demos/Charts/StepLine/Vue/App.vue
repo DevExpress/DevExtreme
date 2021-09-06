@@ -40,7 +40,7 @@ import {
   DxLegend,
   DxPoint,
   DxLabel,
-  DxFormat
+  DxFormat,
 } from 'devextreme-vue/chart';
 import { medalSources, olympicAchievements } from './data.js';
 
@@ -55,19 +55,19 @@ export default {
     DxLegend,
     DxPoint,
     DxLabel,
-    DxFormat
+    DxFormat,
   },
 
   data() {
     return {
       olympicAchievements,
-      medalSources
+      medalSources,
     };
-  }
+  },
 };
 </script>
 <style>
 #container {
-	height: 440px;
+  height: 440px;
 }
 </style>

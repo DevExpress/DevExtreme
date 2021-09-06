@@ -30,8 +30,8 @@ import {
   DxMasterDetail,
 } from 'devextreme-vue/data-grid';
 
-import MasterDetail from './MasterDetail.vue';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+import MasterDetail from './MasterDetail.vue';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
 
@@ -41,15 +41,15 @@ export default {
     DxColumn,
     DxPaging,
     DxMasterDetail,
-    MasterDetail
+    MasterDetail,
   },
   data() {
     return {
       suppliersData: createStore({
         key: 'SupplierID',
-        loadUrl: `${url}/GetSuppliers`
-      })
+        loadUrl: `${url}/GetSuppliers`,
+      }),
     };
-  }
+  },
 };
 </script>

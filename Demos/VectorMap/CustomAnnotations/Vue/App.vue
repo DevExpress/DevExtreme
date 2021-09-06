@@ -31,7 +31,7 @@ import {
   DxVectorMap,
   DxLayer,
   DxAnnotation,
-  DxCommonAnnotationSettings
+  DxCommonAnnotationSettings,
 } from 'devextreme-vue/vector-map';
 
 import { statesData } from './data.js';
@@ -43,15 +43,15 @@ export default {
     DxLayer,
     DxAnnotation,
     DxCommonAnnotationSettings,
-    AnnotationTemplate
+    AnnotationTemplate,
   },
   data() {
     return {
       statesData,
       usa: mapsData.usa,
-      bounds: [-118, 55, -80, 23]
+      bounds: [-118, 55, -80, 23],
     };
-  }
+  },
 };
 </script>
 <style>

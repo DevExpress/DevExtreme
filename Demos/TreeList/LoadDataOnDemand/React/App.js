@@ -3,13 +3,13 @@ import { TreeList, RemoteOperations, Column } from 'devextreme-react/tree-list';
 import 'whatwg-fetch';
 
 const dataSource = {
-  load: function(loadOptions) {
-    let parentIdsParam = loadOptions.parentIds;
+  load(loadOptions) {
+    const parentIdsParam = loadOptions.parentIds;
 
     return fetch(`https://js.devexpress.com/Demos/Mvc/api/treeListData?parentIds=${parentIdsParam}`)
-      .then(response => response.json())
+      .then((response) => response.json())
       .catch(() => { throw 'Data Loading Error'; });
-  }
+  },
 };
 
 class App extends React.Component {
@@ -35,7 +35,7 @@ class App extends React.Component {
 
   customizeText(e) {
     if (e.value !== null) {
-      return `${Math.ceil(e.value / 1024) } KB`;
+      return `${Math.ceil(e.value / 1024)} KB`;
     }
   }
 }

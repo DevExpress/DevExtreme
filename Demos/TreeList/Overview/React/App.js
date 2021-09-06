@@ -1,7 +1,9 @@
 import React from 'react';
 
 import { Template } from 'devextreme-react/core/template';
-import TreeList, { Column, ColumnChooser, HeaderFilter, SearchPanel, Selection, Lookup } from 'devextreme-react/tree-list';
+import TreeList, {
+  Column, ColumnChooser, HeaderFilter, SearchPanel, Selection, Lookup,
+} from 'devextreme-react/tree-list';
 
 import { employees, priorities, tasks } from './data.js';
 import EmployeeCell from './EmployeeCell.js';
@@ -74,14 +76,14 @@ class App extends React.Component {
 }
 
 const dataSourceOptions = {
-  store: tasks.map(function(task) {
-    employees.forEach(function(employee) {
+  store: tasks.map((task) => {
+    employees.forEach((employee) => {
       if (task.Task_Assigned_Employee_ID === employee.ID) {
         task.Task_Assigned_Employee = employee;
       }
     });
     return task;
-  })
+  }),
 };
 
 function customizeTaskCompletionText(cellInfo) {
@@ -93,7 +95,7 @@ const statuses = [
   'Need Assistance',
   'In Progress',
   'Deferred',
-  'Completed'
+  'Completed',
 ];
 
 export default App;

@@ -126,14 +126,14 @@ export default {
     DxTextArea,
     DxTextBox,
     DxNumberBox,
-    DxTagBox
+    DxTagBox,
   },
-  data: function() {
+  data() {
     return {
       europeanUnion,
       languages: [
         'Arabic: Right-to-Left direction',
-        'English: Left-to-Right direction'
+        'English: Left-to-Right direction',
       ],
       displayExpr: 'nameEn',
       rtlEnabled: false,
@@ -144,9 +144,9 @@ export default {
         this.displayExpr = isRTL ? 'nameAr' : 'nameEn';
         this.rtlEnabled = isRTL;
         this.textValue = isRTL ? 'نص' : 'text';
-      }
+      },
     };
-  }
+  },
 };
 </script>
 <style>

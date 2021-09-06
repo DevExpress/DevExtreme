@@ -1,15 +1,14 @@
 import React from 'react';
 
 class Logo extends React.PureComponent {
-
   render() {
-    const props = this.props;
+    const { props } = this;
     return (
       <div
         className="picture-container"
         style={{
           outlineStyle: props.border ? 'solid' : 'none',
-          outlineColor: props.color
+          outlineColor: props.color,
         }}
       >
         <div

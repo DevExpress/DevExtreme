@@ -8,11 +8,11 @@ import { data } from './data.js';
 
 const dataSourceOptions = {
   store: new ArrayStore({
-    data: data,
-    key: 'Id'
+    data,
+    key: 'Id',
   }),
   group: 'City',
-  searchExpr: ['Hotel_Name', 'City', 'Address']
+  searchExpr: ['Hotel_Name', 'City', 'Address'],
 };
 
 const listAttrs = { class: 'list' };
@@ -22,25 +22,24 @@ const formatCurrency = new Intl.NumberFormat(
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }
+    maximumFractionDigits: 0,
+  },
 ).format;
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       currentHotel: data[0],
-      selectedItemKeys: [data[0].Id]
+      selectedItemKeys: [data[0].Id],
     };
 
     this.handleListSelectionChange = this.handleListSelectionChange.bind(this);
   }
 
   render() {
-    const currentHotel = this.state.currentHotel;
+    const { currentHotel } = this.state;
     return (
       <React.Fragment>
         <div className="left">
@@ -92,7 +91,7 @@ class App extends React.Component {
     const currentHotel = e.addedItems[0];
     this.setState({
       currentHotel,
-      selectedItemKeys: [currentHotel.Id]
+      selectedItemKeys: [currentHotel.Id],
     });
   }
 }

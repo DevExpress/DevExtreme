@@ -6,7 +6,7 @@ import Chart, {
   Title,
   Subtitle,
   CommonSeriesSettings,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 
 import { dataSource } from './data.js';

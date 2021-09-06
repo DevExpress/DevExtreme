@@ -42,7 +42,7 @@ import DxChart, {
   DxLabel,
   DxLegend,
   DxSeries,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 
 import { dataSource } from './data.js';
@@ -55,11 +55,11 @@ export default {
     DxLabel,
     DxLegend,
     DxSeries,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
@@ -68,8 +68,8 @@ export default {
     },
     customizeLabel({ value }) {
       return `${Math.abs(value)}%`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

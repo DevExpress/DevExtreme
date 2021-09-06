@@ -39,7 +39,9 @@
   </div>
 </template>
 <script>
-import { DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping,
+} from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
@@ -48,11 +50,11 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping
+    DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping,
   },
   data() {
     return {
-      employees: service.getEmployees()
+      employees: service.getEmployees(),
     };
   },
   methods: {
@@ -62,16 +64,16 @@ export default {
 
       exportDataGrid({
         component: e.component,
-        worksheet: worksheet,
-        autoFilterEnabled: true
+        worksheet,
+        autoFilterEnabled: true,
       }).then(() => {
         workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
         });
       });
       e.cancel = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

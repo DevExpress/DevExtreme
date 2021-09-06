@@ -36,16 +36,18 @@
 </template>
 
 <script>
-import { DxDataGrid, DxColumn, DxRowDragging, DxScrolling, DxLookup } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxRowDragging, DxScrolling, DxLookup,
+} from 'devextreme-vue/data-grid';
 
 const priorities = [{
-  id: 1, text: 'Low'
+  id: 1, text: 'Low',
 }, {
-  id: 2, text: 'Normal'
+  id: 2, text: 'Normal',
 }, {
-  id: 3, text: 'High'
+  id: 3, text: 'High',
 }, {
-  id: 4, text: 'Urgent'
+  id: 4, text: 'Urgent',
 }];
 
 export default {
@@ -54,23 +56,23 @@ export default {
     DxColumn,
     DxRowDragging,
     DxScrolling,
-    DxLookup
+    DxLookup,
   },
   props: {
     tasksStore: {
       type: Object,
-      default: ()=>({})
+      default: () => ({}),
     },
     status: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
       dataSource: {
         store: this.tasksStore,
-        reshapeOnPush: true
+        reshapeOnPush: true,
       },
       priorities,
       filterExpr: ['Status', '=', this.status],
@@ -78,16 +80,16 @@ export default {
   },
   methods: {
     onAdd(e) {
-      var key = e.itemData.ID,
-        values = { Status: e.toData };
+      const key = e.itemData.ID;
+      const values = { Status: e.toData };
 
       this.tasksStore.update(key, values).then(() => {
         // eslint-disable-next-line vue/no-mutating-props
         this.tasksStore.push([{
-          type: 'update', key: key, data: values
+          type: 'update', key, data: values,
         }]);
       });
-    }
-  }
+    },
+  },
 };
 </script>

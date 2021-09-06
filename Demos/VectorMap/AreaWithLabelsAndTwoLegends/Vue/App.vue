@@ -81,7 +81,7 @@ export default {
     DxLayer,
     DxLegend,
     DxSource,
-    DxTooltip
+    DxTooltip,
   },
   data() {
     return {
@@ -90,23 +90,22 @@ export default {
       colorGroups: [0, 0.5, 0.8, 1, 2, 3, 100],
       mapsWorld: mapsData.world,
       bounds: [-180, 85, 180, -75],
-      sizeGroups: [0, 8000, 10000, 50000]
+      sizeGroups: [0, 8000, 10000, 50000],
     };
   },
   methods: {
     customizeText(itemInfo) {
-      if(itemInfo.index === 0) {
+      if (itemInfo.index === 0) {
         return '< 0.5%';
-      } else if (itemInfo.index === 5) {
+      } if (itemInfo.index === 5) {
         return '> 3%';
-      } else {
-        return `${itemInfo.start }% to ${ itemInfo.end }%`;
       }
+      return `${itemInfo.start}% to ${itemInfo.end}%`;
     },
 
     customizeTooltip(info) {
       return {
-        text: info.attribute('text')
+        text: info.attribute('text'),
       };
     },
 
@@ -120,14 +119,14 @@ export default {
 
     customizeLayer(elements) {
       elements.forEach((element) => {
-        let name = element.attribute('name'),
-          population = this.populations[name];
+        const name = element.attribute('name');
+        const population = this.populations[name];
         if (population) {
           element.attribute('population', population);
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

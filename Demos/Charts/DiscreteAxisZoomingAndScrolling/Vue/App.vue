@@ -57,7 +57,6 @@
   </div>
 </template>
 <script>
-import { dataSource } from './data.js';
 import {
   DxChart,
   DxValueAxis,
@@ -66,7 +65,7 @@ import {
   DxLegend,
   DxBorder,
   DxCommonSeriesSettings,
-  DxSeries
+  DxSeries,
 } from 'devextreme-vue/chart';
 import {
   DxRangeSelector,
@@ -76,8 +75,9 @@ import {
   DxChart as DxRsChart,
   DxBehavior,
   DxCommonSeriesSettings as DxCommonSeriesSettingsOptions,
-  DxSeries as DxRsChartSeries
+  DxSeries as DxRsChartSeries,
 } from 'devextreme-vue/range-selector';
+import { dataSource } from './data.js';
 
 export default {
   components: {
@@ -96,7 +96,7 @@ export default {
     DxCommonSeriesSettings,
     DxCommonSeriesSettingsOptions,
     DxSeries,
-    DxRsChartSeries
+    DxRsChartSeries,
   },
   data() {
     return {
@@ -104,39 +104,39 @@ export default {
       range: [],
       series: [{
         name: 'Si',
-        valueField: 'Si'
+        valueField: 'Si',
       }, {
         name: 'Fe',
-        valueField: 'Fe'
+        valueField: 'Fe',
       }, {
         name: 'Ni',
-        valueField: 'Ni'
+        valueField: 'Ni',
       }, {
         name: 'S',
-        valueField: 'S'
+        valueField: 'S',
       }, {
         name: 'O',
-        valueField: 'O'
+        valueField: 'O',
       }, {
         name: 'Mg',
-        valueField: 'Mg'
+        valueField: 'Mg',
       }, {
         name: 'Al',
-        valueField: 'Al'
+        valueField: 'Al',
       }, {
         name: 'K',
-        valueField: 'K'
+        valueField: 'K',
       }, {
         name: 'Na',
-        valueField: 'Na'
-      }]
+        valueField: 'Na',
+      }],
     };
   },
   methods: {
     customizeText({ valueText }) {
       return `${valueText}%`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

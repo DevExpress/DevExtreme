@@ -4,13 +4,12 @@ import PieChart, {
   Legend,
   Series,
   Export,
-  HoverStyle
+  HoverStyle,
 } from 'devextreme-react/pie-chart';
 
 import { olympicMedals } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <PieChart

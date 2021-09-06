@@ -54,12 +54,14 @@
 </template>
 
 <script>
-import { DxDataGrid, DxColumn, DxPaging, DxEditing, DxRequiredRule, DxRangeRule } from 'devextreme-vue/data-grid';
+import {
+  DxDataGrid, DxColumn, DxPaging, DxEditing, DxRequiredRule, DxRangeRule,
+} from 'devextreme-vue/data-grid';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 const statesStore = AspNetData.createStore({
   key: 'ID',
-  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup'
+  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
 });
 
 export default {
@@ -69,13 +71,13 @@ export default {
     DxPaging,
     DxEditing,
     DxRequiredRule,
-    DxRangeRule
+    DxRangeRule,
   },
   props: {
     dataSource: {
       type: Object,
-      default: ()=>({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
@@ -83,9 +85,9 @@ export default {
       lookup: {
         dataSource: statesStore,
         displayExpr: 'Name',
-        valueExpr: 'ID'
-      }
+        valueExpr: 'ID',
+      },
     };
-  }
+  },
 };
 </script>

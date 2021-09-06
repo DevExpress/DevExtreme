@@ -61,16 +61,16 @@
   </div>
 </template>
 <script>
-import { longText } from './data.js';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
+import { longText } from './data.js';
 
 export default {
   components: {
     DxScrollView,
     DxSelectBox,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -79,39 +79,37 @@ export default {
       showScrollbarModes: [
         {
           text: 'On Scroll',
-          value: 'onScroll'
+          value: 'onScroll',
         },
         {
           text: 'On Hover',
-          value: 'onHover'
+          value: 'onHover',
         },
         {
           text: 'Always',
-          value: 'always'
+          value: 'always',
         },
         {
           text: 'Never',
-          value: 'never'
-        }
+          value: 'never',
+        },
       ],
       showScrollbar: 'onScroll',
       scrollByContent: true,
-      scrollByThumb: true
+      scrollByThumb: true,
     };
   },
   created() {},
   methods: {
     updateContent(args, eventName) {
-      var updateContentText =
-        `<br /><div>Content has been updated on the ${
-          eventName
-        } event.</div><br />`;
+      const updateContentText = `<br /><div>Content has been updated on the ${
+        eventName
+      } event.</div><br />`;
       if (this.updateContentTimer) clearTimeout(this.updateContentTimer);
       this.updateContentTimer = setTimeout(() => {
-        this.content =
-          eventName == 'PullDown'
-            ? updateContentText + this.content
-            : this.content + updateContentText;
+        this.content = eventName == 'PullDown'
+          ? updateContentText + this.content
+          : this.content + updateContentText;
         args.component.release();
       }, 500);
     },
@@ -124,10 +122,10 @@ export default {
     onValueChanged(args) {
       this.$refs.scrollViewWidget.instance.option(
         'onReachBottom',
-        args.value ? this.updateBottomContent : null
+        args.value ? this.updateBottomContent : null,
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

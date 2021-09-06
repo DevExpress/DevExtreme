@@ -11,8 +11,9 @@ class DetailTemplate extends React.Component {
     super(props);
     this.dataSource = getTasks(props.data.key);
   }
+
   render() {
-    let { FirstName, LastName } = this.props.data.data;
+    const { FirstName, LastName } = this.props.data.data;
     return (
       <React.Fragment>
         <div className="master-detail-caption">
@@ -36,6 +37,7 @@ class DetailTemplate extends React.Component {
       </React.Fragment>
     );
   }
+
   completedValue(rowData) {
     return rowData.Status === 'Completed';
   }
@@ -45,9 +47,9 @@ function getTasks(key) {
   return new DataSource({
     store: new ArrayStore({
       data: tasks,
-      key: 'ID'
+      key: 'ID',
     }),
-    filter: ['EmployeeID', '=', key]
+    filter: ['EmployeeID', '=', key],
   });
 }
 

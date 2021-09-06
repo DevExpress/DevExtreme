@@ -57,14 +57,14 @@ const backButtonOptions = {
   type: 'back',
   onClick: () => {
     notify('Back button has been clicked!');
-  }
+  },
 };
 
 const refreshButtonOptions = {
   icon: 'refresh',
   onClick: () => {
     notify('Refresh button has been clicked!');
-  }
+  },
 };
 
 const selectBoxOptions = {
@@ -80,35 +80,35 @@ const selectBoxOptions = {
       productsStore.filter(null);
     }
     productsStore.load();
-  }
+  },
 };
 
 const addButtonOptions = {
   icon: 'plus',
   onClick: () => {
     notify('Add button has been clicked!');
-  }
+  },
 };
 
 const saveButtonOptions = {
-  text:'Save',
+  text: 'Save',
   onClick: () => {
     notify('Save option has been clicked!');
-  }
+  },
 };
 
 const printButtonOptions = {
-  text:'Print',
+  text: 'Print',
   onClick: () => {
     notify('Print option has been clicked!');
-  }
+  },
 };
 
 const settingsButtonOptions = {
-  text:'Settings',
+  text: 'Settings',
   onClick: () => {
     notify('Settings option has been clicked!');
-  }
+  },
 };
 
 export default App;

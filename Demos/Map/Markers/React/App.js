@@ -13,25 +13,27 @@ class App extends React.Component {
     super(props);
     this.originMarkersData = markersData;
     this.state = {
-      markerUrl: markerUrl,
-      markersData: markersData
+      markerUrl,
+      markersData,
     };
     this.useCustomMarkers = this.useCustomMarkers.bind(this);
     this.showTooltips = this.showTooltips.bind(this);
   }
+
   useCustomMarkers(e) {
     this.setState({
       markerUrl: e.value ? markerUrl : null,
-      markersData: this.originMarkersData
+      markersData: this.originMarkersData,
     });
   }
+
   showTooltips() {
     this.setState({
-      markersData: this.state.markersData.map(function(item) {
-        let newItem = JSON.parse(JSON.stringify(item));
+      markersData: this.state.markersData.map((item) => {
+        const newItem = JSON.parse(JSON.stringify(item));
         newItem.tooltip.isShown = true;
         return newItem;
-      })
+      }),
     });
   }
 

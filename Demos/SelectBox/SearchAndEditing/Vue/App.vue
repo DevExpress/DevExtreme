@@ -104,6 +104,7 @@ import { DxCheckBox } from 'devextreme-vue/check-box';
 import DataSource from 'devextreme/data/data_source';
 
 import { products, simpleProducts } from './data.js';
+
 const productsDataSource = new DataSource({
   store: {
     data: simpleProducts,
@@ -148,9 +149,7 @@ export default {
         return;
       }
 
-      const productIds = simpleProducts.map(function(item) {
-        return item.ID;
-      });
+      const productIds = simpleProducts.map((item) => item.ID);
       const incrementedId = Math.max.apply(null, productIds) + 1;
       const newItem = {
         Name: data.text,
@@ -161,9 +160,7 @@ export default {
         .store()
         .insert(newItem)
         .then(() => productsDataSource.load())
-        .then(() => {
-          return newItem;
-        })
+        .then(() => newItem)
         .catch((error) => {
           throw error;
         });

@@ -32,37 +32,39 @@
   </div>
 </template>
 <script>
-import { colors } from './data.js';
 import { DxBarGauge, DxPalette, DxLabel } from 'devextreme-vue/bar-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
+import { colors } from './data.js';
 
 export default {
   components: {
-    DxBarGauge, DxPalette, DxLabel,
-    DxSelectBox
+    DxBarGauge,
+    DxPalette,
+    DxLabel,
+    DxSelectBox,
   },
   data() {
     return {
-      colors: colors,
+      colors,
       palette: ['#ff0000', '#00ff00', '#0000ff'],
-      value: colors[0]
+      value: colors[0],
     };
   },
   computed: {
     values() {
       return this.getBasicColors(this.value.code);
-    }
+    },
   },
   methods: {
     getBasicColors(value) {
-      var code = Number(`0x${ value.slice(1)}`);
+      const code = Number(`0x${value.slice(1)}`);
       return [
         (code >> 16) & 0xff,
         (code >> 8) & 0xff,
-        code & 0xff
+        code & 0xff,
       ];
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

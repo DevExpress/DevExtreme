@@ -39,7 +39,7 @@ import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 export default {
   components: {
     DxDataGrid,
-    DxColumn
+    DxColumn,
   },
   data() {
     return {
@@ -47,7 +47,7 @@ export default {
         store: {
           type: 'odata',
           url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-          key: 'Product_ID'
+          key: 'Product_ID',
         },
         select: [
           'Product_ID',
@@ -55,11 +55,11 @@ export default {
           'Product_Cost',
           'Product_Sale_Price',
           'Product_Retail_Price',
-          'Product_Current_Inventory'
+          'Product_Current_Inventory',
         ],
-        filter: ['Product_Current_Inventory', '>', 0]
-      }
+        filter: ['Product_Current_Inventory', '>', 0],
+      },
     };
-  }
+  },
 };
 </script>

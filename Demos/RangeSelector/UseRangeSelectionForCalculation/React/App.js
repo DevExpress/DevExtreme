@@ -1,5 +1,7 @@
 import React from 'react';
-import RangeSelector, { Margin, Scale, MinorTick, Marker, Label, Behavior, SliderMarker } from 'devextreme-react/range-selector';
+import RangeSelector, {
+  Margin, Scale, MinorTick, Marker, Label, Behavior, SliderMarker,
+} from 'devextreme-react/range-selector';
 import { SelectBox } from 'devextreme-react/select-box';
 
 const startValue = new Date(2011, 0, 1);
@@ -11,11 +13,12 @@ class App extends React.Component {
     super(props);
     this.state = {
       workingDaysCount: calculateWorkdays([startValue, endValue]),
-      behaviorMode: behaviorModes[0]
+      behaviorMode: behaviorModes[0],
     };
     this.processRange = this.processRange.bind(this);
     this.setBehavior = this.setBehavior.bind(this);
   }
+
   render() {
     return (
       <div id="range-selector-demo">
@@ -49,14 +52,16 @@ class App extends React.Component {
       </div>
     );
   }
+
   processRange(e) {
     this.setState({
-      workingDaysCount: calculateWorkdays(e.value)
+      workingDaysCount: calculateWorkdays(e.value),
     });
   }
+
   setBehavior(data) {
     this.setState({
-      behaviorMode: data.value
+      behaviorMode: data.value,
     });
   }
 }

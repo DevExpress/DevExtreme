@@ -19,13 +19,13 @@ import { dataSource } from './data.js';
 export default {
   components: {
     DxChart,
-    DxSeries
+    DxSeries,
   },
   data() {
     return {
       dataSource,
     };
-  }
+  },
 };
 </script>
 <style>

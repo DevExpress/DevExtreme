@@ -9,7 +9,7 @@ import { tasks } from './data.js';
 
 const dataSource = new ArrayStore({
   key: 'id',
-  data: tasks
+  data: tasks,
 });
 
 class App extends React.Component {
@@ -18,29 +18,33 @@ class App extends React.Component {
     this.state = {
       selectionMode: 'all',
       selectAllMode: 'page',
-      selectedItemKeys: []
+      selectedItemKeys: [],
     };
     this.onSelectionModeChange = this.onSelectionModeChange.bind(this);
     this.onSelectAllModeChange = this.onSelectAllModeChange.bind(this);
     this.onSelectedItemKeysChange = this.onSelectedItemKeysChange.bind(this);
   }
+
   onSelectionModeChange(args) {
     this.setState({
-      selectionMode: args.value
+      selectionMode: args.value,
     });
   }
+
   onSelectAllModeChange(args) {
     this.setState({
-      selectAllMode: args.value
+      selectAllMode: args.value,
     });
   }
+
   onSelectedItemKeysChange(args) {
-    if(args.name === 'selectedItemKeys') {
+    if (args.name === 'selectedItemKeys') {
       this.setState({
-        selectedItemKeys: args.value
+        selectedItemKeys: args.value,
       });
     }
   }
+
   render() {
     return (
       <React.Fragment>

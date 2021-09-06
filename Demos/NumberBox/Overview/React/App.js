@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { NumberBox } from 'devextreme-react/number-box';
 
 class App extends React.Component {
@@ -6,25 +6,28 @@ class App extends React.Component {
     super(props);
     this.state = {
       max: 30,
-      value: 16
+      value: 16,
     };
     this.valueChanged = this.valueChanged.bind(this);
     this.keyDown = this.keyDown.bind(this);
   }
+
   valueChanged(e) {
     this.setState({
-      value: e.value
+      value: e.value,
     });
   }
+
   keyDown(e) {
-    const event = e.event;
+    const { event } = e;
     const str = event.key || String.fromCharCode(event.which);
-    if(/^[.,e]$/.test(str)) {
+    if (/^[.,e]$/.test(str)) {
       event.preventDefault();
     }
   }
+
   render() {
-    let { value, max } = this.state;
+    const { value, max } = this.state;
     return (
       <div className="form">
         <div className="dx-fieldset">

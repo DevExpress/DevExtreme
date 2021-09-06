@@ -62,7 +62,7 @@ import DxChart, {
   DxTooltip,
   DxTitle,
   DxGrid,
-  DxFormat
+  DxFormat,
 } from 'devextreme-vue/chart';
 import { continentSources, populationData } from './data.js';
 
@@ -77,13 +77,13 @@ export default {
     DxTooltip,
     DxTitle,
     DxGrid,
-    DxFormat
+    DxFormat,
   },
 
   data() {
     return {
       continentSources,
-      populationData
+      populationData,
     };
   },
 
@@ -93,7 +93,7 @@ export default {
       const color = pointInfo.point.getColor();
 
       items.forEach((item, index) => {
-        if(item.indexOf(pointInfo.seriesName) === 0) {
+        if (item.indexOf(pointInfo.seriesName) === 0) {
           const element = document.createElement('span');
 
           element.textContent = item;
@@ -105,16 +105,16 @@ export default {
       });
 
       return { text: items.join('\n') };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
 #chart {
-	height: 440px;
+  height: 440px;
 }
 
 .active {
-	font-weight: 500;
+  font-weight: 500;
 }
 </style>

@@ -52,12 +52,12 @@ import { DxCheckBox } from 'devextreme-vue/check-box';
 
 export default {
   components: {
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
-      checkBoxValue: undefined
+      checkBoxValue: undefined,
     };
-  }
+  },
 };
 </script>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
@@ -8,7 +8,7 @@ import Chart, {
   Tooltip,
   Title,
   Grid,
-  Format
+  Format,
 } from 'devextreme-react/chart';
 import { continentSources, populationData } from './data.js';
 
@@ -25,9 +25,7 @@ class App extends React.Component {
           type="fullstackedbar"
         />
         {
-          continentSources.map(function(item) {
-            return <Series key={item.value} valueField={item.value} name={item.name} />;
-          })
+          continentSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
         }
         <Series
           axis="total"
@@ -74,7 +72,7 @@ function customizeTooltip(pointInfo) {
   const color = pointInfo.point.getColor();
 
   items.forEach((item, index) => {
-    if(item.indexOf(pointInfo.seriesName) === 0) {
+    if (item.indexOf(pointInfo.seriesName) === 0) {
       const element = document.createElement('span');
 
       element.textContent = item;

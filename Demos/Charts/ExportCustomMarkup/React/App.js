@@ -1,10 +1,12 @@
 import React from 'react';
-import { Chart, CommonSeriesSettings, Series, Legend, Title, Subtitle } from 'devextreme-react/chart';
+import {
+  Chart, CommonSeriesSettings, Series, Legend, Title, Subtitle,
+} from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
-import { dataSource } from './data.js';
-import Form from './Form.js';
 import { exportFromMarkup } from 'devextreme/viz/export';
 import toCanvas from 'canvg';
+import { dataSource } from './data.js';
+import Form from './Form.js';
 
 const barPadding = 0.3;
 
@@ -14,7 +16,6 @@ function prepareMarkup(chartSvg, markup) {
 }
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -75,10 +76,10 @@ class App extends React.Component {
           toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
             ignoreDimensions: true,
             ignoreClear: true,
-            renderCallback: resolve
+            renderCallback: resolve,
           });
         });
-      }
+      },
     });
   }
 

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Toast } from 'devextreme-react/toast';
 
 import { ProductItem } from './ProductItem.js';
@@ -8,7 +8,7 @@ function App() {
   const [toastConfig, setToastConfig] = React.useState({
     isVisible: false,
     type: 'info',
-    message: ''
+    message: '',
   });
 
   const items = products.map((product) => (
@@ -33,21 +33,20 @@ function App() {
 
   function checkAvailability(e, product) {
     const type = e.value ? 'success' : 'error';
-    const message =
-      product.Name + (e.value ? ' is available' : ' is not available');
+    const message = product.Name + (e.value ? ' is available' : ' is not available');
 
     setToastConfig({
       ...toastConfig,
       isVisible: true,
       type,
-      message
+      message,
     });
   }
 
   function onHiding() {
     setToastConfig({
       ...toastConfig,
-      isVisible: false
+      isVisible: false,
     });
   }
 }

@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
-  FieldPanel
+  FieldPanel,
 } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -43,26 +43,26 @@ class App extends React.Component {
   }
 
   onContextMenuPreparing(e) {
-    if(e.field && e.field.dataField === 'amount') {
-      summaryDisplayModes.forEach(mode => {
+    if (e.field && e.field.dataField === 'amount') {
+      summaryDisplayModes.forEach((mode) => {
         e.items.push({
           text: mode.text,
           selected: e.field.summaryDisplayMode === mode.value,
           onItemClick: () => {
-            var format,
-              caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
+            let format;
+            const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
             if (mode.value === 'none'
               || mode.value === 'absoluteVariation') {
               format = 'currency';
             }
             dataSource.field(e.field.index, {
               summaryDisplayMode: mode.value,
-              format: format,
-              caption: caption
+              format,
+              caption,
             });
 
             dataSource.load();
-          }
+          },
         });
       });
     }
@@ -77,7 +77,7 @@ const summaryDisplayModes = [
   { text: 'Percent of Row Total', value: 'percentOfRowTotal' },
   { text: 'Percent of Column Grand Total', value: 'percentOfColumnGrandTotal' },
   { text: 'Percent of Row Grand Total', value: 'percentOfRowGrandTotal' },
-  { text: 'Percent of Grand Total', value: 'percentOfGrandTotal' }
+  { text: 'Percent of Grand Total', value: 'percentOfGrandTotal' },
 ];
 
 const dataSource = new PivotGridDataSource({
@@ -85,29 +85,29 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     width: 120,
     dataField: 'region',
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
-    area: 'row'
+    area: 'row',
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     groupName: 'date',
     groupInterval: 'year',
-    expanded: true
+    expanded: true,
   }, {
     caption: 'Relative Sales',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     area: 'data',
-    summaryDisplayMode: 'percentOfColumnGrandTotal'
+    summaryDisplayMode: 'percentOfColumnGrandTotal',
   }],
-  store: sales
+  store: sales,
 });
 
 export default App;

@@ -70,7 +70,7 @@ import DxChart, {
   DxSeries,
   DxTooltip,
   DxValueAxis,
-  DxConstantLine
+  DxConstantLine,
 } from 'devextreme-vue/chart';
 
 import { complaintsData } from './data.js';
@@ -85,29 +85,25 @@ export default {
     DxSeries,
     DxTooltip,
     DxValueAxis,
-    DxConstantLine
+    DxConstantLine,
   },
 
   data() {
-    let data = complaintsData.sort(function(a, b) {
-        return b.count - a.count;
-      }),
-      totalCount = data.reduce(function(prevValue, item) {
-        return prevValue + item.count;
-      }, 0),
-      cumulativeCount = 0;
+    const data = complaintsData.sort((a, b) => b.count - a.count);
+    const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
+    let cumulativeCount = 0;
 
-    const dataSource = data.map(function(item) {
+    const dataSource = data.map((item) => {
       cumulativeCount += item.count;
       return {
         complaint: item.complaint,
         count: item.count,
-        cumulativePercentage: Math.round(cumulativeCount * 100 / totalCount)
+        cumulativePercentage: Math.round(cumulativeCount * 100 / totalCount),
       };
     });
 
     return {
-      dataSource
+      dataSource,
     };
   },
 
@@ -124,14 +120,14 @@ export default {
           pointInfo.points[1].seriesName
         }</span>: </div><div class='value-text'><span class='bottom-series-value'>${
           pointInfo.points[1].valueText
-        }</span>% </div></div></div>`
+        }</span>% </div></div></div>`,
       };
     },
 
     customizePercentageText({ valueText }) {
       return `${valueText}%`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

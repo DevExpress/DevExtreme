@@ -15,7 +15,7 @@ import Chart, {
   Border,
   Tooltip,
   Export,
-  LoadingIndicator
+  LoadingIndicator,
 } from 'devextreme-react/chart';
 
 import SelectBox from 'devextreme-react/select-box';
@@ -28,14 +28,14 @@ class App extends React.Component {
     this.chartDataSource = new DataSource({
       store: {
         type: 'odata',
-        url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems'
+        url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
       },
-      postProcess: function(results) {
+      postProcess(results) {
         return results[0].DayItems;
       },
       expand: 'DayItems',
       filter: ['Id', '=', 1],
-      paginate: false
+      paginate: false,
     });
 
     this.onValueChanged = (data) => {
@@ -104,7 +104,7 @@ class App extends React.Component {
 
 function customizeTooltip(arg) {
   return {
-    text: `${arg.valueText}${'&#176C'}`
+    text: `${arg.valueText}${'&#176C'}`,
   };
 }
 

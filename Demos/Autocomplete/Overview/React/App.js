@@ -1,13 +1,15 @@
-﻿import React from 'react';
+import React from 'react';
 
 import OData from 'devextreme/data/odata/store';
 import { Autocomplete } from 'devextreme-react/autocomplete';
-import { names, surnames, positions, cities } from './data.js';
+import {
+  names, surnames, positions, cities,
+} from './data.js';
 
 const states = new OData({
   url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
   key: 'Sate_ID',
-  keyType: 'Int32'
+  keyType: 'Int32',
 });
 
 class App extends React.Component {
@@ -18,7 +20,7 @@ class App extends React.Component {
       lastName: '',
       position: positions[0],
       city: '',
-      state: ''
+      state: '',
     };
 
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
@@ -26,8 +28,9 @@ class App extends React.Component {
     this.handleCityChange = this.handleCityChange.bind(this);
     this.handleStateChange = this.handleStateChange.bind(this);
   }
+
   render() {
-    var fullInfo = '';
+    let fullInfo = '';
     fullInfo += (`${this.state.firstName || ''} ${this.state.lastName || ''}`).trim();
     fullInfo += (fullInfo && this.state.position) ? (`, ${this.state.position}`) : '';
     fullInfo += (fullInfo && this.state.city) ? (`, ${this.state.city}`) : '';
@@ -131,25 +134,25 @@ class App extends React.Component {
 
   handleFirstNameChange(e) {
     this.setState({
-      firstName: e.value
+      firstName: e.value,
     });
   }
 
   handleLastNameChange(e) {
     this.setState({
-      lastName: e.value
+      lastName: e.value,
     });
   }
 
   handleCityChange(e) {
     this.setState({
-      city: e.value
+      city: e.value,
     });
   }
 
   handleStateChange(e) {
     this.setState({
-      state: e.value
+      state: e.value,
     });
   }
 }

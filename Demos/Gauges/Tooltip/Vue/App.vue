@@ -33,15 +33,17 @@
   </div>
 </template>
 <script>
-import { DxBarGauge, DxLabel, DxTooltip, DxExport, DxTitle, DxFont, DxLegend } from 'devextreme-vue/bar-gauge';
+import {
+  DxBarGauge, DxLabel, DxTooltip, DxExport, DxTitle, DxFont, DxLegend,
+} from 'devextreme-vue/bar-gauge';
 
 export default {
   components: {
-    DxBarGauge, DxLabel, DxTooltip, DxExport, DxTitle, DxFont, DxLegend
+    DxBarGauge, DxLabel, DxTooltip, DxExport, DxTitle, DxFont, DxLegend,
   },
   data() {
     return {
-      values: [121.4, 135.4, 115.9, 141.1, 127.5]
+      values: [121.4, 135.4, 115.9, 141.1, 127.5],
     };
   },
   methods: {
@@ -50,13 +52,13 @@ export default {
     },
     customizeTooltip(arg) {
       return {
-        text: this.getText(arg, arg.valueText)
+        text: this.getText(arg, arg.valueText),
       };
     },
     customizeText(arg) {
       return this.getText(arg.item, arg.text);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -19,7 +19,7 @@ class App extends React.Component {
       opened: false,
       openedStateMode: 'shrink',
       revealMode: 'expand',
-      position: 'top'
+      position: 'top',
     };
 
     this.toolbarItems = [{
@@ -27,8 +27,8 @@ class App extends React.Component {
       location: 'before',
       options: {
         icon: 'menu',
-        onClick: () => this.setState({ opened: !this.state.opened })
-      }
+        onClick: () => this.setState({ opened: !this.state.opened }),
+      },
     }];
 
     this.onOpenedStateModeChanged = this.onOpenedStateModeChanged.bind(this);
@@ -54,7 +54,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { opened, openedStateMode, position, revealMode } = this.state;
+    const {
+      opened, openedStateMode, position, revealMode,
+    } = this.state;
     return (
       <React.Fragment>
         <Toolbar items={this.toolbarItems} />

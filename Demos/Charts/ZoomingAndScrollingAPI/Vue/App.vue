@@ -27,13 +27,12 @@
   </div>
 </template>
 <script>
-import { zoomingData } from './data.js';
 import {
   DxChart,
   DxCommonSeriesSettings,
   DxPoint,
   DxLegend,
-  DxArgumentAxis
+  DxArgumentAxis,
 } from 'devextreme-vue/chart';
 import {
   DxRangeSelector,
@@ -41,8 +40,9 @@ import {
   DxMargin,
   DxScale,
   DxChart as DxRsChart,
-  DxBehavior
+  DxBehavior,
 } from 'devextreme-vue/range-selector';
+import { zoomingData } from './data.js';
 
 export default {
   components: {
@@ -56,20 +56,20 @@ export default {
     DxMargin,
     DxScale,
     DxRsChart,
-    DxBehavior
+    DxBehavior,
   },
   data() {
     return {
       zoomingData,
       range: [],
       series: [{
-        valueField: 'y1'
+        valueField: 'y1',
       }, {
-        valueField: 'y2'
+        valueField: 'y2',
       }, {
-        valueField: 'y3'
-      }]
+        valueField: 'y3',
+      }],
     };
-  }
+  },
 };
 </script>

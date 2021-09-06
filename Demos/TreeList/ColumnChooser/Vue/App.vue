@@ -66,32 +66,34 @@
   </div>
 </template>
 <script>
-import { employees } from './data.js';
 import { DxTreeList, DxColumn, DxColumnChooser } from 'devextreme-vue/tree-list';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
+import { employees } from './data.js';
 
 export default {
   components: {
-    DxTreeList, DxColumn, DxColumnChooser,
+    DxTreeList,
+    DxColumn,
+    DxColumnChooser,
     DxSelectBox,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
-      employees: employees,
+      employees,
       columnChooserModes: [{
         key: 'dragAndDrop',
-        name: 'Drag and drop'
+        name: 'Drag and drop',
       }, {
         key: 'select',
-        name: 'Select'
+        name: 'Select',
       }],
       mode: 'dragAndDrop',
       allowSearch: true,
-      expandedRowKeys: [1]
+      expandedRowKeys: [1],
     };
-  }
+  },
 };
 </script>
 <style scoped>

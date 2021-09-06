@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import {
   Chart,
@@ -9,7 +9,7 @@ import {
   ValueAxis,
   Label,
   Font,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 import { temperaturesData, lowAverage, highAverage } from './data.js';
 
@@ -19,7 +19,7 @@ const lowAverageColor = '#6199e6';
 function customizePoint(arg) {
   if (arg.value > highAverage) {
     return { color: highAverageColor };
-  } else if (arg.value < lowAverage) {
+  } if (arg.value < lowAverage) {
     return { color: lowAverageColor };
   }
 }
@@ -27,7 +27,7 @@ function customizePoint(arg) {
 function customizeLabel(arg) {
   if (arg.value > highAverage) {
     return getLabelsSettings(highAverageColor);
-  } else if (arg.value < lowAverage) {
+  } if (arg.value < lowAverage) {
     return getLabelsSettings(lowAverageColor);
   }
 }
@@ -35,8 +35,8 @@ function customizeLabel(arg) {
 function getLabelsSettings(backgroundColor) {
   return {
     visible: true,
-    backgroundColor: backgroundColor,
-    customizeText
+    backgroundColor,
+    customizeText,
   };
 }
 

@@ -1,9 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, { Scrolling, Pager, Paging } from 'devextreme-react/data-grid';
-import { generateData } from './data.js';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+import { generateData } from './data.js';
 
 const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];
 const allowedPageSizes = [5, 10, 'all'];
@@ -11,30 +11,37 @@ class App extends React.Component {
   displayModeChange = (value) => {
     this.setState({ ...this.state, displayMode: value });
   }
+
   showPageSizeSelectorChange = (value) => {
     this.setState({ ...this.state, showPageSizeSelector: value });
   }
+
   showInfoChange = (value) => {
     this.setState({ ...this.state, showInfo: value });
   }
+
   showNavButtonsChange = (value) => {
     this.setState({ ...this.state, showNavButtons: value });
   }
+
   isCompactMode() {
     return this.state.displayMode === 'compact';
   }
+
   customizeColumns(columns) {
     columns[0].width = 70;
   }
+
   constructor(props) {
     super(props);
     this.state = {
       displayMode: 'full',
       showPageSizeSelector: true,
       showInfo: true,
-      showNavButtons: true
+      showNavButtons: true,
     };
   }
+
   render() {
     return (
       <div>

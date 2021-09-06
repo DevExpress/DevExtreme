@@ -56,7 +56,7 @@ export default {
   components: {
     DxCheckBox,
     DxTextArea,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
       maxLength: null,
       value: service.getContent(),
       valueForEditableTextArea: service.getContent(),
-      valueChangeEvents: service.valueChangeEvents
+      valueChangeEvents: service.valueChangeEvents,
     };
   },
   methods: {
@@ -76,8 +76,8 @@ export default {
         this.value = service.getContent();
         this.maxLength = null;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

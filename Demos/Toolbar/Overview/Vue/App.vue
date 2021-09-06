@@ -65,7 +65,7 @@ export default {
   components: {
     DxToolbar,
     DxList,
-    DxItem
+    DxItem,
   },
   data() {
     return {
@@ -74,13 +74,13 @@ export default {
         type: 'back',
         onClick: () => {
           notify('Back button has been clicked!');
-        }
+        },
       },
       refreshButtonOptions: {
         icon: 'refresh',
         onClick: () => {
           notify('Refresh button has been clicked!');
-        }
+        },
       },
       selectBoxOptions: {
         width: 140,
@@ -95,34 +95,34 @@ export default {
             this.productsStore.filter(null);
           }
           this.productsStore.load();
-        }
+        },
       },
       addButtonOptions: {
         icon: 'plus',
         onClick: () => {
           notify('Add button has been clicked!');
-        }
+        },
       },
       saveButtonOptions: {
-        text:'Save',
+        text: 'Save',
         onClick: () => {
           notify('Save option has been clicked!');
-        }
+        },
       },
       printButtonOptions: {
-        text:'Print',
+        text: 'Print',
         onClick: () => {
           notify('Print option has been clicked!');
-        }
+        },
       },
       settingsButtonOptions: {
-        text:'Settings',
+        text: 'Settings',
         onClick: () => {
           notify('Settings option has been clicked!');
-        }
-      }
+        },
+      },
     };
-  }
+  },
 };
 </script>
 <style>

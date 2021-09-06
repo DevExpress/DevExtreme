@@ -23,12 +23,12 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
-    getFilePath: (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`
-  }
+    getFilePath: (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`,
+  },
 };
 </script>
 <style scoped>

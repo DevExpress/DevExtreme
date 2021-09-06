@@ -71,7 +71,7 @@ import DxPieChart, {
   DxLabel,
   DxFont,
   DxTooltip,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/pie-chart';
 
 import { dataSource, getAnnotationSources } from './data.js';
@@ -90,14 +90,14 @@ export default {
     DxFont,
     DxTooltip,
     DxLegend,
-    TooltipTemplate
+    TooltipTemplate,
   },
   data() {
     return {
       dataSource,
-      annotations: getAnnotationSources()
+      annotations: getAnnotationSources(),
     };
-  }
+  },
 };
 </script>
 

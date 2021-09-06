@@ -59,26 +59,28 @@
   </div>
 </template>
 <script>
+import {
+  DxTreeList, DxScrolling, DxPaging, DxPager, DxColumn, DxLookup,
+} from 'devextreme-vue/tree-list';
 import { tasks, employees } from './data.js';
-import { DxTreeList, DxScrolling, DxPaging, DxPager, DxColumn, DxLookup } from 'devextreme-vue/tree-list';
 
 export default {
   components: {
-    DxTreeList, DxScrolling, DxPaging, DxPager, DxColumn, DxLookup
+    DxTreeList, DxScrolling, DxPaging, DxPager, DxColumn, DxLookup,
   },
   data() {
     return {
-      tasks: tasks,
-      employees: employees,
+      tasks,
+      employees,
       allowedPageSizes: [5, 10, 20],
       statuses: [
         'Not Started',
         'Need Assistance',
         'In Progress',
         'Deferred',
-        'Completed'
-      ]
+        'Completed',
+      ],
     };
-  }
+  },
 };
 </script>

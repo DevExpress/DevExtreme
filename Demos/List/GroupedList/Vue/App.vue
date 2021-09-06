@@ -19,13 +19,13 @@ import { employees } from './data.js';
 
 export default {
   components: {
-    DxList
+    DxList,
   },
   data() {
     return {
-      dataSource: employees
+      dataSource: employees,
     };
-  }
+  },
 };
 </script>
 <style>

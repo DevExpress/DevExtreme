@@ -29,7 +29,7 @@ import { DxScrollView } from 'devextreme-vue/scroll-view';
 export default {
   components: {
     DxPopup,
-    DxScrollView
+    DxScrollView,
   },
   data() {
     return {
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
 
-  }
+  },
 };
 </script>
 <style>

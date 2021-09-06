@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import NumberBox from 'devextreme-react/number-box';
@@ -15,7 +15,7 @@ class App extends React.Component {
       showColon: true,
       minColWidth: 300,
       colCount: 2,
-      company: this.companies[0]
+      company: this.companies[0],
     };
     this.onCompanyChanged = this.onCompanyChanged.bind(this);
     this.onLabelLocationChanged = this.onLabelLocationChanged.bind(this);
@@ -34,7 +34,7 @@ class App extends React.Component {
       minColWidth,
       colCount,
       company,
-      width
+      width,
     } = this.state;
     return (
       <div id="form-demo">
@@ -112,43 +112,43 @@ class App extends React.Component {
 
   onCompanyChanged(e) {
     this.setState({
-      company: e.value
+      company: e.value,
     });
   }
 
   onLabelLocationChanged(e) {
     this.setState({
-      labelLocation: e.value
+      labelLocation: e.value,
     });
   }
 
   onReadOnlyChanged(e) {
     this.setState({
-      readOnly: e.value
+      readOnly: e.value,
     });
   }
 
   onShowColonChanged(e) {
     this.setState({
-      showColon: e.value
+      showColon: e.value,
     });
   }
 
   onMinColWidthChanged(e) {
     this.setState({
-      minColWidth: e.value
+      minColWidth: e.value,
     });
   }
 
   onColumnsCountChanged(e) {
     this.setState({
-      colCount: e.value
+      colCount: e.value,
     });
   }
 
   onFormWidthChanged(e) {
     this.setState({
-      width: e.value
+      width: e.value,
     });
   }
 }

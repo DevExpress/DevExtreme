@@ -7,10 +7,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      typeOptions: colorizationOptions[2].options
+      typeOptions: colorizationOptions[2].options,
     };
     this.setType = this.setType.bind(this);
   }
+
   render() {
     return (
       <React.Fragment>
@@ -44,18 +45,19 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+
   setType(data) {
     this.setState({
-      typeOptions: data.value
+      typeOptions: data.value,
     });
   }
 }
 
 function customizeTooltip(arg) {
-  const data = arg.node.data;
+  const { data } = arg.node;
 
   return {
-    text: arg.node.isLeaf() ? `<span class='product'>${data.name}</span><br/>Sales Amount: ${arg.valueText}` : null
+    text: arg.node.isLeaf() ? `<span class='product'>${data.name}</span><br/>Sales Amount: ${arg.valueText}` : null,
   };
 }
 

@@ -24,19 +24,21 @@
   </div>
 </template>
 <script>
+import {
+  DxPieChart, DxSeries, DxExport, DxTooltip,
+} from 'devextreme-vue/pie-chart';
 import { populationData } from './data.js';
-import { DxPieChart, DxSeries, DxExport, DxTooltip } from 'devextreme-vue/pie-chart';
 import TooltipTemplate from './TooltipTemplate.vue';
 
 export default {
   components: {
-    DxPieChart, DxSeries, DxExport, DxTooltip, TooltipTemplate
+    DxPieChart, DxSeries, DxExport, DxTooltip, TooltipTemplate,
   },
   data() {
     return {
-      populationData: populationData
+      populationData,
     };
-  }
+  },
 };
 </script>
 <style scoped>

@@ -34,7 +34,9 @@
   </DxChart>
 </template>
 <script>
-import { DxChart, DxSeries, DxCommonSeriesSettings, DxLabel, DxArgumentAxis } from 'devextreme-vue/chart';
+import {
+  DxChart, DxSeries, DxCommonSeriesSettings, DxLabel, DxArgumentAxis,
+} from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
 import LabelTemplate from './LabelTemplate.vue';
 
@@ -45,13 +47,13 @@ export default {
     DxCommonSeriesSettings,
     DxLabel,
     DxArgumentAxis,
-    LabelTemplate
+    LabelTemplate,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>
 <style>

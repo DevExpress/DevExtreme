@@ -52,7 +52,9 @@
 </template>
 <script>
 
-import { DxDiagram, DxNodes, DxAutoLayout, DxCustomShape } from 'devextreme-vue/diagram';
+import {
+  DxDiagram, DxNodes, DxAutoLayout, DxCustomShape,
+} from 'devextreme-vue/diagram';
 import { DxPopup } from 'devextreme-vue/popup';
 import ArrayStore from 'devextreme/data/array_store';
 import CustomShapeTemplate from './CustomShapeTemplate.vue';
@@ -60,17 +62,17 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, CustomShapeTemplate, DxPopup
+    DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, CustomShapeTemplate, DxPopup,
   },
   data() {
     return {
       employees: service.getEmployees(),
       dataSource: new ArrayStore({
         key: 'ID',
-        data: service.getEmployees()
+        data: service.getEmployees(),
       }),
       currentEmployee: {},
-      popupVisible: false
+      popupVisible: false,
     };
   },
   methods: {
@@ -80,8 +82,8 @@ export default {
     showInfo(employee) {
       this.currentEmployee = employee;
       this.popupVisible = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

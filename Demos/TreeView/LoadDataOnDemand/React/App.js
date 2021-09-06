@@ -1,10 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import 'whatwg-fetch';
 
 class App extends React.Component {
   render() {
-
     return (
       <React.Fragment>
         <TreeView
@@ -17,11 +16,12 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+
   createChildren(parent) {
-    let parentId = parent ? parent.itemData.id : '';
+    const parentId = parent ? parent.itemData.id : '';
 
     return fetch(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`)
-      .then(response => response.json())
+      .then((response) => response.json())
       .catch(() => { throw 'Data Loading Error'; });
   }
 }

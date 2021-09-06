@@ -3,15 +3,15 @@ import { countriesGDP } from './data.js';
 
 import PieChart from './PieChartComponent.js';
 
-const format = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 0
-}).format;
+const { format } = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 0,
+});
 
 function getPieData(name) {
   return countriesGDP[name] ? [
     { name: 'industry', value: countriesGDP[name].industry },
     { name: 'services', value: countriesGDP[name].services },
-    { name: 'agriculture', value: countriesGDP[name].agriculture }
+    { name: 'agriculture', value: countriesGDP[name].agriculture },
   ] : null;
 }
 
@@ -21,15 +21,15 @@ export default function TooltipTemplate(info) {
   const total = countryGDPData && countryGDPData.total;
   const pieData = getPieData(name);
 
-  const gdpInfo = total ?
-    <div id="nominal">
+  const gdpInfo = total
+    ? <div id="nominal">
       {`Nominal GDP: $${format(total)}M`}
-    </div> :
-    null;
+    </div>
+    : null;
 
-  const graphic = pieData ?
-    <PieChart data={pieData}></PieChart> :
-    <div>No economic development data</div>;
+  const graphic = pieData
+    ? <PieChart data={pieData}></PieChart>
+    : <div>No economic development data</div>;
 
   return (
     <div>

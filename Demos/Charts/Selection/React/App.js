@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
@@ -6,12 +6,11 @@ import Chart, {
   Format,
   ValueAxis,
   Legend,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 import { exportData } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart
@@ -66,7 +65,7 @@ function onPointClick({ target: point }) {
 }
 
 function onLegendClick({ target: series }) {
-  if(series.isVisible()) {
+  if (series.isVisible()) {
     series.hide();
   } else {
     series.show();

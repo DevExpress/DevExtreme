@@ -82,29 +82,30 @@
 import DxTabPanel from 'devextreme-vue/tab-panel';
 import DxTreeView from 'devextreme-vue/tree-view';
 import { continents } from './data.js';
+
 export default {
   components: {
     DxTabPanel,
-    DxTreeView
+    DxTreeView,
   },
-  data: function() {
+  data() {
     return {
       continents,
       tabPanelIndex: 0,
       countryData: continents[0].items[0],
-      citiesData: continents[0].items[0].cities
+      citiesData: continents[0].items[0].cities,
     };
   },
   methods: {
     changeSelection(e) {
-      var countryData = e.itemData;
-      if(countryData.cities) {
+      const countryData = e.itemData;
+      if (countryData.cities) {
         this.countryData = e.itemData;
         this.citiesData = countryData.cities;
         this.tabPanelIndex = 0;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style src="./styles.css"></style>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
-  Export
+  Export,
 } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
@@ -17,17 +17,17 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     dataField: 'region',
     area: 'row',
-    expanded: true
+    expanded: true,
   }, {
     caption: 'City',
     dataField: 'city',
     area: 'row',
-    width: 150
+    width: 150,
   }, {
     dataField: 'date',
     dataType: 'date',
     area: 'column',
-    expanded: true
+    expanded: true,
   }, {
     caption: 'Sales',
     dataField: 'amount',
@@ -36,7 +36,7 @@ const dataSource = new PivotGridDataSource({
     summaryType: 'sum',
     format: 'currency',
   }],
-  store: sales
+  store: sales,
 });
 
 export default function App() {
@@ -46,7 +46,7 @@ export default function App() {
 
     exportPivotGrid({
       component: e.component,
-      worksheet: worksheet
+      worksheet,
     }).then(() => {
       workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');

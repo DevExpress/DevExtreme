@@ -144,8 +144,8 @@ import { DxBox, DxItem } from 'devextreme-vue/box';
 export default {
   components: {
     DxBox,
-    DxItem
-  }
+    DxItem,
+  },
 };
 </script>
 <style>

@@ -40,7 +40,7 @@ import {
   DxPaging,
   DxSelection,
   DxScrolling,
-  DxColumn
+  DxColumn,
 } from 'devextreme-vue/data-grid';
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
 
@@ -53,37 +53,37 @@ export default {
     DxSelection,
     DxScrolling,
     DxColumn,
-    DxDropDownBox
+    DxDropDownBox,
   },
   props: {
     value: {
       type: Number,
-      default: null
+      default: null,
     },
     onValueChanged: {
       type: Function,
-      default: () => function() {}
+      default: () => function() {},
     },
     dataSource: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
       currentValue: this.value,
       dropDownOptions: { width: 500 },
-      dropDownBoxRefName
+      dropDownBoxRefName,
     };
   },
   methods: {
     onSelectionChanged(selectionChangedArgs) {
       this.currentValue = selectionChangedArgs.selectedRowKeys[0];
       this.onValueChanged(this.currentValue);
-      if(selectionChangedArgs.selectedRowKeys.length > 0) {
+      if (selectionChangedArgs.selectedRowKeys.length > 0) {
         this.$refs[dropDownBoxRefName].instance.close();
       }
-    }
-  }
+    },
+  },
 };
 </script>

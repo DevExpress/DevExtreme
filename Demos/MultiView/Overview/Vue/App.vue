@@ -72,16 +72,16 @@ import { multiViewItems } from './data.js';
 export default {
   components: {
     DxCheckBox,
-    DxMultiView
+    DxMultiView,
   },
   data() {
     return {
       selectedIndex: 0,
       loop: false,
       animationEnabled: true,
-      companies: multiViewItems
+      companies: multiViewItems,
     };
-  }
+  },
 };
 </script>
 <style>

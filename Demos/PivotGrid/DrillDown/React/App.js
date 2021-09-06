@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   PivotGrid,
-  FieldChooser
+  FieldChooser,
 } from 'devextreme-react/pivot-grid';
 import { DataGrid, Column } from 'devextreme-react/data-grid';
 import { Popup } from 'devextreme-react/popup';
@@ -16,15 +16,16 @@ class App extends React.Component {
     this.state = {
       popupTitle: '',
       drillDownDataSource: null,
-      popupVisible: false
+      popupVisible: false,
     };
     this.onCellClick = this.onCellClick.bind(this);
     this.onHiding = this.onHiding.bind(this);
     this.onShown = this.onShown.bind(this);
     this.getDataGridInstance = this.getDataGridInstance.bind(this);
   }
+
   render() {
-    let { drillDownDataSource, popupTitle, popupVisible } = this.state;
+    const { drillDownDataSource, popupTitle, popupVisible } = this.state;
 
     return (
       <React.Fragment>
@@ -63,27 +64,31 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+
   getDataGridInstance(ref) {
     this.dataGrid = ref.instance;
   }
+
   onCellClick(e) {
     if (e.area == 'data') {
-      var pivotGridDataSource = e.component.getDataSource(),
-        rowPathLength = e.cell.rowPath.length,
-        rowPathName = e.cell.rowPath[rowPathLength - 1];
+      const pivotGridDataSource = e.component.getDataSource();
+      const rowPathLength = e.cell.rowPath.length;
+      const rowPathName = e.cell.rowPath[rowPathLength - 1];
 
       this.setState({
-        popupTitle: `${rowPathName ? rowPathName : 'Total'} Drill Down Data`,
+        popupTitle: `${rowPathName || 'Total'} Drill Down Data`,
         drillDownDataSource: pivotGridDataSource.createDrillDownDataSource(e.cell),
-        popupVisible: true
+        popupVisible: true,
       });
     }
   }
+
   onHiding() {
     this.setState({
-      popupVisible: false
+      popupVisible: false,
     });
   }
+
   onShown() {
     this.dataGrid.updateDimensions();
   }
@@ -95,23 +100,23 @@ const dataSource = new PivotGridDataSource({
     caption: 'Region',
     width: 120,
     dataField: 'region',
-    area: 'row'
+    area: 'row',
   }, {
     caption: 'City',
     dataField: 'city',
     width: 150,
-    area: 'row'
+    area: 'row',
   }, {
     dataField: 'date',
     dataType: 'date',
-    area: 'column'
+    area: 'column',
   }, {
     caption: 'Total',
     dataField: 'amount',
     dataType: 'number',
     summaryType: 'sum',
     format: 'currency',
-    area: 'data'
+    area: 'data',
   }],
-  store: sales
+  store: sales,
 });

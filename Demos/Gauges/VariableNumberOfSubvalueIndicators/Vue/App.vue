@@ -41,19 +41,27 @@
   </div>
 </template>
 <script>
-import { dataSource } from './data.js';
-import { DxLinearGauge, DxScale, DxLabel, DxTooltip, DxExport, DxTitle, DxFont } from 'devextreme-vue/linear-gauge';
+import {
+  DxLinearGauge, DxScale, DxLabel, DxTooltip, DxExport, DxTitle, DxFont,
+} from 'devextreme-vue/linear-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
+import { dataSource } from './data.js';
 
 export default {
   components: {
-    DxLinearGauge, DxScale, DxLabel, DxTooltip, DxExport, DxTitle, DxFont,
-    DxSelectBox
+    DxLinearGauge,
+    DxScale,
+    DxLabel,
+    DxTooltip,
+    DxExport,
+    DxTitle,
+    DxFont,
+    DxSelectBox,
   },
   data() {
     return {
-      dataSource: dataSource,
-      value: dataSource[0]
+      dataSource,
+      value: dataSource[0],
     };
   },
   methods: {
@@ -61,17 +69,17 @@ export default {
       return `${valueText} kW`;
     },
     customizeTooltip(scaleValue) {
-      var result = `${scaleValue.valueText} kW`;
+      let result = `${scaleValue.valueText} kW`;
       if (scaleValue.index >= 0) {
         result = `Secondary ${scaleValue.index + 1}: ${result}`;
       } else {
         result = `Primary: ${result}`;
       }
       return {
-        text: result
+        text: result,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -9,8 +9,8 @@ export default {
   props: {
     cellData: {
       type: Object,
-      default: () => {}
-    }
-  }
+      default: () => {},
+    },
+  },
 };
 </script>

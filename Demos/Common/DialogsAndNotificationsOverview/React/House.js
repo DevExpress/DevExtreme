@@ -6,18 +6,17 @@ const formatCurrency = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
-  maximumFractionDigits: 2
+  maximumFractionDigits: 2,
 }).format;
 
 const position = {
   offset: '0, 2',
   at: 'bottom',
   my: 'top',
-  collision: 'fit flip'
+  collision: 'fit flip',
 };
 
 class House extends React.PureComponent {
-
   constructor(props) {
     super(props);
 
@@ -26,7 +25,7 @@ class House extends React.PureComponent {
   }
 
   render() {
-    const house = this.props.house;
+    const { house } = this.props;
     return (
       <div>
         <div onClick={this.show} className="item-content">

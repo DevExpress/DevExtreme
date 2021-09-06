@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid from 'devextreme-react/data-grid';
 import { orders } from './data.js';
 

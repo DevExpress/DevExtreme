@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import Diagram, { Nodes, AutoLayout, Edges, Toolbox, Group } from 'devextreme-react/diagram';
+import React from 'react';
+import Diagram, {
+  Nodes, AutoLayout, Edges, Toolbox, Group,
+} from 'devextreme-react/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.js';
 
@@ -9,11 +11,11 @@ class App extends React.Component {
 
     this.orgItemsDataSource = new ArrayStore({
       key: 'id',
-      data: service.getOrgItems()
+      data: service.getOrgItems(),
     });
     this.orgLinksDataSource = new ArrayStore({
       key: 'id',
-      data: service.getOrgLinks()
+      data: service.getOrgLinks(),
     });
   }
 

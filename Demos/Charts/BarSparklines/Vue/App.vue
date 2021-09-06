@@ -44,35 +44,33 @@ import RowTemplate from './RowTemplate.vue';
 
 const source = new DataSource({
   store: new CustomStore({
-    load: () => {
-      return fetch('../../../../data/resourceData.json')
-        .then(e => e.json())
-        .catch(() => { throw 'Data Loading Error'; });
-    },
-    loadMode: 'raw'
+    load: () => fetch('../../../../data/resourceData.json')
+      .then((e) => e.json())
+      .catch(() => { throw 'Data Loading Error'; }),
+    loadMode: 'raw',
   }),
   filter: ['month', '<=', '12'],
-  paginate: false
+  paginate: false,
 });
 
 export default {
   components: {
     RowTemplate,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
       months: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
       years: ['2010', '2011', '2012'],
-      source
+      source,
     };
   },
-  methods:{
+  methods: {
     onValueChanged(e) {
       this.source.filter(['month', '<=', e.value]);
       this.source.load();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

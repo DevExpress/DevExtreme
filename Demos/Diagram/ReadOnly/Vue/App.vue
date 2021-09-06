@@ -11,21 +11,19 @@ import 'whatwg-fetch';
 
 export default {
   components: {
-    DxDiagram
+    DxDiagram,
   },
   mounted() {
-    var diagram = this.$refs['diagram'].instance;
+    const diagram = this.$refs.diagram.instance;
     fetch('../../../../data/diagram-structure.json')
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(json) {
+      .then((response) => response.json())
+      .then((json) => {
         diagram.import(JSON.stringify(json));
       })
-      .catch(function() {
+      .catch(() => {
         throw 'Data Loading Error';
       });
-  }
+  },
 };
 </script>
 <style scoped>

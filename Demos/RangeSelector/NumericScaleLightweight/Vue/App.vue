@@ -24,7 +24,7 @@ import {
   DxScale,
   DxMinorTick,
   DxLabel,
-  DxSliderMarker
+  DxSliderMarker,
 } from 'devextreme-vue/range-selector';
 
 export default {
@@ -34,13 +34,13 @@ export default {
     DxScale,
     DxMinorTick,
     DxLabel,
-    DxSliderMarker
+    DxSliderMarker,
   },
   data() {
     return {
-      range: [40000, 80000]
+      range: [40000, 80000],
     };
-  }
+  },
 };
 </script>
 <style scoped>

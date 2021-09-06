@@ -1,10 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 
 import { Chart, Series } from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart id="chart" dataSource={dataSource}>

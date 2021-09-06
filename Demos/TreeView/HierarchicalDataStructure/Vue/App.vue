@@ -23,20 +23,20 @@ import service from './data.js';
 
 export default {
   components: {
-    DxTreeView
+    DxTreeView,
   },
   data() {
     const products = service.getProducts();
     return {
       products,
-      currentItem: products[0]
+      currentItem: products[0],
     };
   },
   methods: {
     selectItem(e) {
       this.currentItem = e.itemData;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

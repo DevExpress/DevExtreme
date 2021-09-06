@@ -5,7 +5,7 @@ import VectorMap, {
   Layer,
   Legend,
   Source,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
@@ -64,16 +64,15 @@ export default function App() {
 function customizeText(arg) {
   if (arg.index === 0) {
     return '< 0.5%';
-  } else if (arg.index === 5) {
+  } if (arg.index === 5) {
     return '> 3%';
-  } else {
-    return `${arg.start}% to ${arg.end}%`;
   }
+  return `${arg.start}% to ${arg.end}%`;
 }
 
 function customizeTooltip(arg) {
   return {
-    text: arg.attribute('text')
+    text: arg.attribute('text'),
   };
 }
 
@@ -87,8 +86,8 @@ function customizeItems(items) {
 
 function customizeLayer(elements) {
   elements.forEach((element) => {
-    let name = element.attribute('name'),
-      population = populations[name];
+    const name = element.attribute('name');
+    const population = populations[name];
     if (population) {
       element.attribute('population', population);
     }

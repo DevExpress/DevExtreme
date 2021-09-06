@@ -32,7 +32,7 @@ import {
   DxVectorMap,
   DxLabel,
   DxLayer,
-  DxFont
+  DxFont,
 } from 'devextreme-vue/vector-map';
 
 import { weatherData } from './data.js';
@@ -42,15 +42,15 @@ export default {
     DxVectorMap,
     DxLabel,
     DxLayer,
-    DxFont
+    DxFont,
   },
   data() {
     return {
       weatherData,
       usa: mapsData.usa,
-      bounds: [-118, 52, -80, 20]
+      bounds: [-118, 52, -80, 20],
     };
-  }
+  },
 };
 </script>
 <style>

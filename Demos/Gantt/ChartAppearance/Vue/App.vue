@@ -112,7 +112,7 @@ import {
   DxResources,
   DxResourceAssignments,
   DxColumn,
-  DxEditing
+  DxEditing,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -122,7 +122,7 @@ import {
   tasks,
   dependencies,
   resources,
-  resourceAssignments
+  resourceAssignments,
 } from './data.js';
 
 export default {
@@ -136,20 +136,20 @@ export default {
     DxEditing,
     DxCheckBox,
     DxSelectBox,
-    DxDateBox
+    DxDateBox,
   },
   data() {
     return {
-      tasks: tasks,
-      dependencies: dependencies,
-      resources: resources,
-      resourceAssignments: resourceAssignments,
+      tasks,
+      dependencies,
+      resources,
+      resourceAssignments,
       scaleType: 'months',
       taskTitlePosition: 'outside',
       showResources: true,
       showCustomTaskTooltip: true,
       startDateRange: new Date(2018, 11, 1),
-      endDateRange: new Date(2019, 11, 1)
+      endDateRange: new Date(2019, 11, 1),
     };
   },
   methods: {
@@ -159,8 +159,8 @@ export default {
     getTimeLeft(task) {
       const timeEstimate = Math.abs(task.start - task.end) / 36e5;
       return Math.floor((100 - task.progress) / 100 * timeEstimate);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

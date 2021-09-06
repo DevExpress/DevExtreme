@@ -57,7 +57,7 @@ import DxChart, {
   DxSeries,
   DxTooltip,
   DxValueAxis,
-  DxBreakStyle
+  DxBreakStyle,
 } from 'devextreme-vue/chart';
 
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -74,7 +74,7 @@ export default {
     DxValueAxis,
     DxBreakStyle,
     DxSelectBox,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     const lineStyles = ['waved', 'straight'];
@@ -85,9 +85,9 @@ export default {
       lineStyles,
       breaksCount: [1, 2, 3, 4],
       lineStyleValue: lineStyles[0],
-      breaksCountValue: 3
+      breaksCountValue: 3,
     };
-  }
+  },
 };
 </script>
 <style>

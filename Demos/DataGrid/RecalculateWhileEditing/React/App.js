@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Column, Editing, Summary, TotalItem } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, Editing, Summary, TotalItem,
+} from 'devextreme-react/data-grid';
 import service from './data.js';
 
 class App extends React.Component {
@@ -7,6 +9,7 @@ class App extends React.Component {
     super(props);
     this.orders = service.getOrders();
   }
+
   render() {
     return (
       <React.Fragment>

@@ -112,7 +112,7 @@ export default {
     DxSortable,
     DxSelectBox,
     DxCheckBox,
-    DxNumberBox
+    DxNumberBox,
   },
   data() {
     return {
@@ -123,7 +123,7 @@ export default {
       scrollSpeed: 30,
       scrollSensitivity: 60,
       handle: '',
-      dragTemplate: ''
+      dragTemplate: '',
     };
   },
   computed: {
@@ -132,7 +132,7 @@ export default {
     },
     cursorOffset() {
       return this.dragTemplate ? { x: 10, y: 20 } : null;
-    }
+    },
   },
   methods: {
     onDragStart(e) {
@@ -154,8 +154,8 @@ export default {
 
     onDragTemplateChanged(e) {
       this.dragTemplate = e.value ? 'drag' : '';
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

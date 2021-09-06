@@ -68,7 +68,7 @@ import service from './data.js';
 
 export default {
   components: {
-    DxAccordion, DxTagBox, DxCheckBox, DxSlider, DxTooltip, DxLabel, CustomTitle, CustomItem
+    DxAccordion, DxTagBox, DxCheckBox, DxSlider, DxTooltip, DxLabel, CustomTitle, CustomItem,
   },
   data() {
     const companies = service.getCompanies();
@@ -77,9 +77,9 @@ export default {
       selectedItems: [companies[0]],
       multiple: false,
       collapsible: false,
-      animationDuration: 300
+      animationDuration: 300,
     };
-  }
+  },
 };
 </script>
 <style scoped>

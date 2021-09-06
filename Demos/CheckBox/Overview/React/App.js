@@ -1,19 +1,21 @@
-﻿import React from 'react';
+import React from 'react';
 import { CheckBox } from 'devextreme-react/check-box';
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      checkBoxValue: undefined
+      checkBoxValue: undefined,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
   }
+
   onValueChanged(args) {
     this.setState({
-      checkBoxValue: args.value
+      checkBoxValue: args.value,
     });
   }
+
   render() {
     return (
       <div className="form">

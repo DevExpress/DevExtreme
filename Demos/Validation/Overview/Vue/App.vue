@@ -185,7 +185,7 @@ import {
   DxPatternRule,
   DxStringLengthRule,
   DxRangeRule,
-  DxAsyncRule
+  DxAsyncRule,
 } from 'devextreme-vue/validator';
 
 import notify from 'devextreme/ui/notify';
@@ -194,7 +194,7 @@ import service from './data.js';
 const sendRequest = function(value) {
   const validEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
-    setTimeout(function() {
+    setTimeout(() => {
       resolve(value === validEmail);
     }, 1000);
   });
@@ -215,14 +215,14 @@ export default {
     DxStringLengthRule,
     DxRangeRule,
     DxAsyncRule,
-    DxValidationSummary
+    DxValidationSummary,
   },
   data() {
     const currentDate = new Date();
     return {
       countries: service.getCountries(),
       phoneRules: {
-        X: /[02-9]/
+        X: /[02-9]/,
       },
       password: '',
       namePattern: /^[^0-9]+$/,
@@ -245,13 +245,13 @@ export default {
         message: 'You have submitted the form',
         position: {
           my: 'center top',
-          at: 'center top'
-        }
+          at: 'center top',
+        },
       }, 'success', 3000);
 
       e.preventDefault();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

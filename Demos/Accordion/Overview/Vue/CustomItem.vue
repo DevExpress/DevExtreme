@@ -34,8 +34,8 @@ export default {
   props: {
     itemData: {
       type: Object,
-      default: () => {}
-    }
-  }
+      default: () => {},
+    },
+  },
 };
 </script>

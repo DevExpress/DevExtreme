@@ -25,9 +25,9 @@ export default {
   props: {
     employee: {
       type: Object,
-      default: () => {}
-    }
-  }
+      default: () => {},
+    },
+  },
 };
 </script>
 <style>

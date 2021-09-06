@@ -1,14 +1,14 @@
 import React from 'react';
+import TreeMap, { Size, Title, Colorizer } from 'devextreme-react/tree-map';
 import { citiesPopulation } from './data.js';
 
-import TreeMap, { Size, Title, Colorizer } from 'devextreme-react/tree-map';
 import TreeMapBreadcrumbs from './TreeMapBreadcrumbs.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      drillInfo: []
+      drillInfo: [],
     };
     this.nodeClick = this.nodeClick.bind(this);
     this.drill = this.drill.bind(this);
@@ -46,16 +46,16 @@ class App extends React.Component {
   }
 
   drill(e) {
-    let drillInfo = [];
-    for(let node = e.node.getParent(); node; node = node.getParent()) {
+    const drillInfo = [];
+    for (let node = e.node.getParent(); node; node = node.getParent()) {
       drillInfo.unshift({
         text: node.label() || 'All Continents',
-        node: node
+        node,
       });
     }
-    if(drillInfo.length) {
+    if (drillInfo.length) {
       drillInfo.push({
-        text: e.node.label()
+        text: e.node.label(),
       });
     }
 
@@ -63,7 +63,7 @@ class App extends React.Component {
   }
 
   drillInfoClick(node) {
-    if(node) {
+    if (node) {
       node.drillDown();
     }
   }

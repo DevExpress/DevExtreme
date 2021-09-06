@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Column, FilterRow, HeaderFilter, SearchPanel } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, FilterRow, HeaderFilter, SearchPanel,
+} from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
@@ -13,40 +15,40 @@ class App extends React.Component {
     this.orders = service.getOrders();
     this.applyFilterTypes = [{
       key: 'auto',
-      name: 'Immediately'
+      name: 'Immediately',
     }, {
       key: 'onClick',
-      name: 'On Button Click'
+      name: 'On Button Click',
     }];
     this.saleAmountHeaderFilter = [{
       text: 'Less than $3000',
-      value: ['SaleAmount', '<', 3000]
+      value: ['SaleAmount', '<', 3000],
     }, {
       text: '$3000 - $5000',
       value: [
         ['SaleAmount', '>=', 3000],
-        ['SaleAmount', '<', 5000]
-      ]
+        ['SaleAmount', '<', 5000],
+      ],
     }, {
       text: '$5000 - $10000',
       value: [
         ['SaleAmount', '>=', 5000],
-        ['SaleAmount', '<', 10000]
-      ]
+        ['SaleAmount', '<', 10000],
+      ],
     }, {
       text: '$10000 - $20000',
       value: [
         ['SaleAmount', '>=', 10000],
-        ['SaleAmount', '<', 20000]
-      ]
+        ['SaleAmount', '<', 20000],
+      ],
     }, {
       text: 'Greater than $20000',
-      value: ['SaleAmount', '>=', 20000]
+      value: ['SaleAmount', '>=', 20000],
     }];
     this.state = {
       showFilterRow: true,
       showHeaderFilter: true,
-      currentFilter: this.applyFilterTypes[0].key
+      currentFilter: this.applyFilterTypes[0].key,
     };
     this.dataGrid = null;
     this.orderHeaderFilter = this.orderHeaderFilter.bind(this);
@@ -54,6 +56,7 @@ class App extends React.Component {
     this.onShowHeaderFilterChanged = this.onShowHeaderFilterChanged.bind(this);
     this.onCurrentFilterChanged = this.onCurrentFilterChanged.bind(this);
   }
+
   render() {
     return (
       <div>
@@ -123,39 +126,45 @@ class App extends React.Component {
       </div>
     );
   }
+
   calculateFilterExpression(value, selectedFilterOperations, target) {
-    let column = this;
+    const column = this;
     if (target === 'headerFilter' && value === 'weekends') {
       return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
     }
     return column.defaultCalculateFilterExpression.apply(this, arguments);
   }
+
   orderHeaderFilter(data) {
     data.dataSource.postProcess = (results) => {
       results.push({
         text: 'Weekends',
-        value: 'weekends'
+        value: 'weekends',
       });
       return results;
     };
   }
+
   onShowFilterRowChanged(e) {
     this.setState({
-      showFilterRow: e.value
+      showFilterRow: e.value,
     });
     this.clearFilter();
   }
+
   onShowHeaderFilterChanged(e) {
     this.setState({
-      showHeaderFilter: e.value
+      showHeaderFilter: e.value,
     });
     this.clearFilter();
   }
+
   onCurrentFilterChanged(e) {
     this.setState({
-      currentFilter: e.value
+      currentFilter: e.value,
     });
   }
+
   clearFilter() {
     this.dataGrid.instance.clearFilter();
   }

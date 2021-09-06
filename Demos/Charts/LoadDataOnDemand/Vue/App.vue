@@ -52,7 +52,7 @@ import DxChart, {
   DxFont,
   DxAnimation,
   DxLoadingIndicator,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/chart';
 
 import DataSource from 'devextreme/data/data_source';
@@ -74,50 +74,50 @@ export default {
     DxFont,
     DxAnimation,
     DxLoadingIndicator,
-    DxLegend
+    DxLegend,
   },
 
   data() {
     return {
       visualRange: {
         startValue: new Date(2017, 3, 1),
-        endValue: new Date(2017, 3, 15)
+        endValue: new Date(2017, 3, 15),
       },
       chartDataSource: new DataSource({
         store: [],
         sort: 'date',
-        paginate: false
+        paginate: false,
       }),
       bounds: {
         startValue: new Date(2017, 0, 1),
-        endValue: new Date(2017, 11, 31)
-      }
+        endValue: new Date(2017, 11, 31),
+      },
     };
   },
 
   computed: {
     currentVisualRange: {
-      get: function() {
+      get() {
         return this.visualRange;
       },
-      set: function(newRange) {
+      set(newRange) {
         const stateStart = this.visualRange.startValue;
         const currentStart = newRange.startValue;
-        if(stateStart.valueOf() !== currentStart.valueOf()) {
+        if (stateStart.valueOf() !== currentStart.valueOf()) {
           this.visualRange = newRange;
         }
         this.onVisualRangeChanged();
-      }
-    }
+      },
+    },
   },
 
   methods: {
     onVisualRangeChanged() {
       const component = this.$refs.chart.instance;
       const items = component.getDataSource().items();
-      if(!items.length ||
-        items[0].date - this.visualRange.startValue >= HALFDAY ||
-        this.visualRange.endValue - items[items.length - 1].date >= HALFDAY) {
+      if (!items.length
+        || items[0].date - this.visualRange.startValue >= HALFDAY
+        || this.visualRange.endValue - items[items.length - 1].date >= HALFDAY) {
         this.uploadDataByVisualRange(this.visualRange, component);
       }
     },
@@ -129,28 +129,26 @@ export default {
         startVisible: this.getDateString(visualRange.startValue),
         endVisible: this.getDateString(visualRange.endValue),
         startBound: this.getDateString(storage.length ? storage[0].date : null),
-        endBound: this.getDateString(storage.length ?
-          storage[storage.length - 1].date : null)
+        endBound: this.getDateString(storage.length
+          ? storage[storage.length - 1].date : null),
       };
 
-      if(ajaxArgs.startVisible !== ajaxArgs.startBound &&
-        ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
+      if (ajaxArgs.startVisible !== ajaxArgs.startBound
+        && ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
         packetsLock++;
         component.showLoadingIndicator();
 
         this.getDataFrame(ajaxArgs)
-          .then(dataFrame => {
+          .then((dataFrame) => {
             packetsLock--;
-            dataFrame = dataFrame.map(i => {
-              return {
-                date: new Date(i.Date),
-                minTemp: i.MinTemp,
-                maxTemp: i.MaxTemp
-              };
-            });
+            dataFrame = dataFrame.map((i) => ({
+              date: new Date(i.Date),
+              minTemp: i.MinTemp,
+              maxTemp: i.MaxTemp,
+            }));
 
             const componentStorage = dataSource.store();
-            dataFrame.forEach(item => componentStorage.insert(item));
+            dataFrame.forEach((item) => componentStorage.insert(item));
             dataSource.reload();
 
             this.onVisualRangeChanged();
@@ -171,13 +169,13 @@ export default {
         &endBound=${args.endBound}`;
 
       return fetch(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`)
-        .then(response => response.json());
+        .then((response) => response.json());
     },
 
     getDateString(dateTime) {
       return dateTime ? dateTime.toLocaleDateString('en-US') : '';
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

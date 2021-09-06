@@ -40,7 +40,7 @@ export default {
   components: {
     DxFilterBuilder,
     DxCustomOperation,
-    EditorComponent
+    EditorComponent,
   },
   data() {
     return {
@@ -48,7 +48,7 @@ export default {
       filter,
       filterText: '',
       groupOperations: ['and', 'or'],
-      dataSourceText: ''
+      dataSourceText: '',
     };
   },
   methods: {
@@ -58,11 +58,9 @@ export default {
     },
     calculateFilterExpression(filterValue, field) {
       return filterValue && filterValue.length
-        && Array.prototype.concat.apply([], filterValue.map(function(value) {
-          return [[field.dataField, '=', value], 'or'];
-        })).slice(0, -1);
-    }
-  }
+        && Array.prototype.concat.apply([], filterValue.map((value) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
+    },
+  },
 };
 </script>
 <style scoped>

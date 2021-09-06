@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, {
   Column,
@@ -7,7 +7,7 @@ import DataGrid, {
   Selection,
   Lookup,
   Toolbar,
-  Item
+  Item,
 } from 'devextreme-react/data-grid';
 
 import { Button } from 'devextreme-react/button';
@@ -19,22 +19,21 @@ import { employees, states } from './data.js';
 const dataSource = new DataSource({
   store: new ArrayStore({
     data: employees,
-    key: 'ID'
-  })
+    key: 'ID',
+  }),
 });
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItemKeys: []
+      selectedItemKeys: [],
     };
     this.selectionChanged = this.selectionChanged.bind(this);
     this.deleteRecords = this.deleteRecords.bind(this);
   }
 
   render() {
-
     return (
       <div id="data-grid-demo">
         <DataGrid id="gridContainer"
@@ -73,18 +72,20 @@ class App extends React.Component {
       </div>
     );
   }
+
   deleteRecords() {
     this.state.selectedItemKeys.forEach((key) => {
       dataSource.store().remove(key);
     });
     this.setState({
-      selectedItemKeys: []
+      selectedItemKeys: [],
     });
     dataSource.reload();
   }
+
   selectionChanged(data) {
     this.setState({
-      selectedItemKeys: data.selectedRowKeys
+      selectedItemKeys: data.selectedRowKeys,
     });
   }
 }

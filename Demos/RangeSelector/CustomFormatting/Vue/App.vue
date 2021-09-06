@@ -36,7 +36,7 @@ import {
   DxLabel,
   DxSliderMarker,
   DxFormat,
-  DxBehavior
+  DxBehavior,
 } from 'devextreme-vue/range-selector';
 
 export default {
@@ -47,13 +47,13 @@ export default {
     DxLabel,
     DxSliderMarker,
     DxFormat,
-    DxBehavior
+    DxBehavior,
   },
   methods: {
     customizeText({ valueText }) {
       return `${valueText} mg/L`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

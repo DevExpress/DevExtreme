@@ -19,16 +19,16 @@ import DxTreeView from 'devextreme-vue/tree-view';
 
 export default {
   components: {
-    DxTreeView
+    DxTreeView,
   },
   setup() {
     return {
       dataSource: new DataSource({
         store: new ODataStore({
-          url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems'
-        })
-      })
+          url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
+        }),
+      }),
     };
-  }
+  },
 };
 </script>

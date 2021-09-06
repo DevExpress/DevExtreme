@@ -2,7 +2,7 @@ function generateData(start, end, step) {
   const data = [];
   for (let i = start; i < end; i += step) {
     const originalValue = Math.sin(i) / i;
-    data.push({ value: originalValue + ((0.5 - Math.random()) / 10), originalValue: originalValue, argument: i });
+    data.push({ value: originalValue + ((0.5 - Math.random()) / 10), originalValue, argument: i });
   }
   return data;
 }

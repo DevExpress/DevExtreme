@@ -57,7 +57,7 @@
 
 import {
   DxDataGrid,
-  DxColumn
+  DxColumn,
 } from 'devextreme-vue/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
@@ -70,37 +70,37 @@ export default {
     DxDataGrid,
     DxColumn,
     PriceCell,
-    ChangeCell
+    ChangeCell,
   },
   data() {
     return {
       connectionStarted: false,
-      dataSource: null
+      dataSource: null,
     };
   },
   mounted() {
-    var hubConnection = new HubConnectionBuilder()
+    const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
         skipNegotiation: true,
-        transport: HttpTransportType.WebSockets
+        transport: HttpTransportType.WebSockets,
       })
       .build();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
       load: () => hubConnection.invoke('getAllStocks'),
-      key: 'symbol'
+      key: 'symbol',
     });
 
     hubConnection
       .start()
       .then(() => {
         hubConnection.on('updateStockPrice', (data) => {
-          store.push([{ type: 'update', key: data.symbol, data: data }]);
+          store.push([{ type: 'update', key: data.symbol, data }]);
         });
         this.dataSource = store;
         this.connectionStarted = true;
       });
-  }
+  },
 };
 </script>
 

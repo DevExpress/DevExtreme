@@ -73,7 +73,7 @@ import {
   DxHeaderFilter,
   DxEditing,
   DxRequiredRule,
-  DxLookup
+  DxLookup,
 } from 'devextreme-vue/tree-list';
 import AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -88,7 +88,7 @@ export default {
     DxHeaderFilter,
     DxEditing,
     DxRequiredRule,
-    DxLookup
+    DxLookup,
   },
   data() {
     return {
@@ -98,21 +98,21 @@ export default {
         insertUrl: `${url}/InsertTask`,
         updateUrl: `${url}/UpdateTask`,
         deleteUrl: `${url}/DeleteTask`,
-        onBeforeSend: function(method, ajaxOptions) {
+        onBeforeSend(method, ajaxOptions) {
           ajaxOptions.xhrFields = { withCredentials: true };
-        }
+        },
       }),
       employeesData: AspNetData.createStore({
         key: 'ID',
-        loadUrl: `${url}/TaskEmployees`
+        loadUrl: `${url}/TaskEmployees`,
       }),
       statusesData: [
         'Not Started',
         'Need Assistance',
         'In Progress',
         'Deferred',
-        'Completed'
-      ]
+        'Completed',
+      ],
     };
   },
   methods: {
@@ -120,8 +120,8 @@ export default {
       e.data.Task_Status = 'Not Started';
       e.data.Task_Start_Date = new Date();
       e.data.Task_Due_Date = new Date();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

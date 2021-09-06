@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 import { employees } from './data.js';
 
@@ -6,13 +6,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: null
+      selectedValue: null,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
   }
 
   render() {
-    const selectedValue = this.state.selectedValue;
+    const { selectedValue } = this.state;
     return (
       <div>
         <div className="dx-fieldset">
@@ -28,8 +28,8 @@ class App extends React.Component {
             </Lookup>
           </div>
         </div>
-        {selectedValue &&
-          <div className="selected">
+        {selectedValue
+          && <div className="selected">
             <img src={selectedValue.Picture} />
             <span>{selectedValue.Notes}</span>
           </div>
@@ -40,7 +40,7 @@ class App extends React.Component {
 
   onValueChanged(e) {
     this.setState({
-      selectedValue: e.value
+      selectedValue: e.value,
     });
   }
 }

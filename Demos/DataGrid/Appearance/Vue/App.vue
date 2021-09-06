@@ -76,7 +76,7 @@ export default {
   components: {
     DxDataGrid,
     DxColumn,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -84,9 +84,9 @@ export default {
       showColumnLines: false,
       showRowLines: true,
       showBorders: true,
-      rowAlternationEnabled: true
+      rowAlternationEnabled: true,
     };
-  }
+  },
 };
 </script>
 <style scoped>

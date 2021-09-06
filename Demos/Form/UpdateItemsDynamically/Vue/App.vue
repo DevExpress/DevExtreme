@@ -60,7 +60,7 @@ import {
   DxSimpleItem,
   DxGroupItem,
   DxButtonItem,
-  DxLabel
+  DxLabel,
 } from 'devextreme-vue/form';
 import service from './data.js';
 
@@ -70,13 +70,13 @@ export default {
     DxSimpleItem,
     DxGroupItem,
     DxButtonItem,
-    DxLabel
+    DxLabel,
   },
   data() {
     const employee = service.getEmployee();
-    let isHomeAddressVisible = true;
+    const isHomeAddressVisible = true;
 
-    let phoneOptions = this.getPhonesOptions(employee.Phones);
+    const phoneOptions = this.getPhonesOptions(employee.Phones);
 
     return {
       employee,
@@ -87,7 +87,7 @@ export default {
         value: true,
         onValueChanged: (e) => {
           this.isHomeAddressVisible = e.component.option('value');
-        }
+        },
       },
       addPhoneButtonOptions: {
         icon: 'add',
@@ -95,13 +95,13 @@ export default {
         onClick: () => {
           this.employee.Phones.push('');
           this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-        }
-      }
+        },
+      },
     };
   },
   methods: {
     getPhonesOptions(phones) {
-      let options = [];
+      const options = [];
       for (let i = 0; i < phones.length; i++) {
         options.push(this.generateNewPhoneOptions(i));
       }
@@ -110,7 +110,7 @@ export default {
     generateNewPhoneOptions(index) {
       return {
         mask: '+1 (X00) 000-0000',
-        maskRules: { 'X': /[01-9]/ },
+        maskRules: { X: /[01-9]/ },
         buttons: [{
           name: 'trash',
           location: 'after',
@@ -120,12 +120,12 @@ export default {
             onClick: () => {
               this.employee.Phones.splice(index, 1);
               this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-            }
-          }
-        }]
+            },
+          },
+        }],
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

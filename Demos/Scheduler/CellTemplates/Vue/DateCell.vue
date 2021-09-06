@@ -10,13 +10,13 @@ export default {
   props: {
     cellData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
     markDateCell(cellData) {
       return { 'disable-date': Utils.isWeekend(cellData.date) };
-    }
-  }
+    },
+  },
 };
 </script>

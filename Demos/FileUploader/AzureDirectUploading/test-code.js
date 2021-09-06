@@ -1,3 +1,3 @@
-window.checkReady = function() {
-    return true;
+window.checkReady = function () {
+  return true;
 };

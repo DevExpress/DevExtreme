@@ -1,16 +1,17 @@
 import React from 'react';
 
-import { Column, DataGrid, Paging, Summary, TotalItem, ValueFormat } from 'devextreme-react/data-grid';
+import {
+  Column, DataGrid, Paging, Summary, TotalItem, ValueFormat,
+} from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
 
 class OrderHistory extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      orderHistoryStore: null
+      orderHistoryStore: null,
     };
   }
 
@@ -43,13 +44,13 @@ class OrderHistory extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { productId } = this.props;
-    if(prevProps.productId !== productId) {
+    if (prevProps.productId !== productId) {
       this.setState({
         orderHistoryStore: createStore({
           key: 'OrderID',
           loadParams: { ProductID: productId },
-          loadUrl: `${url}/GetOrdersByProduct`
-        })
+          loadUrl: `${url}/GetOrdersByProduct`,
+        }),
       });
     }
   }

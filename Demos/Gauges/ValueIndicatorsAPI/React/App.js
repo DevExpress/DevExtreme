@@ -1,16 +1,17 @@
 import React from 'react';
-import { CircularGauge, Scale, Label, Tooltip, Title, Font } from 'devextreme-react/circular-gauge';
+import {
+  CircularGauge, Scale, Label, Tooltip, Title, Font,
+} from 'devextreme-react/circular-gauge';
 import { NumberBox } from 'devextreme-react/number-box';
 import { Button } from 'devextreme-react/button';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       mainGeneratorValue: 34,
       additionalGenerator1Value: 12,
-      additionalGenerator2Value: 23
+      additionalGenerator2Value: 23,
     };
 
     this.updateValues = () => {
@@ -21,19 +22,19 @@ class App extends React.Component {
 
     this.setMainGeneratorValue = (e) => {
       this.setState({
-        mainGeneratorValue: e.value
+        mainGeneratorValue: e.value,
       });
     };
 
-    this.setAdditionalGenerator1Value = (e)=>{
+    this.setAdditionalGenerator1Value = (e) => {
       this.setState({
-        additionalGenerator1Value: e.value
+        additionalGenerator1Value: e.value,
       });
     };
 
-    this.setAdditionalGenerator2Value = (e)=>{
+    this.setAdditionalGenerator2Value = (e) => {
       this.setState({
-        additionalGenerator2Value: e.value
+        additionalGenerator2Value: e.value,
       });
     };
 

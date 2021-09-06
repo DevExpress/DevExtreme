@@ -57,7 +57,7 @@ import {
   DxLegend,
   DxTitle,
   DxSubtitle,
-  DxTooltip
+  DxTooltip,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 
@@ -77,7 +77,7 @@ export default {
     DxLegend,
     DxTitle,
     DxSubtitle,
-    DxTooltip
+    DxTooltip,
   },
 
   data() {
@@ -85,9 +85,9 @@ export default {
       dataSource: service.getCountriesInfo(),
       energySources: service.getEnergySources(),
       types: ['line', 'stackedline', 'fullstackedline'],
-      type: 'line'
+      type: 'line',
     };
-  }
+  },
 };
 </script>
 <style>

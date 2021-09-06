@@ -33,7 +33,7 @@
 import {
   DxHtmlEditor,
   DxToolbar,
-  DxItem
+  DxItem,
 } from 'devextreme-vue/html-editor';
 import { markup } from './data.js';
 
@@ -41,13 +41,13 @@ export default {
   components: {
     DxHtmlEditor,
     DxToolbar,
-    DxItem
+    DxItem,
   },
   data() {
     return {
       markup,
       headerValues: [false, 1, 2, 3],
     };
-  }
+  },
 };
 </script>

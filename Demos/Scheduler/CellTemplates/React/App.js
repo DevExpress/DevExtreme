@@ -24,7 +24,7 @@ class App extends React.Component {
 
   onAppointmentFormOpening(e) {
     const startDate = new Date(e.appointmentData.startDate);
-    if(!Utils.isValidAppointmentDate(startDate)) {
+    if (!Utils.isValidAppointmentDate(startDate)) {
       e.cancel = true;
       this.notifyDisableDate();
     }
@@ -33,7 +33,7 @@ class App extends React.Component {
 
   onAppointmentAdding(e) {
     const isValidAppointment = Utils.isValidAppointment(e.component, e.appointmentData);
-    if(!isValidAppointment) {
+    if (!isValidAppointment) {
       e.cancel = true;
       this.notifyDisableDate();
     }
@@ -41,7 +41,7 @@ class App extends React.Component {
 
   onAppointmentUpdating(e) {
     const isValidAppointment = Utils.isValidAppointment(e.component, e.newData);
-    if(!isValidAppointment) {
+    if (!isValidAppointment) {
       e.cancel = true;
       this.notifyDisableDate();
     }

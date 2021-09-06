@@ -42,13 +42,13 @@ import service from './data.js';
 export default {
   components: {
     DxDataGrid,
-    DxColumn
+    DxColumn,
   },
   data() {
     return {
-      employees: service.getEmployees()
+      employees: service.getEmployees(),
     };
-  }
+  },
 };
 </script>
 <style scoped>

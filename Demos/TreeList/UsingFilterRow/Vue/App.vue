@@ -40,19 +40,21 @@
   </div>
 </template>
 <script>
+import {
+  DxTreeList, DxFilterRow, DxSelection, DxColumn,
+} from 'devextreme-vue/tree-list';
 import { employees } from './data.js';
-import { DxTreeList, DxFilterRow, DxSelection, DxColumn } from 'devextreme-vue/tree-list';
 
 export default {
   components: {
-    DxTreeList, DxFilterRow, DxSelection, DxColumn
+    DxTreeList, DxFilterRow, DxSelection, DxColumn,
   },
   data() {
     return {
-      employees: employees,
-      expandedRowKeys: [1]
+      employees,
+      expandedRowKeys: [1],
     };
-  }
+  },
 };
 </script>
 <style scoped>

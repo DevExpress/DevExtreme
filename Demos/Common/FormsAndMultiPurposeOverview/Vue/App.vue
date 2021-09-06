@@ -59,7 +59,7 @@ import {
   DxForm,
   DxSimpleItem,
   DxGroupItem,
-  DxLabel
+  DxLabel,
 } from 'devextreme-vue/form';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { employee, positions, states } from './data.js';
@@ -70,23 +70,23 @@ export default {
     DxTextArea,
     DxGroupItem,
     DxSimpleItem,
-    DxLabel
+    DxLabel,
   },
-  data: function() {
+  data() {
     return {
       formData: employee,
       birthDateOptions: { width: '100%' },
       positionOptions: {
         items: positions,
-        value: ''
+        value: '',
       },
       stateOptions: {
-        items: states
+        items: states,
       },
       phoneOptions: { mask: '+1 (000) 000-0000' },
-      notesOptions: { height: 140 }
+      notesOptions: { height: 140 },
     };
-  }
+  },
 };
 </script>
 <style>

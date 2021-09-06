@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import RadioGroup from 'devextreme-react/radio-group';
 import { priorities, priorityEntities, tasks } from './data.js';
 
@@ -7,7 +7,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       colorPriority: priorities[2],
-      selectionPriority: priorityEntities[0].id
+      selectionPriority: priorityEntities[0].id,
     };
 
     this.changeColorPriority = this.changeColorPriority.bind(this);
@@ -54,7 +54,7 @@ class App extends React.Component {
         <div id="tasks-list">
           Tasks by selected priority:
           <ul id="list">
-            {tasks.filter(task => task.priority == this.state.selectionPriority).map(task => <li key={task.id}>{task.subject}</li>)}
+            {tasks.filter((task) => task.priority == this.state.selectionPriority).map((task) => <li key={task.id}>{task.subject}</li>)}
           </ul>
         </div>
       </div>
@@ -63,13 +63,13 @@ class App extends React.Component {
 
   changeColorPriority(e) {
     this.setState({
-      colorPriority: e.value
+      colorPriority: e.value,
     });
   }
 
   changeSelectionPriority(e) {
     this.setState({
-      selectionPriority: e.value
+      selectionPriority: e.value,
     });
   }
 }

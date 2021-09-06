@@ -1,20 +1,21 @@
 import React from 'react';
 
-import FileManager, { Permissions, ItemView, Details, Column } from 'devextreme-react/file-manager';
+import FileManager, {
+  Permissions, ItemView, Details, Column,
+} from 'devextreme-react/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 const remoteProvider = new RemoteFileSystemProvider({
-  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db'
+  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db',
 });
 
 const allowedFileExtensions = [];
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      currentPath: 'Documents/Reports'
+      currentPath: 'Documents/Reports',
     };
 
     this.onCurrentDirectoryChanged = this.onCurrentDirectoryChanged.bind(this);
@@ -22,7 +23,7 @@ class App extends React.Component {
 
   onCurrentDirectoryChanged(e) {
     this.setState({
-      currentPath: e.component.option('currentPath')
+      currentPath: e.component.option('currentPath'),
     });
   }
 

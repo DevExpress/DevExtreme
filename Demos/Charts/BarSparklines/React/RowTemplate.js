@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Sparkline, {
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/sparkline';
 
 export default function RowTemplate(props) {

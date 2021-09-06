@@ -71,7 +71,7 @@ export default {
   components: {
     DxFileManager,
     DxPermissions,
-    DxLoadPanel
+    DxLoadPanel,
   },
 
   data() {
@@ -84,13 +84,13 @@ export default {
         copyItem,
         moveItem,
         uploadFileChunk,
-        downloadItems
+        downloadItems,
       }),
       allowedFileExtensions: [],
       loadPanelPosition: { of: '#file-manager' },
       loadPanelVisible: true,
       wrapperClassName: '',
-      requests: []
+      requests: [],
     };
   },
 
@@ -103,12 +103,12 @@ export default {
     azure = new AzureFileSystem(gateway);
 
     fetch('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
-      .then(response => response.json())
-      .then(result => {
+      .then((response) => response.json())
+      .then((result) => {
         this.wrapperClassName = result.active ? 'show-widget' : 'show-message';
         this.loadPanelVisible = false;
       });
-  }
+  },
 };
 
 function getItems(parentDirectory) {
@@ -140,9 +140,9 @@ function moveItem(item, destinationDirectory) {
 function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
   let promise = null;
 
-  if(uploadInfo.chunkIndex === 0) {
+  if (uploadInfo.chunkIndex === 0) {
     const filePath = destinationDirectory.path ? `${destinationDirectory.path}/${fileData.name}` : fileData.name;
-    promise = gateway.getUploadAccessUrl(filePath).done(accessUrl => {
+    promise = gateway.getUploadAccessUrl(filePath).done((accessUrl) => {
       uploadInfo.customData.accessUrl = accessUrl;
     });
   } else {
@@ -151,7 +151,7 @@ function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
 
   promise = promise.then(() => gateway.putBlock(uploadInfo.customData.accessUrl, uploadInfo.chunkIndex, uploadInfo.chunkBlob));
 
-  if(uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
+  if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
     promise = promise.then(() => gateway.putBlockList(uploadInfo.customData.accessUrl, uploadInfo.chunkCount));
   }
 

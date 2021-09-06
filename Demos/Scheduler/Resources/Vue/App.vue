@@ -49,13 +49,15 @@ import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
 
 import DxRadioGroup from 'devextreme-vue/radio-group';
 
-import { resourcesList, data, priorities, assignees, rooms } from './data.js';
+import {
+  resourcesList, data, priorities, assignees, rooms,
+} from './data.js';
 
 export default {
   components: {
     DxScheduler,
     DxResource,
-    DxRadioGroup
+    DxRadioGroup,
   },
   data() {
     return {
@@ -64,16 +66,16 @@ export default {
       radioGroupValue: 'Assignee',
       dataSource: data,
       resources: resourcesList,
-      assignees: assignees,
-      priorities: priorities,
-      rooms: rooms,
+      assignees,
+      priorities,
+      rooms,
     };
   },
   methods: {
-    onRadioGroupValueChanged: function(e) {
+    onRadioGroupValueChanged(e) {
       this.radioGroupValue = e.value;
-    }
-  }
+    },
+  },
 };
 </script>
 

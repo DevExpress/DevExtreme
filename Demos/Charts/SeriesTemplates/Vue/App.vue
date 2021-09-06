@@ -31,7 +31,7 @@ import DxChart, {
   DxTitle,
   DxSubtitle,
   DxCommonSeriesSettings,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 
 import { dataSource } from './data.js';
@@ -44,18 +44,18 @@ export default {
     DxTitle,
     DxSubtitle,
     DxCommonSeriesSettings,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
   },
   methods: {
     customizeSeries(seriesName) {
       return seriesName === 2009 ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {};
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

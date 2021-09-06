@@ -8,16 +8,18 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      filterMode: 'matchOnly'
+      filterMode: 'matchOnly',
     };
     this.filterModes = ['matchOnly', 'withAncestors', 'fullBranch'];
     this.onFilterModeChange = this.onFilterModeChange.bind(this);
   }
+
   onFilterModeChange(args) {
     this.setState({
-      filterMode: args.value
+      filterMode: args.value,
     });
   }
+
   render() {
     return (
       <React.Fragment>

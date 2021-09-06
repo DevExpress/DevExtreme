@@ -47,14 +47,14 @@ import { employees } from './data.js';
 export default {
   components: {
     DxDataGrid,
-    DxColumn
+    DxColumn,
   },
   data() {
     return {
       showEmployeeInfo: false,
       selectedRowNotes: '',
       selectedRowPicture: '',
-      employees
+      employees,
     };
   },
   methods: {
@@ -64,8 +64,8 @@ export default {
       this.showEmployeeInfo = !!data;
       this.selectedRowNotes = data && data.Notes;
       this.selectedRowPicture = data && data.Picture;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

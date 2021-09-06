@@ -89,14 +89,14 @@ export default {
     };
   },
   computed: {
-    isCompactMode: function() {
+    isCompactMode() {
       return this.displayMode === 'compact';
     },
   },
   methods: {
     customizeColumns(columns) {
       columns[0].width = 70;
-    }
-  }
+    },
+  },
 };
 </script>

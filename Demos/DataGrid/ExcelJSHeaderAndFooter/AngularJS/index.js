@@ -1,41 +1,41 @@
-var DemoApp = angular.module('DemoApp', ['dx']);
+const DemoApp = angular.module('DemoApp', ['dx']);
 
-DemoApp.controller('DemoController', function DemoController($scope) {
+DemoApp.controller('DemoController', ($scope) => {
   $scope.gridOptions = {
     dataSource: countries,
-    keyExpr: "ID",
+    keyExpr: 'ID',
     showBorders: true,
     export: {
-      enabled: true
+      enabled: true,
     },
-    onExporting: function(e) {
-      var workbook = new ExcelJS.Workbook();
-      var worksheet = workbook.addWorksheet('CountriesPopulation');
-      
+    onExporting(e) {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('CountriesPopulation');
+
       DevExpress.excelExporter.exportDataGrid({
         component: e.component,
-        worksheet: worksheet,
-        topLeftCell: { row: 4, column: 1 }
-      }).then(function(cellRange) {
+        worksheet,
+        topLeftCell: { row: 4, column: 1 },
+      }).then((cellRange) => {
         // header
-        var headerRow = worksheet.getRow(2);
+        const headerRow = worksheet.getRow(2);
         headerRow.height = 30;
         worksheet.mergeCells(2, 1, 2, 8);
 
         headerRow.getCell(1).value = 'Country Area, Population, and GDP Structure';
         headerRow.getCell(1).font = { name: 'Segoe UI Light', size: 22 };
         headerRow.getCell(1).alignment = { horizontal: 'center' };
-        
+
         // footer
-        var footerRowIndex = cellRange.to.row + 2;
-        var footerRow = worksheet.getRow(footerRowIndex);
+        const footerRowIndex = cellRange.to.row + 2;
+        const footerRow = worksheet.getRow(footerRowIndex);
         worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
-        
+
         footerRow.getCell(1).value = 'www.wikipedia.org';
         footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
         footerRow.getCell(1).alignment = { horizontal: 'right' };
-      }).then(function() {
-        workbook.xlsx.writeBuffer().then(function(buffer) {
+      }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CountriesPopulation.xlsx');
         });
       });
@@ -49,20 +49,20 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         columns: [{
           caption: 'Total',
           dataField: 'Population_Total',
-          format: 'fixedPoint'
+          format: 'fixedPoint',
         }, {
           caption: 'Urban',
           dataField: 'Population_Urban',
           dataType: 'number',
-          format: { type: 'percent'}
-        }]
+          format: { type: 'percent' },
+        }],
       }, {
         caption: 'Nominal GDP',
         columns: [{
           caption: 'Total, mln $',
           dataField: 'GDP_Total',
           format: 'fixedPoint',
-          sortOrder: 'desc'
+          sortOrder: 'desc',
         }, {
           caption: 'By Sector',
           columns: [{
@@ -71,27 +71,27 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             width: 95,
             format: {
               type: 'percent',
-              precision: 1
-            }
+              precision: 1,
+            },
           }, {
             caption: 'Industry',
             dataField: 'GDP_Industry',
             width: 80,
             format: {
               type: 'percent',
-              precision: 1
-            }
+              precision: 1,
+            },
           }, {
             caption: 'Services',
             dataField: 'GDP_Services',
             width: 85,
             format: {
               type: 'percent',
-              precision: 1
-            }
-          }]
-        }]
-      }
-    ]
+              precision: 1,
+            },
+          }],
+        }],
+      },
+    ],
   };
 });

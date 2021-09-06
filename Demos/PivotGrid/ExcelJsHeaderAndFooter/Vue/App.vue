@@ -28,7 +28,7 @@
 import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
-  DxFieldPanel
+  DxFieldPanel,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
@@ -42,7 +42,7 @@ export default {
     DxPivotGrid,
     DxExport,
     DxFieldChooser,
-    DxFieldPanel
+    DxFieldPanel,
   },
   data() {
     return {
@@ -52,12 +52,12 @@ export default {
           width: 120,
           dataField: 'region',
           area: 'row',
-          expanded: true
+          expanded: true,
         }, {
           caption: 'City',
           dataField: 'city',
           width: 150,
-          area: 'row'
+          area: 'row',
         }, {
           dataField: 'date',
           dataType: 'date',
@@ -70,10 +70,10 @@ export default {
           dataType: 'number',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }],
-        store: sales
-      })
+        store: sales,
+      }),
     };
   },
   methods: {
@@ -82,14 +82,14 @@ export default {
       const worksheet = workbook.addWorksheet('Sales');
 
       worksheet.columns = [
-        { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 }
+        { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 },
       ];
 
       exportPivotGrid({
         component: e.component,
-        worksheet: worksheet,
+        worksheet,
         topLeftCell: { row: 4, column: 1 },
-        keepColumnWidths: false
+        keepColumnWidths: false,
       }).then((cellRange) => {
         // Header
         const headerRow = worksheet.getRow(2);
@@ -116,8 +116,8 @@ export default {
         });
       });
       e.cancel = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

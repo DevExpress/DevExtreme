@@ -31,17 +31,19 @@ import ProductSelectBox from './ProductSelectBox.vue';
 import OrderHistory from './OrderHistory.vue';
 
 export default {
-  components: { DxForm, DxItem, DxLabel, ProductSelectBox, OrderHistory },
+  components: {
+    DxForm, DxItem, DxLabel, ProductSelectBox, OrderHistory,
+  },
   props: {
     supplierId: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
-      chosenProductId: null
+      chosenProductId: null,
     };
-  }
+  },
 };
 </script>

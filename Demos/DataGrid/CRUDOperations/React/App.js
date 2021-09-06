@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { DataGrid, Column, Editing, Scrolling, Lookup, Summary, TotalItem } from 'devextreme-react/data-grid';
+import {
+  DataGrid, Column, Editing, Scrolling, Lookup, Summary, TotalItem,
+} from 'devextreme-react/data-grid';
 import { Button } from 'devextreme-react/button';
 import { SelectBox } from 'devextreme-react/select-box';
 
@@ -21,28 +23,28 @@ class App extends React.Component {
         key: 'OrderID',
         load: () => this.sendRequest(`${URL}/Orders`),
         insert: (values) => this.sendRequest(`${URL}/InsertOrder`, 'POST', {
-          values: JSON.stringify(values)
+          values: JSON.stringify(values),
         }),
         update: (key, values) => this.sendRequest(`${URL}/UpdateOrder`, 'PUT', {
-          key: key,
-          values: JSON.stringify(values)
+          key,
+          values: JSON.stringify(values),
         }),
         remove: (key) => this.sendRequest(`${URL}/DeleteOrder`, 'DELETE', {
-          key: key
-        })
+          key,
+        }),
       }),
       customersData: new CustomStore({
         key: 'Value',
         loadMode: 'raw',
-        load: () => this.sendRequest(`${URL}/CustomersLookup`)
+        load: () => this.sendRequest(`${URL}/CustomersLookup`),
       }),
       shippersData: new CustomStore({
         key: 'Value',
         loadMode: 'raw',
-        load: () => this.sendRequest(`${URL}/ShippersLookup`)
+        load: () => this.sendRequest(`${URL}/ShippersLookup`),
       }),
       requests: [],
-      refreshMode: 'reshape'
+      refreshMode: 'reshape',
     };
 
     this.clearRequests = this.clearRequests.bind(this);
@@ -55,49 +57,42 @@ class App extends React.Component {
 
     this.logRequest(method, url, data);
 
-    if(method === 'GET') {
+    if (method === 'GET') {
       return fetch(url, {
-        method: method,
-        credentials: 'include'
-      }).then(result => result.json().then(json => {
-        if(result.ok) return json.data;
+        method,
+        credentials: 'include',
+      }).then((result) => result.json().then((json) => {
+        if (result.ok) return json.data;
         throw json.Message;
       }));
     }
 
-    const params = Object.keys(data).map((key) => {
-      return `${encodeURIComponent(key) }=${ encodeURIComponent(data[key])}`;
-    }).join('&');
+    const params = Object.keys(data).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
 
     return fetch(url, {
-      method: method,
+      method,
       body: params,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
-      credentials: 'include'
-    }).then(result => {
-      if(result.ok) {
-        return result.text().then(text => text && JSON.parse(text));
-      } else {
-        return result.json().then(json => {
-          throw json.Message;
-        });
+      credentials: 'include',
+    }).then((result) => {
+      if (result.ok) {
+        return result.text().then((text) => text && JSON.parse(text));
       }
+      return result.json().then((json) => {
+        throw json.Message;
+      });
     });
   }
 
   logRequest(method, url, data) {
-    const args = Object.keys(data || {}).map(function(key) {
-      return `${key }=${ data[key]}`;
-    }).join(' ');
+    const args = Object.keys(data || {}).map((key) => `${key}=${data[key]}`).join(' ');
 
     const time = formatDate(new Date(), 'HH:mm:ss');
     const request = [time, method, url.slice(URL.length), args].join(' ');
 
-    this.setState((state) => {
-      return { requests: [request].concat(state.requests) };
-    });
+    this.setState((state) => ({ requests: [request].concat(state.requests) }));
   }
 
   clearRequests() {
@@ -109,7 +104,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { refreshMode, ordersData, customersData, shippersData } = this.state;
+    const {
+      refreshMode, ordersData, customersData, shippersData,
+    } = this.state;
     return (
       <React.Fragment>
         <DataGrid

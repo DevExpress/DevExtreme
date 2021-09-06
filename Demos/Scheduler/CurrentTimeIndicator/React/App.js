@@ -15,7 +15,7 @@ class App extends React.Component {
     this.state = {
       showCurrentTimeIndicator: true,
       shadeUntilCurrentTime: true,
-      updateInterval: 10
+      updateInterval: 10,
     };
     this.onShowCurrentTimeIndicatorChanged = this.onShowCurrentTimeIndicatorChanged.bind(this);
     this.onShadeUntilCurrentTimeChanged = this.onShadeUntilCurrentTimeChanged.bind(this);

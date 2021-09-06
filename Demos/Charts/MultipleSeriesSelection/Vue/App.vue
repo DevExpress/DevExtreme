@@ -43,7 +43,7 @@ import DxChart, {
   DxLabel,
   DxFormat,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 import { versionSources, statisticsData } from './data.js';
 
@@ -58,12 +58,12 @@ export default {
     DxLabel,
     DxFormat,
     DxLegend,
-    DxExport
+    DxExport,
   },
   data() {
     return {
       versionSources,
-      statisticsData
+      statisticsData,
     };
   },
   methods: {
@@ -73,8 +73,8 @@ export default {
       } else {
         series.select();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

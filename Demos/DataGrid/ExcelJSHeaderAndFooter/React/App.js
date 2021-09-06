@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
@@ -10,7 +10,7 @@ import { countries } from './data.js';
 
 const gdpFormat = {
   type: 'percent',
-  precision: 1
+  precision: 1,
 };
 
 class App extends React.Component {
@@ -81,8 +81,8 @@ class App extends React.Component {
 
     exportDataGrid({
       component: e.component,
-      worksheet: worksheet,
-      topLeftCell: { row: 4, column: 1 }
+      worksheet,
+      topLeftCell: { row: 4, column: 1 },
     }).then((cellRange) => {
       // header
       const headerRow = worksheet.getRow(2);

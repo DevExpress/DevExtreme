@@ -1,12 +1,14 @@
 import React from 'react';
-import { TreeList, Editing, Column, ValidationRule, Lookup, Button } from 'devextreme-react/tree-list';
+import {
+  TreeList, Editing, Column, ValidationRule, Lookup, Button,
+} from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 
 const expandedRowKeys = [1, 2, 3, 4, 5];
 
 const lookupData = {
   store: employees,
-  sort: 'Full_Name'
+  sort: 'Full_Name',
 };
 
 class App extends React.Component {
@@ -59,6 +61,7 @@ class App extends React.Component {
       e.editorOptions.value = null;
     }
   }
+
   onInitNewRow(e) {
     e.data.Head_ID = 1;
   }

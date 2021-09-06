@@ -58,14 +58,14 @@ export default {
     DxScheduler,
     DxResource,
     DateCell,
-    DxView
+    DxView,
   },
   data() {
     return {
-      currentDate: currentDate,
+      currentDate,
       dataSource: data,
-      priorityData: priorityData,
-      typeData: typeData,
+      priorityData,
+      typeData,
       typeGroups: ['typeId'],
       priorityGroups: ['priorityId'],
     };

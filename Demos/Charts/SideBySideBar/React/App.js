@@ -1,10 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Chart, Series, CommonSeriesSettings, Label, Format, Legend, Export } from 'devextreme-react/chart';
+import {
+  Chart, Series, CommonSeriesSettings, Label, Format, Legend, Export,
+} from 'devextreme-react/chart';
 import { grossProductData } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart id="chart"

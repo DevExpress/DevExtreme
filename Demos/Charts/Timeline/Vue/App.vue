@@ -38,7 +38,7 @@ import {
   DxTick,
   DxSeriesTemplate,
   DxLegend,
-  DxTitle
+  DxTitle,
 } from 'devextreme-vue/chart';
 import dataSource from './data.js';
 
@@ -56,9 +56,9 @@ export default {
   data() {
     return {
       dataSource,
-      categories: ['Royal Houses']
+      categories: ['Royal Houses'],
     };
-  }
+  },
 };
 </script>
 <style>

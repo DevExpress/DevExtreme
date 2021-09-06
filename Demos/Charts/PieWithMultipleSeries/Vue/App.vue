@@ -40,7 +40,7 @@ import DxPieChart, {
   DxLabel,
   DxTitle,
   DxTooltip,
-  DxSubtitle
+  DxSubtitle,
 } from 'devextreme-vue/pie-chart';
 
 import { exportImportData } from './data.js';
@@ -55,11 +55,11 @@ export default {
     DxLabel,
     DxTitle,
     DxTooltip,
-    DxSubtitle
+    DxSubtitle,
   },
   data() {
     return {
-      exportImportData
+      exportImportData,
     };
   },
   methods: {
@@ -71,10 +71,10 @@ export default {
             pointInfo.seriesName
           }: ${
             pointInfo.valueText
-          }B`
+          }B`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

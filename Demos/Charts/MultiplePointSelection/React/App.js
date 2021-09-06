@@ -1,16 +1,15 @@
-﻿import React from 'react';
+import React from 'react';
 import Chart, {
   CommonSeriesSettings,
   SelectionStyle,
   Hatching,
   Series,
   Legend,
-  Export
+  Export,
 } from 'devextreme-react/chart';
 import { medalSources, medalStatistics } from './data.js';
 
 class App extends React.Component {
-
   render() {
     return (
       <Chart
@@ -30,9 +29,7 @@ class App extends React.Component {
           </SelectionStyle>
         </CommonSeriesSettings>
         {
-          medalSources.map(({ value, name, color }) => {
-            return <Series key={value} valueField={value} name={name} color={color} />;
-          })
+          medalSources.map(({ value, name, color }) => <Series key={value} valueField={value} name={name} color={color} />)
         }
         <Legend
           verticalAlignment="bottom"

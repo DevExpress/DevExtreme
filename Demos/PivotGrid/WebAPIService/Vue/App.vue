@@ -17,7 +17,7 @@
 <script>
 import {
   DxPivotGrid,
-  DxScrolling
+  DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
@@ -25,7 +25,7 @@ import { createStore } from 'devextreme-aspnet-data-nojquery';
 export default {
   components: {
     DxPivotGrid,
-    DxScrolling
+    DxScrolling,
   },
   data() {
     return {
@@ -33,7 +33,7 @@ export default {
         remoteOperations: true,
         store: createStore({
           key: 'OrderID',
-          loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales/Orders'
+          loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales/Orders',
         }),
         fields: [{
           caption: 'Category',
@@ -43,7 +43,7 @@ export default {
           sortBySummaryField: 'SalesAmount',
           sortBySummaryPath: [],
           sortOrder: 'desc',
-          area: 'row'
+          area: 'row',
         }, {
           caption: 'Subcategory',
           dataField: 'ProductSubcategoryName',
@@ -51,7 +51,7 @@ export default {
           sortBySummaryField: 'SalesAmount',
           sortBySummaryPath: [],
           sortOrder: 'desc',
-          area: 'row'
+          area: 'row',
         }, {
           caption: 'Product',
           dataField: 'ProductName',
@@ -59,36 +59,36 @@ export default {
           sortBySummaryField: 'SalesAmount',
           sortBySummaryPath: [],
           sortOrder: 'desc',
-          width: 250
+          width: 250,
         }, {
           caption: 'Date',
           dataField: 'DateKey',
           dataType: 'date',
-          area: 'column'
+          area: 'column',
         }, {
           caption: 'Amount',
           dataField: 'SalesAmount',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }, {
           caption: 'Store',
-          dataField: 'StoreName'
+          dataField: 'StoreName',
         }, {
           caption: 'Quantity',
           dataField: 'SalesQuantity',
-          summaryType: 'sum'
+          summaryType: 'sum',
         }, {
           caption: 'Unit Price',
           dataField: 'UnitPrice',
           format: 'currency',
-          summaryType: 'sum'
+          summaryType: 'sum',
         }, {
           dataField: 'Id',
-          visible: false
-        }]
-      }
+          visible: false,
+        }],
+      },
     };
-  }
+  },
 };
 </script>

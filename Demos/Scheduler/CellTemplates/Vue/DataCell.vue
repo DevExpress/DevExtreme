@@ -8,8 +8,8 @@ export default {
   props: {
     cellData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
     markDataCell(cellData) {
@@ -19,9 +19,9 @@ export default {
 
       return {
         'disable-date': isDisableDate,
-        'dinner': isDinner
+        dinner: isDinner,
       };
-    }
-  }
+    },
+  },
 };
 </script>

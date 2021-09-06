@@ -29,6 +29,6 @@ export const dataSource = [
   { date: '2013/03/28', dayT: 11, nightT: 3 },
   { date: '2013/03/29', dayT: 13, nightT: 4 },
   { date: '2013/03/30', dayT: 15, nightT: 4 },
-  { date: '2013/03/31', dayT: 12, nightT: 7 }
+  { date: '2013/03/31', dayT: 12, nightT: 7 },
 ];
 

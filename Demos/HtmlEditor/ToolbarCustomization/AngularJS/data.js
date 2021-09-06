@@ -1,4 +1,4 @@
-var markup = `
+const markup = `
     <h2>
         <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
         Formatted Text Editor (HTML Editor)

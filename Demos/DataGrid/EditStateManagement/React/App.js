@@ -1,16 +1,18 @@
-﻿import React from 'react';
+import React from 'react';
 import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
 import { LoadPanel } from 'devextreme-react/load-panel';
 import 'whatwg-fetch';
 
 import reducer from './reducer.js';
-import { saveChange, loadOrders, setChanges, setEditRowKey } from './actions.js';
+import {
+  saveChange, loadOrders, setChanges, setEditRowKey,
+} from './actions.js';
 
 const initialState = {
   data: [],
   changes: [],
   editRowKey: null,
-  isLoading: false
+  isLoading: false,
 };
 
 const loadPanelPosition = { of: '#gridContainer' };
@@ -18,13 +20,11 @@ const loadPanelPosition = { of: '#gridContainer' };
 function App() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const changesText = React.useMemo(() => {
-    return JSON.stringify(state.changes.map((change) => ({
-      type: change.type,
-      key: change.type !== 'insert' ? change.key : undefined,
-      data: change.data
-    })), null, ' ');
-  }, [state.changes]);
+  const changesText = React.useMemo(() => JSON.stringify(state.changes.map((change) => ({
+    type: change.type,
+    key: change.type !== 'insert' ? change.key : undefined,
+    data: change.data,
+  })), null, ' '), [state.changes]);
 
   React.useEffect(() => {
     loadOrders(dispatch);

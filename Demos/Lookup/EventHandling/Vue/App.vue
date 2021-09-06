@@ -30,12 +30,12 @@ import { employees } from './data.js';
 export default {
   components: {
     DxLookup,
-    DxDropDownOptions
+    DxDropDownOptions,
   },
   data() {
     return {
       items: employees,
-      selectedValue: null
+      selectedValue: null,
     };
   },
   methods: {
@@ -44,8 +44,8 @@ export default {
     },
     setSelectedValue(e) {
       this.selectedValue = e.value;
-    }
-  }
+    },
+  },
 };
 </script>
 

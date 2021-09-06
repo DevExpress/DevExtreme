@@ -39,14 +39,14 @@ export default {
   props: {
     templateData: {
       type: Object,
-      default: ()=>{}
-    }
+      default: () => {},
+    },
   },
   data() {
-    let { FirstName, LastName } = this.templateData.data;
+    const { FirstName, LastName } = this.templateData.data;
     return {
       dataSource: this.getTasks(this.templateData.key),
-      detailInfo: `${FirstName } ${ LastName }'s Tasks`
+      detailInfo: `${FirstName} ${LastName}'s Tasks`,
     };
   },
   methods: {
@@ -57,12 +57,12 @@ export default {
       return new DataSource({
         store: new ArrayStore({
           data: tasks,
-          key: 'ID'
+          key: 'ID',
         }),
-        filter: ['EmployeeID', '=', key]
+        filter: ['EmployeeID', '=', key],
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

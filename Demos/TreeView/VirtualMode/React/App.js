@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 
 import DataSource from 'devextreme/data/data_source';
@@ -6,8 +6,8 @@ import ODataStore from 'devextreme/data/odata/store';
 
 const dataSource = new DataSource({
   store: new ODataStore({
-    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems'
-  })
+    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
+  }),
 });
 class App extends React.Component {
   render() {

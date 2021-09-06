@@ -66,7 +66,7 @@ import {
   DxEditing,
   DxButton,
   DxPaging,
-  DxLookup
+  DxLookup,
 } from 'devextreme-vue/data-grid';
 
 import service from './data.js';
@@ -78,12 +78,12 @@ export default {
     DxEditing,
     DxButton,
     DxPaging,
-    DxLookup
+    DxLookup,
   },
   data() {
     return {
       employees: service.getEmployees(),
-      states: service.getStates()
+      states: service.getStates(),
     };
   },
   methods: {
@@ -104,19 +104,19 @@ export default {
     rowValidating(e) {
       const position = e.newData.Position;
 
-      if(this.isChief(position)) {
-        e.errorText = `The company can have only one ${ position.toUpperCase() }. Please choose another position.`;
+      if (this.isChief(position)) {
+        e.errorText = `The company can have only one ${position.toUpperCase()}. Please choose another position.`;
         e.isValid = false;
       }
     },
     editorPreparing(e) {
-      if(e.parentType === 'dataRow' && e.dataField === 'Position') {
+      if (e.parentType === 'dataRow' && e.dataField === 'Position') {
         e.editorOptions.readOnly = this.isChief(e.value);
       }
     },
     allowDeleting(e) {
       return !this.isChief(e.row.data.Position);
-    }
-  }
+    },
+  },
 };
 </script>

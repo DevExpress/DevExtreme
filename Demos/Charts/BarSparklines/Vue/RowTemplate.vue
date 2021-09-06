@@ -55,25 +55,25 @@ import DxSparkline, {
 export default {
   components: {
     DxSparkline,
-    DxTooltip
+    DxTooltip,
   },
 
   props: {
-    year:{
+    year: {
       type: String,
-      default() {}
+      default() {},
     },
     source: {
       type: Object,
-      default() {}
-    }
+      default() {},
+    },
   },
 
-  methods:{
+  methods: {
     getValueField(name) {
       return name + this.year;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

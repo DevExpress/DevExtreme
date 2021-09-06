@@ -10,10 +10,11 @@ class App extends React.Component {
     super(props);
     this.state = {
       selectedAlgorithm: algorithms[2],
-      currentAlgorithm: getCurrentAlgorithm(algorithms[2])
+      currentAlgorithm: getCurrentAlgorithm(algorithms[2]),
     };
     this.setAlgorithm = this.setAlgorithm.bind(this);
   }
+
   render() {
     return (
       <React.Fragment>
@@ -48,10 +49,11 @@ class App extends React.Component {
       </React.Fragment>
     );
   }
+
   setAlgorithm(data) {
     this.setState({
       selectedAlgorithm: data.value,
-      currentAlgorithm: getCurrentAlgorithm(data.value)
+      currentAlgorithm: getCurrentAlgorithm(data.value),
     });
   }
 }
@@ -61,7 +63,7 @@ function customAlgorithm(arg) {
   let totalSum = arg.sum;
   let side = 0;
 
-  arg.items.forEach(item => {
+  arg.items.forEach((item) => {
     const size = Math.round((totalRect[side + 2] - totalRect[side]) * item.value / totalSum);
     const rect = totalRect.slice();
 
@@ -74,7 +76,7 @@ function customAlgorithm(arg) {
 
 function getCurrentAlgorithm(selectedAlgorithm) {
   let currentAlgorithm = selectedAlgorithm.toLowerCase();
-  if(currentAlgorithm === 'custom') {
+  if (currentAlgorithm === 'custom') {
     currentAlgorithm = customAlgorithm;
   }
 
@@ -82,13 +84,13 @@ function getCurrentAlgorithm(selectedAlgorithm) {
 }
 
 function customizeTooltip(arg) {
-  const data = arg.node.data;
+  const { data } = arg.node;
   const parentData = arg.node.getParent().data;
 
   return {
     text: arg.node.isLeaf()
       ? `<span class='country'>${parentData.name}</span><br />${data.name}<br />${arg.valueText}(${(100 * data.value / parentData.total).toFixed(1)}%)`
-      : `<span class='country'>${data.name}</span>`
+      : `<span class='country'>${data.name}</span>`,
   };
 }
 

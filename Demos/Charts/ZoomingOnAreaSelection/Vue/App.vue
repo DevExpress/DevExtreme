@@ -63,7 +63,7 @@ import DxChart, {
   DxZoomAndPan,
   DxCrosshair,
   DxLegend,
-  DxBorder
+  DxBorder,
 } from 'devextreme-vue/chart';
 
 import DxButton from 'devextreme-vue/button';
@@ -84,11 +84,11 @@ export default {
     DxLegend,
     DxZoomAndPan,
     DxCrosshair,
-    DxBorder
+    DxBorder,
   },
   data() {
     return {
-      birthLife
+      birthLife,
     };
   },
   methods: {
@@ -97,12 +97,12 @@ export default {
     },
 
     customizeTooltip({ point }) {
-      const data = point.data;
+      const { data } = point;
       return {
-        text: `${data.country} ${data.year}`
+        text: `${data.country} ${data.year}`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

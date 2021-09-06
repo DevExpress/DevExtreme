@@ -1,5 +1,7 @@
 import React from 'react';
-import { TreeList, SearchPanel, Column, Lookup } from 'devextreme-react/tree-list';
+import {
+  TreeList, SearchPanel, Column, Lookup,
+} from 'devextreme-react/tree-list';
 import { tasks, employees } from './data.js';
 
 const dataSource = [
@@ -7,7 +9,7 @@ const dataSource = [
   'Need Assistance',
   'In Progress',
   'Deferred',
-  'Completed'
+  'Completed',
 ];
 
 class App extends React.Component {

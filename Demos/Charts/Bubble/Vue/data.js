@@ -10,7 +10,7 @@ export const dataSource = [{
   perc3: 31.6,
   tag1: 'Sweden',
   tag2: 'Nigeria',
-  tag3: 'Japan'
+  tag3: 'Japan',
 }, {
   total1: 82.8,
   total2: 91.7,
@@ -23,7 +23,7 @@ export const dataSource = [{
   perc3: 8.9,
   tag1: 'Germany',
   tag2: 'Ethiopia',
-  tag3: 'Viet Nam'
+  tag3: 'Viet Nam',
 }, {
   total1: 16.7,
   total2: 80.7,
@@ -36,7 +36,7 @@ export const dataSource = [{
   perc3: 12.9,
   tag1: 'Netherlands',
   tag2: 'Egypt',
-  tag3: 'Sri Lanka'
+  tag3: 'Sri Lanka',
 }, {
   total1: 62.8,
   total2: 52.4,
@@ -49,7 +49,7 @@ export const dataSource = [{
   perc3: 6.1,
   tag1: 'United Kingdom',
   tag2: 'South Africa',
-  tag3: 'Philippines'
+  tag3: 'Philippines',
 }, {
   total1: 38.2,
   total2: 43.2,
@@ -62,7 +62,7 @@ export const dataSource = [{
   perc3: 13.7,
   tag1: 'Poland',
   tag2: 'Kenya',
-  tag3: 'Thailand'
+  tag3: 'Thailand',
 }, {
   total1: 45.5,
   total3: 154.7,
@@ -75,7 +75,7 @@ export const dataSource = [{
   perc4: 20.8,
   tag1: 'Ukraine',
   tag3: 'Bangladesh',
-  tag4: 'Canada'
+  tag4: 'Canada',
 }, {
   total1: 143.2,
   total4: 120.8,
@@ -84,5 +84,5 @@ export const dataSource = [{
   perc1: 18.6,
   perc4: 9.5,
   tag1: 'Russian Federation',
-  tag4: 'Mexico'
+  tag4: 'Mexico',
 }];

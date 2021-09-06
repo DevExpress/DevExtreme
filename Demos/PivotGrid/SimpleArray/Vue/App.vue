@@ -20,7 +20,7 @@
 <script>
 import DxPivotGrid, {
   DxExport,
-  DxFieldChooser
+  DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -30,7 +30,7 @@ export default {
   components: {
     DxPivotGrid,
     DxExport,
-    DxFieldChooser
+    DxFieldChooser,
   },
   data() {
     return {
@@ -40,21 +40,21 @@ export default {
             caption: 'Region',
             width: 120,
             dataField: 'region',
-            area: 'row'
+            area: 'row',
           },
           {
             caption: 'City',
             dataField: 'city',
             width: 150,
             area: 'row',
-            selector: function(data) {
-              return `${data.city } (${ data.country })`;
-            }
+            selector(data) {
+              return `${data.city} (${data.country})`;
+            },
           },
           {
             dataField: 'date',
             dataType: 'date',
-            area: 'column'
+            area: 'column',
           },
           {
             caption: 'Sales',
@@ -62,13 +62,13 @@ export default {
             dataType: 'number',
             summaryType: 'sum',
             format: 'currency',
-            area: 'data'
-          }
+            area: 'data',
+          },
         ],
-        store: sales
-      })
+        store: sales,
+      }),
     };
-  }
+  },
 };
 </script>
 <style scoped>

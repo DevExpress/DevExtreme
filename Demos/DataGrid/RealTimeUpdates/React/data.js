@@ -6,18 +6,20 @@ const orders = [];
 
 const products = [];
 
-for(let i = 1; i <= 100; i++) {
-  products.push({ ProductID: i, ProductName: `Product ${ i}`, UnitPrice: Math.floor(Math.random() * 1000) + 1, Quantity: 0, Amount: 0, OrderCount: 0 });
+for (let i = 1; i <= 100; i++) {
+  products.push({
+    ProductID: i, ProductName: `Product ${i}`, UnitPrice: Math.floor(Math.random() * 1000) + 1, Quantity: 0, Amount: 0, OrderCount: 0,
+  });
 }
 
 export const productsStore = new ArrayStore({
   key: 'ProductID',
-  data: products
+  data: products,
 });
 
 export const ordersStore = new ArrayStore({
   key: 'OrderID',
-  data: orders
+  data: orders,
 });
 
 export function getOrderCount() {
@@ -32,7 +34,7 @@ export function addOrder() {
     ProductID: product.ProductID,
     UnitPrice: product.UnitPrice,
     OrderDate: new Date(),
-    Quantity: Math.round(Math.random() * 20) + 1
+    Quantity: Math.round(Math.random() * 20) + 1,
   };
 
   ordersStore.push([{ type: 'insert', data: order }]);
@@ -43,7 +45,7 @@ export function addOrder() {
     data: {
       OrderCount: product.OrderCount + 1,
       Quantity: product.Quantity + order.Quantity,
-      Amount: product.Amount + order.UnitPrice * order.Quantity
-    }
+      Amount: product.Amount + order.UnitPrice * order.Quantity,
+    },
   }]);
 }

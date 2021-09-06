@@ -1,10 +1,11 @@
 import React from 'react';
-import { LinearGauge, Geometry, Scale, Title, Font, Export } from 'devextreme-react/linear-gauge';
+import {
+  LinearGauge, Geometry, Scale, Title, Font, Export,
+} from 'devextreme-react/linear-gauge';
 
 const customTicks = [0, 10, 25, 50];
 
 class App extends React.Component {
-
   render() {
     return (
       <LinearGauge

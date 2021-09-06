@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Export, Tooltip, Border } from 'devextreme-react/chart';
+import {
+  Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Export, Tooltip, Border,
+} from 'devextreme-react/chart';
 import service from './data.js';
 
 const dataSource = service.getMaleAgeData();
@@ -61,10 +63,10 @@ class App extends React.Component {
 }
 
 function customizeItems(items) {
-  var sortedItems = [];
+  const sortedItems = [];
 
-  items.forEach(function(item) {
-    var startIndex = item.series.stack === 'male' ? 0 : 3;
+  items.forEach((item) => {
+    const startIndex = item.series.stack === 'male' ? 0 : 3;
     sortedItems.splice(startIndex, 0, item);
   });
   return sortedItems;

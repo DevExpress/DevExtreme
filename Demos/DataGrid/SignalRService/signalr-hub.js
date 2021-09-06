@@ -7,6 +7,8 @@
  *
  */
 
+/* eslint-disable */
+
 /// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />
 (function ($, window, undefined) {

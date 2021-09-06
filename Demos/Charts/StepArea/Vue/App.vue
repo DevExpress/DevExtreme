@@ -44,7 +44,7 @@ import DxChart, {
   DxLabel,
   DxLegend,
   DxBorder,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 
 import { dataSource } from './data.js';
@@ -58,13 +58,13 @@ export default {
     DxLabel,
     DxLegend,
     DxBorder,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      dataSource
+      dataSource,
     };
-  }
+  },
 };
 </script>
 <style>

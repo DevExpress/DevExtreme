@@ -23,18 +23,18 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
-      items: ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone']
+      items: ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'],
     };
   },
   methods: {
     customizeItem(item) {
       item.template = 'form-item';
-    }
-  }
+    },
+  },
 };
 </script>

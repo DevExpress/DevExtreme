@@ -45,7 +45,7 @@
 import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
-  DxScrolling
+  DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import DxCheckBox from 'devextreme-vue/check-box';
@@ -58,7 +58,7 @@ export default {
     DxExport,
     DxFieldChooser,
     DxScrolling,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -70,37 +70,37 @@ export default {
           caption: 'Region',
           dataField: 'region',
           expanded: true,
-          area: 'row'
+          area: 'row',
         }, {
           caption: 'Country',
           dataField: 'country',
           expanded: true,
-          area: 'row'
+          area: 'row',
         }, {
           caption: 'City',
           dataField: 'city',
-          area: 'row'
+          area: 'row',
         }, {
           dataField: 'date',
           dataType: 'date',
-          area: 'column'
+          area: 'column',
         }, {
           caption: 'Sales',
           dataField: 'amount',
           dataType: 'number',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }, {
           caption: 'Percent',
           dataField: 'amount',
           dataType: 'number',
           summaryType: 'sum',
           summaryDisplayMode: 'percentOfRowGrandTotal',
-          area: 'data'
+          area: 'data',
         }],
-        store: sales
-      })
+        store: sales,
+      }),
     };
   },
   methods: {
@@ -114,7 +114,7 @@ export default {
 
     onRowHeaderLayoutChanged(data) {
       this.rowHeaderLayout = data.value ? 'tree' : 'standard';
-    }
+    },
   },
 };
 </script>

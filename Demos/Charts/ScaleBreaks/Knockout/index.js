@@ -1,49 +1,49 @@
-window.onload = function() {
-    var lineStyleValue = ko.observable(lineStyles[0]),
-        breaksCountValue = ko.observable(breaksCount[2]),
-        autoBreaksEnabledValue = ko.observable(true),
-        viewModel = {
-            chartOptions: {
-                dataSource: dataSource,
-                series: {
-                    type: "bar",
-                    valueField: "mass",
-                    argumentField: "name"
-                },
-                valueAxis: {
-                    visible: true,
-                    autoBreaksEnabled: autoBreaksEnabledValue,
-                    maxAutoBreakCount: breaksCountValue,
-                    breakStyle: {
-                        line: lineStyleValue
-                    }
-                },
-                title: "Relative Masses of the Heaviest\n Solar System Objects",
-                legend: {
-                    visible: false
-                },
-                tooltip: {
-                    enabled: true
-                }
-            },
+window.onload = function () {
+  const lineStyleValue = ko.observable(lineStyles[0]);
+  const breaksCountValue = ko.observable(breaksCount[2]);
+  const autoBreaksEnabledValue = ko.observable(true);
+  const viewModel = {
+    chartOptions: {
+      dataSource,
+      series: {
+        type: 'bar',
+        valueField: 'mass',
+        argumentField: 'name',
+      },
+      valueAxis: {
+        visible: true,
+        autoBreaksEnabled: autoBreaksEnabledValue,
+        maxAutoBreakCount: breaksCountValue,
+        breakStyle: {
+          line: lineStyleValue,
+        },
+      },
+      title: 'Relative Masses of the Heaviest\n Solar System Objects',
+      legend: {
+        visible: false,
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
 
-            breaksCheckBoxOptions: {
-                text: "Enable Breaks",
-                value: autoBreaksEnabledValue
-            },
+    breaksCheckBoxOptions: {
+      text: 'Enable Breaks',
+      value: autoBreaksEnabledValue,
+    },
 
-            maxCountSelectBoxOptions: {
-                items: breaksCount,
-                value: breaksCountValue,
-                width: 80
-            },
+    maxCountSelectBoxOptions: {
+      items: breaksCount,
+      value: breaksCountValue,
+      width: 80,
+    },
 
-            lineStyleSelectBoxOptions: {
-                items: lineStyles,
-                value: lineStyleValue,
-                width: 120
-            }
-        };
+    lineStyleSelectBoxOptions: {
+      items: lineStyles,
+      value: lineStyleValue,
+      width: 120,
+    },
+  };
 
-    ko.applyBindings(viewModel, document.getElementById("chart-demo"));
+  ko.applyBindings(viewModel, document.getElementById('chart-demo'));
 };

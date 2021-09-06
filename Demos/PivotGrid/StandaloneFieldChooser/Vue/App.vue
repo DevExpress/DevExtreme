@@ -73,26 +73,26 @@
 
 import {
   DxPivotGrid,
-  DxFieldChooser
+  DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
 
 import {
   DxPivotGridFieldChooser,
-  DxTexts
+  DxTexts,
 } from 'devextreme-vue/pivot-grid-field-chooser';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import {
-  DxSelectBox
+  DxSelectBox,
 } from 'devextreme-vue/select-box';
 
 import {
-  DxButton
+  DxButton,
 } from 'devextreme-vue/button';
 
 import {
-  DxRadioGroup
+  DxRadioGroup,
 } from 'devextreme-vue/radio-group';
 
 import service from './data.js';
@@ -105,50 +105,50 @@ export default {
     DxButton,
     DxRadioGroup,
     DxPivotGridFieldChooser,
-    DxTexts
+    DxTexts,
   },
   data() {
-    let dataSource = new PivotGridDataSource({
+    const dataSource = new PivotGridDataSource({
       fields: [{
         caption: 'Region',
         width: 120,
         dataField: 'region',
         area: 'row',
         headerFilter: {
-          allowSearch: true
-        }
+          allowSearch: true,
+        },
       }, {
         caption: 'City',
         dataField: 'city',
         width: 150,
         area: 'row',
         headerFilter: {
-          allowSearch: true
+          allowSearch: true,
         },
-        selector: function(data) {
-          return `${data.city } (${ data.country })`;
-        }
+        selector(data) {
+          return `${data.city} (${data.country})`;
+        },
       }, {
         dataField: 'date',
         dataType: 'date',
-        area: 'column'
+        area: 'column',
       }, {
         caption: 'Sales',
         dataField: 'amount',
         dataType: 'number',
         summaryType: 'sum',
         format: 'currency',
-        area: 'data'
+        area: 'data',
       }],
-      store: service.getSales()
+      store: service.getSales(),
     });
     return {
-      dataSource: dataSource,
+      dataSource,
       state: dataSource.state(),
       layouts: service.getLayouts(),
       layout: 0,
       applyChangesModes: ['instantly', 'onDemand'],
-      applyChangesMode: 'instantly'
+      applyChangesMode: 'instantly',
     };
   },
   methods: {
@@ -157,8 +157,8 @@ export default {
     },
     cancelClick() {
       this.state = this.dataSource.state();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

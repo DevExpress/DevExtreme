@@ -5,7 +5,7 @@ import VectorMap, {
   Layer,
   Legend,
   Source,
-  Font
+  Font,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
@@ -51,7 +51,6 @@ export default function App() {
 function customizeText(itemInfo) {
   if (itemInfo.color === '#3c20c8') {
     return 'Cold';
-  } else {
-    return 'Warm';
   }
+  return 'Warm';
 }

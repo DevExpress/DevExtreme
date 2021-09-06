@@ -33,21 +33,21 @@
 import DxActionSheet from 'devextreme-vue/action-sheet';
 import DxSwitch from 'devextreme-vue/switch';
 import DxButton from 'devextreme-vue/button';
-import { actionSheetItems } from './data.js';
 import notify from 'devextreme/ui/notify';
+import { actionSheetItems } from './data.js';
 
 export default {
   components: {
     DxActionSheet,
     DxButton,
-    DxSwitch
+    DxSwitch,
   },
   data() {
     return {
       dataSource: actionSheetItems,
       isActionSheetVisible: false,
       showTitle: true,
-      showCancelButton: true
+      showCancelButton: true,
     };
   },
   methods: {
@@ -56,8 +56,8 @@ export default {
     },
     showClickNotification(buttonName) {
       notify(`The "${buttonName}" button is clicked.`);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 import Button from 'devextreme-react/button';
 import TextBox from 'devextreme-react/text-box';
@@ -13,7 +13,7 @@ class App extends React.Component {
 
   onClick() {
     notify('Uncomment the line to enable sending a form to the server.');
-    //this.formElement.current.submit();
+    // this.formElement.current.submit();
   }
 
   render() {

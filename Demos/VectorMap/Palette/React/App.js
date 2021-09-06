@@ -3,7 +3,7 @@ import React from 'react';
 import VectorMap, {
   Layer,
   Legend,
-  Source
+  Source,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';

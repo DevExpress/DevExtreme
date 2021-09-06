@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import Diagram, { Nodes, AutoLayout, ContextToolbox, Toolbox, Group } from 'devextreme-react/diagram';
+import React from 'react';
+import Diagram, {
+  Nodes, AutoLayout, ContextToolbox, Toolbox, Group,
+} from 'devextreme-react/diagram';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DiagramEmployees';
@@ -10,18 +12,18 @@ const dataSource = createStore({
   insertUrl: `${url}/InsertEmployee`,
   updateUrl: `${url}/UpdateEmployee`,
   deleteUrl: `${url}/DeleteEmployee`,
-  onBeforeSend: function(method, ajaxOptions) {
+  onBeforeSend(method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },
-  onInserting: function(values) {
-    values['ID'] = 0;
-    values['Title'] = values['Title'] || 'New Position';
-    values['Prefix'] = 'Mr';
-    values['FullName'] = 'New Employee';
-    values['City'] = 'LA';
-    values['State'] = 'CA';
-    values['HireDate'] = new Date();
-  }
+  onInserting(values) {
+    values.ID = 0;
+    values.Title = values.Title || 'New Position';
+    values.Prefix = 'Mr';
+    values.FullName = 'New Employee';
+    values.City = 'LA';
+    values.State = 'CA';
+    values.HireDate = new Date();
+  },
 });
 
 class App extends React.Component {

@@ -45,7 +45,7 @@ import {
   DxLabel,
   DxFormat,
   DxLegend,
-  DxExport
+  DxExport,
 } from 'devextreme-vue/chart';
 import { grossProductData } from './data.js';
 
@@ -57,18 +57,18 @@ export default {
     DxLabel,
     DxFormat,
     DxLegend,
-    DxExport
+    DxExport,
   },
   data() {
     return {
-      dataSource: grossProductData
+      dataSource: grossProductData,
     };
   },
   methods: {
     onPointClick({ target }) {
       target.select();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

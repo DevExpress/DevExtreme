@@ -1,11 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import TextArea from 'devextreme-react/text-area';
 
 import service from './data.js';
 
-const valueChangeEvents = service.valueChangeEvents;
+const { valueChangeEvents } = service;
 
 class App extends React.Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class App extends React.Component {
       value: service.getContent(),
       valueForEditableTestArea: service.getContent(),
       maxLength: null,
-      eventValue: valueChangeEvents[0].name
+      eventValue: valueChangeEvents[0].name,
     };
     this.onCheckboxValueChanged = this.onCheckboxValueChanged.bind(this);
     this.onSelectBoxValueChanged = this.onSelectBoxValueChanged.bind(this);
@@ -80,20 +80,20 @@ class App extends React.Component {
     } else {
       this.setState({
         value: service.getContent(),
-        maxLength: null
+        maxLength: null,
       });
     }
   }
 
   onSelectBoxValueChanged(e) {
     this.setState({
-      eventValue: e.value
+      eventValue: e.value,
     });
   }
 
   onTextAreaValueChanged(e) {
     this.setState({
-      valueForEditableTestArea: e.value
+      valueForEditableTestArea: e.value,
     });
   }
 }

@@ -11,7 +11,7 @@ import { pangaeaBorders, pangaeaContinents } from './data.js';
 
 const projection = {
   to: ([l, lt]) => [l / 100, lt / 100],
-  from: ([x, y]) => [x * 100, y * 100]
+  from: ([x, y]) => [x * 100, y * 100],
 };
 
 export default function App() {
@@ -41,7 +41,7 @@ export default function App() {
 function customizeLayer(elements) {
   elements.forEach((element) => {
     element.applySettings({
-      color: element.attribute('color')
+      color: element.attribute('color'),
     });
   });
 }

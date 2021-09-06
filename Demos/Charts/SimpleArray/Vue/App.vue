@@ -17,7 +17,7 @@ import DxChart, {
   DxArgumentAxis,
   DxLegend,
   DxLabel,
-  DxSeries
+  DxSeries,
 } from 'devextreme-vue/chart';
 
 import { populationData } from './data.js';
@@ -28,13 +28,13 @@ export default {
     DxArgumentAxis,
     DxLabel,
     DxLegend,
-    DxSeries
+    DxSeries,
   },
   data() {
     return {
-      populationData
+      populationData,
     };
-  }
+  },
 };
 </script>
 <style>

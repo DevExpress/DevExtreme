@@ -5,40 +5,40 @@ const itemsDriveC = [{
   icon: 'activefolder',
   isDirectory: true,
   expanded: true,
-  items: [ {
+  items: [{
     id: '2',
     name: 'Projects',
     icon: 'activefolder',
     isDirectory: true,
     expanded: true,
-    items: [ {
+    items: [{
       id: '3',
       name: 'About.rtf',
       icon: 'file',
-      isDirectory: false
+      isDirectory: false,
     }, {
       id: '4',
       name: 'Passwords.rtf',
       icon: 'file',
-      isDirectory: false
-    }
-    ]
+      isDirectory: false,
+    },
+    ],
   }, {
     id: '5',
     name: 'About.xml',
     icon: 'file',
-    isDirectory: false
+    isDirectory: false,
   }, {
     id: '6',
     name: 'Managers.rtf',
     icon: 'file',
-    isDirectory: false
+    isDirectory: false,
   }, {
     id: '7',
     name: 'ToDo.txt',
     icon: 'file',
-    isDirectory: false
-  }
+    isDirectory: false,
+  },
   ],
 }, {
   id: '8',
@@ -46,46 +46,46 @@ const itemsDriveC = [{
   icon: 'activefolder',
   isDirectory: true,
   expanded: true,
-  items: [ {
+  items: [{
     id: '9',
     name: 'logo.png',
     icon: 'file',
-    isDirectory: false
+    isDirectory: false,
   }, {
     id: '10',
     name: 'banner.gif',
     icon: 'file',
-    isDirectory: false
-  }
-  ]
+    isDirectory: false,
+  },
+  ],
 }, {
   id: '11',
   name: 'System',
   isDirectory: true,
   icon: 'activefolder',
   expanded: true,
-  items: [ {
+  items: [{
     id: '12',
     name: 'Employees.txt',
     icon: 'file',
-    isDirectory: false
+    isDirectory: false,
   }, {
     id: '13',
     name: 'PasswordList.txt',
     icon: 'file',
-    isDirectory: false
-  }
-  ]
+    isDirectory: false,
+  },
+  ],
 }, {
   id: '14',
   name: 'Description.rtf',
   icon: 'activefolder',
-  isDirectory: false
+  isDirectory: false,
 }, {
   id: '15',
   name: 'Description.txt',
   icon: 'activefolder',
-  isDirectory: false
+  isDirectory: false,
 }];
 
 export default {
@@ -94,5 +94,5 @@ export default {
   },
   getItemsDriveD() {
     return itemsDriveD;
-  }
+  },
 };

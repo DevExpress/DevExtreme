@@ -42,7 +42,7 @@ import {
   DxPolarChart,
   DxCommonSeriesSettings,
   DxSeries,
-  DxMargin
+  DxMargin,
 } from 'devextreme-vue/polar-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 
@@ -55,42 +55,42 @@ export default {
     DxPolarChart,
     DxCommonSeriesSettings,
     DxSeries,
-    DxMargin
+    DxMargin,
   },
 
   data() {
     return {
       types,
       dataSource,
-      currentType: types[0]
+      currentType: types[0],
     };
-  }
+  },
 };
 </script>
 <style>
 #chart-demo {
-	height: 600px;
+  height: 600px;
 }
 
 #radarChart {
-	height: 500px;
+  height: 500px;
 }
 
 #chart-demo > .center {
-	text-align: center;
+  text-align: center;
 }
 
 #chart-demo > .center > div,
 #chart-demo > .center > .dx-widget {
-	display: inline-block;
-	vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .long-title h3 {
-	font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
-	font-weight: 200;
-	font-size: 28px;
-	text-align: center;
-	margin-bottom: 20px;
+  font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+  font-weight: 200;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

@@ -92,7 +92,7 @@ export default {
     DxCheckBox,
     DxSelectBox,
     DxDateBox,
-    DxCalendar
+    DxCalendar,
   },
   data() {
     return {
@@ -104,7 +104,7 @@ export default {
       zoomLevels: ['month', 'year', 'decade', 'century'],
       cellTemplate: 'cell',
       disabled: false,
-      zoomLevel: 'month'
+      zoomLevel: 'month',
     };
   },
   methods: {
@@ -113,35 +113,35 @@ export default {
       return day === 0 || day === 6;
     },
     setMinDate(e) {
-      if(e.value) {
-        this.minDateValue = new Date((new Date).getTime() - 1000 * 60 * 60 * 24 * 3);
+      if (e.value) {
+        this.minDateValue = new Date((new Date()).getTime() - 1000 * 60 * 60 * 24 * 3);
       } else {
         this.minDateValue = null;
       }
     },
     setMaxDate(e) {
-      if(e.value) {
-        this.maxDateValue = new Date((new Date).getTime() + 1000 * 60 * 60 * 24 * 3);
+      if (e.value) {
+        this.maxDateValue = new Date((new Date()).getTime() + 1000 * 60 * 60 * 24 * 3);
       } else {
         this.maxDateValue = null;
       }
     },
     disableWeekend(e) {
-      if(e.value) {
+      if (e.value) {
         this.disabledDates = (data) => data.view === 'month' && this.isWeekend(data.date);
       } else {
         this.disabledDates = null;
       }
     },
     setFirstDay(e) {
-      if(e.value) {
+      if (e.value) {
         this.firstDay = 1;
       } else {
         this.firstDay = 0;
       }
     },
     useCellTemplate(e) {
-      if(e.value) {
+      if (e.value) {
         this.cellTemplate = 'custom';
       } else {
         this.cellTemplate = 'cell';
@@ -151,19 +151,18 @@ export default {
       let cssClass = '';
       const holydays = [[1, 0], [4, 6], [25, 11]];
 
-      if(this.isWeekend(date))
-      { cssClass = 'weekend'; }
+      if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
       holydays.forEach((item) => {
-        if(date.getDate() === item[0] && date.getMonth() === item[1]) {
+        if (date.getDate() === item[0] && date.getMonth() === item[1]) {
           cssClass = 'holyday';
           return false;
         }
       });
 
       return cssClass;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

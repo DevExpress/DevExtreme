@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Column, DataGrid, MasterDetail, Paging } from 'devextreme-react/data-grid';
+import {
+  Column, DataGrid, MasterDetail, Paging,
+} from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetailView from './MasterDetailView.js';
 
@@ -8,7 +10,7 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetai
 
 const suppliersData = createStore({
   key: 'SupplierID',
-  loadUrl: `${url}/GetSuppliers`
+  loadUrl: `${url}/GetSuppliers`,
 });
 
 class App extends React.Component {

@@ -4,7 +4,7 @@ import VectorMap, {
   Label,
   Layer,
   Font,
-  LoadingIndicator
+  LoadingIndicator,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/usa.js';

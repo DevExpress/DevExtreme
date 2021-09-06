@@ -72,13 +72,13 @@ import DxColorBox from 'devextreme-vue/color-box';
 
 export default {
   components: {
-    DxColorBox
+    DxColorBox,
   },
-  data: function() {
+  data() {
     return {
-      color: '#f05b41'
+      color: '#f05b41',
     };
-  }
+  },
 };
 </script>
 <style>

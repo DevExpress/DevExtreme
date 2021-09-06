@@ -1,5 +1,7 @@
-﻿import React from 'react';
-import DataGrid, { Column, RowDragging, Scrolling, Lookup, Sorting } from 'devextreme-react/data-grid';
+import React from 'react';
+import DataGrid, {
+  Column, RowDragging, Scrolling, Lookup, Sorting,
+} from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
@@ -10,7 +12,7 @@ const tasksStore = createStore({
   updateUrl: `${url}/UpdateTask`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 const employeesStore = createStore({
@@ -18,7 +20,7 @@ const employeesStore = createStore({
   loadUrl: `${url}/Employees`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 class App extends React.Component {
@@ -33,8 +35,8 @@ class App extends React.Component {
   }
 
   async processReorder(e) {
-    let visibleRows = e.component.getVisibleRows(),
-      newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
+    const visibleRows = e.component.getVisibleRows();
+    const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 
     await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
     await e.component.refresh();

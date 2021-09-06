@@ -6,7 +6,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalProduction: calculateTotalProduction()
+      totalProduction: calculateTotalProduction(),
     };
     this.processRange = this.processRange.bind(this);
   }
@@ -31,7 +31,7 @@ class App extends React.Component {
 
   processRange(e) {
     this.setState({
-      totalProduction: calculateTotalProduction(e.value)
+      totalProduction: calculateTotalProduction(e.value),
     });
   }
 }

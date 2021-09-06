@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   PolarChart,
@@ -7,16 +7,15 @@ import {
   ArgumentAxis,
   ValueAxis,
   Margin,
-  Export
+  Export,
 } from 'devextreme-react/polar-chart';
 import { windSources, windRoseData } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      periodValues: windRoseData[0].values
+      periodValues: windRoseData[0].values,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -33,9 +32,7 @@ class App extends React.Component {
         >
           <CommonSeriesSettings type="stackedbar" />
           {
-            windSources.map(function(item) {
-              return <Series key={item.value} valueField={item.value} name={item.name} />;
-            })
+            windSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
           }
           <Margin
             bottom={50}

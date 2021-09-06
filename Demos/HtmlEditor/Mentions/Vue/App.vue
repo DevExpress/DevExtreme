@@ -69,13 +69,13 @@
 <script>
 
 import {
-  DxHtmlEditor
+  DxHtmlEditor,
 } from 'devextreme-vue/html-editor';
 import { employees } from './data.js';
 
 export default {
   components: {
-    DxHtmlEditor
+    DxHtmlEditor,
   },
   data() {
     return {
@@ -83,10 +83,10 @@ export default {
         dataSource: employees,
         searchExpr: 'text',
         displayExpr: 'text',
-        valueExpr: 'text'
-      }]
+        valueExpr: 'text',
+      }],
     };
-  }
+  },
 };
 </script>
 <style>

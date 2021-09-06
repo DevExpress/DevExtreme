@@ -6,7 +6,7 @@ import PieChart, {
   Connector,
   SmallValuesGrouping,
   Legend,
-  Export
+  Export,
 } from 'devextreme-react/pie-chart';
 
 import { dataSource } from './data.js';

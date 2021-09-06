@@ -62,16 +62,16 @@
 </template>
 <script>
 import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup';
+import notify from 'devextreme/ui/notify';
 import EmployeeItem from './EmployeeItem.vue';
 import { employees } from './data.js';
-import notify from 'devextreme/ui/notify';
 
 export default {
   components: {
     DxPopup,
     DxPosition,
     DxToolbarItem,
-    EmployeeItem
+    EmployeeItem,
   },
 
   data() {
@@ -86,19 +86,19 @@ export default {
         onClick: () => {
           const message = `Email is sent to ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
           notify({
-            message: message,
+            message,
             position: {
               my: 'center top',
-              at: 'center top'
-            }
+              at: 'center top',
+            },
           }, 'success', 3000);
-        }
+        },
       },
       closeButtonOptions: {
         text: 'Close',
         onClick: () => {
           this.popupVisible = false;
-        }
+        },
       },
     };
   },
@@ -108,8 +108,8 @@ export default {
       this.currentEmployee = employee;
       this.positionOf = `#image${employee.ID}`;
       this.popupVisible = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

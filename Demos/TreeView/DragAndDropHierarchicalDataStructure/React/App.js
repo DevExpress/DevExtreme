@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import Sortable from 'devextreme-react/sortable';
 
@@ -12,7 +12,7 @@ class App extends React.Component {
 
     this.state = {
       itemsDriveC: service.getItemsDriveC(),
-      itemsDriveD: service.getItemsDriveD()
+      itemsDriveD: service.getItemsDriveD(),
     };
 
     this.onDragChange = this.onDragChange.bind(this);
@@ -79,7 +79,7 @@ class App extends React.Component {
   }
 
   onDragChange(e) {
-    if(e.fromComponent === e.toComponent) {
+    if (e.fromComponent === e.toComponent) {
       const fromNode = this.findNode(this.getTreeView(e.fromData), e.fromIndex);
       const toNode = this.findNode(this.getTreeView(e.toData), this.calculateToIndex(e));
       if (toNode !== null && this.isChildNode(fromNode, toNode)) {
@@ -89,7 +89,7 @@ class App extends React.Component {
   }
 
   onDragEnd(e) {
-    if(e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
+    if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
       return;
     }
 
@@ -99,7 +99,7 @@ class App extends React.Component {
     const fromNode = this.findNode(fromTreeView, e.fromIndex);
     const toNode = this.findNode(toTreeView, this.calculateToIndex(e));
 
-    if(e.dropInsideItem && toNode !== null && !toNode.itemData.isDirectory) {
+    if (e.dropInsideItem && toNode !== null && !toNode.itemData.isDirectory) {
       return;
     }
 
@@ -112,7 +112,7 @@ class App extends React.Component {
 
     this.setState({
       [this.getStateFieldName(e.fromData)]: [...fromItems],
-      [this.getStateFieldName(e.toData)]: [...toItems]
+      [this.getStateFieldName(e.toData)]: [...toItems],
     });
     fromTreeView.scrollToItem(fromTopVisibleNode);
     toTreeView.scrollToItem(toTopVisibleNode);
@@ -131,7 +131,7 @@ class App extends React.Component {
   }
 
   calculateToIndex(e) {
-    if(e.fromComponent != e.toComponent || e.dropInsideItem) {
+    if (e.fromComponent != e.toComponent || e.dropInsideItem) {
       return e.toIndex;
     }
 
@@ -142,20 +142,20 @@ class App extends React.Component {
 
   findNode(treeView, index) {
     const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
-    if(nodeElement) {
+    if (nodeElement) {
       return this.findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
     }
     return null;
   }
 
   findNodeById(nodes, id) {
-    for(var i = 0; i < nodes.length; i++) {
-      if(nodes[i].itemData.id == id) {
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].itemData.id == id) {
         return nodes[i];
       }
-      if(nodes[i].children) {
+      if (nodes[i].children) {
         const node = this.findNodeById(nodes[i].children, id);
-        if(node != null) {
+        if (node != null) {
           return node;
         }
       }
@@ -165,16 +165,16 @@ class App extends React.Component {
 
   moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
     const fromNodeContainingArray = this.getNodeContainingArray(fromNode, fromItems);
-    const fromIndex = fromNodeContainingArray.findIndex(item => item.id == fromNode.itemData.id);
+    const fromIndex = fromNodeContainingArray.findIndex((item) => item.id == fromNode.itemData.id);
     fromNodeContainingArray.splice(fromIndex, 1);
 
-    if(isDropInsideItem) {
+    if (isDropInsideItem) {
       toNode.itemData.items.splice(toNode.itemData.items.length, 0, fromNode.itemData);
     } else {
       const toNodeContainingArray = this.getNodeContainingArray(toNode, toItems);
       const toIndex = toNode === null
         ? toNodeContainingArray.length
-        : toNodeContainingArray.findIndex(item => item.id == toNode.itemData.id);
+        : toNodeContainingArray.findIndex((item) => item.id == toNode.itemData.id);
       toNodeContainingArray.splice(toIndex, 0, fromNode.itemData);
     }
   }
@@ -186,9 +186,9 @@ class App extends React.Component {
   }
 
   isChildNode(parentNode, childNode) {
-    let parent = childNode.parent;
-    while(parent !== null) {
-      if(parent.itemData.id === parentNode.itemData.id) {
+    let { parent } = childNode;
+    while (parent !== null) {
+      if (parent.itemData.id === parentNode.itemData.id) {
         return true;
       }
       parent = parent.parent;
@@ -200,9 +200,9 @@ class App extends React.Component {
     const treeViewElement = component.element();
     const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
     const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');
-    for(let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i++) {
       const nodeTopPosition = nodes[i].getBoundingClientRect().top;
-      if(nodeTopPosition >= treeViewTopPosition) {
+      if (nodeTopPosition >= treeViewTopPosition) {
         return nodes[i];
       }
     }

@@ -8,7 +8,7 @@ export default function DragItem({ data }) {
       style={{
         width: 200,
         padding: 10,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       }}
     />
   );

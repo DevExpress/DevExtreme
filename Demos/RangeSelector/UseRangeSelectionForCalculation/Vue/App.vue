@@ -44,7 +44,7 @@ import {
   DxMarker,
   DxLabel,
   DxBehavior,
-  DxSliderMarker
+  DxSliderMarker,
 } from 'devextreme-vue/range-selector';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 
@@ -58,7 +58,7 @@ export default {
     DxLabel,
     DxBehavior,
     DxSliderMarker,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     const range = [new Date(2011, 0, 1), new Date(2011, 11, 31)];
@@ -68,7 +68,7 @@ export default {
       endValue: range[1],
       range,
       behaviorModes,
-      currentBehaviorMode: behaviorModes[0]
+      currentBehaviorMode: behaviorModes[0],
     };
   },
   computed: {
@@ -77,14 +77,14 @@ export default {
       let workingDaysCount = 0;
 
       while (currentDate <= this.range[1]) {
-        if(currentDate.getDay() > 0 && currentDate.getDay() < 6) {
+        if (currentDate.getDay() > 0 && currentDate.getDay() < 6) {
           workingDaysCount++;
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }
       return workingDaysCount;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

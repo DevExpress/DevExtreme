@@ -36,14 +36,14 @@ import { products } from './data.js';
 export default {
   components: {
     DxSelectBox,
-    DxList
+    DxList,
   },
   data() {
     return {
       products,
-      searchMode: 'contains'
+      searchMode: 'contains',
     };
-  }
+  },
 };
 </script>
 <style>

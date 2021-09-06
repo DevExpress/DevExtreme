@@ -1,7 +1,9 @@
 import React from 'react';
 import 'devextreme-react/text-area';
 
-import Form, { SimpleItem, GroupItem, TabbedItem, TabPanelOptions, Tab } from 'devextreme-react/form';
+import Form, {
+  SimpleItem, GroupItem, TabbedItem, TabPanelOptions, Tab,
+} from 'devextreme-react/form';
 import service from './data.js';
 
 class App extends React.Component {

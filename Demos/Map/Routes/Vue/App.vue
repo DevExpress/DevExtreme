@@ -32,22 +32,21 @@
 </template>
 <script>
 
-import { markersData, routesData } from './data.js';
-
 import DxMap from 'devextreme-vue/map';
 import DxSelectBox from 'devextreme-vue/select-box';
+import { markersData, routesData } from './data.js';
 
 export default {
   components: {
     DxMap,
-    DxSelectBox
+    DxSelectBox,
   },
-  data: function() {
+  data() {
     return {
       markersData,
       routesData,
       routeModes: ['driving', 'walking'],
-      routeColors: ['blue', 'green', 'red']
+      routeColors: ['blue', 'green', 'red'],
     };
   },
   methods: {
@@ -62,8 +61,8 @@ export default {
         item.color = color;
         return item;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -4,7 +4,7 @@ import Chart, {
   Legend,
   Series,
   Tooltip,
-  ValueAxis
+  ValueAxis,
 } from 'devextreme-react/chart';
 
 import SelectBox from 'devextreme-react/select-box';
@@ -21,28 +21,28 @@ class App extends React.Component {
     this.state = {
       autoBreaksEnabledValue: true,
       breaksCountValue: 3,
-      lineStyleValue: lineStyles[0]
+      lineStyleValue: lineStyles[0],
     };
 
     this.changeBreaksCount = (e) => {
       this.setState({
-        breaksCountValue: e.value
+        breaksCountValue: e.value,
       });
     };
 
     this.changeStyle = (e) => {
       this.setState({
-        lineStyleValue: e.value
+        lineStyleValue: e.value,
       });
     };
 
     this.changeBreaksEnabledState = (e) => {
       this.setState({
-        autoBreaksEnabledValue: e.value
+        autoBreaksEnabledValue: e.value,
       });
     };
-
   }
+
   render() {
     return (
       <div>

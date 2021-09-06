@@ -58,27 +58,27 @@ const treeViewDriveDRef = 'treeViewDriveD';
 
 export default {
   components: {
-    DxTreeView, DxSortable
+    DxTreeView, DxSortable,
   },
   data() {
     return {
       itemsDriveC: service.getItemsDriveC(),
       itemsDriveD: service.getItemsDriveD(),
       treeViewDriveCRef,
-      treeViewDriveDRef
+      treeViewDriveDRef,
     };
   },
   computed: {
-    treeViewDriveC: function() {
+    treeViewDriveC() {
       return this.$refs[treeViewDriveCRef].instance;
     },
-    treeViewDriveD: function() {
+    treeViewDriveD() {
       return this.$refs[treeViewDriveDRef].instance;
-    }
+    },
   },
   methods: {
     onDragChange(e) {
-      if(e.fromComponent === e.toComponent) {
+      if (e.fromComponent === e.toComponent) {
         const fromNode = this.findNode(this.getTreeView(e.fromData), e.fromIndex);
         const toNode = this.findNode(this.getTreeView(e.toData), this.calculateToIndex(e));
         if (toNode !== null && this.isChildNode(fromNode, toNode)) {
@@ -88,7 +88,7 @@ export default {
     },
 
     onDragEnd(e) {
-      if(e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
+      if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
         return;
       }
 
@@ -98,7 +98,7 @@ export default {
       const fromNode = this.findNode(fromTreeView, e.fromIndex);
       const toNode = this.findNode(toTreeView, this.calculateToIndex(e));
 
-      if(e.dropInsideItem && toNode !== null && !toNode.itemData.isDirectory) {
+      if (e.dropInsideItem && toNode !== null && !toNode.itemData.isDirectory) {
         return;
       }
 
@@ -131,7 +131,7 @@ export default {
     },
 
     calculateToIndex(e) {
-      if(e.fromComponent != e.toComponent || e.dropInsideItem) {
+      if (e.fromComponent != e.toComponent || e.dropInsideItem) {
         return e.toIndex;
       }
 
@@ -142,20 +142,20 @@ export default {
 
     findNode(treeView, index) {
       const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
-      if(nodeElement) {
+      if (nodeElement) {
         return this.findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
       }
       return null;
     },
 
     findNodeById(nodes, id) {
-      for(var i = 0; i < nodes.length; i++) {
-        if(nodes[i].itemData.id == id) {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].itemData.id == id) {
           return nodes[i];
         }
-        if(nodes[i].children) {
+        if (nodes[i].children) {
           const node = this.findNodeById(nodes[i].children, id);
-          if(node != null) {
+          if (node != null) {
             return node;
           }
         }
@@ -164,16 +164,16 @@ export default {
     },
 
     moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
-      const fromIndex = fromItems.findIndex(item => item.id == fromNode.itemData.id);
+      const fromIndex = fromItems.findIndex((item) => item.id == fromNode.itemData.id);
       fromItems.splice(fromIndex, 1);
 
       const toIndex = toNode === null || isDropInsideItem
         ? toItems.length
-        : toItems.findIndex(item => item.id == toNode.itemData.id);
+        : toItems.findIndex((item) => item.id == toNode.itemData.id);
       toItems.splice(toIndex, 0, fromNode.itemData);
 
       this.moveChildren(fromNode, fromItems, toItems);
-      if(isDropInsideItem) {
+      if (isDropInsideItem) {
         fromNode.itemData.parentId = toNode.itemData.id;
       } else {
         fromNode.itemData.parentId = toNode != null
@@ -183,25 +183,25 @@ export default {
     },
 
     moveChildren(node, fromDataSource, toDataSource) {
-      if(!node.itemData.isDirectory) {
+      if (!node.itemData.isDirectory) {
         return;
       }
 
-      node.children.forEach(child => {
-        if(child.itemData.isDirectory) {
+      node.children.forEach((child) => {
+        if (child.itemData.isDirectory) {
           this.moveChildren(child, fromDataSource, toDataSource);
         }
 
-        const fromIndex = fromDataSource.findIndex(item => item.id == child.itemData.id);
+        const fromIndex = fromDataSource.findIndex((item) => item.id == child.itemData.id);
         fromDataSource.splice(fromIndex, 1);
         toDataSource.splice(toDataSource.length, 0, child.itemData);
       });
     },
 
     isChildNode(parentNode, childNode) {
-      let parent = childNode.parent;
-      while(parent !== null) {
-        if(parent.itemData.id === parentNode.itemData.id) {
+      let { parent } = childNode;
+      while (parent !== null) {
+        if (parent.itemData.id === parentNode.itemData.id) {
           return true;
         }
         parent = parent.parent;
@@ -213,16 +213,16 @@ export default {
       const treeViewElement = component.element();
       const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
       const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');
-      for(let i = 0; i < nodes.length; i++) {
+      for (let i = 0; i < nodes.length; i++) {
         const nodeTopPosition = nodes[i].getBoundingClientRect().top;
-        if(nodeTopPosition >= treeViewTopPosition) {
+        if (nodeTopPosition >= treeViewTopPosition) {
           return nodes[i];
         }
       }
 
       return null;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

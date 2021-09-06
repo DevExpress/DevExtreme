@@ -49,7 +49,7 @@ import {
   DxRequiredRule,
   DxEmailRule,
   DxPatternRule,
-  DxAsyncRule
+  DxAsyncRule,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
@@ -62,7 +62,7 @@ const dataSource = createStore({
   deleteUrl: url,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
-  }
+  },
 });
 
 export default {
@@ -74,12 +74,12 @@ export default {
     DxRequiredRule,
     DxEmailRule,
     DxPatternRule,
-    DxAsyncRule
+    DxAsyncRule,
   },
   data() {
     return {
       dataSource,
-      pattern: /^\(\d{3}\) \d{3}-\d{4}$/i
+      pattern: /^\(\d{3}\) \d{3}-\d{4}$/i,
     };
   },
   methods: {
@@ -87,14 +87,14 @@ export default {
       return fetch('https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json;'
+          'Content-Type': 'application/json;',
         },
         body: JSON.stringify({
           id: params.data.ID,
-          email: params.value
-        })
-      }).then(response => response.json());
-    }
-  }
+          email: params.value,
+        }),
+      }).then((response) => response.json());
+    },
+  },
 };
 </script>

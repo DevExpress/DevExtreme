@@ -4,7 +4,7 @@ import VectorMap, {
   Layer,
   Tooltip,
   Border,
-  Font
+  Font,
 } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
@@ -39,7 +39,7 @@ function customizeTooltip(arg) {
   if (country) {
     return {
       text: `${name}: ${country.totalArea}M km&#178`,
-      color: country.color
+      color: country.color,
     };
   }
 }
@@ -57,7 +57,7 @@ function customizeLayer(elements) {
       element.applySettings({
         color: country.color,
         hoveredColor: '#e0e000',
-        selectedColor: '#008f00'
+        selectedColor: '#008f00',
       });
     }
   });

@@ -1,5 +1,4 @@
 import React from 'react';
-import { dataSource } from './data.js';
 
 import Chart, {
   Series,
@@ -10,7 +9,7 @@ import Chart, {
   ValueAxis,
   Margin,
   Legend,
-  Tooltip
+  Tooltip,
 } from 'devextreme-react/chart';
 
 import RangeSelector, {
@@ -20,15 +19,15 @@ import RangeSelector, {
   ValueAxis as RsValueAxis,
   Series as RsSeries,
   Aggregation as RsAggregation,
-  Behavior
+  Behavior,
 } from 'devextreme-react/range-selector';
+import { dataSource } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      visualRange: {}
+      visualRange: {},
     };
 
     this.updateVisualRange = this.updateVisualRange.bind(this);

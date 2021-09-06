@@ -20,8 +20,8 @@ export const employees = [{
       fullName: 'Victor Norris',
       prefix: 'Mr.',
       selected: true,
-      position: 'Shipping Assistant'
-    }]
+      position: 'Shipping Assistant',
+    }],
   }, {
     id: 4,
     fullName: 'Brett Wade',
@@ -32,23 +32,23 @@ export const employees = [{
       id: 5,
       fullName: 'Amelia Harper',
       prefix: 'Mrs.',
-      position: 'Network Admin'
+      position: 'Network Admin',
     }, {
       id: 6,
       fullName: 'Wally Hobbs',
       prefix: 'Mr.',
-      position: 'Programmer'
+      position: 'Programmer',
     }, {
       id: 7,
       fullName: 'Brad Jameson',
       prefix: 'Mr.',
-      position: 'Programmer'
+      position: 'Programmer',
     }, {
       id: 8,
       fullName: 'Violet Bailey',
       prefix: 'Ms.',
       position: 'Jr Graphic Designer',
-    }]
+    }],
   }, {
     id: 9,
     fullName: 'Barb Banks',
@@ -59,12 +59,12 @@ export const employees = [{
       id: 10,
       fullName: 'Kelly Rodriguez',
       prefix: 'Ms.',
-      position: 'Support Assistant'
+      position: 'Support Assistant',
     }, {
       id: 11,
       fullName: 'James Anderson',
       prefix: 'Mr.',
-      position: 'Support Assistant'
-    }]
-  }]
+      position: 'Support Assistant',
+    }],
+  }],
 }];

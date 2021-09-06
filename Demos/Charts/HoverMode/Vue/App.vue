@@ -34,7 +34,7 @@ import {
   DxSeries,
   DxExport,
   DxLegend,
-  DxPoint
+  DxPoint,
 } from 'devextreme-vue/chart';
 
 import { yearSources, grossProductData } from './data.js';
@@ -47,15 +47,15 @@ export default {
     DxSeries,
     DxExport,
     DxLegend,
-    DxPoint
+    DxPoint,
   },
 
   data() {
     return {
       yearSources,
-      grossProductData
+      grossProductData,
     };
-  }
+  },
 };
 </script>
 <style>

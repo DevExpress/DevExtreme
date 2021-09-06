@@ -1,6 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
-import { Chart, Series, ArgumentAxis, Label, CommonSeriesSettings } from 'devextreme-react/chart';
+import {
+  Chart, Series, ArgumentAxis, Label, CommonSeriesSettings,
+} from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 import { LabelTemplate } from './LabelTemplate.js';
 

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Slider } from 'devextreme-react/slider';
 import { NumberBox } from 'devextreme-react/number-box';
 
@@ -8,6 +8,7 @@ class App extends React.Component {
     this.state = { sliderValue: 10 };
     this.setSliderValue = this.setSliderValue.bind(this);
   }
+
   render() {
     return (
       <div className="form">
@@ -24,7 +25,7 @@ class App extends React.Component {
               <Slider min={0} max={100} defaultValue={50} label={{
                 visible: true,
                 position: 'top',
-                format
+                format,
               }} />
             </div>
           </div>
@@ -35,7 +36,7 @@ class App extends React.Component {
                 enabled: true,
                 showMode: 'always',
                 position: 'bottom',
-                format
+                format,
               }} />
             </div>
           </div>
@@ -80,6 +81,7 @@ class App extends React.Component {
       </div>
     );
   }
+
   setSliderValue({ value }) {
     this.setState({ sliderValue: value });
   }

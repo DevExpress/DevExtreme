@@ -42,20 +42,20 @@ import { service } from './data.js';
 export default {
   components: {
     DxBullet,
-    DxTooltip
+    DxTooltip,
   },
   computed: {
     getWeeksData() {
       return service.getWeeksData();
-    }
+    },
   },
   methods: {
     customizeTooltip({ value, target }) {
       return {
-        text: `Current t&#176: ${value}&#176C<br>Average t&#176: ${target}&#176C`
+        text: `Current t&#176: ${value}&#176C<br>Average t&#176: ${target}&#176C`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

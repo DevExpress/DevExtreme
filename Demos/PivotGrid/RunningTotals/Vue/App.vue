@@ -25,7 +25,7 @@
 import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
-  DxScrolling
+  DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import DxCheckBox from 'devextreme-vue/check-box';
@@ -38,7 +38,7 @@ export default {
     DxExport,
     DxFieldChooser,
     DxScrolling,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
@@ -48,31 +48,31 @@ export default {
           caption: 'Region',
           width: 120,
           dataField: 'region',
-          area: 'row'
+          area: 'row',
         }, {
           caption: 'City',
           dataField: 'city',
           width: 150,
-          area: 'row'
+          area: 'row',
         }, {
           dataField: 'date',
           dataType: 'date',
-          area: 'column'
+          area: 'column',
         }, {
           groupName: 'date',
           groupInterval: 'year',
-          expanded: true
+          expanded: true,
         }, {
           groupName: 'date',
           groupInterval: 'month',
-          visible: false
+          visible: false,
         }, {
           caption: 'Total',
           dataField: 'amount',
           dataType: 'number',
           summaryType: 'sum',
           format: 'currency',
-          area: 'data'
+          area: 'data',
         }, {
           caption: 'Running Total',
           dataField: 'amount',
@@ -81,17 +81,17 @@ export default {
           format: 'currency',
           area: 'data',
           runningTotal: 'row',
-          allowCrossGroupCalculation: true
+          allowCrossGroupCalculation: true,
         }],
-        store: sales
-      })
+        store: sales,
+      }),
     };
   },
   methods: {
     changeAllowCrossGroupCalculation(e) {
       this.dataSource.field(6, { allowCrossGroupCalculation: e.value });
       this.dataSource.load();
-    }
+    },
   },
 };
 </script>

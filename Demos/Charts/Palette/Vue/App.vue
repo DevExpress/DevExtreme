@@ -45,18 +45,18 @@
 
 import DxPieChart, {
   DxSeries,
-  DxLegend
+  DxLegend,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
 import { getPalette } from 'devextreme/viz/palette';
+import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
 
 export default {
   components: {
     DxPieChart,
     DxSeries,
     DxLegend,
-    DxSelectBox
+    DxSelectBox,
   },
   data() {
     return {
@@ -64,14 +64,14 @@ export default {
       palette: paletteCollection[0],
       paletteExtensionModes,
       paletteExtensionMode: paletteExtensionModes[1],
-      dataSource
+      dataSource,
     };
   },
   computed: {
     baseColors() {
       return getPalette(this.palette).simpleSet;
-    }
-  }
+    },
+  },
 };
 </script>
 

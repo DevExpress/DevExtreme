@@ -1,19 +1,18 @@
-﻿import React from 'react';
+import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import {
   PolarChart,
   CommonSeriesSettings,
   Series,
-  Margin
+  Margin,
 } from 'devextreme-react/polar-chart';
 import { types, dataSource } from './data.js';
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      currentType: types[0]
+      currentType: types[0],
     };
     this.handleChange = this.handleChange.bind(this);
   }
