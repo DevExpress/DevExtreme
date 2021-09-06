@@ -120,7 +120,7 @@ export class TooltipProps extends BaseWidgetProps {
 
   @OneWay() target?: string | Element; // Todo: default value
 
-  @TwoWay() visible!: boolean;
+  @TwoWay() visible = true;
 
   @OneWay() width?: number | string | (() => number | string) = 'auto';
 

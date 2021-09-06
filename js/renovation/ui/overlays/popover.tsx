@@ -128,7 +128,7 @@ export class PopoverProps extends BaseWidgetProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() toolbarItems?: any;
 
-  @TwoWay() visible!: boolean;
+  @TwoWay() visible = true;
 
   @OneWay() width: number | string | (() => number | string) = 'auto';
 
