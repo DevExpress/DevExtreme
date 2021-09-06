@@ -321,6 +321,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
       && !this.pendingPullDown
       && !this.pendingReachBottom
+      && this.props.containerHasSizes
+      && this.props.contentSize
+      && this.visibleScrollAreaSize > 0
     ) {
       this.wasScrollComplete = false;
       this.onBounceAnimatorStart();

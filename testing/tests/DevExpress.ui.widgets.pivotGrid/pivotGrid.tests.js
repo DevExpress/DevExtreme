@@ -3100,7 +3100,7 @@ QUnit.module('dxPivotGrid', {
         scrollable.scrollTo({ left: 10, top: 1 });
     });
 
-    QUnit.test('T243287. Scroll position after updateDimensions', function(assert) {
+    QUnit.skip('T243287. Scroll position after updateDimensions', function(assert) {
         $('#pivotGrid').empty();
         $('#pivotGrid').width(100);
         const done = assert.async();

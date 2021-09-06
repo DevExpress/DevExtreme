@@ -486,29 +486,13 @@ const PivotGrid = Widget.inherit({
 
     _subscribeToEvents: function(columnsArea, rowsArea, dataArea) {
         const that = this;
-        const scrollHandler = function(e, areaName) {
+        const scrollHandler = function(e, area) {
             const scrollOffset = e.scrollOffset;
 
-            let leftOffset = that._scrollLeft;
-            let topOffset = that._scrollTop;
+            const scrollable = area._getScrollable();
 
-            if(areaName === 'column') {
-                if(scrollOffset.left) {
-                    leftOffset = scrollOffset.left;
-                }
-            }
-            if(areaName === 'row') {
-                if(scrollOffset.top) {
-                    topOffset = scrollOffset.top;
-                }
-            } else {
-                if(scrollOffset.left) {
-                    leftOffset = scrollOffset.left;
-                }
-                if(scrollOffset.top) {
-                    topOffset = scrollOffset.top;
-                }
-            }
+            const leftOffset = scrollable.option('direction') !== 'vertical' ? scrollOffset.left : that._scrollLeft;
+            const topOffset = scrollable.option('direction') !== 'horizontal' && that._hasHeight ? scrollOffset.top : that._scrollTop;
 
             if((that._scrollLeft || 0) !== (leftOffset || 0) || (that._scrollTop || 0) !== (topOffset || 0)) {
 
@@ -524,9 +508,7 @@ const PivotGrid = Widget.inherit({
         };
 
         each([columnsArea, rowsArea, dataArea], function(_, area) {
-            const areaName = area._getAreaName();
-
-            subscribeToScrollEvent(area, (e) => scrollHandler(e, areaName));
+            subscribeToScrollEvent(area, (e) => scrollHandler(e, area));
         });
 
         !that._hasHeight && that._dataController.subscribeToWindowScrollEvents(dataArea.groupElement());
