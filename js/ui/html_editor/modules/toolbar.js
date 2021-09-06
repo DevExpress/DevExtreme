@@ -194,8 +194,8 @@ if(Quill) {
                 deleteColumn: getTableOperationHandler(this.quill, 'deleteColumn'),
                 deleteRow: getTableOperationHandler(this.quill, 'deleteRow'),
                 deleteTable: getTableOperationHandler(this.quill, 'deleteTable'),
-                cellProperties: () => { showCellPropertiesForm(this.editorInstance); },
-                tableProperties: () => { showTablePropertiesForm(this.editorInstance); }
+                cellProperties: () => { showCellPropertiesForm(this.editorInstance, $(this.quill.getModule('table').getTable()[2].domNode)); },
+                tableProperties: () => { showTablePropertiesForm(this.editorInstance, $(this.quill.getModule('table').getTable()[0].domNode)); }
             };
         }
 
