@@ -4155,6 +4155,20 @@ export interface dxDataGridToolbar {
    * @public
    */
   items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
+  /**
+   * @docid
+   * @type boolean
+   * @default true
+   * @public
+   */
+  visible?: boolean;
+  /**
+   * @docid
+   * @type boolean
+   * @default false
+   * @public
+   */
+  disabled?: boolean;
 }
 
 /**

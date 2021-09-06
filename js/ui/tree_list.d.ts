@@ -1203,6 +1203,20 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
      * @public
      */
     name?: dxTreeListDefaultToolbarItemName | string;
+    /**
+     * @docid
+     * @type boolean
+     * @default true
+     * @public
+     */
+    visible?: boolean;
+    /**
+     * @docid
+     * @type boolean
+     * @default false
+     * @public
+     */
+    disabled?: boolean;
 }
 
 /**
