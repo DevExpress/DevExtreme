@@ -85,10 +85,6 @@ export class PopoverProps extends BaseWidgetProps {
 
   @OneWay() minWidth?: number | string | (() => number | string) | null = null;
 
-  @Event() onContentReady?: () => void;
-
-  @Event() onDisposing?: () => void;
-
   @Event() onHidden?: () => void;
 
   @Event() onHiding?: () => void;

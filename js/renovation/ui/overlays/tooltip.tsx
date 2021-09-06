@@ -91,10 +91,6 @@ export class TooltipProps extends BaseWidgetProps {
 
   @OneWay() minWidth?: number | string | (() => number | string) | null = null;
 
-  @Event() onContentReady?: () => void;
-
-  @Event() onDisposing?: () => void;
-
   @Event() onHidden?: () => void;
 
   @Event() onHiding?: () => void;
