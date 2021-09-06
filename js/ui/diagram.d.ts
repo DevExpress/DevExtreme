@@ -469,7 +469,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 data:object
        * @default undefined
        */
-      customDataExpr?: string | ((data: any, value: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @default null
@@ -480,85 +480,85 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 data:object
        * @default "from"
        */
-      fromExpr?: string | ((data: any, value: any) => any);
+      fromExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      fromLineEndExpr?: string | ((data: any, value: any) => any);
+      fromLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      fromPointIndexExpr?: string | ((data: any, value: any) => any);
+      fromPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "id"
        */
-      keyExpr?: string | ((data: any, value: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      lineTypeExpr?: string | ((data: any, value: any) => any);
+      lineTypeExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      lockedExpr?: string | ((data: any, value: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      pointsExpr?: string | ((data: any, value: any) => any);
+      pointsExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      styleExpr?: string | ((data: any, value: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      textExpr?: string | ((data: any, value: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      textStyleExpr?: string | ((data: any, value: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "to"
        */
-      toExpr?: string | ((data: any, value: any) => any);
+      toExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      toLineEndExpr?: string | ((data: any, value: any) => any);
+      toLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      toPointIndexExpr?: string | ((data: any, value: any) => any);
+      toPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      zIndexExpr?: string | ((data: any, value: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * @docid
@@ -630,19 +630,19 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 data:object
        * @default "children"
        */
-      containerChildrenExpr?: string | ((data: any, value: any) => any);
+      containerChildrenExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      containerKeyExpr?: string | ((data: any, value: any) => any);
+      containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      customDataExpr?: string | ((data: any, value: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @default null
@@ -653,85 +653,85 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 data:object
        * @default undefined
        */
-      heightExpr?: string | ((data: any, value: any) => any);
+      heightExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      imageUrlExpr?: string | ((data: any, value: any) => any);
+      imageUrlExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      itemsExpr?: string | ((data: any, value: any) => any);
+      itemsExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "id"
        */
-      keyExpr?: string | ((data: any, value: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      leftExpr?: string | ((data: any, value: any) => any);
+      leftExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      lockedExpr?: string | ((data: any, value: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      parentKeyExpr?: string | ((data: any, value: any) => any);
+      parentKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      styleExpr?: string | ((data: any, value: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "text"
        */
-      textExpr?: string | ((data: any, value: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      textStyleExpr?: string | ((data: any, value: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      topExpr?: string | ((data: any, value: any) => any);
+      topExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "type"
        */
-      typeExpr?: string | ((data: any, value: any) => any);
+      typeExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      widthExpr?: string | ((data: any, value: any) => any);
+      widthExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      zIndexExpr?: string | ((data: any, value: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * @docid
