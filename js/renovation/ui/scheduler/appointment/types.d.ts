@@ -1,12 +1,16 @@
-import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import { BaseTemplateProps } from '../types';
 
+interface AppointmentData {
+  startDate: Date;
+  endDate: Date;
+}
+
+interface TargetAppointmentData extends AppointmentData {
+  text: string;
+}
+
 export interface AppointmentViewModel {
-  appointment: {
-    startDate: Date;
-    endDate: Date;
-    text: string;
-  };
+  appointment: TargetAppointmentData;
 
   geometry: {
     empty: boolean; // TODO
@@ -19,10 +23,8 @@ export interface AppointmentViewModel {
   };
 
   info: {
-    appointment: {
-      startDate: Date;
-      endDate: Date;
-    };
+    appointment: AppointmentData;
+
     sourceAppointment: {
       groupIndex: number;
     };
@@ -31,6 +33,11 @@ export interface AppointmentViewModel {
   };
 }
 
+export interface AppointmentInfo {
+  appointmentData: AppointmentData;
+  targetedAppointmentData: TargetAppointmentData;
+}
+
 export interface AppointmentTemplateProps extends BaseTemplateProps {
-  data: AppointmentTemplateData;
+  data: AppointmentInfo;
 }
