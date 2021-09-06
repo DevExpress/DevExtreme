@@ -5016,7 +5016,6 @@ QUnit.module('Tests with stubs', {
 
     QUnit.test('Rows height calculation', function(assert) {
         this.dataArea.getRowsHeight.returns([43, 23, 34, 22, 88, 10]);
-        this.dataArea._getScrollable.returns({ container: () => $('<div>') });
         this.verticalArea.getRowsHeight.returns([30, 28, 70, 30]);
 
         this.dataController.getColumnsInfo.returns([{}, {}]);
@@ -5043,7 +5042,6 @@ QUnit.module('Tests with stubs', {
 
     QUnit.test('Rows height calculation when no data', function(assert) {
         this.dataArea.getRowsHeight.returns([43, 23]);
-        this.dataArea._getScrollable.returns({ container: () => $('<div>') });
         this.verticalArea.getRowsHeight.returns([30, 28, 70, 30]);
 
         this.dataController.getColumnsInfo.returns([{}]);
@@ -5056,7 +5054,6 @@ QUnit.module('Tests with stubs', {
 
     QUnit.test('Rows height calculation when no data and many header rows', function(assert) {
         this.dataArea.getRowsHeight.returns([43, 23, 34]);
-        this.dataArea._getScrollable.returns({ container: () => $('<div>') });
         this.verticalArea.getRowsHeight.returns([30, 28]);
 
         this.dataController.getColumnsInfo.returns([{}, {}, {}, {}, {}]);
