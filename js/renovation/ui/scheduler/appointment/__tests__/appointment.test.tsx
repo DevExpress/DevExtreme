@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction, Appointment } from '../appointment';
+import { viewFunction, Appointment, AppointmentProps } from '../appointment';
 import { AppointmentContent } from '../content';
 
 describe('Appointment', () => {
@@ -102,22 +102,24 @@ describe('Appointment', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      it('should return correct styles', () => {
-        const appointment = new Appointment({
-          viewModel: defaultViewModel,
-        });
-
-        expect(appointment.styles)
-          .toEqual({
-            backgroundColor: '#1A2BC',
-            height: 20,
-            left: 1,
-            top: 2,
-            width: 10,
+      describe('styles', () => {
+        it('should return correct styles', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
           });
+
+          expect(appointment.styles)
+            .toEqual({
+              backgroundColor: '#1A2BC',
+              height: 20,
+              left: 1,
+              top: 2,
+              width: 10,
+            });
+        });
       });
 
-      describe('Content', () => {
+      describe('text', () => {
         it('should return correct text', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
@@ -126,7 +128,9 @@ describe('Appointment', () => {
           expect(appointment.text)
             .toBe('Some text');
         });
+      });
 
+      describe('dateText', () => {
         it('should return correct dateText', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
@@ -137,7 +141,7 @@ describe('Appointment', () => {
         });
       });
 
-      describe('Template', () => {
+      describe('data', () => {
         it('shoud return correct data', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
@@ -156,8 +160,17 @@ describe('Appointment', () => {
               },
             });
         });
+      });
 
-        it('shoud return correct index', () => {
+      describe('index', () => {
+        it('shoud return correct default value', () => {
+          const appointment = new Appointment(new AppointmentProps());
+
+          expect(appointment.index)
+            .toEqual(0);
+        });
+
+        it('shoud return correct value', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
             index: 1234,

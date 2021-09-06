@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction } from '../content';
+import { viewFunction, AppointmentContent, AppointmentContentProps } from '../content';
 
 describe('AppointmentContent', () => {
   describe('Render', () => {
@@ -51,6 +51,20 @@ describe('AppointmentContent', () => {
 
       expect(dateText.text())
         .toBe('Date Text');
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Default values', () => {
+      it('properties should have correct values by default', () => {
+        const appointmentContent = new AppointmentContent(new AppointmentContentProps());
+
+        expect(appointmentContent.props.text)
+          .toEqual('');
+
+        expect(appointmentContent.props.dateText)
+          .toEqual('');
+      });
     });
   });
 });
