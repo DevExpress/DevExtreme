@@ -4625,6 +4625,10 @@ declare module DevExpress.ui {
      * [descr:dxActionSheetItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    /**
+     * [descr:dxActionSheetItem.stylingMode]
+     */
+    stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
    * @deprecated use Properties instead
@@ -8695,11 +8699,8 @@ declare module DevExpress.ui {
         | 'bold'
         | 'italic'
         | 'underline'
-        | 'fontColor'
         | 'lineStyle'
         | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
         | 'textAlignLeft'
         | 'textAlignCenter'
         | 'textAlignRight'
@@ -11305,6 +11306,10 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
+     * [descr:dxFileUploaderOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
      */
     invalidFileExtensionMessage?: string;
@@ -12580,6 +12585,22 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showDependencies(value)]
      */
     showDependencies(value: boolean): void;
+    /**
+     * [descr:dxGantt.zoomIn()]
+     */
+    zoomIn(): void;
+    /**
+     * [descr:dxGantt.zoomOut()]
+     */
+    zoomOut(): void;
+    /**
+     * [descr:dxGantt.unassignAllResourcesFromTask(taskKey)]
+     */
+    unassignAllResourcesFromTask(taskKey: any): void;
+    /**
+     * [descr:dxGantt.showTaskDetailsDialog(taskKey)]
+     */
+    showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
@@ -13512,6 +13533,15 @@ declare module DevExpress.ui {
   module dxHtmlEditor {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface dxHtmlEditorTableContextMenu {
+      /**
+       * [descr:dxHtmlEditorTableContextMenu.enabled]
+       */
+      enabled?: boolean;
+    }
     export type FocusInEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type FocusOutEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type InitializedEvent =
@@ -13628,6 +13658,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.mentions]
      */
     mentions?: Array<dxHtmlEditorMention>;
+    /**
+     * [descr:dxHtmlEditorOptions.tableContextMenu]
+     */
+    tableContextMenu?: DevExpress.ui.dxHtmlEditor.dxHtmlEditorTableContextMenu;
     /**
      * [descr:dxHtmlEditorOptions.name]
      */

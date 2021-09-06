@@ -105,9 +105,15 @@ export class CollectionWidgetItem {
   ];
   <Toolbar items={toolbarItems}></Toolbar>
 */
+
+@ComponentBindings()
+export class BaseToolbarItemProps {
+  rtlEnabled?: boolean | undefined;
+}
+
 // TODO: it is not a 'native' way
 @ComponentBindings()
-export class ToolbarTextBoxProps {
+export class ToolbarTextBoxProps extends BaseToolbarItemProps {
   @OneWay() value: (string | null) = '';
 
   // TODO:  EventCallback<TextBoxValueChanged>
@@ -130,7 +136,7 @@ export class ToolbarTextBoxProps {
 */
 // TODO: it is not a 'native' way
 @ComponentBindings()
-export class ToolbarCheckBoxProps {
+export class ToolbarCheckBoxProps extends BaseToolbarItemProps {
   @OneWay() value: (boolean | null) = false;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -188,7 +194,7 @@ export type ToolbarButtonGroupSelectionMode = 'multiple' | 'single';
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarButtonGroupProps {
+export class ToolbarButtonGroupProps extends BaseToolbarItemProps {
   //
   // Use cases:
   //
@@ -239,7 +245,7 @@ export type ToolbarButtonType = 'back' | 'danger' | 'default' | 'normal' | 'succ
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarButtonProps {
+export class ToolbarButtonProps extends BaseToolbarItemProps {
   //
   // Use cases:
   //
@@ -343,7 +349,7 @@ export type ToolbarDropDownButtonItemPropsType = ToolbarDropDownButtonItemProps;
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarDropDownButtonProps {
+export class ToolbarDropDownButtonProps extends BaseToolbarItemProps {
   @OneWay()
   dataSource?: (string | ToolbarDropDownButtonItemPropsType)[];
 
