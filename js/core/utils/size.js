@@ -3,7 +3,6 @@ import domAdapter from '../../core/dom_adapter';
 import { isWindow, isString, isNumeric, isRenderer } from '../utils/type';
 
 const window = getWindow();
-export const hooks = {};
 
 const SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
 
@@ -141,23 +140,38 @@ export const getVisibleHeight = function(element) {
     return 0;
 };
 
-export const getWidth = function(el, value) { return arguments.length === 1 ? elementSize(el, 'width') : elementSize(el, 'width', value); };
-export const setWidth = function(el, value) { return elementSize(el, 'width', value); };
-export const getHeight = function(el, value) { return arguments.length === 1 ? elementSize(el, 'height') : elementSize(el, 'height', value); };
-export const setHeight = function(el, value) { return elementSize(el, 'height', value); };
-export const getOuterWidth = function(el, value) { return arguments.length === 1 ? elementSize(el, 'outerWidth') : elementSize(el, 'outerWidth', value); };
-export const setOuterWidth = function(el, value) { return elementSize(el, 'outerWidth', value); };
-export const getOuterHeight = function(el, value) { return arguments.length === 1 ? elementSize(el, 'outerHeight') : elementSize(el, 'outerHeight', value); };
-export const setOuterHeight = function(el, value) { return elementSize(el, 'outerHeight', value); };
-export const getInnerWidth = function(el, value) { return arguments.length === 1 ? elementSize(el, 'innerWidth') : elementSize(el, 'innerWidth', value); };
-export const setInnerWidth = function(el, value) { return elementSize(el, 'innerWidth', value); };
-export const getInnerHeight = function(el, value) { return arguments.length === 1 ? elementSize(el, 'innerHeight') : elementSize(el, 'innerHeight', value); };
-export const setInnerHeight = function(el, value) { return elementSize(el, 'innerHeight', value); };
+export const commonCallbacks = {
+    getWidth: function(el, value) { return elementSizeHelper('width', ...arguments); },
+    setWidth: function(el, value) { return elementSizeHelper('width', ...arguments); },
+    getHeight: function(el, value) { return elementSizeHelper('height', ...arguments); },
+    setHeight: function(el, value) { return elementSizeHelper('height', ...arguments); },
+    getOuterWidth: function(el, value) { return elementSizeHelper('outerWidth', ...arguments); },
+    setOuterWidth: function(el, value) { return elementSizeHelper('outerWidth', ...arguments); },
+    getOuterHeight: function(el, value) { return elementSizeHelper('outerHeight', ...arguments); },
+    setOuterHeight: function(el, value) { return elementSizeHelper('outerHeight', ...arguments); },
+    getInnerWidth: function(el, value) { return elementSizeHelper('innerWidth', ...arguments); },
+    setInnerWidth: function(el, value) { return elementSizeHelper('innerWidth', ...arguments); },
+    getInnerHeight: function(el, value) { return elementSizeHelper('innerHeight', ...arguments); },
+    setInnerHeight: function(el, value) { return elementSizeHelper('innerHeight', ...arguments); },
+};
+function elementSizeHelper(sizeProperty, el, value) {
+    return arguments.length === 2 ? elementSize(el, sizeProperty) : elementSize(el, sizeProperty, value);
+}
+
+export const getWidth = function(el, value) { return commonCallbacks.getWidth(...arguments); };
+export const setWidth = function(el, value) { return commonCallbacks.setWidth(...arguments); };
+export const getHeight = function(el, value) { return commonCallbacks.getHeight(...arguments); };
+export const setHeight = function(el, value) { return commonCallbacks.setHeight(...arguments); };
+export const getOuterWidth = function(el, value) { return commonCallbacks.getOuterWidth(...arguments); };
+export const setOuterWidth = function(el, value) { return commonCallbacks.setOuterWidth(...arguments); };
+export const getOuterHeight = function(el, value) { return commonCallbacks.getOuterHeight(...arguments); };
+export const setOuterHeight = function(el, value) { return commonCallbacks.setOuterHeight(...arguments); };
+export const getInnerWidth = function(el, value) { return commonCallbacks.getInnerWidth(...arguments); };
+export const setInnerWidth = function(el, value) { return commonCallbacks.setInnerWidth(...arguments); };
+export const getInnerHeight = function(el, value) { return commonCallbacks.getInnerHeight(...arguments); };
+export const setInnerHeight = function(el, value) { return commonCallbacks.setInnerHeight(...arguments); };
 
 export const elementSize = function(el, sizeProperty, value) {
-    if(hooks[sizeProperty]) {
-        return hooks[sizeProperty](...arguments);
-    }
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;
