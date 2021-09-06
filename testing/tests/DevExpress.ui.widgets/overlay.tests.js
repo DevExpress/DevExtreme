@@ -3070,8 +3070,8 @@ testModule('drag', moduleConfig, () => {
             $(toSelector(VIEWPORT_CLASS)).attr('style', 'width: 100px; height: 100px');
 
             const $container = $(window);
-            const viewWidth = Math.max($(document).outerWidth(), $container.outerWidth());
-            const viewHeight = Math.max($(document).outerHeight(), $container.outerHeight());
+            const viewWidth = Math.max(document.body.clientWidth, $container.outerWidth());
+            const viewHeight = Math.max(document.body.clientHeight, $container.outerHeight());
             const position = $overlayContent.position();
 
             const startEvent = pointer.start().dragStart().lastEvent();
