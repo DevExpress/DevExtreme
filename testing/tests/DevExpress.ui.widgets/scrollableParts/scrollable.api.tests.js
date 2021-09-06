@@ -23,8 +23,6 @@ import {
     SCROLLABLE_DISABLED_CLASS,
     calculateInertiaDistance
 } from './scrollable.constants.js';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender as reRender } from 'inferno';
 
 import {
     DIRECTION_HORIZONTAL,
@@ -266,6 +264,7 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
 
     const scrollable = $scrollable.dxScrollable('instance');
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+
 
     $content.append($('<div>').height(100));
     scrollable.scrollBy(distance);
@@ -787,6 +786,7 @@ class ScrollableTestHelper {
 
     checkScrollOffset({ left, top, maxScrollOffset, epsilon = 0.001 }, message) {
         const scrollOffset = getScrollOffset(this.$scrollable);
+
         const { decreasing, positive } = getScrollRtlBehavior();
 
         QUnit.assert.roughEqual(this.getMaxScrollOffset().horizontal, maxScrollOffset, epsilon, 'horizontal maxScrollOffset');
@@ -811,7 +811,6 @@ class ScrollableTestHelper {
         this.$scrollable.css('width', width);
 
         resizeCallbacks.fire();
-        reRender();
     }
 }
 

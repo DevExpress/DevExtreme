@@ -24,6 +24,7 @@ import {
     SCROLLBAR_HOVERABLE_CLASS
 } from './scrollable.constants.js';
 
+
 const moduleConfig = {
     beforeEach: function() {
         const markup = '\
@@ -608,7 +609,6 @@ const testDefaultValue = function(realDevice, currentDevice, realVersion) {
         version: realVersion
     });
     devices.current({ platform: currentDevice });
-
     $('#scrollable').dxScrollable({});
 
     return $('#scrollable').dxScrollable('option', 'useNative');
