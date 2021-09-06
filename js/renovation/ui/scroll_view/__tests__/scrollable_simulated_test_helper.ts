@@ -43,16 +43,6 @@ class ScrollableTestHelper {
 
   isBoth: boolean;
 
-  initHandlerMock?: jest.Mock;
-
-  startHandlerMock?: jest.Mock;
-
-  endHandlerMock?: jest.Mock;
-
-  cancelHandlerMock?: jest.Mock;
-
-  stopHandlerMock?: jest.Mock;
-
   scrollBarHandlers?: { name: string }[];
 
   actionHandlers: { [key: string]: any };
@@ -117,6 +107,8 @@ class ScrollableTestHelper {
       }
     }
 
+    this.viewModel.containerRef.current.scrollTop = 0;
+    this.viewModel.containerRef.current.scrollLeft = 0;
     this.initStyles(this.viewModel.containerRef.current,
       { width: containerSize, height: containerSize },
       { width: contentSize, height: contentHeight });
@@ -226,9 +218,11 @@ class ScrollableTestHelper {
 
       if (scrollbar.props.direction === 'vertical') {
         restProps.scrollLocation = vScrollLocation;
+        scrollbar.prevScrollLocation = vScrollLocation;
       }
       if (scrollbar.props.direction === 'horizontal') {
         restProps.scrollLocation = hScrollLocation;
+        scrollbar.prevScrollLocation = hScrollLocation;
       }
       scrollbar.scrollbarRef = React.createRef();
       scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
@@ -248,6 +242,7 @@ class ScrollableTestHelper {
               scrollbar.props.contentTranslateOffsetChange.bind(this.viewModel),
             scrollLocationChange:
               scrollbar.props.scrollLocationChange.bind(this.viewModel),
+            onScroll: scrollbar.props.onScroll.bind(this.viewModel),
             ...restProps,
           },
         },
@@ -277,12 +272,14 @@ class ScrollableTestHelper {
       { name: 'release' }];
 
     this.scrollBarHandlers.forEach(({ name }) => {
-      this[`${name}HandlerMock`] = jest.fn();
+      this[`${name}VScrollbarHandlerMock`] = jest.fn();
+      this[`${name}HScrollbarHandlerMock`] = jest.fn();
+
       if (this.isVertical) {
-        this.getVScrollbar()[`${name}Handler`] = this[`${name}HandlerMock`];
+        this.getVScrollbar()[`${name}Handler`] = this[`${name}VScrollbarHandlerMock`];
       }
       if (this.isHorizontal) {
-        this.getHScrollbar()[`${name}Handler`] = this[`${name}HandlerMock`];
+        this.getHScrollbar()[`${name}Handler`] = this[`${name}HScrollbarHandlerMock`];
       }
     });
   }
@@ -313,28 +310,18 @@ class ScrollableTestHelper {
   }
 
   checkScrollbarEventHandlerCalls(jestExpect: (any) => any,
+    direction: 'vertical' | 'horizontal',
     expectedHandlers: string[],
-    expectedArgs: (boolean | { x: number; y: number } | { [key: string]: any })[][]): void {
+    expectedArgs: (boolean | number | { [key: string]: any })[][]): void {
+    const prefix = direction === 'vertical' ? 'V' : 'H';
     this.scrollBarHandlers?.forEach((handler) => {
       const indexOf = expectedHandlers.indexOf(handler.name);
-      if (indexOf !== -1) {
-        if (this.isBoth) {
-          jestExpect(this[`${handler.name}HandlerMock`]).toBeCalledTimes(2);
-          if (expectedArgs[indexOf].length === 2) {
-            jestExpect(this[`${handler.name}HandlerMock`]).toHaveBeenNthCalledWith(1, expectedArgs[indexOf][0], expectedArgs[indexOf][1]);
-          } else if (expectedArgs[indexOf].length === 1) {
-            jestExpect(this[`${handler.name}HandlerMock`]).toHaveBeenNthCalledWith(2, expectedArgs[indexOf][0]);
-          }
-        } else {
-          jestExpect(this[`${handler.name}HandlerMock`]).toBeCalledTimes(1);
-          if (expectedArgs[indexOf].length === 2) {
-            jestExpect(this[`${handler.name}HandlerMock`]).toHaveBeenCalledWith(expectedArgs[indexOf][0], expectedArgs[indexOf][1]);
-          } else if (expectedArgs[indexOf].length === 1) {
-            jestExpect(this[`${handler.name}HandlerMock`]).toHaveBeenCalledWith(expectedArgs[indexOf][0]);
-          }
-        }
+
+      if (indexOf !== -1 && this[`is${titleize(direction)}`]) {
+        jestExpect(this[`${handler.name}${prefix}ScrollbarHandlerMock`]).toBeCalledTimes(1);
+        jestExpect(this[`${handler.name}${prefix}ScrollbarHandlerMock`].mock.calls).toEqual([expectedArgs[indexOf]]);
       } else {
-        jestExpect(this[`${handler.name}HandlerMock`]).toBeCalledTimes(0);
+        jestExpect(this[`${handler.name}${prefix}ScrollbarHandlerMock`]).toBeCalledTimes(0);
       }
     });
   }

@@ -90,6 +90,8 @@ class ScrollableTestHelper {
       }
     }
 
+    this.viewModel.containerRef.current.scrollTop = 0;
+    this.viewModel.containerRef.current.scrollLeft = 0;
     this.initStyles(this.viewModel.containerRef.current,
       { width: containerSize, height: containerSize },
       { width: contentSize, height: contentHeight });

@@ -1,22 +1,20 @@
-/* eslint-disable max-classes-per-file */
-
 import {
-  Component, JSXComponent,
+  Component, Consumer, JSXComponent,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
 import LegacyToolbar from '../../../ui/toolbar';
 
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
-import { ToolbarProps } from './toolbar_props';
+import { BaseToolbarItemProps, ToolbarProps } from './toolbar_props';
+import { isObject } from '../../../core/utils/type';
+import { ConfigContext, ConfigContextValue } from '../../common/config_context';
+import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 
-export const viewFunction = ({
-  props,
-  restAttributes,
-}: Toolbar): JSX.Element => (
+export const viewFunction = ({ componentProps, restAttributes }: Toolbar): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyToolbar}
-    componentProps={props}
-  // eslint-disable-next-line react/jsx-props-no-spreading
+    componentProps={componentProps}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
@@ -26,4 +24,27 @@ export const viewFunction = ({
   view: viewFunction,
 })
 
-export class Toolbar extends JSXComponent<ToolbarProps>() {}
+export class Toolbar extends JSXComponent<ToolbarProps>() {
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
+  get componentProps(): ToolbarProps {
+    const { items } = this.props;
+    const toolbarItems = items?.map((item) => {
+      if (!isObject(item)) {
+        return item;
+      }
+
+      const options = (item.options ?? {}) as BaseToolbarItemProps;
+      options.rtlEnabled = options.rtlEnabled ?? this.resolvedRtlEnabled;
+      return { ...item, options };
+    });
+
+    return { ...this.props, items: toolbarItems };
+  }
+
+  get resolvedRtlEnabled(): boolean {
+    const { rtlEnabled } = this.props;
+    return !!resolveRtlEnabled(rtlEnabled, this.config);
+  }
+}

@@ -330,12 +330,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Method()
   scrollOffset(): ScrollOffset {
-    const { top, left } = this.scrollLocation();
+    const { scrollTop, scrollLeft } = this.containerRef.current!;
     const scrollLeftMax = getScrollLeftMax(this.containerElement);
 
     return {
-      top,
-      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
+      top: scrollTop,
+      left: normalizeOffsetLeft(scrollLeft, scrollLeftMax, !!this.props.rtlEnabled),
     };
   }
 
@@ -517,10 +517,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
         return;
       }
 
-      const currentLocation = -this.scrollLocation().top;
-      const scrollDelta = this.locationTop - currentLocation;
+      const { scrollTop } = this.containerRef.current!;
+      const scrollDelta = this.locationTop + scrollTop;
 
-      this.locationTop = currentLocation;
+      this.locationTop = -scrollTop;
 
       if (this.isSwipeDownStrategy && scrollDelta > 0 && this.isReachBottom()) {
         this.onReachBottom();
@@ -628,13 +628,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.hideScrollbarTimer = undefined;
   }
 
-  scrollLocation(): { top: number; left: number } {
-    return {
-      top: this.containerElement.scrollTop,
-      left: this.containerElement.scrollLeft,
-    };
-  }
-
   getInitEventData(): {
     getDirection: () => string | undefined;
     validate: (event: DxMouseEvent) => boolean;
@@ -651,8 +644,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   handleInit(event: DxMouseEvent): void {
     if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
-      if (this.topPocketState === TopPocketState.STATE_RELEASED
-        && this.scrollLocation().top === 0) {
+      const { scrollTop } = this.containerRef.current!;
+
+      if (this.topPocketState === TopPocketState.STATE_RELEASED && scrollTop === 0) {
         this.initPageY = event.originalEvent.pageY;
         this.setPocketState(TopPocketState.STATE_TOUCHED);
       }
@@ -797,14 +791,16 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   isPullDown(): boolean {
-    return this.pullDownEnabled && this.scrollLocation().top <= -this.topPocketHeight;
+    const { scrollTop } = this.containerRef.current!;
+
+    return this.pullDownEnabled && scrollTop <= -this.topPocketHeight;
   }
 
   isReachBottom(): boolean {
-    const { top } = this.scrollLocation();
+    const { scrollTop } = this.containerRef.current!;
 
     return this.props.reachBottomEnabled
-      && isReachedBottom(this.containerElement, top, this.bottomPocketHeight);
+      && isReachedBottom(this.containerElement, scrollTop, this.bottomPocketHeight);
   }
 
   get bottomPocketHeight(): number {

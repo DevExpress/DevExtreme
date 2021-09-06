@@ -7290,4 +7290,23 @@ QUnit.module('New virtual scrolling mode', {
             fireSpy.restore();
         }
     });
+
+    QUnit.test('dataSource adapter should have copy of dataSource items', function(assert) {
+        // arrange
+        const items = [{ id: 1 }];
+        const dataSource = createDataSource({
+            store: [{ id: 1 }],
+            scrolling: {
+                newMode: true
+            }
+        });
+
+        // act
+        dataSource.load();
+
+        // assert
+        assert.notEqual(dataSource.items(), dataSource._dataSource.items(), 'dataSourceAdapter have copy of items');
+        assert.deepEqual(dataSource.items(), items, 'dataSourceAdapter items');
+        assert.deepEqual(dataSource._dataSource.items(), items, 'dataSource items');
+    });
 });
