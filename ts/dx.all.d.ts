@@ -15375,7 +15375,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.dragAndResizeArea]
      */
-    dragAndResizeArea?: DevExpress.core.UserDefinedElement;
+    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxOverlayOptions.dragEnabled]
      */
@@ -16417,7 +16417,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.dragAndResizeArea]
      */
-    dragAndResizeArea?: DevExpress.core.UserDefinedElement;
+    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxPopupOptions.dragEnabled]
      */
