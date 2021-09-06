@@ -20,8 +20,6 @@ import { DataController } from './ui.pivot_grid.data_controller';
 import { DataArea } from './ui.pivot_grid.data_area';
 import { VerticalHeadersArea, HorizontalHeadersArea } from './ui.pivot_grid.headers_area';
 import { getSize } from '../../core/utils/size';
-import { nativeScrolling } from '../../core/utils/support';
-import { calculateScrollbarWidth } from './utils/calculate_scrollbar_width';
 
 import { FieldsArea } from './ui.pivot_grid.fields_area';
 
@@ -1082,7 +1080,7 @@ const PivotGrid = Widget.inherit({
 
             rowsArea.renderScrollable();
             columnsArea.renderScrollable();
-            dataArea.renderScrollable(that.getUseNativeOptionValue());
+            dataArea.renderScrollable();
         }
 
         [dataArea, rowsArea, columnsArea].forEach(function(area) {
@@ -1170,14 +1168,6 @@ const PivotGrid = Widget.inherit({
         return this.callBase() && !this._dataController.isLoading();
     },
 
-    getUseNativeOptionValue: function() {
-        const { useNative } = this.option('scrolling');
-
-        return useNative === 'auto'
-            ? !!nativeScrolling
-            : !!useNative;
-    },
-
     updateDimensions: function() {
         const that = this;
         let groupWidth;
@@ -1188,8 +1178,6 @@ const PivotGrid = Widget.inherit({
         let rowsAreaWidth = 0;
         let hasRowsScroll;
         let hasColumnsScroll;
-
-        const scrollBarUseNative = this.getUseNativeOptionValue();
 
         const dataAreaCell = tableElement.find('.' + DATA_AREA_CELL_CLASS);
         const rowAreaCell = tableElement.find('.' + ROW_AREA_CELL_CLASS);
@@ -1292,10 +1280,10 @@ const PivotGrid = Widget.inherit({
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
 
-            const scrollBarWidth = scrollBarUseNative ? calculateScrollbarWidth() : 0;
+            const scrollBarWidth = that._dataArea.getScrollbarWidth();
 
             ///#DEBUG
-            that.__scrollBarUseNative = scrollBarUseNative;
+            that.__scrollBarUseNative = that._dataArea.getUseNativeValue();
             that.__scrollBarWidth = scrollBarWidth;
             ///#ENDDEBUG
 
@@ -1370,8 +1358,6 @@ const PivotGrid = Widget.inherit({
 
                 const updateScrollableResults = [];
                 that._dataArea.updateScrollableOptions({
-                    useNative: scrollBarUseNative,
-                    useSimulatedScrollbar: !scrollBarUseNative,
                     direction: that._dataArea.getScrollableDirection(hasColumnsScroll, hasRowsScroll),
                     rtlEnabled: that.option('rtlEnabled')
                 });
