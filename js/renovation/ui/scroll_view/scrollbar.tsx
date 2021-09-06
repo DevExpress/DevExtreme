@@ -668,6 +668,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return combineClasses(classesMap);
   }
 
+  get scrollStyles(): { [key: string]: string | number } {
+    return {
+      [this.dimension]: this.scrollSize || THUMB_MIN_SIZE,
+      transform: this.scrollTransform,
+    };
+  }
+
   get scrollTransform(): string {
     if (this.props.showScrollbar === 'never') {
       return 'none';
@@ -680,13 +687,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     return `translate(0px, ${translateValue}px)`;
-  }
-
-  get scrollStyles(): { [key: string]: string | number } {
-    return {
-      [this.dimension]: this.scrollSize || THUMB_MIN_SIZE,
-      transform: this.scrollTransform,
-    };
   }
 
   get scrollClasses(): string {

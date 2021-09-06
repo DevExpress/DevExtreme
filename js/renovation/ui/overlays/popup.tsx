@@ -157,7 +157,8 @@ export class PopupProps extends BaseWidgetProps {
 
   @Template() titleTemplate: template | ((contentElement: DxElement) => string | UserDefinedElement) = 'title';
 
-  @OneWay() toolbarItems? = []; // TODO: default value
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @OneWay() toolbarItems?: any;
 
   @TwoWay() visible!: boolean;
 
