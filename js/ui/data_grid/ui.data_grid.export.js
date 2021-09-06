@@ -13,6 +13,14 @@ import '../drop_down_button';
 import List from '../list';
 import { when, Deferred } from '../../core/utils/deferred';
 
+const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
+const DATAGRID_EXPORT_BUTTON_CLASS = 'dx-datagrid-export-button';
+const DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME = 'exportButton';
+const DATAGRID_EXPORT_ICON = 'export-to';
+const DATAGRID_EXPORT_EXCEL_ICON = 'xlsxfile';
+const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
+const DATAGRID_EXPORT_EXCEL_BUTTON_ICON = 'export-excel-button';
+
 export const DataProvider = Class.inherit({
     ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
         this._exportController = exportController;
@@ -704,7 +712,7 @@ dataGridCore.registerModule('export', {
                     }
 
                     const toolbarButtonOptions = {
-                        name: 'exportButton',
+                        name: DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME,
                         location: 'after',
                         locateInMenu: 'auto',
                         sortIndex: 30,
@@ -717,7 +725,7 @@ dataGridCore.registerModule('export', {
                             hint: items[0].text,
                             text: undefined,
                             elementAttr: {
-                                class: 'dx-datagrid-export-button'
+                                class: DATAGRID_EXPORT_BUTTON_CLASS
                             }
                         };
 
@@ -726,15 +734,15 @@ dataGridCore.registerModule('export', {
                         toolbarButtonOptions.options = widgetOptions;
                     } else {
                         const widgetOptions = {
-                            icon: 'export',
+                            icon: DATAGRID_EXPORT_ICON,
                             displayExpr: 'text',
                             items: items,
                             hint: 'Export',
                             elementAttr: {
-                                class: 'dx-datagrid-export-button'
+                                class: DATAGRID_EXPORT_BUTTON_CLASS
                             },
                             dropDownOptions: {
-                                wrapperAttr: { 'class': 'dx-datagrid-export-menu' },
+                                wrapperAttr: { class: DATAGRID_EXPORT_MENU_CLASS },
                                 width: 'auto'
                             }
                         };
@@ -758,7 +766,7 @@ dataGridCore.registerModule('export', {
                     if(exportOptions.enabled) {
                         items.push({
                             text: texts.exportAll,
-                            icon: 'xlsxfile',
+                            icon: DATAGRID_EXPORT_EXCEL_ICON,
                             onClick: () => {
                                 this._exportController.exportToExcel();
                             }
@@ -767,7 +775,7 @@ dataGridCore.registerModule('export', {
                         if(exportOptions.allowExportSelectedData) {
                             items.push({
                                 text: texts.exportSelectedRows,
-                                icon: 'exportselected',
+                                icon: DATAGRID_EXPORT_SELECTED_ICON,
                                 onClick: () => {
                                     this._exportController.exportToExcel(true);
                                 }
@@ -796,12 +804,12 @@ dataGridCore.registerModule('export', {
                     if(allowExportSelected) {
                         options = {
                             hint: texts.exportTo,
-                            icon: 'export-to'
+                            icon: DATAGRID_EXPORT_ICON
                         };
                     } else {
                         options = {
                             hint: texts.exportAll,
-                            icon: 'export-excel-button',
+                            icon: DATAGRID_EXPORT_EXCEL_BUTTON_ICON,
                             onClick: function() {
                                 that._exportController.exportToExcel();
                             }
