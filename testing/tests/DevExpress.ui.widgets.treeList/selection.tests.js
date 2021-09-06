@@ -933,8 +933,8 @@ QUnit.module('Recursive selection', {
         // assert
         const items = this.dataController.items();
         assert.deepEqual(this.option('selectedRowKeys'), [3], 'selected row keys');
-        assert.ok(!items[0].isSelected, 'first item is not selected');
-        assert.ok(!items[1].isSelected, 'second item is not selected');
+        assert.notOk(items[0].isSelected, 'first item is not selected');
+        assert.notOk(items[1].isSelected, 'second item is not selected');
         assert.ok(items[2].isSelected, 'third item is selected');
     });
 
