@@ -51,8 +51,10 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
     const window = getWindow();
 
     let formInstance;
+    let alignmentEditorInstance;
     const startTableWidth = $table.outerWidth();
     const tableStyles = window.getComputedStyle($table.get(0));
+    const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
     const formOptions = {
         formData: {
@@ -62,7 +64,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             borderStyle: tableStyles.borderStyle,
             borderColor: tableStyles.borderColor,
             borderWidth: tableStyles.borderWidth,
-            alignment: tableStyles.textAlign,
+            alignment: startTextAlign,
         },
         items: [{
             itemType: 'group',
@@ -110,9 +112,14 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             items: [
                 'width', 'height', {
                     dataField: 'alignment',
-                    editorType: 'dxSelectBox', // todo use buttons group
+                    editorType: 'dxButtonGroup',
                     editorOptions: {
-                        items: ['left', 'center', 'right']
+                        items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
+                        keyExpr: 'value',
+                        selectedItemKeys: [startTextAlign],
+                        onInitialized: (e) => {
+                            alignmentEditorInstance = e.component;
+                        }
                     }
                 }
             ]
@@ -131,7 +138,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                         'borderStyle': formData.borderStyle,
                         'borderColor': formData.borderColor,
                         'borderWidth': formData.borderWidth,
-                        'textAlign': formData.alignment
+                        'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0]
                     });
 
                     formPopup.hide();
@@ -164,8 +171,11 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     const window = getWindow();
 
     let formInstance;
+    let alignmentEditorInstance;
+    let verticalAlignmentEditorInstance;
     const startCellWidth = $cell.outerWidth();
     const cellStyles = window.getComputedStyle($cell.get(0));
+    const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
 
     const formOptions = {
         formData: {
@@ -175,7 +185,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             borderStyle: cellStyles.borderStyle,
             borderColor: cellStyles.borderColor,
             borderWidth: cellStyles.borderWidth,
-            alignment: cellStyles.textAlign,
+            alignment: startTextAlign,
             verticalAlignment: cellStyles.verticalAlign,
             padding: cellStyles.padding,
         },
@@ -232,16 +242,26 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             items: [
                 {
                     dataField: 'alignment',
-                    editorType: 'dxSelectBox', // todo use buttons group
+                    editorType: 'dxButtonGroup',
                     editorOptions: {
-                        items: ['left', 'center', 'right']
+                        items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
+                        keyExpr: 'value',
+                        selectedItemKeys: [startTextAlign],
+                        onInitialized: (e) => {
+                            alignmentEditorInstance = e.component;
+                        }
                     }
                 },
                 {
-                    dataField: 'verticalAlignment',
-                    editorType: 'dxSelectBox', // todo use buttons group
+                    dataField: 'alignment',
+                    editorType: 'dxButtonGroup',
                     editorOptions: {
-                        items: ['top', 'middle', 'bottom']
+                        items: [{ value: 'top', icon: 'verticalaligntop' }, { value: 'middle', icon: 'verticalaligncenter' }, { value: 'bottom', icon: 'verticalalignbottom' }],
+                        keyExpr: 'value',
+                        selectedItemKeys: [cellStyles.verticalAlign],
+                        onInitialized: (e) => {
+                            verticalAlignmentEditorInstance = e.component;
+                        }
                     }
                 }
             ]
@@ -260,7 +280,9 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                         'borderStyle': formData.borderStyle,
                         'borderColor': formData.borderColor,
                         'borderWidth': formData.borderWidth,
-                        'textAlign': formData.alignment
+                        'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
+                        'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
+                        'padding': formData.padding
                     });
 
                     formPopup.hide();
