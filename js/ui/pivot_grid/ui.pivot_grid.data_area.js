@@ -46,8 +46,10 @@ export const DataArea = AreaItem.inherit({
         this.callBase();
     },
 
-    renderScrollable: function() {
+    renderScrollable: function(useNative) {
         this._groupElement.dxScrollable({
+            useNative,
+            useSimulatedScrollbar: !useNative,
             rtlEnabled: this.component.option('rtlEnabled'),
             bounceEnabled: false,
             updateManually: true,
