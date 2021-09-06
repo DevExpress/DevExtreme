@@ -2,42 +2,41 @@ import {
   CSSAttributes,
   Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template,
 } from '@devextreme-generator/declarations';
+import type { TargetedAppointmentInfo } from '../../../../ui/scheduler';
 import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { getAppointmentStyles } from './utils';
+import { AppointmentContent } from './content';
 
 export const viewFunction = ({
   text,
   dateText,
   styles,
-  appointmentTemplateProps,
+  data,
+  index,
   props: {
-    AppointmentTemplate,
+    appointmentTemplate,
   },
-}: Appointment): JSX.Element => (
-  <div
-    className="dx-scheduler-appointment"
-    style={styles}
-  >
-    { AppointmentTemplate && (
-    <AppointmentTemplate
-          // eslint-disable-next-line react/jsx-props-no-spreading
-      {...appointmentTemplateProps}
-    />
-    )}
-    { !AppointmentTemplate && (
-      <div className="dx-scheduler-appointment-content">
-        <div className="dx-scheduler-appointment-title">
-          {text}
-        </div>
-        <div className="dx-scheduler-appointment-content-details">
-          <div className="dx-scheduler-appointment-content-date">
-            {dateText}
-          </div>
-        </div>
-      </div>
-    )}
-  </div>
-);
+}: Appointment): JSX.Element => {
+  const AppointmentTemplate = appointmentTemplate;
+
+  return (
+    <div
+      className="dx-scheduler-appointment"
+      style={styles}
+    >
+      {
+        !!AppointmentTemplate && (
+          <AppointmentTemplate data={data} index={index} />
+        )
+      }
+      {
+        !AppointmentTemplate && (
+          <AppointmentContent text={text} dateText={dateText} />
+        )
+      }
+    </div>
+  );
+};
 
 @ComponentBindings()
 export class AppointmentProps {
@@ -45,7 +44,7 @@ export class AppointmentProps {
 
   @OneWay() index = 0;
 
-  @Template() AppointmentTemplate?: JSXTemplate;
+  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 }
 
 @Component({
@@ -59,13 +58,14 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
 
   get styles(): CSSAttributes { return getAppointmentStyles(this.props.viewModel); }
 
-  get appointmentTemplateProps(): AppointmentTemplateProps {
+  get data(): TargetedAppointmentInfo {
     return {
-      model: {
-        appointmentData: this.props.viewModel.info.appointment,
-        targetedAppointmentData: this.props.viewModel.appointment,
-      },
-      itemIndex: this.props.index,
+      appointmentData: this.props.viewModel.info.appointment,
+      targetedAppointmentData: this.props.viewModel.appointment,
     };
+  }
+
+  get index(): number {
+    return this.props.index;
   }
 }

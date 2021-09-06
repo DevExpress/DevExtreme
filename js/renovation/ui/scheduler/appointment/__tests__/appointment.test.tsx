@@ -1,5 +1,6 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction, Appointment } from '../appointment';
+import { AppointmentContent } from '../content';
 
 describe('Appointment', () => {
   const defaultViewModel = {
@@ -56,64 +57,51 @@ describe('Appointment', () => {
         .toEqual('some-styles');
     });
 
+    it('it should has correct render with template', () => {
+      const templateProps = {
+        data: { test: 'Test Data' },
+        index: 1234,
+      };
+      const template = '<div class="some-template">Some Template</div>';
+      const appointment = render({
+        styles: 'some-styles',
+        ...templateProps,
+        props: {
+          appointmentTemplate: template,
+        },
+      });
+
+      expect(appointment.hasClass('dx-scheduler-appointment'))
+        .toBe(true);
+
+      expect(appointment.is('div'))
+        .toBe(true);
+
+      expect(appointment.prop('style'))
+        .toEqual('some-styles');
+
+      const appointmentTemplate = appointment.children();
+
+      expect(appointmentTemplate.type())
+        .toBe(template);
+
+      expect(appointmentTemplate)
+        .toHaveLength(1);
+
+      expect(appointmentTemplate.props())
+        .toEqual(templateProps);
+    });
+
     it('it should has correct content container', () => {
       const appointment = render({});
 
-      expect(appointment.children().hasClass('dx-scheduler-appointment-content'))
-        .toBe(true);
-    });
-
-    it('it should has correct title', () => {
-      const appointment = render({ text: 'Appointment Text' });
-
-      const content = appointment.find('.dx-scheduler-appointment-content');
-      const title = content.find('.dx-scheduler-appointment-title');
-
-      expect(title.length)
-        .toBe(1);
-
-      expect(title.text())
-        .toBe('Appointment Text');
-    });
-
-    it('it should has correct date text', () => {
-      const appointment = render({ dateText: '2 AM - 3 PM' });
-
-      const content = appointment.find('.dx-scheduler-appointment-content');
-
-      const details = content.find('.dx-scheduler-appointment-content-details');
-      expect(details.length)
-        .toBe(1);
-
-      const contentDate = details.find('.dx-scheduler-appointment-content-date');
-      expect(contentDate.length)
-        .toBe(1);
-
-      expect(contentDate.text())
-        .toBe('2 AM - 3 PM');
+      expect(appointment.children().type())
+        .toBe(AppointmentContent);
     });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
-      it('should return correct text', () => {
-        const appointment = new Appointment({
-          viewModel: defaultViewModel,
-        });
-
-        expect(appointment.text)
-          .toBe('Some text');
-      });
-
-      it('should return correct dateText', () => {
-        const appointment = new Appointment({
-          viewModel: defaultViewModel,
-        });
-
-        expect(appointment.dateText)
-          .toBe('1AM - 2PM');
-      });
-
       it('should return correct styles', () => {
         const appointment = new Appointment({
           viewModel: defaultViewModel,
@@ -127,6 +115,57 @@ describe('Appointment', () => {
             top: 2,
             width: 10,
           });
+      });
+
+      describe('Content', () => {
+        it('should return correct text', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+          });
+
+          expect(appointment.text)
+            .toBe('Some text');
+        });
+
+        it('should return correct dateText', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+          });
+
+          expect(appointment.dateText)
+            .toBe('1AM - 2PM');
+        });
+      });
+
+      describe('Template', () => {
+        it('shoud return correct data', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+          });
+
+          expect(appointment.data)
+            .toEqual({
+              appointmentData: {
+                startDate: new Date('2021-08-05T10:00:00.000Z'),
+                endDate: new Date('2021-08-05T12:00:00.000Z'),
+              },
+              targetedAppointmentData: {
+                startDate: new Date('2021-08-05T10:00:00.000Z'),
+                endDate: new Date('2021-08-05T12:00:00.000Z'),
+                text: 'Some text',
+              },
+            });
+        });
+
+        it('shoud return correct index', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+            index: 1234,
+          });
+
+          expect(appointment.index)
+            .toEqual(1234);
+        });
       });
     });
   });

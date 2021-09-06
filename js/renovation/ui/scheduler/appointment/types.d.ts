@@ -1,5 +1,5 @@
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
-import type { DxElement } from '../../../../core/element';
+import { BaseTemplateProps } from '../types';
 
 export interface AppointmentViewModel {
   appointment: {
@@ -31,8 +31,6 @@ export interface AppointmentViewModel {
   };
 }
 
-export interface AppointmentTemplateProps {
-  model: AppointmentTemplateData;
-  itemIndex: number;
-  contentElement?: DxElement;
+export interface AppointmentTemplateProps extends BaseTemplateProps {
+  data: AppointmentTemplateData;
 }
