@@ -69,8 +69,6 @@ export class PopoverProps extends BaseWidgetProps {
 
   @OneWay() disabled = false;
 
-  @OneWay() elementAttr = {};
-
   @OneWay() height: number | string | (() => number | string) = 'auto';
 
   @OneWay() hideEvent?: string;
