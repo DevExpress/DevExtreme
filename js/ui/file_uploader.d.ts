@@ -136,6 +136,12 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     focusStateEnabled?: boolean;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    hoverStateEnabled?: boolean;
+    /**
+     * @docid
      * @default "File type is not allowed"
      * @public
      */

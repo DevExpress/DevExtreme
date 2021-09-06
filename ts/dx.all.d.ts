@@ -10954,6 +10954,10 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
+     * [descr:dxFileUploaderOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
      */
     invalidFileExtensionMessage?: string;
