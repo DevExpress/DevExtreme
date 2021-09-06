@@ -824,7 +824,7 @@ declare module DevExpress {
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
-      rule: Partial<DevExpress.core.DefaultsRule<TProperties>>
+      rule: Partial<DevExpress.core.DefaultOptionsRule<TProperties>>
     ): void;
 
     /**
@@ -1466,7 +1466,7 @@ declare module DevExpress.core {
   export type DeepPartial<T> = {
     [P in keyof T]?: DeepPartial<T[P]>;
   };
-  export type DefaultsRule<T> = {
+  export type DefaultOptionsRule<T> = {
     device: ((device: Device) => boolean) | Device | Device[];
     options: DeepPartial<T>;
   };
@@ -23537,7 +23537,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     static defaultOptions<TProperties>(
-      rule: Partial<DevExpress.core.DefaultsRule<TProperties>>
+      rule: Partial<DevExpress.core.DefaultOptionsRule<TProperties>>
     ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]

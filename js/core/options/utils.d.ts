@@ -3,10 +3,10 @@ import {
 } from '../devices';
 
 import {
-    DefaultsRule,
+    DefaultOptionsRule,
 } from './index';
 
-export function convertRulesToOptions<T>(rules: DefaultsRule<T>[]): T;
+export function convertRulesToOptions<T>(rules: DefaultOptionsRule<T>[]): T;
 
 export function normalizeOptions(options: string | object, value): { [name: string]: string };
 
@@ -16,4 +16,4 @@ export function getFieldName(fullName: string): string;
 
 export function getParentName(fullName: string): string;
 
-export function createDefaultOptionRules<T>(options?: DefaultsRule<T>[]): DefaultsRule<T>[];
+export function createDefaultOptionRules<T>(options?: DefaultOptionsRule<T>[]): DefaultOptionsRule<T>[];

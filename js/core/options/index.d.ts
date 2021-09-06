@@ -7,7 +7,7 @@ import {
 } from '../index';
 
 /** @public */
-export type DefaultsRule<T> = {
+export type DefaultOptionsRule<T> = {
     device: ((device: Device) => boolean) | Device | Device[];
     options: DeepPartial<T>;
 };

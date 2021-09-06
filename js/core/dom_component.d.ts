@@ -10,7 +10,7 @@ import {
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
-import { DefaultsRule } from './options';
+import { DefaultOptionsRule } from './options';
 
 /* eslint-disable no-underscore-dangle */
 
@@ -102,7 +102,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @param1_field2 options:Object
      * @public
      */
-    static defaultOptions<TProperties = Properties>(rule: Partial<DefaultsRule<TProperties>>): void;
+    static defaultOptions<TProperties = Properties>(rule: Partial<DefaultOptionsRule<TProperties>>): void;
 
     /**
      * @docid
