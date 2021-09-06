@@ -48,6 +48,7 @@ const HtmlEditor = Editor.inherit({
             tableResizing: null,
             mentions: null,
             customizeModules: null,
+            tableContextMenu: null,
             allowSoftLineBreak: false,
 
             formDialogOptions: null,
@@ -294,6 +295,7 @@ const HtmlEditor = Editor.inherit({
             // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
             tableResizing: this._getModuleConfigByOption('tableResizing'),
+            tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
                 onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
@@ -431,6 +433,15 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    _tableContextMenuOptionChanged: function(args) {
+        const contextMenuModule = this._quillInstance?.getModule('tableContextMenu');
+        if(contextMenuModule) {
+            contextMenuModule.option(args.name, args.value);
+        } else {
+            this._invalidate();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'value':
@@ -481,6 +492,9 @@ const HtmlEditor = Editor.inherit({
                 break;
             case 'formDialogOptions':
                 this._renderFormDialog();
+                break;
+            case 'tableContextMenu':
+                this._tableContextMenuOptionChanged();
                 break;
             case 'mediaResizing':
                 if(!args.previousValue || !args.value) {
