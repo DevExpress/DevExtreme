@@ -2939,7 +2939,7 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), columnAreaScrollable.$content().width(), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
     });
 
     // T529461;
@@ -2972,7 +2972,7 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), columnAreaScrollable.$content().width(), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
         assert.equal(dataAreaFakeTable.css('right'), '0px');
         assert.equal(columnAreaFakeTable.css('right'), '0px');
         assert.equal(dataAreaContentTable.css('right'), '0px');
@@ -3015,7 +3015,7 @@ QUnit.module('dxPivotGrid', {
 
             const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
             assert.roughEqual(dataAreaScrollable.scrollLeft() + 10, dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + $(columnAreaScrollable.container()).width(), columnAreaScrollable.$content().width(), 2.01, 'scrollLeft is in max right position');
+            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
 
             done();
         };
@@ -7144,7 +7144,7 @@ QUnit.module('Data area', () => {
         });
 
         area.component.option = sinon.stub();
-        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
+        area.component.option.withArgs('scrolling').returns({ useNative: false });
         area.renderScrollable();
         area.updateScrollableOptions({ useNative: false });
 
@@ -7157,7 +7157,7 @@ QUnit.module('Data area', () => {
         assert.strictEqual(virtualContent.css('display'), 'block');
         assert.strictEqual(virtualContent.css('width'), '500px');
         assert.strictEqual(virtualContent.css('height'), '250px');
-        assert.strictEqual(area._getScrollable().$content().css('height'), '250px');
+        assert.strictEqual($(area._getScrollable().content()).css('height'), '250px');
     });
 
     // T465337
@@ -7183,7 +7183,7 @@ QUnit.module('Data area', () => {
 
         area.reset();
 
-        assert.strictEqual(area._getScrollable().$content().get(0).style.height, 'auto');
+        assert.strictEqual($(area._getScrollable().content()).get(0).style.height, 'auto');
     });
 
     QUnit.test('scrollTo with virtual scrolling. Horizontal scrolling', function(assert) {
