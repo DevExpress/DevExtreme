@@ -105,9 +105,9 @@ export class CollectionWidgetItem {
   ];
   <Toolbar items={toolbarItems}></Toolbar>
 */
-
 @ComponentBindings()
 export class BaseToolbarItemProps {
+  @OneWay()
   rtlEnabled?: boolean | undefined;
 }
 
