@@ -179,7 +179,7 @@ const Overlay = Widget.inherit({
 
             dragAndResizeArea: undefined,
 
-            outsideDragFactor: null,
+            outsideDragFactor: 0,
 
             resizeEnabled: false,
             onResizeStart: null,

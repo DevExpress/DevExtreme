@@ -3233,14 +3233,6 @@ testModule('drag', moduleConfig, () => {
             this.reinit({});
         }
     }, () => {
-        test('overlay should use window as drag container and 1 as outsideDragFactor value if allowDragOutside is enabled', function(assert) {
-            this.overlay.option('allowDragOutside', true);
-
-            const overlayDrag = this.getDrag();
-            assert.strictEqual(overlayDrag.container, window, 'window is a drag container');
-            assert.strictEqual(overlayDrag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
-        });
-
         test('overlay should use dragAndResizeArea->container->viewport as a container ', function(assert) {
             try {
                 assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'drag container is dragAndResizeArea if it defined');
@@ -3259,6 +3251,22 @@ testModule('drag', moduleConfig, () => {
             }
         });
 
+        test('overlay should use window as drag container and 1 as outsideDragFactor value on init with allowDragOutside enable', function(assert) {
+            this.reinit({ allowDragOutside: true });
+
+            const overlayDrag = this.getDrag();
+            assert.strictEqual(overlayDrag.container, window, 'window is a drag container');
+            assert.strictEqual(overlayDrag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
+        });
+
+        test('overlay should use window as drag container and 1 as outsideDragFactor value after runtime allowDragOutside enable', function(assert) {
+            this.overlay.option('allowDragOutside', true);
+
+            const overlayDrag = this.getDrag();
+            assert.strictEqual(overlayDrag.container, window, 'window is a drag container');
+            assert.strictEqual(overlayDrag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
+        });
+
         test('overlay should use initial drag container and outsideDragFactor value after allowDragOutside runtime disable', function(assert) {
             this.reinit({ allowDragOutside: true });
 
@@ -3269,10 +3277,57 @@ testModule('drag', moduleConfig, () => {
             assert.strictEqual(overlayDrag.outsideDragFactor, 0.5, 'outsideDragFactor equals 0');
         });
 
-        test('dragAndResizeAria can be specified as a string', function(assert) {
-            this.reinit({ dragAndResizeAria: '#container' });
+        test('dragAndResizeArea can be specified as a string', function(assert) {
+            this.reinit({ dragAndResizeArea: '#parentContainer' });
 
-            assert.strictEqual(this.getDrag().container, $('#container').get(0), 'overlay container is a drag container');
+            assert.strictEqual(this.getDrag().container, $('#parentContainer').get(0), 'drag container was specified as a string');
+        });
+
+        test('overlay should use dragAndResizeArea as drag container if it is specified on init', function(assert) {
+            assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'overlay container is a drag container');
+        });
+
+        test('overlay should use dragAndResizeArea as drag container after its runtime enable', function(assert) {
+            this.reinit({ dragAndResizeArea: null });
+            this.overlay.option('dragAndResizeArea', this.$dragContainer);
+
+            assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'overlay container is a drag container');
+        });
+
+        test('overlay should change drag container after dragAndResizeArea runtime disable', function(assert) {
+            this.overlay.option('dragAndResizeArea', undefined);
+
+            assert.strictEqual(this.getDrag().container, $('#parentContainer').get(0), 'drag container was changed');
+        });
+
+        test('overlay should use container as drag container if dragAndResizeArea is not defined', function(assert) {
+            this.reinit({ dragAndResizeArea: null });
+
+            assert.strictEqual(this.getDrag().container, this.$container.get(0), 'drag container is container');
+        });
+
+        test('overlay should change drag container after container runtime change if dragAndResizeArea is not defined', function(assert) {
+            this.reinit({ dragAndResizeArea: null });
+            this.overlay.option('container', this.$dragContainer);
+
+            assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'drag container was changed');
+        });
+
+        test('overlay should apply outsideDragFactor if it is specified on init', function(assert) {
+            assert.strictEqual(this.getDrag().outsideDragFactor, 0.5, 'outsideDragFactor is applied');
+        });
+
+        test('overlay should change outsideDragFactor on runtime', function(assert) {
+            this.overlay.option('outsideDragFactor', 1);
+
+            assert.strictEqual(this.getDrag().outsideDragFactor, 1, 'outsideDragFactor is changed');
+        });
+
+        test('overlay should not change outsideDragFactor on runtime if allowDragOutside is enabled', function(assert) {
+            this.reinit({ allowDragOutside: true });
+            this.overlay.option('outsideDragFactor', 0);
+
+            assert.strictEqual(this.getDrag().outsideDragFactor, 1, 'outsideDragFactor is not changed');
         });
     });
 });
@@ -3389,6 +3444,50 @@ testModule('resize', moduleConfig, () => {
         overlay.show();
 
         assert.deepEqual([$overlayContent.width(), $overlayContent.height()], [250, 250], 'correct size');
+    });
+
+    QUnit.module('overlay should set resize area', {
+        beforeEach: function() {
+            this.$container = $('#parentContainer');
+            this.$resizeContainer = $('#container');
+            this.initialOptions = {
+                resizeEnabled: true,
+                visible: true,
+            };
+            this.reinit = (options) => {
+                this.overlay && this.overlay.dispose();
+
+                const newOptions = $.extend({}, this.initialOptions, options);
+                this.overlay = $('#overlay').dxOverlay(newOptions).dxOverlay('instance');
+                this.getResizableArea = () => this.overlay._resizable.option('area');
+            };
+
+            this.reinit({});
+        }
+    }, () => {
+        test('after dragAndResizeArea option set on init', function(assert) {
+            this.reinit({ dragAndResizeArea: this.$resizeContainer });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$resizeContainer.get(0), 'resize container was configured');
+        });
+
+        test('after container option set on init', function(assert) {
+            this.reinit({ container: this.$container });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was configured');
+        });
+
+        test('after dragAndResizeArea option runtime change', function(assert) {
+            this.overlay.option('dragAndResizeArea', this.$resizeContainer);
+
+            assert.equal(this.getResizableArea().get(0), this.$resizeContainer.get(0), 'resize container was changed');
+        });
+
+        test('after container option runtime change', function(assert) {
+            this.overlay.option('container', this.$container);
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
+        });
     });
 });
 
