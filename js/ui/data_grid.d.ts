@@ -4465,7 +4465,7 @@ declare class dxDataGrid
      * @return Array<any> | Promise<any>
      * @public
      */
-    getSelectedRowsData(): TKey[] | DxPromise<TKey[]>;
+    getSelectedRowsData(): TSelectionDeferred extends false ? TRowData[] : TSelectionDeferred extends true ? DxPromise<TRowData[]> : TRowData[] | DxPromise<TRowData[]>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
@@ -4885,7 +4885,9 @@ export type Options
    TKeyExpr extends string | string[],
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
-  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns>;
+   TSelectionDeferred extends boolean=boolean,
+   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
+  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred, TStateStoringType>;
 
 /** @deprecated use Properties instead */
 export type IOptions
@@ -4893,6 +4895,8 @@ export type IOptions
    TKeyExpr extends string | string[],
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
-  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns>;
+   TSelectionDeferred extends boolean=boolean,
+   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
+  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred, TStateStoringType>;
 
 export default dxDataGrid;
