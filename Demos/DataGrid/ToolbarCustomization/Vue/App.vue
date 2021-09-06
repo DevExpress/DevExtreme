@@ -38,7 +38,7 @@
       </DxItem>
       <DxItem location="before">
         <DxSelectBox
-          width="200"
+          width="225"
           :items="groupingValues"
           display-expr="text"
           value-expr="value"

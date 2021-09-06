@@ -45,7 +45,7 @@ window.onload = function() {
                     location: "before",
                     widget: "dxSelectBox",
                     options: {
-                        width: 200,
+                        width: 225,
                         items: [{
                             value: "CustomerStoreState",
                             text: "Grouping by State"

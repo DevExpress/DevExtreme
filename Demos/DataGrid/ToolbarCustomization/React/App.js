@@ -77,7 +77,7 @@ class App extends React.Component {
           </Item>
           <Item location="before">
             <SelectBox
-              width="200"
+              width="225"
               items={this.groupingValues}
               displayExpr="text"
               valueExpr="value"
