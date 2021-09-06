@@ -8,7 +8,11 @@ import {
     filterResources,
     getOrLoadResourceItem,
     getResourceColor,
-    getResourcesFromItem
+    getResourcesFromItem,
+    getResourceTreeLeaves,
+    groupAppointmentsByResourcesCore,
+    getResourcesDataByGroups,
+    reduceResourcesTree
 } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -328,7 +332,12 @@ QUnit.test('getResourceTreeLeaves should work correctly when resource.field is e
 
     this.instance.loadResources(['outer.roomId', 'ownerId']).done($.proxy(function(groups) {
         const tree = createResourcesTree(groups);
-        const result = this.instance.getResourceTreeLeaves(tree, resourcesFromItem);
+
+        const result = getResourceTreeLeaves(
+            (field, action) => this.instance.getDataAccessors(field, action),
+            tree,
+            resourcesFromItem
+        );
 
         assert.deepEqual(result, [2, 3], 'Leaves are OK');
 
@@ -601,7 +610,13 @@ QUnit.test('Get appointments by certain resources', function(assert) {
         { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 1), ownerId: [1, 2], roomId: [1, 2] }
     ];
 
-    const result = this.instance.groupAppointmentsByResourcesCore(appointments, [
+    const config = {
+        _resourceFields: this.instance._resourceFields,
+        getResources: () => this.instance.getResources(),
+        getDataAccessors: (field, action) => this.instance.getDataAccessors(field, action)
+    };
+
+    const result = groupAppointmentsByResourcesCore(config, appointments, [
         {
             name: 'ownerId',
             items: [{ id: 1 }, { id: 2 }]
@@ -673,7 +688,11 @@ QUnit.test('Reduce resource tree depend on existing appointments', function(asse
 
     this.instance.loadResources(['o', 'r', 'a']).done($.proxy(function(groups) {
         const tree = createResourcesTree(groups);
-        const reducedTree = this.instance.reduceResourcesTree(tree, appointments);
+        const reducedTree = reduceResourcesTree(
+            (field, action) => this.instance.getDataAccessors(field, action),
+            tree,
+            appointments
+        );
 
         assert.equal(reducedTree.length, 1, 'reducedTree has 1 item');
         assert.equal(reducedTree[0].name, 'o', 'reducedTree has correct name');
@@ -979,8 +998,11 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         const done = assert.async();
 
         this.instance.loadResources(loadingGroups).done($.proxy(() => {
-
-            const resourcesDataByGroups = this.instance.getResourcesDataByGroups(groups);
+            const resourcesDataByGroups = getResourcesDataByGroups(
+                this.instance.loadedResources,
+                this.instance.getResources(),
+                groups
+            );
 
             assert.deepEqual(
                 resourcesDataByGroups,
@@ -999,7 +1021,10 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         const done = assert.async();
 
         this.instance.loadResources([]).done($.proxy(() => {
-            const resourcesDataByGroups = this.instance.getResourcesDataByGroups();
+            const resourcesDataByGroups = getResourcesDataByGroups(
+                this.instance.loadedResources,
+                this.instance.getResources(),
+            );
 
             assert.deepEqual(resourcesDataByGroups, [], 'getResourcesDataByGroups works correctly');
 

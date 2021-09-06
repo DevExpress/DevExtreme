@@ -364,7 +364,7 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResourc
         }
 
         if(tree[i].children) {
-            getResourceTreeLeaves(tree[i].children, appointmentResources, result);
+            getResourceTreeLeaves(getDataAccessors, tree[i].children, appointmentResources, result);
         }
     }
 
