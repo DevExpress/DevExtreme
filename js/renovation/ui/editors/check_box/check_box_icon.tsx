@@ -17,6 +17,8 @@ export const viewFunction = (viewModel: CheckBoxIcon): JSX.Element => {
 @ComponentBindings()
 export class CheckBoxIconProps {
   @OneWay() size?: number | string;
+
+  @OneWay() isChecked = false;
 }
 
 @Component({
@@ -28,13 +30,13 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
 
   @Effect()
   updateFontSize(): void {
-    const { size } = this.props;
+    const { size, isChecked } = this.props;
 
     if (hasWindow()) {
       const newIconSize = isNumber(size) ? size : this.getComputedIconSize();
 
       if (newIconSize) {
-        const newFontSize = getFontSizeByIconSize(newIconSize);
+        const newFontSize = getFontSizeByIconSize(newIconSize, isChecked);
 
         this.setIconFontSize(newFontSize);
       }

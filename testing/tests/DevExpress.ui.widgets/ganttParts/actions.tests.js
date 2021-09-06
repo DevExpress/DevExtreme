@@ -236,4 +236,22 @@ QUnit.module('Actions', moduleConfig, () => {
         this.clock.tick();
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
     });
+    test('showResources()', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, data.resourceAssignments.length);
+        this.instance.showResources(false);
+        assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, 0);
+        this.instance.showResources(true);
+        assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, data.resourceAssignments.length);
+    });
+    test('showDependencies()', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
+        this.instance.showDependencies(false);
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, 0);
+        this.instance.showDependencies(true);
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
+    });
 });

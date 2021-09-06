@@ -333,7 +333,7 @@ export interface BaseWidgetTitle {
      * @default '#232323' &prop(color)
      * @default 28 &prop(size)
      * @default 200 &prop(weight)
-     * @extends CommonVizLightFontFamily
+     * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
      * @public
      */
     font?: Font;
@@ -387,7 +387,7 @@ export interface BaseWidgetTitle {
        * @default '#232323' &prop(color)
        * @default 16 &prop(size)
        * @default 200 &prop(weight)
-       * @extends CommonVizLightFontFamily
+       * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
        */
       font?: Font;
       /**
@@ -514,7 +514,8 @@ export interface BaseWidgetTooltip {
     font?: Font;
     /**
      * @docid BaseWidgetOptions.tooltip.format
-     * @extends CommonVizFormat
+     * @type Format
+     * @default undefined
      * @public
      */
     format?: Format;

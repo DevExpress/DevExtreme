@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
+import { resetActiveElement } from '../../core/utils/dom';
 import { isDefined, isObject, isFunction, isEmptyObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -1177,7 +1178,10 @@ const EditingController = modules.ViewController.inherit((function() {
             const editColumnIndex = this._getVisibleEditColumnIndex();
 
             $editCell = $editCell || rowsView && rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
-            this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+
+            if($editCell) {
+                this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+            }
         },
 
         deleteRow: function(rowIndex) {
@@ -2150,7 +2154,7 @@ export const editingModule = {
                 },
                 _updateItemsCore: function(change) {
                     this.callBase(change);
-                    this._updateEditRow(this.items());
+                    this._updateEditRow(this.items(true));
                 },
                 _applyChangeUpdate: function(change) {
                     this._updateEditRow(change.items);
@@ -2280,6 +2284,9 @@ export const editingModule = {
                     const startEditAction = this.option('editing.startEditAction') || 'click';
 
                     if(eventName === 'down') {
+                        if((devices.real().ios || devices.real().android) && !isEditedCell) {
+                            resetActiveElement();
+                        }
                         return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
                     }
 

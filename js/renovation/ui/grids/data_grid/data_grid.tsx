@@ -20,10 +20,6 @@ import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/e
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
-import { createDefaultOptionRules } from '../../../../core/options/utils';
-import devices from '../../../../core/devices';
-import browser from '../../../../core/utils/browser';
-import { isMaterial, current } from '../../../../ui/themes';
 
 const aria = { role: 'presentation' };
 
@@ -104,38 +100,7 @@ export const viewFunction = ({
   </Widget>
 );
 
-export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
-  device: (): boolean => devices.real().platform === 'ios',
-  options: { showRowLines: true },
-}, {
-  device: (): boolean => devices.real().deviceType !== 'desktop',
-  options: {
-    grouping: {
-      expandMode: 'rowClick',
-    },
-  },
-}, {
-  device: (): boolean => isMaterial(current()),
-  options: {
-    showRowLines: true,
-    showColumnLines: false,
-    headerFilter: {
-      height: 315,
-    },
-    editing: {
-      useIcons: true,
-    },
-  },
-},
-{
-  device: () => browser.webkit === true,
-  options: {
-    loadingTimeout: 30, // T344031
-  },
-},
-]);
 @Component({
-  defaultOptionRules,
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })

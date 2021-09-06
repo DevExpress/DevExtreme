@@ -5,14 +5,14 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
-import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/types.d';
+import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types.d';
 
 fixture`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'));
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [true, false].forEach((useNative) => {
-    test(`scrollToElement(element, offset), useNative: '${useNative}', direction: '${direction}', `, async (t) => {
+    test(`STE(el less cont),nat=${useNative},dir=${direction}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const scrollable = new Scrollable('#container', { useNative, direction });
@@ -20,23 +20,23 @@ fixture`Scrollable_ScrollToElement`
 
       const positions = [
         { initialScrollOffset: { top: 80, left: 80 }, position: 'elementInsideContainer' },
-        { initialScrollOffset: { top: 0, left: 0 }, position: 'scrollFromTopLeftCorner' },
-        { initialScrollOffset: { top: 0, left: 80 }, position: 'scrollFromTop' },
-        { initialScrollOffset: { top: 0, left: 160 }, position: 'scrollFromTopRightCorner' },
-        { initialScrollOffset: { top: 80, left: 160 }, position: 'scrollFromRight' },
-        { initialScrollOffset: { top: 160, left: 160 }, position: 'scrollFromBottomRightCorner' },
-        { initialScrollOffset: { top: 160, left: 80 }, position: 'scrollFromBottom' },
-        { initialScrollOffset: { top: 160, left: 0 }, position: 'scrollFromBottomLeftCorner' },
-        { initialScrollOffset: { top: 80, left: 0 }, position: 'scrollFromLeft' },
+        { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTopLCorner' },
+        { initialScrollOffset: { top: 0, left: 80 }, position: 'fromTop' },
+        { initialScrollOffset: { top: 0, left: 160 }, position: 'fromTopRCorner' },
+        { initialScrollOffset: { top: 80, left: 160 }, position: 'fromR' },
+        { initialScrollOffset: { top: 160, left: 160 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 160, left: 80 }, position: 'fromB' },
+        { initialScrollOffset: { top: 160, left: 0 }, position: 'fromBLCorner' },
+        { initialScrollOffset: { top: 80, left: 0 }, position: 'fromL' },
         // part
-        { initialScrollOffset: { top: 125, left: 125 }, position: 'part-scrollFromTopLeftCorner' },
-        { initialScrollOffset: { top: 125, left: 80 }, position: 'part-scrollFromTop' },
-        { initialScrollOffset: { top: 125, left: 45 }, position: 'part-scrollFromTopRightCorner' },
-        { initialScrollOffset: { top: 80, left: 45 }, position: 'part-scrollFromRight' },
-        { initialScrollOffset: { top: 45, left: 45 }, position: 'part-scrollFromBottomRightCorner' },
-        { initialScrollOffset: { top: 45, left: 80 }, position: 'part-scrollFromBottom' },
-        { initialScrollOffset: { top: 45, left: 125 }, position: 'part-scrollFromBottomLeftCorner' },
-        { initialScrollOffset: { top: 80, left: 125 }, position: 'part-scrollFromLeft' },
+        { initialScrollOffset: { top: 125, left: 125 }, position: 'part-fromTopLCorner' },
+        { initialScrollOffset: { top: 125, left: 80 }, position: 'part-fromTop' },
+        { initialScrollOffset: { top: 125, left: 45 }, position: 'part-fromTopRCorner' },
+        { initialScrollOffset: { top: 80, left: 45 }, position: 'part-fromR' },
+        { initialScrollOffset: { top: 45, left: 45 }, position: 'part-fromBRCorner' },
+        { initialScrollOffset: { top: 45, left: 80 }, position: 'part-fromB' },
+        { initialScrollOffset: { top: 45, left: 125 }, position: 'part-fromBLCorner' },
+        { initialScrollOffset: { top: 80, left: 125 }, position: 'part-fromL' },
       ];
 
       // eslint-disable-next-line no-restricted-syntax
@@ -57,7 +57,7 @@ fixture`Scrollable_ScrollToElement`
           )();
 
           await t
-            .expect(await takeScreenshot(`scrollToElement-useNative=${useNative}-direction=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`STE(el less cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -98,39 +98,39 @@ fixture`Scrollable_ScrollToElement`
       });
     });
 
-    test(`scrollToElement(element, offset), element more than container, useNative: '${useNative}', direction: '${direction}', `, async (t) => {
+    test(`STE(el more cont),native=${useNative},dir=${direction}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const scrollable = new Scrollable('#container', { useNative, direction });
       const { getInstance } = scrollable;
 
       const positions = [
-        { initialScrollOffset: { top: 0, left: 0 }, position: 'scrollFromTopLeftCorner' },
-        { initialScrollOffset: { top: 0, left: 40 }, position: 'scrollFromTopLeftPart' },
-        { initialScrollOffset: { top: 0, left: 120 }, position: 'scrollFromTopRightPart' },
-        { initialScrollOffset: { top: 0, left: 160 }, position: 'scrollFromTopRightCorner' },
+        { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
+        { initialScrollOffset: { top: 0, left: 40 }, position: 'fromTLPart' },
+        { initialScrollOffset: { top: 0, left: 120 }, position: 'fromTRPart' },
+        { initialScrollOffset: { top: 0, left: 160 }, position: 'fromTRCorner' },
 
-        { initialScrollOffset: { top: 40, left: 160 }, position: 'scrollFromRightTopPart' },
-        { initialScrollOffset: { top: 120, left: 160 }, position: 'scrollFromRightBottomPart' },
+        { initialScrollOffset: { top: 40, left: 160 }, position: 'fromRTPart' },
+        { initialScrollOffset: { top: 120, left: 160 }, position: 'fromRBPart' },
 
-        { initialScrollOffset: { top: 160, left: 160 }, position: 'scrollFromBottomRightCorner' },
-        { initialScrollOffset: { top: 160, left: 120 }, position: 'scrollFromBottomRightPart' },
-        { initialScrollOffset: { top: 160, left: 40 }, position: 'scrollFromBottomLeftPart' },
-        { initialScrollOffset: { top: 160, left: 0 }, position: 'scrollFromBottomLeftCorner' },
+        { initialScrollOffset: { top: 160, left: 160 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 160, left: 120 }, position: 'fromBRPart' },
+        { initialScrollOffset: { top: 160, left: 40 }, position: 'fromBLPart' },
+        { initialScrollOffset: { top: 160, left: 0 }, position: 'fromBLCorner' },
 
-        { initialScrollOffset: { top: 120, left: 0 }, position: 'scrollFromLeftBottomPart' },
-        { initialScrollOffset: { top: 40, left: 0 }, position: 'scrollFromLeftTopPart' },
+        { initialScrollOffset: { top: 120, left: 0 }, position: 'fromLBPart' },
+        { initialScrollOffset: { top: 40, left: 0 }, position: 'fromLTPart' },
 
         // from inside
 
-        { initialScrollOffset: { top: 40, left: 60 }, position: 'scrollFromInsideTopLeft' },
-        { initialScrollOffset: { top: 40, left: 100 }, position: 'scrollFromInsideTopRight' },
-        { initialScrollOffset: { top: 60, left: 120 }, position: 'scrollFromInsideRightTop' },
-        { initialScrollOffset: { top: 100, left: 120 }, position: 'scrollFromInsideRightBottom' },
-        { initialScrollOffset: { top: 120, left: 100 }, position: 'scrollFromInsideBottomRight' },
-        { initialScrollOffset: { top: 120, left: 60 }, position: 'scrollFromInsideBottomLeft' },
-        { initialScrollOffset: { top: 100, left: 40 }, position: 'scrollFromInsideLeftBottom' },
-        { initialScrollOffset: { top: 60, left: 40 }, position: 'scrollFromInsideLeftTop' },
+        { initialScrollOffset: { top: 40, left: 60 }, position: 'fromInsideTL' },
+        { initialScrollOffset: { top: 40, left: 100 }, position: 'fromInsideTR' },
+        { initialScrollOffset: { top: 60, left: 120 }, position: 'fromInsideRT' },
+        { initialScrollOffset: { top: 100, left: 120 }, position: 'fromInsideRB' },
+        { initialScrollOffset: { top: 120, left: 100 }, position: 'fromInsideBR' },
+        { initialScrollOffset: { top: 120, left: 60 }, position: 'fromInsideBL' },
+        { initialScrollOffset: { top: 100, left: 40 }, position: 'fromInsideLB' },
+        { initialScrollOffset: { top: 60, left: 40 }, position: 'fromInsideLT' },
       ];
 
       // eslint-disable-next-line no-restricted-syntax
@@ -151,7 +151,7 @@ fixture`Scrollable_ScrollToElement`
           )();
 
           await t
-            .expect(await takeScreenshot(`scrollToElement(), element more than container, useNative=${useNative}-direction=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -194,45 +194,45 @@ fixture`Scrollable_ScrollToElement`
   });
 
   [
-    { initialScrollOffset: { top: 0, left: 0 }, position: 'scrollFromTopLeftCorner' },
-    { initialScrollOffset: { top: 0, left: 290 }, position: 'scrollFromTopRightCorner' },
-    { initialScrollOffset: { top: 290, left: 290 }, position: 'scrollFromBottomRightCorner' },
-    { initialScrollOffset: { top: 290, left: 0 }, position: 'scrollFromBottomLeftCorner' },
+    { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
+    { initialScrollOffset: { top: 0, left: 290 }, position: 'fromTRCorner' },
+    { initialScrollOffset: { top: 290, left: 290 }, position: 'fromBRCorner' },
+    { initialScrollOffset: { top: 290, left: 0 }, position: 'fromBLCorner' },
 
-    { initialScrollOffset: { top: 0, left: 160 }, position: 'scrollFromTop' },
-    { initialScrollOffset: { top: 160, left: 290 }, position: 'scrollFromRight' },
-    { initialScrollOffset: { top: 290, left: 160 }, position: 'scrollFromBottom' },
-    { initialScrollOffset: { top: 160, left: 0 }, position: 'scrollFromLeft' },
+    { initialScrollOffset: { top: 0, left: 160 }, position: 'fromT' },
+    { initialScrollOffset: { top: 160, left: 290 }, position: 'fromR' },
+    { initialScrollOffset: { top: 290, left: 160 }, position: 'fromB' },
+    { initialScrollOffset: { top: 160, left: 0 }, position: 'fromL' },
 
     // from inside
 
-    { initialScrollOffset: { top: 165, left: 175 }, position: 'scrollFromInsideTopLeftPart' },
-    { initialScrollOffset: { top: 140, left: 140 }, position: 'scrollFromInsideRightBottomPart' },
+    { initialScrollOffset: { top: 165, left: 175 }, position: 'fromInsideTLPart' },
+    { initialScrollOffset: { top: 140, left: 140 }, position: 'fromInsideRBPart' },
   ].forEach(({ initialScrollOffset, position }) => {
     // TODO: support useNative: false
     const useNative = true;
 
-    test(`scrollToElement(element, offset), transform: scale(1.5), useNative: '${useNative}', direction: '${direction}', `, async (t) => {
+    test(`STE(scale(1.5)),nat=${useNative},dir=${direction},${position}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const scrollable = new Scrollable('#container', { useNative, direction });
       const { getInstance } = scrollable;
 
       // const positions = [
-      //   { initialScrollOffset: { top: 0, left: 0 }, position: 'scrollFromTopLeftCorner' },
-      //   { initialScrollOffset: { top: 0, left: 290 }, position: 'scrollFromTopRightCorner' },
-      //   { initialScrollOffset: { top: 290, left: 290 }, position: 'scrollFromBottomRightCorner' },
-      //   { initialScrollOffset: { top: 290, left: 0 }, position: 'scrollFromBottomLeftCorner' },
+      // { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTopLCorner' },
+      // { initialScrollOffset: { top: 0, left: 290 }, position: 'fromTopRCorner' },
+      // { initialScrollOffset: { top: 290, left: 290 }, position: 'fromBRCorner' },
+      // { initialScrollOffset: { top: 290, left: 0 }, position: 'fromBLCorner' },
 
-      //   { initialScrollOffset: { top: 0, left: 160 }, position: 'scrollFromTop' },
-      //   { initialScrollOffset: { top: 160, left: 290 }, position: 'scrollFromRight' },
-      //   { initialScrollOffset: { top: 290, left: 160 }, position: 'scrollFromBottom' },
-      //   { initialScrollOffset: { top: 160, left: 0 }, position: 'scrollFromLeft' },
+      // { initialScrollOffset: { top: 0, left: 160 }, position: 'fromTop' },
+      // { initialScrollOffset: { top: 160, left: 290 }, position: 'fromR' },
+      // { initialScrollOffset: { top: 290, left: 160 }, position: 'fromB' },
+      // { initialScrollOffset: { top: 160, left: 0 }, position: 'fromL' },
 
-      //   // from inside
+      // // from inside
 
-      //   { initialScrollOffset: { top: 165, left: 175 }, position: 'scrollFromInsideTopLeftPart' },
-      //   { initialScrollOffset: { top: 140, left: 140 }, position: 'scrollFromInsideRightBottomPart' },
+      // { initialScrollOffset: { top: 165, left: 175 }, position: 'fromInsideTopLPart' },
+      // { initialScrollOffset: { top: 140, left: 140 }, position: 'fromInsideRBPart' },
       // ];
 
       // eslint-disable-next-line no-restricted-syntax
@@ -254,7 +254,7 @@ fixture`Scrollable_ScrollToElement`
       )();
 
       await t
-        .expect(await takeScreenshot(`scrollToElement(),transform=scale(1.5),useNative=${useNative}-direction=${direction}-${position}.png`, Selector('#container')))
+        .expect(await takeScreenshot(`STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#container')))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());

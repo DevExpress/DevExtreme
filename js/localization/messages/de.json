@@ -584,6 +584,8 @@
         "dxGantt-quarter": "Q{0}",
         "dxGantt-sortingAscendingText": "Aufsteigend sortieren",
         "dxGantt-sortingDescendingText": "Absteigend sortieren",
-        "dxGantt-sortingClearText": "Sortierung aufheben"
+        "dxGantt-sortingClearText": "Sortierung aufheben",
+        "dxGantt-showResources": "Ressourcen Anzeigen",
+        "dxGantt-showDependencies": "Abhängigkeiten Anzeigen"
     }
 }

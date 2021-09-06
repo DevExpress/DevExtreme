@@ -77,6 +77,8 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
     _templateManager: TemplateManager;
 
+    _cancelOptionChange?: string;
+
     constructor(element: UserDefinedElement, options?: TProperties);
 
     /**

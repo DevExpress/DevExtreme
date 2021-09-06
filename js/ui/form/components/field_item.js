@@ -11,25 +11,25 @@ import errors from '../../widget/ui.errors';
 import Validator from '../../validator';
 
 import {
-    FLEX_LAYOUT_CLASS,
-    FIELD_ITEM_CLASS,
-    FIELD_ITEM_OPTIONAL_CLASS,
-    FIELD_ITEM_REQUIRED_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
-    LABEL_VERTICAL_ALIGNMENT_CLASS,
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
 } from '../constants';
+
+export const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
+export const FIELD_ITEM_OPTIONAL_CLASS = 'dx-field-item-optional';
+export const FIELD_ITEM_REQUIRED_CLASS = 'dx-field-item-required';
+export const FIELD_ITEM_CONTENT_WRAPPER_CLASS = 'dx-field-item-content-wrapper';
+export const FIELD_ITEM_CONTENT_LOCATION_CLASS = 'dx-field-item-content-location-';
+export const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
+export const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+export const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
+export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
 
 import { renderLabel } from './label';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const INVALID_CLASS = 'dx-invalid';
 
-export function renderFieldItem({
+export function renderFieldItemTo({
     $container,
     containerCssClass,
     parentComponent,
@@ -52,7 +52,6 @@ export function renderFieldItem({
     //
 
     $container
-        .addClass(FIELD_ITEM_CLASS)
         .addClass(containerCssClass)
         .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');// TODO: this is a part of Form markup settings, move it to form.js
 

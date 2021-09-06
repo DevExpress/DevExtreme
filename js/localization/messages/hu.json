@@ -530,6 +530,8 @@
     "dxGantt-quarter": "TODO",
     "dxGantt-sortingAscendingText": "Növekvő",
     "dxGantt-sortingDescendingText": "Csökkenő",
-    "dxGantt-sortingClearText": "Rendezés törlése"
+    "dxGantt-sortingClearText": "Rendezés törlése",
+    "dxGantt-showResources": "TODO",
+    "dxGantt-showDependencies": "TODO"
 }
 }

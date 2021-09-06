@@ -76,7 +76,7 @@ export class GanttCustomFieldsManager {
                         const updatedCustomFields = {};
                         this.addCustomFieldsData(key, updatedCustomFields);
                         dataOption._reloadDataSource().done(data => {
-                            this._gantt._ganttTreeList.updateDataSource(data ?? dataOption._dataSource, isCustomFieldsUpdateOnly);
+                            this._gantt._ganttTreeList.updateDataSource(data ?? dataOption._dataSource, false, isCustomFieldsUpdateOnly);
                         });
                         const selectedRowKey = this._gantt.option('selectedRowKey');
                         this._gantt._ganttView._selectTask(selectedRowKey);

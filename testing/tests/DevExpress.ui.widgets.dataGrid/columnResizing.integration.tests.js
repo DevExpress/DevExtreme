@@ -873,6 +873,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             // act
             const resizeController = instance.getController('columnsResizer');
             resizeController._isResizing = true;
+            resizeController._scrollRight = 0;
             resizeController._targetPoint = { columnIndex: 0 };
             resizeController._setupResizingInfo(-9125);
             resizeController._moveSeparator({

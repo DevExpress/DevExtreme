@@ -31,6 +31,13 @@ import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
 import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './scrollable_simulated_test_helper';
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './scrollable_native_test_helper';
 
+import { getTranslateValues } from '../utils/get_translate_values';
+
+jest.mock('../utils/get_translate_values', () => ({
+  ...jest.requireActual('../utils/get_translate_values'),
+  getTranslateValues: jest.fn(() => ({ top: 0, left: 0 })),
+}));
+
 jest.mock('../../../../core/utils/scroll_rtl_behavior');
 jest.mock('../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
@@ -74,30 +81,6 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
           const scrollViewContent = helper.getScrollable().find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
           expect(scrollViewContent.exists()).toBe(needScrollViewContentWrapper);
-        });
-      });
-
-      each(optionValues.direction).describe('Direction: %o', (direction) => {
-        it('should render scrollbars', () => {
-          const helper = new ScrollableTestHelper({
-            direction,
-            useSimulatedScrollbar: true,
-            showScrollbar: 'always',
-          });
-
-          const scrollbars = helper.getScrollbars();
-
-          if (helper.isBoth) {
-            expect(scrollbars.length).toEqual(2);
-            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal dx-state-invisible');
-            expect(scrollbars.at(1).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical dx-state-invisible');
-          } else if (helper.isVertical) {
-            expect(scrollbars.length).toEqual(1);
-            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical dx-state-invisible');
-          } else if (helper.isHorizontal) {
-            expect(scrollbars.length).toEqual(1);
-            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal dx-state-invisible');
-          }
         });
       });
 
@@ -299,6 +282,8 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                       return value;
                     };
 
+                    const isPullDown = Scrollable === ScrollableSimulated
+                      && pullDownEnabled && forceGeneratePockets;
                     each([
                       [{ top: -81, left: getRequiredOffsetLeft(-81) }, {
                         scrollOffset: { top: -81, left: -81 },
@@ -377,6 +362,10 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                         // ie11 - true [max -> 0] - {decreasing: false, positive: true}
                         (getScrollRtlBehavior as jest.Mock)
                           .mockReturnValue(rtlBehavior);
+                        (getTranslateValues as jest.Mock).mockReturnValue({
+                          top: isPullDown ? -80 : 0,
+                          left: 0,
+                        });
 
                         const onScrollHandler = jest.fn();
 
@@ -392,13 +381,14 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
                         helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
-                        helper.viewModel.canRiseScrollAction = false;
                         (helper.viewModel as any).handlePocketState = jest.fn();
-                        helper.viewModel.canRiseScrollAction = false;
+                        helper.viewModel.needRiseScrollAction = false;
 
                         helper.viewModel.scrollEffect();
                         emit('scroll');
-                        expect(helper.viewModel.canRiseScrollAction).toEqual(true);
+
+                        expect(helper.viewModel.pendingScrollAction).toEqual(false);
+                        expect(helper.viewModel.needRiseScrollAction).toEqual(true);
 
                         helper.viewModel.riseScroll();
 
@@ -415,7 +405,8 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
                         expect(onScrollHandler).toBeCalledTimes(1);
                         expect(onScrollHandler).toBeCalledWith(expectedArgs);
-                        expect(helper.viewModel.canRiseScrollAction).toEqual(false);
+                        expect(helper.viewModel.pendingScrollAction).toEqual(true);
+                        expect(helper.viewModel.needRiseScrollAction).toEqual(false);
                       });
                     });
                   });
@@ -435,29 +426,36 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
           expect(scrollable.riseScroll.bind(scrollable)).not.toThrow();
         });
 
-        it('should not raise scrollAction when canRiseScrollAction is false', () => {
+        it('should not raise scrollAction when needRiseScrollAction is false', () => {
           const onScrollHandler = jest.fn();
           const scrollable = new Scrollable({ onScroll: onScrollHandler });
-          scrollable.canRiseScrollAction = false;
+          scrollable.needRiseScrollAction = false;
 
           scrollable.riseScroll();
 
           expect(onScrollHandler).toBeCalledTimes(0);
-          scrollable.canRiseScrollAction = false;
+          scrollable.needRiseScrollAction = false;
         });
 
-        it('should raise scrollAction when canRiseScrollAction is true', () => {
+        it('should raise scrollAction when needRiseScrollAction is true', () => {
           const onScrollHandler = jest.fn();
-          const scrollable = new Scrollable({ onScroll: onScrollHandler });
+          const viewModel = new Scrollable({
+            onScroll: (args) => {
+              expect(viewModel.pendingScrollAction).toEqual(true);
+              expect(viewModel.needRiseScrollAction).toEqual(true);
+              onScrollHandler(args);
+            },
+          });
 
-          scrollable.canRiseScrollAction = true;
-          scrollable.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
+          viewModel.needRiseScrollAction = true;
+          viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
-          scrollable.riseScroll();
+          viewModel.riseScroll();
 
+          expect(viewModel.needRiseScrollAction).toEqual(false);
+          expect(viewModel.pendingScrollAction).toEqual(true);
           expect(onScrollHandler).toBeCalledTimes(1);
           expect(onScrollHandler).toBeCalledWith({ scrollOffset: { top: 5, left: 10 } });
-          scrollable.canRiseScrollAction = false;
         });
       });
     });

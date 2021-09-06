@@ -608,6 +608,8 @@
         "dxGantt-quarter": "TODO",
         "dxGantt-sortingAscendingText": "Tri croissant",
         "dxGantt-sortingDescendingText": "Tri décroissant",
-        "dxGantt-sortingClearText": "Supprimer le tri"
+        "dxGantt-sortingClearText": "Supprimer le tri",
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO"
     }
 }

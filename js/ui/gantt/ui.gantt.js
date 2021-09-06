@@ -151,6 +151,7 @@ class Gantt extends Widget {
             allowSelection: this.option('allowSelection'),
             selectedRowKey: this.option('selectedRowKey'),
             showResources: this.option('showResources'),
+            showDependencies: this.option('showDependencies'),
             startDateRange: this.option('startDateRange'),
             endDateRange: this.option('endDateRange'),
             taskTitlePosition: this.option('taskTitlePosition'),
@@ -218,7 +219,8 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = validatedData;
-            this._ganttTreeList?.updateDataSource(validatedData);
+            const forceUpdate = !this._ganttTreeList?.getDataSource() && !this._ganttView;
+            this._ganttTreeList?.updateDataSource(validatedData, forceUpdate);
         }
     }
     _validateSourceData(dataSourceName, data) {
@@ -547,6 +549,9 @@ class Gantt extends Widget {
         // eslint-disable-next-line spellcheck/spell-checker
         this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
+    unassignAllResourcesFromTask(taskKey) {
+        this._ganttView._ganttViewCore.unassignAllResourcesFromTask(taskKey);
+    }
     updateDimensions() {
         this._sizeHelper.onAdjustControl();
     }
@@ -555,6 +560,9 @@ class Gantt extends Widget {
     }
     showResourceManagerDialog() {
         this._ganttView._ganttViewCore.showResourcesDialog();
+    }
+    showTaskDetailsDialog(taskKey) {
+        this._ganttView._ganttViewCore.showTaskDetailsDialog(taskKey);
     }
     exportToPdf(options) {
         this._exportHelper.reset();
@@ -600,6 +608,21 @@ class Gantt extends Widget {
         this._treeList.expandRow(key);
     }
 
+    showResources(value) {
+        this.option('showResources', value);
+    }
+
+    showDependencies(value) {
+        this.option('showDependencies', value);
+    }
+
+    zoomIn() {
+        this._ganttView._ganttViewCore.zoomIn();
+    }
+    zoomOut() {
+        this._ganttView._ganttViewCore.zoomOut();
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), GanttHelper.getDefaultOptions());
     }
@@ -625,6 +648,9 @@ class Gantt extends Widget {
                 break;
             case 'showResources':
                 this._setGanttViewOption('showResources', args.value);
+                break;
+            case 'showDependencies':
+                this._setGanttViewOption('showDependencies', args.value);
                 break;
             case 'taskTitlePosition':
                 this._setGanttViewOption('taskTitlePosition', args.value);

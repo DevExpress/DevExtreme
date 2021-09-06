@@ -131,7 +131,19 @@ export class PdfGrid {
                 doc.addPage();
             }
             page._tables.forEach((table) => {
-                table.drawTo(doc, styles);
+                table.drawTo(doc, styles, {
+                    allowDrawBorders: true,
+                    allowDrawCellContent: true,
+                    allowDrawCustomBorders: false
+                });
+            });
+
+            page._tables.forEach((table) => {
+                table.drawTo(doc, styles, {
+                    allowDrawBorders: false,
+                    allowDrawCellContent: false,
+                    allowDrawCustomBorders: true
+                });
             });
         });
 

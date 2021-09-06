@@ -177,6 +177,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @docid
      * @default false
      * @default true &for(desktop)
+     * @default false &for(Material)
      * @public
      */
     showCloseButton?: boolean;

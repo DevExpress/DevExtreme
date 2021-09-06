@@ -616,6 +616,8 @@
         "dxGantt-quarter": "Q{0}",
         "dxGantt-sortingAscendingText": "Sort Ascending",
         "dxGantt-sortingDescendingText": "Sort Descending",
-        "dxGantt-sortingClearText": "Clear Sorting"
+        "dxGantt-sortingClearText": "Clear Sorting",
+        "dxGantt-showResources": "Show Resources",
+        "dxGantt-showDependencies": "Show Dependencies"
       }
 }

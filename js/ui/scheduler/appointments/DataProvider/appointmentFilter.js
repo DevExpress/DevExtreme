@@ -197,7 +197,7 @@ export class AppointmentFilterBaseStrategy {
 
     filter() {
         const dateRange = this.workspace.getDateRange();
-        const resources = this.resourceManager.getResourcesData();
+        const resources = this.resourceManager.loadedResources;
 
         let allDay;
 

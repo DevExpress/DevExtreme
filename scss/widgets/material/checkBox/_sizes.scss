@@ -12,15 +12,15 @@ $material-checkbox-size: null !default;
 @if $size == "default" {
   $material-checkbox-ripple-size: 2.5em !default;
   $material-checkbox-arrow-icon-size: 1em !default;
-  $material-checkbox-indeterminate-icon-size: 1.25em !default;
+  $material-checkbox-indeterminate-icon-size: 1em !default;
   $material-checkbox-border-radius: $checkbox-icon-border-radius !default;
   $material-checkbox-size: 18px !default;
 }
 
 @else if $size == "compact" {
-  $material-checkbox-ripple-size: 1.875em !default;
-  $material-checkbox-arrow-icon-size: 0.875em !default;
-  $material-checkbox-indeterminate-icon-size: 1.125em !default;
+  $material-checkbox-ripple-size: 2.14em !default;
+  $material-checkbox-arrow-icon-size: 1em !default;
+  $material-checkbox-indeterminate-icon-size: 1em !default;
   $material-checkbox-border-radius: 2px !default;
   $material-checkbox-size: 16px !default;
 }

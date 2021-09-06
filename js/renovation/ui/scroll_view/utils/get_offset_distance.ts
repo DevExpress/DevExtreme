@@ -1,7 +1,7 @@
 import {
   ScrollableDirection,
   ScrollOffset,
-} from '../types.d';
+} from '../common/types.d';
 import { ensureDefined } from '../../../../core/utils/common';
 import {
   convertToLocation,

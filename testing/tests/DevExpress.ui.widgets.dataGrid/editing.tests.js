@@ -43,6 +43,7 @@ QUnit.testStart(function() {
 </div>';
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 
@@ -14061,10 +14062,11 @@ QUnit.module('Editing with validation', {
             assert.strictEqual($('.dx-selectbox-popup-wrapper').length, 1, 'has selectbox popup');
 
             // act
-            $cellElements.find('.dx-texteditor-input').last().focus();
             $cellElements.find('.dx-texteditor-input').last().trigger('dxpointerdown');
-            $cellElements.find('.dx-texteditor-input').last().trigger('dxclick');
             this.clock.tick();
+            $cellElements.find('.dx-texteditor-input').last().focus();
+            this.clock.tick();
+            $cellElements.find('.dx-texteditor-input').last().trigger('dxclick');
 
             // assert
             assert.strictEqual($cellElements.first().find('.dx-overlay.dx-datagrid-invalid-message').length, 0, 'hasn\'t invalid message');
@@ -16580,6 +16582,65 @@ QUnit.module('Editing with scrolling', {
             const rowsViewWrapper = dataGridWrapper.rowsView;
             assert.ok(rowsViewWrapper.getDataRow(0).isNewRow(), 'Row 0 is new in view');
             assert.ok(rowsViewWrapper.getDataRow(1).isNewRow(), 'Row 1 is new in view');
+        });
+
+        // T1022630
+        QUnit.test(`scrolling.mode: ${rowRenderingMode}, scrolling.rowRenderingMode: ${rowRenderingMode} - The column edit button should not be displayed after collapsing and expanding a grouped row when the visible property is false`, function(assert) {
+            // arrange
+            const $testElement = $('#container');
+
+            this.options = $.extend(this.options, {
+                columns: [{ dataField: 'column1', groupIndex: 0 }, 'column2', {
+                    type: 'buttons',
+                    buttons: [{
+                        name: 'edit',
+                        icon: 'home',
+                        visible: function(e) {
+                            return !e.row.isEditing;
+                        }
+                    }]
+                }],
+                keyExpr: 'column2',
+                editing: {
+                    mode: 'row',
+                    allowUpdating: true
+                },
+                grouping: {
+                    autoExpandAll: true
+                },
+                scrolling: {
+                    mode: rowRenderingMode,
+                    rowRenderingMode: rowRenderingMode,
+                    rowPageSize: 5
+                }
+            });
+
+            this.setupDataGrid();
+            this.rowsView.render($testElement);
+
+            // assert
+            let $linkElements = $testElement.find('.dx-command-edit').first().find('.dx-link');
+            assert.strictEqual($linkElements.length, 1, 'link count');
+            assert.ok($linkElements.eq(0).hasClass('dx-link-edit'), 'the edit link');
+
+            // act
+            this.editRow(1);
+
+            // assert
+            $linkElements = $testElement.find('.dx-command-edit').first().find('.dx-link');
+            assert.strictEqual($linkElements.length, 2, 'link count');
+            assert.ok($linkElements.eq(0).hasClass('dx-link-save'), 'the save link');
+            assert.ok($linkElements.eq(1).hasClass('dx-link-cancel'), 'the cancel link');
+
+            // act
+            this.collapseRow(['Item101']);
+            this.expandRow(['Item101']);
+
+            // assert
+            $linkElements = $testElement.find('.dx-command-edit').first().find('.dx-link');
+            assert.strictEqual($linkElements.length, 2, 'link count');
+            assert.ok($linkElements.eq(0).hasClass('dx-link-save'), 'the save link');
+            assert.ok($linkElements.eq(1).hasClass('dx-link-cancel'), 'the cancel link');
         });
     });
 

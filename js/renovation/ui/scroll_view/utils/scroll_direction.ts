@@ -6,7 +6,7 @@ import {
 
 import {
   ScrollableDirection,
-} from '../types.d';
+} from '../common/types.d';
 
 export class ScrollDirection {
   direction: ScrollableDirection;

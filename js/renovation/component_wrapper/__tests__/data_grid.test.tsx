@@ -426,7 +426,7 @@ describe('DataGrid Wrapper', () => {
       });
 
       expect(mockComponent._notifyOptionChanged).toBeCalledTimes(1);
-      expect(mockComponent._invalidate).toBeCalledTimes(0);
+      expect(mockComponent._optionChanged).toBeCalledTimes(0);
     });
 
     it('_notifyOptionChanged should not be called if column option is changed to the same value in internal widget', () => {

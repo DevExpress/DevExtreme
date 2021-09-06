@@ -138,6 +138,7 @@ export const GanttHelper = {
             columns: undefined,
             taskListWidth: 300,
             showResources: true,
+            showDependencies: true,
             taskTitlePosition: 'inside',
             firstDayOfWeek: undefined,
             selectedRowKey: undefined,

@@ -806,6 +806,8 @@ declare module DevExpress {
   > extends Component<TProperties> {
     _templateManager: DevExpress.core.TemplateManager;
 
+    _cancelOptionChange?: string;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
@@ -4623,6 +4625,10 @@ declare module DevExpress.ui {
      * [descr:dxActionSheetItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    /**
+     * [descr:dxActionSheetItem.stylingMode]
+     */
+    stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
    * @deprecated use Properties instead
@@ -5150,7 +5156,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBoxOptions.value]
      */
-    value?: boolean | undefined;
+    value?: boolean | null | undefined;
   }
   /**
    * [descr:dxColorBox]
@@ -8693,11 +8699,8 @@ declare module DevExpress.ui {
         | 'bold'
         | 'italic'
         | 'underline'
-        | 'fontColor'
         | 'lineStyle'
         | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
         | 'textAlignLeft'
         | 'textAlignCenter'
         | 'textAlignRight'
@@ -11303,6 +11306,10 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
+     * [descr:dxFileUploaderOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
      */
     invalidFileExtensionMessage?: string;
@@ -12570,6 +12577,30 @@ declare module DevExpress.ui {
      * [descr:dxGantt.refresh()]
      */
     refresh(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxGantt.showResources(value)]
+     */
+    showResources(value: boolean): void;
+    /**
+     * [descr:dxGantt.showDependencies(value)]
+     */
+    showDependencies(value: boolean): void;
+    /**
+     * [descr:dxGantt.zoomIn()]
+     */
+    zoomIn(): void;
+    /**
+     * [descr:dxGantt.zoomOut()]
+     */
+    zoomOut(): void;
+    /**
+     * [descr:dxGantt.unassignAllResourcesFromTask(taskKey)]
+     */
+    unassignAllResourcesFromTask(taskKey: any): void;
+    /**
+     * [descr:dxGantt.showTaskDetailsDialog(taskKey)]
+     */
+    showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
@@ -13084,6 +13115,10 @@ declare module DevExpress.ui {
      */
     showResources?: boolean;
     /**
+     * [descr:dxGanttOptions.showDependencies]
+     */
+    showDependencies?: boolean;
+    /**
      * [descr:dxGanttOptions.showRowLines]
      */
     showRowLines?: boolean;
@@ -13271,6 +13306,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
+      | 'showResources'
+      | 'showDependencies'
     >;
   }
   /**
@@ -13294,6 +13331,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
+      | 'toggleResources'
+      | 'toggleDependencies'
       | string;
     /**
      * [descr:dxGanttToolbarItem.location]
@@ -13494,6 +13533,15 @@ declare module DevExpress.ui {
   module dxHtmlEditor {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface dxHtmlEditorTableContextMenu {
+      /**
+       * [descr:dxHtmlEditorTableContextMenu.enabled]
+       */
+      enabled?: boolean;
+    }
     export type FocusInEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type FocusOutEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type InitializedEvent =
@@ -13587,6 +13635,10 @@ declare module DevExpress.ui {
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
+     * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
+     */
+    allowSoftLineBreak?: boolean;
+    /**
      * [descr:dxHtmlEditorOptions.customizeModules]
      */
     customizeModules?: (config: any) => void;
@@ -13606,6 +13658,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.mentions]
      */
     mentions?: Array<dxHtmlEditorMention>;
+    /**
+     * [descr:dxHtmlEditorOptions.tableContextMenu]
+     */
+    tableContextMenu?: DevExpress.ui.dxHtmlEditor.dxHtmlEditorTableContextMenu;
     /**
      * [descr:dxHtmlEditorOptions.name]
      */

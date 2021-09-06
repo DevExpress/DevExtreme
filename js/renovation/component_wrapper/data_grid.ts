@@ -175,9 +175,9 @@ export default class DataGridWrapper extends Component {
     if (isSecondLevelOption && e.value !== e.previousValue) {
       if (e.fullName.startsWith('columns[')) {
         if (this.option(e.fullName) !== e.value) {
-          this._skipInvalidate = true;
+          this._cancelOptionChange = e.fullName;
           this._notifyOptionChanged(e.fullName, e.value, e.previousValue);
-          this._skipInvalidate = false;
+          this._cancelOptionChange = undefined;
         }
       } else {
         this._skipInvalidate = true;

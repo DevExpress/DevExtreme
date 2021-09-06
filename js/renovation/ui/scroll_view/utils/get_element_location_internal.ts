@@ -1,6 +1,6 @@
 import {
   ScrollableDirection, ScrollOffset,
-} from '../types.d';
+} from '../common/types.d';
 
 import { getRelativeOffset } from './get_relative_offset';
 
