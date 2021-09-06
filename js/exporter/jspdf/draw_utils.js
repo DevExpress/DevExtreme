@@ -6,10 +6,8 @@ const defaultBorderLineWidth = 1;
 
 function drawPdfCells(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
-    cellsArray.forEach(row => {
-        row.forEach(cell => {
-            drawCell(doc, cell, docStyles);
-        });
+    cellsArray.forEach(cell => {
+        drawCell(doc, cell, docStyles);
     });
     setDocumentStyles(doc, docStyles);
 }

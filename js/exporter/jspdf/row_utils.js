@@ -1,82 +1,31 @@
 import { isDefined } from '../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils';
 
-function getRows(doc, dataProvider, dataGrid, options) {
-    const rows = [];
 
-    let previousRow;
-    let currentRow;
-    const rowsCount = dataProvider.getRowsCount();
-    const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
-
-    for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-        previousRow = currentRow;
-
-        const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
-        let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
-        if(rowType === 'groupFooter' && previousRow?.rowType === 'groupFooter') {
-            indentLevel = previousRow.indentLevel - 1;
-        }
-        currentRow = createRow(dataProvider, rowIndex, rowType, indentLevel, wordWrapEnabled);
-
-        if(options.customizeCell) {
-            currentRow.cells.forEach(cellInfo => {
-                options.customizeCell({ gridCell: cellInfo.gridCell, pdfCell: cellInfo.pdfCell });
-            });
-        }
-
-        if(options.onRowExporting) {
-            const args = { rowCells: currentRow.cells.map(c => c.pdfCell) };
-            options.onRowExporting(args);
-            if(isDefined(args.rowHeight)) {
-                currentRow.customerHeight = args.rowHeight;
-            }
-        }
-
-        rows.push(currentRow);
-    }
-
-    return rows;
-}
-
-function createRow(dataProvider, rowIndex, rowType, indentLevel, wordWrapEnabled) {
-    const rowInfo = {
-        rowType: rowType,
-        indentLevel: indentLevel,
-        cells: [],
-        rowIndex
-    };
-
-    fillCells(rowInfo, dataProvider, dataProvider.getColumns(), wordWrapEnabled);
-
-    return rowInfo;
-}
-
-function fillCells(rowInfo, dataProvider, columns, wordWrapEnabled) {
-    for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
-        const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
-        const cellInfo = {
-            gridCell: cellData.cellSourceData,
-            pdfCell: { text: cellData.value, wordWrapEnabled, _rect: {} }
-        };
-        rowInfo.cells.push(cellInfo);
-    }
-}
-
-function calculateWidths(doc, rows, options) {
+function initializeCellsWidth(rows, columnWidths) {
+    // TODO: handle colSpan in this method !!!!
     rows.forEach(row => {
-        row.cells.forEach((cell, index) => {
-            cell.pdfCell._rect.w = options.columnWidths[index];
+        row.cells.forEach(({ gridCell, pdfCell }, index) => {
+            pdfCell._rect.w = columnWidths[index];
         });
     });
 }
 
-function calculateHeights(doc, rows) {
+function calculateHeights(doc, rows, options) {
     rows.forEach(row => {
         const pdfCells = row.cells.map(c => c.pdfCell);
 
-        row.height = isDefined(row.customerHeight)
-            ? row.customerHeight
+        let customerHeight;
+        if(options.onRowExporting) {
+            const args = { rowCells: pdfCells };
+            options.onRowExporting(args);
+            if(isDefined(args.rowHeight)) {
+                customerHeight = args.rowHeight;
+            }
+        }
+
+        row.height = isDefined(customerHeight)
+            ? customerHeight
             : calculateRowHeight(doc, pdfCells, pdfCells.map(c => c._rect.w));
         pdfCells.forEach(cell => {
             cell._rect.h = row.height;
@@ -97,4 +46,4 @@ function calculateCoordinates(doc, rows, options) {
     });
 }
 
-export { getRows, calculateWidths, calculateHeights, calculateCoordinates };
+export { initializeCellsWidth, calculateHeights, calculateCoordinates };
