@@ -552,10 +552,6 @@ class SchedulerAgenda extends WorkSpace {
     _getIntervalDuration() {
         return dateUtils.dateToMilliseconds('day') * this.option('intervalCount');
     }
-
-    getWorkArea() {
-        return this._$dateTableContainer;
-    }
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);
