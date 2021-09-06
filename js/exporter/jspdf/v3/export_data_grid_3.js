@@ -1,5 +1,5 @@
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
 import { initializeCellsWidth, calculateHeights, calculateCoordinates } from './row_utils';
 import { generateRowsInfo } from './rows_generator';
 import { drawPdfCells } from './draw_utils';

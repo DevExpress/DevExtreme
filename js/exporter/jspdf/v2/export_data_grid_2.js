@@ -1,8 +1,8 @@
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
 import { PdfGrid } from './pdf_grid';
 import { createRowInfo, createPdfCell } from './export_data_grid_row_info';
-import { calculateRowHeight } from './pdf_utils';
+import { calculateRowHeight } from './pdf_utils_v2';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
