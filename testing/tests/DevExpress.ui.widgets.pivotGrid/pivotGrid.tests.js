@@ -5174,7 +5174,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             height: 300,
             scrolling: {
@@ -5220,8 +5220,6 @@ QUnit.module('Tests with stubs', {
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
@@ -5244,7 +5242,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             scrolling: {
                 mode: 'virtual'
@@ -5289,8 +5287,6 @@ QUnit.module('Tests with stubs', {
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
 
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
@@ -7135,7 +7131,7 @@ QUnit.module('Data area', () => {
 
     QUnit.test('setVirtualContentParams.', function(assert) {
         const area = createDataArea({
-            'scrolling.mode': 'virtual'
+            'scrolling.mode': 'virtual',
         });
         const testElement = $('#pivotGrid').addClass('dx-pivotgrid').addClass('dx-virtual-mode');
 
@@ -7146,6 +7142,9 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
         area.updateScrollableOptions({ useNative: false });
 
@@ -7177,6 +7176,9 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.reset();
@@ -7216,6 +7218,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7288,6 +7292,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7362,6 +7368,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7436,6 +7444,9 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
