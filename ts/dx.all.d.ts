@@ -16193,7 +16193,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number | false;
+    value?: number | boolean;
   }
   /**
    * [descr:dxRadioGroup]
