@@ -1,4 +1,7 @@
-import { calculateStartViewDate } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
+import {
+    calculateStartViewDate,
+    isDataOnWeekend,
+} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
 import { ViewDataGeneratorWeek } from './view_data_generator_week';
 
 const MONDAY_INDEX = 1;
@@ -7,6 +10,10 @@ export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
     get daysInInterval() { return 5; }
 
     get isWorkView() { return true; }
+
+    isSkippedDate(date) {
+        return isDataOnWeekend(date);
+    }
 
     _calculateStartViewDate(options) {
         return calculateStartViewDate(
