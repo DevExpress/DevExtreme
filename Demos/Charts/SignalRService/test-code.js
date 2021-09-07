@@ -10,7 +10,12 @@ testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, 
       if (window.$ && window.$.connection && window.$.connection.stockTickDataHub) {
         window.$.connection.liveUpdateSignalRHub.client.updateStockPrice = function () { };
       } else {
-        dataSourceItems.forEach((item) => { for (const key in item) { item[key.charAt(0).toLowerCase() + key.slice(1)] = item[key]; delete item[key]; } });
+        dataSourceItems.forEach((item) => {
+          Object.keys(item).forEach((key) => {
+            item[key.charAt(0).toLowerCase() + key.slice(1)] = item[key];
+            delete item[key];
+          });
+        });
         if (window.connection && window.connection.methods) {
           // eslint-disable-next-line spellcheck/spell-checker
           window.connection.methods.updatestockprice.splice(0, 1);
