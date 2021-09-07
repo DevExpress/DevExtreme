@@ -1,6 +1,7 @@
 import Popup from '../../popup';
 import Form from '../../form';
 import ButtonGroup from '../../button_group';
+import ColorBox from '../../color_box';
 
 import $ from '../../../core/renderer';
 import { getWindow } from '../../../core/utils/window';
@@ -117,14 +118,14 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                         items: BORDER_STYLES
                     }
                 },
-                {
-                    dataField: 'borderColor',
-                    label: { text: 'Color' },
-                    editorType: 'dxColorBox',
-                    editorOptions: {
-                        editAlphaChannel: true
-                    }
-                },
+                // {
+                //     dataField: 'borderColor',
+                //     label: { text: 'Color' },
+                //     editorType: 'dxColorBox',
+                //     editorOptions: {
+                //         editAlphaChannel: true
+                //     }
+                // },
                 {
                     itemType: 'simple',
                     dataField: 'borderColor',
@@ -132,7 +133,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                     template: (e) => {
 
                         const $content = $('<div>');
-                        editorInstance._createComponent($content, ButtonGroup, {
+                        editorInstance._createComponent($content, ColorBox, {
                             editAlphaChannel: true,
                             value: e.component.option('formData').borderColor,
                             onInitialized: (e) => {
@@ -151,14 +152,14 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             itemType: 'group',
             caption: 'Background',
             items: [
-                {
-                    dataField: 'backgroundColor',
-                    label: { text: 'Color' },
-                    editorType: 'dxColorBox',
-                    editorOptions: {
-                        editAlphaChannel: true
-                    }
-                }
+                // {
+                //     dataField: 'backgroundColor',
+                //     label: { text: 'Color' },
+                //     editorType: 'dxColorBox',
+                //     editorOptions: {
+                //         editAlphaChannel: true
+                //     }
+                // }
             ]
         }, {
             itemType: 'group',
@@ -260,14 +261,14 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                         items: BORDER_STYLES
                     }
                 },
-                {
-                    dataField: 'borderColor',
-                    caption: 'Color',
-                    editorType: 'dxColorBox',
-                    editorOptions: {
-                        editAlphaChannel: true
-                    }
-                },
+                // {
+                //     dataField: 'borderColor',
+                //     caption: 'Color',
+                //     editorType: 'dxColorBox',
+                //     editorOptions: {
+                //         editAlphaChannel: true
+                //     }
+                // },
                 {
                     dataField: 'borderWidth',
                     caption: 'Width'
@@ -277,14 +278,14 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             itemType: 'group',
             caption: 'Background',
             items: [
-                {
-                    dataField: 'backgroundColor',
-                    caption: 'Color',
-                    editorType: 'dxColorBox',
-                    editorOptions: {
-                        editAlphaChannel: true
-                    }
-                }
+                // {
+                //     dataField: 'backgroundColor',
+                //     caption: 'Color',
+                //     editorType: 'dxColorBox',
+                //     editorOptions: {
+                //         editAlphaChannel: true
+                //     }
+                // }
             ]
         }, {
             itemType: 'group',
