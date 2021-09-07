@@ -2,7 +2,8 @@ import {
   CSSAttributes,
   Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template,
 } from '@devextreme-generator/declarations';
-import { AppointmentInfo, AppointmentTemplateProps, AppointmentViewModel } from './types';
+import type { TargetedAppointmentInfo } from '../../../../ui/scheduler';
+import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { getAppointmentStyles } from './utils';
 import { AppointmentContent } from './content';
 
@@ -57,7 +58,7 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
 
   get styles(): CSSAttributes { return getAppointmentStyles(this.props.viewModel); }
 
-  get data(): AppointmentInfo {
+  get data(): TargetedAppointmentInfo {
     return {
       appointmentData: this.props.viewModel.info.appointment,
       targetedAppointmentData: this.props.viewModel.appointment,
