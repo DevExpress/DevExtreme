@@ -1179,9 +1179,9 @@ export interface DataGridToolbarItem extends dxToolbarItem {
 export class DataGridToolbar {
   @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
 
-  @OneWay() visible?: boolean = true;
+  @OneWay() visible?: boolean;
 
-  @OneWay() disabled?: boolean = false;
+  @OneWay() disabled?: boolean;
 }
 
 @ComponentBindings()
@@ -1552,7 +1552,10 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
 
-  @OneWay() toolbar?: DataGridToolbar;
+  @OneWay() toolbar?: DataGridToolbar = {
+    visible: true,
+    disabled: false,
+  };
 
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 
