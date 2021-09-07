@@ -1,22 +1,25 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
 } from '@devextreme-generator/declarations';
-import { AppointmentViewModel } from './types';
+import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { Appointment } from './appointment';
 import { getAppointmentKey } from './utils';
 
 export const viewFunction = ({
   props: {
-    items,
+    appointments,
+    appointmentTemplate,
   },
 }: AppointmentLayout): JSX.Element => (
   <div
     className="dx-scheduler-appointments"
   >
     {
-      items.map((item: AppointmentViewModel) => (
+      appointments.map((item: AppointmentViewModel, index: number) => (
         <Appointment
           viewModel={item}
+          appointmentTemplate={appointmentTemplate}
+          index={index}
           key={getAppointmentKey(item)}
         />
       ))
@@ -26,7 +29,9 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class AppointmentLayoutProps {
-  @OneWay() items: AppointmentViewModel[] = [];
+  @OneWay() appointments: AppointmentViewModel[] = [];
+
+  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 }
 
 @Component({
