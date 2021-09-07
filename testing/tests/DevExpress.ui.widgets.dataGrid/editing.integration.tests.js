@@ -1460,6 +1460,33 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             });
         });
     });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - cellClick should not be raised when a new row is added (T1027166)`, function(assert) {
+            // arrange
+            const cellClickSpy = sinon.spy(function() {});
+            const dataGrid = createDataGrid({
+                dataSource: [{ id: 1, field: 'test' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onCellClick: cellClickSpy
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(300);
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'cell has an editor');
+            assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+            assert.notOk(cellClickSpy.called, 'onCellClick is not raised');
+        });
+    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {
