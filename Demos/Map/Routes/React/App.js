@@ -30,7 +30,7 @@ class App extends React.Component {
         <div className="options">
           <div className="caption">Options</div>
           <div className="option">
-            <span>Set mode</span>&nbsp;
+            <span>Set mode</span>
             <SelectBox
               defaultValue="driving"
               items={['driving', 'walking']}
@@ -38,7 +38,7 @@ class App extends React.Component {
             />
           </div>
           <div className="option">
-            <span>Route color</span>&nbsp;
+            <span>Route color</span>
             <SelectBox
               defaultValue="blue"
               items={['blue', 'green', 'red']}
