@@ -129,7 +129,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       colorizeGroups?: boolean;
       /**
        * @docid
-       * @extends CommonVizPalette
+       * @default "Material"
        */
       palette?: Array<string> | PaletteType;
       /**
@@ -150,7 +150,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     };
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;

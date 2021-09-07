@@ -18,16 +18,20 @@ import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
+import SchedulerToolbar from './header/header';
+import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
 
 export const viewFunction = ({
   restAttributes,
   currentViewConfig,
   onViewRendered,
+  setCurrentDate,
+  setCurrentView,
+  startViewDate,
   props: {
     accessKey,
     activeStateEnabled,
     disabled,
-    focusStateEnabled,
     height,
     hint,
     hoverStateEnabled,
@@ -36,6 +40,13 @@ export const viewFunction = ({
     visible,
     width,
     className,
+    toolbar: toolbarItems,
+    views,
+    currentView,
+    useDropDownViewSwitcher,
+    customizeDateNavigatorText,
+    min,
+    max,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -68,7 +79,7 @@ export const viewFunction = ({
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
-      focusStateEnabled={focusStateEnabled}
+      focusStateEnabled={false}// TODO: waiting for a toolbar wrapper rerender fix
       height={height}
       hint={hint}
       hoverStateEnabled={hoverStateEnabled}
@@ -80,6 +91,21 @@ export const viewFunction = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
+      <SchedulerToolbar
+        items={toolbarItems}
+        views={views}
+        currentView={currentView}
+        onCurrentViewUpdate={setCurrentView}
+        currentDate={currentDate}
+        onCurrentDateUpdate={setCurrentDate}
+        startViewDate={startViewDate}
+        min={min}
+        max={max}
+        intervalCount={intervalCount}
+        firstDayOfWeek={firstDayOfWeek}
+        useDropDownViewSwitcher={useDropDownViewSwitcher}
+        customizationFunction={customizeDateNavigatorText}
+      />
       <WorkSpace
         firstDayOfWeek={firstDayOfWeek}
         startDayHour={startDayHour}
@@ -129,6 +155,30 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get currentViewConfig(): CurrentViewConfigType {
     return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
+
+  get startViewDate(): Date {
+    const type = this.props.currentView;
+    const {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+    } = this.currentViewConfig;
+
+    const options = {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+    };
+
+    const viewDataGenerator = getViewDataGeneratorByViewType(type);
+    const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
+
+    return startViewDate;
   }
 
   @Method()
@@ -208,5 +258,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   onViewRendered(viewMetaData: ViewMetaData): void {
     this.viewDataProvider = viewMetaData.viewDataProvider;
     this.cellsMetaData = viewMetaData.cellsMetaData;
+  }
+
+  setCurrentView(view: string): void {
+    this.props.currentView = view;
+  }
+
+  setCurrentDate(date: Date): void {
+    this.props.currentDate = date;
   }
 }

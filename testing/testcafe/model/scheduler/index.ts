@@ -1,10 +1,10 @@
 import Widget from '../internal/widget';
 import AppointmentPopup from './appointment/popup';
 import AppointmentTooltip from './appointment/tooltip';
-import AppointmentCollector from './appointment/collector';
 import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
 import Toolbar from './toolbar';
+import Collectors from './collectors';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -24,31 +24,35 @@ export const CLASS = {
 };
 
 export default class Scheduler extends Widget {
-  workSpace: Selector;
+  readonly name = 'dxScheduler';
 
-  dateTableCells: Selector;
+  readonly workSpace: Selector;
 
-  allDayTableCells: Selector;
+  readonly dateTableCells: Selector;
 
-  dateTableRows: Selector;
+  readonly allDayTableCells: Selector;
 
-  dateTable: Selector;
+  readonly dateTableRows: Selector;
 
-  dateTableScrollable: Selector;
+  readonly dateTable: Selector;
 
-  headerPanelCells: Selector;
+  readonly dateTableScrollable: Selector;
 
-  headerSpaceScroll: { left: Promise<number>; top: Promise<number> };
+  readonly headerPanelCells: Selector;
 
-  workspaceScrollable: Selector;
+  readonly headerSpaceScroll: { left: Promise<number>; top: Promise<number> };
 
-  workSpaceScroll: { left: Promise<number>; top: Promise<number> };
+  readonly workspaceScrollable: Selector;
 
-  appointmentPopup: AppointmentPopup;
+  readonly workSpaceScroll: { left: Promise<number>; top: Promise<number> };
 
-  appointmentTooltip: AppointmentTooltip;
+  readonly appointmentPopup: AppointmentPopup;
 
-  name = 'dxScheduler';
+  readonly appointmentTooltip: AppointmentTooltip;
+
+  readonly toolbar: Toolbar;
+
+  readonly collectors: Collectors;
 
   constructor(id: string) {
     super(id);
@@ -63,6 +67,9 @@ export default class Scheduler extends Widget {
     this.workspaceScrollable = this.dateTableScrollable.find(`.${CLASS.scrollableContainer}`);
 
     const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
+
+    this.toolbar = new Toolbar(this.element);
+    this.collectors = new Collectors(this.element);
 
     this.headerSpaceScroll = {
       left: headerSpaceScroll.scrollLeft,
@@ -106,27 +113,11 @@ export default class Scheduler extends Widget {
     return new Appointment(this.element, index, title);
   }
 
-  getAppointmentCollector(title: string, index = 0): AppointmentCollector {
-    return new AppointmentCollector(this.element, index, title);
-  }
-
   getAppointmentByIndex(index = 0): Appointment {
     return new Appointment(this.element, index);
   }
 
-  getAppointmentCollectorByIndex(index = 0): AppointmentCollector {
-    return new AppointmentCollector(this.element, index);
-  }
-
   getAppointmentCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointment}`).count;
-  }
-
-  getAppointmentCollectorCount(): Promise<number> {
-    return this.element.find(`.${CLASS.appointmentCollector}`).count;
-  }
-
-  getToolbar(): Toolbar {
-    return new Toolbar(this.element);
   }
 }

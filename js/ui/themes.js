@@ -335,6 +335,10 @@ export function isDark(themeName) {
     return isTheme('dark', themeName);
 }
 
+export function isCompact(themeName) {
+    return isTheme('compact', themeName);
+}
+
 export function isWebFontLoaded(text, fontWeight) {
     const testedFont = 'Roboto, RobotoFallback, Arial';
     const etalonFont = 'Arial';
@@ -442,6 +446,7 @@ export default {
     ready: themeReady,
     waitWebFont,
     isWebFontLoaded,
+    isCompact,
     isDark,
     isGeneric,
     isMaterial,

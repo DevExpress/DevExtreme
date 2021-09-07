@@ -1,8 +1,6 @@
-import {
-    FIELD_EMPTY_ITEM_CLASS,
-} from '../constants';
+export const FIELD_EMPTY_ITEM_CLASS = 'dx-field-empty-item';
 
-export function renderEmptyItem({
+export function renderEmptyItemTo({
     $container,
 }) {
     return $container

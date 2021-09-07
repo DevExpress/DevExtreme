@@ -16,6 +16,10 @@ export default class ButtonWrapper extends Component {
     return ['content'];
   }
 
+  getSupportedKeyNames(): string[] {
+    return ['space', 'enter'];
+  }
+
   getProps(): Record<string, unknown> {
     const props = super.getProps();
     props.validationGroup = this._validationGroupConfig;
@@ -68,10 +72,6 @@ export default class ButtonWrapper extends Component {
 
   _init(): void {
     super._init();
-    this.defaultKeyHandlers = {
-      enter: (_, opts): Event | undefined => (this.viewRef as Button).onWidgetKeyDown(opts),
-      space: (_, opts): Event | undefined => (this.viewRef as Button).onWidgetKeyDown(opts),
-    };
     this._addAction('onSubmit', this._getSubmitAction());
   }
 

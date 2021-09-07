@@ -5,4 +5,8 @@ export default class CheckBox extends Editor {
   _useTemplates(): boolean {
     return false;
   }
+
+  getSupportedKeyNames(): string[] {
+    return ['space'];
+  }
 }

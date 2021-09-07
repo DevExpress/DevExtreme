@@ -250,7 +250,7 @@ export default Class.inherit({
     },
 
     _onePageSelectAll: function(isDeselect) {
-        const items = this._selectionStrategy.getSelectableItems(this.options.plainItems());
+        const items = this._selectionStrategy.getSelectableItems(this.options.plainItems(true));
         for(let i = 0; i < items.length; i++) {
             const item = items[i];
 

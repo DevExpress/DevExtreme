@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -499,6 +499,138 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
     columnHidingEnabled: true,
     customizeColumns(columns) {
       columns[0].width = 250;
+    },
+  });
+});
+
+test('New virtual mode. Virtual rows should not be in view port', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const getVirtualRowInfo = ClientFunction(() => {
+    const result: any = {};
+    const $virtualRows = $((window as any).widget.element()).find('.dx-virtual-row');
+
+    result.count = $virtualRows.length;
+    $virtualRows.each((index, el) => {
+      const $element = $(el);
+      result[index] = {
+        top: $element.position().top,
+        height: $element.height(),
+      };
+    });
+
+    return result;
+  });
+  const getVisibleRowsHeight = ClientFunction(() => {
+    let result = 0;
+    const $rows = $((window as any).widget.element()).find('.dx-data-row');
+
+    $rows.each((_, el) => {
+      result += $(el).height();
+    });
+
+    return result;
+  });
+
+  await t.wait(350);
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+  let virtualRowInfo = await getVirtualRowInfo();
+  let visibleRowsHeight = await getVisibleRowsHeight();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(20)
+    .expect(virtualRowInfo.count)
+    .eql(1)
+    .expect(virtualRowInfo[0].top >= visibleRowsHeight)
+    .ok();
+
+  // act
+  await dataGrid.scrollTo({ top: 1580 });
+  await t.wait(300);
+  await dataGrid.scrollTo({ top: 3250 });
+  await t.wait(600);
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+  virtualRowInfo = await getVirtualRowInfo();
+  const topScrollPosition = await dataGrid.getScrollTop();
+  const topVirtualRowPosition = virtualRowInfo[0].top as number;
+  const virtualRowHeight = virtualRowInfo[0].height as number;
+  const bottomVirtualRowPosition = topVirtualRowPosition + virtualRowHeight;
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(10)
+    .expect(visibleRows[0].key)
+    .eql(91)
+    .expect(virtualRowInfo.count)
+    .eql(1)
+    .expect(bottomVirtualRowPosition <= topScrollPosition)
+    .ok();
+
+  // act
+  await dataGrid.scrollTo({ top: 1580 });
+  await t.wait(300);
+  await dataGrid.scrollTo({ top: 0 });
+  await t.wait(300);
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+  virtualRowInfo = await getVirtualRowInfo();
+  visibleRowsHeight = await getVisibleRowsHeight();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(10)
+    .expect(visibleRows[0].key)
+    .eql(1)
+    .expect(virtualRowInfo.count)
+    .eql(1)
+    .expect(virtualRowInfo[0].top >= visibleRowsHeight)
+    .ok();
+}).before(async () => {
+  const initStore = ClientFunction(() => {
+    const getItems = (): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < 100; i += 1) {
+        items.push({
+          ID: i + 1,
+          Name: `Name ${i + 1}`,
+        });
+      }
+      return items;
+    };
+
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'id',
+      data: getItems(),
+    });
+  });
+
+  await initStore();
+
+  return createWidget('dxDataGrid', {
+    dataSource: {
+      key: 'ID',
+      load(loadOptions) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.load(loadOptions).done((data) => {
+              resolve(data);
+            });
+          }, 300);
+        });
+      },
+      totalCount(loadOptions) {
+        return (window as any).myStore.totalCount(loadOptions);
+      },
+    },
+    height: 300,
+    remoteOperations: true,
+    scrolling: {
+      mode: 'virtual',
+      newMode: true,
     },
   });
 });

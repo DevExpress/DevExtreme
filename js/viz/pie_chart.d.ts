@@ -234,6 +234,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @extends CommonVizPalette
+     * @default "Material"
      * @public
      */
     palette?: Array<string> | PaletteType;
@@ -602,7 +603,8 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     label?: {
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
-       * @extends CommonVizFormat
+       * @type Format
+       * @default undefined
        */
       argumentFormat?: Format;
       /**
@@ -670,7 +672,8 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       font?: Font;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
-       * @extends CommonVizFormat
+       * @type Format
+       * @default undefined
        */
       format?: Format;
       /**

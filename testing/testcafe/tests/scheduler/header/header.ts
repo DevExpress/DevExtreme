@@ -7,20 +7,18 @@ fixture`Hotkeys for appointments update and navigation`
   .page(url(__dirname, '../../container.html'));
 
 test('dateNavigator buttons should not be selected after clicking', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const toolbar = scheduler.getToolbar();
-  const navigator = toolbar.getNavigator();
+  const { toolbar } = new Scheduler('#container');
 
   await t
-    .click(navigator.nextDuration)
+    .click(toolbar.navigator.nextButton)
 
-    .expect(navigator.prevDuration.hasClass('dx-item-selected'))
+    .expect(toolbar.navigator.prevButton.hasClass('dx-item-selected'))
     .notOk()
 
-    .expect(navigator.caption.hasClass('dx-item-selected'))
+    .expect(toolbar.navigator.caption.hasClass('dx-item-selected'))
     .notOk()
 
-    .expect(navigator.nextDuration.hasClass('dx-item-selected'))
+    .expect(toolbar.navigator.nextButton.hasClass('dx-item-selected'))
     .notOk();
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
@@ -29,18 +27,16 @@ test('dateNavigator buttons should not be selected after clicking', async (t) =>
 }));
 
 test('dateNavigator buttons should have "contained" styling mode with generic theme', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const toolbar = scheduler.getToolbar();
-  const navigator = toolbar.getNavigator();
+  const { toolbar } = new Scheduler('#container');
 
   await t
-    .expect(navigator.prevDuration.hasClass('dx-button-mode-contained'))
+    .expect(toolbar.navigator.prevButton.hasClass('dx-button-mode-contained'))
     .ok()
 
-    .expect(navigator.caption.hasClass('dx-button-mode-contained'))
+    .expect(toolbar.navigator.caption.hasClass('dx-button-mode-contained'))
     .ok()
 
-    .expect(navigator.nextDuration.hasClass('dx-button-mode-contained'))
+    .expect(toolbar.navigator.nextButton.hasClass('dx-button-mode-contained'))
     .ok();
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
@@ -52,18 +48,16 @@ fixture`Scheduler: Adaptive material theme layout`
   .page(url(__dirname, '../../containerMaterial.html'));
 
 test('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const toolbar = scheduler.getToolbar();
-  const navigator = toolbar.getNavigator();
+  const { toolbar } = new Scheduler('#container');
 
   await t
-    .expect(navigator.prevDuration.hasClass('dx-button-mode-text'))
+    .expect(toolbar.navigator.prevButton.hasClass('dx-button-mode-text'))
     .ok()
 
-    .expect(navigator.caption.hasClass('dx-button-mode-text'))
+    .expect(toolbar.navigator.caption.hasClass('dx-button-mode-text'))
     .ok()
 
-    .expect(navigator.nextDuration.hasClass('dx-button-mode-text'))
+    .expect(toolbar.navigator.nextButton.hasClass('dx-button-mode-text'))
     .ok();
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
@@ -72,10 +66,8 @@ test('dateNavigator buttons should have "text" styling mode with material theme'
 }));
 
 test('viewSwitcher dropdown button popup should have a specified class', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const toolbar = scheduler.getToolbar();
-  const viewSwitcher = toolbar.getViewSwitcher();
-  const dropDownButton = viewSwitcher.getDropDownButton();
+  const { toolbar } = new Scheduler('#container');
+  const dropDownButton = toolbar.viewSwitcher.getDropDownButton();
 
   const viewSwitcherDropDownButtonContent = '.dx-scheduler-view-switcher-dropdown-button-content';
 

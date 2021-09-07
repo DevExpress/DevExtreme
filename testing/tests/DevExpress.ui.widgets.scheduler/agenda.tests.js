@@ -30,7 +30,7 @@ module('Agenda', {}, () => {
             rows.push(singleGroup);
         }
 
-        const resources = options && options.groups || { };
+        const resources = options && options.groups || [];
         const key = createFactoryInstances({
             getIsVirtualScrolling: () => false,
             getDataAccessors: () => {},

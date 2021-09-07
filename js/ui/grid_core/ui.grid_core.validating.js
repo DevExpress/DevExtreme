@@ -1373,7 +1373,18 @@ export const validatingModule = {
                     }
 
                     this.callBase.apply(this, arguments);
-                }
+                },
+
+                _restoreErrorRow: function(contentTable) {
+                    const editingController = this.getController('editing');
+                    editingController && editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
+                        const rowOptions = $(item).data('options');
+                        if(rowOptions) {
+                            const change = editingController.getChangeByKey(rowOptions.key);
+                            change && editingController._showErrorRow(change);
+                        }
+                    });
+                },
             }
         }
     }

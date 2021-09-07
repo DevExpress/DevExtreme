@@ -197,7 +197,8 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       font?: Font;
       /**
        * @docid
-       * @extends CommonVizFormat
+       * @type Format
+       * @default undefined
        */
       format?: Format;
       /**
@@ -252,7 +253,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @public
      */
     palette?: Array<string> | PaletteType;
@@ -326,7 +327,8 @@ export interface dxBarGaugeLegend extends BaseLegend {
     customizeText?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
     /**
      * @docid dxBarGaugeOptions.legend.itemTextFormat
-     * @extends CommonVizFormat
+     * @type Format
+     * @default undefined
      * @public
      */
     itemTextFormat?: Format;

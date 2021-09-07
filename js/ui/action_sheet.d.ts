@@ -28,7 +28,10 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-import { ButtonType } from '../docEnums';
+import {
+    ButtonType,
+    ButtonStylingMode,
+} from '../docEnums';
 
 /** @public */
 export type CancelClickEvent = Cancelable & EventInfo<dxActionSheet>;
@@ -198,6 +201,12 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @public
      */
     type?: ButtonType;
+    /**
+     * @docid
+     * @default 'outlined'
+     * @public
+     */
+    stylingMode?: ButtonStylingMode;
 }
 
 /** @public */

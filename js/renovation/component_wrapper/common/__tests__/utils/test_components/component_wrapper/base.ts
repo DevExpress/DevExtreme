@@ -9,6 +9,10 @@ export default class BaseTestComponent extends Component {
     return this.lastPassedProps;
   }
 
+  getSupportedKeyNames(): string[] {
+    return ['space'];
+  }
+
   _init(): void {
     super._init();
     this.defaultKeyHandlers.enter = () => 'default enter handler';

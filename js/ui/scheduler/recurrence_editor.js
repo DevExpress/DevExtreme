@@ -13,6 +13,7 @@ import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import { getRecurrenceProcessor } from './recurrence';
 import '../radio_group';
+import { FirstDayOfWeek } from '../../docEnums';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -145,11 +146,10 @@ class RecurrenceEditor extends Editor {
 
             /**
             * @name dxRecurrenceEditorOptions.firstDayOfWeek
-            * @type Enums.FirstDayOfWeek
             * @default undefined
             * @hidden
             */
-            firstDayOfWeek: undefined
+            firstDayOfWeek: FirstDayOfWeek
         });
     }
 

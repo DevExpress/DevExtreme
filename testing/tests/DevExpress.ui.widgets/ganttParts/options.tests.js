@@ -35,6 +35,15 @@ QUnit.module('Options', moduleConfig, () => {
         this.instance.option('showResources', true);
         assert.equal(this.$element.find(Consts.TASK_RESOURCES_SELECTOR).length, data.resourceAssignments.length);
     });
+    test('showDependencies', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
+        this.instance.option('showDependencies', false);
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, 0);
+        this.instance.option('showDependencies', true);
+        assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
+    });
     test('taskTitlePosition', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.clock.tick();

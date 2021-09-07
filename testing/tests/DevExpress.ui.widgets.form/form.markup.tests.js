@@ -12,7 +12,12 @@ import { FIELD_ITEM_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS } from 'ui/form/constants';
+} from 'ui/form/constants';
+
+import {
+    FIELD_ITEM_HELP_TEXT_CLASS,
+} from 'ui/form/components/field_item';
+
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';

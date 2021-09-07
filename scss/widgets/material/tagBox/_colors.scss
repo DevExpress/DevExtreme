@@ -47,3 +47,5 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-focused-bg: lighten($base-bg, 32%) !default;
 }
 
+$tagbox-tag-disabled-bg: $tagbox-tag-focused-bg !default;
+

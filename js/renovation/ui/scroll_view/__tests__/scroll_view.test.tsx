@@ -2,44 +2,36 @@ import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
 
+import { RefObject } from '@devextreme-generator/declarations';
 import {
   ScrollView,
   viewFunction,
-  ScrollViewProps,
 } from '../scroll_view';
 
-import {
-  defaultOptionRules,
-} from '../scrollable';
-
 import devices from '../../../../core/devices';
-import { touch } from '../../../../core/utils/support';
-import { convertRulesToOptions } from '../../../../core/options/utils';
+import * as support from '../../../../core/utils/support';
+import browser from '../../../../core/utils/browser';
+
 import { current } from '../../../../ui/themes';
 import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
 import { Widget } from '../../common/widget';
-import { ScrollableDirection } from '../types.d';
+import { ScrollableDirection } from '../common/types.d';
+import { ScrollViewProps } from '../common/scrollview_props';
 
 interface Mock extends jest.Mock {}
-
-jest.mock('../../../../core/devices', () => {
-  const actualDevices = jest.requireActual('../../../../core/devices').default;
-  const real = actualDevices.real.bind(actualDevices);
-  const platform = actualDevices.real.bind(actualDevices);
-  const isSimulator = actualDevices.isSimulator.bind(actualDevices);
-
-  actualDevices.isSimulator = jest.fn(isSimulator);
-  actualDevices.real = jest.fn(real);
-  actualDevices.current = jest.fn(platform);
-
-  return actualDevices;
-});
 
 jest.mock('../../../../ui/themes', () => ({
   ...jest.requireActual('../../../../ui/themes'),
   current: jest.fn(() => 'generic'),
+}));
+
+jest.mock('../../../../core/utils/support');
+
+jest.mock('../../../../core/utils/browser', () => ({
+  ...jest.requireActual('../../../../core/utils/browser'),
+  mozilla: false,
 }));
 
 describe('ScrollView', () => {
@@ -49,18 +41,31 @@ describe('ScrollView', () => {
     const scrollView = mount<ScrollView>(<ScrollView {...props} />);
 
     expect(scrollView.props()).toEqual({
-      bounceEnabled: true,
+      addWidgetClass: false,
+      aria: {},
+      bounceEnabled: false,
+      classes: '',
       direction: 'vertical',
+      disabled: false,
       forceGeneratePockets: false,
+      inertiaEnabled: true,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
+      pulledDownText: 'Release to refresh...',
+      pullingDownText: 'Pull down to refresh...',
       reachBottomEnabled: false,
-      scrollByContent: true,
-      scrollByThumb: false,
-      showScrollbar: 'onScroll',
-      useNative: true,
+      reachBottomText: 'Loading...',
+      refreshingText: 'Refreshing...',
+      rtlEnabled: false,
+      scrollByContent: false,
+      scrollByThumb: true,
+      showScrollbar: 'onHover',
+      useKeyboard: true,
+      useNative: false,
+      useSimulatedScrollbar: false,
+      visible: true,
     });
   });
 
@@ -127,13 +132,11 @@ describe('ScrollView', () => {
 
     each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
       it('refresh() method should call according method from scrollbar', () => {
-        const viewModel = new ScrollView({ pullDownEnabled });
         const funcHandler = jest.fn();
-        Object.defineProperties(viewModel, {
-          scrollable: {
-            get() { return { refresh: funcHandler }; },
-          },
-        });
+        const viewModel = new ScrollView({ pullDownEnabled });
+        viewModel.scrollableRef = {
+          current: { refresh: funcHandler },
+        } as RefObject;
 
         viewModel.refresh();
         if (pullDownEnabled) {
@@ -146,13 +149,11 @@ describe('ScrollView', () => {
 
     each([true, false, undefined]).describe('preventScrollBottom: %o', (preventScrollBottom) => {
       it('release(preventScrollBottom)', () => {
-        const viewModel = new ScrollView({ });
         const funcHandler = jest.fn();
-        Object.defineProperties(viewModel, {
-          scrollable: {
-            get() { return { release: funcHandler }; },
-          },
-        });
+        const viewModel = new ScrollView({ });
+        viewModel.scrollableRef = {
+          current: { release: funcHandler },
+        } as RefObject;
 
         viewModel.toggleLoading = jest.fn();
 
@@ -236,23 +237,13 @@ describe('ScrollView', () => {
       });
 
       each([false, true]).describe('useNative: %o', (useNative) => {
-        it('scrollableRef', () => {
-          const viewModel = new ScrollView({ useNative });
-
-          Object.defineProperties(viewModel, {
-            scrollableRef: { get() { return { current: 'scrollableRef' }; } },
-          });
-
-          expect(viewModel.scrollable).toEqual('scrollableRef');
-        });
-
         each([false, true]).describe('isServerSide: %o', (isServerSide) => {
           it('render scrollView content', () => {
             const originalWindow = getWindow();
 
             try {
               setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: {} } as any));
+              const scrollView = mount(viewFunction({ props: { useNative } } as any));
 
               const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
               expect(scrollViewContent.exists()).toBe(true);
@@ -261,18 +252,27 @@ describe('ScrollView', () => {
             }
           });
 
-          it('render scrollbars', () => {
-            const originalWindow = getWindow();
+          each([false, true]).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+            it('render scrollbars', () => {
+              const originalWindow = getWindow();
 
-            try {
-              setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: {} } as any));
+              try {
+                setWindow({}, !isServerSide);
+                const scrollView = mount(viewFunction(
+                  { props: { useNative, useSimulatedScrollbar } } as any,
+                ));
 
-              const scrollViewContent = scrollView.find('.dx-scrollable-scrollbar');
-              expect(scrollViewContent.exists()).toBe(!isServerSide);
-            } finally {
-              setWindow(originalWindow, true);
-            }
+                const shouldRenderScrollbars = (!isServerSide && !useNative)
+                  || (!isServerSide && useNative && useSimulatedScrollbar);
+
+                const scrollViewContent = scrollView.find('.dx-scrollable-scrollbar');
+                expect(scrollViewContent.exists()).toBe(
+                  shouldRenderScrollbars,
+                );
+              } finally {
+                setWindow(originalWindow, true);
+              }
+            });
           });
 
           it('render top & bottom pockets', () => {
@@ -280,7 +280,7 @@ describe('ScrollView', () => {
 
             try {
               setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: {} } as any));
+              const scrollView = mount(viewFunction({ props: { useNative } } as any));
 
               const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
               expect(topPocket.exists()).toBe(!isServerSide);
@@ -296,7 +296,7 @@ describe('ScrollView', () => {
 
             try {
               setWindow({}, !isServerSide);
-              const scrollView = mount(viewFunction({ props: { } } as any));
+              const scrollView = mount(viewFunction({ props: { useNative } } as any));
 
               const loadPanel = scrollView.find('.dx-scrollview-loadpanel');
               expect(loadPanel.exists()).toBe(!isServerSide);
@@ -311,31 +311,12 @@ describe('ScrollView', () => {
 
   describe('Default options', () => {
     beforeEach(() => {
-      (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
-      (devices as any).isSimulator.mockImplementation(() => false);
       (current as Mock).mockImplementation(() => 'generic');
     });
 
     afterEach(() => jest.resetAllMocks());
 
     describe('Texts', () => {
-      it('theme: material, texts options: undefined', () => {
-        (current as Mock).mockImplementation(() => 'material');
-
-        const scrollView = mount(viewFunction(new ScrollView({})));
-        const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
-        expect(scrollViewTopPocketTexts.length).toBe(3);
-
-        expect(scrollViewTopPocketTexts.at(0).text()).toBe('');
-        expect(scrollViewTopPocketTexts.at(1).text()).toBe('');
-        expect(scrollViewTopPocketTexts.at(2).text()).toBe('');
-
-        const scrollViewBottomPocketTexts = scrollView.find('.dx-scrollview-scrollbottom-text > div');
-        expect(scrollViewBottomPocketTexts.length).toBe(1);
-
-        expect(scrollViewBottomPocketTexts.at(0).text()).toBe('');
-      });
-
       it('theme: material, texts options: "value"', () => {
         (current as Mock).mockImplementation(() => 'material');
 
@@ -380,24 +361,6 @@ describe('ScrollView', () => {
         expect(scrollViewBottomPocketTexts.at(0).text()).toBe('value_4');
       });
 
-      it('theme: generic, texts options: undefined', () => {
-        (current as Mock).mockImplementation(() => 'generic');
-
-        const scrollView = mount(viewFunction(new ScrollView({})));
-
-        const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
-        expect(scrollViewTopPocketTexts.length).toBe(3);
-
-        expect(scrollViewTopPocketTexts.at(0).text()).toBe('Pull down to refresh...');
-        expect(scrollViewTopPocketTexts.at(1).text()).toBe('Release to refresh...');
-        expect(scrollViewTopPocketTexts.at(2).text()).toBe('Refreshing...');
-
-        const scrollViewBottomPocketTexts = scrollView.find('.dx-scrollview-scrollbottom-text > div');
-        expect(scrollViewBottomPocketTexts.length).toBe(1);
-
-        expect(scrollViewBottomPocketTexts.at(0).text()).toBe('Loading...');
-      });
-
       it('theme: generic, texts options: empty string', () => {
         (current as Mock).mockImplementation(() => 'generic');
 
@@ -419,31 +382,99 @@ describe('ScrollView', () => {
 
         expect(scrollViewBottomPocketTexts.at(0).text()).toBe('');
       });
-    });
 
-    describe('Options', () => {
-      const getDefaultOptions = (): ScrollViewProps => Object.assign(new ScrollViewProps(),
-        convertRulesToOptions(defaultOptionRules));
+      each(['generic', 'material']).describe('currentTheme: %o', (currentTheme) => {
+        const getDefaultOptions = (): ScrollViewProps => new ScrollViewProps();
+
+        it(`theme: ${currentTheme}, check default values for text options`, () => {
+          (current as Mock).mockImplementation(() => currentTheme);
+
+          const isMaterial = currentTheme === 'material';
+
+          if (isMaterial) {
+            expect(getDefaultOptions().pullingDownText).toBe('');
+            expect(getDefaultOptions().pulledDownText).toBe('');
+            expect(getDefaultOptions().refreshingText).toBe('');
+            expect(getDefaultOptions().reachBottomText).toBe('');
+          } else {
+            expect(getDefaultOptions().pullingDownText).toBe('Pull down to refresh...');
+            expect(getDefaultOptions().pulledDownText).toBe('Release to refresh...');
+            expect(getDefaultOptions().refreshingText).toBe('Refreshing...');
+            expect(getDefaultOptions().reachBottomText).toBe('Loading...');
+          }
+        });
+      });
 
       each([false, true]).describe('isSimulator: %o', (isSimulator) => {
         each(['desktop', 'phone', 'tablet']).describe('deviceType: %o', (deviceType) => {
-          each(['generic', 'android', 'ios']).describe('platform: %o', (platform) => {
-            it('scrollByThumb, showScrollbar', () => {
-              (devices as any).isSimulator.mockImplementation(() => isSimulator);
-              (devices.real as Mock).mockImplementation(() => ({ deviceType }));
-              (devices.current as Mock).mockImplementation(() => ({ platform }));
+          each(['desktop', 'generic', 'ios', 'android']).describe('realPlatform: %o', (realPlatform) => {
+            each(['desktop', 'generic', 'android', 'ios']).describe('currentPlatform: %o', (currentPlatform) => {
+              const getDefaultOptions = (): ScrollViewProps => new ScrollViewProps();
 
-              if (!isSimulator && deviceType === 'desktop' && platform === 'generic') {
-                expect(getDefaultOptions().scrollByThumb).toBe(true);
-                expect(getDefaultOptions().showScrollbar).toBe('onHover');
-                expect(getDefaultOptions().bounceEnabled).toBe(false);
-                expect(getDefaultOptions().scrollByContent).toBe(touch);
-              } else {
-                expect(getDefaultOptions().scrollByThumb).toBe(false);
-                expect(getDefaultOptions().showScrollbar).toBe('onScroll');
-                expect(getDefaultOptions().bounceEnabled).toBe(true);
-                expect(getDefaultOptions().scrollByContent).toBe(true);
-              }
+              it('scrollByThumb, showScrollbar, bounceEnabled, scrollByContent', () => {
+                const originalIsSimulator = devices.isSimulator;
+                const originalRealDevice = devices.real();
+                const originalCurrentDevice = devices.current();
+
+                try {
+                  devices.isSimulator = jest.fn(() => isSimulator);
+                  (devices as any).real({ platform: realPlatform, deviceType });
+                  (devices as any).current({ platform: currentPlatform });
+
+                  if (!isSimulator && deviceType === 'desktop' && currentPlatform === 'generic') {
+                    expect(getDefaultOptions().scrollByThumb).toBe(true);
+                    expect(getDefaultOptions().showScrollbar).toBe('onHover');
+                    expect(getDefaultOptions().bounceEnabled).toBe(false);
+                    expect(getDefaultOptions().scrollByContent).toBe(support.touch);
+                  } else {
+                    expect(getDefaultOptions().scrollByThumb).toBe(false);
+                    expect(getDefaultOptions().showScrollbar).toBe('onScroll');
+                    expect(getDefaultOptions().bounceEnabled).toBe(true);
+                    expect(getDefaultOptions().scrollByContent).toBe(true);
+                  }
+                } finally {
+                  devices.isSimulator = originalIsSimulator;
+                  (devices as any).real(originalRealDevice);
+                  (devices as any).current(originalCurrentDevice);
+                }
+              });
+
+              each([true, false]).describe('nativeScrolling: %o', (nativeScrolling) => {
+                each([true, false]).describe('browser.mozilla: %o', (mozilla) => {
+                  it('useNative, useSimulatedScrollbar', () => {
+                    const originalIsSimulator = devices.isSimulator;
+                    const originalRealDevice = devices.real();
+                    const originalCurrentDevice = devices.current();
+
+                    try {
+                      devices.isSimulator = jest.fn(() => isSimulator);
+                      (browser as any).mozilla = mozilla;
+                      (support as any).nativeScrolling = nativeScrolling;
+                      (devices as any).real({ platform: realPlatform, deviceType });
+                      (devices as any).current({ platform: currentPlatform });
+
+                      let expectedDefaultUseSimulatedScrollbar = false;
+                      let expectedDefaultUseNative = false;
+                      if (nativeScrolling && realPlatform === 'android' && !mozilla) {
+                        expectedDefaultUseSimulatedScrollbar = true;
+                      }
+
+                      if (nativeScrolling) {
+                        expectedDefaultUseNative = true;
+                      }
+
+                      expect(getDefaultOptions().useNative).toBe(expectedDefaultUseNative);
+                      expect(getDefaultOptions().useSimulatedScrollbar)
+                        .toBe(expectedDefaultUseSimulatedScrollbar);
+                    } finally {
+                      devices.isSimulator = originalIsSimulator;
+                      (devices as any).real(originalRealDevice);
+                      (devices as any).current(originalCurrentDevice);
+                      browser.mozilla = false;
+                    }
+                  });
+                });
+              });
             });
           });
         });

@@ -807,6 +807,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default true
      * @public
      */
+     showDependencies?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
     showRowLines?: boolean;
     /**
      * @docid
@@ -1122,6 +1128,93 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @public
      */
     showResourceManagerDialog(): void;
+    /**
+     * @docid
+     * @publicName expandAll()
+     * @public
+     */
+    expandAll(): void;
+    /**
+     * @docid
+     * @publicName collapseAll()
+     * @public
+     */
+    collapseAll(): void;
+    /**
+     * @docid
+     * @publicName expandAllToLevel(level)
+     * @param1 level: Number
+     * @public
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * @docid
+     * @publicName expandToTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandToTask(key: any): void;
+    /**
+     * @docid
+     * @publicName collapseTask(key)
+     * @param1 key:object
+     * @public
+     */
+    collapseTask(key: any): void;
+    /**
+     * @docid
+     * @publicName expandTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandTask(key: any): void;
+    /**
+     * @docid
+     * @publicName refresh()
+     * @return Promise<void>
+     * @public
+     */
+    refresh(): DxPromise<void>;
+    /**
+     * @docid
+     * @publicName showResources(value)
+     * @param1 value:boolean
+     * @public
+     */
+     showResources(value: boolean): void;
+     /**
+     * @docid
+     * @publicName showDependencies(value)
+     * @param1 value:boolean
+     * @public
+     */
+      showDependencies(value: boolean): void;
+     /**
+     * @docid
+     * @publicName zoomIn()
+     * @public
+     */
+      zoomIn(): void;
+      /**
+     * @docid
+     * @publicName zoomOut()
+     * @public
+     */
+      zoomOut(): void;
+     /**
+     * @docid
+     * @publicName unassignAllResourcesFromTask(taskKey)
+     * @param1 taskKey:object
+     * @public
+     */
+      unassignAllResourcesFromTask(taskKey: any): void;
+     /**
+     * @docid
+     * @publicName showTaskDetailsDialog(taskKey)
+     * @param1 taskKey:object
+     * @public
+     */
+      showTaskDetailsDialog(taskKey: any): void;
 }
 
 /**
@@ -1135,7 +1228,7 @@ export interface dxGanttToolbar {
      * @type Array<dxGanttToolbarItem,GanttToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | GanttToolbarItem | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
+    items?: Array<ToolbarItem | GanttToolbarItem>;
 }
 
 /**
@@ -1174,7 +1267,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @type GanttToolbarItem|string
      * @public
      */
-    name?: GanttToolbarItem | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
+    name?: GanttToolbarItem | string;
     /**
      * @docid
      * @default "before"

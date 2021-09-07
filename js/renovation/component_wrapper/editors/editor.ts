@@ -1,13 +1,13 @@
+import { isDefined } from '../../../core/utils/type';
 import Component from '../common/component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
 // eslint-disable-next-line import/named
-import $, { dxElementWrapper } from '../../../core/renderer';
+import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
 import { Option } from '../common/types';
-import { addAttributes, getAriaName } from '../utils/utils';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
@@ -52,14 +52,6 @@ export default class Editor extends Component {
     return props;
   }
 
-  setAria(name: string, value: string): void {
-    const attrName = getAriaName(name);
-    addAttributes(
-      this.$element() as unknown as dxElementWrapper,
-      [{ name: attrName, value }],
-    );
-  }
-
   _init(): void {
     super._init();
 
@@ -90,6 +82,27 @@ export default class Editor extends Component {
     innerWidget.on('optionChanged', syncOptions);
   }
 
+  _raiseValidation(value: unknown, previousValue: unknown): void {
+    const areValuesEmpty = !isDefined(value) && !isDefined(previousValue);
+
+    if (value !== previousValue && !areValuesEmpty) {
+      this.validationRequest.fire({
+        value,
+        editor: this,
+      });
+    }
+  }
+
+  _raiseValueChangeAction(value: unknown, previousValue: unknown): void {
+    this._valueChangeAction?.({
+      element: this.$element(),
+      previousValue,
+      value,
+      event: this._valueChangeEventInstance,
+    });
+    this._valueChangeEventInstance = undefined;
+  }
+
   _optionChanged(option: Option): void {
     const { name, value, previousValue } = option;
 
@@ -99,19 +112,8 @@ export default class Editor extends Component {
 
     switch (name) {
       case 'value':
-        if (value !== previousValue) {
-          this.validationRequest.fire({
-            value,
-            editor: this,
-          });
-        }
-        this._valueChangeAction?.({
-          element: this.$element(),
-          previousValue,
-          value,
-          event: this._valueChangeEventInstance,
-        });
-        this._valueChangeEventInstance = undefined;
+        this._raiseValidation(value, previousValue);
+        this._raiseValueChangeAction(value, previousValue);
         break;
       case 'onValueChanged':
         this._valueChangeAction = this._createActionByOption('onValueChanged', {

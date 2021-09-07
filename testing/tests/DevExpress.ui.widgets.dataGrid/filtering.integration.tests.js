@@ -474,14 +474,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 dataField: 'type'
             }]
         }).dxDataGrid('instance');
-        this.clock.tick(100);
+        this.clock.tick(500);
 
         dataGrid.expandRow(['group']);
-        this.clock.tick(100);
+        this.clock.tick(500);
 
         // act
         dataGrid.columnOption('type', 'filterValue', 1);
-        this.clock.tick(100);
+        this.clock.tick(500);
 
         // assert
         assert.notOk(dataGrid.getDataSource().isLoading(), 'not loading');

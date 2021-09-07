@@ -111,8 +111,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     autoAdjust?: boolean;
     /**
+     * @type Object|string|Array<number>
      * @docid
-     * @extends MapLocationType
      * @fires dxMapOptions.onOptionChanged
      * @inherits MapLocation
      * @public
@@ -177,8 +177,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        */
       iconSrc?: string;
       /**
+       * @type Object|string|Array<number>
        * @docid
-       * @extends MapLocationType
        * @inherits MapLocation
        */
       location?: any | string | Array<number>;
@@ -296,7 +296,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       color?: string;
       /**
        * @docid
-       * @extends MapLocationType
        * @inherits MapLocation
        * @type Array<object>
        */

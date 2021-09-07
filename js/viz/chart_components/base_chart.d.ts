@@ -107,7 +107,8 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     customizePoint?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint);
     /**
      * @docid BaseChartOptions.dataSource
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -194,7 +195,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @public
      */
     palette?: Array<string> | PaletteType;
@@ -269,7 +270,8 @@ export interface BaseChartLegend extends BaseLegend {
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
-     * @extends CommonVizFormat
+     * @type Format
+     * @default undefined
      * @public
      */
     argumentFormat?: Format;

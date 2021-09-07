@@ -71,6 +71,12 @@ export interface MentionTemplateData {
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    allowSoftLineBreak?: boolean;
+    /**
+     * @docid
      * @type_function_param1 config:object
      * @public
      */
@@ -99,6 +105,12 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @public
      */
     mentions?: Array<dxHtmlEditorMention>;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    tableContextMenu?: dxHtmlEditorTableContextMenu;
     /**
      * @docid
      * @hidden false
@@ -418,6 +430,15 @@ export interface dxHtmlEditorMediaResizing {
    */
   enabled?: boolean;
 }
+
+export interface dxHtmlEditorTableContextMenu {
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    enabled?: boolean;
+  }
 
 /**
  * @docid

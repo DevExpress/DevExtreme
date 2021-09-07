@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
+import { resetActiveElement } from '../../core/utils/dom';
 import { isDefined, isObject, isFunction, isEmptyObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -209,6 +210,11 @@ const EditingController = modules.ViewController.inherit((function() {
 
         getChanges: function() {
             return this.option(EDITING_CHANGES_OPTION_NAME);
+        },
+
+        getInsertRowCount: function() {
+            const changes = this.option(EDITING_CHANGES_OPTION_NAME);
+            return changes.filter(change => change.type === 'insert').length;
         },
 
         resetChanges: function() {
@@ -845,8 +851,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             when(this._initNewRow(param, parentKey)).done(() => {
                 if(this._allowRowAdding()) {
-                    this._addRowCore(param.data, parentKey, oldEditRowIndex);
-                    deferred.resolve();
+                    when(this._addRowCore(param.data, parentKey, oldEditRowIndex)).done(deferred.resolve).fail(deferred.reject);
                 } else {
                     deferred.reject('cancel');
                 }
@@ -882,6 +887,8 @@ const EditingController = modules.ViewController.inherit((function() {
             this._showAddedRow(rowIndex);
 
             this._afterInsertRow({ key, data });
+
+            return (new Deferred()).resolve();
         },
 
         _showAddedRow: function(rowIndex) {
@@ -1171,7 +1178,10 @@ const EditingController = modules.ViewController.inherit((function() {
             const editColumnIndex = this._getVisibleEditColumnIndex();
 
             $editCell = $editCell || rowsView && rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
-            this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+
+            if($editCell) {
+                this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+            }
         },
 
         deleteRow: function(rowIndex) {
@@ -2144,7 +2154,7 @@ export const editingModule = {
                 },
                 _updateItemsCore: function(change) {
                     this.callBase(change);
-                    this._updateEditRow(this.items());
+                    this._updateEditRow(this.items(true));
                 },
                 _applyChangeUpdate: function(change) {
                     this._updateEditRow(change.items);
@@ -2274,6 +2284,9 @@ export const editingModule = {
                     const startEditAction = this.option('editing.startEditAction') || 'click';
 
                     if(eventName === 'down') {
+                        if((devices.real().ios || devices.real().android) && !isEditedCell) {
+                            resetActiveElement();
+                        }
                         return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
                     }
 

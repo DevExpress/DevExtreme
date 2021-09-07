@@ -5,12 +5,13 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../../base/pager";
+@use "../gridBase/sizes" as *;
 
 // adduse
 
 
 .dx-pager {
-  padding: $material-pager-paddings 14px  $material-pager-paddings 24px;
+  padding: $material-pager-paddings $material-grid-base-cell-horizontal-padding;
 
   &.dx-light-mode {
     .dx-page-sizes {

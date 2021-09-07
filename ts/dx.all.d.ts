@@ -806,6 +806,8 @@ declare module DevExpress {
   > extends Component<TProperties> {
     _templateManager: DevExpress.core.TemplateManager;
 
+    _cancelOptionChange?: string;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
@@ -4623,6 +4625,10 @@ declare module DevExpress.ui {
      * [descr:dxActionSheetItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    /**
+     * [descr:dxActionSheetItem.stylingMode]
+     */
+    stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
    * @deprecated use Properties instead
@@ -5100,7 +5106,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCheckBox]
    */
-  export class dxCheckBox extends Editor<dxCheckBoxOptions> {}
+  export class dxCheckBox extends Editor<dxCheckBoxOptions> {
+    /**
+     * [descr:dxCheckBox.blur()]
+     */
+    blur(): void;
+  }
   module dxCheckBox {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCheckBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxCheckBox>;
@@ -5145,7 +5156,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBoxOptions.value]
      */
-    value?: boolean | undefined;
+    value?: boolean | null | undefined;
   }
   /**
    * [descr:dxColorBox]
@@ -8688,11 +8699,8 @@ declare module DevExpress.ui {
         | 'bold'
         | 'italic'
         | 'underline'
-        | 'fontColor'
         | 'lineStyle'
         | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
         | 'textAlignLeft'
         | 'textAlignCenter'
         | 'textAlignRight'
@@ -9151,7 +9159,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.customDataExpr]
        */
-      customDataExpr?: string | ((data: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.dataSource]
        */
@@ -9163,59 +9171,59 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.fromExpr]
        */
-      fromExpr?: string | ((data: any) => any);
+      fromExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.fromLineEndExpr]
        */
-      fromLineEndExpr?: string | ((data: any) => any);
+      fromLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.fromPointIndexExpr]
        */
-      fromPointIndexExpr?: string | ((data: any) => any);
+      fromPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.keyExpr]
        */
-      keyExpr?: string | ((data: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.lineTypeExpr]
        */
-      lineTypeExpr?: string | ((data: any) => any);
+      lineTypeExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.lockedExpr]
        */
-      lockedExpr?: string | ((data: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.pointsExpr]
        */
-      pointsExpr?: string | ((data: any) => any);
+      pointsExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.styleExpr]
        */
-      styleExpr?: string | ((data: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.textExpr]
        */
-      textExpr?: string | ((data: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toExpr]
        */
-      toExpr?: string | ((data: any) => any);
+      toExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toLineEndExpr]
        */
-      toLineEndExpr?: string | ((data: any) => any);
+      toLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toPointIndexExpr]
        */
-      toPointIndexExpr?: string | ((data: any) => any);
+      toPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * [descr:dxDiagramOptions.export]
@@ -9278,15 +9286,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.containerChildrenExpr]
        */
-      containerChildrenExpr?: string | ((data: any) => any);
+      containerChildrenExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.containerKeyExpr]
        */
-      containerKeyExpr?: string | ((data: any) => any);
+      containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.customDataExpr]
        */
-      customDataExpr?: string | ((data: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.dataSource]
        */
@@ -9298,59 +9306,59 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.heightExpr]
        */
-      heightExpr?: string | ((data: any) => any);
+      heightExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.imageUrlExpr]
        */
-      imageUrlExpr?: string | ((data: any) => any);
+      imageUrlExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.itemsExpr]
        */
-      itemsExpr?: string | ((data: any) => any);
+      itemsExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.keyExpr]
        */
-      keyExpr?: string | ((data: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.leftExpr]
        */
-      leftExpr?: string | ((data: any) => any);
+      leftExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.lockedExpr]
        */
-      lockedExpr?: string | ((data: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.parentKeyExpr]
        */
-      parentKeyExpr?: string | ((data: any) => any);
+      parentKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.styleExpr]
        */
-      styleExpr?: string | ((data: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.textExpr]
        */
-      textExpr?: string | ((data: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.topExpr]
        */
-      topExpr?: string | ((data: any) => any);
+      topExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.typeExpr]
        */
-      typeExpr?: string | ((data: any) => any);
+      typeExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.widthExpr]
        */
-      widthExpr?: string | ((data: any) => any);
+      widthExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * [descr:dxDiagramOptions.hasChanges]
@@ -11298,6 +11306,10 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
+     * [descr:dxFileUploaderOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
      */
     invalidFileExtensionMessage?: string;
@@ -12537,6 +12549,58 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showResourceManagerDialog()]
      */
     showResourceManagerDialog(): void;
+    /**
+     * [descr:dxGantt.expandAll()]
+     */
+    expandAll(): void;
+    /**
+     * [descr:dxGantt.collapseAll()]
+     */
+    collapseAll(): void;
+    /**
+     * [descr:dxGantt.expandAllToLevel(level)]
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * [descr:dxGantt.expandToTask(key)]
+     */
+    expandToTask(key: any): void;
+    /**
+     * [descr:dxGantt.collapseTask(key)]
+     */
+    collapseTask(key: any): void;
+    /**
+     * [descr:dxGantt.expandTask(key)]
+     */
+    expandTask(key: any): void;
+    /**
+     * [descr:dxGantt.refresh()]
+     */
+    refresh(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxGantt.showResources(value)]
+     */
+    showResources(value: boolean): void;
+    /**
+     * [descr:dxGantt.showDependencies(value)]
+     */
+    showDependencies(value: boolean): void;
+    /**
+     * [descr:dxGantt.zoomIn()]
+     */
+    zoomIn(): void;
+    /**
+     * [descr:dxGantt.zoomOut()]
+     */
+    zoomOut(): void;
+    /**
+     * [descr:dxGantt.unassignAllResourcesFromTask(taskKey)]
+     */
+    unassignAllResourcesFromTask(taskKey: any): void;
+    /**
+     * [descr:dxGantt.showTaskDetailsDialog(taskKey)]
+     */
+    showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
@@ -13051,6 +13115,10 @@ declare module DevExpress.ui {
      */
     showResources?: boolean;
     /**
+     * [descr:dxGanttOptions.showDependencies]
+     */
+    showDependencies?: boolean;
+    /**
      * [descr:dxGanttOptions.showRowLines]
      */
     showRowLines?: boolean;
@@ -13238,6 +13306,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
+      | 'showResources'
+      | 'showDependencies'
     >;
   }
   /**
@@ -13261,6 +13331,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
+      | 'toggleResources'
+      | 'toggleDependencies'
       | string;
     /**
      * [descr:dxGanttToolbarItem.location]
@@ -13461,6 +13533,15 @@ declare module DevExpress.ui {
   module dxHtmlEditor {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface dxHtmlEditorTableContextMenu {
+      /**
+       * [descr:dxHtmlEditorTableContextMenu.enabled]
+       */
+      enabled?: boolean;
+    }
     export type FocusInEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type FocusOutEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type InitializedEvent =
@@ -13554,6 +13635,10 @@ declare module DevExpress.ui {
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
+     * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
+     */
+    allowSoftLineBreak?: boolean;
+    /**
      * [descr:dxHtmlEditorOptions.customizeModules]
      */
     customizeModules?: (config: any) => void;
@@ -13573,6 +13658,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.mentions]
      */
     mentions?: Array<dxHtmlEditorMention>;
+    /**
+     * [descr:dxHtmlEditorOptions.tableContextMenu]
+     */
+    tableContextMenu?: DevExpress.ui.dxHtmlEditor.dxHtmlEditorTableContextMenu;
     /**
      * [descr:dxHtmlEditorOptions.name]
      */

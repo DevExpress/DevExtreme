@@ -59,14 +59,14 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(scheduler.getAppointmentCollector('2').element)
+    .click(scheduler.collectors.find('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, 200, 50, { speed: 0.1 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-week.png', scheduler.workSpace))
     .ok();
 
   await t
-    .click(scheduler.getAppointmentCollector('1').element)
+    .click(scheduler.collectors.find('1').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 350, 150, { speed: 0.1 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-week.png', scheduler.workSpace))
@@ -106,14 +106,14 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(scheduler.getAppointmentCollector('2').element)
+    .click(scheduler.collectors.find('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, -180, -30, { speed: 0.1 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-month.png', scheduler.workSpace))
     .ok();
 
   await t
-    .click(scheduler.getAppointmentCollector('1').element)
+    .click(scheduler.collectors.find('1').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 320, 150, { speed: 0.1 })
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-month.png', scheduler.workSpace))

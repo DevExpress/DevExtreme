@@ -593,7 +593,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, 'visible row count');
+        assert.equal(visibleRows.length, 10, 'visible row count');
         assert.equal(visibleRows[0].key, 6, 'first visible row key');
         assert.equal(visibleRows[6].key, 12, 'selected row key');
         assert.equal(visibleRows[6].isSelected, true, 'isSelected for selected row');
@@ -605,7 +605,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         // arrange, act
         const array = [];
 
-        for(let i = 1; i <= 30; i++) {
+        for(let i = 1; i <= 40; i++) {
             array.push({ id: i });
         }
 
@@ -613,7 +613,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             height: 100,
             dataSource: array,
             keyExpr: 'id',
-            loadingTimeout: null,
+            paging: {
+                pageSize: 30
+            },
             selection: {
                 mode: 'multiple',
                 selectAllMode: 'page'
@@ -623,13 +625,16 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
+        this.clock.tick();
+
         // act
         dataGrid.selectAll();
+        this.clock.tick();
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 10, 'visible row count');
-        assert.equal(dataGrid.getSelectedRowKeys().length, 20, 'selected row key count equals pageSize');
+        assert.equal(visibleRows.length, 20, 'visible row count');
+        assert.equal(dataGrid.getSelectedRowKeys().length, 30, 'selected row key count equals pageSize');
     });
 
     // T726385
@@ -657,13 +662,14 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 10000 });
+
         $(dataGrid.getRowElement(0)).trigger('dxclick');
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 10, 'visible row count');
+        assert.equal(visibleRows.length, 5, 'visible row count');
         assert.equal(visibleRows[0].isSelected, true, 'first visible row is selected');
-        assert.deepEqual(dataGrid.getSelectedRowKeys(), [11], 'selected row key count equals pageSize');
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [16], 'selected row key count equals pageSize');
     });
 });
 

@@ -49,7 +49,7 @@
     }
 
     > .dx-#{$widget-name}-pager {
-      margin-top: 1px;
+      margin-top: -1px;
     }
 
     > .dx-#{$widget-name}-header-panel {
@@ -905,18 +905,6 @@
         padding-top: 0;
         padding-bottom: 0;
       }
-    }
-
-    .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
-      display: none;
-    }
-
-    .dx-select-checkboxes-hidden > tbody > tr > td:hover > .dx-select-checkbox {
-      display: inline-block;
-    }
-
-    .dx-select-checkboxes-hidden > tbody > tr.dx-selection > td > .dx-select-checkbox {
-      display: inline-block;
     }
 
     .dx-row > .dx-master-detail-cell {

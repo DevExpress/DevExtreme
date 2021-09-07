@@ -71,7 +71,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @default false
      * @public
      */
-    value?: boolean | undefined;
+    value?: boolean | null | undefined;
 }
 /**
  * @docid
@@ -82,7 +82,14 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxCheckBox extends Editor<dxCheckBoxOptions> { }
+export default class dxCheckBox extends Editor<dxCheckBoxOptions> {
+    /**
+     * @docid
+     * @publicName blur()
+     * @public
+     */
+     blur(): void;
+}
 
 /** @public */
 export type Properties = dxCheckBoxOptions;

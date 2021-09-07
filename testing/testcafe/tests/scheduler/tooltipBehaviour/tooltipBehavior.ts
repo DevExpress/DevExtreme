@@ -11,7 +11,7 @@ test('The tooltip of collector should not scroll page and immediately hide', asy
 
   await t
     .resizeWindow(600, 450)
-    .click(scheduler.getAppointmentCollector('7').element, { speed: 0.2 })
+    .click(scheduler.collectors.find('7').element, { speed: 0.2 })
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
 }).before(async () => createScheduler({

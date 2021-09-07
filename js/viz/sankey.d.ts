@@ -113,7 +113,8 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     alignment?: VerticalAlignment | Array<VerticalAlignment>;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -479,7 +480,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @public
      */
     palette?: Array<string> | PaletteType;
