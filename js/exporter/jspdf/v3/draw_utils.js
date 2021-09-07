@@ -13,7 +13,10 @@ function drawPdfCells(doc, cellsArray) {
     // TODO: ???? maybe drawBorder in separated method, in "export_data_grid_3.js" file
 
     cellsArray.forEach(cell => {
+        // TODO: drawBackground();
+        // TODO: drawCell() -> drawCellContent()
         drawCell(doc, cell, docStyles);
+        // TODO: drawCellBorder()
     });
     setDocumentStyles(doc, docStyles);
 }
