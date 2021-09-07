@@ -1,5 +1,5 @@
 window.onload = function () {
-  function viewModel() {
+  function ViewModel() {
     const that = this;
     that.swipeValue = ko.observable(true);
     that.menuVisible = ko.observable(true);
@@ -19,5 +19,5 @@ window.onload = function () {
       that.menuVisible(!that.menuVisible());
     };
   }
-  ko.applyBindings(new viewModel(), document.getElementById('slideout'));
+  ko.applyBindings(new ViewModel(), document.getElementById('slideout'));
 };

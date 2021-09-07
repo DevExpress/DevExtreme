@@ -21,6 +21,7 @@ export default function App() {
   const dataGridRef = React.createRef();
 
   const exportGrid = React.useCallback(() => {
+    // eslint-disable-next-line new-cap
     const doc = new jsPDF();
     const dataGrid = dataGridRef.current.instance;
 

@@ -1,5 +1,5 @@
 window.onload = function () {
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
 
     that.employee = ko.observable({});
@@ -33,5 +33,5 @@ window.onload = function () {
     };
   };
 
-  ko.applyBindings(new viewModel(), document.getElementById('container'));
+  ko.applyBindings(new ViewModel(), document.getElementById('container'));
 };

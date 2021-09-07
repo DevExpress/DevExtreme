@@ -80,6 +80,7 @@ export default {
   },
   methods: {
     exportGrid() {
+      // eslint-disable-next-line new-cap
       const doc = new jsPDF();
       exportDataGridToPdf({
         jsPDFDocument: doc,

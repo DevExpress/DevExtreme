@@ -1,5 +1,5 @@
 window.onload = function () {
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
     this.color = ko.observable('#f05b41');
     this.text = ko.observable('UI Superhero');
@@ -36,5 +36,5 @@ window.onload = function () {
       },
     ];
   };
-  ko.applyBindings(new viewModel(), document.getElementById('picture-processor'));
+  ko.applyBindings(new ViewModel(), document.getElementById('picture-processor'));
 };

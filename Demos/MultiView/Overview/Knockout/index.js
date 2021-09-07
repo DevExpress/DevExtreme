@@ -1,5 +1,5 @@
 window.onload = function () {
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
 
     that.selectedIndex = ko.observable(0);
@@ -17,5 +17,5 @@ window.onload = function () {
     };
   };
 
-  ko.applyBindings(new viewModel(), document.getElementById('multiview'));
+  ko.applyBindings(new ViewModel(), document.getElementById('multiview'));
 };

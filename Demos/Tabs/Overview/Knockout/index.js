@@ -1,13 +1,13 @@
 window.onload = function () {
-  const viewModelLongTabs = function () {
+  const ViewModelLongTabs = function () {
     const that = this;
     that.tabOptions = {
       dataSource: longtabs,
     };
   };
-  ko.applyBindings(new viewModelLongTabs(), document.getElementById('longtabs'));
+  ko.applyBindings(new ViewModelLongTabs(), document.getElementById('longtabs'));
 
-  const viewModelScrolledTabs = function () {
+  const ViewModelScrolledTabs = function () {
     const that = this;
     that.tabOptions = {
       dataSource: longtabs,
@@ -16,9 +16,9 @@ window.onload = function () {
       showNavButtons: true,
     };
   };
-  ko.applyBindings(new viewModelScrolledTabs(), document.getElementById('scrolledtabs'));
+  ko.applyBindings(new ViewModelScrolledTabs(), document.getElementById('scrolledtabs'));
 
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
     that.tabContent = ko.observable();
     that.selectedTab = ko.observable(0);
@@ -36,5 +36,5 @@ window.onload = function () {
       that.tabContent(tabs[that.selectedTab()].content);
     });
   };
-  ko.applyBindings(new viewModel(), document.getElementById('tabs'));
+  ko.applyBindings(new ViewModel(), document.getElementById('tabs'));
 };

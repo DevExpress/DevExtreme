@@ -1,5 +1,5 @@
 window.onload = function () {
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
     that.multiple = ko.observable(false);
     that.accept = ko.observable('*');
@@ -34,5 +34,5 @@ window.onload = function () {
     };
   };
 
-  ko.applyBindings(new viewModel(), document.getElementById('fileuploader'));
+  ko.applyBindings(new ViewModel(), document.getElementById('fileuploader'));
 };

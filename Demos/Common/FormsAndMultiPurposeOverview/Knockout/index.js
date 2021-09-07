@@ -1,5 +1,5 @@
 window.onload = function () {
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
 
     that.formOptions = {
@@ -73,5 +73,5 @@ window.onload = function () {
       }],
     };
   };
-  ko.applyBindings(new viewModel(), document.getElementById('editors-overview'));
+  ko.applyBindings(new ViewModel(), document.getElementById('editors-overview'));
 };

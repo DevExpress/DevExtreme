@@ -8,7 +8,7 @@ window.onload = function () {
     return d.promise();
   };
 
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
     const maxDate = new Date();
 
@@ -159,5 +159,5 @@ window.onload = function () {
 
     that.countries = countries;
   };
-  ko.applyBindings(new viewModel(), document.getElementById('validation-demo'));
+  ko.applyBindings(new ViewModel(), document.getElementById('validation-demo'));
 };

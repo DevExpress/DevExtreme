@@ -1,5 +1,5 @@
 window.onload = function () {
-  const viewModel = function () {
+  const ViewModel = function () {
     const that = this;
 
     that.animationDuration = ko.observable(300);
@@ -26,5 +26,5 @@ window.onload = function () {
     };
   };
 
-  ko.applyBindings(new viewModel(), document.getElementById('accordion'));
+  ko.applyBindings(new ViewModel(), document.getElementById('accordion'));
 };
