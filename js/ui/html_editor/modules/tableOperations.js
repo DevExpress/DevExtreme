@@ -89,6 +89,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
 
     let formInstance;
     let alignmentEditorInstance;
+    let borderColorEditorInstance;
     const startTableWidth = $table.outerWidth();
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
@@ -123,6 +124,23 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                     editorOptions: {
                         editAlphaChannel: true
                     }
+                },
+                {
+                    itemType: 'simple',
+                    dataField: 'borderColor',
+                    label: { text: 'Color' },
+                    template: (e) => {
+
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ButtonGroup, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').borderColor,
+                            onInitialized: (e) => {
+                                borderColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    },
                 },
                 {
                     dataField: 'borderWidth',
@@ -177,7 +195,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                         'backgroundColor': formData.backgroundColor,
                         'borderStyle': formData.borderStyle,
                         'borderColor': formData.borderColor,
-                        'borderWidth': formData.borderWidth,
+                        'borderWidth': borderColorEditorInstance.option('value'),
                         'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0]
                     });
 
