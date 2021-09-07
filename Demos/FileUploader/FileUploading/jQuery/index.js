@@ -13,7 +13,7 @@ $(() => {
           const $selectedItem = $('<div />').addClass('selected-item');
           $selectedItem.append(
             $('<span />').html(`Name: ${file.name}<br/>`),
-            $('<span />').html(`Size ${file.size} bytes` + '<br/>'),
+            $('<span />').html(`Size ${file.size} bytes<br/>`),
             $('<span />').html(`Type ${file.type}<br/>`),
             $('<span />').html(`Last Modified Date: ${file.lastModifiedDate}`),
           );

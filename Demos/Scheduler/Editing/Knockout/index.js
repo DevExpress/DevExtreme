@@ -1,6 +1,6 @@
 window.onload = function () {
   function showToast(event, value, type) {
-    DevExpress.ui.notify(`${event} "${value}"` + ' task', type, 800);
+    DevExpress.ui.notify(`${event} "${value}" task`, type, 800);
   }
 
   const allowAddingValue = ko.observable(true);

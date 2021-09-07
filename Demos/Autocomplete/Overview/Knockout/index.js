@@ -47,8 +47,7 @@ window.onload = function () {
       placeholder: 'Type state name...',
       valueExpr: 'State_Long',
       itemTemplate(data) {
-        return $(`<div>${data.State_Long
-        } (${data.State_Short})` + '</div>');
+        return $(`<div>${data.State_Long} (${data.State_Short})</div>`);
       },
       onValueChanged(data) {
         state = data.value;

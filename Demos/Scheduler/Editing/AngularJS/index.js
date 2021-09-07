@@ -2,7 +2,7 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
   function showToast(event, value, type) {
-    DevExpress.ui.notify(`${event} "${value}"` + ' task', type, 800);
+    DevExpress.ui.notify(`${event} "${value}" task`, type, 800);
   }
 
   $scope.editing = {

@@ -27,7 +27,7 @@ $(() => {
       const total = pieChart.getAllSeries()[0].getVisiblePoints().reduce((s, p) => s + p.originalValue, 0);
       const { country } = pieChart.getAllSeries()[0].getVisiblePoints()[0].data;
       const content = $(`<svg><circle cx="100" cy="100" fill="#eee" r="${pieChart.getInnerRadius() - 6}"></circle>`
-                    + '<image x="70" y="58" width="60" height="40" href="' + `../../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg` + '"/>'
+                    + `<image x="70" y="58" width="60" height="40" href="../../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg"/>`
                     + '<text text-anchor="middle" style="font-size: 18px" x="100" y="120" fill="#494949">'
                     + `<tspan x="100" >${country}</tspan>`
                     + `<tspan x="100" dy="20px" style="font-weight: 600">${

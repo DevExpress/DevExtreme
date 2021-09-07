@@ -5,7 +5,7 @@ window.onload = function () {
     tooltip: {
       customizeTooltip(arg) {
         return {
-          text: `Current t&#176: ${arg.value}&#176C<br>` + `Average t&#176: ${arg.target}&#176C`,
+          text: `Current t&#176: ${arg.value}&#176C<br>Average t&#176: ${arg.target}&#176C`,
         };
       },
     },

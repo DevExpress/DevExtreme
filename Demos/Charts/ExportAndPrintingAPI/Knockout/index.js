@@ -13,8 +13,7 @@ window.onload = function () {
         customizeTooltip(arg) {
           return {
             text: `<span class='title'>${arg.argumentText}</span><br />&nbsp;<br />`
-                            + `System: ${arg.point.data.system}<br />` + `Height: ${
-              arg.valueText} m`,
+                  + `System: ${arg.point.data.system}<br />Height: ${arg.valueText} m`,
           };
         },
       },
