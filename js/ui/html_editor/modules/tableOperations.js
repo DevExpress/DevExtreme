@@ -1,5 +1,7 @@
 import Popup from '../../popup';
 import Form from '../../form';
+import ButtonGroup from '../../button_group';
+
 import $ from '../../../core/renderer';
 import { getWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
@@ -99,7 +101,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             borderStyle: tableStyles.borderStyle,
             borderColor: tableStyles.borderColor,
             borderWidth: tableStyles.borderWidth,
-            alignment: startTextAlign,
+            // alignment: startTextAlign,
         },
         items: [{
             itemType: 'group',
@@ -116,7 +118,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                 },
                 {
                     dataField: 'borderColor',
-                    caption: 'Color',
+                    label: { text: 'Color' },
                     editorType: 'dxColorBox',
                     editorOptions: {
                         editAlphaChannel: true
@@ -133,7 +135,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             items: [
                 {
                     dataField: 'backgroundColor',
-                    caption: 'Color',
+                    label: { text: 'Color' },
                     editorType: 'dxColorBox',
                     editorOptions: {
                         editAlphaChannel: true
@@ -146,16 +148,19 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             colCount: 3,
             items: [
                 'width', 'height', {
-                    dataField: 'alignment',
-                    editorType: 'dxButtonGroup',
-                    editorOptions: {
-                        items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
-                        keyExpr: 'value',
-                        selectedItemKeys: [startTextAlign],
-                        onInitialized: (e) => {
-                            alignmentEditorInstance = e.component;
-                        }
-                    }
+                    itemType: 'simple',
+                    template: () => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ButtonGroup, {
+                            items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
+                            keyExpr: 'value',
+                            selectedItemKeys: [startTextAlign],
+                            onInitialized: (e) => {
+                                alignmentEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    },
                 }
             ]
         }, {
@@ -276,27 +281,32 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             colCount: 3,
             items: [
                 {
-                    dataField: 'alignment',
-                    editorType: 'dxButtonGroup',
-                    editorOptions: {
-                        items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
-                        keyExpr: 'value',
-                        selectedItemKeys: [startTextAlign],
-                        onInitialized: (e) => {
-                            alignmentEditorInstance = e.component;
-                        }
+                    itemType: 'simple',
+                    template: () => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ButtonGroup, {
+                            items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
+                            keyExpr: 'value',
+                            selectedItemKeys: [startTextAlign],
+                            onInitialized: (e) => {
+                                alignmentEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
                     }
-                },
-                {
-                    dataField: 'alignment',
-                    editorType: 'dxButtonGroup',
-                    editorOptions: {
-                        items: [{ value: 'top', icon: 'verticalaligntop' }, { value: 'middle', icon: 'verticalaligncenter' }, { value: 'bottom', icon: 'verticalalignbottom' }],
-                        keyExpr: 'value',
-                        selectedItemKeys: [cellStyles.verticalAlign],
-                        onInitialized: (e) => {
-                            verticalAlignmentEditorInstance = e.component;
-                        }
+                }, {
+                    itemType: 'simple',
+                    template: () => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ButtonGroup, {
+                            items: [{ value: 'top', icon: 'verticalaligntop' }, { value: 'middle', icon: 'verticalaligncenter' }, { value: 'bottom', icon: 'verticalalignbottom' }],
+                            keyExpr: 'value',
+                            selectedItemKeys: [cellStyles.verticalAlign],
+                            onInitialized: (e) => {
+                                verticalAlignmentEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
                     }
                 }
             ]

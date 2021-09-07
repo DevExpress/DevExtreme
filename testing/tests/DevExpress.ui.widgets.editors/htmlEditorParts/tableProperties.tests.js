@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/html_editor';
 
-import { showTablePropertiesForm, /* showCellPropertiesForm */ } from 'ui/html_editor/modules/tableOperations';
+import { showTablePropertiesForm, showCellPropertiesForm } from 'ui/html_editor/modules/tableOperations';
 
 const tableMarkup = '\
     before table text<br>\
@@ -53,19 +53,32 @@ module('Table properties forms', {
         this.clock.restore();
     }
 }, () => {
-    test('', function(assert) {
+    test('show table Form', function(assert) {
+
         this.createWidget();
 
         const $tableElement = this.$element.find('table').eq(0);
         this.quillInstance.setSelection(50, 1);
 
         showTablePropertiesForm(this.instance, $tableElement);
-        // this.quillInstance.getModule('tableContextMenu')
-        // const $tableElement = this.$element.find('td').eq(0);
-        // $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-        // const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
 
-        assert.ok(true);
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
+    });
+
+    test('show cell Form', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('table').eq(0);
+        this.quillInstance.setSelection(50, 1);
+
+        showCellPropertiesForm(this.instance, $tableElement);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
     });
 });
