@@ -11,6 +11,7 @@ import {
   calculateAdaptivityProps,
 } from '../resizable_container';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
+import { InternalPagerProps } from '../common/pager_props';
 
 jest.mock('../../../utils/get_computed_style');
 jest.mock('../../../../core/utils/resize_callbacks');
@@ -52,7 +53,7 @@ describe('resizable-container', () => {
           pagerPropsProp2: 'pagerPropsProp2',
           pageIndexChange: jest.fn(),
           pageSizeChange: jest.fn(),
-        },
+        } as Partial<InternalPagerProps>,
         props: {
           contentTemplate,
         } as any,
