@@ -46,10 +46,12 @@ describe('Tooltip', () => {
         });
 
         it('should not fail if ref has no "current"', () => {
-          const tooltip: Tooltip = new Tooltip({
+          const tooltip: any = new Tooltip({
             ...new TooltipProps(),
             visible: true,
           });
+
+          tooltip.domComponentWrapperRef = {};
 
           expect(() => { tooltip.saveInstance(); }).not.toThrow();
         });
@@ -67,10 +69,6 @@ describe('Tooltip', () => {
 
           tooltip.setHideEventListener();
           expect(mockCallback).toBeCalledTimes(1);
-
-          const onHiding = mockCallback.mock.calls[0][1];
-          onHiding();
-          expect(tooltip.props.visible).toBe(false);
         });
 
         it('should set correct "onHiding" event', () => {

@@ -41,10 +41,12 @@ describe('Popup', () => {
         });
 
         it('should not fail if ref has no "current"', () => {
-          const popup: Popup = new Popup({
+          const popup: any = new Popup({
             ...new PopupProps(),
             visible: true,
           });
+
+          popup.domComponentWrapperRef = {};
 
           expect(() => { popup.saveInstance(); }).not.toThrow();
         });
@@ -62,10 +64,6 @@ describe('Popup', () => {
 
           popup.setHideEventListener();
           expect(mockCallback).toBeCalledTimes(1);
-
-          const onHiding = mockCallback.mock.calls[0][1];
-          onHiding();
-          expect(popup.props.visible).toBe(false);
         });
 
         it('should set correct "onHiding" event', () => {

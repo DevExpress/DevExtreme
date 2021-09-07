@@ -133,17 +133,15 @@ export class TooltipProps extends BaseWidgetProps {
 export class Tooltip extends JSXComponent(TooltipProps) {
   @Ref() domComponentWrapperRef!: RefObject<DomComponentWrapper>;
 
-  @Mutable()
-  instance!: { option };
+  @Mutable() instance!: { option };
 
   @Effect()
   saveInstance(): void {
-    this.instance = this.domComponentWrapperRef?.current?.getInstance() as { option };
+    this.instance = this.domComponentWrapperRef.current?.getInstance() as { option };
   }
 
   @Effect()
   setHideEventListener(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     this.instance.option('onHiding', () => {
       this.props.visible = false;
     });

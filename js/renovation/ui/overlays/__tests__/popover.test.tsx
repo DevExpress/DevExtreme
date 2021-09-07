@@ -46,10 +46,11 @@ describe('Popover', () => {
         });
 
         it('should not fail if ref has no "current"', () => {
-          const popover: Popover = new Popover({
+          const popover: any = new Popover({
             ...new PopoverProps(),
             visible: true,
           });
+          popover.domComponentWrapperRef = {};
 
           expect(() => { popover.saveInstance(); }).not.toThrow();
         });
@@ -67,10 +68,6 @@ describe('Popover', () => {
 
           popover.setHideEventListener();
           expect(mockCallback).toBeCalledTimes(1);
-
-          const onHiding = mockCallback.mock.calls[0][1];
-          onHiding();
-          expect(popover.props.visible).toBe(false);
         });
 
         it('should set correct "onHiding" event', () => {
