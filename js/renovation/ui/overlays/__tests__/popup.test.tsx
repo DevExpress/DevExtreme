@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as PopupView, PopupProps, Popup } from '../popup';
@@ -13,43 +12,77 @@ describe('Popup', () => {
         props: componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Popup>;
-      shallow(<PopupView {...props as any} /> as any);
+
+      expect(() => {
+        shallow(<PopupView {...props as any} /> as any);
+      }).not.toThrow();
     });
   });
 
   describe('Behaviour', () => {
-    describe('Events', () => {
-      it('should not fail if ref has no "current"', () => {
-        const toolbar: any = new Popup({
-          ...new PopupProps(),
-          visible: true,
+    describe('Effects', () => {
+      describe('saveInstance', () => {
+        it('should save instance', () => {
+          const mockCallback = jest.fn();
+          const popup: any = new Popup({
+            ...new PopupProps(),
+            visible: true,
+          });
+          const instance = { option: mockCallback };
+
+          popup.wrapperRef = {
+            current: {
+              getInstance: () => instance,
+            },
+          };
+
+          popup.saveInstance();
+          expect(popup.instance).toEqual(instance);
         });
 
-        toolbar.wrapperRef = {};
+        it('should not fail if ref has no "current"', () => {
+          const popup: Popup = new Popup({
+            ...new PopupProps(),
+            visible: true,
+          });
 
-        toolbar.saveInstance();
+          expect(() => { popup.saveInstance(); }).not.toThrow();
+        });
       });
 
-      it('should set the "onHiding" event listener', () => {
-        const mockCallback = jest.fn();
-        const toolbar: any = new Popup({
-          ...new PopupProps(),
-          visible: true,
+      describe('setHideEventListener', () => {
+        it('should set the "onHiding" event listener to instance', () => {
+          const mockCallback = jest.fn();
+          const popup: any = new Popup({
+            ...new PopupProps(),
+            visible: true,
+          });
+
+          popup.instance = { option: mockCallback };
+
+          popup.setHideEventListener();
+          expect(mockCallback).toBeCalledTimes(1);
+
+          const onHiding = mockCallback.mock.calls[0][1];
+          onHiding();
+          expect(popup.props.visible).toBe(false);
         });
 
-        toolbar.wrapperRef = {
-          current: {
-            getInstance: () => ({ option: mockCallback }),
-          },
-        };
+        it('should set correct "onHiding" event', () => {
+          const mockCallback = jest.fn();
+          const popup: any = new Popup({
+            ...new PopupProps(),
+            visible: true,
+          });
 
-        toolbar.saveInstance();
+          popup.instance = { option: mockCallback };
 
-        toolbar.setListeners();
-        expect(mockCallback).toBeCalledTimes(1);
+          popup.setHideEventListener();
+          const onHiding = mockCallback.mock.calls[0][1];
+          onHiding();
 
-        mockCallback.mock.calls[0][1]();
-        expect(toolbar.props.visible).toBe(false);
+          expect(popup.props.visible).toBe(false);
+        });
       });
     });
   });

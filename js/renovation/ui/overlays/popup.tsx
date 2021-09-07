@@ -165,19 +165,19 @@ export class PopupProps extends BaseWidgetProps {
 @Component({
   view: viewFunction,
 })
-export class Popup extends JSXComponent<PopupProps, 'visible'>() {
+export class Popup extends JSXComponent(PopupProps) {
   @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
 
-  @Mutable() // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  instance: any;
+  @Mutable()
+  instance!: { option };
 
   @Effect()
   saveInstance(): void {
-    this.instance = this.wrapperRef.current?.getInstance();
+    this.instance = this.wrapperRef?.current?.getInstance() as { option };
   }
 
   @Effect()
-  setListeners(): void {
+  setHideEventListener(): void {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     this.instance.option('onHiding', () => {
       this.props.visible = false;

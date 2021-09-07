@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as TooltipView, TooltipProps, Tooltip } from '../tooltip';
@@ -26,38 +25,69 @@ describe('Tooltip', () => {
   });
 
   describe('Behaviour', () => {
-    describe('Events', () => {
-      it('should not fail if ref has no "current"', () => {
-        const toolbar: any = new Tooltip({
-          ...new TooltipProps(),
-          visible: true,
+    describe('Effects', () => {
+      describe('saveInstance', () => {
+        it('should save instance', () => {
+          const mockCallback = jest.fn();
+          const tooltip: any = new Tooltip({
+            ...new TooltipProps(),
+            visible: true,
+          });
+          const instance = { option: mockCallback };
+
+          tooltip.wrapperRef = {
+            current: {
+              getInstance: () => instance,
+            },
+          };
+
+          tooltip.saveInstance();
+          expect(tooltip.instance).toEqual(instance);
         });
 
-        toolbar.wrapperRef = {};
+        it('should not fail if ref has no "current"', () => {
+          const tooltip: Tooltip = new Tooltip({
+            ...new TooltipProps(),
+            visible: true,
+          });
 
-        toolbar.saveInstance();
+          expect(() => { tooltip.saveInstance(); }).not.toThrow();
+        });
       });
 
-      it('should set the "onHiding" event listener', () => {
-        const mockCallback = jest.fn();
-        const toolbar: any = new Tooltip({
-          ...new TooltipProps(),
-          visible: true,
+      describe('setHideEventListener', () => {
+        it('should set the "onHiding" event listener to instance', () => {
+          const mockCallback = jest.fn();
+          const tooltip: any = new Tooltip({
+            ...new TooltipProps(),
+            visible: true,
+          });
+
+          tooltip.instance = { option: mockCallback };
+
+          tooltip.setHideEventListener();
+          expect(mockCallback).toBeCalledTimes(1);
+
+          const onHiding = mockCallback.mock.calls[0][1];
+          onHiding();
+          expect(tooltip.props.visible).toBe(false);
         });
 
-        toolbar.wrapperRef = {
-          current: {
-            getInstance: () => ({ option: mockCallback }),
-          },
-        };
+        it('should set correct "onHiding" event', () => {
+          const mockCallback = jest.fn();
+          const tooltip: any = new Tooltip({
+            ...new TooltipProps(),
+            visible: true,
+          });
 
-        toolbar.saveInstance();
+          tooltip.instance = { option: mockCallback };
 
-        toolbar.setListeners();
-        expect(mockCallback).toBeCalledTimes(1);
+          tooltip.setHideEventListener();
+          const onHiding = mockCallback.mock.calls[0][1];
+          onHiding();
 
-        mockCallback.mock.calls[0][1]();
-        expect(toolbar.props.visible).toBe(false);
+          expect(tooltip.props.visible).toBe(false);
+        });
       });
     });
   });
