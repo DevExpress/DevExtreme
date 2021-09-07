@@ -9,7 +9,6 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
-import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
 import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
@@ -1056,10 +1055,9 @@ const EditingController = modules.ViewController.inherit((function() {
             that._delayedInputFocus($firstCell, function() {
                 that._editCellInProgress = false;
 
-                const $cell = that.getFirstEditableCellInRow(rowIndex);
-                const eventToTrigger = that.option('editing.startEditAction') === 'dblClick' ? doubleClickEvent : clickEventName;
-
-                $cell && eventsEngine.trigger($cell, eventToTrigger);
+                const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
+                const columnIndex = that.getFirstEditableColumnIndex();
+                editRowIndex >= 0 && columnIndex >= 0 && that.editCell(editRowIndex, columnIndex);
             });
         },
 
