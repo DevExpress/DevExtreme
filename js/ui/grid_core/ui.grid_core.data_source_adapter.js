@@ -54,25 +54,104 @@ export default gridCore.Controller.inherit((function() {
         }
     }
 
-    function createEmptyPagesData() {
-        return { pages: {} };
+    function createEmptyCachedData() {
+        return { items: {} };
     }
 
-    function getPageKey(pageIndex, loadPageCount) {
-        return isDefined(loadPageCount) ? `${pageIndex}:${loadPageCount}` : pageIndex;
-    }
+    function getPageDataFromCache(options, updatePaging) {
+        const groupCount = gridCore.normalizeSortingInfo(options.group || options.storeLoadOptions.group || options.loadOptions.group).length;
 
-    function getPageDataFromCache(options) {
-        const key = getPageKey(options.pageIndex, options.loadPageCount);
-        return options.cachedPagesData.pages[key];
-    }
+        const { storeLoadOptions } = options;
+        const take = options.take ?? storeLoadOptions.take ?? 0;
+        const cachedItems = options.cachedData?.items;
 
-    function setPageDataToCache(options, data) {
-        const pageIndex = options.pageIndex;
-        if(pageIndex !== undefined) {
-            const key = getPageKey(pageIndex, options.loadPageCount);
-            options.cachedPagesData.pages[key] = data;
+        if(take && cachedItems) {
+            const skip = options.skip ?? /* loadOptions.skip ||*/ storeLoadOptions.skip ?? 0;
+            const result = [];
+            for(let i = 0; i < take; i++) {
+                const item = cachedItems[i + skip];
+                if(item) {
+                    if(groupCount) {
+                        const skips = i === 0 && options.skips || [];
+                        const takes = i === take - 1 && options.takes || [];
+                        const dataItem = getDataItemFromCache(item, groupCount, skips, takes);
+                        if(dataItem) {
+                            result.push(dataItem);
+                        } else {
+                            return;
+                        }
+
+                    } else {
+                        result.push(item);
+                    }
+                } else {
+                    // if(updatePaging && result.length) {
+                    //     const { storeLoadOptions } = options;
+                    //     if(storeLoadOptions.skip !== undefined && storeLoadOptions.take) {
+                    //         storeLoadOptions.skip += result.length;
+                    //         storeLoadOptions.take -= result.length;
+                    //         options.cachedDataPart = result;
+                    //     }
+                    // }
+                    return;
+                }
+            }
+            return result;
         }
+    }
+
+    function setPageDataToCache(options, data, groupCount) {
+        const skip = options.storeLoadOptions.skip || options.skip || 0;
+        const take = options.storeLoadOptions.take || options.take || 0;
+
+        for(let i = 0; i < take; i++) {
+            const globalIndex = i + skip;
+            const cacheItems = options.cachedData.items;
+            const skips = i === 0 && options.skips || [];
+            cacheItems[globalIndex] = getCacheItem(data[i], groupCount, skips);
+        }
+    }
+
+    function getCacheItem(loadedItem, groupCount, skips) {
+        if(groupCount && loadedItem) {
+            const result = { ...loadedItem };
+            const skip = skips[0] || 0;
+            if(loadedItem.items) {
+                result.items = {};
+                loadedItem.items.forEach((item, index) => {
+                    result.items[index + skip] = getCacheItem(item, groupCount - 1, skips.slice(1));
+                });
+            }
+
+            return result;
+        }
+
+        return loadedItem;
+    }
+
+    function getDataItemFromCache(cacheItem, groupCount, skips, takes) {
+        if(groupCount && cacheItem) {
+            const result = { ...cacheItem };
+            const skip = skips[0] || 0;
+            const take = takes[0];
+            const items = cacheItem.items;
+            if(items) {
+                result.items = [];
+                for(let i = 0; take === undefined ? items[i + skip] : i < take; i++) {
+                    const cacheItem = items[i + skip];
+                    const item = getDataItemFromCache(cacheItem, groupCount - 1, skips.slice(1), takes.slice(1));
+                    if(item) {
+                        result.items.push(item);
+                    } else {
+                        return;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        return cacheItem;
     }
 
     return {
@@ -85,7 +164,7 @@ export default gridCore.Controller.inherit((function() {
             that._isLastPage = !dataSource.isLastPage();
             that._hasLastPage = false;
             that._currentTotalCount = 0;
-            that._cachedPagesData = createEmptyPagesData();
+            that._cachedData = createEmptyCachedData();
             that._lastOperationTypes = {};
             that._eventsStrategy = dataSource._eventsStrategy;
             that._totalCountCorrection = 0;
@@ -99,7 +178,7 @@ export default gridCore.Controller.inherit((function() {
             that.changing = Callbacks();
 
             that._dataChangedHandler = that._handleDataChanged.bind(that);
-            that._dataLoadingHandler = that._handleDataLoading.bind(that);
+            that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
             that._dataLoadedHandler = that._handleDataLoaded.bind(that);
             that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
             that._loadErrorHandler = that._handleLoadError.bind(that);
@@ -107,7 +186,7 @@ export default gridCore.Controller.inherit((function() {
             that._changingHandler = that._handleChanging.bind(that);
 
             dataSource.on('changed', that._dataChangedHandler);
-            dataSource.on('customizeStoreLoadOptions', that._dataLoadingHandler);
+            dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
             dataSource.on('customizeLoadResult', that._dataLoadedHandler);
             dataSource.on('loadingChanged', that._loadingChangedHandler);
             dataSource.on('loadError', that._loadErrorHandler);
@@ -131,7 +210,7 @@ export default gridCore.Controller.inherit((function() {
             const store = dataSource.store();
 
             dataSource.off('changed', that._dataChangedHandler);
-            dataSource.off('customizeStoreLoadOptions', that._dataLoadingHandler);
+            dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
             dataSource.off('customizeLoadResult', that._dataLoadedHandler);
             dataSource.off('loadingChanged', that._loadingChangedHandler);
             dataSource.off('loadError', that._loadErrorHandler);
@@ -161,7 +240,7 @@ export default gridCore.Controller.inherit((function() {
             this._cachedPagingData = undefined;
         },
         resetPagesCache: function() {
-            this._cachedPagesData = createEmptyPagesData();
+            this._cachedData = createEmptyCachedData();
         },
         _needClearStoreDataCache: function() {
             const remoteOperations = this.remoteOperations();
@@ -271,7 +350,7 @@ export default gridCore.Controller.inherit((function() {
             const that = this;
             let cachedStoreData = that._cachedStoreData;
             let cachedPagingData = that._cachedPagingData;
-            let cachedPagesData = that._cachedPagesData;
+            let cachedData = this._cachedData;
 
             if((options.storeLoadOptions.filter && !options.remoteOperations.filtering) || (options.storeLoadOptions.sort && !options.remoteOperations.sorting)) {
                 options.remoteOperations = {
@@ -282,13 +361,13 @@ export default gridCore.Controller.inherit((function() {
             if(operationTypes.fullReload) {
                 cachedStoreData = undefined;
                 cachedPagingData = undefined;
-                cachedPagesData = createEmptyPagesData();
+                cachedData = createEmptyCachedData();
             } else {
                 if(operationTypes.reload) {
                     cachedPagingData = undefined;
-                    cachedPagesData = createEmptyPagesData();
+                    cachedData = createEmptyCachedData();
                 } else if(operationTypes.pageSize || operationTypes.groupExpanding) {
-                    cachedPagesData = createEmptyPagesData();
+                    // cachedData = createEmptyCachedData(); // TODO
                 }
 
                 each(operationTypes, function(operationType, value) {
@@ -305,13 +384,17 @@ export default gridCore.Controller.inherit((function() {
 
             options.cachedStoreData = cachedStoreData;
             options.cachedPagingData = cachedPagingData;
-            options.cachedPagesData = cachedPagesData;
+            options.cachedData = cachedData;
 
             if(!options.isCustomLoading) {
                 that._cachedStoreData = cachedStoreData;
                 that._cachedPagingData = cachedPagingData;
-                that._cachedPagesData = cachedPagesData;
+                this._cachedData = cachedData;
             }
+        },
+        _handleCustomizeStoreLoadOptions(options) {
+            this._handleDataLoading(options);
+            options.data = getPageDataFromCache(options, true) || options.cachedStoreData;
         },
         _handleDataLoading: function(options) {
             const dataSource = this._dataSource;
@@ -372,7 +455,7 @@ export default gridCore.Controller.inherit((function() {
 
             options.loadOptions = {};
 
-            const cachedExtra = options.cachedPagesData.extra;
+            const cachedExtra = options.cachedData.extra;
             const localLoadOptionNames = {
                 filter: !remoteOperations.filtering,
                 sort: !remoteOperations.sorting,
@@ -393,15 +476,14 @@ export default gridCore.Controller.inherit((function() {
             if(cachedExtra) {
                 options.extra = cachedExtra;
             }
-            options.data = getPageDataFromCache(options) || options.cachedStoreData;
         },
         _handleDataLoaded: function(options) {
             const loadOptions = options.loadOptions;
             const localPaging = options.remoteOperations && !options.remoteOperations.paging;
-            const cachedPagesData = options.cachedPagesData;
+            const cachedData = options.cachedData;
             const storeLoadOptions = options.storeLoadOptions;
             const needCache = this.option('cacheEnabled') !== false && storeLoadOptions;
-            const needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group);
+            const needPageCache = needCache && !options.isCustomLoading && cachedData && (!localPaging || storeLoadOptions.group);
             const needPagingCache = needCache && localPaging;
             const needStoreCache = needPagingCache && !options.isCustomLoading;
 
@@ -432,6 +514,9 @@ export default gridCore.Controller.inherit((function() {
             const groupCount = gridCore.normalizeSortingInfo(storeLoadOptions.group || loadOptions.group).length;
 
             if(!needPageCache || !getPageDataFromCache(options)) {
+                if(options.cachedDataPart) {
+                    options.data = options.cachedDataPart.concat(options.data);
+                }
                 if(needPagingCache && options.cachedPagingData) {
                     options.data = cloneItems(options.cachedPagingData, groupCount);
                 } else {
@@ -442,7 +527,6 @@ export default gridCore.Controller.inherit((function() {
                             options.data = this._cachedStoreData = this._cachedStoreData.concat(options.data);
                         }
                     }
-
                     new ArrayStore(options.data).load(loadOptions).done(data => {
                         options.data = data;
                         if(needStoreCache) {
@@ -462,12 +546,17 @@ export default gridCore.Controller.inherit((function() {
                     options.extra.totalCount = -1;
                 }
 
+                if(!needPageCache) { // TODO
+                    // this._cachedData.data = cloneItems(options.data, groupCount);
+                }
+
                 this._handleDataLoadedCore(options);
 
+
                 if(needPageCache) {
-                    cachedPagesData.extra = cachedPagesData.extra || extend({}, options.extra);
+                    cachedData.extra = cachedData.extra || extend({}, options.extra);
                     when(options.data).done((data) => {
-                        setPageDataToCache(options, cloneItems(data, groupCount));
+                        setPageDataToCache(options, data, groupCount);
                     });
                 }
             }
@@ -632,7 +721,7 @@ export default gridCore.Controller.inherit((function() {
                 that._scheduleCustomLoadCallbacks(d);
                 dataSource._scheduleLoadCallbacks(d);
 
-                that._handleDataLoading(loadResult);
+                that._handleCustomizeStoreLoadOptions(loadResult);
                 executeTask(function() {
                     if(!dataSource.store()) {
                         return d.reject('canceled');

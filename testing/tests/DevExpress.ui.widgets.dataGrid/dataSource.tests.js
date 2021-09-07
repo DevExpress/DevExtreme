@@ -6077,7 +6077,7 @@ QUnit.module('Cache', {
         assert.deepEqual(dataSource.items(), [1, 2, 3], 'items are correct');
     });
 
-    QUnit.test('reset pages cache on pageSize change when all remoteOperations', function(assert) {
+    QUnit.test('not reset pages cache on pageSize change when all remoteOperations', function(assert) {
         const dataSource = this.createDataSource({
             remoteOperations: true
         });
@@ -6090,7 +6090,7 @@ QUnit.module('Cache', {
         dataSource.load();
 
         // assert
-        assert.deepEqual(this.loadingCount, 1, 'one loading');
+        assert.deepEqual(this.loadingCount, 0, 'data is loaded from cache');
         assert.deepEqual(dataSource.items(), [1, 2], 'items are correct');
     });
 
@@ -6444,7 +6444,7 @@ QUnit.module('Cache', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.loadingCount, 3, 'third load');
+        assert.equal(this.loadingCount, 2, 'data is loaded from cache');
         assert.deepEqual(dataSource.items(), [7, 8, 9], 'items on the third load');
 
         // act
@@ -6454,11 +6454,11 @@ QUnit.module('Cache', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.loadingCount, 3, 'data is loaded from cache');
+        assert.equal(this.loadingCount, 2, 'data is loaded from cache');
         assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items from cache');
     });
 
-    QUnit.test('New mode. Cache should be reset when pageSize is changed', function(assert) {
+    QUnit.test('New mode. Cache should not be reset when pageSize is changed', function(assert) {
         const dataSource = this.createDataSource({
             remoteOperations: {
                 paging: true,
@@ -6495,7 +6495,7 @@ QUnit.module('Cache', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.loadingCount, 3, 'third load');
+        assert.equal(this.loadingCount, 2, 'data is loaded from the cache');
         assert.deepEqual(dataSource.items(), [1, 2], 'new loaded items for the first page');
     });
 
@@ -7112,15 +7112,15 @@ QUnit.module('New virtual scrolling mode', {
         const dataSource = this.createDataSource({
             pageSize: 3
         });
-        const dataLoadingHandler = dataSource._dataLoadingHandler;
+        const dataLoadingHandler = dataSource._customizeStoreLoadOptionsHandler;
         const takeValues = [];
 
-        dataSource._dataLoadingHandler = function(options) {
+        dataSource._customizeStoreLoadOptionsHandler = function(options) {
             dataLoadingHandler.apply(dataSource, arguments);
             takeValues.push(options.storeLoadOptions.take);
         };
         dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
-        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
+        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._customizeStoreLoadOptionsHandler);
 
         try {
             // act

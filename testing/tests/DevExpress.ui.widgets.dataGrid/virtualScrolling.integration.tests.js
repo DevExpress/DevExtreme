@@ -3449,7 +3449,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 3, 'third call'); // should be 2 after reconsidering the cache structure
+        assert.equal(loadSpy.callCount, 2, 'data is loaded from cache');
         assert.equal(visibleRows.length, 18, 'visible rows on the second load');
         assert.equal(visibleGroupRowCount, 3, 'group count on the second load');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the second load');
@@ -3469,7 +3469,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 4, 'fourth call'); // should be 3 after reconsidering the cache structure
+        assert.equal(loadSpy.callCount, 3, 'third call');
         assert.equal(visibleRows.length, 12, 'visible rows on the third load');
         assert.equal(visibleGroupRowCount, 2, 'group count on the third load');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the third load');
@@ -3485,7 +3485,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 4, 'call count is not changed on scrolling up to the middle');
+        assert.equal(loadSpy.callCount, 3, 'call count is not changed on scrolling up to the middle');
         assert.equal(visibleRows.length, 18, 'visible rows on the scrolling up to the middle');
         assert.equal(visibleGroupRowCount, 3, 'group count on the scrolling up to the middle');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the scrolling up to the middle');
@@ -3503,7 +3503,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 4, 'call count is not changed on scrolling up to the top');
+        assert.equal(loadSpy.callCount, 3, 'call count is not changed on scrolling up to the top');
         assert.equal(visibleRows.length, 12, 'visible rows on scrolling up to the top');
         assert.equal(visibleGroupRowCount, 2, 'group count on scrolling up to the top');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on scrolling up to the top');
@@ -4902,7 +4902,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 4, 'fourth call');
+        assert.equal(loadSpy.callCount, 3, 'third call');
         assert.equal(visibleRows.length, 24, 'visible rows on the second load');
         assert.equal(visibleGroupRowCount, 4, 'group count on the second load');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the fourth load');
@@ -4925,7 +4925,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 7, 'seventh call');
+        assert.equal(loadSpy.callCount, 6, 'sixth call');
         assert.equal(visibleRows.length, 24, 'visible rows on the seventh load');
         assert.equal(visibleGroupRowCount, 4, 'group count on the seventh load');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the seventh load');
@@ -4944,7 +4944,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 7, 'call count is not changed on scrolling up to the middle');
+        assert.equal(loadSpy.callCount, 6, 'call count is not changed on scrolling up to the middle');
         assert.equal(visibleRows.length, 24, 'visible rows on the scrolling up to the middle');
         assert.equal(visibleGroupRowCount, 4, 'group count on the scrolling up to the middle');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on the scrolling up to the middle');
@@ -4963,7 +4963,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
         // assert
-        assert.equal(loadSpy.callCount, 7, 'call count is not changed on scrolling up to the top');
+        assert.equal(loadSpy.callCount, 6, 'call count is not changed on scrolling up to the top');
         assert.equal(visibleRows.length, 18, 'visible rows on scrolling up to the top');
         assert.equal(visibleGroupRowCount, 3, 'group count on scrolling up to the top');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on scrolling up to the top');
