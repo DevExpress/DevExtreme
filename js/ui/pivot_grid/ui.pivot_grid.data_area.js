@@ -52,7 +52,6 @@ export const DataArea = AreaItem.inherit({
         this._groupElement.dxScrollable({
             useNative: this.getUseNativeValue(),
             useSimulatedScrollbar: false,
-            rtlEnabled: this.component.option('rtlEnabled'),
             bounceEnabled: false,
             updateManually: true,
         });
@@ -70,11 +69,11 @@ export const DataArea = AreaItem.inherit({
         return this.getUseNativeValue() ? calculateScrollbarWidth() : 0;
     },
 
-    updateScrollableOptions: function({ direction, rtlEnabled }) {
+    updateScrollableOptions: function({ direction }) {
         const scrollable = this._getScrollable();
 
         scrollable.option('useNative', this.getUseNativeValue());
-        scrollable.option({ direction, rtlEnabled });
+        scrollable.option({ direction });
     },
 
     getScrollableDirection: function(horizontal, vertical) {
