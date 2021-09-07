@@ -3,7 +3,7 @@ $(() => {
     dataSource: statuses,
     value: statuses[0],
     onValueChanged(data) {
-      if (data.value == 'All') { dataGrid.clearFilter(); } else { dataGrid.filter(['Task_Status', '=', data.value]); }
+      if (data.value === 'All') { dataGrid.clearFilter(); } else { dataGrid.filter(['Task_Status', '=', data.value]); }
     },
   });
 

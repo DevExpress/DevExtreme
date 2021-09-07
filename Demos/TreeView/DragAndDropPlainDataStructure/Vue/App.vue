@@ -131,7 +131,7 @@ export default {
     },
 
     calculateToIndex(e) {
-      if (e.fromComponent != e.toComponent || e.dropInsideItem) {
+      if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
         return e.toIndex;
       }
 
@@ -150,7 +150,7 @@ export default {
 
     findNodeById(nodes, id) {
       for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].itemData.id == id) {
+        if (nodes[i].itemData.id === id) {
           return nodes[i];
         }
         if (nodes[i].children) {
@@ -164,12 +164,12 @@ export default {
     },
 
     moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
-      const fromIndex = fromItems.findIndex((item) => item.id == fromNode.itemData.id);
+      const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
       fromItems.splice(fromIndex, 1);
 
       const toIndex = toNode === null || isDropInsideItem
         ? toItems.length
-        : toItems.findIndex((item) => item.id == toNode.itemData.id);
+        : toItems.findIndex((item) => item.id === toNode.itemData.id);
       toItems.splice(toIndex, 0, fromNode.itemData);
 
       this.moveChildren(fromNode, fromItems, toItems);
@@ -192,7 +192,7 @@ export default {
           this.moveChildren(child, fromDataSource, toDataSource);
         }
 
-        const fromIndex = fromDataSource.findIndex((item) => item.id == child.itemData.id);
+        const fromIndex = fromDataSource.findIndex((item) => item.id === child.itemData.id);
         fromDataSource.splice(fromIndex, 1);
         toDataSource.splice(toDataSource.length, 0, child.itemData);
       });

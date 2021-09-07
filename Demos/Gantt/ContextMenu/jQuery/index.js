@@ -52,7 +52,7 @@ $(() => {
   });
 
   function onCustomCommandClick(e) {
-    if (e.name == 'ToggleDisplayOfResources') {
+    if (e.name === 'ToggleDisplayOfResources') {
       const showResources = gantt.option('showResources');
       gantt.option('showResources', !showResources);
     }

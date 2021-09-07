@@ -11,7 +11,7 @@ $(() => {
       enabled: false,
     },
     onCellClick(e) {
-      if (e.area == 'data') {
+      if (e.area === 'data') {
         const pivotGridDataSource = e.component.getDataSource();
         const rowPathLength = e.cell.rowPath.length;
         const rowPathName = e.cell.rowPath[rowPathLength - 1];

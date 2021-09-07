@@ -27,7 +27,7 @@ window.onload = function () {
       },
     },
     completedValue(rowData) {
-      return rowData.Status == 'Completed';
+      return rowData.Status === 'Completed';
     },
   };
 

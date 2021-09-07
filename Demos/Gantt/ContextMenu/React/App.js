@@ -92,7 +92,7 @@ class App extends React.Component {
   }
 
   onCustomCommandClick(e) {
-    if (e.name == 'ToggleDisplayOfResources') {
+    if (e.name === 'ToggleDisplayOfResources') {
       this.setState({
         showResources: !this.state.showResources,
       });

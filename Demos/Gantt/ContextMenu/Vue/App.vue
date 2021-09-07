@@ -108,7 +108,7 @@ export default {
       this.disableContextMenu = e.value;
     },
     onCustomCommandClick(e) {
-      if (e.name == 'ToggleDisplayOfResources') {
+      if (e.name === 'ToggleDisplayOfResources') {
         this.showResources = !this.showResources;
       }
     },

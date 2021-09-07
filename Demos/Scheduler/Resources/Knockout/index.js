@@ -21,7 +21,7 @@ window.onload = function () {
     const resourcesData = resources();
 
     for (let i = 0; i < resourcesData.length; i++) {
-      resourcesData[i].useColorAsDefault = resourcesData[i].label == selectedResource();
+      resourcesData[i].useColorAsDefault = resourcesData[i].label === selectedResource();
     }
     resources(resourcesData);
   };

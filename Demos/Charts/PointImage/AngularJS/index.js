@@ -16,11 +16,11 @@ DemoApp.controller('DemoController', ($scope) => {
       formats: ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'],
     },
     customizePoint() {
-      if (this.value == 1) {
+      if (this.value === 1) {
         return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
-      } if (this.value == 2) {
+      } if (this.value === 2) {
         return { image: { url: '../../../../images/Charts/PointImage/icon-medal-silver.png', width: 20, height: 20 }, visible: true };
-      } if (this.value == 3) {
+      } if (this.value === 3) {
         return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
       }
     },
@@ -52,11 +52,11 @@ DemoApp.controller('DemoController', ($scope) => {
       inverted: true,
       label: {
         customizeText() {
-          if (this.valueText == 1) {
+          if (this.valueText === '1') {
             return `${this.valueText}st place`;
-          } if (this.valueText == 2) {
+          } if (this.valueText === '2') {
             return `${this.valueText}nd place`;
-          } if (this.valueText == 3) {
+          } if (this.valueText === '3') {
             return `${this.valueText}rd place`;
           }
           return `${this.valueText}th place`;

@@ -17,7 +17,7 @@ DemoApp.controller('DemoController', ($scope) => {
 
       if (!data.value) { return; }
 
-      if (data.value == 'All') {
+      if (data.value === 'All') {
         dataGrid.selectAll();
       } else {
         const employeesToSelect = $.map($.grep(dataGrid.option('dataSource'), (item) => item.Prefix === data.value), (item) => item.ID);

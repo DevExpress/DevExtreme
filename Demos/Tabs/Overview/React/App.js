@@ -65,7 +65,7 @@ class App extends React.Component {
   }
 
   onTabsSelectionChanged(args) {
-    if (args.name == 'selectedIndex') {
+    if (args.name === 'selectedIndex') {
       this.setState({
         selectedIndex: args.value,
       });

@@ -38,7 +38,7 @@ $(() => {
     width: 200,
     value: currentAlgorithm,
     onValueChanged(data) {
-      if (data.value == 'custom') {
+      if (data.value === 'custom') {
         currentAlgorithm = customAlgorithm;
       } else {
         currentAlgorithm = data.value;

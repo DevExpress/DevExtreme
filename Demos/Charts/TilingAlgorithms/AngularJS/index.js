@@ -45,7 +45,7 @@ DemoApp.controller('DemoController', ($scope) => {
     items: algorithms,
     width: 200,
     onValueChanged(data) {
-      if (data.value == 'custom') {
+      if (data.value === 'custom') {
         $scope.currentAlgorithm = customAlgorithm;
       } else {
         $scope.currentAlgorithm = data.value;

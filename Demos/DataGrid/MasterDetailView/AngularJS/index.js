@@ -48,7 +48,7 @@ DemoApp.controller('DemoController', ($scope) => {
         caption: 'Completed',
         dataType: 'boolean',
         calculateCellValue(rowData) {
-          return rowData.Status == 'Completed';
+          return rowData.Status === 'Completed';
         },
       }],
     };

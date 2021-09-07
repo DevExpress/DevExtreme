@@ -8,7 +8,7 @@ DemoApp.controller('DemoController', ($scope) => {
     tooltip: {
       enabled: true,
       customizeTooltip(args) {
-        const valueText = (args.seriesName.indexOf('Total') != -1)
+        const valueText = (args.seriesName.indexOf('Total') !== -1)
           ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(args.originalValue)
           : args.originalValue;
 

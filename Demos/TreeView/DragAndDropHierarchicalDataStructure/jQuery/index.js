@@ -70,7 +70,7 @@ function getTreeView(driveName) {
 }
 
 function calculateToIndex(e) {
-  if (e.fromComponent != e.toComponent || e.dropInsideItem) {
+  if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
     return e.toIndex;
   }
 
@@ -89,7 +89,7 @@ function findNode(treeView, index) {
 
 function findNodeById(nodes, id) {
   for (let i = 0; i < nodes.length; i++) {
-    if (nodes[i].itemData.id == id) {
+    if (nodes[i].itemData.id === id) {
       return nodes[i];
     }
     if (nodes[i].children) {

@@ -42,7 +42,7 @@ class App extends React.Component {
         </div>
         <ProgressBar
           id="progress-bar-status"
-          className={this.state.seconds == 0 ? 'complete' : '' }
+          className={this.state.seconds === 0 ? 'complete' : '' }
           width="90%"
           min={0}
           max={maxValue}
@@ -79,7 +79,7 @@ class App extends React.Component {
       seconds: this.state.seconds - 1,
     };
 
-    if (state.seconds == 0) {
+    if (state.seconds === 0) {
       state.buttonText = 'Restart progress';
       state.inProgress = !this.state.inProgress;
       clearInterval(intervalId);

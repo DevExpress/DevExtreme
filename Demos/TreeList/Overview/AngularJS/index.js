@@ -4,7 +4,7 @@ DemoApp.controller('DemoController', ($scope) => {
   const treeListData = $.map(tasks, (task) => {
     task.Task_Assigned_Employee = null;
     $.each(employees, (_, employee) => {
-      if (employee.ID == task.Task_Assigned_Employee_ID) { task.Task_Assigned_Employee = employee; }
+      if (employee.ID === task.Task_Assigned_Employee_ID) { task.Task_Assigned_Employee = employee; }
     });
     return task;
   });

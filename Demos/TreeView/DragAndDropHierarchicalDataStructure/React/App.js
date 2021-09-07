@@ -131,7 +131,7 @@ class App extends React.Component {
   }
 
   calculateToIndex(e) {
-    if (e.fromComponent != e.toComponent || e.dropInsideItem) {
+    if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
       return e.toIndex;
     }
 
@@ -150,7 +150,7 @@ class App extends React.Component {
 
   findNodeById(nodes, id) {
     for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].itemData.id == id) {
+      if (nodes[i].itemData.id === id) {
         return nodes[i];
       }
       if (nodes[i].children) {
@@ -165,7 +165,7 @@ class App extends React.Component {
 
   moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
     const fromNodeContainingArray = this.getNodeContainingArray(fromNode, fromItems);
-    const fromIndex = fromNodeContainingArray.findIndex((item) => item.id == fromNode.itemData.id);
+    const fromIndex = fromNodeContainingArray.findIndex((item) => item.id === fromNode.itemData.id);
     fromNodeContainingArray.splice(fromIndex, 1);
 
     if (isDropInsideItem) {
@@ -174,7 +174,7 @@ class App extends React.Component {
       const toNodeContainingArray = this.getNodeContainingArray(toNode, toItems);
       const toIndex = toNode === null
         ? toNodeContainingArray.length
-        : toNodeContainingArray.findIndex((item) => item.id == toNode.itemData.id);
+        : toNodeContainingArray.findIndex((item) => item.id === toNode.itemData.id);
       toNodeContainingArray.splice(toIndex, 0, fromNode.itemData);
     }
   }

@@ -29,7 +29,7 @@ window.onload = function () {
       displayExpr: 'text',
       value: priorityEntities[0].id,
       onValueChanged(e) {
-        viewModel.list(tasks.filter((item) => item.priority == e.value));
+        viewModel.list(tasks.filter((item) => item.priority === e.value));
       },
     },
     list: ko.observableArray([tasks[1]]),

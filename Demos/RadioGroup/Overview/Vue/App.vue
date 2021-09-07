@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     selectedTasks() {
-      return tasks.filter((task) => task.priority == this.selectionPriority);
+      return tasks.filter((task) => task.priority === this.selectionPriority);
     },
   },
   methods: {

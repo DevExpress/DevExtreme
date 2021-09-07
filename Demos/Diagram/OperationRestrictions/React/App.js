@@ -80,7 +80,7 @@ class App extends React.Component {
       }
       if (e.args.shape.type === 'team') {
         for (let i = 0; i < e.args.shape.attachedConnectorIds.length; i++) {
-          if (diagram.getItemById(e.args.shape.attachedConnectorIds[i]).toId != e.args.shape.id) {
+          if (diagram.getItemById(e.args.shape.attachedConnectorIds[i]).toId !== e.args.shape.id) {
             if (e.reason !== 'checkUIElementAvailability') {
               this.showToast('You cannot delete a \'Team\' shape that has a child shape.');
             }

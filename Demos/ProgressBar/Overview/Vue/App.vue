@@ -74,7 +74,7 @@ export default {
     timer() {
       this.seconds -= 1;
 
-      if (this.seconds == 0) {
+      if (this.seconds === 0) {
         this.buttonText = 'Restart progress';
         this.inProgress = !this.inProgress;
         clearInterval(this.intervalId);

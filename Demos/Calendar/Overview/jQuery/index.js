@@ -11,7 +11,7 @@ $(() => {
       selectedDate.option('value', data.value);
     },
     onOptionChanged(data) {
-      if (data.name == 'zoomLevel') {
+      if (data.name === 'zoomLevel') {
         zoomLevel.option('value', data.value);
       }
     },

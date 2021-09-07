@@ -7,7 +7,7 @@ DemoApp.controller('DemoController', ($scope) => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', '../../../../data/monthWeather.json', true);
       xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.responseText) {
+        if (xhr.readyState === 4 && xhr.responseText) {
           d.resolve(JSON.parse(xhr.responseText));
         }
       };

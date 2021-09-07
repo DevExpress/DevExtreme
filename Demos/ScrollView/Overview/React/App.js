@@ -134,7 +134,7 @@ class App extends React.Component {
     if (this.updateContentTimer) { clearTimeout(this.updateContentTimer); }
     this.updateContentTimer = setTimeout(() => {
       this.setState({
-        content: eventName == 'PullDown' ? updateContentText + this.state.content : this.state.content + updateContentText,
+        content: eventName === 'PullDown' ? updateContentText + this.state.content : this.state.content + updateContentText,
       });
       args.component.release();
     }, 500);

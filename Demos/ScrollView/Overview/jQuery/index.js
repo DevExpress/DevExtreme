@@ -3,7 +3,7 @@ $(() => {
 
   function updateContent(args, eventName) {
     setTimeout(() => {
-      $(`<br /><div>Content has been updated on the ${eventName} event.</div><br />`)[eventName == 'PullDown' ? 'prependTo' : 'appendTo']('#scrollview-content');
+      $(`<br /><div>Content has been updated on the ${eventName} event.</div><br />`)[eventName === 'PullDown' ? 'prependTo' : 'appendTo']('#scrollview-content');
       args.component.release();
     }, 500);
   }

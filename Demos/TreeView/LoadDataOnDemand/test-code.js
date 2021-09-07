@@ -12,7 +12,7 @@ testUtils.importAnd(() => 'devextreme/ui/tree_view', () => DevExpress.ui.dxTreeV
 
   changeCreateChildren(treeView);
   treeView.option('onOptionChanged', (e) => {
-    if (e.name === 'items' && Array.isArray(e.value) && e.value.length != 4) {
+    if (e.name === 'items' && Array.isArray(e.value) && e.value.length !== 4) {
       changeCreateChildren(treeView);
     }
   });

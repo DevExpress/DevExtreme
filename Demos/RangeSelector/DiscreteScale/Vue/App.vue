@@ -43,10 +43,10 @@ export default {
       let endIndex = dataSource.length;
 
       dataSource.forEach((item, index) => {
-        if (item.country == this.range[0]) {
+        if (item.country === this.range[0]) {
           startIndex = index;
         }
-        if (item.country == this.range[1]) {
+        if (item.country === this.range[1]) {
           endIndex = index + 1;
         }
       });

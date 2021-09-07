@@ -33,7 +33,7 @@ $(() => {
       const resources = scheduler.option('resources');
 
       for (let i = 0; i < resources.length; i++) {
-        resources[i].useColorAsDefault = resources[i].label == e.value;
+        resources[i].useColorAsDefault = resources[i].label === e.value;
       }
 
       scheduler.repaint();

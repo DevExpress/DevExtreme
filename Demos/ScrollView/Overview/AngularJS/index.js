@@ -7,7 +7,7 @@ DemoApp.controller('DemoController', ($scope) => {
     const updateContentText = `\n \n Content has been updated on the ${eventName} event.`;
     if (updateContentTimer) { clearTimeout(updateContentTimer); }
     updateContentTimer = setTimeout(() => {
-      $scope.content = (eventName == 'PullDown' ? `${updateContentText}\n${$scope.content}` : $scope.content + updateContentText);
+      $scope.content = (eventName === 'PullDown' ? `${updateContentText}\n${$scope.content}` : $scope.content + updateContentText);
       args.component.release();
     }, 500);
   }

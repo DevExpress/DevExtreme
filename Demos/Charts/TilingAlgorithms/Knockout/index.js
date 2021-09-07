@@ -39,7 +39,7 @@ window.onload = function () {
       value: currentAlgorithmName,
       width: 200,
       onValueChanged(data) {
-        if (data.value == 'custom') {
+        if (data.value === 'custom') {
           currentAlgorithm(customAlgorithm);
         } else {
           currentAlgorithm(data.value);

@@ -33,7 +33,7 @@ $(() => {
     onValueChanged(e) {
       $('#list').children().remove();
       $.each(tasks, (i, item) => {
-        if (item.priority == e.value) {
+        if (item.priority === e.value) {
           $('#list').append($('<li/>').text(tasks[i].subject));
         }
       });

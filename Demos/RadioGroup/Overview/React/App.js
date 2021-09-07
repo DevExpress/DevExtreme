@@ -54,7 +54,7 @@ class App extends React.Component {
         <div id="tasks-list">
           Tasks by selected priority:
           <ul id="list">
-            {tasks.filter((task) => task.priority == this.state.selectionPriority).map((task) => <li key={task.id}>{task.subject}</li>)}
+            {tasks.filter((task) => task.priority === this.state.selectionPriority).map((task) => <li key={task.id}>{task.subject}</li>)}
           </ul>
         </div>
       </div>

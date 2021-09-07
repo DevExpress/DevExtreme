@@ -32,7 +32,7 @@ DemoApp.controller('DemoController', ($scope) => {
       displayExpr: 'text',
       value: priorityEntities[0].id,
       onValueChanged(e) {
-        $scope.list = tasks.filter((item) => item.priority == e.value);
+        $scope.list = tasks.filter((item) => item.priority === e.value);
       },
     },
   };

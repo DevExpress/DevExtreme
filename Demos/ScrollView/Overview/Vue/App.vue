@@ -107,7 +107,7 @@ export default {
       } event.</div><br />`;
       if (this.updateContentTimer) clearTimeout(this.updateContentTimer);
       this.updateContentTimer = setTimeout(() => {
-        this.content = eventName == 'PullDown'
+        this.content = eventName === 'PullDown'
           ? updateContentText + this.content
           : this.content + updateContentText;
         args.component.release();

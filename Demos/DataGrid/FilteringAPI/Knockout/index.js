@@ -46,7 +46,7 @@ window.onload = function () {
       dataSource: statuses,
       value: statuses[0],
       onValueChanged(data) {
-        if (data.value == 'All') {
+        if (data.value === 'All') {
           $('#gridContainer')
             .dxDataGrid('instance')
             .clearFilter();
