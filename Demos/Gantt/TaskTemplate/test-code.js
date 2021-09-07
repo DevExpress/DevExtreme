@@ -3,7 +3,7 @@ testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (d
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
 
-  const fake_tasks = [{
+  const fakeTasks = [{
     id: 1,
     parentId: 0,
     title: 'Analysis/Software Requirements',
@@ -68,7 +68,7 @@ testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (d
     progress: 0,
   }];
 
-  fake_tasks.forEach((t) => {
+  fakeTasks.forEach((t) => {
     t.ID = t.id;
     t.ParentId = t.parentId;
     t.Title = t.title;
@@ -82,7 +82,7 @@ testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (d
     .then(() => {
       const instance = dxGantt.getInstance(document.querySelector('.dx-gantt'));
       if (instance) {
-        instance.option('tasks', { dataSource: fake_tasks });
+        instance.option('tasks', { dataSource: fakeTasks });
         instance.option('onContentReady', () => {
           instance.option = function () { };
         });

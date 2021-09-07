@@ -21,12 +21,12 @@ class App extends React.Component {
       isGridBoxOpened: false,
       isTreeBoxOpened: false,
     };
-    this.treeView_itemSelectionChanged = this.treeView_itemSelectionChanged.bind(this);
+    this.treeView_itemSelectionChanged = this.treeViewItemSelectionChanged.bind(this);
     this.syncTreeViewSelection = this.syncTreeViewSelection.bind(this);
     this.syncDataGridSelection = this.syncDataGridSelection.bind(this);
-    this.dataGrid_onSelectionChanged = this.dataGrid_onSelectionChanged.bind(this);
+    this.dataGrid_onSelectionChanged = this.dataGridOnSelectionChanged.bind(this);
     this.treeViewRender = this.treeViewRender.bind(this);
-    this.treeView_onContentReady = this.treeView_onContentReady.bind(this);
+    this.treeView_onContentReady = this.treeViewOnContentReady.bind(this);
     this.dataGridRender = this.dataGridRender.bind(this);
     this.onGridBoxOpened = this.onGridBoxOpened.bind(this);
     this.onTreeBoxOpened = this.onTreeBoxOpened.bind(this);
@@ -72,7 +72,7 @@ class App extends React.Component {
               opened={this.state.isGridBoxOpened}
               valueExpr="ID"
               deferRendering={false}
-              displayExpr={this.gridBox_displayExpr}
+              displayExpr={this.gridBoxDisplayExpr}
               placeholder="Select a value..."
               showClearButton={true}
               dataSource={this.gridDataSource}
@@ -96,9 +96,9 @@ class App extends React.Component {
         selectionMode="single"
         displayExpr="name"
         selectByClick={true}
-        onContentReady={this.treeView_onContentReady}
+        onContentReady={this.treeViewOnContentReady}
         onItemClick={this.onTreeItemClick}
-        onItemSelectionChanged={this.treeView_itemSelectionChanged}
+        onItemSelectionChanged={this.treeViewItemSelectionChanged}
       />
     );
   }
@@ -110,7 +110,7 @@ class App extends React.Component {
         columns={gridColumns}
         hoverStateEnabled={true}
         selectedRowKeys={this.state.gridBoxValue}
-        onSelectionChanged={this.dataGrid_onSelectionChanged}
+        onSelectionChanged={this.dataGridOnSelectionChanged}
         height="100%">
         <Selection mode="single" />
         <Scrolling mode="virtual" />
@@ -139,24 +139,24 @@ class App extends React.Component {
     });
   }
 
-  treeView_itemSelectionChanged(e) {
+  treeViewItemSelectionChanged(e) {
     this.setState({
       treeBoxValue: e.component.getSelectedNodeKeys(),
     });
   }
 
-  dataGrid_onSelectionChanged(e) {
+  dataGridOnSelectionChanged(e) {
     this.setState({
       gridBoxValue: e.selectedRowKeys,
       isGridBoxOpened: false,
     });
   }
 
-  gridBox_displayExpr(item) {
+  gridBoxDisplayExpr(item) {
     return item && `${item.CompanyName} <${item.Phone}>`;
   }
 
-  treeView_onContentReady(e) {
+  treeViewOnContentReady(e) {
     e.component.selectItem(this.state.treeBoxValue);
   }
 
