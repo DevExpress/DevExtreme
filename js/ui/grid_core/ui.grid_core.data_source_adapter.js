@@ -85,14 +85,17 @@ export default gridCore.Controller.inherit((function() {
                         result.push(item);
                     }
                 } else {
-                    // if(updatePaging && result.length) {
-                    //     const { storeLoadOptions } = options;
-                    //     if(storeLoadOptions.skip !== undefined && storeLoadOptions.take) {
-                    //         storeLoadOptions.skip += result.length;
-                    //         storeLoadOptions.take -= result.length;
-                    //         options.cachedDataPart = result;
-                    //     }
-                    // }
+                    const cacheItemCount = result.length;
+                    if(updatePaging && cacheItemCount) {
+                        const { storeLoadOptions } = options;
+                        if(!groupCount && cacheItemCount && storeLoadOptions.skip !== undefined && storeLoadOptions.take) {
+                            options.skip = options.skip ?? storeLoadOptions.skip;
+                            options.take = options.take ?? storeLoadOptions.take;
+                            storeLoadOptions.skip += cacheItemCount;
+                            storeLoadOptions.take -= cacheItemCount;
+                            options.cachedDataPart = result;
+                        }
+                    }
                     return;
                 }
             }
@@ -101,8 +104,9 @@ export default gridCore.Controller.inherit((function() {
     }
 
     function setPageDataToCache(options, data, groupCount) {
-        const skip = options.storeLoadOptions.skip || options.skip || 0;
-        const take = options.storeLoadOptions.take || options.take || 0;
+        const { storeLoadOptions } = options;
+        const skip = options.skip ?? storeLoadOptions.skip ?? 0;
+        const take = options.take ?? storeLoadOptions.take ?? 0;
 
         for(let i = 0; i < take; i++) {
             const globalIndex = i + skip;
@@ -513,10 +517,12 @@ export default gridCore.Controller.inherit((function() {
 
             const groupCount = gridCore.normalizeSortingInfo(storeLoadOptions.group || loadOptions.group).length;
 
+            if(options.cachedDataPart) {
+                options.data = options.cachedDataPart.concat(options.data);
+            }
+
             if(!needPageCache || !getPageDataFromCache(options)) {
-                if(options.cachedDataPart) {
-                    options.data = options.cachedDataPart.concat(options.data);
-                }
+
                 if(needPagingCache && options.cachedPagingData) {
                     options.data = cloneItems(options.cachedPagingData, groupCount);
                 } else {

@@ -7107,16 +7107,18 @@ QUnit.module('New virtual scrolling mode', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test('loadPageCount affects the take parameter', function(assert) {
+    QUnit.test('loadPageCount affects the skip and take parameter', function(assert) {
         // arrange
         const dataSource = this.createDataSource({
             pageSize: 3
         });
         const dataLoadingHandler = dataSource._customizeStoreLoadOptionsHandler;
         const takeValues = [];
+        const skipValues = [];
 
         dataSource._customizeStoreLoadOptionsHandler = function(options) {
             dataLoadingHandler.apply(dataSource, arguments);
+            skipValues.push(options.storeLoadOptions.skip);
             takeValues.push(options.storeLoadOptions.take);
         };
         dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
@@ -7128,14 +7130,18 @@ QUnit.module('New virtual scrolling mode', {
             dataSource.load();
 
             // assert
+            assert.strictEqual(skipValues[0], 0, 'first skip value');
             assert.strictEqual(takeValues[0], 6, 'first take value');
+            assert.deepEqual(dataSource.items(), TEN_NUMBERS.slice(0, 6), 'first load items');
 
             // act
             dataSource.loadPageCount(3);
             dataSource.load();
 
             // assert
-            assert.strictEqual(takeValues[1], 9, 'second take value');
+            assert.strictEqual(skipValues[1], 6, 'second skip value');
+            assert.strictEqual(takeValues[1], 3, 'second take value');
+            assert.deepEqual(dataSource.items(), TEN_NUMBERS.slice(0, 9), 'second load items');
         } finally {
             dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
             dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
