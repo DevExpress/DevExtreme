@@ -6,28 +6,22 @@ const defaultBorderLineWidth = 1;
 
 function drawPdfCells(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
-
-    // TODO: cellsArray filter by borderColor
-    // TODO: drawCells with default borders - first step
-    // TODO: drawCells with custom borders - second step
-    // TODO: ???? maybe drawBorder in separated method, in "export_data_grid_3.js" file
-
     cellsArray.forEach(cell => {
-        // TODO: drawBackground();
-        // TODO: drawCell() -> drawCellContent()
         drawCell(doc, cell, docStyles);
-        // TODO: drawCellBorder()
     });
     setDocumentStyles(doc, docStyles);
 }
 
 function drawCell(doc, cell, docStyles) {
+    // TODO: draw background
+
     setCurrentFont(doc, cell, docStyles);
 
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
         drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 
+    // TODO: move to the separated method "drawGridLines()"
     doc.setLineWidth(defaultBorderLineWidth);
     drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
 }
