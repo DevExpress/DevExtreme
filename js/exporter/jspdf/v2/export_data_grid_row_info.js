@@ -1,4 +1,4 @@
-import { isDefined } from '../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 
 function createRowInfo({ dataProvider, rowIndex, rowOptions, prevRowInfo }) {
     const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;

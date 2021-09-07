@@ -4,8 +4,8 @@ import { jsPDF } from 'jspdf';
 import { isFunction, isObject } from 'core/utils/type';
 
 import 'ui/data_grid';
-import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
-import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
+import { exportDataGrid } from 'exporter/jspdf/v2/export_data_grid_2.js';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../../commonParts/objectAssignHelper.js';
 
 import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';

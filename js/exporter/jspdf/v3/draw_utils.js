@@ -1,6 +1,6 @@
-import { isDefined } from '../../core/utils/type';
-import { drawTextInRect, drawRect } from './pdf_utils';
-import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../../core/utils/type';
+import { drawTextInRect, drawRect } from './pdf_utils_v3';
+import { extend } from '../../../core/utils/extend';
 
 const defaultBorderLineWidth = 1;
 
