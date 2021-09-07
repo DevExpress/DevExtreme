@@ -107,14 +107,14 @@ describe('resizable-container', () => {
 
     describe('UpdateChildProps', () => {
       describe('contentAttributes', () => {
-        it('should merge rest attributes with pager props', () => {
+        it('should merge rest attributes with know pager props exclude react twoWay defaultPageSize and defaultPageIndex', () => {
           const resizableContainer = new ResizableContainer({
-            pagerProps: { prop1: 'value1' },
+            pagerProps: { defaultPageSize: 5, defaultIndex: 5, infoText: true },
           } as any);
 
-          expect(resizableContainer.contentAttributes).toEqual({
+          expect(resizableContainer.contentAttributes).toMatchObject({
             'rest-attributes': 'restAttributes',
-            prop1: 'value1',
+            infoText: true,
           });
         });
       });
