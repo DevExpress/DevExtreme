@@ -17,6 +17,7 @@ import {
 import {
   ScrollOffset,
 } from './common/types.d';
+
 import { ScrollViewProps } from './common/scrollview_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
@@ -83,6 +84,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 };
 
 @Component({
+  defaultOptionRules: null,
   jQuery: {
     register: true,
     component: ScrollViewWrapper,

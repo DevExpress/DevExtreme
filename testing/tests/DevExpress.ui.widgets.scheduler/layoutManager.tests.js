@@ -55,6 +55,7 @@ QUnit.test('Scheduler should have a right rendering strategy for timeline views'
     this.createInstance({
         views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
         currentView: 'timelineDay',
+        currentDate: new Date(2021, 7, 30),
         dataSource: [{
             startDate: new Date(2021, 7, 8, 9),
             endDate: new Date(2021, 7, 8, 10),
@@ -84,6 +85,7 @@ QUnit.test('Scheduler should have a right rendering strategy for views with conf
             type: 'week'
         }],
         currentView: 'WeekView',
+        currentDate: new Date(2021, 7, 30),
         dataSource: [{
             startDate: new Date(2021, 7, 8, 9),
             endDate: new Date(2021, 7, 8, 10),
