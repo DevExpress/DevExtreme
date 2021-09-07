@@ -410,7 +410,7 @@ class SchedulerAgenda extends WorkSpace {
 
         for(i = 0; i < this._rows.length; i++) {
             each(this._rows[i], fillTableBody);
-            // this._setLastRowClass();
+            this._setLastRowClass();
         }
 
         $(options.container).append($('<tbody>').append(this._$rows));
