@@ -1,5 +1,5 @@
-import { isDefined } from '../../core/utils/type';
-import { calculateRowHeight } from './pdf_utils';
+import { isDefined } from '../../../core/utils/type';
+import { calculateRowHeight } from './pdf_utils_v3';
 
 
 function initializeCellsWidth(rows, columnWidths) {

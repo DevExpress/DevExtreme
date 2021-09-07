@@ -31,8 +31,6 @@ import Popup from '../popup';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
-import { getScrollBarInfo } from './utils/get_scrollbar_info';
-
 // STYLE pivotGrid
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
@@ -1177,9 +1175,7 @@ const PivotGrid = Widget.inherit({
         let rowsAreaWidth = 0;
         let hasRowsScroll;
         let hasColumnsScroll;
-        const scrollingOptions = that.option('scrolling') || {};
-        const scrollBarInfo = getScrollBarInfo(scrollingOptions.useNative);
-        const scrollBarWidth = scrollBarInfo.scrollBarWidth;
+
         const dataAreaCell = tableElement.find('.' + DATA_AREA_CELL_CLASS);
         const rowAreaCell = tableElement.find('.' + ROW_AREA_CELL_CLASS);
         const columnAreaCell = tableElement.find('.' + COLUMN_AREA_CELL_CLASS);
@@ -1194,11 +1190,6 @@ const PivotGrid = Widget.inherit({
         }
 
         const needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option('rowHeaderLayout') !== 'tree';
-
-        ///#DEBUG
-        that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
-        that.__scrollBarWidth = scrollBarWidth;
-        ///#ENDDEBUG
 
         that._detectHasContainerHeight();
 
@@ -1218,6 +1209,7 @@ const PivotGrid = Widget.inherit({
         rowFieldsHeader.reset();
 
         const calculateHasScroll = (areaSize, totalSize) => totalSize - areaSize >= 1;
+
         const calculateGroupHeight = (dataAreaHeight, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth) => {
             return hasRowsScroll ? dataAreaHeight : totalHeight + (hasColumnsScroll ? scrollBarWidth : 0);
         };
@@ -1285,6 +1277,13 @@ const PivotGrid = Widget.inherit({
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
 
+            const scrollBarWidth = that._dataArea.getScrollbarWidth();
+
+            ///#DEBUG
+            that.__scrollBarUseNative = that._dataArea.getUseNativeValue();
+            that.__scrollBarWidth = scrollBarWidth;
+            ///#ENDDEBUG
+
             const groupHeight = calculateGroupHeight(dataAreaHeight, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth);
 
             deferRender(function() {
@@ -1349,14 +1348,13 @@ const PivotGrid = Widget.inherit({
                     }
                 }
 
+                const scrollingOptions = that.option('scrolling');
                 if(scrollingOptions.mode === 'virtual') {
                     that._setVirtualContentParams(scrollingOptions, resultWidths, resultHeights, groupWidth, groupHeight, that._hasHeight, rowsAreaWidth);
                 }
 
                 const updateScrollableResults = [];
                 that._dataArea.updateScrollableOptions({
-                    useNative: !!scrollBarInfo.scrollBarUseNative,
-                    useSimulatedScrollbar: !scrollBarInfo.scrollBarUseNative,
                     direction: that._dataArea.getScrollableDirection(hasColumnsScroll, hasRowsScroll),
                     rtlEnabled: that.option('rtlEnabled')
                 });
