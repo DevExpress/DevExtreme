@@ -21,32 +21,34 @@
     </DxDrawer>
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <label>Opened state mode</label>
-        <DxRadioGroup
-          v-model:value="selectedOpenMode"
-          :items="showModes"
-          layout="horizontal"
-        />
-      </div>
-      <div class="option">
-        <label>Position</label>
-        <DxRadioGroup
-          v-model:value="selectedPosition"
-          :items="positionModes"
-          layout="horizontal"
-        />
-      </div>
-      <div
-        v-if="selectedOpenMode !== 'push'"
-        class="option"
-      >
-        <label>Reveal mode</label>
-        <DxRadioGroup
-          v-model:value="selectedRevealMode"
-          :items="showSubmenuModes"
-          layout="horizontal"
-        />
+      <div class="options-container">
+        <div class="option">
+          <label>Opened state mode</label>
+          <DxRadioGroup
+            v-model:value="selectedOpenMode"
+            :items="showModes"
+            layout="horizontal"
+          />
+        </div>
+        <div class="option">
+          <label>Position</label>
+          <DxRadioGroup
+            v-model:value="selectedPosition"
+            :items="positionModes"
+            layout="horizontal"
+          />
+        </div>
+        <div
+          v-if="selectedOpenMode !== 'push'"
+          class="option"
+        >
+          <label>Reveal mode</label>
+          <DxRadioGroup
+            v-model:value="selectedRevealMode"
+            :items="showSubmenuModes"
+            layout="horizontal"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -131,6 +133,11 @@ export default {
         background-color: rgba(191, 191, 191, .15);
     }
 
+    .options-container {
+        display: flex;
+        align-items: center;
+    }
+
     .caption {
         font-size: 18px;
         font-weight: 500;
@@ -139,7 +146,7 @@ export default {
     .option {
         margin-top: 10px;
         display: inline-block;
-        margin-right: 54px;
+        margin-right: 50px;
     }
 
     label {

@@ -40,6 +40,11 @@
     background-color: rgba(191, 191, 191, .15);
 }
 
+.options-container {
+    display: flex;
+    align-items: center;
+}
+
 .caption {
     font-size: 18px;
     font-weight: 500;

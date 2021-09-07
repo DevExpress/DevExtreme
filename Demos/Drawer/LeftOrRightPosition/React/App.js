@@ -73,35 +73,35 @@ class App extends React.Component {
         </Drawer>
         <div className="options">
           <div className="caption">Options</div>
-          <div className="option">
-            <label>Opened state mode</label>
-            <RadioGroup
-              items={['push', 'shrink', 'overlap']}
-              layout="horizontal"
-              value={openedStateMode}
-              onValueChanged={this.onOpenedStateModeChanged}
-            />
+          <div className="options-container">
+            <div className="option">
+              <label>Opened state mode</label>
+              <RadioGroup
+                items={['push', 'shrink', 'overlap']}
+                layout="horizontal"
+                value={openedStateMode}
+                onValueChanged={this.onOpenedStateModeChanged}
+              />
+            </div>
+            <div className="option">
+              <label>Position</label>
+              <RadioGroup
+                items={['left', 'right']}
+                layout="horizontal"
+                value={position}
+                onValueChanged={this.onPositionChanged}
+              />
+            </div>
+            {openedStateMode !== 'push' && (<div className="option">
+              <label>Reveal mode</label>
+              <RadioGroup
+                items={['slide', 'expand']}
+                layout="horizontal"
+                value={revealMode}
+                onValueChanged={this.onRevealModeChanged}
+              />
+            </div>)}
           </div>
-          {' '}
-          <div className="option">
-            <label>Position</label>
-            <RadioGroup
-              items={['left', 'right']}
-              layout="horizontal"
-              value={position}
-              onValueChanged={this.onPositionChanged}
-            />
-          </div>
-          {' '}
-          {openedStateMode !== 'push' && (<div className="option">
-            <label>Reveal mode</label>
-            <RadioGroup
-              items={['slide', 'expand']}
-              layout="horizontal"
-              value={revealMode}
-              onValueChanged={this.onRevealModeChanged}
-            />
-          </div>)}
         </div>
       </React.Fragment>
     );

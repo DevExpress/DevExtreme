@@ -22,28 +22,30 @@
 </dx-drawer>
 <div class="options">
     <div class="caption">Options</div>
-    <div class="option">
-        <label>Opened state mode</label>
-        <dx-radio-group
-            [(value)]="selectedOpenMode"
-            [items]="showModes"
-            layout="horizontal">
-        </dx-radio-group>
-    </div>
-    <div class="option">
-        <label>Position</label>
-        <dx-radio-group
-            [(value)]="selectedPosition"
-            [items]="positionModes"
-            layout="horizontal">
-        </dx-radio-group>
-    </div>
-    <div *ngIf="selectedOpenMode !== 'push'" class="option" >
-        <label>Reveal mode</label>
-        <dx-radio-group
-            [(value)]="selectedRevealMode"
-            [items]="showSubmenuModes"
-            layout="horizontal">
-        </dx-radio-group>
+    <div class="options-container">
+        <div class="option">
+            <label>Opened state mode</label>
+            <dx-radio-group
+                [(value)]="selectedOpenMode"
+                [items]="showModes"
+                layout="horizontal">
+            </dx-radio-group>
+        </div>
+        <div class="option">
+            <label>Position</label>
+            <dx-radio-group
+                [(value)]="selectedPosition"
+                [items]="positionModes"
+                layout="horizontal">
+            </dx-radio-group>
+        </div>
+        <div *ngIf="selectedOpenMode !== 'push'" class="option" >
+            <label>Reveal mode</label>
+            <dx-radio-group
+                [(value)]="selectedRevealMode"
+                [items]="showSubmenuModes"
+                layout="horizontal">
+            </dx-radio-group>
+        </div>
     </div>
 </div>
