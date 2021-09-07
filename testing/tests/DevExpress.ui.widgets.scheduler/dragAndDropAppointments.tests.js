@@ -2341,6 +2341,7 @@ module('Appointment dragging', {
             this.instance = $('#scheduler').dxScheduler({ _draggingMode: 'default', ...options }).dxScheduler('instance');
 
             this.clock.tick(300);
+            this.instance.focus();
 
             this.scheduler = new SchedulerTestWrapper(this.instance);
         };
@@ -2406,6 +2407,7 @@ module('Appointment dragging', {
                     ).dxScheduler('instance');
 
                     this.clock.tick(300);
+                    this.instance.focus();
 
                     this.scheduler = new SchedulerTestWrapper(this.instance);
 
