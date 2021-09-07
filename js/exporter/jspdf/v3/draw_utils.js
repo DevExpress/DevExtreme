@@ -6,6 +6,12 @@ const defaultBorderLineWidth = 1;
 
 function drawPdfCells(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
+
+    // TODO: cellsArray filter by borderColor
+    // TODO: drawCells with default borders - first step
+    // TODO: drawCells with custom borders - second step
+    // TODO: ???? maybe drawBorder in separated method, in "export_data_grid_3.js" file
+
     cellsArray.forEach(cell => {
         drawCell(doc, cell, docStyles);
     });
