@@ -31,5 +31,5 @@ export class AppointmentContentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class AppointmentContent extends JSXComponent<AppointmentContentProps>() {
+export class AppointmentContent extends JSXComponent(AppointmentContentProps) {
 }

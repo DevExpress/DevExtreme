@@ -7,7 +7,7 @@ import { getAppointmentKey } from './utils';
 
 export const viewFunction = ({
   props: {
-    appointmentsMap,
+    appointments,
     appointmentTemplate,
   },
 }: AppointmentLayout): JSX.Element => (
@@ -15,7 +15,7 @@ export const viewFunction = ({
     className="dx-scheduler-appointments"
   >
     {
-      appointmentsMap.map((item: AppointmentViewModel, index: number) => (
+      appointments.map((item: AppointmentViewModel, index: number) => (
         <Appointment
           viewModel={item}
           appointmentTemplate={appointmentTemplate}
@@ -29,7 +29,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class AppointmentLayoutProps {
-  @OneWay() appointmentsMap: AppointmentViewModel[] = [];
+  @OneWay() appointments: AppointmentViewModel[] = [];
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 }

@@ -1044,7 +1044,7 @@ class Scheduler extends Widget {
                 ? this.option('appointmentTemplate')
                 : undefined;
             return {
-                appointmentsMap,
+                appointments: appointmentsMap,
                 appointmentTemplate
             };
         }
