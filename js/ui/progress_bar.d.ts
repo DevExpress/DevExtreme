@@ -45,7 +45,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     statusFormat?: string | ((ratio: number, value: number) => string);
     /**
      * @docid dxProgressBarOptions.value
-     * @type number
+     * @type number|boolean
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
