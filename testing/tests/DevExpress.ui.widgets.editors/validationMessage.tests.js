@@ -1,6 +1,6 @@
 import ValidationMessage from 'ui/validation_message';
 import $ from 'jquery';
-import { commonCallbacks } from '../../../js/core/utils/size';
+import { commonCallbacks } from 'core/utils/size';
 
 const moduleSetup = {
     beforeEach: function() {
