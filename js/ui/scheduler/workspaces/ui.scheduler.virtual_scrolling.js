@@ -3,7 +3,6 @@ import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';
 import { addNamespace } from '../../../events/utils/index';
 import { isDefined } from '../../../core/utils/type';
-import { getWidth, getHeight } from '../../../core/utils/size';
 
 const DEFAULT_CELL_HEIGHT = 50;
 const MIN_CELL_WIDTH = 1;
