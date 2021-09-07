@@ -7141,8 +7141,11 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: false });
         area.renderScrollable();
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions();
 
         const virtualContent = area.tableElement().prev();
 
@@ -7172,6 +7175,9 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.reset();
@@ -7211,6 +7217,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7219,7 +7227,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions();
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7283,6 +7291,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7291,7 +7301,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions();
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7357,6 +7367,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7365,7 +7377,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions();
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7431,6 +7443,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7439,7 +7453,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false, useSimulatedScrollbar: true, direction: 'vertical' });
+        area.updateScrollableOptions({ direction: 'vertical' });
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });
