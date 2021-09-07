@@ -9,7 +9,7 @@ import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
 import Button from '../button';
-import List from '../list';
+import List from '../list_light';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
