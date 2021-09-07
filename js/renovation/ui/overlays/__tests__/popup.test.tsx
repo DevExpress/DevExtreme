@@ -30,7 +30,7 @@ describe('Popup', () => {
           });
           const instance = { option: mockCallback };
 
-          popup.wrapperRef = {
+          popup.domComponentWrapperRef = {
             current: {
               getInstance: () => instance,
             },

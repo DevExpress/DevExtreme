@@ -26,7 +26,7 @@ import { BaseWidgetProps } from '../common/base_props';
 const isDesktop = !(!devices.real().generic || devices.isSimulator());
 
 export const viewFunction = ({
-  wrapperRef,
+  domComponentWrapperRef,
   props,
   restAttributes,
 }: Tooltip): JSX.Element => {
@@ -36,7 +36,7 @@ export const viewFunction = ({
     <DomComponentWrapper
       componentType={LegacyTooltip}
       componentProps={props}
-      ref={wrapperRef}
+      ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
@@ -131,14 +131,14 @@ export class TooltipProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class Tooltip extends JSXComponent(TooltipProps) {
-  @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
+  @Ref() domComponentWrapperRef!: RefObject<DomComponentWrapper>;
 
   @Mutable()
   instance!: { option };
 
   @Effect()
   saveInstance(): void {
-    this.instance = this.wrapperRef?.current?.getInstance() as { option };
+    this.instance = this.domComponentWrapperRef?.current?.getInstance() as { option };
   }
 
   @Effect()

@@ -35,7 +35,7 @@ describe('Tooltip', () => {
           });
           const instance = { option: mockCallback };
 
-          tooltip.wrapperRef = {
+          tooltip.domComponentWrapperRef = {
             current: {
               getInstance: () => instance,
             },

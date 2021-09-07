@@ -28,7 +28,7 @@ const isDesktop = !(!devices.real().generic || devices.isSimulator());
 const window = getWindow();
 
 export const viewFunction = ({
-  wrapperRef,
+  domComponentWrapperRef,
   props,
   restAttributes,
 }: Popup): JSX.Element => {
@@ -38,7 +38,7 @@ export const viewFunction = ({
     <DomComponentWrapper
       componentType={LegacyPopup}
       componentProps={props}
-      ref={wrapperRef}
+      ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
@@ -166,14 +166,14 @@ export class PopupProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class Popup extends JSXComponent(PopupProps) {
-  @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
+  @Ref() domComponentWrapperRef!: RefObject<DomComponentWrapper>;
 
   @Mutable()
   instance!: { option };
 
   @Effect()
   saveInstance(): void {
-    this.instance = this.wrapperRef?.current?.getInstance() as { option };
+    this.instance = this.domComponentWrapperRef?.current?.getInstance() as { option };
   }
 
   @Effect()
