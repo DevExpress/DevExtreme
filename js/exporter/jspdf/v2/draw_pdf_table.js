@@ -1,6 +1,6 @@
-import { extend } from '../../core/utils/extend';
-import { isDefined } from '../../core/utils/type';
-import { drawLine, drawRect, drawTextInRect } from './pdf_utils';
+import { extend } from '../../../core/utils/extend';
+import { isDefined } from '../../../core/utils/type';
+import { drawLine, drawRect, drawTextInRect } from './pdf_utils_v2';
 
 // this function is large and will grow
 export function drawPdfTable(doc, styles, table, options) {

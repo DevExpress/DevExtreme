@@ -1,35 +1,50 @@
 import {
   CSSAttributes,
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template,
 } from '@devextreme-generator/declarations';
-import { AppointmentViewModel } from './types';
+import type { AppointmentTemplateData } from '../../../../ui/scheduler';
+import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { getAppointmentStyles } from './utils';
+import { AppointmentContent } from './content';
 
 export const viewFunction = ({
   text,
   dateText,
   styles,
-}: Appointment): JSX.Element => (
-  <div
-    className="dx-scheduler-appointment"
-    style={styles}
-  >
-    <div className="dx-scheduler-appointment-content">
-      <div className="dx-scheduler-appointment-title">
-        {text}
-      </div>
-      <div className="dx-scheduler-appointment-content-details">
-        <div className="dx-scheduler-appointment-content-date">
-          {dateText}
-        </div>
-      </div>
+  data,
+  index,
+  props: {
+    appointmentTemplate,
+  },
+}: Appointment): JSX.Element => {
+  const AppointmentTemplate = appointmentTemplate;
+
+  return (
+    <div
+      className="dx-scheduler-appointment"
+      style={styles}
+    >
+      {
+        !!AppointmentTemplate && (
+          <AppointmentTemplate data={data} index={index} />
+        )
+      }
+      {
+        !AppointmentTemplate && (
+          <AppointmentContent text={text} dateText={dateText} />
+        )
+      }
     </div>
-  </div>
-);
+  );
+};
 
 @ComponentBindings()
 export class AppointmentProps {
   @OneWay() viewModel!: AppointmentViewModel;
+
+  @OneWay() index = 0;
+
+  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 }
 
 @Component({
@@ -42,4 +57,15 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
   get dateText(): string { return this.props.viewModel.info.dateText; }
 
   get styles(): CSSAttributes { return getAppointmentStyles(this.props.viewModel); }
+
+  get data(): AppointmentTemplateData {
+    return {
+      appointmentData: this.props.viewModel.info.appointment,
+      targetedAppointmentData: this.props.viewModel.appointment,
+    };
+  }
+
+  get index(): number {
+    return this.props.index;
+  }
 }
