@@ -33,6 +33,10 @@ export class ScrollbarProps {
 
   @OneWay() scrollLocation = 0;
 
+  @OneWay() minOffset = 0;
+
+  @OneWay() maxOffset = 0;
+
   @OneWay() pocketState = TopPocketState.STATE_RELEASED;
 
   @Event() onAnimatorStart?: (animator: 'inertia' | 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
