@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
@@ -71,7 +72,7 @@ module('T712431', () => {
         });
 
         const appointment = scheduler.appointments.getAppointment();
-        assert.roughEqual(appointment.outerWidth(), APPOINTMENT_WIDTH, 1);
+        assert.roughEqual(getOuterWidth(appointment), APPOINTMENT_WIDTH, 1);
     });
 });
 
@@ -272,7 +273,7 @@ module('Integration: Appointments in Month view', {
                 const area1 = $appointments.eq(0).dxResizable('instance').option('area');
                 const area2 = $appointments.eq(1).dxResizable('instance').option('area');
                 const $cells = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS);
-                const halfOfCellWidth = 0.5 * $cells.eq(0).outerWidth();
+                const halfOfCellWidth = 0.5 * getOuterWidth($cells.eq(0));
 
                 assert.roughEqual(area1.left, $cells.eq(0).offset().left - halfOfCellWidth, 1.001);
                 assert.roughEqual(area1.right, $cells.eq(7).offset().left + halfOfCellWidth, 1.001);
@@ -583,7 +584,7 @@ module('Integration: Appointments in Month view', {
                 const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
                 assert.equal($appointments.length, 2, 'two appointments is rendered');
 
-                const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0));
                 const cellPosition = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).position().left;
 
                 assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'correct top position');
@@ -620,7 +621,7 @@ module('Integration: Appointments in Month view', {
                 }, this.clock);
 
                 const $element = $(scheduler.instance.$element());
-                const cellWidth = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+                const cellWidth = getOuterWidth($element.find('.' + DATE_TABLE_CELL_CLASS).eq(0));
                 const pointer = pointerMock($element.find('.dx-resizable-handle-left').eq(0)).start();
 
                 pointer.dragStart().drag(-(cellWidth / 2), 0);
