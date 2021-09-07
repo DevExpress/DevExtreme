@@ -1,5 +1,7 @@
 import $ from '../../core/renderer';
 import { AreaItem } from './ui.pivot_grid.area_item';
+import { nativeScrolling } from '../../core/utils/support';
+import { calculateScrollbarWidth } from './utils/calculate_scrollbar_width';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data';
@@ -48,17 +50,31 @@ export const DataArea = AreaItem.inherit({
 
     renderScrollable: function() {
         this._groupElement.dxScrollable({
+            useNative: this.getUseNativeValue(),
+            useSimulatedScrollbar: false,
             rtlEnabled: this.component.option('rtlEnabled'),
             bounceEnabled: false,
             updateManually: true,
         });
     },
 
-    updateScrollableOptions: function({ useNative, ...restOptions }) {
+    getUseNativeValue: function() {
+        const { useNative } = this.component.option('scrolling');
+
+        return useNative === 'auto'
+            ? !!nativeScrolling
+            : !!useNative;
+    },
+
+    getScrollbarWidth: function() {
+        return this.getUseNativeValue() ? calculateScrollbarWidth() : 0;
+    },
+
+    updateScrollableOptions: function({ direction, rtlEnabled }) {
         const scrollable = this._getScrollable();
 
-        scrollable.option('useNative', useNative);
-        scrollable.option(restOptions);
+        scrollable.option('useNative', this.getUseNativeValue());
+        scrollable.option({ direction, rtlEnabled });
     },
 
     getScrollableDirection: function(horizontal, vertical) {
