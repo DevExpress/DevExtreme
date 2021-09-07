@@ -33,6 +33,40 @@ function calculateHeights(doc, rows, options) {
     });
 }
 
+function applyColSpans(rows) {
+    for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        const row = rows[rowIndex];
+        for(let cellIndex = 0; cellIndex < row.cells.length; cellIndex++) {
+            const cell = row.cells[cellIndex];
+            if(isDefined(cell.colSpan) && !isDefined(cell.pdfCell.isMerged)) {
+                for(let spanIndex = 1; spanIndex <= cell.colSpan; spanIndex++) {
+                    const mergedCell = rows[rowIndex].cells[cellIndex + spanIndex];
+                    cell.pdfCell._rect.w += mergedCell.pdfCell._rect.w;
+                    mergedCell.pdfCell._rect.w = 0;
+                    mergedCell.pdfCell.isMerged = true;
+                }
+            }
+        }
+    }
+}
+
+function applyRowSpans(rows) {
+    for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        const row = rows[rowIndex];
+        for(let cellIndex = 0; cellIndex < row.cells.length; cellIndex++) {
+            const cell = row.cells[cellIndex];
+            if(isDefined(cell.rowSpan) && !isDefined(cell.pdfCell.isMerged)) {
+                for(let spanIndex = 1; spanIndex <= cell.rowSpan; spanIndex++) {
+                    const mergedCell = rows[rowIndex + spanIndex].cells[cellIndex];
+                    cell.pdfCell._rect.h += mergedCell.pdfCell._rect.h;
+                    mergedCell.pdfCell._rect.h = 0;
+                    mergedCell.pdfCell.isMerged = true;
+                }
+            }
+        }
+    }
+}
+
 function calculateCoordinates(doc, rows, options) {
     let y = options?.topLeft?.y ?? 0;
     rows.forEach(row => {
@@ -46,4 +80,4 @@ function calculateCoordinates(doc, rows, options) {
     });
 }
 
-export { initializeCellsWidth, calculateHeights, calculateCoordinates };
+export { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates };
