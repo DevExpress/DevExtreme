@@ -5,8 +5,9 @@ import { fitIntoRange } from '../../core/utils/math';
 import { isWindow } from '../../core/utils/type';
 import eventsEngine from '../../events/core/events_engine';
 import {
-    start as dragEventStart,
-    move as dragEventMove
+    start as dragStartEvent,
+    move as dragMoveEvent,
+    end as dragEndEvent
 } from '../../events/drag';
 import { addNamespace } from '../../events/utils/index';
 
@@ -19,7 +20,7 @@ class OverlayDrag {
 
     init(config) {
         // TODO: get rid of dragEnabled, updatePositionChangeHandled
-        const { dragEnabled, handle, container, draggableElement, outsideDragFactor, updatePositionChangeHandled } = config;
+        const { dragEnabled, handle, container, draggableElement, outsideDragFactor, updatePositionChangeHandled, onPositioned } = config;
 
         this._container = container;
         this._outsideDragFactor = outsideDragFactor ?? 0;
@@ -27,6 +28,8 @@ class OverlayDrag {
         this._handle = handle;
         this._dragEnabled = dragEnabled;
         this._updatePositionChangeHandled = updatePositionChangeHandled;
+        this._lastPosition = locate(this._draggableElement);
+        this._onPositioned = onPositioned;
 
         this.unsubscribe();
 
@@ -35,6 +38,10 @@ class OverlayDrag {
         }
 
         this.subscribe();
+    }
+
+    updatePosition() {
+        this._lastPosition = locate(this._draggableElement);
     }
 
     moveDown(e) {
@@ -53,11 +60,26 @@ class OverlayDrag {
         this._moveTo(0, KEYBOARD_DRAG_STEP, e);
     }
 
+    moveToLastPosition() {
+        move(this._draggableElement, this._lastPosition);
+    }
+
+    moveToContainer() {
+        const offset = this._fitOffsetIntoAllowedRange(0, 0);
+
+        this._moveByOffset(offset);
+    }
+
+    getPosition() {
+        return this._lastPosition;
+    }
+
     subscribe() {
         const eventNames = this._getEventNames();
 
         eventsEngine.on(this._handle, eventNames.startEventName, (e) => { this._dragStartHandler(e); });
         eventsEngine.on(this._handle, eventNames.updateEventName, (e) => { this._dragUpdateHandler(e); });
+        eventsEngine.on(this._handle, eventNames.endEventName, (e) => { this._dragEndHandler(e); });
     }
 
     unsubscribe() {
@@ -65,6 +87,7 @@ class OverlayDrag {
 
         eventsEngine.off(this._handle, eventNames.startEventName);
         eventsEngine.off(this._handle, eventNames.updateEventName);
+        eventsEngine.off(this._handle, eventNames.endEventName);
     }
 
     get container() {
@@ -85,12 +108,14 @@ class OverlayDrag {
 
     _getEventNames() {
         const namespace = 'overlayDrag';
-        const startEventName = addNamespace(dragEventStart, namespace);
-        const updateEventName = addNamespace(dragEventMove, namespace);
+        const startEventName = addNamespace(dragStartEvent, namespace);
+        const updateEventName = addNamespace(dragMoveEvent, namespace);
+        const endEventName = addNamespace(dragEndEvent, namespace);
 
         return {
             startEventName,
-            updateEventName
+            updateEventName,
+            endEventName
         };
     }
 
@@ -117,6 +142,10 @@ class OverlayDrag {
         this._prevOffset = e.offset;
     }
 
+    _dragEndHandler(e) {
+        this._onPositioned({ position: this._lastPosition, event: e });
+    }
+
     _moveTo(top, left, e) {
         if(!this._dragEnabled) {
             return;
@@ -125,13 +154,17 @@ class OverlayDrag {
         e.preventDefault();
         e.stopPropagation();
 
+        const offset = this._fitOffsetIntoAllowedRange(top, left);
+        this._moveByOffset(offset);
+    }
+
+    _fitOffsetIntoAllowedRange(top, left) {
         const allowedOffsets = this._getAllowedOffsets();
-        const offset = {
+
+        return {
             top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
             left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
         };
-
-        this._moveByOffset(offset);
     }
 
     _getContainerDimensions() {
@@ -229,20 +262,10 @@ class OverlayDrag {
 
         move(this._draggableElement, newPosition);
 
+        this._lastPosition = newPosition;
+
         // TODO: remove
         this._updatePositionChangeHandled(true);
-
-        return { h: { location: newPosition.left }, v: { location: newPosition.top } };
-    }
-
-    // TO REMOVE
-    renderPositionHandler() {
-        const allowedOffsets = this._getAllowedOffsets();
-
-        return this._moveByOffset({
-            top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
-            left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
-        });
     }
 }
 

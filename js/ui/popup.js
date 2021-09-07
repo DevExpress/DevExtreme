@@ -653,16 +653,14 @@ const Popup = Overlay.inherit({
 
     _renderPosition: function() {
         if(this.option('fullScreen')) {
-            move(this.$overlayContent(), {
-                top: 0,
-                left: 0
-            });
+            const newPosition = { top: 0, left: 0 };
 
-            return { h: { location: 0 }, v: { location: 0 } };
+            move(this.$overlayContent(), newPosition);
+            return newPosition;
         } else {
             (this.option('forceApplyBindings') || noop)();
 
-            return this.callBase(...arguments);
+            return this.callBase();
         }
     },
 

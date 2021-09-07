@@ -458,7 +458,7 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
     });
 
-    test('resizeEnd should trigger positioned event', function(assert) {
+    test('resizeEnd should not trigger positioned event', function(assert) {
         const positionedHandlerStub = sinon.stub();
 
         const instance = $('#overlay').dxOverlay({
@@ -473,13 +473,7 @@ testModule('option', moduleConfig, () => {
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
-        const contentRect = $content.get(0).getBoundingClientRect();
-        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is triggered');
-        assert.deepEqual(
-            positionedHandlerStub.getCall(0).args[0].position,
-            { h: { location: contentRect.left }, v: { location: contentRect.top } },
-            'position parameter is correct'
-        );
+        assert.ok(positionedHandlerStub.notCalled, 'positioned event is not triggered');
     });
 
     test('resize should change overlay width/height options value', function(assert) {
@@ -3002,30 +2996,6 @@ testModule('drag', moduleConfig, () => {
         assert.strictEqual($overlayContent.position().left, prevPosition, 'correct position after next move');
     });
 
-    test('dragged overlay should not be positioned at default location after toggle visibility', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            dragEnabled: true,
-            visible: true,
-            height: 10,
-            width: 10,
-            position: { of: viewPort() }
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const pointer = pointerMock($overlayContent);
-        const position = $overlayContent.position();
-
-        pointer.start().dragStart().drag(50, 50).dragEnd();
-
-        overlay.hide();
-        overlay.show();
-
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top + 50,
-            left: position.left + 50
-        }, 'overlay dragged position was reset');
-    });
-
     test('overlay should not be dragged out of target', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             dragEnabled: true,
@@ -4491,32 +4461,6 @@ QUnit.module('resizeObserver integration', {
             pointer.start().dragStart().drag(10);
             setTimeout(() => {
                 assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
-                resizeOnDraggingDone();
-            }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
-    QUnit.testInActiveWindow('resize end should trigger the single geometry rendering', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnDraggingDone = assert.async();
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-        const positionedHandlerStub = sinon.stub();
-        overlay.on('positioned', positionedHandlerStub);
-
-        setTimeout(() => {
-            pointer.start().dragStart().drag(10, 10).dragEnd();
-            setTimeout(() => {
-                assert.ok(positionedHandlerStub.calledOnce);
                 resizeOnDraggingDone();
             }, this.timeToWaitResize);
             resizeOnOpeningDone();

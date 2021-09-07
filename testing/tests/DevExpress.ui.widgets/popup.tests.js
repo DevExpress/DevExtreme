@@ -93,6 +93,7 @@ const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
+const POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-bottom-right';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -1398,32 +1399,11 @@ QUnit.module('resize', {
         });
         const popup = $popup.dxPopup('instance');
         const $overlayContent = popup.$content().parent();
-        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
+        const $handle = $overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(-100, -100);
         assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, 'size of popup and overlay is equal');
-    });
-
-    QUnit.test('popup content position should be reset after show/hide', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            resizeEnabled: true,
-            height: 'auto',
-            position: { of: viewPort() }
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-
-        popup.$content().append($('<div>').height(10));
-        popup.show();
-        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
-        const pointer = pointerMock($handle);
-        const position = $overlayContent.offset();
-        pointer.start().dragStart().drag(-100, -100).dragEnd();
-
-        popup.hide();
-        popup.show();
-        assert.deepEqual($overlayContent.offset(), position, 'position is same');
     });
 
     QUnit.test('resize callbacks', function(assert) {
@@ -1886,6 +1866,168 @@ QUnit.module('renderGeometry', () => {
         instance.option('fullScreen', true);
 
         assert.ok(positionedHandlerStub.calledOnce, 'positioned event is raised');
-        assert.deepEqual(positionedHandlerStub.getCall(0).args[0].position, { h: { location: 0 }, v: { location: 0 } }, 'parameter is correct');
+        assert.deepEqual(positionedHandlerStub.getCall(0).args[0].position, { top: 0, left: 0 }, 'parameter is correct');
+    });
+});
+
+QUnit.module('drag and resize', {
+    beforeEach: function() {
+        this.$popup = $('#popup').dxPopup({
+            width: 100,
+            height: 100,
+            resizeEnabled: true,
+            visible: true,
+            dragAndResizeArea: window,
+            animation: null,
+            position: { my: 'top left', at: 'center', of: window }
+        });
+        this.popup = this.$popup.dxPopup('instance');
+
+        this.$overlayContent = this.popup.$overlayContent();
+        this.$title = this.$overlayContent.children(`.${POPUP_TITLE_CLASS}`);
+        this.$resizeHandle = this.$overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
+
+        this.dragPointer = pointerMock(this.$title);
+        this.resizePointer = pointerMock(this.$resizeHandle);
+
+        this.getPosition = () => this.$overlayContent.get(0).getBoundingClientRect();
+        this.drag = () => { this.dragPointer.start().down().move(100, 100).up(); };
+        this.resize = () => { this.resizePointer.start().down().move(100, 100).up(); };
+    }
+}, () => {
+    QUnit.test('dragEnd should trigger positioned event with correct parameters', function(assert) {
+        const positionedStub = sinon.stub();
+        this.popup.on('positioned', positionedStub);
+
+        this.drag();
+        const { left, top } = this.getPosition();
+
+        assert.ok(positionedStub.calledOnce, 'positioned event was raised');
+
+        const args = positionedStub.getCall(0).args[0];
+        assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
+        assert.strictEqual(args.event.type, 'dxdragend', 'event parameter is correct');
+    });
+
+    QUnit.test('fullScrren change after drag should trigger positioned event with correct parameters', function(assert) {
+        const positionedStub = sinon.stub();
+        this.popup.on('positioned', positionedStub);
+
+        this.drag();
+        const { left, top } = this.getPosition();
+
+        this.popup.option('fullScreen', true);
+        assert.deepEqual(positionedStub.getCall(1).args[0].position, { top: 0, left: 0 }, 'position parameter is correct after change to true');
+
+        this.popup.option('fullScreen', false);
+        assert.deepEqual(positionedStub.getCall(2).args[0].position, { top, left }, 'position parameter is correct after change to false');
+    });
+
+
+    QUnit.module('position after', () => {
+        QUnit.test('resize should not be restored to initial', function(assert) {
+            const position = this.getPosition();
+
+            this.resize();
+
+            const newPosition = this.getPosition();
+            assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+            assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+        });
+
+        ['drag', 'resize'].forEach(moveMethodName => {
+            QUnit.module(moveMethodName, () => {
+                QUnit.test('should not be changed after fullScreen is enabled and disabled', function(assert) {
+                    this[moveMethodName]();
+                    const position = this.getPosition();
+
+                    this.popup.option('fullScreen', true);
+                    this.popup.option('fullScreen', false);
+
+                    const newPosition = this.getPosition();
+                    assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                    assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                });
+
+                QUnit.test('should not be changed after width or height change', function(assert) {
+                    this[moveMethodName]();
+                    const position = this.getPosition();
+
+                    this.popup.option('width', 300);
+                    this.popup.option('height', 300);
+
+                    const newPosition = this.getPosition();
+                    assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                    assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                });
+
+                QUnit.test('should not be changed after content dimension change', function(assert) {
+                    const done = assert.async();
+
+                    this.popup.option({
+                        width: 'auto',
+                        height: 'auto',
+                        contentTemplate: () => {
+                            return $('<div>')
+                                .attr('id', 'content')
+                                .width(100)
+                                .height(100);
+                        }
+                    });
+
+                    this[moveMethodName]();
+                    const position = this.getPosition();
+
+                    $('#content')
+                        .width(300)
+                        .height(300);
+
+                    setTimeout(() => {
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+
+                        done();
+                    }, 250);
+                });
+
+                QUnit.test('should be restored to position from option after repaint', function(assert) {
+                    const position = this.getPosition();
+
+                    this[moveMethodName]();
+
+                    this.popup.repaint();
+
+                    const newPosition = this.getPosition();
+                    assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                    assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                });
+
+                QUnit.test('should be restored to position from option after reopening', function(assert) {
+                    const position = this.getPosition();
+
+                    this[moveMethodName]();
+
+                    this.popup.hide();
+                    this.popup.show();
+
+                    const newPosition = this.getPosition();
+                    assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                    assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                });
+
+                QUnit.test('should be change after position option change', function(assert) {
+                    const position = this.getPosition();
+
+                    this[moveMethodName]();
+
+                    this.popup.option('position.offset', '100 100');
+
+                    const newPosition = this.getPosition();
+                    assert.strictEqual(newPosition.left, position.left + 100, 'left coordinate is correct');
+                    assert.strictEqual(newPosition.top, position.top + 100, 'top coordinate is correct');
+                });
+            });
+        });
     });
 });

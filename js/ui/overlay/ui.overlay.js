@@ -700,6 +700,7 @@ const Overlay = Widget.inherit({
         }
 
         this._currentVisible = visible;
+        this._positionChangeHandled = false;
 
         this._stopAnimation();
 
@@ -981,7 +982,8 @@ const Overlay = Widget.inherit({
             container: this._getDragResizeContainer().get(0),
             draggableElement: this._$content.get(0),
             outsideDragFactor: this.option('allowDragOutside') ? 1 : this.option('outsideDragFactor'),
-            updatePositionChangeHandled
+            updatePositionChangeHandled,
+            onPositioned: this._actions.onPositioned
         };
 
         if(this._drag) {
@@ -1010,14 +1012,13 @@ const Overlay = Widget.inherit({
     },
 
     _resizeEndHandler: function(e) {
-        this._positionChangeHandled = true;
-
         const width = this._resizable.option('width');
         const height = this._resizable.option('height');
 
         width && this._setOptionWithoutOptionChange('width', width);
         height && this._setOptionWithoutOptionChange('height', height);
-        this._renderGeometry();
+        this._cacheDimensions();
+        this._drag.updatePosition();
 
         this._actions.onResizeEnd(e);
     },
@@ -1245,18 +1246,20 @@ const Overlay = Widget.inherit({
     },
 
     _renderPosition: function() {
-        let resultPosition;
         if(this._positionChangeHandled) {
-            resultPosition = this._drag?.renderPositionHandler();
+            this._drag.moveToLastPosition();
+            this._drag.moveToContainer();
+
+            return this._drag.getPosition();
         } else {
             const position = this._position;
             this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
 
             resetPosition(this._$content);
 
-            resultPosition = positionUtils.setup(this._$content, position);
+            const resultPosition = positionUtils.setup(this._$content, position);
+            return { top: resultPosition.v.location, left: resultPosition.h.location };
         }
-        return resultPosition;
     },
 
     _positionContent: function() {
@@ -1526,6 +1529,7 @@ const Overlay = Widget.inherit({
 
     repaint: function() {
         if(this._contentAlreadyRendered) {
+            this._positionChangeHandled = false;
             this._renderGeometry({ forceStopAnimation: true });
             triggerResizeEvent(this._$content);
         } else {
