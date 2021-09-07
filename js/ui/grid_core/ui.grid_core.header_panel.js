@@ -50,9 +50,13 @@ const HeaderPanel = ColumnsView.inherit({
 
         this.executeAction('onToolbarPreparing', options);
 
-        if(options.toolbarOptions && !isDefined(options.toolbarOptions.visible)) {
+        if(options.toolbarOptions) {
             const toolbarItems = options.toolbarOptions.items;
-            options.toolbarOptions.visible = !!(toolbarItems && toolbarItems.length);
+            options.toolbarOptions.visible = !!(
+                options.toolbarOptions.visible &&
+                toolbarItems &&
+                toolbarItems.length
+            );
         }
 
         return options.toolbarOptions;
