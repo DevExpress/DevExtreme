@@ -5,18 +5,21 @@
 .options {
     background-color: rgba(191, 191, 191, 0.15);
     margin-top: 20px;
+    display: flex;
 }
 
 .column {
     width: 40%;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     margin: 15px 3%;
     text-align: left;
-    vertical-align: top;
 }
 
 .option {
     padding: 5px 0;
+    display: flex;
+    align-items: center;
 }
 
 .label, .value {
@@ -31,6 +34,7 @@
 .value {
     width: 30%;
 }
+
 .caption {
     font-size: 18px;
     font-weight: 500;
