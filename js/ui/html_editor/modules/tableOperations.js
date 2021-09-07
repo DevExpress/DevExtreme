@@ -3,6 +3,7 @@ import Form from '../../form';
 import $ from '../../../core/renderer';
 import { getWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
+import { each } from '../../../core/utils/iterator';
 
 const MIN_HEIGHT = 250;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
@@ -34,6 +35,7 @@ const getMaxHeight = () => {
     return Math.max(MIN_HEIGHT, windowHeight * 0.9);
 };
 
+
 const applyDimensionChanges = ($target, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
         // $target.css('width', 'initial');
@@ -41,6 +43,39 @@ const applyDimensionChanges = ($target, newHeight, newWidth) => {
     }
 
     $target.attr('height', newHeight);
+};
+
+const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
+    if(isDefined(newWidth)) {
+        // const columnIndex = getColumnIndex($target);
+        // $target.css('width', 'initial');
+        $target.attr('width', newWidth);
+    }
+
+    const $horizontalCells = $target.closest('tr, thead').find('td');
+
+    each($horizontalCells, (_, currentCell) => {
+        $(currentCell).attr('height', newHeight + 'px');
+    });
+
+    // $target.attr('height', newHeight);
+
+};
+
+export const setLineElementsAttrValue = ($lineElements, property, value) => {
+    each($lineElements, (i, element) => {
+        $(element).attr(property, value + 'px');
+    });
+};
+
+export const getLineElements = ($table, index, direction) => {
+    let result;
+    if(direction !== 'vertical') {
+        result = $table.find(`td:nth-child(${(1 + index)})`);
+    } else {
+        result = $table.find('tr').eq(index).find('td');
+    }
+    return result;
 };
 
 export const showTablePropertiesForm = (editorInstance, $table) => {
@@ -274,7 +309,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                 onClick: (e) => {
                     const formData = formInstance.option('formData');
                     const widthArg = formData.width === startCellWidth ? undefined : formData.width;
-                    applyDimensionChanges($cell, formData.height, widthArg);
+                    applyCellDimensionChanges($cell, formData.height, widthArg);
                     $cell.css({
                         'backgroundColor': formData.backgroundColor,
                         'borderStyle': formData.borderStyle,

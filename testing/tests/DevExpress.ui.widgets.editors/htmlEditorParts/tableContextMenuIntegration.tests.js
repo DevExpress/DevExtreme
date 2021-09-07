@@ -127,7 +127,7 @@ module('Table resizing integration', {
 
         const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
 
-        assert.strictEqual($textItems.length, 2, 'text items count is correct');
+        assert.strictEqual($textItems.length, 4, 'text items count is correct');
         assert.strictEqual($ItemsHasSubmenu.length, 2, 'submenu items count is correct');
     });
 
