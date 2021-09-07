@@ -21,12 +21,12 @@ class App extends React.Component {
       isGridBoxOpened: false,
       isTreeBoxOpened: false,
     };
-    this.treeView_itemSelectionChanged = this.treeViewItemSelectionChanged.bind(this);
+    this.treeViewItemSelectionChanged = this.treeViewItemSelectionChanged.bind(this);
     this.syncTreeViewSelection = this.syncTreeViewSelection.bind(this);
     this.syncDataGridSelection = this.syncDataGridSelection.bind(this);
-    this.dataGrid_onSelectionChanged = this.dataGridOnSelectionChanged.bind(this);
+    this.dataGridOnSelectionChanged = this.dataGridOnSelectionChanged.bind(this);
     this.treeViewRender = this.treeViewRender.bind(this);
-    this.treeView_onContentReady = this.treeViewOnContentReady.bind(this);
+    this.treeViewOnContentReady = this.treeViewOnContentReady.bind(this);
     this.dataGridRender = this.dataGridRender.bind(this);
     this.onGridBoxOpened = this.onGridBoxOpened.bind(this);
     this.onTreeBoxOpened = this.onTreeBoxOpened.bind(this);

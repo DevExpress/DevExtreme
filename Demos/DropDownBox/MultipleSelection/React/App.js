@@ -19,10 +19,10 @@ class App extends React.Component {
       treeBoxValue: ['1_1'],
       gridBoxValue: [3],
     };
-    this.treeView_itemSelectionChanged = this.treeViewItemSelectionChanged.bind(this);
+    this.treeViewItemSelectionChanged = this.treeViewItemSelectionChanged.bind(this);
     this.syncTreeViewSelection = this.syncTreeViewSelection.bind(this);
     this.syncDataGridSelection = this.syncDataGridSelection.bind(this);
-    this.dataGrid_onSelectionChanged = this.dataGridOnSelectionChanged.bind(this);
+    this.dataGridOnSelectionChanged = this.dataGridOnSelectionChanged.bind(this);
     this.treeViewRender = this.treeViewRender.bind(this);
     this.dataGridRender = this.dataGridRender.bind(this);
   }
