@@ -7,15 +7,15 @@ You can use the following properties to specify custom templates for Lookup elem
     </tr>
     <tr>
         <td>Input field</td>
-        <td><a href="https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxLookup/Configuration/#fieldTemplate">fieldTemplate</a></td>
+        <td><a href="https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxLookup/Configuration/#fieldRender">fieldRender</a></td>
     </tr>
     <tr>
         <td>Drop-down list items</td>
-        <td><a href="https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxLookup/Configuration/#itemTemplate">itemTemplate</a></td>
+        <td><a href="https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxLookup/Configuration/#itemRender">itemRender</a></td>
     </tr> 
     <tr>
         <td>Group captions</td>
-        <td><a href="https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxLookup/Configuration/#groupTemplate">groupTemplate</a></td>
+        <td><a href="https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxLookup/Configuration/#groupRender">groupRender</a></td>
     </tr> 
 </table>
 
