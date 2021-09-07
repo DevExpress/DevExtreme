@@ -4,28 +4,8 @@ import Toolbar from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
 import notify from 'devextreme/ui/notify';
 import service from './data.js';
+import ColorIcon from './ColorIcon.js';
 import 'whatwg-fetch';
-
-class ColorIcon extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick() {
-    this.props.onClick(this.props.color);
-  }
-
-  render() {
-    return (
-      <i
-        onClick={this.onClick}
-        className={this.props.color ? 'color dx-icon dx-icon-square' : 'color dx-icon dx-icon-square dx-theme-text-color'}
-        style={{ color: this.props.color }}
-      />
-    );
-  }
-}
 
 class App extends React.Component {
   onButtonClick(e) {
