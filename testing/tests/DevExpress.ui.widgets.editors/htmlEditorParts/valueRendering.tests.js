@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import 'ui/html_editor/converters/markdown';
+import { getOuterHeight } from 'core/utils/size';
 
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 
@@ -61,11 +62,11 @@ export default function() {
                 width: 50
             }).dxHtmlEditor('instance');
             const $element = instance.$element();
-            const initialHeight = $element.outerHeight();
+            const initialHeight = getOuterHeight($element);
 
             instance.option('placeholder', '1234 567 89 0123 4567 89 012 345 67 890');
 
-            const actualHeight = $element.outerHeight();
+            const actualHeight = getOuterHeight($element);
 
             assert.ok(actualHeight > initialHeight, 'editor height has been increased');
         });

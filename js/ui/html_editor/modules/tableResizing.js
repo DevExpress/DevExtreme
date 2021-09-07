@@ -289,7 +289,7 @@ export default class TableResizingModule extends BaseModule {
         if(direction === 'vertical') {
             return {
                 lineResizerClass: DX_ROW_RESIZER_CLASS,
-                sizeFunction: 'outerHeight',
+                sizeFunction: (x) => getOuterHeight(x),
                 positionCoordinate: 'top',
                 positionStyleProperty: 'height',
                 positionCoordinateName: 'y'
@@ -297,7 +297,7 @@ export default class TableResizingModule extends BaseModule {
         } else {
             return {
                 lineResizerClass: DX_COLUMN_RESIZER_CLASS,
-                sizeFunction: 'outerWidth',
+                sizeFunction: (x) => getOuterWidth(x),
                 positionCoordinate: this.editorInstance.option('rtlEnabled') ? 'right' : 'left',
                 positionStyleProperty: 'width',
                 positionCoordinateName: 'x'
@@ -306,7 +306,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _getSize($element, directionInfo) {
-        return $element[directionInfo.sizeFunction]();
+        return directionInfo.sizeFunction($element);
     }
 
     _updateFrameSeparators(frame, direction) {
