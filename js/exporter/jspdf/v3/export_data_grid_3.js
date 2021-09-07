@@ -22,6 +22,7 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
+            // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
             const rowsInfo = generateRowsInfo(dataProvider, dataGrid);
 
             if(options.customizeCell) {
@@ -43,14 +44,27 @@ function exportDataGrid(doc, dataGrid, options) {
 
             initializeCellsWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
 
-            // TODO set/update/initColSpanRowSpan(rows);
+            // apply colSpans + recalculate cellsWidth
+            // TODO: applyColSpans();
 
             // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled or use value from customizeCell
             calculateHeights(doc, rowsInfo, options);
 
-            // TODO set/update/initBorders(rows);
+            // apply rowSpans + recalculate cells height
+            // TODO: applyRowSpans();
 
+            // when we known all sizes we can calculate all coordinates
             calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
+
+            // recalculate for grouped rows
+            // TODO: applyGroupIndents()
+
+            // set/update/initBorders(rows);
+            // TODO: initBorders(rows);
+
+            // splitting to pages
+            // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
+            // TODO: applySplitting()
 
             const pdfCellsInfo = [].concat.apply([],
                 rowsInfo.map(rowInfo => {
@@ -59,6 +73,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     });
                 })
             );
+
             drawPdfCells(doc, pdfCellsInfo); // draw content only ???
 
             // drawGridLines(); draw grid lines only ???
