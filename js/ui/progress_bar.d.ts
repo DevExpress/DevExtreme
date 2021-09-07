@@ -50,7 +50,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    value?: number;
+    value?: number | boolean;
 }
 /**
  * @docid dxProgressBar

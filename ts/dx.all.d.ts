@@ -9996,7 +9996,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxProgressBar.Options.value]
          */
-        value?: number;
+        value?: number | boolean;
     }
     /**
      * [descr:dxProgressBar]
