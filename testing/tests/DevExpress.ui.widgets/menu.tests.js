@@ -16,6 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'generic_light.css!';
+import { commonCallbacks } from 'core/utils/size';
 
 QUnit.testStart(function() {
     const markup =
@@ -2162,7 +2163,7 @@ QUnit.module('adaptivity: render', {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700);
+        const windowHeight = sinon.stub(commonCallbacks, 'getInnerHeight').returns(700);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         try {
@@ -2644,7 +2645,8 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('Adaptive menu should not flick when the window has been resized with jQuery 3.3.1', function(assert) {
-        const outerWidth = sinon.spy(renderer.fn, 'outerWidth');
+        const getOuterWidth = sinon.spy(commonCallbacks, 'getOuterWidth');
+        const setOuterWidth = sinon.spy(commonCallbacks, 'setOuterWidth');
 
         try {
             new Menu(this.$element, {
@@ -2652,12 +2654,13 @@ QUnit.module('adaptivity: behavior', {
                 adaptivityEnabled: true
             });
 
-            assert.equal(outerWidth.callCount, 3, 'itemWidth has been called for each item and container on render');
+            assert.equal(getOuterWidth.callCount + setOuterWidth.callCount, 3, 'itemWidth has been called for each item and container on render');
 
             resizeCallbacks.fire();
-            assert.equal(outerWidth.callCount, 4, 'itemWidth has been called just for container on dimension change');
+            assert.equal(getOuterWidth.callCount + setOuterWidth.callCount, 4, 'itemWidth has been called just for container on dimension change');
         } finally {
-            outerWidth.restore();
+            getOuterWidth.restore();
+            setOuterWidth.restore();
         }
     });
 

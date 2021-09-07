@@ -4,7 +4,6 @@ import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment } from '..
 import keyboardMock from '../../helpers/keyboardMock.js';
 import localization from 'localization';
 import eventsEngine from 'events/core/events_engine';
-import renderer from 'core/renderer';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'events/drag';
@@ -12,6 +11,7 @@ import CustomStore from 'data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import translator from 'animation/translator';
+import { commonCallbacks } from 'core/utils/size';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
@@ -766,9 +766,9 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.expect(1);
 
         let counter = 0;
-        const originalWidthFn = renderer.fn.width;
+        const originalWidthFn = commonCallbacks.setWidth;
 
-        sinon.stub(renderer.fn, 'width', function(value) {
+        sinon.stub(commonCallbacks, 'setWidth', function(source, value) {
             if(value === 999 && !counter) {
                 const $headerTable = $('#scheduler').find('table').first();
                 assert.notOk($headerTable.attr('class'), 'Header table doesn\'t have any css classes yet');
@@ -787,7 +787,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                 width: 999
             });
         } finally {
-            renderer.fn.width.restore();
+            commonCallbacks.setWidth.restore();
         }
     });
 
