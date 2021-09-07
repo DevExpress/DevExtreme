@@ -11,7 +11,7 @@ describe('AppointmentLayout', () => {
     }));
 
     it('it should be rendered correctly with empty items', () => {
-      const layout = render({ props: { appointmentsMap: [] } });
+      const layout = render({ props: { appointments: [] } });
 
       expect(layout.hasClass('dx-scheduler-appointments'))
         .toEqual(true);
@@ -57,7 +57,7 @@ describe('AppointmentLayout', () => {
       };
       const layout = render({
         props: {
-          appointmentsMap: [
+          appointments: [
             viewModel0,
             viewModel1,
           ],
