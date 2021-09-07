@@ -599,6 +599,14 @@ export default {
                     }
 
                     return this.callBase.apply(this, arguments);
+                },
+
+                _beforeFocusElementInRow: function(rowIndex) {
+                    this.callBase.apply(this, arguments);
+
+                    const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
+                    const columnIndex = this.getFirstEditableColumnIndex();
+                    editRowIndex >= 0 && columnIndex >= 0 && this.editCell(editRowIndex, columnIndex);
                 }
             }
         },
