@@ -90,6 +90,46 @@ export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, is
     return result;
 };
 
+export const getGroupWidth = (groupIndex, viewDataProvider, viewModel) => {
+    const {
+        isVirtualScrolling,
+        rtlEnabled,
+        DOMMetaData
+    } = viewModel;
+
+    const cellWidth = getCellWidth(DOMMetaData);
+    let result = viewDataProvider.getCellCount(viewModel) * cellWidth;
+    // TODO: refactor after deleting old render
+    if(isVirtualScrolling) {
+        const groupedData = viewDataProvider.groupedDataMap.dateTableGroupedMap;
+        const groupLength = groupedData[groupIndex][0].length;
+
+        result = groupLength * cellWidth;
+    }
+
+    const position = getMaxAllowedPosition(
+        groupIndex,
+        viewDataProvider,
+        rtlEnabled,
+        DOMMetaData
+    );
+    const currentPosition = position[groupIndex];
+
+    if(currentPosition) {
+        if(rtlEnabled) {
+            result = currentPosition - position[groupIndex + 1];
+        } else {
+            if(groupIndex === 0) {
+                result = currentPosition;
+            } else {
+                result = currentPosition - position[groupIndex - 1];
+            }
+        }
+    }
+
+    return result;
+};
+
 export class PositionHelper {
     constructor(options) {
         this.options = options;
