@@ -587,7 +587,7 @@ if(Quill) {
                     items: [{
                         dataField: name,
                         editorType: 'dxColorView',
-                        _contentBaseSize: 'auto', // WA for the T590137 (IE only)
+                        _forceContentAutoFlexBasis: true, // WA for the T590137 (IE only)
                         editorOptions: {
                             focusStateEnabled: false
                         },
