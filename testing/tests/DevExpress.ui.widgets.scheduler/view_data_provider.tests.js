@@ -1,4 +1,5 @@
 import ViewDataProvider from 'ui/scheduler/workspaces/view_model/view_data_provider';
+import { supportedViews } from '../../helpers/scheduler/helpers.js';
 
 const {
     test,
@@ -992,6 +993,35 @@ module('View Data Provider', {
                             '2nd cell position is correct'
                         );
                     });
+                });
+            });
+        });
+
+        module('isSkippedDate', () => {
+            test('it should return correct value for the weekend', function(assert) {
+                [
+                    { viewType: 'day', expected: false },
+                    { viewType: 'week', expected: false },
+                    { viewType: 'workWeek', expected: true },
+                    { viewType: 'month', expected: false },
+                    { viewType: 'timelineDay', expected: false },
+                    { viewType: 'timelineWeek', expected: false },
+                    { viewType: 'timelineWorkWeek', expected: true },
+                    { viewType: 'timelineMonth', expected: false },
+                ].forEach(({ viewType, expected }) => {
+                    const viewDataProvider = new ViewDataProvider(viewType);
+                    const result = viewDataProvider.isSkippedDate(new Date(2021, 8, 4));
+
+                    assert.equal(result, expected, `isSkippedDate is correct for the ${viewType} view type`);
+                });
+            });
+
+            test('it should return correct value for the week day', function(assert) {
+                supportedViews.forEach((viewType) => {
+                    const viewDataProvider = new ViewDataProvider(viewType);
+                    const result = viewDataProvider.isSkippedDate(new Date(2021, 8, 3));
+
+                    assert.notOk(result, `isSkippedDate is correct for the ${viewType} view type`);
                 });
             });
         });

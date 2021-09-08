@@ -84,6 +84,8 @@ const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
 const DEFAULT_AGENDA_DURATION = 7;
+const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
+const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 
 const VIEWS_CONFIG = {
     day: {
@@ -161,9 +163,9 @@ class Scheduler extends Widget {
 
             customizeDateNavigatorText: undefined,
 
-            appointmentTemplate: 'item',
+            appointmentTemplate: DEFAULT_APPOINTMENT_TEMPLATE_NAME,
 
-            appointmentCollectorTemplate: 'appointmentCollector',
+            appointmentCollectorTemplate: DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME,
 
             dataCellTemplate: null,
 
@@ -1036,14 +1038,21 @@ class Scheduler extends Widget {
         const { filteredItems } = getAppointmentDataProvider(this.key);
         const layoutManager = this.getLayoutManager();
 
-        const currentViewModel = layoutManager.createAppointmentsMap(filteredItems);
+        const appointmentsMap = layoutManager.createAppointmentsMap(filteredItems);
         if(this.modelProvider.isRenovatedAppointments) {
-            return currentViewModel;
+            const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
+                ? this.option('appointmentTemplate')
+                : undefined;
+            return {
+                appointments: appointmentsMap,
+                appointmentTemplate
+            };
         }
 
-        const oldViewModel = this.getAppointmentsInstance().option('items');
-
-        return layoutManager.getRepaintedAppointments(currentViewModel, oldViewModel);
+        return layoutManager.getRepaintedAppointments(
+            appointmentsMap,
+            this.getAppointmentsInstance().option('items')
+        );
     }
 
     _initExpressions(fields) {

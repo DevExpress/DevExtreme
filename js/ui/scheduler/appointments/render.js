@@ -15,7 +15,7 @@ export const renderAppointments = (options) => {
         container,
         dxrAppointmentLayout,
         'renovatedAppointments',
-        { items: viewModel },
+        viewModel,
     );
 };
 

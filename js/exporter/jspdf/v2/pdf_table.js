@@ -1,4 +1,4 @@
-import { isDefined } from '../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 import { drawPdfTable } from './draw_pdf_table';
 
 export class PdfTable {
