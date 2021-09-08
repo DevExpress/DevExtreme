@@ -14,7 +14,9 @@ type WidgetName =
 'dxContextMenu' |
 'dxDropDownMenu' |
 'dxChart' |
-'dxPopup';
+'dxPopup' |
+'dxSelectBox' |
+'dxButton';
 
 export default async function createWidget(
   widgetName: WidgetName,
