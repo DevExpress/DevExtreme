@@ -56,9 +56,6 @@ function exportDataGrid(doc, dataGrid, options) {
             // when we known all sizes we can calculate all coordinates
             calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
 
-            // when we known all sizes we can calculate a table rect
-            const tableRect = calculateTableSize(doc, rowsInfo, options);
-
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
 
@@ -79,8 +76,9 @@ function exportDataGrid(doc, dataGrid, options) {
             );
 
             drawCellsContent(doc, pdfCellsInfo);
-            drawCellsLines(doc, pdfCellsInfo, options.drawTableBorder, tableRect);
+            drawCellsLines(doc, pdfCellsInfo);
             if(isDefined(options.drawTableBorder) ? options.drawTableBorder : (isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0)) {
+                const tableRect = calculateTableSize(doc, rowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
                 drawGridLines(doc, tableRect, options);
             }
 
