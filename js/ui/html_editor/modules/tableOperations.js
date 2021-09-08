@@ -52,14 +52,26 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
         // const columnIndex = getColumnIndex($target);
         // $target.css('width', 'initial');
-        $target.attr('width', newWidth);
+        // $target.attr('width', newWidth + 'px');
+        const index = $($target).index();
+        const $verticalCells = getLineElements($target.closest('table'), index);
+
+
+        // each($verticalCells, (_, currentCell) => {
+        //     $(currentCell).attr('width', newWidth + 'px');
+        // });
+
+        setLineElementsAttrValue($verticalCells, 'width', newWidth);
     }
 
     const $horizontalCells = $target.closest('tr, thead').find('td');
 
-    each($horizontalCells, (_, currentCell) => {
-        $(currentCell).attr('height', newHeight + 'px');
-    });
+    // each($horizontalCells, (_, currentCell) => {
+    //     $(currentCell).attr('height', newHeight + 'px');
+
+    // });
+
+    setLineElementsAttrValue($horizontalCells, 'height', newHeight);
 
     // $target.attr('height', newHeight);
 
