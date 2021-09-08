@@ -438,7 +438,7 @@ const Overlay = Widget.inherit({
     },
 
     _viewPortChangeHandler: function() {
-        this._positionController.initContainer(this.option('container'));
+        this._positionController.updateContainer(this.option('container'));
         this._refresh();
     },
 
@@ -1372,6 +1372,7 @@ const Overlay = Widget.inherit({
                 this._renderGeometry();
                 break;
             case 'position':
+                this._positionController.updatePosition(this.option('position'));
                 this._positionChangeHandled = false;
                 this._renderGeometry();
                 this._toggleSafariScrolling();
@@ -1390,7 +1391,7 @@ const Overlay = Widget.inherit({
                 this._invalidate();
                 break;
             case 'container':
-                this._positionController.initContainer(value);
+                this._positionController.updateContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
                 if(this.option('dragEnabled') && this._drag && !this.option('dragAndResizeArea')) {

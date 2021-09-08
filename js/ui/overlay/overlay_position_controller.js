@@ -34,15 +34,27 @@ class OverlayPositionController {
         };
 
         this._onPositioned = onPositioned;
-        this._visualPosition = undefined;
         this._$root = $root;
         this._$content = $content;
         this._$wrapper = $wrapper;
-        this._position = this._normalizePosition(position);
-        this.initContainer(container);
+
+        this._visualPosition = undefined;
+        this._$wrapperCoveredElement = undefined;
+
+        this.updateContainer(container);
+        this.updatePosition(position);
     }
 
-    initContainer(containerProp) {
+    updatePosition(positionProp) {
+        this._props.position = positionProp;
+        this._position = this._normalizePosition(positionProp);
+
+        this._updateWrapperCoveredElement();
+    }
+
+    updateContainer(containerProp) {
+        this._props.container = containerProp;
+
         const container = containerProp ?? viewPort();
 
         let $container = this._$root.closest(container);
@@ -52,7 +64,7 @@ class OverlayPositionController {
         }
 
         this._$container = $container.length ? $container : this._$root.parent();
-        this._updateWrapperCoveredElement(containerProp);
+        this._updateWrapperCoveredElement();
     }
 
     positionContent() {
@@ -86,8 +98,8 @@ class OverlayPositionController {
         return !this._wrapperCoveredElement || isWindow(this._wrapperCoveredElement);
     }
 
-    _updateWrapperCoveredElement(containerProp) {
-        this._$wrapperCoveredElement = this._getWrapperCoveredElement(containerProp);
+    _updateWrapperCoveredElement() {
+        this._$wrapperCoveredElement = this._getWrapperCoveredElement();
     }
 
     _positionedHandler(previousPosition, position) {
@@ -100,9 +112,11 @@ class OverlayPositionController {
         this._$content.css('margin', `${boundaryOffset.v}px ${boundaryOffset.h}px`);
     }
 
-    _getWrapperCoveredElement(container) {
-        if(container) {
-            return $(container);
+    _getWrapperCoveredElement() {
+        const containerProp = this._props.container;
+
+        if(containerProp) {
+            return $(containerProp);
         }
         if(this._position) {
             return $(isEvent(this._position.of) ? window : (this._position.of || window));
@@ -136,15 +150,15 @@ class PopupPositionController extends OverlayPositionController {
         super(args);
 
         this._fullScreen = fullScreen;
-        this.initContainer();
+        this.updateContainer();
     }
 
-    _getWrapperCoveredElement(containerProp) {
+    _getWrapperCoveredElement() {
         if(this._fullScreen) {
             return $(window);
         }
 
-        return super._getWrapperCoveredElement(containerProp);
+        return super._getWrapperCoveredElement();
     }
 }
 
