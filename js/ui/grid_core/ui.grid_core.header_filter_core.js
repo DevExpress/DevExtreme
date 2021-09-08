@@ -6,7 +6,9 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import Popup from '../popup';
 import TreeView from '../tree_view';
-import List from '../list';
+import List from '../list_light';
+import '../list/modules/search';
+import '../list/modules/selection';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
@@ -201,7 +203,7 @@ export const HeaderFilterView = modules.View.inherit({
             shading: false,
             showTitle: false,
             showCloseButton: false,
-            closeOnTargetScroll: false, // T756320
+            hideOnParentScroll: false, // T756320
             dragEnabled: false,
             closeOnOutsideClick: true,
             focusStateEnabled: false,

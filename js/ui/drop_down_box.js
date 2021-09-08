@@ -253,7 +253,7 @@ const DropDownBox = DropDownEditor.inherit({
         return activeElement && this._popup.$content().get(0).contains(activeElement);
     },
 
-    _shouldCloseOnTargetScroll: function() {
+    _shouldHideOnParentScroll: function() {
         return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
     },
 
@@ -286,7 +286,7 @@ const DropDownBox = DropDownEditor.inherit({
             dragEnabled: false,
             focusStateEnabled,
             contentTemplate: ANONYMOUS_TEMPLATE_NAME,
-            closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
+            hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
             position: extend(this.option('popupPosition'), {
                 of: this.$element(),
             }),

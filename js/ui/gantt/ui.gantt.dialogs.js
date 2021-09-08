@@ -4,6 +4,8 @@ import '../tag_box';
 import '../radio_group';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
+import '../list_light';
+import '../list/modules/deleting';
 
 export class GanttDialog {
     constructor(owner, $element) {

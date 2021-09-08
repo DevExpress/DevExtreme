@@ -148,6 +148,12 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @public
      */
     width?: number | string | (() => number | string);
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxPopoverAnimation extends dxPopupAnimation {

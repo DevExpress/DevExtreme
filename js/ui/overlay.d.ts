@@ -210,6 +210,12 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @public
      */
     wrapperAttr?: any;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxOverlayAnimation {

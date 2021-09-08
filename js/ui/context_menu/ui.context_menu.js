@@ -477,7 +477,7 @@ class ContextMenu extends MenuBase {
             innerOverlay: true,
             closeOnOutsideClick: this._closeOnOutsideClickHandler.bind(this),
             propagateOutsideClick: true,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             deferRendering: false,
             position: {
                 at: position.at,
