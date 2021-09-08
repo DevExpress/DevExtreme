@@ -7116,7 +7116,7 @@ QUnit.module('Data area', () => {
         area.component.option = sinon.stub();
         area.component.option.withArgs('scrolling').returns({ useNative: false });
         area.renderScrollable();
-        area.updateScrollableOptions();
+        area.updateScrollableOptions({});
 
         const virtualContent = area.tableElement().prev();
 
@@ -7198,7 +7198,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions();
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7272,7 +7272,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions();
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7348,7 +7348,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions();
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7424,7 +7424,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions();
+        area.updateScrollableOptions({});
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });
