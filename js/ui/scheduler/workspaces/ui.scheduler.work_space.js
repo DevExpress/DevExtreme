@@ -72,6 +72,7 @@ import {
     getAllDayHeight,
     getMaxAllowedPosition,
     getMaxAllowedVerticalPosition,
+    getGroupWidth,
     PositionHelper
 } from './helpers/positionHelper';
 
@@ -1620,33 +1621,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    getGroupWidth(groupIndex) { // TODO move to the grouping layer
-        const cellWidth = this.getCellWidth();
-        let result = this._getCellCount() * cellWidth;
-        // TODO: refactor after deleting old render
-        if(this.isVirtualScrolling()) {
-            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
-            const groupLength = groupedData[groupIndex][0].length;
-
-            result = groupLength * cellWidth;
-        }
-
-        const position = this.getMaxAllowedPosition(groupIndex);
-        const currentPosition = position[groupIndex];
-
-        if(currentPosition) {
-            if(this._isRTL()) {
-                result = currentPosition - position[groupIndex + 1];
-            } else {
-                if(groupIndex === 0) {
-                    result = currentPosition;
-                } else {
-                    result = currentPosition - position[groupIndex - 1];
-                }
+    getGroupWidth(groupIndex) {
+        return getGroupWidth(
+            groupIndex,
+            this.viewDataProvider,
+            {
+                isVirtualScrolling: this.isVirtualScrolling(),
+                rtlEnabled: this.option('rtlEnabled'),
+                DOMMetaData: this.getDOMElementsMetaData()
             }
-        }
-
-        return result;
+        );
     }
 
     scrollToTime(hours, minutes, date) {
