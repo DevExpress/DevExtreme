@@ -522,9 +522,9 @@ const LayoutManager = Widget.inherit({
                 if(isDefined(item.rowSpan)) {
                     generatedItem.location.rowspan = item.rowSpan;
                 }
-                if(isDefined(item._forceContentAutoFlexBasis)) {
+                if(isDefined(item._forceItemFlexSizeCorrectionInIE)) {
                     // WA for the T590137 (IE only)
-                    generatedItem._forceContentAutoFlexBasis = item._forceContentAutoFlexBasis;
+                    generatedItem._forceItemFlexSizeCorrectionInIE = item._forceItemFlexSizeCorrectionInIE;
                 }
                 result.push(generatedItem);
             }

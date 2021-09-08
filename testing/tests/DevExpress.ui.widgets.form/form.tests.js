@@ -1603,7 +1603,7 @@ QUnit.test('Get button instance', function(assert) {
     assert.strictEqual(formInvalidateSpy.callCount, 0, 'Invalidate does not called');
 });
 
-QUnit.test('API to apply WA from T590137 (default code fails in IE in this config, _forceContentAutoFlexBasis fails in other configs)', function(assert) {
+QUnit.test('API to apply WA from T590137 (default code fails in IE in this config, _forceItemFlexSizeCorrectionInIE fails in other configs)', function(assert) {
     let $form;
     let $contentElement;
     $('#form').dxPopup({
@@ -1617,7 +1617,7 @@ QUnit.test('API to apply WA from T590137 (default code fails in IE in this confi
                 items: [{
                     editorType: 'dxColorView',
                     dataField: 'item1',
-                    _forceContentAutoFlexBasis: true,
+                    _forceItemFlexSizeCorrectionInIE: true,
                     editorOptions: {
                         focusStateEnabled: false
                     },
