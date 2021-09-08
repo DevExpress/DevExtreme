@@ -1603,7 +1603,8 @@ QUnit.test('Get button instance', function(assert) {
     assert.strictEqual(formInvalidateSpy.callCount, 0, 'Invalidate does not called');
 });
 
-QUnit.test('API to apply WA from T590137 (default code fails in IE in this config, _forceItemFlexSizeCorrectionInIE fails in other configs)', function(assert) {
+QUnit.test('API to apply WA for T590137/T702531', function(assert) {
+    // Cannot set '_forceItemFlexSizeCorrectionInIE: true' by default because it fails in other configs (TODO: list of failed UT)
     let $form;
     let $contentElement;
     $('#form').dxPopup({

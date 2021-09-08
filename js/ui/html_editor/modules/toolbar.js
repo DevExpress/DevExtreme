@@ -587,7 +587,7 @@ if(Quill) {
                     items: [{
                         dataField: name,
                         editorType: 'dxColorView',
-                        _forceItemFlexSizeCorrectionInIE: true, // WA for the T590137 (IE only)
+                        _forceItemFlexSizeCorrectionInIE: true, // WA for the T702531 (IE only)
                         editorOptions: {
                             focusStateEnabled: false
                         },
