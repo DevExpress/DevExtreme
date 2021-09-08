@@ -1603,7 +1603,7 @@ QUnit.test('Get button instance', function(assert) {
     assert.strictEqual(formInvalidateSpy.callCount, 0, 'Invalidate does not called');
 });
 
-QUnit.test('API to apply WA from T590137 (IE only)', function(assert) {
+QUnit.test('API to apply WA from T590137 (default fails in IE, _contentBaseSize fails in other configs)', function(assert) {
     let $form;
     let $contentElement;
     $('#form').dxPopup({
@@ -1630,6 +1630,7 @@ QUnit.test('API to apply WA from T590137 (IE only)', function(assert) {
 
     const popupContentWidth = $contentElement[0].getBoundingClientRect().width;
     const colorViewContainerWidth = $('.dx-colorview-container')[0].getBoundingClientRect().width;
+    // TODO: cannot reproduce
     assert.ok(popupContentWidth > colorViewContainerWidth, `popupContentWidth > colorViewContainerWidth, ${popupContentWidth} ? ${colorViewContainerWidth}`);
 });
 
