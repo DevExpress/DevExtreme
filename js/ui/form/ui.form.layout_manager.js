@@ -326,16 +326,16 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderTemplate: function($container, item) {
-        // switch(item.itemType) {
-        //     case 'empty':
-        //         this._renderEmptyItem($container);
-        //         break;
-        //     case 'button':
-        //         this._renderButtonItem(item, $container);
-        //         break;
-        //     default:
-        //         this._renderFieldItem(item, $container);
-        // }
+        switch(item.itemType) {
+            case 'empty':
+                this._renderEmptyItem($container);
+                break;
+            case 'button':
+                this._renderButtonItem(item, $container);
+                break;
+            default:
+                this._renderFieldItem(item, $container);
+        }
     },
 
     _renderTemplates: function(templatesInfo) {
@@ -406,17 +406,6 @@ const LayoutManager = Widget.inherit({
                 }
                 if(isLastRow) {
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_ROW_CLASS);
-                }
-
-                switch(item.itemType) {
-                    case 'empty':
-                        that._renderEmptyItem($fieldItem);
-                        break;
-                    case 'button':
-                        that._renderButtonItem(item, $fieldItem);
-                        break;
-                    default:
-                        that._renderFieldItem(item, $fieldItem);
                 }
             },
             cols: that._generateRatio(colCount),
