@@ -90,15 +90,15 @@ export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, is
     return result;
 };
 
-export const getGroupWidth = (groupIndex, viewDataProvider, viewModel) => {
+export const getGroupWidth = (groupIndex, viewDataProvider, options) => {
     const {
         isVirtualScrolling,
         rtlEnabled,
         DOMMetaData
-    } = viewModel;
+    } = options;
 
     const cellWidth = getCellWidth(DOMMetaData);
-    let result = viewDataProvider.getCellCount(viewModel) * cellWidth;
+    let result = viewDataProvider.getCellCount(options) * cellWidth;
     // TODO: refactor after deleting old render
     if(isVirtualScrolling) {
         const groupedData = viewDataProvider.groupedDataMap.dateTableGroupedMap;
@@ -113,6 +113,7 @@ export const getGroupWidth = (groupIndex, viewDataProvider, viewModel) => {
         rtlEnabled,
         DOMMetaData
     );
+
     const currentPosition = position[groupIndex];
 
     if(currentPosition) {
