@@ -8,6 +8,6 @@ import {
 
 /** @public */
 export type DefaultOptionsRule<T> = {
-    device?: ((device: Device) => boolean) | Device | Device[];
+    device?: Device | Device[] | ((device: Device) => boolean);
     options: DeepPartial<T>;
 };
