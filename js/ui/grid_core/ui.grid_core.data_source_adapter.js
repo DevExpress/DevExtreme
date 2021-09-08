@@ -108,6 +108,9 @@ export default gridCore.Controller.inherit((function() {
             const items = cacheItem.items;
 
             if(items) {
+                if(take === undefined && !items[skip]) {
+                    return;
+                }
                 result.items = [];
                 for(let i = 0; take === undefined ? items[i + skip] : i < take; i++) {
                     const childCacheItem = items[i + skip];
@@ -161,18 +164,25 @@ export default gridCore.Controller.inherit((function() {
             const globalIndex = i + skip;
             const cacheItems = options.cachedData.items;
             const skips = i === 0 && options.skips || [];
-            cacheItems[globalIndex] = getCacheItem(data[i], groupCount, skips);
+            cacheItems[globalIndex] = getCacheItem(cacheItems[globalIndex], data[i], groupCount, skips);
         }
     }
 
-    function getCacheItem(loadedItem, groupCount, skips) {
+    function getCacheItem(cacheItem, loadedItem, groupCount, skips) {
         if(groupCount && loadedItem) {
             const result = { ...loadedItem };
             const skip = skips[0] || 0;
             if(loadedItem.items) {
-                result.items = {};
+                result.items = cacheItem?.items || {};
                 loadedItem.items.forEach((item, index) => {
-                    result.items[index + skip] = getCacheItem(item, groupCount - 1, skips.slice(1));
+                    const globalIndex = index + skip;
+                    const childSkips = index === 0 ? skips.slice(1) : [];
+                    result.items[globalIndex] = getCacheItem(
+                        result.items[globalIndex],
+                        item,
+                        groupCount - 1,
+                        childSkips
+                    );
                 });
             }
 
@@ -539,7 +549,7 @@ export default gridCore.Controller.inherit((function() {
                 loadOptions.group = options.group || loadOptions.group;
             }
 
-            const groupCount = gridCore.normalizeSortingInfo(storeLoadOptions.group || loadOptions.group).length;
+            const groupCount = gridCore.normalizeSortingInfo(options.group || storeLoadOptions.group || loadOptions.group).length;
 
             if(options.cachedDataPartBegin) {
                 options.data = options.cachedDataPartBegin.concat(options.data);
