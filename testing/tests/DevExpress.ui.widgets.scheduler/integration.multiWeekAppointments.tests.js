@@ -230,8 +230,6 @@ QUnit.test('Each cloned appointment should have a special icon if it greater tha
 QUnit.test('Multi-week appointments should be split by several parts', function(assert) {
     this.createInstance({ width: 700 });
 
-    mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
-
     this.instance.option({
         views: ['month'],
         currentView: 'month',
