@@ -163,7 +163,7 @@ const HeaderPanel = ColumnsView.inherit({
             this._invalidate();
             args.handled = true;
         }
-        if(args.name === 'toolbar') {
+        if(args.name === 'toolbar' && this._toolbar) {
             const parts = getPathParts(args.fullName);
             const optionName = args.fullName.replace(/^toolbar\./, '');
 
