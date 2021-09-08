@@ -8,22 +8,18 @@ import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
-import Button from '../button';
+import '../button';
+import '../drop_down_button';
 import List from '../list';
-import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
 const DATAGRID_EXPORT_BUTTON_CLASS = 'dx-datagrid-export-button';
+const DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME = 'exportButton';
 const DATAGRID_EXPORT_ICON = 'export-to';
 const DATAGRID_EXPORT_EXCEL_ICON = 'xlsxfile';
 const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
 const DATAGRID_EXPORT_EXCEL_BUTTON_ICON = 'export-excel-button';
-
-const TOOLBAR_ITEM_AUTO_HIDE_CLASS = 'dx-toolbar-item-auto-hide';
-const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
-
-const BUTTON_CLASS = 'dx-button';
 
 export const DataProvider = Class.inherit({
     ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
@@ -699,168 +695,100 @@ dataGridCore.registerModule('export', {
                 _getToolbarItems: function() {
                     const items = this.callBase();
 
-                    return this._appendExportItems(items);
-                },
-
-                _appendExportItems: function(items) {
-                    const that = this;
-                    const exportOptions = that.option('export');
-
-                    if(exportOptions.enabled) {
-                        const exportItems = [];
-
-                        if(exportOptions.allowExportSelectedData) {
-                            exportItems.push({
-                                template: function(data, index, container) {
-                                    const $container = $(container);
-                                    that._renderButton(data, $container);
-                                    that._renderExportMenu($container);
-                                },
-                                menuItemTemplate: function(data, index, container) {
-                                    that._renderList(data, $(container));
-                                },
-                                name: 'exportButton',
-                                allowExportSelected: true,
-                                location: 'after',
-                                locateInMenu: 'auto',
-                                sortIndex: 30
-                            });
-
-                        } else {
-                            exportItems.push({
-                                template: function(data, index, container) {
-                                    that._renderButton(data, $(container));
-                                },
-                                menuItemTemplate: function(data, index, container) {
-                                    that._renderButton(data, $(container), true);
-                                },
-                                name: 'exportButton',
-                                location: 'after',
-                                locateInMenu: 'auto',
-                                sortIndex: 30
-                            });
-                        }
-                        items = items.concat(exportItems);
-                        that._correctItemsPosition(items);
+                    const exportButton = this._getExportToolbarButton();
+                    if(exportButton) {
+                        items.push(exportButton);
+                        this._correctItemsPosition(items);
                     }
 
                     return items;
                 },
 
-                _renderButton: function(data, $container, withText) {
-                    const that = this;
-                    const buttonOptions = that._getButtonOptions(data.allowExportSelected);
-                    const $buttonContainer = that._getButtonContainer()
-                        .addClass(DATAGRID_EXPORT_BUTTON_CLASS)
-                        .appendTo($container);
+                _getExportToolbarButton: function() {
+                    const items = this._getExportToolbarItems();
 
-                    if(withText) {
-                        const wrapperNode = $('<div>').addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS);
-                        $container
-                            .wrapInner(wrapperNode)
-                            .parent()
-                            .addClass('dx-toolbar-menu-action dx-toolbar-menu-button ' + TOOLBAR_HIDDEN_BUTTON_CLASS);
-                        buttonOptions.text = buttonOptions.hint;
+                    if(items.length === 0) {
+                        return null;
                     }
 
-                    that._createComponent(
-                        $buttonContainer,
-                        Button,
-                        buttonOptions
-                    );
-                },
+                    const toolbarButtonOptions = {
+                        name: DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME,
+                        location: 'after',
+                        locateInMenu: 'auto',
+                        sortIndex: 30,
+                        options: { items }
+                    };
 
-                _renderList: function(data, $container) {
-                    const that = this;
-                    const texts = that.option('export.texts');
-                    const items = [{
-                        template: function(data, index, container) {
-                            that._renderFakeButton(data, $(container), DATAGRID_EXPORT_EXCEL_ICON);
-                        },
-                        text: texts.exportAll
-                    }, {
-                        template: function(data, index, container) {
-                            that._renderFakeButton(data, $(container), DATAGRID_EXPORT_SELECTED_ICON);
-                        },
-                        text: texts.exportSelectedRows,
-                        exportSelected: true
-                    }];
+                    if(items.length === 1) {
+                        const widgetOptions = {
+                            ...items[0],
+                            hint: items[0].text,
+                            text: undefined,
+                            elementAttr: {
+                                class: DATAGRID_EXPORT_BUTTON_CLASS
+                            }
+                        };
 
-                    that._createComponent(
-                        $container,
-                        List,
-                        {
+
+                        toolbarButtonOptions.widget = 'dxButton';
+                        toolbarButtonOptions.options = widgetOptions;
+                    } else {
+                        const widgetOptions = {
+                            icon: DATAGRID_EXPORT_ICON,
+                            displayExpr: 'text',
                             items: items,
-                            onItemClick: function(e) {
-                                that._exportController.exportToExcel(e.itemData.exportSelected);
+                            hint: 'Export',
+                            elementAttr: {
+                                class: DATAGRID_EXPORT_BUTTON_CLASS
                             },
-                            scrollingEnabled: false
-                        }
-                    );
+                            dropDownOptions: {
+                                wrapperAttr: { class: DATAGRID_EXPORT_MENU_CLASS },
+                                width: 'auto'
+                            }
+                        };
+
+                        toolbarButtonOptions.options = widgetOptions;
+                        toolbarButtonOptions.widget = 'dxDropDownButton';
+                    }
+
+                    toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
+                        this._createComponent($(container), List, { items });
+                    };
+
+                    return toolbarButtonOptions;
                 },
 
-                _renderFakeButton: function(data, $container, iconName) {
-                    const $icon = $('<div>')
-                        .addClass('dx-icon dx-icon-' + iconName);
-                    const $text = $('<span>')
-                        .addClass('dx-button-text')
-                        .text(data.text);
-                    const $content = $('<div>')
-                        .addClass('dx-button-content')
-                        .append($icon)
-                        .append($text);
-                    const $button = $('<div>')
-                        .addClass(BUTTON_CLASS + ' dx-button-has-text dx-button-has-icon dx-datagrid-toolbar-button')
-                        .append($content);
-                    const $toolbarItem = $('<div>')
-                        .addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS)
-                        .append($button);
+                _getExportToolbarItems: function() {
+                    const exportOptions = this.option('export');
+                    const texts = this.option('export.texts');
+                    const items = [];
 
-                    $container
-                        .append($toolbarItem)
-                        .parent()
-                        .addClass('dx-toolbar-menu-custom ' + TOOLBAR_HIDDEN_BUTTON_CLASS);
+                    if(exportOptions.enabled) {
+                        items.push({
+                            text: texts.exportAll,
+                            icon: DATAGRID_EXPORT_EXCEL_ICON,
+                            onClick: () => {
+                                this._exportController.exportToExcel();
+                            }
+                        });
+
+                        if(exportOptions.allowExportSelectedData) {
+                            items.push({
+                                text: texts.exportSelectedRows,
+                                icon: DATAGRID_EXPORT_SELECTED_ICON,
+                                onClick: () => {
+                                    this._exportController.exportToExcel(true);
+                                }
+                            });
+                        }
+                    }
+
+                    return items;
                 },
 
                 _correctItemsPosition: function(items) {
                     items.sort(function(itemA, itemB) {
                         return itemA.sortIndex - itemB.sortIndex;
-                    });
-                },
-
-                _renderExportMenu: function($buttonContainer) {
-                    const that = this;
-                    const $button = $buttonContainer.find('.' + BUTTON_CLASS);
-                    const texts = that.option('export.texts');
-                    const menuItems = [
-                        {
-                            text: texts.exportAll,
-                            icon: DATAGRID_EXPORT_EXCEL_ICON
-                        },
-                        {
-                            text: texts.exportSelectedRows,
-                            exportSelected: true,
-                            icon: DATAGRID_EXPORT_SELECTED_ICON
-                        }
-                    ];
-                    const $menuContainer = $('<div>').appendTo($buttonContainer);
-
-                    that._contextMenu = that._createComponent($menuContainer, ContextMenu, {
-                        showEvent: 'dxclick',
-                        items: menuItems,
-                        cssClass: DATAGRID_EXPORT_MENU_CLASS,
-                        onItemClick: function(e) {
-                            that._exportController.exportToExcel(e.itemData.exportSelected);
-                        },
-                        target: $button,
-                        position: {
-                            at: 'left bottom',
-                            my: 'left top',
-                            offset: '0 3',
-                            collision: 'fit',
-                            boundary: that._$parent,
-                            boundaryOffset: '1 1'
-                        }
                     });
                 },
 

@@ -172,8 +172,17 @@ export function renderFieldItemTo({
             const wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
             const toggleInvalidClass = function(e) {
                 $(e.element).parents(wrapperClass)
-                    .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option('isValid') === false);
+                    .toggleClass(
+                        INVALID_CLASS,
+                        e.component.option('isValid') === false &&
+                        (e.component._isFocused() || e.component.option('validationMessageMode') === 'always')
+                    );
             };
+
+            validationTargetInstance.on('optionChanged', (e) => {
+                if(e.name !== 'isValid') return;
+                toggleInvalidClass(e);
+            });
 
             validationTargetInstance
                 .on('focusIn', toggleInvalidClass)
