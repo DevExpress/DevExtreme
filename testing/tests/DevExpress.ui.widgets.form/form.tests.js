@@ -11,6 +11,7 @@ import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
+import 'ui/color_box';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
@@ -1600,6 +1601,36 @@ QUnit.test('Get button instance', function(assert) {
 
     assert.strictEqual(form.getButton('button2').option('text'), 'changed_button_text');
     assert.strictEqual(formInvalidateSpy.callCount, 0, 'Invalidate does not called');
+});
+
+QUnit.test('API to apply WA from T590137 (IE only)', function(assert) {
+    let $form;
+    let $contentElement;
+    $('#form').dxPopup({
+        visible: true,
+        contentTemplate: (contentElem) => {
+            $contentElement = $(contentElem);
+            $form = $('<div>').appendTo(contentElem);
+            $form.dxForm({
+                width: 'auto',
+                height: 'auto',
+                items: [{
+                    editorType: 'dxColorView',
+                    dataField: 'item1',
+                    _contentBaseSize: 'auto',
+                    editorOptions: {
+                        focusStateEnabled: false
+                    },
+                    label: { visible: false }
+                }]
+            }).dxForm('instance');
+            return $form;
+        }
+    });
+
+    const popupContentWidth = $contentElement[0].getBoundingClientRect().width;
+    const colorViewContainerWidth = $('.dx-colorview-container')[0].getBoundingClientRect().width;
+    assert.ok(popupContentWidth > colorViewContainerWidth, `popupContentWidth > colorViewContainerWidth, ${popupContentWidth} ? ${colorViewContainerWidth}`);
 });
 
 QUnit.testInActiveWindow('Change \'Button.icon\'', function(assert) {

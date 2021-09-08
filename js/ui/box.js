@@ -178,7 +178,7 @@ class FlexLayoutStrategy {
                     width: 'auto',
                     height: 'auto',
                     display: stylePropPrefix('flexDirection') + 'flex',
-                    flexBasis: 0
+                    flexBasis: item._contentBaseSize || 0 // WA for the T590137 (IE only)
                 });
 
                 setFlexProp(itemContent, 'flexGrow', 1);
