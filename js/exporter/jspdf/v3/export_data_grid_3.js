@@ -1,6 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { initializeCellsWidth, calculateHeights, calculateCoordinates } from './row_utils';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates } from './row_utils';
 import { generateRowsInfo } from './rows_generator';
 import { drawPdfCells } from './draw_utils';
 
@@ -22,6 +22,7 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
+            // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
             const rowsInfo = generateRowsInfo(dataProvider, dataGrid);
 
             if(options.customizeCell) {
@@ -43,22 +44,38 @@ function exportDataGrid(doc, dataGrid, options) {
 
             initializeCellsWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
 
-            // TODO set/update/initColSpanRowSpan(rows);
+            // apply colSpans + recalculate cellsWidth
+            applyColSpans(rowsInfo);
 
             // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled or use value from customizeCell
             calculateHeights(doc, rowsInfo, options);
 
-            // TODO set/update/initBorders(rows);
+            // apply rowSpans + recalculate cells height
+            applyRowSpans(rowsInfo);
 
+            // when we known all sizes we can calculate all coordinates
             calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
+
+            // recalculate for grouped rows
+            // TODO: applyGroupIndents()
+
+            // set/update/initBorders(rows);
+            // TODO: initBorders(rows);
+
+            // splitting to pages
+            // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
+            // TODO: applySplitting()
 
             const pdfCellsInfo = [].concat.apply([],
                 rowsInfo.map(rowInfo => {
-                    return rowInfo.cells.map(cellInfo => {
-                        return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
-                    });
+                    return rowInfo.cells
+                        .filter(cell => !isDefined(cell.pdfCell.isMerged))
+                        .map(cellInfo => {
+                            return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
+                        });
                 })
             );
+
             drawPdfCells(doc, pdfCellsInfo); // draw content only ???
 
             // drawGridLines(); draw grid lines only ???

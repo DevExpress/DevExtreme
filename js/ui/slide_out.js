@@ -7,7 +7,7 @@ import { extend } from '../core/utils/extend';
 import PlainEditStrategy from './collection/ui.collection_widget.edit.strategy.plain';
 import SlideOutView from './slide_out_view';
 import CollectionWidget from './collection/ui.collection_widget.edit';
-import List from './list';
+import List from './list_light';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import DataConverterMixin from './shared/grouped_data_converter_mixin';

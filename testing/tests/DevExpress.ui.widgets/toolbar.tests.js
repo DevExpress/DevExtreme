@@ -15,6 +15,7 @@ import browser from 'core/utils/browser';
 import devices from 'core/devices';
 
 import 'ui/button_group';
+import 'ui/text_box';
 
 import 'generic_light.css!';
 import 'ui/button';

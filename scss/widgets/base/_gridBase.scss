@@ -963,22 +963,8 @@
     font-weight: bold;
   }
 
-  .dx-#{$widget-name}-export-menu {
-    .dx-menu-item {
-      .dx-checkbox {
-        margin-left: 0;
-
-        .dx-checkbox-icon {
-          width: 16px;
-          height: 16px;
-        }
-
-        .dx-checkbox-text {
-          white-space: nowrap;
-          word-break: normal;
-        }
-      }
-    }
+  .dx-#{$widget-name}-export-menu .dx-dropdownbutton-content .dx-list-item {
+    display: block;
   }
 
   .dx-command-adaptive {

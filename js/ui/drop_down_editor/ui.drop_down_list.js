@@ -9,7 +9,7 @@ import { isWindow, isDefined, isObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
-import List from '../list';
+import List from '../list_light';
 import errors from '../widget/ui.errors';
 import { addNamespace } from '../../events/utils/index';
 import devices from '../../core/devices';

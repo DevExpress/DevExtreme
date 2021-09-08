@@ -207,6 +207,7 @@ class ScrollableTestHelper {
           ...{
             contentSize: 200,
             containerSize: 100,
+            maxOffset: -100,
             scrollableOffset: 0,
             scrollLocation: -50,
             ...additionalProps.props,
