@@ -1,7 +1,7 @@
 $(() => {
   let isFirstLevel = true;
   const chartContainer = $('#chart');
-  var chart = chartContainer.dxChart({
+  const chart = chartContainer.dxChart({
     dataSource: filterData(''),
     title: 'The Most Populated Countries by Continents',
     series: {

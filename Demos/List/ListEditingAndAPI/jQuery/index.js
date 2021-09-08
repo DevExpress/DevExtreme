@@ -15,7 +15,7 @@ $(() => {
     },
   });
 
-  var itemDeleteModeChooser = $('#itemDeleteMode').dxSelectBox({
+  const itemDeleteModeChooser = $('#itemDeleteMode').dxSelectBox({
     disabled: true,
     dataSource: ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'],
     value: 'toggle',

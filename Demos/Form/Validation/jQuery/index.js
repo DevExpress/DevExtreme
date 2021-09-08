@@ -8,7 +8,7 @@ $(() => {
     return d.promise();
   };
 
-  var formWidget = $('#form').dxForm({
+  const formWidget = $('#form').dxForm({
     formData,
     readOnly: false,
     showColonAfterLabel: true,

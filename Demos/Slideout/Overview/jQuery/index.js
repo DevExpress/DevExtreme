@@ -1,9 +1,6 @@
 $(() => {
-  function showMenu() {
-    slideOut.option('menuVisible', !slideOut.option('menuVisible'));
-  }
-
-  var slideOut = $('#slideout').dxSlideOut({
+  let slideOut;
+  slideOut = $('#slideout').dxSlideOut({
     dataSource: products,
     onItemClick: showMenu,
     menuVisible: true,
@@ -56,4 +53,8 @@ $(() => {
       return `<b>${e.key}</b>`;
     },
   }).dxSlideOut('instance');
+
+  function showMenu() {
+    slideOut.option('menuVisible', !slideOut.option('menuVisible'));
+  }
 });

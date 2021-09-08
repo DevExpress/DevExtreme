@@ -121,6 +121,6 @@ $(() => {
     });
   });
 
-  var formatCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format;
-  var formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;
+  const formatCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format;
+  const formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;
 });

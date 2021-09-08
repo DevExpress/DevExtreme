@@ -18,7 +18,7 @@ $(() => {
     },
   }).dxTabs('instance');
 
-  var selectBox = $('#selectbox').dxSelectBox({
+  const selectBox = $('#selectbox').dxSelectBox({
     value: 0,
     dataSource: tabs,
     displayExpr: 'text',

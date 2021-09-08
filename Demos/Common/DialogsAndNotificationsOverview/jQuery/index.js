@@ -25,7 +25,7 @@ $(() => {
     closeOnOutsideClick: true,
   };
 
-  var buttonOptions = {
+  const buttonOptions = {
     icon: 'favorites',
     width: 260,
     height: 44,

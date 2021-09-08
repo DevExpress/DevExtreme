@@ -49,7 +49,7 @@ $(() => {
     },
   });
 
-  var salesPopup = $('#sales-popup').dxPopup({
+  const salesPopup = $('#sales-popup').dxPopup({
     width: 600,
     height: 400,
     contentTemplate(contentElement) {

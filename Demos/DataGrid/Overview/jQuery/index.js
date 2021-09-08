@@ -83,7 +83,7 @@ $(() => {
   });
 });
 
-var discountCellTemplate = function (container, options) {
+const discountCellTemplate = function (container, options) {
   $('<div/>').dxBullet({
     onIncidentOccurred: null,
     size: {
@@ -114,4 +114,4 @@ var discountCellTemplate = function (container, options) {
   }).appendTo(container);
 };
 
-var collapsed = false;
+let collapsed = false;

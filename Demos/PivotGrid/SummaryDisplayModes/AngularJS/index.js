@@ -73,7 +73,7 @@ DemoApp.controller('DemoController', ($scope) => {
     },
   };
 
-  var summaryDisplayModes = [
+  const summaryDisplayModes = [
     { text: 'None', value: 'none' },
     { text: 'Absolute Variation', value: 'absoluteVariation' },
     { text: 'Percent Variation', value: 'percentVariation' },

@@ -37,4 +37,4 @@ DemoApp.controller('DemoController', ($scope) => {
     },
   };
 });
-var formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;
+const formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;

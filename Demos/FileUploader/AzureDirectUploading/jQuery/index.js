@@ -59,4 +59,4 @@ function createParameterInfoDiv(name, value) {
   );
 }
 
-var gateway = null;
+let gateway = null;

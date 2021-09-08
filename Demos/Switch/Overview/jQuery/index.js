@@ -13,7 +13,7 @@ $(() => {
     },
   });
 
-  var disabledSwitch = $('#disabled').dxSwitch({
+  const disabledSwitch = $('#disabled').dxSwitch({
     value: false,
     disabled: true,
   }).dxSwitch('instance');

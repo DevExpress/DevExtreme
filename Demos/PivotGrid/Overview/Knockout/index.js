@@ -1,5 +1,5 @@
 window.onload = function () {
-  var viewModel = {
+  const viewModel = {
     chart: null,
     chartOptions: {
       commonSeriesSettings: {

@@ -4,7 +4,7 @@ $(() => {
     data: employees,
   });
 
-  var dataGrid = $('#gridContainer').dxDataGrid({
+  const dataGrid = $('#gridContainer').dxDataGrid({
     dataSource: employeesStore,
     showBorders: true,
     paging: {

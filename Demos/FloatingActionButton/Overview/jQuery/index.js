@@ -33,7 +33,7 @@ $(() => {
     },
   }).dxSpeedDialAction('instance');
 
-  var grid = $('#grid').dxDataGrid({
+  const grid = $('#grid').dxDataGrid({
     dataSource: employees,
     showBorders: true,
     keyExpr: 'ID',

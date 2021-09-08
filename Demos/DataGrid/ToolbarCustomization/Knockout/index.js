@@ -6,7 +6,7 @@ window.onload = function () {
     expandButtonText(newValue ? 'Collapse All' : 'Expand All');
   });
 
-  var viewModel = {
+  const viewModel = {
     totalCount: ko.observable(getGroupCount('CustomerStoreState')),
     dataGridOptions: {
       dataSource: orders,

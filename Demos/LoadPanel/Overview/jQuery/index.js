@@ -4,7 +4,7 @@ $(() => {
     showEmployeeInfo({});
   };
 
-  var showEmployeeInfo = function (employee) {
+  const showEmployeeInfo = function (employee) {
     $('.birth-date').text(employee.Birth_Date || '');
     $('.city').text(employee.City || '');
     $('.zipcode').text(employee.Zipcode || '');
@@ -18,7 +18,7 @@ $(() => {
     onClick: showLoadPanel,
   });
 
-  var loadPanel = $('.loadpanel').dxLoadPanel({
+  const loadPanel = $('.loadpanel').dxLoadPanel({
     shadingColor: 'rgba(0,0,0,0.4)',
     position: { of: '#employee' },
     visible: false,

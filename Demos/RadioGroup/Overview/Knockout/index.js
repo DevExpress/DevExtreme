@@ -1,5 +1,5 @@
 window.onload = function () {
-  var viewModel = {
+  const viewModel = {
     simple: {
       items: priorities,
       value: priorities[0],

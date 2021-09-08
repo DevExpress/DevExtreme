@@ -29,7 +29,7 @@ $(() => {
     }],
   }).dxPieChart('instance');
 
-  var region = $('#selectbox').dxSelectBox({
+  const region = $('#selectbox').dxSelectBox({
     width: 250,
     dataSource,
     displayExpr: 'region',

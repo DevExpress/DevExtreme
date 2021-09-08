@@ -31,7 +31,7 @@ $(() => {
     },
   }).dxNumberBox('instance');
 
-  var heightInstance = $('#number-box-height').dxNumberBox({
+  const heightInstance = $('#number-box-height').dxNumberBox({
     showSpinButtons: true,
     value: 260,
     max: 700,

@@ -8,7 +8,7 @@ $(() => {
     return 'Nobody has been selected';
   }
 
-  var treeList = $('#employees').dxTreeList({
+  const treeList = $('#employees').dxTreeList({
     dataSource: employees,
     keyExpr: 'ID',
     parentIdExpr: 'Head_ID',

@@ -11,7 +11,7 @@ $(() => {
     },
   }).dxTagBox('instance');
 
-  var accordion = $('#accordion-container').dxAccordion({
+  const accordion = $('#accordion-container').dxAccordion({
     dataSource: accordionItems,
     animationDuration: 300,
     collapsible: false,

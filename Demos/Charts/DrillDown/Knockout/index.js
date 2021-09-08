@@ -1,7 +1,7 @@
 window.onload = function () {
   const markup = ko.observableArray([]);
 
-  var viewModel = {
+  const viewModel = {
     markup,
     treeMapOptions: {
       dataSource: citiesPopulation,

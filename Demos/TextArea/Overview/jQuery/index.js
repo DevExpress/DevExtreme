@@ -36,7 +36,7 @@ $(() => {
     },
   });
 
-  var editingTextArea = $('#editing-textarea').dxTextArea({
+  const editingTextArea = $('#editing-textarea').dxTextArea({
     value: longText,
     height: 90,
     valueChangeEvent: 'change',
@@ -45,7 +45,7 @@ $(() => {
     },
   }).dxTextArea('instance');
 
-  var disabledTextArea = $('#disabled-textarea').dxTextArea({
+  const disabledTextArea = $('#disabled-textarea').dxTextArea({
     value: longText,
     height: 90,
     readOnly: true,

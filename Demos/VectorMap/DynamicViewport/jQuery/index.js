@@ -24,13 +24,13 @@ $(() => {
     },
   });
 
-  var zoomFactor = $('#zoom-factor').dxTextBox({
+  const zoomFactor = $('#zoom-factor').dxTextBox({
     width: 210,
     readOnly: true,
     value: '1.00',
   }).dxTextBox('instance');
 
-  var center = $('#center').dxTextBox({
+  const center = $('#center').dxTextBox({
     width: 210,
     readOnly: true,
     value: '0.000, 46.036',

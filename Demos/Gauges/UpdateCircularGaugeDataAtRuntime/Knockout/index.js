@@ -1,5 +1,5 @@
 window.onload = function () {
-  var model = {
+  const model = {
     items: dataSource,
     selected: ko.observable(dataSource[0]),
     value: ko.computed(() => model.selected().mean, null, { deferEvaluation: true }),

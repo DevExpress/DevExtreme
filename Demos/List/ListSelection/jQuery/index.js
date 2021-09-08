@@ -1,5 +1,5 @@
 $(() => {
-  var listWidget = $('#simpleList').dxList({
+  const listWidget = $('#simpleList').dxList({
     dataSource: new DevExpress.data.DataSource({
       store: new DevExpress.data.ArrayStore({
         key: 'id',
@@ -23,7 +23,7 @@ $(() => {
     },
   });
 
-  var selectAllModeChooser = $('#selectAllMode').dxSelectBox({
+  const selectAllModeChooser = $('#selectAllMode').dxSelectBox({
     disabled: false,
     items: ['page', 'allPages'],
     value: 'page',

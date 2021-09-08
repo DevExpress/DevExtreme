@@ -24,7 +24,7 @@ window.onload = function () {
     });
   };
 
-  var getSelectedItemsKeys = function (items) {
+  const getSelectedItemsKeys = function (items) {
     let result = [];
     items.forEach((item) => {
       if (item.selected) {
@@ -40,7 +40,7 @@ window.onload = function () {
   const treeDataSource = makeAsyncDataSource('treeProducts.json');
   const gridDataSource = makeAsyncDataSource('customers.json');
 
-  var treeBoxOptions = {
+  const treeBoxOptions = {
     value: ko.observable(['1_1']),
     valueExpr: 'ID',
     displayExpr: 'name',

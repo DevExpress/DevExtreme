@@ -60,7 +60,7 @@ $(() => {
     closeOnOutsideClick: true,
   };
 
-  var showInfo = function (data) {
+  const showInfo = function (data) {
     currentEmployee = data;
 
     if (popup) {

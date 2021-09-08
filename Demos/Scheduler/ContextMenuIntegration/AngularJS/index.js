@@ -59,7 +59,7 @@ DemoApp.controller('DemoController', ($scope) => {
     height: 600,
   };
 
-  var onItemClick = function (contextMenuEvent) {
+  const onItemClick = function (contextMenuEvent) {
     return function (e) {
       e.itemData.onItemClick(contextMenuEvent, e);
     };
@@ -117,14 +117,14 @@ DemoApp.controller('DemoController', ($scope) => {
     }));
   };
 
-  var cellContextMenuItems = [
+  const cellContextMenuItems = [
     { text: 'New Appointment', onItemClick: createAppointment },
     { text: 'New Recurring Appointment', onItemClick: createRecurringAppointment },
     { text: 'Group by Room/Ungroup', beginGroup: true, onItemClick: groupCell },
     { text: 'Go to Today', onItemClick: showCurrentDate },
   ];
 
-  var appointmentContextMenuItems = [
+  let appointmentContextMenuItems = [
     { text: 'Open', onItemClick: showAppointment },
     { text: 'Delete', onItemClick: deleteAppointment },
     { text: 'Repeat Weekly', beginGroup: true, onItemClick: repeatAppointmentWeekly },

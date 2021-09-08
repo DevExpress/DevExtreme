@@ -7,7 +7,7 @@ $(() => {
     },
   });
 
-  var dataGrid = $('#gridContainer').dxDataGrid({
+  const dataGrid = $('#gridContainer').dxDataGrid({
     dataSource: {
       store: {
         type: 'odata',

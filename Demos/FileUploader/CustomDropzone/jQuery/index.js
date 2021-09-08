@@ -38,7 +38,7 @@ $(() => {
     },
   });
 
-  var uploadProgressBar = $('#upload-progress').dxProgressBar({
+  const uploadProgressBar = $('#upload-progress').dxProgressBar({
     min: 0,
     max: 100,
     width: '30%',

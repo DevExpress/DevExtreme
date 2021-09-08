@@ -85,7 +85,7 @@ $(() => {
     ],
   });
 
-  var productsStore = new DevExpress.data.DataSource(products);
+  const productsStore = new DevExpress.data.DataSource(products);
 
   $('#products').dxList({
     dataSource: productsStore,

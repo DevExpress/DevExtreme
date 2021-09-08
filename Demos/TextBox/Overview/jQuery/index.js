@@ -39,7 +39,7 @@ $(() => {
     },
   });
 
-  var emailEditor = $('#email').dxTextBox({
+  const emailEditor = $('#email').dxTextBox({
     value: 'smith@corp.com',
     readOnly: true,
     hoverStateEnabled: false,

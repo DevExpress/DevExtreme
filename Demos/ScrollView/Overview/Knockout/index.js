@@ -14,7 +14,7 @@ window.onload = function () {
     updateContent(e, 'ReachBottom');
   };
 
-  var viewModel = {
+  const viewModel = {
     content: ko.observable(longText),
 
     updateTopContent(e) {

@@ -35,7 +35,7 @@ DemoApp.controller('DemoController', ($scope) => {
     });
 });
 
-var createStore = function () {
+const createStore = function () {
   const url = `${BASE_PATH}api/SchedulerSignalR`;
   return DevExpress.data.AspNet.createStore({
     key: 'AppointmentId',
@@ -49,7 +49,7 @@ var createStore = function () {
   });
 };
 
-var createOptions = function (store) {
+const createOptions = function (store) {
   return {
     dataSource: store,
     timeZone: 'America/Los_Angeles',

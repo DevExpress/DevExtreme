@@ -25,9 +25,9 @@ $(function () {
       allowEditText: false,
     }],
     customShapeTemplate(item, $container) {
-      var employee = item.dataItem;
-      var svgNS = 'http://www.w3.org/2000/svg';
-      var $content = $(document.createElementNS(svgNS, 'svg')).addClass('template');
+      let employee = item.dataItem;
+      let svgNS = 'http://www.w3.org/2000/svg';
+      let $content = $(document.createElementNS(svgNS, 'svg')).addClass('template');
       $(document.createElementNS(svgNS, 'text'))
         .addClass('template-name')
         .attr({ x: '50%', y: '20%' })
@@ -53,7 +53,7 @@ $(function () {
       $container.append($content);
     },
     customShapeToolboxTemplate(item, $container) {
-      var $content = $("<svg class='template'>"
+      let $content = $("<svg class='template'>"
                 + "<text x='50%' y='40%'>New</text>"
                 + "<text x='50%' y='70%'>Employee</text>"
                 + '</svg >');
@@ -91,7 +91,7 @@ $(function () {
       },
     },
     onRequestLayoutUpdate(e) {
-      for (var i = 0; i < e.changes.length; i++) {
+      for (let i = 0; i < e.changes.length; i++) {
         if (e.changes[i].type === 'remove') e.allowed = true;
         else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) e.allowed = true;
       }
@@ -116,7 +116,7 @@ $(function () {
     },
   }).dxDiagram('instance');
 
-  var popupContentTemplate = function ($container) {
+  let popupContentTemplate = function ($container) {
     let $editorsContainer = $('<div class="dx-fieldset" />').appendTo($container);
     let $nameField = $('<div class="dx-field"><div class="dx-field-label">Name</div><div class="dx-field-value" data-field="Full_Name" /></div>');
     $nameField.find('.dx-field-value').append('<div />').dxTextBox();
@@ -157,9 +157,9 @@ $(function () {
     contentTemplate: popupContentTemplate.bind(this),
   }).dxPopup('instance');
 
-  var currentEmployee = {};
+  let currentEmployee = {};
 
-  var editEmployee = function (employee) {
+  const editEmployee = function (employee) {
     currentEmployee = { ...employee };
 
     popup.show();
@@ -172,10 +172,10 @@ $(function () {
       });
     });
   };
-  var deleteEmployee = function (employee) {
+  const deleteEmployee = function (employee) {
     store.push([{ type: 'remove', key: employee.ID }]);
   };
-  var updateEmployee = function () {
+  const updateEmployee = function () {
     store.push([{
       type: 'update',
       key: currentEmployee.ID,
@@ -191,11 +191,11 @@ $(function () {
     }]);
     popup.hide();
   };
-  var cancelEditEmployee = function () {
+  const cancelEditEmployee = function () {
     currentEmployee = {};
     popup.hide();
   };
-  var handleChange = function (field, value) {
+  const handleChange = function (field, value) {
     currentEmployee[field] = value;
   };
 });

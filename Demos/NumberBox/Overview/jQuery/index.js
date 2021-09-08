@@ -41,7 +41,7 @@ $(() => {
     },
   });
 
-  var productInventory = $('#stock').dxNumberBox({
+  const productInventory = $('#stock').dxNumberBox({
     value: 14,
     min: 0,
     showSpinButtons: false,

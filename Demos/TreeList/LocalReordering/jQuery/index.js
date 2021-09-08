@@ -1,5 +1,5 @@
 $(() => {
-  var treeList = $('#employees').dxTreeList({
+  const treeList = $('#employees').dxTreeList({
     dataSource: employees,
     rootValue: -1,
     keyExpr: 'ID',

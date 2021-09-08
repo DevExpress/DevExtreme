@@ -1,5 +1,5 @@
 $(() => {
-  var passwordEditor = $('#password').dxTextBox({
+  const passwordEditor = $('#password').dxTextBox({
     placeholder: 'password',
     mode: 'password',
     value: 'password',
@@ -17,7 +17,7 @@ $(() => {
     }],
   }).dxTextBox('instance');
 
-  var currencyEditor = $('#multicurrency').dxNumberBox({
+  const currencyEditor = $('#multicurrency').dxNumberBox({
     value: 14500.55,
     format: '$ #.##',
     showClearButton: true,
@@ -49,7 +49,7 @@ $(() => {
 
   const millisecondsInDay = 24 * 60 * 60 * 1000;
 
-  var dateEditor = $('#advanced-datebox').dxDateBox({
+  const dateEditor = $('#advanced-datebox').dxDateBox({
     value: new Date().getTime(),
     stylingMode: 'outlined',
     buttons: [{

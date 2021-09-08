@@ -58,7 +58,7 @@ $(() => {
     taskListWidth: 500,
   });
 
-  var popupInstance = $('#popup').dxPopup({
+  const popupInstance = $('#popup').dxPopup({
     showTitle: true,
     title: 'About',
     height: 'auto',

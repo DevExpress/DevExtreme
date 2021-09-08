@@ -39,4 +39,4 @@ window.onload = function () {
 
   ko.applyBindings(viewModel, document.getElementById('chart-demo'));
 };
-var formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;
+const formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;

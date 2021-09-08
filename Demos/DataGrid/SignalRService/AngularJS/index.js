@@ -54,7 +54,7 @@ DemoApp.controller('DemoController', ($scope) => {
 
   $scope.connectionStarted = false;
 
-  var connection = new signalR.HubConnectionBuilder()
+  const connection = new signalR.HubConnectionBuilder()
     .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub')
     .configureLogging(signalR.LogLevel.Information)
     .build();

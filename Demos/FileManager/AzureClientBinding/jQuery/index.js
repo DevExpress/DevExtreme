@@ -114,5 +114,5 @@ function createParameterInfoDiv(name, value) {
   );
 }
 
-var gateway = null;
-var azure = null;
+let gateway = null;
+let azure = null;

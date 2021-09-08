@@ -35,7 +35,7 @@ $(() => {
     },
   };
 
-  var formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
+  const formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
 
   $('#range-selector').dxRangeSelector(rangeOptions);
 

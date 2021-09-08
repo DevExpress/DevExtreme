@@ -7,7 +7,7 @@ window.onload = function () {
     viewModel.events.unshift(eventName);
   }
 
-  var viewModel = {
+  const viewModel = {
     events: ko.observableArray(),
     dataGridOptions: {
       dataSource: employees,

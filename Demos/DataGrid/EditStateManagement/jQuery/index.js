@@ -15,7 +15,7 @@ $(() => {
       dataGrid.option('dataSource', data);
     });
 
-  var dataGrid = $('#gridContainer').dxDataGrid({
+  const dataGrid = $('#gridContainer').dxDataGrid({
     keyExpr: 'OrderID',
     showBorders: true,
     dataSource: [],

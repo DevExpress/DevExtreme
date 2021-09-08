@@ -1,5 +1,5 @@
 $(() => {
-  var form = $('#form').dxForm({
+  const form = $('#form').dxForm({
     colCount: 2,
     formData: employee,
     items: [

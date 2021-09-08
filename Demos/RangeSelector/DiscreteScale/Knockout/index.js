@@ -40,7 +40,7 @@ window.onload = function () {
     },
   };
 
-  var formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
+  const formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
 
   ko.applyBindings(viewModel, $('#range-selector-demo').get(0));
 };

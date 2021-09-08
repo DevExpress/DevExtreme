@@ -1,5 +1,5 @@
 $(() => {
-  var dataGrid = $('#gridContainer').dxDataGrid({
+  const dataGrid = $('#gridContainer').dxDataGrid({
     dataSource: orders,
     keyExpr: 'ID',
     showBorders: true,

@@ -108,7 +108,7 @@ DemoApp.controller('DemoController', ($scope) => {
 
   $scope.connectionStarted = false;
 
-  var connection = new signalR.HubConnectionBuilder()
+  const connection = new signalR.HubConnectionBuilder()
     .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub')
     .configureLogging(signalR.LogLevel.Information)
     .build();
@@ -122,6 +122,6 @@ DemoApp.controller('DemoController', ($scope) => {
       $scope.$apply();
     });
 
-  var formatCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format;
-  var formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;
+  const formatCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format;
+  const formatNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format;
 });

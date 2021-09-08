@@ -126,7 +126,7 @@ DemoApp.controller('DemoController', ($scope) => {
     },
   };
 
-  var customTooltipHandlers = {
+  const customTooltipHandlers = {
     'Average temperature': function (arg, aggregationInfo) {
       const start = aggregationInfo && aggregationInfo.intervalStart;
       const end = aggregationInfo && aggregationInfo.intervalEnd;

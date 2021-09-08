@@ -56,7 +56,7 @@ $(() => {
     },
   });
 
-  var resizing = $('#allow-resizing').dxCheckBox({
+  const resizing = $('#allow-resizing').dxCheckBox({
     text: 'Allow resizing',
     value: true,
     onValueChanged(e) {
@@ -64,7 +64,7 @@ $(() => {
     },
   }).dxCheckBox('instance');
 
-  var dragging = $('#allow-dragging').dxCheckBox({
+  const dragging = $('#allow-dragging').dxCheckBox({
     text: 'Allow dragging',
     value: true,
     onValueChanged(e) {

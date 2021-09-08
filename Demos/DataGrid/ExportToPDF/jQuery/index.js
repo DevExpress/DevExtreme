@@ -19,7 +19,7 @@ $(() => {
     },
   });
 
-  var dataGrid = $('#gridContainer').dxDataGrid({
+  const dataGrid = $('#gridContainer').dxDataGrid({
     dataSource: customers,
     keyExpr: 'ID',
     allowColumnReordering: true,

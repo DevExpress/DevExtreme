@@ -31,7 +31,7 @@ $(() => {
     target: appointmentClassName,
   }).dxContextMenu('instance');
 
-  var updateContextMenu = function (disable, dataSource, target, itemTemplate, onItemClick) {
+  const updateContextMenu = function (disable, dataSource, target, itemTemplate, onItemClick) {
     contextMenuInstance.option({
       dataSource,
       target,
@@ -41,11 +41,11 @@ $(() => {
     });
   };
 
-  var itemTemplate = function (itemData) {
+  const itemTemplate = function (itemData) {
     return getAppointmentMenuTemplate(itemData);
   };
 
-  var onItemClick = function (contextMenuEvent) {
+  const onItemClick = function (contextMenuEvent) {
     return function (e) {
       e.itemData.onItemClick(contextMenuEvent, e);
     };
@@ -103,14 +103,14 @@ $(() => {
     }));
   };
 
-  var cellContextMenuItems = [
+  const cellContextMenuItems = [
     { text: 'New Appointment', onItemClick: createAppointment },
     { text: 'New Recurring Appointment', onItemClick: createRecurringAppointment },
     { text: 'Group by Room/Ungroup', beginGroup: true, onItemClick: groupCell },
     { text: 'Go to Today', onItemClick: showCurrentDate },
   ];
 
-  var appointmentContextMenuItems = [
+  let appointmentContextMenuItems = [
     { text: 'Open', onItemClick: showAppointment },
     { text: 'Delete', onItemClick: deleteAppointment },
     { text: 'Repeat Weekly', beginGroup: true, onItemClick: repeatAppointmentWeekly },
@@ -123,7 +123,7 @@ $(() => {
 
   appointmentContextMenuItems = $.merge(appointmentContextMenuItems, resourcesData);
 
-  var getAppointmentMenuTemplate = function (itemData) {
+  const getAppointmentMenuTemplate = function (itemData) {
     const template = $('<div></div>');
 
     if (itemData.color) {

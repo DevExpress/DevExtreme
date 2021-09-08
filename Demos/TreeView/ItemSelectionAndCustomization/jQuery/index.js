@@ -45,7 +45,7 @@ $(() => {
     },
   });
 
-  var selectionModeSelectBox = $('#selectionMode').dxSelectBox({
+  const selectionModeSelectBox = $('#selectionMode').dxSelectBox({
     items: ['multiple', 'single'],
     value: 'multiple',
     onValueChanged(e) {
@@ -60,7 +60,7 @@ $(() => {
     },
   }).dxSelectBox('instance');
 
-  var recursiveCheckBox = $('#selectNodesRecursive').dxCheckBox({
+  const recursiveCheckBox = $('#selectNodesRecursive').dxCheckBox({
     text: 'Select Nodes Recursive',
     value: true,
     onValueChanged(e) {

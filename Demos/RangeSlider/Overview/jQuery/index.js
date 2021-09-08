@@ -73,7 +73,7 @@ $(() => {
     },
   }).dxRangeSlider('instance');
 
-  var startValue = $('#start-value').dxNumberBox({
+  const startValue = $('#start-value').dxNumberBox({
     value: 10,
     min: 0,
     max: 100,
@@ -83,7 +83,7 @@ $(() => {
     },
   }).dxNumberBox('instance');
 
-  var endValue = $('#end-value').dxNumberBox({
+  const endValue = $('#end-value').dxNumberBox({
     value: 90,
     min: 0,
     max: 100,
