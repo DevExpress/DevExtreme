@@ -8,10 +8,6 @@ import {
 import TaskTemplate from './TaskTemplate.js';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div id="form-demo">

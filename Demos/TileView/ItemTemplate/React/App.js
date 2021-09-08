@@ -10,10 +10,6 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <TileView items={homes} height={390} baseItemHeight={120} baseItemWidth={185} itemMargin={10} itemComponent={TileViewItem} />

@@ -4,10 +4,6 @@ import notify from 'devextreme/ui/notify';
 import { alignments, fontStyles } from './data.js';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>

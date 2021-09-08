@@ -15,10 +15,6 @@ const tasksStore = AspNetData.createStore({
 });
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="tables">

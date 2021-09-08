@@ -4,10 +4,6 @@ import Popup from 'devextreme-react/popup';
 import ScrollView from 'devextreme-react/scroll-view';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Popup

@@ -4,10 +4,6 @@ import {
 } from 'devextreme-react/linear-gauge';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>

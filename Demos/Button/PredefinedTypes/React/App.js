@@ -3,10 +3,6 @@ import { Button } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   onClick(e) {
     const buttonText = e.component.option('text');
     notify(`The ${capitalize(buttonText)} button was clicked`);
