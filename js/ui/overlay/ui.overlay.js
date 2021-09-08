@@ -14,7 +14,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent, isObject } from '../../core/utils/type';
+import { isString, isDefined, isFunction, isPlainObject, isWindow, isObject } from '../../core/utils/type';
 import { changeCallback, originalViewPort } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -242,6 +242,8 @@ const Overlay = Widget.inherit({
         // NOTE: bootstrap integration T342292
         eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
+
+        this._initPositionController();
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
         this._parentsScrollSubscriptionInfo = {
@@ -921,7 +923,6 @@ const Overlay = Widget.inherit({
             }
         });
 
-        this._initPositionController();
         this._renderDrag();
         this._renderResize();
         this._renderScrollTerminator();
@@ -1131,7 +1132,7 @@ const Overlay = Widget.inherit({
     },
 
     _isContainerWindow: function() {
-        const $container = this._getContainer();
+        const $container = this._positionController._$wrapperCoveredElement;
         return this._isWindow($container) || !$container?.get(0);
     },
 
@@ -1173,7 +1174,8 @@ const Overlay = Widget.inherit({
     _renderWrapperDimensions: function() {
         let wrapperWidth;
         let wrapperHeight;
-        const $container = this._getContainer();
+        const $container = this._positionController._$wrapperCoveredElement;
+
         if(!$container) {
             return;
         }
@@ -1194,23 +1196,11 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperPosition: function() {
-        const $container = this._getContainer();
+        const $container = this._positionController._$wrapperCoveredElement;
 
         if($container) {
             positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: $container });
         }
-    },
-
-    _getContainer: function() {
-        const position = this._position;
-        const container = this.option('container');
-        let positionOf = null;
-
-        if(!container && position) {
-            positionOf = isEvent(position.of) ? window : (position.of || window);
-        }
-
-        return $(container || positionOf);
     },
 
     _renderDimensions: function() {
