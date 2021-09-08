@@ -2,7 +2,7 @@ import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize } from './row_utils';
 import { generateRowsInfo } from './rows_generator';
-import { drawPdfCells, drawGridLines } from './draw_utils';
+import { drawCellsContent, drawCellsLines, drawGridLines } from './draw_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -78,8 +78,11 @@ function exportDataGrid(doc, dataGrid, options) {
                 })
             );
 
-            drawPdfCells(doc, pdfCellsInfo); // draw content only ???
-            drawGridLines(doc, pdfCellsInfo, options.drawTableBorder, tableRect); // draw grid lines only ???
+            drawCellsContent(doc, pdfCellsInfo);
+            drawCellsLines(doc, pdfCellsInfo, options.drawTableBorder, tableRect);
+            if(isDefined(options.drawTableBorder) ? options.drawTableBorder : (isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0)) {
+                drawGridLines(doc, tableRect, options);
+            }
 
             resolve();
         });

@@ -4,7 +4,7 @@ import { extend } from '../../../core/utils/extend';
 
 const defaultBorderLineWidth = 1;
 
-function drawPdfCells(doc, cellsArray) {
+function drawCellsContent(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
     cellsArray.forEach(cell => {
         // TODO: drawCellBackground(doc, cell);
@@ -21,15 +21,15 @@ function drawCellText(doc, cell, docStyles) {
     }
 }
 
-function drawGridLines(doc, cellsArray, drawTableBorder, tableRect) {
+function drawCellsLines(doc, cellsArray) {
     cellsArray.forEach(cell => {
         // TODO: doc.setDrawColor(borderColor); // cell.borderColor OR docStyles.borderColor
         drawBorders(doc, cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
     });
+}
 
-    if((isDefined(drawTableBorder) ? drawTableBorder : (isDefined(cellsArray) && cellsArray.length === 0))) {
-        drawBorders(doc, tableRect);
-    }
+function drawGridLines(doc, rect) {
+    drawBorders(doc, rect);
 }
 
 function drawBorders(doc, rect, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true) {
@@ -120,5 +120,5 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawPdfCells, drawGridLines };
+export { drawCellsContent, drawCellsLines, drawGridLines };
 
