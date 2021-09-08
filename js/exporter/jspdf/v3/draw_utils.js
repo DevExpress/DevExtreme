@@ -13,12 +13,15 @@ function drawPdfCells(doc, cellsArray) {
 }
 
 function drawCell(doc, cell, docStyles) {
+    // TODO: draw background
+
     setCurrentFont(doc, cell, docStyles);
 
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
         drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 
+    // TODO: move to the separated method "drawGridLines()"
     doc.setLineWidth(defaultBorderLineWidth);
     drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
 }

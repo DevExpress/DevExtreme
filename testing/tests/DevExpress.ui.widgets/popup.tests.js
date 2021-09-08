@@ -1408,7 +1408,8 @@ QUnit.module('resize', {
     QUnit.test('popup content position should be reset after show/hide', function(assert) {
         const $popup = $('#popup').dxPopup({
             resizeEnabled: true,
-            height: 'auto'
+            height: 'auto',
+            position: { of: viewPort() }
         });
         const popup = $popup.dxPopup('instance');
         const $overlayContent = popup.$content().parent();

@@ -1325,8 +1325,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _isSkippedData() { return false; }
-
     getDroppableCellIndex() {
         const $droppableCell = this._getDroppableCell();
         const $row = $droppableCell.parent();
@@ -2269,7 +2267,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
-            isSkippedDataCallback: this._isSkippedData.bind(this),
             getPositionShiftCallback: this.getPositionShift.bind(this),
             getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
         });

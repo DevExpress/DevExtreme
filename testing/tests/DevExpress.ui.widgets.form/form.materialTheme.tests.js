@@ -520,6 +520,29 @@ QUnit.module('dx-invalid class on dx-field-item-content-wrapper (T949285)', {
         this.clock.tick();
         assert.ok(wrapper.hasClass(invalidClass));
     });
+
+    QUnit.testInActiveWindow('dx-invalid class is added for invalid editor if validationMessageMode: "always" (T1026923)', function(assert) {
+        const formInstance = $('#form').dxForm({
+            formData,
+            customizeItem: function(item) {
+                if(item.itemType === 'simple') {
+                    item.editorOptions = { ...item.editorOptions, validationMessageMode: 'always' };
+                }
+            },
+            items: [{
+                dataField: 'field1',
+                helpText: 'help',
+                isRequired: true
+            }]
+        }).dxForm('instance');
+
+        formInstance.validate();
+
+        const editorInstance = formInstance.getEditor('field1');
+        const wrapper = $(editorInstance.element()).closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
+
+        assert.ok(wrapper.hasClass(invalidClass));
+    });
 });
 
 QUnit.module('check validation message location', {
