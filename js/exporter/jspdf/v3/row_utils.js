@@ -69,7 +69,7 @@ function applyRowSpans(rows) {
 
 function recalculateHeightForMergedRows(doc, rows) {
     const rowsAdditionalHeights = Array.from({ length: rows.length }, () => 0);
-    const calculateRowsHeightWithAdditionalHeights = (rowFromIndex, rowSpan) => {
+    const calculateSummaryRowsHeightWithAdditionalHeights = (rowFromIndex, rowSpan) => {
         let height = 0;
         for(let rowIndex = rowFromIndex; rowIndex <= rowFromIndex + rowSpan; rowIndex++) {
             height += rows[rowIndex].height + rowsAdditionalHeights[rowIndex];
@@ -77,11 +77,11 @@ function recalculateHeightForMergedRows(doc, rows) {
         return height;
     };
 
-    const sortByRowspanAsc = (a, b) => a.rowSpan > b.rowSpan ? 1 : b.rowSpan > a.rowSpan ? -1 : 0;
+    const sortByRowSpanAsc = (a, b) => a.rowSpan > b.rowSpan ? 1 : b.rowSpan > a.rowSpan ? -1 : 0;
     for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
         const orderedCellsWithRowSpan = rows[rowIndex].cells
             .filter(cell => isDefined(cell.rowSpan))
-            .sort(sortByRowspanAsc);
+            .sort(sortByRowSpanAsc);
 
         orderedCellsWithRowSpan.forEach(cell => {
             const pdfCell = cell.pdfCell;
@@ -89,7 +89,7 @@ function recalculateHeightForMergedRows(doc, rows) {
                 wordWrapEnabled: pdfCell.wordWrapEnabled,
                 columnWidth: pdfCell._rect.w
             });
-            const summaryHeight = calculateRowsHeightWithAdditionalHeights(rowIndex, cell.rowSpan);
+            const summaryHeight = calculateSummaryRowsHeightWithAdditionalHeights(rowIndex, cell.rowSpan);
             if(textHeight > summaryHeight) {
                 const delta = (textHeight - summaryHeight) / (cell.rowSpan + 1);
                 for(let spanIndex = rowIndex; spanIndex <= rowIndex + cell.rowSpan; spanIndex++) {
