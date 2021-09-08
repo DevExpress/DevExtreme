@@ -72,7 +72,7 @@ function calculateWorkdays([start, end]) {
 
   while (currentDate <= end) {
     if (currentDate.getDay() > 0 && currentDate.getDay() < 6) {
-      workingDaysCount++;
+      workingDaysCount += 1;
     }
     currentDate.setDate(currentDate.getDate() + 1);
   }

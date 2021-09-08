@@ -50,7 +50,7 @@ DemoApp.controller('DemoController', ($scope) => {
   }
 
   function timer() {
-    seconds--;
+    seconds -= 1;
     $scope.$apply(() => {
       setCurrentStatus();
     });

@@ -193,7 +193,7 @@ function getRandomText(textIndex) {
 function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
   const result = [];
 
-  for (let i = 0; i < appointments.length; i++) {
+  for (let i = 0; i < appointments.length; i += 1) {
     const { startDate } = appointments[i];
     const { endDate } = appointments[i];
 
@@ -214,7 +214,7 @@ export function generateAppointments(startDay, endDay, startDayHour, endDayHour)
   let durationState = 1;
   const durationIncrement = 19;
 
-  for (let i = 0; i < resources.length; i++) {
+  for (let i = 0; i < resources.length; i += 1) {
     let startDate = startDay;
 
     while (startDate.getTime() < endDay.getTime()) {
@@ -228,7 +228,7 @@ export function generateAppointments(startDay, endDay, startDayHour, endDayHour)
         humanId: resources[i].id,
       });
 
-      textIndex++;
+      textIndex += 1;
 
       durationState += durationIncrement;
       startDate = new Date(endDate.getTime() + getRandomDuration(durationState));

@@ -89,7 +89,7 @@ class App extends React.Component {
 
   getPhonesOptions() {
     const options = [];
-    for (let i = 0; i < this.employee.Phones.length; i++) {
+    for (let i = 0; i < this.employee.Phones.length; i += 1) {
       options.push(this.generateNewPhoneOptions(i));
     }
     return options;

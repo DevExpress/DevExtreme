@@ -32,7 +32,7 @@ $(() => {
     onValueChanged(e) {
       const resources = scheduler.option('resources');
 
-      for (let i = 0; i < resources.length; i++) {
+      for (let i = 0; i < resources.length; i += 1) {
         resources[i].useColorAsDefault = resources[i].label === e.value;
       }
 

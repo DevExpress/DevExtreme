@@ -114,12 +114,12 @@ class App extends React.Component {
 
     if (ajaxArgs.startVisible !== ajaxArgs.startBound
       && ajaxArgs.endVisible !== ajaxArgs.endBound && !this.packetsLock) {
-      this.packetsLock++;
+      this.packetsLock += 1;
       component.showLoadingIndicator();
 
       getDataFrame(ajaxArgs)
         .then((dataFrame) => {
-          this.packetsLock--;
+          this.packetsLock -= 1;
           dataFrame = dataFrame.map((i) => ({
             date: new Date(i.Date),
             minTemp: i.MinTemp,
@@ -133,7 +133,7 @@ class App extends React.Component {
           this.onVisualRangeChanged(component);
         })
         .catch(() => {
-          this.packetsLock--;
+          this.packetsLock -= 1;
           dataSource.reload();
         });
     }

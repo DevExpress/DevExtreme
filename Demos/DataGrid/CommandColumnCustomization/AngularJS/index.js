@@ -1,4 +1,5 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
+let maxID = employees[employees.length - 1].ID;
 
 DemoApp.controller('DemoController', ($scope) => {
   const isChief = function (position) {
@@ -46,7 +47,7 @@ DemoApp.controller('DemoController', ($scope) => {
           onClick(e) {
             const clonedItem = angular.copy(e.row.data);
 
-            clonedItem.ID = ++maxID;
+            clonedItem.ID = maxID += 1;
             employees.splice(e.row.rowIndex, 0, clonedItem);
             e.component.refresh(true);
             e.event.preventDefault();

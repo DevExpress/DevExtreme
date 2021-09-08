@@ -29,7 +29,7 @@ $(() => {
 
       while (currentDate <= e.value[1]) {
         if (currentDate.getDay() > 0 && currentDate.getDay() < 6) {
-          workingDaysCount++;
+          workingDaysCount += 1;
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }

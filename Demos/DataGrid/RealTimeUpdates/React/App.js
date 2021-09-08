@@ -29,7 +29,7 @@ class App extends React.Component {
         return;
       }
 
-      for (let i = 0; i < this.state.updateFrequency / 20; i++) {
+      for (let i = 0; i < this.state.updateFrequency / 20; i += 1) {
         addOrder();
       }
     }, 50);

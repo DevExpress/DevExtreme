@@ -308,5 +308,3 @@ const states = [{
   ID: 51,
   Name: 'North Dakota',
 }];
-
-const maxID = employees[employees.length - 1].ID;

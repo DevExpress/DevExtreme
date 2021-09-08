@@ -3,7 +3,7 @@ const paletteExtensionModes = ['Alternate', 'Blend', 'Extrapolate'];
 const dataSource = [];
 let i;
 
-for (i = 0; i < 20; i++) {
+for (i = 0; i < 20; i += 1) {
   dataSource.push({
     arg: `item${i}`,
     val: 1,

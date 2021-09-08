@@ -90,11 +90,11 @@ $(() => {
 
     if (ajaxArgs.startVisible !== ajaxArgs.startBound
             && ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
-      packetsLock++;
+      packetsLock += 1;
       component.showLoadingIndicator();
       getDataFrame(ajaxArgs)
         .then((dataFrame) => {
-          packetsLock--;
+          packetsLock -= 1;
 
           const componentStorage = dataSource.store();
           dataFrame.forEach((item) => {
@@ -106,7 +106,7 @@ $(() => {
           onVisualRangeChanged(range, component);
         },
         () => {
-          packetsLock--;
+          packetsLock -= 1;
           dataSource.reload();
         });
     }

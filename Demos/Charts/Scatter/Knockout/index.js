@@ -62,7 +62,7 @@ window.onload = function () {
 
     const deviation1 = Math.abs(k1 * 8);
     const deviation2 = Math.abs(k2 * 8);
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < 30; i += 1) {
       x1 = random(1, 20);
       x2 = random(1, 20);
 

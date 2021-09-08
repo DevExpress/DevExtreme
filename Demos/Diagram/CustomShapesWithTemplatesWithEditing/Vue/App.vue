@@ -156,7 +156,7 @@ export default {
         key: 'ID',
         data: service.getEmployees(),
         onInserting(values) {
-          values.ID = values.ID || that.generatedID++;
+          values.ID = values.ID || (that.generatedID += 1);
           values.Full_Name = values.Full_Name || "Employee's Name";
           values.Title = values.Title || "Employee's Title";
         },
@@ -192,7 +192,7 @@ export default {
       obj.Mobile_Phone = value.Mobile_Phone;
     },
     onRequestLayoutUpdate(e) {
-      for (let i = 0; i < e.changes.length; i++) {
+      for (let i = 0; i < e.changes.length; i += 1) {
         if (e.changes[i].type === 'remove') {
           e.allowed = true;
         } else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {

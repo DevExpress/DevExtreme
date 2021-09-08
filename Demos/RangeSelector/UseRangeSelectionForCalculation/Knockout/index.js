@@ -34,7 +34,7 @@ window.onload = function () {
 
         while (currentDate <= e.value[1]) {
           if (currentDate.getDay() > 0 && currentDate.getDay() < 6) {
-            workingDays++;
+            workingDays += 1;
           }
           currentDate.setDate(currentDate.getDate() + 1);
         }

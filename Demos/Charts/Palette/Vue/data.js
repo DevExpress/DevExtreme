@@ -2,7 +2,7 @@ export const paletteCollection = ['Material', 'Soft Pastel', 'Harmony Light', 'P
 export const paletteExtensionModes = ['Alternate', 'Blend', 'Extrapolate'];
 
 const data = [];
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 20; i += 1) {
   data.push({
     arg: `item${i}`,
     val: 1,

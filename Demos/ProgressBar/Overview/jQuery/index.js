@@ -40,7 +40,7 @@ $(() => {
   }
 
   function timer() {
-    seconds--;
+    seconds -= 1;
     setCurrentStatus();
     if (seconds === 0) {
       clearInterval(intervalId);

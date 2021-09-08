@@ -4,7 +4,7 @@ $(function () {
     key: 'ID',
     data: employees,
     onInserting(values) {
-      values.ID = values.ID || generatedID++;
+      values.ID = values.ID || (generatedID += 1);
       values.Full_Name = values.Full_Name || "Employee's Name";
       values.Title = values.Title || "Employee's Title";
     },
@@ -91,7 +91,7 @@ $(function () {
       },
     },
     onRequestLayoutUpdate(e) {
-      for (let i = 0; i < e.changes.length; i++) {
+      for (let i = 0; i < e.changes.length; i += 1) {
         if (e.changes[i].type === 'remove') e.allowed = true;
         else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) e.allowed = true;
       }

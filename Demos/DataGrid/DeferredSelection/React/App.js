@@ -116,7 +116,7 @@ class App extends React.Component {
     dataGrid.getSelectedRowsData().then((rowData) => {
       let commonDuration = 0;
 
-      for (let i = 0; i < rowData.length; i++) {
+      for (let i = 0; i < rowData.length; i += 1) {
         commonDuration += rowData[i].Task_Due_Date - rowData[i].Task_Start_Date;
       }
       commonDuration /= MILLISECONDS_IN_DAY;

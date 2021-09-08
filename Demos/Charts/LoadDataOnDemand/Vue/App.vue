@@ -135,12 +135,12 @@ export default {
 
       if (ajaxArgs.startVisible !== ajaxArgs.startBound
         && ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
-        packetsLock++;
+        packetsLock += 1;
         component.showLoadingIndicator();
 
         this.getDataFrame(ajaxArgs)
           .then((dataFrame) => {
-            packetsLock--;
+            packetsLock -= 1;
             dataFrame = dataFrame.map((i) => ({
               date: new Date(i.Date),
               minTemp: i.MinTemp,
@@ -154,7 +154,7 @@ export default {
             this.onVisualRangeChanged();
           })
           .catch(() => {
-            packetsLock--;
+            packetsLock -= 1;
             dataSource.reload();
           });
       }

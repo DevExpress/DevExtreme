@@ -178,7 +178,7 @@ export default {
         return;
       }
 
-      for (let i = 0; i < this.updatesPerSecond / 20; i++) {
+      for (let i = 0; i < this.updatesPerSecond / 20; i += 1) {
         addOrder();
       }
     }, 50);

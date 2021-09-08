@@ -87,7 +87,7 @@ export const dataSource = [{
 
 export function getAnnotationSources() {
   const annotations = [];
-  for (let i = 0; i < annotationSources.length; i++) {
+  for (let i = 0; i < annotationSources.length; i += 1) {
     const annotation = annotationSources[i];
     const { country } = annotation;
     const image = `../../../../images/flags/3x2/${country.replace(/\s/, '')}.svg`;

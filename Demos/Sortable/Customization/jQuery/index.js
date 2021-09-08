@@ -1,5 +1,5 @@
 $(() => {
-  for (let i = 0; i < tasks.length; i++) {
+  for (let i = 0; i < tasks.length; i += 1) {
     $('<div>')
       .text(tasks[i].Task_Subject)
       .addClass('item dx-card dx-theme-background-color dx-theme-text-color')

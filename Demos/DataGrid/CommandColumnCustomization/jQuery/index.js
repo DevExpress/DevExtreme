@@ -1,4 +1,5 @@
 $(() => {
+  let maxID = employees[employees.length - 1].ID;
   const isChief = function (position) {
     return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
   };
@@ -42,7 +43,7 @@ $(() => {
             return !e.row.isEditing && !isChief(e.row.data.Position);
           },
           onClick(e) {
-            const clonedItem = $.extend({}, e.row.data, { ID: ++maxID });
+            const clonedItem = $.extend({}, e.row.data, { ID: maxID += 1 });
 
             employees.splice(e.row.rowIndex, 0, clonedItem);
             e.component.refresh(true);

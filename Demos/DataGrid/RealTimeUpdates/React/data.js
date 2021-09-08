@@ -6,7 +6,7 @@ const orders = [];
 
 const products = [];
 
-for (let i = 1; i <= 100; i++) {
+for (let i = 1; i <= 100; i += 1) {
   products.push({
     ProductID: i, ProductName: `Product ${i}`, UnitPrice: Math.floor(Math.random() * 1000) + 1, Quantity: 0, Amount: 0, OrderCount: 0,
   });

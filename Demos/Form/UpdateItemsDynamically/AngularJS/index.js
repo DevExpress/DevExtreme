@@ -68,7 +68,7 @@ DemoApp.controller('DemoController', ($scope) => {
 
 function getPhonesOptions(phones) {
   const options = [];
-  for (let i = 0; i < phones.length; i++) {
+  for (let i = 0; i < phones.length; i += 1) {
     options.push(generateNewPhoneOptions(i));
   }
   return options;

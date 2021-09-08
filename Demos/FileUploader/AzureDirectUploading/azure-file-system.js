@@ -284,7 +284,7 @@ var AzureGateway = function(endpointUrl, onRequestExecuted) {
             '<BlockList>'
         ];
 
-        for(var i = 0; i < blockCount; i++) {
+        for(var i = 0; i < blockCount; i += 1) {
             var blockContent = '  <Latest>' + getBlockId(i) + '</Latest>';
             contentParts.push(blockContent);
         }

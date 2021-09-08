@@ -87,7 +87,7 @@ export default {
       });
     },
     onRequestLayoutUpdate(e) {
-      for (let i = 0; i < e.changes.length; i++) {
+      for (let i = 0; i < e.changes.length; i += 1) {
         if (e.changes[i].type === 'remove') {
           e.allowed = true;
         } else if (e.changes[i].data.ParentID !== undefined && e.changes[i].data.ParentID !== null) {
@@ -113,7 +113,7 @@ export default {
           e.allowed = false;
         }
         if (e.args.shape.type === 'team') {
-          for (i = 0; i < e.args.shape.attachedConnectorIds.length; i++) {
+          for (i = 0; i < e.args.shape.attachedConnectorIds.length; i += 1) {
             if (diagram.getItemById(e.args.shape.attachedConnectorIds[i]).toId !== e.args.shape.id) {
               if (e.reason !== 'checkUIElementAvailability') {
                 this.showToast('You cannot delete a \'Team\' shape that has a child shape.');

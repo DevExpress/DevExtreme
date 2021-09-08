@@ -3,7 +3,7 @@ window.onload = function () {
   const max = 5000;
   let i;
 
-  for (i = 0; i < max; i++) {
+  for (i = 0; i < max; i += 1) {
     dataSource.push({ arg: i, val: i + i * (Math.random() - 0.5) });
   }
 
