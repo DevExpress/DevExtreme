@@ -31,7 +31,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 12);
+        assert.measureStyleRecalculation(measureFunction, 11);
     });
 
     QUnit.performanceTest(`dxScheduler should force minimum relayout count on creation if showAllDayPanel = true when renovateRender is ${renovateRender}`, function(assert) {
@@ -60,7 +60,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 13);
+        assert.measureStyleRecalculation(measureFunction, 12);
     });
 
     QUnit.performanceTest(`dxScheduler day view should force minimum relayout count on creation with appointments if showAllDayPanel = true when renovateRender is ${renovateRender}`, function(assert) {
