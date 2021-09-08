@@ -45,18 +45,18 @@ export class ResourceManager {
     setResources(resources = []) {
         this._resources = resources;
         this.resourceLoaderMap = new Map();
+
+
         this._dataAccessors = {
             getter: {},
             setter: {}
         };
 
-        this._resourceFields = resources.map(resource => {
+        resources.forEach(resource => {
             const field = getFieldExpr(resource);
 
             this._dataAccessors.getter[field] = compileGetter(field);
             this._dataAccessors.setter[field] = compileSetter(field);
-
-            return field;
         });
 
         this.agendaProcessor.initializeState(resources);

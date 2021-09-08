@@ -1243,7 +1243,6 @@ class Scheduler extends Widget {
                 const resourceManager = this.fire('getResourceManager');
 
                 return getResourcesFromItem(
-                    resourceManager._resourceFields,
                     resourceManager.getResources(),
                     (field, action) => resourceManager.getDataAccessors(field, action),
                     rawAppointment,
