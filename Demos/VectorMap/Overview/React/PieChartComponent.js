@@ -12,10 +12,10 @@ function customizeText(pointInfo) {
   }: $${pointInfo.value}M`;
 }
 
-function PieChartComponent(props) {
+function PieChartComponent({ data = [] }) {
   return (
     <PieChart id="gdp-sectors"
-      dataSource={props.data}
+      dataSource={data}
       animation={false}
     >
       <Series

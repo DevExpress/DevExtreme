@@ -16,11 +16,6 @@ import {
   LoadingIndicator,
 } from 'devextreme-react/chart';
 
-const wholeRange = {
-  startValue: new Date(2017, 0, 1),
-  endValue: new Date(2017, 11, 31),
-};
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -54,7 +49,10 @@ class App extends React.Component {
           argumentType="datetime"
           visualRangeUpdateMode="keep"
           visualRange={this.state.visualRange}
-          wholeRange={wholeRange} />
+          wholeRange={{
+            startValue: new Date(2017, 0, 1),
+            endValue: new Date(2017, 11, 31),
+          }} />
         <ValueAxis
           name="temperature"
           allowDecimals={false}

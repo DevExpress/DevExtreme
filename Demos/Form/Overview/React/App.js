@@ -5,10 +5,6 @@ import NumberBox from 'devextreme-react/number-box';
 import Form from 'devextreme-react/form';
 import service from './data.js';
 
-const labelLocations = ['left', 'top'];
-const columnsCount = ['auto', 1, 2, 3];
-const minColumnWidths = [150, 200, 300];
-
 class App extends React.Component {
   constructor() {
     super();
@@ -66,7 +62,7 @@ class App extends React.Component {
           <div className="option">
             <span>Label location:</span>
             <SelectBox
-              items={labelLocations}
+              items={['left', 'top']}
               value={labelLocation}
               onValueChanged={this.onLabelLocationChanged}
             />
@@ -74,7 +70,7 @@ class App extends React.Component {
           <div className="option">
             <span>Columns count:</span>
             <SelectBox
-              items={columnsCount}
+              items={['auto', 1, 2, 3]}
               value={colCount}
               onValueChanged={this.onColumnsCountChanged}
             />
@@ -82,7 +78,7 @@ class App extends React.Component {
           <div className="option">
             <span>Min column width:</span>
             <SelectBox
-              items={minColumnWidths}
+              items={[150, 200, 300]}
               value={minColWidth}
               onValueChanged={this.onMinColWidthChanged}
             />

@@ -6,8 +6,6 @@ import List from 'devextreme-react/list';
 
 import { tasks } from './data.js';
 
-const itemDeleteModes = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'];
-
 class App extends React.Component {
   constructor() {
     super();
@@ -55,7 +53,7 @@ class App extends React.Component {
             <span>Item delete mode </span>
             <SelectBox
               disabled={!this.state.allowDeletion}
-              items={itemDeleteModes}
+              items={['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']}
               value={this.state.itemDeleteMode}
               onValueChanged={this.onItemDeleteModeChange}>
             </SelectBox>

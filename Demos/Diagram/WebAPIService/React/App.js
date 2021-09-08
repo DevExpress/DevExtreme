@@ -26,8 +26,6 @@ const dataSource = createStore({
   },
 });
 
-const shapes = ['rectangle'];
-
 class App extends React.Component {
   render() {
     return (
@@ -35,10 +33,10 @@ class App extends React.Component {
         <Nodes dataSource={dataSource} keyExpr="ID" textExpr="Title" parentKeyExpr="HeadID">
           <AutoLayout type="tree" />
         </Nodes>
-        <ContextToolbox shapeIconsPerRow={2} width={100} shapes={shapes}>
+        <ContextToolbox shapeIconsPerRow={2} width={100} shapes={['rectangle']}>
         </ContextToolbox>
         <Toolbox showSearch={false} shapeIconsPerRow={2}>
-          <Group title="Items" shapes={shapes} />
+          <Group title="Items" shapes={['rectangle']} />
         </Toolbox>
       </Diagram>
     );

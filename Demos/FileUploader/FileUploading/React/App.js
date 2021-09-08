@@ -3,8 +3,6 @@ import FileUploader from 'devextreme-react/file-uploader';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
-const uploadModes = ['instantly', 'useButtons'];
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -56,7 +54,7 @@ class App extends React.Component {
           </div>
           <div className="option">
             <span>Upload mode</span>
-            <SelectBox items={uploadModes} defaultValue="instantly" onValueChanged={this.onUploadModeChanged} />
+            <SelectBox items={['instantly', 'useButtons']} defaultValue="instantly" onValueChanged={this.onUploadModeChanged} />
           </div>
           <div className="option">
             <CheckBox text="Allow multiple files selection" onValueChanged={this.onMultipleChanged} />

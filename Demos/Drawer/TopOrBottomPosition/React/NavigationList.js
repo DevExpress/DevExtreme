@@ -9,7 +9,7 @@ class NavigationList extends React.PureComponent {
       <div className="list">
         <List
           dataSource={navigation}
-          className="panel-list dx-theme-accent-as-background-color"
+          elementAttr={{ class: 'panel-list dx-theme-accent-as-background-color' }}
           height={200} />
       </div>
     );

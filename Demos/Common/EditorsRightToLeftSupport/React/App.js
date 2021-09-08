@@ -21,7 +21,6 @@ class App extends React.Component {
     ];
     this.displayExpr = 'nameEn';
     this.textValue = 'text';
-    this.tagBoxDefaultValue = [europeanUnion[0].id];
     this.onLanguageChanged = this.onLanguageChanged.bind(this);
   }
 
@@ -90,7 +89,7 @@ class App extends React.Component {
               <div className="dx-field-value">
                 <TagBox
                   items={europeanUnion}
-                  defaultValue={this.tagBoxDefaultValue}
+                  defaultValue={[europeanUnion[0].id]}
                   rtlEnabled={this.state.rtlEnabled}
                   displayExpr={this.displayExpr}
                   placeholder="..."

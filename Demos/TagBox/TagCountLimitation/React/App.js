@@ -2,12 +2,6 @@ import React from 'react';
 import { TagBox } from 'devextreme-react/tag-box';
 import { products } from './data.js';
 
-const defaultValues = {
-  severalItems: [1, 2, 3, 4],
-  allItems: [1, 2, 3, 4, 5],
-  ordinaryTags: [1, 2, 3, 4, 5, 6, 7],
-};
-
 class App extends React.Component {
   constructor() {
     super();
@@ -35,7 +29,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <TagBox
                 items={products}
-                defaultValue={defaultValues.severalItems}
+                defaultValue={[1, 2, 3, 4]}
                 showSelectionControls={true}
                 maxDisplayedTags={3}
                 displayExpr="Name"
@@ -49,7 +43,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <TagBox
                 items={this.items}
-                defaultValue={defaultValues.allItems}
+                defaultValue={[1, 2, 3, 4, 5]}
                 showSelectionControls={true}
                 maxDisplayedTags={3}
                 displayExpr="Name"
@@ -62,7 +56,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <TagBox
                 items={products}
-                defaultValue={defaultValues.ordinaryTags}
+                defaultValue={[1, 2, 3, 4, 5, 6, 7]}
                 showSelectionControls={true}
                 maxDisplayedTags={2}
                 showMultiTagOnly={false}

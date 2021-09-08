@@ -4,15 +4,13 @@ import RangeSelector, {
 } from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 
-const defaultValue = [0, 5];
-
 function App() {
   return (
     <RangeSelector
       id="range-selector"
       title="Select a Range in the CPU Usage History"
       dataSource={dataSource}
-      defaultValue={defaultValue}
+      defaultValue={[0, 5]}
     >
       <Margin left={15} right={15} top={50} />
       <Background color="#808080" />

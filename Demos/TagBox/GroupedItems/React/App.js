@@ -5,12 +5,6 @@ import Group from './Group.js';
 
 import productsData from './data.js';
 
-const defaultValues = {
-  grouped: [17, 19],
-  search: [17, 19],
-  template: [18],
-};
-
 class App extends React.Component {
   constructor() {
     super();
@@ -31,7 +25,7 @@ class App extends React.Component {
             <TagBox
               dataSource={this.products}
               valueExpr="ID"
-              defaultValue={defaultValues.grouped}
+              defaultValue={[17, 19]}
               grouped={true}
               displayExpr="Name" />
           </div>
@@ -43,7 +37,7 @@ class App extends React.Component {
             <TagBox
               dataSource={this.products}
               valueExpr="ID"
-              defaultValue={defaultValues.search}
+              defaultValue={[17, 19]}
               searchEnabled={true}
               grouped={true}
               displayExpr="Name" />
@@ -56,7 +50,7 @@ class App extends React.Component {
             <TagBox
               dataSource={this.products}
               valueExpr="ID"
-              defaultValue={defaultValues.template}
+              defaultValue={[18]}
               grouped={true}
               displayExpr="Name"
               groupRender={Group} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, Selection } from 'devextreme-react/data-grid';
+import DataGrid, { Column } from 'devextreme-react/data-grid';
 import { employees } from './data.js';
 
 class App extends React.Component {
@@ -20,12 +20,12 @@ class App extends React.Component {
       <React.Fragment>
         <DataGrid
           dataSource={employees}
+          selection={{ mode: 'single' }}
           showBorders={true}
           hoverStateEnabled={true}
           keyExpr="ID"
           onSelectionChanged={this.onSelectionChanged}
         >
-          <Selection mode="single" />
           <Column dataField="Prefix" caption="Title" width={70} />
           <Column dataField="FirstName" />
           <Column dataField="LastName" />

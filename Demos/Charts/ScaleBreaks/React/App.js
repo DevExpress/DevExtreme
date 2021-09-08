@@ -5,7 +5,6 @@ import Chart, {
   Series,
   Tooltip,
   ValueAxis,
-  BreakStyle,
 } from 'devextreme-react/chart';
 
 import SelectBox from 'devextreme-react/select-box';
@@ -58,9 +57,8 @@ class App extends React.Component {
           <ValueAxis
             visible={true}
             autoBreaksEnabled={this.state.autoBreaksEnabledValue}
-            maxAutoBreakCount={this.state.breaksCountValue}>
-            <BreakStyle line={this.state.lineStyleValue} />
-          </ValueAxis>
+            maxAutoBreakCount={this.state.breaksCountValue}
+            breakStyle={{ line: this.state.lineStyleValue }} />
           <Legend visible={false} />
           <Tooltip enabled={true} />
         </Chart>

@@ -2,13 +2,11 @@ import React from 'react';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
 import DataGrid, {
-  Column, Editing, Lookup, Texts, Selection,
+  Column, Editing, Lookup, Texts,
 } from 'devextreme-react/data-grid';
 import { SpeedDialAction } from 'devextreme-react/speed-dial-action';
 import { SelectBox } from 'devextreme-react/select-box';
 import { employees, states, directions } from './data.js';
-
-const optionDirections = ['auto', 'up', 'down'];
 
 class App extends React.Component {
   constructor(props) {
@@ -63,6 +61,7 @@ class App extends React.Component {
           dataSource={employees}
           keyExpr="ID"
           ref={(ref) => this.grid = ref}
+          selection={{ mode: 'single' }}
           showBorders={true}
           onSelectionChanged={this.selectionChanged}>
           <Column dataField="Prefix" caption="Title" />
@@ -73,7 +72,6 @@ class App extends React.Component {
             <Lookup dataSource={states} valueExpr="ID" displayExpr="Name" />
           </Column>
           <Column dataField="BirthDate" dataType="date" width={125} />
-          <Selection mode="single" />
           <Editing mode="popup">
             <Texts confirmDeleteMessage="" />
           </Editing>
@@ -100,7 +98,7 @@ class App extends React.Component {
           <div className="option">
             <span>Direction: </span>
             <SelectBox
-              dataSource={optionDirections}
+              dataSource={['auto', 'up', 'down']}
               defaultValue="auto"
               onSelectionChanged={this.directionChanged}
             />

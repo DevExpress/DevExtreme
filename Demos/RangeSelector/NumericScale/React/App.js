@@ -4,15 +4,13 @@ import RangeSelector, {
 } from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 
-const defaultValue = ['1', '2'];
-
 function App() {
   return (
     <RangeSelector
       id="range-selector"
       title="Select a Product Weight"
       dataSource={dataSource}
-      defaultValue={defaultValue}
+      defaultValue={['1', '2']}
     >
       <Margin top={50} />
       <Chart>

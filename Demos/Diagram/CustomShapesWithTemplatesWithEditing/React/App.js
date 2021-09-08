@@ -10,8 +10,6 @@ import CustomShapeTemplate from './CustomShapeTemplate.js';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.js';
 import service from './data.js';
 
-const pageCommands = ['pageSize', 'pageOrientation', 'pageColor'];
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -206,7 +204,7 @@ class App extends React.Component {
           </Toolbox>
           <PropertiesPanel>
             <Tab>
-              <Group title="Page Properties" commands={pageCommands} />
+              <Group title="Page Properties" commands={['pageSize', 'pageOrientation', 'pageColor']} />
             </Tab>
           </PropertiesPanel>
         </Diagram>

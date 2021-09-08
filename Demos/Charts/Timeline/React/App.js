@@ -5,13 +5,11 @@ import {
 } from 'devextreme-react/chart';
 import dataSource from './data.js';
 
-const axisCategories = ['Royal Houses'];
-
 class App extends React.Component {
   render() {
     return (
       <Chart id="chart" dataSource={dataSource} barGroupPadding={0.2} rotated={true}>
-        <ArgumentAxis categories={axisCategories}>
+        <ArgumentAxis categories={['Royal Houses']}>
           <Tick visible={false} />
         </ArgumentAxis>
         <Title text="The British Monarchy"

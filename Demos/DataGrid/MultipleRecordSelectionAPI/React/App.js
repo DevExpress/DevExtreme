@@ -10,8 +10,6 @@ import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
 import { employees } from './data.js';
 
-const titles = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -21,6 +19,7 @@ class App extends React.Component {
 
     this.state = {
       prefix: '',
+      prefixOptions: ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'],
       selectedEmployeeNames: 'Nobody has been selected',
       selectedRowKeys: [],
     };
@@ -32,7 +31,7 @@ class App extends React.Component {
 
   render() {
     const {
-      prefix, selectedRowKeys, selectedEmployeeNames,
+      prefix, selectedRowKeys, selectedEmployeeNames, prefixOptions,
     } = this.state;
 
     return (
@@ -56,7 +55,7 @@ class App extends React.Component {
           <Toolbar>
             <Item location="before">
               <SelectBox
-                dataSource={titles}
+                dataSource={prefixOptions}
                 onValueChanged={this.onSelectionFilterChanged}
                 placeholder="Select title"
                 width={150}

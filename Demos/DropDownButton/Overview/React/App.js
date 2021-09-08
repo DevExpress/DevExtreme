@@ -7,8 +7,6 @@ import service from './data.js';
 import ColorIcon from './ColorIcon.js';
 import 'whatwg-fetch';
 
-const buttonDropDownOptions = { width: 230 };
-
 class App extends React.Component {
   onButtonClick(e) {
     notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
@@ -129,7 +127,7 @@ class App extends React.Component {
               <DropDownButton
                 text="Download Trial"
                 icon="save"
-                dropDownOptions={buttonDropDownOptions}
+                dropDownOptions={{ width: 230 }}
                 items={this.data.downloads}
                 onItemClick={this.onItemClick}
               />

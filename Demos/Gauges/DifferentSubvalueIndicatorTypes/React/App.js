@@ -3,8 +3,6 @@ import {
   CircularGauge, Scale, Geometry, SubvalueIndicator,
 } from 'devextreme-react/circular-gauge';
 
-const subValues = [2, 8];
-
 class App extends React.Component {
   render() {
     return (
@@ -16,7 +14,7 @@ class App extends React.Component {
           <CircularGauge
             id="triangleMarker"
             value={8}
-            subvalues={subValues}
+            subvalues={[2, 8]}
           >
             <SubvalueIndicator
               type="triangleMarker"
@@ -36,7 +34,7 @@ class App extends React.Component {
           <CircularGauge
             id="rectangleNeedle"
             value={9}
-            subvalues={subValues}
+            subvalues={[2, 8]}
           >
 
             <SubvalueIndicator
@@ -57,7 +55,7 @@ class App extends React.Component {
           <CircularGauge
             id="triangleNeedle"
             value={5}
-            subvalues={subValues}
+            subvalues={[2, 8]}
           >
 
             <SubvalueIndicator
@@ -78,7 +76,7 @@ class App extends React.Component {
           <CircularGauge
             id="textCloud"
             value={6}
-            subvalues={subValues}>
+            subvalues={[2, 8]}>
             <SubvalueIndicator
               type="textCloud"
               color="#f05b41"
@@ -97,7 +95,7 @@ class App extends React.Component {
           <CircularGauge
             id="twoColorNeedle"
             value={4}
-            subvalues={subValues}>
+            subvalues={[2, 8]}>
 
             <SubvalueIndicator
               type="twoColorNeedle"

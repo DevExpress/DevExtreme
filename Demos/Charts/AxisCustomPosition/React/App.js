@@ -12,7 +12,6 @@ import {
 import { generateDataSource } from './data.js';
 
 const dataSource = generateDataSource();
-const defaultVisualRange = [-20, 20];
 
 class App extends React.Component {
   constructor(props) {
@@ -56,12 +55,12 @@ class App extends React.Component {
             <Point symbol='triangleDown' />
           </Series>
           <ArgumentAxis
-            defaultVisualRange={defaultVisualRange}
+            defaultVisualRange={[-20, 20]}
             customPosition={argumentCustomPosition}
             offset={argumentOffset}
           />
           <ValueAxis
-            defaultVisualRange={defaultVisualRange}
+            defaultVisualRange={[-20, 20]}
             customPosition={valueCustomPosition}
             offset={valueOffset}
             endOnTick={false}

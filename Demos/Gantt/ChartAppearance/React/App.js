@@ -10,9 +10,6 @@ import {
 } from './data.js';
 import TaskTooltipTemplate from './TaskTooltipTemplate.js';
 
-const scaleTypes = ['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years'];
-const titlePositions = ['inside', 'outside', 'none'];
-
 class App extends React.Component {
   constructor() {
     super();
@@ -51,7 +48,7 @@ class App extends React.Component {
               {' '}
               <div className="value">
                 <SelectBox
-                  items={scaleTypes}
+                  items={['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years']}
                   value={scaleType}
                   onValueChanged={this.onScaleTypeChanged}
                 />
@@ -62,7 +59,7 @@ class App extends React.Component {
               {' '}
               <div className="value">
                 <SelectBox
-                  items={titlePositions}
+                  items={['inside', 'outside', 'none']}
                   value={taskTitlePosition}
                   onValueChanged={this.onTaskTitlePositionChanged}
                 />

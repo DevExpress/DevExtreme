@@ -1,5 +1,5 @@
 import React from 'react';
-import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
+import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import Query from 'devextreme/data/query';
 
 import Appointment from './Appointment.js';
@@ -32,11 +32,11 @@ class App extends React.Component {
         showAllDayPanel={false}
         crossScrollingEnabled={true}
         cellDuration={20}
+        editing={{ allowAdding: false }}
         appointmentComponent={Appointment}
         appointmentTooltipComponent={AppointmentTooltip}
         onAppointmentFormOpening={this.onAppointmentFormOpening}
       >
-        <Editing allowAdding={false} />
         <Resource
           dataSource={moviesData}
           fieldExpr="movieId"

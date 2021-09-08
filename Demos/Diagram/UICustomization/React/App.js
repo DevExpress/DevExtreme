@@ -5,9 +5,6 @@ import Diagram, {
 import dialog from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
 
-const pageCommands = ['pageSize', 'pageOrientation', 'pageColor'];
-const menuCommands = ['bringToFront', 'sendToBack', 'lock', 'unlock'];
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -43,11 +40,11 @@ class App extends React.Component {
   render() {
     return (
       <Diagram id="diagram" ref={this.diagramRef} onCustomCommand={this.onCustomCommand}>
-        <ContextMenu enabled={true} commands={menuCommands} />
+        <ContextMenu enabled={true} commands={['bringToFront', 'sendToBack', 'lock', 'unlock']} />
         <ContextToolbox enabled={true} category="flowchart" shapeIconsPerRow={5} width={200} />
         <PropertiesPanel visibility="visible">
           <Tab>
-            <Group title="Page Properties" commands={pageCommands} />
+            <Group title="Page Properties" commands={['pageSize', 'pageOrientation', 'pageColor']} />
           </Tab>
         </PropertiesPanel>
         <HistoryToolbar visible={false} />

@@ -6,14 +6,9 @@ import TextBox from 'devextreme-react/text-box';
 import DateBox from 'devextreme-react/date-box';
 import TextArea from 'devextreme-react/text-area';
 import Button from 'devextreme-react/button';
-import Validator, { RequiredRule } from 'devextreme-react/validator';
+import Validator from 'devextreme-react/validator';
 import notify from 'devextreme/ui/notify';
 import validationEngine from 'devextreme/ui/validation_engine';
-
-const stylingModes = ['outlined', 'filled', 'underlined'];
-const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
-const defaultStatus = [statuses[0]];
-const priorities = ['High', 'Urgent', 'Normal', 'Low'];
 
 class App extends React.Component {
   constructor(props) {
@@ -47,9 +42,8 @@ class App extends React.Component {
               width="100%"
               placeholder="Subject"
             >
-              <Validator>
-                <RequiredRule />
-              </Validator>
+              <Validator
+                validationRules={[{ type: 'required' }]} />
             </TextBox>
           </div>
           &nbsp;
@@ -61,7 +55,7 @@ class App extends React.Component {
               placeholder="Start Date"
             />
             <SelectBox
-              items={priorities}
+              items={['High', 'Urgent', 'Normal', 'Low']}
               stylingMode={this.state.stylingMode}
               defaultValue="High"
               width="100%"
@@ -70,8 +64,8 @@ class App extends React.Component {
           </div>
           <div className="center">
             <TagBox
-              items={statuses}
-              defaultValue={defaultStatus}
+              items={['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed']}
+              defaultValue={['Not Started']}
               multiline={false}
               stylingMode={this.state.stylingMode}
               width="100%"
@@ -97,7 +91,7 @@ class App extends React.Component {
           <div className="caption">Styling Mode</div>
           <div className="option">
             <SelectBox
-              items={stylingModes}
+              items={['outlined', 'filled', 'underlined']}
               value={this.state.stylingMode}
               onValueChanged={this.stylingModeChange}
             />

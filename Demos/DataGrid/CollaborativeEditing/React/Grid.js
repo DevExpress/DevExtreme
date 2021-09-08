@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, Editing, Paging, RequiredRule, RangeRule, Lookup,
+  Column, Editing, Paging, RequiredRule, RangeRule,
 } from 'devextreme-react/data-grid';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -54,12 +54,12 @@ class Grid extends React.Component {
         <Column
           dataField="StateID"
           caption="State"
+          lookup={{
+            dataSource: this.statesStore,
+            displayExpr: 'Name',
+            valueExpr: 'ID',
+          }}
         >
-          <Lookup
-            dataSource={this.statesStore}
-            displayExpr="Name"
-            valueExpr="ID"
-          />
           <RequiredRule />
         </Column>
 

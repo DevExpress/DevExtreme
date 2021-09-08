@@ -5,9 +5,6 @@ import SelectBox from 'devextreme-react/select-box';
 
 import { markersData, routesData } from './data.js';
 
-const modes = ['driving', 'walking'];
-const routeColors = ['blue', 'green', 'red'];
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +33,7 @@ class App extends React.Component {
             <span>Set mode</span>
             <SelectBox
               defaultValue="driving"
-              items={modes}
+              items={['driving', 'walking']}
               onValueChanged={this.updateRouteMode}
             />
           </div>
@@ -44,7 +41,7 @@ class App extends React.Component {
             <span>Route color</span>
             <SelectBox
               defaultValue="blue"
-              items={routeColors}
+              items={['blue', 'green', 'red']}
               onValueChanged={this.updateRouteColor}
             />
           </div>

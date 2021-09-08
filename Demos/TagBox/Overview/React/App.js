@@ -6,8 +6,6 @@ import ArrayStore from 'devextreme/data/array_store';
 import Item from './Item.js';
 import { simpleProducts, products } from './data.js';
 
-const disabledValue = [simpleProducts[0]];
-
 class App extends React.Component {
   constructor() {
     super();
@@ -88,7 +86,7 @@ class App extends React.Component {
             <div className="dx-field-label">Disabled</div>
             <div className="dx-field-value">
               <TagBox items={simpleProducts}
-                value={disabledValue}
+                value={[simpleProducts[0]]}
                 disabled={true} />
             </div>
           </div>

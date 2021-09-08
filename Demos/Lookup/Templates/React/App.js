@@ -5,8 +5,6 @@ import { employees } from './data.js';
 import Field from './Field.js';
 import Item from './Item.js';
 
-const searchExpression = ['FirstName', 'LastName', 'Prefix'];
-
 class App extends React.Component {
   render() {
     return (
@@ -31,7 +29,7 @@ class App extends React.Component {
             <Lookup
               items={employees}
               displayExpr={this.getDisplayExpr}
-              searchExpr={searchExpression}
+              searchExpr={['FirstName', 'LastName', 'Prefix']}
               valueExpr="ID"
               placeholder="Select employee"
               itemRender={Item}>

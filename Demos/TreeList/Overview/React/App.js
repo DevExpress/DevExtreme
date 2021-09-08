@@ -8,9 +8,6 @@ import TreeList, {
 import { employees, priorities, tasks } from './data.js';
 import EmployeeCell from './EmployeeCell.js';
 
-const expandedKeys = [1, 2];
-const selectedKeys = [1, 29, 42];
-
 class App extends React.Component {
   render() {
     return (
@@ -19,8 +16,8 @@ class App extends React.Component {
         showBorders={true}
         columnAutoWidth={true}
         wordWrapEnabled={true}
-        defaultExpandedRowKeys={expandedKeys}
-        defaultSelectedRowKeys={selectedKeys}
+        defaultExpandedRowKeys={[1, 2]}
+        defaultSelectedRowKeys={[1, 29, 42]}
         keyExpr="Task_ID"
         parentIdExpr="Task_Parent_ID"
         id="tasks"
