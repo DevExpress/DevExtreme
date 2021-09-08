@@ -527,6 +527,13 @@
     "dxGantt-zoomIn": "TODO",
     "dxGantt-zoomOut": "TODO",
     "dxGantt-fullScreen": "TODO",
-    "dxGantt-quarter": "TODO"
+    "dxGantt-quarter": "TODO",
+    "dxGantt-sortingAscendingText": "Növekvő",
+    "dxGantt-sortingDescendingText": "Csökkenő",
+    "dxGantt-sortingClearText": "Rendezés törlése",
+    "dxGantt-showResources": "TODO",
+    "dxGantt-showDependencies": "TODO",
+    "dxGantt-dialogStartDateValidation": "TODO",
+    "dxGantt-dialogEndDateValidation": "TODO"
 }
 }
