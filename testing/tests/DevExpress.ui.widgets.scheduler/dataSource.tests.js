@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import {
     createWrapper,
@@ -317,7 +318,9 @@ module('Events', {
 
             const $appointment = $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
             const initialLeftPosition = translator.locate($appointment).left;
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
+            const cellWidth = getOuterWidth(
+                scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0)
+            );
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-left').eq(0)).start();
 
             pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
@@ -367,13 +370,13 @@ module('Events', {
             });
 
             const $appointment = $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
-            const initialHeight = $appointment.outerHeight();
-            const cellHeight = scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
+            const initialHeight = getOuterHeight($appointment);
+            const cellHeight = getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
 
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
             pointer.dragStart().drag(0, cellHeight * 2).dragEnd();
 
-            assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight(), initialHeight, 'Height is OK');
+            assert.equal(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialHeight, 'Height is OK');
         });
 
         test('Appointment should have initial size if "cancel" flag is defined as true during update operation (month view)', function(assert) {
@@ -389,13 +392,13 @@ module('Events', {
             });
 
             const $appointment = $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
-            const initialWidth = $appointment.outerWidth();
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+            const initialWidth = getOuterWidth($appointment);
+            const cellWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
 
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
             pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
 
-            assert.roughEqual(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), initialWidth, 0.5, 'Width is OK');
+            assert.roughEqual(getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialWidth, 0.5, 'Width is OK');
         });
 
         test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (all day)', function(assert) {
@@ -410,13 +413,15 @@ module('Events', {
             });
 
             const $appointment = $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
-            const initialWidth = $appointment.outerWidth();
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
+            const initialWidth = getOuterWidth($appointment);
+            const cellWidth = getOuterWidth(
+                scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0)
+            );
 
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
             pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
 
-            assert.roughEqual(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), initialWidth, 1, 'Width is OK');
+            assert.roughEqual(getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialWidth, 1, 'Width is OK');
         });
 
         test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (if appointment takes few days)', function(assert) {
@@ -431,13 +436,15 @@ module('Events', {
             });
 
             const $appointment = $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
-            const initialWidth = $appointment.outerWidth();
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
+            const initialWidth = getOuterWidth($appointment);
+            const cellWidth = getOuterWidth(
+                scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0)
+            );
 
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
             pointer.dragStart().drag(cellWidth * 3, 0).dragEnd();
 
-            assert.roughEqual(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), 1.1, initialWidth, 'Width is OK');
+            assert.roughEqual(getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), 1.1, initialWidth, 'Width is OK');
         });
 
         test('Appointment should have initial left coordinate if \'cancel\' flag is defined as true during resize operation', function(assert) {
@@ -453,7 +460,9 @@ module('Events', {
 
             const $appointment = $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
             const initialLeftPosition = translator.locate($appointment).left;
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
+            const cellWidth = getOuterWidth(
+                scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0)
+            );
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-left').eq(0)).start();
 
             pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
@@ -474,7 +483,9 @@ module('Events', {
 
             const $appointment = $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
             const initialTopPosition = translator.locate($appointment).top;
-            const cellHeight = scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerHeight();
+            const cellHeight = getOuterHeight(
+                scheduler.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0)
+            );
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-top').eq(0)).start();
 
             pointer.dragStart().drag(0, -cellHeight * 2).dragEnd();
