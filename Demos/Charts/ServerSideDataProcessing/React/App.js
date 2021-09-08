@@ -52,9 +52,9 @@ class App extends React.Component {
           dataSource={this.chartDataSource}>
           <Size height={420} />
           <ValueAxis
-            grid={{ opacity: 0.2 }}
             valueType="numeric"
           >
+            <Grid opacity={0.2} />
             <Label customizeText={this.customizeLabel} />
           </ValueAxis>
           <ArgumentAxis type="discrete">

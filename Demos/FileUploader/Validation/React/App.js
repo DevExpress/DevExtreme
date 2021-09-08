@@ -1,12 +1,14 @@
 import React from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 
+const fileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
+
 class App extends React.Component {
   render() {
     return (
       <div className="main-block">
         <div className="file-uploader-block">
-          <FileUploader multiple={true} uploadMode="useButtons" uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload" allowedFileExtensions={['.jpg', '.jpeg', '.gif', '.png']} />
+          <FileUploader multiple={true} uploadMode="useButtons" uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload" allowedFileExtensions={fileExtensions} />
           <span className="note">{'Allowed file extensions: '}
             <span>.jpg, .jpeg, .gif, .png</span>
             .

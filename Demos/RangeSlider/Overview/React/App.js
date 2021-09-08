@@ -1,6 +1,15 @@
 import React from 'react';
-import RangeSlider from 'devextreme-react/range-slider';
+import RangeSlider, { Tooltip, Label } from 'devextreme-react/range-slider';
 import NumberBox from 'devextreme-react/number-box';
+
+const defaultValues = {
+  defaultMode: [20, 60],
+  labels: [35, 65],
+  tooltips: [15, 65],
+  withoutRangeHighlighting: [20, 80],
+  discreteStep: [20, 70],
+  disabled: [25, 75],
+};
 
 class App extends React.Component {
   constructor(props) {
@@ -21,46 +30,43 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Default mode</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={[20, 60]} />
+              <RangeSlider min={0} max={100} defaultValue={defaultValues.defaultMode} />
             </div>
           </div>
           <div className="dx-field custom-height-slider">
             <div className="dx-field-label">With labels</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={[35, 65]} label={{
-                visible: true,
-                format,
-                position: 'top',
-              }} />
+              <RangeSlider min={0} max={100} defaultValue={defaultValues.labels}>
+                <Label visible={true} format={format} position="top" />
+              </RangeSlider>
             </div>
           </div>
           <div className="dx-field custom-height-slider">
             <div className="dx-field-label">With tooltips</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={[15, 65]} tooltip={{
-                enabled: true,
-                format,
-                showMode: 'always',
-                position: 'bottom',
-              }} />
+              <RangeSlider min={0} max={100} defaultValue={defaultValues.tooltips}>
+                <Tooltip enabled={true} format={format} showMode="always" position="bottom" />
+              </RangeSlider>
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Without range highlighting</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={[20, 80]} showRange={false} />
+              <RangeSlider min={0} max={100} defaultValue={defaultValues.withoutRangeHighlighting} showRange={false} />
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">With discrete step</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={[20, 70]} step={10} tooltip={{ enabled: true }} />
+              <RangeSlider min={0} max={100} defaultValue={defaultValues.discreteStep} step={10}>
+                <Tooltip enabled="true" />
+              </RangeSlider>
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Disabled</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={[25, 75]} disabled={true} />
+              <RangeSlider min={0} max={100} defaultValue={defaultValues.disabled} disabled={true} />
             </div>
           </div>
         </div>

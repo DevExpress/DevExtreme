@@ -4,6 +4,8 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import service from './data.js';
 
+const startupSelectedKeys = [1, 4, 7];
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +33,7 @@ class App extends React.Component {
       <React.Fragment>
         <DataGrid
           id="gridContainer"
-          defaultSelectedRowKeys={[1, 4, 7]}
+          defaultSelectedRowKeys={startupSelectedKeys}
           onSelectionChanged={this.onSelectionChanged}
           dataSource={this.orders}
           keyExpr="ID"

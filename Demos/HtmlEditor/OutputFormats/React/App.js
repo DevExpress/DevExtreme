@@ -8,6 +8,7 @@ import 'devextreme/ui/html_editor/converters/markdown';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
 const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];
+const defaultSelectedItemKeys = ['Html'];
 
 class App extends React.Component {
   constructor() {
@@ -64,7 +65,7 @@ class App extends React.Component {
         <div className="options">
           <ButtonGroup
             onSelectionChanged={this.valueTypeChanged}
-            defaultSelectedItemKeys={['Html']}
+            defaultSelectedItemKeys={defaultSelectedItemKeys}
           >
             <ButtonItem text="Html" />
             <ButtonItem text="Markdown" />

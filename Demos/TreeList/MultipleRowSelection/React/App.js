@@ -6,6 +6,7 @@ import { employees } from './data.js';
 
 const expandedRowKeys = [1, 2, 10];
 const emptySelectedText = 'Nobody has been selected';
+const selectionModes = ['all', 'excludeRecursive', 'leavesOnly'];
 
 class App extends React.Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class App extends React.Component {
             <span>Selection Mode</span>{' '}
             <SelectBox
               value={selectionMode}
-              items={['all', 'excludeRecursive', 'leavesOnly']}
+              items={selectionModes}
               text="Recursive Selection"
               onValueChanged={this.onSelectionModeChanged}
             />

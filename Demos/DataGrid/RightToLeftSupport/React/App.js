@@ -4,6 +4,9 @@ import SelectBox from 'devextreme-react/select-box';
 
 import service from './data.js';
 
+const populationFormat = { type: 'fixedPoint', precision: 0 };
+const areaFormat = { type: 'fixedPoint', precision: 0 };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -56,10 +59,10 @@ class App extends React.Component {
             caption={rtlEnabled ? 'عاصمة' : 'Capital'} />
           <Column dataField="population"
             caption={rtlEnabled ? 'عدد السكان (نسمة) 2013' : 'Population'}
-            format={{ type: 'fixedPoint', precision: 0 }} />
+            format={populationFormat} />
           <Column dataField="area"
             headerCellRender={this.headerCellRender}
-            format={{ type: 'fixedPoint', precision: 0 }} />
+            format={areaFormat} />
           <Column dataField="accession" visible={false} />
         </DataGrid>
         <div className="options">

@@ -13,11 +13,20 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentValue: props.data.value,
+      selectedRowKeys: [props.data.value],
+      isDropDownOpened: false,
     };
-    this.dropDownBoxRef = React.createRef();
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
     this.contentRender = this.contentRender.bind(this);
+    this.boxOptionChanged = this.boxOptionChanged.bind(this);
+  }
+
+  boxOptionChanged(e) {
+    if (e.name === 'opened') {
+      this.setState({
+        isDropDownOpened: e.value,
+      });
+    }
   }
 
   contentRender() {
@@ -25,13 +34,12 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
       <DataGrid
         dataSource={this.props.data.column.lookup.dataSource}
         remoteOperations={true}
-        keyExpr="ID"
         height={250}
-        selectedRowKeys={[this.state.currentValue]}
+        selectedRowKeys={this.state.selectedRowKeys}
         hoverStateEnabled={true}
         onSelectionChanged={this.onSelectionChanged}
         focusedRowEnabled={true}
-        defaultFocusedRowKey={this.state.currentValue}
+        defaultFocusedRowKey={this.state.selectedRowKeys[0]}
       >
         <Column dataField="FullName" />
         <Column dataField="Title" />
@@ -44,20 +52,21 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
   }
 
   onSelectionChanged(selectionChangedArgs) {
-    this.setState({ currentValue: selectionChangedArgs.selectedRowKeys[0] });
-    this.props.data.setValue(this.state.currentValue);
-    if (selectionChangedArgs.selectedRowKeys.length > 0) {
-      this.dropDownBoxRef.current.instance.close();
-    }
+    this.setState({
+      selectedRowKeys: selectionChangedArgs.selectedRowKeys,
+      isDropDownOpened: false,
+    });
+    this.props.data.setValue(this.state.selectedRowKeys[0]);
   }
 
   render() {
     return (
       <DropDownBox
-        ref={this.dropDownBoxRef}
+        onOptionChanged={this.boxOptionChanged}
+        opened={this.state.isDropDownOpened}
         dropDownOptions={dropDownOptions}
         dataSource={this.props.data.column.lookup.dataSource}
-        value={this.state.currentValue}
+        value={this.state.selectedRowKeys[0]}
         displayExpr="FullName"
         valueExpr="ID"
         contentRender={this.contentRender}>

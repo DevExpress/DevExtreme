@@ -63,7 +63,7 @@ class App extends React.Component {
             onSelectionChanged={this.handleTabPanelSelectionChange}
             dataSource={this.state.citiesData}
             animationEnabled={true}
-            elementAttr={{ id: 'tabpanel' }}
+            id="tabpanel"
           />
         </div>
       </div>
