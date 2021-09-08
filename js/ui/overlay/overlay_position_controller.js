@@ -89,13 +89,13 @@ class OverlayPositionController {
     }
 
     positionWrapper() {
-        if(this._wrapperCoveredElement) {
-            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: this._wrapperCoveredElement });
+        if(this._$wrapperCoveredElement) {
+            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: this._$wrapperCoveredElement });
         }
     }
 
     isContainerWindow() {
-        return !this._wrapperCoveredElement || isWindow(this._wrapperCoveredElement);
+        return !this._$wrapperCoveredElement || isWindow(this._$wrapperCoveredElement);
     }
 
     _updateWrapperCoveredElement() {
@@ -162,8 +162,23 @@ class PopupPositionController extends OverlayPositionController {
     }
 }
 
+class PopoverPositionController extends OverlayPositionController {
+    constructor({ shading, ...args }) {
+        super(args);
+
+        this._shading = shading;
+    }
+
+    positionWrapper() {
+        if(this._shading) {
+            this._$wrapper.css({ top: 0, left: 0 });
+        }
+    }
+}
+
 export {
     OVERLAY_POSITION_ALIASES,
     OverlayPositionController,
-    PopupPositionController
+    PopupPositionController,
+    PopoverPositionController
 };

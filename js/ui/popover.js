@@ -15,6 +15,7 @@ import errors from './widget/ui.errors';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 import { POPOVER_BOUNDARY_OFFSET } from './popover_contants';
+import { PopoverPositionController } from './overlay/overlay_position_controller';
 
 // STYLE popover
 
@@ -475,10 +476,19 @@ const Popover = Popup.inherit({
         }
     },
 
-    _renderWrapperPosition: function() {
-        if(this.option('shading')) {
-            this.$wrapper().css({ top: 0, left: 0 });
-        }
+    _initPositionController() {
+        const { target, container, shading } = this.option();
+
+        this._positionController = new PopoverPositionController({
+            position: this._getOptionValue('position'),
+            target,
+            container,
+            $root: this.$element(),
+            $content: this._$content,
+            $wrapper: this._$wrapper,
+            onPositioned: this._actions.onPositioned,
+            shading
+        });
     },
 
     _renderWrapperDimensions: function() {

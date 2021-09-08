@@ -2114,3 +2114,21 @@ QUnit.module('renderGeometry', () => {
         }
     });
 });
+
+QUnit.module('shading', () => {
+    QUnit.test('overlay wrapper should be positioned at {top: 0, left: 0}', function(assert) {
+        fixtures.simple.create();
+        try {
+            const popover = new Popover($('#what'), {
+                shading: true,
+                target: '#where',
+                visible: true
+            });
+
+            const $wrapper = popover.$wrapper();
+            assert.deepEqual($wrapper.position(), { top: 0, left: 0 }, 'wrapper is positioned correctly');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+});

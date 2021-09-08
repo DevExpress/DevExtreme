@@ -1167,7 +1167,7 @@ const Overlay = Widget.inherit({
     _renderWrapper: function() {
         this._styleWrapperPosition();
         this._renderWrapperDimensions();
-        this._renderWrapperPosition();
+        this._positionController.positionWrapper();
     },
 
     _renderWrapperDimensions: function() {
@@ -1192,14 +1192,6 @@ const Overlay = Widget.inherit({
 
     _isWindow: function($element) {
         return !!$element && isWindow($element.get(0));
-    },
-
-    _renderWrapperPosition: function() {
-        const $container = this._positionController._$wrapperCoveredElement;
-
-        if($container) {
-            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: $container });
-        }
     },
 
     _renderDimensions: function() {
