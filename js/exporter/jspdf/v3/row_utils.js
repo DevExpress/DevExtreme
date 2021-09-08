@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateRowHeight } from './pdf_utils_v3';
+import { calculateRowHeight, calculateTextHeight } from './pdf_utils_v3';
 
 
 function initializeCellsWidth(rows, columnWidths) {
@@ -26,7 +26,7 @@ function calculateHeights(doc, rows, options) {
 
         row.height = isDefined(customerHeight)
             ? customerHeight
-            : calculateRowHeight(doc, pdfCells, pdfCells.map(c => c._rect.w));
+            : calculateRowHeight(doc, row.cells, pdfCells.map(c => c._rect.w));
         pdfCells.forEach(cell => {
             cell._rect.h = row.height;
         });
@@ -67,6 +67,53 @@ function applyRowSpans(rows) {
     }
 }
 
+function recalculateHeightForMergedRows(doc, rows) {
+    const rowsAdditionalHeights = Array.from({ length: rows.length }, () => 0);
+    const calculateRowsHeightWithAdditionalHeights = (rowFromIndex, rowSpan) => {
+        let height = 0;
+        for(let rowIndex = rowFromIndex; rowIndex <= rowFromIndex + rowSpan; rowIndex++) {
+            height += rows[rowIndex].height + rowsAdditionalHeights[rowIndex];
+        }
+        return height;
+    };
+
+    const sortByRowspanAsc = (a, b) => a.rowSpan > b.rowSpan ? 1 : b.rowSpan > a.rowSpan ? -1 : 0;
+    for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        const orderedCellsWithRowSpan = rows[rowIndex].cells
+            .filter(cell => isDefined(cell.rowSpan))
+            .sort(sortByRowspanAsc);
+
+        orderedCellsWithRowSpan.forEach(cell => {
+            const pdfCell = cell.pdfCell;
+            const textHeight = calculateTextHeight(doc, pdfCell.text, pdfCell.font, {
+                wordWrapEnabled: pdfCell.wordWrapEnabled,
+                columnWidth: pdfCell._rect.w
+            });
+            const summaryHeight = calculateRowsHeightWithAdditionalHeights(rowIndex, cell.rowSpan);
+            if(textHeight > summaryHeight) {
+                const delta = (textHeight - summaryHeight) / (cell.rowSpan + 1);
+                for(let spanIndex = rowIndex; spanIndex <= rowIndex + cell.rowSpan; spanIndex++) {
+                    if(delta > rowsAdditionalHeights[spanIndex]) {
+                        rowsAdditionalHeights[spanIndex] = delta;
+                    }
+                }
+            }
+        });
+    }
+
+    rowsAdditionalHeights.forEach((additionalHeight, rowIndex) => {
+        rows[rowIndex].height += additionalHeight;
+    });
+
+    rows.forEach((currentRow, rowIndex) => {
+        currentRow.cells.forEach(cell => {
+            cell.pdfCell._rect.h = rows
+                .slice(rowIndex, rowIndex + (isDefined(cell.rowSpan) ? cell.rowSpan + 1 : 1))
+                .reduce((accumulator, row) => row.height + accumulator, 0);
+        });
+    });
+}
+
 function calculateCoordinates(doc, rows, options) {
     let y = options?.topLeft?.y ?? 0;
     rows.forEach(row => {
@@ -80,4 +127,4 @@ function calculateCoordinates(doc, rows, options) {
     });
 }
 
-export { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates };
+export { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, recalculateHeightForMergedRows, calculateCoordinates };
