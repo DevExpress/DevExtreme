@@ -102,7 +102,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @param1_field2 options:Object
      * @public
      */
-    static defaultOptions<TProperties = Properties>(rule: Partial<DefaultOptionsRule<TProperties>>): void;
+    static defaultOptions<TProperties = Properties>(rule: DefaultOptionsRule<TProperties>): void;
 
     /**
      * @docid
