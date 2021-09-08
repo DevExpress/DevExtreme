@@ -1076,8 +1076,11 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
         this.clock.tick();
-
-        this.instance.showTaskDetailsDialog(globalLastInsertedKey);
+        this.instance._ganttView._ganttViewCore.selectTask(globalPrevInsertedKey);
+        this.clock.tick();
+        const ganttCore = getGanttViewCore(this.instance);
+        const task = ganttCore.viewModel.tasks.items[1];
+        ganttCore.commandManager.showTaskEditDialog.execute(task);
         this.clock.tick();
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
@@ -1091,11 +1094,11 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
         let isValidStartTextBox = startTextBox._getValidationErrors() === null;
-        assert.notOk(isValidStartTextBox, 'empty start validation');
+        assert.notOk(isValidStartTextBox, 'error start validation');
 
         startTextBox.option('value', task1.end);
         isValidStartTextBox = startTextBox._getValidationErrors() === null;
-        assert.ok(isValidStartTextBox, 'not empty start validation');
+        assert.ok(isValidStartTextBox, 'no error start validation');
 
         $okButton.trigger('dxclick');
     });
