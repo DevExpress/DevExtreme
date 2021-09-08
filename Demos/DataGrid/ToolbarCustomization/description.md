@@ -1,12 +1,12 @@
-The DataGrid uses an integrated DevExtreme [Toolbar](/Demos/WidgetsGallery/Demo/Toolbar/Overview/) component to display predefined and custom commands. To add or remove toolbar items, implement the [onToolbarPreparing](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onToolbarPreparing) function. Use its parameter's **toolbarOptions** field to access the [Toolbar's configuration](/Documentation/ApiReference/UI_Components/dxToolbar/Configuration/) object. This object includes the command collection: the **toolbarOptions**.[items](/Documentation/ApiReference/UI_Components/dxToolbar/Configuration/items/) array.
+The DataGrid includes an integrated toolbar that displays predefined and custom controls. To add or remove toolbar items, declare the [toolbar](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/).[items[]](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/items/) array.
 
 This demo illustrates how to add the following items to the toolbar:
 
-- **DevExtreme components**        
-Specify a [component](/Documentation/ApiReference/UI_Components/dxToolbar/Configuration/items/#widget) that you want to add and its [options](/Documentation/ApiReference/UI_Components/dxToolbar/Configuration/items/#options). In this demo, we extended the toolbar's item collection with a [Button](/Demos/WidgetsGallery/Demo/Button/PredefinedTypes/) and a [SelectBox](/Demos/WidgetsGallery/Demo/SelectBox/Overview/).
+* **Predefined Controls**            
+Create an object and specify the [name](/Documentation/ApiReference/UI_Components/dx{WidgetName}/Configuration/toolbar/items/#name) and [properties](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/items/) that you want to customize. If a control does not need customization, include its **name** in the **items[]** array. Ensure that **items[]** contain controls for all features that you enabled in your DataGrid. In this demo, we enable the [columnChooser](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columnChooser/) and add the *"columnChooserButton"* to the **items[]** array.
 
-- **Custom elements**       
-Specify a [template](/Documentation/ApiReference/UI_Components/dxToolbar/Configuration/items/#template) for your custom element. In this demo, the custom element displays the total group count.
+* **DevExtreme Components**           
+Specify a [widget](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/items/#widget) that you want to add and its [options](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/items/#options). In this demo, we extended the toolbar's item collection with a [Button](/Demos/WidgetsGallery/Demo/Button/PredefinedTypes/) and a [SelectBox](/Demos/WidgetsGallery/Demo/SelectBox/Overview/).
 
-- **Predefined controls**        
-The availability of predefined controls depends on whether a specific DataGrid feature is enabled. For example, this demo enables the [columnChooser](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columnChooser/), and the toolbar displays the Column Chooser button. You can customize the predefined controls in the **onToolbarPreparing** function. Refer to its [description](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onToolbarPreparing) for a code example.
+* **Custom Elements**             
+Specify a [template](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/items/#template) for your custom element. In this demo, the custom element displays the total group count.
