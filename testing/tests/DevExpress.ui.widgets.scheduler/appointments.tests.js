@@ -1,3 +1,4 @@
+import { getOuterHeight, getWidth, getHeight } from 'core/utils/size';
 import 'generic_light.css!';
 
 import pointerMock from '../../helpers/pointerMock.js';
@@ -282,7 +283,7 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.outerHeight(), 40, 'Appointment has a right height');
+        assert.equal(getOuterHeight($appointment), 40, 'Appointment has a right height');
     });
 
     QUnit.test('Scheduler appointment should be resizable', function(assert) {
@@ -453,8 +454,8 @@ QUnit.module('Appointments', moduleOptions, () => {
         }, testConfig);
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
-        const initialWidth = $appointment.width();
-        const initialHeight = $appointment.height();
+        const initialWidth = getWidth($appointment);
+        const initialHeight = getHeight($appointment);
         const keyboard = keyboardMock($appointment);
         const pointer = pointerMock(instance.$element().find('.dx-resizable-handle-bottom')).start();
 
@@ -462,8 +463,8 @@ QUnit.module('Appointments', moduleOptions, () => {
         keyboard.keyDown('esc');
         pointer.up();
 
-        assert.equal($appointment.width(), initialWidth, 'Appointment width is correct');
-        assert.equal($appointment.height(), initialHeight, 'Appointment height is correct');
+        assert.equal(getWidth($appointment), initialWidth, 'Appointment width is correct');
+        assert.equal(getHeight($appointment), initialHeight, 'Appointment height is correct');
     });
 
     QUnit.test('Allday appointment should stay in allDayContainer after small dragging', function(assert) {
