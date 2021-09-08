@@ -997,6 +997,18 @@ testModule('position', moduleConfig, () => {
         assert.roughEqual($overlayWrapper.width(), $(window).width(), 1.01, 'overlay wrapper width is correct');
         assert.roughEqual($overlayWrapper.height(), $(window).height(), 1.01, 'overlay wrapper height is correct');
     });
+
+    test('position.of as an event', function(assert) {
+        const event = $.Event('click', { target: $('#overlayInputTarget') });
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            position: { my: 'top', at: 'top', of: event }
+        }).dxOverlay('instance');
+
+        const $content = overlay.$content();
+
+        assert.strictEqual($content.position().top, event.target.position().top, 'overlay is positioned correctly');
+    });
 });
 
 

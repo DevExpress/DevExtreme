@@ -34,6 +34,7 @@ import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 import resizeObserverSingleton from '../../core/resize_observer';
+import { OverlayPositionController, OVERLAY_POSITION_ALIASES } from './overlay_position_controller';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -60,27 +61,7 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
 
-const POSITION_ALIASES = {
-    'top': { my: 'top center', at: 'top center' },
-    'bottom': { my: 'bottom center', at: 'bottom center' },
-    'right': { my: 'right center', at: 'right center' },
-    'left': { my: 'left center', at: 'left center' },
-    'center': { my: 'center', at: 'center' },
-    'right bottom': { my: 'right bottom', at: 'right bottom' },
-    'right top': { my: 'right top', at: 'right top' },
-    'left bottom': { my: 'left bottom', at: 'left bottom' },
-    'left top': { my: 'left top', at: 'left top' }
-};
-
 const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
-
-const getElement = value => {
-    if(isEvent(value)) {
-        value = value.target;
-    }
-
-    return $(value);
-};
 
 ready(() => {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, e => {
@@ -123,7 +104,7 @@ const Overlay = Widget.inherit({
 
             wrapperAttr: {},
 
-            position: extend({}, POSITION_ALIASES.center),
+            position: extend({}, OVERLAY_POSITION_ALIASES.center),
 
             width: '80vw',
 
@@ -504,7 +485,7 @@ const Overlay = Widget.inherit({
         };
 
         if(isDefined(this.option('position'))) {
-            this._position = extend(true, {}, defaultPositionOptions, this._getPositionValue(POSITION_ALIASES));
+            this._position = extend(true, {}, defaultPositionOptions, this._getPositionValue(OVERLAY_POSITION_ALIASES));
         } else {
             this._position = defaultPositionOptions;
         }
@@ -860,7 +841,7 @@ const Overlay = Widget.inherit({
 
         const closeOnScroll = this.option('closeOnTargetScroll');
         if(needSubscribe && closeOnScroll) {
-            let $parents = getElement(this._$wrapper).parents();
+            let $parents = this._$wrapper.parents();
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
@@ -956,6 +937,7 @@ const Overlay = Widget.inherit({
         });
 
         this._renderDrag();
+        this._initPositionController();
         this._renderResize();
         this._renderScrollTerminator();
 
@@ -966,6 +948,18 @@ const Overlay = Widget.inherit({
         });
 
         return whenContentRendered.promise();
+    },
+
+    _initPositionController() {
+        const { position, target, container } = this.option();
+
+        this._positionController = new OverlayPositionController({
+            position, target, container,
+            $root: this.$element(),
+            $content: this._$content,
+            $wrapper: this._$wrapper,
+            onPositioned: this._actions.onPositioned
+        });
     },
 
     _renderDrag: function() {
@@ -1229,7 +1223,7 @@ const Overlay = Widget.inherit({
             positionOf = isEvent(position.of) ? window : (position.of || window);
         }
 
-        return getElement(container || positionOf);
+        return $(container || positionOf);
     },
 
     _renderDimensions: function() {
