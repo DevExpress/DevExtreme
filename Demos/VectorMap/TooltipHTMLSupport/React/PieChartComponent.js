@@ -6,10 +6,10 @@ import PieChart, {
   Connector,
 } from 'devextreme-react/pie-chart';
 
-function PieChartComponent({ data = [] }) {
+function PieChartComponent(props) {
   return (
     <PieChart id="gdp-sectors"
-      dataSource={data}
+      dataSource={props.data}
       animation={false}
     >
       <Series

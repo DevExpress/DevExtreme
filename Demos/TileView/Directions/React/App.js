@@ -6,6 +6,8 @@ import SelectBox from 'devextreme-react/select-box';
 import RenderHomeItem from './HomeItem.js';
 import { homes } from './data.js';
 
+const directions = ['horizontal', 'vertical'];
+
 class App extends React.Component {
   constructor() {
     super();
@@ -35,7 +37,7 @@ class App extends React.Component {
           <div className='option'>
             <span>Direction</span>&nbsp;
             <SelectBox
-              items={['horizontal', 'vertical']}
+              items={directions}
               value={this.state.direction}
               onValueChanged={this.directionChanged}>
             </SelectBox>

@@ -12,7 +12,7 @@ class NavigationList extends React.PureComponent {
           hoverStateEnabled={false}
           activeStateEnabled={false}
           focusStateEnabled={false}
-          elementAttr={{ class: 'panel-list dx-theme-accent-as-background-color' }} />
+          className="panel-list dx-theme-accent-as-background-color" />
       </div>
     );
   }

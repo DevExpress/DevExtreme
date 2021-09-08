@@ -10,6 +10,8 @@ import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import { employees, states } from './data.js';
 
+const startEditActions = ['click', 'dblClick'];
+
 class App extends React.Component {
   constructor() {
     super();
@@ -70,7 +72,7 @@ class App extends React.Component {
           <div className="option">
             <span>Start Edit Action</span>
             <SelectBox
-              items={['click', 'dblClick']}
+              items={startEditActions}
               value={this.state.startEditAction}
               onValueChanged={this.onStartEditActionChanged}>
             </SelectBox>

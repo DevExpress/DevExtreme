@@ -39,6 +39,8 @@ const store = new CustomStore({
   },
 });
 
+const allowedPageSizes = [8, 12, 20];
+
 class App extends React.Component {
   render() {
     return (
@@ -75,7 +77,7 @@ class App extends React.Component {
         <Paging defaultPageSize={12} />
         <Pager
           showPageSizeSelector={true}
-          allowedPageSizes={[8, 12, 20]}
+          allowedPageSizes={allowedPageSizes}
         />
       </DataGrid>
     );

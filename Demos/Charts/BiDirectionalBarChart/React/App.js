@@ -7,6 +7,7 @@ import Chart, {
   Legend,
   Series,
   Tooltip,
+  Margin,
 } from 'devextreme-react/chart';
 
 import { dataSource } from './data.js';
@@ -45,8 +46,9 @@ class App extends React.Component {
         <Legend
           verticalAlignment="bottom"
           horizontalAlignment="center"
-          margin={{ left: 50 }}
-        />
+        >
+          <Margin left={50} />
+        </Legend>
 
       </Chart>
     );

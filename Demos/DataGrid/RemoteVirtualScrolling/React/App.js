@@ -14,9 +14,7 @@ class App extends React.Component {
   render() {
     return (
       <DataGrid
-        elementAttr ={{
-          id: 'gridContainer',
-        }}
+        height={440}
         dataSource={dataSource}
         showBorders={true}
         remoteOperations={true}
