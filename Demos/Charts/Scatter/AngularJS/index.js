@@ -45,8 +45,6 @@ DemoApp.controller('DemoController', ($scope) => {
     const b2 = random(-100, 100) / 10;
     let k1 = random(-100, 100) / 10;
     let k2 = random(-100, 100) / 10;
-    let deviation1;
-    let deviation2;
     const ds = [];
     let i;
     let x1;
@@ -62,8 +60,8 @@ DemoApp.controller('DemoController', ($scope) => {
     if (k2 < 0.1 && k2 >= 0) { k2 = 0.1; }
     if (k2 > -0.1 && k2 < 0) { k2 = -0.1; }
 
-    deviation1 = Math.abs(k1 * 8);
-    deviation2 = Math.abs(k2 * 8);
+    const deviation1 = Math.abs(k1 * 8);
+    const deviation2 = Math.abs(k2 * 8);
     for (i = 0; i < 30; i++) {
       x1 = random(1, 20);
       x2 = random(1, 20);

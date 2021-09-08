@@ -1,8 +1,7 @@
 $(() => {
-  let dataGrid;
   let changedBySelectBox;
 
-  dataGrid = $('#grid-container').dxDataGrid({
+  const dataGrid = $('#grid-container').dxDataGrid({
     dataSource: employees,
     keyExpr: 'ID',
     showBorders: true,

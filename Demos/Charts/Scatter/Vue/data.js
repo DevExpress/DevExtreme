@@ -5,8 +5,6 @@ export function generateDataSource() {
   let k2 = random(-100, 100) / 10;
   const ds = [];
 
-  let deviation1;
-  let deviation2;
   let i;
   let x1;
   let x2;
@@ -21,8 +19,8 @@ export function generateDataSource() {
   if (k2 < 0.1 && k2 >= 0) { k2 = 0.1; }
   if (k2 > -0.1 && k2 < 0) { k2 = -0.1; }
 
-  deviation1 = Math.abs(k1 * 8);
-  deviation2 = Math.abs(k2 * 8);
+  const deviation1 = Math.abs(k1 * 8);
+  const deviation2 = Math.abs(k2 * 8);
   for (i = 0; i < 30; i++) {
     x1 = random(1, 20);
     x2 = random(1, 20);

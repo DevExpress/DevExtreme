@@ -1,13 +1,13 @@
 $(() => {
   const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
-  let treeList;
+
   const taskEmployees = DevExpress.data.AspNet.createStore({
     key: 'ID',
     loadMode: 'raw',
     loadUrl: `${url}/TaskEmployees`,
   });
 
-  treeList = $('#treeList').dxTreeList({
+  const treeList = $('#treeList').dxTreeList({
     dataSource: DevExpress.data.AspNet.createStore({
       key: 'Task_ID',
       loadUrl: `${url}/Tasks`,

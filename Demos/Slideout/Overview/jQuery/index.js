@@ -1,5 +1,5 @@
 $(() => {
-  let slideOut;
+  let slideOut = null;
   slideOut = $('#slideout').dxSlideOut({
     dataSource: products,
     onItemClick: showMenu,

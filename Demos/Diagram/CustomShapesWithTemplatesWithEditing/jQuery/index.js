@@ -1,6 +1,6 @@
 $(function () {
   let generatedID = 100;
-  let store = new DevExpress.data.ArrayStore({
+  const store = new DevExpress.data.ArrayStore({
     key: 'ID',
     data: employees,
     onInserting(values) {
@@ -25,9 +25,9 @@ $(function () {
       allowEditText: false,
     }],
     customShapeTemplate(item, $container) {
-      let employee = item.dataItem;
-      let svgNS = 'http://www.w3.org/2000/svg';
-      let $content = $(document.createElementNS(svgNS, 'svg')).addClass('template');
+      const employee = item.dataItem;
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const $content = $(document.createElementNS(svgNS, 'svg')).addClass('template');
       $(document.createElementNS(svgNS, 'text'))
         .addClass('template-name')
         .attr({ x: '50%', y: '20%' })
@@ -53,7 +53,7 @@ $(function () {
       $container.append($content);
     },
     customShapeToolboxTemplate(item, $container) {
-      let $content = $("<svg class='template'>"
+      const $content = $("<svg class='template'>"
                 + "<text x='50%' y='40%'>New</text>"
                 + "<text x='50%' y='70%'>Employee</text>"
                 + '</svg >');
@@ -116,25 +116,25 @@ $(function () {
     },
   }).dxDiagram('instance');
 
-  let popupContentTemplate = function ($container) {
-    let $editorsContainer = $('<div class="dx-fieldset" />').appendTo($container);
-    let $nameField = $('<div class="dx-field"><div class="dx-field-label">Name</div><div class="dx-field-value" data-field="Full_Name" /></div>');
+  const popupContentTemplate = function ($container) {
+    const $editorsContainer = $('<div class="dx-fieldset" />').appendTo($container);
+    const $nameField = $('<div class="dx-field"><div class="dx-field-label">Name</div><div class="dx-field-value" data-field="Full_Name" /></div>');
     $nameField.find('.dx-field-value').append('<div />').dxTextBox();
-    let $titleField = $('<div class="dx-field"><div class="dx-field-label">Title</div><div class="dx-field-value" data-field="Title" /></div>');
+    const $titleField = $('<div class="dx-field"><div class="dx-field-label">Title</div><div class="dx-field-value" data-field="Title" /></div>');
     $titleField.find('.dx-field-value').append('<div /').dxTextBox();
-    let $cityField = $('<div class="dx-field"><div class="dx-field-label">City</div><div class="dx-field-value" data-field="City" /></div>');
+    const $cityField = $('<div class="dx-field"><div class="dx-field-label">City</div><div class="dx-field-value" data-field="City" /></div>');
     $cityField.find('.dx-field-value').append('<div /').dxTextBox();
-    let $stateField = $('<div class="dx-field"><div class="dx-field-label">State</div><div class="dx-field-value" data-field="State" /></div>');
+    const $stateField = $('<div class="dx-field"><div class="dx-field-label">State</div><div class="dx-field-value" data-field="State" /></div>');
     $stateField.find('.dx-field-value').append('<div /').dxTextBox();
-    let $emailField = $('<div class="dx-field"><div class="dx-field-label">Email</div><div class="dx-field-value" data-field="Email" /></div>');
+    const $emailField = $('<div class="dx-field"><div class="dx-field-label">Email</div><div class="dx-field-value" data-field="Email" /></div>');
     $emailField.find('.dx-field-value').append('<div /').dxTextBox();
-    let $skypeField = $('<div class="dx-field"><div class="dx-field-label">Skype</div><div class="dx-field-value" data-field="Skype" /></div>');
+    const $skypeField = $('<div class="dx-field"><div class="dx-field-label">Skype</div><div class="dx-field-value" data-field="Skype" /></div>');
     $skypeField.find('.dx-field-value').append('<div /').dxTextBox();
-    let $phoneField = $('<div class="dx-field"><div class="dx-field-label">Phone</div><div class="dx-field-value" data-field="Mobile_Phone" /></div>');
+    const $phoneField = $('<div class="dx-field"><div class="dx-field-label">Phone</div><div class="dx-field-value" data-field="Mobile_Phone" /></div>');
     $phoneField.find('.dx-field-value').append('<div /').dxTextBox();
 
     $editorsContainer.append($nameField, $titleField, $cityField, $stateField, $emailField, $skypeField, $phoneField);
-    let $buttonsContainer = $('<div class="dx-fieldset buttons" />').appendTo($container);
+    const $buttonsContainer = $('<div class="dx-fieldset buttons" />').appendTo($container);
     $buttonsContainer.append(
       $('<button />').dxButton({
         text: 'Update',
@@ -147,7 +147,7 @@ $(function () {
       }),
     );
   };
-  let popup = $('#popup').dxPopup({
+  const popup = $('#popup').dxPopup({
     width: 400,
     height: 480,
     showTitle: true,
@@ -164,8 +164,8 @@ $(function () {
 
     popup.show();
     popup.content().find('.dx-field-value').each(function () {
-      let field = $(this).attr('data-field');
-      let edit = $(this).dxTextBox('instance');
+      const field = $(this).attr('data-field');
+      const edit = $(this).dxTextBox('instance');
       edit.option({
         value: currentEmployee[field],
         onValueChanged(e) { handleChange(field, e.value); },
