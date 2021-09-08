@@ -935,10 +935,10 @@ const Overlay = Widget.inherit({
         return whenContentRendered.promise();
     },
 
-    _initPositionController() {
+    _getPositionControllerConfig() {
         const { target, container } = this.option();
 
-        this._positionController = new OverlayPositionController({
+        return {
             position: this._getOptionValue('position'),
             target,
             container,
@@ -946,7 +946,13 @@ const Overlay = Widget.inherit({
             $content: this._$content,
             $wrapper: this._$wrapper,
             onPositioned: this._actions.onPositioned
-        });
+        };
+    },
+
+    _initPositionController() {
+        this._positionController = new OverlayPositionController(
+            this._getPositionControllerConfig()
+        );
     },
 
     _renderDrag: function() {

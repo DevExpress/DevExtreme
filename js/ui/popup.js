@@ -480,21 +480,17 @@ const Popup = Overlay.inherit({
         });
     },
 
-    _initPositionController() {
-        const { target, container, fullScreen } = this.option();
+    _getPositionControllerConfig() {
+        const { fullScreen } = this.option();
 
-        this._positionController = new PopupPositionController({
-            position: this._getOptionValue('position'),
-            target,
-            container,
-            $root: this.$element(),
-            $content: this._$content,
-            $wrapper: this._$wrapper,
-            onPositioned: this._actions.onPositioned,
-            fullScreen
-        });
+        return extend({}, this.callBase(), { fullScreen });
     },
 
+    _initPositionController() {
+        this._positionController = new PopupPositionController(
+            this._getPositionControllerConfig()
+        );
+    },
 
     _getDragTarget: function() {
         return this.topToolbar();

@@ -476,19 +476,16 @@ const Popover = Popup.inherit({
         }
     },
 
-    _initPositionController() {
-        const { target, container, shading } = this.option();
+    _getPositionControllerConfig() {
+        const { shading } = this.option();
 
-        this._positionController = new PopoverPositionController({
-            position: this._getOptionValue('position'),
-            target,
-            container,
-            $root: this.$element(),
-            $content: this._$content,
-            $wrapper: this._$wrapper,
-            onPositioned: this._actions.onPositioned,
-            shading
-        });
+        return extend({}, this.callBase(), { shading });
+    },
+
+    _initPositionController() {
+        this._positionController = new PopoverPositionController(
+            this._getPositionControllerConfig()
+        );
     },
 
     _renderWrapperDimensions: function() {
