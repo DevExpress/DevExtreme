@@ -1,8 +1,8 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates } from './row_utils';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize } from './row_utils';
 import { generateRowsInfo } from './rows_generator';
-import { drawPdfCells } from './draw_utils';
+import { drawPdfCells, drawGridLines } from './draw_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -56,11 +56,13 @@ function exportDataGrid(doc, dataGrid, options) {
             // when we known all sizes we can calculate all coordinates
             calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
 
+            // when we known all sizes we can calculate a table rect
+            const tableRect = calculateTableSize(doc, rowsInfo, options);
+
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
 
-            // set/update/initBorders(rows);
-            // TODO: initBorders(rows);
+            applyBordersConfig(rowsInfo);
 
             // splitting to pages
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
@@ -77,8 +79,7 @@ function exportDataGrid(doc, dataGrid, options) {
             );
 
             drawPdfCells(doc, pdfCellsInfo); // draw content only ???
-
-            // drawGridLines(); draw grid lines only ???
+            drawGridLines(doc, pdfCellsInfo, options.drawTableBorder, tableRect); // draw grid lines only ???
 
             resolve();
         });

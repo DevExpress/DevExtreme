@@ -67,6 +67,34 @@ function applyRowSpans(rows) {
     }
 }
 
+function applyBordersConfig(rows) {
+    for(let r = 0; r < rows.length; r++) {
+        const cells = rows[r].cells;
+        for(let i = 0; i < cells.length; i++) {
+            const currentCell = cells[i];
+            if(currentCell.pdfCell.drawLeftBorder === false && !isDefined(currentCell.pdfCell.colSpan)) { // TODO
+                if(i >= 1) {
+                    cells[i - 1].pdfCell.drawRightBorder = false;
+                }
+            } else if(!isDefined(currentCell.pdfCell.drawLeftBorder)) {
+                if(i >= 1 && cells[i - 1].pdfCell.drawRightBorder === false) {
+                    currentCell.pdfCell.drawLeftBorder = false;
+                }
+            }
+
+            if(currentCell.pdfCell.drawTopBorder === false) {
+                if(r >= 1) {
+                    rows[r - 1].cells[i].pdfCell.drawBottomBorder = false;
+                }
+            } else if(!isDefined(currentCell.pdfCell.drawTopBorder)) {
+                if(r >= 1 && rows[r - 1].cells[i].pdfCell.drawBottomBorder === false) {
+                    currentCell.pdfCell.drawTopBorder = false;
+                }
+            }
+        }
+    }
+}
+
 function calculateCoordinates(doc, rows, options) {
     let y = options?.topLeft?.y ?? 0;
     rows.forEach(row => {
@@ -80,4 +108,25 @@ function calculateCoordinates(doc, rows, options) {
     });
 }
 
-export { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates };
+function calculateTableSize(doc, rows, options) {
+    const tableRect = {
+        x: options?.topLeft?.x ?? 0,
+        y: options?.topLeft?.y ?? 0,
+        w: 0,
+        h: 0
+    };
+
+    if(isDefined(rows)) {
+        const lastRow = rows[rows.length - 1];
+        if(isDefined(lastRow)) {
+            const lastCell = lastRow[lastRow.length - 1];
+            if(isDefined(lastCell)) {
+                tableRect.w = lastCell._rect.x + lastCell._rect.w;
+                tableRect.h = lastCell._rect.y + lastCell._rect.h;
+            }
+        }
+    }
+    return tableRect;
+}
+
+export { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };
