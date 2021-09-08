@@ -12,7 +12,6 @@ import {
     getValueExpr,
     getWrappedDataSource,
     getResourceColor,
-    isResourceMultiple,
     filterResources,
     getPaintedResources,
 } from './utils';
@@ -64,17 +63,6 @@ export class ResourceManager {
 
     getResources() {
         return this._resources || [];
-    }
-
-    setResourcesToItem(itemData, resources) {
-        const resourcesSetter = this._dataAccessors.setter;
-
-        for(const name in resources) {
-            if(Object.prototype.hasOwnProperty.call(resources, name)) {
-                const resourceData = resources[name];
-                resourcesSetter[name](itemData, isResourceMultiple(this.getResources(), name) ? wrapToArray(resourceData) : resourceData);
-            }
-        }
     }
 
     isLoaded() {

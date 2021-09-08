@@ -4,7 +4,7 @@ import devices from '../../core/devices';
 import $ from '../../core/renderer';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { inArray } from '../../core/utils/array';
+import { inArray, wrapToArray } from '../../core/utils/array';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
 import { compileGetter, compileSetter } from '../../core/utils/data';
@@ -1825,7 +1825,14 @@ class Scheduler extends Widget {
 
         const rawResult = result.source();
 
-        getResourceManager(this.key).setResourcesToItem(rawResult, targetCell.groups);
+        const resourceManager = getResourceManager(this.key);
+        const resourcesSetter = resourceManager._dataAccessors.setter;
+
+        for(const name in targetCell.groups) {
+            const resourceData = targetCell.groups[name];
+            // resourcesSetter[name](rawResult, isResourceMultiple(resourceManager.getResources(), name) ? wrapToArray(resourceData) : resourceData);
+            resourcesSetter[name](rawResult, wrapToArray(resourceData));
+        }
 
         return rawResult;
     }
