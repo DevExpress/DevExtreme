@@ -15,7 +15,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent, isObject } from '../../core/utils/type';
-import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
+import { changeCallback, originalViewPort } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import {
@@ -253,8 +253,6 @@ const Overlay = Widget.inherit({
 
     _initOptions: function(options) {
         this._setAnimationTarget(options.target);
-        const container = options.container === undefined ? this.option('container') : options.container;
-        this._initContainer(container);
 
         this.callBase(options);
     },
@@ -289,19 +287,6 @@ const Overlay = Widget.inherit({
                 }
             }
         });
-    },
-
-    _initContainer: function(container) {
-        container = container === undefined ? viewPort() : container;
-
-        const $element = this.$element();
-        let $container = $element.closest(container);
-
-        if(!$container.length) {
-            $container = $(container).first();
-        }
-
-        this._$container = $container.length ? $container : $element.parent();
     },
 
     _initHideTopOverlayHandler: function(handler) {
@@ -452,7 +437,7 @@ const Overlay = Widget.inherit({
     },
 
     _viewPortChangeHandler: function() {
-        this._initContainer(this.option('container'));
+        this._positionController.initContainer(this.option('container'));
         this._refresh();
     },
 
@@ -936,8 +921,8 @@ const Overlay = Widget.inherit({
             }
         });
 
-        this._renderDrag();
         this._initPositionController();
+        this._renderDrag();
         this._renderResize();
         this._renderScrollTerminator();
 
@@ -951,10 +936,12 @@ const Overlay = Widget.inherit({
     },
 
     _initPositionController() {
-        const { position, target, container } = this.option();
+        const { target, container } = this.option();
 
         this._positionController = new OverlayPositionController({
-            position, target, container,
+            position: this._getOptionValue('position'),
+            target,
+            container,
             $root: this.$element(),
             $content: this._$content,
             $wrapper: this._$wrapper,
@@ -1063,7 +1050,7 @@ const Overlay = Widget.inherit({
             return $(dragAndResizeArea);
         }
         const isContainerDefined = originalViewPort().get(0) || this.option('container');
-        const $container = !isContainerDefined ? $(window) : this._$container;
+        const $container = !isContainerDefined ? $(window) : this._positionController._$container;
 
         return $container;
     },
@@ -1087,7 +1074,7 @@ const Overlay = Widget.inherit({
     _attachWrapperToContainer: function() {
         const $element = this.$element();
         const containerDefined = this.option('container') !== undefined;
-        let renderContainer = containerDefined ? this._$container : swatch.getSwatchContainer($element);
+        let renderContainer = containerDefined ? this._positionController._$container : swatch.getSwatchContainer($element);
 
         if(renderContainer && renderContainer[0] === $element.parent()[0]) {
             renderContainer = $element;
@@ -1414,7 +1401,7 @@ const Overlay = Widget.inherit({
                 this._invalidate();
                 break;
             case 'container':
-                this._initContainer(value);
+                this._positionController.initContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
                 if(this.option('dragEnabled') && this._drag && !this.option('dragAndResizeArea')) {
