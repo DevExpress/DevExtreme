@@ -72,7 +72,6 @@ import {
     getAllDayHeight,
     getMaxAllowedPosition,
     getMaxAllowedVerticalPosition,
-    getGroupWidth,
     PositionHelper
 } from './helpers/positionHelper';
 
@@ -1619,18 +1618,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
 
         return result;
-    }
-
-    getGroupWidth(groupIndex) {
-        return getGroupWidth(
-            groupIndex,
-            this.viewDataProvider,
-            {
-                isVirtualScrolling: this.isVirtualScrolling(),
-                rtlEnabled: this.option('rtlEnabled'),
-                DOMMetaData: this.getDOMElementsMetaData()
-            }
-        );
     }
 
     scrollToTime(hours, minutes, date) {
