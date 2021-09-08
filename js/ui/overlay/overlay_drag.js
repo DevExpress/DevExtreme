@@ -20,10 +20,9 @@ class OverlayDrag {
 
     init(config) {
         // TODO: get rid of dragEnabled, updatePositionChangeHandled
-        const { dragEnabled, handle, container, draggableElement, outsideDragFactor, updatePositionChangeHandled, onPositioned } = config;
+        const { dragEnabled, handle, draggableElement, updatePositionChangeHandled, onPositioned, positionController } = config;
 
-        this._container = container;
-        this._outsideDragFactor = outsideDragFactor ?? 0;
+        this._positionController = positionController;
         this._draggableElement = draggableElement;
         this._handle = handle;
         this._dragEnabled = dragEnabled;
@@ -90,22 +89,6 @@ class OverlayDrag {
         eventsEngine.off(this._handle, eventNames.endEventName);
     }
 
-    get container() {
-        return this._container;
-    }
-
-    set container(element) {
-        this._container = element;
-    }
-
-    get outsideDragFactor() {
-        return this._outsideDragFactor;
-    }
-
-    set outsideDragFactor(value) {
-        this._outsideDragFactor = value;
-    }
-
     _getEventNames() {
         const namespace = 'overlayDrag';
         const startEventName = addNamespace(dragStartEvent, namespace);
@@ -169,10 +152,11 @@ class OverlayDrag {
 
     _getContainerDimensions() {
         const document = domAdapter.getDocument();
+        const container = this._positionController.$dragResizeContainer.get(0);
 
-        let containerWidth = getOuterWidth(this._container);
-        let containerHeight = getOuterHeight(this._container);
-        if(isWindow(this._container)) {
+        let containerWidth = getOuterWidth(container);
+        let containerHeight = getOuterHeight(container);
+        if(isWindow(container)) {
             containerHeight = Math.max(document.body.clientHeight, containerHeight);
             containerWidth = Math.max(document.body.clientWidth, containerWidth);
         }
@@ -184,9 +168,11 @@ class OverlayDrag {
     }
 
     _getContainerPosition() {
-        return isWindow(this._container)
+        const container = this._positionController.$dragResizeContainer.get(0);
+
+        return isWindow(container)
             ? { top: 0, left: 0 }
-            : getOffset(this._container);
+            : getOffset(container);
     }
 
     _getElementPosition() {
@@ -205,10 +191,11 @@ class OverlayDrag {
 
     _getOuterDelta() {
         const { width, height } = this._getElementDimensions();
+        const outsideDragFactor = this._positionController.outsideDragFactor;
 
         return {
-            x: width * this._outsideDragFactor,
-            y: height * this._outsideDragFactor
+            x: width * outsideDragFactor,
+            y: height * outsideDragFactor
         };
     }
 

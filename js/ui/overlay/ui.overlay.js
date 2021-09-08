@@ -15,7 +15,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isString, isDefined, isFunction, isPlainObject, isWindow, isObject } from '../../core/utils/type';
-import { changeCallback, originalViewPort } from '../../core/utils/view_port';
+import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import {
@@ -936,7 +936,7 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container } = this.option();
+        const { target, container, dragAndResizeArea, allowDragOutside, outsideDragFactor } = this.option();
 
         return {
             position: this._getOptionValue('position'),
@@ -945,7 +945,10 @@ const Overlay = Widget.inherit({
             $root: this.$element(),
             $content: this._$content,
             $wrapper: this._$wrapper,
-            onPositioned: this._actions.onPositioned
+            onPositioned: this._actions.onPositioned,
+            dragAndResizeArea,
+            allowDragOutside,
+            outsideDragFactor
         };
     },
 
@@ -966,11 +969,10 @@ const Overlay = Widget.inherit({
         const config = {
             dragEnabled: this.option('dragEnabled'),
             handle: $dragTarget.get(0),
-            container: this._getDragResizeContainer().get(0),
             draggableElement: this._$content.get(0),
-            outsideDragFactor: this.option('allowDragOutside') ? 1 : this.option('outsideDragFactor'),
             updatePositionChangeHandled,
-            onPositioned: this._actions.onPositioned
+            onPositioned: this._actions.onPositioned,
+            positionController: this._positionController
         };
 
         if(this._drag) {
@@ -994,7 +996,7 @@ const Overlay = Widget.inherit({
             },
             minHeight: 100,
             minWidth: 100,
-            area: this._getDragResizeContainer()
+            area: this._positionController.$dragResizeContainer
         });
     },
 
@@ -1045,20 +1047,6 @@ const Overlay = Widget.inherit({
 
     _getDragTarget: function() {
         return this.$content();
-    },
-
-    _getDragResizeContainer: function() {
-        const { dragAndResizeArea, allowDragOutside } = this.option();
-        if(allowDragOutside) {
-            return $(window);
-        }
-        if(dragAndResizeArea) {
-            return $(dragAndResizeArea);
-        }
-        const isContainerDefined = originalViewPort().get(0) || this.option('container');
-        const $container = !isContainerDefined ? $(window) : this._positionController._$container;
-
-        return $container;
     },
 
     _moveFromContainer: function() {
@@ -1392,11 +1380,8 @@ const Overlay = Widget.inherit({
                 this._positionController.updateContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
-                if(this.option('dragEnabled') && this._drag && !this.option('dragAndResizeArea')) {
-                    this._drag.container = this._getDragResizeContainer()?.get(0);
-                }
-                if(this.option('resizeEnabled') && !this.option('dragAndResizeArea')) {
-                    this._resizable.option('area', this._getDragResizeContainer());
+                if(this.option('resizeEnabled')) {
+                    this._resizable?.option('area', this._positionController.$dragResizeContainer);
                 }
                 break;
             case 'innerOverlay':
@@ -1433,27 +1418,20 @@ const Overlay = Widget.inherit({
                 this._renderWrapperAttributes();
                 break;
             case 'dragAndResizeArea':
+                this._positionController.dragAndResizeArea = value;
                 if(this.option('resizeEnabled')) {
-                    this._resizable.option('area', this._getDragResizeContainer());
-                }
-                if(this.option('dragEnabled')) {
-                    this._drag.container = this._getDragResizeContainer().get(0);
+                    this._resizable?.option('area', this._positionController.$dragResizeContainer);
                 }
                 this._positionContent();
                 break;
             case 'allowDragOutside':
+                this._positionController.allowDragOutside = value;
                 if(this.option('resizeEnabled')) {
-                    this._resizable.option('area', this._getDragResizeContainer());
-                }
-                if(this.option('dragEnabled')) {
-                    this._drag.container = this._getDragResizeContainer().get(0);
-                    this._drag.outsideDragFactor = args.value ? 1 : this.option('outsideDragFactor');
+                    this._resizable.option('area', this._positionController.$dragResizeContainer);
                 }
                 break;
             case 'outsideDragFactor':
-                if(this.option('dragEnabled') && !this.option('allowDragOutside')) {
-                    this._drag.outsideDragFactor = args.value;
-                }
+                this._positionController.outsideDragFactor = value;
                 break;
             default:
                 this.callBase(args);
