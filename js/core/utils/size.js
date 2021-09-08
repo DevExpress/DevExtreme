@@ -36,14 +36,18 @@ const getBoxSizingOffset = function(name, elementStyles, boxParams) {
 
     return 0;
 };
+const getComputedStyle = function(element) {
+    const view = element?.ownerDocument?.defaultView || window;
+    return view.getComputedStyle && view.getComputedStyle(element);
+};
 
 export const getSize = function(element, name, include) {
-    const elementStyles = window.getComputedStyle(element);
+    const elementStyles = getComputedStyle(element);
 
     const boxParams = getElementBoxParams(name, elementStyles);
 
-    const clientRect = element.getClientRects().length;
-    const boundingClientRect = element.getBoundingClientRect()[name];
+    const clientRect = element.getClientRects && element.getClientRects().length;
+    const boundingClientRect = element.getBoundingClientRect && element.getBoundingClientRect()[name];
 
     let result = clientRect ? boundingClientRect : 0;
 
@@ -218,7 +222,7 @@ export const elementSize = function(el, sizeProperty, value) {
     }
 
     if(isNumeric(value)) {
-        const elementStyles = window.getComputedStyle(el);
+        const elementStyles = getComputedStyle(el);
         const sizeAdjustment = getElementBoxParams(propName, elementStyles);
         const isBorderBox = elementStyles.boxSizing === 'border-box';
         value = Number(value);
