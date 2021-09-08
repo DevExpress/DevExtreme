@@ -586,6 +586,8 @@
         "dxGantt-sortingDescendingText": "降順に並べ替え",
         "dxGantt-sortingClearText": "並べ替えをクリア",
         "dxGantt-showResources": "リソースを表示",
-        "dxGantt-showDependencies": "依存関係を表示"
+        "dxGantt-showDependencies": "依存関係を表示",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

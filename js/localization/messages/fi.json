@@ -533,6 +533,8 @@
         "dxGantt-sortingDescendingText": "Lajittele laskeva",
         "dxGantt-sortingClearText": "Tyhjennä lajittelu",
         "dxGantt-showResources": "TODO",
-        "dxGantt-showDependencies": "TODO"
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

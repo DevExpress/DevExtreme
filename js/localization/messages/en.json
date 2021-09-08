@@ -618,6 +618,8 @@
         "dxGantt-sortingDescendingText": "Sort Descending",
         "dxGantt-sortingClearText": "Clear Sorting",
         "dxGantt-showResources": "Show Resources",
-        "dxGantt-showDependencies": "Show Dependencies"
+        "dxGantt-showDependencies": "Show Dependencies",
+        "dxGantt-dialogStartDateValidation": "Start date should be {0} or late",
+        "dxGantt-dialogEndDateValidation": "End date should be {0} or late"
       }
 }
