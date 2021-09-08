@@ -647,7 +647,7 @@ const Lookup = DropDownList.inherit({
                 target: this.$element(),
                 fullScreen: false,
                 shading: false,
-                closeOnTargetScroll: true,
+                hideOnParentScroll: true,
                 _fixWrapperPosition: false,
                 width: this._isInitialOptionValue('dropDownOptions.width')
                     ? (function() { return this.$element().outerWidth(); }).bind(this)
@@ -689,7 +689,7 @@ const Lookup = DropDownList.inherit({
 
             toolbarItems: this._getPopupToolbarItems(),
 
-            closeOnTargetScroll: false,
+            hideOnParentScroll: false,
             onPositioned: null,
 
             maxHeight: '100vh',
@@ -717,7 +717,7 @@ const Lookup = DropDownList.inherit({
                 of: this.element()
             };
 
-            result.closeOnTargetScroll = true;
+            result.hideOnParentScroll = true;
         }
 
         each(['position', 'animation', 'width', 'height'], (_, optionName) => {
@@ -947,15 +947,15 @@ const Lookup = DropDownList.inherit({
         // NOTE: Focus can trigger "scroll" event
 
         const { _scrollToSelectedItemEnabled } = this.option();
-        const closeOnTargetScroll = this._popup.option('closeOnTargetScroll');
+        const hideOnParentScroll = this._popup.option('hideOnParentScroll');
 
         if(!_scrollToSelectedItemEnabled) {
             callback();
         } else {
-            this._popup.option('closeOnTargetScroll', false);
+            this._popup.option('hideOnParentScroll', false);
             callback();
-            this._closeOnTargetScrollTimer = setTimeout(() => { // T1018037
-                this._popup.option('closeOnTargetScroll', closeOnTargetScroll);
+            this._hideOnParentScrollTimer = setTimeout(() => { // T1018037
+                this._popup.option('hideOnParentScroll', hideOnParentScroll);
             });
         }
     },
@@ -1027,9 +1027,9 @@ const Lookup = DropDownList.inherit({
 
     _clean: function() {
         this._$fieldWrapper.remove();
-        clearTimeout(this._closeOnTargetScrollTimer);
+        clearTimeout(this._hideOnParentScrollTimer);
 
-        this._closeOnTargetScrollTimer = null;
+        this._hideOnParentScrollTimer = null;
         this._$searchBox = null;
 
         this.callBase();

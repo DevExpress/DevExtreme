@@ -791,7 +791,7 @@ const FilterBuilder = Widget.inherit({
             },
             visible: true,
             focusStateEnabled: false,
-            closeOnTargetScroll: this.option('closePopupOnTargetScroll'),
+            hideOnParentScroll: this.option('closePopupOnTargetScroll'),
             closeOnOutsideClick: true,
             onShown: options.popup.onShown,
             shading: false,

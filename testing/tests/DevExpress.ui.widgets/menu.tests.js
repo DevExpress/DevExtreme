@@ -2087,7 +2087,7 @@ QUnit.module('adaptivity: render', {
         assert.equal(overlay.option('position').collision, 'flipfit', 'collision strategy is correct');
     });
 
-    QUnit.test('Overlay should have closeOnTargetScroll option', function(assert) {
+    QUnit.test('Overlay should have hideOnParentScroll option', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true,
@@ -2097,7 +2097,7 @@ QUnit.module('adaptivity: render', {
         const $overlay = this.$element.find('.dx-overlay').first();
         const overlay = $overlay.dxOverlay('instance');
 
-        assert.ok(overlay.option('closeOnTargetScroll'), 'overlay should close on target scroll');
+        assert.ok(overlay.option('hideOnParentScroll'), 'overlay should close on target scroll');
     });
 
     QUnit.test('Width option should transfer to the adaptive overlay', function(assert) {
