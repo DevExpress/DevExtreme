@@ -11,7 +11,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     get dateTableOffset() { return this.options.dateTableOffset; }
     get endViewDate() { return this.options.endViewDate; }
     get adaptivityEnabled() { return this.options.adaptivityEnabled; }
-    get DOMMetaData() { return this.options.DOMMetaData; }
+    get DOMMetaData() { return this.options.getDOMMetaData(); }
 
     _getLeftPosition(settings) {
         const fullWeekAppointmentWidth = this.getWorkspaceGroupWidth(settings.groupIndex);

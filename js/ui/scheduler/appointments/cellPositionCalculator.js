@@ -3,7 +3,7 @@ class BaseStrategy {
         this.options = options;
     }
 
-    get DOMMetaData() { return this.options.DOMMetaData; }
+    get DOMMetaData() { return this.options.getDOMMetaData(); }
     get appointments() { return this.options.dateSettings; } // TODO rename appoitments -> dateSettings
     get viewDataProvider() { return this.options.viewDataProvider; }
     get positionHelper() { return this.options.positionHelper; }
