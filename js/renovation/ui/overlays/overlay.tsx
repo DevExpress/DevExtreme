@@ -38,7 +38,7 @@ export class OverlayProps extends BaseWidgetProps {
 
   @OneWay() closeOnOutsideClick? = false;
 
-  @OneWay() closeOnTargetScroll? = false;
+  @OneWay() hideOnParentScroll? = false;
 
   @OneWay() animation?: AnimationConfig | null = {
     type: 'pop', duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 },
