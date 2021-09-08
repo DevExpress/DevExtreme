@@ -9,6 +9,7 @@ import {
   AnimatedScrollbar,
 } from '../animated_scrollbar';
 import { inRange } from '../../../../core/utils/math';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
 
 interface Mock extends jest.Mock {}
 
@@ -19,11 +20,10 @@ jest.mock('../../../../core/utils/math', () => ({
 
 describe('Public methods', () => {
   each([
-    { name: 'getMaxOffset', calledWith: [] },
+    { name: 'getMinOffset', calledWith: [] },
     { name: 'scrollStep', calledWith: ['arg1'] },
     { name: 'moveTo', calledWith: ['arg1'] },
     { name: 'stopAnimator', calledWith: ['arg1'] },
-    { name: 'getMinOffset', calledWith: [] },
     { name: 'isScrollbar', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
     { name: 'initHandler', calledWith: ['arg1', 'arg2'] },
@@ -64,6 +64,7 @@ describe('Public methods', () => {
 
         const viewModel = new AnimatedScrollbar({
           scrollLocation,
+          maxOffset: -700,
         });
         (viewModel as any).scrollbarRef = {
           current: {
@@ -71,8 +72,7 @@ describe('Public methods', () => {
             moveTo: scrollbarMoveToHandler,
           },
         };
-        viewModel.getMaxOffset = jest.fn(() => 0);
-        viewModel.getMinOffset = jest.fn(() => -700);
+        viewModel.getMinOffset = jest.fn(() => 0);
 
         Object.defineProperties(viewModel, {
           isFinished: { get() { return true; } },
@@ -119,11 +119,15 @@ describe('Public methods', () => {
   });
 
   each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-    const minOffset = -100;
-    const maxOffset = 0;
-    each([10, maxOffset, 0, -1, -99, minOffset, -101]).describe('scrollLocation: %o', (scrollLocation) => {
+    const maxOffset = -100;
+    const minOffset = 0;
+    each([10, minOffset, 0, -1, -99, maxOffset, -101]).describe('scrollLocation: %o', (scrollLocation) => {
       it('animator on the step should scrolls scrollbar on correct value', () => {
-        const viewModel = new AnimatedScrollbar({ bounceEnabled, scrollLocation });
+        const viewModel = new AnimatedScrollbar({
+          bounceEnabled,
+          scrollLocation,
+          maxOffset,
+        });
         const scrollStepHandler = jest.fn();
 
         viewModel.velocity = -5;
@@ -135,13 +139,12 @@ describe('Public methods', () => {
           current: {
             scrollStep: scrollStepHandler,
             getMinOffset: jest.fn(() => minOffset),
-            getMaxOffset: jest.fn(() => maxOffset),
           },
         };
         viewModel.step();
 
         let expectedVelocity = -5;
-        if (!bounceEnabled && (scrollLocation >= maxOffset || scrollLocation <= minOffset)) {
+        if (!bounceEnabled && (scrollLocation >= minOffset || scrollLocation <= maxOffset)) {
           expectedVelocity = 0;
         }
 
@@ -149,6 +152,105 @@ describe('Public methods', () => {
         expect(scrollStepHandler).toHaveBeenCalledWith(expectedVelocity);
 
         expect(viewModel.velocity).toEqual(expectedVelocity * acceleration);
+      });
+    });
+  });
+
+  each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('direction: %o', (direction) => {
+    each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+      each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
+        each([0, 55]).describe('bottomPocketSize: %o', (bottomPocketSize) => {
+          each([0, 80]).describe('topPocketSize: %o', (topPocketSize) => {
+            each([0, 8]).describe('contentPaddingBottom: %o', (contentPaddingBottom) => {
+              each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
+                each([true, false]).describe('forceAnimationToBottomBound: %o', (forceAnimationToBottomBound) => {
+                  it('maxOffset()', () => {
+                    const viewModel = new AnimatedScrollbar({
+                      direction,
+                      forceGeneratePockets,
+                      reachBottomEnabled,
+                      bottomPocketSize,
+                      topPocketSize,
+                      contentPaddingBottom,
+                      maxOffset,
+                    });
+
+                    viewModel.forceAnimationToBottomBound = forceAnimationToBottomBound;
+
+                    let expectedMaxOffsetValue = 0;
+
+                    if (
+                      forceGeneratePockets
+                        && reachBottomEnabled
+                        && !forceAnimationToBottomBound
+                    ) {
+                      expectedMaxOffsetValue = (maxOffset as number)
+                        - (bottomPocketSize as number) - (contentPaddingBottom as number);
+                    } else {
+                      expectedMaxOffsetValue = maxOffset;
+                    }
+
+                    expect(viewModel.maxOffset).toEqual(expectedMaxOffsetValue);
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});
+
+describe('Action handlers', () => {
+  each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('direction: %o', (direction) => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
+      it('inEnd(direction)', () => {
+        const viewModel = new AnimatedScrollbar({
+          direction,
+          onEnd: actionHandler,
+        });
+
+        viewModel.forceAnimationToBottomBound = true;
+
+        viewModel.onEnd(direction);
+
+        expect(viewModel.forceAnimationToBottomBound).toEqual(false);
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+          expect(actionHandler).toHaveBeenCalledWith(direction);
+        }
+      });
+
+      each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+        each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
+          each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
+            it('onRelease()', () => {
+              (inRange as Mock).mockImplementation(inRangeFn);
+
+              const viewModel = new AnimatedScrollbar({
+                direction,
+                forceGeneratePockets,
+                reachBottomEnabled,
+                onRelease: actionHandler,
+              });
+
+              viewModel.forceAnimationToBottomBound = false;
+
+              viewModel.onRelease();
+
+              expect(viewModel.forceAnimationToBottomBound)
+                .toEqual(inRangeFn() && forceGeneratePockets && reachBottomEnabled);
+              if (actionHandler) {
+                expect(actionHandler).toHaveBeenCalledTimes(1);
+              }
+            });
+          });
+        });
       });
     });
   });
@@ -186,10 +288,10 @@ describe('Animator', () => {
     it('should setup bounce on animator start()', () => {
       const viewModel = new AnimatedScrollbar({
         scrollLocation: -1500,
+        maxOffset: -700,
       });
       viewModel.stepCore = jest.fn();
-      viewModel.getMaxOffset = jest.fn(() => 0);
-      viewModel.getMinOffset = jest.fn(() => -700);
+      viewModel.getMinOffset = jest.fn(() => 0);
 
       viewModel.start('bounce');
 
@@ -226,23 +328,21 @@ describe('Animator', () => {
   describe('Getters', () => {
     each([0, -99.9, -100, -100.1, -150]).describe('scrollLocation: %o', (scrollLocation) => {
       it('reachedMin', () => {
-        const viewModel = new AnimatedScrollbar({ scrollLocation });
-        const minOffset = -100;
+        const maxOffset = -100;
+        const viewModel = new AnimatedScrollbar({ scrollLocation, maxOffset });
 
-        viewModel.getMinOffset = jest.fn(() => minOffset);
-
-        expect(viewModel.reachedMin()).toEqual(scrollLocation <= minOffset);
+        expect(viewModel.reachedMin()).toEqual(scrollLocation <= maxOffset);
       });
     });
 
     each([100, 80.1, 80, 79.9, 0]).describe('scrollLocation: %o', (scrollLocation) => {
       it('reachedMax', () => {
         const viewModel = new AnimatedScrollbar({ scrollLocation });
-        const maxOffset = 80;
+        const minOffset = 80;
 
-        viewModel.getMaxOffset = jest.fn(() => maxOffset);
+        viewModel.getMinOffset = jest.fn(() => minOffset);
 
-        expect(viewModel.reachedMax()).toEqual(scrollLocation >= maxOffset);
+        expect(viewModel.reachedMax()).toEqual(scrollLocation >= minOffset);
       });
     });
 
@@ -250,7 +350,6 @@ describe('Animator', () => {
       each([undefined, {
         current: {
           getMinOffset: jest.fn(),
-          getMaxOffset: jest.fn(),
         },
       }]).describe('ScrollbarRef: %o', (scrollbarRef) => {
         each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {

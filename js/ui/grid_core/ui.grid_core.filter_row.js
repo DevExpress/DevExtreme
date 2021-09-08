@@ -257,7 +257,6 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 shading: false,
                 showTitle: false,
                 focusStateEnabled: false,
-                closeOnTargetScroll: false,
                 closeOnOutsideClick: true,
                 copyRootClassesToWrapper: true,
                 animation: false,
