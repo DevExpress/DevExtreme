@@ -123,12 +123,12 @@ export default class Scheduler extends Widget {
   }
 
   scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
-    const scheduler = this.element;
-    const scrollTo = (): any => $(scheduler()).dxScheduler('instance').scrollTo(date, group, allDay);
+    const { name, element } = this;
+    const scrollTo = (): any => $(element())[name]('instance').scrollTo(date, group, allDay);
 
     return ClientFunction(scrollTo, {
       dependencies: {
-        date, group, allDay, scheduler,
+        date, group, allDay, element, name,
       },
     })();
   }
