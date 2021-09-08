@@ -26,6 +26,7 @@ import Button from './button';
 import Overlay from './overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from './themes';
 import './toolbar/ui.toolbar.base';
+import { PopupPositionController } from './overlay/overlay_position_controller';
 
 const window = getWindow();
 
@@ -479,13 +480,21 @@ const Popup = Overlay.inherit({
         });
     },
 
-    _getContainer: function() {
-        if(this.option('fullScreen')) {
-            return $(window);
-        }
+    _initPositionController() {
+        const { target, container, fullScreen } = this.option();
 
-        return this.callBase();
+        this._positionController = new PopupPositionController({
+            position: this._getOptionValue('position'),
+            target,
+            container,
+            $root: this.$element(),
+            $content: this._$content,
+            $wrapper: this._$wrapper,
+            onPositioned: this._actions.onPositioned,
+            fullScreen
+        });
     },
+
 
     _getDragTarget: function() {
         return this.topToolbar();
@@ -578,7 +587,7 @@ const Popup = Overlay.inherit({
                 };
             }
         } else {
-            const container = $(this._getContainer()).get(0);
+            const container = $(this._positionController._$wrapperCoveredElement).get(0);
             const maxHeightValue = addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container);
             const minHeightValue = addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 

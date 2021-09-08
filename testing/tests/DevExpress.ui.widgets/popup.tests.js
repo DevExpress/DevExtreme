@@ -1953,8 +1953,8 @@ QUnit.module('drag and resize', {
                     this[moveMethodName]();
                     const position = this.getPosition();
 
-                    this.popup.option('width', 300);
-                    this.popup.option('height', 300);
+                    this.popup.option('width', 200);
+                    this.popup.option('height', 200);
 
                     const newPosition = this.getPosition();
                     assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');

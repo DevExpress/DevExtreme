@@ -242,8 +242,6 @@ const Overlay = Widget.inherit({
         // NOTE: bootstrap integration T342292
         eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
-
-        this._initPositionController();
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
         this._parentsScrollSubscriptionInfo = {
@@ -363,6 +361,7 @@ const Overlay = Widget.inherit({
     _initMarkup() {
         this.callBase();
         this._renderWrapperAttributes();
+        this._initPositionController();
     },
 
     _documentDownHandler: function(e) {
