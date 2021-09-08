@@ -11,24 +11,24 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scheduler: null,
       currentDate: new Date(2021, 2, 25),
       cellDuration: 30,
     };
     this.showAppointmentPopup = this.showAppointmentPopup.bind(this);
-    this.onContentReady = this.onContentReady.bind(this);
     this.onOptionChanged = this.onOptionChanged.bind(this);
+
+    this.schedulerRef = React.createRef();
   }
 
   render() {
     return (
       <React.Fragment>
         <Scheduler
+          ref={this.schedulerRef}
           timeZone="America/Los_Angeles"
           dataSource={data}
           views={views}
           adaptivityEnabled={true}
-          onContentReady={this.onContentReady}
           onOptionChanged={this.onOptionChanged}
           defaultCurrentView="month"
           currentDate={this.state.currentDate}
@@ -49,10 +49,6 @@ class App extends React.Component {
     );
   }
 
-  onContentReady(e) {
-    this.state.scheduler === null && this.setState({ scheduler: e.component });
-  }
-
   onOptionChanged(e) {
     if (e.name === 'currentDate') {
       this.setState({ currentDate: e.value });
@@ -60,7 +56,7 @@ class App extends React.Component {
   }
 
   showAppointmentPopup() {
-    this.state.scheduler.showAppointmentPopup();
+    this.schedulerRef.current.instance.showAppointmentPopup();
   }
 }
 
