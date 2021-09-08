@@ -2,6 +2,8 @@ import Popup from '../popup';
 import Form from '../form';
 import '../tag_box';
 import '../radio_group';
+import '../list_light';
+import '../list/modules/deleting';
 
 import messageLocalization from '../../localization/message';
 

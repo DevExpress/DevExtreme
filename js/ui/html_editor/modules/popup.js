@@ -6,7 +6,7 @@ import { getWindow } from '../../../core/utils/window';
 import BaseModule from './base';
 
 import Popup from '../../popup';
-import List from '../../list';
+import List from '../../list_light';
 
 let ListPopupModule = BaseModule;
 

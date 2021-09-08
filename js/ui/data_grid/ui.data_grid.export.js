@@ -8,9 +8,10 @@ import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
+
 import '../button';
 import '../drop_down_button';
-import List from '../list';
+import List from '../list_light';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
