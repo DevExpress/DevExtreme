@@ -45,3 +45,13 @@
     display: inline-block;
     vertical-align: middle;
 }
+
+.options-container {
+    display: flex;
+    align-items: center;
+}
+
+.options-container > .option {
+    display: flex;
+    align-items: center;
+}

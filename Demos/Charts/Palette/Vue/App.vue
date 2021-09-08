@@ -23,19 +23,21 @@
 
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <span>Palette</span>
-        <DxSelectBox
-          :items="paletteCollection"
-          v-model:value="palette"
-        />
-      </div>
-      <div class="option">
-        <span>Palette Extension Mode</span>
-        <DxSelectBox
-          :items="paletteExtensionModes"
-          v-model:value="paletteExtensionMode"
-        />
+      <div class="options-container">
+        <div class="option">
+          <span>Palette</span>
+          <DxSelectBox
+            :items="paletteCollection"
+            v-model:value="palette"
+          />
+        </div>
+        <div class="option">
+          <span>Palette Extension Mode</span>
+          <DxSelectBox
+            :items="paletteExtensionModes"
+            v-model:value="paletteExtensionMode"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -111,16 +113,26 @@ export default {
 
 .option {
     display: inline-block;
-    min-width: 324px;
+    min-width: 320px;
     margin-top: 5px;
 }
 
 .option > span {
-   margin: 0 14px 0 0;
+   margin: 0 10px 0 0;
 }
 
 .option > .dx-widget {
     display: inline-block;
     vertical-align: middle;
+}
+
+.options-container {
+    display: flex;
+    align-items: center;
+}
+
+.options-container > .option {
+    display: flex;
+    align-items: center;
 }
 </style>

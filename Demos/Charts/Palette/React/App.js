@@ -48,22 +48,23 @@ class App extends React.Component {
 
         <div className="options">
           <div className="caption">Options</div>
-          <div className="option">
-            <span>Palette </span>
-            <SelectBox
-              items={paletteCollection}
-              defaultValue={this.state.palette}
-              onValueChanged={this.setPalette}
-            />
-          </div>
-          &nbsp;
-          <div className="option">
-            <span>Palette Extension Mode </span>
-            <SelectBox
-              items={paletteExtensionModes}
-              defaultValue={this.state.extensionMode}
-              onValueChanged={this.setExtensionMode}
-            />
+          <div className="options-container">
+            <div className="option">
+              <span>Palette </span>
+              <SelectBox
+                items={paletteCollection}
+                defaultValue={this.state.palette}
+                onValueChanged={this.setPalette}
+              />
+            </div>
+            <div className="option">
+              <span>Palette Extension Mode </span>
+              <SelectBox
+                items={paletteExtensionModes}
+                defaultValue={this.state.extensionMode}
+                onValueChanged={this.setExtensionMode}
+              />
+            </div>
           </div>
         </div>
       </React.Fragment>

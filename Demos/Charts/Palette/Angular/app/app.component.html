@@ -12,14 +12,16 @@
 
 <div class="options">
     <div class="caption">Options</div>
-    <div class="option">
-        <span>Palette</span>
-        <dx-select-box [items]="paletteCollection" [(value)]="palette">
-        </dx-select-box>
-    </div>
-    <div class="option">
-        <span>Palette Extension Mode</span>
-        <dx-select-box [items]="paletteExtensionModes" [(value)]="paletteExtensionMode">
-        </dx-select-box>
+    <div class="options-container">
+        <div class="option">
+            <span>Palette</span>
+            <dx-select-box [items]="paletteCollection" [(value)]="palette">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <span>Palette Extension Mode</span>
+            <dx-select-box [items]="paletteExtensionModes" [(value)]="paletteExtensionMode">
+            </dx-select-box>
+        </div>
     </div>
 </div>
