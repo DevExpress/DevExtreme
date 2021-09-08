@@ -58,30 +58,36 @@ export default gridCore.Controller.inherit((function() {
         return { items: {} };
     }
 
-    function getPageDataFromCache(options, updatePaging, fromEnd) {
+    function getPageDataFromCache(options, updatePaging) {
         const groupCount = gridCore.normalizeSortingInfo(options.group || options.storeLoadOptions.group || options.loadOptions.group).length;
+        const items = [];
+        if(fillItemsFromCache(items, options, groupCount)) {
+            return items;
+        } else if(updatePaging) {
+            updatePagingOptionsByCache(items, options, groupCount);
+        }
+    }
+
+    function fillItemsFromCache(items, options, groupCount, fromEnd) {
         const { storeLoadOptions } = options;
         const take = options.take ?? storeLoadOptions.take ?? 0;
         const cachedItems = options.cachedData?.items;
 
         if(take && cachedItems) {
             const skip = options.skip ?? storeLoadOptions.skip ?? 0;
-            const result = [];
             for(let i = 0; i < take; i++) {
                 const localIndex = fromEnd ? take - 1 - i : i;
                 const cacheItem = cachedItems[localIndex + skip];
                 const item = getItemFromCache(options, cacheItem, groupCount, localIndex, take);
                 if(item) {
-                    result.push(item);
+                    items.push(item);
                 } else {
-                    if(updatePaging && !groupCount) {
-                        updatePagingOptionsByCache(options, result, fromEnd);
-                    }
-                    return;
+                    return false;
                 }
             }
-            return result;
+            return true;
         }
+        return false;
     }
 
     function getItemFromCache(options, cacheItem, groupCount, index, take) {
@@ -120,25 +126,29 @@ export default gridCore.Controller.inherit((function() {
         return cacheItem;
     }
 
-    function updatePagingOptionsByCache(options, cacheItems, fromEnd) {
-        const cacheItemCount = cacheItems.length;
+    function updatePagingOptionsByCache(cacheItemsFromBegin, options, groupCount) {
+        const cacheItemBeginCount = cacheItemsFromBegin.length;
         const { storeLoadOptions } = options;
-        if(cacheItemCount && storeLoadOptions.skip !== undefined && storeLoadOptions.take) {
-            options.skip = options.skip ?? storeLoadOptions.skip;
-            options.take = options.take ?? storeLoadOptions.take;
-            if(!fromEnd) {
-                storeLoadOptions.skip += cacheItemCount;
-            }
-            storeLoadOptions.take -= cacheItemCount;
+        if(storeLoadOptions.skip !== undefined && storeLoadOptions.take && !groupCount) {
+            const cacheItemsFromEnd = [];
+            fillItemsFromCache(cacheItemsFromEnd, options, groupCount, true);
+            const cacheItemEndCount = cacheItemsFromEnd.length;
 
-            if(fromEnd) {
-                options.cachedDataPartEnd = cacheItems.reverse();
-            } else {
-                options.cachedDataPartBegin = cacheItems;
+            if(cacheItemBeginCount || cacheItemEndCount) {
+                options.skip = options.skip ?? storeLoadOptions.skip;
+                options.take = options.take ?? storeLoadOptions.take;
             }
-        }
-        if(!fromEnd) {
-            getPageDataFromCache(options, true, true);
+
+            if(cacheItemBeginCount) {
+                storeLoadOptions.skip += cacheItemBeginCount;
+                storeLoadOptions.take -= cacheItemBeginCount;
+                options.cachedDataPartBegin = cacheItemsFromBegin;
+            }
+
+            if(cacheItemEndCount) {
+                storeLoadOptions.take -= cacheItemEndCount;
+                options.cachedDataPartEnd = cacheItemsFromEnd.reverse();
+            }
         }
     }
 
