@@ -51,7 +51,7 @@ window.onload = function () {
           if (target === 'headerFilter' && value === 'weekends') {
             return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
           }
-          return this.defaultCalculateFilterExpression.apply(this, arguments);
+          return this.defaultCalculateFilterExpression(...arguments);
         },
         headerFilter: {
           dataSource(data) {
