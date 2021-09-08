@@ -1,3 +1,4 @@
+import { getOuterWidth } from 'core/utils/size';
 import fx from 'animation/fx';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
@@ -542,7 +543,7 @@ QUnit.module('Methods', {
             currentDate: new Date(2015, 10, 3)
         });
 
-        const timePanelWidth = scheduler.instance.$element().find('.dx-scheduler-time-panel').eq(0).outerWidth();
+        const timePanelWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-time-panel').eq(0));
         const offset = scheduler.instance.getWorkSpaceDateTableOffset();
 
         assert.equal(offset, timePanelWidth, 'Date Table offset is correct');
@@ -568,7 +569,7 @@ QUnit.module('Methods', {
             rtlEnabled: true
         });
 
-        const timePanelWidth = scheduler.instance.$element().find('.dx-scheduler-time-panel').eq(0).outerWidth();
+        const timePanelWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-time-panel').eq(0));
         const offset = scheduler.instance.getWorkSpaceDateTableOffset();
 
         assert.equal(offset, timePanelWidth, 'Date Table offset is correct');
