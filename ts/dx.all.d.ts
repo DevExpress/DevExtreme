@@ -5156,7 +5156,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBoxOptions.value]
      */
-    value?: boolean | null | undefined;
+    value?: boolean | null;
   }
   /**
    * [descr:dxColorBox]
