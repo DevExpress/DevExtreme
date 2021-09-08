@@ -5,7 +5,6 @@
  * @namespace DevExpress
  * @module core/set_template_engine
  * @export default
- * @prevFileNamespace DevExpress.core
  * @public
  */
 declare function setTemplateEngine(templateEngineName: string): void;
@@ -19,10 +18,8 @@ declare function setTemplateEngine(templateEngineName: string): void;
  * @namespace DevExpress
  * @module core/set_template_engine
  * @export default
- * @prevFileNamespace DevExpress.core
  * @public
  */
-declare function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
-
+declare function setTemplateEngine(templateEngineOptions: { compile?: Function; render?: Function }): void;
 
 export default setTemplateEngine;

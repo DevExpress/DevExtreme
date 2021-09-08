@@ -2,7 +2,7 @@ import $ from 'jquery';
 import SchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
@@ -49,11 +49,11 @@ const stubInvokeMethod = function(instance, options) {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'getResourceTreeLeaves') {
             const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new SchedulerResourcesManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
+            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
         }
         if(subscribe === 'getTimezone') {
             return options.tz || 3;
@@ -432,6 +432,8 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        this.instance.option('renovateRender', false);
+
         const $element = this.instance.$element();
 
         this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
@@ -448,23 +450,29 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
         assert.equal($element.find('.dx-scheduler-header-row th').length, 0, 'Date table has not header cell');
     });
 
-    QUnit.test('Scheduler workspace day grouped view should contain a few headers', function(assert) {
-        const $element = this.instance.$element();
+    [true, false].forEach((isRenovatedRender) => {
+        QUnit.test('Scheduler workspace day grouped view should contain a few headers', function(assert) {
+            const $element = this.instance.$element();
 
-        this.instance.option('groups', [
-            {
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            },
-            {
-                name: 'two',
-                items: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
-            }
-        ]);
+            this.instance.option('groups', [
+                {
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                },
+                {
+                    name: 'two',
+                    items: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
+                }
+            ]);
+            this.instance.option('renovateRender', isRenovatedRender);
 
-        assert.equal($element.find('.dx-scheduler-header-row th').length, 0, 'Date table has not header cell');
-        assert.equal($element.find('.dx-scheduler-group-row').eq(0).find('th').attr('colspan'), '2', 'Group header has a right \'colspan\'');
-        assert.strictEqual($element.find('.dx-scheduler-group-row').eq(1).find('th').attr('colspan'), undefined, 'Group header has a right \'colspan\'');
+            const lowerHeaderColspan = this.instance.option('renovateRender')
+                ? '1' : undefined;
+
+            assert.equal($element.find('.dx-scheduler-header-row th').length, 0, 'Date table has not header cell');
+            assert.equal($element.find('.dx-scheduler-group-row').eq(0).find('th').attr('colspan'), '2', 'Group header has a right \'colspan\'');
+            assert.strictEqual($element.find('.dx-scheduler-group-row').eq(1).find('th').attr('colspan'), lowerHeaderColspan, 'Group header has a right \'colspan\'');
+        });
     });
 
     QUnit.test('Time panel should have 24 rows and 24 cells', function(assert) {
@@ -600,6 +608,8 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        this.instance.option('renovateRender', false);
+
         const $element = this.instance.$element();
 
         assert.deepEqual($element.find('.dx-scheduler-date-table tbody tr>td').eq(0).data('dxCellData').groups, {
@@ -609,6 +619,8 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Grouped allDay cells should have a right group field in dxCellData', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option('showAllDayPanel', true);
 
         const $allDayCells = this.instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS));
@@ -844,6 +856,8 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        this.instance.option('renovateRender', false);
+
         const $element = this.instance.$element();
         const $cells = $element.find('.dx-scheduler-date-table tbody tr>td');
         const cellCount = $cells.length;
@@ -913,7 +927,9 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
     });
 
     QUnit.test('Scheduler workspace work week view should contain a 5 headers', function(assert) {
-        const currentDate = new Date();
+        const currentDate = new Date(2021, 2, 21);
+        this.instance.option('currentDate', currentDate);
+
         const $element = this.instance.$element();
         const weekStartDate = new Date(currentDate).getDate() - (new Date(currentDate).getDay() - 1);
         const $headerCells = $element.find('.dx-scheduler-header-panel-cell');
@@ -1401,6 +1417,8 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        this.instance.option('renovateRender', false);
+
         const $element = this.instance.$element();
         const $cells = $element.find('.dx-scheduler-date-table tbody tr>td');
         const cellCount = $cells.length;
@@ -1494,7 +1512,7 @@ QUnit.module('Workspace with crossScrollingEnabled markup', scrollingModuleConfi
         const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
 
         assert.equal(headerScrollable.option('direction'), 'horizontal', 'Direction is OK');
-        assert.strictEqual(headerScrollable.option('showScrollbar'), false, 'showScrollbar is OK');
+        assert.strictEqual(headerScrollable.option('showScrollbar'), 'never', 'showScrollbar is OK');
         assert.strictEqual(headerScrollable.option('bounceEnabled'), false, 'bounceEnabled is OK');
         assert.strictEqual(headerScrollable.option('updateManually'), true, 'updateManually is OK');
     });
@@ -1503,7 +1521,7 @@ QUnit.module('Workspace with crossScrollingEnabled markup', scrollingModuleConfi
         const timePanelScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
 
         assert.equal(timePanelScrollable.option('direction'), 'vertical', 'Direction is OK');
-        assert.strictEqual(timePanelScrollable.option('showScrollbar'), false, 'showScrollbar is OK');
+        assert.strictEqual(timePanelScrollable.option('showScrollbar'), 'never', 'showScrollbar is OK');
         assert.strictEqual(timePanelScrollable.option('bounceEnabled'), false, 'bounceEnabled is OK');
         assert.strictEqual(timePanelScrollable.option('updateManually'), true, 'updateManually is OK');
     });

@@ -106,6 +106,14 @@ export const click = {
     }
 };
 
+export const dxScrollInit = {
+    on: ($el, onInit, eventData, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxscrollinit', namespace), eventData, onInit);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxscrollinit', namespace));
+    }
+};
 export const dxScrollStart = {
     on: ($el, onStart, { namespace } = {}) => {
         eventsEngine.on($el, addNamespace('dxscrollstart', namespace), onStart);

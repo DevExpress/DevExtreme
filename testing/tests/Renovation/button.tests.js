@@ -8,10 +8,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
-import { act } from 'preact/test-utils';
 
 import 'renovation/ui/button.j';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -39,7 +37,7 @@ const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 const moduleConfig = {
     Button(options = {}) {
-        act(() => $('#button').dxButton(options));
+        $('#button').dxButton(options);
         return $('#button');
     }
 };
@@ -94,17 +92,6 @@ QUnit.test('should render dom node', function(assert) {
     });
     assert.strictEqual(element.find('.dx-button-content').length, 1, 'render content');
     assert.strictEqual(element.find('#custom-template').length, 1, 'render custom template');
-});
-
-QUnit.test('should replace content if has "dx-template-wrapper" class', function(assert) {
-    const element = this.Button({
-        template: (data, container) => {
-            return $('<span>')
-                .addClass('dx-template-wrapper')
-                .get(0);
-        },
-    });
-    assert.ok(element.find('.dx-button-content').hasClass('dx-template-wrapper'), 'template has "dx-button-content" class');
 });
 
 QUnit.test('should rerender template in runtime', function(assert) {
@@ -201,7 +188,7 @@ QUnit.module('options changed callbacks', moduleConfig, () => {
             _templateData: { custom: 1 }
         });
         template.reset();
-        act(() => element.dxButton('repaint'));
+        element.dxButton('repaint');
 
         assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
     });
@@ -307,15 +294,13 @@ QUnit.module('contentReady', () => {
             return true;
         };
 
-        let $firstButton;
-        act(() => $firstButton = $('#widget').dxButton(buttonConfig));
-
-        act(() => $('#button').dxButton($.extend({}, buttonConfig, {
+        const $firstButton = $('#widget').dxButton(buttonConfig);
+        $('#button').dxButton($.extend({}, buttonConfig, {
             onContentReady(e) {
                 assert.ok(areElementsEqual($firstButton, $(e.element)), 'rendered widget and widget with fired action are equals');
                 done();
             }
-        })));
+        }));
     });
 });
 
@@ -441,7 +426,7 @@ QUnit.module('submit behavior', {
         this.$element = this.Button({ useSubmitBehavior: true });
         this.$form = $('#form');
         this.clickButton = function() {
-            act(() => this.$element.trigger('dxclick'));
+            this.$element.trigger('dxclick');
         };
     }
 }, () => {
@@ -561,6 +546,18 @@ QUnit.module('templates', moduleConfig, () => {
         assert.equal(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
         assert.equal(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.equal(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
+    });
+
+    QUnit.test('should not throw error when called "focus" and has anonymous template', function(assert) {
+        $('#button').html('<span>Default slot</span>');
+        const $element = this.Button({});
+
+        try {
+            $element.trigger('dxhoverstart');
+            assert.ok(true, 'the error is not thrown');
+        } catch(e) {
+            assert.ok(false, 'the error is thrown');
+        }
     });
 });
 

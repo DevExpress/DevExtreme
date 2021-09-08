@@ -1,6 +1,6 @@
 import {
   ComponentBindings, OneWay, JSXComponent, Component,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 export const viewFunction = (
   { props: { message, className }, restAttributes }: ErrorMessage,

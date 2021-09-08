@@ -1,7 +1,8 @@
 import {
-  dxElement
+  DxElement,
 } from './element';
 
+/** @namespace DevExpress */
 export interface ComponentOptions<T = Component> {
   /**
    * @docid
@@ -9,57 +10,51 @@ export interface ComponentOptions<T = Component> {
    * @type_function_param1_field1 component:this
    * @default null
    * @action
-   * @prevFileNamespace DevExpress.core
    * @public
    */
-  onDisposing?: ((e: { component?: T }) => any);
+  onDisposing?: ((e: { component: T }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 element:dxElement
+   * @type_function_param1_field2 element:DxElement
    * @default null
    * @action
-   * @prevFileNamespace DevExpress.core
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: dxElement }) => any);
+  onInitialized?: ((e: { component?: T; element?: DxElement }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
-   * @type_function_param1_field4 name:string
-   * @type_function_param1_field5 fullName:string
-   * @type_function_param1_field6 value:any
+   * @type_function_param1_field2 name:string
+   * @type_function_param1_field3 fullName:string
+   * @type_function_param1_field4 value:any
    * @default null
    * @action
-   * @prevFileNamespace DevExpress.core
    * @public
    */
-  onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
+  onOptionChanged?: ((e: { component?: T; name?: string; fullName?: string; value?: any }) => void);
 }
 /**
-* @docid
-* @module core/component
-* @export default
-* @namespace DevExpress
-* @hidden
-* @wrappable
-* @prevFileNamespace DevExpress.core
-*/
-export default class Component {
+ * @docid Component
+ * @module core/component
+ * @export Component
+ * @namespace DevExpress
+ * @hidden
+ * @wrappable
+ */
+export class Component {
   constructor(options?: ComponentOptions);
   /**
    * @docid
    * @publicName beginUpdate()
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   beginUpdate(): void;
   /**
    * @docid
    * @publicName endUpdate()
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   endUpdate(): void;
@@ -67,7 +62,6 @@ export default class Component {
    * @docid
    * @publicName instance()
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   instance(): this;
@@ -76,7 +70,6 @@ export default class Component {
    * @publicName off(eventName)
    * @param1 eventName:string
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   off(eventName: string): this;
@@ -86,7 +79,6 @@ export default class Component {
    * @param1 eventName:string
    * @param2 eventHandler:function
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   off(eventName: string, eventHandler: Function): this;
@@ -96,7 +88,6 @@ export default class Component {
    * @param1 eventName:string
    * @param2 eventHandler:function
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   on(eventName: string, eventHandler: Function): this;
@@ -105,7 +96,6 @@ export default class Component {
    * @publicName on(events)
    * @param1 events:object
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   on(events: any): this;
@@ -113,7 +103,6 @@ export default class Component {
    * @docid
    * @publicName option()
    * @return object
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   option(): any;
@@ -122,7 +111,6 @@ export default class Component {
    * @publicName option(optionName)
    * @param1 optionName:string
    * @return any
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   option(optionName: string): any;
@@ -131,7 +119,6 @@ export default class Component {
    * @publicName option(optionName, optionValue)
    * @param1 optionName:string
    * @param2 optionValue:any
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   option(optionName: string, optionValue: any): void;
@@ -139,7 +126,6 @@ export default class Component {
    * @docid
    * @publicName option(options)
    * @param1 options:object
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   option(options: any): void;
@@ -147,14 +133,7 @@ export default class Component {
    * @docid
    * @publicName resetOption(optionName)
    * @param1 optionName:string
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   resetOption(optionName: string): void;
-
-  _createActionByOption(optionName: string, config: object): Function;
-  _dispose(): void;
-  _getDefaultOptions(): object;
-  _init(): void;
-  _optionChanged(args: { name: string; value: unknown }): void;
 }

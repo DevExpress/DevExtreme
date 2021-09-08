@@ -1,29 +1,30 @@
-interface dxPromiseCallback<T> {
-    (value?: T, ...args: any[]): void;
-}
-export interface dxPromise<T> {
-    then(doneFilter: (value?: T, ...values: any[]) => void, failFilter?: (...reasons: any[]) => any): dxPromise<void>;
-    done(doneCallback?: dxPromiseCallback<T>): dxPromise<T>;
-    fail(failCallback?: dxPromiseCallback<T>): dxPromise<T>;
-    always(alwaysCallback?: dxPromiseCallback<T>): dxPromise<T>;
-    progress(progressCallback?: dxPromiseCallback<T>): dxPromise<T>;
+// eslint-disable-next-line @typescript-eslint/prefer-function-type
+type Callback<T> = (value?: T, ...args: T[]) => void;
+declare class DeferredObj<T> {
+    constructor();
     state(): string;
-    promise(target?: any): dxPromise<T>;
+    always(alwaysCallback?: Callback<T>): DeferredObj<T>;
+    catch(catchCallback?: Callback<T>): DeferredObj<T>;
+    then(resolveCallback?: Callback<T>, rejectCallback?: Callback<T>): DeferredObj<T>;
+    done(doneCallback?: Callback<T>): DeferredObj<T>;
+    fail(failCallback?: Callback<T>): DeferredObj<T>;
+    progress(progressCallback?: Callback<T>): DeferredObj<T>;
+    notify(value?: T, ...args: T[]): DeferredObj<T>;
+    notifyWith(context: DeferredObj<T>, args?: T[]): DeferredObj<T>;
+    reject(value?: T, ...args: T[]): DeferredObj<T>;
+    rejectWith(context: DeferredObj<T>, args?: T[]): DeferredObj<T>;
+    resolve(value?: T, ...args: T[]): DeferredObj<T>;
+    resolveWith(context: DeferredObj<T>, args?: T[]): DeferredObj<T>;
+    promise(target?: T): Promise<T>;
 }
 
-export interface dxDeferred<T> {
-    state(): string;
-    always(alwaysCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    done(doneCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    fail(failCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    progress(progressCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    notify(value?: any, ...args: any[]): dxDeferred<T>;
-    notifyWith(context: any, args?: any[]): dxDeferred<T>;
-    reject(value?: any, ...args: any[]): dxDeferred<T>;
-    rejectWith(context: any, args?: any[]): dxDeferred<T>;
-    resolve(value?: T, ...args: any[]): dxDeferred<T>;
-    resolveWith(context: any, args?: T[]): dxDeferred<T>;
-    promise(target?: any): dxPromise<T>;
-}
+export function Deferred<T>(): DeferredObj<T>;
 
-export function Deferred<T>(): dxDeferred<T>;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
+export interface PromiseType<T> { }
+/**
+ * @docid
+ * @type Promise<void>
+ * @namespace DevExpress.core.utils
+ */
+export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;

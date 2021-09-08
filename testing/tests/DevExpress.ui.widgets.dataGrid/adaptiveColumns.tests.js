@@ -9,7 +9,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
 
@@ -60,7 +59,7 @@ function setupDataGrid(that, $dataGridContainer) {
         initViews: true
     };
 
-    dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'validating',
+    dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'validating',
         'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'summary', 'gridView'], that.setupOptions);
 }
 
@@ -142,8 +141,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
-        this.options.columnHidingEnabled = true;
-        this.adaptiveColumnsController.optionChanged({ name: 'columnHidingEnabled', value: true });
+        this.option('columnHidingEnabled', true);
         this.clock.tick();
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -200,8 +198,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
-        this.options.columnHidingEnabled = false;
-        this.adaptiveColumnsController.optionChanged({ name: 'columnHidingEnabled', value: false });
+        this.option('columnHidingEnabled', false);
         this.clock.tick();
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -442,16 +439,16 @@ QUnit.module('AdaptiveColumns', {
         this.resizingController.updateDimensions();
         this.clock.tick();
         let $cols = $('.dx-datagrid-rowsview col');
-        const adaptiveRowsWidth = $cols.eq($cols.length - 1).css('width');
+        const adaptiveRowsWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
 
         this.dataController.collapseAll();
         this.clock.tick();
 
         $cols = $('.dx-datagrid-headers col');
-        const adaptiveHeadersWidth = $cols.eq($cols.length - 1).css('width');
+        const adaptiveHeadersWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
 
         // assert
-        assert.equal(adaptiveRowsWidth, adaptiveHeadersWidth, 'adaptive command column\'s width');
+        assert.roughEqual(adaptiveRowsWidth, adaptiveHeadersWidth, 0.1, 'adaptive command column\'s width');
     });
 
     QUnit.test('Adaptive command column should not be displayed for a group summary row', function(assert) {
@@ -1991,16 +1988,58 @@ QUnit.module('API', {
         this.resizingController.updateDimensions();
         this.clock.tick();
 
+        // assert
+        const $adaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
         this.clock.tick();
 
+        // assert
         assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Hide additional data', 'command cell aria-label'); // T947070
 
+        // act
         this.adaptiveColumnsController.collapseAdaptiveDetailRow();
         this.clock.tick();
 
+        // assert
         assert.ok(!$('.dx-adaptive-detail-row').length, 'there is no field items');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+    });
+
+    QUnit.test('Collapse adaptive row when expanding another one', function(assert) {
+        // arrange
+        $('.dx-datagrid').width(200);
+
+        setupDataGrid(this);
+        this.rowsView.render($('#container'));
+        this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        // assert
+        const $firstAdaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
+        const $secondAdaptiveCommand = $(this.getRowElement(1)).find('.dx-command-adaptive');
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+
+        // act
+        $firstAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Hide additional data', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+
+        // act
+        $secondAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Hide additional data', 'command cell aria-label'); // T947070
     });
 
     QUnit.test('Is adaptive row expanded', function(assert) {
@@ -3832,9 +3871,7 @@ QUnit.module('Editing', {
         // act
         this.editingController.addRow();
 
-        assert.strictEqual(args.length, 4, 'onRowPrepared call count');
-        assert.strictEqual(args[2].rowType, 'data', 'data row');
-        assert.strictEqual(args[3].rowType, 'detailAdaptive', 'adaptive detail row');
+        assert.strictEqual(args.length, 2, 'onRowPrepared call count');
     });
 });
 

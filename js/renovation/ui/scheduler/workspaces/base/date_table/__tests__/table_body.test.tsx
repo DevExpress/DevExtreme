@@ -1,11 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 import { viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
+const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
 
 describe('DateTableBody', () => {
   describe('Render', () => {
@@ -19,7 +21,7 @@ describe('DateTableBody', () => {
           index: 4,
           isFirstGroupCell: true,
           isLastGroupCell: false,
-          key: '1',
+          key: 3,
           text: 'test 1',
           today: true,
           otherMonth: true,
@@ -32,7 +34,7 @@ describe('DateTableBody', () => {
           index: 5,
           isFirstGroupCell: false,
           isLastGroupCell: false,
-          key: '2',
+          key: 6,
           text: 'test 2',
           today: false,
           otherMonth: false,
@@ -45,16 +47,19 @@ describe('DateTableBody', () => {
           index: 6,
           isFirstGroupCell: false,
           isLastGroupCell: true,
-          key: '3',
+          key: 9,
           text: 'test 3',
           today: false,
           otherMonth: false,
           firstDayOfMonth: false,
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
+        groupIndex: 1,
       }],
       leftVirtualCellWidth: 100,
       rightVirtualCellWidth: 200,
+      leftVirtualCellCount: 2,
+      rightVirtualCellCount: 21,
     };
     const cellTemplate = () => null;
 
@@ -64,18 +69,18 @@ describe('DateTableBody', () => {
         props={{
           viewData,
           cellTemplate,
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
           ...viewModel.props,
         }}
-      />,
+      /> as any,
     );
 
     beforeEach(() => {
-      getIsGroupedAllDayPanel.mockClear();
+      jest.clearAllMocks();
     });
 
     it('should render rows and pass correct props to them', () => {
-      const rows = render({
-      }).find(Row);
+      const rows = render({}).find(Row);
 
       expect(rows)
         .toHaveLength(3);
@@ -86,6 +91,8 @@ describe('DateTableBody', () => {
             className: 'dx-scheduler-date-table-row',
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
+            leftVirtualCellCount: 2,
+            rightVirtualCellCount: 21,
           });
       });
     });
@@ -133,7 +140,7 @@ describe('DateTableBody', () => {
             dataCellTemplate,
           });
         expect(cell.key())
-          .toBe(key);
+          .toBe(key.toString());
       };
 
       const cells = tableBody.find(cellTemplate);
@@ -143,6 +150,22 @@ describe('DateTableBody', () => {
       assert(cells, 0);
       assert(cells, 1);
       assert(cells, 2);
+    });
+
+    it('should pass correct keys to rows depending on "leftVirtualCellCount"', () => {
+      const tableBody = render({});
+
+      const rows = tableBody.find(Row);
+
+      expect(rows.length)
+        .toBe(3);
+
+      expect(rows.at(0).key())
+        .toBe('1');
+      expect(rows.at(1).key())
+        .toBe('4');
+      expect(rows.at(2).key())
+        .toBe('7');
     });
 
     it('should render AllDayPanelBody and pass correct arguments to it', () => {
@@ -192,6 +215,32 @@ describe('DateTableBody', () => {
             0,
           );
       });
+    });
+
+    it('should provide correct key to a groups\'s Fragment depending on groupIndex', () => {
+      render({
+        props: {
+          viewData: {
+            groupedData: [{
+              dateTable: [],
+              groupIndex: 3,
+            }, {
+              dateTable: [],
+              groupIndex: 4,
+            }],
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+            leftVirtualCellCount: 2,
+          },
+        },
+      });
+
+      expect(getKeyByGroup)
+        .toHaveBeenCalledTimes(2);
+      expect(getKeyByGroup)
+        .toHaveBeenNthCalledWith(1, 3, VERTICAL_GROUP_ORIENTATION);
+      expect(getKeyByGroup)
+        .toHaveBeenNthCalledWith(2, 4, VERTICAL_GROUP_ORIENTATION);
     });
   });
 });

@@ -163,11 +163,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _createStrategy: function() {
         const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
-
         const strategyClass = refreshStrategies[strategyName];
-        if(!strategyClass) {
-            throw Error('E1030', this.option('refreshStrategy'));
-        }
 
         this._strategy = new strategyClass(this);
         this._strategy.pullDownCallbacks.add(this._pullDownHandler.bind(this));
@@ -274,10 +270,6 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         }
     },
 
-    isEmpty: function() {
-        return !$(this.content()).children().length;
-    },
-
     content: function() {
         return getPublicElement(this._$content.children().eq(1));
     },
@@ -306,7 +298,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     * @hidden
     */
     isFull: function() {
-        return $(this.content()).height() > this._$container.height();
+        return $(this.content()).height() > $(this.container()).height();
     },
 
     refresh: function() {

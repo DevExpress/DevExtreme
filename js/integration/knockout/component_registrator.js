@@ -5,6 +5,7 @@ import Callbacks from '../../core/utils/callbacks';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
+import Draggable from '../../ui/draggable';
 import { KoTemplate } from './template';
 import Editor from '../../ui/editor/editor';
 import Locker from '../../core/utils/locker';
@@ -18,7 +19,7 @@ if(ko) {
     const editorsBindingHandlers = [];
     const registerComponentKoBinding = function(componentName, componentClass) {
 
-        if(componentClass.subclassOf(Editor)) {
+        if(Editor.isEditor(componentClass.prototype)) {
             editorsBindingHandlers.push(componentName);
         }
 
@@ -32,10 +33,10 @@ if(ko) {
                 const isBindingPropertyPredicateName = knockoutConfig && knockoutConfig.isBindingPropertyPredicateName;
                 let isBindingPropertyPredicate;
                 let ctorOptions = {
-                    onInitializing: function() {
+                    onInitializing: function(options) {
                         optionsByReference = this._getOptionsByReference();
 
-                        ko.computed(function() {
+                        ko.computed(() => {
                             const model = ko.unwrap(valueAccessor());
 
                             if(component) {
@@ -48,6 +49,8 @@ if(ko) {
 
                             if(component) {
                                 component.endUpdate();
+                            } else {
+                                model?.onInitializing?.call(this, options);
                             }
 
                         }, null, { disposeWhenNodeIsRemoved: domNode });
@@ -205,7 +208,7 @@ if(ko) {
                 createComponent();
 
                 return {
-                    controlsDescendantBindings: componentClass.subclassOf(Widget)
+                    controlsDescendantBindings: componentClass.subclassOf(Widget) || component instanceof Draggable
                 };
             }
         };

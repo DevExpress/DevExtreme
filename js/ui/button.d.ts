@@ -1,66 +1,92 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type ClickEvent = NativeEventInfo<dxButton> & {
+    validationGroup?: any;
+};
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxButton>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxButton>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxButton>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
+
+/** @public */
+export type TemplateData = {
+    readonly text?: string;
+    readonly icon?: string;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 validationGroup:object
+     * @type_function_param1_field1 component:dxButton
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: event, validationGroup?: any }) => any);
+    onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
      * @type Enums.ButtonStylingMode
      * @default 'contained'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     stylingMode?: 'text' | 'outlined' | 'contained';
@@ -70,16 +96,14 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
      * @type_function_param1_field2 icon:string
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
+    template?: template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
@@ -87,21 +111,18 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @docid
      * @type Enums.ButtonType
      * @default 'normal'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     useSubmitBehavior?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationGroup?: string;
@@ -112,24 +133,18 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @hasTranscludedContent
  * @module ui/button
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxButton extends Widget {
-    constructor(element: Element, options?: dxButtonOptions)
-    constructor(element: JQuery, options?: dxButtonOptions)
+    constructor(element: UserDefinedElement, options?: dxButtonOptions)
 }
 
-declare global {
-interface JQuery {
-    dxButton(): JQuery;
-    dxButton(options: "instance"): dxButton;
-    dxButton(options: string): any;
-    dxButton(options: string, ...params: any[]): any;
-    dxButton(options: dxButtonOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxButtonOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxButtonOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxButtonOptions;

@@ -1,30 +1,31 @@
-import Component, {
-    ComponentOptions
+import {
+    Component,
+    ComponentOptions,
 } from './component';
 
 import {
-    Device
+    Device,
 } from './devices';
 
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from './element';
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 
+/** @namespace DevExpress */
 export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     bindingOptions?: any;
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     elementAttr?: any;
@@ -32,34 +33,26 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @action
-     * @extends Action
-     * @prevFileNamespace DevExpress.core
+     * @default null
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onDisposing?: ((e: { component?: T; element?: DxElement; model?: any }) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 name:string
-     * @type_function_param1_field5 fullName:string
-     * @type_function_param1_field6 value:any
      * @action
-     * @extends Action
-     * @prevFileNamespace DevExpress.core
+     * @default null
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
+    onOptionChanged?: ((e: { component?: T; element?: DxElement; model?: any; name?: string; fullName?: string; value?: any }) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     rtlEnabled?: boolean;
@@ -67,7 +60,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     width?: number | string | (() => number | string);
@@ -80,10 +72,24 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @module core/dom_component
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.core
  */
+/* eslint-disable no-underscore-dangle */
 export default class DOMComponent extends Component {
-    constructor(element: Element | JQuery, options?: DOMComponentOptions);
+    _templateManager: TemplateManager;
+
+    constructor(element: UserDefinedElement, options?: DOMComponentOptions);
+
+    /**
+     * @docid
+     * @static
+     * @section uiWidgets
+     * @publicName getInstance(element)
+     * @param1 element:Element|JQuery
+     * @return DOMComponent
+     * @public
+     */
+    static getInstance(element: UserDefinedElement): DOMComponent;
+
     /**
      * @docid
      * @static
@@ -92,45 +98,30 @@ export default class DOMComponent extends Component {
      * @param1 rule:Object
      * @param1_field1 device:Device|Array<Device>|function
      * @param1_field2 options:Object
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+    static defaultOptions(rule: { device?: Device | Array<Device> | Function; options?: any }): void;
+
     /**
      * @docid
      * @publicName dispose()
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     dispose(): void;
     /**
      * @docid
      * @publicName element()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.core
+     * @return DxElement
      * @public
      */
-    element(): dxElement;
-    /**
-     * @docid
-     * @static
-     * @section uiWidgets
-     * @publicName getInstance(element)
-     * @param1 element:Element|JQuery
-     * @return DOMComponent
-     * @prevFileNamespace DevExpress.core
-     * @public
-     */
-    static getInstance(element: Element | JQuery): DOMComponent;
+    element(): DxElement;
 
-    $element(): Element | JQuery;
+    $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
-    _templateManager: TemplateManager;
 }
+ /* eslint-enable no-underscore-dangle */
 
 export type Options = DOMComponentOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = DOMComponentOptions;

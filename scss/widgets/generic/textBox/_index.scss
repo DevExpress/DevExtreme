@@ -20,8 +20,6 @@
     font-size: $generic-texteditor-icon-size - 1;
 
     &::before {
-      position: static;
-      text-indent: 0;
       color: $textbox-search-icon-color;
     }
 

@@ -6,8 +6,8 @@ import {
   getIsGroupedAllDayPanel,
   getGroupCellClasses,
   isVerticalGroupOrientation,
+  isHorizontalGroupOrientation,
 } from '../utils';
-import { GroupedViewData } from '../types.d';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
 
 describe('Workspaces utils', () => {
@@ -29,10 +29,20 @@ describe('Workspaces utils', () => {
 
   describe('getKeyByGroup', () => {
     it('should generate key from group', () => {
-      expect(getKeyByGroup(0))
+      expect(getKeyByGroup(0, VERTICAL_GROUP_ORIENTATION))
         .toBe('0');
-      expect(getKeyByGroup(1))
+      expect(getKeyByGroup(1, VERTICAL_GROUP_ORIENTATION))
         .toBe('1');
+    });
+
+    it('should return 0 when group orientation is not provided', () => {
+      expect(getKeyByGroup(32, undefined))
+        .toBe('0');
+    });
+
+    it('should return 0 when group orientation is horizontal', () => {
+      expect(getKeyByGroup(32, HORIZONTAL_GROUP_ORIENTATION))
+        .toBe('0');
     });
   });
 
@@ -98,7 +108,7 @@ describe('Workspaces utils', () => {
 
   describe('getIsGroupedAllDayPanel', () => {
     it('should return false if all-day-panel is a part of the header', () => {
-      const viewData: GroupedViewData = {
+      const viewData: any = {
         groupedData: [{
           dateTable: [[{
             startDate: new Date(2020, 1, 2),
@@ -128,7 +138,7 @@ describe('Workspaces utils', () => {
     });
 
     it('should return true if all-day-panel is a part of the DateTable', () => {
-      const viewData: GroupedViewData = {
+      const viewData: any = {
         groupedData: [{
           dateTable: [[{
             startDate: new Date(2020, 1, 2),
@@ -216,6 +226,27 @@ describe('Workspaces utils', () => {
       expect(isVerticalGroupOrientation(HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
       expect(isVerticalGroupOrientation())
+        .toBe(false);
+    });
+  });
+
+  describe('isHorizontalGroupOrientation', () => {
+    const testGroups = [{}] as any;
+
+    it('should return true if group orientation is horizontal and groups length is more than 0', () => {
+      expect(isHorizontalGroupOrientation(testGroups, HORIZONTAL_GROUP_ORIENTATION))
+        .toBe(true);
+    });
+
+    it('should return false if group orientation is not horizontal', () => {
+      expect(isHorizontalGroupOrientation(testGroups, VERTICAL_GROUP_ORIENTATION))
+        .toBe(false);
+      expect(isHorizontalGroupOrientation(testGroups))
+        .toBe(false);
+    });
+
+    it('should return false if groups length is 0', () => {
+      expect(isHorizontalGroupOrientation([], HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
     });
   });

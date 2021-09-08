@@ -1,53 +1,70 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    DxPromise,
+} from '../core/utils/deferred';
+
+import {
+    template,
 } from '../core/templates/template';
 
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type DisposingEvent = EventInfo<dxSlideOutView>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSlideOutView>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSlideOutView> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
      * @docid
-     * @type_function_param1 contentElement:dxElement
+     * @type_function_param1 contentElement:DxElement
      * @default "content"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: dxElement) => any);
+    contentTemplate?: template | ((contentElement: DxElement) => any);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
      * @default "normal"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     menuPosition?: 'inverted' | 'normal';
     /**
      * @docid
-     * @type_function_param1 menuElement:dxElement
+     * @type_function_param1 menuElement:DxElement
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | ((menuElement: dxElement) => any);
+    menuTemplate?: template | ((menuElement: DxElement) => any);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     menuVisible?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     swipeEnabled?: boolean;
@@ -58,64 +75,55 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @hasTranscludedContent
  * @module ui/slide_out_view
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @deprecated dxDrawer
  * @public
  */
 export default class dxSlideOutView extends Widget {
-    constructor(element: Element, options?: dxSlideOutViewOptions)
-    constructor(element: JQuery, options?: dxSlideOutViewOptions)
+    constructor(element: UserDefinedElement, options?: dxSlideOutViewOptions)
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.ui
+     * @return DxElement
      * @public
      */
-    content(): dxElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName hideMenu()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): Promise<void> & JQueryPromise<void>;
+    hideMenu(): DxPromise<void>;
     /**
      * @docid
      * @publicName menuContent()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.ui
+     * @return DxElement
      * @public
      */
-    menuContent(): dxElement;
+    menuContent(): DxElement;
     /**
      * @docid
      * @publicName showMenu()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): Promise<void> & JQueryPromise<void>;
+    showMenu(): DxPromise<void>;
     /**
      * @docid
-     * @publicName toggleMenuVisibility()
+     * @publicName toggleMenuVisibility(showing)
+     * @param1 showing:Boolean|undefined
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
+    toggleMenuVisibility(showing?: boolean): DxPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxSlideOutView(): JQuery;
-    dxSlideOutView(options: "instance"): dxSlideOutView;
-    dxSlideOutView(options: string): any;
-    dxSlideOutView(options: string, ...params: any[]): any;
-    dxSlideOutView(options: dxSlideOutViewOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSlideOutViewOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSlideOutViewOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSlideOutViewOptions;

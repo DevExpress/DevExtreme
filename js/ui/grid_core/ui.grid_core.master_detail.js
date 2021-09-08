@@ -11,7 +11,7 @@ const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const ROW_LINES_CLASS = 'dx-row-lines';
 
 
-export default {
+export const masterDetailModule = {
     defaultOptions: function() {
         return {
             masterDetail: {
@@ -180,6 +180,10 @@ export default {
                                     isAutoExpandAllChanged = value.autoExpandAll !== previousValue.autoExpandAll;
                                     break;
                                 }
+                                case 'masterDetail.template': {
+                                    initMasterDetail(that);
+                                    break;
+                                }
                                 case 'masterDetail.enabled':
                                     isEnabledChanged = true;
                                     break;
@@ -217,17 +221,26 @@ export default {
 
                     if(masterRowOptions && masterDataGrid) {
                         if(masterDataGrid.getView('rowsView').isFixedColumns()) {
-                            this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
+                            return this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
                         } else {
+                            if(masterDataGrid.option('scrolling.useNative') === true) {
+                                return masterDataGrid.updateDimensions();
+                            }
+
                             const scrollable = masterDataGrid.getScrollable();
+
                             // T607490
-                            return scrollable && scrollable.update();
+                            return scrollable?.update();
                         }
                     }
                 },
                 _updateFixedMasterDetailGrids: function(masterDataGrid, masterRowIndex, $detailElement) {
                     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
-                    if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
+                    const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
+                    const rowsNotEqual = $rows?.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height();
+                    const tablesNotEqual = $tables?.length === 2 && $tables.eq(0).height() !== $tables.eq(1).height();
+
+                    if(rowsNotEqual || tablesNotEqual) {
                         const detailElementWidth = $detailElement.width();
                         return masterDataGrid.updateDimensions().done(() => {
                             const isDetailHorizontalScrollCanBeShown = this.option('columnAutoWidth') && masterDataGrid.option('scrolling.useNative') === true;
@@ -242,11 +255,11 @@ export default {
                 _toggleBestFitMode: function(isBestFit) {
                     this.callBase.apply(this, arguments);
                     if(this.option('masterDetail.template')) {
-                        const $rowsTable = this._rowsView._getTableElement();
+                        const $rowsTable = this._rowsView.getTableElement();
                         if($rowsTable) {
                             $rowsTable
                                 .find('.dx-master-detail-cell')
-                                .toggleClass('dx-hidden', isBestFit);
+                                .css('maxWidth', isBestFit ? 0 : '');
                         }
                     }
                 }

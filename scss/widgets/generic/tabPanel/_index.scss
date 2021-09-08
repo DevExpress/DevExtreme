@@ -5,6 +5,7 @@
 @use "../sizes" as *;
 @use "../tabs/sizes" as *;
 @use "../tabs/colors" as *;
+@use "../../base/tabPanel";
 
 // adduse
 
@@ -69,7 +70,7 @@ $generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
     }
   }
 
-  .dx-multiview-wrapper {
+  & > .dx-tabpanel-container > .dx-multiview-wrapper {
     border-color: $accent-color;
   }
 }

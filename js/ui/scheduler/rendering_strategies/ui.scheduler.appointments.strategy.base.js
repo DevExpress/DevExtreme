@@ -78,7 +78,7 @@ class BaseRenderingStrategy {
         for(let i = 0; i < length; i++) {
             let coordinates = this._getItemPosition(items[i]);
 
-            if(this._isRtl()) {
+            if(coordinates.length && this._isRtl()) {
                 coordinates = this._correctRtlCoordinates(coordinates);
             }
 
@@ -114,17 +114,15 @@ class BaseRenderingStrategy {
     }
 
     _getItemPosition(appointment) {
-        const adapter = this.instance.createAppointmentAdapter(appointment);
-
         const position = this._getAppointmentCoordinates(appointment);
         const allDay = this.isAllDay(appointment);
-        const startDate = new Date(adapter.startDate);
 
         let result = [];
 
         for(let j = 0; j < position.length; j++) {
             const height = this.calculateAppointmentHeight(appointment, position[j]);
             const width = this.calculateAppointmentWidth(appointment, position[j]);
+
             let resultWidth = width;
             let appointmentReduced = null;
             let multiWeekAppointmentParts = [];
@@ -144,22 +142,23 @@ class BaseRenderingStrategy {
                     initialRowIndex = position[j].rowIndex;
                     initialCellIndex = position[j].cellIndex;
 
-                    resultWidth = this._reduceMultiWeekAppointment(width, {
-                        left: position[j].left,
-                        right: currentMaxAllowedPosition
-                    });
+                    resultWidth = this._reduceMultiWeekAppointment(
+                        width,
+                        {
+                            left: position[j].left,
+                            right: currentMaxAllowedPosition
+                        }
+                    );
 
                     multiWeekAppointmentParts = this._getAppointmentParts({
                         sourceAppointmentWidth: width,
                         reducedWidth: resultWidth,
                         height: height
-                    }, position[j], startDate);
-
+                    }, position[j]);
 
                     if(this._isRtl()) {
                         position[j].left = currentMaxAllowedPosition;
                     }
-
                 }
             }
 
@@ -535,18 +534,23 @@ class BaseRenderingStrategy {
         });
     }
 
-    _markAppointmentAsVirtual(coordinates, isAllDay) {
+    _markAppointmentAsVirtual(coordinates, isAllDay = false) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
+            const { top, left } = coordinates;
             coordinates.virtual = {
-                top: coordinates.top,
-                left: coordinates.left,
-                index: coordinates.appointmentReduced === 'tail' ?
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
-                isAllDay: isAllDay
+                top,
+                left,
+                index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
+                isAllDay,
             };
         }
+    }
+
+    _generateAppointmentCollectorIndex({
+        groupIndex, rowIndex, cellIndex,
+    }, isAllDay) {
+        return `${groupIndex}-${rowIndex}-${cellIndex}-${isAllDay}`;
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {

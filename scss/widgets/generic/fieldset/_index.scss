@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -12,7 +13,6 @@
 @use "../../base/fieldset";
 
 // adduse
-
 
 $generic-field-min-height: $generic-base-inline-widget-height;
 $generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding + $generic-invalid-badge-size;
@@ -53,7 +53,7 @@ $generic-mobile-field-vertical-margin: 10px;
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: ($generic-field-min-height - $size) / 2 0;
+    margin: math.div($generic-field-min-height - $size, 2) 0;
   }
 }
 

@@ -39,7 +39,7 @@ function readThemeMarker() {
     let result;
 
     try {
-        result = element.css('fontFamily');
+        result = window.getComputedStyle(element.get(0))['fontFamily'];
         if(!result) {
             return null;
         }
@@ -103,7 +103,7 @@ export function waitForThemeLoad(themeName) {
     }
 }
 
-function isPendingThemeLoaded() {
+export function isPendingThemeLoaded() {
     if(!pendingThemeName) {
         return true;
     }
@@ -248,7 +248,10 @@ export function current(options) {
         }
     } else {
         if(isAutoInit) {
-            waitForThemeLoad(ANY_THEME);
+            if(hasWindow()) {
+                waitForThemeLoad(ANY_THEME);
+            }
+
             themeReadyCallback.fire();
             themeReadyCallback.empty();
         } else {
@@ -446,4 +449,5 @@ export default {
     attachCssClasses,
     current,
     waitForThemeLoad,
+    isPendingThemeLoaded,
 };

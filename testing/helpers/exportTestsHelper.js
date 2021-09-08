@@ -1,4 +1,3 @@
-import 'common.css!';
 
 import { excel as excelCreator } from 'exporter';
 import excel_creator from 'exporter/excel_creator';

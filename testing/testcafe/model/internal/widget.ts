@@ -11,19 +11,19 @@ export default abstract class Widget {
 
   abstract name: string;
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     this.element = typeof id === 'string' ? Selector(id) : id;
     this.isFocused = this.element.hasClass(CLASS.focused);
   }
 
-  static addClassPrefix(widgetName: string, className: string) {
+  static addClassPrefix(widgetName: string, className: string): string {
     return `dx-${widgetName.slice(2).toLowerCase() + (className ? `-${className}` : '')}`;
   }
 
   option(option: string, value?: any): Promise<any> {
     const { element, name } = this;
-    const get = () => $(element())[name]('instance').option(option);
-    const set = () => $(element())[name]('instance').option(option, value);
+    const get = (): any => $(element())[name]('instance').option(option);
+    const set = (): any => $(element())[name]('instance').option(option, value);
     const isSetter = arguments.length === 2;
 
     return ClientFunction(isSetter ? set : get, {

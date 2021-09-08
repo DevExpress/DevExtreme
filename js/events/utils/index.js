@@ -148,22 +148,18 @@ export const needSkipEvent = e => {
     // TODO: this checking used in swipeable first move handler. is it correct?
     const { target } = e;
     const $target = $(target);
-    const touchInInput = $target.is('input, textarea, select');
+    const isDropDown = $target.is('.dx-dropdownlist-popup-wrapper *, .dx-dropdownlist-popup-wrapper');
+    const isContentEditable = target?.isContentEditable || target?.hasAttribute('contenteditable');
+    const touchInEditable = $target.is('input, textarea, select') || isContentEditable;
 
-    if($target.is('.dx-skip-gesture-event *, .dx-skip-gesture-event')) {
+    if($target.is('.dx-skip-gesture-event *, .dx-skip-gesture-event') && !isDropDown) {
         return true;
     }
 
     if(isDxMouseWheelEvent(e)) {
         const isTextArea = $target.is('textarea') && $target.hasClass('dx-texteditor-input');
 
-        if(isTextArea) {
-            return false;
-        }
-
-        const isContentEditable = target.isContentEditable || target.hasAttribute('contenteditable');
-
-        if(isContentEditable) {
+        if(isTextArea || isContentEditable) {
             return false;
         }
 
@@ -173,11 +169,11 @@ export const needSkipEvent = e => {
     }
 
     if(isMouseEvent(e)) {
-        return touchInInput || e.which > 1; // only left mouse button
+        return touchInEditable || e.which > 1; // only left mouse button
     }
 
     if(isTouchEvent(e)) {
-        return touchInInput && focused($target);
+        return touchInEditable && focused($target);
     }
 };
 

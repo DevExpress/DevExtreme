@@ -1,11 +1,11 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable import/named */
-import LegacyOverlay from '../../ui/overlay';
-import { dxElement } from '../../core/element';
+import LegacyOverlay from '../../ui/overlay/ui.overlay';
+import { UserDefinedElement, DxElement } from '../../core/element';
 import { template } from '../../core/templates/template';
 import { animationConfig } from '../../animation/fx';
 /* eslint-enable import/named */
@@ -17,6 +17,7 @@ export const viewFunction = ({
   restAttributes,
 }: Overlay): JSX.Element => (
   <DomComponentWrapper
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rootElementRef={rootElementRef as any}
     componentType={LegacyOverlay}
     componentProps={componentProps}
@@ -31,11 +32,11 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() templatesRenderAsynchronously? = false;
 
-  @OneWay() shading?= true;
+  @OneWay() shading? = true;
 
-  @OneWay() width?: number | string | (() => number| string);
+  @OneWay() width?: number | string | (() => number | string);
 
-  @OneWay() height?: number | string | (() => number| string);
+  @OneWay() height?: number | string | (() => number | string);
 
   @OneWay() closeOnOutsideClick? = false;
 
@@ -45,6 +46,9 @@ export class OverlayProps extends WidgetProps {
     type: 'pop', duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 },
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @OneWay() position?: any;
+
   @OneWay() visible?: boolean = false;
 
   @OneWay() container?: string | Element;
@@ -53,9 +57,9 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() _checkParentVisibility? = false;
 
-  @OneWay() rtlEnabled?= false;
+  @OneWay() rtlEnabled? = false;
 
-  @OneWay() contentTemplate?: template | ((contentElement: dxElement) => string | Element | JQuery) = 'content';
+  @OneWay() contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement) = 'content';
 
   @OneWay() maxWidth?: number | string | (() => number | string) | null = null;
 }

@@ -536,7 +536,6 @@ Series.prototype = {
         that._legendCallback = legendCallback || that._legendCallback;
 
         if(!that._visible) {
-            animationEnabled = false;
             that._group.remove();
             return;
         }
@@ -851,7 +850,7 @@ Series.prototype = {
                 }
             };
 
-            if(data.length) {
+            if(Array.isArray(data)) {
                 data.forEach(processData);
             } else {
                 processData(data);

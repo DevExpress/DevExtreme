@@ -42,12 +42,15 @@ const Autocomplete = DropDownList.inherit({
                 }
                 return true;
             },
-            enter: function() {
+            enter: function(e) {
                 if(!item) {
                     this.close();
                 }
-                parent.enter.apply(this, arguments);
-                return this.option('opened');
+                const opened = this.option('opened');
+                if(opened) {
+                    e.preventDefault();
+                }
+                return opened;
             }
         });
     },
@@ -114,12 +117,8 @@ const Autocomplete = DropDownList.inherit({
         return this.option('valueExpr');
     },
 
-    _popupConfig: function() {
-        return extend(this.callBase(), {
-            closeOnOutsideClick: (function(e) {
-                return !$(e.target).closest(this.$element()).length;
-            }).bind(this)
-        });
+    _closeOutsideDropDownHandler: function({ target }) {
+        return !$(target).closest(this.$element()).length;
     },
 
     _renderDimensions: function() {
@@ -133,7 +132,10 @@ const Autocomplete = DropDownList.inherit({
 
     _listConfig: function() {
         return extend(this.callBase(), {
-            pageLoadMode: 'none'
+            pageLoadMode: 'none',
+            onSelectionChanged: (e) => {
+                this._setSelectedItem(e.addedItems[0]);
+            }
         });
     },
 
@@ -173,9 +175,9 @@ const Autocomplete = DropDownList.inherit({
         };
     },
 
-    _searchDataSource: function() {
+    _searchDataSource: function(searchValue) {
         this._dataSource.pageSize(this.option('maxItemCount'));
-        this.callBase();
+        this.callBase(searchValue);
         this._clearFocusedItem();
     },
 

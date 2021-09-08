@@ -396,6 +396,50 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(endDateEditor.option('text'), '11/3/2019, 6:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in appointment timezone');
         scheduler.appointmentPopup.clickCancelButton();
     });
+
+    QUnit.test('Scheduler - Fix - Recurrent appointment settings generator should consider daylight saving time (T985142)', function(assert) {
+        // NOTE: The daylight saving changed in Pacific/Tahiti on 28.03.2021
+        let scheduler;
+        try {
+            scheduler = createWrapper({
+                dataSource: [{
+                    startDate: '2021-03-28T10:00:00.000Z',
+                    endDate: '2021-03-29T10:00:00.000Z',
+                    startDateTimeZone: 'Europe/Paris',
+                    endDateTimeZone: 'Europe/Paris',
+                    recurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=1'
+                }],
+                views: ['day'],
+                currentView: 'day',
+                currentDate: new Date(2021, 2, 27),
+                height: 600,
+                timeZone: 'Pacific/Tahiti'
+            });
+
+            assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appoitment count is correct');
+
+            const appointmentSettings = scheduler.instance.getAppointmentsInstance().option('items')[0];
+
+            assert.deepEqual({
+                appointment: {
+                    startDate: new Date('2021-03-27T22:00:00.000Z'),
+                    endDate: new Date('2021-03-28T22:00:00.000Z'),
+                    source: {
+                        startDate: new Date('2021-03-28T10:00:00.000Z'),
+                        endDate: new Date('2021-03-29T10:00:00.000Z')
+                    }
+                },
+                sourceAppointment: {
+                    startDate: new Date('2021-03-28T10:00:00.000Z'),
+                    endDate: new Date('2021-03-29T10:00:00.000Z')
+                }
+            },
+            appointmentSettings.settings[0].info,
+            'Appoitment settings is correct');
+        } catch(e) {
+            assert.ok(false, e.Message);
+        }
+    });
 });
 
 QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {

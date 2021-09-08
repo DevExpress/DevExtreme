@@ -3,7 +3,8 @@ import FileSystemItem from '../../file_management/file_system_item';
 import ObjectFileSystemProvider from '../../file_management/object_provider';
 import RemoteFileSystemProvider from '../../file_management/remote_provider';
 import CustomFileSystemProvider from '../../file_management/custom_provider';
-import ErrorCode from '../../file_management/errors';
+import FileSystemError from '../../file_management/error';
+import ErrorCode from '../../file_management/error_codes';
 import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from '../../file_management/utils';
 import { whenSome } from './ui.file_manager.common';
 
@@ -11,6 +12,7 @@ import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { equalByValue } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -29,18 +31,47 @@ export default class FileItemsController {
 
         this._defaultIconMap = this._createDefaultIconMap();
 
+        this._setSecurityController();
+        this._setProvider(options.fileProvider);
+        this._initialize();
+    }
+
+    _setSecurityController() {
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
             maxFileSize: this._options.uploadMaxFileSize
         });
+        this._resetState();
+    }
 
-        this._setProvider(options.fileProvider);
-        this._initialize();
+    setAllowedFileExtensions(allowedFileExtensions) {
+        if(isDefined(allowedFileExtensions)) {
+            this._options.allowedFileExtensions = allowedFileExtensions;
+        }
+        this._setSecurityController();
+        this.refresh();
+    }
+
+    setUploadOptions({ maxFileSize, chunkSize }) {
+        if(isDefined(chunkSize)) {
+            this._options.uploadChunkSize = chunkSize;
+        }
+        if(isDefined(maxFileSize)) {
+            this._options.uploadMaxFileSize = maxFileSize;
+            this._setSecurityController();
+            this.refresh();
+        }
     }
 
     _setProvider(fileProvider) {
         this._fileProvider = this._createFileProvider(fileProvider);
         this._resetState();
+    }
+
+    updateProvider(fileProvider, currentPath) {
+        this._resetCurrentDirectory();
+        this._setProvider(fileProvider);
+        return this.refresh().then(() => this.setCurrentPath(currentPath));
     }
 
     _createFileProvider(fileProvider) {
@@ -70,7 +101,7 @@ export default class FileItemsController {
         const pathParts = getPathParts(path);
         const rawPath = pathCombine(...pathParts);
         if(this.getCurrentDirectory().fileItem.relativeName === rawPath) {
-            return;
+            return new Deferred().resolve().promise();
         }
 
         return this._setCurrentDirectoryByPathParts(pathParts);
@@ -99,9 +130,13 @@ export default class FileItemsController {
         return this._currentDirectoryInfo;
     }
 
-    setCurrentDirectory(directoryInfo) {
+    setCurrentDirectory(directoryInfo, checkActuality) {
         if(!directoryInfo) {
             return;
+        }
+
+        if(checkActuality) {
+            directoryInfo = this._getActualDirectoryInfo(directoryInfo);
         }
 
         if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
@@ -119,6 +154,10 @@ export default class FileItemsController {
         }
     }
 
+    _resetCurrentDirectory() {
+        this._currentDirectoryInfo = this._rootDirectoryInfo;
+    }
+
     getCurrentItems(onlyFiles) {
         return this._dataLoadingDeferred
             ? this._dataLoadingDeferred.then(() => this._getCurrentItemsInternal(onlyFiles))
@@ -127,7 +166,12 @@ export default class FileItemsController {
 
     _getCurrentItemsInternal(onlyFiles) {
         const currentDirectory = this.getCurrentDirectory();
-        return onlyFiles ? this.getFiles(currentDirectory) : this.getDirectoryContents(currentDirectory);
+        const getItemsPromise = this.getDirectoryContents(currentDirectory);
+        return getItemsPromise.then(items => {
+            const separatedItems = this._separateItemsByType(items);
+            currentDirectory.fileItem.hasSubDirectories = !!separatedItems.folders.length;
+            return onlyFiles ? separatedItems.files : items;
+        });
     }
 
     getDirectories(parentDirectoryInfo, skipNavigationOnError) {
@@ -135,9 +179,11 @@ export default class FileItemsController {
             .then(itemInfos => itemInfos.filter(info => info.fileItem.isDirectory));
     }
 
-    getFiles(parentDirectoryInfo) {
-        return this.getDirectoryContents(parentDirectoryInfo)
-            .then(itemInfos => itemInfos.filter(info => !info.fileItem.isDirectory));
+    _separateItemsByType(itemInfos) {
+        const folders = [];
+        const files = [];
+        itemInfos.forEach(info => info.fileItem.isDirectory ? folders.push(info) : files.push(info));
+        return { folders, files };
     }
 
     getDirectoryContents(parentDirectoryInfo, skipNavigationOnError) {
@@ -194,7 +240,13 @@ export default class FileItemsController {
         const tempDirInfo = this._createDirInfoByName(name, parentDirectoryInfo);
         const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
+            () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name)
+                .done(info => {
+                    if(!parentDirectoryInfo.fileItem.isRoot()) {
+                        parentDirectoryInfo.fileItem.hasSubDirectories = true;
+                    }
+                    return info;
+                }),
             () => this._resetDirectoryState(parentDirectoryInfo, true));
     }
 
@@ -298,7 +350,8 @@ export default class FileItemsController {
         this._raiseEditActionStarting(actionInfo);
         this._raiseEditActionResultAcquired(actionInfo);
         this._raiseEditActionError(actionInfo, {
-            errorId: errorInfo.errorId,
+            errorCode: errorInfo.errorCode,
+            errorText: errorInfo.errorText,
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
@@ -440,6 +493,9 @@ export default class FileItemsController {
     }
 
     _executeDataLoad(action, operation) {
+        if(this._dataLoadingDeferred) {
+            return this._dataLoadingDeferred.then(() => this._executeDataLoad(action, operation));
+        }
         this._dataLoading = true;
         this._dataLoadingDeferred = new Deferred();
 
@@ -448,9 +504,10 @@ export default class FileItemsController {
         }
 
         return action().always(() => {
-            this._dataLoadingDeferred.resolve();
+            const tempDeferred = this._dataLoadingDeferred;
             this._dataLoadingDeferred = null;
             this._dataLoading = false;
+            tempDeferred.resolve();
         });
     }
 
@@ -580,6 +637,10 @@ export default class FileItemsController {
         return result;
     }
 
+    setRootText(rootText) {
+        this._rootDirectoryInfo.displayName = rootText || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
+    }
+
     _raiseInitialized() {
         const e = { controller: this };
         if(this._options.onInitialized) {
@@ -684,13 +745,13 @@ class FileSecurityController {
 
     validateExtension(name) {
         if(!this._isValidExtension(name)) {
-            this._throwError(ErrorCode.WrongFileExtension);
+            throw new FileSystemError(ErrorCode.WrongFileExtension, null);
         }
     }
 
     validateMaxFileSize(size) {
         if(this._maxFileSize && size > this._maxFileSize) {
-            this._throwError(ErrorCode.MaxFileSizeExceeded);
+            throw new FileSystemError(ErrorCode.MaxFileSizeExceeded, null);
         }
     }
 
@@ -700,10 +761,6 @@ class FileSecurityController {
         }
         const extension = getFileExtension(name).toUpperCase();
         return this._extensionsMap[extension];
-    }
-
-    _throwError(errorId) {
-        throw { errorId };
     }
 
     get _allowedFileExtensions() {

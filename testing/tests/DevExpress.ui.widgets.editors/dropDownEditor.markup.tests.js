@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
 
 import 'ui/drop_down_editor/ui.drop_down_editor';
-import 'common.css!';
 
 const { module, test, testStart } = QUnit;
 
@@ -36,6 +35,10 @@ module('DropDownEditor markup', {
 }, () => {
     test('root element must be decorated with DROP_DOWN_EDITOR_CLASS', function(assert) {
         assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_CLASS));
+    });
+
+    test('root element have only one child', function(assert) {
+        assert.strictEqual(this.rootElement.children().length, 1);
     });
 
     test('dxDropDownEditor must have a button which must be decorated with DROP_DOWN_EDITOR_BUTTON_CLASS', function(assert) {

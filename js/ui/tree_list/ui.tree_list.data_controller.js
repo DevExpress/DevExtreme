@@ -3,7 +3,7 @@ import { Deferred } from '../../core/utils/deferred';
 import treeListCore from './ui.tree_list.core';
 import { equalByValue } from '../../core/utils/common';
 import dataSourceAdapterProvider from './ui.tree_list.data_source_adapter';
-import dataControllerModule from '../grid_core/ui.grid_core.data_controller';
+import { dataControllerModule } from '../grid_core/ui.grid_core.data_controller';
 
 export const DataController = dataControllerModule.controllers.data.inherit((function() {
     return {
@@ -46,7 +46,7 @@ export const DataController = dataControllerModule.controllers.data.inherit((fun
                 return false;
             }
 
-            if(item1.level !== item2.level) {
+            if(item1.level !== item2.level || item1.isExpanded !== item2.isExpanded) {
                 return false;
             }
 
@@ -84,17 +84,16 @@ export const DataController = dataControllerModule.controllers.data.inherit((fun
 
         changeRowExpand: function(key) {
             if(this._dataSource) {
-                const that = this;
                 const args = {
                     key: key
                 };
                 const isExpanded = this.isRowExpanded(key);
 
-                that.executeAction(isExpanded ? 'onRowCollapsing' : 'onRowExpanding', args);
+                this.executeAction(isExpanded ? 'onRowCollapsing' : 'onRowExpanding', args);
 
                 if(!args.cancel) {
-                    return that._dataSource.changeRowExpand(key).done(function() {
-                        that.executeAction(isExpanded ? 'onRowCollapsed' : 'onRowExpanded', args);
+                    return this._dataSource.changeRowExpand(key).done(() => {
+                        this.executeAction(isExpanded ? 'onRowCollapsed' : 'onRowExpanded', args);
                     });
                 }
             }

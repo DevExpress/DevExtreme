@@ -3,8 +3,14 @@ import { isFunction, isDefined } from '../core/utils/type';
 import { each, map } from '../core/utils/iterator';
 import { compileGetter, toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
-import errorsModule from './errors';
-import dataUtils from './utils';
+import { errors, handleError as handleDataError } from './errors';
+import {
+    aggregators,
+    isGroupCriterion,
+    isUnaryOperation,
+    normalizeBinaryCriterion,
+    isConjunctiveOperator as isConjunctiveOperatorChecker
+} from './utils';
 
 const Iterator = Class.inherit({
 
@@ -231,7 +237,7 @@ const compileCriteria = (function() {
         each(crit, function() {
             if(Array.isArray(this) || isFunction(this)) {
                 if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
-                    throw new errorsModule.errors.Error('E4019');
+                    throw new errors.Error('E4019');
                 }
 
                 ops.push(compileCriteria(this));
@@ -239,7 +245,7 @@ const compileCriteria = (function() {
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
             } else {
-                isConjunctiveNextOperator = dataUtils.isConjunctiveOperator(this);
+                isConjunctiveNextOperator = isConjunctiveOperatorChecker(this);
             }
         });
 
@@ -262,7 +268,7 @@ const compileCriteria = (function() {
     };
 
     const compileBinary = function(crit) {
-        crit = dataUtils.normalizeBinaryCriterion(crit);
+        crit = normalizeBinaryCriterion(crit);
         const getter = compileGetter(crit[0]);
         const op = crit[1];
         let value = crit[2];
@@ -293,7 +299,8 @@ const compileCriteria = (function() {
                         return false;
                     }
 
-                    return getterValue.lastIndexOf(value) === getterValue.length - value.length;
+                    const index = getterValue.lastIndexOf(value);
+                    return index !== -1 && index === getterValue.length - value.length;
                 };
             case 'contains':
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) > -1; };
@@ -301,7 +308,7 @@ const compileCriteria = (function() {
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === -1; };
         }
 
-        throw errorsModule.errors.Error('E4003', op);
+        throw errors.Error('E4003', op);
     };
 
     function compileEquals(getter, value, negate) {
@@ -328,17 +335,17 @@ const compileCriteria = (function() {
             return function(obj) { return !criteria(obj); };
         }
 
-        throw errorsModule.errors.Error('E4003', op);
+        throw errors.Error('E4003', op);
     }
 
     return function(crit) {
         if(isFunction(crit)) {
             return crit;
         }
-        if(dataUtils.isGroupCriterion(crit)) {
+        if(isGroupCriterion(crit)) {
             return compileGroup(crit);
         }
-        if(dataUtils.isUnaryOperation(crit)) {
+        if(isUnaryOperation(crit)) {
             return compileUnary(crit);
         }
         return compileBinary(crit);
@@ -496,7 +503,7 @@ const arrayQueryImpl = function(iter, queryOptions) {
             handler(error);
         }
 
-        errorsModule._errorHandler(error);
+        handleDataError(error);
     };
 
     const aggregateCore = function(aggregator) {
@@ -537,7 +544,7 @@ const arrayQueryImpl = function(iter, queryOptions) {
     };
 
     const standardAggregate = function(name) {
-        return aggregateCore(dataUtils.aggregators[name]);
+        return aggregateCore(aggregators[name]);
     };
 
     const select = function(getter) {
@@ -582,7 +589,7 @@ const arrayQueryImpl = function(iter, queryOptions) {
                 return chainQuery(iter.thenBy(getter, desc, compare));
             }
 
-            throw errorsModule.errors.Error('E4004');
+            throw errors.Error('E4004');
         },
 
         filter: function(criteria) {

@@ -8,6 +8,7 @@ import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import { Event as dxEvent } from 'events/index';
 import { normalizeKeyName } from 'events/utils/index';
+import Quill from 'devextreme-quill';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -33,6 +34,7 @@ const INSERT_TEXT_DELTA = { ops: [{ insert: 'Text' }] };
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.Delta = Quill.import('delta');
 
         this.$element = $('#htmlEditor');
 
@@ -48,17 +50,17 @@ const moduleConfig = {
             }
         });
 
+        this.previousChar = ' ';
+
         this.quillMock = {
-            insertEmbed: (position, format, value) => {
-                this.log.push({ position, format, value });
-            },
-            getContents: () => { return { ops: [{ insert: ' ' }] }; },
+            getContents: () => { return { ops: [{ insert: this.previousChar }] }; },
             getLength: () => 0,
             getBounds: () => { return { left: 0, bottom: 0 }; },
             root: this.$element.get(0),
             getModule: noop,
             getSelection: () => { return { index: 1, length: 0 }; },
             setSelection: (index) => { this.log.push({ operation: 'setSelection', index }); },
+            updateContents: (newDelta) => { this.log.push({ delta: newDelta }); },
             getFormat: noop,
             on: noop,
             deleteText: (index, length) => { this.log.push({ operation: 'deleteText', index, length }); },
@@ -199,15 +201,16 @@ QUnit.module('Mentions module', moduleConfig, () => {
 
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[2], {
-            format: 'mention',
-            position: 0,
-            value: {
+        const expectedDelta = new this.Delta()
+            .delete(1)
+            .insert({ mention: {
+                value: 'Alex',
                 marker: '@',
-                id: 'Alex',
-                value: 'Alex'
-            }
-        }, 'Correct formatting');
+                id: 'Alex'
+            } })
+            .insert(' ');
+
+        assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
     });
 
     test('Display and value expression with complex data', function(assert) {
@@ -219,15 +222,16 @@ QUnit.module('Mentions module', moduleConfig, () => {
 
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[2], {
-            format: 'mention',
-            position: 0,
-            value: {
+        const expectedDelta = new this.Delta()
+            .delete(1)
+            .insert({ mention: {
+                value: 'Alex manager',
                 marker: '@',
-                id: 'Alex',
-                value: 'Alex manager'
-            }
-        }, 'Correct formatting');
+                id: 'Alex'
+            } })
+            .insert(' ');
+
+        assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
     });
 
     test('Insert embed content should remove marker before insert a mention and restore the selection', function(assert) {
@@ -238,27 +242,21 @@ QUnit.module('Mentions module', moduleConfig, () => {
         $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger('dxclick');
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log, [{
-            index: 0, // insert space after the mention
-            text: ' ',
-            operation: 'insertText',
-            source: 'silent'
-        }, {
-            index: 1, // remove the marker
-            length: 1,
-            operation: 'deleteText'
-        }, {
-            format: 'mention', // insert the mention to the current position
-            position: 0,
-            value: {
+        const expectedDelta = new this.Delta()
+            .delete(1)
+            .insert({ mention: {
+                value: 'Alex manager',
                 marker: '@',
-                id: 'Alex',
-                value: 'Alex manager'
-            }
-        }, {
+                id: 'Alex'
+            } })
+            .insert(' ');
+
+        assert.strictEqual(this.log.length, 2, 'add a mention + set selection');
+        assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'add a mention');
+        assert.deepEqual(this.log[1], {
             index: 2, // restore selection
             operation: 'setSelection'
-        }]);
+        });
     });
 
     test('changing text by user should trigger checkMentionRequest', function(assert) {
@@ -369,15 +367,15 @@ QUnit.module('Mentions module', moduleConfig, () => {
         $items.first().trigger('dxclick');
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[2], {
-            format: 'mention',
-            position: 0,
-            value: {
+        const firstDelta = new this.Delta()
+            .delete(1)
+            .insert({ mention: {
+                value: 'Alex',
                 marker: '@',
-                id: 'Alex',
-                value: 'Alex'
-            }
-        }, 'insert user mention');
+                id: 'Alex'
+            } })
+            .insert(' ');
+        assert.deepEqual(this.log[0].delta.ops, firstDelta.ops, 'insert user mention');
 
         mention.onTextChange(INSERT_HASH_MENTION_DELTA, {}, 'user');
 
@@ -388,15 +386,15 @@ QUnit.module('Mentions module', moduleConfig, () => {
         $items.first().trigger('dxclick');
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[6], {
-            format: 'mention',
-            position: 0,
-            value: {
+        const secondDelta = new this.Delta()
+            .delete(1)
+            .insert({ mention: {
+                value: 4421,
                 marker: '#',
-                id: 4421,
-                value: 4421
-            }
-        }, 'insert issue mention');
+                id: 4421
+            } })
+            .insert(' ');
+        assert.deepEqual(this.log[2].delta.ops, secondDelta.ops, 'insert issue mention');
     });
 
     test('list shouldn\'t be focused on text input', function(assert) {
@@ -535,15 +533,15 @@ QUnit.module('Mentions module', moduleConfig, () => {
             this.$element.trigger($.Event('keydown', { key, which: code }));
             this.clock.tick();
 
-            assert.deepEqual(this.log[2], {
-                format: 'mention',
-                position: 0,
-                value: {
+            const expectedDelta = new this.Delta()
+                .delete(1)
+                .insert({ mention: {
+                    value: 'Alex',
                     marker: '@',
-                    id: 'Alex',
-                    value: 'Alex'
-                }
-            }, 'Correct formatting');
+                    id: 'Alex'
+                } })
+                .insert(' ');
+            assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
         });
     });
 
@@ -629,5 +627,27 @@ QUnit.module('Mentions module', moduleConfig, () => {
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.ok(popupRepaintSpy.calledOnce, 'popup has been repainted after search');
+    });
+
+    test('insert mention on a start of the newline', function(assert) {
+        this.previousChar = '\n';
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(3);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+
+        $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger('dxclick');
+
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
+        const expectedDelta = new this.Delta()
+            .retain(1)
+            .delete(1)
+            .insert({ mention: {
+                value: 'Alex',
+                marker: '@',
+                id: 'Alex'
+            } })
+            .insert(' ');
+        assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
     });
 });

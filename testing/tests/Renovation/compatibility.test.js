@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import widgetsMeta from './widgets.json!';
-import publicWidgets from 'bundles/modules/parts/renovation';
-import { act } from 'preact/test-utils';
+import publicWidgets from 'renovation/components';
 import Button from 'ui/button';
 import 'ui/check_box';
 import 'ui/pager';
@@ -10,12 +9,12 @@ import 'ui/pager';
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
 const PRIVATE_JQUERY_WIDGETS = [
-    'TimePanelTableLayout',
-    'DayDateTableLayout', 'WeekTableLayout', 'TimelineDateTableLayout',
-    'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
-    'GridPager', 'Scrollable',
+    'Widget',
+    'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
+    'DateTableLayoutBase', 'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
+    'GridPager', 'Scrollable'
 ];
-const INPROGRESS_WIDGETS = ['Widget', 'ScrollView', 'DataGrid', 'Bullet'];
+const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'LayoutManager'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
 const widgetsInBundle = publicWidgets.map(widget => widget.name);
@@ -52,9 +51,7 @@ QUnit.module('Mandatory component setup', {
 }, () => {
     widgets.forEach((meta) => {
         QUnit.test(`${`dx${meta.name}`} - check css class names`, function(assert) {
-            act(() => {
-                $('#component')[`dx${meta.name}`]();
-            });
+            $('#component')[`dx${meta.name}`]();
 
             let message = 'You should always set `dx-widget` class to the root of your component';
             assert.equal($('#component').get(0), $('.dx-widget').get(0), message);
@@ -69,10 +66,8 @@ QUnit.module('Mandatory component setup', {
             const message = 'You should pass restAttributes to the component\'s root\n'
             + '<root {...viewModel.restAttributes} />';
 
-            act(() => {
-                $('#component')[`dx${meta.name}`]({
-                    'data-custom-option': 'custom-value',
-                });
+            $('#component')[`dx${meta.name}`]({
+                'data-custom-option': 'custom-value',
             });
 
             assert.equal($('#component').attr('data-custom-option'), 'custom-value', message);
@@ -86,9 +81,7 @@ QUnit.module('Mandatory component setup', {
             + 'get className() { return \`${this.restAttributes.className} dx-my-component\` }'; // eslint-disable-line
 
             $('#component').addClass('custom-class');
-            act(() => {
-                $('#component')[`dx${meta.name}`]();
-            });
+            $('#component')[`dx${meta.name}`]();
             const className = CUSTOM_ROOT_WIDGET_CLASS[`dx${meta.name}`] || meta.name.toLowerCase();
             assert.equal($('#component').get(0), $(`.custom-class.dx-${className}`).get(0), message);
         });
@@ -106,9 +99,7 @@ QUnit.module('Mandatory component setup', {
                 width: '100px', height: '50px', display: 'inline-block',
             });
 
-            act(() => {
-                $('#component')[`dx${meta.name}`]();
-            });
+            $('#component')[`dx${meta.name}`]();
 
             assert.equal($('#component').css('width'), '100px', message);
             assert.equal($('#component').css('height'), '50px', message);
@@ -134,11 +125,9 @@ QUnit.module('Mandatory component setup', {
                     width: '100px', height: '50px',
                 });
 
-                act(() => {
-                    $('#component')[`dx${meta.name}`]({
-                        width: '110px',
-                        height: '55px',
-                    });
+                $('#component')[`dx${meta.name}`]({
+                    width: '110px',
+                    height: '55px',
                 });
 
                 assert.equal($('#component').css('width'), '110px', message);

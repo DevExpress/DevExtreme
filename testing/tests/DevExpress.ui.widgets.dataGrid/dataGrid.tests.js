@@ -37,13 +37,13 @@ QUnit.testStart(function() {
 import '../../../node_modules/underscore/underscore-min.js';
 import '../../../node_modules/jsrender/jsrender.min.js';
 
-import DataGrid from 'ui/data_grid/ui.data_grid';
+import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
 import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
-import version from 'core/version';
+import { version } from 'core/version';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -97,7 +97,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('columns option is not changed after initialization when columnAutoWidth is enabled', function(assert) {
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             columns: ['field1', { dataField: 'field2' }],
             dataSource: [{ field1: 1, field2: 2 }]
@@ -110,6 +110,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('commonColumnOptions', function(assert) {
         const dataGrid = createDataGrid({});
+
         assert.deepEqual(dataGrid.option('commonColumnSettings'), {
             allowFiltering: true,
             allowHiding: true,
@@ -343,7 +344,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
         const options = {
             dataSource,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             paging: {
                 pageSize: 2
             },
@@ -370,9 +371,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('cellClick/cellHoverChanged handler should be executed when define via \'on\' method', function(assert) {
         let cellClickCount = 0;
         let cellHoverChangedCount = 0;
+
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
 
             dataSource: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }]
         }).dxDataGrid('instance');
@@ -406,7 +408,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Context menu item\'s color and text should have the same color', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2', 'field3'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1' }]
             }
@@ -440,7 +442,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     templatesRenderedCount++;
                 }
             }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }],
                 pageSize: 20
@@ -497,7 +499,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
         let onOptionChangedCallCount = 0;
         const grid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowColumnReordering: true,
             dataSource: [{}],
             columns: [{
@@ -679,7 +681,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         this.clock.tick();
 
-        const rowsView = dataGrid._views.rowsView;
+        const rowsView = dataGrid.getView('rowsView');
         rows = rowsView.element().find('.dx-row').filter(function(index, element) { return !$(element).hasClass('dx-freespace-row'); });
 
         // assert
@@ -731,7 +733,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         createDataGrid({
             remoteOperations: false,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 load: function() {
                     loadCallCount++;
@@ -744,7 +746,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     // T268912
-    QUnit.test('load from remote rest store when remoteOperations false', function(assert) {
+    QUnit.skip('load from remote rest store when remoteOperations false', function(assert) {
         this.clock.restore();
         const done = assert.async();
         let errorMessage;
@@ -805,7 +807,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         const d = $.Deferred();
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 load: function() {
                     return d;
@@ -1036,7 +1038,86 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
-        assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
+        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 0.51, 'toolbar custom item is aligned');
+    });
+
+    QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            sorting: { mode: 'none' },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50 }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.roughEqual($cellContent.width(), 35.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when column is sorted (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
+        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when header filter is visible (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            headerFilter: {
+                visible: true
+            },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50 }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when header filter and sorting are enabled (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            headerFilter: {
+                visible: true
+            },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
+        assert.roughEqual($cellContent.width(), 4.5, 1, 'correct width');
     });
 });
 
@@ -1123,7 +1204,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         let buttonTemplateCallCount = 0;
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1 }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{
                 type: 'buttons',
                 width: 100,
@@ -1151,7 +1232,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         // act
         createDataGrid({
             dataSource: [{ boolean: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             renderAsync: true,
             columns: [{
                 dataField: 'boolean',
@@ -1176,7 +1257,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         // act
         createDataGrid({
             dataSource: [{ id: 1, template: 'Test' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             filterRow: {
                 visible: true
             },
@@ -1213,7 +1294,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('dataSource change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }]
         });
 
@@ -1234,7 +1315,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         const dataSource = [{ id: 1 }];
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource
         });
 
@@ -1253,7 +1334,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('dataSource change to null', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }]
         });
 
@@ -1278,7 +1359,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('dataSource changing reset columns order when dataSource structure is changed', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field3: 3 }]
         });
 
@@ -1296,7 +1377,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('dataSource changing not reset columns order when dataSource structure is not changed', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }]
         });
 
@@ -1384,7 +1465,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // arrange, act
         let loadingCount = 0;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: {
                     type: 'array',
@@ -1417,7 +1498,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('columns change to empty array', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ a: 1111, b: 222 }]
         });
 
@@ -1470,7 +1551,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // arrange, act
         let loadingCount = 0;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: { filtering: true, sorting: true, paging: true },
             dataSource: {
                 store: {
@@ -1526,7 +1607,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('Toolbar update it\'s items only when corresponding options are change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: { filtering: true, sorting: true, paging: true },
             dataSource: {
                 store: {
@@ -1567,7 +1648,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('customizeColumns change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ a: 1111, b: 222 }],
             columns: ['a'],
             customizeColumns: function() {
@@ -1600,7 +1681,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             commonColumnSettings: { allowSorting: false },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }]
         });
 
@@ -1608,7 +1689,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option({
             commonColumnSettings: { allowSorting: true },
             dataSource: [{ id: 1, value: 'value 1' }],
-            loadingTimeout: undefined
+            loadingTimeout: null
         });
 
         // assert
@@ -1623,7 +1704,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('paging.enabled change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
@@ -1648,7 +1729,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('paging change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
@@ -1678,7 +1759,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('paging change if nested options are not changed', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
@@ -1707,7 +1788,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('pager.allowedPageSizes change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
@@ -1730,7 +1811,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             height: 100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 4
@@ -1747,45 +1828,11 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok($('#dataGrid').find('.dx-datagrid-rowsview').height() > rowsViewHeight, 'rowsView height updated');
     });
 
-    // T121445
-    QUnit.test('pager light-mode should be correct after change pageSize', function(assert) {
-        // arrange, act
-        const data = [];
-        for(let i = 0; i < 11; ++i) {
-            data.push({ value: i });
-        }
-        const dataGrid = createDataGrid({
-            width: 250,
-            loadingTimeout: undefined,
-            dataSource: data,
-            pager: {
-                allowedPageSizes: [2, 6],
-                showInfo: true,
-                showNavigationButtons: true,
-                showPageSizeSelector: true,
-                visible: true
-            },
-            paging: {
-                pageSize: 6
-            }
-        });
-
-        // assert
-        assert.notOk($('#dataGrid .dx-pager').hasClass('dx-light-mode'));
-
-        // act
-        dataGrid.option('paging.pageSize', 2);
-        dataGrid.option('paging.pageSize', 6);
-
-        // assert
-        assert.notOk($('#dataGrid .dx-pager').hasClass('dx-light-mode'), 'is not light-mode');
-    });
-
     // T120699
     QUnit.test('showRowLines/showColumnLines change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ a: 1111, b: 222 }]
         });
 
@@ -1822,7 +1869,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: new DataSource({
                 _preferSync: true,
                 store: [{ id: 1111 }]
@@ -1846,7 +1893,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource
         });
 
@@ -1858,7 +1905,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataSource.load();
 
         // assert
-        assert.ok(!dataGrid.getController('data').dataSource(), 'no dataSource');
+        assert.ok(!dataGrid.getDataSource(), 'no dataSource');
         assert.ok(!dataSource._disposed, 'dataSource is not disposed');
     });
 
@@ -1875,6 +1922,24 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.ok(dataGrid._disposed, 'DataGrid is disposed');
+    });
+
+    QUnit.test('Set the same options after reset (T1010114)', function(assert) {
+        const editing = {
+            mode: 'row',
+            useIcons: true
+        };
+        const dataGrid = createDataGrid({
+            editing,
+            dataSource: [{ id: 1 }]
+        });
+        this.clock.tick();
+
+        dataGrid.resetOption('editing');
+        dataGrid.option('editing', editing);
+
+        // assert
+        assert.ok(dataGrid.option('editing').changes, 'Custom and default options are merged');
     });
 
     // T243908
@@ -1953,7 +2018,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // act
         createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }],
             onContentReady: function() {
                 contentReadyCallCount++;
@@ -1970,7 +2035,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 pageSize: 3,
                 store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
@@ -2050,7 +2115,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 pageSize: 3,
                 store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
@@ -2065,7 +2130,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.equal(contentReadyCallCount, 1);
 
         // act
-        dataGrid._render();
+        dataGrid.repaint();
 
         // assert
         assert.equal($('#dataGrid').find('.dx-data-row').length, 3);
@@ -2085,22 +2150,22 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid._views.columnHeadersView.element().find('td').length, 2, 'count columns');
+        assert.equal(dataGrid.getView('columnHeadersView').element().find('td').length, 2, 'count columns');
 
         // act
         dataGrid.option('groupPanel.visible', true);
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid._views.headerPanel.element().find('.dx-datagrid-group-panel').length, 1, 'has group panel');
-        assert.ok(dataGrid._views.headerPanel.element().find('.dx-datagrid-group-panel').is(':visible'), 'visible group panel');
+        assert.equal(dataGrid.getView('headerPanel').element().find('.dx-datagrid-group-panel').length, 1, 'has group panel');
+        assert.ok(dataGrid.getView('headerPanel').element().find('.dx-datagrid-group-panel').is(':visible'), 'visible group panel');
 
         // act
         dataGrid.columnOption(0, { visible: false });
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid._views.columnHeadersView.element().find('td').length, 1, 'count columns');
+        assert.equal(dataGrid.getView('columnHeadersView').element().find('td').length, 1, 'count columns');
     });
 
     // T113684
@@ -2224,7 +2289,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // arrange
         const onOptionChanged = sinon.spy();
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
             columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
             onOptionChanged: onOptionChanged
@@ -2254,7 +2319,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('begin custom loading', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }]
         });
 
@@ -2306,7 +2371,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('begin custom loading without message', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }]
         });
 
@@ -2328,7 +2393,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('add column', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }]
         });
 
@@ -2343,7 +2408,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // arrange, act
         let expandAllGroupIndex;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ group: 1, id: 1111 }]
         });
 
@@ -2362,7 +2427,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // arrange, act
         let collapseAllGroupIndex;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ group: 1, id: 1111 }]
         });
 
@@ -2381,7 +2446,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('component refresh', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ testField: 'TestValue' }]
         });
 
@@ -2396,7 +2461,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('refresh', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: []
         });
         let reloadResolved = false;
@@ -2452,7 +2517,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('refresh $.Callbacks memory leaks', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: []
         });
         let addCallCount = 0;
@@ -2485,7 +2550,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('getSelectedRowsData when storeSelectedItems enabled', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ testField: 'TestValue' }],
             storeSelectedItems: true
         });
@@ -2500,7 +2565,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('pageCount', function(assert) {
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 pageSize: 3,
                 store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
@@ -2517,7 +2582,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('columnCount', function(assert) {
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }]
         });
 
@@ -2531,7 +2596,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('getRowElement', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', 'field2', 'field3'],
             dataSource: {
                 store: [
@@ -2551,7 +2616,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('There is no console errors when call getCellElement at command column\'s cell', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1' }],
             dataSource: {
                 store: [
@@ -2632,7 +2697,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 { dataField: 'field2', width: 100, groupIndex: 1 },
                 { dataField: 'field3', width: 100 }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test', field2: 2, field3: 3 }, { field1: 'test test test test test test test test test test test', field2: 3, field3: 4 }]
         });
 
@@ -2672,7 +2737,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // arrange, act
         let initialized;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             onInitialized: function(e) {
                 e.component.columnOption('command:edit', 'visibleIndex', -1);
                 initialized = true;
@@ -2705,7 +2770,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['field1']
         });
@@ -2743,7 +2808,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['field1']
         });
@@ -2786,7 +2851,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             dataSource: dataSource,
             columns: ['field1']
@@ -2830,7 +2895,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['id', 'field1']
         });
@@ -2868,7 +2933,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['id', {
                 dataField: 'field1',
@@ -2935,7 +3000,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             highlightChanges: true,
             repaintChangesOnly: true,
@@ -2987,7 +3052,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['id', {
                 dataField: 'field1',
@@ -3034,7 +3099,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             onCellPrepared: function(e) {
                 if(e.rowType === 'data' && e.data.field1 === 'test5') {
@@ -3080,7 +3145,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             rowAlternationEnabled: true,
             repaintChangesOnly: true,
             dataSource: dataSource
@@ -3106,7 +3171,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const watchUpdateArgs = [];
         const dataGrid = createDataGrid({
             keyExpr: 'id',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             dataSource: [
                 { id: 1, field1: 'test1', detail: 'detail1' },
@@ -3169,7 +3234,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 },
                 pushAggregationTimeout: 0
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             editing: {
                 mode: 'cell'
@@ -3218,7 +3283,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 },
                 pushAggregationTimeout: 0
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             onCellPrepared: function(e) {
                 cellPreparedArgs.push(e);
@@ -3255,7 +3320,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             summary: {
                 totalItems: [{
@@ -3377,7 +3442,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         setTemplateEngine('jsrender');
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ value: 1 }, { value: 2 }],
             rowTemplate: $('#jsrenderRow')
         });
@@ -3410,7 +3475,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         const container = $('<div />');
 
         // act
-        dataGrid._getTemplate('#scriptTestTemplate2').render({ container: container });
+        (DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid)._getTemplate('#scriptTestTemplate2').render({ container: container });
 
         // assert
         assert.equal(container.html().trim().toLowerCase(), '<span>Template2</span>'.toLowerCase());
@@ -3490,7 +3555,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     QUnit.test('Setting rowTemplate via dxTemplate', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             rowTemplate: 'testRow',
             dataSource: [{ column1: 'test1', column2: 'test2' }],
             columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
@@ -3509,7 +3574,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             width: 1000,
             dataSource: [],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', {
                 dataField: 'field2',
                 width: 100
@@ -3542,7 +3607,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             width: 1000,
             dataSource: [],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             rowTemplate: (container, options) => {
                 $(container).append(
                     `<tbody class='dx-row'>
@@ -3596,7 +3661,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     QUnit.test('totalCount', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
                 pageSize: 3
@@ -3667,7 +3732,7 @@ QUnit.module('Modules', {
         });
         const dataGrid = createDataGrid({});
 
-        assert.ok(dataGrid.option('test.enabled'), 'registered default option');
+        assert.ok((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).option('test.enabled'), 'registered default option');
     });
 
     // T109256
@@ -3690,7 +3755,7 @@ QUnit.module('Modules', {
 
         const dataGrid = createDataGrid({});
 
-        assert.ok(dataGrid.option('test.text'), 'LOCALIZED');
+        assert.ok((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).option('test.text'), 'LOCALIZED');
     });
 
     QUnit.test('register controller', function(assert) {
@@ -3858,7 +3923,7 @@ QUnit.module('Modules', {
         });
         const dataGrid = createDataGrid({});
 
-        assert.equal(dataGrid.testMethod(), 'test');
+        assert.equal((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).testMethod(), 'test');
     });
 
     QUnit.test('controller public methods does not exist', function(assert) {
@@ -3915,7 +3980,7 @@ QUnit.module('Modules', {
         });
         const dataGrid = createDataGrid({});
 
-        assert.equal(dataGrid.testMethod(), 'test');
+        assert.equal((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).testMethod(), 'test');
     });
 
     QUnit.test('callbacks registration', function(assert) {

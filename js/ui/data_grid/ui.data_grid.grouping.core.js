@@ -1,14 +1,14 @@
 import $ from '../../core/renderer';
 import Class from '../../core/class';
 import gridCore from './ui.data_grid.core';
-import dataUtils from '../../data/utils';
+import { normalizeSortingInfo } from '../../data/utils';
 import { when } from '../../core/utils/deferred';
 
-export function createOffsetFilter(path, storeLoadOptions) {
-    const groups = dataUtils.normalizeSortingInfo(storeLoadOptions.group);
+export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly) {
+    const groups = normalizeSortingInfo(storeLoadOptions.group);
     let filter = [];
 
-    for(let i = 0; i < path.length; i++) {
+    for(let i = lastLevelOnly ? path.length - 1 : 0; i < path.length; i++) {
         const filterElement = [];
         for(let j = 0; j <= i; j++) {
             const selector = groups[j].selector;
@@ -240,8 +240,8 @@ export const GroupingHelper = Class.inherit((function() {
         refresh: function(options) {
             const that = this;
             const storeLoadOptions = options.storeLoadOptions;
-            const groups = dataUtils.normalizeSortingInfo(storeLoadOptions.group || []);
-            const oldGroups = '_group' in that ? dataUtils.normalizeSortingInfo(that._group || []) : groups;
+            const groups = normalizeSortingInfo(storeLoadOptions.group || []);
+            const oldGroups = '_group' in that ? normalizeSortingInfo(that._group || []) : groups;
             let groupsCount = Math.min(oldGroups.length, groups.length);
 
             that._group = storeLoadOptions.group;

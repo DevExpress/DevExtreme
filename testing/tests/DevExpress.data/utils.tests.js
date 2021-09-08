@@ -1,12 +1,6 @@
 import Guid from 'core/guid';
-import dataUtils from 'data/utils';
+import { processRequestResultLock, keysEqual, isGroupCriterion, throttleChanges, base64_encode as b64 } from 'data/utils';
 import { EdmLiteral } from 'data/odata/utils';
-
-const keysEqual = dataUtils.keysEqual;
-const processRequestResultLock = dataUtils.processRequestResultLock;
-const b64 = dataUtils.base64_encode;
-const throttleChanges = dataUtils.throttleChanges;
-const isGroupCriterion = dataUtils.isGroupCriterion;
 
 QUnit.module('keysEqual');
 

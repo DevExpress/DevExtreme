@@ -35,7 +35,7 @@ const environment = {
     },
     createAxis: function(options) {
         const stripsGroup = this.renderer.g();
-        const labelAxesGroup = this.renderer.g();
+        const stripLabelAxesGroup = this.renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = this.renderer.g();
         const gridGroup = this.renderer.g();
@@ -46,7 +46,7 @@ const environment = {
         this.axis = new Axis($.extend(true, {
             renderer: this.renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,

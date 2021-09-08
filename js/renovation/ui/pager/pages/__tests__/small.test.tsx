@@ -1,8 +1,10 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { mount } from 'enzyme';
+import { RefObject } from '@devextreme-generator/declarations';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
 import getElementComputedStyle from '../../../../utils/get_computed_style';
 import messageLocalization from '../../../../../localization/message';
+import { createTestRef } from '../../../../test_utils/create_ref';
 
 jest.mock('../../../../utils/get_computed_style');
 jest.mock('../../../number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
@@ -11,7 +13,6 @@ jest.mock('../../../../../localization/message', () => ({
 }));
 
 describe('Small pager pages', () => {
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const render = (props) => {
     const tree = mount<Element>(<PagesSmallComponent {...props} /> as any).childAt(0);
     const pageIndexNumberBox = tree.childAt(0);
@@ -27,13 +28,13 @@ describe('Small pager pages', () => {
   };
 
   it('View', () => {
-    const pageIndexRef = createRef();
+    const pageIndexRef = createTestRef();
     const props = { pageCount: 100 } as Partial<PagesSmall['props']>;
     const viewProps = {
       valueChange: jest.fn(),
       width: 40,
       value: 3,
-      pageIndexRef: pageIndexRef as unknown as HTMLDivElement,
+      pageIndexRef,
       selectLastPageIndex: jest.fn(),
       pagesCountText: 'of',
       props,
@@ -43,9 +44,8 @@ describe('Small pager pages', () => {
     } = render(viewProps);
     expect(tree.props().className).toBe('dx-light-pages');
 
-    expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toMatchObject({
-      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40,
+      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40, rootElementRef: pageIndexRef,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toMatchObject({
@@ -58,7 +58,7 @@ describe('Small pager pages', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
       const component = new PagesSmall({ pageCount: 100 });
       const numberBoxElement = {};
-      component.pageIndexRef = numberBoxElement as HTMLDivElement;
+      component.pageIndexRef = { current: numberBoxElement } as RefObject<HTMLDivElement>;
       component.updateWidth();
       expect(getElementComputedStyle).toBeCalledWith(numberBoxElement);
       expect(component.width).toBe(19 + 10 * 3);

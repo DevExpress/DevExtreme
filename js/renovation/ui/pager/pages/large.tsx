@@ -3,15 +3,14 @@ import {
   JSXComponent,
   Fragment,
   Consumer,
-  Ref,
-} from 'devextreme-generator/component_declaration/common';
+  Mutable,
+} from '@devextreme-generator/declarations';
 import { Page, PageProps } from './page';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ pages }: PagesLarge) => {
+export const viewFunction = ({ pages }: PagesLarge): JSX.Element => {
   const PagesMarkup = pages.map(({ key, pageProps }) => (pageProps
     ? (
       <Page
@@ -38,8 +37,8 @@ interface SlidingWindowState {
   slidingWindowIndexes: number[];
 }
 type PageIndex = number | 'low' | 'high';
-type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';
+interface PageIndexes extends Array<PageIndex> {}
 
 function getDelimiterType(
   startIndex: number, slidingWindowSize: number, pageCount: number,
@@ -90,19 +89,19 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
   );
 }
 
-type PagesLargePropsType = Pick<PagerProps,
-'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  @Ref()
-  slidingWindowStateRef!: SlidingWindowState;
+  @Mutable()
+  slidingWindowStateHolder!: SlidingWindowState;
 
   private get slidingWindowState(): SlidingWindowState {
-    const slidingWindowState = this.slidingWindowStateRef;
+    const slidingWindowState = this.slidingWindowStateHolder;
     if (!slidingWindowState) {
       return {
         indexesForReuse: [],
@@ -140,7 +139,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
       pageIndexes,
       ...slidingWindowState
     } = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);
-    this.slidingWindowStateRef = slidingWindowState;
+    this.slidingWindowStateHolder = slidingWindowState;
     return pageIndexes;
   }
 
@@ -154,7 +153,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   }
 
   get pageIndexes(): PageIndexes {
-    const { pageCount } = this.props as {pageCount: number};
+    const { pageCount } = this.props as { pageCount: number };
     if (this.isSlidingWindowMode()) {
       return createPageIndexes(0, pageCount, pageCount, 'none').pageIndexes;
     }

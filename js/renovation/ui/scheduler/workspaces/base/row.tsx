@@ -1,32 +1,42 @@
 import {
-  Component, ComponentBindings, JSXComponent, Slot, OneWay,
-} from 'devextreme-generator/component_declaration/common';
-import { VirtualCell } from './virtual-cell';
+  Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
+} from '@devextreme-generator/declarations';
+import { VirtualCell } from './virtual_cell';
 
 export const viewFunction = ({
   props: {
     className,
     leftVirtualCellWidth,
     rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
     children,
+    styles,
+    isHeaderRow,
   },
   hasLeftVirtualCell,
   hasRightVirtualCell,
-  restAttributes,
 }: Row): JSX.Element => (
   <tr
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={className}
+    style={styles}
   >
     {hasLeftVirtualCell && (
-      <VirtualCell width={leftVirtualCellWidth} />
+      <VirtualCell
+        width={leftVirtualCellWidth}
+        colSpan={leftVirtualCellCount}
+        isHeaderCell={isHeaderRow}
+      />
     )}
 
     {children}
 
     {hasRightVirtualCell && (
-      <VirtualCell width={rightVirtualCellWidth} />
+      <VirtualCell
+        width={rightVirtualCellWidth}
+        colSpan={rightVirtualCellCount}
+        isHeaderCell={isHeaderRow}
+      />
     )}
   </tr>
 );
@@ -39,6 +49,14 @@ export class RowProps {
 
   @OneWay() rightVirtualCellWidth = 0;
 
+  @OneWay() leftVirtualCellCount?: number;
+
+  @OneWay() rightVirtualCellCount?: number;
+
+  @OneWay() styles?: CSSAttributes;
+
+  @OneWay() isHeaderRow = false;
+
   @Slot() children?: JSX.Element | JSX.Element[];
 }
 
@@ -48,14 +66,14 @@ export class RowProps {
 })
 export class Row extends JSXComponent(RowProps) {
   get hasLeftVirtualCell(): boolean {
-    const { leftVirtualCellWidth } = this.props;
+    const { leftVirtualCellCount } = this.props;
 
-    return !!leftVirtualCellWidth;
+    return !!leftVirtualCellCount;
   }
 
   get hasRightVirtualCell(): boolean {
-    const { rightVirtualCellWidth } = this.props;
+    const { rightVirtualCellCount } = this.props;
 
-    return !!rightVirtualCellWidth;
+    return !!rightVirtualCellCount;
   }
 }

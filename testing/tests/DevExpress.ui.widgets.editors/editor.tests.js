@@ -1,11 +1,12 @@
 import $ from 'jquery';
+import { Component } from 'core/component';
 import Editor from 'ui/editor/editor';
 import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import hoverEvents from 'events/hover';
 
-import 'common.css!';
 import 'generic_light.css!';
+
 
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 const INVALID_MESSAGE_CONTENT_CLASS = 'dx-invalid-message-content';
@@ -29,7 +30,7 @@ const Fixture = Class.inherit({
 });
 
 const getValidationMessageWrapper = (editor) => {
-    return editor._validationMessage._wrapper();
+    return editor._validationMessage.$wrapper();
 };
 
 QUnit.module('Editor', {
@@ -40,6 +41,13 @@ QUnit.module('Editor', {
         this.fixture.teardown();
     }
 }, () => {
+
+    QUnit.test('isEditor', function(assert) {
+        const editor = this.fixture.createEditor();
+        assert.ok(Editor.isEditor(editor));
+        assert.ok(!Editor.isEditor(new Component(this.$element, {})));
+    });
+
     QUnit.test('Editor can be instantiated', function(assert) {
         const editor = this.fixture.createEditor();
         assert.ok(editor instanceof Editor);
@@ -176,6 +184,19 @@ QUnit.module('Editor', {
         editor.reset();
 
         assert.strictEqual(editor.option('value'), null);
+    });
+
+    QUnit.testInActiveWindow('The blur() method does not blur the active item', function(assert) {
+        const focusOutSpy = sinon.spy();
+        const editor = this.fixture.createEditor({ value: '123' });
+        const $testElement = $('<input type="button">');
+        $testElement.appendTo('#qunit-fixture');
+        $testElement.on('blur', focusOutSpy);
+        $testElement.focus();
+
+        editor.blur();
+
+        assert.strictEqual(focusOutSpy.callCount, 0);
     });
 
     QUnit.test('T359215 - the hover class should be added on hover event if widget has read only state', function(assert) {
@@ -904,6 +925,35 @@ QUnit.module('Validation overlay options', {
 
         const message = $(`.${INVALID_MESSAGE_CONTENT_CLASS}`).text();
         assert.strictEqual(message, 'New error message');
+    });
+
+    QUnit.test('editor should clear validation message cache on dispose (T968422)', function(assert) {
+        assert.expect(0);
+
+        class TestEditor extends Editor {
+            repaintValidationMessage() {
+                this._validationMessage && this._validationMessage.repaint();
+                this._$validationMessage
+                    && this._$validationMessage.dxValidationMessage('instance').repaint();
+            }
+        }
+
+        const $element = this.fixture.createOnlyElement();
+        const instance = new TestEditor($element, {
+            validationMessageMode: 'always',
+            validationError: {
+                message: 'Error message'
+            },
+            isValid: false
+        });
+
+        instance.dispose();
+
+        try {
+            instance.repaintValidationMessage();
+        } catch(e) {
+            assert.ok(false, 'cache is not cleared on editor dispose');
+        }
     });
 });
 

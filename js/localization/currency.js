@@ -6,7 +6,7 @@ export default {
             formatConfig.precision = formatConfig.precision || 0;
 
             let result = this.format(value, extend({}, formatConfig, { type: 'fixedpoint' }));
-            const currencyPart = this.getCurrencySymbol().symbol.replace('$', '$$$$');
+            const currencyPart = this.getCurrencySymbol().symbol.replace(/\$/g, '$$$$');
 
             result = result.replace(/^(\D*)(\d.*)/, '$1' + currencyPart + '$2');
 

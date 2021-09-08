@@ -1,5 +1,8 @@
-import '../../jquery_augmentation';
+import {
+    DxPromise,
+} from '../../core/utils/deferred';
 
+/** @namespace DevExpress.data */
 export interface ODataContextOptions {
     /**
      * @docid
@@ -11,19 +14,16 @@ export interface ODataContextOptions {
      * @type_function_param1_field5 params:object
      * @type_function_param1_field6 payload:object
      * @type_function_param1_field7 headers:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+    beforeSend?: ((options: { url?: string; async?: boolean; method?: string; timeout?: number; params?: any; payload?: any; headers?: any }) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     deserializeDates?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     entities?: any;
@@ -33,26 +33,22 @@ export interface ODataContextOptions {
      * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+    errorHandler?: ((e: { httpStatus?: number; errorDetails?: any; requestOptions?: any }) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     filterToLower?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     jsonp?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     url?: string;
@@ -60,14 +56,12 @@ export interface ODataContextOptions {
      * @docid
      * @default 2
      * @acceptValues 2|3|4
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     version?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     withCredentials?: boolean;
@@ -76,7 +70,6 @@ export interface ODataContextOptions {
  * @docid
  * @module data/odata/context
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export default class ODataContext {
@@ -87,10 +80,9 @@ export default class ODataContext {
      * @param1 operationName:string
      * @param2 params:object
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
+    get(operationName: string, params: any): DxPromise<any>;
     /**
      * @docid
      * @publicName invoke(operationName, params, httpMethod)
@@ -98,17 +90,15 @@ export default class ODataContext {
      * @param2 params:object
      * @param3 httpMethod:object
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: any): DxPromise<void>;
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)
      * @param1 entityAlias:string
      * @param2 key:object|string|number
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     objectLink(entityAlias: string, key: any | string | number): any;

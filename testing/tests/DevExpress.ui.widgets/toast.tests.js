@@ -5,7 +5,6 @@ import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
 import devices from 'core/devices.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const TOAST_CLASS = 'dx-toast';
@@ -46,9 +45,10 @@ QUnit.module('general', moduleConfig, () => {
         this.instance.show();
 
         const $content = this.instance.$content();
+        const $wrapper = this.instance.$wrapper();
 
         assert.ok(this.$element.hasClass(TOAST_CLASS));
-        assert.ok($content.parent().hasClass(TOAST_WRAPPER_CLASS));
+        assert.ok($wrapper.hasClass(TOAST_WRAPPER_CLASS));
         assert.ok($content.hasClass(TOAST_CONTENT_CLASS));
 
         assert.ok($content.width() < $(window).width());

@@ -505,7 +505,7 @@ const DraggingHeaderView = modules.View.inherit({
             const targetLocation = targetDraggingPanel.getName();
             const rowIndex = targetLocation === 'headers' ? dragOptions.rowIndex : undefined;
             const sourceColumn = dragOptions.sourceColumn;
-            const columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn && sourceColumn.ownerBand) || [];
+            const columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn?.ownerBand) || [];
             const pointsByTarget = dragOptions.pointsByTarget = dragOptions.pointsByTarget || {};
             const pointsByColumns = targetLocation === 'columnChooser' ? [] : pointsByTarget[targetLocation] || controller._generatePointsByColumns(extend({}, dragOptions, {
                 targetDraggingPanel: targetDraggingPanel,
@@ -744,7 +744,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             const scrollable = that.component.getScrollable();
 
             if(scrollable && that._isRtlParentStyle()) {
-                that._scrollRight = scrollable.$content().width() - scrollable._container().width() - scrollable.scrollLeft();
+                that._scrollRight = scrollable.$content().width() - $(scrollable.container()).width() - scrollable.scrollLeft();
             }
 
             e.preventDefault();
@@ -820,11 +820,11 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                 }
 
                 if(adaptColumnWidthByRatio) {
-                    column && columnsController.columnOption(column.index, 'visibleWidth', columnWidth);
-                    column && columnsController.columnOption(column.index, 'width', (columnWidth / contentWidth * 100).toFixed(3) + '%');
+                    columnsController.columnOption(column.index, 'visibleWidth', columnWidth);
+                    columnsController.columnOption(column.index, 'width', (columnWidth / contentWidth * 100).toFixed(3) + '%');
                 } else {
-                    column && columnsController.columnOption(column.index, 'visibleWidth', null);
-                    column && columnsController.columnOption(column.index, 'width', columnWidth);
+                    columnsController.columnOption(column.index, 'visibleWidth', null);
+                    columnsController.columnOption(column.index, 'width', columnWidth);
                 }
             }
         }
@@ -899,7 +899,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
 
                 const scrollable = this.component.getScrollable();
                 if(scrollable && isRtlParentStyle) {
-                    const left = scrollable.$content().width() - scrollable._container().width() - this._scrollRight;
+                    const left = scrollable.$content().width() - $(scrollable.container()).width() - this._scrollRight;
                     scrollable.scrollTo({ left: left });
                 }
             }
@@ -1293,7 +1293,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
     }
 });
 
-export default {
+export const columnsResizingReorderingModule = {
     views: {
         columnsSeparatorView: ColumnsSeparatorView,
         blockSeparatorView: BlockSeparatorView,

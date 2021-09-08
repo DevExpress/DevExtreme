@@ -66,8 +66,8 @@ export default Class.inherit({
         filterIsChanged && this.onSelectionChanged();
     },
 
-    setSelection: function(keys) {
-        return this.selectedItemKeys(keys);
+    setSelection: function(keys, updatedKeys) {
+        return this.selectedItemKeys(keys, false, false, false, updatedKeys);
     },
 
     select: function(keys) {
@@ -78,14 +78,14 @@ export default Class.inherit({
         return this.selectedItemKeys(keys, true, true);
     },
 
-    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
+    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
 
         keys = keys ?? [];
         keys = Array.isArray(keys) ? keys : [keys];
         that.validate();
 
-        return this._selectionStrategy.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
+        return this._selectionStrategy.selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys);
     },
 
     clearSelection: function() {
@@ -161,11 +161,11 @@ export default Class.inherit({
     },
 
     isItemDataSelected: function(data) {
-        return this._selectionStrategy.isItemDataSelected(data);
+        return this._selectionStrategy.isItemDataSelected(data, { checkPending: true });
     },
 
-    isItemSelected: function(arg) {
-        return this._selectionStrategy.isItemKeySelected(arg);
+    isItemSelected: function(arg, options) {
+        return this._selectionStrategy.isItemKeySelected(arg, options);
     },
 
     _resetItemSelectionWhenShiftKeyPressed: function() {

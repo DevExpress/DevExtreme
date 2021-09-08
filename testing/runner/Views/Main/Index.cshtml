@@ -73,7 +73,7 @@
         </div>
         <div>
             <label>
-                Renovation: <input type="checkbox" data-bind="checked: renovation" />
+                No Renovation: <input type="checkbox" data-bind="checked: noRenovation" />
             </label>
         </div>
 
@@ -168,7 +168,7 @@
             this.noGlobals = ko.observable(false);
             this.noTimers = ko.observable(true);
             this.noJQuery = ko.observable(true);
-            this.renovation = ko.observable(false);
+            this.noRenovation = ko.observable(false);
             this.JQUERY_VERSION = [
                 { name: "", value: null },
                 { name: "2.x", value: "2" },
@@ -238,8 +238,8 @@
                     result.jquery = this.jqueryVersion();
                 if(this.noJQuery())
                     result.nojquery = "true";
-                if(this.renovation())
-                    result.renovation = "true";
+                if(this.noRenovation())
+                    result.norenovation = "true";
                 return result;
             },
 

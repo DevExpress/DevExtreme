@@ -6,7 +6,7 @@ import Scheduler from '../../model/scheduler';
 fixture`Scheduler: NativeScrolling`
   .page(url(__dirname, '../container.html'));
 
-const createScheduler = (options) => createWidget('dxScheduler', options, true);
+const createScheduler = (options): Promise<void> => createWidget('dxScheduler', options, true);
 
 const scrollToTime = ClientFunction(() => {
   const date = new Date(2019, 5, 1, 9, 40);

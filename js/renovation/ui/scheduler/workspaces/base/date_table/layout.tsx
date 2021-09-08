@@ -3,15 +3,16 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
 import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({
   props: {
-    cellTemplate,
     viewData,
+    groupOrientation,
+    cellTemplate,
     dataCellTemplate,
   },
   topVirtualRowHeight,
@@ -29,6 +30,8 @@ export const viewFunction = ({
     bottomVirtualRowHeight={bottomVirtualRowHeight}
     leftVirtualCellWidth={leftVirtualCellWidth}
     rightVirtualCellWidth={rightVirtualCellWidth}
+    leftVirtualCellCount={viewData.leftVirtualCellCount}
+    rightVirtualCellCount={viewData.rightVirtualCellCount}
     virtualCellsCount={virtualCellsCount}
     className={classes}
   >
@@ -38,6 +41,7 @@ export const viewFunction = ({
       dataCellTemplate={dataCellTemplate}
       leftVirtualCellWidth={leftVirtualCellWidth}
       rightVirtualCellWidth={rightVirtualCellWidth}
+      groupOrientation={groupOrientation}
     />
   </Table>
 );
@@ -49,10 +53,13 @@ export class DateTableLayoutBaseProps extends DateTableLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
-export class DateTableLayoutBase extends JSXComponent<DateTableLayoutBaseProps, 'cellTemplate'>() {
-  get classes(): string {
-    return `dx-scheduler-date-table ${this.props.className}`;
+export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
+  get classes(): string | undefined {
+    const { addDateTableClass } = this.props;
+
+    return addDateTableClass ? 'dx-scheduler-date-table' : undefined;
   }
 
   get topVirtualRowHeight(): number {

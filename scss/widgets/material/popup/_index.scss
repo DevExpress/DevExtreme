@@ -15,8 +15,6 @@
 
 $material-popup-toolbar-label-font-size: $material-m-font-size;
 
-$material-popup-title-bottom-margin: $material-popup-content-withtitle-top-padding - $material-popup-content-padding;
-
 .dx-popup-wrapper {
   & > .dx-overlay-content {
     background: $overlay-content-bg;
@@ -32,7 +30,6 @@ $material-popup-title-bottom-margin: $material-popup-content-withtitle-top-paddi
 .dx-popup-title {
   position: relative;
   padding: $material-popup-toolbartop-padding;
-  margin-bottom: $material-popup-title-bottom-margin;
   min-height: 28px;
   border-bottom: 1px solid $popup-title-border-color;
   background: $popup-title-bg;

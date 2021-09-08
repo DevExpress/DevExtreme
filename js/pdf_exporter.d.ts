@@ -1,18 +1,19 @@
-import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import { DxPromise } from './core/utils/deferred';
+import dxDataGrid, { Column } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**
-* @docid
-* @namespace DevExpress.pdfExporter
-* @prevFileNamespace DevExpress
-* @type object
-*/
+ * @docid
+ * @namespace DevExpress.pdfExporter
+ * @type object
+ */
 export interface PdfDataGridCell {
     /**
      * @docid
      * @public
+     * @type dxDataGridColumn
      */
-    column?: dxDataGridColumn;
+    column?: Column;
     /**
      * @docid
      * @public
@@ -29,15 +30,13 @@ export interface PdfDataGridCell {
      */
     groupSummaryItems?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress
-      */
-      name?: string,
+       * @docid
+       */
+      name?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress
-      */
-      value?: any
+       * @docid
+       */
+      value?: any;
     }>;
     /**
      * @docid
@@ -57,17 +56,17 @@ export interface PdfDataGridCell {
 }
 
 /**
-* @docid
-* @namespace DevExpress.pdfExporter
-*/
+ * @docid
+ * @namespace DevExpress.pdfExporter
+ */
 export interface PdfExportDataGridProps {
-     /**
+    /**
      * @docid
      * @default undefined
      * @public
      */
     jsPDFDocument?: object;
-     /**
+    /**
      * @docid
      * @default undefined
      * @public
@@ -98,8 +97,8 @@ export interface PdfExportDataGridProps {
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => any);
-     /**
+    customizeCell?: ((options: { gridCell?: PdfDataGridCell; pdfCell?: any }) => void);
+    /**
      * @docid
      * @public
      */
@@ -114,7 +113,6 @@ export interface PdfExportDataGridProps {
  * @namespace DevExpress.pdfExporter
  * @module pdf_exporter
  * @static
- * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
+export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>;

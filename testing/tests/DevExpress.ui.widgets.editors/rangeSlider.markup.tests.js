@@ -2,7 +2,6 @@ import $ from 'jquery';
 import config from 'core/config';
 
 import 'ui/range_slider';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

@@ -706,3 +706,9 @@ Box.ItemClass = BoxItem;
 registerComponent('dxBox', Box);
 
 export default Box;
+
+/**
+ * @name dxBoxItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

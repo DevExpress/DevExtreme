@@ -4,7 +4,7 @@ import {
   JSXComponent,
   JSXTemplate,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GroupedViewData, ViewCellData } from '../types.d';
 import { LayoutProps } from './layout_props';
 

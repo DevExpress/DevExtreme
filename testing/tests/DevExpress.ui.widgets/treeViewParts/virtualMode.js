@@ -14,7 +14,6 @@ import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 const { module, test, assert } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';

@@ -1,23 +1,34 @@
-import '../../jquery_augmentation';
-
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../../core/element';
 
 import {
-    event
+    DxPromise,
+} from '../../core/utils/deferred';
+
+import {
+    NativeEventInfo,
 } from '../../events/index';
 
+export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T> {
+    readonly scrollOffset?: any;
+    readonly reachedLeft?: boolean;
+    readonly reachedRight?: boolean;
+    readonly reachedTop?: boolean;
+    readonly reachedBottom?: boolean;
+}
+
+/** @namespace DevExpress.ui */
 export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
     /**
      * @docid
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     bounceEnabled?: boolean;
@@ -25,20 +36,18 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @docid
      * @type Enums.ScrollDirection
      * @default "vertical"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     direction?: 'both' | 'horizontal' | 'vertical';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -46,14 +55,16 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field7 reachedRight:boolean
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: ScrollEventInfo<T>) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -61,42 +72,40 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field7 reachedRight:boolean
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onUpdated?: ((e: ScrollEventInfo<T>) => void);
     /**
      * @docid
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByThumb?: boolean;
     /**
      * @docid
-     * @default 'onHover' [for](desktop)
+     * @default 'onHover' &for(desktop)
      * @type string
      * @acceptValues 'onScroll'|'onHover'|'always'|'never'
      * @default 'onScroll'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
     /**
      * @docid
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     useNative?: boolean;
@@ -106,16 +115,13 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
  * @inherits DOMComponent
  * @namespace DevExpress.ui
  * @hidden
- * @prevFileNamespace DevExpress.ui
  */
 export default class dxScrollable extends DOMComponent {
-    constructor(element: Element, options?: dxScrollableOptions)
-    constructor(element: JQuery, options?: dxScrollableOptions)
+    constructor(element: UserDefinedElement, options?: dxScrollableOptions)
     /**
      * @docid
      * @publicName clientHeight()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clientHeight(): number;
@@ -123,39 +129,27 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName clientWidth()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clientWidth(): number;
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.ui
+     * @return DxElement
      * @public
      */
-    content(): dxElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName scrollBy(distance)
-     * @param1 distance:numeric
-     * @prevFileNamespace DevExpress.ui
+     * @param1 distance:numeric|object
      * @public
      */
-    scrollBy(distance: number): void;
-    /**
-     * @docid
-     * @publicName scrollBy(distanceObject)
-     * @param1 distanceObject:object
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    scrollBy(distanceObject: any): void;
+    scrollBy(distance: number | any): void;
     /**
      * @docid
      * @publicName scrollHeight()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollHeight(): number;
@@ -163,7 +157,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollLeft()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollLeft(): number;
@@ -171,39 +164,27 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollOffset()
      * @return object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollOffset(): any;
     /**
      * @docid
      * @publicName scrollTo(targetLocation)
-     * @param1 targetLocation:numeric
-     * @prevFileNamespace DevExpress.ui
+     * @param1 targetLocation:numeric|object
      * @public
      */
-    scrollTo(targetLocation: number): void;
+    scrollTo(targetLocation: number | any): void;
     /**
      * @docid
-     * @publicName scrollTo(targetLocationObject)
-     * @param1 targetLocation:object
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    scrollTo(targetLocation: any): void;
-    /**
-     * @docid
-     * @publicName scrollToElement(targetLocation)
+     * @publicName scrollToElement(element)
      * @param1 element:Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToElement(element: Element | JQuery): void;
+    scrollToElement(element: UserDefinedElement): void;
     /**
      * @docid
      * @publicName scrollTop()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollTop(): number;
@@ -211,7 +192,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollWidth()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollWidth(): number;
@@ -219,8 +199,7 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName update()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    update(): Promise<void> & JQueryPromise<void>;
+    update(): DxPromise<void>;
 }

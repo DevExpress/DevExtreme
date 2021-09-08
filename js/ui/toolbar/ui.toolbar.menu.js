@@ -62,7 +62,7 @@ const ToolbarMenu = ListBase.inherit({
             itemElement.addClass('dx-toolbar-menu-custom');
         }
 
-        if(location === 'menu' || item.widget === 'dxButton' || item.isAction) {
+        if(location === 'menu' || item.widget === 'dxButton' || item.widget === 'dxButtonGroup' || item.isAction) {
             itemElement.addClass(TOOLBAR_MENU_ACTION_CLASS);
         }
 

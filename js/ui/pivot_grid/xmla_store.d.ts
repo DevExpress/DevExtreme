@@ -1,3 +1,4 @@
+/** @namespace DevExpress.data */
 export interface XmlaStoreOptions {
     /**
      * @docid
@@ -8,25 +9,21 @@ export interface XmlaStoreOptions {
      * @type_function_param1_field4 xhrFields:object
      * @type_function_param1_field5 data:string
      * @type_function_param1_field6 dataType:string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
+    beforeSend?: ((options: { url?: string; method?: string; headers?: any; xhrFields?: any; data?: string; dataType?: string }) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     catalog?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cube?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     url?: string;
@@ -36,9 +33,9 @@ export interface XmlaStoreOptions {
  * @namespace DevExpress.data
  * @module ui/pivot_grid/xmla_store
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class XmlaStore {
     constructor(options?: XmlaStoreOptions)
 }

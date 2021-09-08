@@ -4,7 +4,6 @@ import fx from 'animation/fx';
 import SpeedDialItem from 'ui/speed_dial_action/speed_dial_item';
 
 import 'ui/speed_dial_action';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -606,6 +605,27 @@ QUnit.module('add visible option', {
 });
 
 
+QUnit.test('check label rendering before/after toggling visibility (T985992)', function(assert) {
+    this.firstSDA = $('#fab-one').dxSpeedDialAction({
+        icon: 'add',
+        index: 1,
+        visible: false,
+    }).dxSpeedDialAction('instance');
+
+    this.firstSDA.option('label', 'Add row');
+    this.firstSDA.option('visible', true);
+
+    assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), 'Add row', 'FAB has label');
+
+    this.firstSDA.option('visible', false);
+    this.firstSDA.option('visible', true);
+    this.firstSDA.option('label', 'Add row');
+
+    assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), 'Add row', 'FAB has label');
+
+});
+
+
 QUnit.test('check onClick handler after toggling visibility (T933671)', function(assert) {
     const firstClickStub = sinon.stub();
     const secondClickStub = sinon.stub();
@@ -988,7 +1008,7 @@ QUnit.module('check action buttons events', {
 });
 
 
-QUnit.module('T850271', {}, () => {
+QUnit.module('T850271 (one action)', {}, () => {
     QUnit.test('check peventDefault in _outsideClickHandler method', function(assert) {
         const instance = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
 
@@ -1001,6 +1021,43 @@ QUnit.module('T850271', {}, () => {
         });
 
         speedDialItem._outsideClickHandler(event);
+
+        assert.equal(preventDefaultStub.callCount, 1, 'there is peventDefault in outsideClickHandler when shading is true');
+
+        instance.dispose();
+    });
+});
+
+QUnit.module('T959764 (multiple actions)', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+
+    afterEach: function() {
+        fx.off = false;
+    },
+}, () => {
+    QUnit.test('check peventDefault in _outsideClickHandler method', function(assert) {
+
+        config({
+            floatingActionButtonConfig: {
+                shading: true
+            }
+        });
+
+        const preventDefaultStub = sinon.stub();
+        const event = $.Event('dxpointerdown');
+
+        event.preventDefault = preventDefaultStub;
+
+        $('#fab-one').dxSpeedDialAction({ icon: 'add' }).dxSpeedDialAction('instance');
+        $('#fab-two').dxSpeedDialAction({ icon: 'remove' }).dxSpeedDialAction('instance');
+
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
+
+        $fabMainContent.trigger('dxclick');
+
+        $fabMainContent.closest('.dx-overlay-shader').trigger(event);
 
         assert.equal(preventDefaultStub.callCount, 1, 'there is peventDefault in outsideClickHandler when shading is true');
     });

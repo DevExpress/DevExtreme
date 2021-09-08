@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import messageLocalization from '../../../../../../../localization/message';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 

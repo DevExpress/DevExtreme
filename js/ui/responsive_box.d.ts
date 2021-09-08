@@ -1,110 +1,139 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
+
+import Store from '../data/abstract_store';
+
+import {
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxResponsiveBox>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxResponsiveBox>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxResponsiveBox>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cols?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type number | Enums.Mode
-      * @default 0
-      */
-      baseSize?: number | 'auto',
+       * @docid
+       * @type number | Enums.Mode
+       * @default 0
+       */
+      baseSize?: number | 'auto';
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
-      ratio?: number,
+       * @docid
+       * @default 1
+       */
+      ratio?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
-      screen?: string,
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
-      shrink?: number
+       * @docid
+       * @default 1
+       */
+      shrink?: number;
     }>;
     /**
      * @docid
+     * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxResponsiveBoxItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type_function_return number|string
      * @default '100%'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
+     * @type Array<string | dxResponsiveBoxItem | any>
      * @fires dxResponsiveBoxOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxResponsiveBoxItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     rows?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type number | Enums.Mode
-      * @default 0
-      */
-      baseSize?: number | 'auto',
+       * @docid
+       * @type number | Enums.Mode
+       * @default 0
+       */
+      baseSize?: number | 'auto';
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
-      ratio?: number,
+       * @docid
+       * @default 1
+       */
+      ratio?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
-      screen?: string,
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
-      shrink?: number
+       * @docid
+       * @default 1
+       */
+      shrink?: number;
     }>;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     screenByWidth?: Function;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     singleColumnScreen?: string;
@@ -112,7 +141,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @docid
      * @type_function_return number|string
      * @default '100%'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
@@ -122,67 +150,60 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @inherits CollectionWidget
  * @module ui/responsive_box
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxResponsiveBox extends CollectionWidget {
-    constructor(element: Element, options?: dxResponsiveBoxOptions)
-    constructor(element: JQuery, options?: dxResponsiveBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxResponsiveBoxOptions)
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @public
+ * @namespace DevExpress.ui.dxResponsiveBox
+ */
+export type Item = dxResponsiveBoxItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     location?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
-      col?: number,
+       * @docid
+       */
+      col?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
-      colspan?: number,
+       * @docid
+       * @default undefined
+       */
+      colspan?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
-      row?: number,
+       * @docid
+       */
+      row?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
-      rowspan?: number,
+       * @docid
+       * @default undefined
+       */
+      rowspan?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
-      screen?: string
-    } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
+    } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
 }
 
-declare global {
-interface JQuery {
-    dxResponsiveBox(): JQuery;
-    dxResponsiveBox(options: "instance"): dxResponsiveBox;
-    dxResponsiveBox(options: string): any;
-    dxResponsiveBox(options: string, ...params: any[]): any;
-    dxResponsiveBox(options: dxResponsiveBoxOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxResponsiveBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxResponsiveBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxResponsiveBoxOptions;

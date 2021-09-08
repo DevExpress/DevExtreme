@@ -4,7 +4,6 @@ const ko = require('knockout');
 require('integration/knockout');
 require('ui/scheduler');
 
-require('common.css!');
 require('generic_light.css!');
 
 QUnit.test('Appointment should have right date format', function(assert) {

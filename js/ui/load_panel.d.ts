@@ -1,21 +1,59 @@
 import {
-    animationConfig
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxLoadPanel>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxLoadPanel>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxLoadPanel>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxLoadPanel>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxLoadPanel>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxLoadPanel> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = EventInfo<dxLoadPanel>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxLoadPanel>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
@@ -23,21 +61,18 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | UserDefinedElement;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     delay?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
@@ -45,93 +80,82 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @type_function_return number|string
      * @default 90
-     * @default 60 [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default 60 &for(Material)
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorSrc?: string;
     /**
      * @docid
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number | string | (() => number | string);
     /**
      * @docid
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxWidth?: number | string | (() => number | string);
     /**
      * @docid
      * @default "Loading ..."
-     * @default "" [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default "" &for(Material)
      * @public
      */
     message?: string;
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
     /**
      * @docid
      * @default 'transparent'
-     * @default '' [for](Android|iOS)
-     * @prevFileNamespace DevExpress.ui
+     * @default '' &for(Android|iOS)
      * @public
      */
     shadingColor?: string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showIndicator?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showPane?: boolean;
     /**
      * @docid
      * @default 222
-     * @default 60 [for](Material)
+     * @default 60 &for(Material)
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     /**
      * @docid dxLoadPanelOptions.animation.hide
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hide?: animationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     show?: animationConfig;
@@ -141,24 +165,18 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @inherits dxOverlay
  * @module ui/load_panel
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxLoadPanel extends dxOverlay {
-    constructor(element: Element, options?: dxLoadPanelOptions)
-    constructor(element: JQuery, options?: dxLoadPanelOptions)
+    constructor(element: UserDefinedElement, options?: dxLoadPanelOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLoadPanel(): JQuery;
-    dxLoadPanel(options: "instance"): dxLoadPanel;
-    dxLoadPanel(options: string): any;
-    dxLoadPanel(options: string, ...params: any[]): any;
-    dxLoadPanel(options: dxLoadPanelOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxLoadPanelOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLoadPanelOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxLoadPanelOptions;

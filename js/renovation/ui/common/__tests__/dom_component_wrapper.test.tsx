@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
+import { RefObject } from '@devextreme-generator/declarations';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
 import { renderTemplate } from '../../../utils/render_template';
 
@@ -120,7 +122,7 @@ describe('DomComponentWrapper', () => {
         } as Partial<DomComponentWrapperProps> as any);
         const { onValueChanged } = component.properties;
 
-        (onValueChanged as Function)({ value: 5 });
+        (onValueChanged as (({ value: number }) => any))({ value: 5 });
 
         expect(fn.mock.calls).toEqual([[5]]);
       });
@@ -141,7 +143,7 @@ describe('DomComponentWrapper', () => {
       };
 
       it('setupWidget', () => {
-        const widgetRef = {} as HTMLDivElement;
+        const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
         component.widgetRef = widgetRef;
@@ -149,7 +151,7 @@ describe('DomComponentWrapper', () => {
         component.setupWidget();
 
         expect(DomComponentMock).toBeCalledTimes(1);
-        expect(DomComponentMock).toBeCalledWith(widgetRef, spy.mock.results[0].value);
+        expect(DomComponentMock).toBeCalledWith(widgetRef.current, spy.mock.results[0].value);
       });
 
       it('setupWidget returns dispose widget callback', () => {
@@ -157,7 +159,8 @@ describe('DomComponentWrapper', () => {
         DomComponentMock.mockImplementation(() => ({ dispose: disposeDom }));
 
         const component = createWidget();
-        const dispose = component.setupWidget();
+        component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
+        const dispose = component.setupWidget() as DisposeEffectReturn;
         dispose();
 
         expect((disposeDom as any).mock.instances[0].dispose).toBeCalledTimes(1);
@@ -185,21 +188,21 @@ describe('DomComponentWrapper', () => {
       });
 
       it('setRootElementRef, set rootElementRef to div ref', () => {
-        const widgetRef = {} as HTMLDivElement;
+        const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         const component = new DomComponentWrapper({
-          rootElementRef: {} as HTMLDivElement,
+          rootElementRef: {} as RefObject<HTMLDivElement>,
         } as DomComponentWrapperProps);
         component.widgetRef = widgetRef;
         component.setRootElementRef();
 
-        expect(component.props.rootElementRef).toBe(component.widgetRef);
+        expect(component.props.rootElementRef?.current).toBe(component.widgetRef.current);
       });
 
       it('setRootElementRef, hasnt rootElementRef', () => {
         const component = new DomComponentWrapper({ } as DomComponentWrapperProps);
-        component.widgetRef = {} as HTMLDivElement;
+        component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         component.setRootElementRef();
-        expect(component.props.rootElementRef).toBeUndefined();
+        expect(component.props.rootElementRef?.current).toBeUndefined();
       });
     });
   });

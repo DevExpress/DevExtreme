@@ -4,6 +4,7 @@ import { isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from 'core/devices';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import errors from 'ui/widget/ui.errors';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
@@ -2134,6 +2135,100 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(scrollView._loading, false, 'scrollView loading not indicated');
     });
 
+    QUnit.test('list should indicate loading during second dataSource loading (T985917)', function(assert) {
+        const dataSourceLoadTime = 100;
+        const dataSource = new DataSource({
+            load() {
+                const deferred = $.Deferred();
+
+                setTimeout(() => {
+                    deferred.resolve([]);
+                }, dataSourceLoadTime);
+
+                return deferred.promise();
+            }
+        });
+        const element = this.element;
+        element.dxList({
+            height: 300,
+            pageLoadMode: 'scrollBottom',
+            showSelectionControls: true,
+            dataSource
+        });
+
+        this.clock.tick(2 * dataSourceLoadTime);
+
+        dataSource.load();
+        this.clock.tick(dataSourceLoadTime / 2);
+        const scrollView = element.dxScrollView('instance');
+
+        assert.equal(scrollView._loading, true, 'scrollView is in loading state');
+    });
+
+    QUnit.test('list should indicate loading during second dataSource loading after dataSource changing (T985917)', function(assert) {
+        const dataSourceLoadTime = 100;
+        const dataSourceConfig = {
+            paginate: true,
+            load() {
+                const deferred = $.Deferred();
+
+                setTimeout(() => {
+                    deferred.resolve([]);
+                }, dataSourceLoadTime);
+
+                return deferred.promise();
+            }
+        };
+
+        const element = this.element;
+
+        const listInstance = element.dxList({
+            height: 300,
+            pageLoadMode: 'scrollBottom',
+            showSelectionControls: true,
+            dataSource: new DataSource(dataSourceConfig)
+        }).dxList('instance');
+
+        this.clock.tick(2 * dataSourceLoadTime);
+
+        listInstance.option('dataSource', new DataSource(dataSourceConfig));
+        this.clock.tick(dataSourceLoadTime / 2);
+        const scrollView = element.dxScrollView('instance');
+
+        assert.equal(scrollView._loading, false, 'scrollView doesn\'t in loading state');
+    });
+
+    QUnit.test('list should indicate loading during dataSource reload (T985917)', function(assert) {
+        const dataSourceLoadTime = 100;
+        const dataSource = new DataSource({
+            paginate: true,
+            load() {
+                const deferred = $.Deferred();
+
+                setTimeout(() => {
+                    deferred.resolve([]);
+                }, dataSourceLoadTime);
+
+                return deferred.promise();
+            }
+        });
+        const element = this.element;
+        const listConfig = {
+            height: 300,
+            pageLoadMode: 'scrollBottom',
+            showSelectionControls: true,
+            dataSource
+        };
+        element.dxList(listConfig).dxList('instance');
+        this.clock.tick(2 * dataSourceLoadTime);
+
+        dataSource.reload();
+        this.clock.tick(dataSourceLoadTime / 2);
+        const scrollView = element.dxScrollView('instance');
+
+        assert.equal(scrollView._loading, true, 'scrollView doesn\'t in loading state');
+    });
+
     QUnit.test('setting indicateLoading to false hides load panel at once', function(assert) {
         const dataSourceLoadTime = 100;
 
@@ -3143,6 +3238,75 @@ QUnit.module('scrollView integration', {
 
             assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), 'changed text');
         });
+    });
+
+    QUnit.test('List should not call "get" in item model when scrolling to item (T996102)', function(assert) {
+        const getCallSpy = sinon.spy();
+        const items = [{ get: getCallSpy }];
+        const instance = $('#list').dxList({
+            items: items
+        }).dxList('instance');
+
+        instance.scrollToItem(items[0]);
+        assert.strictEqual(getCallSpy.callCount, 0);
+    });
+
+    QUnit.test('list should load new items if the new height allows it', function(assert) {
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            pageSize: 5
+        });
+
+        const listHeight = 60;
+        const $container = $('#list')
+            .wrap('<div>')
+            .parent()
+            .height(listHeight);
+        const $list = $('#list').dxList({
+            height: '100%',
+            dataSource,
+            pageLoadMode: 'scrollBottom'
+        });
+
+        this.clock.tick();
+        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+
+        assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
+
+        $container.height(listHeight * 10);
+        resizeCallbacks.fire();
+        this.clock.tick();
+
+        assert.strictEqual(getListItemsCount(), 10, 'second page loaded');
+    });
+
+    QUnit.test('list should not load new items if the new height does not allows it', function(assert) {
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            pageSize: 5
+        });
+
+        const listHeight = 60;
+        const $container = $('#list')
+            .wrap('<div>')
+            .parent()
+            .height(listHeight);
+        const $list = $('#list').dxList({
+            height: '100%',
+            dataSource,
+            pageLoadMode: 'scrollBottom'
+        });
+
+        this.clock.tick();
+        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+
+        assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
+
+        $container.height(listHeight * 2);
+        resizeCallbacks.fire();
+        this.clock.tick();
+
+        assert.strictEqual(getListItemsCount(), 5, 'new page has not been loaded');
     });
 });
 

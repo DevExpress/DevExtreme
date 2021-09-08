@@ -2,7 +2,8 @@ import $ from 'jquery';
 import errors from 'core/errors';
 
 import 'ui/slide_out';
-import 'common.css!';
+
+import 'generic_light.css!';
 
 const SLIDEOUT_CLASS = 'dx-slideout';
 const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';

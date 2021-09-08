@@ -60,5 +60,9 @@
     &.dx-gantt-i-zoom-out {
       @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/zoom-out.svg'), $color);
     }
+
+    &.dx-gantt-i-resource-manager {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/resource-manager.svg'), $color);
+    }
   }
 }

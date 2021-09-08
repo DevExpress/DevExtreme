@@ -5,6 +5,7 @@ import CalendarStrategy from './ui.date_box.strategy.calendar';
 import TimeView from './ui.time_view';
 import dateLocalization from '../../localization/date';
 import { extend } from '../../core/utils/extend';
+import dateUtils from '../../core/utils/date';
 import Box from '../box';
 import uiDateUtils from './ui.date_utils';
 
@@ -23,12 +24,21 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         });
     },
 
+    _closeDropDownByEnter: function() {
+        return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
+    },
+
     getDisplayFormat: function(displayFormat) {
         return displayFormat || 'shortdateshorttime';
     },
 
     _is24HourFormat: function() {
         return dateLocalization.is24HourFormat(this.getDisplayFormat(this.dateBox.option('displayFormat')));
+    },
+
+    _getContouredValue: function() {
+        const viewDate = this.callBase();
+        return this._updateDateTime(viewDate);
     },
 
     _renderWidget: function() {
@@ -50,7 +60,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         const popup = this._getPopup();
 
         if(popup) {
-            popup._wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
+            popup.$wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
         }
 
         clearTimeout(this._repaintTimer);
@@ -177,14 +187,18 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         }
     },
 
-    getValue: function() {
-        let date = this._widget.option('value');
+    _updateDateTime: function(date) {
         const time = this._timeView.option('value');
-
-        date = date ? new Date(date) : new Date();
         date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 
         return date;
+    },
+
+    getValue: function() {
+        let date = this._widget.option('value');
+        date = date ? new Date(date) : new Date();
+
+        return this._updateDateTime(date);
     },
 
     dispose: function() {

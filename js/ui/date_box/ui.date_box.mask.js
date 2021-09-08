@@ -1,4 +1,4 @@
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, normalizeKeyName, isCommandKeyPressed } from '../../events/utils/index';
 import { isFunction, isString, isDate, isDefined } from '../../core/utils/type';
 import { clipboardText } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
@@ -122,9 +122,13 @@ const DateBoxMask = DateBoxBase.inherit({
         });
     },
 
-    _isSingleCharKey(e) {
-        const key = e.originalEvent.data || e.originalEvent.key;
-        return typeof key === 'string' && key.length === 1 && !e.ctrl && !e.alt;
+    _isSingleCharKey({ originalEvent, alt }) {
+        const key = originalEvent.data || (
+            normalizeKeyName(originalEvent) === 'space' ? // IE11 (T972456)
+                ' ' :
+                originalEvent.key
+        );
+        return typeof key === 'string' && key.length === 1 && !alt && !isCommandKeyPressed(originalEvent);
     },
 
     _isSingleDigitKey(e) {
@@ -325,10 +329,20 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _prepareRegExpInfo() {
         this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
-        const regExp = this._regExpInfo.regexp;
-        const flags = regExp.flags;
-        const convertedRegExp = numberLocalization.convertDigits(this._regExpInfo.regexp.source, false);
-        this._regExpInfo.regexp = RegExp(convertedRegExp, flags);
+        const regexp = this._regExpInfo.regexp;
+        const source = regexp.source;
+        const flags = regexp.flags;
+        const quantifierRegexp = new RegExp(/(\{[0-9]+,?[0-9]*\})/);
+
+        const convertedSource = source
+            .split(quantifierRegexp)
+            .map((sourcePart) => {
+                return quantifierRegexp.test(sourcePart) ?
+                    sourcePart :
+                    numberLocalization.convertDigits(sourcePart, false);
+            })
+            .join('');
+        this._regExpInfo.regexp = new RegExp(convertedSource, flags);
     },
 
     _initMaskState() {
@@ -359,7 +373,9 @@ const DateBoxMask = DateBoxBase.inherit({
 
         if(text) {
             this._dateParts = renderDateParts(text, this._regExpInfo);
-            this._isFocused() && this._selectNextPart();
+            if(!this._input().is(':hidden')) {
+                this._selectNextPart();
+            }
         }
     },
 

@@ -2,22 +2,19 @@ import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
-import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
-import browser from 'core/utils/browser';
 
-import typeUtils from 'core/utils/type';
+import { isDefined, isFunction } from 'core/utils/type';
 import 'ui/pivot_grid/ui.pivot_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
 import { PivotGridExport } from 'ui/pivot_grid/ui.pivot_grid.export.js';
-import { Export } from 'exporter/exceljs/export';
 
 let helper;
 
@@ -66,28 +63,29 @@ const moduleConfig = {
 
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
-    const epsilon = browser.chrome ? 1.15 : 4;
-
-    const toExcelWidth = (width) => {
-        const excelWidth = parseFloat(width) / Export.__internals.MAX_DIGIT_WIDTH_IN_PIXELS;
-        return Math.floor(excelWidth * 100) / 100;
-    };
 
     const getOptions = (context, pivotGrid, expectedCustomizeCellArgs, options) => {
-        const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
+        const { keepColumnWidths = true, selectedRowsOnly = false,
+            mergeRowFieldValues = true, mergeColumnFieldValues = true, topLeftCell = topLeft, loadPanel = { enabled: false }, customizeCell } = options || {};
 
         const result = {
             component: pivotGrid,
             worksheet: context.worksheet,
+            loadPanel: loadPanel,
             topLeftCell: topLeftCell,
             customizeCell: (eventArgs) => {
-                if(typeUtils.isDefined(expectedCustomizeCellArgs)) {
+                if(isDefined(expectedCustomizeCellArgs)) {
                     helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
+                }
+                if(isFunction(customizeCell)) {
+                    customizeCell(eventArgs);
                 }
             }
         };
         result.keepColumnWidths = keepColumnWidths;
         result.selectedRowsOnly = selectedRowsOnly;
+        result.mergeRowFieldValues = mergeRowFieldValues;
+        result.mergeColumnFieldValues = mergeColumnFieldValues;
         return result;
     };
 
@@ -110,9 +108,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -154,9 +152,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -198,8 +195,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 2, column: 2 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -242,8 +238,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -294,9 +289,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(479), toExcelWidth(450)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -306,7 +300,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string x string x number,number] with \'dataFieldArea:column\'', function(assert) {
+    QUnit.test('Export [string x string x number,number] with dataFieldArea:column', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -346,9 +340,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(345), toExcelWidth(584)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -358,7 +351,119 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string x string x number,number] with \'dataFieldArea:row\'', function(assert) {
+    QUnit.test('Export [string x string x number,number] with dataFieldArea:column, mergeColumnFieldValues: false', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number' },
+                { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
+            ],
+            store: [
+                { row1: 'A', col1: 'a', data1: 42 },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataFieldArea: 'column',
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+        ], [
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+            { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { mergeColumnFieldValues: false })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
+            helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Export [string x string x number,number] with dataFieldArea:column, mergeColumnFieldValues: false, customizeCell: () => {}', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'number', format: 'currency' },
+                { area: 'data', summaryType: 'count', dataType: 'number' },
+                { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
+            ],
+            store: [
+                { row1: 'A', col1: 20, data1: 42 },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataFieldArea: 'column',
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+            { excelCell: { value: '$20', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['20'], rowspan: 1, text: '$20', type: 'D' } },
+            { excelCell: { value: '$20', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['20'], rowspan: 1, text: '', type: 'D' } }
+        ], [
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['20'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+            { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['20'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['20'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['20'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, {
+            mergeColumnFieldValues: false,
+            customizeCell: ({ excelCell, pivotCell }) => {
+                if(pivotCell.area === 'column' && pivotCell.text === '$20') {
+                    Object.assign(excelCell, {
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        font: { color: { argb: '9C0006' }, bold: true }
+                    });
+                }
+            }
+        })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
+            helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Export [string x string x number,number] with dataFieldArea:row', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -398,9 +503,120 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
+            helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Export [string x string x number,number], dataFieldArea:row, mergeRowFieldValues: false', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number' },
+                { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
+            ],
+            store: [
+                { row1: 'A', col1: 'a', data1: 42 },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataFieldArea: 'row',
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'Count', type: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
+        ], [
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'Data1 (Sum)', type: 'D' } },
+            { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { mergeRowFieldValues: false })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+            helper.checkCellFormat(expectedCells);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
+            helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Export [string x string x number,number], dataFieldArea:row, mergeRowFieldValues: false, customizeCell: () => {}', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'number', format: 'currency' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number' },
+                { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
+            ],
+            store: [
+                { row1: 15, col1: 'a', data1: 42 },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataFieldArea: 'row',
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: '$15', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, path: ['15'], rowspan: 2, text: '$15', type: 'D' } },
+            { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['15'], rowspan: 1, text: 'Count', type: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['15'], rowType: 'D', rowspan: 1, text: '1' } }
+        ], [
+            { excelCell: { value: '$15', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, path: ['15'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['15'], rowspan: 1, text: 'Data1 (Sum)', type: 'D' } },
+            { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['15'], rowType: 'D', rowspan: 1, text: '42' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, {
+            mergeRowFieldValues: false,
+            customizeCell: ({ excelCell, pivotCell }) => {
+                if(pivotCell.area === 'row' && pivotCell.text === '$15') {
+                    Object.assign(excelCell, {
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        font: { color: { argb: '9C0006' }, bold: true }
+                    });
+                }
+            }
+        })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+            helper.checkCellFormat(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -449,9 +665,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -502,9 +717,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -553,9 +767,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -606,9 +819,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -666,9 +878,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(422), toExcelWidth(436)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -728,9 +939,68 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(422), toExcelWidth(436)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column + 1 });
+            helper.checkCellRange(cellRange, { row: 4, column: 4 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Export [string/string(A1,A2) x string/string(a1,a2) x Number], mergeRowFieldValues: false, mergeColumnFieldValues: false', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: false },
+                { area: 'row', dataField: 'row2' },
+                { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
+                { area: 'column', dataField: 'col2' },
+                { area: 'data', summaryType: 'count', dataType: 'number' }
+            ],
+            store: [
+                { row1: 'A', row2: 'A1', col1: 'a', col2: 'a1' },
+                { row1: 'A', row2: 'A2', col1: 'a', col2: 'a2' },
+                { row1: 'A', row2: 'A2', col1: 'a', col2: 'a2' },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 2, text: '' } },
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+        ], [
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'a1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['a', 'a1'], rowspan: 1, text: 'a1', type: 'D', width: 100 } },
+            { excelCell: { value: 'a2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['a', 'a2'], rowspan: 1, text: 'a2', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 2, text: 'A', type: 'D' } },
+            { excelCell: { value: 'A1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['A', 'A1'], rowspan: 1, text: 'A1', type: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: null, type: ExcelJS.ValueType.Null, dataType: 'object', alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A1'], rowType: 'D', rowspan: 1, text: '', value: undefined } }
+        ], [
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: ['A'], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'A2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['A', 'A2'], rowspan: 1, text: 'A2', type: 'D' } },
+            { excelCell: { value: null, type: ExcelJS.ValueType.Null, dataType: 'object', alignment: undefined }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '', value: undefined } },
+            { excelCell: { value: 2, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'a2'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'A2'], rowType: 'D', rowspan: 1, text: '2' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { mergeRowFieldValues: false, mergeColumnFieldValues: false })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
+            helper.checkCellFormat(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -773,9 +1043,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -821,9 +1090,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -867,9 +1135,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -916,9 +1183,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -965,9 +1231,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(448), toExcelWidth(481)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -1015,11 +1280,11 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         helper.extendExpectedCells(expectedCells, topLeft);
 
+
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(448), toExcelWidth(481)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -1073,9 +1338,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -1130,9 +1394,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -1180,9 +1443,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(70), toExcelWidth(859)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1231,9 +1493,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -1279,9 +1540,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1350,8 +1610,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
             helper.checkColumnWidths([undefined, undefined, undefined, undefined, undefined], topLeft.column);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
@@ -1362,6 +1621,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 
     QUnit.test('Check header/data/total cell style/data type, pivot.rtlEnabled = true', function(assert) {
+        const clock = sinon.useFakeTimers();
         const done = assert.async();
         const ds = {
             fields: [
@@ -1420,19 +1680,22 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(71), toExcelWidth(70), toExcelWidth(169), toExcelWidth(277), toExcelWidth(412)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { 'rightToLeft': true, state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column + 1 });
             helper.checkCellRange(cellRange, { row: 5, column: 5 }, topLeft);
+
+            clock.restore();
             done();
         });
+
+        clock.tick(400);
     });
 
-    QUnit.test('Export [string x string x number] with \'format: currency\'', function(assert) {
+    QUnit.test('Export [string x string x number] with format: currency', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -1457,15 +1720,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
             { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
-            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: 'currency', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '$1' } }
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: 'currency', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '$1' } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -1513,9 +1775,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(255), toExcelWidth(675)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -1556,9 +1817,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(930)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0], topLeft.row);
@@ -1608,9 +1868,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(255), toExcelWidth(675)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -1667,9 +1926,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(255), toExcelWidth(675)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -1704,26 +1962,25 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', width: 100, type: 'GT', isLast: true, area: 'column' } },
         ], [
             { excelCell: { value: 'r1_1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1_1', path: ['r1_1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'row' } },
-            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
-            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
+            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
+            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
         ], [
             { excelCell: { value: 'r1_2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1_2', path: ['r1_2'], type: 'D', isLast: true, dataSourceIndex: 2, area: 'row' } },
-            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
-            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
+            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
+            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
         ], [
             { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', type: 'GT', isLast: true, area: 'row' } },
-            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'D' } },
-            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'GT' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'GT' } },
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(345), toExcelWidth(585)], topLeft.column, epsilon);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -1782,8 +2039,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -1842,8 +2098,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -1902,8 +2157,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -1913,7 +2167,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string(r1) x date(c1; c2)/date(c1_1; c2_1, c2_2) x number] & grouping & data.runningTotal=\'row\' & allowCrossGroupCalculation: false', function(assert) {
+    QUnit.test('Export [string(r1) x date(c1; c2)/date(c1_1; c2_1, c2_2) x number] & grouping & data.runningTotal=row & allowCrossGroupCalculation: false', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -1961,8 +2215,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -2020,8 +2273,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -2080,8 +2332,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -2144,8 +2395,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -2188,9 +2438,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2233,9 +2482,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2281,9 +2529,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -2326,8 +2573,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2370,8 +2616,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2413,8 +2658,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
             helper.checkCellFormat(expectedCells);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2464,8 +2708,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -2512,8 +2755,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -2560,8 +2802,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -2608,8 +2849,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -2657,8 +2897,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -2706,8 +2945,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkCellFormat(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
@@ -2754,9 +2992,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths([toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH)], topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkColumnWidths(helper.toExcelWidths([PivotGridExport.DEFAUL_COLUMN_WIDTH, PivotGridExport.DEFAUL_COLUMN_WIDTH]), topLeft.column);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2804,9 +3041,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths([toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH)], topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkColumnWidths(helper.toExcelWidths([PivotGridExport.DEFAUL_COLUMN_WIDTH, PivotGridExport.DEFAUL_COLUMN_WIDTH]), topLeft.column);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2905,15 +3141,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
             ], [
                 { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
-                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: { 'type': format.type, 'precision': expectedPrecision }, rowPath: ['A'], rowType: 'D', rowspan: 1, text: format.expectedText } }
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: { 'type': format.type, 'precision': expectedPrecision }, rowPath: ['A'], rowType: 'D', rowspan: 1, text: format.expectedText } }
             ]];
 
             helper.extendExpectedCells(expectedCells, topLeft);
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkCellFormat(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
@@ -2940,7 +3175,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         { format: 'shortDate', expectedFormat: '[$-9]M\\/d\\/yyyy', expectedText: '10/9/2019' },
         { format: 'shortTime', expectedFormat: '[$-9]H:mm AM/PM', expectedText: '9:09 AM' },
         { format: 'longDateLongTime', expectedFormat: '[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM', expectedText: 'Wednesday, October 9, 2019, 9:09:09 AM' },
-        { format: 'shotDateShortTime', expectedFormat: '[$-9]ssAM/PMSS\\o\\r\\t\\T\\im\\e', expectedText: '99otDAMte09ortTi9e' },
+        { format: 'shortDateShortTime', expectedFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', expectedText: '10/9/2019, 9:09 AM' },
         { format: 'longDate', expectedFormat: '[$-9]dddd, MMMM d, yyyy', expectedText: 'Wednesday, October 9, 2019' },
         { format: 'longTime', expectedFormat: '[$-9]H:mm:ss AM/PM', expectedText: '9:09:09 AM' },
         { format: 'dayOfWeek', expectedFormat: '[$-9]dddd', expectedText: 'Wednesday' },
@@ -2980,7 +3215,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     if(format.format === 'second' || format.format === 'minute' || format.format === 'hour') text = '00';
                     if(format.format === 'shortTime' || format.format === 'longTime') text = '12:00 AM';
                     if(format.format === 'longDateLongTime') text = 'Wednesday, October 9, 2019, 12:00:00 AM';
-                    if(format.format === 'shotDateShortTime') text = '012otDAMte012ortTi0e';
+                    if(format.format === 'shortDateShortTime') text = '10/9/2019, 12:00 AM';
                     if(format.format === 'longTime') text = '12:00:00 AM';
                 }
 
@@ -2989,15 +3224,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     { excelCell: { value: text, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [new Date(date.value).toString()], rowspan: 1, text: text, type: 'D', width: 100, value: date.expectedPivotCellValue } }
                 ], [
                     { excelCell: { value: text, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: [new Date(date.value).toString()], rowspan: 1, text: text, type: 'D', value: date.expectedPivotCellValue } },
-                    { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [new Date(date.value).toString()], columnType: 'D', dataIndex: 0, dataType: 'date', format: format.format, rowPath: [new Date(date.value).toString()], rowType: 'D', rowspan: 1, value: date.expectedPivotCellValue, text: text } }
+                    { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: format.expectedFormat, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [new Date(date.value).toString()], columnType: 'D', dataIndex: 0, dataType: 'date', format: format.format, rowPath: [new Date(date.value).toString()], rowType: 'D', rowspan: 1, value: date.expectedPivotCellValue, text: text } }
                 ]];
 
                 helper.extendExpectedCells(expectedCells, topLeft);
 
                 exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkCellFormat(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
@@ -3043,9 +3277,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -3088,9 +3321,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -3131,9 +3363,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(120), toExcelWidth(480)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -3198,9 +3429,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(296), toExcelWidth(292), toExcelWidth(341)], topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -3208,6 +3438,126 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 helper.checkCellRange(cellRange, { row: 4, column: 4 }, topLeft);
                 done();
             });
+        });
+    });
+
+    QUnit.test('Export [string x date x number], mergeColumnFieldValues: false', function(assert) {
+        const done = assert.async();
+
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'date' },
+                { area: 'data', summaryType: 'count', dataType: 'number' }
+            ],
+            store: [
+                { row1: 'A', col1: new Date(2019, 1, 21) },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: ds,
+            onInitialized: (e) => {
+                e.component.getDataSource().expandAll('col1');
+            }
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 3, text: '' } },
+            { excelCell: { value: '2019', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, expanded: true, path: [2019], rowspan: 1, text: '2019', type: 'D' } },
+            { excelCell: { value: '2019', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, expanded: true, path: [2019], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: '2019 Total', master: [1, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 3, text: '2019 Total', type: 'T' } }
+        ], [
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Q1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, expanded: true, path: [2019, 1], rowspan: 1, text: 'Q1', type: 'D' } },
+            { excelCell: { value: 'Q1 Total', master: [2, 3], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: [2019, 1], rowspan: 2, text: 'Q1 Total', type: 'T' } },
+            { excelCell: { value: '2019 Total', master: [1, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 1, text: '', type: 'T', width: 100 } }
+        ], [
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'February', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, isLast: true, path: [2019, 1, 2], rowspan: 1, text: 'February', type: 'D', width: 100 } },
+            { excelCell: { value: 'Q1 Total', master: [2, 3], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, isLast: true, path: [2019, 1], rowspan: 1, text: '', type: 'T', width: 100 } },
+            { excelCell: { value: '2019 Total', master: [1, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 1, text: '', type: 'T', width: 100 } }
+        ], [
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2019, 1, 2], columnType: 'D', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2019, 1], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2019], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { mergeColumnFieldValues: false })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column });
+            helper.checkCellRange(cellRange, { row: 4, column: 4 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Export [date x string x number], mergeRowFieldValues: false', function(assert) {
+        const done = assert.async();
+
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'date' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number' }
+            ],
+            store: [
+                { row1: new Date(2019, 1, 21), col1: 'A', },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: ds,
+            onInitialized: (e) => {
+                e.component.getDataSource().expandAll('row1');
+            }
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D', width: 100 } },
+        ], [
+            { excelCell: { value: '2019', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: [2019], rowspan: 2, text: '2019', type: 'D' } },
+            { excelCell: { value: 'Q1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, expanded: true, path: [2019, 1], rowspan: 1, text: 'Q1', type: 'D' } },
+            { excelCell: { value: 'February', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: [2019, 1, 2], rowspan: 1, text: 'February', type: 'D', width: 100 } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowPath: [2019, 1, 2], columnType: 'D', dataIndex: 0, dataType: 'number', columnPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+        ], [
+            { excelCell: { value: '2019', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, expanded: true, path: [2019], rowspan: 1, text: '', type: 'D' } },
+            { excelCell: { value: 'Q1 Total', master: [3, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 2, dataSourceIndex: 2, isLast: true, path: [2019, 1], rowspan: 1, text: 'Q1 Total', type: 'T' } },
+            { excelCell: { value: 'Q1 Total', master: [3, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: [2019, 1], rowspan: 1, text: '', type: 'T', width: 100 } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowPath: [2019, 1], columnType: 'D', dataIndex: 0, dataType: 'number', columnPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } },
+        ], [
+            { excelCell: { value: '2019 Total', master: [4, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 3, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 1, text: '2019 Total', type: 'T' } },
+            { excelCell: { value: '2019 Total', master: [4, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 1, text: '', type: 'T', width: 100 } },
+            { excelCell: { value: '2019 Total', master: [4, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: [2019], rowspan: 1, text: '', type: 'T', width: 100 } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowPath: [2019], columnType: 'D', dataIndex: 0, dataType: 'number', columnPath: ['A'], rowType: 'T', rowspan: 1, text: '1' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { mergeRowFieldValues: false })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
+            helper.checkCellFormat(expectedCells);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 2 });
+            helper.checkCellRange(cellRange, { row: 4, column: 4 }, topLeft);
+            done();
         });
     });
 
@@ -3242,9 +3592,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -3256,9 +3605,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, newTopLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
-                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, newTopLeft);
                 assert.strictEqual(this.worksheet.getRow(newTopLeft).outlineLevel, 0, `worksheet.getRow(${newTopLeft}).outlineLevel`);
@@ -3307,9 +3655,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -3319,17 +3666,18 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [row1,row2 x col1 x data] & rowHeaderLayout = tree', function(assert) {
+    QUnit.test('Export [row1,row2 x col1 x data] & rowHeaderLayout = tree, mergeRowFieldValues: false, customizeCell: () => {}', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
-                { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
-                { area: 'row', dataField: 'row2' },
-                { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
-                { area: 'data', summaryType: 'count', dataType: 'number' }
+                { area: 'row', dataField: 'row1', dataType: 'number', format: 'currency', expanded: true },
+                { area: 'row', dataField: 'row2', dataType: 'number', format: 'currency' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number' },
             ],
             store: [
-                { row1: 'r1', row2: 'r2', col1: 'c1', col2: 'c2' },
+                { row1: 15, row2: 5, col1: 'a', data1: 42 },
+                { row1: 15, row2: 10, col1: 'a', data1: 12 },
             ]
         };
 
@@ -3346,29 +3694,44 @@ QUnit.module('Scenarios', moduleConfig, () => {
         const expectedCells = [[
             { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
             { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-            { excelCell: { value: 'c1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, isLast: true, path: ['c1'], text: 'c1', type: 'D', dataSourceIndex: 1, width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, isLast: true, path: ['a'], text: 'a', type: 'D', dataSourceIndex: 1, width: 100 } },
         ], [
-            { excelCell: { value: 'r1 Total', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 2, rowspan: 1, isLast: true, path: ['r1'], text: 'r1 Total', type: 'T', dataSourceIndex: 1, expanded: true } },
-            { excelCell: { value: 'r1 Total', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: ['r1'], text: '', type: 'T', dataSourceIndex: 1, expanded: true } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['c1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['r1'], rowType: 'T', text: '1' } },
+            { excelCell: { value: '$15 Total', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 2, rowspan: 1, isLast: true, path: [15], text: '$15 Total', type: 'T', dataSourceIndex: 1, expanded: true } },
+            { excelCell: { value: '$15 Total', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: [15], text: '', type: 'T', dataSourceIndex: 1, expanded: true } },
+            { excelCell: { value: 2, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['15'], rowType: 'T', text: '2' } },
         ], [
-            { excelCell: { value: '', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, path: ['r1'], text: 'r1', type: 'D', dataSourceIndex: 1, isWhiteSpace: true, width: null } },
-            { excelCell: { value: 'r2', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: ['r1', 'r2'], text: 'r2', type: 'D', dataSourceIndex: 2 } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['c1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['r1', 'r2'], rowType: 'D', text: '1' } },
+            { excelCell: { value: '', alignment: alignLeftTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'row', colspan: 1, rowspan: 2, path: [15], text: '$15', type: 'D', dataSourceIndex: 1, isWhiteSpace: true, width: null } },
+            { excelCell: { value: '$5', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: [15, 5], text: '$5', type: 'D', dataSourceIndex: 2 } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: [15, 5], rowType: 'D', text: '1' } },
+        ], [
+            { excelCell: { value: '', alignment: alignLeftTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, path: [15], text: '', type: 'D', dataSourceIndex: 1, isWhiteSpace: true, width: null } },
+            { excelCell: { value: '$10', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: [15, 10], text: '$10', type: 'D', dataSourceIndex: 3 } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: [15, 10], rowType: 'D', text: '1' } },
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
 
-        exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
-            helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, {
+            mergeRowFieldValues: false,
+            customizeCell: ({ excelCell, pivotCell }) => {
+                if(pivotCell.area === 'row' && pivotCell.text === '$15') {
+                    Object.assign(excelCell, {
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        font: { color: { argb: '9C0006' }, bold: true }
+                    });
+                }
+            }
+        })).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+            helper.checkColumnWidths(helper.toExcelWidths([19, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
-            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
-            helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+            helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
             done();
         });
     });
@@ -3415,9 +3778,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -3469,9 +3831,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([19, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -3527,9 +3888,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -3585,9 +3945,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([19, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -3645,9 +4004,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([70, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -3704,9 +4062,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([19, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -3770,9 +4127,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 4 }, { row: 5, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(20), toExcelWidth(71), toExcelWidth(889)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([19, 20, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
@@ -3819,9 +4175,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -3872,9 +4227,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -3929,9 +4283,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -3990,9 +4343,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(234), toExcelWidth(624)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -4037,9 +4389,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -4090,9 +4441,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4139,9 +4489,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4191,9 +4540,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(361), toExcelWidth(568)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4247,9 +4595,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(361), toExcelWidth(568)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -4307,9 +4654,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(198), toExcelWidth(311), toExcelWidth(420)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -4359,9 +4705,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(361), toExcelWidth(568)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4405,9 +4750,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -4458,9 +4802,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4514,9 +4857,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4573,9 +4915,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(183), toExcelWidth(287), toExcelWidth(388)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4638,9 +4979,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 5 }, { row: 4, column: 5 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(183), toExcelWidth(287), toExcelWidth(388)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -4694,9 +5034,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -4741,9 +5080,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -4802,9 +5140,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -4868,9 +5205,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 4 }, { row: 5, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
@@ -4939,9 +5275,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(183), toExcelWidth(287), toExcelWidth(388)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
@@ -5000,9 +5335,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -5047,9 +5381,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5109,9 +5442,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(584), toExcelWidth(274)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -5171,9 +5503,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([70, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -5233,9 +5564,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(584), toExcelWidth(274)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([70, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -5283,7 +5613,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     if(expectedColumnWidth < minColumnWidth) {
                         expectedColumnWidth = minColumnWidth;
                     }
-                    helper.checkColumnWidths([toExcelWidth(rowWidth), toExcelWidth(expectedColumnWidth)], topLeft.column, epsilon);
+                    helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     done();
                 });
@@ -5333,7 +5663,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     if(expectedColumnWidth < minColumnWidth) {
                         expectedColumnWidth = minColumnWidth;
                     }
-                    helper.checkColumnWidths([toExcelWidth(row1Width), toExcelWidth(row2Width), toExcelWidth(expectedColumnWidth)], topLeft.column, epsilon);
+                    helper.checkColumnWidths(helper.toExcelWidths([row1Width, row2Width, expectedColumnWidth]), topLeft.column);
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     done();
                 });
@@ -5375,9 +5705,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([PivotGridExport.DEFAUL_COLUMN_WIDTH, PivotGridExport.DEFAUL_COLUMN_WIDTH]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5430,9 +5759,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH)], topLeft.column, epsilon);
-            helper.checkFont(expectedCells);
-            helper.checkAlignment(expectedCells);
+            helper.checkColumnWidths(helper.toExcelWidths([PivotGridExport.DEFAUL_COLUMN_WIDTH, PivotGridExport.DEFAUL_COLUMN_WIDTH, PivotGridExport.DEFAUL_COLUMN_WIDTH]), topLeft.column);
+            helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5476,7 +5804,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then(() => {
-                helper.checkColumnWidths([toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH)], topLeft.column, epsilon);
+                helper.checkColumnWidths(helper.toExcelWidths([PivotGridExport.DEFAUL_COLUMN_WIDTH, PivotGridExport.DEFAUL_COLUMN_WIDTH]), topLeft.column);
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 done();
             });
@@ -5517,8 +5845,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5561,8 +5888,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5605,8 +5931,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5859,13 +6184,27 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, () => $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'));
-LoadPanelTests.runTests(moduleConfig, exportPivotGrid, () => $('#pivotGrid').dxPivotGrid({
-    fields: [
-        { area: 'row', dataField: 'row1', dataType: 'string' },
-        { area: 'column', dataField: 'col1', dataType: 'string' },
-        { area: 'data', summaryType: 'count', dataType: 'number' }
-    ],
-    store: [
-        { row1: 'A', col1: 'a' },
-    ]
-}).dxPivotGrid('instance'), 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGrid').dxPivotGrid(options).dxPivotGrid('instance'),
+    {
+        fields: [
+            { area: 'row', dataField: 'row1', dataType: 'string' },
+            { area: 'column', dataField: 'col1', dataType: 'string' },
+            { area: 'data', summaryType: 'count', dataType: 'number' }
+        ],
+        store: [
+            { row1: 'A', col1: 'a' },
+        ],
+        loadPanel: { enabled: true },
+    }, 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGrid').dxPivotGrid(options).dxPivotGrid('instance'),
+    {
+        fields: [
+            { area: 'row', dataField: 'row1', dataType: 'string' },
+            { area: 'column', dataField: 'col1', dataType: 'string' },
+            { area: 'data', summaryType: 'count', dataType: 'number' }
+        ],
+        store: [
+            { row1: 'A', col1: 'a' },
+        ],
+        loadPanel: { enabled: false },
+    }, 'worksheet');

@@ -35,7 +35,7 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 
 let globalColumnId = 1;
 
-export default {
+export const columnsControllerModule = {
     defaultOptions: function() {
         return {
             commonColumnSettings: {
@@ -1096,7 +1096,6 @@ export default {
                         case 'groupPanel':
                         case 'regenerateColumnsByVisibleItems':
                         case 'customizeColumns':
-                        case 'editing':
                         case 'columnHidingEnabled':
                         case 'dateSerializationFormat':
                         case 'columnResizingMode':
@@ -1104,16 +1103,7 @@ export default {
                         case 'columnWidth': {
                             args.handled = true;
                             const ignoreColumnOptionNames = args.fullName === 'columnWidth' && ['width'];
-                            const isEditingPopup = args.fullName?.indexOf('editing.popup') === 0;
-                            const isEditingForm = args.fullName?.indexOf('editing.form') === 0;
-                            const isEditRowKey = args.fullName?.indexOf('editing.editRowKey') === 0;
-                            const isEditColumnName = args.fullName?.indexOf('editing.editColumnName') === 0;
-                            const isChanges = args.fullName?.indexOf('editing.changes') === 0;
-                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey && !isChanges && !isEditColumnName;
-
-                            if(needReinit) {
-                                this.reinit(ignoreColumnOptionNames);
-                            }
+                            this.reinit(ignoreColumnOptionNames);
                             break;
                         }
                         case 'rtlEnabled':
@@ -2122,6 +2112,12 @@ export default {
                         }
                     }
                     return -1;
+                },
+
+                getVisibleIndexByColumn: function(column, rowIndex) {
+                    const visibleColumns = this.getVisibleColumns(rowIndex);
+                    const visibleColumn = visibleColumns.filter(col => col.index === column.index && col.command === column.command)[0];
+                    return visibleColumns.indexOf(visibleColumn);
                 },
 
                 getVisibleColumnIndex: function(id, rowIndex) {

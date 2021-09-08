@@ -1,12 +1,42 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
+
 import CollectionWidget, {
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxValidationSummary>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxValidationSummary>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxValidationSummary>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxValidationSummary> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxValidationSummary> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
     /**
      * @docid
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationGroup?: string;
@@ -16,24 +46,18 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @inherits CollectionWidget
  * @module ui/validation_summary
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: Element, options?: dxValidationSummaryOptions)
-    constructor(element: JQuery, options?: dxValidationSummaryOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationSummaryOptions)
 }
 
-declare global {
-interface JQuery {
-    dxValidationSummary(): JQuery;
-    dxValidationSummary(options: "instance"): dxValidationSummary;
-    dxValidationSummary(options: string): any;
-    dxValidationSummary(options: string, ...params: any[]): any;
-    dxValidationSummary(options: dxValidationSummaryOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxValidationSummaryOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationSummaryOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationSummaryOptions;

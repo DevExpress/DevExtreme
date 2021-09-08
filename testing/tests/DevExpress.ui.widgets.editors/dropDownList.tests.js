@@ -15,7 +15,6 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/drop_down_editor/ui.drop_down_list';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -31,8 +30,14 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 
+const TIME_TO_WAIT = 500;
+
 const getPopup = (instance) => {
     return instance._popup;
+};
+
+const getList = (instance) => {
+    return instance._list;
 };
 
 const moduleConfig = {
@@ -71,10 +76,10 @@ QUnit.module('focus policy', {
         }
 
         this.instance.option('opened', true);
-        this.clock.tick(500);
+        this.clock.tick(TIME_TO_WAIT);
         this.keyboard.keyDown('down');
         const $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
-        assert.equal(isRenderer(this.instance._list.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.equal(isRenderer(getList(this.instance).option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS), 'first list element is focused');
 
         this.keyboard.type('some text');
@@ -144,6 +149,34 @@ QUnit.module('focus policy', {
         this.$input.trigger('input');
 
         assert.equal(setFocusPolicySpy.callCount, 1, 'setFocusPollicy called once');
+    });
+
+    [false, true].forEach((searchEnabled) => {
+        [false, true].forEach((acceptCustomValue) => {
+            const isEditable = acceptCustomValue || searchEnabled;
+            const position = isEditable ? 'end' : 'beginning';
+            const testTitle = `caret should be set to the ${position} of the text after click on the dropDown button when ` +
+                `"acceptCustomValue" is ${acceptCustomValue} and "searchEnabled" is ${searchEnabled} (T976700)`;
+
+            QUnit.testInActiveWindow(testTitle, function(assert) {
+                const value = '1234567890abcdefgh';
+                this.instance.option({
+                    items: [value],
+                    showDropDownButton: true,
+                    acceptCustomValue,
+                    searchEnabled,
+                    value
+                });
+                const $dropDownButton = this.$element.find('.dx-dropdowneditor-button');
+                const input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0);
+                const expectedPosition = isEditable ? value.length : 0;
+
+                $dropDownButton.trigger('dxclick');
+
+                assert.strictEqual(input.selectionStart, expectedPosition, 'correct start position');
+                assert.strictEqual(input.selectionEnd, expectedPosition, 'correct end position');
+            });
+        });
     });
 });
 
@@ -267,6 +300,7 @@ QUnit.module('displayExpr', moduleConfig, () => {
             dataSource,
             deferRendering: false,
             value: 2,
+            useItemTextAsTitle: false,
             displayExpr(item) {
                 args.push(item);
             }
@@ -330,6 +364,29 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         instance.option('wrapItemText', false);
         assert.notOk($itemContainer.hasClass('dx-wrap-item-text'), 'class was removed');
+    });
+
+    [true, false].forEach(useItemTextAsTitle => {
+        QUnit.test(`useItemTextAsTitle=${useItemTextAsTitle} option should be passed to list on init`, function(assert) {
+            const dropDownList = $('#dropDownList').dxDropDownList({
+                deferRendering: false,
+                useItemTextAsTitle
+            }).dxDropDownList('instance');
+            const list = getList(dropDownList);
+
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option initial value is correct');
+        });
+
+        QUnit.test(`useItemTextAsTitle option runtime change to ${useItemTextAsTitle} should be passed to list`, function(assert) {
+            const dropDownList = $('#dropDownList').dxDropDownList({
+                deferRendering: false,
+                useItemTextAsTitle: !useItemTextAsTitle
+            }).dxDropDownList('instance');
+            const list = getList(dropDownList);
+
+            dropDownList.option('useItemTextAsTitle', useItemTextAsTitle);
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option value is correct after runtime change');
+        });
     });
 
     QUnit.test('widget should render with empty items', function(assert) {
@@ -440,59 +497,6 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         this.clock.tick();
 
         assert.equal($.trim($('.dx-list-item').text()), 'test', 'template rendered');
-    });
-
-    QUnit.test('contentReady action fires when dataSource loaded', function(assert) {
-        let contentReadyFired = 0;
-
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            dataSource: [1],
-            deferRendering: true,
-            onContentReady() {
-                contentReadyFired++;
-            }
-        });
-
-        assert.equal(contentReadyFired, 0, 'no content ready before opening');
-        $dropDownList.dxDropDownList('open');
-        this.clock.tick();
-
-        assert.equal(contentReadyFired, 1, 'content ready fired when content is rendered');
-
-        $dropDownList.dxDropDownList('close');
-        $dropDownList.dxDropDownList('open');
-
-        assert.equal(contentReadyFired, 1, 'content ready not fired when reopen dropdown');
-    });
-
-    QUnit.test('contentReady action fires when readOnly=true', function(assert) {
-        const contentReadyActionStub = sinon.stub();
-
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            readOnly: true,
-            dataSource: [1],
-            onContentReady: contentReadyActionStub,
-            deferRendering: true
-        });
-
-        $dropDownList.dxDropDownList('open');
-
-        assert.ok(contentReadyActionStub.called, 'content ready fired when content is rendered');
-    });
-
-    QUnit.test('contentReady action fires when disabled=true', function(assert) {
-        const contentReadyActionStub = sinon.stub();
-
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            disabled: true,
-            dataSource: [1],
-            onContentReady: contentReadyActionStub,
-            deferRendering: true
-        });
-
-        $dropDownList.dxDropDownList('open');
-
-        assert.ok(contentReadyActionStub.called, 'content ready fired when content is rendered');
     });
 
     QUnit.test('dataSource with Guid key', function(assert) {
@@ -681,21 +685,73 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         assert.equal(loadHandler.callCount, 2, 'dataSource loaded when full time is over after last input character');
     });
 
-    QUnit.test('dropDownList should search for a pasted value', function(assert) {
-        const $element = $('#dropDownList').dxDropDownList({
-            searchEnabled: true,
-            dataSource: ['1', '2', '3']
+    QUnit.module('search', {
+        beforeEach: function() {
+            this.$element = $('#dropDownList').dxDropDownList({
+                searchEnabled: true,
+                dataSource: ['1', 'ㅏ'],
+                deferRendering: false
+            });
+            this.instance = this.$element.dxDropDownList('instance');
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+            this.getListItemsCount = () => {
+                const $content = $(this.instance.content());
+                const $listItems = $content.find(LIST_ITEM_SELECTOR);
+
+                return $listItems.length;
+            };
+        }
+    }, () => {
+        QUnit.test('dropDownList should search for a pasted value', function(assert) {
+            this.$input.val('1');
+            this.keyboard.input();
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 1, 'was search');
         });
 
-        const instance = $element.dxDropDownList('instance');
-        const searchSpy = sinon.spy(instance, '_searchDataSource');
-        const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const kb = keyboardMock($input);
+        QUnit.test('should not search if composition is in progress (T1003899)', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.keyboard.type('ㅡ');
+            this.clock.tick(TIME_TO_WAIT);
 
-        kb.input('2');
-        this.clock.tick(600);
+            assert.strictEqual(this.getListItemsCount(), 2, 'was no search');
+        });
 
-        assert.equal(searchSpy.callCount, 1, 'widget searched for a suitable values');
+        QUnit.test('should not cancel search on input if composition is in progress', function(assert) {
+            this.keyboard.type('2');
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 0, 'search is still in progress');
+        });
+
+        QUnit.test('should not get composite characters as search value when compositionend is raised because of next composition start', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅏ');
+            this.$input.trigger($.Event('compositionend'));
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 1, 'last input composite character is not in search value');
+        });
+
+        QUnit.test('should search if composition is finished', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.keyboard.type('ㅡ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.$input.trigger($.Event('compositionend'));
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 0, 'was search');
+        });
     });
 
     QUnit.test('dropDownList should search in grouped DataSource', function(assert) {
@@ -714,7 +770,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         const expectedValue = { key: 'b', items: [{ name: '2', key: 'b' }] };
 
         kb.type('2');
-        this.clock.tick(500);
+        this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual(instance.option('items')[0], expectedValue, 'widget searched for a suitable values');
     });
@@ -813,6 +869,84 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         $listItem.trigger('dxclick');
 
         assert.equal(spy.callCount, 0, 'byKey is not called when items are loaded');
+    });
+
+    QUnit.module('byKey call result should be ignored', {
+        beforeEach: function() {
+            this.callCount = 0;
+            this.items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+            this.customStore = new CustomStore({
+                load: () => {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve({ data: this.items, totalCount: this.items.length });
+                    }, 100);
+                    return deferred.promise();
+                },
+
+                byKey: (key) => {
+                    const deferred = $.Deferred();
+                    const filter = () => this.items.filter(item => item.id === key)[0];
+                    if(this.callCount === 0) {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 1000);
+                    }
+                    ++this.callCount;
+                    return deferred.promise();
+                }
+            });
+
+            this.dataSource = new DataSource({
+                store: this.customStore
+            });
+
+            this.dropDownList = $('#dropDownList').dxDropDownList({
+                dataSource: this.dataSource,
+                displayExpr: 'text',
+                valueExpr: 'id',
+                value: 1
+            }).dxDropDownList('instance');
+        }
+    }, () => {
+        QUnit.test('after new call', function(assert) {
+            this.dropDownList.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after value change to already loaded value', function(assert) {
+            this.dropDownList.open();
+            this.clock.tick(100);
+
+            this.dropDownList.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after change value to undefined (T1008488)', function(assert) {
+            this.dropDownList.option('value', undefined);
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'init byKey result is ignored');
+        });
+
+        QUnit.test('after value reset', function(assert) {
+            this.dropDownList.reset();
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'byKey result is ignored');
+        });
     });
 });
 
@@ -1003,9 +1137,9 @@ QUnit.module('selectedItem', moduleConfig, () => {
         }).dxDropDownList('instance');
 
         dropDownList.option('opened', true);
-        this.clock.tick(1000);
+        this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal(dropDownList._list.option('selectedItem'), 1, 'selectedItem is correct');
+        assert.equal(getList(dropDownList).option('selectedItem'), 1, 'selectedItem is correct');
     });
 
     QUnit.test('reset()', function(assert) {
@@ -1289,7 +1423,6 @@ QUnit.module('popup', moduleConfig, () => {
             id: 2,
             value: 'value12'
         }];
-        const onContentReadySpy = sinon.spy();
         const dropDownList = $('#dropDownList').dxDropDownList({
             displayExpr: 'value',
             valueExpr: 'id',
@@ -1298,8 +1431,7 @@ QUnit.module('popup', moduleConfig, () => {
                 paginate: true,
                 pageSize: 2
             }),
-            opened: true,
-            onContentReady: onContentReadySpy
+            opened: true
         }).dxDropDownList('instance');
         const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
         listInstance.option({
@@ -1736,3 +1868,59 @@ QUnit.module(
 
     }
 );
+
+QUnit.module('contentReady', {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.contentReadyActionStub = sinon.stub();
+        this.$dropDownList = $('#dropDownList').dxDropDownList({
+            onContentReady: this.contentReadyActionStub,
+            deferRendering: true
+        });
+        this.instance = this.$dropDownList.dxDropDownList('instance');
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('fires on base content rendering', function(assert) {
+        assert.strictEqual(this.contentReadyActionStub.callCount, 1, 'content ready is fired');
+    });
+
+    QUnit.test('fires after popup first rendering', function(assert) {
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired after popup first opening');
+    });
+
+    QUnit.test('does not fire after reopening', function(assert) {
+        this.instance.open();
+        this.instance.close();
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is not fired after reopening');
+    });
+
+    QUnit.test('fires on popup rendering without opening', function(assert) {
+        this.instance.option('deferRendering', false);
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired on popup rendering');
+    });
+
+    QUnit.test('fires on popup first opening when readOnly=true', function(assert) {
+        this.instance.option('readOnly', true);
+
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired on popup rendering');
+    });
+
+    QUnit.test('fires on popup first opening when disabled=true', function(assert) {
+        this.instance.option('disabled', true);
+
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired on popup rendering');
+    });
+});

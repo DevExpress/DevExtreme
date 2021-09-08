@@ -5,15 +5,13 @@ import {
   JSXTemplate,
   Template,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import { ContentTemplateProps, DataCellTemplateProps } from '../../types.d';
 
 export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
   <Cell
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
     isFirstGroupCell={viewModel.props.isFirstGroupCell}
     isLastGroupCell={viewModel.props.isLastGroupCell}
     contentTemplate={viewModel.props.dataCellTemplate}

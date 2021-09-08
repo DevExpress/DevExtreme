@@ -17,8 +17,6 @@ const compressionPipes = require('./compression-pipes.js');
 const VECTORMAP_UTILS_PATH = 'js/viz/vector_map.utils';
 const VECTORMAP_UTILS_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-utils');
 const VECTORMAP_DATA_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-data');
-const VECTORMAP_UTILS_RENOVATION_RESULT_PATH = path.join(context.RESULT_JS_RENOVATION_PATH, 'vectormap-utils');
-const VECTORMAP_DATA_RENOVATION_RESULT_PATH = path.join(context.RESULT_JS_RENOVATION_PATH, 'vectormap-data');
 
 function transformFileName(fileName) {
     return path.join(VECTORMAP_UTILS_PATH, fileName) + '.js';
@@ -55,7 +53,6 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
                     .pipe(rename(file))
                     .pipe(headerPipes.useStrict())
                     .pipe(gulp.dest(VECTORMAP_DATA_RESULT_PATH))
-                    .pipe(gulp.dest(VECTORMAP_DATA_RENOVATION_RESULT_PATH))
             );
         });
     });
@@ -67,8 +64,7 @@ function patchVectorMapUtilsStream(stream, isMinify) {
         .pipe(headerPipes.bangLicense())
         .pipe(gulpIf(isMinify, compressionPipes.minify()))
         .pipe(gulpIf(!isMinify, compressionPipes.beautify()))
-        .pipe(gulp.dest(VECTORMAP_UTILS_RESULT_PATH))
-        .pipe(gulp.dest(VECTORMAP_UTILS_RENOVATION_RESULT_PATH));
+        .pipe(gulp.dest(VECTORMAP_UTILS_RESULT_PATH));
 }
 
 function createVectorMapUtilsStream(name, suffix, isMinify) {

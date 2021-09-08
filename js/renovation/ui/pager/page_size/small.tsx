@@ -1,20 +1,19 @@
 import {
   ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { SelectBox } from '../../select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types.d';
 import { getElementMinWidth } from '../utils/get_element_width';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   width,
   props: {
     pageSize, pageSizeChange, pageSizes,
   },
-}: PageSizeSmall) => (
+}: PageSizeSmall): JSX.Element => (
   <SelectBox
     displayExpr="text"
     valueExpr="value"
@@ -46,6 +45,6 @@ export class PageSizeSmall
   }
 
   @Effect({ run: 'always' }) updateWidth(): void {
-    this.minWidth = getElementMinWidth(this.props.parentRef) || this.minWidth;
+    this.minWidth = getElementMinWidth(this.props.parentRef.current!) || this.minWidth;
   }
 }

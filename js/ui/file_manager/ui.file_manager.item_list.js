@@ -91,6 +91,9 @@ class FileManagerItemListBase extends Widget {
     _getItems() {
         return this._getItemsInternal().done(itemInfos => {
             this._itemCount = itemInfos.length;
+            if(this._itemCount === 0) {
+                this._resetFocus();
+            }
 
             const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
             this._hasParentDirectoryItem = !!parentDirectoryItem;
@@ -120,8 +123,8 @@ class FileManagerItemListBase extends Widget {
         this._actions.onSelectedItemOpened({ fileItemInfo });
     }
 
-    _raiseContextMenuShowing() {
-        this._actions.onContextMenuShowing();
+    _raiseContextMenuShowing(e) {
+        this._actions.onContextMenuShowing(e);
     }
 
     _tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
@@ -155,6 +158,10 @@ class FileManagerItemListBase extends Widget {
         this._lockFocusedItemProcessing = false;
 
         this._raiseFocusedItemChanged(args);
+    }
+
+    _resetFocus() {
+
     }
 
     _getItemThumbnail(fileInfo) {
@@ -191,8 +198,8 @@ class FileManagerItemListBase extends Widget {
         return devices.real().deviceType === 'desktop';
     }
 
-    _showContextMenu(items, element, offset, targetFileItem) {
-        this._contextMenu.showAt(items, element, offset, targetFileItem);
+    _showContextMenu(items, element, event, target) {
+        this._contextMenu.showAt(items, element, event, target);
     }
 
     get _contextMenu() {

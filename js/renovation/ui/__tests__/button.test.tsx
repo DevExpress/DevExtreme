@@ -17,7 +17,7 @@ import { Widget } from '../common/widget';
 import { Icon } from '../common/icon';
 import { InkRipple } from '../common/ink_ripple';
 
-type Mock = jest.Mock;
+interface Mock extends jest.Mock {}
 
 jest.mock('../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../core/devices').default;
@@ -128,7 +128,12 @@ describe('Button', () => {
     });
 
     it('should render template', () => {
-      const template = ({ data: { text } }) => <div className="custom-content">{`${text}_text`}</div>;
+      const template = ({ data: { text } }: {
+        data: {
+          text?: any;
+          icon?: any;
+        };
+      }) => <div className="custom-content">{`${text}_text`}</div>;
       const button = mount(viewFunction({
         props: { template, text: 'button', icon: 'icon' },
       } as any) as any);
@@ -193,7 +198,7 @@ describe('Button', () => {
           const onContentReady = jest.fn();
           const button = new Button({ onContentReady });
           const parentNode = {};
-          button.contentRef = { parentNode } as any;
+          button.contentRef = { current: { parentNode } } as any;
           button.contentReadyEffect();
           expect(onContentReady).toHaveBeenCalledTimes(1);
           expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
@@ -221,12 +226,12 @@ describe('Button', () => {
         it('should call "onSubmit" callback by submit input click ', () => {
           const onSubmit = jest.fn();
           const button = new Button({ useSubmitBehavior: true, onSubmit });
-          button.submitInputRef = {} as any;
+          button.submitInputRef = { current: {} } as any;
           button.submitEffect();
-          emit(EVENT.click, defaultEvent, button.submitInputRef as any);
+          emit(EVENT.click, defaultEvent, button.submitInputRef.current as any);
           expect(onSubmit).toHaveBeenCalledTimes(1);
           expect(onSubmit).toHaveBeenCalledWith(
-            { event: defaultEvent, submitInput: button.submitInputRef },
+            { event: defaultEvent, submitInput: button.submitInputRef.current },
           );
         });
 
@@ -246,11 +251,11 @@ describe('Button', () => {
       describe('focus', () => {
         it('should focus main element', () => {
           const button = new Button({});
-          button.widgetRef = { focus: jest.fn() } as any;
+          button.widgetRef = { current: { focus: jest.fn() } } as any;
           button.focus();
 
-          expect(button.widgetRef.focus).toHaveBeenCalledTimes(1);
-          expect(button.widgetRef.focus).toHaveBeenCalledWith();
+          expect(button.widgetRef.current?.focus).toHaveBeenCalledTimes(1);
+          expect(button.widgetRef.current?.focus).toHaveBeenCalledWith();
         });
       });
     });
@@ -317,17 +322,17 @@ describe('Button', () => {
           it('should force form submit by Widget click if the "useSubmitBehavior" is true', () => {
             const event = {} as Event;
             const button = new Button({ useSubmitBehavior: true });
-            button.submitInputRef = { click: jest.fn() } as any;
+            button.submitInputRef = { current: { click: jest.fn() } } as any;
             button.onWidgetClick(event);
-            expect(button.submitInputRef.click).toHaveBeenCalledTimes(1);
+            expect(button.submitInputRef.current?.click).toHaveBeenCalledTimes(1);
           });
 
           it('should not force form submit by Widget click if the "useSubmitBehavior" is false', () => {
             const event = {} as Event;
             const button = new Button({ useSubmitBehavior: false });
-            button.submitInputRef = { click: jest.fn() } as any;
+            button.submitInputRef = { current: { click: jest.fn() } } as any;
             button.onWidgetClick(event);
-            expect(button.submitInputRef.click).not.toBeCalled();
+            expect(button.submitInputRef.current?.click).not.toBeCalled();
           });
         });
 
@@ -335,41 +340,43 @@ describe('Button', () => {
           it('should ignore inkripple effects if the useInkRipple is "false"', () => {
             const button = new Button({ useInkRipple: false });
             button.inkRippleRef = {
-              showWave: jest.fn(),
-              hideWave: jest.fn(),
+              current: {
+                showWave: jest.fn(),
+                hideWave: jest.fn(),
+              },
             } as any;
 
             button.onActive({} as Event);
             button.onInactive({} as Event);
-            expect(button.inkRippleRef.showWave).not.toHaveBeenCalled();
-            expect(button.inkRippleRef.hideWave).not.toHaveBeenCalled();
+            expect(button.inkRippleRef.current?.showWave).not.toHaveBeenCalled();
+            expect(button.inkRippleRef.current?.hideWave).not.toHaveBeenCalled();
           });
 
           it('should show inkripple effect on active action', () => {
             const button = new Button({ useInkRipple: true });
-            const contentRef = {};
+            const contentRef = { current: {} };
             const event = {} as Event;
             button.contentRef = contentRef as any;
-            button.inkRippleRef = { showWave: jest.fn() } as any;
+            button.inkRippleRef = { current: { showWave: jest.fn() } } as any;
             button.onActive(event);
 
-            expect(button.inkRippleRef.showWave).toHaveBeenCalledTimes(1);
-            expect(button.inkRippleRef.showWave).toHaveBeenCalledWith({
-              element: contentRef, event,
+            expect(button.inkRippleRef.current?.showWave).toHaveBeenCalledTimes(1);
+            expect(button.inkRippleRef.current?.showWave).toHaveBeenCalledWith({
+              element: contentRef.current, event,
             });
           });
 
           it('should hide inkripple effect on inactive action', () => {
             const button = new Button({ useInkRipple: true });
-            const contentRef = {};
+            const contentRef = { current: {} };
             const event = {} as Event;
             button.contentRef = contentRef as any;
-            button.inkRippleRef = { hideWave: jest.fn() } as any;
+            button.inkRippleRef = { current: { hideWave: jest.fn() } } as any;
             button.onInactive(event);
 
-            expect(button.inkRippleRef.hideWave).toHaveBeenCalledTimes(1);
-            expect(button.inkRippleRef.hideWave).toHaveBeenCalledWith({
-              element: contentRef, event,
+            expect(button.inkRippleRef.current?.hideWave).toHaveBeenCalledTimes(1);
+            expect(button.inkRippleRef.current?.hideWave).toHaveBeenCalledWith({
+              element: contentRef.current, event,
             });
           });
         });

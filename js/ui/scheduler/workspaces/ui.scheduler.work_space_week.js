@@ -2,12 +2,9 @@ import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import dateLocalization from '../../../localization/date';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
-
-import dxrWeekTableLayout from '../../../renovation/ui/scheduler/workspaces/week/date_table/layout.j';
+import { getIntervalDuration } from './utils/week';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
-
-const toMs = dateUtils.dateToMilliseconds;
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
     _getElementClass() {
         return WEEK_CLASS;
@@ -32,7 +29,7 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
     }
 
     _getIntervalDuration() {
-        return toMs('day') * 7 * this.option('intervalCount');
+        return getIntervalDuration(this.option('intervalCount'));
     }
 
     getPositionShift(timeShift, isAllDay) {
@@ -51,18 +48,6 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
             return false;
         }
         return super._isApplyCompactAppointmentOffset();
-    }
-
-    renderRDateTable() {
-        this.renderRComponent(
-            this._$dateTable,
-            dxrWeekTableLayout,
-            'renovatedDateTable',
-            {
-                viewData: this.viewDataProvider.viewData,
-                dataCellTemplate: this.option('dataCellTemplate'),
-            }
-        );
     }
 }
 

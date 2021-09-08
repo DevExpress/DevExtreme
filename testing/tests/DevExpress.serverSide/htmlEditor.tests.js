@@ -1,5 +1,3 @@
-import 'common.css!';
-
 QUnit.testStart(() => {
     const element = document.createElement('div');
     element.setAttribute('id', 'htmlEditor');

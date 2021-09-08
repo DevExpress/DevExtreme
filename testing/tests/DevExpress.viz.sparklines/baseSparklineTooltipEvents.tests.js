@@ -6,6 +6,7 @@ const rendererModule = require('viz/core/renderers/renderer');
 const pointerEvents = require('events/pointer');
 
 require('viz/sparkline');
+require('viz/bullet');
 
 const fixture = $('<div>')
     .attr('id', 'qunit-fixture')
@@ -24,11 +25,11 @@ QUnit.begin(function() {
     };
 });
 
-const environment = {
+const environment = (widget) => ({
     beforeEach: function() {
         this.$container = $(createTestContainer('#container'));
-        this.createSparkline = function(options) {
-            return this.$container.dxSparkline(options).dxSparkline('instance');
+        this.createWidget = function(options) {
+            return this.$container[widget](options)[widget]('instance');
         };
         this.triggerDocument = function(name, target, x, y) {
             const event = $.Event(name, { pageX: x, pageY: y });
@@ -51,16 +52,16 @@ const environment = {
     afterEach: function() {
         this.$container.remove();
     }
-};
+});
 
-QUnit.module('Tooltip events', environment);
+QUnit.module('Tooltip events', environment('dxSparkline'));
 
 function createTest(name, actions, asserts) {
     ['down', 'move'].forEach(act => {
         QUnit.test(`${name}. pointer${act}`, function(assert) {
             const tooltipShown = sinon.spy();
             const tooltipHidden = sinon.spy();
-            const sparkline = this.createSparkline({
+            const sparkline = this.createWidget({
                 dataSource: [4, 8, 5],
                 tooltip: {
                     enabled: true
@@ -106,7 +107,7 @@ createTest('Tooltip hiding after move pointer outside canvas', {
 QUnit.test('No events hendling after dispose', function(assert) {
     const tooltipShown = sinon.spy();
     const tooltipHidden = sinon.spy();
-    const sparkline = this.createSparkline({
+    const sparkline = this.createWidget({
         dataSource: [4, 8, 5],
         tooltip: {
             enabled: true
@@ -127,5 +128,31 @@ QUnit.test('No events hendling after dispose', function(assert) {
 
     // assert
     assert.strictEqual(tooltipShown.callCount, 0);
+    assert.strictEqual(tooltipHidden.callCount, 0);
+});
+
+QUnit.module('Tooltip events, bullet', environment('dxBullet'));
+
+QUnit.test('Tooltip should not hide if in the canvas with margins', function(assert) {
+    const tooltipShown = sinon.spy();
+    const tooltipHidden = sinon.spy();
+    const bullet = this.createWidget({
+        startScaleValue: 0,
+        endScaleValue: 35,
+        tooltip: {
+            enabled: true
+        },
+        value: 20,
+        onTooltipShown: tooltipShown,
+        onTooltipHidden: tooltipHidden
+    });
+
+    const tracker = bullet._tooltipTracker;
+    this.trigger(pointerEvents.move, tracker, 10, 15);
+    this.trigger(pointerEvents.move, tracker, 3, 5);
+    this.trigger(pointerEvents.move, tracker, 253, 35);
+
+    // assert
+    assert.strictEqual(tooltipShown.callCount, 1);
     assert.strictEqual(tooltipHidden.callCount, 0);
 });

@@ -4,8 +4,9 @@ import typeUtils from 'core/utils/type';
 import windowUtils from 'core/utils/window';
 import errors from 'core/errors';
 
-import 'common.css!';
 import 'ui/slide_out_view';
+
+import 'generic_light.css!';
 
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
 const SLIDEOUTVIEW_WRAPPER_CLASS = 'dx-slideoutview-wrapper';

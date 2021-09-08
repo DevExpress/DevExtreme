@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = ({ pathInRenovationFolder }) =>
-    `import Widget from "../renovation/${pathInRenovationFolder}";
+    `import Widget from '${pathInRenovationFolder}';
 export default Widget;`;

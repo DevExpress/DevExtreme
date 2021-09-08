@@ -4,7 +4,7 @@ import fx from 'animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
 
-import 'common.css!';
+import 'generic_light.css!';
 
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
@@ -125,7 +125,7 @@ QUnit.module('base z-index', () => {
         Tooltip.baseZIndex(10000);
 
         const tooltip = new Tooltip($('#tooltip'), { visible: true });
-        const $tooltipContent = tooltip.overlayContent();
+        const $tooltipContent = tooltip.$overlayContent();
 
         assert.equal($tooltipContent.css('zIndex'), 10001, 'tooltip\'s z-index is correct');
     });

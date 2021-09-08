@@ -2,7 +2,7 @@
 module.exports = ({ name, pathToWrapper, pathInRenovationFolder }) => {
     const wrappedComponentImport = pathToWrapper ?
         `import { WrappedWidget as Widget } from '${pathToWrapper}';` :
-        `import Widget from '../renovation/${pathInRenovationFolder}';`;
+        `import Widget from '${pathInRenovationFolder}';`;
     return `${wrappedComponentImport}
 import registerComponent from '../core/component_registrator';
 import { wrapRenovatedWidget } from '../../../testing/helpers/wrapRenovatedWidget.js';

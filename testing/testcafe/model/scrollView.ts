@@ -11,14 +11,14 @@ export default class ScrollView extends Widget {
 
   name = 'dxScrollView';
 
-  constructor(id: string|Selector, direction) {
+  constructor(id: string | Selector, direction: string) {
     super(id);
 
     this.element = Selector(`.${CLASS.scrollView}`);
     this.scrollbar = new Scrollbar(direction);
   }
 
-  static getScrollViewContainer() {
+  static getScrollViewContainer(): Selector {
     return Selector(`.${CLASS.scrollbarContainer}`);
   }
 }

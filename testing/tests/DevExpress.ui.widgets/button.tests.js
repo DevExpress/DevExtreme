@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import renderer from 'core/renderer';
 import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 import DefaultAdapter from 'ui/validation/default_adapter';
@@ -8,7 +9,6 @@ import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import dxButton from 'ui/button';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -137,6 +137,23 @@ QUnit.module('Button', function() {
             this.instance.option('stylingMode', 'contained');
             assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
             assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
+        });
+
+        [
+            { option: 'stylingMode', value: 'text' },
+            { option: 'type', value: 'danger' }
+        ].forEach(({ option, value }) => {
+            QUnit.test(`only className argument is passed when changing the "${option}" option`, function(assert) {
+                const removeClassSpy = sinon.spy(renderer.fn, 'removeClass');
+
+                this.instance.option(option, value);
+
+                removeClassSpy.getCalls().forEach((funcCall) => {
+                    assert.strictEqual(funcCall.args.length, 1, 'only one argument passed to removeClass');
+                });
+
+                removeClassSpy.restore();
+            });
         });
 
         QUnit.test('readOnly validator should be excluded for the click action', function(assert) {
@@ -384,6 +401,10 @@ QUnit.module('Button', function() {
     }, function() {
         QUnit.test('render input with submit type', function(assert) {
             assert.strictEqual(this.$element.find('input[type=submit]').length, 1);
+        });
+
+        QUnit.test('input with submit type should not have display:none (T983803)', function(assert) {
+            assert.notStrictEqual(this.$element.find('input[type=submit]').css('display'), 'none');
         });
 
         QUnit.test('submit input has .dx-button-submit-input CSS class', function(assert) {

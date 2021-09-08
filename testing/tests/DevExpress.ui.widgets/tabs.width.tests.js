@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';

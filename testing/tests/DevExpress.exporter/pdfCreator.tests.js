@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const version = require('core/version');
+const version = require('core/version').version;
 const getData = require('exporter').pdf.getData;
 const pdfCreator = require('exporter/pdf_creator').__tests;
 const isFunction = require('core/utils/type').isFunction;

@@ -5,7 +5,6 @@ import Views from 'ui/calendar/ui.calendar.views';
 import fx from 'animation/fx';
 import dateSerialization from 'core/utils/date_serialization';
 
-import 'common.css!';
 import 'ui/calendar';
 
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
@@ -29,8 +28,10 @@ const getTextsArray = function(elements) {
 
 QUnit.module('Basics', () => {
     QUnit.test('all views must be derived from the base view class', function(assert) {
-        $.each(Views, function() {
-            assert.ok(new this($('<div>')) instanceof BaseView);
+        $.each(Views, function(name, View) {
+            if(name !== 'default') {
+                assert.ok(new View($('<div>')) instanceof BaseView);
+            }
         });
     });
 });

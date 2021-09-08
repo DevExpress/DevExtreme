@@ -1,12 +1,12 @@
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
+import { getElementsFromPoint, getBoundingRect } from '../core/utils/position';
 const window = getWindow();
 import eventsEngine from '../events/core/events_engine';
 import { quadToObject } from '../core/utils/string';
 import registerComponent from '../core/component_registrator';
 import { locate, move } from '../animation/translator';
 import Animator from './scroll_view/animator';
-import browser from '../core/utils/browser';
 import { dasherize } from '../core/utils/inflector';
 import { extend } from '../core/utils/extend';
 import DOMComponent from '../core/dom_component';
@@ -26,7 +26,7 @@ import { noop, splitPair } from '../core/utils/common';
 import { value as viewPort } from '../core/utils/view_port';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
-import { getBoundingRect } from '../core/utils/position';
+
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
 const DRAG_EVENT_NAME = addNamespace(dragEventMove, DRAGGABLE);
@@ -46,6 +46,10 @@ const getMousePosition = (event) => ({
     x: event.pageX - $(window).scrollLeft(),
     y: event.pageY - $(window).scrollTop()
 });
+
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
+const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 class ScrollHelper {
     constructor(orientation, component) {
@@ -76,11 +80,24 @@ class ScrollHelper {
     }
 
     updateScrollable(elements, mousePosition) {
-        const that = this;
+        let isScrollableFound = false;
 
-        if(!elements.some(element => that._trySetScrollable(element, mousePosition))) {
-            that._$scrollableAtPointer = null;
-            that._scrollSpeed = 0;
+        elements.some((element) => {
+            const $element = $(element);
+            const isTargetOverOverlayWrapper = $element.hasClass(OVERLAY_WRAPPER_CLASS) && $element.css('pointerEvents') !== 'none';
+            const isTargetOverOverlayContent = $element.hasClass(OVERLAY_CONTENT_CLASS);
+            if(isTargetOverOverlayWrapper || isTargetOverOverlayContent) {
+                return true;
+            }
+
+            isScrollableFound = this._trySetScrollable(element, mousePosition);
+
+            return isScrollableFound;
+        });
+
+        if(!isScrollableFound) {
+            this._$scrollableAtPointer = null;
+            this._scrollSpeed = 0;
         }
     }
 
@@ -241,14 +258,19 @@ const Draggable = DOMComponent.inherit({
             onDragEnd: null,
             onDragEnter: null,
             onDragLeave: null,
+
             /**
+             * @section Utils
+             * @default null
              * @name dxDraggableOptions.onDrop
              * @type function(e)
-             * @extends Action
              * @type_function_param1 e:object
+             * @type_function_param1_field1 component:this
+             * @type_function_param1_field2 element:DxElement
+             * @type_function_param1_field3 model:object
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 itemData:any
-             * @type_function_param1_field6 itemElement:dxElement
+             * @type_function_param1_field6 itemElement:DxElement
              * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
              * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
              * @type_function_param1_field9 fromData:any
@@ -600,6 +622,7 @@ const Draggable = DOMComponent.inherit({
 
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
+        this._setGestureCoverCursor($dragElement.children());
         const isFixedPosition = $dragElement.css('position') === 'fixed';
 
         this._initPosition(extend({}, dragStartArgs, {
@@ -643,6 +666,10 @@ const Draggable = DOMComponent.inherit({
     _toggleDragSourceClass: function(value, $element) {
         const $sourceElement = $element || this._$sourceElement;
         $sourceElement && $sourceElement.toggleClass(this._addWidgetPrefix('source'), value);
+    },
+
+    _setGestureCoverCursor: function($element) {
+        $(`.${GESTURE_COVER_CLASS}`).css('cursor', $element.css('cursor'));
     },
 
     _getBoundOffset: function() {
@@ -709,27 +736,11 @@ const Draggable = DOMComponent.inherit({
 
         if(that.option('autoScroll')) {
             const mousePosition = getMousePosition(e);
-            const allObjects = that.getElementsFromPoint(mousePosition);
+            const allObjects = getElementsFromPoint(mousePosition.x, mousePosition.y);
 
             that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
             that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
         }
-    },
-
-    getElementsFromPoint: function(position, dragElement) {
-        const ownerDocument = (dragElement || this._$dragElement.get(0)).ownerDocument;
-
-        if(browser.msie) {
-            const msElements = ownerDocument.msElementsFromPoint(position.x, position.y);
-
-            if(msElements) {
-                return Array.prototype.slice.call(msElements);
-            }
-
-            return [];
-        }
-
-        return ownerDocument.elementsFromPoint(position.x, position.y);
     },
 
     _getScrollable: function($element) {
@@ -849,7 +860,7 @@ const Draggable = DOMComponent.inherit({
         const $targetDraggableElement = this.$element();
 
         const mousePosition = getMousePosition(e);
-        const elements = this.getElementsFromPoint(mousePosition, e.target);
+        const elements = getElementsFromPoint(mousePosition.x, mousePosition.y);
         const firstWidgetElement = elements.filter((element) => {
             const $element = $(element);
 

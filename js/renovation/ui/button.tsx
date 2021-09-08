@@ -10,10 +10,9 @@ import {
   Template,
   Slot,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
-import noop from '../utils/noop';
 import { isMaterial, current } from '../../ui/themes';
 import { click } from '../../events/short';
 import { combineClasses } from '../utils/combine_classes';
@@ -21,8 +20,8 @@ import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
-import BaseWidgetProps from '../utils/base_props';
-import BaseComponent from '../preact_wrapper/button';
+import { BaseWidgetProps } from './common/base_props';
+import BaseComponent from '../component_wrapper/button';
 import { EffectReturn } from '../utils/effect_return.d';
 
 const stylingModes = ['outlined', 'text', 'contained'];
@@ -108,9 +107,9 @@ export class ButtonProps extends BaseWidgetProps {
   @Event({
     actionConfig: { excludeValidators: ['readOnly'] },
   })
-  onClick?: (e: { event: Event; validationGroup?: string }) => void = noop;
+  onClick?: (e: { event: Event; validationGroup?: string }) => void;
 
-  @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement }) => void = noop;
+  @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void;
 
   @OneWay() pressed?: boolean;
 
@@ -164,31 +163,35 @@ export class Button extends JSXComponent(ButtonProps) {
     //       (for example, text, icon, etc)
     const { onContentReady } = this.props;
 
-    onContentReady?.({ element: this.contentRef.parentNode });
+    onContentReady?.({ element: this.contentRef.current!.parentNode });
   }
 
   @Method()
   focus(): void {
-    this.widgetRef.focus();
+    this.widgetRef.current!.focus();
   }
 
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.showWave({ element: this.contentRef, event });
+    useInkRipple && this.inkRippleRef.current!.showWave({
+      element: this.contentRef.current, event,
+    });
   }
 
   onInactive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.hideWave({ element: this.contentRef, event });
+    useInkRipple && this.inkRippleRef.current!.hideWave({
+      element: this.contentRef.current, event,
+    });
   }
 
   onWidgetClick(event: Event): void {
     const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
     onClick?.({ event, validationGroup });
-    useSubmitBehavior && this.submitInputRef.click();
+    useSubmitBehavior && this.submitInputRef.current!.click();
   }
 
   onWidgetKeyDown(options): Event | undefined {
@@ -214,17 +217,17 @@ export class Button extends JSXComponent(ButtonProps) {
     const { useSubmitBehavior, onSubmit } = this.props;
 
     if (useSubmitBehavior && onSubmit) {
-      click.on(this.submitInputRef,
-        (event) => onSubmit({ event, submitInput: this.submitInputRef }),
+      click.on(this.submitInputRef.current,
+        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
         { namespace });
 
-      return (): void => click.off(this.submitInputRef, { namespace });
+      return (): void => click.off(this.submitInputRef.current, { namespace });
     }
 
     return undefined;
   }
 
-  get aria(): object {
+  get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
     let label = text || icon;

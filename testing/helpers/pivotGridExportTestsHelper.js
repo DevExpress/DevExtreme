@@ -1,5 +1,3 @@
-import 'common.css!';
-
 import 'ui/pivot_grid/ui.pivot_grid';
 
 import $ from 'jquery';

@@ -261,10 +261,10 @@ const FilterBuilder = Widget.inherit({
         for(let i = 0; i < groupCriteria.length; i++) {
             const innerCriteria = groupCriteria[i];
             if(isGroup(innerCriteria)) {
-                this._createGroupElementByCriteria(innerCriteria, groupCriteria, groupLevel + 1)
+                this._createGroupElementByCriteria(innerCriteria, criteria, groupLevel + 1)
                     .appendTo($groupContent);
             } else if(isCondition(innerCriteria)) {
-                this._createConditionElement(innerCriteria, groupCriteria)
+                this._createConditionElement(innerCriteria, criteria)
                     .appendTo($groupContent);
             }
         }
@@ -321,7 +321,7 @@ const FilterBuilder = Widget.inherit({
                     onItemClick: (e) => {
                         if(groupMenuItem !== e.itemData) {
                             setGroupValue(criteria, e.itemData.value);
-                            $operationButton.html(e.itemData.text);
+                            $operationButton.text(e.itemData.text);
                             groupMenuItem = e.itemData;
                             this._updateFilter();
                         }

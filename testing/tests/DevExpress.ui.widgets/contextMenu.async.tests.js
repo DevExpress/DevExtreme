@@ -2,7 +2,6 @@ import $ from 'jquery';
 import ContextMenu from 'ui/context_menu';
 
 import 'ui/button';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

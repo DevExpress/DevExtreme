@@ -2,15 +2,12 @@ import $ from 'jquery';
 import PivotGridDataSource from 'ui/pivot_grid/data_source';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-import 'viz/core/themes/generic.light'; // remove
-
 /* global orders */
 import '../../../testing/content/orders.js';
 
 import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
 import 'ui/pivot_grid/ui.pivot_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'viz/chart';
 

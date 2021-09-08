@@ -26,3 +26,19 @@ export const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current
 export const HORIZONTAL_GROUP_ORIENTATION = 'horizontal';
 
 export const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';
+
+export const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
+
+export const APPOINTMENT_CONTENT_CLASSES = {
+    APPOINTMENT_CONTENT_DETAILS: 'dx-scheduler-appointment-content-details',
+    RECURRING_ICON: 'dx-scheduler-appointment-recurrence-icon',
+    APPOINTMENT_TITLE: 'dx-scheduler-appointment-title',
+    APPOINTMENT_DATE: 'dx-scheduler-appointment-content-date',
+    ALL_DAY_CONTENT: 'dx-scheduler-appointment-content-allday',
+    ITEM: 'dx-scheduler-appointment',
+
+    AGENDA_MARKER: 'dx-scheduler-agenda-appointment-marker',
+    AGENDA_RESOURCE_LIST: 'dx-scheduler-appointment-resource-list',
+    AGENDA_RESOURCE_LIST_ITEM: 'dx-scheduler-appointment-resource-item',
+    AGENDA_RESOURCE_LIST_ITEM_VALUE: 'dx-scheduler-appointment-resource-item-value'
+};

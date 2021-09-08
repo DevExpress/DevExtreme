@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 import { Table } from '../../table';
 import { AllDayPanelTableBody } from './table_body';
@@ -21,8 +21,10 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
       >
         <AllDayPanelTableBody
           viewData={viewModel.allDayPanelData}
-          leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
-          rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
+          leftVirtualCellWidth={viewModel.props.viewData.leftVirtualCellWidth}
+          rightVirtualCellWidth={viewModel.props.viewData.rightVirtualCellWidth}
+          leftVirtualCellCount={viewModel.props.viewData.leftVirtualCellCount}
+          rightVirtualCellCount={viewModel.props.viewData.rightVirtualCellCount}
           dataCellTemplate={viewModel.props.dataCellTemplate}
         />
       </Table>

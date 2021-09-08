@@ -23,7 +23,7 @@ import { getWindow, hasWindow } from '../core/utils/window';
 import { triggerResizeEvent } from '../events/visibility_change';
 import messageLocalization from '../localization/message';
 import Button from './button';
-import Overlay from './overlay';
+import Overlay from './overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from './themes';
 import './toolbar/ui.toolbar.base';
 
@@ -44,6 +44,8 @@ const POPUP_TITLE_CLASS = 'dx-popup-title';
 const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
 
 const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
+
+const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -90,8 +92,6 @@ const getButtonPlace = name => {
                 location = 'after';
                 break;
         }
-    } else if(platform === 'android') {
-        location = 'center';
     }
 
     return {
@@ -233,7 +233,7 @@ const Popup = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(POPUP_CLASS);
-        this._wrapper().addClass(POPUP_WRAPPER_CLASS);
+        this.$wrapper().addClass(POPUP_WRAPPER_CLASS);
         this._$popupContent = this._$content
             .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
             .children().eq(0);
@@ -247,7 +247,7 @@ const Popup = Overlay.inherit({
     },
 
     _toggleFullScreenClass: function(value) {
-        this._$content
+        this.$overlayContent()
             .toggleClass(POPUP_FULL_SCREEN_CLASS, value)
             .toggleClass(POPUP_NORMAL_CLASS, !value);
     },
@@ -284,6 +284,7 @@ const Popup = Overlay.inherit({
             this._$title = this._renderTemplateByType('titleTemplate', items, $title).addClass(POPUP_TITLE_CLASS);
             this._renderDrag();
             this._executeTitleRenderAction(this._$title);
+            this._$title.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
         } else if(this._$title) {
             this._$title.detach();
         }
@@ -354,6 +355,7 @@ const Popup = Overlay.inherit({
             this._createComponent($button, Button, {
                 icon: 'close',
                 onClick: this._createToolbarItemAction(undefined),
+                stylingMode: 'text',
                 integrationOptions: {}
             });
             $(container).append($button);
@@ -397,11 +399,15 @@ const Popup = Overlay.inherit({
             }
         });
 
-        if(toolbar === 'top' && this.option('showCloseButton') && this.option('showTitle')) {
+        if(toolbar === 'top' && this._hasCloseButton()) {
             toolbarsItems.push(this._getCloseButton());
         }
 
         return toolbarsItems;
+    },
+
+    _hasCloseButton() {
+        return this.option('showCloseButton') && this.option('showTitle');
     },
 
     _getLocalizationKey(itemType) {
@@ -464,10 +470,10 @@ const Popup = Overlay.inherit({
             const className = POPUP_CLASS + '-' + alias;
 
             if(inArray(className, this._toolbarItemClasses) >= 0) {
-                this._wrapper().addClass(className + '-visible');
+                this.$wrapper().addClass(className + '-visible');
                 this._$bottom.addClass(className);
             } else {
-                this._wrapper().removeClass(className + '-visible');
+                this.$wrapper().removeClass(className + '-visible');
                 this._$bottom.removeClass(className);
             }
         });
@@ -494,7 +500,7 @@ const Popup = Overlay.inherit({
     },
 
     _resetContentHeight: function() {
-        this._$popupContent.css({
+        this.$content().css({
             'height': 'auto',
             'maxHeight': 'none'
         });
@@ -503,7 +509,7 @@ const Popup = Overlay.inherit({
     _renderDrag: function() {
         this.callBase();
 
-        this._$content.toggleClass(POPUP_DRAGGABLE_CLASS, this.option('dragEnabled'));
+        this.$overlayContent().toggleClass(POPUP_DRAGGABLE_CLASS, this.option('dragEnabled'));
     },
 
     _renderResize: function() {
@@ -519,11 +525,11 @@ const Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option('forceApplyBindings') || noop)();
 
-        const overlayContent = this.overlayContent().get(0);
+        const overlayContent = this.$overlayContent().get(0);
         const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
         this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
-        this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
+        this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
     },
 
     _heightStrategyChangeOffset: function(currentHeightStrategyClass, popupVerticalPaddings) {
@@ -598,7 +604,7 @@ const Popup = Overlay.inherit({
     },
 
     _isAutoHeight: function() {
-        return this.overlayContent().get(0).style.height === 'auto';
+        return this.$overlayContent().get(0).style.height === 'auto';
     },
 
     _splitPopupHeight: function() {
@@ -608,7 +614,7 @@ const Popup = Overlay.inherit({
         return {
             header: getVisibleHeight(topToolbar && topToolbar.get(0)),
             footer: getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
-            contentVerticalOffsets: getVerticalOffsets(this.overlayContent().get(0), true),
+            contentVerticalOffsets: getVerticalOffsets(this.$overlayContent().get(0), true),
             popupVerticalOffsets: getVerticalOffsets(this.$content().get(0), true),
             popupVerticalPaddings: getVerticalOffsets(this.$content().get(0), false)
         };
@@ -629,7 +635,7 @@ const Popup = Overlay.inherit({
 
     _renderDimensions: function() {
         if(this.option('fullScreen')) {
-            this._$content.css({
+            this.$overlayContent().css({
                 width: '100%',
                 height: '100%',
                 minWidth: '',
@@ -646,7 +652,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderFullscreenWidthClass: function() {
-        this.overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, this.overlayContent().outerWidth() === $(window).width());
+        this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, this.$overlayContent().outerWidth() === $(window).width());
     },
 
     refreshPosition: function() {
@@ -655,7 +661,7 @@ const Popup = Overlay.inherit({
 
     _renderPosition: function() {
         if(this.option('fullScreen')) {
-            move(this._$content, {
+            move(this.$overlayContent(), {
                 top: 0,
                 left: 0
             });
@@ -673,12 +679,12 @@ const Popup = Overlay.inherit({
             case 'titleTemplate':
                 this._renderTitle();
                 this._renderGeometry();
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'bottomTemplate':
                 this._renderBottom();
                 this._renderGeometry();
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'onTitleRendered':
                 this._createTitleRenderAction(args.value);
@@ -695,7 +701,7 @@ const Popup = Overlay.inherit({
 
                 if(shouldRenderGeometry) {
                     this._renderGeometry();
-                    triggerResizeEvent(this._$content);
+                    triggerResizeEvent(this.$overlayContent());
                 }
                 break;
             }
@@ -704,7 +710,7 @@ const Popup = Overlay.inherit({
                 break;
             case 'autoResizeEnabled':
                 this._renderGeometry();
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'fullScreen':
                 this._toggleFullScreenClass(args.value);
@@ -713,7 +719,7 @@ const Popup = Overlay.inherit({
 
                 this._renderGeometry();
 
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'showCloseButton':
                 this._renderTitle();
@@ -736,10 +742,10 @@ const Popup = Overlay.inherit({
     },
 
     content: function() {
-        return getPublicElement(this._$popupContent);
+        return getPublicElement(this.$content());
     },
 
-    overlayContent: function() {
+    $overlayContent: function() {
         return this._$content;
     }
 });

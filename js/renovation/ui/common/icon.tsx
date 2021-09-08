@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Fragment,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { getImageSourceType } from '../../../core/utils/icon';
 
 export const viewFunction = ({

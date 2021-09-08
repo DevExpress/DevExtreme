@@ -11,7 +11,7 @@ import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import { end as hoverEventEnd } from '../../events/hover';
 import MenuBase from '../context_menu/ui.menu_base';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import Submenu from './ui.submenu';
 import Button from '../button';
 import TreeView from '../tree_view';
@@ -407,7 +407,7 @@ class Menu extends MenuBase {
             .addClass(DX_ADAPTIVE_MODE_CLASS)
             .addClass(this.option('cssClass'));
 
-        this._overlay._wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
+        this._overlay.$wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
         this._$adaptiveContainer.append($hamburger);
         this._$adaptiveContainer.append(this._overlay.$element());
@@ -930,8 +930,9 @@ class Menu extends MenuBase {
                 super._optionChanged(args);
                 break;
             default:
-                if(this._isAdaptivityEnabled()) {
-                    this._treeView.option(args.name, args.value);
+                if(this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
+                    // TODO: if(args.name === 'items') this._treeView.option('items', this.option('items')) or treeView.repaint() ?
+                    this._treeView.option(args.fullName, args.value);
                 }
                 super._optionChanged(args);
         }

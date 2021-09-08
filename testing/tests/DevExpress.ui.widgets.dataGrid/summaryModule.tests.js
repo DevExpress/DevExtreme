@@ -8,7 +8,6 @@ QUnit.testStart(function() {
 });
 
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -693,7 +692,7 @@ QUnit.module('Footer with real dataController and columnController', {
         ];
 
         this.setupDataGridModules = function(userOptions) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'columnFixing', 'grouping', 'summary', 'pager', 'editing'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'columnFixing', 'grouping', 'summary', 'pager', 'editing', 'editingRowBased'], {
                 initViews: true,
                 initDefaultOptions: true,
                 options: $.extend(true, {

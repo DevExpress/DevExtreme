@@ -1,9 +1,8 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
-import { equalByValue } from '../../core/utils/common';
+import { ensureDefined, equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
 
@@ -28,7 +27,6 @@ const FILE_MANAGER_CLASS = 'dx-filemanager';
 const FILE_MANAGER_WRAPPER_CLASS = FILE_MANAGER_CLASS + '-wrapper';
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + '-container';
 const FILE_MANAGER_DIRS_PANEL_CLASS = FILE_MANAGER_CLASS + '-dirs-panel';
-const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + '-inactive-area';
 const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + '-editing-container';
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + '-items-panel';
 const FILE_MANAGER_ITEM_CUSTOM_THUMBNAIL_CLASS = FILE_MANAGER_CLASS + '-item-custom-thumbnail';
@@ -45,15 +43,8 @@ class FileManager extends Widget {
     _initTemplates() {
     }
 
-    _initMarkup() {
-        super._initMarkup();
-
-        this._initActions();
-
-        this._firstItemViewLoad = true;
-        this._lockSelectionProcessing = false;
-        this._lockFocusedItemProcessing = false;
-        this._itemKeyToFocus = undefined;
+    _init() {
+        super._init();
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -67,6 +58,18 @@ class FileManager extends Widget {
             onDataLoading: this._onDataLoading.bind(this),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
+    }
+
+    _initMarkup() {
+        super._initMarkup();
+
+        this._initActions();
+
+        this._firstItemViewLoad = true;
+        this._lockSelectionProcessing = false;
+        this._lockFocusedItemProcessing = false;
+        this._itemKeyToFocus = undefined;
+
         this._commandManager = new FileManagerCommandManager(this.option('permissions'));
 
         this.$element().addClass(FILE_MANAGER_CLASS);
@@ -74,7 +77,6 @@ class FileManager extends Widget {
         this._createNotificationControl();
 
         this._initCommandManager();
-        this._setItemsViewAreaActive(false);
     }
 
     _createNotificationControl() {
@@ -84,19 +86,20 @@ class FileManager extends Widget {
 
         this._notificationControl = this._createComponent($notificationControl, FileManagerNotificationControl, {
             progressPanelContainer: this.$element(),
-            contentTemplate: container => this._createWrapper(container),
+            contentTemplate: (container, notificationControl) => this._createWrapper(container, notificationControl),
             onActionProgress: e => this._onActionProgress(e),
-            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
+            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`,
+            showProgressPanel: this.option('notifications.showPanel'),
+            showNotificationPopup: this.option('notifications.showPopup')
         });
-        this._editing.option('notificationControl', this._notificationControl);
     }
 
-    _createWrapper(container) {
+    _createWrapper(container, notificationControl) {
         this._$wrapper = $('<div>')
             .addClass(FILE_MANAGER_WRAPPER_CLASS)
             .appendTo(container);
 
-        this._createEditing();
+        this._createEditing(notificationControl);
 
         const $toolbar = $('<div>').appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
@@ -122,7 +125,7 @@ class FileManager extends Widget {
         });
     }
 
-    _createEditing() {
+    _createEditing(notificationControl) {
         const $editingContainer = $('<div>')
             .addClass(FILE_MANAGER_EDITING_CONTAINER_CLASS)
             .appendTo(this.$element());
@@ -130,12 +133,13 @@ class FileManager extends Widget {
         this._editing = this._createComponent($editingContainer, FileManagerEditingControl, {
             controller: this._controller,
             model: {
-                getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
+                getMultipleSelectedItems: this._getSelectedItemInfos.bind(this)
             },
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
+            notificationControl,
             uploadDropZonePlaceholderContainer: this.$element(),
+            rtlEnabled: this.option('rtlEnabled'),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
-            onCreating: () => this._setItemsViewAreaActive(false),
             onError: e => this._onEditingError(e)
         });
     }
@@ -164,9 +168,10 @@ class FileManager extends Widget {
             contextMenu: this._filesTreeViewContextMenu,
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
-            onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this),
-            onClick: () => this._setItemsViewAreaActive(false)
+            onDirectoryClick: ({ itemData }) => this._setCurrentDirectory(itemData)
         });
+
+        this._filesTreeView.updateCurrentDirectory();
     }
 
     _createItemView($container, viewMode) {
@@ -184,7 +189,7 @@ class FileManager extends Widget {
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
-            onContextMenuShowing: () => this._onContextMenuShowing(VIEW_AREAS.items),
+            onContextMenuShowing: e => this._onContextMenuShowing(VIEW_AREAS.items, e),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -195,15 +200,13 @@ class FileManager extends Widget {
         viewMode = viewMode || itemViewOptions.mode;
         const widgetClass = viewMode === 'thumbnails' ? FileManagerThumbnailsItemList : FileManagerDetailsItemList;
         this._itemView = this._createComponent($itemView, widgetClass, options);
-
-        eventsEngine.on($itemView, 'click', this._onItemViewClick.bind(this));
     }
 
     _createBreadcrumbs($container) {
         const $breadcrumbs = $('<div>').appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
             rootFolderDisplayName: this.option('rootFolderName'),
-            onCurrentDirectoryChanging: ({ currentDirectory }) => this._setCurrentDirectory(currentDirectory)
+            onCurrentDirectoryChanging: ({ currentDirectory }) => this._setCurrentDirectory(currentDirectory, true)
         });
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
     }
@@ -214,7 +217,7 @@ class FileManager extends Widget {
             commandManager: this._commandManager,
             items: this.option('contextMenu.items'),
             onItemClick: (args) => this._actions.onContextMenuItemClick(args),
-            onContextMenuShowing: () => this._onContextMenuShowing(viewArea),
+            onContextMenuShowing: e => this._onContextMenuShowing(viewArea, e),
             isolateCreationItemCommands,
             viewArea
         });
@@ -231,11 +234,6 @@ class FileManager extends Widget {
         this._commandManager.registerActions(actions);
     }
 
-    _onFilesTreeViewDirectoryClick({ itemData }) {
-        this._setCurrentDirectory(itemData);
-        this._setItemsViewAreaActive(false);
-    }
-
     _onItemViewSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
         this._lockSelectionProcessing = true;
         this.option('selectedItemKeys', selectedItemKeys);
@@ -244,7 +242,6 @@ class FileManager extends Widget {
         this._actions.onSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
 
         this._updateToolbar(selectedItemInfos);
-        this._setItemsViewAreaActive(true);
     }
 
     _onItemViewFocusedItemChanged(e) {
@@ -284,27 +281,6 @@ class FileManager extends Widget {
         this._toolbar.update(items);
     }
 
-    _setItemsViewAreaActive(active) {
-        if(this._itemsViewAreaActive === active) {
-            return;
-        }
-
-        this._itemsViewAreaActive = active;
-
-        let $activeArea = null;
-        let $inactiveArea = null;
-        if(active) {
-            $activeArea = this._itemView.$element();
-            $inactiveArea = this._filesTreeView.$element();
-        } else {
-            $activeArea = this._filesTreeView.$element();
-            $inactiveArea = this._itemView.$element();
-        }
-
-        $activeArea.removeClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
-        $inactiveArea.addClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
-    }
-
     _switchView(viewMode) {
         this._disposeWidget(this._itemView.option('contextMenu'));
         this._disposeWidget(this._itemView);
@@ -322,10 +298,6 @@ class FileManager extends Widget {
         this._itemView.clearSelection();
     }
 
-    _getMultipleSelectedItems() {
-        return this._itemsViewAreaActive ? this._getSelectedItemInfos() : [ this._getCurrentDirectory() ];
-    }
-
     _showError(message) { // TODO use notification control instead of it
         this._showNotification(message, false);
     }
@@ -338,8 +310,7 @@ class FileManager extends Widget {
     }
 
     _redrawComponent(onlyFileItemsView) {
-        !onlyFileItemsView && this._filesTreeView.refresh();
-        this._itemView.refresh();
+        this._itemView.refresh().then(() => !onlyFileItemsView && this._filesTreeView.refresh());
     }
 
     _getItemViewItems() {
@@ -395,12 +366,15 @@ class FileManager extends Widget {
         return itemsCopy;
     }
 
-    _onItemViewClick() {
-        this._setItemsViewAreaActive(true);
-    }
-
-    _onContextMenuShowing(viewArea) {
-        this._setItemsViewAreaActive(viewArea === VIEW_AREAS.items);
+    _onContextMenuShowing(viewArea, e) {
+        let eventArgs = extendAttributes({}, e, ['targetElement', 'cancel', 'event']);
+        eventArgs = extend(eventArgs, {
+            viewArea,
+            fileSystemItem: e.itemData?.fileItem,
+            _isActionButton: e.isActionButton
+        });
+        this._actions.onContextMenuShowing(eventArgs);
+        e.cancel = ensureDefined(eventArgs.cancel, false);
     }
 
     _getItemThumbnailInfo(fileInfo) {
@@ -476,6 +450,8 @@ class FileManager extends Widget {
 
             onContextMenuItemClick: null,
 
+            onContextMenuShowing: null,
+
             onCurrentDirectoryChanged: null,
 
             onSelectedFileOpened: null,
@@ -503,6 +479,11 @@ class FileManager extends Widget {
                 rename: false,
                 upload: false,
                 download: false
+            },
+
+            notifications: {
+                showPanel: true,
+                showPopup: true
             }
         });
     }
@@ -527,14 +508,26 @@ class FileManager extends Widget {
                     this._itemView.option('focusedItemKey', args.value);
                 }
                 break;
+            case 'rootFolderName':
+                this._controller.setRootText(args.value);
+                this.repaint();
+                break;
             case 'fileSystemProvider':
+                this._controller.updateProvider(args.value, this.option('currentPath'))
+                    .then(() => this.repaint());
+                break;
+            case 'allowedFileExtensions':
+                this._controller.setAllowedFileExtensions(args.value);
+                this.repaint();
+                break;
+            case 'upload':
+                this._controller.setUploadOptions(this.option('upload'));
+                this.repaint();
+                break;
+            case 'permissions':
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
-            case 'rootFolderName':
-            case 'allowedFileExtensions':
-            case 'permissions':
-            case 'upload':
                 this.repaint();
                 break;
             case 'itemView':
@@ -571,7 +564,12 @@ class FileManager extends Widget {
                     this._itemViewContextMenu.option('items', contextMenuItems);
                 }
                 break;
+            case 'notifications':
+                this._notificationControl.option('showProgressPanel', this.option('notifications.showPanel'));
+                this._notificationControl.option('showNotificationPopup', this.option('notifications.showPopup'));
+                break;
             case 'onContextMenuItemClick':
+            case 'onContextMenuShowing':
             case 'onCurrentDirectoryChanged':
             case 'onSelectedFileOpened':
             case 'onSelectionChanged':
@@ -579,6 +577,10 @@ class FileManager extends Widget {
             case 'onToolbarItemClick':
             case 'onErrorOccurred':
                 this._actions[name] = this._createActionByOption(name);
+                break;
+            case 'rtlEnabled':
+                this._editing.updateDialogRtl(args.value);
+                super._optionChanged(args);
                 break;
             default:
                 super._optionChanged(args);
@@ -588,6 +590,7 @@ class FileManager extends Widget {
     _initActions() {
         this._actions = {
             onContextMenuItemClick: this._createActionByOption('onContextMenuItemClick'),
+            onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
             onCurrentDirectoryChanged: this._createActionByOption('onCurrentDirectoryChanged'),
             onSelectedFileOpened: this._createActionByOption('onSelectedFileOpened'),
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
@@ -601,8 +604,8 @@ class FileManager extends Widget {
         return this._commandManager.executeCommand(commandName);
     }
 
-    _setCurrentDirectory(directoryInfo) {
-        this._controller.setCurrentDirectory(directoryInfo);
+    _setCurrentDirectory(directoryInfo, checkActuality) {
+        this._controller.setCurrentDirectory(directoryInfo, checkActuality);
     }
 
     _getCurrentDirectory() {
@@ -661,7 +664,7 @@ class FileManager extends Widget {
     }
 
     _getSelectedItemInfos() {
-        return this._itemView.getSelectedItems();
+        return this._itemView ? this._itemView.getSelectedItems() : [];
     }
 
     refresh() {

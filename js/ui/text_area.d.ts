@@ -1,33 +1,96 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
 } from './text_box';
 
+/** @public */
+export type ChangeEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTextArea>;
+
+/** @public */
+export type CopyEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type CutEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTextArea>;
+
+/** @public */
+export type EnterKeyEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTextArea>;
+
+/** @public */
+export type InputEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type KeyPressEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type KeyUpEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTextArea> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = NativeEventInfo<dxTextArea>;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxTextArea> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoResizeEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number | string;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minHeight?: number | string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     spellcheck?: boolean;
@@ -38,24 +101,18 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @inherits dxTextBox
  * @module ui/text_area
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTextArea extends dxTextBox {
-    constructor(element: Element, options?: dxTextAreaOptions)
-    constructor(element: JQuery, options?: dxTextAreaOptions)
+    constructor(element: UserDefinedElement, options?: dxTextAreaOptions)
 }
 
-declare global {
-interface JQuery {
-    dxTextArea(): JQuery;
-    dxTextArea(options: "instance"): dxTextArea;
-    dxTextArea(options: string): any;
-    dxTextArea(options: string, ...params: any[]): any;
-    dxTextArea(options: dxTextAreaOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxTextAreaOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTextAreaOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTextAreaOptions;

@@ -5,16 +5,17 @@ import { addNamespace } from '../../../events/utils/index';
 import { isDefined } from '../../../core/utils/type';
 
 const DEFAULT_CELL_HEIGHT = 50;
+const MIN_CELL_WIDTH = 1;
 const MIN_SCROLL_OFFSET = 10;
-const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
+const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 30;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
 
-const scrollingTypes = {
+const scrollingOrientations = {
     vertical: 'vertical',
     horizontal: 'horizontal',
     both: 'both'
 };
-const DefaultScrollingType = scrollingTypes.vertical;
+const DefaultScrollingOrientation = scrollingOrientations.both;
 
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
@@ -28,6 +29,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     get workspace() { return this._workspace; }
+    get isRTL() { return this.workspace._isRTL(); }
 
     get renderer() { return this._renderer; }
 
@@ -52,6 +54,8 @@ export default class VirtualScrollingDispatcher {
     get rowHeight() { return this._rowHeight; }
     set rowHeight(value) { this._rowHeight = value; }
 
+    get outlineCount() { return this.workspace.option('scrolling.outlineCount'); }
+
     get viewportHeight() {
         return this.height
             ? this.workspace.$element().height()
@@ -67,10 +71,32 @@ export default class VirtualScrollingDispatcher {
             : getWindow().innerWidth;
     }
 
+    get cellCountInsideTopVirtualRow() { return this.verticalScrollingState?.virtualItemCountBefore || 0; }
+    get cellCountInsideLeftVirtualCell() { return this.horizontalScrollingState?.virtualItemCountBefore || 0; }
+    get cellCountInsideRightVirtualCell() { return this.horizontalScrollingState?.virtualItemCountAfter || 0; }
+
     get topVirtualRowsCount() {
-        return this.verticalScrollingState?.virtualItemCountBefore > 0
+        return this.cellCountInsideTopVirtualRow > 0
             ? 1
             : 0;
+    }
+
+    get leftVirtualCellsCount() {
+        const virtualItemsCount = !this.isRTL
+            ? this.cellCountInsideLeftVirtualCell
+            : this.cellCountInsideRightVirtualCell;
+
+        return virtualItemsCount > 0
+            ? 1
+            : 0;
+    }
+
+    get virtualRowOffset() {
+        return this.verticalScrollingState?.virtualItemSizeBefore || 0;
+    }
+
+    get virtualCellOffset() {
+        return this.horizontalScrollingState?.virtualItemSizeBefore || 0;
     }
 
     get scrollingState() {
@@ -82,19 +108,18 @@ export default class VirtualScrollingDispatcher {
     get verticalScrollingState() { return this.scrollingState.vertical; }
     get horizontalScrollingState() { return this.scrollingState.horizontal; }
 
-    get scrollingType() {
-        return this.workspace.option('scrolling.type') ||
-            DefaultScrollingType;
+    get scrollingOrientation() {
+        return this.workspace.option('scrolling.orientation') || DefaultScrollingOrientation;
     }
 
     get verticalScrollingAllowed() {
-        return this.scrollingType === scrollingTypes.vertical ||
-            this.scrollingType === scrollingTypes.both;
+        return this.scrollingOrientation === scrollingOrientations.vertical ||
+            this.scrollingOrientation === scrollingOrientations.both;
     }
 
     get horizontalScrollingAllowed() {
-        return this.scrollingType === scrollingTypes.horizontal ||
-            this.scrollingType === scrollingTypes.both;
+        return this.scrollingOrientation === scrollingOrientations.horizontal ||
+            this.scrollingOrientation === scrollingOrientations.both;
     }
 
     getRenderState() {
@@ -108,12 +133,28 @@ export default class VirtualScrollingDispatcher {
     }
 
     getCellHeight() {
-        return this.workspace.getCellHeight(false) || DEFAULT_CELL_HEIGHT;
+        const cellHeight = this.workspace.getCellHeight(false);
+        const result = cellHeight > 0
+            ? cellHeight
+            : DEFAULT_CELL_HEIGHT;
+
+        return Math.floor(result);
     }
 
     getCellWidth() {
-        const { workspace } = this;
-        return workspace.getCellWidth() || workspace.getCellMinWidth();
+        let cellWidth = this.workspace.getCellWidth();
+        const minCellWidth = this.workspace.getCellMinWidth();
+
+        // TODO: Remove this after CSS refactoring
+        if(!cellWidth || cellWidth < minCellWidth) {
+            cellWidth = minCellWidth;
+        }
+
+        const result = cellWidth > 0
+            ? cellWidth
+            : MIN_CELL_WIDTH;
+
+        return Math.floor(result);
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date, isCalculateTime, isVerticalDirectionView) {
@@ -133,11 +174,12 @@ export default class VirtualScrollingDispatcher {
             ? 0
             : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
 
-        const cellWidth = workSpace.getCellWidth();
+        const cellWidth = this.getCellWidth();
+        const rowHeight = this.getCellHeight();
 
         const top = isVerticalDirectionView
-            ? (rowIndex + scrollInCell) * this.rowHeight
-            : rowIndex * this.rowHeight;
+            ? (rowIndex + scrollInCell) * rowHeight
+            : rowIndex * rowHeight;
 
         let left = isVerticalDirectionView
             ? columnIndex * cellWidth
@@ -161,7 +203,8 @@ export default class VirtualScrollingDispatcher {
             this.verticalVirtualScrolling = new VerticalVirtualScrolling({
                 workspace: this.workspace,
                 viewportHeight: this.viewportHeight,
-                rowHeight: this.rowHeight
+                rowHeight: this.rowHeight,
+                outlineCount: this.outlineCount
             });
         }
 
@@ -169,17 +212,20 @@ export default class VirtualScrollingDispatcher {
             this.horizontalVirtualScrolling = new HorizontalVirtualScrolling({
                 workspace: this.workspace,
                 viewportWidth: this.viewportWidth,
-                cellWidth: this.cellWidth
+                cellWidth: this.cellWidth,
+                outlineCount: this.outlineCount
             });
         }
     }
 
     _attachScrollableEvents() {
-        if(this.height || this.width) {
-            this._attachScrollableScroll();
-        }
-        if(!this.height || !this.width) {
-            this._attachWindowScroll();
+        if(this.horizontalScrollingAllowed || this.verticalScrollingAllowed) {
+            if(this.height || this.horizontalScrollingAllowed) {
+                this._attachScrollableScroll();
+            }
+            if(!this.height) {
+                this._attachWindowScroll();
+            }
         }
     }
 
@@ -231,21 +277,21 @@ export default class VirtualScrollingDispatcher {
         }
     }
 
-    updateDimensions() {
+    updateDimensions(isForce) {
         const cellHeight = this.getCellHeight(false);
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
-        if(needUpdateVertical) {
+        if(needUpdateVertical || isForce) {
             this.rowHeight = cellHeight;
 
-            this.verticalVirtualScrolling.reinitState(cellHeight);
+            this.verticalVirtualScrolling?.reinitState(cellHeight, isForce);
         }
 
         const cellWidth = this.getCellWidth();
         const needUpdateHorizontal = this.horizontalScrollingAllowed && cellWidth !== this.cellWidth;
-        if(needUpdateHorizontal) {
+        if(needUpdateHorizontal || isForce) {
             this.cellWidth = cellWidth;
 
-            this.horizontalVirtualScrolling.reinitState(cellWidth);
+            this.horizontalVirtualScrolling?.reinitState(cellWidth, isForce);
         }
 
         if(needUpdateVertical || needUpdateHorizontal) {
@@ -256,18 +302,23 @@ export default class VirtualScrollingDispatcher {
 
 class VirtualScrollingBase {
     constructor(options) {
-        this._workspace = options.workspace;
+        this.options = options;
         this._state = this.defaultState;
         this._viewportSize = options.viewportSize;
         this._itemSize = options.itemSize;
+
         this._position = -1;
+        this._itemSizeChanged = false;
 
         this.updateState(0);
     }
 
     get viewportSize() { return this._viewportSize; }
     get itemSize() { return this._itemSize; }
-    set itemSize(value) { this._itemSize = value; }
+    set itemSize(value) {
+        this._itemSizeChanged = this._itemSize !== value;
+        this._itemSize = value;
+    }
     get state() { return this._state; }
     set state(value) { this._state = value; }
 
@@ -278,10 +329,12 @@ class VirtualScrollingBase {
     }
 
     get outlineCount() {
-        return Math.floor(this.pageSize / 2);
+        return isDefined(this.options.outlineCount)
+            ? this.options.outlineCount
+            : Math.floor(this.pageSize / 2);
     }
 
-    get workspace() { return this._workspace; }
+    get workspace() { return this.options.workspace; }
     get groupCount() { return this.workspace._getGroupCount(); }
     get isVerticalGrouping() { return this.workspace._isVerticalGroupedWorkSpace(); }
 
@@ -355,10 +408,10 @@ class VirtualScrollingBase {
             : -1;
     }
 
-    updateState(position) {
+    updateState(position, isForce) {
         position = this._correctPosition(position);
 
-        if(!this.needUpdateState(position)) {
+        if(!this.needUpdateState(position) && !isForce) {
             return false;
         }
 
@@ -393,14 +446,14 @@ class VirtualScrollingBase {
         return true;
     }
 
-    reinitState(itemSize) {
+    reinitState(itemSize, isForceUpdate) {
         const { position } = this;
 
         this.itemSize = itemSize;
 
-        this.updateState(0);
+        this.updateState(0, isForceUpdate);
         if(position > 0) {
-            this.updateState(position);
+            this.updateState(position, isForceUpdate);
         }
     }
 
@@ -483,12 +536,18 @@ class VirtualScrollingBase {
 
         const isAppend = prevVirtualSizeBefore < virtualSizeBefore;
         const isPrepend = prevVirtualSizeAfter < virtualSizeAfter;
-        const needAddItems = isAppend || isPrepend;
 
+        const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
         if(needAddItems) {
-            state.virtualItemSizeBefore = virtualItemSizeBefore;
-            state.virtualItemSizeAfter = virtualItemSizeAfter;
+            this._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
         }
+    }
+
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
+        const { state } = this;
+
+        state.virtualItemSizeBefore = virtualItemSizeBefore;
+        state.virtualItemSizeAfter = virtualItemSizeAfter;
     }
 }
 
@@ -497,7 +556,8 @@ class VerticalVirtualScrolling extends VirtualScrollingBase {
         super({
             workspace: options.workspace,
             viewportSize: options.viewportHeight,
-            itemSize: options.rowHeight
+            itemSize: options.rowHeight,
+            outlineCount: options.outlineCount
         });
     }
 
@@ -526,9 +586,12 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
         super({
             workspace: options.workspace,
             viewportSize: options.viewportWidth,
-            itemSize: options.cellWidth
+            itemSize: options.cellWidth,
+            outlineCount: options.outlineCount
         });
     }
+
+    get isRTL() { return this.workspace._isRTL(); }
 
     getTotalItemCount() {
         return this.workspace._getTotalCellCount(this.groupCount, this.isVerticalGrouping);
@@ -540,8 +603,20 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
             rightVirtualCellWidth: this.state.virtualItemSizeAfter,
             startCellIndex: this.state.startIndex,
             cellCount: this.state.itemCount,
-            cellWidth: this.state.itemSize
+            cellWidth: this.itemSize
         };
+    }
+
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
+        if(!this.isRTL) {
+            super._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
+        } else {
+            const { state } = this;
+
+            state.virtualItemSizeAfter = virtualItemSizeBefore;
+            state.virtualItemSizeBefore = virtualItemSizeAfter;
+            state.startIndex = this.getTotalItemCount() - this.startIndex - this.state.itemCount;
+        }
     }
 }
 
@@ -563,7 +638,6 @@ class Renderer {
     }
 
     _renderGrid() {
-        this.workspace.renderRAllDayPanel();
         this.workspace.renderRWorkspace(false);
     }
 

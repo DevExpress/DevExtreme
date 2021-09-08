@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   ComponentBindings, JSXComponent, OneWay, Component, Ref, ForwardRef, Effect, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
 
@@ -16,7 +16,7 @@ export const viewFunction = ({
   props: {
     isLargeDisplayMode, pageSize, pageSizeChange,
   },
-}: PageSizeSelector) => (
+}: PageSizeSelector): JSX.Element => (
   <div ref={htmlRef} className={PAGER_PAGE_SIZES_CLASS}>
     {isLargeDisplayMode && (
     <PageSizeLarge
@@ -46,7 +46,7 @@ class PageSizeSelectorProps {
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize'| 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
   extends JSXComponent<PageSizeSelectorPropsType>() {
@@ -55,7 +55,7 @@ export class PageSizeSelector
   @Effect({ run: 'once' }) setRootElementRef(): void {
     const { rootElementRef } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.htmlRef;
+      rootElementRef.current = this.htmlRef.current;
     }
   }
 

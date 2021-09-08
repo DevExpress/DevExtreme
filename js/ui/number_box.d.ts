@@ -1,46 +1,108 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
 import dxTextEditor, {
     dxTextEditorButton,
-    dxTextEditorOptions
+    dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
 import {
-    format
+    ValueChangedInfo,
+} from './editor/editor';
+
+import {
+    format,
 } from './widget/ui.widget';
 
+/** @public */
+export type ChangeEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxNumberBox>;
+
+/** @public */
+export type CopyEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type CutEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxNumberBox>;
+
+/** @public */
+export type EnterKeyEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxNumberBox>;
+
+/** @public */
+export type InputEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type KeyPressEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type KeyUpEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxNumberBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = NativeEventInfo<dxNumberBox>;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxNumberBox> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
      * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     format?: format;
     /**
      * @docid
      * @default "Value must be a number"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     invalidValueMessage?: string;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: number;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: number;
@@ -48,37 +110,32 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @docid
      * @type Enums.NumberBoxMode
      * @default "text"
-     * @default 'number' [for](mobile_devices)
-     * @prevFileNamespace DevExpress.ui
+     * @default 'number' &for(mobile_devices)
      * @public
      */
     mode?: 'number' | 'text' | 'tel';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSpinButtons?: boolean;
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     step?: number;
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(desktop)
      * @public
      */
     useLargeSpinButtons?: boolean;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: number;
@@ -89,24 +146,18 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
  * @inherits dxTextEditor
  * @module ui/number_box
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxNumberBox extends dxTextEditor {
-    constructor(element: Element, options?: dxNumberBoxOptions)
-    constructor(element: JQuery, options?: dxNumberBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxNumberBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxNumberBox(): JQuery;
-    dxNumberBox(options: "instance"): dxNumberBox;
-    dxNumberBox(options: string): any;
-    dxNumberBox(options: string, ...params: any[]): any;
-    dxNumberBox(options: dxNumberBoxOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxNumberBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxNumberBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxNumberBoxOptions;

@@ -47,7 +47,7 @@ const Drawer = Widget.inherit({
 
             /**
             * @name dxDrawerOptions.contentTemplate
-            * @type_function_param1 contentElement:dxElement
+            * @type_function_param1 contentElement:DxElement
             * @type template|function
             * @hidden
             * @default "content"
@@ -94,7 +94,6 @@ const Drawer = Widget.inherit({
 
         this.$element().addClass(DRAWER_CLASS);
 
-        this._animations = [];
         this._whenAnimationCompleted = undefined;
         this._whenPanelContentRendered = undefined;
         this._whenPanelContentRefreshed = undefined;
@@ -192,7 +191,7 @@ const Drawer = Widget.inherit({
             this._initMinMaxSize();
             this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide' || !this.isHorizontalDirection());
 
-            this._renderPosition(this.option('opened'), false);
+            this._renderPosition(this.option('opened'), true);
             this._removePanelManualPosition();
         });
     },
@@ -397,24 +396,29 @@ const Drawer = Widget.inherit({
         return position === 'right' || position === 'bottom';
     },
 
-    _renderPosition(isDrawerOpened, animate, jumpToEnd) {
+    _renderPosition(isDrawerOpened, disableAnimation, jumpToEnd) {
         this.stopAnimations(jumpToEnd);
-
-        this._animations = [];
 
         if(!hasWindow()) {
             return;
         }
 
-        animate = isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
+        // Clear possible settings from strategies:
+        $(this.viewContent()).css('paddingLeft', 0);
+        $(this.viewContent()).css('paddingRight', 0);
+        $(this.viewContent()).css('paddingTop', 0);
+        $(this.viewContent()).css('paddingBottom', 0);
+
+        let animationEnabled = this.option('animationEnabled');
+        if(disableAnimation === true) {
+            animationEnabled = false;
+        }
 
         if(isDrawerOpened) {
             this._toggleShaderVisibility(isDrawerOpened);
         }
 
-        this._strategy.renderPosition(isDrawerOpened, animate);
-
-        this._strategy.renderShaderVisibility(isDrawerOpened, animate, this.option('animationDuration'));
+        this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
     },
 
     _animationCompleteHandler() {
@@ -422,7 +426,6 @@ const Drawer = Widget.inherit({
 
         if(this._whenAnimationCompleted) {
             this._whenAnimationCompleted.resolve();
-            this._animations = [];
         }
     },
 
@@ -444,7 +447,7 @@ const Drawer = Widget.inherit({
     _dimensionChanged() {
         this._initMinMaxSize();
         this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
-        this._renderPosition(this.option('opened'), false);
+        this._renderPosition(this.option('opened'), true);
     },
 
     _toggleShaderVisibility(visible) {
@@ -461,13 +464,8 @@ const Drawer = Widget.inherit({
     },
 
     _refreshPanel() {
-        // TODO: removeAttr('style')?
-        $(this.viewContent()).css('paddingLeft', 0);
-        $(this.viewContent()).css('paddingRight', 0);
-        $(this.viewContent()).css('paddingTop', 0);
-        $(this.viewContent()).css('paddingBottom', 0);
-        $(this.viewContent()).css('left', 0);
-        $(this.viewContent()).css('transform', 'translate(0px, 0px)');
+        $(this.viewContent()).css('left', 0); // can affect animation
+        $(this.viewContent()).css('transform', 'translate(0px, 0px)'); // can affect animation
         $(this.viewContent()).removeClass('dx-theme-background-color');
 
         this._removePanelContentWrapper();
@@ -483,7 +481,7 @@ const Drawer = Widget.inherit({
         if(hasWindow()) {
             this._whenPanelContentRefreshed.always(() => {
                 this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
-                this._renderPosition(this.option('opened'), false, true);
+                this._renderPosition(this.option('opened'), true, true);
                 this._removePanelManualPosition();
             });
         }
@@ -517,7 +515,7 @@ const Drawer = Widget.inherit({
                 this._dimensionChanged();
                 break;
             case 'opened':
-                this._renderPosition(args.value);
+                this._renderPosition(this.option('opened'));
                 this._toggleOpenedStateClass(args.value);
                 break;
             case 'position':
@@ -539,7 +537,7 @@ const Drawer = Widget.inherit({
             case 'minSize':
             case 'maxSize':
                 this._initMinMaxSize();
-                this._renderPosition(this.option('opened'), false);
+                this._renderPosition(this.option('opened'), true);
                 break;
             case 'revealMode':
                 this._refreshRevealModeClass(args.previousValue);
@@ -566,7 +564,7 @@ const Drawer = Widget.inherit({
     /**
     * @name dxDrawer.viewContent
     * @publicName viewContent()
-    * @return dxElement
+    * @return DxElement
     * @hidden
     */
     viewContent() {

@@ -3,7 +3,6 @@ import errors from '../core/errors';
 
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
-import proxyUrlFormatter from './proxy_url_formatter';
 
 let IS_WINJS_ORIGIN;
 let IS_LOCAL_ORIGIN;
@@ -29,10 +28,6 @@ EndpointSelector.prototype = {
         const bag = this.config[key];
         if(!bag) {
             throw errors.Error('E0006');
-        }
-
-        if(proxyUrlFormatter.isProxyUsed()) {
-            return proxyUrlFormatter.formatProxyUrl(bag.local);
         }
 
         if(bag.production) {

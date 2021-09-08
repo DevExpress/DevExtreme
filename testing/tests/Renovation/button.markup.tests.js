@@ -2,10 +2,7 @@ import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import { act } from 'preact/test-utils';
-
 import 'renovation/ui/button.j';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -27,13 +24,12 @@ const BUTTON_HAS_TEXT_CLASS = 'dx-button-has-text';
 const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
 const BUTTON_BACK_CLASS = 'dx-button-back';
-const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
 
 const moduleConfig = {
     Button(options = {}) {
-        act(() => $('#button').dxButton(options));
+        $('#button').dxButton(options);
         return $('#button');
     }
 };
@@ -166,14 +162,8 @@ QUnit.module('Button markup', moduleConfig, () => {
         assert.ok(element.find('.fa-new-icon.fa').length, 'icon was changed correctly');
     });
 
-    QUnit.test('Button content class appear on correct container (T256387)', function(assert) {
-        act(() => $('#buttonWithTemplate').dxButton({ text: 'text1', icon: 'test-icon', template: 'content' }));
-
-        assert.ok($('#buttonWithTemplate').find('.' + BUTTON_CONTENT_CLASS).hasClass(TEMPLATE_WRAPPER_CLASS), 'template has content class');
-    });
-
     QUnit.test('Button with anonymous template', function(assert) {
-        act(() => $('#buttonWithAnonymousTemplate').dxButton());
+        $('#buttonWithAnonymousTemplate').dxButton();
 
         assert.equal($.trim($('#buttonWithAnonymousTemplate').text()), 'test', 'anonymous template rendered');
     });
@@ -181,7 +171,7 @@ QUnit.module('Button markup', moduleConfig, () => {
     QUnit.test('anonymous content template rendering', function(assert) {
         const $contentElement = $('#buttonWithAnonymousTemplate #content');
 
-        act(() => $('#buttonWithAnonymousTemplate').dxButton());
+        $('#buttonWithAnonymousTemplate').dxButton();
 
         assert.equal($('#buttonWithAnonymousTemplate').find('#content')[0], $contentElement[0], 'content element preserved');
     });
@@ -193,26 +183,6 @@ QUnit.module('Button markup', moduleConfig, () => {
                 return $('<div>');
             }
         });
-    });
-
-    QUnit.test('Button should render custom template with render function that returns dom node', function(assert) {
-        const element = this.Button({
-            template: 'test',
-            integrationOptions: {
-                templates: {
-                    'test': {
-                        render: function(args) {
-                            return $('<span>')
-                                .addClass('dx-template-wrapper')
-                                .text('button text')
-                                .get(0);
-                        }
-                    }
-                }
-            }
-        });
-
-        assert.equal(element.text(), 'button text', 'container is correct');
     });
 });
 

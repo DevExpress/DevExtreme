@@ -1,19 +1,21 @@
-import '../jquery_augmentation';
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
-    LoadOptions
+    LoadOptions,
 } from './load_options';
 
+/** @namespace DevExpress.data */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface StoreOptions<T = Store> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     errorHandler?: Function;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     key?: string | Array<string>;
@@ -22,45 +24,39 @@ export interface StoreOptions<T = Store> {
      * @type_function_param1 values:object
      * @type_function_param2 key:object|string|number
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onInserted?: ((values: any, key: any | string | number) => any);
+    onInserted?: ((values: any, key: any | string | number) => void);
     /**
      * @docid
      * @type_function_param1 values:object
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onInserting?: ((values: any) => any);
+    onInserting?: ((values: any) => void);
     /**
      * @docid
      * @type_function_param1 result:Array<any>
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoaded?: ((result: Array<any>) => any);
+    onLoaded?: ((result: Array<any>) => void);
     /**
      * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => any);
+    onLoading?: ((loadOptions: LoadOptions) => void);
     /**
      * @docid
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     onModified?: Function;
     /**
      * @docid
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     onModifying?: Function;
@@ -68,51 +64,46 @@ export interface StoreOptions<T = Store> {
      * @docid
      * @type_function_param1 changes:Array<any>
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onPush?: ((changes: Array<any>) => any);
+    onPush?: ((changes: Array<any>) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onRemoved?: ((key: any | string | number) => any);
+    onRemoved?: ((key: any | string | number) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onRemoving?: ((key: any | string | number) => any);
-    /**
-     * @docid
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 values:object
-     * @action
-     * @prevFileNamespace DevExpress.data
-     * @public
-     */
-    onUpdated?: ((key: any | string | number, values: any) => any);
+    onRemoving?: ((key: any | string | number) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onUpdating?: ((key: any | string | number, values: any) => any);
+    onUpdated?: ((key: any | string | number, values: any) => void);
+    /**
+     * @docid
+     * @type_function_param1 key:object|string|number
+     * @type_function_param2 values:object
+     * @action
+     * @public
+     */
+    onUpdating?: ((key: any | string | number, values: any) => void);
 }
 /**
  * @docid
  * @hidden
  * @module data/abstract_store
  * @export default
- * @prevFileNamespace DevExpress.data
+ * @namespace DevExpress.data
  */
 export default class Store {
     constructor(options?: StoreOptions)
@@ -121,24 +112,21 @@ export default class Store {
      * @publicName byKey(key)
      * @param1 key:object|string|number
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
      * @publicName insert(values)
      * @param1 values:object
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert(values: any): Promise<any> & JQueryPromise<any>;
+    insert(values: any): DxPromise<any>;
     /**
      * @docid
      * @publicName key()
      * @return any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     key(): any;
@@ -147,7 +135,6 @@ export default class Store {
      * @publicName keyOf(obj)
      * @param1 obj:object
      * @return any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     keyOf(obj: any): any;
@@ -155,25 +142,22 @@ export default class Store {
      * @docid
      * @publicName load()
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(): Promise<any> & JQueryPromise<any>;
+    load(): DxPromise<any>;
     /**
      * @docid
      * @publicName load(options)
      * @param1 options:LoadOptions
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
+    load(options: LoadOptions): DxPromise<any>;
     /**
      * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     off(eventName: string): this;
@@ -183,7 +167,6 @@ export default class Store {
      * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     off(eventName: string, eventHandler: Function): this;
@@ -193,7 +176,6 @@ export default class Store {
      * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     on(eventName: string, eventHandler: Function): this;
@@ -202,7 +184,6 @@ export default class Store {
      * @publicName on(events)
      * @param1 events:object
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     on(events: any): this;
@@ -210,7 +191,6 @@ export default class Store {
      * @docid
      * @publicName push(changes)
      * @param1 changes:Array<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     push(changes: Array<any>): void;
@@ -219,10 +199,9 @@ export default class Store {
      * @publicName remove(key)
      * @param1 key:object|string|number
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
+    remove(key: any | string | number): DxPromise<void>;
     /**
      * @docid
      * @publicName totalCount(options)
@@ -230,18 +209,16 @@ export default class Store {
      * @param1_field1 filter:object
      * @param1_field2 group:object
      * @return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
+    totalCount(obj: { filter?: any; group?: any }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)
      * @param1 key:object|string|number
      * @param2 values:object
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
+    update(key: any | string | number, values: any): DxPromise<any>;
 }

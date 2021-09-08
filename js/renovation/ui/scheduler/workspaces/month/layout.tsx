@@ -1,6 +1,6 @@
 // We do not use this component yet so it is safe to remove several parts temporarily
 // We have to do this because of a bug in Vue generator
-import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { Component, JSXComponent } from '@devextreme-generator/declarations';
 import { LayoutBase } from '../base/layout';
 import { LayoutProps } from '../base/layout_props';
 

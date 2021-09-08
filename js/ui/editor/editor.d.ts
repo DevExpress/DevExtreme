@@ -1,41 +1,45 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import {
-    event
+    NativeEventInfo,
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from '../widget/ui.widget';
 
+export interface ValueChangedInfo {
+    readonly previousValue?: any;
+    readonly value?: any;
+}
+
+/** @namespace DevExpress.ui */
 export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readOnly?: boolean;
@@ -43,14 +47,12 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @ref
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationError?: any;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationErrors?: Array<any>;
@@ -58,7 +60,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @type Enums.ValidationMessageMode
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationMessageMode?: 'always' | 'auto';
@@ -66,7 +67,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @type Enums.ValidationStatus
      * @default "valid"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationStatus?: 'valid' | 'invalid' | 'pending';
@@ -74,10 +74,16 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @default null
      * @fires EditorOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
+    /**
+     * @docid
+     * @type Enums.EditorStylingMode
+     * @default 'outlined'
+     * @hidden
+     */
+    stylingMode?: 'outlined' | 'underlined' | 'filled';
 }
 /**
  * @docid
@@ -85,15 +91,13 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @module ui/editor/editor
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class Editor extends Widget {
-    constructor(element: Element, options?: EditorOptions)
-    constructor(element: JQuery, options?: EditorOptions)
+    constructor(element: UserDefinedElement, options?: EditorOptions)
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;

@@ -7,7 +7,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const BUTTON_CLASS = 'dx-button';
@@ -22,6 +21,46 @@ QUnit.testStart(() => {
         <div id="widget"></div>
     `;
     $('#qunit-fixture').html(markup);
+});
+
+QUnit.module('options', () => {
+    QUnit.test('items=[item1.elementAttr = { attr1="test1", attr2="test2", attr3="test3" }]', function(assert) {
+        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+            keyExpr: 'id',
+            items: [
+                { id: 1, text: 'button 1', elementAttr: { attr1: 'test1', attr2: 'test2', attr3: 'test3' } },
+            ],
+        });
+
+        const $button = buttonGroup.find('.dx-button');
+        assert.equal($button.attr('attr1'), 'test1');
+        assert.equal($button.attr('attr2'), 'test2');
+        assert.equal($button.attr('attr3'), 'test3');
+    });
+
+    QUnit.test('items=[item1.elementAttr.class="test1",item2.elementAttr.class="test2"]', function(assert) {
+        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+            keyExpr: 'id',
+            items: [
+                { id: 1, text: 'button 1', elementAttr: { class: 'test1' } },
+                { id: 2, text: 'button 2', elementAttr: { class: 'test2' } },
+            ],
+        });
+
+        const $button = buttonGroup.find('.dx-button');
+        assert.equal($button.eq(0).hasClass('test1'), true);
+        assert.equal($button.eq(0).hasClass('test2'), false);
+        assert.equal($button.eq(1).hasClass('test1'), false);
+        assert.equal($button.eq(1).hasClass('test2'), true);
+
+        // default classes are still exist
+        assert.equal($button.eq(0).hasClass('dx-widget'), true);
+        assert.equal($button.eq(1).hasClass('dx-widget'), true);
+        assert.equal($button.eq(0).hasClass('dx-buttongroup-item'), true);
+        assert.equal($button.eq(1).hasClass('dx-buttongroup-item'), true);
+        assert.equal($button.eq(0).hasClass('dx-buttongroup-first-item'), true);
+        assert.equal($button.eq(1).hasClass('dx-buttongroup-last-item'), true);
+    });
 });
 
 QUnit.module('option changed', {
@@ -164,6 +203,19 @@ QUnit.module('option changed', {
         assert.deepEqual(templateMock.getCall(1).args[0], item2, 'full item should be passed to the template');
     });
 
+    QUnit.test('custom item property should not be passed to default buttonTemplate', function(assert) {
+        const item1 = { text: 'button 1', icon: 'box', custom: 1 };
+        const item2 = { text: 'button 2', icon: 'box', custom: 2 };
+        this.createButtonGroup({
+            items: [item1, item2]
+        });
+
+        const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton('instance'));
+
+        assert.deepEqual(buttons[0].option('_templateData'), {}, 'full item should be passed to the template');
+        assert.deepEqual(buttons[1].option('_templateData'), {}, 'full item should be passed to the template');
+    });
+
     QUnit.test('item.template should have higher priority than the buttonTemplate option', function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{
@@ -223,7 +275,6 @@ QUnit.module('option changed', {
         assert.equal(buttons[1].option('stylingMode'), 'text', 'second button');
     });
 });
-
 
 QUnit.module('Events', () => {
     class ButtonGroupEventsTestHelper {

@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import 'renovation/ui/common/widget.j';
 
-import { act } from 'preact/test-utils';
-
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
         <div id="component"></div>
@@ -11,7 +9,7 @@ QUnit.testStart(function() {
 
 const moduleConfig = {
     Widget(options = {}) {
-        act(() => $('#component').dxWidget(options));
+        $('#component').dxWidget(options);
         return $('#component');
     }
 };
@@ -112,11 +110,26 @@ QUnit.module('Container', moduleConfig, () => {
 
         assert.strictEqual(widget.$element().get(0), container);
     });
+
+    QUnit.test('should not remove container on dispose', function(assert) {
+        const widget = this.Widget({}).dxWidget('instance');
+        widget.dispose();
+
+        assert.strictEqual($('#component').length, 1, 'container is not removed');
+        assert.strictEqual($('#component').attr('class'), undefined, 'class attribute is empty');
+    });
+
+    QUnit.test('should remove container on remove call', function(assert) {
+        const $element = this.Widget({});
+        $element.remove();
+
+        assert.strictEqual($('#component').length, 0, 'container is removed');
+    });
 });
 
-QUnit.module('Preact Wrapper', moduleConfig, () => {
+QUnit.module('Component Wrapper', moduleConfig, () => {
     QUnit.test('should create in separate element', function(assert) {
-        act(() => $('<div>').dxWidget({}));
+        $('<div>').dxWidget({});
 
         assert.ok(true, 'no exceptions');
     });

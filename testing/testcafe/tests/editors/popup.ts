@@ -11,10 +11,10 @@ test('Popup should be centered regarding the container even if container is anim
   const wrapper = outerPopup.content.find('.dx-overlay-wrapper');
   const content = wrapper.find('.dx-overlay-content');
 
-  const wrapperRect: {bottom: number; top: number; left: number; right: number} = {
+  const wrapperRect: { bottom: number; top: number; left: number; right: number } = {
     bottom: 0, top: 0, left: 0, right: 0,
   };
-  const contentRect: {bottom: number; top: number; left: number; right: number} = {
+  const contentRect: { bottom: number; top: number; left: number; right: number } = {
     bottom: 0, top: 0, left: 0, right: 0,
   };
 
@@ -42,8 +42,8 @@ test('Popup wrapper left top corner should be the same as the container right le
   const wrapper = outerPopup.content.find('.dx-overlay-wrapper');
   const container = wrapper.parent();
 
-  const wrapperRect: {top: number; left: number} = { top: 0, left: 0 };
-  const containerRect: {top: number; left: number} = { top: 0, left: 0 };
+  const wrapperRect: { top: number; left: number } = { top: 0, left: 0 };
+  const containerRect: { top: number; left: number } = { top: 0, left: 0 };
 
   await asyncForEach(['left', 'top'], async (prop) => {
     wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);

@@ -1,8 +1,11 @@
-import { CSSAttributes } from 'devextreme-generator/component_declaration/common';
+import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
-import { GroupedViewData } from './types.d';
+import { Group, GroupedViewData, TimePanelData } from './types.d';
 import { GroupOrientation } from '../types.d';
-import { VERTICAL_GROUP_ORIENTATION } from '../consts';
+import {
+  HORIZONTAL_GROUP_ORIENTATION,
+  VERTICAL_GROUP_ORIENTATION,
+} from '../consts';
 
 export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string => {
   const key = date.getTime();
@@ -13,7 +16,15 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
   return (key + groupIndex).toString();
 };
 
-export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
+export const getKeyByGroup = (
+  groupIndex: number, groupOrientation: GroupOrientation | undefined,
+): string => {
+  if (groupOrientation === VERTICAL_GROUP_ORIENTATION) {
+    return groupIndex.toString();
+  }
+
+  return '0';
+};
 
 const addToStyle = (
   attr: string,
@@ -23,7 +34,7 @@ const addToStyle = (
   const nextStyle = style || {};
   const result = { ...nextStyle };
 
-  result[attr] = value || nextStyle[value];
+  result[attr] = value || nextStyle[attr];
 
   return result;
 };
@@ -55,11 +66,11 @@ export const getGroupCellClasses = (
 });
 
 export const getIsGroupedAllDayPanel = (
-  viewData: GroupedViewData, index: number,
+  viewData: GroupedViewData | TimePanelData, index: number,
 ): boolean => {
   const { groupedData } = viewData;
   const groupData = groupedData[index];
-  const isAllDayPanel = !!(groupData?.allDayPanel?.length);
+  const isAllDayPanel = !!(groupData?.allDayPanel);
   const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
 
   return isAllDayPanel && isGroupedAllDayPanel;
@@ -68,3 +79,7 @@ export const getIsGroupedAllDayPanel = (
 export const isVerticalGroupOrientation = (
   groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION;
+
+export const isHorizontalGroupOrientation = (
+  groups: Group[], groupOrientation?: GroupOrientation,
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;

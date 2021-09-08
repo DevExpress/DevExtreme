@@ -1,96 +1,123 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxButtonGroup>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxButtonGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxButtonGroup> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
-     * @type_function_param2 buttonContent:dxElement
+     * @type_function_param2 buttonContent:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttonTemplate?: template | ((buttonData: any, buttonContent: dxElement) => string | Element | JQuery);
+    buttonTemplate?: template | ((buttonData: any, buttonContent: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @type Array<dxButtonGroupItem>
      * @public
      */
-    items?: Array<dxButtonGroupItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default 'text'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxButtonGroup
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onItemClick?: ((e: ItemClickEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxButtonGroup
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 value:any
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItemKeys?: Array<any>;
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<any>;
@@ -98,15 +125,13 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @type Enums.ButtonGroupSelectionMode
      * @default 'single'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: 'multiple' | 'single' | 'none';
     /**
      * @docid
      * @type Enums.ButtonStylingMode
      * @default 'contained'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     stylingMode?: 'text' | 'outlined' | 'contained';
@@ -116,29 +141,31 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @inherits Widget
  * @module ui/button_group
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxButtonGroup extends Widget {
-    constructor(element: Element, options?: dxButtonGroupOptions)
-    constructor(element: JQuery, options?: dxButtonGroupOptions)
+    constructor(element: UserDefinedElement, options?: dxButtonGroupOptions)
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxButtonGroup
+ */
+export type Item = dxButtonGroupItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
@@ -146,22 +173,22 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @docid
      * @type Enums.ButtonType
      * @default 'normal'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * @docid
+     * @public
+     */
+    elementAttr?: { [key: string]: any };
 }
 
-declare global {
-interface JQuery {
-    dxButtonGroup(): JQuery;
-    dxButtonGroup(options: "instance"): dxButtonGroup;
-    dxButtonGroup(options: string): any;
-    dxButtonGroup(options: string, ...params: any[]): any;
-    dxButtonGroup(options: dxButtonGroupOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxButtonGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxButtonGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxButtonGroupOptions;

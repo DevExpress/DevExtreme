@@ -7,7 +7,6 @@ import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.j
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
@@ -77,6 +76,7 @@ module('crossScrollingEnabled = true', config, () => {
     test('Appointment should have correct position while vertical dragging', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2015, 6, 10),
+            _draggingMode: 'default',
             editing: true,
             views: ['month'],
             currentView: 'month',
@@ -184,6 +184,7 @@ module('crossScrollingEnabled = true', config, () => {
 
             const scheduler = createWrapper({
                 height: 500,
+                _draggingMode: 'default',
                 editing: true,
                 currentDate: new Date(2015, 1, 9),
                 currentView: 'week',
@@ -210,6 +211,7 @@ module('crossScrollingEnabled = true', config, () => {
         test('Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)', function(assert) {
             const scheduler = createWrapper({
                 height: 500,
+                _draggingMode: 'default',
                 editing: true,
                 currentDate: new Date(2015, 1, 9),
                 currentView: 'week',
@@ -240,6 +242,7 @@ module('crossScrollingEnabled = true', config, () => {
             const scheduler = createWrapper({
                 height: 500,
                 width: 800,
+                _draggingMode: 'default',
                 editing: true,
                 currentDate: new Date(2015, 1, 9),
                 currentView: 'week',

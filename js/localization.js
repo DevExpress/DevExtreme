@@ -4,10 +4,6 @@ import number from './localization/number';
 import date from './localization/date';
 import './localization/currency';
 
-/**
- * @name localization
- */
-
 export const locale = core.locale.bind(core);
 
 export const loadMessages = message.load.bind(message);

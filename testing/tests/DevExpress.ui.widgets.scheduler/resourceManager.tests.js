@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import dxSchedulerResourceManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getWrappedDataSource } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
@@ -65,37 +66,32 @@ const resourceDataWithDataSource = [
 QUnit.module('Resource Manager', {
     beforeEach: function() {
         this.createInstance = function(resources) {
-            this.instance = new dxSchedulerResourceManager(resources);
+            this.instance = new ResourceManager(resources);
         };
     }
 });
 
-QUnit.module('_createWrappedDataSource', () => {
-    const createWrappedDataSource = (dataSource) => {
-        const manager = new dxSchedulerResourceManager([]);
-        return manager._createWrappedDataSource(dataSource);
-    };
-
+QUnit.module('getWrappedDataSource', () => {
     QUnit.test('JSON declaration should be wrapped to DataSource object', function(assert) {
         const filterValue = ['id', '=', 'emp1'];
-        const dataSource = createWrappedDataSource({
+        const dataSource = getWrappedDataSource({
             filter: filterValue,
             store: new CustomStore({
                 load: () => {}
             })
         });
 
-        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if JSON is passed');
+        assert.ok(dataSource instanceof DataSource, 'getWrappedDataSource should return DataSource object if JSON is passed');
         assert.deepEqual(dataSource.filter(), filterValue, 'Filter should be passed to the created dataSource');
     });
 
     QUnit.test('Array data should be wrapped to DataSource object', function(assert) {
-        const dataSource = createWrappedDataSource([
+        const dataSource = getWrappedDataSource([
             { id: 0 },
             { id: 1 }
         ]);
 
-        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if array passed');
+        assert.ok(dataSource instanceof DataSource, 'getWrappedDataSource should return DataSource object if array passed');
         assert.equal(dataSource.filter(), undefined, 'Filter shouldn\'t exist in DataSource');
     });
 
@@ -106,16 +102,16 @@ QUnit.module('_createWrappedDataSource', () => {
             })
         });
 
-        const dataSource = createWrappedDataSource(originalDataSource);
+        const dataSource = getWrappedDataSource(originalDataSource);
 
-        assert.equal(dataSource, originalDataSource, 'result of _createWrappedDataSource should be equal originalDataSource');
+        assert.equal(dataSource, originalDataSource, 'result of getWrappedDataSource should be equal originalDataSource');
         assert.equal(dataSource.filter(), undefined, 'Filter shouldn\'t exist in DataSource');
     });
 });
 
 QUnit.test('Init', function(assert) {
     this.createInstance();
-    assert.ok(this.instance instanceof dxSchedulerResourceManager, 'Resource Manager is initialized');
+    assert.ok(this.instance instanceof ResourceManager, 'Resource Manager is initialized');
 });
 
 QUnit.test('Resources should be initialized on ctor', function(assert) {
@@ -822,49 +818,133 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
 
 [
     {
-        groups: { roomId: 1 },
+        name: 'Rooms single',
+        loadingGroups: ['roomId'],
+        groups: [{ roomId: 0 }],
         expected: [{
-            data: [{ Id: 1, color: '#cb6bb2', text: 'Room1' }],
-            items: [{ color: '#cb6bb2', id: 1, text: 'Room1' }],
+            data: [{ Id: 0, color: '#cb6bb2', text: 'Room1' }],
+            items: [{ color: '#cb6bb2', id: 0, text: 'Room1' }],
             name: 'roomId'
         }]
     },
     {
-        groups: { roomId: 2 },
+        name: 'Rooms multiple',
+        loadingGroups: ['roomId'],
+        groups: [{ roomId: 0 }, { roomId: 2 }],
+        expected: [
+            {
+                data: [
+                    { Id: 0, color: '#cb6bb2', text: 'Room1' },
+                    { Id: 2, color: '#cb6bb3', text: 'Room2' }
+                ],
+                items: [
+                    { id: 0, color: '#cb6bb2', text: 'Room1' },
+                    { id: 2, color: '#cb6bb3', text: 'Room2' }
+                ],
+                name: 'roomId'
+            }
+        ]
+    },
+    {
+        name: 'Phones single',
+        loadingGroups: ['phoneId'],
+        groups: [{ phoneId: 0 }],
         expected: [{
-            data: [{ Id: 2, color: '#cb6bb3', text: 'Room2' }],
-            items: [{ color: '#cb6bb3', id: 2, text: 'Room2' }],
-            name: 'roomId'
+            data: [{ Id: 0, text: 'Phone1', color: '#cd6bb2' }],
+            items: [{ id: 0, text: 'Phone1', color: '#cd6bb2' }],
+            name: 'phoneId'
         }]
     },
-].forEach(data => {
-    QUnit.test(`getResourcesDataByGroups if groups: '${data.groups.roomId}'`, function(assert) {
-        const roomData =
+    {
+        name: 'Phones multiple',
+        loadingGroups: ['phoneId'],
+        groups: [{ phoneId: 0 }, { phoneId: 3 }],
+        expected: [{
+            data: [
+                { Id: 0, text: 'Phone1', color: '#cd6bb2' },
+                { Id: 3, text: 'Phone3', color: '#cd6bb4' }
+            ],
+            items: [
+                { id: 0, text: 'Phone1', color: '#cd6bb2' },
+                { id: 3, text: 'Phone3', color: '#cd6bb4' }
+            ],
+            name: 'phoneId'
+        }]
+    },
+    {
+        name: 'Rooms, Phones multiple',
+        loadingGroups: ['roomId', 'phoneId'],
+        groups: [
+            { roomId: 2 }, { roomId: 3 },
+            { phoneId: 0 }, { phoneId: 3 }
+        ],
+        expected: [
+            {
+                data: [
+                    { Id: 2, color: '#cb6bb3', text: 'Room2' },
+                    { Id: 3, color: '#cb6bb4', text: 'Room3' }
+                ],
+                items: [
+                    { id: 2, color: '#cb6bb3', text: 'Room2' },
+                    { id: 3, color: '#cb6bb4', text: 'Room3' }
+                ],
+                name: 'roomId'
+            }, {
+                data: [
+                    { Id: 0, text: 'Phone1', color: '#cd6bb2' },
+                    { Id: 3, text: 'Phone3', color: '#cd6bb4' }
+                ],
+                items: [
+                    { id: 0, color: '#cd6bb2', text: 'Phone1' },
+                    { id: 3, color: '#cd6bb4', text: 'Phone3' }
+                ],
+                name: 'phoneId'
+            }
+        ]
+    }
+].forEach(({ name, groups, loadingGroups, expected }) => {
+    QUnit.test(`getResourcesDataByGroups if resources: '${name}'`, function(assert) {
+        const roomData = [
             {
                 field: 'roomId',
-                label: 'Room',
-                allowMultiple: false,
+                label: 'Rooms',
+                allowMultiple: true,
                 valueExpr: 'Id',
-                dataSource: [{
-                    text: 'Room1',
-                    Id: 1,
-                    color: '#cb6bb2'
-                }, {
-                    text: 'Room2',
-                    Id: 2,
-                    color: '#cb6bb3'
-                }]
-            };
-        this.createInstance([roomData]);
+                dataSource: [
+                    { Id: 0, text: 'Room1', color: '#cb6bb2' },
+                    { Id: 2, text: 'Room2', color: '#cb6bb3' },
+                    { Id: 3, text: 'Room3', color: '#cb6bb4' }
+                ]
+            },
+            {
+                field: 'phoneId',
+                label: 'Phones',
+                allowMultiple: true,
+                valueExpr: 'Id',
+                dataSource: [
+                    { Id: 0, text: 'Phone1', color: '#cd6bb2' },
+                    { Id: 2, text: 'Phone2', color: '#cd6bb3' },
+                    { Id: 3, text: 'Phone3', color: '#cd6bb4' }
+                ]
+            }
+        ];
+
+        this.createInstance(roomData);
 
         const done = assert.async();
 
-        this.instance.loadResources(['roomId']).done($.proxy(() => {
-            const resourcesDataByGroups = this.instance.getResourcesDataByGroups(data.groups);
+        this.instance.loadResources(loadingGroups).done($.proxy(() => {
 
-            assert.deepEqual(resourcesDataByGroups, data.expected, 'getResourcesDataByGroups works correctly');
+            const resourcesDataByGroups = this.instance.getResourcesDataByGroups(groups);
+
+            assert.deepEqual(
+                resourcesDataByGroups,
+                expected,
+                'getResourcesDataByGroups works correctly'
+            );
 
             done();
+
         }, this));
     });
 
@@ -880,5 +960,20 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
 
             done();
         }, this));
+    });
+});
+
+QUnit.test('resources should be validated (transformed into an empty array) after loading', function(assert) {
+    const done = assert.async();
+
+    this.createInstance([{
+        field: 'ownerId',
+        dataSource: []
+    }]);
+
+    this.instance.loadResources(['ownerId']).done((resources) => {
+        assert.deepEqual(resources, [], 'Correct resources');
+
+        done();
     });
 });

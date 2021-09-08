@@ -79,7 +79,7 @@ const getFilterValue = (that, state) => {
     return DEFAULT_FILTER_VALUE;
 };
 
-export default {
+export const stateStoringModule = {
     defaultOptions: function() {
         return {
             stateStoring: {
@@ -182,7 +182,8 @@ export default {
                         that.option('pager').allowedPageSizes = allowedPageSizes;
                     }
 
-                    if(that.option('focusedRowEnabled')) {
+                    if(that.option('focusedRowEnabled') && state.focusedRowKey !== undefined) {
+                        that.option('focusedRowIndex', -1);
                         that.option('focusedRowKey', state.focusedRowKey);
                     }
 

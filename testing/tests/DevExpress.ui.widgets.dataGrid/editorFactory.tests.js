@@ -27,7 +27,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 
 import 'ui/data_grid/ui.data_grid';
 import 'ui/lookup';
@@ -42,6 +41,7 @@ import SelectBox from 'ui/select_box';
 import { MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
+import { noop } from 'core/utils/common';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -76,6 +76,8 @@ QUnit.module('Editor Factory', {
         // assert
         assert.ok(textBox, 'dxTextBox created');
         assert.equal(textBox.option('value'), 'A', 'text editor value');
+        assert.ok(textBox._supportedKeys().enter, 'enter handler is defined'); // T1013643
+        assert.notEqual(textBox._supportedKeys().enter, noop, 'enter handler is not noop'); // T1013643
 
         // act
         textBox.option('value', 'B');
@@ -290,10 +292,9 @@ QUnit.module('Editor Factory', {
         assert.ok(!textBox, 'dxTextBox not created');
 
         // arrange
-        this.options.onEditorPreparing = function(options) {
+        this.editorFactoryController.option('onEditorPreparing', (options) => {
             options.cancel = false;
-        };
-        this.editorFactoryController.optionChanged({ name: 'onEditorPreparing' });
+        });
 
         // act
         this.editorFactoryController.createEditor($container, {
@@ -1333,7 +1334,7 @@ QUnit.module('Focus', {
         ];
 
         that.setupDataGrid = function() {
-            setupDataGridModules(that, ['data', 'rows', 'columns', 'editorFactory', 'editing', 'validating', 'masterDetail'], {
+            setupDataGridModules(that, ['data', 'rows', 'columns', 'editorFactory', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'validating', 'masterDetail'], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),
@@ -1548,7 +1549,7 @@ QUnit.module('Focus', {
             return $('#qunit-fixture');
         };
 
-        setupDataGridModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'filterRow', 'editorFactory', 'editing', 'keyboardNavigation'], {
+        setupDataGridModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'filterRow', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
             initViews: true
         });
 
@@ -1610,7 +1611,7 @@ QUnit.module('Focus', {
             return $('#qunit-fixture');
         };
 
-        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'keyboardNavigation'], {
+        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
             initViews: true
         });
 
@@ -1657,7 +1658,7 @@ QUnit.module('Focus', {
             return $('#qunit-fixture');
         };
 
-        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'keyboardNavigation'], {
+        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
             initViews: true
         });
 

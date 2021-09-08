@@ -36,13 +36,6 @@ describe('MonthDateTableCell', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render text correctly', () => {
       const cell = render({});
 

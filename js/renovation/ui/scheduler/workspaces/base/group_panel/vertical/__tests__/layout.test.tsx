@@ -40,10 +40,10 @@ describe('GroupPanel Vertical Layout', () => {
     const defaultStyle = { color: 'red' };
 
     const render = (viewModel) => mount(LayoutView({
-      groupsRenderData,
       style: defaultStyle,
       ...viewModel,
       props: {
+        groupsRenderData,
         ...viewModel.props,
       },
     }) as any);
@@ -66,8 +66,6 @@ describe('GroupPanel Vertical Layout', () => {
         props: { className: 'custom-class' },
       });
 
-      expect(layout.hasClass('dx-scheduler-work-space-vertical-group-table'))
-        .toBe(true);
       expect(layout.hasClass('custom-class'))
         .toBe(true);
       expect(layout.childAt(0).hasClass('dx-scheduler-group-flex-container'))
@@ -75,9 +73,9 @@ describe('GroupPanel Vertical Layout', () => {
     });
 
     it('should render two rows and pass correct props to them', () => {
-      const cellTemplate = jest.fn();
+      const resourceCellTemplate = jest.fn();
       const layout = render({
-        props: { cellTemplate },
+        props: { resourceCellTemplate },
       });
 
       const rows = layout.find(Row);
@@ -87,12 +85,12 @@ describe('GroupPanel Vertical Layout', () => {
       expect(rows.at(0).props())
         .toMatchObject({
           groupItems: groupsRenderData[0],
-          cellTemplate,
+          cellTemplate: resourceCellTemplate,
         });
       expect(rows.at(1).props())
         .toMatchObject({
           groupItems: groupsRenderData[1],
-          cellTemplate,
+          cellTemplate: resourceCellTemplate,
         });
     });
   });
@@ -101,81 +99,14 @@ describe('GroupPanel Vertical Layout', () => {
     describe('Getters', () => {
       describe('style', () => {
         it('should call addHeightToStyle with proper parameters', () => {
-          const style = { width: '555px', height: '666px' };
-          const layout = new Layout({ height: 500 });
-          layout.restAttributes = { style };
+          const styles = { width: '555px', height: '666px' };
+          const layout = new Layout({ height: 500, styles });
 
           expect(layout.style)
             .toBe('style');
 
           expect(addHeightToStyle)
-            .toHaveBeenCalledWith(500, style);
-        });
-      });
-
-      describe('groupsRenderData', () => {
-        it('should transform grouping data into group items', () => {
-          const groups = [{
-            name: 'group 1',
-            items: [{
-              text: 'item 1', id: 1, color: 'color 1',
-            }, {
-              text: 'item 2', id: 2, color: 'color 2',
-            }],
-            data: [{
-              text: 'item 1', id: 1, color: 'color 1',
-            }, {
-              text: 'item 2', id: 2, color: 'color 2',
-            }],
-          }, {
-            name: 'group 2',
-            items: [{
-              text: 'item 3', id: 1, color: 'color 3',
-            }, {
-              text: 'item 4', id: 2, color: 'color 4',
-            }],
-            data: [{
-              text: 'item 3', id: 1, color: 'color 3',
-            }, {
-              text: 'item 4', id: 2, color: 'color 4',
-            }],
-          }];
-          const layout = new Layout({
-            groups,
-          });
-
-          expect(layout.groupsRenderData)
-            .toEqual([[{
-              ...groups[0].items[0],
-              data: groups[0].data[0],
-              resourceName: groups[0].name,
-              key: '0_group 1_1',
-            }, {
-              ...groups[0].items[1],
-              data: groups[0].data[1],
-              resourceName: groups[0].name,
-              key: '0_group 1_2',
-            }], [{
-              ...groups[1].items[0],
-              data: groups[1].data[0],
-              resourceName: groups[1].name,
-              key: '0_group 2_1',
-            }, {
-              ...groups[1].items[1],
-              data: groups[1].data[1],
-              resourceName: groups[1].name,
-              key: '0_group 2_2',
-            }, {
-              ...groups[1].items[0],
-              data: groups[1].data[0],
-              resourceName: groups[1].name,
-              key: '1_group 2_1',
-            }, {
-              ...groups[1].items[1],
-              data: groups[1].data[1],
-              resourceName: groups[1].name,
-              key: '1_group 2_2',
-            }]]);
+            .toHaveBeenCalledWith(500, styles);
         });
       });
     });

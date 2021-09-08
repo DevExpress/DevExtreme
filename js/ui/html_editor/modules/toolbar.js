@@ -2,26 +2,27 @@ import Quill from 'devextreme-quill';
 
 import $ from '../../../core/renderer';
 
+import BaseModule from './base';
+
 import Toolbar from '../../toolbar';
 import '../../select_box';
 import '../../color_box/color_view';
 import '../../number_box';
+import errors from '../../widget/ui.errors';
 
 import WidgetCollector from './widget_collector';
 import { each } from '../../../core/utils/iterator';
 import { isString, isObject, isDefined, isEmptyObject, isBoolean } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import localizationMessage from '../../../localization/message';
-import { titleize } from '../../../core/utils/inflector';
+import { titleize, camelize } from '../../../core/utils/inflector';
 
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-let ToolbarModule = {};
+let ToolbarModule = BaseModule;
 
 if(Quill) {
-    const BaseModule = Quill.import('core/module');
-
     const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
     const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
     const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
@@ -64,14 +65,23 @@ if(Quill) {
     const USER_ACTION = 'user';
     const SILENT_ACTION = 'silent';
 
-    const HEADING_TEXT = localizationMessage.format('dxHtmlEditor-heading');
-    const NORMAL_TEXT = localizationMessage.format('dxHtmlEditor-normalText');
+    const localize = (name) => {
+        return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
+    };
+
+    const localizeValue = (value, name) => {
+        if(name === 'header') {
+            const isHeaderValue = isDefined(value) && value !== false;
+            return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
+        }
+
+        return localize(value) || value;
+    };
 
     ToolbarModule = class ToolbarModule extends BaseModule {
         constructor(quill, options) {
             super(quill, options);
 
-            this._editorInstance = options.editorInstance;
             this._toolbarWidgets = new WidgetCollector();
             this._formatHandlers = this._getFormatHandlers();
 
@@ -88,13 +98,13 @@ if(Quill) {
         }
 
         _applyFormat(formatArgs, event) {
-            this._editorInstance._saveValueChangeEvent(event);
+            this.saveValueChangeEvent(event);
             this.quill.format(...formatArgs);
         }
 
         _addCallbacks() {
-            this._editorInstance.addCleanCallback(this.clean.bind(this));
-            this._editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
+            this.addCleanCallback(this.clean.bind(this));
+            this.editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
         }
 
         _updateToolbar(isSelectionChanged) {
@@ -103,31 +113,31 @@ if(Quill) {
             this.updateTableWidgets();
         }
 
-        _getDefaultClickHandler(formatName) {
+        _getDefaultClickHandler(name) {
             return ({ event }) => {
                 const formats = this.quill.getFormat();
-                const value = formats[formatName];
+                const value = formats[name];
                 const newValue = !(isBoolean(value) ? value : isDefined(value));
 
-                this._applyFormat([formatName, newValue, USER_ACTION], event);
+                this._applyFormat([name, newValue, USER_ACTION], event);
 
-                this._updateFormatWidget(formatName, newValue, formats);
+                this._updateFormatWidget(name, newValue, formats);
             };
         }
 
-        _updateFormatWidget(formatName, isApplied, formats) {
-            const widget = this._toolbarWidgets.getByName(formatName);
+        _updateFormatWidget(name, isApplied, formats) {
+            const widget = this._toolbarWidgets.getByName(name);
 
             if(!widget) {
                 return;
             }
 
             if(isApplied) {
-                this._markActiveFormatWidget(formatName, widget, formats);
+                this._markActiveFormatWidget(name, widget, formats);
             } else {
-                this._resetFormatWidget(formatName, widget);
-                if(Object.prototype.hasOwnProperty.call(formatName)) {
-                    delete formats[formatName];
+                this._resetFormatWidget(name, widget);
+                if(Object.prototype.hasOwnProperty.call(name)) {
+                    delete formats[name];
                 }
             }
 
@@ -136,9 +146,10 @@ if(Quill) {
 
         _getFormatHandlers() {
             return {
-                clear: (e) => {
+                clear: ({ event }) => {
                     const range = this.quill.getSelection();
                     if(range) {
+                        this.saveValueChangeEvent(event);
                         this.quill.removeFormat(range);
                         this.updateFormatWidgets();
                     }
@@ -155,11 +166,11 @@ if(Quill) {
                 alignJustify: this._prepareShortcutHandler('align', 'justify'),
                 codeBlock: this._getDefaultClickHandler('code-block'),
                 undo: ({ event }) => {
-                    this._editorInstance._saveValueChangeEvent(event);
+                    this.saveValueChangeEvent(event);
                     this.quill.history.undo();
                 },
                 redo: ({ event }) => {
-                    this._editorInstance._saveValueChangeEvent(event);
+                    this.saveValueChangeEvent(event);
                     this.quill.history.redo();
                 },
                 increaseIndent: ({ event }) => {
@@ -181,12 +192,12 @@ if(Quill) {
             };
         }
 
-        _prepareShortcutHandler(formatName, shortcutValue) {
+        _prepareShortcutHandler(name, shortcutValue) {
             return ({ event }) => {
                 const formats = this.quill.getFormat();
-                const value = formats[formatName] === shortcutValue ? false : shortcutValue;
+                const value = formats[name] === shortcutValue ? false : shortcutValue;
 
-                this._applyFormat([formatName, value, USER_ACTION], event);
+                this._applyFormat([name, value, USER_ACTION], event);
                 this.updateFormatWidgets(true);
             };
         }
@@ -203,9 +214,9 @@ if(Quill) {
                     text: selection && !hasEmbedContent ? this.quill.getText(selection) : '',
                     target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true
                 };
-                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
+                this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
 
-                const promise = this._editorInstance.showFormDialog({
+                const promise = this.editorInstance.showFormDialog({
                     formData: formData,
                     items: this._getLinkFormItems(selection)
                 });
@@ -216,7 +227,7 @@ if(Quill) {
                         const { index, length } = selection;
 
                         formData.text = undefined;
-                        this._editorInstance._saveValueChangeEvent(event);
+                        this.saveValueChangeEvent(event);
 
                         length && this.quill.deleteText(index, length, SILENT_ACTION);
                         this.quill.insertText(index, text, 'link', formData, USER_ACTION);
@@ -276,9 +287,9 @@ if(Quill) {
 
                 const formatIndex = this._embedFormatIndex;
 
-                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
+                this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
 
-                const promise = this._editorInstance.showFormDialog({
+                const promise = this.editorInstance.showFormDialog({
                     formData: formData,
                     items: this._imageFormItems
                 });
@@ -287,7 +298,7 @@ if(Quill) {
                     .done((formData, event) => {
                         let index = defaultIndex;
 
-                        this._editorInstance._saveValueChangeEvent(event);
+                        this.saveValueChangeEvent(event);
 
                         if(isUpdateDialog) {
                             index = formatIndex;
@@ -327,7 +338,8 @@ if(Quill) {
         _prepareInsertTableHandler() {
             return () => {
                 const formats = this.quill.getFormat();
-                const isTableFocused = Object.prototype.hasOwnProperty.call(formats, 'table');
+                const isTableFocused = Object.prototype.hasOwnProperty.call(formats, 'table') ||
+                    Object.prototype.hasOwnProperty.call(formats, 'tableHeaderCell');
                 const formData = { rows: 1, columns: 1 };
 
                 if(isTableFocused) {
@@ -335,9 +347,9 @@ if(Quill) {
                     return;
                 }
 
-                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
+                this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
 
-                const promise = this._editorInstance.showFormDialog({
+                const promise = this.editorInstance.showFormDialog({
                     formData,
                     items: this._insertTableFormItems
                 });
@@ -348,7 +360,7 @@ if(Quill) {
 
                         const table = this.quill.getModule('table');
                         if(table) {
-                            this._editorInstance._saveValueChangeEvent(event);
+                            this.saveValueChangeEvent(event);
 
                             const { columns, rows } = formData;
                             table.insertTable(columns, rows);
@@ -409,13 +421,13 @@ if(Quill) {
                 .appendTo(container);
             this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
-            eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this._editorInstance.NAME), (e) => {
+            eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this.editorInstance.NAME), (e) => {
                 e.preventDefault();
             });
 
-            this.toolbarInstance = this._editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
+            this.toolbarInstance = this.editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
-            this._editorInstance.on('optionChanged', ({ name }) => {
+            this.editorInstance.on('optionChanged', ({ name }) => {
                 if(name === 'readOnly' || name === 'disabled') {
                     this.toolbarInstance.option('disabled', this.isInteractionDisabled);
                 }
@@ -432,7 +444,7 @@ if(Quill) {
         }
 
         get isInteractionDisabled() {
-            return this._editorInstance.option('readOnly') || this._editorInstance.option('disabled');
+            return this.editorInstance.option('readOnly') || this.editorInstance.option('disabled');
         }
 
         isMultilineMode() {
@@ -456,9 +468,27 @@ if(Quill) {
         _getContainer() {
             const $container = $('<div>');
 
-            this._editorInstance.$element().prepend($container);
+            this.editorInstance.$element().prepend($container);
 
             return $container;
+        }
+
+        _detectRenamedOptions(item) {
+            const optionsInfo = [{
+                newName: 'name',
+                oldName: 'formatName'
+            }, {
+                newName: 'acceptedValues',
+                oldName: 'formatValues'
+            }];
+
+            if(isObject(item)) {
+                each(optionsInfo, (index, optionName) => {
+                    if(Object.prototype.hasOwnProperty.call(item, optionName.oldName)) {
+                        errors.log('W1016', optionName.oldName, optionName.newName);
+                    }
+                });
+            }
         }
 
         _prepareToolbarItems() {
@@ -466,6 +496,7 @@ if(Quill) {
 
             each(this.options.items, (index, item) => {
                 let newItem;
+                this._detectRenamedOptions(item);
                 if(isObject(item)) {
                     newItem = this._handleObjectItem(item);
                 } else if(isString(item)) {
@@ -481,12 +512,12 @@ if(Quill) {
         }
 
         _handleObjectItem(item) {
-            if(item.formatName && item.formatValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
+            if(item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
                 const selectItemConfig = this._prepareSelectItemConfig(item);
 
                 return this._getToolbarItem(selectItemConfig);
-            } else if(item.formatName && this._isAcceptableItem(item.widget, 'dxButton')) {
-                const defaultButtonItemConfig = this._prepareButtonItemConfig(item.formatName);
+            } else if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+                const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
                 return this._getToolbarItem(buttonItemConfig);
@@ -499,18 +530,18 @@ if(Quill) {
             return !widget || widget === acceptableWidgetName;
         }
 
-        _prepareButtonItemConfig(formatName) {
-            const iconName = formatName === 'clear' ? 'clearformat' : formatName;
-            const buttonText = titleize(formatName);
+        _prepareButtonItemConfig(name) {
+            const iconName = name === 'clear' ? 'clearformat' : name;
+            const buttonText = titleize(name);
 
             return {
                 widget: 'dxButton',
-                formatName: formatName,
+                name,
                 options: {
-                    hint: buttonText,
-                    text: buttonText,
+                    hint: localize(buttonText),
+                    text: localize(buttonText),
                     icon: iconName.toLowerCase(),
-                    onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName),
+                    onClick: this._formatHandlers[name] || this._getDefaultClickHandler(name),
                     stylingMode: 'text'
                 },
                 showText: 'inMenu'
@@ -518,16 +549,22 @@ if(Quill) {
         }
 
         _prepareSelectItemConfig(item) {
+            const { name, acceptedValues } = item;
+
             return extend(true, {
                 widget: 'dxSelectBox',
-                formatName: item.formatName,
+                name,
                 options: {
                     stylingMode: 'filled',
-                    dataSource: item.formatValues,
-                    placeholder: titleize(item.formatName),
+                    dataSource: acceptedValues,
+                    displayExpr: (value) => {
+                        return localizeValue(value, name);
+                    },
+                    placeholder: localize(name),
                     onValueChanged: (e) => {
                         if(!this._isReset) {
-                            this._applyFormat([item.formatName, e.value, USER_ACTION], e.event);
+                            this._hideAdaptiveMenu();
+                            this._applyFormat([name, e.value, USER_ACTION], e.event);
                             this._setValueSilent(e.component, e.value);
                         }
                     }
@@ -535,15 +572,21 @@ if(Quill) {
             }, item);
         }
 
-        _prepareColorClickHandler(formatName) {
+        _hideAdaptiveMenu() {
+            if(this.toolbarInstance.option('overflowMenuVisible')) {
+                this.toolbarInstance.option('overflowMenuVisible', false);
+            }
+        }
+
+        _prepareColorClickHandler(name) {
             return () => {
                 const formData = this.quill.getFormat();
-                const caption = formatName === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
-                this._editorInstance.formDialogOption('title', localizationMessage.format(caption));
-                const promise = this._editorInstance.showFormDialog({
+                const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
+                this.editorInstance.formDialogOption('title', localizationMessage.format(caption));
+                const promise = this.editorInstance.showFormDialog({
                     formData: formData,
                     items: [{
-                        dataField: formatName,
+                        dataField: name,
                         editorType: 'dxColorView',
                         editorOptions: {
                             onContentReady: (e) => {
@@ -558,7 +601,7 @@ if(Quill) {
                 });
 
                 promise.done((formData, event) => {
-                    this._applyFormat([formatName, formData[formatName], USER_ACTION], event);
+                    this._applyFormat([name, formData[name], USER_ACTION], event);
                 });
                 promise.fail(() => {
                     this.quill.focus();
@@ -570,10 +613,10 @@ if(Quill) {
             const baseItem = {
                 options: {
                     onInitialized: (e) => {
-                        if(item.formatName) {
+                        if(item.name) {
                             e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-                            e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
-                            this._toolbarWidgets.add(item.formatName, e.component);
+                            e.component.$element().toggleClass(`dx-${item.name.toLowerCase()}-format`, !!item.name);
+                            this._toolbarWidgets.add(item.name, e.component);
                         }
                     }
                 }
@@ -581,19 +624,11 @@ if(Quill) {
 
             const multilineItem = this.isMultilineMode() ? { location: 'before', locateInMenu: 'never' } : {};
 
-            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.formatName), item, baseItem, multilineItem);
+            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.name), item, baseItem, multilineItem);
         }
 
         _getDefaultItemsConfig() {
             return {
-                header: {
-                    options: {
-                        displayExpr: (item) => {
-                            const isHeaderValue = isDefined(item) && item !== false;
-                            return isHeaderValue ? `${HEADING_TEXT} ${item}` : NORMAL_TEXT;
-                        }
-                    }
-                },
                 clear: {
                     options: {
                         disabled: true
@@ -656,8 +691,8 @@ if(Quill) {
             };
         }
 
-        _getDefaultConfig(formatName) {
-            return this._getDefaultItemsConfig()[formatName];
+        _getDefaultConfig(name) {
+            return this._getDefaultItemsConfig()[name];
         }
 
         updateHistoryWidgets() {
@@ -683,7 +718,8 @@ if(Quill) {
             }
 
             const selection = this.quill.getSelection();
-            const isTableOperationsEnabled = selection && Boolean(this.quill.getFormat(selection)?.table);
+            const { table: tableCell, tableHeaderCell } = selection && this.quill.getFormat(selection) || {};
+            const isTableOperationsEnabled = Boolean(tableCell) || Boolean(tableHeaderCell);
             TABLE_OPERATIONS.forEach((operationName) => {
                 const isInsertTable = operationName === 'insertTable';
                 const widget = this._toolbarWidgets.getByName(operationName);
@@ -746,12 +782,12 @@ if(Quill) {
             }
         }
 
-        _isColorFormat(formatName) {
-            return formatName === 'color' || formatName === 'background';
+        _isColorFormat(name) {
+            return name === 'color' || name === 'background';
         }
 
-        _updateColorWidget(formatName, color) {
-            const formatWidget = this._toolbarWidgets.getByName(formatName);
+        _updateColorWidget(name, color) {
+            const formatWidget = this._toolbarWidgets.getByName(name);
             if(!formatWidget) {
                 return;
             }
@@ -762,26 +798,26 @@ if(Quill) {
                 .css('borderBottomColor', color || 'transparent');
         }
 
-        _getFormatWidgetName(formatName, formats) {
+        _getFormatWidgetName(name, formats) {
             let widgetName;
-            switch(formatName) {
+            switch(name) {
                 case 'align':
-                    widgetName = formatName + titleize(formats[formatName]);
+                    widgetName = name + titleize(formats[name]);
                     break;
                 case 'list':
-                    widgetName = formats[formatName] + titleize(formatName);
+                    widgetName = formats[name] + titleize(name);
                     break;
                 case 'code-block':
                     widgetName = 'codeBlock';
                     break;
                 case 'script':
-                    widgetName = formats[formatName] + formatName;
+                    widgetName = formats[name] + name;
                     break;
                 case 'imageSrc':
                     widgetName = 'image';
                     break;
                 default:
-                    widgetName = formatName;
+                    widgetName = name;
             }
 
             return widgetName;
@@ -813,9 +849,9 @@ if(Quill) {
             }
         }
 
-        addClickHandler(formatName, handler) {
-            this._formatHandlers[formatName] = handler;
-            const formatWidget = this._toolbarWidgets.getByName(formatName);
+        addClickHandler(name, handler) {
+            this._formatHandlers[name] = handler;
+            const formatWidget = this._toolbarWidgets.getByName(name);
             if(formatWidget && formatWidget.NAME === 'dxButton') {
                 formatWidget.option('onClick', handler);
             }

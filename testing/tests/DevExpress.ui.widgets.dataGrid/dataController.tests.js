@@ -2,7 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import formatHelper from 'format_helper';
 import errors from 'ui/widget/ui.errors';
-import dataErrors from 'data/errors';
+import { errors as dataErrors } from 'data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -26,6 +26,9 @@ const setupModule = function() {
         'filterRow',
         'search',
         'editing',
+        'editingRowBased',
+        'editingFormBased',
+        'editingCellBased',
         'grouping',
         'headerFilter',
         'masterDetail',
@@ -122,9 +125,9 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     QUnit.test('Initialize array with keyExpr option', function(assert) {
-    // act
-        this.applyOptions({ keyExpr: 'id', dataSource: [] });
-        this.dataController.optionChanged({ name: 'keyExpr' });
+        // act
+        this.option('dataSource', []);
+        this.option('keyExpr', 'id');
 
         // assert
         assert.equal(this.getDataSource().store().key(), 'id', 'keyExpr is assigned to store');
@@ -232,19 +235,12 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     QUnit.test('events rising on second initialize shared dataSource', function(assert) {
         let changedCount = 0;
         const dataSource = createDataSource([]);
-
-        this.applyOptions({
-            dataSource: dataSource
-        });
-
-        this.dataController.optionChanged({ name: 'dataSource' });
-
         this.dataController.changed.add(function(args) {
             changedCount++;
         });
 
         // act
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', dataSource);
 
         // assert
         assert.strictEqual(changedCount, 1, 'changed called');
@@ -254,11 +250,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     QUnit.test('events rising on second initialize not shared dataSource', function(assert) {
         let changedCount = 0;
 
-        this.applyOptions({
-            dataSource: []
-        });
-
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', []);
 
         const dataSource = this.dataController.dataSource()._dataSource;
 
@@ -267,7 +259,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', []);
 
         // assert
         assert.ok(dataSource, 'dataSource created');
@@ -1817,73 +1809,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(foundRowCount, 9, 'Found row count');
     });
 
-    QUnit.test('Get row index if group by two columns, simple key and virtual scrolling', function(assert) {
-    // arrange
-        let foundRowCount = 0;
-        const dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], sort: 'name', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
-
-        this.applyOptions({
-            commonColumnSettings: { autoExpandGroup: true },
-            scrolling: { mode: 'virtual' },
-            dataSource: dataSource
-        });
-
-        // act
-        const dataController = this.dataController;
-        dataController._refreshDataSource();
-        // assert
-        dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 2, 'Alex');
-        });
-        dataController.getGlobalRowIndexByKey('Bob').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 4, 'Bob');
-        });
-        dataController.getGlobalRowIndexByKey('Mark').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 5, 'Mark');
-        });
-        dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 6, 'Sad');
-        });
-        dataController.getGlobalRowIndexByKey('Dan').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 9, 'Dan');
-        });
-        dataController.getGlobalRowIndexByKey('Den').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 10, 'Den');
-        });
-        dataController.getGlobalRowIndexByKey('Clark').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 13, 'Clark');
-        });
-        dataController.getGlobalRowIndexByKey('Alice').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 18, 'Alice');
-        });
-        dataController.getGlobalRowIndexByKey('Zeb').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 16, 'Zeb');
-        });
-
-        assert.equal(foundRowCount, 9, 'Found row count');
-    });
-
     // B254274
     QUnit.test('sortOrder in column options and group parameters in dataSource', function(assert) {
     // arrange
@@ -2629,13 +2554,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         dataSource.load();
 
-        this.applyOptions({ dataSource: dataSource });
-
         // act
-        this.dataController.optionChanged({
-            name: 'dataSource',
-            value: dataSource
-        });
+        this.option('dataSource', dataSource);
 
         // assert
         assert.equal(this.dataController.items().length, 3);
@@ -2658,13 +2578,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         dataSource.load();
 
-        this.applyOptions({ dataSource: dataSource });
-
         // act
-        this.dataController.optionChanged({
-            name: 'dataSource',
-            value: dataSource
-        });
+        this.option('dataSource', dataSource);
 
         this.clock.tick();
 
@@ -3654,7 +3569,7 @@ const setupVirtualRenderingModule = function() {
         dataSource: array
     };
 
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail'], {
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'editingRowBased', 'editingCellBased', 'grouping', 'headerFilter', 'masterDetail'], {
         initDefaultOptions: true,
         options: options
     });
@@ -3826,6 +3741,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
                 groupExpanding: undefined,
                 grouping: false,
                 pageIndex: true,
+                pageSize: false,
                 paging: true,
                 reload: false,
                 skip: true,
@@ -3880,9 +3796,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('disabled row render virtualization', function(assert) {
-        this.options.scrolling.rowRenderingMode = 'standard';
-
-        this.dataController.optionChanged({ name: 'scrolling', fullName: 'scrolling.rowRenderingMode' });
+        this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(9);
         this.clock.tick(0);
@@ -3931,8 +3845,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('scroll to to the next page after expand', function(assert) {
-        this.options.scrolling.rowRenderingMode = 'standard';
-        this.dataController.optionChanged({ name: 'scrolling' });
+        this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(9);
         this.clock.tick();
@@ -3963,8 +3876,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     // T641290
     QUnit.test('Search should work correctly when rowRenderingMode is set to \'virtual\'', function(assert) {
     // arrange, act
-        this.options.searchPanel = { text: 'test' };
-        this.dataController.optionChanged({ fullName: 'searchPanel.text', value: 'test' });
+        this.option('searchPanel.text', 'test');
         this.clock.tick();
 
         // assert
@@ -3972,8 +3884,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.pageCount(), 1, 'page count');
 
         // act
-        this.options.searchPanel = { text: '' };
-        this.dataController.optionChanged({ fullName: 'searchPanel.text', value: '' });
+        this.option('searchPanel.text', '');
         this.clock.tick();
 
         // assert
@@ -4820,6 +4731,296 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.equal(items[pageSize].dataIndex, 1);
     });
 
+    QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(200),
+            pageSize: 10
+        });
+
+        // act
+        this.dataController.viewportSize(15);
+
+        // assert
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.dataController.items().length, 10, 'initial visible items count');
+
+        // act
+        this.dataController.setViewportPosition(500);
+        this.clock.tick();
+        const visibleItems = this.dataController.items();
+        const loadedItems = this.dataController.dataSource().items();
+
+        // assert
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 0 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 30, 'loaded items count');
+        assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
+        assert.deepEqual(loadedItems[29], { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.equal(visibleItems.length, 25, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
+        assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
+    });
+
+    QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(100);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 5, 'items count');
+        assert.deepEqual(changedItemIds, [21, 22, 23, 24, 25], 'change item IDs');
+        assert.deepEqual(change.changeTypes, ['insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'finally rendered item IDs');
+    });
+
+    QUnit.test('New mode. View port items should not be changed on small scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(20);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 0, 'items count');
+        assert.deepEqual(changedItemIds, [], 'change item IDs');
+        assert.deepEqual(change.changeTypes, [], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'finally rendered item IDs');
+    });
+
+    QUnit.test('New mode. DataSourceAdapter.viewportSize should not be called when viewPortSize is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const viewportSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportSize');
+
+        try {
+            this.dataController.viewportSize();
+
+            assert.notOk(viewportSizeSpy.called, 'not called');
+        } finally {
+            viewportSizeSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. DataSourceAdapter.viewportItemSize should not be called when viewportItemSize is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const viewportItemSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportItemSize');
+
+        try {
+            this.dataController.viewportItemSize();
+
+            assert.notOk(viewportItemSizeSpy.called, 'not called');
+        } finally {
+            viewportItemSizeSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. DataSourceAdapter.setContentItemSizes should not be called when setContentItemSizes is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const setContentItemSizesSpy = sinon.spy(this.dataController.dataSource(), 'setContentItemSizes');
+
+        try {
+            this.dataController.setContentItemSizes([30]);
+
+            assert.notOk(setContentItemSizesSpy.called, 'not called');
+        } finally {
+            setContentItemSizesSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. updateItems should not be called on data loading when loadViewport method is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const updateItemsSpy = sinon.spy(this.dataController, 'updateItems');
+
+        try {
+            // act
+            this.dataController._isLoading = true;
+            this.dataController.loadViewport();
+
+            // assert
+            assert.notOk(updateItemsSpy.called, 'not called');
+
+            // act
+            this.dataController._isLoading = false;
+            this.dataController.loadViewport();
+
+            // assert
+            assert.ok(updateItemsSpy.called, 'called');
+        } finally {
+            updateItemsSpy.restore();
+        }
+    });
+
 });
 
 QUnit.module('Infinite scrolling', {
@@ -5199,6 +5400,174 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         assert.equal(dataController.pageSize(), 3);
         assert.ok(dataController.isLoaded());
     });
+
+    QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(200),
+            pageSize: 10
+        });
+
+        // act
+        this.dataController.viewportSize(15);
+
+        // assert
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.dataController.items().length, 10, 'initial visible items count');
+
+        // act
+        this.dataController.setViewportPosition(500);
+        this.clock.tick();
+        const visibleItems = this.dataController.items();
+        const loadedItems = this.dataController.dataSource().items();
+
+        // assert
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 0 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 30, 'loaded items count');
+        assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
+        assert.deepEqual(loadedItems[29], { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.equal(visibleItems.length, 25, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
+        assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
+    });
+
+    QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(100);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 5, 'items count');
+        assert.deepEqual(changedItemIds, [21, 22, 23, 24, 25], 'change item IDs');
+        assert.deepEqual(change.changeTypes, ['insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'finally rendered item IDs');
+    });
+
+    QUnit.test('New mode. View port items should not be changed on small scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(20);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 0, 'items count');
+        assert.deepEqual(changedItemIds, [], 'change item IDs');
+        assert.deepEqual(change.changeTypes, [], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'finally rendered item IDs');
+    });
 });
 
 QUnit.module('Filtering', {
@@ -5210,18 +5579,6 @@ QUnit.module('Filtering', {
                 text: ''
             }
         });
-
-        const originalOption = this.option;
-
-        this.option = function(options, value) {
-            const result = originalOption.apply(this, arguments);
-
-            if(options === 'searchPanel.text' && typeUtils.isDefined(value)) {
-                this.dataController.optionChanged({ fullName: options });
-            }
-
-            return result;
-        };
 
         this.setupFilterableData = function() {
             this.dataSource = createDataSource([
@@ -7937,7 +8294,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.deepEqual(this.dataController.items()[0].data, { name: 'Alex', phone: '55-55-55' });
     });
 
-    QUnit.test('Cancel Inserting Row after change page', function(assert) {
+    QUnit.test('Don\'t cancel Inserting Row after change page', function(assert) {
         const array = [
             { name: 'Alex', phone: '55-55-55' },
             { name: 'Dan', phone: '98-75-21' },
@@ -7954,7 +8311,9 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.dataController.pageIndex(1);
 
         // assert
-        assert.ok(!this.editingController.isEditing());
+        assert.ok(this.editingController.isEditing());
+        assert.equal(this.option('editing.changes').length, 1, 'editing changes are not reset');
+        assert.ok(this.option('editing.editRowKey'), 'editRowKey is not reset');
         assert.equal(this.dataController.items().length, 1);
 
         assert.deepEqual(this.dataController.items()[0].data, array[2]);
@@ -8024,35 +8383,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.strictEqual(this.dataController.items()[4].rowType, 'data', 'row 4 is detail');
     });
 
-    QUnit.test('delete row with confirmDelete and confirmDeleteMessage is not empty', function(assert) {
-    // arrange
-        let removeHandlerCallCount = 0;
-        const dataSource = new DataSource({
-            key: 'id',
-            load: () => [{ id: 1 }],
-            totalCount: () => 1,
-            remove: () => ++removeHandlerCallCount
-        });
-
-        this.dataController.setDataSource(dataSource);
-        dataSource.load();
-
-        // act
-        this.editingController.deleteRow(0);
-
-        // assert
-        assert.equal(removeHandlerCallCount, 0, 'row is not deleted');
-
-        // arrange
-        this.options.editing.confirmDelete = false;
-
-        // act
-        this.editingController.deleteRow(0);
-
-        // assert
-        assert.equal(removeHandlerCallCount, 1, 'row is deleted');
-    });
-
     QUnit.test('delete row with confirmDelete and confirmDeleteMessage is empty', function(assert) {
     // arrange
         let removeHandlerCallCount = 0;
@@ -8092,7 +8422,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('update error', function(assert) {
-        const errors = dataErrors.errors;
+        const errors = dataErrors;
         sinon.spy(errors, 'log');
         const dataSource = new DataSource({
             key: 'field1',
@@ -10010,44 +10340,6 @@ QUnit.module('Summary', {
         }]]);
     });
 
-    QUnit.test('Several total summary items in different column', function(assert) {
-        this.options = {
-            dataSource: [
-                { name: 'Alex', age: 19 },
-                { name: 'Dan', age: 25 }
-            ],
-            summary: {
-                totalItems: [{
-                    column: 'name',
-                    summaryType: 'count'
-                },
-                {
-                    column: 'age',
-                    summaryType: 'max'
-                }]
-            }
-        };
-
-        // act
-        this.setupDataGridModules();
-        this.clock.tick();
-
-        // assert
-        assert.deepEqual(this.dataController.footerItems(), [{
-            rowType: 'totalFooter', summaryCells: [[{
-                value: 2,
-                column: 'name',
-                summaryType: 'count'
-            }], [{
-                value: 25,
-                column: 'age',
-                summaryType: 'max'
-            }]
-            ]
-        }]);
-        assert.ok(!this.dataController.isLoading());
-    });
-
     QUnit.test('Changing total summary items', function(assert) {
         this.options = {
             dataSource: [
@@ -10350,11 +10642,7 @@ QUnit.module('Summary', {
         this.clock.tick();
 
         // act
-        this.options.sortByGroupSummaryInfo = [{
-            summaryItem: 'count'
-        }];
-
-        this.dataController.optionChanged({ name: 'sortByGroupSummaryInfo' });
+        this.option('sortByGroupSummaryInfo', [{ summaryItem: 'count' }]);
         this.clock.tick();
 
 
@@ -11190,7 +11478,7 @@ QUnit.module('Summary with Editing', {
         };
 
         this.setupDataGridModules = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing'], options);
+            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing', 'editingRowBased', 'editingCellBased'], options);
         };
 
         this.getTotalValues = function() {
@@ -11896,8 +12184,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        this.options.masterDetail.enabled = false;
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail.enabled' });
+        this.option('masterDetail.enabled', false);
 
         // assert
         const items = this.dataController.items();
@@ -11915,11 +12202,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        const oldMasterDetail = this.options.masterDetail;
-
-        this.options.masterDetail = { enabled: true, autoExpandAll: false };
-
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail', previousValue: oldMasterDetail, value: this.options.masterDetail });
+        this.option('masterDetail', { enabled: true, autoExpandAll: false });
 
         // assert
         assert.ok(this.dataController.isRowExpanded(1), 'row 1 is expanded');
@@ -11931,11 +12214,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        const oldMasterDetail = this.options.masterDetail;
-
-        this.options.masterDetail = { enabled: true, autoExpandAll: true };
-
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail', previousValue: oldMasterDetail, value: this.options.masterDetail });
+        this.option('masterDetail', { enabled: true, autoExpandAll: true });
 
         // assert
         assert.ok(this.dataController.isRowExpanded(1), 'row 1 is not expanded');
@@ -12741,7 +13020,6 @@ QUnit.module('Refresh changesOnly', {
 
         // act
         this.option('searchPanel.text', 'Bob');
-        this.dataController.optionChanged({ name: 'searchPanel', fullName: 'searchPanel.text' });
 
         // assert
         const items = this.dataController.items();
@@ -13051,9 +13329,8 @@ QUnit.module('Refresh changesOnly', {
         this.options.repaintChangesOnly = true;
 
         // act
-        this.options.dataSource = createDataSource(this.array.slice(1), { key: 'id' });
 
-        this.dataController.optionChanged({ name: 'dataSource', fullName: 'dataSource', previousValue: this.array, value: this.options.dataSource });
+        this.option('dataSource', createDataSource(this.array.slice(1), { key: 'id' }));
 
         // assert
         const items = this.dataController.items();
@@ -13496,7 +13773,6 @@ QUnit.module('Using DataSource instance', {
 
         // act
         this.option('grouping.autoExpandAll', false);
-        this.dataController.optionChanged({ name: 'grouping' });
 
         this.clock.tick();
 

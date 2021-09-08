@@ -3,7 +3,6 @@ import devices from 'core/devices';
 
 import 'ui/form/ui.form';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const INVALID_CLASS = 'dx-invalid';

@@ -35,6 +35,10 @@ const dxPolarChart = AdvancedChart.inherit({
         };
     },
 
+    _executeAppendBeforeSeries(append) {
+        append();
+    },
+
     _prepareAxisOptions: function(typeSelector, axisOptions) {
         const isArgumentAxis = typeSelector === 'argumentAxis';
         const themeManager = this._themeManager;

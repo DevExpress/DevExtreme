@@ -1,39 +1,46 @@
 import {
-  ComponentBindings, OneWay, Event, Slot,
-} from 'devextreme-generator/component_declaration/common';
+  ComponentBindings, OneWay, Slot, Event,
+} from '@devextreme-generator/declarations';
 import { EventCallback } from '../common/event_callback.d';
-import BaseWidgetProps from '../../utils/base_props';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
-import { TopPocketProps } from './topPocket_props';
-import { BottomPocketProps } from './bottomPocket_props';
-
 @ComponentBindings()
-export class ScrollableInternalProps {
+export class ScrollableProps {
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
+
+  @OneWay() useNative = true;
 
   @OneWay() direction: ScrollableDirection = 'vertical';
 
   @OneWay() showScrollbar: ScrollableShowScrollbar = 'onScroll';
 
+  @OneWay() bounceEnabled = true;
+
+  @OneWay() scrollByContent = true;
+
   @OneWay() scrollByThumb = false;
 
-  @OneWay() useSimulatedScrollbar = false;
-
-  @OneWay() pushBackValue = 0;
+  @OneWay() updateManually = false;
 
   @OneWay() classes?: string;
+
+  @OneWay() pullDownEnabled = false;
+
+  @OneWay() reachBottomEnabled = false;
 
   @OneWay() forceGeneratePockets = false;
 
   @OneWay() needScrollViewContentWrapper = false;
 
-  @Event() onScroll?: EventCallback<ScrollEventArgs>;
-}
+  @OneWay() needScrollViewLoadPanel = false;
 
-@ComponentBindings()
-export class ScrollableProps extends ScrollableInternalProps {
-  @OneWay() useNative = false;
+  @Event() onScroll?: EventCallback<ScrollEventArgs>;
+
+  @Event() onUpdated?: EventCallback<ScrollEventArgs>;
+
+  @Event() onPullDown?: EventCallback<unknown>;
+
+  @Event() onReachBottom?: EventCallback<unknown>;
 
   @OneWay() pullingDownText?: string;
 
@@ -43,10 +50,3 @@ export class ScrollableProps extends ScrollableInternalProps {
 
   @OneWay() reachBottomText?: string;
 }
-
-export type ScrollableInternalPropsType = ScrollableInternalProps
-& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>
-& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
-& Pick<BottomPocketProps, 'reachBottomText'>;
-
-export type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;

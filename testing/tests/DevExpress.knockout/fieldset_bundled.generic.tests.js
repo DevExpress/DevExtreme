@@ -1,4 +1,3 @@
-require('common.css!');
 require('generic_light.css!');
 
 const testFieldsetsOnPlatform = require('./fieldsetParts/shared.js');

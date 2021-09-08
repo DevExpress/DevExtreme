@@ -72,12 +72,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onSelectionChanged: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemReordered
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 fromIndex:number
             * @type_function_param1_field8 toIndex:number
@@ -87,12 +91,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onItemReordered: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleting
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 cancel:boolean | Promise<void>
             * @action
@@ -101,12 +109,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onItemDeleting: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleted
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @hidden
@@ -542,7 +554,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _isItemSelected: function(index) {
         const key = this._getKeyByIndex(index);
-        return this._selection.isItemSelected(key);
+        return this._selection.isItemSelected(key, { checkPending: true });
     },
 
     _optionChanged: function(args) {
@@ -727,7 +739,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             this._selection.setSelection([key]);
         } else {
             const selectedItemKeys = this.option('selectedItemKeys') || [];
-            this._selection.setSelection([...selectedItemKeys, key]);
+            this._selection.setSelection([...selectedItemKeys, key], [key]);
         }
     },
 
@@ -751,7 +763,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         const key = this._getKeyByIndex(itemIndex);
 
-        if(!this._selection.isItemSelected(key)) {
+        if(!this._selection.isItemSelected(key, { checkPending: true })) {
             return;
         }
 

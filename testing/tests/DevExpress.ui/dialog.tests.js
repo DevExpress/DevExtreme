@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
 import devices from 'core/devices';
-import dialog from 'ui/dialog';
+import { alert, confirm, custom, DEBUG_set_title } from 'ui/dialog';
 import domUtils from 'core/utils/dom';
 import errors from 'ui/widget/ui.errors';
 import fx from 'animation/fx';
@@ -46,7 +46,7 @@ module('dialog tests', {
             return;
         }
 
-        dialog.alert();
+        alert();
         assert.ok(this.thereIsDialog());
         keyboardMock(this.dialog().find('.dx-overlay-content').get(0)).keyDown('esc');
         assert.ok(this.thereIsNoDialog());
@@ -67,14 +67,14 @@ module('dialog tests', {
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
         // by 'hide' calling
-        instance = dialog.custom(options);
+        instance = custom(options);
         instance.show().done(afterHide);
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
         instance.hide(result);
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown after \'hide\' was called.');
 
         // by clicking button
-        instance = dialog.custom(options);
+        instance = custom(options);
         instance.show();
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
         this.clickButton();
@@ -86,7 +86,7 @@ module('dialog tests', {
             assert.ok(true, 'focus is absent on mobile devices');
             return;
         }
-        dialog.alert('Sample message', 'Alert');
+        alert('Sample message', 'Alert');
 
         assert.equal($('.dx-dialog-wrapper').find('.dx-state-focused').length, 1, 'button obtained focus');
     });
@@ -98,7 +98,7 @@ module('dialog tests', {
             messageHtml: this.messageHtml
         };
 
-        instance = dialog.custom(options);
+        instance = custom(options);
         instance.show();
 
         assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Actual title is equal to expected.');
@@ -112,8 +112,8 @@ module('dialog tests', {
         };
         assert.equal(instance.title, undefined, 'dialog.title value isn\'t set.');
 
-        dialog.DEBUG_set_title(this.title);
-        instance = dialog.custom(options);
+        DEBUG_set_title(this.title);
+        instance = custom(options);
         instance.show();
 
         assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Dialog default title is used.');
@@ -129,7 +129,7 @@ module('dialog tests', {
             messageHtml: this.messageHtml,
             showTitle: false
         };
-        const instance = dialog.custom(options);
+        const instance = custom(options);
 
         instance.show();
 
@@ -143,7 +143,7 @@ module('dialog tests', {
                 messageHtml: this.messageHtml,
                 dragEnabled: dialogDragEnabled
             };
-            const instance = dialog.custom(options);
+            const instance = custom(options);
 
             instance.show();
 
@@ -158,7 +158,7 @@ module('dialog tests', {
 
     test('alert dialog without title should not be draggable', function(assert) {
         const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
-            dialog.alert(this.messageHtml, 'alert title', showTitle);
+            alert(this.messageHtml, 'alert title', showTitle);
 
             assert.equal(this.isPopupDraggable(), expectedPopupDragEnabled, message);
 
@@ -172,7 +172,7 @@ module('dialog tests', {
 
     test('confirm dialog without title should not be draggable', function(assert) {
         const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
-            dialog.confirm(this.messageHtml, 'confirm title', showTitle);
+            confirm(this.messageHtml, 'confirm title', showTitle);
 
             assert.equal(this.isPopupDraggable(), expectedPopupDragEnabled, message);
 
@@ -205,7 +205,7 @@ module('dialog tests', {
 
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        const instance = dialog.custom(options);
+        const instance = custom(options);
         instance.show().done((value) => actual = value);
 
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
@@ -220,8 +220,8 @@ module('dialog tests', {
     test('alert dialog', function(assert) {
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        dialog.DEBUG_set_title(this.title);
-        dialog.alert(this.messageHtml);
+        DEBUG_set_title(this.title);
+        alert(this.messageHtml);
 
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
         assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Dialog default title is used.');
@@ -241,7 +241,7 @@ module('dialog tests', {
 
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        dialog.confirm(this.messageHtml, this.title).done((value) => actual = value);
+        confirm(this.messageHtml, this.title).done((value) => actual = value);
 
         this.clickButton();
 
@@ -252,7 +252,7 @@ module('dialog tests', {
     test('dialog overlay content has \'dx-rtl\' class when RTL is enabled', function(assert) {
         config({ rtlEnabled: true });
 
-        dialog.confirm(this.messageHtml, this.title);
+        confirm(this.messageHtml, this.title);
 
         assert.ok($('.dx-overlay-content').hasClass('dx-rtl'), '\'dx-rlt\' class is present');
 
@@ -266,7 +266,7 @@ module('dialog tests', {
         errors.log = (loggedWarning) => warning = loggedWarning;
 
         try {
-            dialog.custom({ message: 'message' });
+            custom({ message: 'message' });
             assert.strictEqual(warning, 'W1013');
         } finally {
             errors.log = originalLog;
@@ -281,7 +281,7 @@ module('dialog tests', {
         const resetActiveElementStub = sinon.stub(domUtils, 'resetActiveElement');
 
         try {
-            const instance = dialog.custom(options);
+            const instance = custom(options);
             instance.show();
             assert.equal(resetActiveElementStub.callCount, 1);
             instance.hide();
@@ -291,7 +291,7 @@ module('dialog tests', {
     });
 
     test('it should be possible to redefine popup option in the dialog', function(assert) {
-        dialog.custom({
+        custom({
             title: 'Test Title',
             popupOptions: {
                 customOption: 'Test',
@@ -310,7 +310,7 @@ module('dialog tests', {
     test('it should apply correct arguments to the button \'onClick\' handler', function(assert) {
         const clickStub = sinon.stub();
 
-        dialog.custom({
+        custom({
             buttons: [{
                 text: 'Test',
                 onClick: clickStub

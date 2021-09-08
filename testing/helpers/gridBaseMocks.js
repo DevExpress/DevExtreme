@@ -153,7 +153,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             viewportItemSize: function() {},
 
-            setContentSize: function() {},
+            setContentItemSizes: function() {},
 
             setViewportItemIndex: function(index) {
                 options.viewportItemIndex = index;
@@ -243,6 +243,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
             fireError: function() { },
+            getMaxRowIndex: function() {
+                this.items().length - 1;
+            }
         };
     };
 
@@ -388,6 +391,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
 
                 return columns;
+            },
+
+            getVisibleIndexByColumn: function(column, rowIndex) {
+                const visibleColumns = this.getVisibleColumns(rowIndex);
+                const visibleColumn = visibleColumns.filter(col => col.index === column.index && col.command === column.command)[0];
+                return visibleColumns.indexOf(visibleColumn);
             },
 
             getColumnIndexOffset: function() {
@@ -959,10 +968,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
 
-        if(that.options.legacyRendering === undefined) {
-            that.options.legacyRendering = false;
-        }
-
         if(that.options.editing?.changes === undefined) {
             if(that.options.editing) {
                 that.options.editing.changes = [];
@@ -989,8 +994,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                             const previousValue = result[path[i]];
                             result[path[i]] = value;
 
-                            if(path[0] === 'editing' && that.needFireOptionChange) {
-                                that.editingController.optionChanged({ name: path[0], fullName: options, value, previousValue });
+                            if(that.needFireOptionChange && that._initialized && !that.preventOptionChanged) {
+                                const controllersAndViews = { ...that._controllers, ...that._views };
+                                Object.keys(controllersAndViews).forEach((key) => {
+                                    controllersAndViews[key].optionChanged?.({ name: path[0], fullName: options, value, previousValue });
+                                });
                             }
 
                             if(that._optionCache) {
@@ -1125,6 +1133,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 this.init && this.init();
             });
         }
+
+        that._initialized = true;
     };
 
     exports.generateItems = function(itemCount) {

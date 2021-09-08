@@ -2,7 +2,6 @@ import DataGrid from 'ui/data_grid';
 
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 DataGrid.defaultOptions({

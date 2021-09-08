@@ -1,6 +1,6 @@
 import { getBoundingRect } from '../../../core/utils/position';
 import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
-import { cache } from './cache';
+import { Cache } from './cache';
 
 const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
 
@@ -8,6 +8,12 @@ const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
 
 class VerticalGroupedStrategy extends GroupedStrategy {
+    constructor(workSpace) {
+        super(workSpace);
+
+        this.cache = new Cache();
+    }
+
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
         let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
@@ -73,8 +79,12 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    getHorizontalMax() {
-        return this._workSpace.getMaxAllowedPosition()[0];
+    getHorizontalMax(groupIndex) {
+        if(this._workSpace.isRenovatedRender()) {
+            return this._workSpace.getMaxAllowedPosition(groupIndex);
+        }
+
+        return this._workSpace.getMaxAllowedPosition(0);
     }
 
     getVerticalMax(groupIndex) {
@@ -127,10 +137,10 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return 0;
     }
 
-    getGroupCountAttr() {
+    getGroupCountAttr(groups) {
         return {
             attr: VERTICAL_GROUPED_ATTR,
-            count: this._workSpace.option('groups') && this._workSpace.option('groups').length
+            count: groups?.length
         };
     }
 
@@ -139,8 +149,8 @@ class VerticalGroupedStrategy extends GroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return cache.get('groupBoundsOffset', () => {
-            const groupIndex = coordinates.groupIndex;
+        const groupIndex = coordinates.groupIndex;
+        return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
             const startOffset = $cells.eq(0).offset().left;
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
             const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
@@ -160,6 +170,24 @@ class VerticalGroupedStrategy extends GroupedStrategy {
                 bottom: bottomOffset
             };
         });
+    }
+
+    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
+        return this.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+    }
+
+    shiftIndicator($indicator, height, rtlOffset, i) {
+        const offset = this._workSpace.getIndicatorOffset(0);
+        const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
+        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+        let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
+            verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
+        }
+
+        $indicator.css('left', horizontalOffset + tableOffset);
+        $indicator.css('top', height + verticalOffset);
     }
 
     getShaderOffset(i, width) {

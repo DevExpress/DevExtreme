@@ -1,148 +1,211 @@
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
 } from '../core/element';
 
+import {
+    DxPromise,
+} from '../core/utils/deferred';
+
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
-    event
+    DxEvent,
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
 import dxMenuBase, {
-    dxMenuBaseOptions
+    dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
 import {
-    dxMenuBaseItem
+    dxMenuBaseItem,
 } from './menu';
 
+import {
+    SelectionChangedInfo,
+} from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxContextMenu>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxContextMenu>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxContextMenu>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxContextMenu>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxContextMenu>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
+
+/** @public */
+export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
+    readonly position: positionConfig;
+};
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxContextMenu> & SelectionChangedInfo;
+
+/** @public */
+export type ShowingEvent = Cancelable & EventInfo<dxContextMenu>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxContextMenu>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
      * @default true
      * @type_function_param1 event:event
      * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    /**
+     * @docid
+     * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions
+     * @default null
+     * @public
+     */
+    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
+    /**
+     * @docid
+     * @type Array<dxContextMenuItem>
+     * @public
+     */
+    items?: Array<Item>;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    dataSource?: string | Array<dxContextMenuItem> | DataSource | DataSourceOptions;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    items?: Array<dxContextMenuItem>;
-    /**
-     * @docid
-     * @extends Action
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
+    onHidden?: ((e: HiddenEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onHiding?: ((e: HidingEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, event?: event, position?: positionConfig }) => any);
+    onPositioning?: ((e: PositioningEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onShowing?: ((e: ShowingEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: ShownEvent) => void);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     position?: positionConfig;
     /**
      * @docid
      * @default "dxcontextmenu"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showEvent?: {
       /**
-      * @docid
-      * @default undefined
-      * @prevFileNamespace DevExpress.ui
-      */
-      delay?: number,
+       * @docid
+       * @default undefined
+       */
+      delay?: number;
       /**
-      * @docid
-      * @default undefined
-      * @prevFileNamespace DevExpress.ui
-      */
-      name?: string
+       * @docid
+       * @default undefined
+       */
+      name?: string;
     } | string;
     /**
      * @docid
      * @type Enums.ContextMenuSubmenuDirection
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     submenuDirection?: 'auto' | 'left' | 'right';
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
      * @fires dxContextMenuOptions.onShowing
      * @fires dxContextMenuOptions.onHiding
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
@@ -152,63 +215,59 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
  * @inherits dxMenuBase
  * @module ui/context_menu
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxContextMenu extends dxMenuBase {
-    constructor(element: Element, options?: dxContextMenuOptions)
-    constructor(element: JQuery, options?: dxContextMenuOptions)
+    constructor(element: UserDefinedElement, options?: dxContextMenuOptions)
     /**
      * @docid
      * @publicName hide()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<void> & JQueryPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<void> & JQueryPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
 /**
- * @docid
- * @inherits dxMenuBaseItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxContextMenu
+ */
+export type Item = dxContextMenuItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type Array<dxContextMenuItem>
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<Item>;
 }
 
-declare global {
-interface JQuery {
-    dxContextMenu(): JQuery;
-    dxContextMenu(options: "instance"): dxContextMenu;
-    dxContextMenu(options: string): any;
-    dxContextMenu(options: string, ...params: any[]): any;
-    dxContextMenu(options: dxContextMenuOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxContextMenuOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxContextMenuOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxContextMenuOptions;

@@ -3,7 +3,6 @@ const $ = require('jquery');
 require('../../helpers/qunitPerformanceExtension.js');
 require('../../helpers/widgetsIterator.js');
 
-require('common.css!');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').addClass('qunit-fixture-visible');

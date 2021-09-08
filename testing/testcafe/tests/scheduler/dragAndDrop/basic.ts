@@ -41,7 +41,7 @@ test('Drag-n-drop when browser has horizontal scroll', async (t) => {
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(6))
+    .drag(draggableAppointment.element, 250, -50, { speed: 0.2 })
     .expect(draggableAppointment.isAllDay).eql(true);
 }).before(() => createScheduler({
   views: ['week'],
@@ -92,7 +92,7 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
     .expect(appointment.element.exists)
     .ok()
     .expect(appointment.date.time)
-    .eql('5:00 AM - 7:00 AM')
+    .eql('4:00 AM - 6:00 AM')
     .expect(collector.element.exists)
     .notOk();
 }).before(() => createScheduler({

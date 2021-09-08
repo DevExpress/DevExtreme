@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { Consts, getViewToolbarElement, getViewToolbarInstance, findViewToolbarItem, findContextMenuItem, getContextMenuItemCheck } from '../../../helpers/diagramHelpers.js';
@@ -78,6 +77,8 @@ QUnit.module('View Toolbar', {
         const $zoomLevelTextBox = $viewToolbar.find('.dx-textbox');
         const $zoomLevelDropDownButton = $zoomLevelTextBox.find('.dx-button');
         $zoomLevelDropDownButton.trigger('dxclick');
+        this.clock.tick(200); // initiate render
+
         let $zoomLevel100Button = findContextMenuItem(this.$element, '100%');
         let $zoomLevel100ButtonCheck = getContextMenuItemCheck($zoomLevel100Button);
         let $zoomLevel200Button = findContextMenuItem(this.$element, '200%');
@@ -90,6 +91,9 @@ QUnit.module('View Toolbar', {
         assert.equal(this.instance.option('zoomLevel'), 2);
 
         $zoomLevelDropDownButton.trigger('dxclick');
+        this.clock.tick(200); // initiate render
+        $zoomLevelDropDownButton.trigger('dxclick');
+
         $zoomLevel100Button = findContextMenuItem(this.$element, '100%');
         $zoomLevel100ButtonCheck = getContextMenuItemCheck($zoomLevel100Button);
         $zoomLevel200Button = findContextMenuItem(this.$element, '200%');

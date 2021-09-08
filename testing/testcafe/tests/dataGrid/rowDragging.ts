@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -223,6 +223,104 @@ test('The cross-component drag and drop rows should work when there are fixed co
         },
         {
           id: 8, name: 'Name 8', age: 14,
+        },
+      ],
+      columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }, false, '#otherContainer'),
+  ]);
+});
+
+test('The cross-component drag and drop rows should not block rows', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const otherDataGrid = new DataGrid('#otherContainer');
+
+  await t.drag(Selector('.dx-command-drag').nth(2), 500, 0);
+
+  const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
+    $('.dx-datagrid-rowsview .dx-datagrid-content-fixed:eq(0)').css('pointer-events'),
+    $('.dx-datagrid-rowsview .dx-datagrid-content-fixed:eq(1)').css('pointer-events'),
+  ], { dependencies: { dataGrid, otherDataGrid } })();
+
+  // T1013088
+  await t
+    .expect(fixedPointerEvents)
+    .eql('none')
+    .expect(otherFixedPointerEvents)
+    .eql('none');
+}).before(async (t) => {
+  await t.maximizeWindow();
+
+  await ClientFunction(() => {
+    $('body').css('display', 'flex');
+    $('#container, #otherContainer').css({
+      display: 'inline-block',
+      width: '50%',
+    });
+  })();
+
+  return Promise.all([
+    createWidget('dxDataGrid', {
+      width: 400,
+      dataSource: [
+        {
+          id: 1, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, name: 'Name 8', age: 14,
+        },
+      ],
+      columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
+      rowDragging: {
+        group: 'shared',
+      },
+    }),
+    createWidget('dxDataGrid', {
+      width: 400,
+      dataSource: [
+        {
+          id: 1, name: 'Name 1', age: 19,
+        },
+        {
+          id: 2, name: 'Name 2', age: 11,
+        },
+        {
+          id: 3, name: 'Name 3', age: 15,
+        },
+        {
+          id: 4, name: 'Name 4', age: 16,
+        },
+        {
+          id: 5, name: 'Name 5', age: 25,
+        },
+        {
+          id: 6, name: 'Name 6', age: 18,
+        },
+        {
+          id: 7, name: 'Name 7', age: 21,
+        },
+        {
+          id: 8, name: 'Name 8', age: 15,
         },
       ],
       columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],

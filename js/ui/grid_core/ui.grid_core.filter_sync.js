@@ -34,7 +34,9 @@ const FilterSyncController = modules.Controller.inherit((function() {
     };
 
     const canSyncHeaderFilterWithFilterRow = function(column) {
-        return !filterUtils.getGroupInterval(column) && !(column.headerFilter && column.headerFilter.dataSource);
+        const filterValues = column.filterValues || [];
+        return (!filterUtils.getGroupInterval(column) && !(column.headerFilter && column.headerFilter.dataSource)) ||
+        (filterValues.length === 1 && filterValues[0] === null);
     };
 
     const getHeaderFilterFromCondition = function(headerFilterCondition, column) {
@@ -89,7 +91,10 @@ const FilterSyncController = modules.Controller.inherit((function() {
 
         if(!filterValues) return null;
 
-        if(canSyncHeaderFilterWithFilterRow(column) && column.filterValues.length === 1 && !Array.isArray(filterValues[0])) {
+        if(filterValues.length === 1 && (
+            canSyncHeaderFilterWithFilterRow(column)
+            && !Array.isArray(filterValues[0])
+        )) {
             column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = '<>' : selectedOperation = '=';
             value = filterValues[0];
         } else {
@@ -106,17 +111,18 @@ const FilterSyncController = modules.Controller.inherit((function() {
 
     const updateFilterRowCondition = function(columnsController, column, condition) {
         let filterRowOptions;
-        let selectedFilterOperation = condition && condition[1];
+        let selectedFilterOperation = condition?.[1];
+        const filterValue = condition?.[2];
         const filterOperations = column.filterOperations || column.defaultFilterOperations;
 
         if((!filterOperations || filterOperations.indexOf(selectedFilterOperation) >= 0 || selectedFilterOperation === column.defaultFilterOperation)
-            && FILTER_ROW_OPERATIONS.indexOf(selectedFilterOperation) >= 0) {
+            && FILTER_ROW_OPERATIONS.indexOf(selectedFilterOperation) >= 0 && filterValue !== null) {
             if(selectedFilterOperation === column.defaultFilterOperation && !isDefined(column.selectedFilterOperation)) {
                 selectedFilterOperation = column.selectedFilterOperation;
             }
             filterRowOptions = {
-                filterValue: condition[2],
-                selectedFilterOperation: selectedFilterOperation
+                filterValue,
+                selectedFilterOperation
             };
         } else {
             filterRowOptions = {
@@ -268,7 +274,11 @@ const DataControllerFilterSyncExtender = {
 
     _parseColumnPropertyName: function(fullName) {
         const matched = fullName.match(/.*\.(.*)/);
-        return matched[1];
+        if(matched) {
+            return matched[1];
+        } else {
+            return null;
+        }
     },
 
     clearFilter: function(filterName) {
@@ -344,7 +354,7 @@ const ColumnHeadersViewFilterSyncExtender = {
     }
 };
 
-export default {
+export const filterSyncModule = {
     defaultOptions: function() {
         return {
             filterValue: null,

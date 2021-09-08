@@ -1,13 +1,23 @@
-import '../../jquery_augmentation';
+import {
+    DxPromise,
+} from '../../core/utils/deferred';
 
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from '../abstract_store';
 
 import {
-    LoadOptions
+    LoadOptions,
 } from '../load_options';
 
+interface PromiseExtension<T> {
+    then<TResult1 = T, TResult2 = never>(
+        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): Promise<TResult1 | TResult2>;
+}
+
+/** @namespace DevExpress.data */
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid
@@ -19,13 +29,11 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @type_function_param1_field5 params:object
      * @type_function_param1_field6 payload:object
      * @type_function_param1_field7 headers:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+    beforeSend?: ((options: { url?: string; async?: boolean; method?: string; timeout?: number; params?: any; payload?: any; headers?: any }) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     deserializeDates?: boolean;
@@ -35,27 +43,23 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+    errorHandler?: ((e: { httpStatus?: number; errorDetails?: any; requestOptions?: any }) => void);
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     fieldTypes?: any;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     filterToLower?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     jsonp?: boolean;
@@ -63,7 +67,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @docid
      * @type string|object
      * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
@@ -71,13 +74,11 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => any);
+    onLoading?: ((loadOptions: LoadOptions) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     url?: string;
@@ -85,14 +86,12 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @docid
      * @default 2
      * @acceptValues 2|3|4
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     version?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     withCredentials?: boolean;
@@ -102,12 +101,11 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
  * @inherits Store
  * @module data/odata/store
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export default class ODataStore extends Store {
     constructor(options?: ODataStoreOptions)
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -116,17 +114,24 @@ export default class ODataStore extends Store {
      * @param2_field1 expand:string|Array<string>
      * @param2_field2 select:string|Array<string>
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<any>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
      * @param1 loadOptions:object
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     createQuery(loadOptions: any): any;
+
+    /**
+     * @docid
+     * @publicName insert(values)
+     * @param1 values:object
+     * @return Promise<any>
+     * @public
+     */
+    insert(values: any): DxPromise<any> & PromiseExtension<any>;
 }

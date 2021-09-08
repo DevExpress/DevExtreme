@@ -1,8 +1,8 @@
 import Class from '../../core/class';
 import { compileGetter } from '../../core/utils/data';
 import { isFunction } from '../../core/utils/type';
-import errorUtils from '../../data/errors';
-import dataUtils from '../../data/utils';
+import { errors } from '../../data/errors';
+import { aggregators } from '../../data/utils';
 
 function depthFirstSearch(i, depth, root, callback) {
     let j = 0;
@@ -38,7 +38,7 @@ function isEmpty(x) {
 }
 
 function isCount(aggregator) {
-    return aggregator === dataUtils.aggregators.count;
+    return aggregator === aggregators.count;
 }
 
 function normalizeAggregate(aggregate) {
@@ -50,9 +50,9 @@ function normalizeAggregate(aggregate) {
 
 
     if(typeof aggregator === 'string') {
-        aggregator = dataUtils.aggregators[aggregator];
+        aggregator = aggregators[aggregator];
         if(!aggregator) {
-            throw errorUtils.errors.Error('E4001', aggregate.aggregator);
+            throw errors.Error('E4001', aggregate.aggregator);
         }
     }
 

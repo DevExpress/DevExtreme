@@ -6,10 +6,6 @@ MAIN_BRANCH=$(node -e "console.log(require('./package.json').version.split(/\./g
 CACHE_DIRS="node_modules dotnet_packages"
 CACHE_URL="http://devextreme-ci-cache.s3.amazonaws.com/$MAIN_BRANCH"
 
-if [ "$TARGET" == "test_scss" ]; then
-    CACHE_DIRS="$CACHE_DIRS themebuilder-scss/node_modules"
-fi
-
 if [ "$1" == "rebuild" ]; then
     if [ "$DRONE_BUILD_EVENT" != "push" ] || [ "$DRONE_REPO" != "$MAIN_REPO" ] || [ "$DRONE_BRANCH" != "$MAIN_BRANCH" ]; then
         echo "Skip"

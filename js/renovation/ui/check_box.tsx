@@ -10,18 +10,17 @@ import {
   Event,
   ForwardRef,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
 import Guid from '../../core/guid';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { isMaterial, current } from '../../ui/themes';
-import BaseComponent from '../preact_wrapper/check_box';
-import BaseWidgetProps from '../utils/base_props';
+import BaseComponent from '../component_wrapper/check_box';
+import { BaseWidgetProps } from './common/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
-import noop from '../utils/noop';
 import { ValidationMessage } from './validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {
@@ -87,16 +86,16 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
-      {viewModel.rendered && viewModel.shouldShowValidationMessage
+      {viewModel.showValidationMessage
                 && (
                 <ValidationMessage
                   validationErrors={viewModel.validationErrors}
                   mode={viewModel.props.validationMessageMode}
                   positionRequest="below"
                   rtlEnabled={viewModel.props.rtlEnabled}
-                  target={viewModel.target}
-                  boundary={viewModel.target}
-                  container={viewModel.target}
+                  target={viewModel.targetCurrent}
+                  boundary={viewModel.targetCurrent}
+                  container={viewModel.targetCurrent}
                 />
                 )}
     </Widget>
@@ -109,13 +108,13 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = true;
 
-  @OneWay() validationError?: object | null = null;
+  @OneWay() validationError?: Record<string, unknown> | null = null;
 
-  @OneWay() validationErrors?: object[] | null = null;
+  @OneWay() validationErrors?: Record<string, unknown>[] | null = null;
 
   @OneWay() text?: string = '';
 
-  @OneWay() validationMessageMode?: 'auto'|'always' = 'auto';
+  @OneWay() validationMessageMode?: 'auto' | 'always' = 'auto';
 
   @OneWay() validationStatus?: string = 'valid';
 
@@ -131,16 +130,17 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @Event() onFocusIn?: (e: Event) => void;
 
-  @OneWay() saveValueChangeEvent?: (event: Event) => void = noop;
+  @OneWay() saveValueChangeEvent?: (event: Event) => void;
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
 }, {
+  // NOTE: it's disabled until styles fix: see https://trello.com/c/5Pbm18YA
   // eslint-disable-next-line import/no-named-as-default-member
   device: (): boolean => isMaterial(current()),
-  options: { useInkRipple: true },
+  options: { useInkRipple: false },
 }]);
 
 @Component({
@@ -153,7 +153,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
-  rendered = false;
+  showValidationMessage = false;
 
   @Ref() iconRef!: RefObject<HTMLDivElement>;
 
@@ -165,14 +165,14 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @ForwardRef() target!: RefObject<HTMLDivElement>;
 
-  @Effect({ run: 'once' })
-  afterInitEffect(): EffectReturn {
-    this.rendered = true;
+  @Effect()
+  updateValidationMessageVisibility(): EffectReturn {
+    this.showValidationMessage = this.shouldShowValidationMessage;
   }
 
   @Method()
   focus(): void {
-    this.widgetRef.focus();
+    this.widgetRef.current!.focus();
   }
 
   @Effect()
@@ -238,22 +238,27 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       && !!this.validationErrors?.length;
   }
 
-  get aria(): object {
+  get aria(): Record<string, string> {
     const { readOnly, isValid } = this.props;
     const checked = !!this.props.value;
     const indeterminate = this.props.value === null;
 
-    return {
+    const result: Record<string, string> = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
-      // eslint-disable-next-line spellcheck/spell-checker
-      describedby: this.shouldShowValidationMessage ? `dx-${new Guid()}` : undefined,
     };
+
+    if (this.shouldShowValidationMessage) {
+      // eslint-disable-next-line spellcheck/spell-checker
+      result.describedby = `dx-${new Guid()}`;
+    }
+
+    return result;
   }
 
-  get validationErrors(): object[] | null | undefined {
+  get validationErrors(): Record<string, unknown>[] | null | undefined {
     const { validationErrors, validationError } = this.props;
     let allValidationErrors = validationErrors;
     if (!allValidationErrors && validationError) {
@@ -262,8 +267,14 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     return allValidationErrors;
   }
 
+  get targetCurrent(): HTMLDivElement | null | undefined {
+    return this.target?.current;
+  }
+
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
     const { useInkRipple } = this.props;
-    useInkRipple && this.inkRippleRef[type]({ element: this.iconRef, event, wave: waveId });
+    useInkRipple && this.inkRippleRef.current![type]({
+      element: this.iconRef.current, event, wave: waveId,
+    });
   }
 }

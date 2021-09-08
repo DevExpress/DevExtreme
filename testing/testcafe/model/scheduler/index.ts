@@ -6,20 +6,26 @@ import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
 import Navigator from './navigator';
 
-const CLASS = {
+export const CLASS = {
   appointment: 'dx-scheduler-appointment',
   appointmentCollector: 'dx-scheduler-appointment-collector',
   dateTable: 'dx-scheduler-date-table',
   dateTableCell: 'dx-scheduler-date-table-cell',
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
+  focusedCell: 'dx-scheduler-focused-cell',
+  selectedCell: 'dx-state-focused',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
   headerPanelCell: 'dx-scheduler-header-panel-cell',
   headerScrollable: 'dx-scheduler-header-scrollable',
   scrollableContainer: 'dx-scrollable-container',
+
+  workSpace: 'dx-scheduler-work-space',
 };
 
 export default class Scheduler extends Widget {
+  workSpace: Selector;
+
   dateTableCells: Selector;
 
   allDayTableCells: Selector;
@@ -47,6 +53,7 @@ export default class Scheduler extends Widget {
   constructor(id: string) {
     super(id);
 
+    this.workSpace = this.element.find(`.${CLASS.workSpace}`);
     this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
     this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
     this.dateTable = this.element.find(`.${CLASS.dateTable}`);
@@ -71,7 +78,7 @@ export default class Scheduler extends Widget {
     this.appointmentTooltip = new AppointmentTooltip(this.element);
   }
 
-  static getDialog() {
+  static getDialog(): AppointmentDialog {
     return new AppointmentDialog();
   }
 
@@ -81,6 +88,18 @@ export default class Scheduler extends Widget {
 
   getAllDayTableCell(cellIndex = 0): Selector {
     return this.allDayTableCells.nth(cellIndex);
+  }
+
+  getFocusedCell(isAllDay = false): Selector {
+    const cells = isAllDay ? this.allDayTableCells : this.dateTableCells;
+
+    return cells.filter(`.${CLASS.focusedCell}`);
+  }
+
+  getSelectedCells(isAllDay = false): Selector {
+    const cells = isAllDay ? this.allDayTableCells : this.dateTableCells;
+
+    return cells.filter(`.${CLASS.selectedCell}`);
   }
 
   getAppointment(title: string, index = 0): Appointment {
@@ -99,11 +118,11 @@ export default class Scheduler extends Widget {
     return new AppointmentCollector(this.element, index);
   }
 
-  getAppointmentCount() {
+  getAppointmentCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointment}`).count;
   }
 
-  getAppointmentCollectorCount() {
+  getAppointmentCollectorCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointmentCollector}`).count;
   }
 

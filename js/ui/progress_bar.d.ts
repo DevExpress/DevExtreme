@@ -1,32 +1,60 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
 import dxTrackBar, {
-    dxTrackBarOptions
+    dxTrackBarOptions,
 } from './track_bar';
 
+/** @public */
+export type CompleteEvent = NativeEventInfo<dxProgressBar>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxProgressBar>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxProgressBar>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxProgressBar>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field1 component:dxProgressBar
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: event }) => any);
+    onComplete?: ((e: CompleteEvent) => void);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showStatus?: boolean;
@@ -36,41 +64,33 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @type_function_param1 ratio:number
      * @type_function_param2 value:number
      * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     statusFormat?: string | ((ratio: number, value: number) => string);
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    value?: number;
+    value?: number | boolean;
 }
 /**
  * @docid
  * @inherits dxTrackBar
  * @module ui/progress_bar
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxProgressBar extends dxTrackBar {
-    constructor(element: Element, options?: dxProgressBarOptions)
-    constructor(element: JQuery, options?: dxProgressBarOptions)
+    constructor(element: UserDefinedElement, options?: dxProgressBarOptions)
 }
 
-declare global {
-interface JQuery {
-    dxProgressBar(): JQuery;
-    dxProgressBar(options: "instance"): dxProgressBar;
-    dxProgressBar(options: string): any;
-    dxProgressBar(options: string, ...params: any[]): any;
-    dxProgressBar(options: dxProgressBarOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxProgressBarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxProgressBarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxProgressBarOptions;

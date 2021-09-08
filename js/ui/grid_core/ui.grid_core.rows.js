@@ -12,9 +12,10 @@ import { compileGetter } from '../../core/utils/data';
 import gridCoreUtils from './ui.grid_core.utils';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import Scrollable from '../scroll_view/ui.scrollable';
-import removeEvent from '../../core/remove_event';
+import { removeEvent } from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -33,10 +34,10 @@ const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
 function getMaxHorizontalScrollOffset(scrollable) {
-    return scrollable ? scrollable.scrollWidth() - scrollable.clientWidth() : 0;
+    return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
 
-export default {
+export const rowsModule = {
     defaultOptions: function() {
         return {
             hoverStateEnabled: false,
@@ -83,7 +84,7 @@ export default {
 
             const getScrollableBottomPadding = function(that) {
                 const scrollable = that.getScrollable();
-                return scrollable ? Math.ceil(parseFloat(scrollable.$content().css('paddingBottom'))) : 0;
+                return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
             };
 
             return {
@@ -260,14 +261,24 @@ export default {
                 _handleScroll: function(e) {
                     const that = this;
                     const rtlEnabled = that.option('rtlEnabled');
+                    const isNativeScrolling = e.component.option('useNative');
 
                     that._isScrollByEvent = !!e.event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
+                    let scrollLeft = e.scrollOffset.left;
                     if(rtlEnabled) {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
+
+                        if(isNativeScrolling) {
+                            scrollLeft = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+                        }
+
+                        if(!this.isScrollbarVisible(true)) {
+                            this._scrollLeft = -1;
+                        }
                     }
-                    that.scrollChanged.fire(e.scrollOffset, that.name);
+                    that.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, that.name);
                 },
 
                 _renderScrollableCore: function($element) {
@@ -276,10 +287,9 @@ export default {
                     const scrollHandler = that._handleScroll.bind(that);
 
                     dxScrollableOptions.onScroll = scrollHandler;
-                    dxScrollableOptions.onStop = scrollHandler;
 
                     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
-                    that._scrollableContainer = that._scrollable && that._scrollable._$container;
+                    that._scrollableContainer = that._scrollable && $(that._scrollable.container());
                 },
 
                 _renderLoadPanel: gridCoreUtils.renderLoadPanel,
@@ -292,7 +302,7 @@ export default {
 
                 _updateContent: function(newTableElement, change) {
                     const that = this;
-                    const tableElement = that._getTableElement();
+                    const tableElement = that.getTableElement();
                     const contentElement = that._findContentElement();
                     const changeType = change && change.changeType;
                     const executors = [];
@@ -351,7 +361,7 @@ export default {
                             newTableElement.remove();
                             break;
                         default:
-                            that._setTableElement(newTableElement);
+                            that.setTableElement(newTableElement);
                             contentElement.addClass(that.addWidgetPrefix(CONTENT_CLASS));
                             that._renderContent(contentElement, newTableElement);
                             break;
@@ -431,7 +441,7 @@ export default {
 
                 _updateRowHeight: function() {
                     const that = this;
-                    const $tableElement = that._getTableElement();
+                    const $tableElement = that.getTableElement();
                     const itemsCount = that._dataController.items().length;
 
                     if($tableElement && that._needUpdateRowHeight(itemsCount)) {
@@ -446,7 +456,7 @@ export default {
 
                     if($content) {
                         if(scrollable) {
-                            $content = scrollable.$content();
+                            $content = $(scrollable.content());
                         }
                         return $content.children().first();
                     }
@@ -606,8 +616,8 @@ export default {
                         }
                     };
 
-                    if(!isDefined(that._getTableElement())) {
-                        that._setTableElement($table);
+                    if(!isDefined(that.getTableElement())) {
+                        that.setTableElement($table);
                         that._renderScrollable(true);
                         that.resizeCompleted.add(resizeCompletedHandler);
                     } else {
@@ -800,8 +810,9 @@ export default {
 
                 _getHeightCorrection: function() {
                     const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
+                    const isChromeLatest = browser.chrome && browser.version >= 91;
                     const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !this.option('showRowLines');
-                    return isZoomedWebkit || hasExtraBorderTop ? 1 : 0;
+                    return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
                 },
 
                 _columnOptionChanged: function(e) {
@@ -1013,7 +1024,7 @@ export default {
                 },
 
                 _getCellElementsCore: function(rowIndex) {
-                    const $cells = this.callBase(rowIndex);
+                    const $cells = this.callBase.apply(this, arguments);
 
                     if($cells) {
                         const groupCellIndex = $cells.filter('.' + GROUP_CELL_CLASS).index();
@@ -1033,7 +1044,7 @@ export default {
                     const $contentElement = that._findContentElement();
                     const contentElementOffsetTop = $contentElement && $contentElement.offset().top;
                     const items = that._dataController.items();
-                    const tableElement = that._getTableElement();
+                    const tableElement = that.getTableElement();
 
                     if(items.length && tableElement) {
                         const rowElements = that._getRowElements(tableElement).filter(':visible');

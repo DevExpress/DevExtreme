@@ -1,11 +1,9 @@
 import $ from '../../core/renderer';
-import { getWindow, hasWindow } from '../../core/utils/window';
-import { deferUpdate, deferRender } from '../../core/utils/common';
+import { getWindow } from '../../core/utils/window';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
-import { move } from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
@@ -26,6 +24,7 @@ const SCROLLING_MODE_VIRTUAL = 'virtual';
 const SCROLLING_MODE_STANDARD = 'standard';
 const PIXELS_LIMIT = 250000; // this limit is defined for IE
 const LOAD_TIMEOUT = 300;
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 const isVirtualMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
@@ -58,6 +57,14 @@ const isItemCountableByDataSource = function(item, dataSource) {
     return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && dataSource.isGroupItemCountable(item.data);
 };
 
+const updateItemIndices = function(items) {
+    items.forEach(function(item, index) {
+        item.rowIndex = index;
+    });
+
+    return items;
+};
+
 
 const VirtualScrollingDataSourceAdapterExtender = (function() {
     const updateLoading = function(that) {
@@ -80,14 +87,17 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
     };
 
     const result = {
-        init: function(dataSource) {
+        init: function() {
+            this.callBase.apply(this, arguments);
+            this._items = [];
+            this._isLoaded = true;
+            this._loadPageCount = 1;
+
+            this._virtualScrollController = new VirtualScrollController(this.component, this._getVirtualScrollDataOptions());
+        },
+        _getVirtualScrollDataOptions: function() {
             const that = this;
-
-            that.callBase.apply(that, arguments);
-            that._items = [];
-            that._isLoaded = true;
-
-            that._virtualScrollController = new VirtualScrollController(that.component, {
+            return {
                 pageSize: function() {
                     return that.pageSize();
                 },
@@ -98,16 +108,16 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     return that.hasKnownLastPage();
                 },
                 pageIndex: function(index) {
-                    return dataSource.pageIndex(index);
+                    return that._dataSource.pageIndex(index);
                 },
                 isLoading: function() {
-                    return dataSource.isLoading() && !that.isCustomLoading();
+                    return that._dataSource.isLoading() && !that.isCustomLoading();
                 },
                 pageCount: function() {
                     return that.pageCount();
                 },
                 load: function() {
-                    return dataSource.load();
+                    return that._dataSource.load();
                 },
                 updateLoading: function() {
                     updateLoading(that);
@@ -116,7 +126,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     return that.itemsCount(true);
                 },
                 items: function() {
-                    return dataSource.items();
+                    return that._dataSource.items();
                 },
                 viewportItems: function(items) {
                     if(items) {
@@ -134,9 +144,14 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
                     return that._renderTime || 0;
                 }
-            });
+            };
         },
         _handleLoadingChanged: function(isLoading) {
+            if(this.option(NEW_SCROLLING_MODE)) {
+                this.callBase.apply(this, arguments);
+                return;
+            }
+
             if(!isVirtualMode(this) || this._isLoadingAll) {
                 this._isLoading = isLoading;
                 this.callBase.apply(this, arguments);
@@ -149,28 +164,36 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             }
         },
         _handleLoadError: function() {
-            const that = this;
+            if(!this.option(NEW_SCROLLING_MODE)) {
+                this._isLoading = false;
+                this.loadingChanged.fire(false);
+            }
 
-            that._isLoading = false;
-            that.loadingChanged.fire(false);
-
-            that.callBase.apply(that, arguments);
+            this.callBase.apply(this, arguments);
         },
         _handleDataChanged: function(e) {
+            if(this.option(NEW_SCROLLING_MODE)) {
+                this.callBase.apply(this, arguments);
+                return;
+            }
+
             const callBase = this.callBase.bind(this);
 
             this._virtualScrollController.handleDataChanged(callBase, e);
         },
         _customizeRemoteOperations: function(options, operationTypes) {
-            const that = this;
+            const newMode = this.option(NEW_SCROLLING_MODE);
 
-            if(!that.option('legacyRendering') && isVirtualMode(that) && !operationTypes.reload && operationTypes.skip && that._renderTime < that.option('scrolling.renderingThreshold')) {
+            if((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && this._renderTime < this.option('scrolling.renderingThreshold')) {
                 options.delay = undefined;
             }
 
-            that.callBase.apply(that, arguments);
+            this.callBase.apply(this, arguments);
         },
         items: function() {
+            if(this.option(NEW_SCROLLING_MODE)) {
+                return this._dataSource.items();
+            }
             return this._items;
         },
         itemsCount: function(isBase) {
@@ -180,7 +203,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             return this._virtualScrollController.itemsCount();
         },
         load: function(loadOptions) {
-            if(loadOptions) {
+            if(this.option(NEW_SCROLLING_MODE) || loadOptions) {
                 return this.callBase(loadOptions);
             }
             return this._virtualScrollController.load();
@@ -200,8 +223,11 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         _changeRowExpandCore: function() {
             const result = this.callBase.apply(this, arguments);
 
-            this.resetPagesCache();
+            if(this.option(NEW_SCROLLING_MODE)) {
+                return result;
+            }
 
+            this.resetPagesCache();
             updateLoading(this);
 
             return result;
@@ -210,10 +236,10 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             this._dataSource.pageIndex(this.pageIndex());
             const virtualScrollController = this._virtualScrollController;
 
-            if(virtualScrollController) {
+            if(!this.option(NEW_SCROLLING_MODE) && virtualScrollController) {
                 const d = new Deferred();
                 this.callBase.apply(this, arguments).done(function(r) {
-                    const delayDeferred = virtualScrollController._delayDeferred;
+                    const delayDeferred = virtualScrollController.getDelayDeferred();
                     if(delayDeferred) {
                         delayDeferred.done(d.resolve).fail(d.reject);
                     } else {
@@ -226,51 +252,84 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             }
         },
         refresh: function(options, operationTypes) {
-            const that = this;
-            const storeLoadOptions = options.storeLoadOptions;
-            const dataSource = that._dataSource;
+            if(!this.option(NEW_SCROLLING_MODE)) {
+                const storeLoadOptions = options.storeLoadOptions;
+                const dataSource = this._dataSource;
 
-            if(operationTypes.reload) {
-                that._virtualScrollController.reset();
-                dataSource.items().length = 0;
-                that._isLoaded = false;
+                if(operationTypes.reload) {
+                    this._virtualScrollController.reset();
+                    dataSource.items().length = 0;
+                    this._isLoaded = false;
 
-                updateLoading(that);
-                that._isLoaded = true;
+                    updateLoading(this);
+                    this._isLoaded = true;
 
-                if(isAppendMode(that)) {
-                    that.pageIndex(0);
-                    dataSource.pageIndex(0);
-                    storeLoadOptions.pageIndex = 0;
-                    options.pageIndex = 0;
-                    storeLoadOptions.skip = 0;
-                } else {
-                    dataSource.pageIndex(that.pageIndex());
-                    if(dataSource.paginate()) {
-                        options.pageIndex = that.pageIndex();
-                        storeLoadOptions.skip = that.pageIndex() * that.pageSize();
+                    if(isAppendMode(this)) {
+                        this.pageIndex(0);
+                        dataSource.pageIndex(0);
+                        storeLoadOptions.pageIndex = 0;
+                        options.pageIndex = 0;
+                        storeLoadOptions.skip = 0;
+                    } else {
+                        dataSource.pageIndex(this.pageIndex());
+                        if(dataSource.paginate()) {
+                            options.pageIndex = this.pageIndex();
+                            storeLoadOptions.skip = this.pageIndex() * this.pageSize();
+                        }
                     }
+                } else if(isAppendMode(this) && storeLoadOptions.skip && this._skipCorrection < 0) {
+                    storeLoadOptions.skip += this._skipCorrection;
                 }
-            } else if(isAppendMode(that) && storeLoadOptions.skip && that._skipCorrection < 0) {
-                storeLoadOptions.skip += that._skipCorrection;
             }
-            return that.callBase.apply(that, arguments);
+            return this.callBase.apply(this, arguments);
         },
         dispose: function() {
             this._virtualScrollController.dispose();
             this.callBase.apply(this, arguments);
+        },
+        loadPageCount: function(count) {
+            if(!isDefined(count)) {
+                return this._loadPageCount;
+            }
+            this._loadPageCount = count;
+        },
+        _handleDataLoading: function(options) {
+            const loadPageCount = this.loadPageCount();
+
+            options.loadPageCount = loadPageCount;
+            if(this.option(NEW_SCROLLING_MODE) && loadPageCount > 1) {
+                options.storeLoadOptions.take = loadPageCount * this.pageSize();
+            }
+            this.callBase.apply(this, arguments);
+        },
+        _loadPageSize: function() {
+            return this.callBase.apply(this, arguments) * this.loadPageCount();
         }
     };
+
+    [
+        'beginPageIndex',
+        'endPageIndex'
+    ].forEach(function(name) {
+        result[name] = function() {
+            if(this.option(NEW_SCROLLING_MODE)) {
+                const dataSource = this._dataSource;
+                return dataSource.pageIndex.apply(dataSource, arguments);
+            }
+
+            const virtualScrollController = this._virtualScrollController;
+            return virtualScrollController[name].apply(virtualScrollController, arguments);
+        };
+    });
 
     [
         'virtualItemsCount',
         'getContentOffset',
         'getVirtualContentSize',
-        'setContentSize', 'setViewportPosition',
+        'setContentItemSizes', 'setViewportPosition',
         'getViewportItemIndex', 'setViewportItemIndex', 'getItemIndexByPosition',
         'viewportSize', 'viewportItemSize', 'getItemSize', 'getItemSizes',
-        'pageIndex', 'beginPageIndex', 'endPageIndex',
-        'loadIfNeed'
+        'pageIndex', 'loadIfNeed'
     ].forEach(function(name) {
         result[name] = function() {
             const virtualScrollController = this._virtualScrollController;
@@ -308,6 +367,10 @@ const VirtualScrollingRowsViewExtender = (function() {
                 this.scrollToPage(dataController.pageIndex());
             });
 
+            dataController.dataSourceChanged.add(() => {
+                !this._scrollTop && this._scrollToCurrentPageOnResize();
+            });
+
             dataController.stateLoaded?.add(() => {
                 this._scrollToCurrentPageOnResize();
             });
@@ -318,7 +381,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         _scrollToCurrentPageOnResize: function() {
             const dataController = this.getController('data');
 
-            if(!this.option('legacyRendering') && dataController.pageIndex() > 0) {
+            if(dataController.pageIndex() > 0) {
                 const resizeHandler = () => {
                     this.resizeCompleted.remove(resizeHandler);
                     this.scrollToPage(dataController.pageIndex());
@@ -369,7 +432,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 const itemCount = e.items ? e.items.length : 20;
                 const viewportSize = that._dataController.viewportSize() || 20;
 
-                if(isVirtualRowRendering(that)) {
+                if(isVirtualRowRendering(that) && itemCount > 0) {
                     dataSource._renderTime = (new Date() - startRenderTime) * viewportSize / itemCount;
                 } else {
                     dataSource._renderTime = (new Date() - startRenderTime);
@@ -381,31 +444,6 @@ const VirtualScrollingRowsViewExtender = (function() {
             const $rows = this.callBase(tableElement);
 
             return $rows && $rows.not('.' + VIRTUAL_ROW_CLASS);
-        },
-
-        _renderContent: function(contentElement, tableElement) {
-            const that = this;
-            const virtualItemsCount = that._dataController.virtualItemsCount();
-
-            if(virtualItemsCount && that.option('legacyRendering')) {
-                if(hasWindow()) {
-                    tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
-                }
-
-                if(!contentElement.children().length) {
-                    contentElement.append(tableElement);
-                } else {
-                    contentElement.children().first().replaceWith(tableElement);
-                }
-
-                if(contentElement.children('table').length === 1) {
-                    contentElement.append(that._createTable());
-                    that._contentHeight = 0;
-                }
-                return contentElement;
-            }
-
-            return that.callBase.apply(that, arguments);
         },
 
         _removeRowsElements: function(contentTable, removeCount, changeType) {
@@ -436,34 +474,33 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         _updateContent: function(tableElement, change) {
-            const that = this;
             let $freeSpaceRowElements;
-            const contentElement = that._findContentElement();
+            const contentElement = this._findContentElement();
             const changeType = change && change.changeType;
 
             if(changeType === 'append' || changeType === 'prepend') {
                 const contentTable = contentElement.children().first();
-                const $tBodies = that._getBodies(tableElement);
-                if(!that.option('legacyRendering') && $tBodies.length === 1) {
-                    that._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
+                const $tBodies = this._getBodies(tableElement);
+                if($tBodies.length === 1) {
+                    this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
                 } else {
                     $tBodies[changeType === 'append' ? 'appendTo' : 'prependTo'](contentTable);
                 }
 
                 tableElement.remove();
-                $freeSpaceRowElements = that._getFreeSpaceRowElements(contentTable);
+                $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
                 removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
 
                 if(change.removeCount) {
-                    that._removeRowsElements(contentTable, change.removeCount, changeType);
+                    this._removeRowsElements(contentTable, change.removeCount, changeType);
                 }
 
-                that._restoreErrorRow(contentTable);
+                this._restoreErrorRow(contentTable);
             } else {
-                that.callBase.apply(that, arguments);
+                this.callBase.apply(this, arguments);
             }
 
-            that._updateBottomLoading();
+            this._updateBottomLoading();
         },
         _addVirtualRow: function($table, isFixed, location, position) {
             if(!position) return;
@@ -506,73 +543,30 @@ const VirtualScrollingRowsViewExtender = (function() {
             return correctedRowHeights;
         },
         _updateContentPosition: function(isRender) {
-            const that = this;
-            const dataController = that._dataController;
-            const rowHeight = that._rowHeight || 20;
+            const dataController = this._dataController;
+            const rowHeight = this._rowHeight || 20;
 
             dataController.viewportItemSize(rowHeight);
 
-            if(!that.option('legacyRendering') && (isVirtualMode(that) || isVirtualRowRendering(that))) {
+            if(isVirtualMode(this) || isVirtualRowRendering(this)) {
                 if(!isRender) {
-                    const rowHeights = that._getRowHeights();
-                    const correctedRowHeights = that._correctRowHeights(rowHeights);
-                    dataController.setContentSize(correctedRowHeights);
+                    const rowHeights = this._getRowHeights();
+                    const correctedRowHeights = this._correctRowHeights(rowHeights);
+                    dataController.setContentItemSizes(correctedRowHeights);
                 }
                 const top = dataController.getContentOffset('begin');
                 const bottom = dataController.getContentOffset('end');
-                const $tables = that.getTableElements();
+                const $tables = this.getTableElements();
                 const $virtualRows = $tables.children('tbody').children('.' + VIRTUAL_ROW_CLASS);
 
                 removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
 
-                $tables.each(function(index) {
+                $tables.each((index, element) => {
                     const isFixed = index > 0;
-                    that._isFixedTableRendering = isFixed;
-                    that._addVirtualRow($(this), isFixed, 'top', top);
-                    that._addVirtualRow($(this), isFixed, 'bottom', bottom);
-                    that._isFixedTableRendering = false;
-                });
-            } else {
-                deferUpdate(function() {
-                    that._updateContentPositionCore();
-                });
-            }
-        },
-
-        _updateContentPositionCore: function() {
-            const that = this;
-            let contentHeight;
-            let $tables;
-            let $contentTable;
-            const rowHeight = that._rowHeight || 20;
-            const virtualItemsCount = that._dataController.virtualItemsCount();
-
-            if(virtualItemsCount) {
-                const contentElement = that._findContentElement();
-                $tables = contentElement.children();
-                $contentTable = $tables.eq(0);
-                const virtualTable = $tables.eq(1);
-
-                that._contentTableHeight = $contentTable[0].offsetHeight;
-
-                that._dataController.viewportItemSize(rowHeight);
-                that._dataController.setContentSize(that._contentTableHeight);
-
-                contentHeight = that._dataController.getVirtualContentSize();
-                const top = that._dataController.getContentOffset();
-
-                deferRender(function() {
-                    move($contentTable, { left: 0, top: top });
-
-                    // TODO jsdmitry: Separate this functionality on render and resize
-                    const isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
-                        !that._isTableLinesDisplaysCorrect(virtualTable) ||
-                        !that._isColumnElementsEqual($contentTable.find('col'), virtualTable.find('col'));
-
-                    if(isRenderVirtualTableContentRequired) {
-                        that._contentHeight = contentHeight;
-                        that._renderVirtualTableContent(virtualTable, contentHeight);
-                    }
+                    this._isFixedTableRendering = isFixed;
+                    this._addVirtualRow($(element), isFixed, 'top', top);
+                    this._addVirtualRow($(element), isFixed, 'bottom', bottom);
+                    this._isFixedTableRendering = false;
                 });
             }
         },
@@ -645,9 +639,8 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateBottomLoading: function() {
             const that = this;
-            const scrollingMode = that.option('scrolling.mode');
-            const virtualMode = scrollingMode === SCROLLING_MODE_VIRTUAL;
-            const appendMode = scrollingMode === SCROLLING_MODE_INFINITE;
+            const virtualMode = isVirtualMode(this);
+            const appendMode = isAppendMode(this);
             const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || appendMode);
             const $contentElement = that._findContentElement();
             const bottomLoadPanelElement = that._findBottomLoadPanel($contentElement);
@@ -679,16 +672,26 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         _updateRowHeight: function() {
-            const that = this;
+            this.callBase.apply(this, arguments);
 
-            that.callBase.apply(that, arguments);
+            if(this._rowHeight) {
 
-            if(that._rowHeight) {
+                this._updateContentPosition();
 
-                that._updateContentPosition();
+                const viewportHeight = this._hasHeight ? this.element().outerHeight() : $(getWindow()).outerHeight();
+                const dataController = this._dataController;
+                const itemsCount = dataController.items().length;
+                const $tableElement = this.getTableElement();
+                const rowsHeight = this._getRowsHeight($tableElement);
+                const rowHeight = itemsCount ? (rowsHeight / itemsCount) : this._rowHeight;
 
-                const viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
-                that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
+                dataController.viewportSize(Math.ceil(viewportHeight / rowHeight));
+
+                if(this.option(NEW_SCROLLING_MODE) && !isDefined(dataController._loadViewportParams)) {
+                    const viewportSize = dataController.viewportSize();
+                    const viewportIsNotFilled = viewportSize > dataController.items().length && (isAppendMode(this) || dataController.totalItemsCount() > viewportSize);
+                    viewportIsNotFilled && dataController.loadViewport();
+                }
             }
         },
 
@@ -703,16 +706,18 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         setLoading: function(isLoading, messageText) {
-            const that = this;
-            const callBase = that.callBase;
-            const dataController = that._dataController;
-            const hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!that._findBottomLoadPanel();
+            const dataController = this._dataController;
+            const hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!this._findBottomLoadPanel();
+
+            if(this.option(NEW_SCROLLING_MODE) && isLoading && dataController.isViewportChanging()) {
+                return;
+            }
 
             if(hasBottomLoadPanel) {
                 isLoading = false;
             }
 
-            callBase.call(that, isLoading, messageText);
+            this.callBase.call(this, isLoading, messageText);
         },
 
         _resizeCore: function() {
@@ -739,9 +744,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         loadIfNeed: function() {
             const dataController = this._dataController;
-            if(dataController && dataController.loadIfNeed) {
-                dataController.loadIfNeed();
-            }
+            dataController?.loadIfNeed?.();
         },
 
         setColumnWidths: function(widths) {
@@ -751,7 +754,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             this.callBase.apply(this, arguments);
 
             if(this.option('scrolling.mode') === 'virtual') {
-                $content = scrollable ? scrollable.$content() : this.element();
+                $content = scrollable ? $(scrollable.content()) : this.element();
                 this.callBase(widths, $content.children('.' + this.addWidgetPrefix(CONTENT_CLASS)).children(':not(.' + this.addWidgetPrefix(TABLE_CONTENT_CLASS) + ')'));
             }
         },
@@ -763,7 +766,7 @@ const VirtualScrollingRowsViewExtender = (function() {
     };
 })();
 
-export default {
+export const virtualScrollingModule = {
     defaultOptions: function() {
         return {
             scrolling: {
@@ -776,7 +779,9 @@ export default {
                 mode: 'standard',
                 preloadEnabled: false,
                 rowRenderingMode: 'standard',
-                loadTwoPagesOnStart: false
+                loadTwoPagesOnStart: false,
+                newMode: false,
+                minGap: 1
             }
         };
     },
@@ -796,29 +801,24 @@ export default {
 
                         return pageSize && pageSize < rowPageSize ? pageSize : rowPageSize;
                     },
-                    _applyFilter: function() {
-                        this.setViewportPosition(0);
-                        return this.callBase.apply(this, arguments);
-                    },
                     reload: function() {
-                        const that = this;
-                        const rowsScrollController = that._rowsScrollController || that._dataSource;
+                        const rowsScrollController = this._rowsScrollController || this._dataSource;
                         const itemIndex = rowsScrollController && rowsScrollController.getItemIndexByPosition();
                         const result = this.callBase.apply(this, arguments);
-                        return result && result.done(function() {
-                            if(isVirtualMode(that) || isVirtualRowRendering(that)) {
-                                const rowIndexOffset = that.getRowIndexOffset();
+                        return result && result.done(() => {
+                            if(isVirtualMode(this) || isVirtualRowRendering(this)) {
+                                const rowIndexOffset = this.getRowIndexOffset();
                                 const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
-                                const component = that.component;
+                                const component = this.component;
                                 const scrollable = component.getScrollable && component.getScrollable();
-                                const isSortingOperation = that.dataSource().operationTypes().sorting;
+                                const isSortingOperation = this.dataSource().operationTypes().sorting;
 
-                                if(scrollable && !that.option('legacyRendering') && !isSortingOperation) {
+                                if(scrollable && !isSortingOperation) {
                                     const rowElement = component.getRowElement(rowIndex);
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
-
-                                    const allowedTopOffset = browser.mozilla || browser.msie ? 1 : 0; // T884308
+                                    const isChromeLatest = browser.chrome && browser.version >= 91;
+                                    const allowedTopOffset = browser.mozilla || browser.msie || isChromeLatest ? 1 : 0; // T884308
                                     if(top > allowedTopOffset) {
                                         top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
@@ -828,28 +828,54 @@ export default {
                         });
                     },
                     initVirtualRows: function() {
-                        const that = this;
-                        const virtualRowsRendering = isVirtualRowRendering(that);
+                        const virtualRowsRendering = isVirtualRowRendering(this);
 
-                        if(that.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || that.option('legacyRendering') || !that.option('scrolling.rowPageSize')) {
-                            that._visibleItems = null;
-                            that._rowsScrollController = null;
+                        if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || !this.option('scrolling.rowPageSize')) {
+                            this._visibleItems = null;
+                            this._rowsScrollController = null;
                             return;
                         }
 
-                        that._rowPageIndex = Math.ceil(that.pageIndex() * that.pageSize() / that.getRowPageSize());
+                        const pageIndex = !isVirtualMode(this) && this.pageIndex() >= this.pageCount() ? this.pageCount() - 1 : this.pageIndex();
+                        this._rowPageIndex = Math.ceil(pageIndex * this.pageSize() / this.getRowPageSize());
+                        this._uncountableItemCount = 0;
 
-                        that._visibleItems = [];
+                        this._visibleItems = this.option(NEW_SCROLLING_MODE) ? null : [];
+                        this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
+                        this._viewportChanging = false;
 
+                        this._rowsScrollController.positionChanged.add(() => {
+                            if(this.option(NEW_SCROLLING_MODE)) {
+                                this._viewportChanging = true;
+                                this.loadViewport();
+                                this._viewportChanging = false;
+                                return;
+                            }
+                            this._dataSource?.setViewportItemIndex(this._rowsScrollController.getViewportItemIndex());
+                        });
+
+                        if(this.isLoaded() && !this.option(NEW_SCROLLING_MODE)) {
+                            this._rowsScrollController.load();
+                        }
+                    },
+                    isViewportChanging: function() {
+                        return this._viewportChanging;
+                    },
+                    _getRowsScrollDataOptions: function() {
+                        const that = this;
                         const isItemCountable = function(item) {
                             return isItemCountableByDataSource(item, that._dataSource);
                         };
 
-                        that._rowsScrollController = new VirtualScrollController(that.component, {
+                        return {
                             pageSize: function() {
                                 return that.getRowPageSize();
                             },
                             totalItemsCount: function() {
+                                if(that.option(NEW_SCROLLING_MODE)) {
+                                    return that.totalItemsCount() + that._uncountableItemCount;
+                                }
+
                                 return isVirtualMode(that) ? that.totalItemsCount() : that._items.filter(isItemCountable).length;
                             },
                             hasKnownLastPage: function() {
@@ -874,7 +900,8 @@ export default {
                                     that._rowsScrollController.pageIndex(that._rowPageIndex);
                                 }
 
-                                if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
+                                if(!this.items().length && this.totalItemsCount()) return;
+
                                 that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
                                     change.changeType = change.changeType || 'refresh';
@@ -889,7 +916,7 @@ export default {
                             updateLoading: function() {
                             },
                             itemsCount: function() {
-                                return that._rowsScrollController._dataSource.items().filter(isItemCountable).length;
+                                return this.items().filter(isItemCountable).length;
                             },
                             correctCount: function(items, count, fromEnd) {
                                 return correctCount(items, count, fromEnd, (item, isNextAfterLast, fromEnd) => {
@@ -931,7 +958,7 @@ export default {
                                 return countableOnly ? result.filter(isItemCountable) : result;
                             },
                             viewportItems: function(items) {
-                                if(items) {
+                                if(items && !that.option(NEW_SCROLLING_MODE)) {
                                     that._visibleItems = items;
                                 }
                                 return that._visibleItems;
@@ -941,25 +968,22 @@ export default {
                             changingDuration: function(e) {
                                 const dataSource = that.dataSource();
 
-                                if(dataSource.isLoading()) {
+                                if(dataSource.isLoading() && !that.option(NEW_SCROLLING_MODE)) {
                                     return LOAD_TIMEOUT;
                                 }
 
                                 return dataSource?._renderTime || 0;
                             }
-                        }, true);
-
-                        that._rowsScrollController.positionChanged.add(() => {
-                            that._dataSource?.setViewportItemIndex(that._rowsScrollController.getViewportItemIndex());
-                        });
-
-                        if(that.isLoaded()) {
-                            that._rowsScrollController.load();
-                        }
+                        };
                     },
                     _updateItemsCore: function(change) {
                         const delta = this.getRowIndexDelta();
+
                         this.callBase.apply(this, arguments);
+                        if(this.option(NEW_SCROLLING_MODE) && isVirtualRowRendering(this)) {
+                            return;
+                        }
+
                         const rowsScrollController = this._rowsScrollController;
 
                         if(rowsScrollController) {
@@ -992,11 +1016,25 @@ export default {
                                     change.items = visibleItems;
                                 }
 
-                                visibleItems.forEach((item, index) => {
-                                    item.rowIndex = index;
-                                });
+                                updateItemIndices(visibleItems);
                             }
                         }
+                    },
+                    _updateLoadViewportParams: function() {
+                        this._loadViewportParams = this._rowsScrollController.getViewportParams();
+                    },
+                    _afterProcessItems: function(items, change) {
+                        this._uncountableItemCount = 0;
+                        if(isDefined(this._loadViewportParams)) {
+                            this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
+                            this._updateLoadViewportParams();
+                            const { skipForCurrentPage } = this.getLoadPageParams();
+                            change.repaintChangesOnly = change.changeType === 'refresh';
+
+                            return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
+                        }
+
+                        return this.callBase.apply(this, arguments);
                     },
                     _applyChange: function(change) {
                         const that = this;
@@ -1048,10 +1086,18 @@ export default {
                         let offset = 0;
                         const dataSource = this.dataSource();
                         const rowsScrollController = this._rowsScrollController;
+                        const virtualMode = isVirtualMode(this);
+                        const appendMode = isAppendMode(this);
+                        const newMode = this.option(NEW_SCROLLING_MODE);
 
                         if(rowsScrollController && !byLoadedRows) {
-                            offset = rowsScrollController.beginPageIndex() * rowsScrollController._dataSource.pageSize();
-                        } else if(this.option('scrolling.mode') === 'virtual' && dataSource) {
+                            if(this.option(NEW_SCROLLING_MODE) && isDefined(this._loadViewportParams)) {
+                                const { skipForCurrentPage, pageIndex } = this.getLoadPageParams();
+                                offset = pageIndex * this.pageSize() + skipForCurrentPage;
+                            } else {
+                                offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
+                            }
+                        } else if((virtualMode || (appendMode && newMode)) && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
                         }
 
@@ -1059,18 +1105,26 @@ export default {
                     },
                     viewportSize: function() {
                         const rowsScrollController = this._rowsScrollController;
-                        rowsScrollController && rowsScrollController.viewportSize.apply(rowsScrollController, arguments);
-
                         const dataSource = this._dataSource;
-                        return dataSource && dataSource.viewportSize.apply(dataSource, arguments);
+                        const result = rowsScrollController?.viewportSize.apply(rowsScrollController, arguments);
+
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            return result;
+                        }
+
+                        return dataSource?.viewportSize.apply(dataSource, arguments);
                     },
                     viewportItemSize: function() {
                         const rowsScrollController = this._rowsScrollController;
-
-                        rowsScrollController && rowsScrollController.viewportItemSize.apply(rowsScrollController, arguments);
-
                         const dataSource = this._dataSource;
-                        return dataSource && dataSource.viewportItemSize.apply(dataSource, arguments);
+                        const result = rowsScrollController?.viewportItemSize.apply(rowsScrollController, arguments);
+
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            return result;
+                        }
+
+
+                        return dataSource?.viewportItemSize.apply(dataSource, arguments);
                     },
                     setViewportPosition: function() {
                         const rowsScrollController = this._rowsScrollController;
@@ -1082,16 +1136,50 @@ export default {
                             dataSource?.setViewportPosition.apply(dataSource, arguments);
                         }
                     },
-                    setContentSize: function(sizes) {
+                    setContentItemSizes: function(sizes) {
                         const rowsScrollController = this._rowsScrollController;
-
-
-                        rowsScrollController && rowsScrollController.setContentSize(sizes);
-
                         const dataSource = this._dataSource;
-                        return dataSource && dataSource.setContentSize(sizes);
+                        const result = rowsScrollController?.setContentItemSizes(sizes);
+
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            return result;
+                        }
+
+                        return dataSource?.setContentItemSizes(sizes);
+                    },
+                    getLoadPageParams: function() {
+                        const viewportParams = this._loadViewportParams;
+
+                        const pageIndex = Math.floor(viewportParams.skip / this.pageSize());
+                        const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());
+                        const loadPageCount = Math.ceil((skipForCurrentPage + viewportParams.take) / this.pageSize());
+
+                        return {
+                            pageIndex,
+                            loadPageCount,
+                            skipForCurrentPage
+                        };
+                    },
+                    loadViewport: function() {
+                        if(isVirtualMode(this) || isAppendMode(this)) {
+                            this._updateLoadViewportParams();
+                            const { pageIndex, loadPageCount } = this.getLoadPageParams();
+                            const dataSourceAdapter = this._dataSource;
+
+                            if(pageIndex !== dataSourceAdapter.pageIndex() || loadPageCount !== dataSourceAdapter.loadPageCount()) {
+                                dataSourceAdapter.pageIndex(pageIndex);
+                                dataSourceAdapter.loadPageCount(loadPageCount);
+                                this.load();
+                            } else if(!this._isLoading) {
+                                this.updateItems();
+                            }
+                        }
                     },
                     loadIfNeed: function() {
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            return;
+                        }
+
                         const rowsScrollController = this._rowsScrollController;
                         rowsScrollController && rowsScrollController.loadIfNeed();
 
@@ -1143,10 +1231,26 @@ export default {
                         rowsScrollController && rowsScrollController.dispose();
 
                         this.callBase.apply(this, arguments);
+                    },
+                    topItemIndex: function() {
+                        return this._loadViewportParams?.skip;
+                    },
+                    bottomItemIndex: function() {
+                        const viewportParams = this._loadViewportParams;
+                        return viewportParams && viewportParams.skip + viewportParams.take;
+                    },
+                    virtualItemsCount: function() {
+                        const rowsScrollController = this._rowsScrollController;
+
+                        if(rowsScrollController) {
+                            return rowsScrollController.virtualItemsCount.apply(rowsScrollController, arguments);
+                        }
+
+                        const dataSource = this._dataSource;
+                        return dataSource?.virtualItemsCount.apply(dataSource, arguments);
                     }
                 };
 
-                gridCoreUtils.proxyMethod(members, 'virtualItemsCount');
                 gridCoreUtils.proxyMethod(members, 'getVirtualContentSize');
                 gridCoreUtils.proxyMethod(members, 'setViewportItemIndex');
 
@@ -1158,7 +1262,7 @@ export default {
                     const callBase = that.callBase;
                     let result;
 
-                    if(!that.option('legacyRendering') && (isVirtualMode(that) || isVirtualRowRendering(that))) {
+                    if(isVirtualMode(that) || isVirtualRowRendering(that)) {
                         clearTimeout(that._resizeTimeout);
                         const diff = new Date() - that._lastTime;
                         const updateTimeout = that.option('scrolling.updateTimeout');

@@ -4,7 +4,6 @@ import { Deferred } from 'core/utils/deferred';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const { test, module, testStart } = QUnit;

@@ -1,12 +1,58 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
+
+import {
+    SelectionChangedInfo,
+} from './collection/ui.collection_widget.base';
+
 import dxTabs, {
-    dxTabsItem,
-    dxTabsOptions
+    Item as dxTabsItem,
+    dxTabsOptions,
 } from './tabs';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxNavBar>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxNavBar>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxNavBar>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxNavBar> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxNavBar> & SelectionChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
@@ -16,38 +62,37 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @inherits dxTabs
  * @module ui/nav_bar
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @deprecated dxTabs
  * @public
  */
 export default class dxNavBar extends dxTabs {
-    constructor(element: Element, options?: dxNavBarOptions)
-    constructor(element: JQuery, options?: dxNavBarOptions)
+    constructor(element: UserDefinedElement, options?: dxNavBarOptions)
 }
 
 /**
-* @docid
-* @inherits dxTabsItem
-* @type object
-*/
+ * @public
+ * @namespace DevExpress.ui.dxNavBar
+ */
+export type Item = dxNavBarItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
 export interface dxNavBarItem extends dxTabsItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
 }
 
-declare global {
-interface JQuery {
-    dxNavBar(): JQuery;
-    dxNavBar(options: "instance"): dxNavBar;
-    dxNavBar(options: string): any;
-    dxNavBar(options: string, ...params: any[]): any;
-    dxNavBar(options: dxNavBarOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxNavBarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxNavBarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxNavBarOptions;

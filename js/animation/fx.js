@@ -21,7 +21,7 @@ import {
 import { requestAnimationFrame, cancelAnimationFrame } from './frame';
 import { transitionEndEventName, transition } from '../core/utils/support';
 import positionUtils from './position';
-import removeEvent from '../core/remove_event';
+import { removeEvent } from '../core/remove_event';
 import { addNamespace } from '../events/utils/index';
 import { when, Deferred } from '../core/utils/deferred';
 const removeEventName = addNamespace(removeEvent, 'dxFX');
@@ -262,7 +262,7 @@ const FrameAnimationStrategy = {
     _parseTransform: function(transformString) {
         const result = {};
 
-        each(transformString.match(/(\w|\d)+\([^)]*\)\s*/g), function(i, part) {
+        each(transformString.match(/\w+\d*\w*\([^)]*\)\s*/g), function(i, part) {
             const translateData = parseTranslate(part);
             const scaleData = part.match(/scale\((.+?)\)/);
             const rotateData = part.match(/(rotate.)\((.+)deg\)/);

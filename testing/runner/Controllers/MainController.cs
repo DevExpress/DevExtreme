@@ -72,11 +72,22 @@ namespace Runner.Controllers
         public IActionResult RunAll(string constellation, string include, string exclude)
         {
             HashSet<string> includeSet = null, excludeSet = null;
+            int partIndex = 0;
+            int partCount = 1;
 
             if (!String.IsNullOrEmpty(include))
                 includeSet = new HashSet<string>(include.Split(','));
             if (!String.IsNullOrEmpty(exclude))
                 excludeSet = new HashSet<string>(exclude.Split(','));
+            if (!String.IsNullOrEmpty(constellation) && constellation.Contains('(') && constellation.EndsWith(')'))
+            {
+                var constellationParts = constellation.TrimEnd(')').Split('(');
+                var parts = constellationParts[1].Split(new char[] { '/', '_' });
+
+                constellation = constellationParts[0];
+                partIndex = Int32.Parse(parts[0]) - 1;
+                partCount = Int32.Parse(parts[1]);
+            }
 
             var packageJson = IOFile.ReadAllText(Path.Combine(_env.ContentRootPath, "package.json"));
 
@@ -85,7 +96,7 @@ namespace Runner.Controllers
                 Constellation = constellation ?? "",
                 CategoriesList = include,
                 Version = JsonConvert.DeserializeObject<IDictionary>(packageJson)["version"].ToString(),
-                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet)
+                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet, partIndex, partCount)
             };
 
             AssignBaseRunProps(model);
@@ -94,7 +105,7 @@ namespace Runner.Controllers
         }
 
         [HttpPost]
-        public void NotifySuiteFinalized(string name, bool passed)
+        public void NotifySuiteFinalized(string name, bool passed, int runtime)
         {
             Response.ContentType = "text/plain";
             lock (IO_SYNC)
@@ -111,11 +122,23 @@ namespace Runner.Controllers
                     Console.Write("FAIL");
                 }
                 Console.ResetColor();
-                Console.WriteLine("] " + name);
+                TimeSpan runSpan = TimeSpan.FromMilliseconds(runtime);
+                Console.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
 
-                if (_runFlags.IsContinuousIntegration)
-                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
+                NotifyIsAlive();
             }
+        }
+
+        static readonly object IOLock = new object();
+
+        [HttpPost]
+        public void NotifyIsAlive()
+        {
+            if (_runFlags.IsContinuousIntegration)
+                lock (IOLock)
+                {
+                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
+                }
         }
 
         [HttpPost]
@@ -199,7 +222,7 @@ namespace Runner.Controllers
             m.NoTryCatch = q.ContainsKey("notrycatch");
             m.NoJQuery = q.ContainsKey("nojquery");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
-            m.Renovation = q.ContainsKey("renovation") || false;
+            m.NoRenovation = q.ContainsKey("norenovation") || false;
         }
 
         string JQueryVersion()

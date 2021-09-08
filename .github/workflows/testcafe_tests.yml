@@ -14,13 +14,18 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
-    - name: Restore npm cache
-      uses: actions/cache@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
       with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node
+        node-version: '15'
+
+    # - name: Restore npm cache
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ./node_modules
+    #     key: ${{ runner.os }}-node-modules-v4-${{ hashFiles('**/package.json') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-node-modules-v4
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
@@ -37,6 +42,7 @@ jobs:
         all_args="--concurrency 2 --browsers=chrome:headless ${ARGS}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
+
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2

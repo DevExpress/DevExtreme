@@ -554,7 +554,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
   await t.expect(ClientFunction(() => (window as any).focusedRowChanging_Counter)()).eql(undefined);
   await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
 }).before(() => createWidget('dxDataGrid', () => {
-  const data = (function () {
+  const data = (function (): Record<string, unknown>[] {
     const result = [];
 
     for (let i = 0; i < 200; i += 1) {
@@ -577,7 +577,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     },
     masterDetail: {
       enabled: true,
-      template: (container) => {
+      template: (container): any => {
         (container.append($('<div>') as any).dxDataGrid({
           height: 500,
           keyExpr: 'id',
@@ -605,13 +605,13 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
       mode: 'virtual',
       rowRenderingMode: 'virtual',
     },
-    onFocusedRowChanging: () => {
+    onFocusedRowChanging: (): void => {
       if (!(window as any).focusedRowChanging_Counter) {
         (window as any).focusedRowChanging_Counter = 0;
       }
       (window as any).focusedRowChanging_Counter += 1;
     },
-    onFocusedRowChanged: () => {
+    onFocusedRowChanged: (): void => {
       if (!(window as any).focusedRowChanged_Counter) {
         (window as any).focusedRowChanged_Counter = 0;
       }
@@ -629,7 +629,7 @@ test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual r
     .expect(dataGrid.getFocusedRow().exists)
     .notOk();
 }).before(() => createWidget('dxDataGrid', () => {
-  const data = (function () {
+  const data = (function (): Record<string, unknown>[] {
     const result = [];
     for (let i = 0; i < 100; i += 1) {
       result.push({ id: i + 1 });
@@ -678,7 +678,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
     }).prependTo('body');
   })();
   await createWidget('dxDataGrid', () => {
-    const data = (function () {
+    const data = (function (): Record<string, unknown>[] {
       const result = [];
       for (let i = 0; i < 20; i += 1) {
         result.push({ id: i + 1 });

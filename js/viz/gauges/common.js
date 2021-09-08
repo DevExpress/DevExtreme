@@ -63,10 +63,12 @@ export const dxGauge = BaseGauge.inherit({
         const that = this;
 
         that._scaleGroup = that._renderer.g().attr({ 'class': 'dxg-scale' }).linkOn(that._renderer.root, 'scale');
+        that._labelsAxesGroup = that._renderer.g().attr({ 'class': 'dxg-scale-elements' }).linkOn(that._renderer.root, 'scale-elements');
         that._scale = new Axis({
             incidentOccurred: that._incidentOccurred,
             renderer: that._renderer,
             axesContainerGroup: that._scaleGroup,
+            labelsAxesGroup: that._labelsAxesGroup,
             axisType: that._scaleTypes.type,
             drawingType: that._scaleTypes.drawingType,
             widgetClass: 'dxg',
@@ -80,12 +82,13 @@ export const dxGauge = BaseGauge.inherit({
 
         that._scale.dispose();
         that._scaleGroup.linkOff();
+        that._labelsAxesGroup.linkOff();
 
         that._rangeContainer.dispose();
         that._disposeValueIndicators();
         that._subvalueIndicatorContainer.linkOff();
 
-        that._scale = that._scaleGroup = that._rangeContainer = null;
+        that._scale = that._scaleGroup = that._labelsAxesGroup = that._rangeContainer = null;
     },
 
     _disposeValueIndicators: function() {
@@ -194,7 +197,7 @@ export const dxGauge = BaseGauge.inherit({
         const startValue = bounds[0];
         const endValue = bounds[1];
         const angles = that._translator.getCodomain();
-        const invert = !!(startValue > endValue ^ scaleOptions.inverted);
+        const invert = !!((startValue > endValue) ^ scaleOptions.inverted);
         const min = _min(startValue, endValue);
         const max = _max(startValue, endValue);
 
@@ -215,6 +218,7 @@ export const dxGauge = BaseGauge.inherit({
         that._updateScaleTickIndent(scaleOptions);
 
         that._scaleGroup.linkAppend();
+        that._labelsAxesGroup.linkAppend();
         that._scale.draw(extend({}, that._canvas));
     },
 

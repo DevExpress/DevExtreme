@@ -13,6 +13,7 @@ export const Consts = {
     GENERAL_TOOLBAR_CLASS: 'dx-filemanager-general-toolbar',
     FILE_TOOLBAR_CLASS: 'dx-filemanager-file-toolbar',
     CONTAINER_CLASS: 'dx-filemanager-container',
+    DRAWER_WRAPPER_CLASS: 'dx-drawer-wrapper',
     DRAWER_PANEL_CONTENT_CLASS: 'dx-drawer-panel-content',
     DRAWER_CONTENT_CLASS: 'dx-drawer-content',
     DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
@@ -39,31 +40,42 @@ export const Consts = {
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: 'dx-treeview-toggle-item-visibility',
+    FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
     BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
     ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
-    ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
-    INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
-    TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_SEPARATOR_ITEM_CLASS: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_VIEWMODE_ITEM_CLASS: 'dx-filemanager-toolbar-viewmode-item',
+    TOOLBAR_HAS_LARGE_ICON_CLASS: 'dx-filemanager-toolbar-has-large-icon',
+    TOOLBAR_ITEM_CLASS: 'dx-toolbar-item',
+    TOOLBAR_ITEM_WITH_HIDDEN_TEXT_CLASS: 'dx-toolbar-text-auto-hide',
+    TOOLBAR_REFRESH_ITEM_ICON_CLASS: 'dx-filemanager-i',
+    TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS: 'dx-filemanager-i-refresh',
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
+    NAME_EDITOR_DIALOG_CLASS: 'dx-filemanager-dialog-name-editor-popup',
+    DELETE_ITEM_DIALOG_CLASS: 'dx-filemanager-dialog-delete-item-popup',
+    NOTIFICATION_POPUP_CLASS: 'dx-filemanager-notification-popup',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
     BUTTON_CLASS: 'dx-button',
     BUTTON_HAS_TEXT_CLASS: 'dx-button-has-text',
     BUTTON_TEXT_CLASS: 'dx-button-text',
+    BUTTON_OUTLINED_CLASS: 'dx-button-mode-outlined',
     DROP_DOWN_BUTTON_CLASS: 'dx-dropdownbutton',
     DROP_DOWN_BUTTON_ACTION_CLASS: 'dx-dropdownbutton-action',
     TEXT_EDITOR_INPUT_CLASS: 'dx-texteditor-input',
     MENU_ITEM_WITH_TEXT_CLASS: 'dx-menu-item-has-text',
+    MENU_ITEM_SELECTED_CLASS: 'dx-menu-item-selected',
     CONTEXT_MENU_CLASS: 'dx-context-menu',
     MENU_ITEM_CLASS: 'dx-menu-item',
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
+    CONTEXT_MENU_SEPARATOR_CLASS: 'dx-menu-separator',
     SELECTION_CLASS: 'dx-selection',
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
@@ -71,6 +83,7 @@ export const Consts = {
     SPLITTER_CLASS: 'dx-splitter',
     FOCUSED_STATE_CLASS: 'dx-state-focused',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
+    READONLY_STATE_CLASS: 'dx-state-readonly',
     UPLOAD_ICON_CLASS: 'dx-icon-upload',
     DROPDOWN_MENU_BUTTON_CLASS: 'dx-dropdownmenu-button',
     DROPDOWN_MENU_LIST_CLASS: 'dx-dropdownmenu-list',
@@ -112,7 +125,7 @@ export class FileManagerWrapper {
 
     getFolderNodes(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
     }
@@ -126,22 +139,31 @@ export class FileManagerWrapper {
         return text.replace(showMoreButtonText, '');
     }
 
-    getFolderNodeByText(text, inDialog) {
-        return this.getFolderNodes(inDialog).filter(function(index, node) {
-            const content = $(node).text();
-            return content === text;
-        }).first();
-    }
-
     getFolderToggles(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
     }
 
     getFolderToggle(index, inDialog) {
         return this.getFolderToggles(inDialog).eq(index);
+    }
+
+    isFolderNodeToggleOpened(text, inDialog) {
+        let result = null;
+        const targetNode = this.getFolderNodes(inDialog).filter(function() { return $(this).text() === text; }).eq(0).parent();
+        if(targetNode.length) {
+            const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            if(itemToggle.length) {
+                result = itemToggle.hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS);
+            }
+        }
+        return result;
+    }
+
+    getTreeViewScrollableContainer() {
+        return this.getDirsTree().find(`.${Consts.SCROLLABLE_CONTAINER_ClASS}`);
     }
 
     getFocusedItemText() {
@@ -177,6 +199,19 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS}`);
     }
 
+    getGeneralToolbar() {
+        return this.getToolbar().children().first();
+    }
+
+    getFileSelectionToolbar() {
+        return this.getToolbar().children().first().next();
+    }
+
+    getAllItemsOfToolbar(isFileSelection) {
+        const toolbarElement = isFileSelection ? this.getFileSelectionToolbar() : this.getGeneralToolbar();
+        return toolbarElement.find(`.${Consts.TOOLBAR_ITEM_CLASS}`);
+    }
+
     getToolbarElements() {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
@@ -187,21 +222,23 @@ export class FileManagerWrapper {
     }
 
     getGeneralToolbarElements() {
-        const _$generalToolbar = this.getToolbar().children().first();
-        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getGeneralToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getFileSelectionToolbarElements() {
-        const _$fileSelectionToolbar = this.getToolbar().children().first().next();
-        return _$fileSelectionToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getFileSelectionToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarButton(text) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
 
+    getToolbarRefreshButton(isFileSelectionToolbar) {
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}[title='Refresh']`).eq(isFileSelectionToolbar ? 1 : 0);
+    }
+
     getToolbarSeparators() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM_CLASS}:visible`);
     }
 
     getToolbarDropDownButton() {
@@ -213,11 +250,11 @@ export class FileManagerWrapper {
     }
 
     getToolbarDropDownMenuItem(childIndex) {
-        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`).eq(childIndex);
     }
 
     getToolbarViewSwitcherListItem(childIndex) {
-        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`).eq(childIndex);
     }
 
     getToolbarNavigationPaneToggleButton() {
@@ -229,7 +266,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsItemList() {
-        return this._$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`);
+        return this.getItemsView();
     }
 
     getThumbnailsViewPort() {
@@ -386,6 +423,10 @@ export class FileManagerWrapper {
         return this.getRowInDetailsView(index).is(`.${Consts.FOCUSED_ROW_CLASS}`);
     }
 
+    getContextMenuItemsWithSeparators() {
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}:visible, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}:visible`);
+    }
+
     getContextMenuItems(visible) {
         let selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
         if(visible) {
@@ -406,8 +447,12 @@ export class FileManagerWrapper {
         return $container.find(`.${Consts.FILE_ACTION_BUTTON_CLASS} .${Consts.BUTTON_CLASS}`);
     }
 
-    getDrawerPanelContent() {
+    getNavPaneDrawerPanelContent() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getProgressPaneDrawerPanelContent() {
+        return this._$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS} > .${Consts.DRAWER_WRAPPER_CLASS} > .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
     }
 
     getProgressDrawer() {
@@ -420,7 +465,7 @@ export class FileManagerWrapper {
 
     moveSplitter(delta, pointerType) {
         const $splitter = this.getSplitter();
-        const $drawerContent = this.getDrawerPanelContent();
+        const $drawerContent = this.getNavPaneDrawerPanelContent();
         if(!pointerType) {
             pointerType = 'mouse';
         }
@@ -443,12 +488,29 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
     }
 
+    getSplitterPosition() {
+        const $splitterWrapper = this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
+        return $splitterWrapper.get(0).offsetLeft + parseFloat(this.getSplitter().css('margin-left'));
+    }
+
+    getNotificationPopup() {
+        return $(`.${Consts.NOTIFICATION_POPUP_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+    }
+
     getFolderChooserDialog() {
-        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
+    }
+
+    getNameEditorDialog() {
+        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
+    }
+
+    getDeleteItemDialog() {
+        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getDialogTextInput() {
-        return $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        return this.getNameEditorDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
     }
 
     getDialogButton(text) {
@@ -650,22 +712,27 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 1',
             isDirectory: true,
+            hasSubDirectories: true,
             items: [
                 {
                     name: 'Folder 1.1',
                     isDirectory: true,
+                    hasSubDirectories: true,
                     items: [
                         {
                             name: 'Folder 1.1.1',
                             isDirectory: true,
+                            hasSubDirectories: true,
                             items: [
                                 {
                                     name: 'Folder 1.1.1.1',
                                     isDirectory: true,
+                                    hasSubDirectories: true,
                                     items: [
                                         {
                                             name: 'Folder 1.1.1.1.1',
                                             isDirectory: true,
+                                            hasSubDirectories: false,
                                             items: [
                                                 {
                                                     name: 'Special deep file.txt',
@@ -697,7 +764,8 @@ export const createTestFileSystem = () => {
                 },
                 {
                     name: 'Folder 1.2',
-                    isDirectory: true
+                    isDirectory: true,
+                    hasSubDirectories: false
                 },
                 {
                     name: 'File 1-1.txt',
@@ -711,6 +779,7 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 2',
             isDirectory: true,
+            hasSubDirectories: false,
             items: [
                 {
                     name: 'File 2-1.jpg',
@@ -719,7 +788,8 @@ export const createTestFileSystem = () => {
         },
         {
             name: 'Folder 3',
-            isDirectory: true
+            isDirectory: true,
+            hasSubDirectories: false
         },
         {
             name: 'File 1.txt',
@@ -842,7 +912,9 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
 };
 
 export const stubFileReader = object => {
-    sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+    if(!(object['_createFileReader'].restore && object['_createFileReader'].restore.sinon)) {
+        sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+    }
 };
 
 export const isDesktopDevice = () => {

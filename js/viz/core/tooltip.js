@@ -285,7 +285,7 @@ Tooltip.prototype = {
     },
 
     isCursorOnTooltip: function(x, y) {
-        if(this._options.interactive && this.isEnabled()) {
+        if(this._options.interactive) {
             const box = this.plaque.getBBox();
             return x > box.x && x < box.x + box.width && y > box.y && y < box.y + box.height;
         }
@@ -332,7 +332,7 @@ Tooltip.prototype = {
             that._textHtml.css({
                 left: -left, top: -top
             });
-            that._textGroupHtml.css({ width: that._textHtml.width() });
+            that._textGroupHtml.css({ width: mathCeil(that._textHtml.width()) });
         }
     },
 

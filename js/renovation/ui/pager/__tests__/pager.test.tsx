@@ -5,7 +5,7 @@ import { PagerContent } from '../content';
 import { Pager as PagerComponent } from '../pager';
 import { PageSizeLarge } from '../page_size/large';
 import { PageIndexSelector } from '../pages/page_index_selector';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 
 jest.mock('../../select_box', () => ({ SelectBox: jest.fn() }));
 

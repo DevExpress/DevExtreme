@@ -107,8 +107,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         // switch to details and remember scroll position
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
         this.clock.tick(400);
-        let detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
-        $(detailsViewSelector).trigger('dxclick');
+        this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
 
         const detailsScrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
@@ -116,8 +115,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         // switch to thumbnails and check scroll position
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
         this.clock.tick(400);
-        const thumbnailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(1);
-        $(thumbnailsViewSelector).trigger('dxclick');
+        this.wrapper.getToolbarViewSwitcherListItem(1).trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), thumbnailsScrollPosition, 'thumbnails scroll position is the same');
@@ -125,8 +123,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         // switch to details and check scroll position
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
         this.clock.tick(400);
-        detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
-        $(detailsViewSelector).trigger('dxclick');
+        this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');
@@ -169,5 +166,28 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+    });
+
+    test('NavPane - must keep scroll position after refresh', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+
+        this.fileManager.option({
+            width: 500,
+            height: 250,
+            currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1'
+        });
+        this.clock.tick(400);
+
+        const scrollPosition = 64;
+        this.wrapper.getTreeViewScrollableContainer().scrollTop(scrollPosition);
+        this.clock.tick(400);
+
+        this.fileManager.refresh();
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getTreeViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+
+        renderer.fn.width = originalFunc;
     });
 });

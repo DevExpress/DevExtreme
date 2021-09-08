@@ -24,9 +24,9 @@ jest.mock('../../table', () => ({
 }));
 
 describe('TimePanelLayout', () => {
-  const viewDataBase = {
+  const timePanelDataBase = {
     groupedData: [{
-      dateTable: [[{
+      dateTable: [{
         startDate: new Date(2020, 6, 9, 1),
         endDate: new Date(2020, 6, 9, 2),
         text: '0:00 AM',
@@ -37,16 +37,6 @@ describe('TimePanelLayout', () => {
         isFirstGroupCell: false,
         isLastGroupCell: false,
       }, {
-        startDate: new Date(2020, 6, 9, 2),
-        endDate: new Date(2020, 6, 9, 3),
-        text: '0:00 AM',
-        groups: { id: 2 },
-        groupIndex: 2,
-        index: 1,
-        key: '2',
-        isFirstGroupCell: false,
-        isLastGroupCell: false,
-      }], [{
         startDate: new Date(2020, 6, 9, 3),
         endDate: new Date(2020, 6, 9, 4),
         text: '1:00 AM',
@@ -56,28 +46,21 @@ describe('TimePanelLayout', () => {
         key: '3',
         isFirstGroupCell: false,
         isLastGroupCell: false,
-      }, {
-        startDate: new Date(2020, 6, 9, 4),
-        endDate: new Date(2020, 6, 9, 4),
-        text: '1:00 AM',
-        groups: { id: 2 },
-        groupIndex: 2,
-        index: 3,
-        key: '4',
-        isFirstGroupCell: false,
-        isLastGroupCell: false,
-      }]],
+      }],
       groupIndex: 2,
     }],
     cellCountInGroupRow: 2,
   };
 
   describe('Render', () => {
-    const render = (viewModel) => shallow(<LayoutView {...{
-      ...viewModel,
-      props: { viewData: viewDataBase, ...viewModel.props },
-    }}
-    />);
+    const render = (viewModel) => shallow(
+      <LayoutView
+        {...{
+          ...viewModel,
+          props: { timePanelData: timePanelDataBase, ...viewModel.props },
+        }}
+      /> as any,
+    );
 
     afterEach(jest.resetAllMocks);
 
@@ -128,23 +111,23 @@ describe('TimePanelLayout', () => {
       expect(cells)
         .toHaveLength(2);
 
-      const { dateTable } = viewDataBase.groupedData[0];
+      const { dateTable } = timePanelDataBase.groupedData[0];
 
       expect(cells.at(0).props())
         .toMatchObject({
-          startDate: dateTable[0][0].startDate,
+          startDate: dateTable[0].startDate,
           groups: undefined,
           groupIndex: undefined,
           index: 0,
-          text: dateTable[0][0].text,
+          text: dateTable[0].text,
         });
       expect(cells.at(1).props())
         .toMatchObject({
-          startDate: dateTable[1][0].startDate,
+          startDate: dateTable[1].startDate,
           groups: undefined,
           groupIndex: undefined,
           index: 1,
-          text: dateTable[1][0].text,
+          text: dateTable[1].text,
         });
     });
 
@@ -178,53 +161,48 @@ describe('TimePanelLayout', () => {
       expect(cells)
         .toHaveLength(2);
 
-      const { dateTable } = viewDataBase.groupedData[0];
+      const { dateTable } = timePanelDataBase.groupedData[0];
 
       expect(cells.at(0).props())
         .toMatchObject({
-          groups: dateTable[0][0].groups,
-          groupIndex: dateTable[0][0].groupIndex,
+          groups: dateTable[0].groups,
+          groupIndex: dateTable[0].groupIndex,
         });
       expect(cells.at(1).props())
         .toMatchObject({
-          groups: dateTable[1][0].groups,
-          groupIndex: dateTable[1][0].groupIndex,
+          groups: dateTable[1].groups,
+          groupIndex: dateTable[1].groupIndex,
         });
     });
 
     describe('firstGroupCell, lastGroupCell', () => {
-      const viewData = {
+      const timePanelData = {
         groupedData: [{
-          dateTable: [
-            [{
-              startDate: new Date(2020, 6, 9, 1),
-              text: '0:00 AM',
-              isFirstGroupCell: true,
-              isLastGroupCell: false,
-              key: '1',
-            }],
-            [{
-              startDate: new Date(2020, 6, 9, 2),
-              text: '1:00 AM',
-              isFirstGroupCell: false,
-              isLastGroupCell: false,
-              key: '2',
-            }],
-            [{
-              startDate: new Date(2020, 6, 9, 3),
-              text: '2:00 AM',
-              isFirstGroupCell: false,
-              isLastGroupCell: false,
-              key: '3',
-            }],
-            [{
-              startDate: new Date(2020, 6, 9, 4),
-              text: '3:00 AM',
-              isFirstGroupCell: false,
-              isLastGroupCell: true,
-              key: '4',
-            }],
-          ],
+          dateTable: [{
+            startDate: new Date(2020, 6, 9, 1),
+            text: '0:00 AM',
+            isFirstGroupCell: true,
+            isLastGroupCell: false,
+            key: '1',
+          }, {
+            startDate: new Date(2020, 6, 9, 2),
+            text: '1:00 AM',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
+            key: '2',
+          }, {
+            startDate: new Date(2020, 6, 9, 3),
+            text: '2:00 AM',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
+            key: '3',
+          }, {
+            startDate: new Date(2020, 6, 9, 4),
+            text: '3:00 AM',
+            isFirstGroupCell: false,
+            isLastGroupCell: true,
+            key: '4',
+          }],
           groupIndex: 10,
         }],
       };
@@ -244,7 +222,7 @@ describe('TimePanelLayout', () => {
 
       it('should pass correct "isFirstGroupCell" and "isLastGroupCell" props to the cells', () => {
         const layout = render({
-          props: { viewData },
+          props: { timePanelData },
           isVerticalGroupOrientation: true,
         });
 
@@ -260,7 +238,7 @@ describe('TimePanelLayout', () => {
 
       it('should not pass "isFirstGroupCell" and "isLastGroupCell" props to the cells if grouping is not vertical', () => {
         const layout = render({
-          props: { viewData },
+          props: { timePanelData },
           isVerticalGroupOrientation: false,
         });
 
@@ -283,7 +261,7 @@ describe('TimePanelLayout', () => {
 
       expect(getIsGroupedAllDayPanel)
         .toHaveBeenCalledWith(
-          viewDataBase,
+          timePanelDataBase,
           0,
         );
     });
@@ -302,7 +280,7 @@ describe('TimePanelLayout', () => {
       it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${mockValue} and dateTable is empty`, () => {
         getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
 
-        const viewData = {
+        const timePanelData = {
           groupedData: [{
             dateTable: [],
             groupIndex: 33,
@@ -310,7 +288,7 @@ describe('TimePanelLayout', () => {
           cellCountInGroupRow: 2,
           isGroupedAllDayPanel: true,
         };
-        const layout = render({ props: { viewData } });
+        const layout = render({ props: { timePanelData } });
         const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
 
         expect(titleCell.find(AllDayPanelTitle).exists())
@@ -324,7 +302,7 @@ describe('TimePanelLayout', () => {
       expect(getKeyByGroup)
         .toHaveBeenCalledTimes(1);
       expect(getKeyByGroup)
-        .toHaveBeenCalledWith(2);
+        .toHaveBeenCalledWith(2, undefined);
     });
   });
 
@@ -334,11 +312,11 @@ describe('TimePanelLayout', () => {
         [500, undefined].forEach((bottomVirtualRowHeight) => {
           it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {
             const layout = new TimePanelTableLayout({
-              viewData: {
-                ...viewDataBase,
+              timePanelData: {
+                ...timePanelDataBase,
                 topVirtualRowHeight,
                 bottomVirtualRowHeight,
-              },
+              } as any,
             });
 
             let value = topVirtualRowHeight || 0;

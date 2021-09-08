@@ -316,6 +316,20 @@ QUnit.test('ranges are not valid - wrong order', function(assert) {
     ]);
 });
 
+QUnit.test('ranges are empty, without custom color (T961251)', function(assert) {
+    this.checkRanges(assert, [
+        { startValue: 10, endValue: 10 },
+        { startValue: 50, endValue: 50 },
+        { startValue: 10, endValue: 50 }
+    ], [
+        { start: 10, end: 10, color: '#97c95c', className: 0 },
+        { start: 50, end: 50, color: '#ffc720', className: 1 },
+        { start: 10, end: 50, color: '#f5564a', className: 2 },
+        { start: -50, end: 10, color: 'bcolor' },
+        { start: 50, end: 150, color: 'bcolor' },
+    ]);
+});
+
 QUnit.test('ranges are not valid - not numbers', function(assert) {
     this.checkRanges(assert, [
         { startValue: 'test', endValue: 10, color: 'c1' },

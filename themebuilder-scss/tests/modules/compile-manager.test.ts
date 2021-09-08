@@ -11,8 +11,15 @@ const dataPath = path.join(path.resolve(), 'tests', 'data');
 
 jest.mock('../../src/modules/bundle-resolver', () => ({
   __esModule: true,
-  default: (): sass.SyncOptions => ({
-    file: path.join(dataPath, 'scss', 'bundles', 'dx.light.scss'),
+  default: (theme: string): sass.SyncOptions => ({
+    file: path.join(
+      dataPath,
+      'scss',
+      'bundles',
+      theme === 'material'
+        ? 'dx.material.blue.light.scss'
+        : 'dx.light.scss',
+    ),
     includePaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
   }),
 }));
@@ -21,8 +28,6 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   __esModule: true,
   metadata,
 }));
-
-jest.mock('fibers', () => undefined);
 
 PostCompiler.addInfoHeader = (css: string): string => css;
 
@@ -116,10 +121,10 @@ describe('Compile manager - integration test on test sass', () => {
     return manager.compile({
       isBootstrap: true,
       bootstrapVersion: 4,
-      data: '$primary: red;',
+      data: '$primary: red;$font-family-sans-serif: sans-serif;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  background-color: sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -129,7 +134,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+        '$base-font-family': 'sans-serif',
         '$base-accent': 'red',
         '$accordion-title-color': 'red',
         '$accordion-item-title-opened-bg': 'transparent',
@@ -161,5 +166,16 @@ describe('Compile manager - integration test on test sass', () => {
       makeSwatch: true,
       outColorScheme: 'error for sass compiler :)',
     })).rejects.toBeInstanceOf(Error);
+  });
+
+  test('compile test bundle with removeExternalResources option', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      themeName: 'material',
+      removeExternalResources: true,
+    }).then((result) => {
+      expect(result.css).toBe('');
+      expect(result.compiledMetadata).toEqual({});
+    });
   });
 });

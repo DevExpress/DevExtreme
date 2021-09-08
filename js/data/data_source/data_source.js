@@ -3,11 +3,11 @@ import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
-import dataUtils from '../utils';
+import { throttleChanges } from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
 import { EventsStrategy } from '../../core/events_strategy';
-import errorUtils from '../errors';
+import { errors } from '../errors';
 import { isEmpty } from '../../core/utils/array';
 import { create } from '../../core/utils/queue';
 import { Deferred, when } from '../../core/utils/deferred';
@@ -48,30 +48,52 @@ export const DataSource = Class.inherit({
     */
     ctor(options) {
         options = normalizeDataSourceOptions(options);
-        this._eventsStrategy = new EventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this, {
+            syncStrategy: true
+        });
 
         /**
         * @name DataSourceOptions.store.type
         * @type Enums.DataSourceStoreType
         */
 
-        const onPushHandler = options.pushAggregationTimeout !== 0
-            ? dataUtils.throttleChanges(this._onPush, () =>
-                options.pushAggregationTimeout === undefined
-                    ? this._changedTime * 5
-                    : options.pushAggregationTimeout
-            )
-            : this._onPush;
-
+        this._store = options.store;
         this._changedTime = 0;
 
-        this._onPushHandler = (changes) => {
-            this._aggregationTimeoutId = onPushHandler.call(this, changes);
-        };
+        const needThrottling = options.pushAggregationTimeout !== 0;
 
-        this._store = options.store;
-        this._store.on('push', this._onPushHandler);
+        if(needThrottling) {
+            const throttlingTimeout = options.pushAggregationTimeout === undefined
+                ? () => this._changedTime * 5
+                : options.pushAggregationTimeout;
 
+            let pushDeferred;
+            let lastPushWaiters;
+
+            const throttlingPushHandler = throttleChanges((changes) => {
+                pushDeferred.resolve();
+                const storePushPending = when(...lastPushWaiters);
+                storePushPending.done(() => this._onPush(changes));
+
+                lastPushWaiters = undefined;
+                pushDeferred = undefined;
+            }, throttlingTimeout);
+
+            this._onPushHandler = (args) => {
+                this._aggregationTimeoutId = throttlingPushHandler(args.changes);
+
+                if(!pushDeferred) {
+                    pushDeferred = new Deferred();
+                }
+
+                lastPushWaiters = args.waitFor;
+                args.waitFor.push(pushDeferred.promise());
+            };
+            this._store.on('beforePush', this._onPushHandler);
+        } else {
+            this._onPushHandler = (changes) => this._onPush(changes);
+            this._store.on('push', this._onPushHandler);
+        }
 
         this._storeLoadOptions = this._extractLoadOptions(options);
 
@@ -131,6 +153,7 @@ export const DataSource = Class.inherit({
     },
 
     dispose() {
+        this._store.off('beforePush', this._onPushHandler);
         this._store.off('push', this._onPushHandler);
         this._eventsStrategy.dispose();
         clearTimeout(this._aggregationTimeoutId);
@@ -351,7 +374,7 @@ export const DataSource = Class.inherit({
         const options = this._createStoreLoadOptions();
         const handleDone = (data) => {
             if(!isDefined(data) || isEmpty(data)) {
-                d.reject(new errorUtils.errors.Error('E4009'));
+                d.reject(new errors.Error('E4009'));
             } else {
                 if(!Array.isArray(data)) {
                     data = [data];

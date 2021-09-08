@@ -1,8 +1,5 @@
 const $ = require('jquery');
 
-require('common.css!');
-
-
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 const TOOLTIP_CLASS = 'dx-tooltip';
 

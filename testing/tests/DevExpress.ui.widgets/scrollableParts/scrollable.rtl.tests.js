@@ -1,5 +1,4 @@
 import animationFrame from 'animation/frame';
-import 'common.css!';
 import 'generic_light.css!';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
@@ -52,7 +51,7 @@ QUnit.test('rtlEnabled scrolls to very right position', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
@@ -67,7 +66,7 @@ QUnit.test('rtlEnabled scrolls to very right position after changing the size of
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
@@ -85,7 +84,7 @@ QUnit.test('rtlEnabled scrolls to very right position after shown event', functi
     $wrapper.show();
     triggerShownEvent($wrapper);
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
@@ -111,6 +110,6 @@ QUnit.test('rtlEnabled scrolls to very right position when a width was changing 
     const scrollable = $scrollable.dxScrollable('instance');
     scrollable.option('width', 50);
 
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });

@@ -2,22 +2,23 @@ import React, { createRef } from 'react';
 // Should be before component import
 import { mount } from 'enzyme';
 // import { create as mount } from 'react-test-renderer';
+import { RefObject } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
 } from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
-import { isFakeClickEvent } from '../../../../events/utils/index';
 import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
-  isFakeClickEvent: jest.fn(),
 }));
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
 jest.mock('../../../utils/resolve_rtl');
+jest.mock('../../../../core/utils/resize_callbacks');
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -96,78 +97,6 @@ describe('Widget', () => {
     });
 
     describe('Effects', () => {
-      describe('accessKeyEffect', () => {
-        const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() };
-
-        beforeEach(() => {
-          (isFakeClickEvent as any).mockImplementation(() => true);
-        });
-
-        it('should subscribe to click event', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(true);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(1);
-        });
-
-        it('should not change state if click event is not fake', () => {
-          (isFakeClickEvent as any).mockImplementation(() => false);
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should return unsubscribe callback', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          const detach = widget.accessKeyEffect() as DisposeEffectReturn;
-
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach();
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
-        });
-
-        it('should not subscribe if widget is disabled', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: true });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget is not focusable', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: false, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget does not have accessKey', () => {
-          const widget = new Widget({ focusStateEnabled: true, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-      });
-
       describe('activeEffect', () => {
         const onActive = jest.fn();
         const onInactive = jest.fn();
@@ -209,6 +138,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.activeEffect() as DisposeEffectReturn;
 
@@ -261,6 +191,7 @@ describe('Widget', () => {
           const e = { ...defaultEvent };
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           widget.clickEffect();
           emit(EVENT.dxClick, e);
@@ -272,6 +203,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.clickEffect() as DisposeEffectReturn;
           detach();
@@ -358,6 +290,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.focusEffect() as DisposeEffectReturn;
 
@@ -398,20 +331,30 @@ describe('Widget', () => {
 
       describe('hoverEffect', () => {
         it('should subscribe to hover event', () => {
-          const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          const onHoverStart = jest.fn();
+          const onHoverEnd = jest.fn();
+
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: false, onHoverStart, onHoverEnd,
+          });
           widget.widgetRef = {} as any;
           widget.active = false;
           widget.hoverEffect();
 
           emit(EVENT.hoverStart);
           expect(widget.hovered).toBe(true);
+          expect(onHoverStart).toHaveBeenCalledTimes(1);
+          expect(onHoverEnd).toHaveBeenCalledTimes(0);
 
           emit(EVENT.hoverEnd);
           expect(widget.hovered).toBe(false);
+          expect(onHoverEnd).toHaveBeenCalledTimes(1);
+          expect(onHoverStart).toHaveBeenCalledTimes(1);
         });
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           widget.active = false;
           const detach = widget.hoverEffect() as DisposeEffectReturn;
 
@@ -519,6 +462,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onDimensionChanged });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           const detach = widget.resizeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
@@ -532,6 +476,46 @@ describe('Widget', () => {
 
           emit(EVENT.resize);
           expect(getEventHandlers(EVENT.resize)).toBe(undefined);
+        });
+      });
+
+      describe('windowResizeEffect', () => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should subscribe on window.onresize event', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          expect(resizeCallbacks.add).toBeCalledTimes(1);
+          expect(resizeCallbacks.add).toHaveBeenCalledWith(onDimensionChanged);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+
+          dispose?.();
+        });
+
+        it('should return window.onresize unsubscribe callback', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          dispose?.();
+
+          expect(resizeCallbacks.remove).toBeCalledTimes(1);
+          expect(resizeCallbacks.remove).toHaveBeenCalledWith(onDimensionChanged);
+        });
+
+        it('should not subscribe on window.onresize event if onDimensionChanged callback does not defined', () => {
+          const widget = new Widget({ });
+          const dispose = widget.windowResizeEffect();
+
+          expect(resizeCallbacks.add).toBeCalledTimes(0);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+          expect(dispose).toBe(undefined);
         });
       });
 
@@ -575,21 +559,21 @@ describe('Widget', () => {
 
       describe('setRootElementRef', () => {
         it('set rootElementRef to div ref', () => {
-          const widgetRef = {} as HTMLDivElement;
+          const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           const component = new Widget({
             rootElementRef: {},
           } as WidgetProps);
           component.widgetRef = widgetRef;
           component.setRootElementRef();
 
-          expect(component.props.rootElementRef).toBe(component.widgetRef);
+          expect(component.props.rootElementRef?.current).toBe(component.widgetRef.current);
         });
 
         it('hasnt rootElementRef', () => {
           const component = new Widget({ });
-          component.widgetRef = {} as HTMLDivElement;
+          component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           component.setRootElementRef();
-          expect(component.props.rootElementRef).toBeUndefined();
+          expect(component.props.rootElementRef?.current).toBeUndefined();
         });
       });
     });
@@ -619,7 +603,7 @@ describe('Widget', () => {
 
       describe('attributes', () => {
         it('should return ARIA labels', () => {
-          const widget = new Widget({ visible: false, aria: { id: 10, role: 'button', level: 100 } });
+          const widget = new Widget({ visible: false, aria: { id: '10', role: 'button', level: '100' } });
 
           expect(widget.attributes).toEqual({
             'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', 'rest-attributes': 'restAttributes',
@@ -803,12 +787,11 @@ describe('Widget', () => {
       const defaultProps = new WidgetProps();
 
       expect(defaultProps).toEqual({
-        accessKey: null,
+        accessKey: undefined,
         activeStateEnabled: false,
         disabled: false,
         focusStateEnabled: false,
         hoverStateEnabled: false,
-        onContentReady: expect.any(Function),
         tabIndex: 0,
         visible: true,
         _feedbackHideTimeout: 400,

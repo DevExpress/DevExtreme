@@ -113,7 +113,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                 enabled: true,
                 template: function(container, e) {
                     $('<div>').addClass('detail-grid').appendTo(container).dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         columns: ['field3', 'field4'],
                         dataSource: [{ field1: '3', field2: '4' }]
                     });
@@ -139,7 +139,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange
         const cellClickArgs = [];
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1, text: 'Text 1' }],
             keyExpr: 'id',
             onCellClick: function(e) {
@@ -148,7 +148,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             masterDetail: {
                 template: function(container, e) {
                     $('<div>').addClass('detail-grid').appendTo(container).dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         keyExpr: 'id',
                         dataSource: [
                             { id: 2, text: 'Text 2' },
@@ -287,13 +287,13 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1 }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             masterDetail: {
                 autoExpandAll: true,
                 template: function(detailElement) {
                     $('<div>').appendTo(detailElement).dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         columns: ['field1']
                     });
                 }
@@ -302,7 +302,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // assert
         const scrollable = dataGrid.getScrollable();
-        assert.equal($(scrollable.content()).width(), $(scrollable._container()).width(), 'no scroll');
+        assert.equal($(scrollable.content()).width(), $(scrollable.container()).width(), 'no scroll');
     });
 
     QUnit.test('LoadPanel show when grid rendering in detail row', function(assert) {
@@ -347,7 +347,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             height: 300,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1 }],
             keyExpr: 'id',
             masterDetail: {
@@ -372,7 +372,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             rtlEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1', field2: '2' }]
             },
@@ -411,7 +411,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.test('Click on detail cell with cellIndex more than number of parent grid columns', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1' }],
             dataSource: {
                 store: [
@@ -429,7 +429,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                                 { id: 2, col1: 3 }
                             ]
                         },
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         columns: [
                             { dataField: 'id' },
                             { dataField: 'col1' },
@@ -612,6 +612,61 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), 'nested row heights are synchronized after collapse');
     });
 
+    QUnit.test('Columns should be synchronized after expand master detail row in second nested DataGrid with fixed columns (T995035)', function(assert) {
+        // arrange
+        let nestedDataGrid;
+
+        const firstColumnWidth = 100;
+
+        const dataGridConfig = {
+            dataSource: [{ id: 1, text: 'text' }],
+            onInitialized(e) {
+                nestedDataGrid = e.component;
+            },
+            keyExpr: 'id',
+            columnAutoWidth: true,
+            columns: [{
+                dataField: 'id',
+                width: firstColumnWidth,
+                cssClass: 'first-column',
+                fixed: true
+            }, 'text'],
+            masterDetail: {
+                enabled: true,
+                template: masterDetailTemplate
+            }
+        };
+
+        function masterDetailTemplate() {
+            return $('<div>').dxDataGrid(dataGridConfig);
+        }
+
+        const dataGrid = createDataGrid({
+            width: 500,
+            ...dataGridConfig
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick();
+
+        nestedDataGrid.expandRow(1);
+        this.clock.tick();
+
+        nestedDataGrid.expandRow(1);
+        this.clock.tick();
+
+        // assert
+        const $firstHeaderCells = $('.dx-header-row > .first-column');
+
+        assert.equal($firstHeaderCells.length, 8, 'first-column header cell count');
+        for(let i = 0; i < $firstHeaderCells.length; i++) {
+            assert.equal($firstHeaderCells.eq(i).outerWidth(), firstColumnWidth, 'first column width');
+        }
+    });
+
     // T607490
     QUnit.test('Scrollable should be updated after expand master detail row with nested DataGrid', function(assert) {
         // arrange
@@ -644,7 +699,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         const watchCallbacks = [];
         const dataSource = [{ id: 1, value: 1 }, { id: 2, value: 2 }];
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             keyExpr: 'id',
             integrationOptions: {
@@ -679,7 +734,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             { id: 4, field1: 'test4' }
         ];
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             highlightChanges: true,
             repaintChangesOnly: true,
@@ -741,7 +796,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.test('rowTemplate via dxTemplate should works with masterDetail template', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { name: 'First Grid Item' },
                 { name: 'Second Grid Item' },
@@ -772,7 +827,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.testInActiveWindow('DataGrid with inside grid in masterDetail - the invalid message of the datebox should not be removed when focusing cell', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: {
                     type: 'array',
@@ -819,7 +874,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.test('Rows should be synchronized after expand if column fixing is enabled and deferUpdate is used in masterDetail template', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: [{ id: 1 }],
             columnFixing: {
@@ -852,7 +907,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         ];
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             keyExpr: 'id',
             columnAutoWidth: true,
@@ -877,5 +932,108 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(1, 0)).get(0).style.width, '', 'width style is not defined for detail cell');
         // T650963
         assert.equal($(dataGrid.getCellElement(1, 0)).css('maxWidth'), 'none', 'max width style for detail cell');
+    });
+
+    QUnit.test('Master grid should scroll its content properly when rows in nested detail grids are expanded (T1010839)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 1; i <= 10; i++) {
+                items.push({
+                    id: i,
+                    name: `item_${i}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            columnFixing: {
+                enabled: true
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+            },
+            scrolling: {
+                useNative: false
+            },
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $('<div>')
+                        .addClass('nested')
+                        .dxDataGrid({
+                            dataSource: getData(),
+                            keyExpr: 'id',
+                            columnFixing: {
+                                enabled: true
+                            },
+                            customizeColumns: function(columns) {
+                                columns[0].fixed = true;
+                            },
+                            masterDetail: {
+                                enabled: true,
+                                template: function(container, options) {
+                                    $('<div>')
+                                        .dxDataGrid({
+                                            dataSource: getData(),
+                                            keyExpr: 'id',
+                                            columnFixing: {
+                                                enabled: true
+                                            },
+                                            customizeColumns: function(columns) {
+                                                columns[0].fixed = true;
+                                            },
+                                        }).appendTo(container);
+                                }
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(2);
+        this.clock.tick();
+        dataGrid.expandRow(1);
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 400 });
+
+
+        // assert
+        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 400, 'scroll top1');
+
+
+        // act
+        const nestedGrid = $(dataGrid.getRowElement(3)).eq(1).find('.nested').dxDataGrid('instance');
+        nestedGrid.expandRow(1);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(nestedGrid.getRowElement(1)).hasClass('dx-master-detail-row'), 'detail row of the nested grid');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 1653, 5, 'scroll height1');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1290 });
+
+        // assert
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1289, 5, 'scroll top2');
+
+        // act
+        dataGrid.expandRow(10);
+        this.clock.tick();
+
+        // assert
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2090, 5, 'scroll height2');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1728 });
+        this.clock.tick();
+
+        // assert
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1725, 5, 'scroll top3');
     });
 });

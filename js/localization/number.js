@@ -306,6 +306,7 @@ const numberLocalization = dependencyInjector({
         text = this.convertDigits(text, true);
 
         if(format && typeof format !== 'string') {
+            // Current parser functionality provided as-is and is independent of the most of capabilities of formatter.
             errors.log('W0011');
         }
 

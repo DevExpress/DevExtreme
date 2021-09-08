@@ -5,6 +5,7 @@ import {
 } from '../layout';
 import { Table } from '../../table';
 import { DateTableBody } from '../table_body';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
 jest.mock('../table_body', () => ({
   DateTableBody: () => null,
@@ -35,6 +36,8 @@ describe('DateTableLayoutBase', () => {
       groupIndex: 1,
     }],
     cellCountInGroupRow: 1,
+    leftVirtualCellCount: 32,
+    rightVirtualCellCount: 44,
   };
 
   describe('Render', () => {
@@ -46,6 +49,7 @@ describe('DateTableLayoutBase', () => {
         cellTemplate,
         viewData: viewDataBase,
         viewType: 'month',
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
         ...viewModel.props,
       },
     } as any) as any);
@@ -85,6 +89,8 @@ describe('DateTableLayoutBase', () => {
           leftVirtualCellWidth: 300,
           rightVirtualCellWidth: 400,
           virtualCellsCount: 3,
+          leftVirtualCellCount: 32,
+          rightVirtualCellCount: 44,
         });
       expect(table.hasClass('some-class'))
         .toBe(true);
@@ -96,6 +102,7 @@ describe('DateTableLayoutBase', () => {
       expect(tableBody.props())
         .toMatchObject({
           viewData: viewDataBase,
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
           cellTemplate,
           dataCellTemplate,
           leftVirtualCellWidth: 300,
@@ -107,14 +114,18 @@ describe('DateTableLayoutBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('classes', () => {
-        it('should been set correctly', () => {
-          const layout = new DateTableLayoutBase({ className: 'some-class' } as any);
+        it('should return date-table class if "addDateTableClass" is true', () => {
+          const layout = new DateTableLayoutBase({ addDateTableClass: true } as any);
 
-          expect(layout.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-date-table',
-              'some-class',
-            ]);
+          expect(layout.classes)
+            .toBe('dx-scheduler-date-table');
+        });
+
+        it('should return undefined if "addDateTableClass" is false', () => {
+          const layout = new DateTableLayoutBase({ addDateTableClass: false } as any);
+
+          expect(layout.classes)
+            .toBe(undefined);
         });
       });
 

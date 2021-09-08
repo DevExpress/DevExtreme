@@ -1,5 +1,5 @@
 import {
-    format
+    format,
 } from './ui/widget/ui.widget';
 
 /**
@@ -11,9 +11,10 @@ import {
  * @static
  * @module localization
  * @export formatDate
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function formatDate(value: Date, format: format): string;
 
 /**
@@ -25,10 +26,10 @@ export function formatDate(value: Date, format: format): string;
  * @static
  * @module localization
  * @export formatMessage
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
-export function formatMessage(key: string, value: string | Array<string>): string;
+export function formatMessage(key: string, ...values: Array<string>): string;
 
 /**
  * @docid localization.formatNumber
@@ -39,9 +40,10 @@ export function formatMessage(key: string, value: string | Array<string>): strin
  * @static
  * @module localization
  * @export formatNumber
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function formatNumber(value: number, format: format): string;
 
 /**
@@ -51,7 +53,7 @@ export function formatNumber(value: number, format: format): string;
  * @static
  * @module localization
  * @export loadMessages
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function loadMessages(messages: any): void;
@@ -63,7 +65,7 @@ export function loadMessages(messages: any): void;
  * @static
  * @module localization
  * @export locale
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function locale(): string;
@@ -75,9 +77,10 @@ export function locale(): string;
  * @static
  * @module localization
  * @export locale
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function locale(locale: string): void;
 
 /**
@@ -89,9 +92,10 @@ export function locale(locale: string): void;
  * @static
  * @module localization
  * @export parseDate
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function parseDate(text: string, format: format): Date;
 
 /**
@@ -103,9 +107,8 @@ export function parseDate(text: string, format: format): Date;
  * @static
  * @module localization
  * @export parseNumber
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function parseNumber(text: string, format: format): number;
-
-

@@ -1,6 +1,10 @@
+import $ from '../../core/renderer';
 import ToolbarStrategy from './ui.toolbar.strategy';
 import { extend } from '../../core/utils/extend';
 import ActionSheet from '../action_sheet';
+import Button from '../button';
+
+const TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
 
 const ActionSheetStrategy = ToolbarStrategy.inherit({
 
@@ -15,10 +19,24 @@ const ActionSheetStrategy = ToolbarStrategy.inherit({
             return;
         }
 
-        this.callBase();
+        this._renderMenuButton();
+        this._renderWidget();
     },
 
-    _menuWidgetClass: function() {
+    _renderMenuButton: function() {
+        this._renderMenuButtonContainer();
+        this._$button = $('<div>').appendTo(this._$menuButtonContainer)
+            .addClass(TOOLBAR_MENU_BUTTON_CLASS);
+
+        this._toolbar._createComponent(this._$button, Button, {
+            icon: 'overflow',
+            onClick: () => {
+                this._toolbar.option('overflowMenuVisible', !this._toolbar.option('overflowMenuVisible'));
+            }
+        });
+    },
+
+    _menuWidget: function() {
         return ActionSheet;
     },
 
@@ -27,23 +45,16 @@ const ActionSheetStrategy = ToolbarStrategy.inherit({
     },
 
     _widgetOptions: function() {
-        return extend({}, this.callBase(), {
+        return extend(this.callBase(), {
             target: this._$button,
-            showTitle: false
+            showTitle: false,
+            onOptionChanged: ({ name, value }) => {
+                if(name === 'visible') {
+                    this._toolbar.option('overflowMenuVisible', value);
+                }
+            }
         });
     },
-
-    _menuButtonOptions: function() {
-        return extend({}, this.callBase(), { icon: 'overflow' });
-    },
-
-    _toggleMenu: function() {
-        this.callBase.apply(this, arguments);
-
-        this._menu.toggle(this._menuShown);
-        this._menuShown = false;
-    }
-
 });
 
 export default ActionSheetStrategy;

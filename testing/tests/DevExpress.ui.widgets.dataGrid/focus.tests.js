@@ -7,7 +7,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -24,16 +23,6 @@ import commonUtils from 'core/utils/common';
 
 const dataGridWrapper = new DataGridWrapper('#container');
 const rowsViewWrapper = dataGridWrapper.rowsView;
-
-const addOptionChangedHandlers = function(that) {
-    that.optionCalled.add(function(optionName, value) {
-        if(optionName === 'focusedRowIndex' ||
-           optionName === 'focusedRowKey' ||
-           optionName === 'focusedColumnIndex') {
-            that.focusController.optionChanged({ name: optionName, value: value });
-        }
-    });
-};
 
 const getModuleConfig = function(keyboardNavigationEnabled) {
     return {
@@ -63,7 +52,7 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
             }, this.options);
 
             setupDataGridModules(this, [
-                'data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'grouping', 'gridView', 'editing', 'focus', 'selection',
+                'data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'grouping', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'focus', 'selection',
                 'keyboardNavigation', 'validating', 'masterDetail', 'virtualScrolling', 'adaptivity', 'columnFixing', 'pager'
             ], {
                 initViews: true
@@ -84,7 +73,7 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
 const scrollTo = function(that, location) {
     const scrollable = that.getScrollable();
     scrollable.scrollTo(location);
-    $(scrollable._container()).trigger('scroll');
+    $(scrollable.container()).trigger('scroll');
 };
 
 QUnit.module('Focused row', getModuleConfig(true), () => {
@@ -132,7 +121,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
 
         const rowsView = this.gridView.getView('rowsView');
@@ -187,7 +175,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
 
         const rowsView = this.gridView.getView('rowsView');
@@ -261,7 +248,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
 
         this.clock.tick();
@@ -295,7 +281,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
 
         this.clock.tick();
@@ -352,7 +337,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -409,7 +393,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -445,7 +428,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -482,7 +464,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -517,7 +498,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             focusedRowEnabled: true
         };
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
         this.clock.tick();
         this.addRow();
@@ -549,7 +529,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -584,7 +563,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -621,7 +599,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -655,7 +632,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
         this.clock.tick();
 
@@ -744,7 +720,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
 
         this.clock.tick();
@@ -784,7 +759,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
 
         this.clock.tick();
@@ -855,7 +829,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
 
         this.clock.tick(30);
@@ -884,6 +857,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             }
         };
 
+        this.preventOptionChanged = true;
         this.setupModule();
 
         this.gridView.render($('#container'));
@@ -1318,7 +1292,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -1375,7 +1348,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -1431,7 +1403,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -2480,7 +2451,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         rowsView.height(400);
         rowsView.resize();
         const scrollable = rowsView.getScrollable();
-        const $scrollContainer = $(scrollable._container());
+        const $scrollContainer = $(scrollable.container());
         const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 
@@ -2761,7 +2732,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -2803,7 +2773,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -3061,7 +3030,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -3147,7 +3115,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -3181,7 +3148,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -3222,7 +3188,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -3508,7 +3473,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -3550,7 +3514,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         this.setupModule();
 
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -3580,7 +3543,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
         this.clock.tick();
 
@@ -3622,7 +3584,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
         const rowsView = this.gridView.getView('rowsView');
         this.clock.tick();
@@ -3657,7 +3618,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         };
 
         this.setupModule();
-        addOptionChangedHandlers(this);
         this.gridView.render($('#container'));
         this.clock.tick();
 
@@ -3754,7 +3714,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -3816,7 +3775,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -3870,7 +3828,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         const rowsView = this.gridView.getView('rowsView');
@@ -3915,7 +3872,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
 
@@ -3957,7 +3913,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         const rowsView = this.gridView.getView('rowsView');
@@ -3999,7 +3954,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         const rowsView = this.gridView.getView('rowsView');
@@ -4048,7 +4002,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         ];
 
         this.setupModule();
-        addOptionChangedHandlers(this);
 
         this.gridView.render($('#container'));
         this.clock.tick();
@@ -4189,7 +4142,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
                     this.setupModule();
 
-                    addOptionChangedHandlers(this);
                     this.gridView.render($('#container'));
 
                     // assert
@@ -4243,7 +4195,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
                     this.setupModule();
 
-                    addOptionChangedHandlers(this);
                     this.gridView.render($('#container'));
 
                     // assert
@@ -4305,7 +4256,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 onSelectionChanged: () => ++selectionChangedFiresCount
             };
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -4382,7 +4332,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4423,7 +4372,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             this.gridView.update();
@@ -4467,7 +4415,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4511,7 +4458,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 dataErrors.push(e);
             });
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4546,7 +4492,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 dataErrors.push(e);
             });
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4585,7 +4530,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 dataErrors.push(e);
             });
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4618,7 +4562,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 dataErrors.push(e);
             });
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4663,7 +4606,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4711,7 +4653,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             const rowsView = this.gridView.getView('rowsView');
 
@@ -4753,7 +4694,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
 
             this.clock.tick();
@@ -4795,7 +4735,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
 
             this.clock.tick();
@@ -4842,7 +4781,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -4884,7 +4822,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
 
             this.clock.tick();
@@ -4930,7 +4867,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
 
             this.clock.tick();
@@ -4997,7 +4933,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             this.clock.tick();
@@ -5214,7 +5149,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -5244,7 +5178,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 onFocusedRowChanged: () => ++focusedRowChangedCount
             };
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5285,7 +5218,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 onFocusedRowChanged: () => ++focusedRowChangedCount
             };
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5333,7 +5265,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 }
             };
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
             rowsView.height(40);
@@ -5399,7 +5330,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             this.clock.tick();
@@ -5641,7 +5571,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -5675,7 +5604,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -5703,7 +5631,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
 
@@ -5735,7 +5662,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             try {
             // act
                 this.option('dataSource', null);
-                this.getController('data').optionChanged({ name: 'dataSource', value: null });
                 // assert
                 assert.ok(true, 'No exception after dataSource is null');
             } catch(e) {
@@ -5763,7 +5689,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5792,7 +5717,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5844,7 +5768,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5871,7 +5794,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5895,7 +5817,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5923,7 +5844,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5948,7 +5868,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -5958,6 +5877,32 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             // assert
             assert.equal(this.option('focusedRowKey'), 'Dan', 'focusedRowKey was changed to the next row');
+        });
+
+        // T987289
+        QUnit.testInActiveWindow('DataGrid should reset focused row key after last row removed', function(assert) {
+            this.options = {
+                keyExpr: 'id',
+                focusedRowEnabled: true,
+                focusedRowKey: 1,
+                editing: {
+                    allowDeleting: true,
+                    texts: { confirmDeleteMessage: '' }
+                }
+            };
+
+            this.data = [{ id: 1 }];
+
+            this.setupModule();
+            this.gridView.render($('#container'));
+            this.clock.tick();
+
+            // act
+            this.deleteRow(0);
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.option('focusedRowKey'), null, 'focusedRowKey was reset');
         });
 
         // T730760
@@ -5975,7 +5920,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             };
 
             this.setupModule();
-            addOptionChangedHandlers(this);
             this.gridView.render($('#container'));
             this.clock.tick();
 
@@ -6065,7 +6009,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
@@ -6107,7 +6050,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
@@ -6144,7 +6086,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
@@ -6185,7 +6126,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
@@ -6224,7 +6164,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
@@ -6268,7 +6207,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
@@ -6304,7 +6242,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');
@@ -6344,7 +6281,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             ];
 
             this.setupModule();
-            addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
             const rowsView = this.gridView.getView('rowsView');

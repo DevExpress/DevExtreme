@@ -1,123 +1,157 @@
-import '../jquery_augmentation';
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
+
+import Store from '../data/abstract_store';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxGallery>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxGallery>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxGallery>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxGallery> & SelectionChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
      * @docid
      * @default 400
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationDuration?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxGalleryItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     initialItemWidth?: number;
     /**
      * @docid
+     * @type Array<string | dxGalleryItem | any>
      * @fires dxGalleryOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxGalleryItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     loop?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showIndicator?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showNavButtons?: boolean;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     slideshowDelay?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     stretchImages?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     swipeEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     wrapAround?: boolean;
@@ -127,72 +161,66 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @inherits CollectionWidget
  * @module ui/gallery
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxGallery extends CollectionWidget {
-    constructor(element: Element, options?: dxGalleryOptions)
-    constructor(element: JQuery, options?: dxGalleryOptions)
+    constructor(element: UserDefinedElement, options?: dxGalleryOptions)
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)
      * @param1 itemIndex:numeric
      * @param2 animation:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
+    goToItem(itemIndex: number, animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName nextItem(animation)
      * @param1 animation:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    nextItem(animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName prevItem(animation)
      * @param1 animation:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    prevItem(animation: boolean): DxPromise<void>;
 }
 
 /**
- * @docid
- * @type object
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxGallery
+ */
+export type Item = dxGalleryItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxGalleryItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     imageAlt?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     imageSrc?: string;
 }
 
-declare global {
-interface JQuery {
-    dxGallery(): JQuery;
-    dxGallery(options: "instance"): dxGallery;
-    dxGallery(options: string): any;
-    dxGallery(options: string, ...params: any[]): any;
-    dxGallery(options: dxGalleryOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxGalleryOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxGalleryOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxGalleryOptions;

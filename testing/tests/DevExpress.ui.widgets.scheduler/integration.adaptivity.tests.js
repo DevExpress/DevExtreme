@@ -11,7 +11,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from 'core/devices';
 import 'ui/switch';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 

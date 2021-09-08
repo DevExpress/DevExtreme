@@ -7,7 +7,7 @@ import { extend } from '../../core/utils/extend';
 import constants from './axes_constants';
 import xyAxes from './xy_axes';
 import { tick } from './tick';
-import { calculateCanvasMargins, Axis, measureLabels } from './base_axis';
+import { calculateCanvasMargins, measureLabels } from './axes_utils';
 import { noop as _noop } from '../../core/utils/common';
 const { PI, abs, atan, round } = Math;
 const _min = Math.min;
@@ -156,15 +156,13 @@ const circularAxes = {
         return margins;
     },
 
-    updateSize() {
+    _updateLabelsPosition() {
         const that = this;
-
-        Axis.prototype.updateSize.apply(that, arguments);
 
         measureLabels(that._majorTicks);
         that._adjustLabelsCoord(0, 0, true);
 
-        this._checkBoundedLabelsOverlapping(this._majorTicks, this._majorTicks.map(t=>t.labelBBox));
+        that._checkBoundedLabelsOverlapping(this._majorTicks, this._majorTicks.map(t=>t.labelBBox));
     },
 
     _setVisualRange: _noop,
@@ -424,12 +422,13 @@ const circularAxes = {
         }
 
         if(constants.areLabelsOverlap(boxes[0], boxes[lastVisibleLabelIndex], labelOpt.minSpacing, constants.center)) {
-            labelOpt.hideFirstOrLast === 'first' ? majorTicks[0].label.remove() : majorTicks[lastVisibleLabelIndex].label.remove();
+            labelOpt.hideFirstOrLast === 'first' ? majorTicks[0].removeLabel() : majorTicks[lastVisibleLabelIndex].removeLabel();
         }
     },
 
     shift: function(margins) {
         this._axisGroup.attr({ translateX: margins.right, translateY: margins.bottom });
+        this._axisElementsGroup.attr({ translateX: margins.right, translateY: margins.bottom });
     },
 
     getTranslatedAngle(angle) {

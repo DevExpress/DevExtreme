@@ -2,12 +2,12 @@ import Class from '../core/class';
 const abstract = Class.abstract;
 import { EventsStrategy } from '../core/events_strategy';
 import { each } from '../core/utils/iterator';
-import errorsModule from './errors';
-import dataUtils from './utils';
+import { errors, handleError } from './errors';
+import { processRequestResultLock } from './utils';
 import { compileGetter } from '../core/utils/data';
 import storeHelper from './store_helper';
 const queryByOptions = storeHelper.queryByOptions;
-import { Deferred } from '../core/utils/deferred';
+import { Deferred, when } from '../core/utils/deferred';
 import { noop } from '../core/utils/common';
 
 const storeImpl = {};
@@ -74,7 +74,7 @@ const Store = Class.inherit({
 
     _requireKey: function() {
         if(!this.key()) {
-            throw errorsModule.errors.Error('E4005');
+            throw errors.Error('E4005');
         }
     },
     load: function(options) {
@@ -100,7 +100,7 @@ const Store = Class.inherit({
             const that = this;
             const args = arguments;
 
-            dataUtils.processRequestResultLock
+            processRequestResultLock
                 .promise()
                 .done(function() {
                     result.resolveWith(that, args);
@@ -158,8 +158,17 @@ const Store = Class.inherit({
     _updateImpl: abstract,
 
     push: function(changes) {
-        this._pushImpl(changes);
-        this._eventsStrategy.fireEvent('push', [changes]);
+        const beforePushArgs = {
+            changes,
+            waitFor: []
+        };
+
+        this._eventsStrategy.fireEvent('beforePush', [beforePushArgs]);
+
+        when(...beforePushArgs.waitFor).done(() => {
+            this._pushImpl(changes);
+            this._eventsStrategy.fireEvent('push', [changes]);
+        });
     },
 
     _pushImpl: noop,
@@ -179,7 +188,7 @@ const Store = Class.inherit({
     _removeImpl: abstract,
 
     _addFailHandlers: function(deferred) {
-        return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
+        return deferred.fail(this._errorHandler).fail(handleError);
     },
 
     on(eventName, eventHandler) {
@@ -195,7 +204,7 @@ const Store = Class.inherit({
 
 Store.create = function(alias, options) {
     if(!(alias in storeImpl)) {
-        throw errorsModule.errors.Error('E4020', alias);
+        throw errors.Error('E4020', alias);
     }
 
     return new storeImpl[alias](options);

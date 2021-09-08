@@ -1,14 +1,13 @@
 import {
   Component, ComponentBindings, ForwardRef, JSXComponent, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { format } from '../../../core/utils/string';
 import messageLocalization from '../../../localization/message';
-import PagerProps from './common/pager_props';
+import { PagerProps } from './common/pager_props';
 
 export const PAGER_INFO_CLASS = 'dx-info';
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ text, props: { rootElementRef } }: InfoText) => (
+export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX.Element => (
   <div ref={rootElementRef} className={PAGER_INFO_CLASS}>
     {text}
   </div>

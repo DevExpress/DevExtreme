@@ -72,8 +72,20 @@ window.XMLHttpRequestMock = function() {
             return 200 <= STATUS && STATUS < 300;
         };
 
+        this._fireReadyStateEvent = function() {
+            const readyStateEvent = {
+                currentTarget: {
+                    status: STATUS,
+                    readyState: 4
+                }
+            };
+            this.readyState = 4;
+            this['onreadystatechange'](readyStateEvent);
+        };
+
         this._progressHandler = function() {
             if(this.uploadAborted) {
+                this._fireReadyStateEvent();
                 return;
             }
 
@@ -89,18 +101,10 @@ window.XMLHttpRequestMock = function() {
             }
 
             if(progressEvent.loaded >= progressEvent.total) {
-                const readyStateEvent = {
-                    currentTarget: {
-                        status: STATUS,
-                        readyState: 4
-                    }
-                };
-
                 this.uploaded = true;
                 this.upload.onload(progressEvent);
-                this.readyState = 4;
                 this.status = STATUS;
-                this['onreadystatechange'](readyStateEvent);
+                this._fireReadyStateEvent();
             } else {
                 this._timeout = setTimeout($.proxy(this._progressHandler, this), PROGRESS_INTERVAL);
             }
@@ -112,18 +116,10 @@ window.XMLHttpRequestMock = function() {
                 total: 0
             };
 
-            const readyStateEvent = {
-                currentTarget: {
-                    status: STATUS,
-                    readyState: 4
-                }
-            };
-
             this.uploadFailed = true;
             this.upload.onerror(errorEvent);
             this.status = STATUS;
-            this.readyState = 4;
-            this['onreadystatechange'](readyStateEvent);
+            this._fireReadyStateEvent();
         };
 
         this.setRequestHeader = function(name, value) {

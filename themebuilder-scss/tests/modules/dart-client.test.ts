@@ -99,4 +99,25 @@ describe('DartClient tests', () => {
 
     expect(result.error).toContain('Error: ');
   });
+
+  test('"send" method (client destroyed while send - client destroyed if server fail)', async () => {
+    const testData = {
+      index: '',
+      file: '',
+      data: '',
+      items: [{ key: '', value: '' }],
+    };
+    expect.assertions(2);
+    await startServer(false);
+    const client = new DartClient();
+    await client.check();
+    expect(client.isServerAvailable).toBe(true);
+    await client.dispose();
+
+    const result = await client.send(testData);
+
+    await stopServer();
+
+    expect(result.error).toContain('Error: ');
+  });
 });

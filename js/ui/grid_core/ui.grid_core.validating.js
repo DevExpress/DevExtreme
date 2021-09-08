@@ -13,10 +13,9 @@ import Button from '../button';
 import pointerEvents from '../../events/pointer';
 import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
-import Tooltip from '../tooltip';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import errors from '../widget/ui.errors';
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { encodeHtml } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
@@ -55,6 +54,7 @@ const VALIDATION_STATUS = {
 const EDIT_DATA_INSERT_TYPE = 'insert';
 const EDIT_DATA_REMOVE_TYPE = 'remove';
 const VALIDATION_CANCELLED = 'cancel';
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 const validationResultIsValid = function(result) {
     return isDefined(result) && result !== VALIDATION_CANCELLED;
@@ -82,7 +82,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         _getValidationData: function(key, create) {
-            let validationData = this._validationState.filter(data => data.key === key)[0];
+            let validationData = this._validationState.filter(data => equalByValue(data.key, key))[0];
 
             if(!validationData && create) {
                 validationData = { key, isValid: true };
@@ -121,7 +121,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             this.executeAction('onRowValidating', parameters);
 
-            when(parameters.promise).always(function() {
+            when(fromPromise(parameters.promise)).always(function() {
                 validationData.isValid = parameters.isValid;
                 validationData.errorText = parameters.errorText;
                 deferred.resolve(parameters);
@@ -165,7 +165,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 each(changes, (index, { type, key }) => {
 
                     if(type !== 'remove') {
-                        const validationData = this._getValidationData(key);
+                        const validationData = this._getValidationData(key, true);
                         const validationResult = this.validateGroup(validationData);
                         completeList.push(validationResult);
                         validationResult.done((validationResult) => {
@@ -343,6 +343,17 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
         },
 
+        _syncInternalEditingData: function(parameters) {
+            const editingController = this._editingController;
+            const change = editingController.getChangeByKey(parameters.key);
+            const oldDataFromState = editingController._getOldData(parameters.key);
+            const oldData = parameters.row?.oldData;
+
+            if(change && oldData && !oldDataFromState) {
+                editingController._addInternalData({ key: parameters.key, oldData });
+            }
+        },
+
         createValidator: function(parameters, $container) {
             const editingController = this._editingController;
             const column = parameters.column;
@@ -366,7 +377,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
 
                 if(isCellOrBatchEditingAllowed && showEditorAlways) {
-                    editingController._addInternalData({ key: parameters.key, oldData: parameters.data });
+                    editingController._addInternalData({ key: parameters.key, oldData: parameters.row?.oldData ?? parameters.data });
                 }
             }
 
@@ -376,6 +387,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     return;
                 }
 
+                this._syncInternalEditingData(parameters);
                 const validationData = this._getValidationData(parameters.key, true);
 
                 const getValue = () => {
@@ -429,8 +441,8 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
-            return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
-                    && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
+            return this._currentCellValidator && equalByValue(this._currentCellValidator.option('validationGroup').key, rowKey)
+                && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 
         validateCell: function(validator) {
@@ -555,7 +567,7 @@ const ValidatingController = modules.Controller.inherit((function() {
     };
 })());
 
-export default {
+export const validatingModule = {
     defaultOptions: function() {
         return {
             editing: {
@@ -614,31 +626,33 @@ export default {
                     });
                 },
 
-                getEditFormOptions: function(detailOptions) {
-                    const editFormOptions = this.callBase.apply(this, arguments);
+                _getValidationGroupsInForm: function(detailOptions) {
                     const validatingController = this.getController('validating');
                     const validationData = validatingController._getValidationData(detailOptions.key, true);
 
-                    return extend({}, editFormOptions, {
+                    return {
                         validationGroup: validationData
-                    });
+                    };
                 },
 
-                _updateEditRowCore: function(row, skipCurrentRow, isCustomSetCellValue) {
-                    this.callBase.apply(this, arguments);
-
+                _validateEditFormAfterUpdate: function(row, isCustomSetCellValue) {
                     // T816256, T844143
                     if(isCustomSetCellValue && this._editForm && !row.isNewRow) {
                         this._editForm.validate();
                     }
+
+                    this.callBase.apply(this, arguments);
                 },
 
                 _needInsertItem: function(change) {
                     let result = this.callBase.apply(this, arguments);
                     const { key, pageIndex } = change;
                     const validationData = this.getController('validating')._getValidationData(key);
+                    const scrollingMode = this.option('scrolling.mode');
+                    const virtualMode = scrollingMode === 'virtual';
+                    const appendMode = scrollingMode === 'infinite';
 
-                    if(result && !validationData?.isValid) {
+                    if(result && !validationData?.isValid && !virtualMode && !(appendMode && this.option(NEW_SCROLLING_MODE))) {
                         result = pageIndex === this._pageIndex;
                     }
 
@@ -657,9 +671,8 @@ export default {
                 },
 
                 processItems: function(items, changeType) {
-                    const that = this;
-                    const changes = that.getChanges();
-                    const dataController = that.getController('data');
+                    const changes = this.getChanges();
+                    const dataController = this.getController('data');
                     const validatingController = this.getController('validating');
                     const getIndexByChange = function(change, items) {
                         let index = -1;
@@ -667,7 +680,7 @@ export default {
                         const key = change.key;
 
                         each(items, function(i, item) {
-                            if(equalByValue(key, isInsert ? item : dataController.keyOf(item))) {
+                            if(equalByValue(key, isInsert ? item.key : dataController.keyOf(item))) {
                                 index = i;
                                 return false;
                             }
@@ -676,7 +689,7 @@ export default {
                         return index;
                     };
 
-                    items = that.callBase(items, changeType);
+                    items = this.callBase(items, changeType);
                     const itemsCount = items.length;
 
                     const addInValidItem = function(change, validationData) {
@@ -694,11 +707,11 @@ export default {
                         items.splice(rowIndex, 0, data);
                     };
 
-                    if(that.getEditMode() === EDIT_MODE_BATCH && changeType !== 'prepend' && changeType !== 'append') {
+                    if(this.getEditMode() === EDIT_MODE_BATCH && changeType !== 'prepend' && changeType !== 'append') {
                         changes.forEach(change => {
                             const key = change.key;
                             const validationData = validatingController._getValidationData(key);
-                            if(validationData && change.type && validationData.pageIndex === that._pageIndex && change?.pageIndex !== that._pageIndex) {
+                            if(validationData && change.type && validationData.pageIndex === this._pageIndex && change?.pageIndex !== this._pageIndex) {
                                 addInValidItem(change, validationData);
                             }
                         });
@@ -836,6 +849,8 @@ export default {
 
                 _afterSaveEditData: function(cancel) {
                     let $firstErrorRow;
+                    const isCellEditMode = this.getEditMode() === EDIT_MODE_CELL;
+
                     each(this.getChanges(), (_, change) => {
                         const $errorRow = this._showErrorRow(change);
                         $firstErrorRow = $firstErrorRow || $errorRow;
@@ -848,7 +863,7 @@ export default {
                         }
                     }
 
-                    if(cancel && this.getEditMode() === EDIT_MODE_CELL && this._needUpdateRow()) {
+                    if(cancel && isCellEditMode && this._needUpdateRow()) {
                         const editRowIndex = this.getEditRowIndex();
 
                         this._dataController.updateItems({
@@ -857,7 +872,18 @@ export default {
                         });
                         this._focusEditingCell();
                     } else if(!cancel) {
-                        this.getController('validating')._validationState = [];
+                        let shouldResetValidationState = true;
+
+                        if(isCellEditMode) {
+                            const columns = this.getController('columns').getColumns();
+                            const columnsWithValidatingEditors = columns.filter(col => col.showEditorAlways && col.validationRules?.length > 0).length > 0;
+
+                            shouldResetValidationState = !columnsWithValidatingEditors;
+                        }
+
+                        if(shouldResetValidationState) {
+                            this.getController('validating')._validationState = [];
+                        }
                     }
                 },
 
@@ -999,6 +1025,8 @@ export default {
                         }
 
                         let $tooltipElement = $container.find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                        const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+
                         $tooltipElement && $tooltipElement.remove();
                         $tooltipElement = $('<div>')
                             .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
@@ -1007,8 +1035,12 @@ export default {
                         const tooltipOptions = {
                             animation: null,
                             visible: true,
+                            width: 'auto',
+                            height: 'auto',
                             target: $container,
-                            container: $container,
+                            shading: false,
+                            container: $overlayContainer,
+                            propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             closeOnTargetScroll: false,
                             contentTemplate: () => {
@@ -1025,24 +1057,23 @@ export default {
                             position: {
                                 my: 'left top',
                                 at: 'right top',
-                                of: $container,
                                 offset: '1 0',
                                 collision: 'flip',
+                                boundaryOffset: '0 0',
                                 boundary: this._rowsView.element()
                             },
                             onPositioned: this._positionedHandler.bind(this)
                         };
-
-                        return new Tooltip($tooltipElement, tooltipOptions);
+                        return new Overlay($tooltipElement, tooltipOptions);
                     },
 
                     _hideFixedGroupCell: function($cell, overlayOptions) {
                         let $nextFixedRowElement;
                         let $groupCellElement;
                         const isFixedColumns = this._rowsView.isFixedColumns();
-                        const isFormEditMode = this._editingController.isFormEditMode();
+                        const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
-                        if(isFixedColumns && !isFormEditMode) {
+                        if(isFixedColumns && !isFormOrPopupEditMode) {
                             const nextRowOptions = $cell.closest('.dx-row').next().data('options');
 
                             if(nextRowOptions && nextRowOptions.rowType === 'group') {
@@ -1138,7 +1169,7 @@ export default {
 
                         let position;
                         const visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element);
-                        const $overlayContentElement = isRevertButton ? options.component.overlayContent() : options.component.$content();
+                        const $overlayContentElement = options.component.$content();
                         const validationMessageWidth = $overlayContentElement.outerWidth(true);
                         const needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth;
                         const columnIndex = this._rowsView.getCellIndex($(options.element).closest('td'));
@@ -1203,10 +1234,10 @@ export default {
                         const rowOptions = $focus?.closest('.dx-row').data('options');
                         const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
                         const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
+                        const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
                         let revertTooltip;
 
-                        if((validationResult && validationResult.status === VALIDATION_STATUS.invalid)
-                            || (change?.type === 'update' && !this._editingController.isSaving())) {
+                        if((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
                             if(this._editingController.getEditMode() === EDIT_MODE_CELL) {
                                 revertTooltip = this._showRevertButton($focus);
                             }
@@ -1242,8 +1273,6 @@ export default {
                         const editingController = this.getController('editing');
                         const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
                         let validationResult;
-                        const $cell = $focus && $focus.is('td') ? $focus : null;
-                        const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
                         const validatingController = this.getController('validating');
 
                         if(validator) {
@@ -1253,6 +1282,7 @@ export default {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
+                                        const column = validationResult.validator.option('dataGetter')().column;
                                         if(change && column && !validatingController.isCurrentValidatorProcessing({ rowKey: change.key, columnIndex: column.index })) {
                                             return;
                                         }
@@ -1279,7 +1309,7 @@ export default {
             })(),
             data: {
                 _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-                    const cell = oldRow.cells[columnIndex];
+                    const cell = oldRow.cells?.[columnIndex];
                     const oldValidationStatus = cell && cell.validationStatus;
                     const validatingController = this.getController('validating');
                     const validationResult = validatingController.getCellValidationResult({
@@ -1336,7 +1366,7 @@ export default {
                     });
                 },
                 _cellPrepared: function($cell, parameters) {
-                    if(!this.getController('editing').isFormEditMode()) {
+                    if(!this.getController('editing').isFormOrPopupEditMode()) {
                         this.getController('validating').createValidator(parameters, $cell);
                     }
 

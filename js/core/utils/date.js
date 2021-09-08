@@ -522,6 +522,19 @@ const dateInRange = function(date, min, max, format) {
     return normalizeDate(date, min, max) === date;
 };
 
+const intervalsOverlap = function(options) {
+    const {
+        firstMin,
+        firstMax,
+        secondMin,
+        secondMax
+    } = options;
+
+    return (firstMin <= secondMin && secondMin <= firstMax) ||
+        (firstMin > secondMin && firstMin < secondMax) ||
+        (firstMin < secondMax && firstMax > secondMax);
+};
+
 const dateTimeFromDecimal = function(number) {
     const hours = Math.floor(number);
     const minutes = (number % 1) * 60;
@@ -663,6 +676,7 @@ const dateUtils = {
     getQuarter: getQuarter,
     getFirstQuarterMonth: getFirstQuarterMonth,
     dateInRange: dateInRange,
+    intervalsOverlap: intervalsOverlap,
     roundToHour: roundToHour,
     normalizeDate: normalizeDate,
     getViewMinBoundaryDate: getViewMinBoundaryDate,

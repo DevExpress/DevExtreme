@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 
 import $ from 'jquery';
@@ -2851,6 +2850,32 @@ QUnit.module('Multiple sorting', {
         checkHeaderWidths(assert, this, options, {
             textContentWidthDiff: 0,
             cellWidthDiff: -12
+        });
+    });
+
+    ['ctrlKey', 'metaKey'].forEach((key) => {
+        QUnit.test(`${key} + click should reset sort order`, function(assert) {
+            // arrange
+            const $testElement = this.$element().addClass('dx-widget');
+            const options = {
+                sorting: {
+                    mode: 'multiple'
+                }
+            };
+
+            this.setupDataGrid(options);
+
+            // act
+            this.columnHeadersView.render($testElement);
+            const $headerCells = $testElement.find('.dx-header-row').children();
+
+            $headerCells.eq(1).trigger($.Event('dxclick', { [key]: true }));
+            this.clock.tick();
+
+            const cols = this.columnsController.getVisibleColumns();
+            assert.strictEqual(cols[0].sortOrder, undefined, 'first column has not sort order');
+            assert.strictEqual(cols[1].sortOrder, undefined, 'second column has not sort order');
+            assert.strictEqual(cols[2].sortOrder, 'asc', 'third column has sort order');
         });
     });
 });

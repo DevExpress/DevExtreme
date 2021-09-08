@@ -1,6 +1,8 @@
 import Popup from '../popup';
 import Form from '../form';
 import '../tag_box';
+import '../radio_group';
+
 import messageLocalization from '../../localization/message';
 
 export class GanttDialog {
@@ -15,9 +17,11 @@ export class GanttDialog {
         };
     }
     _apply() {
-        const result = this._dialogInfo.getResult();
-        this._callback(result);
-        this.hide();
+        if(this._dialogInfo.isValidated()) {
+            const result = this._dialogInfo.getResult();
+            this._callback(result);
+            this.hide();
+        }
     }
 
     show(name, parameters, callback, afterClosing, editingOptions) {
@@ -80,7 +84,6 @@ class DialogInfoBase {
             }
         };
     }
-
     getTitle() { return ''; }
     getToolbarItems() {
         return this._editingOptions.enabled ?
@@ -105,6 +108,9 @@ class DialogInfoBase {
         this._updateParameters(formData);
         return this._parameters;
     }
+    isValidated() {
+        return true;
+    }
 }
 
 class TaskEditDialogInfo extends DialogInfoBase {
@@ -127,7 +133,11 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 width: '100%',
                 readOnly: readOnlyRange || this._isReadOnlyField('start')
             },
-            visible: !this._isHiddenField('start')
+            visible: !this._isHiddenField('start'),
+            validationRules: [{
+                type: 'required',
+                message: messageLocalization.format('validation-required-formatted', messageLocalization.format('dxGantt-dialogStartTitle'))
+            }]
         }, {
             dataField: 'end',
             editorType: 'dxDateBox',
@@ -137,7 +147,11 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 width: '100%',
                 readOnly: readOnlyRange || this._isReadOnlyField('end')
             },
-            visible: !this._isHiddenField('end')
+            visible: !this._isHiddenField('end'),
+            validationRules: [{
+                type: 'required',
+                message: messageLocalization.format('validation-required-formatted', messageLocalization.format('dxGantt-dialogEndTitle'))
+            }]
         }, {
             dataField: 'progress',
             editorType: 'dxNumberBox',
@@ -194,6 +208,10 @@ class TaskEditDialogInfo extends DialogInfoBase {
         this._parameters.end = formData.end;
         this._parameters.progress = formData.progress * 100;
         this._parameters.assigned = formData.assigned;
+    }
+    isValidated() {
+        const validationResult = this._form?.validate();
+        return validationResult?.isValid;
     }
 }
 

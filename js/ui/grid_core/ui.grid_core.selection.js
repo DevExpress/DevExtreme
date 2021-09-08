@@ -12,6 +12,7 @@ import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import holdEvent from '../../events/hold';
 import Selection from '../selection/selection';
 import { Deferred } from '../../core/utils/deferred';
+import errors from '../widget/ui.errors';
 
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
 const ROW_CLASS = 'dx-row';
@@ -98,8 +99,13 @@ const SelectionController = gridCore.Controller.inherit((function() {
 
     return {
         init: function() {
+            const { deferred, selectAllMode, mode } = this.option('selection') || {};
+            if(this.option('scrolling.mode') === 'infinite' && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
+                errors.log('W1018');
+            }
+
             this._dataController = this.getController('data');
-            this._selectionMode = this.option(SELECTION_MODE);
+            this._selectionMode = mode;
             this._isSelectionWithCheckboxes = false;
 
             this._selection = this._createSelection();
@@ -108,27 +114,28 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         _getSelectionConfig: function() {
-            const that = this;
-            const dataController = that._dataController;
-            const selectionOptions = that.option('selection') || {};
+            const dataController = this._dataController;
+            const selectionOptions = this.option('selection') || {};
+            const deferred = selectionOptions.deferred;
 
             return {
-                selectedKeys: that.option('selectedRowKeys'),
-                mode: that._selectionMode,
-                deferred: selectionOptions.deferred,
+                selectedKeys: this.option('selectedRowKeys'),
+                mode: this._selectionMode,
+                deferred,
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
-                selectionFilter: that.option('selectionFilter'),
+                selectionFilter: this.option('selectionFilter'),
+                ignoreDisabledItems: true,
                 key: function() {
-                    return dataController && dataController.key();
+                    return dataController?.key();
                 },
                 keyOf: function(item) {
-                    return dataController && dataController.keyOf(item);
+                    return dataController?.keyOf(item);
                 },
                 dataFields: function() {
-                    return dataController.dataSource() && dataController.dataSource().select();
+                    return dataController.dataSource()?.select();
                 },
                 load: function(options) {
-                    return dataController.dataSource() && dataController.dataSource().load(options) || new Deferred().resolve([]);
+                    return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
                 },
                 plainItems: function() {
                     return dataController.items(true);
@@ -137,18 +144,18 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return item.selected;
                 },
                 isSelectableItem: function(item) {
-                    return item && item.rowType === 'data' && !item.isNewRow;
+                    return item?.rowType === 'data' && !item.isNewRow;
                 },
                 getItemData: function(item) {
-                    return item && (item.oldData || item.data || item);
+                    return item?.oldData || item?.data || item;
                 },
                 filter: function() {
-                    return dataController.getCombinedFilter();
+                    return dataController.getCombinedFilter(deferred);
                 },
-                totalCount: function() {
+                totalCount: () => {
                     return dataController.totalCount();
                 },
-                onSelectionChanged: that._updateSelectedItems.bind(this)
+                onSelectionChanged: this._updateSelectedItems.bind(this)
             };
         },
 
@@ -274,34 +281,34 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         optionChanged: function(args) {
-            const that = this;
-
-            that.callBase(args);
+            this.callBase(args);
 
             switch(args.name) {
                 case 'selection': {
-                    const oldSelectionMode = that._selectionMode;
+                    const oldSelectionMode = this._selectionMode;
 
-                    that.init();
+                    this.init();
 
-                    const selectionMode = that._selectionMode;
-                    let selectedRowKeys = that.option('selectedRowKeys');
+                    if(args.fullName !== 'selection.showCheckBoxesMode') {
+                        const selectionMode = this._selectionMode;
+                        let selectedRowKeys = this.option('selectedRowKeys');
 
-                    if(oldSelectionMode !== selectionMode) {
-                        if(selectionMode === 'single') {
-                            if(selectedRowKeys.length > 1) {
-                                selectedRowKeys = [selectedRowKeys[0]];
+                        if(oldSelectionMode !== selectionMode) {
+                            if(selectionMode === 'single') {
+                                if(selectedRowKeys.length > 1) {
+                                    selectedRowKeys = [selectedRowKeys[0]];
+                                }
+                            } else if(selectionMode !== 'multiple') {
+                                selectedRowKeys = [];
                             }
-                        } else if(selectionMode !== 'multiple') {
-                            selectedRowKeys = [];
                         }
+
+                        this.selectRows(selectedRowKeys).always(() => {
+                            this._fireSelectionChanged();
+                        });
                     }
 
-                    that.selectRows(selectedRowKeys).always(function() {
-                        that._fireSelectionChanged();
-                    });
-
-                    that.getController('columns').updateColumns();
+                    this.getController('columns').updateColumns();
                     args.handled = true;
                     break;
                 }
@@ -311,8 +318,8 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     break;
                 case 'selectedRowKeys': {
                     const value = args.value || [];
-                    if(Array.isArray(value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !value.length)) {
-                        that.selectRows(value);
+                    if(Array.isArray(value) && !this._selectedItemsInternalChange && (this.component.getDataSource() || !value.length)) {
+                        this.selectRows(value);
                     }
                     args.handled = true;
                     break;
@@ -460,7 +467,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
     };
 })());
 
-export default {
+export const selectionModule = {
     defaultOptions: function() {
         return {
             selection: {
@@ -610,9 +617,13 @@ export default {
                     const $editor = $element && $element.find('.' + SELECT_CHECKBOX_CLASS);
 
                     if($element && $editor.length && that.option('selection.mode') === 'multiple') {
+                        const selectAllValue = that.getController('selection').isSelectAll();
+                        const hasSelection = selectAllValue !== false;
+                        const isVisible = that.option('selection.allowSelectAll') ? !that.getController('data').isEmpty() : hasSelection;
+
                         $editor.dxCheckBox('instance').option({
-                            visible: !that.getController('data').isEmpty(),
-                            value: that.getController('selection').isSelectAll(),
+                            visible: isVisible,
+                            value: selectAllValue,
                         });
                     }
                 },

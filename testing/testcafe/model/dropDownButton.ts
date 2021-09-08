@@ -7,12 +7,12 @@ const ATTR = {
 export default class DropDownButton extends DropDownList {
   name = 'dxDropDownButton';
 
-  getPopupOwnerElement() {
+  getPopupOwnerElement(): Selector {
     return this.element;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getPopupIdAttr() {
+  getPopupIdAttr(): string {
     return ATTR.popupId;
   }
 }

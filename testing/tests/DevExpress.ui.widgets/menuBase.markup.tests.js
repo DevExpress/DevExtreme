@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import MenuBase from 'ui/context_menu/ui.menu_base';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

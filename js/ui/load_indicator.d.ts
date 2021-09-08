@@ -1,12 +1,37 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxLoadIndicator>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxLoadIndicator>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorSrc?: string;
@@ -16,24 +41,18 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
  * @inherits Widget
  * @module ui/load_indicator
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxLoadIndicator extends Widget {
-    constructor(element: Element, options?: dxLoadIndicatorOptions)
-    constructor(element: JQuery, options?: dxLoadIndicatorOptions)
+    constructor(element: UserDefinedElement, options?: dxLoadIndicatorOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLoadIndicator(): JQuery;
-    dxLoadIndicator(options: "instance"): dxLoadIndicator;
-    dxLoadIndicator(options: string): any;
-    dxLoadIndicator(options: string, ...params: any[]): any;
-    dxLoadIndicator(options: dxLoadIndicatorOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxLoadIndicatorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLoadIndicatorOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxLoadIndicatorOptions;

@@ -26,6 +26,7 @@ const PROVIDERS = {
     bing
 };
 
+// STYLE map
 
 const MAP_CLASS = 'dx-map';
 const MAP_CONTAINER_CLASS = 'dx-map-container';
@@ -83,10 +84,6 @@ const Map = Widget.inherit({
                 southWest: null
             },
 
-            /**
-            * @pseudo MapLocationType
-            * @type Object|string|Array<number>
-            */
             /**
             * @name MapLocation
             * @hidden
@@ -189,6 +186,10 @@ const Map = Widget.inherit({
         this._grabEvents();
 
         this._rendered = {};
+    },
+
+    _useTemplates: function() {
+        return false;
     },
 
     _checkOption: function(option) {

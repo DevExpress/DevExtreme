@@ -4,7 +4,7 @@ import dataGridCore from './ui.data_grid.core';
 import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './ui.data_grid.grouping.core';
 import { createGroupFilter } from './ui.data_grid.utils';
 import errors from '../widget/ui.errors';
-import dataErrors from '../../data/errors';
+import { errors as dataErrors } from '../../data/errors';
 import { when, Deferred } from '../../core/utils/deferred';
 
 function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
@@ -324,7 +324,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
             if(!isFinite(count)) {
-                d.reject(dataErrors.errors.Error(isGrouping ? 'E4022' : 'E4021'));
+                d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
                 return;
             }
             d.resolve(count);
@@ -533,7 +533,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
                 }
 
                 if(groupCount && options.storeLoadOptions.requireGroupCount && !isFinite(options.extra.groupCount)) {
-                    options.data = (new Deferred()).reject(dataErrors.errors.Error('E4022'));
+                    options.data = (new Deferred()).reject(dataErrors.Error('E4022'));
                     return;
                 }
 
@@ -648,7 +648,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
                         filter: createOffsetFilter(groupInfo.path, {
                             filter: storeLoadOptions.filter,
                             group: group
-                        }),
+                        }, true),
                         group: group.slice(groupInfo.path.length - 1, groupInfo.path.length),
                         select: storeLoadOptions.select
                     });

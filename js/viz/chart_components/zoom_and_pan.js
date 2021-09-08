@@ -217,7 +217,7 @@ export default {
                 axes.filter(isNotEmptyAxisBusinessRange).forEach(axis => {
                     axis.handleZooming(null, { start: true }, e, actionField);
                 });
-                zoomStarted = zoomStarted && axes.length;
+                zoomStarted = axes.length;
             }
             zoomStarted && chart._requestChange(['VISUAL_RANGE']);
         }

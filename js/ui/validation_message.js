@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
-import Overlay from './overlay';
+import Overlay from './overlay/ui.overlay';
 import { extend } from '../core/utils/extend';
 import { encodeHtml } from '../core/utils/string';
 import { getDefaultAlignment } from '../core/utils/position';
@@ -32,6 +32,7 @@ const ValidationMessage = Overlay.inherit({
             mode: 'auto',
             validationErrors: undefined,
             positionRequest: undefined,
+            describedElement: undefined,
             boundary: undefined,
             offset: { h: 0, v: 0 }
         });
@@ -47,13 +48,14 @@ const ValidationMessage = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(INVALID_MESSAGE);
-        this._wrapper().addClass(INVALID_MESSAGE);
+        this.$wrapper().addClass(INVALID_MESSAGE);
         this._toggleModeClass();
         this._updateContentId();
     },
 
     _updateContentId() {
-        const contentId = $(this.option('container')).attr('aria-describedby');
+        const describedElement = this.option('describedElement') || this.option('container');
+        const contentId = $(describedElement).attr('aria-describedby');
 
         this.$content()
             .addClass(INVALID_MESSAGE_CONTENT)
@@ -74,7 +76,7 @@ const ValidationMessage = Overlay.inherit({
 
     _toggleModeClass() {
         const mode = this.option('mode');
-        this._wrapper()
+        this.$wrapper()
             .toggleClass(INVALID_MESSAGE_AUTO, mode === 'auto')
             .toggleClass(INVALID_MESSAGE_ALWAYS, mode === 'always');
     },

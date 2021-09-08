@@ -8,7 +8,7 @@ export default {
     translate: function(category, directionOffset) {
         const that = this;
         const canvasOptions = that._canvasOptions;
-        const categoryIndex = that._categoriesToPoints[category.valueOf()];
+        const categoryIndex = that._categoriesToPoints[category?.valueOf()];
         const specialValue = that.translateSpecialCase(category);
         const startPointIndex = canvasOptions.startPointIndex || 0;
         const stickInterval = that._options.stick ? 0 : 0.5;
@@ -118,7 +118,7 @@ export default {
 
     to: function(value, direction) {
         const canvasOptions = this._canvasOptions;
-        const categoryIndex = this._categoriesToPoints[value.valueOf()];
+        const categoryIndex = this._categoriesToPoints[value?.valueOf()];
         const startPointIndex = canvasOptions.startPointIndex || 0;
         const stickDelta = categoryIndex + (this._options.stick ? 0 : 0.5) - startPointIndex + (this._businessRange.invert ? -1 : +1) * direction * 0.5;
         return round(this._calculateProjection(canvasOptions.interval * stickDelta));

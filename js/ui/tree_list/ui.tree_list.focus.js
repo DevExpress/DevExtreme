@@ -1,7 +1,7 @@
 import core from './ui.tree_list.core';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
-import focusModule from '../grid_core/ui.grid_core.focus';
+import { focusModule } from '../grid_core/ui.grid_core.focus';
 
 function findIndex(items, callback) {
     let result = -1;
@@ -92,15 +92,13 @@ core.registerModule('focus', extend(true, {}, focusModule, {
 
                     that.expandAscendants(key).done(function() {
                         dataSource.load({
-                            filter: that.getCombinedFilter(),
-                            sort: that.getController('columns').getSortDataSourceParameters(!dataSource.remoteOperations().sorting),
                             parentIds: []
                         }).done(function(nodes) {
                             const offset = findIndex(nodes, function(node) {
                                 return that.keyOf(node.data) === key;
                             });
 
-                            let pageIndex = that.pageIndex();
+                            let pageIndex = -1;
 
                             if(offset >= 0) {
                                 pageIndex = Math.floor(offset / that.pageSize());

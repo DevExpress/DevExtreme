@@ -616,3 +616,86 @@ QUnit.test('createDateWithFullYear', function(assert) {
 
     assert.deepEqual(testDate, expectedDate, 'correct date is created');
 });
+
+QUnit.module('intervalsOverlap', () => {
+    QUnit.test('Check if intervals overlaps from the Left', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 10),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 14)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if intervals overlaps from the Right', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 10),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 9),
+            secondMax: new Date(2021, 2, 4, 11)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if first interval include the second', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 10),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 12)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if second interval include the first', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 12),
+            secondMin: new Date(2021, 2, 4, 10),
+            secondMax: new Date(2021, 2, 4, 13)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check the same intervals', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 12),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 12)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if leftMin < rightMin and leftMax < rightMax', function(assert) {
+        assert.notOk(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 12),
+            secondMin: new Date(2021, 2, 4, 13),
+            secondMax: new Date(2021, 2, 4, 14)
+        }), 'Intervals not overlaps');
+    });
+
+    QUnit.test('Check if leftMin > rightMin and leftMax < rightMax', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 12),
+            secondMax: new Date(2021, 2, 4, 14)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if leftMin > rightMin and leftMax > rightMax', function(assert) {
+        assert.notOk(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 13),
+            firstMax: new Date(2021, 2, 4, 14),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 12)
+        }), 'Intervals not overlaps');
+    });
+
+    QUnit.test('Check if leftMin < rightMin and leftMax > rightMin', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 12),
+            secondMax: new Date(2021, 2, 4, 15)
+        }), 'Intervals overlaps');
+    });
+});

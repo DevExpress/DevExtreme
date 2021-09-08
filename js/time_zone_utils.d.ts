@@ -1,6 +1,5 @@
 /**
  * @docid
- * @prevFileNamespace DevExpress
  */
 export interface dxSchedulerTimeZone {
     /**
@@ -26,7 +25,6 @@ export interface dxSchedulerTimeZone {
  * @module time_zone_utils
  * @export getTimeZones
  * @static
- * @prevFileNamespace DevExpress
  * @public
  */
 export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;

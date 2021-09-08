@@ -1,18 +1,17 @@
 import {
   Component, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { ResizableContainer } from './resizable_container';
-import PagerProps from './common/pager_props';
+import { PagerProps } from './common/pager_props';
 import { PagerContent } from './content';
-import { GridPagerWrapper } from '../../preact_wrapper/grid_pager';
+import { GridPagerWrapper } from '../../component_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   pagerProps,
   restAttributes,
-}: Pager) => (
+}: Pager): JSX.Element => (
   <ResizableContainer
     contentTemplate={PagerContent}
     pagerProps={pagerProps}

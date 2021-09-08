@@ -3,8 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/slideOutView";
 
 // adduse
+
 $material-slideoutview-border-width: $material-base-border-width;
 
 .dx-slideoutview-content {

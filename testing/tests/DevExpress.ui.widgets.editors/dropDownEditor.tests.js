@@ -5,14 +5,14 @@ import eventsEngine from 'events/core/events_engine';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import browser from 'core/utils/browser';
 import support from 'core/utils/support';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
-import Overlay from 'ui/overlay';
+import Overlay from 'ui/overlay/ui.overlay';
 import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import { logger } from 'core/utils/console';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -33,7 +33,6 @@ const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-templat
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
-const POPUP_CLASS = 'dx-popup';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
@@ -42,7 +41,7 @@ const isIOs = devices.current().platform === 'ios';
 
 const beforeEach = function() {
     fx.off = true;
-    this.rootElement = $('<div id=\'dropDownEditor\'></div>');
+    this.rootElement = $('<div id="dropDownEditor"></div>');
     this.rootElement.appendTo($('#qunit-fixture'));
     this.$dropDownEditor = $('#dropDownEditor').dxDropDownEditor();
     this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor('instance');
@@ -58,10 +57,12 @@ const afterEach = function() {
     fx.off = false;
 };
 
-const reinitFixture = function(...args) {
-    // TODO: get rid of  beforeEach and afterEach usage
-    afterEach.apply(this, args);
-    beforeEach.apply(this, args);
+const reinitFixture = function(options) {
+    this.$dropDownEditor.remove();
+    this.$dropDownEditor = $('<div id="dropDownEditor"></div>')
+        .appendTo('#qunit-fixture');
+    this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor(options)
+        .dxDropDownEditor('instance');
 };
 
 const testEnvironment = {
@@ -96,11 +97,6 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         };
         dropDownEditor.open();
         assert.strictEqual(dropDownEditor._$popup.dxPopup('$content').find(content)[0], content[0]);
-    });
-
-    QUnit.test('dropdown must close on outside click', function(assert) {
-        this.dropDownEditor.open();
-        assert.ok(this.dropDownEditor._popup.option('closeOnOutsideClick'));
     });
 
     QUnit.test('widget should have only one input by default', function(assert) {
@@ -146,6 +142,19 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         const $submitInput = this.$dropDownEditor.find('input[type=\'hidden\']');
 
         assert.equal($submitInput.val(), 'test', 'the submit value is correct');
+    });
+
+    QUnit.test('submit value should be equal to the value of widget with fieldTemplate', function(assert) {
+        this.reinitFixture({
+            useHiddenSubmitElement: true,
+            fieldTemplate: () => $('<div>').dxTextBox(),
+            value: 'test'
+        });
+
+        const $submitInput = this.$dropDownEditor.find('input[type=\'hidden\']');
+
+        assert.strictEqual($submitInput.length, 1);
+        assert.strictEqual($submitInput.val(), 'test', 'the submit value is correct');
     });
 
     QUnit.test('clicking the input must not close the dropdown', function(assert) {
@@ -353,82 +362,14 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
     });
 });
 
-QUnit.module('dropDownOptions', () => {
-    QUnit.test('dropDownOptions should work on init', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true,
-            dropDownOptions: { customOption: 'Test' }
-        }).dxDropDownEditor('instance');
-
-        assert.equal(instance._popup.option('customOption'), 'Test', 'Option has been passed to the popup');
-    });
-
-    QUnit.test('dropDownOptions should redefine built-in values', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true,
-            dropDownOptions: { showTitle: true }
-        }).dxDropDownEditor('instance');
-
-        assert.strictEqual(instance._popup.option('showTitle'), true, 'Option has been redefined');
-    });
-
-    QUnit.test('dropDownOptions should be updated when popup option changed', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        const popup = instance._popup;
-
-        assert.equal(popup.option('width'), instance.option('dropDownOptions.width'), 'dropDownOptions has been updated on init');
-
-        popup.option('width', 400);
-        assert.equal(instance.option('dropDownOptions.width'), 400, 'dropDownOptions has been updated on popup\'s option changed');
-    });
-
-    QUnit.test('it should be possible to set part of the dropDownOptions without full object changing', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        const popup = instance._popup;
-
-        instance.option('dropDownOptions.width', 300);
-        assert.equal(popup.option('width'), 300, 'popup\'s width has been changed');
-
-        instance.option('dropDownOptions', { height: 200 });
-        assert.equal(popup.option('width'), 300, 'popup\'s width has not been changed');
-        assert.equal(popup.option('height'), 200, 'popup\'s height has been changed');
-        assert.equal(instance.option('dropDownOptions.width'), 300, 'dropDownOptions object has not been rewrited');
-    });
-
-    QUnit.test('dropDownOptions should not be cleared after repaint', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                container: '#dropDownEditorLazy'
-            },
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        assert.strictEqual(instance.option('dropDownOptions.container'), '#dropDownEditorLazy', 'option is correct');
-
-        instance.repaint();
-        assert.strictEqual(instance.option('dropDownOptions.container'), '#dropDownEditorLazy', 'option is correct');
-    });
-
-    QUnit.test('dropDownOptions should have dragEnabled = false after popup opened (T946143)', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        assert.strictEqual(instance.option('dropDownOptions.dragEnabled'), false);
-    });
-
-});
-
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'blur preventing unnecessary on mobile devices');
+        const isDesktop = devices.real().deviceType === 'desktop';
+        const isIE11OrLower = browser.msie && parseInt(browser.version) <= 11;
+
+        if(!isDesktop || isIE11OrLower) {
+            const message = isIE11OrLower ? 'test is ignored in IE11 because it failes on farm' : 'blur preventing unnecessary on mobile devices';
+            assert.ok(true, message);
             return;
         }
 
@@ -441,7 +382,7 @@ QUnit.module('focus policy', () => {
 
         instance.open();
 
-        const $buttons = instance._popup._wrapper().find('.dx-button');
+        const $buttons = instance._popup.$wrapper().find('.dx-button');
 
         $.each($buttons, function(index, button) {
             const $button = $(button);
@@ -610,13 +551,37 @@ QUnit.module('focus policy', () => {
 
         assert.ok(dropDownEditor1.option('opened'), 'should be still opened after the widget\'s popup focus');
     });
+
+    [false, true].forEach((acceptCustomValue) => {
+        const position = acceptCustomValue ? 'end' : 'beginning';
+        const testTitle = `caret should be set to the ${position} of the text after click on the dropDown button when "acceptCustomValue" option is ${acceptCustomValue} (T976700)`;
+
+        QUnit.testInActiveWindow(testTitle, function(assert) {
+            const value = '1234567890abcdefgh';
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                items: [value],
+                focusStateEnabled: true,
+                showDropDownButton: true,
+                acceptCustomValue,
+                value
+            });
+            const $dropDownButton = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+            const input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0);
+            const expectedPosition = acceptCustomValue ? value.length : 0;
+
+            $dropDownButton.trigger('dxclick');
+
+            assert.strictEqual(input.selectionStart, expectedPosition, 'correct start position');
+            assert.strictEqual(input.selectionEnd, expectedPosition, 'correct end position');
+        });
+    });
 });
 
 QUnit.module('keyboard navigation', {
     beforeEach() {
         fx.off = true;
-        this.$rootElement = $('<div id=\'dropDownEditor\'></div>');
-        this.$rootElement.appendTo('body');
+        this.$rootElement = $('<div id="dropDownEditor"></div>');
+        this.$rootElement.appendTo('#qunit-fixture');
         this.dropDownEditor = $('#dropDownEditor').dxDropDownEditor({
             focusStateEnabled: true
         }).dxDropDownEditor('instance');
@@ -798,7 +763,7 @@ QUnit.module('keyboard navigation inside popup', {
     beforeEach() {
         fx.off = true;
         this.$element = $('<div>');
-        $('body').append(this.$element);
+        $('#qunit-fixture').append(this.$element);
 
         this.instance = this.$element.dxDropDownEditor({
             focusStateEnabled: true,
@@ -808,7 +773,7 @@ QUnit.module('keyboard navigation inside popup', {
 
         this.$input = this.$element.find('.dx-texteditor-input');
 
-        const $popupWrapper = $(this.instance._popup._wrapper());
+        const $popupWrapper = $(this.instance._popup.$wrapper());
         this.$doneButton = $popupWrapper.find('.dx-popup-done.dx-button');
         this.$cancelButton = $popupWrapper.find('.dx-popup-cancel.dx-button');
 
@@ -910,24 +875,6 @@ QUnit.module('keyboard navigation inside popup', {
         this.triggerKeyPress(this.$doneButton, ESC_KEY_CODE);
         assert.notOk(this.instance.option('opened'), 'popup is closed');
         assert.ok(this.$element.hasClass('dx-state-focused'), 'editor is focused');
-    });
-});
-
-QUnit.module('deferRendering', () => {
-    QUnit.test('popup is rendered only when open editor when deferRendering is true', function(assert) {
-        $('#dropDownEditorLazy').dxDropDownEditor({
-            deferRendering: false
-        });
-
-        assert.equal($('.dx-dropdowneditor-overlay').length, 1, 'content is not rendered');
-    });
-
-    QUnit.test('popup is rendered immediately when deferRendering is changed to false in runtime', function(assert) {
-        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({}).dxDropDownEditor('instance');
-
-        assert.strictEqual(dropDownEditor._popup, undefined, 'popup is not rendered');
-        dropDownEditor.option('deferRendering', false);
-        assert.ok(dropDownEditor._popup, 'popup is rendered after runtime option change');
     });
 });
 
@@ -1191,6 +1138,24 @@ QUnit.module('Templates', () => {
 
         assert.strictEqual($buttons.length, 1, 'there is only one button');
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
+    });
+
+    ['readOnly', 'disabled'].forEach((prop) => {
+        [false, true].forEach((propValue) => {
+            QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
+                const dropDownButtonTemplate = sinon.spy(() => {
+                    return '<div>Template</div>';
+                });
+
+                const editor = $('#dropDownEditorLazy').dxDropDownEditor({
+                    dropDownButtonTemplate,
+                    [prop]: propValue
+                }).dxDropDownEditor('instance');
+
+                editor.option(prop, !propValue);
+                assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
+            });
+        });
     });
 });
 
@@ -1589,60 +1554,6 @@ QUnit.module('popup integration', () => {
         assert.roughEqual(overlayContentRect.left, editorRect.left, 1.01, 'left position is correct');
     });
 
-    QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                width: 500
-            },
-            opened: true
-        });
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
-    });
-
-    QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                width: 500
-            },
-            opened: true
-        });
-        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
-
-        dropDownEditor.option('width', 300);
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
-    });
-
-    QUnit.test('dropDownOptions.height should be passed to popup', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                height: 500
-            },
-            opened: true
-        });
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('height'), 500, 'popup height option value is correct');
-    });
-
-    QUnit.test('popup should have height equal to dropDownOptions.height even after editor height change', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                height: 500
-            },
-            opened: true
-        });
-        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
-
-        dropDownEditor.option('height', 300);
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('height'), 500, 'popup height option value is correct');
-    });
-
     QUnit.test('onPopupInitialized', function(assert) {
         assert.expect(1);
 
@@ -1670,7 +1581,7 @@ QUnit.module('popup integration', () => {
     });
 
     QUnit.test('popup should have correct class if it is flipped', function(assert) {
-        const $dropDownEditor = $('<div>').appendTo('body');
+        const $dropDownEditor = $('<div>').appendTo('#qunit-fixture');
         try {
             $dropDownEditor.css({ position: 'fixed', bottom: 0 });
             $dropDownEditor.dxDropDownEditor({
@@ -1694,7 +1605,7 @@ QUnit.module('popup integration', () => {
 
         const $dropDownEditor = $('<div>').dxDropDownEditor({
             opened: true
-        }).appendTo('body');
+        }).appendTo('#qunit-fixture');
 
         try {
             const popup = $dropDownEditor.find('.dx-popup').dxPopup('instance');
@@ -1709,26 +1620,13 @@ QUnit.module('popup integration', () => {
             $dropDownEditor.remove();
         }
     });
-
-    QUnit.test('widget should work correctly when popup \'fullScreen\' is true', function(assert) {
-        const $dropDownEditor = $('<div>').dxDropDownEditor({
-            opened: true
-        }).appendTo('body');
-
-        const popup = $dropDownEditor.find('.dx-popup').dxPopup('instance');
-        popup.option('fullScreen', true);
-
-        assert.ok(true, 'Widget works correctly');
-
-        $dropDownEditor.remove();
-    });
 });
 
 QUnit.module('popup buttons', {
     beforeEach() {
         fx.off = true;
-        this.$dropDownEditor = $('<div id=\'dropDownEditor\'></div>')
-            .appendTo('body');
+        this.$dropDownEditor = $('<div id="dropDownEditor"></div>')
+            .appendTo('#qunit-fixture');
         this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor({
             applyValueMode: 'useButtons',
             dropDownOptions: { showTitle: true }
@@ -1737,8 +1635,8 @@ QUnit.module('popup buttons', {
     reinitFixture(options) {
         this.$dropDownEditor.remove();
         this.dropDownEditor = null;
-        this.$dropDownEditor = $('<div id=\'dropDownEditor\'></div>')
-            .appendTo('body');
+        this.$dropDownEditor = $('<div id="dropDownEditor"></div>')
+            .appendTo('#qunit-fixture');
         this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor(options)
             .dxDropDownEditor('instance');
     },
@@ -1959,4 +1857,3 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 });
-

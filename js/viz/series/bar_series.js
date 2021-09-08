@@ -133,7 +133,7 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     },
 
     checkSeriesViewportCoord(axis, coord) {
-        if(this._points.length === 0) {
+        if(!chartSeries.checkSeriesViewportCoord.call(this)) {
             return false;
         }
         if(axis.isArgumentAxis) {

@@ -25,7 +25,9 @@ const ListStrategy = DateBoxStrategy.inherit({
     supportedKeys: function() {
         return {
             tab: function() {
-                if(this.option('opened')) {
+                const { opened, applyValueMode } = this.option();
+
+                if(opened && applyValueMode === 'instantly') {
                     this.close();
                 }
             },
@@ -47,6 +49,17 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     popupConfig: function(popupConfig) {
         return popupConfig;
+    },
+
+    getValue: function() {
+        const selectedIndex = this._widget.option('selectedIndex');
+
+        if(selectedIndex === -1) {
+            return this.dateBox.option('value');
+        }
+
+        const itemData = this._widgetItems[selectedIndex];
+        return this._getDateByItemData(itemData);
     },
 
     useCurrentDateByDefault: function() {
@@ -215,10 +228,18 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _listItemClickHandler: function(e) {
-        this.dateBox.option('opened', false);
+        if(this.dateBox.option('applyValueMode') === 'useButtons') {
+            return;
+        }
 
+        const date = this._getDateByItemData(e.itemData);
+
+        this.dateBox.option('opened', false);
+        this.dateBoxValue(date, e.event);
+    },
+
+    _getDateByItemData: function(itemData) {
         let date = this.dateBox.option('value');
-        const { itemData } = e;
         const hours = itemData.getHours();
         const minutes = itemData.getMinutes();
         const seconds = itemData.getSeconds();
@@ -243,10 +264,10 @@ const ListStrategy = DateBoxStrategy.inherit({
             date = new Date(year, month, day, hours, minutes, 0, 0);
         }
 
-        this.dateBoxValue(date, e.event);
+        return date;
     },
 
-    getKeyboardListener() {
+    getKeyboardListener: function() {
         return this._widget;
     },
 

@@ -11,7 +11,7 @@ const disableAnimation = ClientFunction(() => {
   (window as any).DevExpress.fx.off = true;
 });
 
-const createScheduler = async (options = {}) => {
+const createScheduler = async (options = {}): Promise<void> => {
   await disableAnimation();
   await createWidget('dxScheduler', extend(options, {
     dataSource: [],

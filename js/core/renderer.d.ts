@@ -5,135 +5,137 @@ interface Coordinates {
 
 export interface dxElementWrapper {
 
-    add(selector: string): this;
+  add(selector: string): this;
 
-    addClass(className: string): this;
+  addClass(className: string): this;
 
-    after(element: Element|dxElementWrapper): this;
+  after(element: Element | dxElementWrapper): this;
 
-    append(element: Element|dxElementWrapper): this;
+  append(element: Element | dxElementWrapper): this;
 
-    appendTo(element: Element|dxElementWrapper): this;
+  appendTo(element: Element | dxElementWrapper): this;
 
-    attr(attributeName: string, value: string|number|null): this;
+  attr(attributeName: string, value: string | number | null): this;
 
-    before(element: Element|dxElementWrapper): this;
+  before(element: Element | dxElementWrapper): this;
 
-    children(selector: string): this;
+  children(selector?: string): this;
 
-    clone(): this;
+  clone(): this;
 
-    closest(selector: string): this;
+  closest(selector: string): this;
 
-    contents(): this;
+  contents(): this;
 
-    css(propertyName: string, value: string|number): this;
+  css(propertyName: string, value: string | number): this;
 
-    data(key: string, value: any): this;
+  data(key: string, value: any): this;
 
-    detach(): this;
+  detach(): this;
 
-    each(func: (this: Element, index: number, element: Element) => boolean): this;
+  each(func: (this: Element, index: number, element: Element) => boolean): this;
 
-    empty(): this;
+  empty(): this;
 
-    eq(index: number): this;
+  eq(index: number): this;
 
-    filter(selector: string): this;
+  filter(selector: string): this;
 
-    find(selector_element: string | Element | dxElementWrapper): this;
+  find(selector_element: string | Element | dxElementWrapper): this;
 
-    first(): this;
+  first(): this;
 
-    get(index: number): Element;
+  get(index: number): Element;
 
-    hasClass(className: string): boolean;
+  hasClass(className: string): boolean;
 
-    height(value: string|number): number;
+  height(value: string | number): number;
 
-    hide(): this;
+  hide(): this;
 
-    html(value: string): this;
+  html(value: string): this;
 
-    index(element: Element|dxElementWrapper): number;
+  index(element: Element | dxElementWrapper): number;
 
-    innerHeight(value: string|number): number;
+  innerHeight(value: string | number): number;
 
-    innerWidth(value: string|number): number;
+  innerWidth(value: string | number): number;
 
-    insertAfter(element: Element|dxElementWrapper): this;
+  insertAfter(element: Element | dxElementWrapper): this;
 
-    insertBefore(element: Element|dxElementWrapper): this;
+  insertBefore(element: Element | dxElementWrapper): this;
 
-    is(selector: string): boolean;
+  is(selector: string): boolean;
 
-    last(): this;
+  last(): this;
 
-    next(selector: string): this;
+  next(selector: string): this;
 
-    not(selector: string): this;
+  not(selector: string): this;
 
-    offset(): Coordinates|undefined;
+  offset(): Coordinates | undefined;
 
-    offsetParent(): this;
+  offsetParent(): this;
 
-    outerHeight(value: number|string): this;
+  outerHeight(value: number | string): this;
 
-    outerWidth(value: number|string): this;
+  outerWidth(value: number | string): this;
 
-    parent(selector: string): this;
+  parent(selector: string): this;
 
-    parents(selector: string): this;
+  parents(selector: string): this;
 
-    position(): Coordinates|undefined;
+  position(): Coordinates | undefined;
 
-    prepend(element: Element|dxElementWrapper): this;
+  prepend(element: Element | dxElementWrapper): this;
 
-    prependTo(element: Element|dxElementWrapper): this;
+  prependTo(element: Element | dxElementWrapper): this;
 
-    prev(): this;
+  prev(): this;
 
-    prop(propertyName: string, value: string|number|boolean): this;
+  prop(propertyName: string, value: string | number | boolean): this;
 
-    remove(element: Element|dxElementWrapper): this;
+  remove(element: Element | dxElementWrapper): this;
 
-    removeAttr(attributeName: string): this;
+  removeAttr(attributeName: string): this;
 
-    removeClass(className: string): this;
+  removeClass(className: string): this;
 
-    removeData(key: string): this;
+  removeData(key: string): this;
 
-    replaceWith(element: Element|dxElementWrapper): this;
+  replaceWith(element: Element | dxElementWrapper): this;
 
-    scrollLeft(value: string|undefined): this;
+  scrollLeft(value: string | undefined): this;
 
-    scrollTop(value: string|undefined): this;
+  scrollTop(value: string | undefined): this;
 
-    show(): this;
+  show(): this;
 
-    siblings(): this;
+  siblings(): this;
 
-    slice(start?: number, end?: number): this;
+  slice(start?: number, end?: number): this;
 
-    splice(start: number, deleteCount?: number): this;
+  splice(start: number, deleteCount?: number): this;
 
-    text(text: string|number|boolean): this;
+  text(text: string | number | boolean): this;
 
-    toArray(): Element[];
+  toArray(): Element[];
 
-    toggle(value: string|undefined): this;
+  toggle(value: string | undefined): this;
 
-    toggleClass(className: string, value?: boolean): this;
+  toggleClass(className: string, value?: boolean): this;
 
-    val(value?: string|string[]|number): this;
+  val(value?: string | string[] | number): this;
 
-    width(value: number|string): this;
+  width(value: number | string): this;
 
-    wrap(wrappingElement: this|Element|string): this;
+  wrap(wrappingElement: this | Element | string): this;
 
-    wrapInner(wrappingElement: this|Element|string): this;
+  wrapInner(wrappingElement: this | Element | string): this;
+
+  length: number;
 }
 
-declare function renderer(selector: string|Element|dxElementWrapper): dxElementWrapper;
+declare function renderer(selector: string | Element | dxElementWrapper): dxElementWrapper;
 
 export default renderer;

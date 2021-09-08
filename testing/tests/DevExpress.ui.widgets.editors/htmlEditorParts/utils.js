@@ -16,7 +16,11 @@ function checkLink(assert, { content, href, afterLink }, text) {
 }
 
 function prepareTableValue(value) {
-    return value.replace(/(\s?style="[^"]*")|(\s?data-row="[^"]*")/ig, '');
+    return value.replace(/(\s?style="[^"]*")|(\s?data(-header)?-row="[^"]*")/ig, '');
 }
 
-export { checkLink, prepareTableValue };
+function prepareEmbedValue(value) {
+    return value.replace(/\uFEFF/g, '');
+}
+
+export { checkLink, prepareTableValue, prepareEmbedValue };

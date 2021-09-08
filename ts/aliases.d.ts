@@ -1,6 +1,6 @@
 declare module DevExpress {
-    /** @deprecated Use DevExpress.events.dxEvent instead */
-    export type dxEvent = DevExpress.events.dxEvent
+    /** @deprecated Use DevExpress.events.EventObject instead */
+    export type dxEvent = DevExpress.events.EventObject
     /** @deprecated Use DevExpress.events.event instead */
     export type event = DevExpress.events.event
 }

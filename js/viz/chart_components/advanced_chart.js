@@ -49,15 +49,10 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
             skipEventRising: true
         };
 
-        const pathElements = arg.fullName.split('.');
-        const destElem = pathElements[pathElements.length - 1];
-        if(destElem === 'endValue' || destElem === 'startValue') {
-            options = {
-                allowPartialUpdate: true
-            };
-            visualRange = {
-                [destElem]: arg.value
-            };
+        const wrappedVisualRange = wrapVisualRange(arg.fullName, visualRange);
+        if(wrappedVisualRange) {
+            options = { allowPartialUpdate: true };
+            visualRange = wrappedVisualRange;
         }
     } else {
         visualRange = (_isDefined(index) ? arg.value[index] : arg.value).visualRange;
@@ -71,6 +66,17 @@ function getAxisTypes(groupsData, axis, isArgumentAxes) {
     }
     const { valueAxisType, valueType } = groupsData.groups.filter(g => g.valueAxis === axis)[0];
     return { valueAxisType, valueType };
+}
+
+function wrapVisualRange(fullName, value) {
+    const pathElements = fullName.split('.');
+    const destElem = pathElements[pathElements.length - 1];
+
+    if(destElem === 'endValue' || destElem === 'startValue') {
+        return {
+            [destElem]: value
+        };
+    }
 }
 
 export const AdvancedChart = BaseChart.inherit({
@@ -103,6 +109,9 @@ export const AdvancedChart = BaseChart.inherit({
         disposeObjectsInArray.call(panesClipRects, 'base');
         disposeObjectsInArray.call(panesClipRects, 'wide');
         this._panesClipRects = null;
+        this._labelsAxesGroup.linkOff();
+        this._labelsAxesGroup.dispose();
+        this._labelsAxesGroup = null;
     },
 
     _dispose: function() {
@@ -427,8 +436,9 @@ export const AdvancedChart = BaseChart.inherit({
         that._stripsGroup.linkAppend();
         that._gridGroup.linkAppend();
         that._axesGroup.linkAppend();
+        that._labelsAxesGroup.linkAppend();
         that._constantLinesGroup.linkAppend();
-        that._labelAxesGroup.linkAppend();
+        that._stripLabelAxesGroup.linkAppend();
         that._scaleBreaksGroup.linkAppend();
     },
 
@@ -580,14 +590,15 @@ export const AdvancedChart = BaseChart.inherit({
             axisClass: isArgumentAxes ? 'arg' : 'val',
             widgetClass: 'dxc',
             stripsGroup: that._stripsGroup,
-            labelAxesGroup: that._labelAxesGroup,
+            stripLabelAxesGroup: that._stripLabelAxesGroup,
             constantLinesGroup: that._constantLinesGroup,
             scaleBreaksGroup: that._scaleBreaksGroup,
             axesContainerGroup: that._axesGroup,
+            labelsAxesGroup: that._labelsAxesGroup,
             gridGroup: that._gridGroup,
             isArgumentAxis: isArgumentAxes,
-            getTemplate() {
-                return that._getTemplate(options.label.template);
+            getTemplate(template) {
+                return that._getTemplate(template);
             }
         }, that._getAxisRenderingOptions(typeSelector));
         const axis = new Axis(renderingSettings);
@@ -680,6 +691,9 @@ export const AdvancedChart = BaseChart.inherit({
         index = _isDefined(index) ? parseInt(index[0]) : index;
 
         if(fullName.indexOf('visualRange') > 0) {
+            if(type(value) !== 'object') {
+                value = wrapVisualRange(fullName, value) || value;
+            }
             that._setCustomVisualRange(name, index, value);
         } else if((type(value) === 'object' || _isArray(value)) && name.indexOf('Axis') > 0 && JSON.stringify(value).indexOf('visualRange') > 0) {
             if(_isDefined(value.visualRange)) {
@@ -730,12 +744,20 @@ export const AdvancedChart = BaseChart.inherit({
         const that = this;
 
         that._valueAxes.forEach(axis => {
-            if(axis.getOptions().optionPath) {
-                const path = `${axis.getOptions().optionPath}.visualRange`;
+            const axisPath = axis.getOptions().optionPath;
+            if(axisPath) {
+                const path = `${axisPath}.visualRange`;
                 const visualRange = convertVisualRangeObject(axis.visualRange(), !_isArray(that.option(path)));
 
                 if(!axis.skipEventRising || !rangesAreEqual(visualRange, that.option(path))) {
-                    that.option(path, visualRange);
+                    if(!that.option(axisPath) && axisPath !== 'valueAxis') {
+                        that.option(axisPath, {
+                            name: axis.name,
+                            visualRange: visualRange
+                        });
+                    } else {
+                        that.option(path, visualRange);
+                    }
                 } else {
                     axis.skipEventRising = null;
                 }

@@ -8,7 +8,7 @@ import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {
@@ -49,7 +49,7 @@ const stubInvokeMethod = (instance) => {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'convertDateByTimezone') {
             return arguments[1];
@@ -203,6 +203,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
 
     QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData', function(assert) {
         this.instance.option({
+            renovateRender: false,
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
             startDayHour: 5,
@@ -235,6 +236,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
 
     QUnit.test('Each cell of grouped scheduler timeline day should contain correct jQuery dxCellData', function(assert) {
         this.instance.option({
+            renovateRender: false,
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
             startDayHour: 5,
@@ -244,6 +246,11 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
                 { name: 'two', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }
             ]
         });
+
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
 
         const $cells = this.instance.$element().find('.dx-scheduler-date-table-row').eq(2).find('.' + CELL_CLASS);
 
@@ -351,6 +358,8 @@ QUnit.module('TimelineDay with intervalCount markup', timelineDayModuleConfig, (
     });
 
     QUnit.test('TimelineDay Day view cells have right cellData with view option intervalCount=2', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -445,6 +454,8 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
     });
 
     QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData, groupOrientation = horizontal', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -669,6 +680,8 @@ QUnit.module('TimelineWeek with intervalCount markup', timelineWeekModuleConfig,
     });
 
     QUnit.test('TimelineWeek view cells have right cellData with view option intervalCount=2', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -728,6 +741,8 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
     });
 
     QUnit.test('Each cell of scheduler timeline week should contain correct jQuery dxCellData, groupOrientation = horizontal', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -892,6 +907,8 @@ QUnit.module('TimelineWorkWeek with intervalCount markup', timelineWorkWeekModul
     });
 
     QUnit.test('TimelineWorkWeek view cells have right cellData with view option intervalCount=2', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -992,6 +1009,8 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
     });
 
     QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -1012,6 +1031,8 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
     });
 
     QUnit.test('Cells should have right date', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option({
             currentDate: new Date(2016, 3, 21),
             firstDayOfWeek: 1,
@@ -1052,6 +1073,8 @@ QUnit.module('TimelineMonth with intervalCount', timelineMonthModuleConfig, () =
     });
 
     QUnit.test('TimelineMonth view cells have right cellData with view option intervalCount=2', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -1116,6 +1139,8 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
     });
 
     QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -1142,6 +1167,8 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
     });
 
     QUnit.test('Cells should have right date', function(assert) {
+        this.instance.option('renovateRender', false);
+
         this.instance.option({
             currentDate: new Date(2016, 3, 21),
             firstDayOfWeek: 1,

@@ -5,7 +5,7 @@ import { AllDayPanelTableBody } from '../table_body';
 import { DefaultSizes } from '../../../../const';
 
 describe('AllDayPanelLayout', () => {
-  const viewData = {
+  const viewData: any = {
     groupedData: [{
       allDayPanel: [{
         startDate: new Date(2020, 6, 9),
@@ -20,6 +20,10 @@ describe('AllDayPanelLayout', () => {
       groupIndex: 1,
     }],
     cellCountInGroupRow: 1,
+    leftVirtualCellWidth: 100,
+    rightVirtualCellWidth: 200,
+    leftVirtualCellCount: 34,
+    rightVirtualCellCount: 44,
   };
   const allDayPanelData = viewData.groupedData[0].allDayPanel;
 
@@ -30,9 +34,10 @@ describe('AllDayPanelLayout', () => {
         {...viewModel}
         props={{
           visible: true,
+          viewData,
           ...viewModel.props,
         }}
-      />,
+      /> as any,
     );
 
     it('should spread restAttributes', () => {
@@ -50,8 +55,6 @@ describe('AllDayPanelLayout', () => {
         emptyTableHeight: 123,
         props: {
           dataCellTemplate,
-          leftVirtualCellWidth: 100,
-          rightVirtualCellWidth: 200,
         },
       });
 
@@ -82,6 +85,8 @@ describe('AllDayPanelLayout', () => {
           dataCellTemplate,
           leftVirtualCellWidth: 100,
           rightVirtualCellWidth: 200,
+          leftVirtualCellCount: 34,
+          rightVirtualCellCount: 44,
         });
     });
 
@@ -119,7 +124,7 @@ describe('AllDayPanelLayout', () => {
               groupIndex: 1,
             }],
             cellCountInGroupRow: 1,
-          },
+          } as any,
         });
 
         expect(layout.emptyTableHeight)

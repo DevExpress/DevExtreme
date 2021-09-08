@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'material_blue_light.css!';
 
 import $ from 'jquery';

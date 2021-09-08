@@ -1,44 +1,102 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
+import {
+    SelectionChangedInfo,
+} from './collection/ui.collection_widget.base';
+
 import dxMultiView, {
-    dxMultiViewItem,
-    dxMultiViewOptions
+    Item as dxMultiViewItem,
+    dxMultiViewOptions,
 } from './multi_view';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTabPanel>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTabPanel>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTabPanel>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo;
+
+/** @public */
+export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: DxElement;
+};
+
+/** @public */
+export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: DxElement;
+};
+
+/** @public */
+export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: DxElement;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid
      * @default false
-     * @default true [for](Android|iOS)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(Android|iOS)
      * @public
      */
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTabPanelItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
@@ -47,86 +105,86 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @default "title"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<string | dxTabPanelItem | any>
      * @fires dxTabPanelOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxTabPanelItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleClick?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any) | string;
+    onTitleClick?: ((e: TitleClickEvent) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleHold?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any);
+    onTitleHold?: ((e: TitleHoldEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement }) => any);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollingEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showNavButtons?: boolean;
     /**
      * @docid
-     * @default false [for](non-touch_devices)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(non-touch_devices)
      * @public
      */
     swipeEnabled?: boolean;
@@ -136,57 +194,52 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @inherits dxMultiView
  * @module ui/tab_panel
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
-    constructor(element: Element, options?: dxTabPanelOptions)
-    constructor(element: JQuery, options?: dxTabPanelOptions)
+    constructor(element: UserDefinedElement, options?: dxTabPanelOptions)
 }
 
 /**
- * @docid
- * @inherits dxMultiViewItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTabPanel
+ */
+export type Item = dxTabPanelItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxTabPanelItem extends dxMultiViewItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | Element | JQuery);
+    tabTemplate?: template | (() => string | UserDefinedElement);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabPanel(): JQuery;
-    dxTabPanel(options: "instance"): dxTabPanel;
-    dxTabPanel(options: string): any;
-    dxTabPanel(options: string, ...params: any[]): any;
-    dxTabPanel(options: dxTabPanelOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxTabPanelOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTabPanelOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTabPanelOptions;

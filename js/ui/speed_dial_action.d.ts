@@ -1,34 +1,58 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type ClickEvent = NativeEventInfo<dxSpeedDialAction> & {
+    actionElement?: DxElement;
+};
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
+    actionElement?: DxElement;
+};
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSpeedDialAction>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     index?: number;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     label?: string;
@@ -37,26 +61,26 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @type_function_param1 e:object
      * @type_function_param1_field1 event:event
      * @type_function_param1_field2 component:this
-     * @type_function_param1_field3 element:dxElement
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 actionElement:DxElement
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
+    onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field1 component:dxSpeedDialAction
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 actionElement:DxElement
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: dxElement, model?: any, actionElement?: dxElement }) => any);
+    onContentReady?: ((e: ContentReadyEvent) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
@@ -66,24 +90,18 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @inherits Widget
  * @module ui/speed_dial_action
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxSpeedDialAction extends Widget {
-    constructor(element: Element, options?: dxSpeedDialActionOptions)
-    constructor(element: JQuery, options?: dxSpeedDialActionOptions)
+    constructor(element: UserDefinedElement, options?: dxSpeedDialActionOptions)
 }
 
-declare global {
-interface JQuery {
-    dxSpeedDialAction(): JQuery;
-    dxSpeedDialAction(options: "instance"): dxSpeedDialAction;
-    dxSpeedDialAction(options: string): any;
-    dxSpeedDialAction(options: string, ...params: any[]): any;
-    dxSpeedDialAction(options: dxSpeedDialActionOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSpeedDialActionOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSpeedDialActionOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSpeedDialActionOptions;

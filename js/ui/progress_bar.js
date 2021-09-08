@@ -86,6 +86,10 @@ const ProgressBar = TrackBar.inherit({
         this._toggleStatus(this.option('showStatus'));
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _createCompleteAction: function() {
         this._completeAction = this._createActionByOption('onComplete');
     },

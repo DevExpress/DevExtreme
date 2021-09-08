@@ -2,7 +2,7 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isPlainObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import errorsModule from '../errors';
+import { errors, handleError } from '../errors';
 import ODataStore from './store';
 import RequestDispatcher from './request_dispatcher';
 import { escapeServiceOperationParams, formatFunctionInvocationUrl } from './utils';
@@ -57,7 +57,7 @@ const ODataContext = Class.inherit({
                 d.resolve(r);
             })
             .fail(this._errorHandler)
-            .fail(errorsModule._errorHandler)
+            .fail(handleError)
             .fail(d.reject);
 
         return d.promise();
@@ -66,7 +66,7 @@ const ODataContext = Class.inherit({
     objectLink(entityAlias, key) {
         const store = this[entityAlias];
         if(!store) {
-            throw errorsModule.errors.Error('E4015', entityAlias);
+            throw errors.Error('E4015', entityAlias);
         }
 
         if(!isDefined(key)) {
@@ -75,7 +75,7 @@ const ODataContext = Class.inherit({
 
         return {
             __metadata: {
-                uri: store._byKeyUrl(key, true)
+                uri: store._byKeyUrl(key)
             }
         };
     },

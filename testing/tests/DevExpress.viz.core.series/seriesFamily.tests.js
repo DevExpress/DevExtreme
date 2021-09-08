@@ -745,6 +745,22 @@ QUnit.test('Set five series', function(assert) {
     checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
+QUnit.test('Set five series, not fit in the interval (T969297)', function(assert) {
+    const series = [];
+    for(let i = 0; i < 5; i++) {
+        series.push(createSeries({ points: pointsForStacking.points1() }, undefined, undefined, 4));
+    }
+    const expectedWidth = 1;
+
+    createSeriesFamily('bar', series, { });
+
+    checkSeries(assert, series[0], expectedWidth, -1.11);
+    checkSeries(assert, series[1], expectedWidth, -0.55);
+    checkSeries(assert, series[2], expectedWidth, 0);
+    checkSeries(assert, series[3], expectedWidth, 0.55);
+    checkSeries(assert, series[4], expectedWidth, 1.11);
+});
+
 QUnit.test('Set five series, barGroupWidth is specified', function(assert) {
     const series1 = createSeries({ points: pointsForStacking.points1() });
     const series2 = createSeries({ points: pointsForStacking.points2() });
@@ -844,8 +860,8 @@ QUnit.test('Set two series, barPadding is 1', function(assert) {
 
     createSeriesFamily('bar', series);
 
-    checkSeries(assert, series1, 1, -35.5);
-    checkSeries(assert, series2, 1, 35.5);
+    checkSeries(assert, series1, 1, -35);
+    checkSeries(assert, series2, 1, 35);
 });
 
 QUnit.test('Set three series, all of them in one group', function(assert) {
@@ -878,7 +894,6 @@ QUnit.test('Set three series, all of them in one group', function(assert) {
     checkStackedPoints(assert, mixedPoints2);
     checkStackedPoints(assert, mixedPoints3);
 });
-
 
 QUnit.test('Set three series, two of them in one group, and last in another group', function(assert) {
     const mixedPoints1 = pointsForStacking.mixedPoints1();
@@ -997,6 +1012,39 @@ QUnit.test('Set one series, barGroupPadding more than 1, bars width should be 70
     createSeriesFamily('bar', series, { barGroupPadding: 2 });
 
     checkSeries(assert, series1, 70, 0);
+});
+
+QUnit.test('Set four series, two groups and with barPadding option (T1005617)', function(assert) {
+    const mixedPoints1 = pointsForStacking.mixedPoints1();
+    const mixedPoints2 = pointsForStacking.mixedPoints3();
+    const mixedPoints3 = pointsForStacking.mixedPoints3();
+    const mixedPoints4 = pointsForStacking.mixedPoints3();
+    const series1 = createSeries({
+        points: mixedPoints1,
+        barOverlapGroup: 'first'
+    });
+    const series2 = createSeries({
+        points: mixedPoints2,
+        barOverlapGroup: 'second',
+    });
+    const series3 = createSeries({
+        points: mixedPoints3,
+        barOverlapGroup: 'first',
+        barPadding: 0.7
+    });
+    const series4 = createSeries({
+        points: mixedPoints4,
+        barOverlapGroup: 'second',
+        barPadding: 0.7
+    });
+    const series = [series1, series2, series3, series4];
+
+    createSeriesFamily('bar', series);
+
+    checkSeries(assert, series1, 32, -19.5);
+    checkSeries(assert, series2, 32, 19.5);
+    checkSeries(assert, series3, 11, -19.5);
+    checkSeries(assert, series4, 11, 19.5);
 });
 
 QUnit.test('Set five series, only width is specified, negative value', function(assert) {

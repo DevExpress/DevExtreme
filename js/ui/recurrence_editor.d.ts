@@ -1,13 +1,17 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
+/** @namespace DevExpress.ui */
 export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
     /**
      * @docid
      * @default null
      * @fires dxRecurrenceEditorOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
@@ -18,24 +22,12 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @inherits Editor
  * @module ui/recurrence_editor
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxRecurrenceEditor extends Editor {
-    constructor(element: Element, options?: dxRecurrenceEditorOptions)
-    constructor(element: JQuery, options?: dxRecurrenceEditorOptions)
+    constructor(element: UserDefinedElement, options?: dxRecurrenceEditorOptions)
 }
 
-declare global {
-interface JQuery {
-    dxRecurrenceEditor(): JQuery;
-    dxRecurrenceEditor(options: "instance"): dxRecurrenceEditor;
-    dxRecurrenceEditor(options: string): any;
-    dxRecurrenceEditor(options: string, ...params: any[]): any;
-    dxRecurrenceEditor(options: dxRecurrenceEditorOptions): JQuery;
-}
-}
 export type Options = dxRecurrenceEditorOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = dxRecurrenceEditorOptions;

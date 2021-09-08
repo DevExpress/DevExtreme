@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import Component from '../core/component';
+import { Component } from '../core/component';
 import Action from '../core/action';
 import devices from '../core/devices';
 import config from '../core/config';
@@ -25,10 +25,6 @@ const DEFAULT_BUTTON = {
     text: 'OK',
     onClick: function() { return true; }
 };
-
-/**
- * @name ui.dialog
- */
 
 const DX_DIALOG_CLASSNAME = 'dx-dialog';
 const DX_DIALOG_WRAPPER_CLASSNAME = `${DX_DIALOG_CLASSNAME}-wrapper`;
@@ -173,13 +169,13 @@ export const custom = function(options) {
         boundaryOffset: { h: 10, v: 0 }
     }, options.popupOptions));
 
-    popupInstance._wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
+    popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 
     if(options.position) {
         popupInstance.option('position', options.position);
     }
 
-    popupInstance._wrapper()
+    popupInstance.$wrapper()
         .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
     function show() {

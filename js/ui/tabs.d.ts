@@ -1,66 +1,106 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
+
+import Store from '../data/abstract_store';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTabs>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTabs>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTabs>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid
+     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<string | dxTabsItem | any>
      * @fires dxTabsOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxTabsItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(desktop)
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollingEnabled?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<string | number | any>;
@@ -68,15 +108,13 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      * @docid
      * @type Enums.NavSelectionMode
      * @default 'single'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectionMode?: 'multiple' | 'single';
     /**
      * @docid
      * @default true
-     * @default false [for](mobile_devices)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(mobile_devices)
      * @public
      */
     showNavButtons?: boolean;
@@ -86,44 +124,41 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
  * @inherits CollectionWidget
  * @module ui/tabs
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTabs extends CollectionWidget {
-    constructor(element: Element, options?: dxTabsOptions)
-    constructor(element: JQuery, options?: dxTabsOptions)
+    constructor(element: UserDefinedElement, options?: dxTabsOptions)
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTabs
+ */
+export type Item = dxTabsItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxTabsItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabs(): JQuery;
-    dxTabs(options: "instance"): dxTabs;
-    dxTabs(options: string): any;
-    dxTabs(options: string, ...params: any[]): any;
-    dxTabs(options: dxTabsOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxTabsOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTabsOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTabsOptions;

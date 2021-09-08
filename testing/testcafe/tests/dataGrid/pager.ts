@@ -1,7 +1,7 @@
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
-import { createScreenshotsComparer, compareScreenshot } from '../../helpers/screenshort-comparer';
+import { createScreenshotsComparer, compareScreenshot } from '../../helpers/screenshot-comparer';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 
@@ -31,7 +31,7 @@ test('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
   await t
-    .resizeWindow(650, 600)
+    .resizeWindow(750, 600)
     .expect(pager.getPageSize(0).selected)
     .ok('page size 5 selected')
     .expect(pager.getNavPage('6').selected)
@@ -90,7 +90,7 @@ test('Resize', async (t) => {
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .resizeWindow(650, 600)
+    .resizeWindow(700, 600)
     .expect(await takeScreenshot('pager-resize-large.png', pagerElement))
     .ok()
     .resizeWindow(600, 600)
@@ -102,8 +102,32 @@ test('Resize', async (t) => {
     .resizeWindow(600, 600)
     .expect(await takeScreenshot('pager-resize-large-noinfo-enlarge.png', pagerElement))
     .ok()
-    .resizeWindow(650, 600)
+    .resizeWindow(700, 600)
     .expect(await takeScreenshot('pager-resize-large-enlarge.png', pagerElement))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+});
+test('Resize without navigation buttons', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.option('pager.showNavigationButtons', false);
+  const pagerElement = dataGrid.getPager().element;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .resizeWindow(700, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large.png', pagerElement))
+    .ok()
+    .resizeWindow(540, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo.png', pagerElement))
+    .ok()
+    .resizeWindow(350, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-small.png', pagerElement))
+    .ok()
+    .resizeWindow(540, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo-enlarge.png', pagerElement))
+    .ok()
+    .resizeWindow(700, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large-enlarge.png', pagerElement))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

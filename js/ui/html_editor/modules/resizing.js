@@ -7,6 +7,7 @@ import devices from '../../../core/devices';
 import Resizable from '../../resizable';
 import { getBoundingRect } from '../../../core/utils/position';
 import Quill from 'devextreme-quill';
+import BaseModule from './base';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
@@ -18,12 +19,13 @@ const MOUSEDOWN_EVENT = addNamespace('mousedown', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
-export default class ResizingModule {
+export default class ResizingModule extends BaseModule {
     constructor(quill, options) {
-        this.quill = quill;
-        this.editorInstance = options.editorInstance;
+        super(quill, options);
         this.allowedTargets = options.allowedTargets || ['image'];
         this.enabled = !!options.enabled;
+        this._hideFrameWithContext = this.hideFrame.bind(this);
+        this._framePositionChangedHandler = this._prepareFramePositionChangedHandler();
 
         if(this.enabled) {
             this._attachEvents();
@@ -33,11 +35,15 @@ export default class ResizingModule {
 
     _attachEvents() {
         eventsEngine.on(this.quill.root, addNamespace(ClickEvent, MODULE_NAMESPACE), this._clickHandler.bind(this));
-        eventsEngine.on(this.quill.root, SCROLL_EVENT, this._scrollHandler.bind(this));
+        eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
+        this.editorInstance.on('focusOut', this._hideFrameWithContext);
+        this.quill.on('text-change', this._framePositionChangedHandler);
     }
 
     _detachEvents() {
         eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
+        this.editorInstance.off('focusOut', this._hideFrameWithContext);
+        this.quill.off('text-change', this._framePositionChangedHandler);
     }
 
     _clickHandler(e) {
@@ -50,14 +56,23 @@ export default class ResizingModule {
 
             this.updateFramePosition();
             this.showFrame();
+            this._adjustSelection();
         } else if(this._$target) {
             this.hideFrame();
         }
     }
 
-    _scrollHandler(e) {
-        if(this._$target) {
-            this.updateFramePosition();
+    _prepareFramePositionChangedHandler(e) {
+        return () => {
+            if(this._$target) {
+                this.updateFramePosition();
+            }
+        };
+    }
+
+    _adjustSelection() {
+        if(!this.quill.getSelection()) {
+            this.quill.setSelection(0, 0);
         }
     }
 

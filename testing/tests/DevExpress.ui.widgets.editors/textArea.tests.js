@@ -4,7 +4,6 @@ import nativePointerMock from '../../helpers/nativePointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/text_area';
 import 'ui/scroll_view/ui.scrollable';
@@ -32,7 +31,7 @@ const TEXTAREA_CLASS = 'dx-textarea';
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const AUTO_RESIZE_CLASS = 'dx-texteditor-input-auto-resize';
-
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 
 QUnit.module('rendering', () => {
@@ -239,7 +238,7 @@ QUnit.module('widget sizing render', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const inputHeight = $input.outerHeight();
         const borderHeight = parseInt($element.css('borderTopWidth'));
 
@@ -253,7 +252,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const inputHeight = $input.outerHeight();
         $input.height(0);
@@ -266,7 +265,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger('focus');
         keyboardMock($input).type('\n\n');
@@ -284,7 +283,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         });
 
         const instance = $element.dxTextArea('instance');
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         instance.option('value', '\n\n');
 
@@ -299,7 +298,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input
             .val('\n\n')
@@ -333,7 +332,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             maxHeight: boundaryHeight
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const elementHeight = $element.outerHeight();
         const inputHeight = $input.outerHeight();
 
@@ -387,7 +386,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             minHeight: boundaryHeight
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const elementHeight = $element.outerHeight();
         const inputHeight = $input.outerHeight();
 
@@ -468,7 +467,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             valueChangeEvent: 'keyup'
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger('focus');
         keyboardMock($input).type('\n\n');
@@ -551,10 +550,10 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 80);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 80);
             });
 
@@ -567,10 +566,10 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 70);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 70);
             });
 
@@ -583,14 +582,13 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 100);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 100);
             });
 
         });
     }
 });
-

@@ -22,7 +22,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -88,7 +87,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         }
     };
 
-    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'], {
+    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'], {
         initViews: true,
         controllers: {
             columns: columnsController,
@@ -243,8 +242,6 @@ QUnit.module('Rows view', {
         assert.strictEqual(scrollable.option('test'), 'test', 'scrollable test');
         // T654402
         assert.strictEqual(scrollable.option('updateManually'), false, 'scrollable updateManually');
-        // T698156
-        assert.strictEqual(scrollable.option('pushBackValue'), 0, 'scrollable pushBackValue');
     });
 
     QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {
@@ -1873,11 +1870,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let rowClickArgs;
 
-        this.options.onRowClick = function(data) {
+        rowsView.option('onRowClick', function(data) {
             rowClickArgs = data;
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
         rowsView.render(testElement);
         const rows = testElement.find('tbody > tr');
 
@@ -1902,11 +1897,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let cellClickArgs;
 
-        this.options.onCellClick = function(options) {
+        rowsView.option('onCellClick', function(options) {
             cellClickArgs = options;
-        };
-
-        rowsView.optionChanged({ name: 'onCellClick' });
+        });
         rowsView.render(testElement);
         const cells = testElement.find('td');
 
@@ -1931,11 +1924,9 @@ QUnit.module('Rows view', {
         const $testElement = $('#container');
         let rowDoubleClickArgs;
 
-        this.options.onRowDblClick = function(data) {
+        rowsView.option('onRowDblClick', function(data) {
             rowDoubleClickArgs = data;
-        };
-
-        rowsView.optionChanged({ name: 'onRowDblClick' });
+        });
         rowsView.render($testElement);
         const $rowElement = $(rowsView.getRowElement(1));
 
@@ -1960,11 +1951,9 @@ QUnit.module('Rows view', {
         const $testElement = $('#container');
         let cellDoubleClickArgs;
 
-        this.options.onCellDblClick = function(options) {
+        rowsView.option('onCellDblClick', function(options) {
             cellDoubleClickArgs = options;
-        };
-
-        rowsView.optionChanged({ name: 'onCellDblClick' });
+        });
         rowsView.render($testElement);
         const $cellElement = $(rowsView.getCellElement(0, 0));
 
@@ -2016,7 +2005,7 @@ QUnit.module('Rows view', {
         $testElement.height(300);
         const oldFunc = rowsView._renderScrollable;
         rowsView._renderScrollable = function() {
-            oldTableHeight = this._getTableElement().height();
+            oldTableHeight = this.getTableElement().height();
             oldFunc.call(rowsView);
         };
 
@@ -2898,11 +2887,9 @@ QUnit.module('Rows view', {
         this.options.masterDetail = {
             enabled: true
         };
-        this.options.onRowClick = function(options) {
+        rowsView.option('onRowClick', function(options) {
             rowClickIndexes.push(options.rowIndex);
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
 
         rowsView.render(testElement);
 
@@ -2958,11 +2945,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let rowClickArgs;
 
-        this.options.onRowClick = function(e) {
+        rowsView.option('onRowClick', function(e) {
             rowClickArgs = e;
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
 
         this.options.masterDetail = {
             enabled: true,
@@ -3925,9 +3910,14 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render($testElement);
+        const columnWidths = rowsView.getColumnWidths();
+        const values = [30, 100, 100];
 
         // assert
-        assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], 'calculate widths');
+        assert.strictEqual(columnWidths.length, values.length, 'number of widths');
+        columnWidths.forEach((width, index) => {
+            assert.roughEqual(width, values[index], 0.02, `calculate width of the ${index} column`);
+        });
     });
 
     QUnit.test('GetRowsElements method is called once when opacity is applied to rows', function(assert) {
@@ -3988,8 +3978,8 @@ QUnit.module('Rows view with real dataController and columnController', {
             scrolling: {}
         };
 
-        this.setupDataGridModules = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'grouping', 'virtualScrolling', 'pager', 'summary', 'masterDetail'], {
+        this.setupDataGridModules = function(modules) {
+            setupDataGridModules(this, modules || ['data', 'columns', 'rows', 'grouping', 'virtualScrolling', 'pager', 'summary', 'masterDetail'], {
                 initViews: true
             });
         };
@@ -5419,7 +5409,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
             const scrollable = this.rowsView._scrollable;
             scrollable.scrollTo({ y: 2500 });
-            $(scrollable._container()).trigger('scroll');
+            $(scrollable.container()).trigger('scroll');
             clock.tick(500);
 
             // assert
@@ -5495,6 +5485,46 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         clock.restore();
     });
+
+    // T969363
+    ['form', 'popup'].forEach(editMode => {
+        QUnit.test(`Column name should not be highlighted in form (${editMode} edit mode)`, function(assert) {
+            const clock = sinon.useFakeTimers();
+            const $testElement = $('#container');
+
+            // arrange
+            this.options = {
+                dataSource: [{ test: 'test' }],
+                searchPanel: {
+                    highlightSearchText: true,
+                    text: 'test'
+                },
+                editing: {
+                    mode: editMode,
+                    allowUpdating: true
+                }
+            };
+
+            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
+            this.rowsView.render($testElement);
+            clock.tick();
+
+            this.$element = () => {
+                return $testElement;
+            };
+
+            // act
+            this.editRow(0);
+            clock.tick();
+
+            // assert
+            const $form = $('.dx-form');
+            assert.ok($form.length, 'form was rendered');
+            assert.notOk($form.find('.dx-datagrid-search-text').length, 'no search text');
+
+            clock.restore();
+        });
+    });
 });
 
 QUnit.module('Virtual scrolling', {
@@ -5509,13 +5539,13 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController.getItemSize = x.getItemSize;
             rowsView._dataController.getItemSizes = x.getItemSizes;
             rowsView._dataController.viewportItemSize = x.viewportItemSize;
-            rowsView._dataController.setContentSize = x.setContentSize;
+            rowsView._dataController.setContentItemSizes = x.setContentItemSizes;
             rowsView._dataController.setViewportPosition = x.setViewportPosition;
             rowsView._dataController.getItemIndexByPosition = x.getItemIndexByPosition;
             rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
             rowsView._dataController.option = rowsView.option.bind(rowsView);
             rowsView._dataController.positionChanged = $.Callbacks();
-            rowsView._dataController._dataSource = {
+            rowsView._dataController._dataOptions = {
                 changingDuration: function() { return 50; },
                 totalItemsCount: function() {
                     const virtualItemsCount = dataController.virtualItemsCount();
@@ -5544,6 +5574,7 @@ QUnit.module('Virtual scrolling', {
                 end: 7
             }
         };
+
         const dataController = new MockDataController(options);
         const rowsView = this.createRowsView(options.items, dataController);
         const testElement = $('#container');
@@ -6842,7 +6873,7 @@ QUnit.module('Scrollbar', {
         rowsView.render($('#container').css({ width: 100, height: 100 }));
 
         // arrange
-        if(devices.real().deviceType === 'desktop') {
+        if(devices.real().deviceType === 'desktop' && !devices.real().mac) {
             assert.ok(rowsView.getScrollbarWidth() > 0, 'scrollbar width more 0 for desktop');
         } else {
             assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');
@@ -6915,7 +6946,11 @@ QUnit.module('Scrollbar', {
 
     // T697699
     QUnit.test('The vertical scrollbar should not be shown if showScrollbar is always', function(assert) {
-    // arrange
+        if(devices.real().android) {
+            assert.ok(true, 'It\'s a bug under Android only');
+            return;
+        }
+        // arrange
         const rows = [{ values: ['test1'], rowType: 'data' }];
         const columns = ['field1'];
         const rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: false, showScrollbar: 'always' } });
@@ -6927,7 +6962,7 @@ QUnit.module('Scrollbar', {
         rowsView.resize();
 
         // assert
-        assert.strictEqual(rowsView.getScrollable().$content().outerHeight(), rowsView.getScrollable()._container().outerHeight(), 'No vertical scroll');
+        assert.strictEqual(rowsView.getScrollable().$content().outerHeight(), $(rowsView.getScrollable().container()).outerHeight(), 'No vertical scroll');
     });
 });
 

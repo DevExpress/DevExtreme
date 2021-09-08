@@ -1,6 +1,5 @@
 const $ = require('jquery');
 
-require('common.css!');
 require('ui/scroll_view');
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
@@ -22,7 +21,7 @@ QUnit.module('ScrollView server markup');
 
 QUnit.test('pockets should not be rendered in scrollView on server', function(assert) {
     const $scrollView = $('#scrollView').dxScrollView();
-    const $scrollableContent = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $scrollableContent = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $topPocket = $scrollableContent.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
     const $bottomPocket = $scrollableContent.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 

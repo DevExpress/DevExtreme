@@ -10,9 +10,8 @@
  * @namespace DevExpress.data
  * @module data/apply_changes
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
-declare function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>, immutable?: boolean }): Array<any>;
+declare function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>; immutable?: boolean }): Array<any>;
 
 export default applyChanges;

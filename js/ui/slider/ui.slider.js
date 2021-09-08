@@ -366,7 +366,7 @@ const Slider = TrackBar.inherit({
                     .appendTo(this._$wrapper);
             }
 
-            this._$minLabel.html(numberLocalization.format(min, labelFormat));
+            this._$minLabel.text(numberLocalization.format(min, labelFormat));
 
             if(!this._$maxLabel) {
                 this._$maxLabel = $('<div>')
@@ -374,7 +374,7 @@ const Slider = TrackBar.inherit({
                     .appendTo(this._$wrapper);
             }
 
-            this._$maxLabel.html(numberLocalization.format(max, labelFormat));
+            this._$maxLabel.text(numberLocalization.format(max, labelFormat));
 
             this.$element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
 
@@ -447,7 +447,7 @@ const Slider = TrackBar.inherit({
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         delete this._needPreventAnimation;
-        this._saveValueChangeEvent(e);
+        this._saveValueChangeEvent(e.event);
         this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
         delete this._startOffset;
         this._renderValue();
@@ -458,7 +458,7 @@ const Slider = TrackBar.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._saveValueChangeEvent(e);
+        this._saveValueChangeEvent(e.event);
         this._updateHandlePosition(e);
     },
 

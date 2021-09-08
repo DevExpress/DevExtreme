@@ -271,9 +271,10 @@ testComponentDefaults(DropDownButton, {}, {
     deferRendering: true,
     text: '',
     keyExpr: 'this',
-    displayExpr: 'this',
+    displayExpr: undefined,
     useSelectMode: false,
     wrapItemText: false,
+    useItemTextAsTitle: true,
     opened: false,
     splitButton: false,
     showArrowIcon: true,
@@ -294,11 +295,24 @@ testComponentDefaults(DropDownList,
     {
         groupTemplate: 'group',
         wrapItemText: false,
+        useItemTextAsTitle: false,
         grouped: false
     }
 );
 
 testComponentDefaults(List,
+    {},
+    { useNativeScrolling: false },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(TreeView,
     {},
     { useNativeScrolling: false },
     function() {
@@ -531,6 +545,7 @@ testComponentDefaults(Popover,
     {},
     {
         position: 'bottom',
+        target: window,
         animation: {
             show: {
                 type: 'fade',

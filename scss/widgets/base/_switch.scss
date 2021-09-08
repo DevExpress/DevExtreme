@@ -9,21 +9,22 @@
   @include user-select(none);
 
   -webkit-user-drag: none;
-}
 
-.dx-switch-wrapper {
-  display: inline-block;
-  text-align: left;
-  height: 100%;
-  width: 100%;
-
-  &::before {
+  .dx-switch-wrapper {
     display: inline-block;
+    text-align: left;
     height: 100%;
-    content: '';
-    vertical-align: middle;
+    width: 100%;
+
+    &::before {
+      display: inline-block;
+      height: 100%;
+      content: '';
+      vertical-align: middle;
+    }
   }
 }
+
 
 .dx-switch-inner {
   display: flex;

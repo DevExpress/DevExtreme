@@ -14,7 +14,7 @@ import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import messageLocalization from '../localization/message';
-import { addNamespace, normalizeKeyName } from '../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
@@ -23,6 +23,7 @@ import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { allowScroll } from './text_box/utils.scroll';
+import errors from './widget/ui.errors';
 
 // STYLE tagBox
 
@@ -285,7 +286,7 @@ const TagBox = SelectBox.inherit({
 
             showDropDownButton: false,
 
-            maxFilterLength: 1500,
+            maxFilterQueryLength: 1500,
 
             tagTemplate: 'tag',
 
@@ -522,8 +523,6 @@ const TagBox = SelectBox.inherit({
         eventsEngine.on(this._$tagsContainer, eventName, `.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`, (event) => {
             tagRemoveAction({ event });
         });
-
-        this._renderTypingEvent();
     },
 
     _renderSingleLineScroll: function() {
@@ -549,14 +548,18 @@ const TagBox = SelectBox.inherit({
         const scrollLeft = this._$tagsContainer.scrollLeft();
         const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
-        if(allowScroll(this._$tagsContainer, delta, true)) {
+        if(!isCommandKeyPressed(e) && allowScroll(this._$tagsContainer, delta, true)) {
             this._$tagsContainer.scrollLeft(scrollLeft + delta);
             return false;
         }
     },
 
-    _renderTypingEvent: function() {
-        eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), (e) => {
+    _renderEvents: function() {
+        this.callBase();
+
+        const input = this._input();
+        const namespace = addNamespace('keydown', this.NAME);
+        eventsEngine.on(input, namespace, (e) => {
             const keyName = normalizeKeyName(e);
             if(!this._isControlKey(keyName) && this._isEditable()) {
                 this._clearTagFocus();
@@ -713,7 +716,7 @@ const TagBox = SelectBox.inherit({
 
     _renderInputSubstitution: function() {
         this.callBase();
-        this._renderInputSize();
+        this._updateWidgetHeight();
     },
 
     _getValue: function() {
@@ -754,28 +757,41 @@ const TagBox = SelectBox.inherit({
         return $tag;
     },
 
+    _getFilter: function(creator) {
+        const dataSourceFilter = this._dataSource.filter();
+        const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
+        const filterQueryLength = encodeURI(JSON.stringify(filterExpr)).length;
+        const maxFilterQueryLength = this.option('maxFilterQueryLength');
+
+        if(filterQueryLength <= maxFilterQueryLength) {
+            return filterExpr;
+        }
+
+        errors.log('W1019', maxFilterQueryLength);
+    },
+
     _getFilteredItems: function(values) {
+        this._loadFilteredItemsPromise?.reject();
         const creator = new FilterCreator(values);
 
-        const selectedItems = (this._list && this._list.option('selectedItems')) || this.option('selectedItems');
+        const listSelectedItems = this._list?.option('selectedItems');
+        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource()?.isLoaded();
+        const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
 
-        if(!this._isDataSourceChanged && selectedItemsAlreadyLoaded) {
+        if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
-            const dataSourceFilter = dataSource.filter();
-            const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
-            const filterLength = encodeURI(JSON.stringify(filterExpr)).length;
-            const filter = filterLength > this.option('maxFilterLength') ? undefined : filterExpr;
-            const { customQueryParams, expand } = dataSource.loadOptions();
+            const { customQueryParams, expand, select } = dataSource.loadOptions();
+            const filter = this._getFilter(creator);
 
             dataSource
                 .store()
-                .load({ filter, customQueryParams, expand })
+                .load({ filter, customQueryParams, expand, select })
                 .done((data, extra) => {
                     this._isDataSourceChanged = false;
                     if(this._disposed) {
@@ -789,6 +805,7 @@ const TagBox = SelectBox.inherit({
                 })
                 .fail(d.reject);
 
+            this._loadFilteredItemsPromise = d;
             return d.promise();
         }
     },
@@ -858,10 +875,20 @@ const TagBox = SelectBox.inherit({
 
     _getFilteredGroupedItems: function(values) {
         const selectedItems = new Deferred();
+        if(this._filteredGroupedItemsLoadPromise) {
+            this._dataSource.cancel(this._filteredGroupedItemsLoadPromise.operationId);
+        }
         if(!this._dataSource.items().length) {
-            this._dataSource.load().done(function() {
-                selectedItems.resolve(this._getItemsByValues(values));
-            }.bind(this)).fail(selectedItems.resolve([]));
+            this._filteredGroupedItemsLoadPromise = this._dataSource.load()
+                .done(() => {
+                    selectedItems.resolve(this._getItemsByValues(values));
+                })
+                .fail(() => {
+                    selectedItems.resolve([]);
+                })
+                .always(() => {
+                    this._filteredGroupedItemsLoadPromise = undefined;
+                });
         } else {
             selectedItems.resolve(this._getItemsByValues(values));
         }
@@ -934,7 +961,28 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsFromPlain: function(values) {
-        const plainItems = this._getPlainItems();
+        let selectedItems = this._getSelectedItemsFromList(values);
+        const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length);
+
+        if(needFilterPlainItems) {
+            const plainItems = this._getPlainItems();
+            selectedItems = this._filterSelectedItems(plainItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _getSelectedItemsFromList: function(values) {
+        const listSelectedItems = this._list?.option('selectedItems');
+        let selectedItems = [];
+        if(values.length === listSelectedItems?.length) {
+            selectedItems = this._filterSelectedItems(listSelectedItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _filterSelectedItems: function(plainItems, values) {
         const selectedItems = plainItems.filter((dataItem) => {
             let currentValue;
             for(let i = 0; i < values.length; i++) {
@@ -1058,7 +1106,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemModel: function(item, displayValue) {
-        if(isObject(item) && displayValue) {
+        if(isObject(item) && isDefined(displayValue)) {
             return item;
         } else {
             return ensureDefined(displayValue, '');
@@ -1260,7 +1308,7 @@ const TagBox = SelectBox.inherit({
 
     _searchHandler: function(e) {
         if(this.option('searchEnabled') && !!e && !this._isTagRemoved) {
-            this.callBase(e);
+            this.callBase(arguments);
             this._setListDataSourceFilter();
         }
 
@@ -1355,13 +1403,12 @@ const TagBox = SelectBox.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        if(this._list) {
-            this._isDataSourceChanged = true;
-        }
+        this._isDataSourceChanged = true;
         this.callBase.apply(this, arguments);
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(args) {
+        this._saveValueChangeEvent(args.event);
         this.option('value', this._getSortedListValues());
         this._clearTextValue();
         this.callBase();
@@ -1473,6 +1520,11 @@ const TagBox = SelectBox.inherit({
             case 'selectAllText':
                 this._setListOption('selectAllText', this.option('selectAllText'));
                 break;
+            case 'readOnly':
+            case 'disabled':
+                this.callBase(args);
+                !args.value && this._refreshEvents();
+                break;
             case 'value':
                 this._valuesToUpdate = args?.value;
                 this.callBase(args);
@@ -1498,7 +1550,7 @@ const TagBox = SelectBox.inherit({
                 this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
                 this._renderSingleLineScroll();
                 break;
-            case 'maxFilterLength':
+            case 'maxFilterQueryLength':
                 break;
             default:
                 this.callBase(args);

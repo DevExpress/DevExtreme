@@ -1,8 +1,12 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { FileManagerProgressPanelWrapper } from '../../../helpers/fileManagerHelpers.js';
+import renderer from 'core/renderer';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { Consts, createTestFileSystem, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
+import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
+import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 
 const { test } = QUnit;
 
@@ -22,6 +26,46 @@ const moduleConfig = {
         fx.off = false;
     }
 
+};
+
+const integrationModuleConfig = {
+    beforeEach: function() {
+        const fileSystem = createTestFileSystem();
+
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+
+        this.$element = $('#fileManager').dxFileManager({
+            fileSystemProvider: fileSystem,
+            selectionMode: 'single',
+            itemView: {
+                showFolders: true,
+                showParentFolder: true
+            },
+            permissions: {
+                create: true,
+                copy: true,
+                move: true,
+                delete: true,
+                rename: true,
+                upload: true,
+                download: true
+            }
+        });
+
+        this.fileManager = this.$element.dxFileManager('instance');
+        this.wrapper = new FileManagerWrapper(this.$element);
+        this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
+
+        this.clock.tick(400);
+    },
+
+    afterEach: function() {
+        this.clock.tick(5000);
+
+        this.clock.restore();
+        fx.off = false;
+    }
 };
 
 const createProgressPanel = context => {
@@ -189,30 +233,11 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
         createProgressPanel(this);
 
         const $container = $('<div>').appendTo(this.$element);
-        this.progressPanel.renderError($container, null, 'Some error occurred');
+        this.progressPanel._renderError($container, null, 'Some error occurred');
 
         const $error = this.progressPanelWrapper.findError($container);
         assert.equal($error.length, 1, 'error rendered');
         assert.equal($error.text(), 'Some error occurred', 'error text rendered');
-    });
-
-    test('create error details progress box', function(assert) {
-        createProgressPanel(this);
-
-        const $container = $('<div>').appendTo(this.$element);
-        const itemInfo = { commonText: 'File 1.txt', imageUrl: 'doc' };
-        this.progressPanel.createErrorDetailsProgressBox($container, itemInfo, 'Some error occurred');
-
-        const boxes = this.progressPanelWrapper.findProgressBoxes($container);
-        assert.equal(boxes.length, 1, 'progress box rendered');
-
-        const box = boxes[0];
-        assert.ok(box.hasError, 'error rendered');
-        assert.equal(box.errorText, 'Some error occurred', 'error text rendered');
-        assert.equal(box.commonText, 'File 1.txt', 'common text rendered');
-        assert.notOk(box.$progressBar.length, 'progress bar not rendered');
-        assert.notOk(box.$closeButton.length, 'close button not rendered');
-        assert.ok(box.$image.hasClass('dx-icon-doc'), 'correct icon rendered');
     });
 
     test('complete single operation with error', function(assert) {
@@ -444,6 +469,209 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
         assert.notOk(detail.$progressBar.length, 'progress bar not rendered');
         assert.notOk(detail.closeButton, 'detail item has no close button');
         assert.ok(detail.$image.hasClass('dx-icon-doc'), 'detail item has correct icon');
+    });
+
+});
+
+QUnit.module('Progress panel integration tests', integrationModuleConfig, () => {
+
+    test('the progress panel cannot be shown if showPanel option is false', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+        resizeCallbacks.fire();
+        this.fileManager.option({
+            notifications: {
+                showPanel: false
+            },
+            width: '1200px'
+        });
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is hidden');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '0px', 'progress panel is hidden');
+        renderer.fn.width = originalFunc;
+    });
+
+    test('the progress panel hides if to set showPanel option false when pane is shown', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+        resizeCallbacks.fire();
+        this.fileManager.option({
+            notifications: {
+                showPanel: true
+            },
+            width: '1200px'
+        });
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is shown');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '340px', 'progress panel is shown');
+
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is hidden');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '0px', 'progress panel is hidden');
+        renderer.fn.width = originalFunc;
+    });
+
+    test('it\'s impossible to add operations to the progress panel if showPanel option is false', function(assert) {
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is still no operations');
+    });
+
+    test('already added operations removes from the progress panel after set showPanel option to false', function(assert) {
+        this.fileManager.option('notifications.showPanel', true);
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'there is one operation');
+        assert.equal(infos[0].common.commonText, 'Deleted an item from Files', 'common text is correct');
+
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations again');
+    });
+
+    test('refresh buttons status icon is default if showPanel option is false', function(assert) {
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        const $refresh = this.wrapper.getToolbarButton('Refresh');
+        assert.strictEqual($refresh.length, 2, 'refresh buttons exists');
+        const refreshIcon0 = $refresh.eq(0).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
+        const refreshIcon1 = $refresh.eq(1).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
+        assert.ok(refreshIcon0.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
+        assert.ok(refreshIcon1.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
+    });
+
+    test('long-running operation cannot be shown in case of showPanel is dynamically set to true-false-true', function(assert) {
+        const operationDelay = 1500;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'd'
+            }),
+            notifications: {
+                showPanel: true
+            }
+        });
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
+
+        const initialCount = this.wrapper.getRowsInDetailsView().length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick((operationDelay - 300) / 3);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount, 'files count is the same yet');
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
+
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick((operationDelay - 300) / 3);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount, 'files count is the same yet');
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
+
+        this.fileManager.option('notifications.showPanel', true);
+        this.clock.tick((operationDelay - 300) / 3);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount, 'files count is the same yet');
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
+
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount - 1, 'files count decreased');
+        assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is still no operations');
     });
 
 });

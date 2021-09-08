@@ -4,14 +4,12 @@ import {
   JSXComponent,
   JSXTemplate,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { ContentTemplateProps, DateTimeCellTemplateProps } from '../../types.d';
 
 export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
   <Cell
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
     isFirstGroupCell={viewModel.props.isFirstGroupCell}
     isLastGroupCell={viewModel.props.isLastGroupCell}
     contentTemplate={viewModel.props.timeCellTemplate}

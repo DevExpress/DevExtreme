@@ -1,7 +1,7 @@
 import gridCore from './ui.data_grid.core';
 import errors from '../widget/ui.errors';
 import dataSourceAdapterProvider from './ui.data_grid.data_source_adapter';
-import dataControllerModule from '../grid_core/ui.grid_core.data_controller';
+import { dataControllerModule } from '../grid_core/ui.grid_core.data_controller';
 
 export const DataController = dataControllerModule.controllers.data.inherit((function() {
     return {

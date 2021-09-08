@@ -15,7 +15,8 @@
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -ms-scroll-snap-type: proximity; // stylelint-disable-line property-no-vendor-prefix
 
-  .dx-scrollable-scrollbar {
+  &.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-scrollbar,
+  > div > .dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-scrollbar {
     display: none;
   }
 
@@ -23,7 +24,8 @@
     display: block;
   }
 
-  .dx-scrollable-container {
+  &.dx-scrollable-wrapper > .dx-scrollable-container,
+  > div.dx-scrollable-wrapper > .dx-scrollable-container {
     -webkit-overflow-scrolling: touch;
     position: relative;
     height: 100%;
@@ -101,6 +103,9 @@
     ::-webkit-scrollbar {
       display: none;
     }
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 
@@ -184,9 +189,14 @@
   .dx-scrollable-container {
     direction: ltr;
 
-    @at-root #{selector-append(".dx-scrollable-renovated", &)} {
+    @at-root #{selector-append(".dx-scrollable-native", &)} {
       direction: rtl;
-      float: none;
+    }
+  }
+
+  .dx-scrollable-content {
+    @at-root #{selector-append(".dx-scrollable-native", &)} {
+      float: right;
     }
   }
 

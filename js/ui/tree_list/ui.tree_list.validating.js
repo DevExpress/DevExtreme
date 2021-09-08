@@ -1,6 +1,6 @@
 import { extend } from '../../core/utils/extend';
 import treeListCore from './ui.tree_list.core';
-import validatingModule from '../grid_core/ui.grid_core.validating';
+import { validatingModule } from '../grid_core/ui.grid_core.validating';
 
 const EditingControllerExtender = extend({}, validatingModule.extenders.controllers.editing);
 delete EditingControllerExtender.processItems;

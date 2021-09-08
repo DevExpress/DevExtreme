@@ -1,35 +1,39 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    format
+    format,
 } from '../ui/widget/ui.widget';
 
 import {
     BaseLegend,
     BaseLegendItem,
     DashStyleType,
-    HatchingDirectionType
+    HatchingDirectionType,
 } from './common';
 
 import BaseWidget, {
@@ -37,462 +41,463 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font,
     WordWrapType,
-    VizTextOverflowType
+    VizTextOverflowType,
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
 } from './core/base_widget';
 
 /**
-* @docid
-* @inherits BaseLegendItem
-* @type object
-*/
+ * @public
+ * @namespace DevExpress.viz.dxFunnel
+ */
+export type LegendItem = FunnelLegendItem;
+
+/**
+ * @deprecated Use LegendItem instead
+ * @namespace DevExpress.viz
+ */
 export interface FunnelLegendItem extends BaseLegendItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
+     * @type dxFunnelItem
      * @public
      */
-    item?: dxFunnelItem;
+    item?: Item;
 }
 
+interface FunnelItemInfo {
+  readonly item: Item;
+}
+
+/** @public */
+export type DisposingEvent = EventInfo<dxFunnel>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxFunnel>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxFunnel>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxFunnel> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxFunnel>;
+
+/** @public */
+export type HoverChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxFunnel>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type LegendClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     adaptiveLayout?: {
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 80
-      */
-      height?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      keepLabels?: boolean,
+       * @docid
+       * @default 80
+       */
+      height?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 80
-      */
-      width?: number
+       * @docid
+       * @default true
+       */
+      keepLabels?: boolean;
+      /**
+       * @docid
+       * @default 80
+       */
+      width?: number;
     };
     /**
      * @docid
      * @type Enums.FunnelAlgorithm
      * @default 'dynamicSlope'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     algorithm?: 'dynamicHeight' | 'dynamicSlope';
     /**
      * @docid
      * @default 'arg'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     argumentField?: string;
     /**
      * @docid
      * @default 'color'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     colorField?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
-     * @prevFileNamespace DevExpress.viz
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hoverEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     inverted?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     item?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default #ffffff
-        */
-        color?: string,
+         * @docid
+         * @default #ffffff
+         */
+        color?: string;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
-        visible?: boolean,
+         * @docid
+         * @default false
+         */
+        visible?: boolean;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 2
-        */
-        width?: number
-      },
+         * @docid
+         * @default 2
+         */
+        width?: number;
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       hoverStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
-          color?: string,
+           * @docid
+           * @default undefined
+           */
+          color?: string;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
-          visible?: boolean,
+           * @docid
+           * @default undefined
+           */
+          visible?: boolean;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
-          width?: number
-        },
+           * @docid
+           * @default undefined
+           */
+          width?: number;
+        };
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         */
         hatching?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type Enums.HatchingDirection
-          * @default 'right'
-          */
-          direction?: HatchingDirectionType,
+           * @docid
+           * @type Enums.HatchingDirection
+           * @default 'right'
+           */
+          direction?: HatchingDirectionType;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 0.75
-          */
-          opacity?: number,
+           * @docid
+           * @default 0.75
+           */
+          opacity?: number;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 6
-          */
-          step?: number,
+           * @docid
+           * @default 6
+           */
+          step?: number;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 2
-          */
-          width?: number
-        }
-      },
+           * @docid
+           * @default 2
+           */
+          width?: number;
+        };
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       selectionStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
-          color?: string,
+           * @docid
+           * @default undefined
+           */
+          color?: string;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
-          visible?: boolean,
+           * @docid
+           * @default undefined
+           */
+          visible?: boolean;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
-          width?: number
-        },
+           * @docid
+           * @default undefined
+           */
+          width?: number;
+        };
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         */
         hatching?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type Enums.HatchingDirection
-          * @default "right"
-          */
-          direction?: HatchingDirectionType,
+           * @docid
+           * @type Enums.HatchingDirection
+           * @default "right"
+           */
+          direction?: HatchingDirectionType;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 0.5
-          */
-          opacity?: number,
+           * @docid
+           * @default 0.5
+           */
+          opacity?: number;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 6
-          */
-          step?: number,
+           * @docid
+           * @default 6
+           */
+          step?: number;
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 2
-          */
-          width?: number
-        }
-      }
+           * @docid
+           * @default 2
+           */
+          width?: number;
+        };
+      };
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     label?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
-      backgroundColor?: string,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
-      border?: {
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#d3d3d3'
-        */
-        color?: string,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.DashStyle
-        * @default 'solid'
-        */
-        dashStyle?: DashStyleType,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
-        visible?: boolean,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
-        width?: number
-      },
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
-      connector?: {
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
-        color?: string,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 0.5
-        */
-        opacity?: number,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
-        visible?: boolean,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
-        width?: number
-      },
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 itemInfo:object
-      * @type_function_param1_field1 item:dxFunnelItem
-      * @type_function_param1_field2 value:Number
-      * @type_function_param1_field3 valueText:string
-      * @type_function_param1_field4 percent:Number
-      * @type_function_param1_field5 percentText:string
-      * @type_function_return string
-      * @notUsedInTheme
-      */
-      customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#767676' [prop](color)
-      */
-      font?: Font,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizFormat
-      */
-      format?: format,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.HorizontalEdge
-      * @default 'right'
-      */
-      horizontalAlignment?: 'left' | 'right',
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
-      horizontalOffset?: number,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.FunnelLabelPosition
-      * @default 'columns'
-      */
-      position?: 'columns' | 'inside' | 'outside',
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
-      showForZeroValues?: boolean,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VizTextOverflow
-      * @default 'ellipsis'
-      */
-      textOverflow?: VizTextOverflowType,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      visible?: boolean,
+       * @docid
+       */
+      backgroundColor?: string;
       /**
        * @docid
-       * @prevFileNamespace DevExpress.viz
+       */
+      border?: {
+        /**
+         * @docid
+         * @default '#d3d3d3'
+         */
+        color?: string;
+        /**
+         * @docid
+         * @type Enums.DashStyle
+         * @default 'solid'
+         */
+        dashStyle?: DashStyleType;
+        /**
+         * @docid
+         * @default false
+         */
+        visible?: boolean;
+        /**
+         * @docid
+         * @default 1
+         */
+        width?: number;
+      };
+      /**
+       * @docid
+       */
+      connector?: {
+        /**
+         * @docid
+         * @default undefined
+         */
+        color?: string;
+        /**
+         * @docid
+         * @default 0.5
+         */
+        opacity?: number;
+        /**
+         * @docid
+         * @default true
+         */
+        visible?: boolean;
+        /**
+         * @docid
+         * @default 1
+         */
+        width?: number;
+      };
+      /**
+       * @docid
+       * @type_function_param1 itemInfo:object
+       * @type_function_param1_field1 item:dxFunnelItem
+       * @type_function_param1_field2 value:Number
+       * @type_function_param1_field3 valueText:string
+       * @type_function_param1_field4 percent:Number
+       * @type_function_param1_field5 percentText:string
+       * @type_function_return string
+       * @notUsedInTheme
+       */
+      customizeText?: ((itemInfo: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => string);
+      /**
+       * @docid
+       * @default '#767676' &prop(color)
+       */
+      font?: Font;
+      /**
+       * @docid
+       * @type format
+       * @default undefined
+       */
+      format?: format;
+      /**
+       * @docid
+       * @type Enums.HorizontalEdge
+       * @default 'right'
+       */
+      horizontalAlignment?: 'left' | 'right';
+      /**
+       * @docid
+       * @default 0
+       */
+      horizontalOffset?: number;
+      /**
+       * @docid
+       * @type Enums.FunnelLabelPosition
+       * @default 'columns'
+       */
+      position?: 'columns' | 'inside' | 'outside';
+      /**
+       * @docid
+       * @default false
+       */
+      showForZeroValues?: boolean;
+      /**
+       * @docid
+       * @type Enums.VizTextOverflow
+       * @default 'ellipsis'
+       */
+      textOverflow?: VizTextOverflowType;
+      /**
+       * @docid
+       * @default true
+       */
+      visible?: boolean;
+      /**
+       * @docid
        * @type Enums.VizWordWrap
        * @default 'normal'
        */
-      wordWrap?: WordWrapType
+      wordWrap?: WordWrapType;
     };
     /**
      * @docid
      * @inherits BaseLegend
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     legend?: dxFunnelLegend;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     neckHeight?: number;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     neckWidth?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, item?: dxFunnelItem }) => any);
+    onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
+    onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, item?: dxFunnelItem }) => any);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     palette?: Array<string> | PaletteType;
@@ -500,7 +505,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @type Enums.VizPaletteExtensionMode
      * @default 'blend'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     paletteExtensionMode?: PaletteExtensionModeType;
@@ -508,7 +512,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @type Enums.FunnelResolveLabelOverlapping
      * @default "shift"
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
@@ -516,32 +519,29 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @type Enums.SelectionMode
      * @default 'single'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     selectionMode?: 'multiple' | 'none' | 'single';
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     sortData?: boolean;
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: dxFunnelTooltip;
     /**
      * @docid
      * @default 'val'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     valueField?: string;
 }
+/** @namespace DevExpress.viz */
 export interface dxFunnelLegend extends BaseLegend {
     /**
      * @docid dxFunnelOptions.legend.customizeHint
@@ -549,18 +549,16 @@ export interface dxFunnelLegend extends BaseLegend {
      * @type_function_param1_field1 item:dxFunnelItem
      * @type_function_param1_field2 text:string
      * @type_function_return string
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+    customizeHint?: ((itemInfo: { item?: Item; text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.customizeItems
      * @type_function_param1 items:Array<FunnelLegendItem>
      * @type_function_return Array<FunnelLegendItem>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
+    customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxFunnelOptions.legend.customizeText
      * @type_function_param1 itemInfo:object
@@ -568,28 +566,26 @@ export interface dxFunnelLegend extends BaseLegend {
      * @type_function_param1_field2 text:string
      * @type_function_return string
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+    customizeText?: ((itemInfo: { item?: Item; text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.markerTemplate
      * @default undefined
      * @type_function_param1 legendItem:FunnelLegendItem
      * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxFunnelOptions.legend.visible
      * @default false
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     visible?: boolean;
 }
+/** @namespace DevExpress.viz */
 export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.contentTemplate
@@ -599,13 +595,12 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field3 valueText:string
      * @type_function_param1_field4 percent:Number
      * @type_function_param1_field5 percentText:string
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
@@ -616,26 +611,23 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field4 percent:Number
      * @type_function_param1_field5 percentText:string
      * @type_function_return object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeTooltip?: ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
+    customizeTooltip?: ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => any);
 }
 /**
  * @docid
  * @inherits BaseWidget, DataHelperMixin
  * @module viz/funnel
  * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
 export default class dxFunnel extends BaseWidget {
-    constructor(element: Element, options?: dxFunnelOptions)
-    constructor(element: JQuery, options?: dxFunnelOptions)
+    constructor(element: UserDefinedElement, options?: dxFunnelOptions)
     /**
      * @docid
      * @publicName clearSelection()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
@@ -643,34 +635,36 @@ export default class dxFunnel extends BaseWidget {
      * @docid
      * @publicName getAllItems()
      * @return Array<dxFunnelItem>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    getAllItems(): Array<dxFunnelItem>;
+    getAllItems(): Array<Item>;
     getDataSource(): DataSource;
     /**
      * @docid
      * @publicName hideTooltip()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
 }
 
 /**
-* @docid
-* @publicName Item
-*/
+ * @public
+ * @namespace DevExpress.viz.dxFunnel
+ */
+export type Item = dxFunnelItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.viz
+ */
 export interface dxFunnelItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     argument?: string | Date | number;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     data?: any;
@@ -678,7 +672,6 @@ export interface dxFunnelItem {
      * @docid
      * @publicName getColor()
      * @return string
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getColor(): string;
@@ -686,7 +679,6 @@ export interface dxFunnelItem {
      * @docid
      * @publicName hover(state)
      * @param1 state:boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hover(state: boolean): void;
@@ -694,7 +686,6 @@ export interface dxFunnelItem {
      * @docid
      * @publicName isHovered()
      * @return boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     isHovered(): boolean;
@@ -702,13 +693,11 @@ export interface dxFunnelItem {
      * @docid
      * @publicName isSelected()
      * @return boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     isSelected(): boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     percent?: number;
@@ -716,35 +705,27 @@ export interface dxFunnelItem {
      * @docid
      * @publicName select(state)
      * @param1 state:boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     select(state: boolean): void;
     /**
      * @docid
      * @publicName showTooltip()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     value?: number;
 }
 
-declare global {
-interface JQuery {
-    dxFunnel(): JQuery;
-    dxFunnel(options: "instance"): dxFunnel;
-    dxFunnel(options: string): any;
-    dxFunnel(options: string, ...params: any[]): any;
-    dxFunnel(options: dxFunnelOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxFunnelOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFunnelOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxFunnelOptions;

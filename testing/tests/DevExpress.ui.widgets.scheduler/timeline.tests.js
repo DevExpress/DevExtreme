@@ -1,10 +1,9 @@
-import 'common.css!';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
@@ -29,7 +28,7 @@ const stubInvokeMethod = function(instance) {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'convertDateByTimezone') {
             return arguments[1];
@@ -107,49 +106,53 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
     assert.equal(dateTableWidth, 1440, 'Width is OK');
 });
 
-QUnit.test('Sidebar scrollable should update position if date scrollable position is changed', function(assert) {
-    const done = assert.async();
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`Sidebar scrollable should update position if date scrollable position is changed when renovateRender is ${renovateRender}`, function(assert) {
+        const done = assert.async();
 
-    this.instance.option({
-        crossScrollingEnabled: true,
-        width: 400,
-        height: 200,
-        groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }]
+        this.instance.option({
+            crossScrollingEnabled: true,
+            width: 400,
+            height: 200,
+            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
+            renovateRender,
+        });
+
+        const $element = this.instance.$element();
+        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+
+        triggerHidingEvent($element);
+        triggerShownEvent($element);
+
+        dateTableScrollable.scrollTo({ top: 200 });
+
+        setTimeout(() => {
+            assert.equal(groupPanelScrollable.scrollTop(), 200, 'Scroll position is OK');
+            done();
+        });
     });
 
-    const $element = this.instance.$element();
-    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    QUnit.test(`Date table scrollable should update position if sidebar position is changed when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            crossScrollingEnabled: true,
+            width: 400,
+            height: 200,
+            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
+            renovateRender,
+        });
 
-    triggerHidingEvent($element);
-    triggerShownEvent($element);
+        const $element = this.instance.$element();
+        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    dateTableScrollable.scrollTo({ top: 200 });
+        triggerHidingEvent($element);
+        triggerShownEvent($element);
 
-    setTimeout(() => {
-        assert.equal(groupPanelScrollable.scrollTop(), 200, 'Scroll position is OK');
-        done();
+        groupPanelScrollable.scrollTo({ top: 200 });
+
+        assert.equal(dateTableScrollable.scrollTop(), 200, 'Scroll position is OK');
     });
-});
-
-QUnit.test('Date table scrollable should update position if sidebar position is changed', function(assert) {
-    this.instance.option({
-        crossScrollingEnabled: true,
-        width: 400,
-        height: 200,
-        groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }]
-    });
-
-    const $element = this.instance.$element();
-    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-    triggerHidingEvent($element);
-    triggerShownEvent($element);
-
-    groupPanelScrollable.scrollTo({ top: 200 });
-
-    assert.equal(dateTableScrollable.scrollTop(), 200, 'Scroll position is OK');
 });
 
 QUnit.test('Date table scrollable should update position if header scrollable position is changed', function(assert) {
@@ -199,38 +202,41 @@ QUnit.test('Group table cells should have correct height', function(assert) {
     assert.roughEqual(dateTableCellHeight, groupHeaderHeight, 1.1, 'Cell height is OK');
 });
 
-QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 10, 16),
-        startDayHour: 9,
-        hoursInterval: 1
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates when renovateRender is ${true}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 10, 16),
+            startDayHour: 9,
+            hoursInterval: 1,
+            renovateRender,
+        });
+
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element()
+            .find('.dx-scheduler-date-table-cell').eq(1);
+        const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
+
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
 
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    const $expectedCell = this.instance.$element()
-        .find('.dx-scheduler-date-table-cell').eq(1);
-    const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
+    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates for rtl mode when renovateRender is ${true}`, function(assert) {
+        this.instance.option({
+            rtlEnabled: true,
+            width: 100,
+            currentDate: new Date(2015, 10, 16),
+            startDayHour: 9,
+            hoursInterval: 1,
+            renovateRender,
+        });
 
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-});
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element()
+            .find('.dx-scheduler-date-table-cell').eq(1);
 
-QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for rtl mode', function(assert) {
-    this.createInstance({ rtlEnabled: true });
+        const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
 
-    this.instance.option({
-        width: 100,
-        currentDate: new Date(2015, 10, 16),
-        startDayHour: 9,
-        hoursInterval: 1
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
-
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    const $expectedCell = this.instance.$element()
-        .find('.dx-scheduler-date-table-cell').eq(1);
-
-    const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
-
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
 });
 
 QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for grouped timeline', function(assert) {
@@ -525,38 +531,40 @@ QUnit.test('Scheduler timeline week cells should have right height if crossScrol
     assert.roughEqual($firstRowCell.outerHeight(), $lastRowCell.outerHeight(), 1.5, 'Cells has correct height');
 });
 
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 1, 23),
-        firstDayOfWeek: 1,
-        startDayHour: 1,
-        endDayHour: 10,
-        hoursInterval: 0.5
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`The part of long appointment should have right coordinates on current week (T342192) when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 1, 23),
+            firstDayOfWeek: 1,
+            startDayHour: 1,
+            endDayHour: 10,
+            hoursInterval: 0.5,
+            renovateRender,
+        });
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 0, 30), 0, false);
+        const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
+
+        const expectedPositionLeft = $expectedCell.position().left;
+
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 0, 30), 0, false);
-    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
 
-    const expectedPositionLeft = $expectedCell.position().left;
+    QUnit.test(`The part of long appointment should have right coordinates on current week (T342192) №2 when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 1, 23),
+            firstDayOfWeek: 1,
+            startDayHour: 1,
+            endDayHour: 10,
+            hoursInterval: 0.5,
+            renovateRender,
+        });
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 1, 28, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
 
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+        const expectedPositionLeft = $expectedCell.position().left;
 
-});
-
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №2', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 1, 23),
-        firstDayOfWeek: 1,
-        startDayHour: 1,
-        endDayHour: 10,
-        hoursInterval: 0.5
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 1, 28, 10, 30), 0, false);
-    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
-
-    const expectedPositionLeft = $expectedCell.position().left;
-
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-
 });
 
 QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №3', function(assert) {
@@ -722,7 +730,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         e.component._attachTablesEvents();
                     },
                     renovateRender: scrollingMode === 'virtual',
-                    scrolling: { mode: scrollingMode },
+                    scrolling: { mode: scrollingMode, orientation: 'vertical' },
                 }).dxSchedulerTimelineMonth('instance');
                 stubInvokeMethod(this.instance);
             }
@@ -855,6 +863,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                             groupByDate,
                             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
                             allowMultipleCellSelection: true,
+                            scrolling: { mode: scrollingMode, orientation: 'vertical' },
                         });
 
                         const $element = this.instance.$element();
@@ -1001,6 +1010,8 @@ QUnit.test('Group header should be rendered correct, groupByDate = true and cros
 });
 
 QUnit.test('Date table cells shoud have right cellData, groupByDate = true', function(assert) {
+    this.instance.option('renovateRender', false);
+
     const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
     assert.deepEqual($cells.eq(0).data('dxCellData'), {
@@ -1074,21 +1085,26 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
     assert.equal($groupHeaderCells.eq(83).text(), 'b', 'Group header content height is OK');
 });
 
-QUnit.test('Timeline should find cell coordinates by date, groupByDate = true', function(assert) {
-    const $element = this.instance.$element();
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`Timeline should find cell coordinates by date, groupByDate = true when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 2, 4),
+            renovateRender,
+        });
 
-    this.instance.option('currentDate', new Date(2015, 2, 4));
-    let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+        let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 9, 0), 0, false);
+        const $element = this.instance.$element();
 
-    assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().top, 'Top cell coordinates are right');
-    assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().left, 'Left cell coordinates are right');
-    assert.equal(coords.hMax, 16800, 'hMax is right');
+        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().top, 'Top cell coordinates are right');
+        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().left, 'Left cell coordinates are right');
+        assert.equal(coords.hMax, 16800, 'hMax is right');
 
-    coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 2, false);
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 9, 0), 1, false);
 
-    assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().top, 'Top cell coordinates are right');
-    assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().left, 'Left cell coordinates are right');
-    assert.equal(coords.hMax, 16800, 'hMax is right');
+        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().top, 'Top cell coordinates are right');
+        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().left, 'Left cell coordinates are right');
+        assert.equal(coords.hMax, 16800, 'hMax is right');
+    });
 });
 
 QUnit.module('TimelineDay with grouping by date', {
@@ -1207,20 +1223,27 @@ QUnit.module('Renovated Render', {
                 }],
                 cellCountInGroupRow: 2,
                 bottomVirtualRowHeight: undefined,
-                isVirtual: false,
+                isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
-            const expectedViewDataMap = [
-                [{
-                    cellData: cellsBase[0],
-                    position: { cellIndex: 0, rowIndex: 0 }
-                }, {
-                    cellData: cellsBase[1],
-                    position: { cellIndex: 1, rowIndex: 0 }
-                }]
-            ];
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [
+                    [{
+                        cellData: cellsBase[0],
+                        position: { cellIndex: 0, rowIndex: 0 }
+                    }, {
+                        cellData: cellsBase[1],
+                        position: { cellIndex: 1, rowIndex: 0 }
+                    }]
+                ]
+            };
 
             assert.deepEqual(viewData, expectedViewData, 'correct view data');
             assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct view data map');
@@ -1271,26 +1294,33 @@ QUnit.module('Renovated Render', {
                     isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
-                isVirtual: false,
+                isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
             const expectedDateTable = expectedViewData.groupedData[0].dateTable[0];
 
-            const expectedViewDataMap = [[{
-                cellData: expectedDateTable[0],
-                position: { cellIndex: 0, rowIndex: 0 }
-            }, {
-                cellData: expectedDateTable[1],
-                position: { cellIndex: 1, rowIndex: 0 }
-            }, {
-                cellData: expectedDateTable[2],
-                position: { cellIndex: 2, rowIndex: 0 }
-            }, {
-                cellData: expectedDateTable[3],
-                position: { cellIndex: 3, rowIndex: 0 }
-            }]];
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [[{
+                    cellData: expectedDateTable[0],
+                    position: { cellIndex: 0, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[1],
+                    position: { cellIndex: 1, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[2],
+                    position: { cellIndex: 2, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[3],
+                    position: { cellIndex: 3, rowIndex: 0 }
+                }]]
+            };
 
             assert.deepEqual(viewData, expectedViewData, 'correct view data');
             assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
@@ -1340,27 +1370,34 @@ QUnit.module('Renovated Render', {
                 }],
                 bottomVirtualRowHeight: undefined,
                 cellCountInGroupRow: 2,
-                isVirtual: false,
+                isGroupedAllDayPanel: true,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
 
-            const expectedViewDataMap = [
-                [{
-                    cellData: expectedViewData.groupedData[0].dateTable[0][0],
-                    position: { rowIndex: 0, cellIndex: 0 }
-                }, {
-                    cellData: expectedViewData.groupedData[0].dateTable[0][1],
-                    position: { rowIndex: 0, cellIndex: 1 }
-                }], [{
-                    cellData: expectedViewData.groupedData[1].dateTable[0][0],
-                    position: { rowIndex: 1, cellIndex: 0 }
-                }, {
-                    cellData: expectedViewData.groupedData[1].dateTable[0][1],
-                    position: { rowIndex: 1, cellIndex: 1 }
-                }]
-            ];
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [
+                    [{
+                        cellData: expectedViewData.groupedData[0].dateTable[0][0],
+                        position: { rowIndex: 0, cellIndex: 0 }
+                    }, {
+                        cellData: expectedViewData.groupedData[0].dateTable[0][1],
+                        position: { rowIndex: 0, cellIndex: 1 }
+                    }], [{
+                        cellData: expectedViewData.groupedData[1].dateTable[0][0],
+                        position: { rowIndex: 1, cellIndex: 0 }
+                    }, {
+                        cellData: expectedViewData.groupedData[1].dateTable[0][1],
+                        position: { rowIndex: 1, cellIndex: 1 }
+                    }]
+                ]
+            };
 
             assert.deepEqual(viewData, expectedViewData, 'correct viewData');
             assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');

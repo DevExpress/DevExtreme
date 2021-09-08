@@ -53,7 +53,8 @@ function getCloudAngle({ width, height }, x, y, anchorX, anchorY) {
         (anchorX >= xl && anchorX <= xr && anchorY < yt) // 2
     ) {
         return 270;
-    } if(
+    }
+    if(
         (anchorX > xr && anchorY > yb) || // 5
         (anchorX >= xl && anchorX <= xr && anchorY > yb) // 6
     ) {

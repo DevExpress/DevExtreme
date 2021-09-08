@@ -3,11 +3,11 @@ import { locate } from 'animation/translator';
 import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';
+import browser from 'core/utils/browser';
+import Color from 'color';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
-import { isDefined } from 'core/utils/type';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
 export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
@@ -41,18 +41,35 @@ export const CLASSES = {
     headerPanelCurrentTimeCell: '.dx-scheduler-header-panel-current-time-cell',
     selectedCell: '.dx-state-focused',
     focusedCell: '.dx-scheduler-focused-cell',
+    virtualCell: '.dx-scheduler-virtual-cell',
 
+    allDayTitle: '.dx-scheduler-all-day-title',
     verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
+
+    shader: '.dx-scheduler-date-time-shader',
 
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
 
+    appointmentTitle: '.dx-scheduler-appointment-title',
+
+    appointmentMarker: '.dx-scheduler-agenda-appointment-marker',
+
     resizableHandle: {
         left: '.dx-resizable-handle-left',
         right: '.dx-resizable-handle-right'
-    }
+    },
+
+    dialog: '.dx-dialog',
+    popup: '.dx-popup',
 };
+
+export const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+
+export const supportedScrollingModes = !isIE11
+    ? ['standard', 'virtual']
+    : ['standard'];
 
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
@@ -82,74 +99,55 @@ export const asyncWrapper = (assert, callback) => {
         .then(done);
 };
 
-export const execAsync = (promise, beforeAssertCallback, assertCallback, timeout, check) => {
+export const execAsync = (assert, promise, beforeAssertCallback, assertCallback, timeout) => {
+    let timerId;
+
     return promise.then(() => {
-        let timerId;
 
         return new Promise((resolve, reject) => {
+
             const execCallback = func => {
                 try {
                     func();
                 } catch(e) {
-                    reject(e);
+                    assert.ok(false, e.message);
+                    reject();
                 }
             };
 
             beforeAssertCallback && execCallback(beforeAssertCallback);
 
             timerId = setTimeout(() => {
-
-                if(check && !check()) {
-
-                    reject();
-
-                } else {
-
-                    execCallback(assertCallback);
-
-                    resolve();
-                }
-
+                execCallback(assertCallback);
+                resolve();
             }, timeout);
-        }).catch(() => {
-            clearTimeout(timerId);
         });
+    }).catch(() => {
+        clearTimeout(timerId);
     });
 };
 
-export const asyncScrollTest = (promise, assertCallback, scrollable, offset) => {
-    const scrollTimeout = 20;
-    let scrollAttemptCount = 4;
-
+export const asyncScrollTest = (assert, promise, assertCallback, scrollable, offset, scrollTimeout = 100) => {
     const wrapper = () => {
-        if(scrollAttemptCount <= 0) {
-            return Promise.reject();
-        }
-
         return execAsync(
+            assert,
             promise,
             () => scrollable.scrollTo(offset),
             assertCallback,
-            scrollTimeout,
-            () => {
-                const scrollOffset = scrollable.scrollOffset();
-                const {
-                    x,
-                    y
-                } = offset;
-
-                scrollAttemptCount--;
-
-                return (!isDefined(x) || scrollOffset.left === x) &&
-                    (!isDefined(y) || scrollOffset.top === y);
-            })
-            .then(
-                null,
-                () => wrapper(promise, assertCallback, scrollable, offset)
-            );
+            scrollTimeout
+        ).catch(() => wrapper());
     };
 
     return wrapper();
+};
+
+export const asyncAssert = (assert, assertCallback, timeout) => {
+    return asyncWrapper(assert, promise => {
+
+        execAsync(assert, promise, null, assertCallback, timeout);
+
+        return promise;
+    });
 };
 
 class ElementWrapper {
@@ -173,6 +171,26 @@ class ClickElementWrapper extends ElementWrapper {
     }
 }
 
+class AppointmentTitle extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentTitle, parent, 0);
+    }
+
+    get text() {
+        return this.getElement().text();
+    }
+}
+
+class AppointmentMarker extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentMarker, parent, 0);
+    }
+
+    get color() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+}
+
 class Appointment extends ClickElementWrapper {
     constructor(parent, index) {
         super(CLASSES.appointment, parent, index);
@@ -191,8 +209,20 @@ class Appointment extends ClickElementWrapper {
         return this.getElement().position();
     }
 
-    get date() {
+    get date() { // TODO
         return this.getElement().find(CLASSES.appointmentDate).text();
+    }
+
+    get title() {
+        return new AppointmentTitle(this.getElement());
+    }
+
+    get backgroundColor() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+
+    get marker() {
+        return new AppointmentMarker(this.getElement());
     }
 
     get data() {
@@ -230,6 +260,13 @@ class Appointment extends ClickElementWrapper {
         this.getElement().trigger('dxclick');
         clock.tick(300);
         clock.restore();
+    }
+
+    dbClick() {
+        // const clock = sinon.useFakeTimers();
+        this.getElement().trigger('dxdblclick');
+        // clock.tick(300);
+        // clock.restore();
     }
 }
 
@@ -448,12 +485,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
 
             dialog: {
-                clickEditSeries: () => $('.dx-dialog').find('.dx-dialog-button').eq(0).trigger('dxclick'),
-                clickEditAppointment: () => $('.dx-dialog').find('.dx-dialog-button').eq(1).trigger('dxclick'),
-                hide: () => $('.dx-dialog').find('.dx-closebutton.dx-button').trigger('dxclick')
+                clickEditSeries: () => $(CLASSES.dialog).find('.dx-dialog-button').eq(0).trigger('dxclick'),
+                clickEditAppointment: () => $(CLASSES.dialog).find('.dx-dialog-button').eq(1).trigger('dxclick'),
+                hide: () => $(CLASSES.dialog).find('.dx-closebutton.dx-button').trigger('dxclick')
             },
 
             getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup'),
+            getRecurrenceDialog: () => $(`${CLASSES.dialog}${CLASSES.popup}`),
             getPopupTitleElement: () => this.appointmentPopup.getPopup().find('.dx-popup-title'),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find('.dx-scrollable-container').get(0);
@@ -549,7 +587,9 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
             getTimePanelCells: () => $(CLASSES.timePanelCell),
+            getVirtualCells: () => $(CLASSES.virtualCell),
             getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
+            getWeekDayHeaderPanelCells: () => $(`${CLASSES.weekHeaderPanelCell}`),
             getTimePanelCurrentTimeCells: () => $(CLASSES.currentTimeCell),
             getHeaderPanelCurrentTimeCells: () => $(CLASSES.headerPanelCurrentTimeCell),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
@@ -559,6 +599,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
             getCurrentTimeIndicatorCount: () => this.workSpace.getCurrentTimeIndicator().length,
             getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
+            getAllDayTitle: () => $(CLASSES.allDayTitle),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
             getScrollPosition: () => {
@@ -589,6 +630,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
                     .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
                     .up();
             },
+
+            getShader: () => $(CLASSES.shader),
         };
 
         this.viewSwitcher = {

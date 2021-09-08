@@ -9,8 +9,8 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 import Popup from '../popup';
-import { AppointmentForm } from './ui.scheduler.appointment_form';
-import { hide as hideLoading, show as showLoading } from './ui.loading';
+import { AppointmentForm } from './appointment_form';
+import { hide as hideLoading, show as showLoading } from './loading';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -49,7 +49,7 @@ export default class AppointmentPopup {
 
     show(data = {}, isDoneButtonVisible) {
         if(isEmptyObject(data)) {
-            const startDate = this.scheduler.option('currentDate');
+            const startDate = new Date(this.scheduler.option('currentDate'));
             const endDate = new Date(startDate.getTime() + this.scheduler.option('cellDuration') * toMs('minute'));
             this.scheduler.fire('setField', 'startDate', data, startDate);
             this.scheduler.fire('setField', 'endDate', data, endDate);
@@ -403,7 +403,7 @@ export default class AppointmentPopup {
     }
 
     _showLoadPanel() {
-        const $overlayContent = this._popup.overlayContent();
+        const $overlayContent = this._popup.$overlayContent();
 
         showLoading({
             container: $overlayContent,

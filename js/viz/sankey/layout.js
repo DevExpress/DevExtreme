@@ -6,7 +6,7 @@ const _ALIGNMENT_DEFAULT = _ALIGNMENT_CENTER;
 import graphModule from './graph';
 import validatorModule from './data_validator';
 
-const layout = {
+export const layout = {
     _weightPerPixel: null,
 
     _getCascadeIdx: function(nodeTitle, cascadesConfig) {
@@ -122,7 +122,7 @@ const layout = {
             const nodesInCascade = Object.keys(cascade).length;
             const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
 
-            let cascadeAlign = _ALIGNMENT_DEFAULT;
+            let cascadeAlign;
 
             if(Array.isArray(options.nodeAlign)) {
                 cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : _ALIGNMENT_DEFAULT;
@@ -308,5 +308,3 @@ const layout = {
             box2.y >= box1.y + box1.height || box2.y + box2.height <= box1.y);
     }
 };
-
-export default layout;

@@ -638,6 +638,77 @@ QUnit.module('Filter value', function() {
         assert.deepEqual(instance.option('value'), ['Product', '=', 2]);
     });
 
+    // T982743
+    QUnit.testInActiveWindow('change filter value in selectbox with customizeText', function(assert) {
+        const $container = $('#container');
+        const customizeText = sinon.spy(e => {
+            return 'customized ' + e.valueText;
+        });
+        const instance = $container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ['test', '=', 'first'],
+            fields: [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: ['first', 'second']
+                },
+                customizeText: customizeText
+            }]
+        }).dxFilterBuilder('instance');
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized first');
+
+        const $valueButton = $container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger('dxclick');
+
+        const selectBoxInstance = $container.find('.dx-selectbox').dxSelectBox('instance');
+        selectBoxInstance.open();
+        $('.dx-list-item').eq(1).trigger('dxclick');
+        clickByOutside();
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized second');
+        assert.deepEqual(instance.option('value'), ['test', '=', 'second']);
+        assert.equal(customizeText.callCount, 2);
+        assert.deepEqual(customizeText.firstCall.args[0], { value: 'first', valueText: 'first' });
+        assert.deepEqual(customizeText.secondCall.args[0], { value: 'second', valueText: 'second' });
+    });
+
+    // T982743
+    QUnit.testInActiveWindow('change filter value in selectbox with customizeText and displayExpr', function(assert) {
+        const $container = $('#container');
+        const customizeText = sinon.spy(e => {
+            return 'customized ' + e.valueText;
+        });
+        const instance = $container.dxFilterBuilder({
+            value: ['test', '=', 1],
+            fields: [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: [{ id: 1, text: 'first' }, { id: 2, text: 'second' }],
+                    valueExpr: 'id',
+                    displayExpr: 'text'
+                },
+                customizeText: customizeText
+            }]
+        }).dxFilterBuilder('instance');
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized first');
+
+        const $valueButton = $container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger('dxclick');
+
+        const selectBoxInstance = $container.find('.dx-selectbox').dxSelectBox('instance');
+        selectBoxInstance.open();
+        $('.dx-list-item').eq(1).trigger('dxclick');
+        clickByOutside();
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized second');
+        assert.deepEqual(instance.option('value'), ['test', '=', 2]);
+        assert.equal(customizeText.callCount, 2);
+        assert.deepEqual(customizeText.firstCall.args[0], { value: 1, valueText: 'first' });
+        assert.deepEqual(customizeText.secondCall.args[0], { value: 2, valueText: 'second' });
+    });
+
     QUnit.testInActiveWindow('check default value for number', function(assert) {
         const container = $('#container');
         const instance = container.dxFilterBuilder({

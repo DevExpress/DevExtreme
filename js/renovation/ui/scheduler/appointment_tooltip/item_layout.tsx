@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent,
   OneWay, Template, Event, JSXTemplate,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import noop from '../../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
@@ -35,7 +35,7 @@ export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
           // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
     >
-      <Marker color={viewModel.props.item.color} />
+      <Marker />
       <TooltipItemContent
         text={viewModel.formattedContent.text}
         formattedDate={viewModel.formattedContent.formatDate}

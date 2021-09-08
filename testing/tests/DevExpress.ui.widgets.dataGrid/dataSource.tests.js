@@ -25,7 +25,6 @@ const createDataSource = function(options) {
         options: {
             scrolling: options.scrolling,
             cacheEnabled: options.cacheEnabled,
-            legacyRendering: options.legacyRendering,
             remoteOperations: options.remoteOperations,
             loadingTimeout: options.loadingTimeout !== undefined ? options.loadingTimeout : (options.asyncLoadEnabled ? 0 : undefined)
         }
@@ -442,7 +441,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('groupingHelper when remoteOperations is auto and ArrayStore', function(assert) {
-    // act
+        // act
         const dataSource = createDataSource({
             store: TEN_NUMBERS,
             remoteOperations: 'auto'
@@ -453,7 +452,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('groupingHelper when remoteOperations is auto and CustomStore', function(assert) {
-    // act
+        // act
         const dataSource = createDataSource({
             load: function() { },
             remoteOperations: 'auto'
@@ -464,7 +463,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('groupingHelper when remoteOperations is auto and ODataStore', function(assert) {
-    // act
+        // act
         const dataSource = createDataSource({
             store: {
                 type: 'odata',
@@ -537,7 +536,7 @@ QUnit.module('Grid DataSource', {
 
     // T474591
     QUnit.test('No error when store returned non-array', function(assert) {
-    // arrange
+        // arrange
         const source = createDataSource({
             load: function() {
                 return $.Deferred().resolve({ /* no data property */ });
@@ -552,7 +551,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('createOffsetFilter should generate filters with =/<> filter operations for boolean values', function(assert) {
-    // arrange
+        // arrange
 
         const booleanValues = [null, false, true];
         const descValues = [false, true];
@@ -580,7 +579,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('Custom store with remote paging and with local filtering', function(assert) {
-    // arrange
+        // arrange
         let loadArgs = [];
         const source = createDataSource({
             remoteOperations: { paging: true },
@@ -616,7 +615,7 @@ QUnit.module('Grid DataSource', {
 
     // T748688
     QUnit.test('Custom store with remote paging and with local sorting', function(assert) {
-    // arrange
+        // arrange
         let loadArgs = [];
         const source = createDataSource({
             remoteOperations: { paging: true },
@@ -1120,7 +1119,7 @@ QUnit.module('Grouping with basic remoteOperations', {
         // act
         source.load();
         source.changed.add(function() {
-        // assert
+            // assert
             assert.equal(source.itemsCount(), 3);
             assert.deepEqual(source.items(), [{
                 key: 1, items: null,
@@ -1957,7 +1956,7 @@ QUnit.module('Grouping with basic remoteOperations', {
 
     // T545211
     QUnit.test('Ungrouping with custom store - there are no exceptions when remote paging', function(assert) {
-    // arrange
+        // arrange
         const that = this;
         const dataSource = createDataSource({
             load: function() {
@@ -1975,14 +1974,14 @@ QUnit.module('Grouping with basic remoteOperations', {
         dataSource.load();
 
         try {
-        // act
+            // act
             dataSource.group(null);
             dataSource.load();
 
             // assert
             assert.ok(true, 'There are no exceptions');
         } catch(error) {
-        // assert
+            // assert
             assert.ok(false, 'exception was threw:' + error);
         }
     });
@@ -2557,7 +2556,7 @@ QUnit.module('Grouping with basic remoteOperations. Second level', {
 
     // T307341
     QUnit.test('Update group offset for expanded grouped row of the first level when change sortOrder of the first level group field', function(assert) {
-    // arrange
+        // arrange
         this.array = [
             { field1: 1, field2: 2, field3: 3 },
             { field1: 1, field2: 2, field3: 4 },
@@ -2814,20 +2813,26 @@ QUnit.module('Remote group paging', {
             pageSize: 3
         });
 
-        loadStub.onCall(0).returns($.Deferred().resolve({ data: [
-            { key: 'test1', items: null, count: 3 },
-            { key: 'test2', items: null, count: 3 },
-            { key: 'test3', items: null, count: 3 }
-        ], totalCount: 9, groupCount: 3 }));
+        loadStub.onCall(0).returns($.Deferred().resolve({
+            data: [
+                { key: 'test1', items: null, count: 3 },
+                { key: 'test2', items: null, count: 3 },
+                { key: 'test3', items: null, count: 3 }
+            ], totalCount: 9, groupCount: 3
+        }));
 
-        loadStub.onCall(1).returns($.Deferred().resolve({ data: [
-            { key: 'test1', items: null, count: 3 }
-        ], totalCount: 9, groupCount: 3 }));
+        loadStub.onCall(1).returns($.Deferred().resolve({
+            data: [
+                { key: 'test1', items: null, count: 3 }
+            ], totalCount: 9, groupCount: 3
+        }));
 
-        loadStub.onCall(2).returns($.Deferred().resolve({ data: [
-            { name: 'test1', id: 1 },
-            { name: 'test1 ', id: 2 }
-        ] }));
+        loadStub.onCall(2).returns($.Deferred().resolve({
+            data: [
+                { name: 'test1', id: 1 },
+                { name: 'test1 ', id: 2 }
+            ]
+        }));
 
         dataSource.load();
 
@@ -2862,10 +2867,12 @@ QUnit.module('Remote group paging', {
     QUnit.test('Expand group if group key is object', function(assert) {
         const dataSource = this.createDataSource({
             load: function() {
-                return $.Deferred().resolve({ data: [
-                    { key: { groupId: 1, groupName: 'test 1' }, items: [{ id: 1 }] },
-                    { key: { groupId: 2, groupName: 'test 2' }, items: [{ id: 2 }] }
-                ], totalCount: 2, groupCount: 2 });
+                return $.Deferred().resolve({
+                    data: [
+                        { key: { groupId: 1, groupName: 'test 1' }, items: [{ id: 1 }] },
+                        { key: { groupId: 2, groupName: 'test 2' }, items: [{ id: 2 }] }
+                    ], totalCount: 2, groupCount: 2
+                });
             },
             group: 'group'
         });
@@ -3259,9 +3266,9 @@ QUnit.module('Remote group paging', {
 
     QUnit.test('Expand third level group', function(assert) {
         const array = [
-        /* 1 */
-        /* 2 */
-        /* 3 */
+            /* 1 */
+            /* 2 */
+            /* 3 */
             { field1: 1, field2: 2, field3: 3, id: 1 },
             { field1: 1, field2: 2, field3: 3, id: 2 },
             /* 2 */ { field1: 2, field2: 2, field3: 4, id: 3 },
@@ -3470,6 +3477,44 @@ QUnit.module('Remote group paging', {
         assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, 'take for second level');
     });
 
+    // T990766
+    QUnit.test('Reload dataSource when two expanded group and two group levels exist', function(assert) {
+        const dataSource = this.createDataSource({
+            group: ['field1', 'field2'],
+            pageSize: 3
+        });
+        const loadingChanged = sinon.stub();
+
+        dataSource.load();
+
+        dataSource.changeRowExpand([2]);
+        dataSource.load();
+        dataSource.changeRowExpand([2, 4]);
+        dataSource.load();
+
+        dataSource.store().on('loading', loadingChanged);
+
+        // act
+        dataSource.reload(true);
+
+        assert.deepEqual(dataSource.items(), [
+            {
+                key: 1,
+                items: null
+            },
+            {
+                key: 2,
+                items: [{
+                    isContinuationOnNextPage: true,
+                    key: 4,
+                    items: []
+                }]
+            }], 'items');
+
+        assert.equal(dataSource.totalItemsCount(), 9, 'total items count');
+        assert.strictEqual(loadingChanged.callCount, 6, 'loading count');
+    });
+
     QUnit.test('Error on change grouping when one expanded group and two group levels exist', function(assert) {
         const brokeOptions = {};
         const dataSource = this.createDataSource({
@@ -3501,7 +3546,7 @@ QUnit.module('Remote group paging', {
 
     // T850299
     QUnit.test('Remote group paging should work correctly after sorting if grouping by 2 columns', function(assert) {
-    // arrange
+        // arrange
         let items;
         let subgroups;
 
@@ -3645,7 +3690,7 @@ QUnit.module('Remote group paging', {
 
     // T454240
     QUnit.test('Error when store not returned groupCount', function(assert) {
-    // arrange
+        // arrange
         assert.expect(1);
 
         const dataSource = this.createDataSource({
@@ -3655,18 +3700,18 @@ QUnit.module('Remote group paging', {
         // act
         dataSource.load()
             .done(() => {
-            // assert
+                // assert
                 assert.ok(false, 'exception should be rised');
             })
             .fail((e) => {
-            // assert
+                // assert
                 assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
             });
     });
 
     // T477410
     QUnit.test('Error when store not returned groupCount during expand not last level group', function(assert) {
-    // arrange
+        // arrange
         assert.expect(1);
 
         const brokeOptions = {};
@@ -3681,18 +3726,18 @@ QUnit.module('Remote group paging', {
 
         dataSource.changeRowExpand([1])
             .done(() => {
-            // assert
+                // assert
                 assert.ok(false, 'exception should be rised');
             })
             .fail((e) => {
-            // assert
+                // assert
                 assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
             });
     });
 
     // T477410
     QUnit.test('Exception when store not returned totalCount after full reload', function(assert) {
-    // arrange
+        // arrange
         const brokeOptions = {};
         const dataSource = this.createDataSource({
             group: ['field1']
@@ -3714,7 +3759,7 @@ QUnit.module('Remote group paging', {
 
     // T754708
     QUnit.test('The collapseAll method should work after expanding group row', function(assert) {
-    // arrange
+        // arrange
         const dataSource = this.createDataSource({
             group: 'field2',
             pageSize: 2
@@ -3761,7 +3806,7 @@ QUnit.module('Remote group paging', {
 
     // T754708
     QUnit.test('The expandAll method  should work after collapsing group row', function(assert) {
-    // arrange
+        // arrange
         const dataSource = this.createDataSource({
             group: 'field2',
             pageSize: 2
@@ -4508,7 +4553,7 @@ QUnit.module('Remote group paging', {
 
                 // T112478
                 QUnit.test('collapseAll for remote data', function(assert) {
-                // arrange
+                    // arrange
                     const source = this.createDataSource({
                         load: function() { return [{ group: 'group 1', text: 'text 1' }, { group: 'group 1', text: 'text 2' }, { group: 'group 2', text: 'text 3' }]; },
                         totalCount: function() { return -1; },
@@ -5055,13 +5100,13 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 15);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, isContinuationOnNextPage: true, items:
-                [
-                    {
-                        key: 2,
-                        isContinuationOnNextPage: true,
-                        items: [{ field1: 1, field2: 2, field3: 3 }]
-                    }
-                ]
+                        [
+                            {
+                                key: 2,
+                                isContinuationOnNextPage: true,
+                                items: [{ field1: 1, field2: 2, field3: 3 }]
+                            }
+                        ]
                 }]);
             });
 
@@ -5134,10 +5179,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 4);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
-                ]
+                        [
+                            { key: 2, items: null },
+                            { key: 3, items: null }
+                        ]
                 }]);
             });
 
@@ -5159,10 +5204,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 5);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
-                ]
+                        [
+                            { key: 2, items: null },
+                            { key: 3, items: null }
+                        ]
                 }]);
             });
 
@@ -5178,10 +5223,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 5);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
-                ]
+                        [
+                            { key: 2, items: null },
+                            { key: 3, items: null }
+                        ]
                 }]);
             });
 
@@ -5248,10 +5293,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 4);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 3, items: null },
-                    { key: 2, items: null }
-                ]
+                        [
+                            { key: 3, items: null },
+                            { key: 2, items: null }
+                        ]
                 }]);
             });
 
@@ -6012,25 +6057,6 @@ QUnit.module('Cache', {
         assert.deepEqual(this.loadingCount, 1, 'one loading');
     });
 
-    QUnit.test('no caching when all remoteOperations and legacyRendering is true', function(assert) {
-        const dataSource = this.createDataSource({
-            legacyRendering: true,
-            remoteOperations: {
-                filtering: true,
-                sorting: true,
-                paging: true
-            }
-        });
-        dataSource.load();
-
-        // act
-        dataSource.load();
-        dataSource.reload();
-
-        // assert
-        assert.deepEqual(this.loadingCount, 3, 'three loadings');
-    });
-
     QUnit.test('caching pages when all remoteOperations', function(assert) {
         const dataSource = this.createDataSource({
             remoteOperations: true
@@ -6381,6 +6407,146 @@ QUnit.module('Cache', {
         assert.deepEqual(dataSource.items()[0], 2, 'first item on page');
         assert.deepEqual(dataSource.totalCount(), 10, 'totalCount is not refreshed');
         assert.deepEqual(this.loadingCount, 1, 'one loading');
+    });
+
+    QUnit.test('New mode. Data should be loaded from the cache with the same load params', function(assert) {
+        const dataSource = this.createDataSource({
+            remoteOperations: {
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            }
+        });
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 1, 'first load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 2, 'second load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(2);
+        dataSource.loadPageCount(1);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 3, 'third load');
+        assert.deepEqual(dataSource.items(), [7, 8, 9], 'items on the third load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 3, 'data is loaded from cache');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items from cache');
+    });
+
+    QUnit.test('New mode. Cache should be reset when pageSize is changed', function(assert) {
+        const dataSource = this.createDataSource({
+            remoteOperations: {
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            }
+        });
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 1, 'first load');
+        assert.deepEqual(dataSource.items(), [1, 2, 3], 'items on the first load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 2, 'second load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(0);
+        dataSource.pageSize(2);
+        dataSource.loadPageCount(1);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 3, 'third load');
+        assert.deepEqual(dataSource.items(), [1, 2], 'new loaded items for the first page');
+    });
+
+    QUnit.test('New mode. Data should be loaded without the cache', function(assert) {
+        const dataSource = this.createDataSource({
+            remoteOperations: {
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            cacheEnabled: false,
+        });
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 1, 'first load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 2, 'second load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(2);
+        dataSource.loadPageCount(1);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 3, 'third load');
+        assert.deepEqual(dataSource.items(), [7, 8, 9], 'items on the third load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 4, 'fourth load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the fourth load');
     });
 });
 
@@ -6917,5 +7083,211 @@ QUnit.module('Custom Load', {
         assert.deepEqual(dataSource.items(), [1, 1, 2, 2, 3], 'items on page');
         assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
         assert.deepEqual(loadingCount, 2, 'loading count');
+    });
+});
+
+
+QUnit.module('New virtual scrolling mode', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.createDataSource = function(options) {
+            return createDataSource($.extend({
+                store: TEN_NUMBERS,
+                paginate: true,
+                scrolling: {
+                    newMode: true,
+                    mode: 'virtual',
+                    rowRenderingMode: 'virtual'
+                },
+                remoteOperations: { filtering: true, sorting: true, paging: true }
+            }, options));
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('loadPageCount affects the take parameter', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const dataLoadingHandler = dataSource._dataLoadingHandler;
+        const takeValues = [];
+
+        dataSource._dataLoadingHandler = function(options) {
+            dataLoadingHandler.apply(dataSource, arguments);
+            takeValues.push(options.storeLoadOptions.take);
+        };
+        dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
+        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
+
+        try {
+            // act
+            dataSource.loadPageCount(2);
+            dataSource.load();
+
+            // assert
+            assert.strictEqual(takeValues[0], 6, 'first take value');
+
+            // act
+            dataSource.loadPageCount(3);
+            dataSource.load();
+
+            // assert
+            assert.strictEqual(takeValues[1], 9, 'second take value');
+        } finally {
+            dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
+            dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
+        }
+    });
+
+    // TODO the following tests can be removed when newMode is enabled by default
+    QUnit.test('startLoadTime was not initialized when loadingChanged is raised', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const loadingChangeHandler = dataSource._loadingChangedHandler;
+        const startLoadTimeValues = [];
+
+        dataSource._loadingChangedHandler = function() {
+            loadingChangeHandler.apply(dataSource, arguments);
+            startLoadTimeValues.push(dataSource._startLoadTime);
+        };
+        dataSource._dataSource.off('loadingChanged', loadingChangeHandler);
+        dataSource._dataSource.on('loadingChanged', dataSource._loadingChangedHandler);
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.strictEqual(startLoadTimeValues.length, 2, 'change handler call count');
+            assert.notOk(startLoadTimeValues[0], 'not initizlized on the first call');
+            assert.notOk(startLoadTimeValues[1], 'not initizlized on the second call');
+        } finally {
+            dataSource._dataSource.off('loadingChanged', dataSource._loadingChangedHandler);
+            dataSource._dataSource.on('loadingChanged', loadingChangeHandler);
+        }
+    });
+
+    QUnit.test('VirtualScrollController.handleDataChanged is not called when data is loaded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const handleDataChangedSpy = sinon.spy(dataSource._virtualScrollController, 'handleDataChanged');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.notOk(handleDataChangedSpy.called, 'not called');
+        } finally {
+            handleDataChangedSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.load is not called when data is loaded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const loadSpy = sinon.spy(dataSource._virtualScrollController, 'load');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.notOk(loadSpy.called, 'not called');
+        } finally {
+            loadSpy.restore();
+        }
+    });
+
+    QUnit.test('resetPagesCache is not called when row is expanded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3,
+            group: 't'
+        });
+        const resetPagesCacheSpy = sinon.spy(dataSource, 'resetPagesCache');
+
+        try {
+            // act
+            dataSource.changeRowExpand([1]);
+
+            // assert
+            assert.notOk(resetPagesCacheSpy.called, 'not called');
+        } finally {
+            resetPagesCacheSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.getDelayDeferred is not called on reload', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const getDelayDeferredSpy = sinon.spy(dataSource._virtualScrollController, 'getDelayDeferred');
+
+        try {
+            // act
+            dataSource.reload();
+
+            // assert
+            assert.notOk(getDelayDeferredSpy.called, 'not called');
+        } finally {
+            getDelayDeferredSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.reset is not called on refresh', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const resetSpy = sinon.spy(dataSource._virtualScrollController, 'reset');
+
+        try {
+            // act
+            dataSource.refresh({ storeLoadOptions: {} }, { reload: true });
+
+            // assert
+            assert.notOk(resetSpy.called, 'not called');
+        } finally {
+            resetSpy.restore();
+        }
+    });
+
+    QUnit.test('loadingChanged should not fire when loading is failed', function(assert) {
+        // arrange
+        const dataSource = createDataSource({
+            store: new CustomStore({
+                key: 'id',
+                load: function() {
+                    return $.Deferred().reject().promise();
+                }
+            }),
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+        });
+        const fireSpy = sinon.spy(dataSource.loadingChanged, 'fire');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.equal(fireSpy.callCount, 2, 'called twice');
+        } finally {
+            fireSpy.restore();
+        }
     });
 });

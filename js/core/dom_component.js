@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import config from './config';
 import errors from './errors';
 import windowResizeCallbacks from '../core/utils/resize_callbacks';
-import Component from './component';
+import { Component } from './component';
 import { TemplateManager } from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
 import { cleanDataRecursive } from './element_data';
@@ -42,6 +42,8 @@ const DOMComponent = Component.inherit({
     * @hidden
     */
     ctor(element, options) {
+        this._customClass = null;
+
         this._createElement(element);
         attachInstanceToElement(this._$element, this, this._dispose);
 
@@ -116,7 +118,10 @@ const DOMComponent = Component.inherit({
 
         this.$element()
             .attr(attributes)
+            .removeClass(this._customClass)
             .addClass(classNames);
+
+        this._customClass = classNames;
     },
 
     _renderVisibilityChange() {
@@ -302,16 +307,6 @@ const DOMComponent = Component.inherit({
         return extend(this.callBase(), { context });
     },
 
-    /**
-    * @pseudo Action
-    * @section Utils
-    * @type function
-    * @default null
-    * @type_function_param1 e:object
-    * @type_function_param1_field1 component:this
-    * @type_function_param1_field2 element:dxElement
-    * @type_function_param1_field3 model:object
-    **/
     _defaultActionArgs() {
         const $element = this.$element();
         const model = this._modelByElement($element);

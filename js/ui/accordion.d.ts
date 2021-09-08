@@ -1,60 +1,100 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
+import {
+    DxPromise,
+} from '../core/utils/deferred';
+
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxAccordion>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxAccordion>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxAccordion>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemTitleClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
      * @docid
      * @default 300
-     * @default 200 [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default 200 &for(Material)
      * @public
      */
     animationDuration?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapsible?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxAccordionItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -62,14 +102,12 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
@@ -78,61 +116,58 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<string | dxAccordionItem | any>
      * @fires dxAccordionOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxAccordionItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiple?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:dxAccordion
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
+    onItemTitleClick?: ((e: ItemTitleClickEvent) => void) | string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
@@ -142,70 +177,64 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @inherits CollectionWidget
  * @module ui/accordion
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
-    constructor(element: Element, options?: dxAccordionOptions)
-    constructor(element: JQuery, options?: dxAccordionOptions)
+    constructor(element: UserDefinedElement, options?: dxAccordionOptions)
     /**
      * @docid
      * @publicName collapseItem(index)
      * @param1 index:numeric
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(index: number): Promise<void> & JQueryPromise<void>;
+    collapseItem(index: number): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(index)
      * @param1 index:numeric
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(index: number): Promise<void> & JQueryPromise<void>;
+    expandItem(index: number): DxPromise<void>;
     /**
      * @docid
      * @publicName updateDimensions()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): DxPromise<void>;
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxAccordion
+ */
+export type Item = dxAccordionItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxAccordionItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxAccordion(): JQuery;
-    dxAccordion(options: "instance"): dxAccordion;
-    dxAccordion(options: string): any;
-    dxAccordion(options: string, ...params: any[]): any;
-    dxAccordion(options: dxAccordionOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxAccordionOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxAccordionOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxAccordionOptions;

@@ -1,8 +1,20 @@
-import '../jquery_augmentation';
+import {
+    UserDefinedElement,
+} from '../core/element';
 
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
+
+import {
+    DxPromise,
+} from '../core/utils/deferred';
+
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
 
 import {
     AsyncRule,
@@ -13,9 +25,22 @@ import {
     PatternRule,
     RangeRule,
     RequiredRule,
-    StringLengthRule
+    StringLengthRule,
 } from './validation_rules';
 
+/** @public */
+export type DisposingEvent = EventInfo<dxValidationGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
 /**
@@ -24,16 +49,14 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @hasTranscludedContent
  * @module ui/validation_group
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxValidationGroup extends DOMComponent {
-    constructor(element: Element, options?: dxValidationGroupOptions)
-    constructor(element: JQuery, options?: dxValidationGroupOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationGroupOptions)
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
@@ -41,7 +64,6 @@ export default class dxValidationGroup extends DOMComponent {
      * @docid
      * @publicName validate()
      * @return dxValidationGroupResult
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validate(): dxValidationGroupResult;
@@ -50,52 +72,43 @@ export default class dxValidationGroup extends DOMComponent {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxValidationGroupResult {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
      * @docid
      * @type Promise<dxValidationGroupResult>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
+    complete?: DxPromise<dxValidationGroupResult>;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
     /**
      * @docid
      * @type Enums.ValidationStatus
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     status?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validators?: Array<any>;
 }
 
-declare global {
-interface JQuery {
-    dxValidationGroup(): JQuery;
-    dxValidationGroup(options: "instance"): dxValidationGroup;
-    dxValidationGroup(options: string): any;
-    dxValidationGroup(options: string, ...params: any[]): any;
-    dxValidationGroup(options: dxValidationGroupOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxValidationGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationGroupOptions;

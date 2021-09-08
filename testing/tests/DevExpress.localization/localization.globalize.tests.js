@@ -25,7 +25,8 @@ define(function(require, exports, module) {
     const cldrData = [
         require('../../../node_modules/devextreme-cldr-data/ru.json!json'),
         require('../../../node_modules/devextreme-cldr-data/en.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/de.json!json')
+        require('../../../node_modules/devextreme-cldr-data/de.json!json'),
+        require('../../../node_modules/devextreme-cldr-data/da.json!json')
     ];
 
     require('localization/globalize/core');
@@ -294,6 +295,12 @@ define(function(require, exports, module) {
     QUnit.module('Custom format types', () => {
         QUnit.test('format: { time: \'medium\' }', function(assert) {
             assert.equal(dateLocalization.format(new Date(2015, 1, 2, 3, 4, 5, 6), { time: 'medium' }), '3:04:05 AM', 'with object format');
+        });
+
+        QUnit.test('Parse custom format', function(assert) {
+            const expected = new Date(2010, 2, 2).toString();
+            assert.equal(dateLocalization.parse('20100302', 'yyyyMMdd'), expected, 'Format \'yyyyMMdd\' parse ok');
+            assert.equal(dateLocalization.parse('02mar10', 'dMyyyy'), expected, 'Format \'dMyyyy\' parse ok');
         });
     });
 

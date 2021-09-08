@@ -62,8 +62,8 @@ const CollectionWidget = Widget.inherit({
             }
 
             this._itemClickHandler(extend({}, e, {
-                target: $itemElement,
-                currentTarget: $itemElement
+                target: $itemElement.get(0),
+                currentTarget: $itemElement.get(0)
             }));
         };
         const space = function(e) {
@@ -132,7 +132,7 @@ const CollectionWidget = Widget.inherit({
             focusOnSelectedItem: true,
             /**
             * @name CollectionWidgetOptions.focusedElement
-            * @type dxElement
+            * @type DxElement
             * @default null
             * @hidden
             */
@@ -476,7 +476,7 @@ const CollectionWidget = Widget.inherit({
             case 'items':
             case '_itemAttributes':
             case 'itemTemplateProperty':
-            case 'showItemDataTitle':
+            case 'useItemTextAsTitle':
                 this._cleanRenderedItems();
                 this._invalidate();
                 break;
@@ -902,7 +902,7 @@ const CollectionWidget = Widget.inherit({
             this._appendItemToContainer.call(this, $container, $itemFrame, index);
         }
 
-        if(this.option('showItemDataTitle')) {
+        if(this.option('useItemTextAsTitle')) {
             const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
             $itemFrame.attr('title', displayValue);
         }

@@ -7,7 +7,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 
 import 'ui/data_grid/ui.data_grid';
 import 'data/odata/store';
@@ -19,6 +18,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import clickEvent from 'events/click';
+import errors from 'ui/widget/ui.errors';
 
 const dataGridWrapper = new DataGridWrapper('#container');
 
@@ -571,13 +571,9 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.selectionController.selectRows([{ name: 'Kate', age: 20 }]);
 
-        this.selectionController.optionChanged({
-            name: 'selectedRowKeys',
-            value: [
-                { name: 'Dan', age: 16 },
-                { name: 'Dmitry', age: 18 }
-            ]
-        });
+        this.option('selectedRowKeys', [
+            { name: 'Dan', age: 16 },
+            { name: 'Dmitry', age: 18 }]);
 
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
@@ -680,12 +676,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         const keys = [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }];
 
-        this.options.selectedRowKeys = keys;
-
-        this.selectionController.optionChanged({
-            name: 'selectedRowKeys',
-            value: keys
-        });
+        this.option('selectedRowKeys', keys);
 
         assert.deepEqual(this.selectionController.option('selectedRowKeys'), keys, 'selectedRowKeys instance is not changed');
         assert.deepEqual(this.selectionController.getSelectedRowsData(), keys, 'selectRowsData equal keys by deep equal');
@@ -1096,8 +1087,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 1);
 
         // act
-        this.options.dataSource = [{ name: 'Dan', age: 16 }];
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', [{ name: 'Dan', age: 16 }]);
 
         // assert
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
@@ -1494,6 +1484,73 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(this.totalCount(), 6, 'total count');
         assert.strictEqual(this.getSelectedRowKeys().length, 6, 'selected row count');
         assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
+    });
+
+    QUnit.test('selectAll when calculateCellValue is defined for filtered column (T1021412)', function(assert) {
+        this.applyOptions({
+            columns: [{
+                dataField: 'age',
+                calculateCellValue() { return 99; },
+                filterValue: 99
+            }]
+        });
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ['age', '=', 99], 'filter');
+        assert.strictEqual(this.getVisibleRows().length, 7, 'visible row count');
+        assert.strictEqual(this.totalCount(), 7, 'total count');
+        assert.strictEqual(this.getSelectedRowKeys().length, 7, 'selected row count');
+        assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
+    });
+
+    ['single', 'multiple'].forEach(selectionMode => {
+        QUnit.test(`Disabled item should be selected when mode = ${selectionMode} (T1015840)`, function(assert) {
+            this.applyOptions({
+                selection: {
+                    mode: selectionMode
+                }
+            });
+            this.array[0].disabled = true;
+
+            // act
+            this.selectionController.changeItemSelection(0, { control: selectionMode === 'multiple' });
+
+            // assert
+            assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15, disabled: true }]);
+        });
+    });
+
+    QUnit.module('W1018', () => {
+        [true, false].forEach(deferred => {
+            ['infinite', 'virtual', 'standard'].forEach(scrollingMode => {
+                ['multiple', 'single', 'none'].forEach(selectionMode => {
+                    ['page', 'allPages'].forEach(selectAllMode => {
+                        QUnit.test(`scrolling mode = ${scrollingMode}, deferred = ${deferred}, selection mode = ${selectionMode}, selectAllMode = ${selectAllMode}`, function(assert) {
+                            // arrange
+                            sinon.spy(errors, 'log');
+
+                            this.applyOptions({
+                                selection: { mode: selectionMode, deferred, selectAllMode },
+                                scrolling: { mode: scrollingMode }
+                            });
+
+                            // assert
+                            if(scrollingMode === 'infinite' && selectionMode === 'multiple' && !deferred && selectAllMode === 'allPages') {
+                                assert.equal(errors.log.callCount, 1, 'warning was thrown');
+                                assert.equal(errors.log.lastCall.args[0], 'W1018', 'warning code');
+                            } else {
+                                assert.equal(errors.log.callCount, 0, 'warning was not thrown');
+                            }
+
+                            errors.log.restore();
+                        });
+                    });
+                });
+            });
+        });
     });
 });
 
@@ -2914,7 +2971,7 @@ QUnit.module('Selection SelectAllMode', {
 
         this.applyOptions({
             columns: ['id', 'field1', 'field3'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             selection: {
                 mode: 'multiple',
                 maxFilterLengthInRequest: 1
@@ -3276,7 +3333,7 @@ QUnit.module('Selection with views', {
         };
 
         this.setup = function() {
-            setupDataGridModules(this, ['data', 'columns', 'selection', 'columnHeaders', 'rows', 'editorFactory', 'editing'], {
+            setupDataGridModules(this, ['data', 'columns', 'selection', 'columnHeaders', 'rows', 'editorFactory', 'editing', 'editingCellBased'], {
                 initViews: true
             });
         };
@@ -3691,11 +3748,6 @@ QUnit.module('Selection with views', {
         this.selectionController.selectAll();
 
         this.option('selection.selectAllMode', 'page');
-        this.selectionController.optionChanged({
-            name: 'selection',
-            fullName: 'selectAllMode',
-            value: 'page'
-        });
 
         const $checkbox = testElement.find('.dx-checkbox');
 
@@ -3731,11 +3783,6 @@ QUnit.module('Selection with views', {
         this.dataController.pageIndex(1);
 
         this.option('selection.selectAllMode', 'allPages');
-        this.selectionController.optionChanged({
-            name: 'selection',
-            fullName: 'selectAllMode',
-            value: 'allPages'
-        });
 
         const $checkbox = testElement.find('.dx-checkbox');
 
@@ -4052,10 +4099,8 @@ QUnit.module('Deferred selection', {
         // act
         selectionChangedStub.reset();
 
-        this.selectionController.optionChanged({
-            name: 'selectionFilter',
-            value: ['id', '>', 5]
-        });
+        this.option('selectionFilter', ['id', '>', 5]);
+
         // assert
         let selectedKeys = [];
 
@@ -4135,7 +4180,7 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [
@@ -4175,7 +4220,7 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [
@@ -4204,6 +4249,37 @@ QUnit.module('Deferred selection', {
 
         // assert
         assert.equal(selectedRowsData.length, 0, 'selected rows data count');
+    });
+
+    // T959045
+    QUnit.test('The selectionFilter should be correctly after select all -> deselect row when there is filter', function(assert) {
+        // arrange
+        this.setupDataGrid({
+            dataSource: [
+                { id: 1, name: 'Alex' },
+                { id: 5, name: 'Sergey' }
+            ],
+            keyExpr: 'id',
+            columns: [{ dataField: 'id', filterValue: 1, dataType: 'number' }],
+            selection: { mode: 'multiple', deferred: true }
+        });
+
+        this.clock.tick();
+
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, 'filtered items');
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), ['id', '=', 1], 'selectionFilter');
+
+        // act
+        this.selectionController.deselectRows(1);
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter');
     });
 });
 

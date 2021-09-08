@@ -10,7 +10,6 @@ import positionUtils from 'animation/position';
 import ValidationGroup from 'ui/validation_group';
 import eventsEngine from 'events/core/events_engine';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'integration/angular';
 
@@ -1004,6 +1003,30 @@ QUnit.test('Custom store with ISO8601 dates', function(assert) {
     this.clock.tick(0);
 
     assert.equal($markup.find('.dx-scheduler-appointment').length, 1, 'appointment count');
+});
+
+QUnit.test('Should not merge element with ".dx-template-wrapper" class', function(assert) {
+    const $markup = $('\
+        <div dx-scheduler="schedulerOptions">\
+            <div data-options=\'dxTemplate: { name: "dataCellTemplate" }\' class=\'test-cell\'>\
+            </div>\
+        </div>\
+    ');
+
+    const controller = function($scope) {
+        $scope.schedulerOptions = {
+            dataCellTemplate: 'dataCellTemplate'
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick(0);
+    const template = $markup.find('.test-cell').first();
+
+    assert.equal(template.length, 1, 'Template exists');
+    assert.ok(template.hasClass('dx-template-wrapper'), 'Template has class ".dx-template-wrapper"');
+    assert.ok(template.parent().is('td'), 'Template\'s parent is cell');
 });
 
 

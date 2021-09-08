@@ -5,23 +5,33 @@ import {
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_REQUIRED_CLASS,
+    LAYOUT_MANAGER_ONE_COLUMN,
+} from 'ui/form/constants';
+
+import {
+    FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_CLASS,
+    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
+    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
+} from 'ui/form/components/field_item';
+
+import {
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_LABEL_LOCATION_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+} from 'ui/form/components/label';
+
+import {
     FIELD_EMPTY_ITEM_CLASS,
-    LAYOUT_MANAGER_ONE_COLUMN
-} from 'ui/form/constants';
+} from 'ui/form/components/empty_item';
+
 import config from 'core/config';
-import typeUtils from 'core/utils/type';
+import { isFunction, isDefined, isRenderer } from 'core/utils/type';
 import { inArray } from 'core/utils/array';
 import windowUtils from 'core/utils/window';
 
@@ -39,7 +49,6 @@ import 'ui/slider';
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
 
-import 'common.css!';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 
@@ -1322,27 +1331,27 @@ QUnit.module('Layout manager', () => {
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
-            layoutData: {
-                name: 'Alex',
-                lastName: 'Johnson',
-                state: 'CA'
-            },
-            items: [{
-                dataField: 'name',
-                helpText: 'Type a name'
-            }, {
-                dataField: 'lastName'
-            }]
+            items: [
+                { dataField: 'field1', helpText: 'field1 help text' },
+                { dataField: 'field1', helpText: null },
+                { dataField: 'field1', helpText: undefined },
+                'field3',
+                { dataField: 'field2' },
+                { itemType: 'empty', helpText: 'should be rendered for simple only' },
+                { itemType: 'group', helpText: 'should be rendered for simple only' },
+                { itemType: 'tabbed', helpText: 'should be rendered for simple only' },
+                { itemType: 'button', helpText: 'should be rendered for simple only' },
+            ]
         });
 
         const $fieldItems = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'First field item has widget wrapper');
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'First field item has help text element');
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).text(), 'Type a name', 'Correct help text');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'FIELD_ITEM_CONTENT_WRAPPER_CLASS.length');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'FIELD_ITEM_HELP_TEXT_CLASS.length');
 
-        assert.equal($fieldItems.eq(1).find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 0, 'Second field item has\'t widget wrapper');
-        assert.equal($fieldItems.eq(1).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 0, 'Second field item has\'t help text element');
+        const $fieldHelpText = $fieldItems.eq(0).find('>.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS + '>.' + FIELD_ITEM_HELP_TEXT_CLASS + ':last-child');
+        assert.equal($fieldHelpText.length, 1, '$field1HelpText.length');
+        assert.equal($fieldHelpText.text(), 'field1 help text');
     });
 
     test('Change the order of items', function(assert) {
@@ -2171,7 +2180,7 @@ QUnit.module('Templates', () => {
             items: [{
                 dataField: 'test',
                 template: function(data, container) {
-                    assert.deepEqual(typeUtils.isRenderer(container), !!config().useJQuery, 'container is correct');
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
 
                     $(container).append($('<span>').text('Template'));
 
@@ -2310,9 +2319,9 @@ QUnit.module('Public methods', () => {
 
         const layoutManager = $testContainer.dxLayoutManager('instance');
 
-        assert.ok(!typeUtils.isDefined(layoutManager.getEditor('test2')), 'We has\'t instance for \'test2\' field');
-        assert.ok(typeUtils.isDefined(layoutManager.getEditor('test1')), 'We have instance for \'test1\' field');
-        assert.ok(typeUtils.isDefined(layoutManager.getEditor('test3')), 'We have instance for \'test3\' field');
+        assert.ok(!isDefined(layoutManager.getEditor('test2')), 'We has\'t instance for \'test2\' field');
+        assert.ok(isDefined(layoutManager.getEditor('test1')), 'We have instance for \'test1\' field');
+        assert.ok(isDefined(layoutManager.getEditor('test3')), 'We have instance for \'test3\' field');
 
         assert.equal(layoutManager.getEditor('test1').NAME, 'dxTextBox', 'It\'s textbox');
         assert.equal(layoutManager.getEditor('test3').NAME, 'dxNumberBox', 'It\'s numberBox');
@@ -2360,7 +2369,7 @@ QUnit.module('Accessibility', () => {
 
         items.forEach(({ dataField, editorType }) => {
             const editor = layoutManager.getEditor(dataField);
-            const $ariaTarget = editor._getAriaTarget();
+            const $ariaTarget = isFunction(editor._getAriaTarget) ? editor._getAriaTarget() : editor.$element();
             const $label = editor.$element().closest(`.${FIELD_ITEM_CLASS}`).children().first();
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
 

@@ -18,7 +18,6 @@ QUnit.testStart(function() {
 });
 
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -1483,7 +1482,7 @@ QUnit.module('Fixed columns', {
                 template: function(container) {
                     detailDataGrid = $('<div>').appendTo(container).dxDataGrid({
                         height: 100,
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         scrolling: { useNative: false },
                         dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
                         columns: ['id']
@@ -1925,9 +1924,7 @@ QUnit.module('Fixed columns', {
 
         that.clock.restore();
         that.items = generateData(20);
-        that.options.scrolling = {
-            pushBackValue: 0 // for ios devices
-        };
+
         that.setupDataGrid();
         that.rowsView.render(that.gridContainer);
         that.rowsView.height(100);
@@ -1957,9 +1954,7 @@ QUnit.module('Fixed columns', {
 
             that.clock.restore();
             that.items = generateData(20);
-            that.options.scrolling = {
-                pushBackValue: 0 // for ios devices
-            };
+
             that.setupDataGrid();
             that.rowsView.render(that.gridContainer);
             that.rowsView.height(100);
@@ -2770,7 +2765,7 @@ QUnit.module('Fixed columns with band columns', {
         assert.equal(widths.length, 3, 'widths of the columns');
         assert.equal(widths[0], 200, 'width of the first cell');
         assert.equal(widths[1], 150, 'width of the second cell');
-        assert.equal(widths[2], 250, 'width of the fourth cell');
+        assert.roughEqual(widths[2], 250, 0.1, 'width of the fourth cell');
     });
 
     QUnit.test('Fixed columns with band columns', function(assert) {
@@ -3072,7 +3067,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         that.gridContainer = $('#container > .dx-datagrid');
 
         that.options = {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             columns: [{ dataField: 'field1', fixed: true }, 'field2', 'field3', 'field4'],
             dataSource: [
@@ -3085,7 +3080,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         };
 
         that.setupDataGrid = function() {
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'columnFixing', 'masterDetail', 'editorFactory', 'grouping', 'virtualScrolling'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'columnFixing', 'masterDetail', 'editorFactory', 'grouping', 'summary', 'virtualScrolling'], {
                 initViews: true
             });
         };
@@ -3252,7 +3247,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
 
         // act
         scrollable.scrollTo({ x: 10 });
-        $(scrollable._container()).trigger('scroll');
+        $(scrollable.container()).trigger('scroll');
 
         // assert
         const $fixedTableElement = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
@@ -3292,6 +3287,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
 
         // assert
         assert.strictEqual($testElement.find('.dx-datagrid-bottom-load-panel').length, 2, 'load panel count');
+        assert.strictEqual($testElement.find('.dx-datagrid-bottom-load-panel').css('background-color'), 'rgb(255, 255, 255)', 'load panel background'); // T1011801
 
         // act
         that.columnOption(0, 'fixed', false);
@@ -3321,6 +3317,49 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         assert.ok(firstColumn.headerId.indexOf('-fixed') > 0, 'headerId of the first column has the \'-fixed\' postfix');
         assert.equal(secondColumn.command, 'transparent', 'the second column is transparent');
         assert.notOk(secondColumn.headerId, 'headerId of the second column is not defined');
+    });
+
+    // T1011790
+    QUnit.test('Draw fixed table for rowsView with summary by fixed column in group row when all columns are fixed', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [
+            { dataField: 'field1', fixed: true, groupIndex: 0 },
+            { dataField: 'field2', fixed: true },
+            { dataField: 'field3', fixed: true },
+            { dataField: 'field4', fixed: true }
+        ];
+        this.options.summary = {
+            groupItems: [
+                {
+                    column: 'field4',
+                    summaryType: 'max',
+                    showInGroupFooter: false,
+                    alignByColumn: true
+                }
+            ]
+        };
+
+        this.setupDataGrid();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual($testElement.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content').length, 1, 'has main content');
+        assert.strictEqual($testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 0, 'hasn\'t fix content');
+
+        const $table = $testElement.find('.dx-datagrid-rowsview').children(':not(.dx-datagrid-content-fixed)').find('table');
+        const $groupRows = $table.find('tbody > .dx-group-row');
+        const $groupCells = $groupRows.first().children();
+
+        assert.strictEqual($groupRows.length, 5, 'has group row in main table');
+        assert.strictEqual($groupCells.length, 3, 'count cell in group row');
+        assert.ok($groupCells.first().hasClass('dx-datagrid-group-space'), 'first cell in group row');
+        assert.strictEqual($groupCells.eq(1).text(), 'Field 1: 1', 'text second cell in group row');
+        assert.strictEqual($groupCells.eq(1).attr('colspan'), '2', 'colspan a second cell in group row');
+        assert.strictEqual($groupCells.eq(2).text(), '4', 'summary value');
     });
 });
 

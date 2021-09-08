@@ -3,7 +3,7 @@ import { ensureDefined } from '../core/utils/common';
 import { compileGetter, compileSetter } from '../core/utils/data';
 import Guid from '../core/guid';
 import { isFunction } from '../core/utils/type';
-import errorsUtils from '../data/errors';
+import { errors } from '../data/errors';
 import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
 import { fileSaver } from '../exporter/file_saver';
@@ -11,7 +11,8 @@ import Errors from '../ui/widget/ui.errors';
 import JSZip from 'jszip';
 
 import FileSystemProviderBase from './provider_base';
-import ErrorCode from './errors';
+import FileSystemError from './error';
+import ErrorCode from './error_codes';
 import { pathCombine } from './utils';
 
 const window = getWindow();
@@ -24,7 +25,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
         const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
-            throw errorsUtils.errors.Error('E4006');
+            throw errors.Error('E4006');
         }
 
 
@@ -95,8 +96,6 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
             array.push(dataItem);
         }));
 
-        this._updateHasSubDirs(destinationDir);
-
         return deferreds;
     }
 
@@ -111,8 +110,6 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
             const copiedItem = this._createCopy(dataItem);
             array.push(copiedItem);
         }));
-
-        this._updateHasSubDirs(destinationDir);
 
         return deferreds;
     }
@@ -196,10 +193,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
     _validateDirectoryExists(directoryInfo) {
         if(!this._isFileItemExists(directoryInfo) || this._isDirGetter(directoryInfo.fileItem)) {
-            throw {
-                errorId: ErrorCode.DirectoryNotFound,
-                fileItem: directoryInfo
-            };
+            throw new FileSystemError(ErrorCode.DirectoryNotFound, directoryInfo);
         }
     }
 
@@ -213,10 +207,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
             currentPath = pathCombine(currentPath, info.name);
             const pathKey = this._getDataObjectKey(info.key, currentPath);
             if(pathKey === itemKey) {
-                throw {
-                    errorId: ErrorCode.Other,
-                    fileItem: item
-                };
+                throw new FileSystemError(ErrorCode.Other, item);
             }
         });
     }
@@ -231,10 +222,6 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
         const parentDataItem = this._findDataObject(parentDir);
         const array = this._getDirectoryDataItems(parentDataItem);
         array.push(dataObj);
-
-        if(isDirectory) {
-            this._updateHasSubDirs(parentDir);
-        }
 
         return dataObj;
     }
@@ -312,10 +299,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
         const result = this._findFileItemObj(item.getFullPathInfo());
         if(!result) {
-            throw {
-                errorId: item.isDirectory ? ErrorCode.DirectoryNotFound : ErrorCode.FileNotFound,
-                fileItem: item
-            };
+            const errorCode = item.isDirectory ? ErrorCode.DirectoryNotFound : ErrorCode.FileNotFound;
+            throw new FileSystemError(errorCode, item);
         }
         return result;
     }
@@ -359,13 +344,6 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
             this._keySetter(dataObj, key);
         }
         return key;
-    }
-
-    _updateHasSubDirs(dir) {
-        if(dir && !dir.isRoot()) {
-            const dataItem = this._findDataObject(dir);
-            dir.hasSubDirectories = this._hasSubDirs(dataItem);
-        }
     }
 
     _hasSubDirs(dataObj) {

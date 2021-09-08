@@ -5,30 +5,52 @@ export interface ViewCellData {
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
-  groups?: object;
+  groups?: Record<string, unknown>;
   groupIndex?: number;
   index: number;
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
-  key: string;
+  key: number;
   firstDayOfMonth?: boolean;
 }
 
-interface ViewData {
-  dateTable: ViewCellData[][];
+export interface DateHeaderCellData extends ViewCellData {
+  colSpan: number;
+}
+
+interface ViewDataBase {
   groupIndex: number;
-  allDayPanel?: ViewCellData[];
   isGroupedAllDayPanel?: boolean;
 }
 
-export interface GroupedViewData {
-  groupedData: ViewData[];
-  isVirtual?: boolean;
+interface ViewData extends ViewDataBase {
+  dateTable: ViewCellData[][];
+  allDayPanel?: ViewCellData[];
+}
+
+interface TimePanelCellsData extends ViewDataBase {
+  dateTable: ViewCellData[];
+  allDayPanel?: ViewCellData;
+}
+
+interface GroupedViewDataBase {
   topVirtualRowHeight?: number;
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
   cellCountInGroupRow: number;
+  leftVirtualCellCount: number;
+  rightVirtualCellCount: number;
+  topVirtualRowCount: number;
+  bottomVirtualRowCount: number;
+}
+
+export interface GroupedViewData extends GroupedViewDataBase {
+  groupedData: ViewData[];
+}
+
+export interface TimePanelData extends GroupedViewDataBase {
+  groupedData: TimePanelCellsData[];
 }
 
 export interface GroupItem {
@@ -40,6 +62,9 @@ export interface GroupRenderItem extends GroupItem {
   key: string;
   resourceName: string;
   data: GroupItem;
+  colSpan?: number;
+  isFirstGroupCell?: boolean;
+  isLastGroupCell?: boolean;
 }
 
 export interface Group {
@@ -49,7 +74,7 @@ export interface Group {
 }
 
 interface BaseTemplateData {
-  groups?: object;
+  groups?: Record<string, unknown>;
   groupIndex?: number;
   allDay?: boolean;
   text?: string;
@@ -96,3 +121,14 @@ export interface ResourceCellTemplateProps extends BaseTemplateProps {
   data: ResourceCellTemplateData;
 }
 
+export interface DateHeaderData {
+  dataMap: DateHeaderCellData[][];
+  leftVirtualCellWidth: number;
+  rightVirtualCellWidth: number;
+  leftVirtualCellCount: number;
+  rightVirtualCellCount: number;
+  weekDayLeftVirtualCellWidth?: number;
+  weekDayRightVirtualCellWidth?: number;
+  weekDayLeftVirtualCellCount?: number;
+  weekDayRightVirtualCellCount?: number;
+}

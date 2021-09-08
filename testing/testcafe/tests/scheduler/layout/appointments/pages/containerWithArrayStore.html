@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Scheduler tests T1024213</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../../../artifacts/css/dx.light.css" />
+
+    <script type="text/javascript" src="../../../../../../../artifacts/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../artifacts/js/dx.all.debug.js"></script>
+</head>
+
+<body>
+    <div id="scheduler"></div>
+    <script>
+        $(function () {
+            const scheduler = $("#scheduler").dxScheduler({
+                dataSource: new DevExpress.data.DataSource({
+                    store: {
+                        type: "array",
+                        key: "appointmentId",
+                        data: [{
+                            startDate: new Date(2021, 6, 12, 10),
+                            endDate: new Date(2021, 6, 12, 11),
+                            text: 'Test Appointment',
+                            recurrenceRule: 'FREQ=DAILY;COUNT=3',
+                            appointmentId: 0,
+                        }],
+                    },
+                }),
+                recurrenceEditMode: 'occurrence',
+                views: ['week'],
+                currentView: 'week',
+                startDayHour: 9,
+                currentDate: new Date(2021, 6, 12, 10),
+                height: 600,
+            });
+        });
+    </script>
+</body>
+
+</html>

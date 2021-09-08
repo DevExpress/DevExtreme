@@ -5,7 +5,6 @@ import holdEvent from 'events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
 import { setupRenovation } from '../../helpers/renovationHelper.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import ActionSheet from 'ui/action_sheet';
 
@@ -63,7 +62,10 @@ QUnit.module('action sheet', {
     QUnit.test('popup position (B252842)', function(assert) {
         assert.expect(1);
 
-        const $popup = $('.dx-popup', this.element); const $overlayContent = $('.dx-overlay-content', $popup); const popup = $popup.dxPopup('instance'); const positionConfig = popup.option('position');
+        const $popup = $('.dx-popup', this.element);
+        const $overlayContent = $('.dx-overlay-content', $popup);
+        const popup = $popup.dxPopup('instance');
+        const positionConfig = popup.option('position');
 
         this.instance.show().done(function() {
             const expectedPosition = positionUtils.calculate($overlayContent, positionConfig).v.location;
@@ -258,7 +260,8 @@ QUnit.module('action sheet', {
 
     QUnit.test('showTitle option', function(assert) {
         this.instance.show();
-        const $popupTitle = $('.dx-popup-title'); const $popup = $('.dx-popup-wrapper');
+        const $popupTitle = $('.dx-popup-title');
+        const $popup = $('.dx-popup-wrapper');
 
         assert.ok($popupTitle.is(':visible'), 'visible by default');
         assert.ok(!$popup.hasClass(ACTION_SHEET_WITHOUT_TITLE_CLASS), 'class set');
@@ -347,7 +350,8 @@ QUnit.module('action sheet', {
     });
 
     QUnit.test('items rendered correctly after changing items and showing (Q570978)', function(assert) {
-        const $actionSheet = $('<div>').dxActionSheet({}).appendTo('#qunit-fixture'); const actionSheet = $actionSheet.dxActionSheet('instance');
+        const $actionSheet = $('<div>').dxActionSheet({}).appendTo('#qunit-fixture');
+        const actionSheet = $actionSheet.dxActionSheet('instance');
 
         actionSheet.option('items', [{ text: '1' }, { text: '2' }, { text: '3' }]);
         actionSheet.option('visible', true);
@@ -441,7 +445,8 @@ QUnit.module('popover integration', {
 
         $actionSheet.dxActionSheet('option', 'visible', true);
 
-        const $popover = $('.dx-popover'); const $target = $($popover.dxPopover('option', 'target'));
+        const $popover = $('.dx-popover');
+        const $target = $($popover.dxPopover('option', 'target'));
 
         assert.equal($popover.length, 1, 'popover was created');
         assert.equal($target.get(0), $container.get(0), 'popover target is element');
@@ -556,28 +561,32 @@ QUnit.module('regressions', {
 
 QUnit.module('widget sizing render', () => {
     QUnit.test('default', function(assert) {
-        const $element = $('#widget').dxActionSheet(); const instance = $element.dxActionSheet('instance');
+        const $element = $('#widget').dxActionSheet();
+        const instance = $element.dxActionSheet('instance');
 
         instance.show();
 
-        assert.ok(instance._popup._container().outerWidth() > 0, 'outer width of the element must be more than zero');
+        assert.ok(instance._popup.$overlayContent().outerWidth() > 0, 'outer width of the element must be more than zero');
     });
 
     QUnit.test('constructor', function(assert) {
-        const $element = $('#widget').dxActionSheet({ width: 400 }); const instance = $element.dxActionSheet('instance');
+        const $element = $('#widget').dxActionSheet({ width: 400 });
+        const instance = $element.dxActionSheet('instance');
 
         instance.show();
 
         assert.strictEqual(instance.option('width'), 400);
-        assert.strictEqual(instance._popup._container().outerWidth(), 400, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(instance._popup.$overlayContent().outerWidth(), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxActionSheet(); const instance = $element.dxActionSheet('instance'); const customWidth = 400;
+        const $element = $('#widget').dxActionSheet();
+        const instance = $element.dxActionSheet('instance');
+        const customWidth = 400;
 
         instance.option('width', customWidth);
 
         instance.show();
-        assert.strictEqual(instance._popup._container().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(instance._popup.$overlayContent().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 });

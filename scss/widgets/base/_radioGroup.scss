@@ -22,15 +22,8 @@
 }
 
 .dx-radiogroup-horizontal {
-  @include dx-clearfix-mixin();
-
-  .dx-radiobutton {
-    float: left;
-
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-      float: right;
-    }
+  .dx-collection {
+    display: flex;
   }
 
   .dx-radiobutton:last-of-type {

@@ -78,7 +78,7 @@
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
             jqueryVersion = @Html.Raw(Json.Serialize(Model.JQueryVersion)),
             noJQuery = @Html.Raw(Json.Serialize(Model.NoJQuery)),
-            renovation = @Html.Raw(Json.Serialize(Model.Renovation)),
+            noRenovation = @Html.Raw(Json.Serialize(Model.NoRenovation)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
             DX_HTTP_CACHE = $.now(),
             lastTestCaseDoneTime = 0,
@@ -197,8 +197,8 @@
                 additionalParams.jquery = jqueryVersion;
             if(noJQuery)
                 additionalParams.nojquery = "true";
-            if(renovation)
-                additionalParams.renovation = "true";
+            if(noRenovation)
+                additionalParams.norenovation = "true";
 
             additionalParams.DX_HTTP_CACHE = DX_HTTP_CACHE;
             additionalParams.frame = i;
@@ -407,6 +407,7 @@
             if($.now() - lastTestCaseDoneTime > 1000) {
                 lastTestCaseDoneTime = $.now();
                 notifyDeviceTestManager("QUnit.testCaseDone");
+                notifyIsAlive();
             }
 
             if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
@@ -444,7 +445,7 @@
 
             if(suite) {
                 suite.finalize(passed, qunitData.total);
-                notifySuiteFinalized(suite.name, passed);
+                notifySuiteFinalized(suite.name, passed, qunitData.runtime);
             }
         };
 
@@ -477,9 +478,13 @@
             }
         }
 
-        function notifySuiteFinalized(name, passed) {
+        function notifySuiteFinalized(name, passed, runtime) {
             var url = @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized")));
-            $.post(url, { name: name, passed: passed });
+            $.post(url, { name: name, passed: passed, runtime: runtime });
+        }
+        function notifyIsAlive(){
+            var url = @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive")));
+            $.post(url);
         }
 
         function roundTime(time) {

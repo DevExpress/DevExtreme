@@ -2,6 +2,7 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 const { test } = QUnit;
 import 'ui/file_manager';
+import FileSystemError from 'file_management/error.js';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
@@ -330,29 +331,29 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.ok(this.wrapper.getSplitter().length, 'Splitter was rendered');
         assert.ok(this.wrapper.isSplitterActive(), 'Splitter is active');
 
-        let oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        let oldTreeViewWidth = this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
         let oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(100);
-        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, 'Dirs tree has correct width');
+        assert.equal(this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, 'Dirs tree has correct width');
         assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth - 100, 'Item view has correct width');
 
-        oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        oldTreeViewWidth = this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
         oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(-200);
-        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth - 200, 'Dirs tree has correct width');
+        assert.equal(this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth - 200, 'Dirs tree has correct width');
         assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth + 200, 'Item view has correct width');
 
-        oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        oldTreeViewWidth = this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
         oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(-oldTreeViewWidth * 2);
-        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, 0, 'Dirs tree has correct width');
+        assert.equal(this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, 0, 'Dirs tree has correct width');
         assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, fileManagerWidth, 'Item view has correct width');
 
         const splitterWidth = this.wrapper.getSplitter().get(0).clientWidth;
-        oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        oldTreeViewWidth = this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
         oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(oldItemViewWidth * 2);
-        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, 'Dirs tree has correct width');
+        assert.equal(this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, 'Dirs tree has correct width');
         assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, splitterWidth, 'Item view has correct width');
 
         renderer.fn.width = originalFunc;
@@ -851,5 +852,88 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         this.clock.tick(800);
 
         assert.strictEqual(this.wrapper.getFocusedItemText(), folderName, 'current folder is still focused');
+    });
+
+    test('errorText can be customized on the getItems', function(assert) {
+        const customMessage = 'Custom error message';
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: () => { throw new FileSystemError(0, null, customMessage); }
+            })
+        });
+        this.clock.tick(400);
+
+        const info = this.progressPanelWrapper.getInfos()[0];
+        const common = info.common;
+        const details = info.details[0];
+        assert.notOk(common.hasError, 'error rendered');
+        assert.equal(common.commonText, 'The directory cannot be opened', 'common text rendered');
+        assert.notOk(common.$progressBar.length, 'progress bar not rendered');
+        assert.ok(common.closeButtonVisible, 'close button visible');
+
+        assert.ok(details.hasError, 'error rendered');
+        assert.equal(details.errorText, customMessage, 'details error text rendered');
+    });
+
+    test('repaint method does not call data loading', function(assert) {
+        const getItemsStub = sinon.stub();
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: getItemsStub
+            })
+        });
+        this.clock.tick(400);
+        getItemsStub.reset();
+
+        this.fileManager.repaint();
+        this.clock.tick(400);
+
+        assert.ok(getItemsStub.notCalled, 'getItems method was not called');
+    });
+
+    test('currentPathKeys option has correct value with nameExpr and keyExpr (T988286)', function(assert) {
+        this.fileManager.option('fileSystemProvider', {
+            data: [
+                {
+                    title: 'Folder 1',
+                    id: 'dir-1',
+                    isDirectory: true,
+                    items: [
+                        {
+                            title: 'Folder 1.1',
+                            id: 'dir-1.1',
+                            isDirectory: true
+                        }
+                    ]
+                }
+            ],
+            nameExpr: 'title',
+            keyExpr: 'id'
+        });
+        this.clock.tick(400);
+
+        let currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is root');
+        assert.strictEqual(currentPathKeys.length, 0, 'Current path keys has correct size');
+
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, 'dir-1', 'Current directory is Folder 1');
+        assert.strictEqual(currentPathKeys.length, 1, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], 'dir-1', 'Current path keys are correct');
+
+        this.wrapper.findThumbnailsItem('Folder 1.1').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1/Folder 1.1', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, 'dir-1.1', 'Current directory is Folder 1.1');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], 'dir-1');
+        assert.strictEqual(currentPathKeys[1], 'dir-1.1', 'Current path keys are correct');
     });
 });

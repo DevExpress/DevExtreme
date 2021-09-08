@@ -60,7 +60,7 @@ const environment = {
         this.axis = new Axis({
             renderer: this.renderer,
             stripsGroup: this.renderer.g(),
-            labelAxesGroup: this.renderer.g(),
+            stripLabelAxesGroup: this.renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),

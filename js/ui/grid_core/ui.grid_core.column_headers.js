@@ -25,7 +25,7 @@ const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
 const HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator';
 const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
 
-export default {
+export const columnHeadersModule = {
     defaultOptions: function() {
         return {
             showColumnHeaders: true,
@@ -333,7 +333,7 @@ export default {
                 },
 
                 getHeadersRowHeight: function() {
-                    const $tableElement = this._getTableElement();
+                    const $tableElement = this.getTableElement();
                     const $headerRows = $tableElement && $tableElement.find('.' + HEADER_ROW_CLASS);
 
                     return $headerRows && $headerRows.toArray().reduce(function(sum, headerRow) {
@@ -435,7 +435,7 @@ export default {
                     const $columnElements = that.getColumnElements();
 
                     if($columnElements && $columnElements.length) {
-                        const offset = that._getTableElement().offset();
+                        const offset = that.getTableElement().offset();
                         return {
                             top: offset.top
                         };

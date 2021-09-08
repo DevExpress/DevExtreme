@@ -35,14 +35,18 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                     e.preventDefault();
 
                     if(this._widget.option('zoomLevel') === this._widget.option('maxZoomLevel')) {
-                        const contouredDate = this._widget._view.option('contouredDate');
+                        const viewValue = this._getContouredValue();
                         const lastActionElement = this._lastActionElement;
-                        if(contouredDate && lastActionElement === 'calendar') {
-                            this.dateBoxValue(contouredDate, e);
+                        const shouldCloseDropDown = this._closeDropDownByEnter();
+
+                        if(shouldCloseDropDown && viewValue && lastActionElement === 'calendar') {
+                            this.dateBoxValue(viewValue, e);
                         }
 
-                        this.dateBox.close();
+                        shouldCloseDropDown && this.dateBox.close();
                         this.dateBox._valueChangeEventHandler(e);
+
+                        return !shouldCloseDropDown;
                     } else {
                         return true;
                     }
@@ -59,8 +63,14 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         return displayFormat || 'shortdate';
     },
 
+    _closeDropDownByEnter: () => true,
+
     _getWidgetName: function() {
         return Calendar;
+    },
+
+    _getContouredValue: function() {
+        return this._widget._view.option('contouredDate');
     },
 
     getKeyboardListener() {
@@ -118,7 +128,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                     onInitialized: function(e) {
                         e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
                     }.bind(this),
-                    onClick: (function() { this._widget._toTodayView(); }).bind(this),
+                    onClick: (args) => { this._widget._toTodayView(args); },
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
                     type: 'today'
                 }

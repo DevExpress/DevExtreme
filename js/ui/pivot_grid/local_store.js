@@ -1,5 +1,5 @@
 import { when, Deferred } from '../../core/utils/deferred';
-import dataUtils from '../../data/utils';
+import { aggregators } from '../../data/utils';
 import dataQuery from '../../data/query';
 import dateSerialization from '../../core/utils/date_serialization';
 import { DataSource } from '../../data/data_source/data_source';
@@ -227,7 +227,7 @@ export const LocalStore = Class.inherit((function() {
             };
         }
 
-        return dataUtils.aggregators[field.summaryType] || dataUtils.aggregators.count;
+        return aggregators[field.summaryType] || aggregators.count;
     }
 
     function aggregationStep(measures, aggregationCells, data) {

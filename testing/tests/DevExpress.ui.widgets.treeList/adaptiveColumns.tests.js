@@ -6,7 +6,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 
@@ -48,7 +47,7 @@ function setupTreeList(that, $treeListContainer) {
         initViews: true
     };
 
-    treeListMocks.setupTreeListModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'masterDetail', 'editing', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'gridView'], that.setupOptions);
+    treeListMocks.setupTreeListModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'masterDetail', 'editing', 'editingRowBased', 'editingCellBased', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'gridView'], that.setupOptions);
 }
 
 QUnit.module('API', {

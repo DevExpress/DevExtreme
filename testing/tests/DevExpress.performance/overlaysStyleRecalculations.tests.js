@@ -1,8 +1,7 @@
 require('../../helpers/qunitPerformanceExtension.js');
-require('ui/overlay');
+require('ui/overlay/ui.overlay');
 require('ui/popup');
 
-require('common.css!');
 require('generic_light.css!');
 
 const $ = require('jquery');

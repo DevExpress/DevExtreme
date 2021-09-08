@@ -1,14 +1,21 @@
 import $ from 'jquery';
 import exporter from 'exporter';
-
 const imageCreator = exporter.image.creator;
 import typeUtils from 'core/utils/type';
 const testingMarkupStart = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>';
 const testingMarkupEnd = '</svg>';
 import browser from 'core/utils/browser';
-import proxyUrlFormatter from 'data/proxy_url_formatter';
 import svgUtils from 'core/utils/svg';
 import { Deferred } from 'core/utils/deferred';
+
+const pathNameByUrl = (url) => {
+    const a = document.createElement('a');
+    a.href = url;
+
+    return a.pathname.charAt(0) === '/'
+        ? a.pathname
+        : '/' + a.pathname;
+};
 
 function setupCanvasStub(drawnElements, paths) {
     const prototype = window.CanvasRenderingContext2D.prototype;
@@ -20,7 +27,7 @@ function setupCanvasStub(drawnElements, paths) {
             type: 'image',
             args: {
                 node: img.nodeName,
-                src: proxyUrlFormatter.parseUrl(img.src).pathname,
+                src: pathNameByUrl(img.src),
                 x: x,
                 y: y,
                 width: width,
@@ -272,6 +279,8 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
+    sinon.stub(prototype, 'setTransform');
+
     // clips & patterns
     sinon.stub(prototype, 'clip');
     sinon.stub(prototype, 'save');
@@ -336,6 +345,8 @@ function teardownCanvasStub() {
 
     // createLinearGradient
     prototype.createLinearGradient.restore();
+
+    prototype.setTransform.restore();
 }
 
 function getData(markup, isFullMode) {
@@ -433,6 +444,45 @@ QUnit.test('Defined background', function(assert) {
             }, 'Background style');
         } finally {
             done();
+        }
+    });
+});
+
+QUnit.test('Defined background, devicePixelRatio is 2 (T892041)', function(assert) {
+    if(browser.msie) {
+        assert.ok(true, 'This test is not for IE/Edge');
+        return;
+    }
+
+    const that = this;
+    const tmpDevicePixelRatio = window.devicePixelRatio;
+    window.devicePixelRatio = 2;
+    const done = assert.async();
+    const context = window.CanvasRenderingContext2D.prototype;
+    const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
+        {
+            width: 560,
+            height: 290,
+            margin: 10,
+            format: 'png',
+            backgroundColor: '#ff0000'
+        });
+
+    assert.expect(2);
+    $.when(imageBlob).done(function() {
+        try {
+            const backgroundElem = that.drawnElements[0];
+
+            assert.deepEqual(backgroundElem.args, {
+                x: -10,
+                y: -10,
+                width: 1140,
+                height: 600
+            }, 'Background args');
+            assert.deepEqual(context.setTransform.getCall(0).args, [2, 0, 0, 2, 0, 0], 'setTransform');
+        } finally {
+            done();
+            window.devicePixelRatio = tmpDevicePixelRatio;
         }
     });
 });
@@ -1270,6 +1320,28 @@ QUnit.test('Text', function(assert) {
             assert.equal(textElem.args[0], 'Test', 'Text');
             assert.equal(textElem.args[1], 20, 'X coord');
             assert.equal(textElem.args[2], 30, 'Y coord');
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('Defaults of text', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-weight:bold; opacity: 0.3;">Test</text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(4);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 2, 'Canvas elements count');
+
+            const { style } = that.drawnElements[1];
+
+            assert.equal(style.font, 'sans-serif', 'Style font');
+            assert.equal(style.size, '10px', 'Style size');
+            assert.equal(style.fillStyle, '#000000', 'Style fill');
         } finally {
             done();
         }

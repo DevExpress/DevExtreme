@@ -1,9 +1,12 @@
-import '../jquery_augmentation';
+import {
+    UserDefinedElement,
+} from '../core/element';
 
 import dxOverlay, {
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
+/** @namespace DevExpress.ui */
 export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxOverlayOptions<T> {
     mode?: string;
 
@@ -11,24 +14,14 @@ export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxO
 
     positionRequest?: string;
 
-    boundary?: String | Element | JQuery;
+    boundary?: String | UserDefinedElement;
 
     offset?: object;
 }
-
+/** @namespace DevExpress.ui */
 export default class dxValidationMessage extends dxOverlay {
-    constructor(element: Element, options?: dxValidationMessageOptions)
-    constructor(element: JQuery, options?: dxValidationMessageOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationMessageOptions)
 }
 
-declare global {
-interface JQuery {
-    dxValidationMessage(): JQuery;
-    dxValidationMessage(options: "instance"): dxValidationMessage;
-    dxValidationMessage(options: string): any;
-    dxValidationMessage(options: string, ...params: any[]): any;
-    dxValidationMessage(options: dxValidationMessageOptions): JQuery;
-}
-}
 export type Options = dxValidationMessageOptions;
 export type IOptions = dxValidationMessageOptions;

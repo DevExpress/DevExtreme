@@ -56,7 +56,7 @@ const RowDraggingExtender = {
             this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
         };
 
-        if(allowReordering && $content.length) {
+        if((allowReordering || this[currentSortableName]) && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
                 component: this.component,
                 contentTemplate: null,
@@ -70,7 +70,8 @@ const RowDraggingExtender = {
                     e.itemData = row && row.data;
 
                     const isDataRow = row && row.rowType === 'data';
-                    e.cancel = !isDataRow;
+
+                    e.cancel = !allowReordering || !isDataRow;
 
                     rowDragging.onDragStart?.(e);
                 },
@@ -84,6 +85,10 @@ const RowDraggingExtender = {
                     togglePointerEventsStyle(false);
                     rowDragging.onDragEnd?.(e);
                 },
+                onAdd: (e) => {
+                    togglePointerEventsStyle(false);
+                    rowDragging.onAdd?.(e);
+                },
                 dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode,
                 onOptionChanged: (e) => {
                     const hasFixedSortable = this[sortableFixedName];
@@ -95,7 +100,8 @@ const RowDraggingExtender = {
                 }
             }));
 
-            $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, !rowDragging.showDragIcons);
+            $content.toggleClass('dx-scrollable-container', isFixedTableRendering);
+            $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, allowReordering && !rowDragging.showDragIcons);
         }
 
         return $content;
@@ -182,7 +188,7 @@ const RowDraggingExtender = {
 };
 
 
-export default {
+export const rowDraggingModule = {
     defaultOptions: function() {
         return {
             rowDragging: {

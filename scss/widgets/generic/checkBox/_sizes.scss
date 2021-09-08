@@ -4,20 +4,20 @@
 // adduse
 
 $generic-checkbox-arrow-icon-size: null !default;
-$generic-checkbox-intermidiate-icon-size: null !default;
-$generic-checkbox-intermidiate-icon-margin: null !default;
+$generic-checkbox-indeterminate-icon-size: null !default;
+$generic-checkbox-indeterminate-icon-margin: null !default;
 $generic-checkbox-size: null !default;
 
 @if $size == "default" {
   $generic-checkbox-arrow-icon-size: 16px !default;
-  $generic-checkbox-intermidiate-icon-size: 14px !default;
-  $generic-checkbox-intermidiate-icon-margin: 4px !default;
+  $generic-checkbox-indeterminate-icon-size: 12px !default;
+  $generic-checkbox-indeterminate-icon-margin: 4px !default;
   $generic-checkbox-size: 22px !default;
 }
 
 @else if $size == "compact" {
   $generic-checkbox-arrow-icon-size: 10px !default;
-  $generic-checkbox-intermidiate-icon-size: 8px !default;
-  $generic-checkbox-intermidiate-icon-margin: 3px !default;
+  $generic-checkbox-indeterminate-icon-size: 8px !default;
+  $generic-checkbox-indeterminate-icon-margin: 3px !default;
   $generic-checkbox-size: 16px !default;
 }

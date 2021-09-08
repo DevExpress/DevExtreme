@@ -1,11 +1,11 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Fragment, Consumer,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
@@ -17,7 +17,6 @@ const nextButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}
 const prevButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
 const nextButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`;
 const prevButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   renderPrevButton,
   renderNextButton,
@@ -30,7 +29,7 @@ export const viewFunction = ({
     isLargeDisplayMode, maxPagesCount,
     pageCount, pageIndex, pagesCountText,
   },
-}: PageIndexSelector) => (
+}: PageIndexSelector): JSX.Element => (
   <Fragment>
     {renderPrevButton && (
     <LightButton

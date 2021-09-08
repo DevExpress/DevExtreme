@@ -1,10 +1,9 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {
@@ -39,9 +38,9 @@ const moduleConfig = {
 };
 
 const getScrollOffset = function($scrollable) {
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),
@@ -109,7 +108,7 @@ QUnit.test('inertia calc distance', function(assert) {
         }
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const mouse = pointerMock($content);
 
     mouse
@@ -137,7 +136,7 @@ QUnit.test('no inertia when gesture end is deferred', function(assert) {
         }
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const mouse = pointerMock($content);
     const moveDistance = -10;
     const moveDuration = 10;
@@ -182,10 +181,6 @@ QUnit.test('stop inertia on click', function(assert) {
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
-        onStop: function() {
-            const location = getScrollOffset($scrollable);
-            assert.notEqual(Math.round(location.top), Math.round(distance), 'scroll was stopped');
-        }
     });
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
@@ -200,6 +195,9 @@ QUnit.test('stop inertia on click', function(assert) {
         .up();
 
     this.clock.tick();
+
+    const location = getScrollOffset($scrollable);
+    assert.notEqual(Math.round(location.top), Math.round(distance), 'scroll was stopped');
 });
 
 QUnit.test('scrollbar is hidden on stop', function(assert) {
@@ -210,11 +208,8 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
     };
 
     const $scrollable = $('#scrollable').dxScrollable({
+        showScrollbar: 'onScroll',
         useNative: false,
-        onStop: function() {
-            const $scroll = $scrollable.find('.dx-scrollable-scroll');
-            assert.ok($scroll.hasClass('dx-state-invisible'), 'scroll was hidden');
-        }
     });
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
@@ -224,11 +219,10 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
         .move(0, -10)
         .up();
 
-    mouse
-        .down()
-        .up();
-
     this.clock.tick();
+
+    const $scroll = $scrollable.find('.dx-scrollable-scroll');
+    assert.ok($scroll.hasClass('dx-state-invisible'), 'scroll was hidden');
 });
 
 QUnit.test('bounce top', function(assert) {
@@ -269,7 +263,7 @@ QUnit.test('bounce bottom', function(assert) {
         inertiaEnabled: false
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const mouse = pointerMock($content);
 
     mouse
@@ -314,15 +308,10 @@ QUnit.test('stop bounce on click', function(assert) {
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
-        onStop: function() {
-            const location = getScrollOffset($scrollable);
-            assert.notEqual(location.top, 0, 'bounced stopped');
-        },
         onEnd: function() {
-            assert.ok(false, 'shouldn\'t fire end action');
         }
     });
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const mouse = pointerMock($content);
 
     mouse
@@ -334,10 +323,12 @@ QUnit.test('stop bounce on click', function(assert) {
         .down();
 
     this.clock.tick();
+
+    const location = getScrollOffset($scrollable);
+    assert.notEqual(location.top, 0, 'bounced stopped');
 });
 
 QUnit.test('stop inertia bounce on after mouse up', function(assert) {
-    assert.expect(1);
 
     animationFrame.requestAnimationFrame = function(callback) {
         setTimeout(callback, 0);
@@ -348,15 +339,10 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
-        onStop: function() {
-            const location = getScrollOffset($scrollable);
-            assert.notEqual(location.top, 0, 'bounced stopped');
-        },
         onEnd: function() {
-            assert.ok(false, 'scroll complete shouldn`t be fired');
         }
     });
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const mouse = pointerMock($content);
 
     mouse
@@ -370,6 +356,9 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
         .down();
 
     this.clock.tick();
+
+    const location = getScrollOffset($scrollable);
+    assert.notEqual(location.top, 0, 'bounced stopped');
 });
 
 QUnit.test('bounce elastic', function(assert) {
@@ -381,7 +370,6 @@ QUnit.test('bounce elastic', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
-
         onScroll: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
@@ -506,7 +494,7 @@ QUnit.test('inertia is stopped when bound is reached', function(assert) {
         }
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const mouse = pointerMock($content);
 
     mouse
@@ -532,7 +520,7 @@ QUnit.test('velocity calculated correctly when content height less than containe
         }
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const mouse = pointerMock($content).start();
 
     mouse
@@ -565,7 +553,7 @@ QUnit.test('scrollable should have correct scrollPosition when content is not cr
         scrollByContent: true
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $content.children().eq(0).css({
         width: '100px',
@@ -595,13 +583,13 @@ QUnit.test('scrollable should have correct scrollPosition when content is not cr
 QUnit.test('scrollable should have correct scrollPosition when content is cropped by overflow hidden', function(assert) {
     const $scrollable = $('#scrollable').height(50).width(50);
 
-    $scrollable.dxScrollable({
+    const scrollable = $scrollable.dxScrollable({
         useNative: false,
         direction: 'both',
         scrollByContent: true
-    });
+    }).dxScrollable('instance');
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $(scrollable.content());
 
     $content.children().eq(0).css({
         width: '100px',

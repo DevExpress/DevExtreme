@@ -16,13 +16,13 @@ module.exports = Object.assign({
                         options: transpileConfig.cjs,
                     },
                     {
-                        loader: 'devextreme-generator/webpack-loader',
+                        loader: '@devextreme-generator/build-helpers/dist/webpack-loader',
                         options: {
-                            platform: 'preact',
+                            platform: 'inferno',
                             defaultOptionsModule: 'js/core/options/utils',
                             jqueryComponentRegistratorModule: 'js/core/component_registrator',
-                            jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
-                            tsConfig: path.resolve('build/gulp/generator/ts-configs/preact.tsconfig.json')
+                            jqueryBaseComponentModule: 'js/renovation/component_wrapper/component',
+                            tsConfig: path.resolve('build/gulp/generator/ts-configs/inferno.tsconfig.json')
                         },
                     },
                 ],

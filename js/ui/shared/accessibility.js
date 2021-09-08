@@ -128,16 +128,16 @@ export function registerKeyboardAction(viewName, instance, $element, selector, a
         return noop;
     }
 
-    const $mainElement = $(instance.element());
-    const keyDownHandler = e => processKeyDown(viewName, instance, e, action, $mainElement, executeKeyDown);
+    const getMainElement = () => $(instance.element());
+    const keyDownHandler = e => processKeyDown(viewName, instance, e, action, getMainElement(), executeKeyDown);
     const mouseDownHandler = () => {
         isMouseDown = true;
-        $mainElement.removeClass(FOCUS_STATE_CLASS);
+        getMainElement().removeClass(FOCUS_STATE_CLASS);
     };
     const focusinHandler = () => {
         const needShowOverlay = !isMouseDown && !isHiddenFocusing;
         if(needShowOverlay) {
-            $mainElement.addClass(FOCUS_STATE_CLASS);
+            getMainElement().addClass(FOCUS_STATE_CLASS);
         }
         isMouseDown = false;
     };

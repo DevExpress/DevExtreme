@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
-import LegacyOverlay from '../../../ui/overlay';
+import { createTestRef } from '../../test_utils/create_ref';
+import LegacyOverlay from '../../../ui/overlay/ui.overlay';
 import { viewFunction as OverlayView, OverlayProps, Overlay } from '../overlay';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 
-jest.mock('../../../ui/overlay', () => jest.fn());
+jest.mock('../../../ui/overlay/ui.overlay', () => jest.fn());
 
 describe('Overlay', () => {
   describe('View', () => {
     it('default render', () => {
-      const rootElementRef = { } as HTMLDivElement;
+      const rootElementRef = createTestRef();
       const componentProps = new OverlayProps();
       const props = {
         props: { rootElementRef },
@@ -31,10 +32,7 @@ describe('Overlay', () => {
   describe('Logic', () => {
     it('componentProps', () => {
       const props = new OverlayProps();
-      const validationMessage = new Overlay({
-        ...props,
-        rootElementRef: {} as unknown as HTMLDivElement,
-      });
+      const validationMessage = new Overlay({ ...props });
 
       expect(validationMessage.componentProps).toMatchObject(props);
     });

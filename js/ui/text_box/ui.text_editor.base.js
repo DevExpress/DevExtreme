@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { resetActiveElement } from '../../core/utils/dom';
 import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -27,12 +26,6 @@ const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
-const TEXTEDITOR_STYLING_MODE_PREFIX = 'dx-editor-';
-const ALLOWED_STYLE_CLASSES = [
-    TEXTEDITOR_STYLING_MODE_PREFIX + 'outlined',
-    TEXTEDITOR_STYLING_MODE_PREFIX + 'filled',
-    TEXTEDITOR_STYLING_MODE_PREFIX + 'underlined'
-];
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const TEXTEDITOR_PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
@@ -190,21 +183,8 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderStylingMode: function() {
-        const optionName = 'stylingMode';
-        const optionValue = this.option(optionName);
-        ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
-
-        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + optionValue;
-
-        if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
-            const defaultOptionValue = this._getDefaultOptions()[optionName];
-            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
-            stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + (platformOptionValue || defaultOptionValue);
-        }
-
-        this.$element().addClass(stylingModeClass);
-
-        this._updateButtonsStyling(optionValue);
+        this.callBase();
+        this._updateButtonsStyling(this.option('stylingMode'));
     },
 
     _initMarkup: function() {
@@ -224,13 +204,14 @@ const TextEditorBase = Editor.inherit({
     },
 
     _render: function() {
+        this.callBase();
+
         this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
 
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
-        this.callBase();
     },
 
     _renderInput: function() {
@@ -297,6 +278,12 @@ const TextEditorBase = Editor.inherit({
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$buttonsContainer);
     },
 
+    _cleanButtonContainers: function() {
+        this._$beforeButtonsContainer?.remove();
+        this._$afterButtonsContainer?.remove();
+        this._buttonCollection.clean();
+    },
+
     _clean() {
         this._buttonCollection.clean();
         this._disposePendingIndicator();
@@ -331,7 +318,8 @@ const TextEditorBase = Editor.inherit({
             autocomplete: 'off'
         };
 
-        if(devices.real().ios) {
+        const { ios, mac } = devices.real();
+        if(ios || mac) {
             // WA to fix vAlign (T898735)
             // https://bugs.webkit.org/show_bug.cgi?id=142968
             defaultAttributes.placeholder = ' ';
@@ -345,9 +333,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _updateButtonsStyling: function(editorStylingMode) {
-        each(this.option('buttons'), (_, buttonOptions) => {
-            if(buttonOptions.options && !buttonOptions.options.stylingMode) {
-                const buttonInstance = this.getButton(buttonOptions.name);
+        each(this.option('buttons'), (_, { options, name: buttonName }) => {
+            if(options && !options.stylingMode && this.option('visible')) {
+                const buttonInstance = this.getButton(buttonName);
                 buttonInstance.option && buttonInstance.option('stylingMode', editorStylingMode === 'underlined' ? 'text' : 'contained');
             }
         });
@@ -409,6 +397,7 @@ const TextEditorBase = Editor.inherit({
     _togglePlaceholder: function(isEmpty) {
         this.$element()
             .find(`.${TEXTEDITOR_PLACEHOLDER_CLASS}`)
+            .eq(0)
             .toggleClass(STATE_INVISIBLE_CLASS, !isEmpty);
     },
 
@@ -577,6 +566,10 @@ const TextEditorBase = Editor.inherit({
         return this.element();
     },
 
+    _isInput: function(element) {
+        return element === this._input().get(0);
+    },
+
     _preventNestedFocusEvent: function(event) {
         if(event.isDefaultPrevented()) {
             return true;
@@ -585,7 +578,7 @@ const TextEditorBase = Editor.inherit({
         let result = this._isNestedTarget(event.relatedTarget);
 
         if(event.type === 'focusin') {
-            result = result && this._isNestedTarget(event.target);
+            result = result && this._isNestedTarget(event.target) && !this._isInput(event.target);
         }
 
         result && event.preventDefault();
@@ -634,6 +627,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _valueChangeEventHandler: function(e, formattedValue) {
+        if(this.option('readOnly')) {
+            return;
+        }
         this._saveValueChangeEvent(e);
         this.option('value', arguments.length > 1 ? formattedValue : this._input().val());
         this._saveValueChangeEvent(undefined);
@@ -670,6 +666,10 @@ const TextEditorBase = Editor.inherit({
 
     _getSubmitElement: function() {
         return this._input();
+    },
+
+    _hasActiveElement: function() {
+        return this._input().is(domAdapter.getActiveElement());
     },
 
     _optionChanged: function(args) {
@@ -729,10 +729,17 @@ const TextEditorBase = Editor.inherit({
                 if(fullName === name) {
                     checkButtonsOptionType(value);
                 }
-                this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
-                this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
-                this._buttonCollection.clean();
+                this._cleanButtonContainers();
                 this._renderButtonContainers();
+                this._updateButtonsStyling(this.option('stylingMode'));
+                break;
+            case 'visible':
+                this.callBase(args);
+                if(value && this.option('buttons')) {
+                    this._cleanButtonContainers();
+                    this._renderButtonContainers();
+                    this._updateButtonsStyling(this.option('stylingMode'));
+                }
                 break;
             case 'displayValueFormatter':
                 this._invalidate();
@@ -769,12 +776,6 @@ const TextEditorBase = Editor.inherit({
 
     focus: function() {
         eventsEngine.trigger(this._input(), 'focus');
-    },
-
-    blur: function() {
-        if(this._input().is(domAdapter.getActiveElement())) {
-            resetActiveElement();
-        }
     },
 
     reset: function() {

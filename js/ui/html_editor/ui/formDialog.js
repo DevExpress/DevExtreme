@@ -20,6 +20,7 @@ class FormDialog {
         this._popupUserConfig = popupConfig;
 
         this._renderPopup();
+        this._attachOptionChangedHandler();
     }
 
     _renderPopup() {
@@ -30,6 +31,18 @@ class FormDialog {
         const popupConfig = this._getPopupConfig();
 
         return editorInstance._createComponent($container, Popup, popupConfig);
+    }
+
+    _attachOptionChangedHandler() {
+        this._popup
+            ?.on(
+                'optionChanged',
+                ({ name, value }) => {
+                    if(name === 'title') {
+                        this._updateFormLabel(value);
+                    }
+                }
+            );
     }
 
     _escKeyHandler() {
@@ -112,6 +125,14 @@ class FormDialog {
     _renderForm($container, options) {
         $container.addClass(FORM_CLASS);
         this._form = this._editorInstance._createComponent($container, Form, options);
+        this._updateFormLabel();
+    }
+
+    _updateFormLabel(text) {
+        const label = text ?? this.popupOption('title');
+        this._form
+            ?.$element()
+            .attr('aria-label', label);
     }
 
     show(formUserConfig) {

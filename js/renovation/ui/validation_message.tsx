@@ -1,6 +1,6 @@
 import {
-  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+  Component, ComponentBindings, JSXComponent, OneWay,
+} from '@devextreme-generator/declarations';
 import { WidgetProps } from './common/widget';
 import LegacyValidationMessage from '../../ui/validation_message';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
@@ -21,19 +21,19 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class ValidationMessageProps extends WidgetProps {
-  @OneWay() mode?: 'auto'|'always' = 'auto';
+  @OneWay() mode?: 'auto' | 'always' = 'auto';
 
-  @OneWay() validationErrors?: object[] | null;
+  @OneWay() validationErrors?: Record<string, unknown>[] | null;
 
   @OneWay() positionRequest?: string;
 
-  @ForwardRef() boundary?: RefObject<string | Element>;
+  @OneWay() boundary?: string | Element | null;
 
-  @ForwardRef() container?: RefObject<string | Element>;
+  @OneWay() container?: string | Element | null;
 
-  @ForwardRef() target?: RefObject<string | Element>;
+  @OneWay() target?: string | Element | null;
 
-  @OneWay() offset?: object = { h: 0, v: 0 };
+  @OneWay() offset?: Record<string, number> = { h: 0, v: 0 };
 }
 @Component({
   defaultOptionRules: null,

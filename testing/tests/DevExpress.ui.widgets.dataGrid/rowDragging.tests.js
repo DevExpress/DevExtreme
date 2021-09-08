@@ -15,7 +15,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -298,8 +297,8 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.ok($draggableElement.find('.dx-data-row').children().first().hasClass('my-cell'), 'cell with custom class');
     });
 
-    QUnit.test('\'rowDragging\' option changing', function(assert) {
-    // arrange
+    QUnit.test('\'rowDragging.allowReordering\' option changing (false -> true)', function(assert) {
+        // arrange
         const $testElement = $('#container');
 
         this.options.rowDragging = {
@@ -319,11 +318,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         // arrange
         pointer.up();
 
-        this.options.rowDragging = {
-            allowReordering: true
-        };
-
-        rowsView.optionChanged({ name: 'rowDragging' });
+        rowsView.option('rowDragging', { allowReordering: true });
 
         // act
         pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
@@ -331,6 +326,39 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         // assert
         assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'there is placeholder');
         assert.strictEqual($('body').children('.dx-sortable-dragging').length, 1, 'there is dragging element');
+    });
+
+    // T972509
+    QUnit.test('\'rowDragging.allowReordering\' option changing (true -> false)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.rowDragging = {
+            allowReordering: true
+        };
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+        // assert
+        assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'there is placeholder');
+        assert.strictEqual($('body').children('.dx-sortable-dragging').length, 1, 'there is dragging element');
+
+        // arrange
+        pointer.up();
+
+        rowsView.option('rowDragging', { allowReordering: false });
+
+        // act
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+        // assert
+        assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 0, 'there is not placeholder');
+        assert.strictEqual($('body').children('.dx-sortable-dragging').length, 0, 'there is not dragging element');
+        assert.notStrictEqual($(rowsView.getRowElement(0)).children().first().css('cursor'), 'pointer', 'cursor is not pointer');
     });
 
     QUnit.test('Dragging row to the last position - row should be before the freespace row', function(assert) {
@@ -633,6 +661,34 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
 
     });
 
+    QUnit.test('Sortables points should be updated on scroll for fixed columns (T996293)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns[2] = {
+            dataField: 'field3',
+            fixed: true
+        };
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+        rowsView.height(50);
+
+        const $sortable = $testElement.find('.dx-sortable');
+        const fixedScrollable = $sortable.eq(1).dxSortable('instance');
+        sinon.spy(fixedScrollable, '_correctItemPoints');
+
+        // act
+        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 70);
+
+        $sortable.eq(1).scrollTop(10);
+        $sortable.eq(1).trigger('scroll');
+
+        // assert
+        assert.equal($sortable.length, 2, 'two sortables are rendered');
+        assert.equal(fixedScrollable._correctItemPoints.callCount, 1, '_correctItemPoints for fixed sortable is called');
+    });
+
     // T830034
     QUnit.test('Placeholder should not be wider than grid if horizontal scroll exists', function(assert) {
     // arrange
@@ -842,11 +898,10 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        this.options.rowDragging = {
+        rowsView.option('rowDragging', {
             dropFeedbackMode: 'push',
             allowReordering: true
-        };
-        rowsView.optionChanged({ name: 'rowDragging' });
+        });
 
         const dropFeedbackMode = rowsView._sortable.option('dropFeedbackMode');
 
@@ -921,11 +976,10 @@ QUnit.module('Handle', $.extend({}, moduleConfig, {
         assert.strictEqual($handleElement.find('.dx-datagrid-drag-icon').length, 0, 'no handle icon');
 
         // act
-        this.options.rowDragging = {
+        rowsView.option('rowDragging', {
             showDragIcons: true,
             allowReordering: true
-        };
-        rowsView.optionChanged({ name: 'rowDragging' });
+        });
 
         // assert
         $handleElement = $(rowsView.getRowElement(0)).children().first();

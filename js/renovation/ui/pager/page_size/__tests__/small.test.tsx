@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
+import { RefObject } from '@devextreme-generator/declarations';
 import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../small';
 import getElementComputedStyle from '../../../../utils/get_computed_style';
 
@@ -14,7 +15,7 @@ describe('Pager size selector', () => {
     const props = {
       width: 30,
       props: {
-        parentRef: {} as HTMLElement,
+        parentRef: { current: {} } as RefObject<HTMLElement>,
         rtlEnabled: true,
         pageSize: 5,
         pageSizeChange: jest.fn(),
@@ -35,16 +36,19 @@ describe('Pager size selector', () => {
   describe('Behaviour', () => {
     it('Effect updateWidth', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '42px' });
-      const parentRef = { minWidth: '42px' };
+      const parentRef = { current: { minWidth: '42px' } };
       const component = new PageSizeSmall({ parentRef, pageSizes: [...pageSizes, { text: '1000', value: 1000 }] } as any);
       component.updateWidth();
       expect(component.width).toBe(42 + 10 * 4);
-      expect((getElementComputedStyle as jest.Mock)).toBeCalledWith(parentRef);
+      expect((getElementComputedStyle as jest.Mock)).toBeCalledWith(parentRef.current);
     });
 
     it('Effect updateWidth, default width', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue(null);
-      const component = new PageSizeSmall({ pageSizes: [...pageSizes, { text: '1000', value: 1000 }] } as any);
+      const component = new PageSizeSmall({
+        pageSizes: [...pageSizes, { text: '1000', value: 1000 }],
+        parentRef: { current: {} },
+      } as any);
       component.updateWidth();
       expect(component.width).toBe(10 + 10 * 4);
     });

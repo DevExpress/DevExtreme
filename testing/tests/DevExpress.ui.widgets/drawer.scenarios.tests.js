@@ -12,7 +12,6 @@ import 'ui/tab_panel';
 import 'ui/text_box';
 import 'ui/tree_view';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import dxDrawer from 'ui/drawer';
@@ -22,7 +21,6 @@ QUnit.testStart(() => {
     // $('#qunit-tests').prepend(drawerTesters.markup);
 });
 
-// TODO: templateSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
 const openedStateModes = ['shrink', 'push', 'overlap'];
 const configs = [];
 openedStateModes.forEach(openedStateMode => {
@@ -227,6 +225,51 @@ configs.forEach(config => {
                 }
             }));
 
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+        });
+
+        testOrSkip('opened: false -> minSize: 0', () => configIs('overlap', 'right', 'expand'), function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: false,
+                template: drawerTesters[config.position].template,
+            }));
+
+            this.clock.tick(100);
+            drawer.option('minSize', 0);
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+        });
+
+        testOrSkip('opened: false -> minSize: null', () => configIs('overlap', 'right', 'expand'), function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: false,
+                template: drawerTesters[config.position].template,
+            }));
+
+            this.clock.tick(100);
+            drawer.option('minSize', null);
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+        });
+
+        testOrSkip('opened: false -> minSize: 30', () => configIs('overlap', 'right', 'expand'), function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: false,
+                template: drawerTesters[config.position].template,
+            }));
+
+            this.clock.tick(100);
+            drawer.option('minSize', 30);
             this.clock.tick(100);
 
             drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
@@ -487,6 +530,7 @@ const changeOpenedStateModeConfigs = [];
 ['slide', 'expand'].forEach(revealMode => {
     [undefined, 25].forEach(minSize => {
         ['left', 'top', 'right', 'bottom'].forEach(position => {
+            // TODO: templateSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
             changeOpenedStateModeConfigs.push({ position, revealMode, minSize });
         });
     });

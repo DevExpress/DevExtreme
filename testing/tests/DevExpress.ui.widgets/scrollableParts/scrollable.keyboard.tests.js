@@ -2,9 +2,8 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {
@@ -273,7 +272,7 @@ if(devices.real().deviceType === 'desktop') {
         ['vertical', 'horizontal'].forEach((scrollbarDirection) => {
             function checkScrollLocation($scrollable, expectedLocation) {
                 const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
-                const scrollLocation = translator.locate($scroll);
+                const scrollLocation = getTranslateValues($scroll.get(0));
                 QUnit.assert.deepEqual(scrollLocation, expectedLocation, 'scroll location');
             }
 
@@ -317,6 +316,38 @@ if(devices.real().deviceType === 'desktop') {
                     const keyboard = keyboardMock($contentContainer1);
                     $contentContainer2.focus();
                     keyboard.keyDown('tab');
+                });
+            });
+        });
+    });
+
+
+    [true, false].forEach((bounceEnabled) => {
+        [true, false].forEach(ctrlKey => {
+            [true, false].forEach(metaKey => {
+                QUnit.test(`Handle ctrl key (T970904). bounceEnabled: ${bounceEnabled}, ctrlKey: ${ctrlKey}, metaKey: ${metaKey}`, function(assert) {
+                    if(devices.real().deviceType !== 'desktop') {
+                        assert.ok(true, 'scenario is relevant only for desktop');
+                        return;
+                    }
+
+                    const scrollable = $('#scrollable').dxScrollable({
+                        useNative: false,
+                        bounceEnabled
+                    }).dxScrollable('instance');
+
+                    const validateRes = scrollable._validate({
+                        type: 'dxmousewheel',
+                        delta: -100,
+                        ctrlKey,
+                        metaKey,
+                    });
+
+                    const expectedRes = (metaKey || ctrlKey)
+                        ? false
+                        : true;
+
+                    assert.equal(validateRes, expectedRes);
                 });
             });
         });

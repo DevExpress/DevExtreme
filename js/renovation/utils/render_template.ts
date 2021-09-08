@@ -1,9 +1,10 @@
-import * as Preact from 'preact';
+import { render } from 'inferno';
+import { createElement } from 'inferno-create-element';
 
 export function renderTemplate(template: string, props, container): void {
   setTimeout(() => {
-    Preact.render(
-      Preact.h(template, props), container?.get(0),
+    render(
+      createElement(template, props), container?.get(0),
     );
   }, 0);
 }

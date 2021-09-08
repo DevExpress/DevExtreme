@@ -11,6 +11,7 @@ import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
+import { Event as dxEvent } from '../../events/index';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
 
@@ -44,10 +45,13 @@ const HtmlEditor = Editor.inherit({
             toolbar: null,
             variables: null,
             mediaResizing: null,
+            tableResizing: null,
             mentions: null,
             customizeModules: null,
 
-            formDialogOptions: null
+            formDialogOptions: null,
+
+            stylingMode: 'outlined'
         });
     },
 
@@ -104,8 +108,11 @@ const HtmlEditor = Editor.inherit({
         this._$htmlContainer = $('<div>').addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
+            .attr('role', 'application')
             .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
+
+        this._renderStylingMode();
 
         const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         const transclude = true;
@@ -285,14 +292,18 @@ const HtmlEditor = Editor.inherit({
             // TODO: extract some IE11 tweaks for the Quill uploader module
             // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
+            tableResizing: this._getModuleConfigByOption('tableResizing'),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
-                onDrop: (e) => this._saveValueChangeEvent(e),
+                onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
                 imageBlot: 'extendedImage'
             },
+            keyboard: {
+                onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e))
+            },
             clipboard: {
-                onPaste: (e) => this._saveValueChangeEvent(e),
-                onCut: (e) => this._saveValueChangeEvent(e),
+                onPaste: (e) => this._saveValueChangeEvent(dxEvent(e)),
+                onCut: (e) => this._saveValueChangeEvent(dxEvent(e)),
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
@@ -396,8 +407,26 @@ const HtmlEditor = Editor.inherit({
         this._formDialog = new FormDialog(this, userOptions);
     },
 
+    _getStylingModePrefix: function() {
+        return 'dx-htmleditor-';
+    },
+
     _getQuillContainer: function() {
         return this._$htmlContainer;
+    },
+
+    _tableResizingOptionChanged: function(args) {
+        const tableResizingModule = this._quillInstance?.getModule('tableResizing');
+        const shouldPassOptionsToModule = Boolean(tableResizingModule);
+
+        if(shouldPassOptionsToModule) {
+            const optionData = args.fullName?.split('.');
+            const optionName = optionData.length === 2 ? optionData[1] : args.name;
+
+            tableResizingModule.option(optionName, args.value);
+        } else {
+            this._invalidate();
+        }
     },
 
     _optionChanged: function(args) {
@@ -425,6 +454,9 @@ const HtmlEditor = Editor.inherit({
             case 'customizeModules':
                 this._invalidate();
                 break;
+            case 'tableResizing':
+                this._tableResizingOptionChanged(args);
+                break;
             case 'valueType': {
                 this._prepareConverters();
                 const newValue = this._updateValueByType(args.value);
@@ -436,6 +468,9 @@ const HtmlEditor = Editor.inherit({
                 }
                 break;
             }
+            case 'stylingMode':
+                this._renderStylingMode();
+                break;
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
@@ -530,12 +565,16 @@ const HtmlEditor = Editor.inherit({
         return this._quillInstance;
     },
 
-    getSelection: function() {
-        return this._applyQuillMethod('getSelection');
+    getSelection: function(focus) {
+        return this._applyQuillMethod('getSelection', arguments);
     },
 
     setSelection: function(index, length) {
         this._applyQuillMethod('setSelection', arguments);
+    },
+
+    getText: function(index, length) {
+        return this._applyQuillMethod('getText', arguments);
     },
 
     format: function(formatName, formatValue) {
@@ -576,6 +615,10 @@ const HtmlEditor = Editor.inherit({
         return this._applyQuillMethod('getLength');
     },
 
+    getBounds: function(index, length) {
+        return this._applyQuillMethod('getBounds', arguments);
+    },
+
     delete: function(index, length) {
         this._applyQuillMethod('deleteText', arguments);
     },
@@ -598,8 +641,11 @@ const HtmlEditor = Editor.inherit({
 
     focus: function() {
         this.callBase();
-
         this._applyQuillMethod('focus');
+    },
+
+    blur: function() {
+        this._applyQuillMethod('blur');
     }
 });
 

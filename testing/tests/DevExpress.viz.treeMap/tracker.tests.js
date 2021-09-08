@@ -308,7 +308,7 @@ QUnit.test('Tooltip is shown on hover', function(assert) {
     this.trigger(pointerEvents.move, 2, { pageX: 300, pageY: 200 });
 
     assert.deepEqual(this.tooltip.show.lastCall.args[0].node, root.getChild(1), 'show');
-    assert.deepEqual(this.tooltip.move.lastCall.args, [300, 200, 0], 'move');
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 300, y: 200, offset: 0 });
 });
 
 QUnit.test('Tooltip is not shown on hover if tooltip disabled', function(assert) {
@@ -335,7 +335,7 @@ QUnit.test('Tooltip is shown on touch', function(assert) {
     this.trigger(pointerEvents.down, 2, { pageX: 300, pageY: 200 });
 
     assert.deepEqual(this.tooltip.show.lastCall.args[0].node, root.getChild(1), 'show');
-    assert.deepEqual(this.tooltip.move.lastCall.args, [300, 200, 0], 'move');
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 300, y: 200, offset: 0 });
 });
 
 QUnit.test('Hovering same element several times does not cause several tooltip shows', function(assert) {
@@ -347,7 +347,6 @@ QUnit.test('Hovering same element several times does not cause several tooltip s
     }).getRootNode();
     root.getChild(1).showTooltip();
     this.tooltip.show.reset();
-    this.tooltip.move.reset();
 
     this.trigger(pointerEvents.move, 2, { pageX: 200, pageY: 100 });
     this.trigger(pointerEvents.move, 2, { pageX: 210, pageY: 120 });

@@ -31,7 +31,9 @@ createTestCafe('localhost', 1437, 1438)
         if(testName) {
             runner.filter(name => name === testName);
         }
-
+        if(args.cache) {
+            runner.cache = args.cache;
+        }
         return runner.run({
             quarantineMode: args.quarantineMode
         });
@@ -51,6 +53,7 @@ function getArgs() {
             test: '',
             componentFolder: '',
             file: '*',
+            cache: true,
             quarantineMode: false
         }
     });

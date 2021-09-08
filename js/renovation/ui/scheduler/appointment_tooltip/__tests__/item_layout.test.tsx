@@ -87,15 +87,6 @@ describe('TooltipItemLayout', () => {
         .toBe(true);
     });
 
-    it('should pass correct props to Marker', () => {
-      const marker = render({}).find(Marker);
-
-      expect(marker.props())
-        .toMatchObject({
-          color: defaultProps.item.color,
-        });
-    });
-
     it('should pass correct props to DeleteButton', () => {
       const onDeleteButtonClick = jest.fn();
       const deleteButton = render({ onDeleteButtonClick }).find(DeleteButton);

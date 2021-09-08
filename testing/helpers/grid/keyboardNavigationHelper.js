@@ -71,7 +71,7 @@ export function setupModules(that, modulesOptions, gridModules) {
     gridModules = (gridModules || []).concat([
         'data', 'columns', 'editorFactory',
         'gridView', 'columnHeaders', 'rows', 'grouping',
-        'headerPanel', 'search', 'editing', 'keyboardNavigation',
+        'headerPanel', 'search', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'keyboardNavigation',
         'summary', 'masterDetail', 'virtualScrolling'
     ]);
 
@@ -121,9 +121,11 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         stopPropagation: false
     };
     let alt = false;
+    let meta = false;
     if(typeof ctrl === 'object') {
         alt = ctrl.alt;
         shift = ctrl.shift;
+        meta = ctrl.meta;
         ctrl = ctrl.ctrl;
     }
 
@@ -135,6 +137,7 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         ctrlKey: ctrl,
         shiftKey: shift,
         altKey: alt,
+        metaKey: meta,
         target: target && target[0] || target,
         type: 'keydown',
         preventDefault: function() {

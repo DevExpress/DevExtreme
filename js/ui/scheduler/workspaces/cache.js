@@ -2,17 +2,13 @@ import { isDefined } from '../../../core/utils/type';
 
 export class Cache {
     constructor() {
-        this._init();
+        this._cache = new Map();
     }
 
     get size() { return this._cache.size; }
 
-    _init() {
-        this._cache = new Map();
-    }
-
     clear() {
-        this._init();
+        this._cache.clear();
     }
 
     get(name, callback) {
@@ -27,5 +23,3 @@ export class Cache {
         isDefined(value) && this._cache.set(name, value);
     }
 }
-
-export const cache = new Cache();

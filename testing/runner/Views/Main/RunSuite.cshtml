@@ -6,9 +6,9 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var npmModule = Model.Renovation
-        ? "transpiled-renovation"
-        : "transpiled";
+    var npmModule = Model.NoRenovation
+        ? "transpiled"
+        : "transpiled-renovation";
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -129,9 +129,9 @@
             });
 
             QUnit.config.urlConfig.push({
-                id: "renovation",
-                label: "Renovation",
-                tooltip: "Use renovation components with old tests",
+                id: "norenovation",
+                label: "No Renovation",
+                tooltip: "Use norenovation components with old tests",
             });
 
             function notifyExtraDoneCall() {
@@ -167,9 +167,9 @@
                 }
             }
 
-            var baseURL = QUnit.urlParams.renovation
-                ? '@Url.Content("~/artifacts/transpiled-renovation")'
-                : '@Url.Content("~/artifacts/transpiled")';
+            var baseURL = QUnit.urlParams.norenovation
+                ? '@Url.Content("~/artifacts/transpiled")'
+                : '@Url.Content("~/artifacts/transpiled-renovation")';
 
             SystemJS.config({
                 baseURL: baseURL,
@@ -182,15 +182,20 @@
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
-                    'preact': '@Url.Content("~/node_modules/preact/dist/preact.js")',
-                    'preact/hooks': '@Url.Content("~/node_modules/preact/hooks/dist/hooks.js")',
-                    'preact/compat': '@Url.Content("~/node_modules/preact/compat/dist/compat.js")',
-                    'preact/test-utils': '@Url.Content("~/node_modules/preact/test-utils/dist/testUtils.js")',
+                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
+                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
+                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
+                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
+                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
+                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
+                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
                     'exceljs': '@Url.Content("~/node_modules/exceljs/dist/exceljs.js")',
+                    'fflate': '@Url.Content("~/node_modules/fflate/esm/browser.js")',
                     'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.es.js")',
                     'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
                     'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
@@ -198,8 +203,6 @@
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
 
                     // Global CSS
-                    'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
-
                     'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/artifacts/css/dx.material.blue.light.css")',
 
@@ -211,6 +214,11 @@
                     'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
                 },
                 packages: {
+                    '@@devextreme/vdom': {
+                        main: './dist/cjs/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
                     '': {
                         defaultExtension: 'js'
                     },
@@ -223,8 +231,17 @@
                     'cldr': {
                         main: '../cldr.js',
                         defaultExtension: 'js'
-                    }
+                    },
+                    'events/utils': {
+                        main: 'index'
+                    },
+                    'events': {
+                        main: 'index'
+                    },
                 },
+                packageConfigPaths: [
+                    "@@devextreme/*/package.json",
+                ],
                 meta: {
                     '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {
                         format: 'global',

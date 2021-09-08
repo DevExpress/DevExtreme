@@ -1,16 +1,15 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
 import { EventCallback } from '../../common/event_callback.d';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   className, value, label, props: { onClick },
-}: Page) => (
+}: Page): JSX.Element => (
   <LightButton
     className={className}
     label={label}
@@ -30,7 +29,7 @@ export class PageProps {
 
   @OneWay() selected = false;
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = PAGER_PAGE_CLASS;
 }
 
 @Component({
@@ -51,7 +50,6 @@ export class Page extends JSXComponent<PageProps>() {
     const
       { selected } = this.props;
     return combineClasses({
-      [PAGER_PAGE_CLASS]: true,
       [`${this.props.className}`]: !!this.props.className,
       [PAGER_SELECTION_CLASS]: !!selected,
     });

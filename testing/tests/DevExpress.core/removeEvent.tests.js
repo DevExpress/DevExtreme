@@ -1,6 +1,6 @@
 const eventsEngine = require('events/core/events_engine');
 const $ = require('jquery');
-const removeEvent = require('core/remove_event');
+const { removeEvent } = require('core/remove_event');
 
 QUnit.testStart(function() {
     const markup = '<div id="element"><div id="inner"></div></div>';

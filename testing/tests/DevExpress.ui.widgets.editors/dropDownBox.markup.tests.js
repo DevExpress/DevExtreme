@@ -4,7 +4,6 @@ import DropDownBox from 'ui/drop_down_box';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
