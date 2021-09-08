@@ -16,7 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'generic_light.css!';
-import { commonCallbacks } from 'core/utils/size';
+import { commonCallbacks, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 
 QUnit.testStart(function() {
     const markup =
@@ -97,8 +97,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.height(), 2, 'ok');
-        assert.notEqual(delimiter.width(), 0, 'ok');
+        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.notEqual(getWidth(delimiter), 0, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().left + 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
     });
@@ -116,8 +116,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.width(), 2, 'ok');
-        assert.notEqual(delimiter.height(), 0, 'ok');
+        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.notEqual(getHeight(delimiter), 0, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().left - 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
     });
@@ -135,8 +135,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.height(), 2, 'ok');
-        assert.notEqual(delimiter.width(), 0, 'ok');
+        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.notEqual(getWidth(delimiter), 0, 'ok');
         assert.roughEqual(rootMenuItem.offset().left + 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
     });
@@ -154,8 +154,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.width(), 2, 'ok');
-        assert.notEqual(delimiter.height(), 0, 'ok');
+        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.notEqual(getHeight(delimiter), 0, 'ok');
         assert.roughEqual(rootMenuItem.offset().left - 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
     });
@@ -2764,14 +2764,14 @@ QUnit.module('adaptivity: behavior', {
         overlay.on('positioned', overlayPositioned);
 
         $($button).trigger('dxclick');
-        const height = $overlayContent.outerHeight();
+        const height = getOuterHeight($overlayContent);
 
         $($item2).trigger('dxclick');
-        assert.ok($overlayContent.outerHeight() > height, 'overlay should be enlarged');
+        assert.ok(getOuterHeight($overlayContent) > height, 'overlay should be enlarged');
         assert.equal(overlayPositioned.callCount, 2, 'overlay\'s position should be recalculated');
 
         $($item2).trigger('dxclick');
-        assert.equal($overlayContent.outerHeight(), height, 'overlay should be shrinked');
+        assert.equal(getOuterHeight($overlayContent), height, 'overlay should be shrinked');
         assert.equal(overlayPositioned.callCount, 3, 'overlay\'s position should be recalculated');
     });
 
