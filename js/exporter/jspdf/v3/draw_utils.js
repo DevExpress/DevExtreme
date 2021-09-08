@@ -7,9 +7,7 @@ const defaultBorderLineWidth = 1;
 function drawPdfCells(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
     cellsArray.forEach(cell => {
-        if(!cell.isMerged) {
-            drawCell(doc, cell, docStyles);
-        }
+        drawCell(doc, cell, docStyles);
     });
     setDocumentStyles(doc, docStyles);
 }

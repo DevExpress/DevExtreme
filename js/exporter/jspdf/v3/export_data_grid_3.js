@@ -68,9 +68,11 @@ function exportDataGrid(doc, dataGrid, options) {
 
             const pdfCellsInfo = [].concat.apply([],
                 rowsInfo.map(rowInfo => {
-                    return rowInfo.cells.map(cellInfo => {
-                        return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
-                    });
+                    return rowInfo.cells
+                        .filter(cell => !isDefined(cell.pdfCell.isMerged))
+                        .map(cellInfo => {
+                            return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
+                        });
                 })
             );
 
