@@ -532,6 +532,8 @@
     "dxGantt-sortingDescendingText": "降序排序",
     "dxGantt-sortingClearText": "清除排序",
     "dxGantt-showResources": "TODO",
-    "dxGantt-showDependencies": "TODO"
+    "dxGantt-showDependencies": "TODO",
+    "dxGantt-dialogStartDateValidation": "TODO",
+    "dxGantt-dialogEndDateValidation": "TODO"
 }
 }

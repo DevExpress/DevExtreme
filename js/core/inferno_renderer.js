@@ -5,23 +5,25 @@ import domAdapter from './dom_adapter';
 import { cleanDataRecursive } from './element_data';
 import injector from './utils/dependency_injector';
 
+const remove = (element) => {
+    const { parentNode } = element;
+
+    if(parentNode) {
+        cleanDataRecursive(element);
+        parentNode.$V = element.$V;
+        render(null, parentNode);
+        parentNode.appendChild(element);
+        element.innerHTML = '';
+        delete parentNode.$V;
+    }
+
+    delete element.$V;
+};
+
 export default injector({
     createElement: (component, props) => createElement(component, props),
 
-    remove: (element) => {
-        const { parentNode } = element;
-
-        if(parentNode) {
-            cleanDataRecursive(element);
-            parentNode.$V = element.$V;
-            render(null, parentNode);
-            parentNode.appendChild(element);
-            element.innerHTML = '';
-            delete parentNode.$V;
-        }
-
-        delete element.$V;
-    },
+    remove,
 
     onAfterRender: () => {
         InfernoEffectHost.callEffects();
@@ -38,6 +40,9 @@ export default injector({
             const rootNode = domAdapter.createElement('div');
             rootNode.appendChild(container);
             const mountNode = domAdapter.createDocumentFragment().appendChild(rootNode);
+            const vNodeAlreadyExists = !!container.$V;
+
+            vNodeAlreadyExists && remove(container);
 
             hydrate(
                 createElement(component, props),

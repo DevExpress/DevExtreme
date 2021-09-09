@@ -8,7 +8,7 @@ import Widget from './widget/ui.widget';
 import Button from './button';
 import Popover from './popover';
 import DataHelperMixin from '../data_helper';
-import List from './list';
+import List from './list_light';
 import { isMaterial } from './themes';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 

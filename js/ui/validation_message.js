@@ -20,7 +20,6 @@ const ValidationMessage = Overlay.inherit({
             width: 'auto',
             height: 'auto',
             closeOnOutsideClick: false,
-            closeOnTargetScroll: false,
             animation: null,
             visible: true,
             propagateOutsideClick: true,

@@ -610,6 +610,8 @@
         "dxGantt-sortingDescendingText": "Tri décroissant",
         "dxGantt-sortingClearText": "Supprimer le tri",
         "dxGantt-showResources": "TODO",
-        "dxGantt-showDependencies": "TODO"
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }
