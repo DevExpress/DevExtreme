@@ -147,6 +147,7 @@ class OverlayPositionController {
         } else {
             const currentPosition = locate(this._$content);
             move(this._$content, this._visualPosition);
+
             this._positionedHandler(currentPosition, this._visualPosition);
         }
     }
@@ -288,6 +289,8 @@ class PopoverPositionController extends OverlayPositionController {
             this._$wrapper.css({ top: 0, left: 0 });
         }
     }
+
+    _renderBoundaryOffset() {}
 
     _getContainerPosition() {
         const offset = pairToObject(this._position.offset || '');

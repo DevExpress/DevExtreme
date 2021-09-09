@@ -61,8 +61,6 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
 
-const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
-
 ready(() => {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, e => {
         for(let i = OVERLAY_STACK.length - 1; i >= 0; i--) {
@@ -1181,7 +1179,7 @@ const Overlay = Widget.inherit({
             return this._drag.getPosition();
         } else {
             const position = this._positionController._position;
-            this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
+            this._positionController._renderBoundaryOffset();
 
             resetPosition(this._$content);
 
@@ -1203,10 +1201,6 @@ const Overlay = Widget.inherit({
         }
 
         return position;
-    },
-
-    _renderOverlayBoundaryOffset: function({ boundaryOffset }) {
-        this._$content.css('margin', boundaryOffset.v + 'px ' + boundaryOffset.h + 'px');
     },
 
     _focusTarget: function() {

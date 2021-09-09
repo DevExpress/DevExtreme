@@ -4,7 +4,6 @@ import { getPublicElement } from '../core/element';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import { noop } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { move } from '../animation/translator';
 import positionUtils from '../animation/position';
@@ -300,8 +299,6 @@ const Popover = Popup.inherit({
         this.callBase();
         this._renderOverlayPosition();
     },
-
-    _renderOverlayBoundaryOffset: noop,
 
     _renderOverlayPosition: function() {
         this._resetOverlayPosition();
