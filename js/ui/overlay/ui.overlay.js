@@ -375,10 +375,10 @@ const Overlay = Widget.inherit({
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
 
-        const $container = this._$content;
         const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
-        const isInnerOverlay = $(e.target).closest('.' + INNER_OVERLAY_CLASS).length;
-        const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || contains($container.get(0), e.target));
+        const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
+        const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
+            || contains(this._$content.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
             this._outsideClickHandler(e);
