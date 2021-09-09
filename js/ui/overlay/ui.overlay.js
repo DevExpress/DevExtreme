@@ -14,7 +14,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isString, isDefined, isFunction, isPlainObject, isObject } from '../../core/utils/type';
+import { isDefined, isFunction, isPlainObject, isObject } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -1192,15 +1192,6 @@ const Overlay = Widget.inherit({
         const resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
-    },
-
-    _getPositionValue: function(positionAliases) {
-        let position = this._getOptionValue('position', this);
-        if(isString(position)) {
-            position = extend({}, positionAliases[position]);
-        }
-
-        return position;
     },
 
     _focusTarget: function() {
