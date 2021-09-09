@@ -2947,7 +2947,7 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
     });
 
     // T529461;
@@ -2980,7 +2980,7 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
         assert.equal(dataAreaFakeTable.css('right'), '0px');
         assert.equal(columnAreaFakeTable.css('right'), '0px');
         assert.equal(dataAreaContentTable.css('right'), '0px');
@@ -3023,7 +3023,7 @@ QUnit.module('dxPivotGrid', {
 
             const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
             assert.roughEqual(dataAreaScrollable.scrollLeft() + 10, dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
+            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
 
             done();
         };
@@ -3715,7 +3715,7 @@ QUnit.module('dxPivotGrid', {
 
         this.clock.tick();
         const dataArea = pivotGrid._dataArea;
-        assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), dataArea.tableElement().width().toFixed(2));
+        assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), getWidth(dataArea.tableElement()).toFixed(2));
     });
 
     QUnit.test('PivotGrid table width should be correct if width is small and fieldPanel is visible', function(assert) {
