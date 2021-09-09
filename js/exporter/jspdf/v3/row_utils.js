@@ -77,13 +77,11 @@ function recalculateHeightForMergedRows(doc, rows) {
         return height;
     };
 
-    const sortByRowSpanAsc = (a, b) => a.rowSpan > b.rowSpan ? 1 : b.rowSpan > a.rowSpan ? -1 : 0;
     for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-        const orderedCellsWithRowSpan = rows[rowIndex].cells
-            .filter(cell => isDefined(cell.rowSpan))
-            .sort(sortByRowSpanAsc);
+        const cellsWithRowSpan = rows[rowIndex].cells
+            .filter(cell => isDefined(cell.rowSpan));
 
-        orderedCellsWithRowSpan.forEach(cell => {
+        cellsWithRowSpan.forEach(cell => {
             const pdfCell = cell.pdfCell;
             const textHeight = calculateTextHeight(doc, pdfCell.text, pdfCell.font, {
                 wordWrapEnabled: pdfCell.wordWrapEnabled,
@@ -93,9 +91,7 @@ function recalculateHeightForMergedRows(doc, rows) {
             if(textHeight > summaryHeight) {
                 const delta = (textHeight - summaryHeight) / (cell.rowSpan + 1);
                 for(let spanIndex = rowIndex; spanIndex <= rowIndex + cell.rowSpan; spanIndex++) {
-                    if(delta > rowsAdditionalHeights[spanIndex]) {
-                        rowsAdditionalHeights[spanIndex] = delta;
-                    }
+                    rowsAdditionalHeights[spanIndex] += delta;
                 }
             }
         });
