@@ -70,13 +70,10 @@ function applyRowSpans(rows) {
 function recalculateHeightForMergedRows(doc, rows) {
     const rowsAdditionalHeights = Array.from({ length: rows.length }, () => 0);
     const calculateSummaryRowsHeightWithAdditionalHeights = (rowFromIndex, rowSpan) => {
-        let height = 0;
-        for(let rowIndex = rowFromIndex; rowIndex <= rowFromIndex + rowSpan; rowIndex++) {
-            height += rows[rowIndex].height + rowsAdditionalHeights[rowIndex];
-        }
-        return height;
+        return rows
+            .slice(rowFromIndex, rowFromIndex + rowSpan + 1)
+            .reduce((accumulator, row) => accumulator + row.height + rowsAdditionalHeights[row.rowIndex], 0);
     };
-
     const getMaxRowSpanValue = (row) => {
         const rowSpans = row.cells.map(cell => cell.rowSpan ?? 0);
         return Math.max(...rowSpans, 0);
