@@ -1226,7 +1226,6 @@ QUnit.module('flipping', () => {
                 animation: null,
                 visible: true,
                 position: {
-                    collision: 'flip',
                     my: 'right center',
                     at: 'left center',
                     offset: '10 0'
@@ -1410,7 +1409,7 @@ QUnit.module('flipping', () => {
                 width: 200,
                 animation: null,
                 visible: true,
-                position: { my: 'right center', at: 'left center', collision: 'flip' }
+                position: { my: 'right center', at: 'left center' }
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
@@ -1436,7 +1435,7 @@ QUnit.module('flipping', () => {
                 width: 200,
                 animation: null,
                 visible: true,
-                position: { my: 'left center', at: 'right center', collision: 'flip' }
+                position: { my: 'left center', at: 'right center' }
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
