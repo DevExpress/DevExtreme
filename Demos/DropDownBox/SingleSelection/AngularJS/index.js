@@ -99,7 +99,7 @@ DemoApp.controller('DemoController', ($scope) => {
       },
       onSelectionChanged(selectedItems) {
         const keys = selectedItems.selectedRowKeys;
-        $scope.gridBoxValue = keys.length && keys[0] || null;
+        $scope.gridBoxValue = (keys.length && keys[0]) || null;
         $scope.isTreeBoxOpened = false;
       },
     },

@@ -9,11 +9,11 @@ window.onload = function () {
     this.border = ko.observable(false);
 
     this.width.subscribe((width) => {
-      that.height(width * 26 / 37);
+      that.height((width * 26) / 37);
     });
 
     this.height.subscribe((height) => {
-      that.width(height * 37 / 26);
+      that.width((height * 37) / 26);
     });
 
     this.transformations = [

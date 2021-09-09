@@ -27,7 +27,7 @@ $(() => {
     onValueChanged(e) {
       const width = e.value;
       $('svg').width(width);
-      heightInstance.option('value', width * 26 / 37);
+      heightInstance.option('value', (width * 26) / 37);
     },
   }).dxNumberBox('instance');
 
@@ -40,7 +40,7 @@ $(() => {
     onValueChanged(e) {
       const height = e.value;
       $('svg').height(height);
-      widthInstance.option('value', height * 37 / 26);
+      widthInstance.option('value', (height * 37) / 26);
     },
   }).dxNumberBox('instance');
 

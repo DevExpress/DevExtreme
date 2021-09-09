@@ -158,7 +158,7 @@ class App extends React.Component {
 
   handleHeightChange(e) {
     this.setState({
-      width: e.value * 37 / 26,
+      width: (e.value * 37) / 26,
       height: e.value,
     });
   }
@@ -166,7 +166,7 @@ class App extends React.Component {
   handleWidthChange(e) {
     this.setState({
       width: e.value,
-      height: e.value * 26 / 37,
+      height: (e.value * 26) / 37,
     });
   }
 

@@ -30,7 +30,7 @@ $(() => {
       });
     },
     onProgress(e) {
-      uploadProgressBar.option('value', e.bytesLoaded / e.bytesTotal * 100);
+      uploadProgressBar.option('value', (e.bytesLoaded / e.bytesTotal) * 100);
     },
     onUploadStarted() {
       toggleImageVisible(false);

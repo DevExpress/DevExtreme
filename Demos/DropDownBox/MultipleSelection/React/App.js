@@ -145,7 +145,7 @@ class App extends React.Component {
 
   dataGridOnSelectionChanged(e) {
     this.setState({
-      gridBoxValue: e.selectedRowKeys.length && e.selectedRowKeys || [],
+      gridBoxValue: (e.selectedRowKeys.length && e.selectedRowKeys) || [],
     });
   }
 }

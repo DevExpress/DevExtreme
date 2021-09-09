@@ -90,7 +90,7 @@ export default {
       this.progressValue = 0;
     },
     onProgress(e) {
-      this.progressValue = e.bytesLoaded / e.bytesTotal * 100;
+      this.progressValue = (e.bytesLoaded / e.bytesTotal) * 100;
     },
     onUploadStarted() {
       this.imageSource = '';

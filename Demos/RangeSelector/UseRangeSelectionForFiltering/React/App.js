@@ -48,7 +48,7 @@ class App extends React.Component {
 
   filterEmployees({ value }) {
     this.setState({
-      selectedEmployees: employees.filter((employee) => employee.BirthYear >= value[0] && employee.BirthYear <= value[1] || !value.length),
+      selectedEmployees: employees.filter((employee) => (employee.BirthYear >= value[0] && employee.BirthYear <= value[1]) || !value.length),
     });
   }
 }

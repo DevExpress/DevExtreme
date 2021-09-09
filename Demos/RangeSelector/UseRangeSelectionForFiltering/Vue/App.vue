@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     selectedEmployees() {
-      return employees.filter((employee) => employee.BirthYear >= this.range[0] && employee.BirthYear <= this.range[1] || !this.range.length);
+      return employees.filter((employee) => (employee.BirthYear >= this.range[0] && employee.BirthYear <= this.range[1]) || !this.range.length);
     },
   },
 };

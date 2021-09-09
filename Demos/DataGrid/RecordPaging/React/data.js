@@ -15,8 +15,7 @@ export function generateData(count) {
 
   for (i = 0; i < count; i += 1) {
     const birthDate = new Date(startBirthDate + Math.floor(
-      random()
-      * (endBirthDate - startBirthDate) / 10,
+      (random() * (endBirthDate - startBirthDate)) / 10,
     ));
     birthDate.setHours(12);
 

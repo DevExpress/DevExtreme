@@ -9,11 +9,11 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.border = false;
 
   $scope.$watch('width', (width) => {
-    $scope.height = width * 26 / 37;
+    $scope.height = (width * 26) / 37;
   });
 
   $scope.$watch('height', (height) => {
-    $scope.width = height * 37 / 26;
+    $scope.width = (height * 37) / 26;
   });
 
   $scope.transformations = [

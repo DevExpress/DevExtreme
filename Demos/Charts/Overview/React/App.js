@@ -24,7 +24,7 @@ const dataArray = data.map((item) => {
   return {
     complaint: item.complaint,
     count: item.count,
-    cumulativePercentage: Math.round(cumulativeCount * 100 / totalCount),
+    cumulativePercentage: Math.round((cumulativeCount * 100) / totalCount),
   };
 });
 

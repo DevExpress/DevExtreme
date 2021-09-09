@@ -129,10 +129,10 @@ export default {
   },
   watch: {
     height(val) {
-      this.width = val * 37 / 26;
+      this.width = (val * 37) / 26;
     },
     width(val) {
-      this.height = val * 26 / 37;
+      this.height = (val * 26) / 37;
     },
   },
 };

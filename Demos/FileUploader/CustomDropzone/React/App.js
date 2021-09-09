@@ -95,7 +95,7 @@ class App extends React.Component {
   }
 
   onProgress(e) {
-    this.setState({ progressValue: e.bytesLoaded / e.bytesTotal * 100 });
+    this.setState({ progressValue: (e.bytesLoaded / e.bytesTotal) * 100 });
   }
 
   onUploadStarted() {

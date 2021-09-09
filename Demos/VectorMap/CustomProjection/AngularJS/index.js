@@ -13,8 +13,8 @@ DemoApp.controller('DemoController', ($scope) => {
       const y = Math.min(Math.max(coordinates[1] * RADIANS, -WAGNER_6_P_LAT), +WAGNER_6_P_LAT);
       const t = y / Math.PI;
       return [
-        x / Math.PI * Math.sqrt(1 - 3 * t * t),
-        y * 2 / Math.PI,
+        (x / Math.PI) * Math.sqrt(1 - 3 * t * t),
+        (y * 2) / Math.PI,
       ];
     },
 
@@ -23,8 +23,8 @@ DemoApp.controller('DemoController', ($scope) => {
       const y = Math.min(Math.max(coordinates[1], -WAGNER_6_U_LAT), +WAGNER_6_U_LAT);
       const t = y / 2;
       return [
-        x * Math.PI / Math.sqrt(1 - 3 * t * t) / RADIANS,
-        y * Math.PI / 2 / RADIANS,
+        (x * Math.PI) / Math.sqrt(1 - 3 * t * t) / RADIANS,
+        (y * Math.PI) / 2 / RADIANS,
       ];
     },
   };

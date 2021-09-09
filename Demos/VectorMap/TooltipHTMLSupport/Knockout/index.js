@@ -18,7 +18,7 @@ window.onload = function () {
         customize(elements) {
           elements.forEach((element) => {
             const countryGDPData = countriesGDP[element.attribute('name')];
-            element.attribute('total', countryGDPData && countryGDPData.total || 0);
+            element.attribute('total', (countryGDPData && countryGDPData.total) || 0);
           });
         },
       },
