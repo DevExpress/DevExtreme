@@ -464,19 +464,6 @@ const Overlay = Widget.inherit({
         return visible ? this._show() : this._hide();
     },
 
-    _normalizePosition: function() {
-        const defaultPositionOptions = {
-            of: this.option('target'),
-            boundaryOffset: DEFAULT_BOUNDARY_OFFSET
-        };
-
-        if(isDefined(this.option('position'))) {
-            this._position = extend(true, {}, defaultPositionOptions, this._getPositionValue(OVERLAY_POSITION_ALIASES));
-        } else {
-            this._position = defaultPositionOptions;
-        }
-    },
-
     _getAnimationConfig: function() {
         return this._getOptionValue('animation', this);
     },
@@ -532,8 +519,6 @@ const Overlay = Widget.inherit({
         this._currentVisible = true;
         this._isShown = false;
 
-        this._normalizePosition();
-
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
             this._showingDeferred.resolve();
@@ -569,7 +554,7 @@ const Overlay = Widget.inherit({
 
             if(animation[prop] && typeof animation[prop] === 'object') {
                 extend(animation[prop], {
-                    position: this._position
+                    position: this._positionController._position
                 });
             }
         }
@@ -1111,7 +1096,8 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
-        this._normalizePosition();
+        // NOTE: position can be specified as a function which needs to be called strict on render start
+        this._positionController.updatePosition(this._getOptionValue('position'));
         this._renderWrapper();
         this._renderDimensions();
         this._cacheDimensions();
@@ -1208,7 +1194,7 @@ const Overlay = Widget.inherit({
 
             return this._drag.getPosition();
         } else {
-            const position = this._position;
+            const position = this._positionController._position;
             this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
 
             resetPosition(this._$content);
@@ -1373,6 +1359,7 @@ const Overlay = Widget.inherit({
                 });
                 break;
             case 'target':
+                this._positionController.updateTarget(value);
                 this._setAnimationTarget(value);
                 this._invalidate();
                 break;

@@ -5,6 +5,7 @@ import positionUtils from '../../animation/position';
 import { resetPosition, locate, move } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
 import { originalViewPort, value as viewPort } from '../../core/utils/view_port';
+import { pairToObject } from '../../core/utils/common';
 
 const window = getWindow();
 
@@ -20,6 +21,29 @@ const OVERLAY_POSITION_ALIASES = {
     'left top': { my: 'left top', at: 'left top' }
 };
 const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
+
+
+const SIDE_BORDER_WIDTH_STYLES = {
+    'left': 'borderLeftWidth',
+    'top': 'borderTopWidth',
+    'right': 'borderRightWidth',
+    'bottom': 'borderBottomWidth'
+};
+const WEIGHT_OF_SIDES = {
+    'left': -1,
+    'top': -1,
+    'center': 0,
+    'right': 1,
+    'bottom': 1
+};
+const POPOVER_POSITION_ALIASES = {
+    // NOTE: public API
+    'top': { my: 'bottom center', at: 'top center', collision: 'fit flip' },
+    'bottom': { my: 'top center', at: 'bottom center', collision: 'fit flip' },
+    'right': { my: 'left center', at: 'right center', collision: 'flip fit' },
+    'left': { my: 'right center', at: 'left center', collision: 'flip fit' }
+};
+const POPOVER_DEFAULT_BOUNDARY_OFFSET = { h: 10, v: 10 };
 
 class OverlayPositionController {
     constructor({
@@ -48,7 +72,7 @@ class OverlayPositionController {
         this._outsideDragFactor = undefined;
 
         this.updateContainer(container);
-        this.updatePosition(position);
+        this.updatePosition(position, target);
         this._updateDragResizeContainer();
         this._updateOutsideDragFactor();
     }
@@ -80,9 +104,15 @@ class OverlayPositionController {
         this._updateOutsideDragFactor();
     }
 
-    updatePosition(positionProp) {
+    updateTarget(target) {
+        this._props.target = target;
+
+        this.updatePosition(this._props.position, target);
+    }
+
+    updatePosition(positionProp, targetProp = this._props.target) {
         this._props.position = positionProp;
-        this._position = this._normalizePosition(positionProp);
+        this._position = this._normalizePosition(positionProp, targetProp);
 
         this._updateWrapperCoveredElement();
     }
@@ -188,14 +218,14 @@ class OverlayPositionController {
         }
     }
 
-    _normalizePosition(position) {
+    _normalizePosition(positionProp, targetProp) {
         const defaultPositionConfig = {
-            of: this._props.target,
+            of: targetProp,
             boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET
         };
 
-        if(isDefined(position)) {
-            return extend(true, {}, defaultPositionConfig, this._positionToObject(position));
+        if(isDefined(positionProp)) {
+            return extend(true, {}, defaultPositionConfig, this._positionToObject(positionProp));
         } else {
             return defaultPositionConfig;
         }
@@ -228,10 +258,14 @@ class PopupPositionController extends OverlayPositionController {
 }
 
 class PopoverPositionController extends OverlayPositionController {
-    constructor({ shading, ...args }) {
+    constructor({ shading, $arrow, ...args }) {
         super(args);
 
         this._shading = shading;
+
+        this._$arrow = $arrow;
+
+        this._positionSide = undefined;
     }
 
     positionWrapper() {
@@ -239,11 +273,92 @@ class PopoverPositionController extends OverlayPositionController {
             this._$wrapper.css({ top: 0, left: 0 });
         }
     }
+
+    _getContainerPosition() {
+        const offset = pairToObject(this._position.offset || '');
+        let hOffset = offset.h;
+        let vOffset = offset.v;
+        const isVerticalSide = this._isVerticalSide();
+        const isHorizontalSide = this._isHorizontalSide();
+
+        if(isVerticalSide || isHorizontalSide) {
+            const isPopoverInside = this._isPopoverInside();
+            const sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
+            const arrowSize = isVerticalSide ? this._$arrow.height() : this._$arrow.width();
+            const arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
+            const arrowOffset = sign * (arrowSize - arrowSizeCorrection);
+
+            isVerticalSide ? vOffset += arrowOffset : hOffset += arrowOffset;
+        }
+
+        return extend({}, this._position, { offset: hOffset + ' ' + vOffset });
+    }
+
+    _getContentBorderWidth(side) {
+        const borderWidth = this._$content.css(SIDE_BORDER_WIDTH_STYLES[side]);
+
+        return parseInt(borderWidth) || 0;
+    }
+
+    _isPopoverInside() {
+        const my = positionUtils.setup.normalizeAlign(this._position.my);
+        const at = positionUtils.setup.normalizeAlign(this._position.at);
+
+        return my.h === at.h && my.v === at.v;
+    }
+
+    _isVerticalSide(side) {
+        side = side || this._positionSide;
+        return side === 'top' || side === 'bottom';
+    }
+
+    _isHorizontalSide(side) {
+        side = side || this._positionSide;
+        return side === 'left' || side === 'right';
+    }
+
+    _getDisplaySide(position) {
+        const my = positionUtils.setup.normalizeAlign(position.my);
+        const at = positionUtils.setup.normalizeAlign(position.at);
+
+        const weightSign = WEIGHT_OF_SIDES[my.h] === WEIGHT_OF_SIDES[at.h] && WEIGHT_OF_SIDES[my.v] === WEIGHT_OF_SIDES[at.v] ? -1 : 1;
+        const horizontalWeight = Math.abs(WEIGHT_OF_SIDES[my.h] - weightSign * WEIGHT_OF_SIDES[at.h]);
+        const verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
+
+        return horizontalWeight > verticalWeight ? at.h : at.v;
+    }
+
+    _normalizePosition(positionProp, targetProp) {
+        const defaultPositionConfig = {
+            of: targetProp,
+            boundaryOffset: POPOVER_DEFAULT_BOUNDARY_OFFSET
+        };
+
+        let resultPosition;
+        if(isDefined(positionProp)) {
+            resultPosition = extend(true, {}, defaultPositionConfig, this._positionToObject(positionProp));
+        } else {
+            resultPosition = defaultPositionConfig;
+        }
+
+        this._positionSide = this._getDisplaySide(resultPosition);
+
+        return resultPosition;
+    }
+
+    _positionToObject(positionProp) {
+        if(isString(positionProp)) {
+            return extend({}, POPOVER_POSITION_ALIASES[positionProp]);
+        }
+
+        return positionProp;
+    }
 }
 
 export {
     OVERLAY_POSITION_ALIASES,
     OverlayPositionController,
     PopupPositionController,
+    POPOVER_POSITION_ALIASES,
     PopoverPositionController
 };
