@@ -66,7 +66,7 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { createResourceEditorModel, getCellGroups, getResourcesFromItem } from './resources/utils';
+import { createResourceEditorModel, getCellGroups, getResourcesFromItem, isResourceMultiple } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
@@ -1825,16 +1825,21 @@ class Scheduler extends Widget {
 
         const rawResult = result.source();
 
-        const resourceManager = getResourceManager(this.key);
-        const resourcesSetter = resourceManager._dataAccessors.setter;
-
-        for(const name in targetCell.groups) {
-            const resourceData = targetCell.groups[name];
-            // resourcesSetter[name](rawResult, isResourceMultiple(resourceManager.getResources(), name) ? wrapToArray(resourceData) : resourceData);
-            resourcesSetter[name](rawResult, wrapToArray(resourceData));
-        }
+        this.setResourceToAppointment(rawResult, targetCell.groups);
 
         return rawResult;
+    }
+
+    setResourceToAppointment(appointment, groups) {
+        const resourceManager = getResourceManager(this.key);
+        const resourcesSetter = resourceManager._dataAccessors.setter;
+        const resources = resourceManager.getResources();
+
+        for(const name in groups) {
+            const resourceData = groups[name];
+            const value = isResourceMultiple(resources, name) ? wrapToArray(resourceData) : resourceData;
+            resourcesSetter[name](appointment, value);
+        }
     }
 
     getTargetedAppointment(appointment, element) {
