@@ -104,6 +104,11 @@ const Toast = Overlay.inherit({
             * @name dxToastOptions.dragEnabled
             * @hidden
             */
+
+            /**
+            * @name dxToastOptions.allowDragOutside
+            * @hidden
+            */
         });
     },
 

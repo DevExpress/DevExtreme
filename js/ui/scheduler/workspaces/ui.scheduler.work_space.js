@@ -1622,35 +1622,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    getGroupWidth(groupIndex) { // TODO move to the grouping layer
-        const cellWidth = this.getCellWidth();
-        let result = this._getCellCount() * cellWidth;
-        // TODO: refactor after deleting old render
-        if(this.isVirtualScrolling()) {
-            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
-            const groupLength = groupedData[groupIndex][0].length;
-
-            result = groupLength * cellWidth;
-        }
-
-        const position = this.getMaxAllowedPosition(groupIndex);
-        const currentPosition = position[groupIndex];
-
-        if(currentPosition) {
-            if(this._isRTL()) {
-                result = currentPosition - position[groupIndex + 1];
-            } else {
-                if(groupIndex === 0) {
-                    result = currentPosition;
-                } else {
-                    result = currentPosition - position[groupIndex - 1];
-                }
-            }
-        }
-
-        return result;
-    }
-
     scrollToTime(hours, minutes, date) {
         if(!this._isValidScrollDate(date)) {
             return;
