@@ -1857,30 +1857,91 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,42.6,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,10,15,70,202.4',
-                    'text,Band1 line,80,42.6,{baseline:middle}',
+                    'rect,10,15,70,165.6',
+                    'text,Band1 line,80,24.2,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,80,15,140,55.2',
-                    'text,Band1_2,80,107,{baseline:middle}',
+                    'rect,80,15,140,18.4',
+                    'text,Band1_2,80,70.2,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,80,70.2,80,73.6',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,160,79.4,{baseline:middle}',
+                    'rect,80,33.4,80,73.6',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,160,42.6,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,160,70.2,60,147.2',
-                    'text,f3,80,180.6,{baseline:middle}',
+                    'rect,160,33.4,60,147.2',
+                    'text,f3,80,143.8,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,80,143.8,80,73.6',
-                    'text,f1_1,10,226.6,{baseline:middle}',
+                    'rect,80,107,80,73.6',
+                    'text,f1_1,10,189.8,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,10,217.4,70,18.4',
-                    'text,f3_1,80,226.6,{baseline:middle}',
+                    'rect,10,180.6,70,18.4',
+                    'text,f3_1,80,189.8,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,80,217.4,80,18.4',
-                    'text,f4_1,160,226.6,{baseline:middle}',
+                    'rect,80,180.6,80,18.4',
+                    'text,f4_1,160,189.8,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,160,217.4,60,18.4'
+                    'rect,160,180.6,60,18.4'
+                ];
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[f1, band-[band-[f3,f4]]], long text height auto', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9', dataField: 'f1' },
+                        {
+                            caption: 'Band1 line',
+                            columns: [
+                                {
+                                    caption: 'Band1_2', columns: [
+                                        { dataField: 'f3', caption: 'f3' },
+                                    ]
+                                },
+                                { caption: 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9', dataField: 'f4' }
+                            ]
+                        }
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1_1',
+                            f2: 'f2_1',
+                            f3: 'f3_1',
+                            f4: 'f4_1'
+                        }],
+                });
+
+                const expectedLog = [
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,70,184',
+                    'text,Band1 line,80,24.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,80,15,140,18.4',
+                    'text,Band1_2,80,74.8,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,80,33.4,80,82.8',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,160,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,160,33.4,60,165.6',
+                    'text,f3,80,157.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,80,116.2,80,82.8',
+                    'text,f1_1,10,208.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,199,70,18.4',
+                    'text,f3_1,80,208.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,80,199,80,18.4',
+                    'text,f4_1,160,208.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,160,199,60,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');

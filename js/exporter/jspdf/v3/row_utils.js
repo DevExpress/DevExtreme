@@ -77,25 +77,32 @@ function recalculateHeightForMergedRows(doc, rows) {
         return height;
     };
 
-    for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-        const cellsWithRowSpan = rows[rowIndex].cells
-            .filter(cell => isDefined(cell.rowSpan));
+    const getMaxRowSpanValue = (row) => {
+        const rowSpans = row.cells.map(cell => cell.rowSpan ?? 0);
+        return Math.max(...rowSpans, 0);
+    };
+    const sortByMaxRowSpanAsc = (a, b) => getMaxRowSpanValue(a) > getMaxRowSpanValue(b) ? 1 : getMaxRowSpanValue(b) > getMaxRowSpanValue(a) ? -1 : 0;
 
-        cellsWithRowSpan.forEach(cell => {
-            const pdfCell = cell.pdfCell;
-            const textHeight = calculateTextHeight(doc, pdfCell.text, pdfCell.font, {
-                wordWrapEnabled: pdfCell.wordWrapEnabled,
-                columnWidth: pdfCell._rect.w
-            });
-            const summaryHeight = calculateSummaryRowsHeightWithAdditionalHeights(rowIndex, cell.rowSpan);
-            if(textHeight > summaryHeight) {
-                const delta = (textHeight - summaryHeight) / (cell.rowSpan + 1);
-                for(let spanIndex = rowIndex; spanIndex <= rowIndex + cell.rowSpan; spanIndex++) {
-                    rowsAdditionalHeights[spanIndex] += delta;
+    [...rows].sort(sortByMaxRowSpanAsc)
+        .forEach(row => {
+            const cellsWithRowSpan = row.cells
+                .filter(cell => isDefined(cell.rowSpan));
+
+            cellsWithRowSpan.forEach(cell => {
+                const pdfCell = cell.pdfCell;
+                const textHeight = calculateTextHeight(doc, pdfCell.text, pdfCell.font, {
+                    wordWrapEnabled: pdfCell.wordWrapEnabled,
+                    columnWidth: pdfCell._rect.w
+                });
+                const summaryHeight = calculateSummaryRowsHeightWithAdditionalHeights(row.rowIndex, cell.rowSpan);
+                if(textHeight > summaryHeight) {
+                    const delta = (textHeight - summaryHeight) / (cell.rowSpan + 1);
+                    for(let spanIndex = row.rowIndex; spanIndex <= row.rowIndex + cell.rowSpan; spanIndex++) {
+                        rowsAdditionalHeights[spanIndex] += delta;
+                    }
                 }
-            }
+            });
         });
-    }
 
     rowsAdditionalHeights.forEach((additionalHeight, rowIndex) => {
         rows[rowIndex].height += additionalHeight;
