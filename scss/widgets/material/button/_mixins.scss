@@ -8,6 +8,7 @@
 $material-button-padding: $material-button-vertical-padding $material-button-horizontal-padding;
 $material-button-icononly-padding: $material-button-vertical-padding;
 $material-button-icon-size: $material-base-icon-size;
+$material-button-icon-text-padding: 12px;
 $material-normal-button-shadow: $material-button-box-shadow-size $button-shadow-color;
 $material-normal-button-active-state-shadow: $material-button-active-box-shadow-size $button-active-shadow-color;
 $material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
@@ -34,8 +35,21 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, math.div($material-button-icon-size, 2));
 }
 
+@mixin dx-button-mode-text-withtext-sizing() {
+  @include dx-button-sizing($material-button-vertical-padding $material-text-button-horizontal-padding, $material-button-icon-size - 6, math.div($material-button-icon-size, 2));
+}
+
 @mixin dx-button-text-and-icon-sizing() {
   @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, 8px);
+
+  .dx-button-content {
+    padding-left: $material-button-icon-text-padding;
+
+    .dx-rtl & {
+      padding-left: $material-button-horizontal-padding;
+      padding-right: $material-button-icon-text-padding;
+    }
+  }
 }
 
 

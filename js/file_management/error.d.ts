@@ -1,4 +1,4 @@
-import FileSystemItem from "./file_system_item";
+import FileSystemItem from './file_system_item';
 
 /**
  * @docid FileSystemError

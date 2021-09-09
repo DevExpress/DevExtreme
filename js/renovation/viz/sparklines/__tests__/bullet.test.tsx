@@ -6,7 +6,7 @@ import {
   emit,
   getEventHandlers,
 } from '../../../test_utils/events_mock';
-import { Bullet, viewFunction as BulletComponent } from '../bullet';
+import { Bullet, BulletProps, viewFunction as BulletComponent } from '../bullet';
 import { PathSvgElement } from '../../common/renderers/svg_path';
 import { resolveRtlEnabled } from '../../../utils/resolve_rtl';
 import { TooltipProps } from '../../common/tooltip';
@@ -434,6 +434,14 @@ describe('Bullet', () => {
         });
       });
     });
+
+    describe('BulletProps', () => {
+      it('should be enabled by default', () => {
+        const bulletProps = new BulletProps();
+
+        expect(bulletProps.tooltip.enabled).toBe(true);
+      });
+    });
   });
 
   describe('Logic', () => {
@@ -562,19 +570,19 @@ describe('Bullet', () => {
 
         it('should return inner custom props if bullet doesn\'t have tooltip props', () => {
           (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
-          const bullet = new Bullet({ value, target });
+          const bullet = new Bullet({ value, target, tooltip: new TooltipProps() });
           bullet.canvasState = { width: 200, height: 100 } as ClientRect;
           bullet.offsetState = { left: 100, top: 200 };
           bullet.widgetRef = {} as any;
 
-          expect(bullet.customizedTooltipProps).toEqual({
-            enabled: true,
-            data,
-            eventData: { component: {} },
-            customizeTooltip: customizeTooltipFn,
-            x: 200,
-            y: 250,
-          });
+          const bulletCustomizedTooltipProps = bullet.customizedTooltipProps;
+
+          expect(bulletCustomizedTooltipProps.enabled).toEqual(true);
+          expect(bulletCustomizedTooltipProps.data).toEqual(data);
+          expect(typeof bulletCustomizedTooltipProps.customizeTooltip).toEqual('function');
+          expect(bulletCustomizedTooltipProps.eventData).toEqual({ component: {} });
+          expect(bulletCustomizedTooltipProps.x).toEqual(200);
+          expect(bulletCustomizedTooltipProps.y).toEqual(250);
         });
 
         it('should return customized tooltip props', () => {
@@ -606,22 +614,22 @@ describe('Bullet', () => {
           const onTooltipShown = jest.fn();
           const onTooltipHidden = jest.fn();
           const bullet = new Bullet({
-            value, target, onTooltipShown, onTooltipHidden,
+            value, target, onTooltipShown, onTooltipHidden, tooltip: new TooltipProps(),
           });
           bullet.canvasState = { width: 200, height: 100 } as ClientRect;
           bullet.offsetState = { left: 100, top: 200 };
           bullet.widgetRef = {} as any;
 
-          expect(bullet.customizedTooltipProps).toEqual({
-            enabled: true,
-            data,
-            eventData: { component: {} },
-            onTooltipShown,
-            onTooltipHidden,
-            customizeTooltip: customizeTooltipFn,
-            x: 200,
-            y: 250,
-          });
+          const bulletCustomizedTooltipProps = bullet.customizedTooltipProps;
+
+          expect(bulletCustomizedTooltipProps.enabled).toEqual(true);
+          expect(bulletCustomizedTooltipProps.data).toEqual(data);
+          expect(bulletCustomizedTooltipProps.eventData).toEqual({ component: {} });
+          expect(bulletCustomizedTooltipProps.onTooltipShown).toEqual(onTooltipShown);
+          expect(bulletCustomizedTooltipProps.onTooltipHidden).toEqual(onTooltipHidden);
+          expect(typeof bulletCustomizedTooltipProps.customizeTooltip).toEqual('function');
+          expect(bulletCustomizedTooltipProps.x).toEqual(200);
+          expect(bulletCustomizedTooltipProps.y).toEqual(250);
         });
       });
 

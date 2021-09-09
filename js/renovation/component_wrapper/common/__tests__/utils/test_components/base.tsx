@@ -106,6 +106,10 @@ export default class TestWidget extends JSXComponent(TestWidgetProps) {
     return undefined;
   }
 
+  keyDown(): void {
+    return undefined;
+  }
+
   get className(): string {
     return combineClasses({
       'dx-test-widget': true,

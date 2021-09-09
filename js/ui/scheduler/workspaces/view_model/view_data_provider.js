@@ -1,37 +1,11 @@
 import dateUtils from '../../../../core/utils/date';
+import { getGroupPanelData } from '../../../../renovation/ui/scheduler/view_model/group_panel/utils';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../../../../renovation/ui/scheduler/workspaces/utils';
-import { VIEWS } from '../../constants';
-import { calculateIsGroupedAllDayPanel } from '../utils/base';
+import { calculateIsGroupedAllDayPanel } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
-import { ViewDataGenerator } from './view_data_generator';
-import { ViewDataGeneratorDay } from './view_data_generator_day';
-import { ViewDataGeneratorMonth } from './view_data_generator_month';
-import { ViewDataGeneratorTimelineMonth } from './view_data_generator_timeline_month';
-import { ViewDataGeneratorWeek } from './view_data_generator_week';
-import { ViewDataGeneratorWorkWeek } from './view_data_generator_work_week';
-
-const getViewDataGeneratorByViewType = (viewType) => {
-    switch(viewType) {
-        case VIEWS.MONTH:
-            return new ViewDataGeneratorMonth();
-        case VIEWS.TIMELINE_MONTH:
-            return new ViewDataGeneratorTimelineMonth();
-        case VIEWS.DAY:
-        case VIEWS.TIMELINE_DAY:
-            return new ViewDataGeneratorDay();
-        case VIEWS.WEEK:
-        case VIEWS.TIMELINE_WEEK:
-            return new ViewDataGeneratorWeek();
-        case VIEWS.WORK_WEEK:
-        case VIEWS.TIMELINE_WORK_WEEK:
-            return new ViewDataGeneratorWorkWeek();
-        default:
-            return new ViewDataGenerator();
-
-    }
-};
+import { getViewDataGeneratorByViewType } from './utils';
 
 export default class ViewDataProvider {
     constructor(viewType) {
@@ -44,6 +18,10 @@ export default class ViewDataProvider {
     }
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
+
+    get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
+
+    isSkippedDate(date) { return this.viewDataGenerator.isSkippedDate(date); }
 
     update(options, isGenerateNewViewData) {
         this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);
@@ -82,7 +60,7 @@ export default class ViewDataProvider {
         );
 
         this.dateHeaderData = dateHeaderDataGenerator
-            .generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
+            .generateDateHeaderData(this.completeDateHeaderMap, this.completeViewDataMap, renderOptions);
 
         if(renderOptions.isGenerateTimePanelData) {
             this.timePanelData = timePanelDataGenerator.generateTimePanelData(
@@ -97,7 +75,11 @@ export default class ViewDataProvider {
         this.viewDataMapWithSelection = this.viewDataGenerator
             .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
         this.viewData = this.viewDataGenerator
-            .getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
+            .getViewDataFromMap(
+                this.completeViewDataMap,
+                this.viewDataMapWithSelection,
+                renderOptions,
+            );
     }
 
     _transformRenderOptions(renderOptions) {
@@ -122,6 +104,21 @@ export default class ViewDataProvider {
             groupOrientation,
             isAllDayPanelVisible,
         };
+    }
+
+    getGroupPanelData(options) {
+        const renderOptions = this._transformRenderOptions(options);
+        if(renderOptions.groups.length > 0) {
+            const cellCount = this.getCellCount(renderOptions);
+            return getGroupPanelData(
+                renderOptions.groups,
+                cellCount,
+                renderOptions.isGroupedByDate,
+                renderOptions.isGroupedByDate ? 1 : cellCount,
+            );
+        }
+
+        return undefined;
     }
 
     getGroupStartDate(groupIndex) {
@@ -176,7 +173,7 @@ export default class ViewDataProvider {
     }
 
     getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
-        const rowsPerGroup = this._options.rowCountWithAllDayRow;
+        const rowsPerGroup = this._getRowCountWithAllDayRows();
         const isShowAllDayPanel = this._options.isAllDayPanelVisible;
 
         const firstRowInGroup = this._options.isVerticalGrouping
@@ -413,5 +410,19 @@ export default class ViewDataProvider {
 
     getRowCount(options) {
         return this.viewDataGenerator.getRowCount(options);
+    }
+
+    getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
+        return this.viewDataGenerator.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
+    }
+
+    _getRowCountWithAllDayRows() {
+        const allDayRowCount = this._options.isAllDayPanelVisible ? 1 : 0;
+
+        return this.getRowCount(this._options) + allDayRowCount;
+    }
+
+    getFirstDayOfWeek(firstDayOfWeekOption) {
+        return this.viewDataGenerator.getFirstDayOfWeek(firstDayOfWeekOption);
     }
 }

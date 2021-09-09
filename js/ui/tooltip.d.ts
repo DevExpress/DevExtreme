@@ -2,11 +2,11 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxPopover, {
-    dxPopoverOptions
+    dxPopoverOptions,
 } from './popover';
 
 /** @public */

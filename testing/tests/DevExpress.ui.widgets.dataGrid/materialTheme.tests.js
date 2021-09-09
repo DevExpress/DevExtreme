@@ -28,7 +28,7 @@ QUnit.module('Material theme', baseModuleConfig, () => {
         const rightPadding = beforeElement.getPropertyValue('padding-right');
         const leftPadding = beforeElement.getPropertyValue('padding-left');
 
-        assert.equal(rightPadding, '14px');
-        assert.equal(leftPadding, '14px');
+        assert.equal(rightPadding, '16px');
+        assert.equal(leftPadding, '16px');
     });
 });

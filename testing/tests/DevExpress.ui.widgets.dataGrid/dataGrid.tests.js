@@ -476,7 +476,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        $('.dx-datagrid-export-button').trigger('dxclick');
+        $('.dx-datagrid-export-button .dx-button').trigger('dxclick');
 
         checkDxFontIcon(assert, '.dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
         checkDxFontIcon(assert, '.dx-icon-exportselected', DX_ICON_EXPORT_SELECTED_CONTENT_CODE);
@@ -1037,7 +1037,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
-        assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
+        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 0.51, 'toolbar custom item is aligned');
     });
 
     QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
@@ -3785,7 +3785,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
-        $(dataGrid.getScrollable()._container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
+        $(dataGrid.getScrollable().container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'row is navigated');
@@ -3824,7 +3824,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
-        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(500);
 
         // assert

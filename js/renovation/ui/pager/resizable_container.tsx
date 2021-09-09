@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
-import { PagerProps } from './common/pager_props';
+import { InternalPagerProps } from './common/pager_props';
 import { getElementWidth, getElementStyle } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { PagerContentProps } from './content';
@@ -17,8 +17,8 @@ export const viewFunction = ({
   pagesRef,
   infoTextVisible,
   isLargeDisplayMode,
-  props: { contentTemplate: Content, pagerProps },
-  restAttributes,
+  contentAttributes,
+  props: { contentTemplate: Content },
 }: ResizableContainer): JSX.Element => (
   <Content
     rootElementRef={parentRef}
@@ -28,7 +28,7 @@ export const viewFunction = ({
     infoTextVisible={infoTextVisible}
     isLargeDisplayMode={isLargeDisplayMode}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...{ ...pagerProps, ...restAttributes }}
+    {...contentAttributes}
   />
 );
 interface ChildElements<T> { pageSizes: T; pages: T; info: T }
@@ -68,9 +68,9 @@ function getElementsWidth({
 
 @ComponentBindings()
 export class ResizableContainerProps {
-  @OneWay() pagerProps!: PagerProps;
+  @OneWay() pagerProps!: InternalPagerProps;
 
-  @Template() contentTemplate!: JSXTemplate<PagerContentProps>;
+  @Template() contentTemplate!: JSXTemplate<PagerContentProps, 'pageSizeChange' | 'pageIndexChange'>;
 }
 @Component({
   defaultOptionRules: null,
@@ -106,6 +106,62 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
     }
   }
 
+  get contentAttributes(): Record<string, unknown> & InternalPagerProps {
+    // Without destructing in react defaultPageSize and defaultPageIndex from this.props.pagerProps
+    // added to contentAttributes after added to Widget.restAttributes
+    // and way to the following error:
+    // React does not recognize the `defaultPageSize` prop on a DOM element.
+    const {
+      pageSize,
+      pageIndex,
+      pageIndexChange,
+      pageSizeChange,
+      gridCompatibility,
+      className,
+      showInfo,
+      infoText,
+      lightModeEnabled,
+      displayMode,
+      maxPagesCount,
+      pageCount,
+      pagesCountText,
+      visible,
+      hasKnownLastPage,
+      pagesNavigatorVisible,
+      showPageSizes,
+      pageSizes,
+      rtlEnabled,
+      showNavigationButtons,
+      totalCount,
+      onKeyDown,
+    } = this.props.pagerProps;
+    return {
+      ...this.restAttributes,
+      pageSize,
+      pageIndex,
+      pageIndexChange,
+      pageSizeChange,
+      gridCompatibility,
+      className,
+      showInfo,
+      infoText,
+      lightModeEnabled,
+      displayMode,
+      maxPagesCount,
+      pageCount,
+      pagesCountText,
+      visible,
+      hasKnownLastPage,
+      pagesNavigatorVisible,
+      showPageSizes,
+      pageSizes,
+      rtlEnabled,
+      showNavigationButtons,
+      totalCount,
+      onKeyDown,
+    };
+  }
+
   updateAdaptivityProps(): void {
     const currentElementsWidth = getElementsWidth({
       parent: this.parentRef.current,
@@ -114,8 +170,8 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       pages: this.pagesRef.current,
     });
     if (isDefined(this.actualAdaptivityProps)
-    && ((this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible
-      || this.actualAdaptivityProps.isLargeDisplayMode !== this.isLargeDisplayMode))) {
+      && (this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible
+        || this.actualAdaptivityProps.isLargeDisplayMode !== this.isLargeDisplayMode)) {
       return;
     }
     const isEmpty = !isDefined(this.elementsWidth);

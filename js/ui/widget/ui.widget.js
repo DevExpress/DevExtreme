@@ -8,7 +8,6 @@ import { extend } from '../../core/utils/extend';
 import { focusable as focusableSelector } from './selectors';
 import { inArray } from '../../core/utils/array';
 import { isPlainObject, isDefined } from '../../core/utils/type';
-import ResizeObserver from '../../core/resize_observer';
 import devices from '../../core/devices';
 import { compare as compareVersions } from '../../core/utils/version';
 
@@ -56,16 +55,28 @@ const Widget = DOMComponent.inherit({
             accessKey: undefined,
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name WidgetOptions.onFocusIn
-            * @extends Action
             * @action
             * @hidden
             */
             onFocusIn: null,
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name WidgetOptions.onFocusOut
-            * @extends Action
             * @action
             * @hidden
             */
@@ -94,22 +105,7 @@ const Widget = DOMComponent.inherit({
     _init() {
         this.callBase();
         this._initContentReadyAction();
-        this._initResizeObserver();
     },
-
-    _initResizeObserver: function() {
-        if(!this.option('useResizeObserver')) {
-            return;
-        }
-
-        this._resizeObserver = new ResizeObserver({
-            callback: (entries) => { this._resizeObserverCallback(entries); },
-            shouldSkipCallback: (entries) => this._shouldSkipResizeObserverCallback(entries)
-        });
-    },
-
-    _resizeObserverCallback: noop,
-    _shouldSkipResizeObserverCallback: noop,
 
     _innerWidgetOptionChanged: function(innerWidget, args) {
         const options = Widget.getOptionsFromContainer(args);
@@ -174,8 +170,6 @@ const Widget = DOMComponent.inherit({
     _fireContentReadyAction: deferRenderer(function() { return this._contentReadyAction(); }),
 
     _dispose() {
-        this._resizeObserver?.disconnect();
-        this._resizeObserver = null;
         this._contentReadyAction = null;
         this._detachKeyboardEvents();
 

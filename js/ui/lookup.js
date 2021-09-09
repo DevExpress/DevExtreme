@@ -406,14 +406,6 @@ const Lookup = DropDownList.inherit({
         return this._$fieldWrapper;
     },
 
-    _toggleOpenState: function() {
-        this.callBase();
-
-        if(!this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
-            this._setPopupPosition();
-        }
-    },
-
     _renderField: function() {
         const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
@@ -466,6 +458,16 @@ const Lookup = DropDownList.inherit({
         if(this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
             this._popup.option('position').of = $(window);
         }
+    },
+    _popupShownHandler: function() {
+        const scrollToSelectedItemEnabled = this.option('_scrollToSelectedItemEnabled');
+        const fullScreen = this.option('dropDownOptions.fullScreen');
+
+        if(!fullScreen && scrollToSelectedItemEnabled) {
+            this._setPopupPosition();
+        }
+
+        this.callBase();
     },
 
     _scrollToSelectedItem: function() {
@@ -645,7 +647,7 @@ const Lookup = DropDownList.inherit({
                 target: this.$element(),
                 fullScreen: false,
                 shading: false,
-                closeOnTargetScroll: true,
+                hideOnParentScroll: true,
                 _fixWrapperPosition: false,
                 width: this._isInitialOptionValue('dropDownOptions.width')
                     ? (function() { return this.$element().outerWidth(); }).bind(this)
@@ -687,7 +689,7 @@ const Lookup = DropDownList.inherit({
 
             toolbarItems: this._getPopupToolbarItems(),
 
-            closeOnTargetScroll: false,
+            hideOnParentScroll: false,
             onPositioned: null,
 
             maxHeight: '100vh',
@@ -715,7 +717,7 @@ const Lookup = DropDownList.inherit({
                 of: this.element()
             };
 
-            result.closeOnTargetScroll = true;
+            result.hideOnParentScroll = true;
         }
 
         each(['position', 'animation', 'width', 'height'], (_, optionName) => {
@@ -941,16 +943,35 @@ const Lookup = DropDownList.inherit({
         this._refreshSelected();
     },
 
+    _runWithoutCloseOnScroll: function(callback) {
+        // NOTE: Focus can trigger "scroll" event
+
+        const { _scrollToSelectedItemEnabled } = this.option();
+        const hideOnParentScroll = this._popup.option('hideOnParentScroll');
+
+        if(!_scrollToSelectedItemEnabled) {
+            callback();
+        } else {
+            this._popup.option('hideOnParentScroll', false);
+            callback();
+            this._hideOnParentScrollTimer = setTimeout(() => { // T1018037
+                this._popup.option('hideOnParentScroll', hideOnParentScroll);
+            });
+        }
+    },
+
     _setFocusPolicy: function() {
         if(!this.option('focusStateEnabled')) {
             return;
         }
 
-        if(this.option('searchEnabled')) {
-            this._searchBox.focus();
-        } else {
-            eventsEngine.trigger(this._$list, 'focus');
-        }
+        this._runWithoutCloseOnScroll(() => {
+            if(this.option('searchEnabled')) {
+                this._searchBox.focus();
+            } else {
+                eventsEngine.trigger(this._$list, 'focus');
+            }
+        });
     },
 
     _focusTarget: function() {
@@ -1006,7 +1027,11 @@ const Lookup = DropDownList.inherit({
 
     _clean: function() {
         this._$fieldWrapper.remove();
+        clearTimeout(this._hideOnParentScrollTimer);
+
+        this._hideOnParentScrollTimer = null;
         this._$searchBox = null;
+
         this.callBase();
     },
 

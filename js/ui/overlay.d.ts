@@ -1,32 +1,38 @@
 import {
-    AnimationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     DxEvent,
     Cancelable,
-    EventInfo
+    EventInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @namespace DevExpress.ui */
 export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     allowDragOutside?: boolean;
     /**
      * @docid
      * @default { show: { type: "pop", duration: 300, from: { scale: 0.55 } }, hide: { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
@@ -64,6 +70,12 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @public
      */
     deferRendering?: boolean;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    dragAndResizeArea?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
@@ -198,6 +210,12 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @public
      */
     wrapperAttr?: any;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxOverlayAnimation {

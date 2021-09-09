@@ -1,9 +1,9 @@
 import {
-    AnimationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
-    PositionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
@@ -11,12 +11,12 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 /** @public */

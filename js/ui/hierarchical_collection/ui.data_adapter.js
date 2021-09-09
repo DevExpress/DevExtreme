@@ -5,6 +5,7 @@ import { isFunction, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import errors from '../../ui/widget/ui.errors';
 import uiSearchBoxMixin from '../../ui/widget/ui.search_box_mixin';
+import TextBox from '../../ui/text_box';
 import { inArray } from '../../core/utils/array';
 import query from '../../data/query';
 import storeHelper from '../../data/store_helper';
@@ -13,6 +14,8 @@ import HierarchicalDataConverter from './ui.data_converter';
 const EXPANDED = 'expanded';
 const SELECTED = 'selected';
 const DISABLED = 'disabled';
+
+uiSearchBoxMixin.setEditorClass(TextBox);
 
 const DataAdapter = Class.inherit({
 

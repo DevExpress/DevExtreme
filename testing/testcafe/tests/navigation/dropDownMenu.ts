@@ -17,8 +17,8 @@ test('Drop down button should lost hover state', async (t) => {
     .expect(dropDownMenu.isHovered)
     .notOk();
 }).before(async () => {
-  await appendElementTo('body', 'button', {
-    id: 'button', width: 50, height: 50, backgroundColor: 'steelblue',
+  await appendElementTo('body', 'button', 'button', {
+    width: '50px', height: '50px', backgroundColor: 'steelblue',
   });
 
   await createWidget('dxDropDownMenu', {

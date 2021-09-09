@@ -99,6 +99,7 @@ describe('Pager size selector', () => {
         const widgetRef = { } as RefObject<HTMLDivElement>;
         const component = new PageSizeSelector({
           rootElementRef: { current: {} } as RefObject<HTMLDivElement>,
+          pageSizeChange: jest.fn(),
         });
         component.htmlRef = widgetRef;
         component.setRootElementRef();
@@ -107,7 +108,9 @@ describe('Pager size selector', () => {
       });
 
       it('hasnt rootElementRef', () => {
-        const component = new PageSizeSelector({ });
+        const component = new PageSizeSelector({
+          pageSizeChange: jest.fn(),
+        });
         component.htmlRef = {} as RefObject<HTMLDivElement>;
         component.setRootElementRef();
         expect(component.props.rootElementRef).toBeUndefined();

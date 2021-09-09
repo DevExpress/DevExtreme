@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
-const scrollEvents = require('ui/scroll_view/ui.events.emitter.gesture.scroll');
+const scrollEvents = require('events/gesture/emitter.gesture.scroll');
 const GestureEmitter = require('events/gesture/emitter.gesture');
 const eventUtils = require('events/utils/index');
 const devices = require('core/devices');

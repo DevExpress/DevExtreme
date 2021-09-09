@@ -1621,6 +1621,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 
     QUnit.test('Check header/data/total cell style/data type, pivot.rtlEnabled = true', function(assert) {
+        const clock = sinon.useFakeTimers();
         const done = assert.async();
         const ds = {
             fields: [
@@ -1686,8 +1687,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { 'rightToLeft': true, state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column + 1 });
             helper.checkCellRange(cellRange, { row: 5, column: 5 }, topLeft);
+
+            clock.restore();
             done();
         });
+
+        clock.tick(400);
     });
 
     QUnit.test('Export [string x string x number] with format: currency', function(assert) {

@@ -237,3 +237,10 @@ const ButtonGroup = Widget.inherit({
 registerComponent('dxButtonGroup', ButtonGroup);
 
 export default ButtonGroup;
+
+
+/**
+ * @name dxButtonGroupItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

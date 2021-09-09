@@ -612,7 +612,8 @@ class RecurrenceEditor extends Editor {
             onValueChanged: this._repeatUntilValueChangeHandler.bind(this),
             calendarOptions: {
                 firstDayOfWeek: this._getFirstDayOfWeek()
-            }
+            },
+            useMaskBehavior: true
         });
 
         return $editorWrapper;
@@ -673,6 +674,7 @@ class RecurrenceEditor extends Editor {
     _optionChanged(args) {
         switch(args.name) {
             case 'readOnly':
+                this._recurrenceForm?.option('readOnly', args.value);
                 this._repeatCountEditor?.option('readOnly', args.value);
                 this._weekEditor?.option('readOnly', args.value);
                 this._repeatUntilDate?.option('readOnly', args.value);

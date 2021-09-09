@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -26,21 +26,21 @@ import {
 } from '../events/index';
 
 import {
-    dxListItem
+    Item as dxListItem,
 } from './list';
 
 import {
-    Properties as PopupProperties
+    Properties as PopupProperties,
 } from './popup';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
 export type ButtonClickEvent = NativeEventInfo<dxDropDownButton> & {
     readonly selectedItem?: any;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxDropDownButton>;
@@ -64,7 +64,7 @@ export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo
 export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
     readonly item: any;
     readonly previousItem: any;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -73,10 +73,11 @@ export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid
+     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -137,10 +138,11 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<dxDropDownButtonItem | any>
      * @default null
      * @public
      */
-    items?: Array<dxDropDownButtonItem | any>;
+    items?: Array<Item | any>;
     /**
      * @docid
      * @default 'this'
@@ -298,9 +300,13 @@ export default class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
 }
 
 /**
- * @docid
- * @inherits dxListItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxDropDownButton
+ */
+export type Item = dxDropDownButtonItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxDropDownButtonItem extends dxListItem {
@@ -314,7 +320,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @type_function_param1_field4 event:event
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
+    onClick?: ((e: { component?: dxDropDownButton; element?: DxElement; model?: any; event?: DxEvent }) => void) | string;
 }
 
 /** @public */

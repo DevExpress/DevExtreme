@@ -649,7 +649,7 @@ QUnit.module('popup options', moduleConfig, () => {
         assert.strictEqual($popupContent.height(), popupHeight + 50, 'popup height has been changed');
     });
 
-    QUnit.test('Dropdownbox popup should have function as closeOnTargetScroll option value (T845484)', function(assert) {
+    QUnit.test('Dropdownbox popup should have function as hideOnParentScroll option value (T845484)', function(assert) {
         const $content = $('<div>').attr('id', 'content');
 
         const instance = new DropDownBox($('#dropDownBox'), {
@@ -657,7 +657,7 @@ QUnit.module('popup options', moduleConfig, () => {
             contentTemplate: () => $content
         });
 
-        assert.ok(typeUtils.isFunction(instance.option('dropDownOptions.closeOnTargetScroll')));
+        assert.ok(typeUtils.isFunction(instance.option('dropDownOptions.hideOnParentScroll')));
     });
 
     [true, false].forEach((isMac) => {

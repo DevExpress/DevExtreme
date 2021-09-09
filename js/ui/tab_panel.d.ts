@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -18,16 +18,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
-    dxMultiViewItem,
-    dxMultiViewOptions
+    Item as dxMultiViewItem,
+    dxMultiViewOptions,
 } from './multi_view';
 
 /** @public */
@@ -61,19 +61,19 @@ export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo
 export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -89,10 +89,11 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -111,10 +112,11 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<string | dxTabPanelItem | any>
      * @fires dxTabPanelOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxTabPanelItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default null
@@ -198,9 +200,13 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
 export default class dxTabPanel extends dxMultiView<dxTabPanelOptions> { }
 
 /**
- * @docid
- * @inherits dxMultiViewItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTabPanel
+ */
+export type Item = dxTabPanelItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxTabPanelItem extends dxMultiViewItem {

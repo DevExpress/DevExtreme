@@ -1,3 +1,4 @@
+import { isMaterial } from '../../themes';
 import dateUtils from '../../../core/utils/date';
 
 const { trimTime } = dateUtils;
@@ -18,7 +19,7 @@ export const getDateNavigator = (header, item) => {
         getNextButtonOptions(header),
     ];
 
-    const stylingMode = header.option('useDropDownViewSwitcher') ? 'text' : 'contained';
+    const stylingMode = isMaterial() ? 'text' : 'contained';
 
     return {
         widget: 'dxButtonGroup',
@@ -26,6 +27,7 @@ export const getDateNavigator = (header, item) => {
         options: {
             items,
             stylingMode,
+            selectionMode: 'none',
             onItemClick: (e) => {
                 e.itemData.clickHandler(e);
             },

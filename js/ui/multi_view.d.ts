@@ -1,5 +1,5 @@
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -9,13 +9,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -58,10 +58,11 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -76,10 +77,11 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
     focusStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<string | dxMultiViewItem | any>
      * @fires dxMultiViewOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxMultiViewItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -110,9 +112,13 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
 export default class dxMultiView<TProperties = Properties> extends CollectionWidget<TProperties> { }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxMultiView
+ */
+export type Item = dxMultiViewItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxMultiViewItem extends CollectionWidgetItem {

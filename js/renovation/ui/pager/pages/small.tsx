@@ -11,7 +11,7 @@ import { NumberBox } from '../../editors/number_box';
 import messageLocalization from '../../../../localization/message';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getElementMinWidth } from '../utils/get_element_width';
-import { PagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/pager_props';
 
 const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
@@ -46,10 +46,10 @@ export const viewFunction = ({
   </div>
 );
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallProps = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'>;
+type PagerSmallProps = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesSmall extends JSXComponent<PagerSmallProps>() {
+export class PagesSmall extends JSXComponent<PagerSmallProps, 'pageIndexChange'>() {
   @Ref() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {
@@ -73,11 +73,10 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   }
 
   selectLastPageIndex(): void {
-    const { pageCount } = this.props;
-    this.props.pageIndexChange?.(pageCount - 1);
+    this.props.pageIndexChange(this.props.pageCount - 1);
   }
 
   valueChange(value: number): void {
-    this.props.pageIndex = value - 1;
+    this.props.pageIndexChange(value - 1);
   }
 }

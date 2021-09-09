@@ -3,7 +3,9 @@ import 'generic_light.css!';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
-import { RTL_CLASS } from './scrollable.constants.js';
+import {
+    RTL_CLASS
+} from './scrollable.constants.js';
 
 
 const moduleConfig = {

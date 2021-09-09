@@ -1,5 +1,5 @@
 import FileSystemProviderBase, {
-    FileSystemProviderBaseOptions
+    FileSystemProviderBaseOptions,
 } from './provider_base';
 
 /** @namespace DevExpress.fileManagement */

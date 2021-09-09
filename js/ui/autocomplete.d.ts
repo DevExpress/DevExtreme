@@ -3,24 +3,24 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import dxDropDownList, {
     dxDropDownListOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    Properties as PopupProperties
+    Properties as PopupProperties,
 } from './popup';
 
 /** @public */

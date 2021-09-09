@@ -53,7 +53,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
      * @type_function_return Promise<number>
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: FilterDescriptor | Array<FilterDescriptor>, group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }) => PromiseLike<number>);
+    totalCount?: ((loadOptions: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }) => PromiseLike<number>);
     /**
      * @docid
      * @type_function_param1 key:object|string|number

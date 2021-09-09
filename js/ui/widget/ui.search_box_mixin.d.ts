@@ -1,5 +1,5 @@
 import {
-    Properties as TextBoxProperties
+    Properties as TextBoxProperties,
 } from '../text_box';
 
 /** @namespace DevExpress.ui */
@@ -50,6 +50,7 @@ export interface SearchBoxMixinOptions {
  * @export default
  * @hidden
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class SearchBoxMixin {
     constructor(options?: SearchBoxMixinOptions)
 }

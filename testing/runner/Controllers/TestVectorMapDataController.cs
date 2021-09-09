@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Net.Http;
+using Runner.Tools;
 using Directory = System.IO.Directory;
 using Path = System.IO.Path;
 using IOFile = System.IO.File;
@@ -46,6 +47,7 @@ namespace Runner.Controllers
         public TestVectorMapDataController(IHostingEnvironment env)
         {
             _env = env;
+            ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
         }
 
         private string ReadTextFile(string path)

@@ -1,5 +1,3 @@
-
-
 /**
  * @docid viz.refreshPaths
  * @publicName refreshPaths()

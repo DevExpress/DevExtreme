@@ -1,5 +1,5 @@
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 /** @namespace DevExpress.ui */

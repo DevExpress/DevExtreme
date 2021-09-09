@@ -41,7 +41,7 @@ $switch-invalid-container-bg: color.change($base-invalid-color, $alpha: 0.5) !de
 
 @if $mode == "dark" {
   $switch-bg: lighten($base-element-bg, 38%) !default;
-  $switch-handle-off-bg: lighten($base-element-bg, 2%) !default;
+  $switch-handle-off-bg: lighten($base-element-bg, 18.5%) !default;
   $switch-handle-disabled-bg: lighten($base-element-bg, 26%) !default;
 }
 

@@ -1,5 +1,5 @@
 import { DxPromise } from '../core/utils/deferred';
-import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index'
+import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 /** @namespace DevExpress.data */
 export interface StoreOptions<TKey = any, TValue = any> {
@@ -94,7 +94,7 @@ export interface StoreOptions<TKey = any, TValue = any> {
     onUpdating?: ((key: TKey, values: TValue) => void);
 }
 
-type EventName = 'loaded'|'loading'|'inserted'|'inserting'|'updated'|'updating'|'push'|'removed'|'removing'|'modified'|'modifying';
+type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 
 /**
  * @docid
@@ -185,14 +185,14 @@ export default class Store<TKey = any, TValue = any> {
      * @return this
      * @public
      */
-    on(events: {[key in EventName]?: Function}): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * @docid
      * @publicName push(changes)
      * @param1 changes:Array<any>
      * @public
      */
-    push(changes: Array<{type: 'insert' | 'update' | 'remove', data?: TValue, key?: TKey, index?: number}>): void;
+    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: TValue; key?: TKey; index?: number }>): void;
     /**
      * @docid
      * @publicName remove(key)
@@ -210,7 +210,7 @@ export default class Store<TKey = any, TValue = any> {
      * @return Promise<number>
      * @public
      */
-    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>, group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }): DxPromise<number>;
+    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)

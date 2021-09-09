@@ -1,10 +1,11 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
-import TextBox from '../text_box';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
+import { stubComponent } from '../../core/utils/stubs';
 
+let EditorClass = stubComponent('TextBox');
 
 export default {
     _getDefaultOptions: function() {
@@ -46,7 +47,7 @@ export default {
         } else {
             $element.addClass(rootElementClassName);
             this._$searchEditorElement = $('<div>').addClass(searchBoxClassName).prependTo($element);
-            this._searchEditor = this._createComponent(this._$searchEditorElement, TextBox, editorOptions);
+            this._searchEditor = this._createComponent(this._$searchEditorElement, EditorClass, editorOptions);
         }
     },
 
@@ -167,5 +168,9 @@ export default {
         }
 
         this.callBase();
+    },
+
+    setEditorClass: function(value) {
+        EditorClass = value;
     }
 };

@@ -1,5 +1,5 @@
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -9,12 +9,12 @@ import {
   NativeEventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
-  ItemInfo
+  ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -56,29 +56,30 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
        * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto',
+      baseSize?: number | 'auto';
       /**
        * @docid
        * @default 1
        */
-      ratio?: number,
+      ratio?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string,
+      screen?: string;
       /**
        * @docid
        * @default 1
        */
-      shrink?: number
+      shrink?: number;
     }>;
     /**
      * @docid
+     * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type_function_return number|string
@@ -88,10 +89,11 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     height?: number | string | (() => number | string);
     /**
      * @docid
+     * @type Array<string | dxResponsiveBoxItem | any>
      * @fires dxResponsiveBoxOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxResponsiveBoxItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @public
@@ -102,22 +104,22 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
        * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto',
+      baseSize?: number | 'auto';
       /**
        * @docid
        * @default 1
        */
-      ratio?: number,
+      ratio?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string,
+      screen?: string;
       /**
        * @docid
        * @default 1
        */
-      shrink?: number
+      shrink?: number;
     }>;
     /**
      * @docid
@@ -150,9 +152,13 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
 export default class dxResponsiveBox extends CollectionWidget<dxResponsiveBoxOptions> { }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxResponsiveBox
+ */
+export type Item = dxResponsiveBoxItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
@@ -164,27 +170,27 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
       /**
        * @docid
        */
-      col?: number,
+      col?: number;
       /**
        * @docid
        * @default undefined
        */
-      colspan?: number,
+      colspan?: number;
       /**
        * @docid
        */
-      row?: number,
-      /**
-       * @docid
-       * @default undefined
-       */
-      rowspan?: number,
+      row?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string
-    } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
+      rowspan?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
+    } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
 }
 
 /** @public */

@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/form";
+@use "../textEditor/sizes" as *;
 
 // adduse
 @use "../scrollable";
@@ -87,6 +88,13 @@
 
 .dx-field-item-label-location-top {
   padding: $material-form-top-label-padding;
+  padding-left: $material-filled-texteditor-input-horizontal-padding;
+  padding-right: $material-filled-texteditor-input-horizontal-padding;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .dx-field-item-label-text {
@@ -95,8 +103,13 @@
 
 .dx-field-item-help-text {
   color: $form-field-item-color;
-  padding: 6px 0 2px;
+  padding: 6px $material-filled-texteditor-input-horizontal-padding 2px;
   font-style: normal;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .dx-field-item-required-mark {

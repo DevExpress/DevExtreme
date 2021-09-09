@@ -21,6 +21,8 @@ namespace Runner
             try
             {
                 var rootPath = Path.Combine(AppContext.BaseDirectory, "../../..");
+                ConsoleHelper.Logger.SetWorkingFolder(rootPath);
+                ConsoleHelper.Logger.Write();
                 Ports.Load(Path.Combine(rootPath, "ports.json"));
 
                 var url = "http://0.0.0.0:" + Ports.Get("qunit");
@@ -72,7 +74,7 @@ namespace Runner
                 using (var host = builder.Build())
                 {
                     host.Start();
-                    Console.WriteLine($"QUnit runner server listens on {url}...");
+                    ConsoleHelper.WriteLine($"QUnit runner server listens on {url}...");
                     Thread.Sleep(Timeout.Infinite);
                 }
 
@@ -80,7 +82,7 @@ namespace Runner
             }
             catch (Exception x)
             {
-                Console.Error.WriteLine(x.Message);
+                ConsoleHelper.Error.WriteLine(x.Message);
                 return 1;
             }
         }

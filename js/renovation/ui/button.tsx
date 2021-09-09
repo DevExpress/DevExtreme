@@ -68,7 +68,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       onActive={viewModel.onActive}
       onClick={viewModel.onWidgetClick}
       onInactive={viewModel.onInactive}
-      onKeyDown={viewModel.onWidgetKeyDown}
+      onKeyDown={viewModel.keyDown}
       rtlEnabled={viewModel.props.rtlEnabled}
       tabIndex={viewModel.props.tabIndex}
       visible={viewModel.props.visible}
@@ -213,7 +213,7 @@ export class Button extends JSXComponent(ButtonProps) {
     useSubmitBehavior && this.submitInputRef.current!.click();
   }
 
-  onWidgetKeyDown(e: {
+  keyDown(e: {
     originalEvent: Event & { cancel: boolean };
     keyName: string;
     which: string;

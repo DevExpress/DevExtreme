@@ -1,9 +1,10 @@
 import {
-  Component, JSXComponent,
+  Component,
+  JSXComponent,
 } from '@devextreme-generator/declarations';
 
 import { ResizableContainer } from './resizable_container';
-import { PagerProps } from './common/pager_props';
+import { PagerProps, InternalPagerProps } from './common/pager_props';
 import { PagerContent } from './content';
 import { GridPagerWrapper } from '../../component_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
@@ -25,6 +26,7 @@ export const viewFunction = ({
   jQuery: { register: true, component: GridPagerWrapper },
   view: viewFunction,
 })
+
 export class Pager extends JSXComponent<PagerProps>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
@@ -55,7 +57,7 @@ export class Pager extends JSXComponent<PagerProps>() {
     return this.props.className;
   }
 
-  get pagerProps(): PagerProps {
+  get pagerProps(): InternalPagerProps {
     return {
       ...this.props,
       className: this.className,

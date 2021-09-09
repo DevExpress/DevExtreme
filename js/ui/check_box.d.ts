@@ -2,12 +2,12 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     EditorOptions,
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 /** @public */
@@ -53,13 +53,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @default undefined
      * @public
      */
-    iconHeight?: number | string;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-     iconWidth?: number | string;
+    iconSize?: number | string;
     /**
      * @docid
      * @hidden false
@@ -77,7 +71,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @default false
      * @public
      */
-    value?: boolean | undefined;
+    value?: boolean | null | undefined;
 }
 /**
  * @docid
@@ -88,7 +82,14 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxCheckBox extends Editor<dxCheckBoxOptions> { }
+export default class dxCheckBox extends Editor<dxCheckBoxOptions> {
+    /**
+     * @docid
+     * @publicName blur()
+     * @public
+     */
+     blur(): void;
+}
 
 /** @public */
 export type Properties = dxCheckBoxOptions;

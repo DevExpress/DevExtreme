@@ -1012,7 +1012,8 @@ module('Search operation', moduleConfig, () => {
         const dataAdapter = helper.initDataAdapter({
             items: [{ text: 'item 1', expanded: true, items: [{ text: 'item 11' }] }],
             dataType: 'tree'
-        }); const breakingSymbols = [];
+        });
+        const breakingSymbols = [];
 
         $.each(symbols, function(_, symbol) {
             try {

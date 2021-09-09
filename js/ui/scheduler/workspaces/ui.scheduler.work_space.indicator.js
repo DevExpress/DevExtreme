@@ -6,7 +6,7 @@ import { extend } from '../../../core/utils/extend';
 import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
-import { getToday } from './utils/base';
+import { getToday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 

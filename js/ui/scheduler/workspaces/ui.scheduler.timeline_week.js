@@ -16,10 +16,6 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
         return getBoundingRect($headerRow.children().first().get(0)).width;
     }
 
-    _getWeekDuration() {
-        return 7;
-    }
-
     _needRenderWeekHeader() {
         return true;
     }

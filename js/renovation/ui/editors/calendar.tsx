@@ -7,7 +7,6 @@ import { EventCallback } from '../common/event_callback';
 import { BaseWidgetProps } from '../common/base_props';
 
 function today(): Date { return new Date(); }
-function TruePredicate(): boolean { return true; }
 
 export const viewFunction = ({
   props,
@@ -40,7 +39,7 @@ export class CalendarProps extends BaseWidgetProps {
   // Scheduler private API
   @OneWay() _todayDate? = today;
 
-  @OneWay() hasFocus?: (e: HTMLElement) => boolean = TruePredicate;
+  @OneWay() skipFocusCheck?: boolean = false;
 }
 @Component({
   defaultOptionRules: null,

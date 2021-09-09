@@ -84,10 +84,6 @@ $badge-invalid-bg: $base-invalid-color;
   .dx-list {
     height: 100%;
     min-height: $material-list-item-height;
-
-    &:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
-      padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding - 1px;
-    }
   }
 
   .dx-list-select-all {

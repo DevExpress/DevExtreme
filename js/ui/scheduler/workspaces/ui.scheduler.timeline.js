@@ -13,10 +13,10 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getDateForHeaderText } from './utils/timeline_week';
+import { getDateForHeaderText } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/timeline_week';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
-import { formatWeekdayAndDay } from './utils/base';
+import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -106,10 +106,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _incrementDate(date) {
         date.setDate(date.getDate() + 1);
-    }
-
-    _getWeekDuration() {
-        return 1;
     }
 
     getIndicationCellCount() {
@@ -299,10 +295,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
     }
 
-    _getRowCountWithAllDayRows() {
-        return this._getRowCount();
-    }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
@@ -312,27 +304,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     generateRenderOptions() {
         const options = super.generateRenderOptions(true);
 
-        const groupCount = this._getGroupCount();
-        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-            ? groupCount
-            : 1;
-
-        const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
-        const daysInView = cellsInGroup * horizontalGroupCount;
-
         return {
             ...options,
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
-            daysInView,
             getDateForHeaderText,
-            columnsInDay: this._getCellCountInDay(),
-        };
-    }
-
-    _getDateGenerationOptions() {
-        return {
-            ...super._getDateGenerationOptions(),
-            columnsInDay: this._getCellCountInDay(),
         };
     }
 
@@ -374,7 +349,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderView() {
-        this._hiddenInterval = this._getHiddenInterval();
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
@@ -459,7 +433,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
                 ? groupCount
                 : 1;
-            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+            const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * this.option('intervalCount');
 
             const cellsCount = cellsInGroup * horizontalGroupCount;
 

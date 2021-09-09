@@ -2,12 +2,12 @@ import { DxPromise } from '../../core/utils/deferred';
 import Store, { StoreOptions } from '../abstract_store';
 import { LoadOptions } from '../index';
 import { Query } from '../query';
-import { ODataRequestOptions } from './context'
+import { ODataRequestOptions } from './context';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
-        onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): Promise<TResult1 | TResult2>;
 }
 
@@ -25,7 +25,7 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url: string, async: boolean, method: string, timeout: number, params: any, payload: any, headers: any }) => void);
+    beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
     /**
      * @docid
      * @public
@@ -39,7 +39,7 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus: number, errorDetails: any, requestOptions: ODataRequestOptions }) => void);
+    errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
      * @default {}
@@ -110,7 +110,7 @@ export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TV
      * @return Promise<any>
      * @public
      */
-    byKey(key: TKey, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<TValue>;
+    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TValue>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -118,7 +118,7 @@ export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TV
      * @return object
      * @public
      */
-    createQuery(loadOptions?: {expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any}): Query;
+    createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
 
     /**
      * @docid

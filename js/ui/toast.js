@@ -40,6 +40,8 @@ const POSITION_ALIASES = {
     'left': { my: 'center left', at: 'center left', of: null, offset: '0 0' }
 };
 
+const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
+
 ready(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
         for(let i = TOAST_STACK.length - 1; i >= 0; i--) {
@@ -234,7 +236,7 @@ const Toast = Overlay.inherit({
         const verticalPosition = this.option('position').split(' ')[0];
         const horizontalPosition = this.option('position').split(' ')[1];
 
-        this.option('position', extend({}, POSITION_ALIASES[verticalPosition]));
+        this.option('position', extend({ boundaryOffset: DEFAULT_BOUNDARY_OFFSET }, POSITION_ALIASES[verticalPosition]));
 
         switch(horizontalPosition) {
             case 'center':
@@ -298,7 +300,6 @@ const Toast = Overlay.inherit({
                 this._toggleCloseEvents('Click');
                 break;
             case 'displayTime':
-            case 'position':
                 break;
             default:
                 this.callBase(args);

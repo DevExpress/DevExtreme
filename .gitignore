@@ -16,6 +16,6 @@ bin
 node_modules
 obj
 project.lock.json
-package-lock.json
 yarn.lock
+RawLog.txt
 .DS_Store

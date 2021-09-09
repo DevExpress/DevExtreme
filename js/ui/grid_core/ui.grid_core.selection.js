@@ -116,11 +116,12 @@ const SelectionController = gridCore.Controller.inherit((function() {
         _getSelectionConfig: function() {
             const dataController = this._dataController;
             const selectionOptions = this.option('selection') || {};
+            const deferred = selectionOptions.deferred;
 
             return {
                 selectedKeys: this.option('selectedRowKeys'),
                 mode: this._selectionMode,
-                deferred: selectionOptions.deferred,
+                deferred,
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
                 selectionFilter: this.option('selectionFilter'),
                 ignoreDisabledItems: true,
@@ -136,8 +137,8 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 load: function(options) {
                     return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
                 },
-                plainItems: function() {
-                    return dataController.items(true);
+                plainItems: function(allItems) {
+                    return dataController.items(allItems);
                 },
                 isItemSelected: function(item) {
                     return item.selected;
@@ -149,7 +150,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return item?.oldData || item?.data || item;
                 },
                 filter: function() {
-                    return dataController.getCombinedFilter(true);
+                    return dataController.getCombinedFilter(deferred);
                 },
                 totalCount: () => {
                     return dataController.totalCount();
@@ -413,7 +414,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys);
+            return this._selection.changeItemSelection(itemIndex, keys);
         },
 
         focusedItemIndex: function(itemIndex) {

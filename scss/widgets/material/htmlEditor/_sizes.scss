@@ -1,14 +1,18 @@
 @use "../sizes" as *;
+@use "../toolbar/sizes" as *;
 
 // adduse
 
 $material-toolbar-size-editor-width: null !default;
 $material-html-editor-horizontal-padding: 15px !default;
+$material-htmleditor-toolbar-padding: null !default;
 
 @if $size == "default" {
   $material-toolbar-size-editor-width: 120px !default;
+  $material-htmleditor-toolbar-padding: 16px !default;
 }
 
 @else if $size == "compact" {
   $material-toolbar-size-editor-width: 90px !default;
+  $material-htmleditor-toolbar-padding: 11px !default;
 }

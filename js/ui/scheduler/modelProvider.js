@@ -1,13 +1,7 @@
 import { getGroupCount } from './resources/utils';
 import { getResourceManager } from './instanceFactory';
-import { each } from '../../core/utils/iterator';
 import { isObject } from '../../core/utils/type';
-
-const VIEW_TYPES = [
-    'day', 'week', 'workWeek',
-    'month', 'timelineDay', 'timelineWeek',
-    'timelineWorkWeek', 'timelineMonth', 'agenda'
-];
+import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 
 const VIEW_RENDERING_CONFIG = {
     day: {
@@ -65,6 +59,7 @@ export class ModelProvider {
     get agendaDuration() { return this.model['agendaDuration']; }
     get currentDate() { return this.model['currentDate']; }
     get timeZone() { return this.model['timeZone']; }
+    get isRenovatedAppointments() { return this.model['isRenovatedAppointments']; }
 
     supportAllDayResizing() {
         return this.currentViewType !== 'day' || this.currentView.intervalCount > 1;
@@ -74,25 +69,7 @@ export class ModelProvider {
         const views = this.model['views'];
         const currentView = this.model['currentView'];
 
-        this.currentView = null;
-
-        each(views, (_, view) => {
-            const names = isObject(view)
-                ? [view.name, view.type]
-                : [view];
-            if(names.includes(currentView)) {
-                this.currentView = view;
-                return false;
-            }
-        });
-
-        if(!this.currentView) {
-            if(VIEW_TYPES.includes(currentView)) {
-                this.currentView = currentView;
-            } else {
-                this.currentView = views[0];
-            }
-        }
+        this.currentView = getCurrentView(currentView, views);
     }
 
     isGroupedByDate() {

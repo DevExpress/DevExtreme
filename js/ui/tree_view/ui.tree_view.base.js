@@ -19,6 +19,9 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
 import errors from '../widget/ui.errors';
+import { nativeScrolling } from '../../core/utils/support';
+import { getRelativeOffset } from '../../renovation/ui/scroll_view/utils/get_relative_offset';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../renovation/ui/scroll_view/common/consts';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -156,6 +159,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             onItemExpanded: null,
             onItemCollapsed: null,
             scrollDirection: 'vertical',
+            useNativeScrolling: true,
             virtualModeEnabled: false,
             rootValue: 0,
             focusStateEnabled: false,
@@ -188,6 +192,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 useDeferUpdateForTemplates: false
             }
         });
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return !nativeScrolling;
+                },
+                options: {
+                    useNativeScrolling: false
+                }
+            }
+        ]);
     },
 
     // TODO: implement these functions
@@ -261,7 +278,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._checkBoxModeChange(value, previousValue);
                 break;
             case 'scrollDirection':
-                this._scrollableContainer.option('direction', value);
+                this.getScrollable().option('direction', value);
+                break;
+            case 'useNativeScrolling':
+                this.getScrollable().option('useNative', value);
                 break;
             case 'items':
                 delete this._$selectAllItem;
@@ -479,8 +499,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return $itemElement.children(`.${NODE_CONTAINER_CLASS}`);
         }
 
-        if(this._scrollableContainer) {
-            return $(this._scrollableContainer.content()).children();
+        const scrollable = this.getScrollable();
+
+        if(scrollable) {
+            return $(scrollable.content()).children();
         }
 
         return $();
@@ -494,8 +516,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $container = this._renderNodeContainer($itemElement);
 
         if(this._isRootLevel(parentId)) {
-            if(!this._scrollableContainer) this._renderScrollableContainer();
-            $(this._scrollableContainer.content()).append($container);
+            const scrollable = this.getScrollable();
+
+            if(!scrollable) {
+                this._renderScrollableContainer();
+            }
+            $(scrollable.content()).append($container);
         }
 
         return $container;
@@ -535,7 +561,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderContentImpl: function() {
         const $nodeContainer = this._renderNodeContainer();
 
-        $(this._scrollableContainer.content()).append($nodeContainer);
+        $(this.getScrollable().content()).append($nodeContainer);
 
         if(!this.option('items') || !this.option('items').length) {
             return;
@@ -562,21 +588,24 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataSource = this.getDataSource();
         const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
-        if(this._scrollableContainer && hasWindow()) {
-            this._scrollableContainer.update();
+        const scrollable = this.getScrollable();
+
+        if(scrollable && hasWindow()) {
+            scrollable.update();
         }
 
         if(!skipContentReadyAction) {
             this.callBase();
         }
 
-        if(this._scrollableContainer && hasWindow()) {
-            this._scrollableContainer.update();
+        if(scrollable && hasWindow()) {
+            scrollable.update();
         }
     },
 
     _renderScrollableContainer: function() {
-        this._scrollableContainer = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
+        this._scrollable = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
+            useNative: this.option('useNativeScrolling'),
             direction: this.option('scrollDirection'),
             useKeyboard: false
         });
@@ -971,7 +1000,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 $nodeContainer.css('maxHeight', 'none');
                 $nodeContainer.toggleClass(OPENED_NODE_CONTAINER_CLASS, state);
                 this.setAria('expanded', state, $node);
-                this._scrollableContainer.update();
+                this.getScrollable().update();
                 this._fireExpandedStateUpdatedEvent(state, node, e);
 
                 if(completionCallback) {
@@ -1010,7 +1039,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _emptyMessageContainer: function() {
-        return this._scrollableContainer ? this._scrollableContainer.content() : this.callBase();
+        const scrollable = this.getScrollable();
+        return scrollable ? $(scrollable.content()) : this.callBase();
     },
 
     _renderContent: function() {
@@ -1399,7 +1429,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.option('focusedElement', getPublicElement($prevItem));
 
                 const prevItemElement = this._getNodeItemElement($prevItem);
-                this._scrollableContainer.scrollToElement(prevItemElement);
+                this.getScrollable().scrollToElement(prevItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, prevItemElement);
                 }
@@ -1410,7 +1440,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.option('focusedElement', getPublicElement($nextItem));
 
                 const nextItemElement = this._getNodeItemElement($nextItem);
-                this._scrollableContainer.scrollToElement(nextItemElement);
+                this.getScrollable().scrollToElement(nextItemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, nextItemElement);
                 }
@@ -1423,7 +1453,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
 
                 this.option('focusedElement', getPublicElement($firstItem));
-                this._scrollableContainer.scrollToElement(this._getNodeItemElement($firstItem));
+                this.getScrollable().scrollToElement(this._getNodeItemElement($firstItem));
                 break;
             }
             case FOCUS_LAST: {
@@ -1434,7 +1464,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
 
                 this.option('focusedElement', getPublicElement($lastItem));
-                this._scrollableContainer.scrollToElement(this._getNodeItemElement($lastItem));
+                this.getScrollable().scrollToElement(this._getNodeItemElement($lastItem));
                 break;
             }
             case FOCUS_RIGHT: {
@@ -1473,7 +1503,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
             const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
             this.option('focusedElement', getPublicElement($nextItem));
-            this._scrollableContainer.scrollToElement(this._getNodeItemElement($nextItem));
+            this.getScrollable().scrollToElement(this._getNodeItemElement($nextItem));
             return;
         }
 
@@ -1504,7 +1534,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         } else {
             const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
             collapsedNode.length && this.option('focusedElement', getPublicElement(collapsedNode));
-            this._scrollableContainer.scrollToElement(this._getNodeItemElement(collapsedNode));
+            this.getScrollable().scrollToElement(this._getNodeItemElement(collapsedNode));
         }
     },
 
@@ -1520,11 +1550,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             : value;
     },
 
+    getScrollable: function() {
+        return this._scrollable;
+    },
+
     updateDimensions: function() {
         const deferred = new Deferred();
 
-        if(this._scrollableContainer) {
-            this._scrollableContainer.update().done(() => {
+        const scrollable = this.getScrollable();
+        if(scrollable) {
+            scrollable.update().done(() => {
                 deferred.resolveWith(this);
             });
         } else {
@@ -1618,7 +1653,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
             const $element = this._getNodeElement(node);
             if($element && $element.length) {
-                this._scrollableContainer.scrollToElementTopLeft($element);
+                this.scrollToElementTopLeft($element.get(0));
                 scrollCallback.resolve();
             } else {
                 scrollCallback.reject();
@@ -1626,6 +1661,27 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         return scrollCallback.promise();
+    },
+
+    scrollToElementTopLeft: function(targetElement) {
+        const scrollable = this.getScrollable();
+        const { scrollDirection, rtlEnabled } = this.option();
+
+        const targetLocation = { top: 0, left: 0 };
+        const relativeOffset = getRelativeOffset($(scrollable.content()).get(0), targetElement);
+
+        if(scrollDirection !== DIRECTION_VERTICAL) {
+            const containerElement = $(scrollable.container()).get(0);
+
+            targetLocation.left = rtlEnabled
+                ? relativeOffset.left + targetElement.offsetWidth - containerElement.clientWidth
+                : relativeOffset.left;
+        }
+        if(scrollDirection !== DIRECTION_HORIZONTAL) {
+            targetLocation.top = relativeOffset.top;
+        }
+
+        scrollable.scrollTo(targetLocation);
     },
 
     _expandNodes: function(keysToExpand) {

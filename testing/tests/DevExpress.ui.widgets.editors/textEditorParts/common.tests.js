@@ -459,7 +459,7 @@ QUnit.module('general', {}, () => {
             stylingMode: 'someWrongOptionValue'
         });
 
-        assert.ok($textEditor.hasClass('dx-editor-underlined'));
+        assert.ok($textEditor.hasClass('dx-editor-filled'));
 
         themes.isMaterial = realIsMaterial;
     });
@@ -640,6 +640,13 @@ QUnit.module('options changing', moduleConfig, () => {
 
             input.trigger(prepareEvent(eventName));
         });
+    });
+
+    QUnit.test('editor should not change value if it is readOnly (T1022447)', function(assert) {
+        this.instance.option({ value: null, readOnly: true });
+        this.keyboard.type('f').change();
+
+        assert.strictEqual(this.instance.option('value'), null);
     });
 
     QUnit.test('Click on \'clear\' button', function(assert) {

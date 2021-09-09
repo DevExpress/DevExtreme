@@ -77,4 +77,7 @@ export default class OptionsTestWidget extends JSXComponent(OptionsTestWidgetPro
   getLastReceivedProps(): OptionsTestWidgetProps {
     return this.props;
   }
+
+  keyDown(): void {
+  }
 }

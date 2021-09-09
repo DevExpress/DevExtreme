@@ -105,6 +105,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     isAllDay(appointmentData) {
         return ExpressionUtils.getField(this.key, 'allDay', appointmentData);
     }
+
+    _isItemsCross(firstItem, secondItem) {
+        const orientation = this._getOrientation();
+
+        return this._checkItemsCrossing(firstItem, secondItem, orientation);
+    }
 }
 
 export default HorizontalRenderingStrategy;

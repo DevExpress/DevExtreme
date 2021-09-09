@@ -5,6 +5,7 @@
  * @export default
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class themes {
     /**
      * @docid ui.themes.current
@@ -43,3 +44,4 @@ export default class themes {
 
 export function current(): string;
 export function isMaterial(theme: string): boolean;
+export function isCompact(theme: string): boolean;

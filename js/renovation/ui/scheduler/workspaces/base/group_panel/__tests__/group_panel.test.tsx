@@ -6,27 +6,9 @@ import {
 import { GroupPanelVerticalLayout } from '../vertical/layout';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
 import { GroupPanelHorizontalLayout } from '../horizontal/layout';
-import { getGroupsRenderData } from '../utils';
 
-jest.mock('../utils', () => ({
-  getGroupsRenderData: jest.fn(() => 'data'),
-}));
-
-describe('GroupPanel Vertical Layout', () => {
+describe('GroupPanel', () => {
   describe('Render', () => {
-    const groups = [{
-      name: 'group 1',
-      items: [{
-        text: 'item 1', id: 1, color: 'color 1',
-      }, {
-        text: 'item 2', id: 2, color: 'color 2',
-      }],
-      data: [{
-        text: 'item 1', id: 1, color: 'color 1',
-      }, {
-        text: 'item 2', id: 2, color: 'color 2',
-      }],
-    }];
     const groupOrientation = VERTICAL_GROUP_ORIENTATION;
 
     const render = (viewModel) => mount(GroupPanelView({
@@ -34,7 +16,6 @@ describe('GroupPanel Vertical Layout', () => {
       ...viewModel,
       restAttributes: { style: { height: 724 } },
       props: {
-        groups,
         groupOrientation,
         height: 500,
         groupByDate: false,
@@ -45,17 +26,27 @@ describe('GroupPanel Vertical Layout', () => {
     it('should pass correct props to the root component', () => {
       const resourceCellTemplate = () => null;
       const groupPanel = render({
-        props: { resourceCellTemplate, className: 'custom-class' },
+        props: {
+          resourceCellTemplate,
+          className: 'custom-class',
+          groupPanelData: {
+            groupPanelItems: [],
+            baseColSpan: 4,
+          },
+        },
       });
 
       expect(groupPanel.props())
-        .toMatchObject({
-          groups,
+        .toEqual({
           height: 500,
           resourceCellTemplate,
           groupByDate: false,
           className: 'custom-class',
           styles: { height: 724 },
+          groupPanelData: {
+            groupPanelItems: [],
+            baseColSpan: 4,
+          },
         });
     });
   });
@@ -89,24 +80,6 @@ describe('GroupPanel Vertical Layout', () => {
 
           expect(groupPanel.layout)
             .toBe(GroupPanelHorizontalLayout);
-        });
-      });
-
-      describe('groupsRenderedData', () => {
-        it('should call getGroupsRenderedData with correct parameters', () => {
-          const groups = [];
-          const groupPanel = new GroupPanel({
-            groups,
-            groupByDate: true,
-            columnCountPerGroup: 72,
-          });
-
-          expect(groupPanel.groupsRenderData)
-            .toBe('data');
-          expect(getGroupsRenderData)
-            .toBeCalledWith(
-              groups, 72, true,
-            );
         });
       });
     });

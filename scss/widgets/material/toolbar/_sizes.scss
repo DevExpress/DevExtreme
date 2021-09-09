@@ -12,12 +12,12 @@ $material-toolbar-label-font-size: $material-m-font-size !default;
 $material-toolbar-section-padding: 15px !default;
 
 @if $size == "default" {
-  $material-toolbar-height: 76px !default;
+  $material-toolbar-height: 56px !default;
   $material-toolbar-menu-vertical-padding: 7px !default;
 }
 
 @else if $size == "compact" {
-  $material-toolbar-height: 56px !default;
+  $material-toolbar-height: 38px !default;
   $material-toolbar-menu-vertical-padding: 5px !default;
 }
 

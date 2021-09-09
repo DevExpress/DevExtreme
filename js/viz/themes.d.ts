@@ -1,5 +1,3 @@
-
-
 /**
  * @docid viz.currentTheme
  * @publicName currentTheme()

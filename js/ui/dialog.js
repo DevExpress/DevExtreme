@@ -170,7 +170,9 @@ export const custom = function(options) {
             }
         },
         rtlEnabled: config().rtlEnabled,
-        boundaryOffset: { h: 10, v: 0 }
+        position: {
+            boundaryOffset: { h: 10, v: 0 }
+        }
     }, options.popupOptions));
 
     popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);

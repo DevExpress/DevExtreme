@@ -81,7 +81,7 @@ const HeaderPanel = ColumnsView.inherit({
                 return button;
             }
 
-            return extend(defaultButtonsByNames[button.name], button);
+            return extend(true, defaultButtonsByNames[button.name], button);
         }));
 
         return isArray ? normalizedItems : normalizedItems[0];

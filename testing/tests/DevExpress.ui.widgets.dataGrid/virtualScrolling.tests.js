@@ -33,7 +33,8 @@ const mockDataSource = {
     itemsCount: sinon.stub(),
     items: sinon.stub(),
     viewportItems: sinon.stub(),
-
+    loadedOffset: sinon.stub(),
+    loadedItemCount: sinon.stub(),
     changingDuration: sinon.stub(),
     onChanged: sinon.stub()
 };
@@ -854,6 +855,8 @@ QUnit.module('VirtualScrollingController. New mode', {
         mockComponent.option.withArgs('scrolling.newMode').returns(true);
         mockComponent.option.withArgs('scrolling.minGap').returns(1);
         mockDataSource.pageSize.returns(5);
+        mockDataSource.loadedOffset.returns(0);
+        mockDataSource.loadedItemCount.returns(100000);
     },
     afterEach: function() {
         mockDataSource.pageSize.returns(20);
@@ -931,13 +934,13 @@ QUnit.module('VirtualScrollingController. New mode', {
     QUnit.test('Viewport params at the bottom', function(assert) {
         const viewportSize = 25;
         this.scrollController.viewportSize(viewportSize);
-        const viewportItemIndex = 19985;
-        this.scrollController.setViewportItemIndex(19985);
+        const viewportItemIndex = DEFAULT_TOTAL_ITEMS_COUNT - 15;
+        this.scrollController.setViewportItemIndex(viewportItemIndex);
         const viewportParams = this.scrollController.getViewportParams();
         const virtualItemsCount = this.scrollController.virtualItemsCount();
 
         // assert
-        assert.deepEqual(virtualItemsCount, { begin: viewportItemIndex - 5, end: 0 }, 'virtual items');
-        assert.deepEqual(viewportParams, { skip: viewportItemIndex - 5, take: DEFAULT_TOTAL_ITEMS_COUNT - viewportItemIndex + 5 }, 'viewport params');
+        assert.deepEqual(virtualItemsCount, { begin: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize - 5, end: 0 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize - 5, take: viewportSize + 5 }, 'viewport params');
     });
 });

@@ -6,7 +6,7 @@ import {
   Mutable,
 } from '@devextreme-generator/declarations';
 import { Page, PageProps } from './page';
-import { PagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
@@ -90,10 +90,10 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+type PagesLargePropsType = Pick<InternalPagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
+export class PagesLarge extends JSXComponent<PagesLargePropsType, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
@@ -149,7 +149,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   }
 
   private onPageClick(pageIndex: number): void {
-    this.props.pageIndexChange?.(pageIndex);
+    this.props.pageIndexChange(pageIndex);
   }
 
   get pageIndexes(): PageIndexes {

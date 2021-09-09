@@ -6,6 +6,16 @@ import { exportPivotGrid } from './exporter/exceljs/export_pivot_grid';
 * @section utils
 */
 
+/**
+ * @name ExcelDataGridCell
+ * @type object
+ */
+
+/**
+ * @name ExcelPivotGridCell
+ * @inherits dxPivotGridPivotGridCell
+ */
+
 export {
     exportDataGrid,
     exportPivotGrid

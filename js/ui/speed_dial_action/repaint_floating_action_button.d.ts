@@ -1,5 +1,3 @@
-
-
 /**
  * @docid ui.repaintFloatingActionButton
  * @static

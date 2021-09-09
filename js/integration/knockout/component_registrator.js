@@ -210,8 +210,8 @@ if(ko) {
                 createComponent();
 
                 return {
-                    controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(VizWidget) || componentClass.subclassOf(Draggable) ||
-                    componentClass.subclassOf(ComponentWrapper)
+                    controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(VizWidget) ||
+                    componentClass.subclassOf(ComponentWrapper) || component instanceof Draggable
                 };
             }
         };

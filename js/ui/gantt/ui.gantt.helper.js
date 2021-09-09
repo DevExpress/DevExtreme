@@ -89,6 +89,16 @@ export const GanttHelper = {
         }
     },
 
+    getAllParentNodesKeys(node, array) {
+        if(node?.data) {
+            array.push(node.key);
+        }
+
+        if(node?.parent?.data) {
+            GanttHelper.getAllParentNodesKeys(node.parent, array);
+        }
+    },
+
     getDefaultOptions() {
         return {
             /**
@@ -128,6 +138,7 @@ export const GanttHelper = {
             columns: undefined,
             taskListWidth: 300,
             showResources: true,
+            showDependencies: true,
             taskTitlePosition: 'inside',
             firstDayOfWeek: undefined,
             selectedRowKey: undefined,
@@ -193,7 +204,7 @@ export const GanttHelper = {
                 ascendingText: messageLocalization.format('dxGantt-sortingAscendingText'),
                 descendingText: messageLocalization.format('dxGantt-sortingDescendingText'),
                 clearText: messageLocalization.format('dxGantt-sortingClearText'),
-                mode: 'none',
+                mode: 'single',
                 showSortIndexes: false
             }
         };

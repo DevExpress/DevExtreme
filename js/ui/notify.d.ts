@@ -1,5 +1,3 @@
-
-
 /**
  * @docid ui.notify
  * @static

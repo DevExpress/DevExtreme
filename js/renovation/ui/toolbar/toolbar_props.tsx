@@ -105,9 +105,15 @@ export class CollectionWidgetItem {
   ];
   <Toolbar items={toolbarItems}></Toolbar>
 */
+@ComponentBindings()
+export class BaseToolbarItemProps {
+  @OneWay()
+  rtlEnabled?: boolean | undefined;
+}
+
 // TODO: it is not a 'native' way
 @ComponentBindings()
-export class ToolbarTextBoxProps {
+export class ToolbarTextBoxProps extends BaseToolbarItemProps {
   @OneWay() value: (string | null) = '';
 
   // TODO:  EventCallback<TextBoxValueChanged>
@@ -130,7 +136,7 @@ export class ToolbarTextBoxProps {
 */
 // TODO: it is not a 'native' way
 @ComponentBindings()
-export class ToolbarCheckBoxProps {
+export class ToolbarCheckBoxProps extends BaseToolbarItemProps {
   @OneWay() value: (boolean | null) = false;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -147,23 +153,26 @@ export type ToolbarLocateInMenuType = 'always' | 'auto' | 'never';
 
 export type ToolbarLocationType = 'after' | 'before' | 'center';
 
-// TODO: it is not a 'native' way
-@ComponentBindings()
-export class ToolbarButtonGroupItemProps extends CollectionWidgetItem {
-  @OneWay()
-  hint?: string;
+export interface CollectionItemType {
+  text?: string;
 
-  @OneWay()
-  icon?: string;
+  disabled?: boolean;
 
-  @OneWay()
-  type?: ToolbarButtonType;
+  html?: string;
 
-  // TODO: other props
+  visible?: boolean;
 }
 
-// eslint-disable-next-line
-export type ToolbarButtonGroupItemPropsType = ToolbarButtonGroupItemProps;
+export interface ToolbarButtonGroupItemPropsType extends CollectionItemType {
+  hint?: string;
+
+  icon?: string;
+
+  type?: ToolbarButtonType;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  elementAttr?: { [key: string]: any };
+}
 
 export type ToolbarButtonGroupSelectionMode = 'multiple' | 'single';
 
@@ -185,7 +194,7 @@ export type ToolbarButtonGroupSelectionMode = 'multiple' | 'single';
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarButtonGroupProps {
+export class ToolbarButtonGroupProps extends BaseToolbarItemProps {
   //
   // Use cases:
   //
@@ -236,7 +245,7 @@ export type ToolbarButtonType = 'back' | 'danger' | 'default' | 'normal' | 'succ
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarButtonProps {
+export class ToolbarButtonProps extends BaseToolbarItemProps {
   //
   // Use cases:
   //
@@ -309,7 +318,11 @@ export type ToolbarDropDownButtonItemPropsType = ToolbarDropDownButtonItemProps;
           {
             icon: "alignleft",
             alignment: "left",
-            hint: "Align left"
+            hint: "Align left",
+            elementAttr: {
+              foo1: 'attr1',
+              class: 'some-class123'
+            }
           },
           {
             icon: "aligncenter",
@@ -336,7 +349,7 @@ export type ToolbarDropDownButtonItemPropsType = ToolbarDropDownButtonItemProps;
 * <Toolbar items={toolbarItems}></Toolbar>
 */
 @ComponentBindings()
-export class ToolbarDropDownButtonProps {
+export class ToolbarDropDownButtonProps extends BaseToolbarItemProps {
   @OneWay()
   dataSource?: (string | ToolbarDropDownButtonItemPropsType)[];
 

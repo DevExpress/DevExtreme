@@ -210,7 +210,7 @@ testComponentDefaults(ValidationMessage,
         width: 'auto',
         height: 'auto',
         closeOnOutsideClick: false,
-        closeOnTargetScroll: false,
+        hideOnParentScroll: false,
         animation: null,
         visible: true,
         propagateOutsideClick: true,
@@ -259,7 +259,7 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'underlined'
+        stylingMode: 'filled'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -336,6 +336,18 @@ testComponentDefaults(DropDownList,
 );
 
 testComponentDefaults(List,
+    {},
+    { useNativeScrolling: false },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(TreeView,
     {},
     { useNativeScrolling: false },
     function() {
@@ -601,7 +613,11 @@ testComponentDefaults(Widget,
 testComponentDefaults(Popover,
     {},
     {
-        position: 'bottom',
+        position: {
+            at: 'bottom center',
+            collision: 'fit flip',
+            my: 'top center'
+        },
         target: undefined,
         animation: {
             show: {
@@ -632,6 +648,24 @@ testComponentDefaults(Gallery,
         selectionByClick: false
     }
 );
+
+if(!Scrollable.IS_RENOVATED_WIDGET) {
+    testComponentDefaults(Scrollable,
+        {},
+        {
+            useNative: false,
+            useSimulatedScrollbar: true
+        },
+        function() {
+            this._supportNativeScrolling = support.nativeScrolling;
+            support.nativeScrolling = false;
+        },
+        function() {
+            support.nativeScrolling = this._supportNativeScrolling;
+        }
+    );
+}
+
 
 testComponentDefaults(Scrollable,
     {},
@@ -688,17 +722,70 @@ testComponentDefaults(Scrollable,
     }
 );
 
-testComponentDefaults(ScrollView,
+testComponentDefaults(Scrollable,
     {},
-    { refreshStrategy: 'swipeDown' },
+    {
+        useNative: false,
+    },
     function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: false
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
         this._originalRealDevice = devices.real();
-        devices.real({ platform: 'android' });
+        devices.real({ platform: 'generic' });
+        support.nativeScrolling = true;
     },
     function() {
         devices.real(this._originalRealDevice);
+        support.nativeScrolling = this._supportNativeScrolling;
     }
 );
+
+
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: true,
+        useSimulatedScrollbar: !browser.mozilla
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+        support.nativeScrolling = true;
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+if(!Scrollable.IS_RENOVATED_WIDGET) {
+    testComponentDefaults(ScrollView,
+        {},
+        { refreshStrategy: 'swipeDown' },
+        function() {
+            this._originalRealDevice = devices.real();
+            devices.real({ platform: 'android' });
+        },
+        function() {
+            devices.real(this._originalRealDevice);
+        }
+    );
+}
 
 testComponentDefaults(ScrollView,
     {},

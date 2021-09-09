@@ -1909,6 +1909,43 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.ok(!this.labels[1].shift.called);
     });
 
+    QUnit.test('Three overlapping labels, inverted value axis, T1021956', function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 20, width: 10, height: 30 },
+            { x: 5, y: 40, width: 10, height: 30 },
+            { x: 5, y: 60, width: 10, height: 30 }]);
+
+        this.createChart({
+            resolveLabelOverlapping: 'stack',
+            series: [{ type: 'stackedbar' }],
+            valueAxis: {
+                inverted: true
+            }
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        this.checkLabelPosition(assert, this.labels[1], [5, 50]);
+        this.checkLabelPosition(assert, this.labels[2], [5, 80]);
+    });
+
+    QUnit.test('Three overlapping labels, inverted value axis, rotated, T1021956', function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 60, width: 30, height: 10 },
+            { x: 25, y: 60, width: 30, height: 10 },
+            { x: 55, y: 60, width: 30, height: 10 }], { argument: 10 });
+
+        this.createChart({
+            rotated: true,
+            resolveLabelOverlapping: 'stack',
+            series: [{ type: 'stackedbar' }],
+            valueAxis: {
+                inverted: true
+            }
+        });
+
+        this.checkLabelPosition(assert, this.labels[0], [115, 60]);
+        this.checkLabelPosition(assert, this.labels[1], [85, 60]);
+        assert.ok(!this.labels[2].shift.called);
+    });
+
     QUnit.module('resolveLabelOverlapping. stack. range series', $.extend({}, commons.environment, {
         beforeEach: function() {
             commons.environment.beforeEach.apply(this, arguments);

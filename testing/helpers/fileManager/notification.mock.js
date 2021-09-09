@@ -49,8 +49,13 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
         return extend(super._getDefaultOptions(), {
             progressPanelComponent: null,
             progressManagerComponent: null,
-            logger: null
+            logger: null,
+            progressPanelOpened: null
         });
+    }
+
+    _isProgressDrawerOpened() {
+        return this.option('progressPanelOpened');
     }
 
     _optionChanged(args) {
@@ -60,6 +65,7 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
             case 'progressPanelComponent':
             case 'progressManagerComponent':
             case 'logger':
+            case 'progressPanelOpened':
                 break;
             default:
                 super._optionChanged(args);

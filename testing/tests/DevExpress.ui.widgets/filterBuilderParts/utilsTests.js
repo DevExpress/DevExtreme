@@ -1699,7 +1699,8 @@ QUnit.module('Lookup Value', function() {
         const categories = [
             'Video Players',
             'Televisions'
-        ]; const field = {
+        ];
+        const field = {
             lookup: {
                 dataSource: new CustomStore({
                     load: () => categories,

@@ -30,6 +30,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 import $ from 'jquery';
@@ -811,7 +812,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 },
                 scrolling: {
                     mode: 'infinite',
-                    useNative: false
+                    useNative: false,
+                    rowPageSize: 20
                 },
                 columns: ['id', {
                     dataField: 'group',
@@ -829,8 +831,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
             // assert
             let rows = dataGrid.getVisibleRows();
-            assert.equal(dataGrid.totalCount(), 38, 'totalCount');
-            assert.equal(rows.length, 38, 'visible row count');
+            assert.equal(dataGrid.totalCount(), grouping ? 54 : 48, 'totalCount');
+            assert.equal(rows.length, 40, 'visible row count');
             assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
             assert.equal(rows[18].key, grouping ? 19 : 21, 'row 18');
             assert.equal(rows[37].key, grouping ? 36 : 40, 'row 37');
@@ -840,8 +842,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
             // assert
             rows = dataGrid.getVisibleRows();
-            assert.equal(dataGrid.totalCount(), 20, 'totalCount');
-            assert.equal(rows.length, 20, 'visible row count');
+            assert.equal(dataGrid.totalCount(), grouping ? 54 : 48, 'totalCount');
+            assert.equal(rows.length, 40, 'visible row count');
             assert.equal(rows[firstDataRowIndex].key, 3, 'row 0');
         });
     });
@@ -871,7 +873,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             },
             columns: ['id'],
             loadingTimeout: null
@@ -884,7 +886,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.deleteRow(0);
         dataGrid.deleteRow(0);
         dataGrid.getScrollable().scrollTo({ y: 10000 });
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        this.clock.tick();
+
+        for(let i = 0; i < 10; i++) {
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+        }
 
         // assert
         const rows = dataGrid.getVisibleRows();
@@ -926,13 +932,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.addRow();
             dataGrid.saveEditData();
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            for(let i = 0; i < 12; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+            }
 
             // assert
             const rows = dataGrid.getVisibleRows();
-            assert.strictEqual(dataGrid.totalCount(), refreshMode === 'repaint' ? 152 : 151, 'totalCount'); // TODO: Fix duplicate added row when editing.refreshMode = 'repaint'
+            assert.strictEqual(dataGrid.totalCount(), 151, 'totalCount');
             assert.strictEqual(rows[rows.length - 2].key, 150, 'penultimate row key');
         });
 
@@ -969,14 +975,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.getDataSource().store().push([{ type: 'insert', data: { id: 987654321 }, index: 0 }]);
             this.clock.tick();
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            for(let i = 0; i < 12; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+            }
 
             // assert
             const rows = dataGrid.getVisibleRows();
             assert.strictEqual(rows[rows.length - 2].key, 150, 'penultimate row key');
-            assert.strictEqual(dataGrid.totalCount(), 152, 'totalCount'); // TODO: Fix duplicate added row
+            assert.strictEqual(dataGrid.totalCount(), 151, 'totalCount');
         });
     });
 
@@ -1025,7 +1031,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGridTables = $dataGrid.find('.dx-datagrid-table');
         // assert
-        assert.equal(contentReadyCallCount, 1);
+        assert.equal(contentReadyCallCount, 2);
         assert.equal($dataGridTables.length, 2);
         assert.equal($dataGridTables.eq(0).find('.dx-row').first().find('td')[0].getBoundingClientRect().width, $dataGridTables.eq(1).find('.dx-row').first().find('td')[0].getBoundingClientRect().width);
 
@@ -1038,11 +1044,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataSource = [];
 
         for(let i = 0; i < 40; i++) {
-            dataSource.push({ field: i });
+            dataSource.push({ id: i });
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
+            keyExpr: 'id',
             dataSource,
             height: 150,
             editing: {
@@ -1060,13 +1067,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         dataGrid.getScrollable().scrollTo({ y: 1500 });
 
-        dataGrid.editCell(8, 0);
+        dataGrid.editCell(dataGrid.getRowIndexByKey(38), 0);
 
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
         assert.notOk(visibleRows[-1], 'no visible row with index -1');
-        assert.equal($(dataGrid.getCellElement(9, 0)).text(), '39', 'last row is correct');
+        assert.equal($(dataGrid.getCellElement(dataGrid.getRowIndexByKey(39), 0)).text(), '39', 'last row is correct');
     });
 
     // T833061
@@ -2764,6 +2771,57 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.strictEqual(insertSpy.args[0][0].field2, true, 'insert is called with valid value');
         });
     });
+
+    ['Batch', 'Cell'].forEach((editMode) => {
+        QUnit.testInActiveWindow(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, function(assert) {
+            if(devices.real().deviceType === 'desktop') {
+                assert.ok(true, 'test only for mobile devices');
+                return;
+            }
+            const data = [
+                { id: 1, field1: 'test', field2: true }
+            ];
+            const dataGrid = createDataGrid({
+                dataSource: data,
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true
+                }
+            });
+            this.clock.tick();
+            dataGrid.editCell(0, 0);
+            this.clock.tick();
+
+            // act
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+            const $firstInput = $firstCell.find('input.dx-texteditor-input');
+            $firstInput.focus();
+            this.clock.tick();
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-focused'));
+            assert.ok($firstInput.is(':focus'), 'input is focused');
+
+            // act
+            // mock for real blur
+            $firstInput.on('blur', function(e) {
+                $(e.target).trigger('change');
+            });
+            $firstInput.val('123');
+            let $secondCell = $(dataGrid.getCellElement(0, 1));
+            $secondCell.find('.dx-checkbox').trigger(pointerEvents.down);
+            this.clock.tick();
+            $secondCell = $(dataGrid.getCellElement(0, 1));
+            $secondCell.find('.dx-checkbox').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'first cell value');
+            assert.strictEqual(dataGrid.cellValue(0, 1), false, 'second cell value');
+        });
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -3375,7 +3433,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, 'visible row count');
+        assert.equal(visibleRows.length, 10, 'visible row count');
         assert.equal(visibleRows[0].key, 6, 'first visible row key');
         assert.equal($(dataGrid.getRowElement(1, 0)).find('.dx-texteditor').length, 1, 'row has editor');
     });
@@ -4023,14 +4081,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.saveEditData();
         dataGrid.getScrollable().scrollTo({ top: 10000 });
         dataGrid.getScrollable().scrollTo({ top: 10000 });
-        dataGrid.cellValue(9, 'name', 'updated');
+        dataGrid.cellValue(dataGrid.getRowIndexByKey(10), 'name', 'updated');
         dataGrid.saveEditData();
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
-        assert.deepEqual(dataGrid.getVisibleRows()[0].data, { id: 1, name: 'updated' }, 'row 1 is updated');
-        assert.deepEqual(dataGrid.getVisibleRows()[1].data, { id: 2, name: 'test 2' }, 'row 2 is not updated');
-        assert.deepEqual(dataGrid.getVisibleRows()[9].data, { id: 10, name: 'updated' }, 'row 10 is updated');
+        assert.equal(dataGrid.getVisibleRows().length, 10, 'visible row count');
+        assert.deepEqual(dataGrid.getVisibleRows()[0].data, { id: 6, name: 'test 6' }, 'row 6 is not updated');
+        assert.deepEqual(dataGrid.getVisibleRows()[4].data, { id: 10, name: 'updated' }, 'row 10 is updated');
     });
 
     // T804060
@@ -4828,6 +4885,48 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual($validationMessage.offset().top - $cellElement.offset().top, validationMessageDiff.top, 'top validation message position relative to the cell is not changed');
         assert.strictEqual($validationMessage.offset().left - $cellElement.offset().left, validationMessageDiff.left, 'left validation message position relative to the cell is not changed');
     });
+
+    QUnit.test('validationCallback should accept correct data parameter (T1020702)', function(assert) {
+        const validationCallbackSpy = sinon.spy(function() {
+            return true;
+        });
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, id1: 1, name: 'test1' },
+                { id: 2, id1: 1, Name: 'test2' }
+            ],
+            keyExpr: ['id', 'id1'],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: validationCallbackSpy
+                    }]
+                }
+            ]
+        });
+
+        // act
+        this.clock.tick();
+        for(let i = 0; i < 5; i++) {
+            dataGrid.editRow(0);
+            this.clock.tick();
+
+            dataGrid.saveEditData();
+            this.clock.tick();
+        }
+
+        // assert
+        assert.equal(validationCallbackSpy.callCount, 5, 'call count');
+        for(let i = 0; i < validationCallbackSpy.callCount; i++) {
+            assert.deepEqual(validationCallbackSpy.args[i][0].data, { id: 1, id1: 1, name: 'test1' }, `data parameter for the ${i + 1} call`);
+        }
+    });
 });
 
 
@@ -5484,7 +5583,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // assert
                     let visibleRows = dataGrid.getVisibleRows();
-                    assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.ok(visibleRows[1].isNewRow, 'new row is added after the first page');
                     assert.equal(dataGrid.option('editing.changes')[0].pageIndex, undefined, 'no pageIndex');
 
                     // act
@@ -5513,7 +5613,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
 
                     visibleRows = dataGrid.getVisibleRows();
-                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.ok(visibleRows.length >= 2, 'two or more rows');
                     assert.notOk(visibleRows[1].isNewRow, 'not new row');
                     assert.equal(data.length, 3, 'row count in datasource');
                     assert.equal(data[2].field, 'test', 'field value was posted');
@@ -5542,7 +5642,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         },
                         scrolling: {
                             mode: 'virtual',
-                            useNative: false
+                            useNative: false,
+                            minGap: 0
                         }
                     }).dxDataGrid('instance');
 
@@ -5563,11 +5664,12 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
                     // assert
                     visibleRows = dataGrid.getVisibleRows();
-                    const $insertedRow = $(dataGrid.getRowElement(2));
+                    const $insertedRow = $(dataGrid.getRowElement(1));
                     const $cells = $insertedRow.find('td');
 
-                    assert.equal(visibleRows.length, 3, 'three rows');
-                    assert.ok(visibleRows[2].isNewRow, 'new row');
+                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.equal(visibleRows[0].key, 2, 'first row key');
+                    assert.ok(visibleRows[1].isNewRow, 'new row is in the end');
                     assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
                     assert.equal(data.length, 2, 'row count in datasource');
 
@@ -5583,7 +5685,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
 
                     visibleRows = dataGrid.getVisibleRows();
-                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.equal(visibleRows.length, 1, 'one row');
+                    assert.equal(visibleRows[0].key, 2, 'row key');
                     assert.notOk(visibleRows[0].isNewRow, 'not new row');
                     assert.equal(data.length, 3, 'row count in datasource');
                     assert.equal(data[2].field, 'test', 'field value was posted');
@@ -5756,5 +5859,38 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should not be called on option change');
             });
         });
+    });
+
+    QUnit.test('Pager should not be hidden after delete row using onSaving event handler', function(assert) {
+        // arrange
+        const items = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+        $('#dataGrid').dxDataGrid({
+            keyExpr: 'id',
+            dataSource: items,
+            paging: {
+                pageSize: 2
+            },
+            editing: {
+                allowDeleting: true,
+                confirmDelete: false,
+            },
+            repaintChangesOnly: true,
+            onSaving: function(e) {
+                e.cancel = true;
+                e.promise = $.Deferred();
+
+                items.splice(0, 1);
+                e.component.option('dataSource', e.component.option('dataSource'));
+                e.promise.resolve();
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $('#dataGrid .dx-link-delete').eq(0).trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.ok($('#dataGrid .dx-datagrid-pager').is(':visible'), 'Pager is visible');
     });
 });

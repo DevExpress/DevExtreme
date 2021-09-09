@@ -1,7 +1,5 @@
 import DOMComponent from '../core/dom_component';
 
-
-
 /**
  * @docid viz.exportFromMarkup
  * @publicName exportFromMarkup(markup, options)
@@ -23,7 +21,7 @@ import DOMComponent from '../core/dom_component';
  * @export exportFromMarkup
  * @public
  */
-export function exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
+export function exportFromMarkup(markup: string, options: { fileName?: string; format?: string; backgroundColor?: string; proxyUrl?: string; width?: number; height?: number; onExporting?: Function; onExported?: Function; onFileSaving?: Function; margin?: number; svgToCanvas?: Function }): void;
 
 /**
  * @docid viz.exportWidgets
@@ -58,7 +56,7 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
  * @export exportWidgets
  * @public
  */
-export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
+export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string; format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG'; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: 'bottom' | 'center' | 'top'; horizontalAlignment?: 'center' | 'left' | 'right'; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
 
 /**
  * @docid viz.getMarkup

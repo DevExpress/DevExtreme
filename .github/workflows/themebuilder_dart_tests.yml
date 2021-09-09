@@ -1,6 +1,13 @@
 name: Themebuilder and Styles tests
 
-on: [push, pull_request]
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [21_2]
 
 jobs:
   dart-test:
@@ -11,16 +18,15 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: .\node_modules
-    #     key: ${{ runner.os }}-node-modules-v4-${{ hashFiles('**/package.json') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-node-modules-v4
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build etalon bundles
       run: npx gulp style-compiler-themes-ci
@@ -32,8 +38,8 @@ jobs:
       run: pub get
       working-directory: ./themebuilder-scss/dart-compiler
 
-    - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+    - name: Run npm install for themebuilder-scss
+      run: npm install --no-audit --no-fund
       working-directory: ./themebuilder-scss
 
     - name: Build
@@ -54,3 +60,18 @@ jobs:
     - name: Check styles for duplicate rules (material)
       run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
 
+  notify:
+    runs-on: ubuntu-latest
+    name: Send notifications
+    needs: [dart-test]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 21_2

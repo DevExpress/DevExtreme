@@ -35,10 +35,18 @@
   min-width: $material-button-min-width;
 
   @include dx-button-withtext-sizing();
+
+  &.dx-button-mode-text {
+    @include dx-button-mode-text-withtext-sizing();
+  }
 }
 
 .dx-button-has-icon.dx-button-has-text {
   @include dx-button-text-and-icon-sizing();
+
+  &.dx-button-mode-text {
+    @include dx-button-mode-text-withtext-sizing();
+  }
 }
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors

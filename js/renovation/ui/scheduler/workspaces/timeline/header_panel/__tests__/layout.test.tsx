@@ -16,13 +16,17 @@ describe('TimelineHeaderPanelLayout', () => {
       leftVirtualCellWidth: 0,
       rightVirtualCellWidth: 0,
     };
+    const groupPanelData = {
+      groupPanelItems: [],
+      baseColSpan: 11,
+    };
+
     const baseProps = {
       dateHeaderData,
+      groupPanelData,
       groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
       groups: [],
       groupByDate: false,
-      groupPanelCellBaseColSpan: 5,
-      columnCountPerGroup: 15,
       isRenderDateHeader: true,
       resourceCellTemplate: () => null,
       dateCellTemplate: () => null,

@@ -1,6 +1,13 @@
 name: Renovation
 
-on: [push, pull_request]
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [21_2]
 
 jobs:
   jest-tests:
@@ -15,16 +22,16 @@ jobs:
       with:
         node-version: '15'
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ./node_modules
-    #     key: ${{ runner.os }}-node-modules-v4-${{ hashFiles('**/package.json') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-node-modules-v4
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
+
     - name: Jest test
       run: |
         npm i
@@ -42,17 +49,33 @@ jobs:
       with:
         node-version: '15'
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ./node_modules
-    #     key: ${{ runner.os }}-node-modules-v4-${{ hashFiles('**/package.json') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-node-modules-v4
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
+
     - name: Check components generation
       run: |
         npx gulp localization
         npx gulp native-components-compilation-check
+
+  notify:
+    runs-on: ubuntu-latest
+    name: Send notifications
+    needs: [jest-tests, generation]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 21_2

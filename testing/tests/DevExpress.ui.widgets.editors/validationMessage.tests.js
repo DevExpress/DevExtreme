@@ -12,6 +12,8 @@ const moduleSetup = {
     }
 };
 
+const overlayWrapperSelector = '.dx-overlay-wrapper';
+
 QUnit.module('options', moduleSetup, () => {
     QUnit.test('default maxWidth should be 100%', function(assert) {
         assert.strictEqual(this._validationMessage.option('maxWidth'), '100%', 'default maxWidth was calculated correctly');
@@ -33,14 +35,18 @@ QUnit.module('options', moduleSetup, () => {
     });
 
     QUnit.test('position should be recalculated after target option runtime change', function(assert) {
-        const $element = $('<div>');
+        const $element = $('<div>').css({
+            position: 'absolute',
+            left: 100
+        });
 
         try {
             $element.appendTo('#qunit-fixture');
+            const srcRect = $(overlayWrapperSelector)[0].getBoundingClientRect();
 
             this._validationMessage.option('target', $element);
 
-            assert.strictEqual(this._validationMessage.option('position').of, $element, 'position is recalculated');
+            assert.notEqual(srcRect.left, $(overlayWrapperSelector)[0].getBoundingClientRect().left, 'position is recalculated');
         } finally {
             $element.remove();
         }
@@ -181,5 +187,29 @@ QUnit.module('position', moduleSetup, () => {
                 assert.deepEqual(this._validationMessage.option('position.at'), 'left top', 'at is correct');
             });
         });
+    });
+});
+
+QUnit.module('content id', moduleSetup, () => {
+    QUnit.test('validation message should update content id after contentId option change', function(assert) {
+        const contentId = 'guid';
+        this._validationMessage.option('contentId', contentId);
+
+        assert.strictEqual(this._validationMessage.$content().attr('id'), contentId);
+    });
+
+    QUnit.test('validation message should update content id after container option change if contentId is not specified', function(assert) {
+        const contentId = 'guid';
+        const $container = $('<div>')
+            .attr('aria-describedby', contentId)
+            .appendTo('#qunit-fixture');
+
+        try {
+            this._validationMessage.option('container', $container);
+
+            assert.strictEqual(this._validationMessage.$content().attr('id'), contentId);
+        } finally {
+            $container.remove();
+        }
     });
 });

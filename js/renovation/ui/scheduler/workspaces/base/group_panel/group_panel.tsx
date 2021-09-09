@@ -1,41 +1,45 @@
 import {
   Component,
+  ComponentBindings,
   JSXComponent,
   JSXTemplate,
+  OneWay,
 } from '@devextreme-generator/declarations';
 import { isVerticalGroupingApplied } from '../../utils';
-import { GroupPanelProps } from './group_panel_props';
+import { GroupPanelBaseProps } from './group_panel_props';
 import { GroupPanelVerticalLayout } from './vertical/layout';
 import { GroupPanelHorizontalLayout } from './horizontal/layout';
 import { GroupPanelLayoutProps } from './group_panel_layout_props';
-import { GroupRenderItem } from '../../types.d';
-import { getGroupsRenderData } from './utils';
+import { Group } from '../../types';
+import { GroupOrientation } from '../../../types';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 
 export const viewFunction = ({
   layout: Layout,
-  groupsRenderData,
   restAttributes,
   props: {
-    groups,
-    groupByDate,
     height,
-    baseColSpan,
     className,
+    groupPanelData,
     resourceCellTemplate,
   },
 }: GroupPanel): JSX.Element => (
   <Layout
-    groups={groups}
     height={height}
     resourceCellTemplate={resourceCellTemplate}
-    groupByDate={groupByDate}
     className={className}
-    groupsRenderData={groupsRenderData}
-    baseColSpan={baseColSpan}
+    groupPanelData={groupPanelData}
     // eslint-disable-next-line react/jsx-props-no-spreading
     styles={restAttributes.style}
   />
 );
+
+@ComponentBindings()
+export class GroupPanelProps extends GroupPanelBaseProps {
+  @OneWay() groups: Group[] = [];
+
+  @OneWay() groupOrientation: GroupOrientation = VERTICAL_GROUP_ORIENTATION;
+}
 
 @Component({
   defaultOptionRules: null,
@@ -49,11 +53,5 @@ export class GroupPanel extends JSXComponent(GroupPanelProps) {
     return isVerticalGroupingApplied(groups, groupOrientation)
       ? GroupPanelVerticalLayout
       : GroupPanelHorizontalLayout;
-  }
-
-  get groupsRenderData(): GroupRenderItem[][] {
-    const { groups, columnCountPerGroup, groupByDate } = this.props;
-
-    return getGroupsRenderData(groups, columnCountPerGroup, groupByDate);
   }
 }

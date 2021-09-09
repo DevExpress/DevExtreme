@@ -2,19 +2,19 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxTrackBar, {
-    dxTrackBarOptions
+    dxTrackBarOptions,
 } from './track_bar';
 
 import {
-    Format
+    Format,
 } from '../localization';
 
 /** @public */
@@ -95,18 +95,18 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        * @docid
        * @default function(value) { return value }
        */
-      format?: Format,
+      format?: Format;
       /**
        * @docid
        * @type Enums.VerticalEdge
        * @default 'bottom'
        */
-      position?: 'bottom' | 'top',
+      position?: 'bottom' | 'top';
       /**
        * @docid
        * @default false
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -135,24 +135,24 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        * @docid
        * @default false
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default function(value) { return value }
        */
-      format?: Format,
+      format?: Format;
       /**
        * @docid
        * @type Enums.VerticalEdge
        * @default 'top'
        */
-      position?: 'bottom' | 'top',
+      position?: 'bottom' | 'top';
       /**
        * @docid
        * @type Enums.SliderTooltipShowMode
        * @default 'onHover'
        */
-      showMode?: 'always' | 'onHover'
+      showMode?: 'always' | 'onHover';
     };
 }
 

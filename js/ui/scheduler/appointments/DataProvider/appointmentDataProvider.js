@@ -1,6 +1,7 @@
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
 import { ExpressionUtils } from '../../expressionUtils';
+import { createAppointmentAdapter } from '../../appointmentAdapter';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -80,12 +81,14 @@ export class AppointmentDataProvider {
         this.getFilterStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
     }
 
-    appointmentTakesAllDay(appointment, startDayHour, endDayHour) {
-        return this.getFilterStrategy().appointmentTakesAllDay(appointment, startDayHour, endDayHour);
+    appointmentTakesAllDay(rawAppointment, startDayHour, endDayHour) {
+        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        return this.getFilterStrategy().appointmentTakesAllDay(adapter, startDayHour, endDayHour);
     }
 
-    hasAllDayAppointments(appointments) {
-        return this.getFilterStrategy().hasAllDayAppointments(appointments);
+    hasAllDayAppointments(rawAppointments) {
+        const adapters = rawAppointments.map((item) => createAppointmentAdapter(this.key, item));
+        return this.getFilterStrategy().hasAllDayAppointments(adapters);
     }
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
@@ -93,16 +96,18 @@ export class AppointmentDataProvider {
     }
 
     // From subscribe
-    replaceWrongEndDate(appointment, startDate, endDate) {
-        this.getFilterStrategy().replaceWrongEndDate(appointment, startDate, endDate);
+    replaceWrongEndDate(rawAppointment, startDate, endDate) {
+        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        this.getFilterStrategy().replaceWrongEndDate(adapter, startDate, endDate);
     }
 
     calculateAppointmentEndDate(isAllDay, startDate) {
         return this.getFilterStrategy().calculateAppointmentEndDate(isAllDay, startDate);
     }
 
-    appointmentTakesSeveralDays(appointment) {
-        return this.getFilterStrategy().appointmentTakesSeveralDays(appointment);
+    appointmentTakesSeveralDays(rawAppointment) {
+        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        return this.getFilterStrategy().appointmentTakesSeveralDays(adapter);
     }
 
     sortAppointmentsByStartDate(appointments) {

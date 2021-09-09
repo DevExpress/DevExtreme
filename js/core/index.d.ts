@@ -1,7 +1,6 @@
-
 type KeyOf<T> = T extends never ? never : keyof T;
 
-type KeysOf<T1, T2, T3, T4, T5, T6, T7, T8> = 
+type KeysOf<T1, T2, T3, T4, T5, T6, T7, T8> =
   KeyOf<T1> | KeyOf<T2> | KeyOf<T3> | KeyOf<T4> | KeyOf<T5> | KeyOf<T6> | KeyOf<T7> | KeyOf<T8>;
 
 type Seal<T, K extends keyof any> = T & {

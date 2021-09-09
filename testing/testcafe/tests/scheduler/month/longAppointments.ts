@@ -37,18 +37,18 @@ fixture`Scheduler: long appointments in month view`
 
 [false, true].forEach((rtlEnabled) => {
   test(`Long appointment(several months) should display valid on month view(rtl='${rtlEnabled})`, async (t) => {
-    const scheduler = new Scheduler('#container');
+    const { toolbar, workSpace } = new Scheduler('#container');
 
     await t
-      .expect(await compareScreenshot(t, `month-long-appointment-several-months-january(rtl=${rtlEnabled}).png`, scheduler.workSpace)).ok();
+      .expect(await compareScreenshot(t, `month-long-appointment-several-months-january(rtl=${rtlEnabled}).png`, workSpace)).ok();
 
     await t
-      .click(scheduler.getToolbar().getNavigator().nextDuration)
-      .expect(await compareScreenshot(t, `month-long-appointment-several-months-february(rtl=${rtlEnabled}).png`, scheduler.workSpace)).ok();
+      .click(toolbar.navigator.nextButton)
+      .expect(await compareScreenshot(t, `month-long-appointment-several-months-february(rtl=${rtlEnabled}).png`, workSpace)).ok();
 
     await t
-      .click(scheduler.getToolbar().getNavigator().nextDuration)
-      .expect(await compareScreenshot(t, `month-long-appointment-several-months-march(rtl=${rtlEnabled}).png`, scheduler.workSpace)).ok();
+      .click(toolbar.navigator.nextButton)
+      .expect(await compareScreenshot(t, `month-long-appointment-several-months-march(rtl=${rtlEnabled}).png`, workSpace)).ok();
   }).before(async () => createWidget('dxScheduler', {
     dataSource: [{
       text: 'Text',
@@ -63,14 +63,14 @@ fixture`Scheduler: long appointments in month view`
 });
 
 test('Long recurrence appointment should display valid on month view', async (t) => {
-  const scheduler = new Scheduler('#container');
+  const { toolbar, workSpace } = new Scheduler('#container');
 
   await t
-    .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-january.png', scheduler.workSpace)).ok();
+    .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-january.png', workSpace)).ok();
 
   await t
-    .click(scheduler.getToolbar().getNavigator().nextDuration)
-    .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-february.png', scheduler.workSpace)).ok();
+    .click(toolbar.navigator.nextButton)
+    .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-february.png', workSpace)).ok();
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Text',

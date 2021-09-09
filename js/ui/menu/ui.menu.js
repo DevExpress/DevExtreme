@@ -337,7 +337,7 @@ class Menu extends MenuBase {
             deferRendering: false,
             shading: false,
             animation: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             onHidden: () => {
                 this._toggleHamburgerActiveState(false);
             },
@@ -931,8 +931,9 @@ class Menu extends MenuBase {
                 super._optionChanged(args);
                 break;
             default:
-                if(this._isAdaptivityEnabled()) {
-                    this._treeView.option(args.name, args.value);
+                if(this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
+                    // TODO: if(args.name === 'items') this._treeView.option('items', this.option('items')) or treeView.repaint() ?
+                    this._treeView.option(args.fullName, args.value);
                 }
                 super._optionChanged(args);
         }

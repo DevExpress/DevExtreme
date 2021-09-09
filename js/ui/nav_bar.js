@@ -60,3 +60,9 @@ NavBar.ItemClass = NavBarItem;
 registerComponent('dxNavBar', NavBar);
 
 export default NavBar;
+
+/**
+ * @name dxNavBarItem
+ * @inherits dxTabsItem
+ * @type object
+ */

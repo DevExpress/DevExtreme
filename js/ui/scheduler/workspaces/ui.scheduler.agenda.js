@@ -16,8 +16,8 @@ import {
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
 import { getPathToLeaf } from '../resources/utils';
-import { calculateStartViewDate } from './utils/agenda';
-import { formatWeekday, getVerticalGroupCountClass } from './utils/base';
+import { calculateStartViewDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
+import { formatWeekday, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
 import dateUtils from '../../../core/utils/date';
 

@@ -48,7 +48,7 @@ module('dialog tests', {
 
         alert();
         assert.ok(this.thereIsDialog());
-        keyboardMock(this.dialog().find('.dx-overlay-content').get(0)).keyDown('esc');
+        keyboardMock(this.dialog().find('.dx-overlay-content .dx-dialog-button').get(0)).keyDown('esc');
         assert.ok(this.thereIsNoDialog());
     });
 

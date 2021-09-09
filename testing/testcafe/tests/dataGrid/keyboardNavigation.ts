@@ -1536,7 +1536,7 @@ test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', a
   });
 });
 
-test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', async (t) => {
+test.skip('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   let rowIndex = 0;
   let cell = dataGrid.getDataCell(rowIndex, 0);

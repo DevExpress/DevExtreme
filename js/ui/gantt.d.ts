@@ -1,6 +1,6 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
@@ -9,37 +9,37 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
 import {
-    dxTreeListColumn
+    Column,
 } from './tree_list';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 import {
-    dxToolbarItem
+    Item as dxToolbarItem,
 } from './toolbar';
 
 import {
-    dxContextMenuItem
+    Item as dxContextMenuItem,
 } from './context_menu';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 /** @public */
@@ -53,38 +53,38 @@ export type ContextMenuPreparingEvent = Cancelable & {
     readonly targetKey?: any;
     readonly targetType?: string;
     readonly data?: any;
-    readonly items?: Array<any>
-}
+    readonly items?: Array<any>;
+};
 
 /** @public */
 export type CustomCommandEvent = {
     readonly component?: dxGantt;
     readonly element?: DxElement;
     readonly name: string;
-}
+};
 
 /** @public */
 export type DependencyDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type DependencyDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type DependencyInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type DependencyInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxGantt>;
@@ -99,76 +99,76 @@ export type OptionChangedEvent = EventInfo<dxGantt> & ChangedOptionInfo;
 export type ResourceAssignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceAssigningEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type ResourceDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type ResourceUnassignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type ResourceUnassigningEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxGantt> & {
     readonly selectedRowKey?: any;
-}
+};
 
 /** @public */
 export type TaskClickEvent = NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
-}
+};
 
 /** @public */
 export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
-}
+};
 
 /** @public */
 export type TaskDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
@@ -176,43 +176,43 @@ export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly key: any;
     readonly readOnlyFields?: Array<string>;
     readonly hiddenFields?: Array<string>;
-}
+};
 
 /** @public */
 export type ResourceManagerDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: Array<any>;
-}
+};
 
 /** @public */
 export type TaskInsertedEvent = EventInfo<dxGantt> & {
     readonly value?: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
-}
+};
 
 /** @public */
 export type TaskMovingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskUpdatedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
-}
+};
 
 /** @public */
 export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
-    readonly key: any
-}
+    readonly key: any;
+};
 
 /** @public */
 export type TaskContentTemplateData = {
@@ -221,20 +221,20 @@ export type TaskContentTemplateData = {
     readonly taskData: any;
     readonly taskHTML: any;
     readonly taskPosition: any;
-    readonly taskResources:  Array<any>;
+    readonly taskResources: Array<any>;
     readonly taskSize: any;
-}
+};
 
 /** @public */
 export type ProgressTooltipTemplateData = {
     readonly progress: number;
-}
+};
 
 /** @public */
 export type TimeTooltipTemplateData = {
     readonly start: Date;
     readonly end: Date;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -249,10 +249,11 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     allowSelection?: boolean;
     /**
      * @docid
+     * @type Array<dxTreeListColumn|string>
      * @default undefined
      * @public
      */
-    columns?: Array<dxTreeListColumn | string>;
+    columns?: Array<Column | string>;
     /**
      * @docid
      * @default null
@@ -263,27 +264,27 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "predecessorId"
        */
-      predecessorIdExpr?: string | Function,
+      predecessorIdExpr?: string | Function;
       /**
        * @docid
        * @default "successorId"
        */
-      successorIdExpr?: string | Function,
+      successorIdExpr?: string | Function;
       /**
        * @docid
        * @default "type"
        */
-      typeExpr?: string | Function
+      typeExpr?: string | Function;
     };
     /**
      * @docid
@@ -294,52 +295,52 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default true
        */
-      allowDependencyAdding?: boolean,
+      allowDependencyAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowDependencyDeleting?: boolean,
+      allowDependencyDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceAdding?: boolean,
+      allowResourceAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceDeleting?: boolean,
+      allowResourceDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceUpdating?: boolean,
+      allowResourceUpdating?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskAdding?: boolean,
+      allowTaskAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskDeleting?: boolean,
+      allowTaskDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskResourceUpdating?: boolean,
+      allowTaskResourceUpdating?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskUpdating?: boolean,
+      allowTaskUpdating?: boolean;
       /**
        * @docid
        * @default false
        */
-      enabled?: boolean
+      enabled?: boolean;
     };
     /**
      * @docid
@@ -350,24 +351,24 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default false
        */
-      validateDependencies?: boolean,
+      validateDependencies?: boolean;
       /**
        * @docid
        * @default false
        */
-      autoUpdateParentTasks?: boolean,
+      autoUpdateParentTasks?: boolean;
       /**
        * @docid
        * @default false
        */
-       enablePredecessorGap?: boolean
+       enablePredecessorGap?: boolean;
     };
     /**
      * @docid
      * @type object
      * @public
      */
-     sorting?: Sorting;
+     sorting?: dxGanttSorting;
     /**
      * @docid
      * @default null
@@ -729,22 +730,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "resourceId"
        */
-      resourceIdExpr?: string | Function,
+      resourceIdExpr?: string | Function;
       /**
        * @docid
        * @default "taskId"
        */
-      taskIdExpr?: string | Function
+      taskIdExpr?: string | Function;
     };
     /**
      * @docid
@@ -756,22 +757,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function,
+      colorExpr?: string | Function;
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "text"
        */
-      textExpr?: string | Function
+      textExpr?: string | Function;
     };
     /**
      * @docid
@@ -792,6 +793,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     showResources?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+     showDependencies?: boolean;
     /**
      * @docid
      * @default true
@@ -828,42 +835,42 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function,
+      colorExpr?: string | Function;
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "end"
        */
-      endExpr?: string | Function,
+      endExpr?: string | Function;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "parentId"
        */
-      parentIdExpr?: string | Function,
+      parentIdExpr?: string | Function;
       /**
        * @docid
        * @default "progress"
        */
-      progressExpr?: string | Function,
+      progressExpr?: string | Function;
       /**
        * @docid
        * @default "start"
        */
-      startExpr?: string | Function,
+      startExpr?: string | Function;
       /**
        * @docid
        * @default "title"
        */
-      titleExpr?: string | Function
+      titleExpr?: string | Function;
     };
     /**
      * @docid
@@ -930,6 +937,18 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     rootValue?: any;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    startDateRange?: Date;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    endDateRange?: Date;
 }
 /**
  * @docid
@@ -1015,7 +1034,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param2 taskKeys?:Array<object>
      * @public
      */
-    insertResource(data: any,  taskKeys?: Array<any>): void;
+    insertResource(data: any, taskKeys?: Array<any>): void;
     /**
      * @docid
      * @publicName deleteResource(key)
@@ -1089,7 +1108,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      */
     scrollToDate(date: Date | Number | string): void;
     /**
-     * @docid 
+     * @docid
      * @publicName exportToPdf(options)
      * @param1 options:object
      * @return Promise<any>
@@ -1102,6 +1121,93 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @public
      */
     showResourceManagerDialog(): void;
+    /**
+     * @docid
+     * @publicName expandAll()
+     * @public
+     */
+    expandAll(): void;
+    /**
+     * @docid
+     * @publicName collapseAll()
+     * @public
+     */
+    collapseAll(): void;
+    /**
+     * @docid
+     * @publicName expandAllToLevel(level)
+     * @param1 level: Number
+     * @public
+     */
+    expandAllToLevel(level: Number): void;
+    /**
+     * @docid
+     * @publicName expandToTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandToTask(key: any): void;
+    /**
+     * @docid
+     * @publicName collapseTask(key)
+     * @param1 key:object
+     * @public
+     */
+    collapseTask(key: any): void;
+    /**
+     * @docid
+     * @publicName expandTask(key)
+     * @param1 key:object
+     * @public
+     */
+    expandTask(key: any): void;
+    /**
+     * @docid
+     * @publicName refresh()
+     * @return Promise<void>
+     * @public
+     */
+    refresh(): DxPromise<void>;
+    /**
+     * @docid
+     * @publicName showResources(value)
+     * @param1 value:boolean
+     * @public
+     */
+     showResources(value: boolean): void;
+     /**
+     * @docid
+     * @publicName showDependencies(value)
+     * @param1 value:boolean
+     * @public
+     */
+      showDependencies(value: boolean): void;
+     /**
+     * @docid
+     * @publicName zoomIn()
+     * @public
+     */
+      zoomIn(): void;
+      /**
+     * @docid
+     * @publicName zoomOut()
+     * @public
+     */
+      zoomOut(): void;
+     /**
+     * @docid
+     * @publicName unassignAllResourcesFromTask(taskKey)
+     * @param1 taskKey:object
+     * @public
+     */
+      unassignAllResourcesFromTask(taskKey: any): void;
+     /**
+     * @docid
+     * @publicName showTaskDetailsDialog(taskKey)
+     * @param1 taskKey:object
+     * @public
+     */
+      showTaskDetailsDialog(taskKey: any): void;
 }
 
 /**
@@ -1115,7 +1221,7 @@ export interface dxGanttToolbar {
      * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
      * @public
      */
-    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
+    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies'>;
 }
 
 /**
@@ -1129,18 +1235,23 @@ export interface dxGanttContextMenu {
      * @default true
      * @public
      */
-    enabled?: boolean
+    enabled?: boolean;
     /**
      * @docid
      * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
      * @public
      */
-    items?: Array<dxGanttContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
+    items?: Array<ContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
 }
 
 /**
- * @docid
- * @inherits dxToolbarItem
+ * @public
+ * @namespace DevExpress.ui.dxGantt
+ */
+export type ToolbarItem = dxGanttToolbarItem;
+
+/**
+ * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui
  */
 export interface dxGanttToolbarItem extends dxToolbarItem {
@@ -1149,7 +1260,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @type Enums.GanttToolbarItem|string
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
+    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies' | string;
     /**
      * @docid
      * @default "before"
@@ -1160,8 +1271,13 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
 }
 
 /**
- * @docid
- * @inherits dxContextMenuItem
+ * @public
+ * @namespace DevExpress.ui.dxGantt
+ */
+export type ContextMenuItem = dxGanttContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
@@ -1212,33 +1328,33 @@ export interface dxGanttStripLine {
  * @type object
  * @namespace DevExpress.ui
  */
-export interface Sorting {
+export interface dxGanttSorting {
     /**
      * @docid
      * @default "Sort Ascending"
      */
-    ascendingText?: string,
+    ascendingText?: string;
     /**
      * @docid
      * @default "Clear Sorting"
      */
-    clearText?: string,
+    clearText?: string;
     /**
      * @docid
      * @default "Sort Descending"
      */
-    descendingText?: string,
+    descendingText?: string;
     /**
      * @docid
      * @type Enums.GanttSortingMode|string
-     * @default "none"
+     * @default "single"
      */
-    mode?: 'multiple' | 'none' | 'single',
+    mode?: 'multiple' | 'none' | 'single';
     /**
-     * @docid 
+     * @docid
      * @default false
      */
-    showSortIndexes?: boolean
+    showSortIndexes?: boolean;
 }
 
 /** @public */

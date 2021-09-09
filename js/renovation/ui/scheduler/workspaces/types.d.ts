@@ -1,3 +1,5 @@
+import { BaseTemplateProps } from '../types';
+
 export interface ViewCellData {
   startDate: Date;
   endDate: Date;
@@ -68,6 +70,11 @@ export interface GroupRenderItem extends GroupItem {
   isLastGroupCell?: boolean;
 }
 
+export interface GroupPanelData {
+  groupPanelItems: GroupRenderItem[][];
+  baseColSpan: number;
+}
+
 export interface Group {
   name: string;
   items: GroupItem[];
@@ -96,9 +103,6 @@ interface TemplateData extends BaseTemplateData {
   endDate?: Date;
 }
 
-interface BaseTemplateProps {
-  index: number;
-}
 export interface ContentTemplateProps extends BaseTemplateProps {
   data: TemplateData;
 }
@@ -134,5 +138,33 @@ export interface DateHeaderData {
   weekDayRightVirtualCellCount?: number;
 }
 
-export type ViewType = 'day' | 'week' | 'workWeek' | 'month'
-| 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda';
+interface CountGenerationConfig {
+  intervalCount: number;
+  currentDate: Date;
+  viewType: string;
+  hoursInterval: number;
+  startDayHour: number;
+  endDayHour: number;
+}
+
+// TODO: tempporary
+export interface ViewDataProviderType {
+  timePanelData: TimePanelData;
+  viewData: GroupedViewData;
+  dateHeaderData: DateHeaderData;
+  getCellCount: (config: CountGenerationConfig) => number;
+  getRowCount: (config: CountGenerationConfig) => number;
+  update: (options: unknown, isGenerateNewData: boolean) => void;
+  getGroupPanelData: (options: unknown) => GroupPanelData;
+  getStartViewDate: () => Date;
+}
+
+export interface CellsMetaData {
+  dateTableCellsMeta: ClientRect[][];
+  allDayPanelCellsMeta: ClientRect[];
+}
+
+export interface ViewMetaData {
+  viewDataProvider: ViewDataProviderType;
+  cellsMetaData: CellsMetaData;
+}

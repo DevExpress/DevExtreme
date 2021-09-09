@@ -6,6 +6,8 @@ import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
 
+import 'generic_light.css!';
+
 QUnit.testStart(() => {
     const markup =
         '<div id="scheduler-work-space">\
@@ -96,7 +98,11 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
             this.instance = $('#scheduler-work-space')[view]({})[view]('instance');
+        },
+        afterEach: function() {
+            this.clock.restore();
         }
     };
 
@@ -1085,20 +1091,6 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         assert.ok($element.hasClass('dx-scheduler-work-space-month'), 'dxSchedulerWorkSpaceMonth has \'dx-scheduler-workspace-month\' css class');
     });
 
-    QUnit.test('Scheduler workspace month scrollable content should have a right css class', function(assert) {
-        const $scrollableContent = this.instance.getScrollable().$content();
-
-        assert.ok($scrollableContent.hasClass('dx-scheduler-scrollable-fixed-content'), 'Scrollable content has \'dx-scheduler-scrollable-fixed-content\' css class');
-    });
-
-    QUnit.test('Scheduler workspace month scrollable content should not have a right css class, if intervalCount is set', function(assert) {
-        this.instance.option('intervalCount', 2);
-
-        const $scrollableContent = this.instance.getScrollable().$content();
-
-        assert.notOk($scrollableContent.hasClass('dx-scheduler-scrollable-fixed-content'), 'Scrollable content hasn\'t \'dx-scheduler-scrollable-fixed-content\' css class');
-    });
-
     QUnit.test('Scheduler all day panel should not contain rows & cells', function(assert) {
         const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
 
@@ -1358,12 +1350,6 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
         assert.equal(dateTableScrollable.option('showScrollbar'), expectedShowScrollbarOption, 'showScrollbar is OK');
         assert.strictEqual(dateTableScrollable.option('bounceEnabled'), false, 'bounceEnabled is OK');
         assert.strictEqual(dateTableScrollable.option('updateManually'), true, 'updateManually is OK');
-    });
-
-    QUnit.test('Scheduler workspace month scrollable content should not have fixed-content class with vertical grouping', function(assert) {
-        const $scrollableContent = this.instance.getScrollable().$content();
-
-        assert.notOk($scrollableContent.hasClass('dx-scheduler-scrollable-fixed-content'), 'Scrollable content hasn\'t \'dx-scheduler-scrollable-fixed-content\' css class');
     });
 
     QUnit.test('Sidebar scrollable should contain group table', function(assert) {

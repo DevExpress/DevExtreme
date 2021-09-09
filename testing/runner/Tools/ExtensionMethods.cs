@@ -9,7 +9,6 @@ namespace Runner.Tools
 {
     public static class ExtensionMethods
     {
-
         public static IHtmlContent ContentWithCacheBuster(this IUrlHelper url, string contentPath)
         {
             var cacheBuster = CacheBuster(url).ToString();
@@ -62,29 +61,16 @@ namespace Runner.Tools
             var writtenFailures = 0;
             var separator = "".PadLeft(80, '-');
 
-            if (results.failures > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-            }
-            else if (notRunCases.Length > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-            }
-
-            Console.WriteLine($"Tests run: {results.total}, Failures: {results.failures}, Not run: {notRunCases.Length}");
-            Console.ResetColor();
+            ConsoleHelper.WriteLine($"Tests run: {results.total}, Failures: {results.failures}, Not run: {notRunCases.Length}",
+                    results.failures > 0 ? ConsoleColor.Red : notRunCases.Length > 0 ? ConsoleColor.Yellow : ConsoleColor.Green);
 
             if (notRunCases.Length > 0 && results.failures == 0)
             {
                 foreach (var @case in notRunCases)
                 {
-                    Console.WriteLine(separator);
-                    Console.WriteLine("Skipped: " + @case.name);
-                    Console.WriteLine("Reason: " + @case.reason.message);
+                    ConsoleHelper.WriteLine(separator);
+                    ConsoleHelper.WriteLine("Skipped: " + @case.name);
+                    ConsoleHelper.WriteLine("Reason: " + @case.reason.message);
                 }
             }
 
@@ -96,20 +82,18 @@ namespace Runner.Tools
 
                 foreach (var @case in failedCases)
                 {
-                    Console.WriteLine(separator);
+                    ConsoleHelper.WriteLine(separator);
 
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine(@case.name);
-                    Console.ResetColor();
+                    ConsoleHelper.WriteLine(@case.name, ConsoleColor.White);
 
-                    Console.WriteLine();
-                    Console.WriteLine(@case.failure.message);
+                    ConsoleHelper.WriteLine();
+                    ConsoleHelper.WriteLine(@case.failure.message);
 
                     writtenFailures++;
 
                     if (writtenFailures >= maxWrittenFailures)
                     {
-                        Console.WriteLine($"WARNING: only first {maxWrittenFailures} failures are shown.");
+                        ConsoleHelper.WriteLine($"WARNING: only first {maxWrittenFailures} failures are shown.");
                         break;
                     }
                 }

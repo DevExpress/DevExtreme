@@ -88,7 +88,7 @@ export default gridCore.Controller.inherit((function() {
             that._cachedPagesData = createEmptyPagesData();
             that._lastOperationTypes = {};
             that._eventsStrategy = dataSource._eventsStrategy;
-            that._skipCorrection = 0;
+            that._totalCountCorrection = 0;
             that._isLoadingAll = false;
 
 
@@ -154,7 +154,7 @@ export default gridCore.Controller.inherit((function() {
         },
         resetCurrentTotalCount: function() {
             this._currentTotalCount = 0;
-            this._skipCorrection = 0;
+            this._totalCountCorrection = 0;
         },
         resetCache: function() {
             this._cachedStoreData = undefined;
@@ -228,7 +228,7 @@ export default gridCore.Controller.inherit((function() {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
             });
 
-            const getItemCount = () => groupCount ? this.itemsCount() : this._items.length;
+            const getItemCount = () => groupCount ? this.itemsCount() : this.items().length;
             const oldItemCount = getItemCount();
 
 
@@ -247,8 +247,8 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
-                this._skipCorrection += getItemCount() - oldItemCount;
+            if(!this.option('scrolling.newMode') && this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
+                this._totalCountCorrection += getItemCount() - oldItemCount;
             }
 
             changes.splice(0, changes.length);
@@ -558,7 +558,7 @@ export default gridCore.Controller.inherit((function() {
             return this._isLastPage;
         },
         totalCount: function() {
-            return parseInt((this._currentTotalCount || this._dataSource.totalCount()) + this._skipCorrection);
+            return parseInt((this._currentTotalCount || this._dataSource.totalCount()) + this._totalCountCorrection);
         },
         itemsCount: function() {
             return this._dataSource.items().length;
@@ -576,7 +576,7 @@ export default gridCore.Controller.inherit((function() {
         },
         pageCount: function() {
             const that = this;
-            const count = that.totalItemsCount() - that._skipCorrection;
+            const count = that.totalItemsCount() - that._totalCountCorrection;
             const pageSize = that.pageSize();
 
             if(pageSize && count > 0) {

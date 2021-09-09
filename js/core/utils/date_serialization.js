@@ -61,11 +61,15 @@ function parseISO8601String(text) {
         return;
     }
 
-    const year = parts[1];
+    const year = getTimePart(parts[1]);
     const month = --parts[3];
     const day = parts[5];
     let timeZoneHour = 0;
     let timeZoneMinute = 0;
+    const correctYear = (d) => {
+        year < 100 && d.setFullYear(year);
+        return d;
+    };
 
     timeZoneHour = getTimePart(parts[14]);
     timeZoneMinute = getTimePart(parts[16]);
@@ -85,10 +89,10 @@ function parseISO8601String(text) {
     const millisecond = parseMilliseconds(parts[11]);
 
     if(parts[12]) {
-        return new Date(Date.UTC(year, month, day, hour, minute, second, millisecond));
+        return correctYear(new Date(Date.UTC(year, month, day, hour, minute, second, millisecond)));
     }
 
-    return new Date(year, month, day, hour, minute, second, millisecond);
+    return correctYear(new Date(year, month, day, hour, minute, second, millisecond));
 }
 
 const getIso8601Format = function(text, useUtc) {

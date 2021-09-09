@@ -174,6 +174,15 @@ describe('DataGrid Wrapper', () => {
     });
   });
 
+  it('should not fail on server side rendering', () => {
+    const component = new DataGridComponent({} as any, {});
+    // It's server side rendering
+    component._getInternalInstance = () => undefined as any;
+    // It's first render
+    component._isNodeReplaced = false;
+    expect(() => component._renderWrapper({})).not.toThrow();
+  });
+
   it('deprecated options', () => {
     const component = createDataGrid();
 
@@ -331,6 +340,15 @@ describe('DataGrid Wrapper', () => {
       expect(prevProps.dataSource.store.data).toEqual([1]);
     });
 
+    it('integrationOptions changed', () => {
+      const component: any = createDataGrid();
+      const options = { option: 'value' };
+      component.__options = options;
+      component.viewRef.prevProps = options;
+      component._optionChanging('integrationOptions', undefined, { template: { 'some.nested.string': 'value' } });
+      expect(options).not.toContain('integrationOptions');
+    });
+
     it('editing complex option changed', () => {
       const component: any = createDataGrid();
       const prevProps = { editing: { editRowKey: null } };
@@ -408,7 +426,7 @@ describe('DataGrid Wrapper', () => {
       });
 
       expect(mockComponent._notifyOptionChanged).toBeCalledTimes(1);
-      expect(mockComponent._invalidate).toBeCalledTimes(0);
+      expect(mockComponent._optionChanged).toBeCalledTimes(0);
     });
 
     it('_notifyOptionChanged should not be called if column option is changed to the same value in internal widget', () => {

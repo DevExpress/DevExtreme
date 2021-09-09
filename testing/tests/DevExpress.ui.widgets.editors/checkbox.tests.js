@@ -23,6 +23,17 @@ const ICON_SELECTOR = '.dx-checkbox-icon';
 QUnit.module('Checkbox', function() {
     const isRenovation = !!dxCheckBox.IS_RENOVATED_WIDGET;
 
+    QUnit.module('methods', () => {
+        QUnit.testInActiveWindow('focus', function(assert) {
+            const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+            const instance = $element.dxCheckBox('instance');
+
+            instance.focus();
+
+            assert.ok($element.hasClass('dx-state-focused'), 'checkBox has focus class');
+        });
+    });
+
     QUnit.module('render', function() {
         QUnit.test('init with default options', function(assert) {
             const $element = $('#checkBox').dxCheckBox();
@@ -159,16 +170,6 @@ QUnit.module('Checkbox', function() {
             instance.option('height', newSize);
 
             assert.equal($element.find(ICON_SELECTOR).height(), initHeight, 'icon height is not resized');
-        });
-
-        QUnit.test('widget input should get the "name" attribute with a correct value', function(assert) {
-            const expectedName = 'some_name';
-            const $element = $('#checkBox').dxCheckBox({
-                name: expectedName
-            });
-            const $input = $element.find('input');
-
-            assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value');
         });
     });
 
@@ -387,22 +388,20 @@ QUnit.module('Checkbox', function() {
 
                 QUnit.test('checkbox icon\'s font-size should be Math.ceil(iconSize * 16 / 22)', function(assert) {
                     const iconSize = 50;
-                    const initialFontSize = this.$element.find(ICON_SELECTOR).css('font-size');
 
-                    this.instance.option({ iconSize });
+                    this.instance.option({ iconSize, value: true });
 
                     const newFontSize = this.$element.find(ICON_SELECTOR).css('font-size');
                     const iconFontSizeRatio = 16 / 22;
                     const expectedFontSize = `${Math.ceil(iconSize * iconFontSizeRatio)}px`;
 
-                    assert.notStrictEqual(initialFontSize, newFontSize, 'font-size is changed');
                     assert.strictEqual(newFontSize, expectedFontSize, 'font-size has correct value');
                 });
 
                 QUnit.test('checkbox icon\'s font-size should decrease if "iconSize" option decrease', function(assert) {
                     const iconSize = 10;
 
-                    this.instance.option({ iconSize });
+                    this.instance.option({ iconSize, value: true });
 
                     assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), '8px', 'font-size was decreased');
                 });
@@ -410,7 +409,7 @@ QUnit.module('Checkbox', function() {
                 QUnit.test('checkbox icon\'s font-size should increase if "iconSize" option increase', function(assert) {
                     const iconSize = 30;
 
-                    this.instance.option({ iconSize });
+                    this.instance.option({ iconSize, value: true });
 
                     assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), '22px', 'font-size was increased');
                 });
@@ -423,7 +422,7 @@ QUnit.module('Checkbox', function() {
                     assert.strictEqual(this.$element.css('height'), `${iconSize}px`, 'root element height equals icon height');
                 });
 
-                QUnit.test('checkbox root element size should not adjust to "iconWidth"/"iconHeight" options if "widht"/"height" options not defined', function(assert) {
+                QUnit.test('checkbox root element size should not adjust to "iconSize" options if "widht"/"height" options not defined', function(assert) {
                     const iconSize = 45;
                     const width = 30;
                     const height = 30;
@@ -440,6 +439,18 @@ QUnit.module('Checkbox', function() {
                         assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${value} option value`);
                     });
                 });
+            });
+
+            QUnit.testInActiveWindow('blur method', function(assert) {
+                const blurSpy = sinon.spy();
+                const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+                const instance = $element.dxCheckBox('instance');
+                $element.on('blur', blurSpy);
+
+                instance.focus();
+                instance.blur();
+
+                assert.ok(blurSpy.calledOnce, 'element was blurred');
             });
         }
     });

@@ -1,4 +1,5 @@
-import { dxElementWrapper } from '../core/renderer';
+/* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
+import { dxElementWrapper } from './renderer';
 
 export interface Condition {}
 

@@ -484,15 +484,22 @@ if(devices.current().deviceType === 'desktop') {
             [1, 0.75, 1.5].forEach((browserZoom) => {
                 QUnit.test(`WheelDelta -> browser.zoom: ${browserZoom}, direction: ${direction}, wheelDelta: ${wheelDelta}`, function() {
                     const helper = new ValidateMouseWheelEventTestHelper(direction, false);
-                    helper.scrollable.scrollTo(25);
-                    const defaultDevicePixelRatio = getWindow().devicePixelRatio;
-                    setWindow({ devicePixelRatio: browserZoom }, true);
 
-                    helper.triggerWheelEvent(wheelDelta);
+                    const originalWindow = getWindow();
 
-                    helper.checkScrollOffset(wheelDelta, browserZoom);
+                    try {
+                        helper.scrollable.scrollTo(25);
+                        const defaultDevicePixelRatio = getWindow().devicePixelRatio;
+                        setWindow({ devicePixelRatio: browserZoom }, true);
 
-                    setWindow({ devicePixelRatio: defaultDevicePixelRatio }, true);
+                        helper.triggerWheelEvent(wheelDelta);
+
+                        helper.checkScrollOffset(wheelDelta, browserZoom);
+
+                        setWindow({ devicePixelRatio: defaultDevicePixelRatio }, true);
+                    } finally {
+                        setWindow(originalWindow);
+                    }
                 });
             });
         });

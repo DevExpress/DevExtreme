@@ -10,6 +10,7 @@ import { compare as compareVersions } from '../../core/utils/version';
 
 const realDevice = devices.real();
 
+const SCROLL_EVENT = 'scroll';
 const SCROLL_INIT_EVENT = 'dxscrollinit';
 const SCROLL_START_EVENT = 'dxscrollstart';
 const SCROLL_MOVE_EVENT = 'dxscroll';
@@ -20,7 +21,7 @@ const SCROLL_CANCEL_EVENT = 'dxscrollcancel';
 
 const Locker = Class.inherit((function() {
 
-    const NAMESPACED_SCROLL_EVENT = addNamespace('scroll', 'dxScrollEmitter');
+    const NAMESPACED_SCROLL_EVENT = addNamespace(SCROLL_EVENT, 'dxScrollEmitter');
 
     return {
 
@@ -347,5 +348,6 @@ export default {
     move: SCROLL_MOVE_EVENT,
     end: SCROLL_END_EVENT,
     stop: SCROLL_STOP_EVENT,
-    cancel: SCROLL_CANCEL_EVENT
+    cancel: SCROLL_CANCEL_EVENT,
+    scroll: SCROLL_EVENT
 };

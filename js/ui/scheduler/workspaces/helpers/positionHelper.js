@@ -107,7 +107,6 @@ export class PositionHelper {
     get isVerticalGroupedWorkSpace() { return this.options.isVerticalGroupedWorkSpace; }
     get groupCount() { return this.options.groupCount; }
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
-    get isSkippedData() { return this.options.isSkippedDataCallback; }
     get getPositionShift() { return this.options.getPositionShiftCallback; }
     get getDOMMetaData() { return this.options.getDOMMetaDataCallback; }
 
@@ -151,7 +150,7 @@ export class PositionHelper {
     getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {
         const result = [];
 
-        if(this.isSkippedData(startDate)) {
+        if(this.viewDataProvider.isSkippedDate(startDate)) {
             return result;
         }
 

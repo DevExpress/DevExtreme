@@ -13,7 +13,9 @@ const PRIVATE_JQUERY_WIDGETS = [
     'Widget', 'ResizableContainer',
     'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
     'DateTableLayoutBase', 'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
-    'GridPager', 'Scrollable', 'DraggableContainer', 'Droppable'
+    'AppointmentLayout',
+    'GridPager', 'Scrollable', 'DraggableContainer', 'Droppable',
+    'Editor'
 ];
 const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'LayoutManager', 'ResponsiveBox', 'Box'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
@@ -55,7 +57,11 @@ QUnit.module('Mandatory component setup', {
             $('#component')[`dx${meta.name}`]();
 
             let message = 'You should always set `dx-widget` class to the root of your component';
-            assert.equal($('#component').get(0), $('.dx-widget').get(0), message);
+
+            if(meta.name !== 'ScrollView') {
+                assert.equal($('#component').get(0), $('.dx-widget').get(0), message);
+            }
+
             const className = CUSTOM_ROOT_WIDGET_CLASS[`dx${meta.name}`] || meta.name.toLowerCase();
             message = 'Use `dx-` followed by lowercase Component name as css class name';
             assert.equal($('#component').get(0), $(`.dx-${className}`).get(0), message);

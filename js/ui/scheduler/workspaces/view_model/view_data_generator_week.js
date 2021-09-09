@@ -1,4 +1,4 @@
-import { calculateStartViewDate, getIntervalDuration } from '../utils/week';
+import { calculateStartViewDate, getIntervalDuration } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/week';
 import { ViewDataGenerator } from './view_data_generator';
 
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
@@ -14,7 +14,7 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
             options.startDayHour,
             options.startDate,
             this._getIntervalDuration(options.intervalCount),
-            options.firstDayOfWeek,
+            this.getFirstDayOfWeek(options.firstDayOfWeek),
         );
     }
 }

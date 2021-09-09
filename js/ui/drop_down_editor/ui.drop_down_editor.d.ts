@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import dxTextBox, {
@@ -13,19 +13,19 @@ import dxTextBox, {
 } from '../text_box';
 
 import {
-    dxTextEditorButton
+    dxTextEditorButton,
 } from '../text_box/ui.text_editor.base';
 
 import {
-    Properties as PopoverProperties
+    Properties as PopoverProperties,
 } from '../popover';
 
 import {
-    Properties as PopupProperties
+    Properties as PopupProperties,
 } from '../popup';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 export interface DropDownButtonTemplateDataModel {

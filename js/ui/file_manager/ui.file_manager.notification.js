@@ -138,6 +138,8 @@ export default class FileManagerNotificationControl extends Widget {
 
         if(!this._isProgressDrawerOpened() || !notificationManager.hasNoOperations()) {
             notificationManager.updateActionProgressStatus(operationInfo);
+        } else {
+            notificationManager.tryHideActionProgress();
         }
     }
 

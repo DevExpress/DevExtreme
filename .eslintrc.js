@@ -1,6 +1,3 @@
-const rulesDirPlugin = require('eslint-plugin-rulesdir');
-rulesDirPlugin.RULES_DIR = 'build/rules';
-
 module.exports = {
     'extends': [
         'devextreme/spell-check'
@@ -16,9 +13,6 @@ module.exports = {
             'jsx': true
         }
     },
-    plugins: [
-        'rulesdir'
-    ],
     'overrides': [
         {
             'files': [
@@ -184,7 +178,8 @@ module.exports = {
         },
         {
             'files': [
-                '*.ts?(x)'
+                '*.ts',
+                '*.tsx'
             ],
             'parser': '@typescript-eslint/parser',
             'extends': [
@@ -322,9 +317,8 @@ module.exports = {
                 '@typescript-eslint/no-misused-promises': 'error',
                 '@typescript-eslint/no-floating-promises': 'error',
                 '@typescript-eslint/no-unsafe-return': 'error',
-                'rulesdir/no-non-null-assertion': 'error',
                 '@typescript-eslint/no-unsafe-member-access': 'warn',
-                '@typescript-eslint/no-non-null-assertion': 'off'
+                '@typescript-eslint/no-non-null-assertion': 'error'
                 /*
             "@typescript-eslint/no-magic-numbers": "error",
             "no-return-await": "off",
@@ -335,6 +329,62 @@ module.exports = {
             "@typescript-eslint/strict-boolean-expressions": "error",
             "@typescript-eslint/unbound-method": "error",
             */
+            }
+        },
+        {
+            'files': [
+                '*.d.ts'
+            ],
+            'excludedFiles': 'js/renovation/**/*.d.ts',
+            'parser': '@typescript-eslint/parser',
+            'extends': [
+                'devextreme/typescript'
+            ],
+            'rules': {
+                '@typescript-eslint/no-non-null-assertion': 'warn',
+                '@typescript-eslint/explicit-function-return-type': 'error',
+                'no-return-await': 'error',
+                '@typescript-eslint/no-extraneous-class': 'error',
+                '@typescript-eslint/no-unsafe-assignment': 'warn',
+                '@typescript-eslint/restrict-template-expressions': 'warn',
+                '@typescript-eslint/no-unsafe-call': 'warn',
+                '@typescript-eslint/no-unnecessary-condition': 'warn',
+                '@typescript-eslint/strict-boolean-expressions': 'warn',
+                '@typescript-eslint/unbound-method': 'warn',
+                '@typescript-eslint/no-unsafe-member-access': 'warn',
+                '@typescript-eslint/member-delimiter-style': 'error',
+                '@typescript-eslint/indent': 'off',
+                '@typescript-eslint/quotes': ['error', 'single'],
+                'spaced-comment': 'off',
+                'max-len': 'off',
+                '@typescript-eslint/method-signature-style': 'off',
+                '@typescript-eslint/unified-signatures': 'off',
+                '@typescript-eslint/naming-convention': [
+                    'error',
+                    {
+                        'selector': 'interface',
+                        'format': ['PascalCase', 'camelCase'],
+                    },
+                    {
+                        'selector': 'class',
+                        'format': ['PascalCase', 'camelCase'],
+                    }
+                ],
+                '@typescript-eslint/array-type': 'off',
+                'no-irregular-whitespace': 'error',
+                'import/named': 'off',
+                'import/default': 'off',
+                '@typescript-eslint/no-type-alias': 'off',
+                '@typescript-eslint/member-ordering': 'off',
+                '@typescript-eslint/prefer-readonly-parameter-types': 'off',
+                '@typescript-eslint/no-explicit-any': 'off',
+                '@typescript-eslint/explicit-module-boundary-types': 'off',
+                '@typescript-eslint/explicit-member-accessibility': 'off',
+                '@typescript-eslint/no-unnecessary-type-arguments': 'off',
+                '@typescript-eslint/no-magic-numbers': 'off',
+                '@typescript-eslint/ban-types': 'off',
+                '@typescript-eslint/prefer-interface': 'off',
+                '@typescript-eslint/consistent-type-definitions': 'off',
             }
         },
         {

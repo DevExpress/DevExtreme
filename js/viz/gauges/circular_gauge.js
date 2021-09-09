@@ -66,15 +66,30 @@ const dxCircularGauge = dxGauge.inherit({
         const indentFromTick = scaleOptions.label.indentFromTick;
         const length = scaleOptions.tick.visible ? scaleOptions.tick.length : 0;
         const textParams = this._scale.measureLabels(extend({}, this._canvas));
-        let tickCorrection = length;
+        const scaleOrientation = scaleOptions.orientation;
+        const tickCorrection = length;
 
-        if(scaleOptions.orientation === 'inside') {
-            tickCorrection = 0;
-        } else if(scaleOptions.orientation === 'center') {
-            tickCorrection = 0.5 * length;
+        let indentFromAxis = indentFromTick;
+
+        if(indentFromTick >= 0) {
+            if(scaleOrientation === 'outside') {
+                indentFromAxis += tickCorrection;
+            } else if(scaleOrientation === 'center') {
+                indentFromAxis += tickCorrection / 2;
+            }
+        } else {
+            const labelCorrection = _max(textParams.width, textParams.height);
+            const rangeContainerWidth = this._getOption('rangeContainer').width;
+            indentFromAxis -= (labelCorrection + rangeContainerWidth);
+            if(scaleOrientation === 'inside') {
+                indentFromAxis -= tickCorrection;
+            } else if(scaleOrientation === 'center') {
+                indentFromAxis -= tickCorrection / 2;
+            }
         }
 
-        scaleOptions.label.indentFromAxis = indentFromTick >= 0 ? indentFromTick + tickCorrection : indentFromTick - tickCorrection - _max(textParams.width, textParams.height);
+        scaleOptions.label.indentFromAxis = indentFromAxis;
+
         this._scale.updateOptions(scaleOptions);
     },
 

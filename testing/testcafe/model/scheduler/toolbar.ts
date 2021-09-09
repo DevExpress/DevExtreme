@@ -5,18 +5,16 @@ const CLASS = {
   toolbar: 'dx-toolbar',
 };
 
-export default class SchedulerToolbar {
-  element: Selector;
+export default class Toolbar {
+  readonly element: Selector;
+
+  readonly navigator: Navigator;
+
+  readonly viewSwitcher: ViewSwitcher;
 
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.toolbar}`);
-  }
-
-  getNavigator(): Navigator {
-    return new Navigator(this.element);
-  }
-
-  getViewSwitcher(): ViewSwitcher {
-    return new ViewSwitcher(this.element);
+    this.navigator = new Navigator(this.element);
+    this.viewSwitcher = new ViewSwitcher(this.element);
   }
 }

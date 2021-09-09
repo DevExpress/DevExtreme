@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
+using Runner.Tools;
 using Directory = System.IO.Directory;
 using Path = System.IO.Path;
 
@@ -12,6 +13,7 @@ namespace Runner.Controllers
         string _bundlesPath;
         public ThemesTestController(IHostingEnvironment env)
         {
+            ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
             _bundlesPath = Path.Combine(env.ContentRootPath, "scss", "bundles");
         }
 

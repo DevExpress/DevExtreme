@@ -1,5 +1,5 @@
 import {
-    dxValidationGroupResult
+    dxValidationGroupResult,
 } from './validation_group';
 
 /**
@@ -10,6 +10,7 @@ import {
  * @export default
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class validationEngine {
     /**
      * @docid

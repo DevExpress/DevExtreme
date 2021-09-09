@@ -293,9 +293,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 text: 'Task 1',
                 startDate: new Date(2015, 1, 14),
                 endDate: new Date(2015, 1, 14, 1),
-                allDay: false,
-                recurrenceRule: '',
-                recurrenceException: ''
+                allDay: false
             };
 
             const pointer = pointerMock($(scheduler.appointments.getAppointment(0))).start().down().move(10, 10);
@@ -348,9 +346,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 startDate: new Date(2015, 1, 9, 0, 30),
                 endDate: new Date(2015, 1, 9, 1, 30),
                 priorityId: 2,
-                allDay: false,
-                recurrenceRule: '',
-                recurrenceException: ''
+                allDay: false
             };
 
             const pointer = pointerMock($(scheduler.appointments.getAppointment(0))).start().down().move(10, 10);
@@ -394,9 +390,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 text: 'Task 1',
                 startDate: new Date(2015, 1, 14),
                 endDate: new Date(2015, 1, 14, 1),
-                allDay: false,
-                recurrenceRule: '',
-                recurrenceException: ''
+                allDay: false
             };
 
             const pointer = pointerMock($(scheduler.appointments.getAppointment(2))).start().down().move(10, 10);
@@ -414,7 +408,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Appointment shouldn\'t render on view if he is excluded from recurrence', function(assert) {
+        test('Appointment should not render on view if he is excluded from recurrence', function(assert) {
             const scheduler = createWrapper({
                 currentDate: new Date(2015, 1, 12),
                 dataSource: [{
@@ -460,7 +454,7 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             const singleItem = scheduler.instance.option('dataSource').items()[1];
 
-            assert.equal(singleItem.recurrenceException, '', 'Single appointment data is correct');
+            assert.equal(singleItem.recurrenceException, undefined, 'Single appointment data is correct');
         });
 
         test('Recurrent Task dragging, single mode', function(assert) {
@@ -488,7 +482,6 @@ supportedScrollingModes.forEach(scrollingMode => {
                 startDate: new Date(2015, 1, 14, 0),
                 endDate: new Date(2015, 1, 14, 1),
                 allDay: false,
-                recurrenceRule: ''
             };
 
             const pointer = pointerMock($(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0)).start().down().move(10, 10);
@@ -500,11 +493,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
             const exceptionDate = new Date(2015, 1, 9, 1, 0, 0, 0);
 
-            assert.equal(updatedSingleItem.text, updatedItem.text, 'New data is correct');
-            assert.equal(updatedSingleItem.allDay, updatedItem.allDay, 'New data is correct');
-            assert.equal(updatedSingleItem.recurrenceRule, updatedItem.recurrenceRule, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.startDate, updatedItem.startDate, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.endDate, updatedItem.endDate, 'New data is correct');
+            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
 
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
@@ -564,9 +553,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedItem = {
                 text: 'Task 1',
                 startDate: new Date(2015, 1, 10, 1),
-                endDate: new Date(2015, 1, 10, 3),
-                allDay: false,
-                recurrenceRule: ''
+                endDate: new Date(2015, 1, 10, 3)
             };
 
             const cellHeight = $(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
@@ -580,9 +567,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
             const exceptionDate = new Date(2015, 1, 10, 1, 0, 0, 0);
 
-            assert.equal(updatedSingleItem.recurrenceRule, updatedItem.recurrenceRule, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.startDate, updatedItem.startDate, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.endDate, updatedItem.endDate, 'New data is correct');
+            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
 
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
@@ -686,8 +671,6 @@ supportedScrollingModes.forEach(scrollingMode => {
                 text: 'Task 2',
                 startDate: new Date(2015, 1, 11, 3),
                 endDate: new Date(2015, 1, 11, 4),
-                allDay: false,
-                recurrenceRule: ''
             };
 
             const scheduler = this.createInstance({
@@ -716,10 +699,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
             const exceptionDate = new Date(2015, 1, 11, 1, 0, 0, 0);
 
-            assert.equal(updatedSingleItem.text, updatedItem.text, 'New data is correct');
-            assert.equal(updatedSingleItem.recurrenceRule, updatedItem.recurrenceRule, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.startDate, updatedItem.startDate, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.endDate, updatedItem.endDate, 'New data is correct');
+            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
 
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
@@ -833,9 +813,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedItem = {
                 text: 'Task 2',
                 startDate: new Date(2015, 1, 11, 3),
-                endDate: new Date(2015, 1, 11, 4),
-                allDay: false,
-                recurrenceRule: ''
+                endDate: new Date(2015, 1, 11, 4)
             };
 
             const scheduler = this.createInstance({
@@ -864,11 +842,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
             const exceptionDate = new Date(2015, 1, 11, 1, 0, 0, 0);
 
-            assert.equal(updatedSingleItem.text, updatedItem.text, 'New data is correct');
-            assert.equal(updatedSingleItem.recurrenceRule, updatedItem.recurrenceRule, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.startDate, updatedItem.startDate, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.endDate, updatedItem.endDate, 'New data is correct');
-
+            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
@@ -899,7 +873,6 @@ supportedScrollingModes.forEach(scrollingMode => {
                 startDate: new Date(2015, 0, 26, 1),
                 endDate: new Date(2015, 0, 26, 2),
                 allDay: true,
-                recurrenceRule: ''
             };
 
             const pointer = pointerMock($(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0)).start().down().move(10, 10);
@@ -911,12 +884,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
             const exceptionDate = new Date(2015, 1, 9, 1, 0, 0, 0);
 
-            assert.equal(updatedSingleItem.text, updatedItem.text, 'New data is correct');
-            assert.equal(updatedSingleItem.allDay, updatedItem.allDay, 'New data is correct');
-            assert.equal(updatedSingleItem.recurrenceRule, updatedItem.recurrenceRule, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.startDate, updatedItem.startDate, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.endDate, updatedItem.endDate, 'New data is correct');
-
+            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
@@ -947,8 +915,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 text: 'Task 1',
                 startDate: new Date(2015, 0, 26),
                 endDate: new Date(2015, 0, 27),
-                allDay: true,
-                recurrenceRule: ''
+                allDay: true
             };
 
             const pointer = pointerMock($(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0)).start().down().move(10, 10);
@@ -961,12 +928,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
             const exceptionDate = new Date(2015, 1, 9, 0, 0, 0, 0);
 
-            assert.equal(updatedSingleItem.text, updatedItem.text, 'New data is correct');
-            assert.equal(updatedSingleItem.allDay, updatedItem.allDay, 'New data is correct');
-            assert.equal(updatedSingleItem.recurrenceRule, updatedItem.recurrenceRule, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.startDate, updatedItem.startDate, 'New data is correct');
-            assert.deepEqual(updatedSingleItem.endDate, updatedItem.endDate, 'New data is correct');
-
+            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 

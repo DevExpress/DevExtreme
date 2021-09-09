@@ -15,35 +15,38 @@ jest.mock('../../../../utils', () => ({
 
 describe('GroupPanel Vertical Layout', () => {
   describe('Render', () => {
-    const groupsRenderData = [[{
-      id: 'testId 1',
-      text: 'text 1',
-      color: 'color 1',
-      key: 'key 1',
-      resourceName: 'resource 1',
-      data: 'data 1',
-    }], [{
-      id: 'testId 2',
-      text: 'text 2',
-      color: 'color 2',
-      key: 'key 2',
-      resourceName: 'resource 2',
-      data: 'data 2',
-    }, {
-      id: 'testId 3',
-      text: 'text 3',
-      color: 'color 3',
-      key: 'key 3',
-      resourceName: 'resource 3',
-      data: 'data 3',
-    }]];
+    const groupPanelData = {
+      groupPanelItems: [[{
+        id: 'testId 1',
+        text: 'text 1',
+        color: 'color 1',
+        key: 'key 1',
+        resourceName: 'resource 1',
+        data: 'data 1',
+      }], [{
+        id: 'testId 2',
+        text: 'text 2',
+        color: 'color 2',
+        key: 'key 2',
+        resourceName: 'resource 2',
+        data: 'data 2',
+      }, {
+        id: 'testId 3',
+        text: 'text 3',
+        color: 'color 3',
+        key: 'key 3',
+        resourceName: 'resource 3',
+        data: 'data 3',
+      }]],
+      baseColSpan: 3,
+    };
     const defaultStyle = { color: 'red' };
 
     const render = (viewModel) => mount(LayoutView({
       style: defaultStyle,
       ...viewModel,
       props: {
-        groupsRenderData,
+        groupPanelData,
         ...viewModel.props,
       },
     }) as any);
@@ -84,12 +87,12 @@ describe('GroupPanel Vertical Layout', () => {
 
       expect(rows.at(0).props())
         .toMatchObject({
-          groupItems: groupsRenderData[0],
+          groupItems: groupPanelData.groupPanelItems[0],
           cellTemplate: resourceCellTemplate,
         });
       expect(rows.at(1).props())
         .toMatchObject({
-          groupItems: groupsRenderData[1],
+          groupItems: groupPanelData.groupPanelItems[1],
           cellTemplate: resourceCellTemplate,
         });
     });

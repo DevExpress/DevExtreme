@@ -26,15 +26,19 @@ export const getKeyByGroup = (
   return '0';
 };
 
-const addToStyle = (
-  attr: string,
-  value: string,
+export const addToStyles = (
+  options: {
+    attr: string;
+    value: string | number;
+  } [],
   style?: CSSAttributes,
 ): CSSAttributes => {
   const nextStyle = style ?? {};
   const result = { ...nextStyle };
 
-  result[attr] = value || nextStyle[attr];
+  options.forEach(({ attr, value }) => {
+    result[attr] = value || nextStyle[attr];
+  });
 
   return result;
 };
@@ -44,7 +48,7 @@ export const addHeightToStyle = (
   style?: CSSAttributes,
 ): CSSAttributes => {
   const height = value ? `${value}px` : '';
-  return addToStyle('height', height, style);
+  return addToStyles([{ attr: 'height', value: height }], style);
 };
 
 export const addWidthToStyle = (
@@ -52,7 +56,7 @@ export const addWidthToStyle = (
   style?: CSSAttributes,
 ): CSSAttributes => {
   const width = value ? `${value}px` : '';
-  return addToStyle('width', width, style);
+  return addToStyles([{ attr: 'width', value: width }], style);
 };
 
 export const getGroupCellClasses = (

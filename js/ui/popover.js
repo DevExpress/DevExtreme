@@ -47,6 +47,8 @@ const POSITION_ALIASES = {
     'left': { my: 'right center', at: 'left center', collision: 'flip fit' }
 };
 
+const DEFAULT_BOUNDARY_OFFSET = { h: POPOVER_BOUNDARY_OFFSET, v: POPOVER_BOUNDARY_OFFSET };
+
 const SIDE_BORDER_WIDTH_STYLES = {
     'left': 'borderLeftWidth',
     'top': 'borderTopWidth',
@@ -134,7 +136,7 @@ const Popover = Popup.inherit({
 
             shading: false,
 
-            position: 'bottom',
+            position: extend({}, POSITION_ALIASES.bottom),
 
             closeOnOutsideClick: true,
 
@@ -169,22 +171,40 @@ const Popover = Popup.inherit({
             resizeEnabled: false,
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name dxPopoverOptions.onResizeStart
-            * @extends Action
             * @action
             * @hidden
             */
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name dxPopoverOptions.onResize
-            * @extends Action
             * @action
             * @hidden
             */
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name dxPopoverOptions.onResizeEnd
-            * @extends Action
             * @action
             * @hidden
             */
@@ -195,10 +215,9 @@ const Popover = Popup.inherit({
             */
 
             fullScreen: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: POPOVER_BOUNDARY_OFFSET, v: POPOVER_BOUNDARY_OFFSET },
 
             _fixWrapperPosition: true
 
@@ -442,7 +461,7 @@ const Popover = Popup.inherit({
     },
 
     _isPopoverInside: function() {
-        const position = this._transformStringPosition(this.option('position'), POSITION_ALIASES);
+        const position = this._getPositionValue(POSITION_ALIASES);
 
         const my = positionUtils.setup.normalizeAlign(position.my);
         const at = positionUtils.setup.normalizeAlign(position.at);
@@ -472,20 +491,13 @@ const Popover = Popup.inherit({
     },
 
     _normalizePosition: function() {
-        const position = extend({}, this._transformStringPosition(this.option('position'), POSITION_ALIASES));
+        const defaultOptions = { of: this.option('target'), boundaryOffset: DEFAULT_BOUNDARY_OFFSET };
 
-        if(!position.of) {
-            position.of = this.option('target');
-        }
+        const position = extend(true, {}, defaultOptions, this._getPositionValue(POSITION_ALIASES));
 
-        if(!position.collision) {
+        if(!this._isInitialOptionValue('position') && this._isInitialOptionValue('position.collision')) {
             position.collision = 'flip';
         }
-
-        if(!position.boundaryOffset) {
-            position.boundaryOffset = this.option('boundaryOffset');
-        }
-
         this._positionSide = this._getDisplaySide(position);
 
         this._position = position;
@@ -528,7 +540,6 @@ const Popover = Popup.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'boundaryOffset':
             case 'arrowPosition':
             case 'arrowOffset':
                 this._renderGeometry();

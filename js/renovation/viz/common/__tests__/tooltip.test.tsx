@@ -84,13 +84,15 @@ describe('Render', () => {
   };
 
   const props = {
-    fontStyles: {
+    textSvgElementStyles: {
       fill: 'customized_font_color',
       fontFamily: 'test_family_color',
       opacity: 0.4,
       fontSize: 15,
       fontWeight: 600,
+      pointerEvents: 'auto',
     },
+    pointerEvents: 'auto',
     textSize: {
       width: 40, height: 30, x: 1, y: 2,
     },
@@ -234,7 +236,7 @@ describe('Render', () => {
   it('should be interactive', () => {
     const customizedProps = { ...props.props, interactive: true };
     const tooltip = shallow(TooltipComponent({
-      ...props, pointerEvents: 'auto', props: customizedProps,
+      ...props, props: customizedProps,
     } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
@@ -875,6 +877,27 @@ describe('Logic', () => {
     });
 
     afterEach(() => jest.resetAllMocks);
+
+    describe('textSvgElementStyles', () => {
+      it('should merge font styles with the pointerEvents', () => {
+        const tooltip = new Tooltip({
+          font: {
+            family: 'family',
+            size: 1,
+            weight: 2,
+            opacity: 0.1,
+          },
+        });
+        expect(tooltip.textSvgElementStyles).toEqual({
+          fontFamily: 'family',
+          fontSize: '1',
+          fontWeight: '2',
+          opacity: '0.1',
+          fill: 'customized_font_color',
+          pointerEvents: 'none',
+        });
+      });
+    });
 
     describe('fontStyles', () => {
       it('should build font styles', () => {

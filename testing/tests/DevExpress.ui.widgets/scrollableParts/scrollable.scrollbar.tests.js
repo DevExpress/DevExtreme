@@ -55,6 +55,8 @@ const moduleConfig = {
     }
 };
 
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
+
 QUnit.module('scrollbar', moduleConfig);
 
 QUnit.test('markup', function(assert) {
@@ -129,7 +131,7 @@ QUnit.test('scrollbar height calculated correctly', function(assert) {
     });
 
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
@@ -209,14 +211,18 @@ QUnit.test('scrollbar in scaled container has correct position after update', fu
     const contentHeight = 1000;
     const scaleRatio = 0.5;
     const distance = -100;
-    const expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
+    let expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
+
+    if(isRenovation) {
+        expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5));
+    }
 
     const $scrollable = $('#scaledScrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -246,7 +252,7 @@ QUnit.test('scrollbar width calculated correctly', function(assert) {
         direction: 'horizontal'
     });
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.width(containerWidth);
@@ -271,7 +277,7 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
         }
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -298,7 +304,7 @@ QUnit.test('scrollbar has correct position after update', function(assert) {
         inertiaEnabled: false
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -601,6 +607,12 @@ QUnit.test('content size should be rounded to prevent unexpected scrollbar appea
 });
 
 QUnit.test('scrollbar should be hidden when container size is almost similar to content size when zooming', function(assert) {
+    if(isRenovation) {
+        // uses private API specific for old widget only
+        assert.ok(true);
+        return;
+    }
+
     const scrollable = new Scrollable($('#scrollable'), {
         useNative: false
     });

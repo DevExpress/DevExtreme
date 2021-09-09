@@ -1,5 +1,5 @@
 import FileSystemProviderBase, {
-    FileSystemProviderBaseOptions
+    FileSystemProviderBaseOptions,
 } from './provider_base';
 
 import FileSystemItem from './file_system_item';

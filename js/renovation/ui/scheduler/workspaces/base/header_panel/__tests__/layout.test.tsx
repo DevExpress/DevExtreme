@@ -97,11 +97,13 @@ describe('HeaderPanelLayoutLayout', () => {
     it('should pass correct props to GroupPanel', () => {
       const resourceCellTemplate = () => null;
       const groupPanelProps = {
-        groupPanelCellBaseColSpan: 3,
-        columnCountPerGroup: 3,
         groupByDate: false,
         groups: [],
         resourceCellTemplate,
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
       };
 
       const layout = render({
@@ -113,12 +115,14 @@ describe('HeaderPanelLayoutLayout', () => {
 
       expect(groupPanel.props())
         .toEqual({
-          baseColSpan: 3,
-          columnCountPerGroup: 3,
           groupByDate: false,
           groups: [],
           resourceCellTemplate,
           groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
+          groupPanelData: {
+            groupPanelItems: [],
+            baseColSpan: 34,
+          },
         });
     });
 

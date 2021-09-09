@@ -26,8 +26,8 @@ test('Context menu should be shown in the same position when item was added in r
     .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset);
 }).before(async () => {
   const menuTargetID = 'menuTarget';
-  await appendElementTo('body', 'button', {
-    id: menuTargetID, width: 150, height: 50, backgroundColor: 'steelblue',
+  await appendElementTo('body', 'button', menuTargetID, {
+    width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 
   return createWidget('dxContextMenu', {

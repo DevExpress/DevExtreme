@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -13,24 +13,24 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxSelectBox, {
     dxSelectBoxOptions,
-    CustomItemCreatingInfo
+    CustomItemCreatingInfo,
 } from './select_box';
 
 /** @public */
@@ -80,7 +80,7 @@ export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
     readonly multiTagElement: DxElement;
     readonly selectedItems?: Array<string | number | any>;
     text?: string;
-}
+};
 
 /** @public */
 export type OpenedEvent = EventInfo<dxTagBox>;
@@ -91,7 +91,7 @@ export type OptionChangedEvent = EventInfo<dxTagBox> & ChangedOptionInfo;
 /** @public */
 export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
     readonly value: boolean;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;

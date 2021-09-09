@@ -1,21 +1,21 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    dxButtonOptions
+    dxButtonOptions,
 } from './button';
 
 /**
  * @public
  */
 export interface CustomDialogOptions {
-    title?: string,
-    messageHtml?: string,
-    buttons?: Array<dxButtonOptions>,
-    showTitle?: boolean,
-    message?: string,
-    dragEnabled?: boolean
+    title?: string;
+    messageHtml?: string;
+    buttons?: Array<dxButtonOptions>;
+    showTitle?: boolean;
+    message?: string;
+    dragEnabled?: boolean;
 }
 /**
  * @docid ui.dialog.alert
@@ -63,5 +63,3 @@ export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
  * @public
  */
 export function custom(options: CustomDialogOptions): any;
-
-

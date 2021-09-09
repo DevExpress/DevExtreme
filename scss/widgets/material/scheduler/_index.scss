@@ -479,7 +479,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
   padding-top: $material-scheduler-header-height;
-  margin-top: -$material-scheduler-header-height - 1;
+  margin-top: -$material-scheduler-header-height;
 
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
     .dx-scheduler-header-panel {

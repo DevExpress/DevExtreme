@@ -172,7 +172,8 @@ const Popup = Overlay.inherit({
                 },
                 options: {
                     useDefaultToolbarButtons: true,
-                    useFlatToolbarButtons: true
+                    useFlatToolbarButtons: true,
+                    showCloseButton: false
                 }
             }
         ]);

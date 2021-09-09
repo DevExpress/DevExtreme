@@ -573,7 +573,9 @@ export const AreaItem = Class.inherit({
     },
 
     _getMaxLeftOffset(scrollable) {
-        return scrollable._container().get(0).scrollWidth - scrollable._container().get(0).clientWidth;
+        const containerElement = $(scrollable.container()).get(0);
+
+        return containerElement.scrollWidth - containerElement.clientWidth;
     },
 
     on: function(eventName, handler) {
@@ -605,9 +607,9 @@ export const AreaItem = Class.inherit({
         if(scrollable) {
             if(this.option('rtlEnabled')) {
                 if(this._getAreaName() === 'column') {
-                    scrollablePos = this._getMaxLeftOffset(scrollable) - pos;
+                    scrollablePos = this._getMaxLeftOffset(scrollable) - pos.left;
                 } else if(this._getAreaName() === 'data') {
-                    scrollablePos = { x: this._getMaxLeftOffset(scrollable) - pos.x, y: pos.y };
+                    scrollablePos = { left: this._getMaxLeftOffset(scrollable) - pos.left, top: pos.top };
                 }
             }
             scrollable.scrollTo(scrollablePos);

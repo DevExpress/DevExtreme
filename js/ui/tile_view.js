@@ -502,3 +502,9 @@ const TileView = CollectionWidget.inherit({
 registerComponent('dxTileView', TileView);
 
 export default TileView;
+
+/**
+ * @name dxTileViewItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

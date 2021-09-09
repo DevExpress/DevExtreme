@@ -1,5 +1,5 @@
 import ArrayStore, {
-    ArrayStoreOptions
+    ArrayStoreOptions,
 } from './array_store';
 
 /** @namespace DevExpress.data */

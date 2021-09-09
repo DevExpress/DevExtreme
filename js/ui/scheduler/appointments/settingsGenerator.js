@@ -7,9 +7,11 @@ import { createResourcesTree, getGroupCount } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
 import { ExpressionUtils } from '../expressionUtils';
-import { isDateAndTimeView } from '../workspaces/utils/base';
+import { isDateAndTimeView } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { createFormattedDateText } from './textUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
+const APPOINTMENT_DATE_TEXT_FORMAT = 'TIME';
 
 export class DateGeneratorBaseStrategy {
     constructor(options) {
@@ -520,6 +522,7 @@ export class AppointmentSettingsGenerator {
     get rawAppointment() { return this.options.rawAppointment; }
     get resourceManager() { return this.options.resourceManager; }
     get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
+    get modelGroups() { return this.options.modelGroups; }
     get dateSettingsStrategy() {
         const options = {
             ...this.options,
@@ -566,15 +569,42 @@ export class AppointmentSettingsGenerator {
 
         cellPositions.forEach(({ coordinates, dateSettingIndex }) => {
             const dateSetting = dateSettings[dateSettingIndex];
+            const sourceAppointment = dateSetting.source;
+            const dateText = this._getAppointmentDateText(sourceAppointment);
+
+            const info = {
+                appointment: dateSetting,
+                sourceAppointment: dateSetting.source,
+                dateText,
+            };
+
+            this._setResourceColor(info, coordinates.groupIndex);
+
             infos.push({
                 ...coordinates,
-                info: {
-                    appointment: dateSetting,
-                    sourceAppointment: dateSetting.source
-                }
+                info
             });
         });
 
         return infos;
+    }
+    _getAppointmentDateText(sourceAppointment) {
+        const { startDate, endDate, allDay } = sourceAppointment;
+        return createFormattedDateText({
+            startDate,
+            endDate,
+            allDay,
+            format: APPOINTMENT_DATE_TEXT_FORMAT
+        });
+    }
+
+    _setResourceColor(info, groupIndex) {
+        this.resourceManager.getAppointmentColor({
+            itemData: this.rawAppointment,
+            groupIndex,
+            groups: this.modelGroups
+        }).done((color) => {
+            info.resourceColor = color;
+        });
     }
 }

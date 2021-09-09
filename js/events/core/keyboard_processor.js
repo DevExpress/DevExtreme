@@ -9,6 +9,21 @@ const COMPOSITION_END_EVENT = 'compositionend';
 const KEYDOWN_EVENT = 'keydown';
 const NAMESPACE = 'KeyboardProcessor';
 
+const createKeyDownOptions = (e) => {
+    return {
+        keyName: normalizeKeyName(e),
+        key: e.key,
+        code: e.code,
+        ctrl: e.ctrlKey,
+        location: e.location,
+        metaKey: e.metaKey,
+        shift: e.shiftKey,
+        alt: e.altKey,
+        which: e.which,
+        originalEvent: e
+    };
+};
+
 const KeyboardProcessor = Class.inherit({
     _keydown: addNamespace(KEYDOWN_EVENT, NAMESPACE),
     _compositionStart: addNamespace(COMPOSITION_START_EVENT, NAMESPACE),
@@ -53,18 +68,7 @@ const KeyboardProcessor = Class.inherit({
     },
 
     process: function(e) {
-        this._handler({
-            keyName: normalizeKeyName(e),
-            key: e.key,
-            code: e.code,
-            ctrl: e.ctrlKey,
-            location: e.location,
-            metaKey: e.metaKey,
-            shift: e.shiftKey,
-            alt: e.altKey,
-            which: e.which,
-            originalEvent: e
-        });
+        this._handler(createKeyDownOptions(e));
     },
 
     toggleProcessing: function({ type }) {
@@ -72,5 +76,7 @@ const KeyboardProcessor = Class.inherit({
         this._isComposingJustFinished = !this._isComposing;
     }
 });
+
+KeyboardProcessor.createKeyDownOptions = createKeyDownOptions;
 
 export default KeyboardProcessor;

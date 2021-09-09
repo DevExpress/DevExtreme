@@ -2,3 +2,13 @@
 
 // adduse
 
+$material-menu-vertical-padding: null !default;
+
+@if $size == "default" {
+  $material-menu-vertical-padding: 12px !default;
+}
+
+@if $size == "compact" {
+  $material-menu-vertical-padding: 8px !default;
+}
+

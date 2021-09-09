@@ -66,9 +66,10 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { getCellGroups } from './resources/utils';
+import { createResourceEditorModel, getCellGroups } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
-import { validateDayHours } from './workspaces/utils/base';
+import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { renderAppointments } from './appointments/render';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -83,6 +84,8 @@ const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
 const DEFAULT_AGENDA_DURATION = 7;
+const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
+const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 
 const VIEWS_CONFIG = {
     day: {
@@ -143,104 +146,6 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends Widget {
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
-            /**
-                * @pseudo StartDayHour
-                * @type number
-                * @default 0
-                */
-
-            /**
-                * @pseudo EndDayHour
-                * @type number
-                * @default 24
-                */
-
-            /**
-                * @pseudo Groups
-                * @type Array<string>
-                * @default []
-                */
-
-            /**
-                * @pseudo CellDuration
-                * @type number
-                * @default 30
-                */
-
-            /**
-                * @pseudo AppointmentTemplate
-                * @type template|function
-                * @default "item"
-                * @type_function_param1 model:object
-                * @type_function_param1_field1 appointmentData:object
-                * @type_function_param1_field2 targetedAppointmentData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo AppointmentTooltipTemplate
-                * @type template|function
-                * @default "appointmentTooltip"
-                * @type_function_param1 model:object
-                * @type_function_param1_field1 appointmentData:object
-                * @type_function_param1_field2 targetedAppointmentData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo DateCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo DataCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo TimeCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo ResourceCellTemplate
-                * @type template|function
-                * @default null
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
-
-            /**
-                * @pseudo AppointmentCollectorTemplate
-                * @type template|function
-                * @default "appointmentCollector"
-                * @type_function_param1 data:object
-                * @type_function_param1_field1 appointmentCount:number
-                * @type_function_param1_field2 isCompact:boolean
-                * @type_function_param2 collectorElement:DxElement
-                * @type_function_return string|Element|jQuery
-                */
 
             views: ['day', 'week'],
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
@@ -258,9 +163,9 @@ class Scheduler extends Widget {
 
             customizeDateNavigatorText: undefined,
 
-            appointmentTemplate: 'item',
+            appointmentTemplate: DEFAULT_APPOINTMENT_TEMPLATE_NAME,
 
-            appointmentCollectorTemplate: 'appointmentCollector',
+            appointmentCollectorTemplate: DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME,
 
             dataCellTemplate: null,
 
@@ -557,7 +462,6 @@ class Scheduler extends Widget {
                 break;
             case 'currentView':
                 this.modelProvider.updateCurrentView();
-                this.getLayoutManager()._initRenderingStrategy();
 
                 this._validateDayHours();
 
@@ -1009,9 +913,9 @@ class Scheduler extends Widget {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
             timeZone: this.option('timeZone'),
-            getDataAccessors: function(key) {
+            getDataAccessors: (key) => {
                 return utils.dataAccessors.combine(key, this._dataAccessors);
-            }.bind(this),
+            },
         });
     }
 
@@ -1112,20 +1016,43 @@ class Scheduler extends Widget {
             this._isAllDayExpanded(filteredItems)
         );
 
-        if(filteredItems.length && this._isVisible()) {
-            this._appointments.option('items', this._getAppointmentsToRepaint());
-            getAppointmentDataProvider(this.key).cleanState();
-        } else {
-            this._appointments.option('items', []);
+        let viewModel = [];
+        if(this._isVisible()) {
+            viewModel = this._getAppointmentsToRepaint();
         }
+
+        if(this.modelProvider.isRenovatedAppointments) {
+            renderAppointments({
+                instance: this,
+                $dateTable: this.getWorkSpace()._getDateTable(),
+                viewModel
+            });
+        } else {
+            this._appointments.option('items', viewModel);
+        }
+
+        getAppointmentDataProvider(this.key).cleanState();
     }
 
     _getAppointmentsToRepaint() {
         const { filteredItems } = getAppointmentDataProvider(this.key);
         const layoutManager = this.getLayoutManager();
 
-        const appointments = layoutManager.createAppointmentsMap(filteredItems);
-        return layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
+        const appointmentsMap = layoutManager.createAppointmentsMap(filteredItems);
+        if(this.modelProvider.isRenovatedAppointments) {
+            const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
+                ? this.option('appointmentTemplate')
+                : undefined;
+            return {
+                appointments: appointmentsMap,
+                appointmentTemplate
+            };
+        }
+
+        return layoutManager.getRepaintedAppointments(
+            appointmentsMap,
+            this.getAppointmentsInstance().option('items')
+        );
     }
 
     _initExpressions(fields) {
@@ -1297,9 +1224,14 @@ class Scheduler extends Widget {
 
     createAppointmentForm() {
         const scheduler = {
-            getResourceManager: () => this.fire('getResourceManager'),
+            createResourceEditorModel: () => {
+                const resourceManager = this.fire('getResourceManager');
+                return createResourceEditorModel(resourceManager.getResources(), resourceManager.loadedResources);
+            },
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
+
+            getEditingConfig: () => this._editing,
 
             getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
             getStartDayHour: () => this.option('startDayHour'),
@@ -1461,6 +1393,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
             groups: this._getCurrentViewOption('groups'),
+            isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
                 const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
@@ -1601,6 +1534,7 @@ class Scheduler extends Widget {
 
             // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),
+            isRenovatedAppointments: this.modelProvider.isRenovatedAppointments
         }, currentViewOptions);
 
         result.observer = this;
@@ -1745,23 +1679,22 @@ class Scheduler extends Widget {
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
         const appointment = createAppointmentAdapter(this.key, { ...rawAppointment });
-        const newAppointment = createAppointmentAdapter(this.key, newRawAppointment);
+        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
-        newAppointment.recurrenceRule = '';
-        newAppointment.recurrenceException = '';
+        const singleRawAppointment = { ...newRawAppointment };
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
+        delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
+
+        const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
+        delete singleRawAppointment[keyPropertyName];
 
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
-            const keyPropertyName = getAppointmentDataProvider(this.key).keyName;
-            delete newRawAppointment[keyPropertyName];
-
-            this.addAppointment(newRawAppointment);
+            this.addAppointment(singleRawAppointment);
         }
 
-        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
-
         if(isPopupEditing) {
-            this._appointmentPopup.show(newRawAppointment, {
+            this._appointmentPopup.show(singleRawAppointment, {
                 isToolbarVisible: true,
                 action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
                 excludeInfo: {
@@ -1770,7 +1703,6 @@ class Scheduler extends Widget {
                 }
             });
             this._editAppointmentData = rawAppointment;
-
         } else {
             this._updateAppointment(rawAppointment, appointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
@@ -2189,7 +2121,7 @@ class Scheduler extends Widget {
         const result = {};
         const toMs = dateUtils.dateToMilliseconds;
 
-        const startDate = this.option('currentDate');
+        const startDate = new Date(this.option('currentDate'));
         const endDate = new Date(startDate.getTime() + this.option('cellDuration') * toMs('minute'));
 
         ExpressionUtils.setField(this.key, 'startDate', result, startDate);
@@ -2200,7 +2132,7 @@ class Scheduler extends Widget {
 
     hideAppointmentPopup(saveChanges) {
         if(this._appointmentPopup?.visible) {
-            saveChanges && this._appointmentPopup.saveChanges();
+            saveChanges && this._appointmentPopup.saveChangesAsync();
             this._appointmentPopup.hide();
         }
     }

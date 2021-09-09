@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from '../palette';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
 import {
     EventInfo,
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
-import { 
-    Format
+import {
+    Format,
   } from '../../localization';
 
 import {
@@ -33,7 +33,7 @@ import {
     chartSeriesObject,
     dxChartAnnotationConfig,
     dxChartSeriesTypesCommonSeriesLabel,
-    dxChartSeriesTypesCommonSeriesPoint
+    dxChartSeriesTypesCommonSeriesPoint,
 } from '../chart';
 
 import {
@@ -44,7 +44,7 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    BaseWidgetAnnotationConfig
+    BaseWidgetAnnotationConfig,
 } from '../core/base_widget';
 
 export interface PointInteractionInfo {
@@ -72,23 +72,23 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
        * @docid
        * @default 1000
        */
-      duration?: number,
+      duration?: number;
       /**
        * @docid
        * @type Enums.VizAnimationEasing
        * @default 'easeOutCubic'
        */
-      easing?: 'easeOutCubic' | 'linear',
+      easing?: 'easeOutCubic' | 'linear';
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 300
        */
-      maxPointCountSupported?: number
+      maxPointCountSupported?: number;
     } | boolean;
     /**
      * @docid
@@ -106,7 +106,8 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     customizePoint?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint);
     /**
      * @docid BaseChartOptions.dataSource
-     * @extends CommonVizDataSource
+     * @type Array<any>|Store|DataSource|DataSourceOptions|string
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -193,7 +194,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -271,7 +272,8 @@ export interface BaseChartLegend extends BaseLegend {
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
-     * @extends CommonVizFormat
+     * @type Format
+     * @default undefined
      * @public
      */
     argumentFormat?: Format;

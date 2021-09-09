@@ -20,7 +20,6 @@ declare function setTemplateEngine(templateEngineName: string): void;
  * @export default
  * @public
  */
-declare function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
-
+declare function setTemplateEngine(templateEngineOptions: { compile?: Function; render?: Function }): void;
 
 export default setTemplateEngine;

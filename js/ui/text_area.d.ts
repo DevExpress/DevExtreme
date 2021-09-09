@@ -2,15 +2,15 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
 } from './text_box';
 
 /** @public */
