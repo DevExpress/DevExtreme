@@ -500,7 +500,6 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 if(isAsync) {
                     click();
                 } else {
-
                     const clock = sinon.useFakeTimers();
 
                     click();
