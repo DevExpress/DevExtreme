@@ -204,7 +204,7 @@ export const GanttHelper = {
                 ascendingText: messageLocalization.format('dxGantt-sortingAscendingText'),
                 descendingText: messageLocalization.format('dxGantt-sortingDescendingText'),
                 clearText: messageLocalization.format('dxGantt-sortingClearText'),
-                mode: 'none',
+                mode: 'single',
                 showSortIndexes: false
             }
         };

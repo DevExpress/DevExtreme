@@ -15,9 +15,9 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,line,10,26.5,{baseline:middle}',
+                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
-                    'setFontSize,16'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -40,9 +40,9 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,line,10,26.5,{baseline:middle}',
+                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
-                    'setFontSize,16'
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
@@ -65,9 +65,9 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,line,10,26.5,{baseline:middle}',
+                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
-                    'setFontSize,16'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 10 }; };
