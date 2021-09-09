@@ -313,7 +313,8 @@ let maxID = employees[employees.length - 1].ID;
 
 export default {
   getMaxID() {
-    return maxID += 1;
+    maxID += 1;
+    return maxID;
   },
   getEmployees() {
     return employees;

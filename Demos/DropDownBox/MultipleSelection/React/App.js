@@ -79,7 +79,7 @@ class App extends React.Component {
   treeViewRender() {
     return (
       <TreeView dataSource={this.treeDataSource}
-        ref={(ref) => this.treeView = ref}
+        ref={(ref) => { this.treeView = ref; }}
         dataStructure="plain"
         keyExpr="ID"
         parentIdExpr="categoryId"

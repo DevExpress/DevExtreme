@@ -26,7 +26,7 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Chart ref={(ref) => this.chart = ref.instance}>
+        <Chart ref={(ref) => { this.chart = ref.instance; }}>
           <Size height={320} />
           <Tooltip enabled={true} customizeTooltip={customizeTooltip} />
           <CommonSeriesSettings type="bar" />
@@ -43,7 +43,7 @@ class App extends React.Component {
           showColumnGrandTotals={false}
           showRowTotals={false}
           showRowGrandTotals={false}
-          ref={(ref) => this.pivotGrid = ref.instance}
+          ref={(ref) => { this.pivotGrid = ref.instance; }}
         >
           <FieldChooser enabled={true} height={400} />
         </PivotGrid>

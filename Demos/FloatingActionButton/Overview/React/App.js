@@ -62,7 +62,7 @@ class App extends React.Component {
           id="grid"
           dataSource={employees}
           keyExpr="ID"
-          ref={(ref) => this.grid = ref}
+          ref={(ref) => { this.grid = ref; }}
           showBorders={true}
           onSelectionChanged={this.selectionChanged}>
           <Column dataField="Prefix" caption="Title" />

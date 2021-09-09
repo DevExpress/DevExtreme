@@ -61,7 +61,7 @@ class App extends React.Component {
     return (
       <div>
         <DataGrid id="gridContainer"
-          ref={(ref) => this.dataGrid = ref}
+          ref={(ref) => { this.dataGrid = ref; }}
           dataSource={this.orders}
           keyExpr="ID"
           showBorders={true}>

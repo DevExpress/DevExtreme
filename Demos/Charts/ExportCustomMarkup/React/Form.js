@@ -8,7 +8,7 @@ class Form extends React.Component {
 
   render() {
     return (
-      <div id="custom_markup_container" ref={(node) => this.node = node}>
+      <div id="custom_markup_container" ref={(node) => { this.node = node; }}>
         <svg width="820px" height="420px">
           <path d="M 13 407 L 128 407 L 232 39 L 13 39" fill="#6D39C3"></path>
           <path d="M 46 381 L 161 381 L 265 13 L 46 13" opacity="0.5" fill="#6D39C3"></path>

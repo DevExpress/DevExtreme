@@ -81,7 +81,7 @@ export default {
         location: 'before',
         options: {
           icon: 'menu',
-          onClick: () => this.openState = !this.openState,
+          onClick: () => { this.openState = !this.openState; },
         },
       }],
     };

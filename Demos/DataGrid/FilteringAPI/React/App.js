@@ -51,7 +51,7 @@ class App extends React.Component {
 
         <DataGrid
           id="gridContainer"
-          ref={(ref) => this.dataGrid = ref}
+          ref={(ref) => { this.dataGrid = ref; }}
           dataSource={dataSourceOptions}
           columnAutoWidth={true}
           showBorders={true}

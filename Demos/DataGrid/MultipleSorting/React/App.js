@@ -23,7 +23,7 @@ class App extends React.Component {
           dataSource={employees}
           keyExpr="ID"
           showBorders={true}
-          ref={(ref) => this.dataGrid = ref}
+          ref={(ref) => { this.dataGrid = ref; }}
         >
           <Sorting mode="multiple" />
 

@@ -42,7 +42,7 @@ class App extends React.Component {
           dataSource={employees}
           keyExpr="ID"
           onSelectionChanged={this.onSelectionChanged}
-          ref={(ref) => this.dataGrid = ref}
+          ref={(ref) => { this.dataGrid = ref; }}
           selectedRowKeys={selectedRowKeys}
           showBorders={true}
         >
