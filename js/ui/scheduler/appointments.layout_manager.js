@@ -81,7 +81,6 @@ class AppointmentLayoutManager {
             intervalDuration: workspace.getIntervalDuration(),
             isVerticalOrientation: workspace.isVerticalOrientation(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
-            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
             DOMMetaData: workspace.getDOMElementsMetaData(),
         };
     }

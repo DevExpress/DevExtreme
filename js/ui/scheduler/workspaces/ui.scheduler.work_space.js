@@ -1319,14 +1319,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return index;
     }
 
-    getPositionShift(timeShift, isAllDay) {
-        return {
-            top: timeShift * this.getCellHeight(),
-            left: 0,
-            cellPosition: 0
-        };
-    }
-
     getDroppableCellIndex() {
         const $droppableCell = this._getDroppableCell();
         const $row = $droppableCell.parent();
@@ -2240,7 +2232,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
-            getPositionShiftCallback: this.getPositionShift.bind(this),
             getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
         });
     }

@@ -375,6 +375,18 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     _needHorizontalGroupBounds() {
         return false;
     }
+
+    getPositionShift(timeShift, isAllDay) {
+        if(!isAllDay && this.isAdaptive && this._getMaxAppointmentCountPerCellByType(isAllDay) === 0) {
+            return {
+                top: 0,
+                left: 0,
+                cellPosition: 0
+            };
+        }
+
+        return super.getPositionShift(timeShift, isAllDay);
+    }
 }
 
 export default VerticalRenderingStrategy;
