@@ -170,6 +170,11 @@ const Popover = Popup.inherit({
             */
 
             /**
+            * @name dxPopoverOptions.dragAndResizeArea
+            * @hidden
+            */
+
+            /**
             * @name dxPopoverOptions.resizeEnabled
             * @hidden
             */

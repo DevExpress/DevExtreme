@@ -73,6 +73,11 @@ const LoadPanel = Overlay.inherit({
             */
 
             /**
+            * @name dxLoadPanelOptions.dragAndResizeArea
+            * @hidden
+            */
+
+            /**
             * @name dxLoadPanelOptions.contentTemplate
             * @hidden
             */
