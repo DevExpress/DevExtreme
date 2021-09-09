@@ -109,7 +109,7 @@ function recalculateHeightForMergedRows(doc, rows) {
     rows.forEach((currentRow, rowIndex) => {
         currentRow.cells.forEach(cell => {
             cell.pdfCell._rect.h = rows
-                .slice(rowIndex, rowIndex + (isDefined(cell.rowSpan) ? getRowsCount(cell.rowSpan) : 1))
+                .slice(rowIndex, rowIndex + getRowsCount(cell.rowSpan ?? 0))
                 .reduce((accumulator, row) => row.height + accumulator, 0);
         });
     });
