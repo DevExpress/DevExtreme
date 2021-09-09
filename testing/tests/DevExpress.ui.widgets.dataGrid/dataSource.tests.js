@@ -6458,6 +6458,66 @@ QUnit.module('Cache', {
         assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items from cache');
     });
 
+    QUnit.test('New mode. Data should be loaded from the cache with the same load params if remote groupPaging', function(assert) {
+        const remoteGroupPaging = true;
+        const array = [
+            { group1: 1, group2: 1, id: 1 },
+            { group1: 1, group2: 1, id: 2 },
+            { group1: 1, group2: 1, id: 3 },
+            { group1: 1, group2: 1, id: 4 },
+            { group1: 1, group2: 2, id: 5 },
+            { group1: 2, group2: 1, id: 6 },
+        ];
+
+        const dataSource = createDataSourceWithRemoteGrouping({
+            store: array,
+            paginate: true,
+            pageSize: 2,
+            requireTotalCount: true,
+            requireGroupCount: true,
+            group: ['group1', 'group2'],
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            }
+        }, remoteGroupPaging);
+
+        dataSource.load();
+        dataSource.changeRowExpand([1]);
+        dataSource.load();
+        dataSource.changeRowExpand([1, 1]);
+        dataSource.load();
+        dataSource.pageIndex(1);
+        dataSource.load();
+        dataSource.pageIndex(2);
+        dataSource.load();
+
+        this.loadingCount = 0;
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.load();
+
+        // assert
+        assert.equal(this.loadingCount, 0, 'no load during back scroll');
+        assert.deepEqual(dataSource.items(), [{
+            'isContinuation': true,
+            'isContinuationOnNextPage': true,
+            'items': [
+                {
+                    'isContinuation': true,
+                    'items': [
+                        array[0],
+                        array[1]
+                    ],
+                    'key': 1
+                }
+            ],
+            'key': 1
+        }], 'items on the second load');
+    });
+
     QUnit.test('New mode. Cache should not be reset when pageSize is changed', function(assert) {
         const dataSource = this.createDataSource({
             remoteOperations: {
