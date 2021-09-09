@@ -2,8 +2,8 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
   $scope.searchValue = '';
-  $scope.productName = '',
-  $scope.productPrice = '',
+  $scope.productName = '';
+  $scope.productPrice = '';
   $scope.productImage = '';
 
   $scope.treeViewOptions = {

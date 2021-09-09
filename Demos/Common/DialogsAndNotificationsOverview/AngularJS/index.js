@@ -1,7 +1,7 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
-  $scope.ADD_TO_FAVORITES = 'Add to Favorites',
+  $scope.ADD_TO_FAVORITES = 'Add to Favorites';
   $scope.REMOVE_FROM_FAVORITES = 'Remove from Favorites';
   $scope.houses = houses;
   $scope.currentHouse = $scope.houses[0];

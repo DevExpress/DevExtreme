@@ -13,8 +13,8 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.orientation = 'horizontal';
   $scope.closeOnMouseLeave = false;
 
-  $scope.productName = '',
-  $scope.productPrice = '',
+  $scope.productName = '';
+  $scope.productPrice = '';
   $scope.productImage = '';
 
   $scope.menuOptions = {

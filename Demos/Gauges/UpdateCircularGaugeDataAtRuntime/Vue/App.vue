@@ -83,7 +83,7 @@ export default {
       return `${valueText} °C`;
     },
     onSelectionChanged({ selectedItem }) {
-      this.value = selectedItem.mean,
+      this.value = selectedItem.mean;
       this.subvalues = [selectedItem.min, selectedItem.max];
     },
   },
