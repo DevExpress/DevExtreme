@@ -13,7 +13,7 @@ function updateRowsAndCellsHeights(doc, rows) {
             const rowsCount = (cell.rowSpan ?? 0) + 1;
             cell.pdfCell._rect.h = rows
                 .slice(row.rowIndex, row.rowIndex + rowsCount)
-                .reduce((accumulator, rowInfo) => rowInfo.height + accumulator, 0);
+                .reduce((accumulator, rowInfo) => accumulator + rowInfo.height, 0);
         });
     });
 }
@@ -31,8 +31,12 @@ function calculateAdditionalRowsHeights(doc, rows) {
                 wordWrapEnabled: cell.pdfCell.wordWrapEnabled,
                 columnWidth: cell.pdfCell._rect.w
             });
-            const rowsCount = (cell.rowSpan ?? 0) + 1;
-            const summaryRowsHeight = calculateSummaryRowsHeight(rows, rowsAdditionalHeights, row.rowIndex, rowsCount);
+
+            const rowsCount = cell.rowSpan + 1;
+            const summaryRowsHeight = rows
+                .slice(row.rowIndex, row.rowIndex + rowsCount)
+                .reduce((accumulator, rowInfo) => accumulator + rowInfo.height + rowsAdditionalHeights[rowInfo.rowIndex], 0);
+
             if(cellTextHeight > summaryRowsHeight) {
                 const delta = (cellTextHeight - summaryRowsHeight) / rowsCount;
                 for(let spanIndex = row.rowIndex; spanIndex < row.rowIndex + rowsCount; spanIndex++) {
@@ -45,21 +49,16 @@ function calculateAdditionalRowsHeights(doc, rows) {
     return rowsAdditionalHeights;
 }
 
-function calculateSummaryRowsHeight(rows, rowsAdditionalHeights, rowFromIndex, rowsCount) {
-    return rows
-        .slice(rowFromIndex, rowFromIndex + rowsCount)
-        .reduce((accumulator, row) => accumulator + row.height + rowsAdditionalHeights[row.rowIndex], 0);
-}
-
 function sortRowsByMaxRowSpanAsc(rows) {
     const getMaxRowSpan = (row) => {
-        const rowSpansArray = row.cells.map(cell => cell.rowSpan ?? 0);
-        return Math.max(...rowSpansArray, 0);
+        const spansArray = row.cells.map(cell => cell.rowSpan ?? 0);
+        return Math.max(...spansArray);
     };
 
     const sortByMaxRowSpan = (row1, row2) => {
         const row1RowSpan = getMaxRowSpan(row1);
         const row2RowSpan = getMaxRowSpan(row2);
+
         if(row1RowSpan > row2RowSpan) {
             return 1;
         }
