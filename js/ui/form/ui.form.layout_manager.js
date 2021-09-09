@@ -31,8 +31,8 @@ import '../button';
 
 import { getLabelWidthByText } from './components/label';
 import { renderFieldItemTo } from './components/field_item.js';
-import { renderButtonItemTo } from './components/button_item.js';
-import { renderEmptyItemTo } from './components/empty_item.js';
+import { renderButtonItem } from './components/button_item.js';
+import { renderEmptyItem } from './components/empty_item.js';
 import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
@@ -351,15 +351,15 @@ const LayoutManager = Widget.inherit({
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
 
-                const itemCssClasses = [item.cssClass];
+                let itemRootElementCssClasses = item.cssClass;
 
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
-                    itemCssClasses.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
+                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_FIRST_ROW_CLASS;
                 }
                 if(e.location.col === 0) {
-                    itemCssClasses.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
+                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_FIRST_COL_CLASS;
                 }
 
                 if(item.itemType === SIMPLE_ITEM_TYPE && that.option('isRoot')) {
@@ -369,23 +369,26 @@ const LayoutManager = Widget.inherit({
                 const rowsCount = that._getRowsCount();
                 const isLastRow = e.location.row === rowsCount - 1;
                 if(isLastColumn) {
-                    itemCssClasses.push(LAYOUT_MANAGER_LAST_COL_CLASS);
+                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_LAST_COL_CLASS;
                 }
                 if(isLastRow) {
-                    itemCssClasses.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
+                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_LAST_ROW_CLASS;
                 }
 
                 const $fieldItem = $('<div>');
-                $fieldItem.appendTo($itemElement);
-                itemCssClasses.forEach(cssClass => $fieldItem.addClass(cssClass));
                 switch(item.itemType) {
                     case 'empty':
-                        renderEmptyItemTo({ $container: $fieldItem });
+                        renderEmptyItem()
+                            .addClass(itemRootElementCssClasses)
+                            .appendTo($itemElement);
                         break;
                     case 'button':
-                        that._renderButtonItem(item, $fieldItem);
+                        that._renderButtonItem({ item, $parent: $itemElement, itemRootElementCssClasses });
                         break;
                     default:
+                        $fieldItem
+                            .addClass(itemRootElementCssClasses)
+                            .appendTo($itemElement);
                         that._renderFieldItem(item, $fieldItem);
                 }
             },
@@ -511,28 +514,29 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderEmptyItem: function($container) {
-        renderEmptyItemTo({ $container });
+        renderEmptyItem({ $container });
     },
 
-    _renderButtonItem: function(item, $container) {
-        $container
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
+    _renderButtonItem: function({ item, $parent, itemRootElementCssClasses }) {
+        itemRootElementCssClasses += ' ' + FIELD_ITEM_CLASS + ' ' + this.option('cssItemClass');
+        if(isDefined(item.col)) {
+            itemRootElementCssClasses += ' dx-col-' + item.col;
+        }
 
-        const instance = renderButtonItemTo({
+        const { $itemRootElement, buttonInstance } = renderButtonItem({
             item,
-            $container,
+            $parent,
+            itemRootElementCssClasses,
             validationGroup: this.option('validationGroup'),
             createComponentCallback: this._createComponent.bind(this),
-            cssItemClass: this.option('cssItemClass'),
         });
 
         // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: instance, // TODO: try to remove 'widgetInstance'
+            widgetInstance: buttonInstance, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
-            $itemContainer: $container
+            $itemContainer: $itemRootElement
         });
     },
 
