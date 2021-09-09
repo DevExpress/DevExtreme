@@ -19,4 +19,5 @@ export function getFieldName(fullName: string): string;
 
 export function getParentName(fullName: string): string;
 
-export function createDefaultOptionRules<T>(options?: DefaultOptionsRule<T>[]): DefaultOptionsRule<T>[];
+// TODO: Remove Required<T> after https://trello.com/c/me612NxO/2872-rename-rule-to-defauloptionrule is ready
+export function createDefaultOptionRules<T>(options?: DefaultOptionsRule<T>[]): Required<DefaultOptionsRule<T>>[];
