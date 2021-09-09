@@ -68,27 +68,30 @@ function applyRowSpans(rows) {
 }
 
 function applyBordersConfig(rows) {
-    for(let r = 0; r < rows.length; r++) {
-        const cells = rows[r].cells;
-        for(let i = 0; i < cells.length; i++) {
-            const currentCell = cells[i];
-            if(currentCell.pdfCell.drawLeftBorder === false && !isDefined(currentCell.pdfCell.colSpan)) { // TODO
-                if(i >= 1) {
-                    cells[i - 1].pdfCell.drawRightBorder = false;
+    for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        const cells = rows[rowIndex].cells;
+        for(let columnIndex = 0; columnIndex < cells.length; columnIndex++) {
+            const pdfCell = cells[columnIndex].pdfCell;
+            const leftPdfCell = (columnIndex >= 1) ? cells[columnIndex - 1].pdfCell : null;
+            const topPdfCell = (rowIndex >= 1) ? rows[rowIndex - 1].cells[columnIndex].pdfCell : null;
+
+            if(pdfCell.drawLeftBorder === false && !isDefined(pdfCell.colSpan)) { // TODO
+                if(isDefined(leftPdfCell)) {
+                    leftPdfCell.drawRightBorder = false;
                 }
-            } else if(!isDefined(currentCell.pdfCell.drawLeftBorder)) {
-                if(i >= 1 && cells[i - 1].pdfCell.drawRightBorder === false) {
-                    currentCell.pdfCell.drawLeftBorder = false;
+            } else if(!isDefined(pdfCell.drawLeftBorder)) {
+                if(isDefined(leftPdfCell) && leftPdfCell.drawRightBorder === false) {
+                    pdfCell.drawLeftBorder = false;
                 }
             }
 
-            if(currentCell.pdfCell.drawTopBorder === false) {
-                if(r >= 1) {
-                    rows[r - 1].cells[i].pdfCell.drawBottomBorder = false;
+            if(pdfCell.drawTopBorder === false) {
+                if(isDefined(topPdfCell)) {
+                    topPdfCell.drawBottomBorder = false;
                 }
-            } else if(!isDefined(currentCell.pdfCell.drawTopBorder)) {
-                if(r >= 1 && rows[r - 1].cells[i].pdfCell.drawBottomBorder === false) {
-                    currentCell.pdfCell.drawTopBorder = false;
+            } else if(!isDefined(pdfCell.drawTopBorder)) {
+                if(isDefined(topPdfCell) && topPdfCell.drawBottomBorder === false) {
+                    pdfCell.drawTopBorder = false;
                 }
             }
         }
@@ -109,24 +112,16 @@ function calculateCoordinates(doc, rows, options) {
 }
 
 function calculateTableSize(doc, rows, options) {
-    const tableRect = {
-        x: options?.topLeft?.x ?? 0,
-        y: options?.topLeft?.y ?? 0,
-        w: 0,
-        h: 0
-    };
+    const topLeft = options?.topLeft;
+    const columnWidths = options?.columnWidths;
+    const rowHeights = rows.map(row => row.height);
 
-    if(isDefined(rows)) {
-        const lastRow = rows[rows.length - 1];
-        if(isDefined(lastRow)) {
-            const lastCell = lastRow[lastRow.length - 1];
-            if(isDefined(lastCell)) {
-                tableRect.w = lastCell._rect.x + lastCell._rect.w;
-                tableRect.h = lastCell._rect.y + lastCell._rect.h;
-            }
-        }
-    }
-    return tableRect;
+    return {
+        x: topLeft?.x ?? 0,
+        y: topLeft?.y ?? 0,
+        w: columnWidths?.reduce((a, b) => a + b, 0) ?? 0,
+        h: rowHeights?.reduce((a, b) => a + b, 0) ?? 0
+    };
 }
 
 export { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };

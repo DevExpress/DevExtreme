@@ -77,7 +77,10 @@ function exportDataGrid(doc, dataGrid, options) {
 
             drawCellsContent(doc, pdfCellsInfo);
             drawCellsLines(doc, pdfCellsInfo);
-            if(isDefined(options.drawTableBorder) ? options.drawTableBorder : (isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0)) {
+
+            const isDrawTableBorderSpecified = options.drawTableBorder === true;
+            const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
+            if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
                 const tableRect = calculateTableSize(doc, rowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
                 drawGridLines(doc, tableRect);
             }
