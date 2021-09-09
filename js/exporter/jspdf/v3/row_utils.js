@@ -93,9 +93,9 @@ function recalculateHeightForMergedRows(doc, rows) {
                     wordWrapEnabled: pdfCell.wordWrapEnabled,
                     columnWidth: pdfCell._rect.w
                 });
-                const summaryHeight = calculateSummaryRowsHeightWithAdditionalHeights(row.rowIndex, cell.rowSpan);
-                if(textHeight > summaryHeight) {
-                    const delta = (textHeight - summaryHeight) / getRowsCount(cell.rowSpan);
+                const summaryRowHeight = calculateSummaryRowsHeightWithAdditionalHeights(row.rowIndex, cell.rowSpan);
+                if(textHeight > summaryRowHeight) {
+                    const delta = (textHeight - summaryRowHeight) / getRowsCount(cell.rowSpan);
                     for(let spanIndex = row.rowIndex; spanIndex < row.rowIndex + getRowsCount(cell.rowSpan); spanIndex++) {
                         rowsAdditionalHeights[spanIndex] += delta;
                     }
