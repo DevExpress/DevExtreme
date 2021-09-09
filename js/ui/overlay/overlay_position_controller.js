@@ -50,7 +50,8 @@ class OverlayPositionController {
         position, target, container,
         $root, $content, $wrapper,
         onPositioned,
-        allowDragOutside, dragAndResizeArea, outsideDragFactor
+        allowDragOutside, dragAndResizeArea, outsideDragFactor,
+        _fixWrapperPosition
     }) {
         this._props = {
             position,
@@ -58,7 +59,8 @@ class OverlayPositionController {
             container,
             allowDragOutside,
             dragAndResizeArea,
-            outsideDragFactor
+            outsideDragFactor,
+            _fixWrapperPosition
         };
 
         this._onPositioned = onPositioned;
@@ -79,6 +81,12 @@ class OverlayPositionController {
 
     get $dragResizeContainer() {
         return this._$dragResizeContainer;
+    }
+
+    set fixWrapperPosition(fixWrapperPosition) {
+        this._props._fixWrapperPosition = fixWrapperPosition;
+
+        this.styleWrapperPosition();
     }
 
     set dragAndResizeArea(dragAndResizeArea) {
@@ -160,8 +168,15 @@ class OverlayPositionController {
         }
     }
 
-    isContainerWindow() {
+    isAllWindowCoveredByWrapper() {
         return !this._$wrapperCoveredElement || isWindow(this._$wrapperCoveredElement);
+    }
+
+    styleWrapperPosition() {
+        const useFixed = this.isAllWindowCoveredByWrapper() || this._props._fixWrapperPosition;
+
+        const positionStyle = useFixed ? 'fixed' : 'absolute';
+        this._$wrapper.css('position', positionStyle);
     }
 
     _updateOutsideDragFactor() {

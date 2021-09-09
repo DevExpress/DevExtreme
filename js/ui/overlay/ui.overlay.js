@@ -14,7 +14,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isString, isDefined, isFunction, isPlainObject, isWindow, isObject } from '../../core/utils/type';
+import { isString, isDefined, isFunction, isPlainObject, isObject } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -921,7 +921,7 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container, dragAndResizeArea, allowDragOutside, outsideDragFactor } = this.option();
+        const { target, container, dragAndResizeArea, allowDragOutside, outsideDragFactor, _fixWrapperPosition } = this.option();
 
         return {
             position: this._getOptionValue('position'),
@@ -933,7 +933,8 @@ const Overlay = Widget.inherit({
             onPositioned: this._actions.onPositioned,
             dragAndResizeArea,
             allowDragOutside,
-            outsideDragFactor
+            outsideDragFactor,
+            _fixWrapperPosition
         };
     },
 
@@ -1104,19 +1105,8 @@ const Overlay = Widget.inherit({
         this._positionContent();
     },
 
-    _styleWrapperPosition: function() {
-        const useFixed = this._isContainerWindow() || this.option('_fixWrapperPosition');
-        const positionStyle = useFixed ? 'fixed' : 'absolute';
-        this._$wrapper.css('position', positionStyle);
-    },
-
-    _isContainerWindow: function() {
-        const $container = this._positionController._$wrapperCoveredElement;
-        return this._isWindow($container) || !$container?.get(0);
-    },
-
     _isAllWindowCovered: function() {
-        return this._isContainerWindow() && this.option('shading');
+        return this._positionController.isAllWindowCoveredByWrapper() && this.option('shading');
     },
 
     _toggleSafariScrolling: function() {
@@ -1145,7 +1135,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapper: function() {
-        this._styleWrapperPosition();
+        this._positionController.styleWrapperPosition();
         this._renderWrapperDimensions();
         this._positionController.positionWrapper();
     },
@@ -1159,7 +1149,7 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        const isWindow = this._isWindow($container);
+        const isWindow = this._positionController.isAllWindowCoveredByWrapper();
         const documentElement = domAdapter.getDocumentElement();
         wrapperWidth = isWindow ? documentElement.clientWidth : $container.outerWidth(),
         wrapperHeight = isWindow ? window.innerHeight : $container.outerHeight();
@@ -1168,10 +1158,6 @@ const Overlay = Widget.inherit({
             width: wrapperWidth,
             height: wrapperHeight
         });
-    },
-
-    _isWindow: function($element) {
-        return !!$element && isWindow($element.get(0));
     },
 
     _renderDimensions: function() {
@@ -1399,7 +1385,7 @@ const Overlay = Widget.inherit({
                 this.callBase(args);
                 break;
             case '_fixWrapperPosition':
-                this._styleWrapperPosition();
+                this._positionController.fixWrapperPosition = value;
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();
