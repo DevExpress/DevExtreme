@@ -1,7 +1,25 @@
 import { ClientFunction } from 'testcafe';
 
+type WidgetName =
+'dxGallery' |
+'dxTabPanel' |
+'dxForm' |
+'dxTabPanel' |
+'dxScrollable' |
+'dxScrollView' |
+'dxDataGrid' |
+'dxTreeList' |
+'dxScheduler' |
+'dxTagBox' |
+'dxContextMenu' |
+'dxDropDownMenu' |
+'dxChart' |
+'dxPopup' |
+'dxSelectBox' |
+'dxButton';
+
 export default async function createWidget(
-  widgetName: string,
+  widgetName: WidgetName,
   options: unknown,
   disableAnimation = false,
   selector = '#container',
