@@ -4,8 +4,8 @@ import { calculateTextHeight } from './pdf_utils_v3';
 function updateRowsAndCellsHeights(doc, rows) {
     const rowsAdditionalHeights = calculateAdditionalRowsHeights(doc, rows);
 
-    rowsAdditionalHeights.forEach((height, rowIndex) => {
-        rows[rowIndex].height += height;
+    rows.forEach(row => {
+        row.height += rowsAdditionalHeights[row.rowIndex];
     });
 
     rows.forEach((row) => {
