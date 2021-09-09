@@ -2,9 +2,7 @@
 
 $scheduler-workspace-background-color: null !default;
 $scheduler-workspace-accent-color: null !default;
-$scheduler-workspace-info-font-size: null !default;
 $scheduler-small-size-factor: null !default;
-$scheduler-small-font-size: null !default;
 
 $scheduler-base-border: null !default;
 $scheduler-base-border-color: null !default;
@@ -12,17 +10,7 @@ $scheduler-accent-border: null !default;
 $scheduler-accent-border-color: null !default;
 
 $scheduler-current-time-cell-color: null !default;
-$scheduler-current-time-cell-border-size: null !default;
 $scheduler-time-indicator-color: null !default;
-
-$scheduler-header-panel-table-cell-height: null !default;
-$scheduler-workspace-date-table-cell-height: null !default;
-$scheduler-all-day-table-cell-height: null !default;
-$scheduler-collapsed-all-day-table-cell-height: null !default;
-$scheduler-vertical-grouped-all-day-table-cell-height: null !default;
-$scheduler-group-header-table-cell-height: null !default;
-$scheduler-timepanel-cell-offset: null !default;
-$scheduler-group-header-table-cell-width: null !default;
 
 $scheduler-workspace-active-cell-color: null !default;
 $scheduler-workspace-hovered-cell-color: null !default;
@@ -31,21 +19,41 @@ $scheduler-focused-cell-shadow: null !default;
 $scheduler-droppable-cell-background-color: null !default;
 
 $scheduler-left-column-width: null !default;
-$scheduler-month-workspace-date-table-height: null !default;
 
 $scheduler-other-month-cell-opacity: null !default;
-$scheduler-month-date-text-size: null !default;
 $scheduler-workspace-month-text-color: null !default;
-$scheduler-month-date-text-padding: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 
-$scheduler-agenda-left-column-width: null !default;
-$scheduler-group-header-agenda-font-size: null !default;
-
-$scheduler-timeline-min-height: null !default;
-
 $scheduler-panel-text-color: null !default;
-$scheduler-header-panel-top-gap: null !default;
+
+$scheduler-header-panel-top-gap: 10px;
+
+$scheduler-timepanel-cell-offset: 20px;
+$scheduler-workspace-info-font-size: 20px;
+$scheduler-small-font-size: 14px;
+
+$scheduler-current-time-cell-border-size: 2px;
+
+$scheduler-workspace-date-table-cell-height: 50px;
+$scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 1.5;
+$scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5;
+$scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height;
+$scheduler-vertical-group-header-content-top-offset: 16px;
+$scheduler-month-workspace-rows-count: 6;
+$scheduler-month-workspace-date-table-height: $scheduler-workspace-date-table-cell-height * $scheduler-month-workspace-rows-count;
+$scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-height - 10px;
+$scheduler-group-header-table-cell-height: 30px;
+
+$scheduler-group-header-table-cell-width: 80px;
+
+$scheduler-month-date-text-size: 16px;
+
+$scheduler-month-date-text-padding: 6px;
+
+$scheduler-agenda-left-column-width: 70px;
+$scheduler-group-header-agenda-font-size: 18px;
+
+$scheduler-timeline-min-height: 100px;
 
 .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
   color: $scheduler-current-time-cell-color;

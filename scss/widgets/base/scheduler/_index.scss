@@ -43,30 +43,6 @@ $agenda-appointment-recurrence-icon-color: null !default;
 
 $scheduler-default-header-height: 56px;
 
-$scheduler-timepanel-cell-offset: 20px;
-
-$scheduler-workspace-info-font-size: 20px;
-
-$scheduler-workspace-date-table-cell-height: 50px;
-$scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 1.5;
-$scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5;
-$scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height;
-$scheduler-vertical-group-header-content-top-offset: 16px;
-$scheduler-month-workspace-rows-count: 6;
-$scheduler-month-workspace-date-table-height: $scheduler-workspace-date-table-cell-height * $scheduler-month-workspace-rows-count;
-
-$scheduler-group-header-table-cell-height: 30px;
-
-$scheduler-group-header-table-cell-width: 80px;
-$scheduler-group-header-agenda-font-size: 18px;
-
-$scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-height - 10px;
-$scheduler-header-panel-top-gap: 10px;
-$scheduler-header-panel-offset: $scheduler-header-panel-table-cell-height + $scheduler-header-panel-top-gap;
-
-$scheduler-month-date-text-size: 16px;
-$scheduler-month-date-text-padding: 6px;
-
 $scheduler-appointment-min-size: 4px;
 $scheduler-appointment-content-padding: 5px 7px;
 $scheduler-appointment-reduced-content-padding: 40px;
@@ -102,10 +78,8 @@ $scheduler-recurrence-icon-offset: 20px;
 
 $scheduler-agenda-appointment-margin: 5px;
 $scheduler-agenda-last-in-date-appointment-margin: 20px;
-$scheduler-agenda-left-column-width: 70px;
 
 $scheduler-small-size-factor: 0.5;
-$scheduler-small-font-size: 14px;
 
 $scheduler-small-size-element-offset: $scheduler-left-column-width * $scheduler-small-size-factor;
 
@@ -117,9 +91,6 @@ $scheduler-time-indicator-left: 12px;
 $scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1);
 $scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;
 $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;
-$scheduler-current-time-cell-border-size: 2px;
-
-$scheduler-timeline-min-height: 100px;
 
 $scheduler-appointment-form-label-padding: 20px;
 
@@ -147,9 +118,7 @@ $scheduler-appointment-form-label-padding: 20px;
 @use "./views" with (
   $scheduler-workspace-background-color: $scheduler-workspace-background-color,
   $scheduler-workspace-accent-color: $scheduler-workspace-accent-color,
-  $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-small-size-factor: $scheduler-small-size-factor,
-  $scheduler-small-font-size: $scheduler-small-font-size,
 
   $scheduler-base-border: $scheduler-base-border,
   $scheduler-base-border-color: $scheduler-base-border-color,
@@ -157,17 +126,7 @@ $scheduler-appointment-form-label-padding: 20px;
   $scheduler-accent-border-color: $scheduler-accent-border-color,
 
   $scheduler-current-time-cell-color: $scheduler-current-time-cell-color,
-  $scheduler-current-time-cell-border-size: $scheduler-current-time-cell-border-size,
   $scheduler-time-indicator-color: $scheduler-time-indicator-color,
-
-  $scheduler-header-panel-table-cell-height: $scheduler-header-panel-table-cell-height,
-  $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height,
-  $scheduler-all-day-table-cell-height: $scheduler-all-day-table-cell-height,
-  $scheduler-collapsed-all-day-table-cell-height: $scheduler-collapsed-all-day-table-cell-height,
-  $scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-vertical-grouped-all-day-table-cell-height,
-  $scheduler-group-header-table-cell-height: $scheduler-group-header-table-cell-height,
-  $scheduler-timepanel-cell-offset: $scheduler-timepanel-cell-offset,
-  $scheduler-group-header-table-cell-width: $scheduler-group-header-table-cell-width,
 
   $scheduler-workspace-active-cell-color: $scheduler-workspace-active-cell-color,
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-hovered-cell-color,
@@ -176,21 +135,12 @@ $scheduler-appointment-form-label-padding: 20px;
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
 
   $scheduler-left-column-width: $scheduler-left-column-width,
-  $scheduler-month-workspace-date-table-height: $scheduler-month-workspace-date-table-height,
 
   $scheduler-other-month-cell-opacity: $scheduler-other-month-cell-opacity,
-  $scheduler-month-date-text-size: $scheduler-month-date-text-size,
   $scheduler-workspace-month-text-color: $scheduler-workspace-month-text-color,
-  $scheduler-month-date-text-padding: $scheduler-month-date-text-padding,
   $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-background-color,
 
-  $scheduler-agenda-left-column-width: $scheduler-agenda-left-column-width,
-  $scheduler-group-header-agenda-font-size: $scheduler-group-header-agenda-font-size,
-
-  $scheduler-timeline-min-height: $scheduler-timeline-min-height,
-
   $scheduler-panel-text-color: $scheduler-panel-text-color,
-  $scheduler-header-panel-top-gap: $scheduler-header-panel-top-gap,
 );
 
 @function calculate-small-left-column-size($size) {
