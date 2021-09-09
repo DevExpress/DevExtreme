@@ -75,7 +75,7 @@ function applyBordersConfig(rows) {
             const leftPdfCell = (columnIndex >= 1) ? cells[columnIndex - 1].pdfCell : null;
             const topPdfCell = (rowIndex >= 1) ? rows[rowIndex - 1].cells[columnIndex].pdfCell : null;
 
-            if(pdfCell.drawLeftBorder === false && !isDefined(pdfCell.colSpan)) { // TODO
+            if(pdfCell.drawLeftBorder === false && !isDefined(pdfCell.colSpan)) { // TODO: Check this logic after implementing splitting to pages
                 if(isDefined(leftPdfCell)) {
                     leftPdfCell.drawRightBorder = false;
                 }
