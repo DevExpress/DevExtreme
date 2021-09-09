@@ -6,7 +6,7 @@ import { getWindow } from '../../../core/utils/window';
 import BaseModule from './base';
 
 import Popup from '../../popup';
-import List from '../../list';
+import List from '../../list_light';
 
 let ListPopupModule = BaseModule;
 
@@ -65,7 +65,7 @@ if(Quill) {
                 width: 'auto',
                 height: 'auto',
                 shading: false,
-                closeOnTargetScroll: true,
+                hideOnParentScroll: true,
                 closeOnOutsideClick: true,
                 animation: {
                     show: { type: 'fade', duration: 0, from: 0, to: 1 },

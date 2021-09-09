@@ -27,11 +27,8 @@ describe('Calendar', () => {
   describe('Logic', () => {
     it('props defaults', () => {
       const props = new CalendarProps();
-      const element = {
-        classList: { contains: () => true },
-      };
 
-      expect(props.hasFocus?.(element as any)).toEqual(true);
+      expect(props.skipFocusCheck).toEqual(false);
       // eslint-disable-next-line no-underscore-dangle
       expect(props._todayDate?.() instanceof Date).toEqual(true);
     });
