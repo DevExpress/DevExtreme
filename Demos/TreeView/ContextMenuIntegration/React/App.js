@@ -93,6 +93,8 @@ class App extends React.Component {
         logEntry = `Information about '${this.state.selectedTreeItem.text}' was copied`;
         break;
       }
+      default:
+        break;
     }
     const logItems = this.state.logItems.concat([logEntry]);
 

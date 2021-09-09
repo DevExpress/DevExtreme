@@ -54,6 +54,8 @@ $(() => {
         logEntry = `Information about "${selectedTreeItem.text}" was copied`;
         break;
       }
+      default:
+        break;
     }
     logItems.push(logEntry);
     log.option('items', logItems);

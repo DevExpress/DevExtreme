@@ -91,6 +91,8 @@ export default {
           logEntry = `Information about '${this.selectedTreeItem.text}' was copied`;
           break;
         }
+        default:
+          break;
       }
       this.logItems = this.logItems.concat(logEntry);
     },

@@ -17,8 +17,8 @@ DemoApp.controller('DemoController', ($scope) => {
       },
     },
     customizePoint() {
-      let color; let
-        hoverStyle;
+      let color;
+      let hoverStyle;
       switch (this.data.type) {
         case 'Star':
           color = 'red';
@@ -27,6 +27,9 @@ DemoApp.controller('DemoController', ($scope) => {
         case 'Satellite':
           color = 'gray';
           hoverStyle = { border: { color: 'gray' } };
+          break;
+        default:
+          break;
       }
       return { color, hoverStyle };
     },

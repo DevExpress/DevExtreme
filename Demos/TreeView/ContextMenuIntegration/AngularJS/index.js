@@ -52,6 +52,8 @@ DemoApp.controller('DemoController', ($scope) => {
           logEntry = `Information about '${$scope.selectedTreeItem.text}' was copied`;
           break;
         }
+        default:
+          break;
       }
       $scope.logItems.push(logEntry);
     },

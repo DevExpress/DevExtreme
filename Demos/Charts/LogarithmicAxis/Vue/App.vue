@@ -84,6 +84,9 @@ export default {
         case 'Satellite':
           color = 'gray';
           hoverStyle = { border: { color: 'gray' } };
+          break;
+        default:
+          break;
       }
       return { color, hoverStyle };
     },

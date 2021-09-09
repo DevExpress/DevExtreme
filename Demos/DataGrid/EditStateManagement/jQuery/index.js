@@ -95,6 +95,8 @@ $(() => {
         return sendRequest(`${url}/UpdateOrder`, 'PUT', { key: change.key, values: JSON.stringify(change.data) });
       case 'remove':
         return sendRequest(`${url}/DeleteOrder`, 'DELETE', { key: change.key });
+      default:
+        break;
     }
   }
 

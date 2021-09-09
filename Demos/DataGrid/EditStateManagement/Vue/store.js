@@ -100,6 +100,8 @@ export default createStore({
             case 'remove':
               await dispatch('remove', change);
               break;
+            default:
+              break;
           }
         } finally {
           commit('updateIsLoading', false);
