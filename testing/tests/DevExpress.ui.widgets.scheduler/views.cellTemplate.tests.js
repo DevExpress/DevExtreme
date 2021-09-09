@@ -2269,7 +2269,7 @@ module('CellTemplate tests', moduleConfig, () => {
             templateName: 'resourceCellTemplate',
             expectedTemplateCount: 2,
         }].forEach(({ templateName, expectedTemplateCount }) => {
-            test(`Scheduler should be rerendered once when ${templateName} is changed`, function(assert) {
+            test(`Scheduler should be rerendered once when ${templateName} is changed (T1028189)`, function(assert) {
                 const scheduler = createWrapper({
                     views: ['week'],
                     currentView: 'week',
