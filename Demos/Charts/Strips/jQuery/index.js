@@ -55,16 +55,20 @@ $(() => {
     customizePoint() {
       if (this.value > highAverage) {
         return { color: highAverageColor };
-      } if (this.value < lowAverage) {
+      }
+      if (this.value < lowAverage) {
         return { color: lowAverageColor };
       }
+      return null;
     },
     customizeLabel() {
       if (this.value > highAverage) {
         return getLabelsSettings(highAverageColor);
-      } if (this.value < lowAverage) {
+      }
+      if (this.value < lowAverage) {
         return getLabelsSettings(lowAverageColor);
       }
+      return null;
     },
   });
 

@@ -61,7 +61,7 @@ DemoApp.controller('DemoController', ($scope) => {
         method: 'custom',
         calculate(aggregationInfo) {
           if (!aggregationInfo.data.length) {
-            return;
+            return null;
           }
           const temp = aggregationInfo.data.map((item) => item.temp);
           const maxTemp = Math.max.apply(null, temp);

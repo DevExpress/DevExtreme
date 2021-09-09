@@ -29,7 +29,10 @@ DemoApp.controller('DemoController', ($scope) => {
     tooltip: {
       enabled: true,
       customizeTooltip(arg) {
-        if (arg.layer.name === 'rooms') { return { text: `Square: ${arg.attribute('square')} ft&#178` }; }
+        if (arg.layer.name === 'rooms') {
+          return { text: `Square: ${arg.attribute('square')} ft&#178` };
+        }
+        return null;
       },
     },
   };

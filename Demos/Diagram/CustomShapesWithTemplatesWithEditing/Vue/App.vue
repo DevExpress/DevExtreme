@@ -190,6 +190,7 @@ export default {
       obj.Email = value.Email;
       obj.Skype = value.Skype;
       obj.Mobile_Phone = value.Mobile_Phone;
+      return null;
     },
     onRequestLayoutUpdate(e) {
       for (let i = 0; i < e.changes.length; i += 1) {

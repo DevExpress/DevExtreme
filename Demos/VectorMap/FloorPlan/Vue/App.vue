@@ -60,6 +60,7 @@ export default {
       if (info.layer.name === 'rooms') {
         return { text: `Square: ${info.attribute('square')} ft&#178` };
       }
+      return null;
     },
   },
 };

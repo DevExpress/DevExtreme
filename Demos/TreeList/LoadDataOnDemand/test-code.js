@@ -240,5 +240,6 @@ testUtils.importAnd(() => 'devextreme/ui/tree_list', () => DevExpress.ui.dxTreeL
     if (arguments[0] !== 'dataSource') {
       return option.apply(this, arguments);
     }
+    return null;
   };
 })));

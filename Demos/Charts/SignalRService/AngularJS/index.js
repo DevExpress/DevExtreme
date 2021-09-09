@@ -37,6 +37,7 @@ DemoApp.controller('DemoController', ($scope) => {
               close: prices[prices.length - 1],
             };
           }
+          return null;
         },
       },
     }, {
@@ -64,6 +65,7 @@ DemoApp.controller('DemoController', ($scope) => {
           return { color: '#1db2f5' };
         }
       }
+      return null;
     },
     tooltip: {
       enabled: true,

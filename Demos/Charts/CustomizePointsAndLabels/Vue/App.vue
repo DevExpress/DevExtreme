@@ -77,9 +77,11 @@ export default {
     customizePoint({ value }) {
       if (value > this.highAverage) {
         return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
-      } if (value < this.lowAverage) {
+      }
+      if (value < this.lowAverage) {
         return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } };
       }
+      return null;
     },
 
     customizeLabel({ value }) {
@@ -92,6 +94,7 @@ export default {
           },
         };
       }
+      return null;
     },
 
     customizeText({ valueText }) {

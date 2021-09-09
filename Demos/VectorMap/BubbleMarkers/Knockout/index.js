@@ -20,6 +20,7 @@ window.onload = function () {
           if (arg.layer.type === 'marker') {
             return { text: arg.attribute('tooltip') };
           }
+          return null;
         },
       },
       legends: [{

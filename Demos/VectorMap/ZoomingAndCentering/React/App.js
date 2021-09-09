@@ -30,6 +30,7 @@ class App extends React.Component {
     if (arg.layer.type === 'marker') {
       return { text: arg.attribute('name') };
     }
+    return null;
   }
 
   markerClick(e) {

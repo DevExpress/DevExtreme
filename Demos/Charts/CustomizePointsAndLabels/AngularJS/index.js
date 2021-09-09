@@ -9,9 +9,11 @@ DemoApp.controller('DemoController', ($scope) => {
     customizePoint() {
       if (this.value > highAverage) {
         return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
-      } if (this.value < lowAverage) {
+      }
+      if (this.value < lowAverage) {
         return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } };
       }
+      return null;
     },
     customizeLabel() {
       if (this.value > highAverage) {
@@ -23,6 +25,7 @@ DemoApp.controller('DemoController', ($scope) => {
           },
         };
       }
+      return null;
     },
     export: {
       enabled: true,

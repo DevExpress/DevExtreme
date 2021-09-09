@@ -58,6 +58,7 @@ export default {
       if (info.layer.type === 'marker') {
         return { text: info.attribute('name') };
       }
+      return null;
     },
     markerClick(e) {
       if (e.target && e.target.layer.type === 'marker') {

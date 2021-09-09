@@ -72,6 +72,7 @@ export default {
       if (info.layer.type === 'marker') {
         return { text: info.attribute('tooltip') };
       }
+      return null;
     },
 
     customizeText({ index }) {

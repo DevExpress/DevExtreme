@@ -78,11 +78,14 @@ export default {
     customizePoint({ value }) {
       if (value === 1) {
         return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
-      } if (value === 2) {
+      }
+      if (value === 2) {
         return { image: { url: '../../../../images/Charts/PointImage/icon-medal-silver.png', width: 20, height: 20 }, visible: true };
-      } if (value === 3) {
+      }
+      if (value === 3) {
         return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
       }
+      return null;
     },
 
     customizeText({ valueText }) {

@@ -46,6 +46,7 @@ function customizeTooltip(arg) {
       text: arg.attribute('tooltip'),
     };
   }
+  return 0;
 }
 
 function customizeText(arg) {

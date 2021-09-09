@@ -43,6 +43,7 @@ window.onload = function () {
         cssClass = 'holyday';
         return false;
       }
+      return true;
     });
 
     return `<span class='${cssClass}'>${data.text}</span>`;

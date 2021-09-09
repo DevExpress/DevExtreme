@@ -41,6 +41,7 @@ $(() => {
                 close: prices[prices.length - 1],
               };
             }
+            return null;
           },
         },
       }, {
@@ -68,6 +69,7 @@ $(() => {
             return { color: '#1db2f5' };
           }
         }
+        return null;
       },
       tooltip: {
         enabled: true,

@@ -151,7 +151,7 @@ export default {
   methods: {
     calculateRangeArea(aggregationInfo) {
       if (!aggregationInfo.data.length) {
-        return;
+        return null;
       }
 
       const temp = aggregationInfo.data.map((item) => item.temp);

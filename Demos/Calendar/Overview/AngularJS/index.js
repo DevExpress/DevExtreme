@@ -71,6 +71,7 @@ DemoApp.controller('DemoController', ($scope) => {
         cssClass = 'holyday';
         return false;
       }
+      return true;
     });
 
     return `<span class='${cssClass}'>${data.text}</span>`;

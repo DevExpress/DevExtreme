@@ -53,6 +53,7 @@ function customizeTooltip(arg) {
   if (arg.layer.type === 'marker') {
     return { text: arg.attribute('tooltip') };
   }
+  return null;
 }
 
 function customizeText(arg) {

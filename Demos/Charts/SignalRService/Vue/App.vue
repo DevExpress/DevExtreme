@@ -146,6 +146,7 @@ export default {
           close: prices[prices.length - 1],
         };
       }
+      return null;
     },
 
     customizePoint(pointInfo) {
@@ -155,6 +156,7 @@ export default {
           return { color: '#1db2f5' };
         }
       }
+      return null;
     },
   },
 };

@@ -61,6 +61,7 @@ export default {
       } else {
         return obj.type === 'group' ? 'ellipse' : 'rectangle';
       }
+      return null;
     },
     itemWidthExpr(obj, value) {
       if (value) {
@@ -68,6 +69,7 @@ export default {
       } else {
         return obj.width || (obj.type === 'group' && 1.5) || 1;
       }
+      return null;
     },
     itemHeightExpr(obj, value) {
       if (value) {
@@ -75,6 +77,7 @@ export default {
       } else {
         return obj.height || (obj.type === 'group' && 1) || 0.75;
       }
+      return null;
     },
     itemTextStyleExpr(obj) {
       if (obj.level === 'senior') {

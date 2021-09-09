@@ -65,6 +65,7 @@ export default {
           text: info.attribute('tooltip'),
         };
       }
+      return null;
     },
 
     customizeText({ index }) {

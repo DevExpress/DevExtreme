@@ -41,6 +41,7 @@ class App extends React.Component {
     } else {
       return obj.type === 'group' ? 'ellipse' : 'rectangle';
     }
+    return null;
   }
 
   itemWidthExpr(obj, value) {
@@ -49,6 +50,7 @@ class App extends React.Component {
     } else {
       return obj.width || (obj.type === 'group' && 1.5) || 1;
     }
+    return null;
   }
 
   itemHeightExpr(obj, value) {
@@ -57,6 +59,7 @@ class App extends React.Component {
     } else {
       return obj.height || (obj.type === 'group' && 1) || 0.75;
     }
+    return null;
   }
 
   itemTextStyleExpr(obj) {

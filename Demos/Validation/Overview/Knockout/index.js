@@ -46,6 +46,7 @@ window.onload = function () {
           if (password) {
             return password.option('value');
           }
+          return null;
         },
         message: "'Password' and 'Confirm Password' do not match.",
       },

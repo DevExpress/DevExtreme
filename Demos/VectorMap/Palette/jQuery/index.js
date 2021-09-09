@@ -33,6 +33,7 @@ $(() => {
         if (arg.attribute('population')) {
           return { text: `${arg.attribute('name')}: ${arg.attribute('population')}% of world population` };
         }
+        return null;
       },
     },
   });

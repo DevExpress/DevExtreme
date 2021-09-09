@@ -15,6 +15,7 @@ DemoApp.controller('DemoController', ($scope) => {
         if (country) {
           return { text: `${name}: ${country.totalArea}M km&#178`, color: country.color };
         }
+        return null;
       },
     },
     layers: {

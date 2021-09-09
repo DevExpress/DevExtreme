@@ -7,6 +7,7 @@ window.onload = function () {
           if (arg.layer.type === 'marker') {
             return { text: arg.attribute('name') };
           }
+          return null;
         },
       },
       onClick(e) {

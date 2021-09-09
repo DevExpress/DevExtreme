@@ -62,6 +62,7 @@ class App extends React.Component {
         close: prices[prices.length - 1],
       };
     }
+    return null;
   }
 
   render() {
@@ -127,6 +128,7 @@ class App extends React.Component {
         return { color: '#1db2f5' };
       }
     }
+    return null;
   }
 }
 

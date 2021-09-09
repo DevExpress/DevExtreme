@@ -156,7 +156,6 @@ export default {
       holydays.forEach((item) => {
         if (date.getDate() === item[0] && date.getMonth() === item[1]) {
           cssClass = 'holyday';
-          return false;
         }
       });
 

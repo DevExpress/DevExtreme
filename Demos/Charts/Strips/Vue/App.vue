@@ -85,17 +85,21 @@ export default {
     customizePoint(arg) {
       if (arg.value > this.highAverage) {
         return { color: this.highAverageColor };
-      } if (arg.value < this.lowAverage) {
+      }
+      if (arg.value < this.lowAverage) {
         return { color: this.lowAverageColor };
       }
+      return null;
     },
 
     customizeLabel(arg) {
       if (arg.value > this.highAverage) {
         return this.getLabelsSettings(this.highAverageColor);
-      } if (arg.value < this.lowAverage) {
+      }
+      if (arg.value < this.lowAverage) {
         return this.getLabelsSettings(this.lowAverageColor);
       }
+      return null;
     },
 
     getLabelsSettings(backgroundColor) {

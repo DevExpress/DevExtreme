@@ -54,6 +54,7 @@ export async function saveChange(dispatch, change) {
     }
   } else {
     dispatch({ type: SAVING_CANCEL });
+    return null;
   }
 }
 
@@ -71,7 +72,7 @@ async function sendChange(url, change) {
     case 'remove':
       return sendRequest(`${url}/DeleteOrder`, 'DELETE', { key: change.key });
     default:
-      break;
+      return null;
   }
 }
 

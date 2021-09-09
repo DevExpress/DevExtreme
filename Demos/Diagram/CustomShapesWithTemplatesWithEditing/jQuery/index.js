@@ -85,6 +85,7 @@ $(function () {
         obj.Email = value.Email;
         obj.Skype = value.Skype;
         obj.Mobile_Phone = value.Mobile_Phone;
+        return null;
       },
       autoLayout: {
         type: 'tree',

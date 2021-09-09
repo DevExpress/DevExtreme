@@ -19,17 +19,21 @@ const lowAverageColor = '#6199e6';
 function customizePoint(arg) {
   if (arg.value > highAverage) {
     return { color: highAverageColor };
-  } if (arg.value < lowAverage) {
+  }
+  if (arg.value < lowAverage) {
     return { color: lowAverageColor };
   }
+  return null;
 }
 
 function customizeLabel(arg) {
   if (arg.value > highAverage) {
     return getLabelsSettings(highAverageColor);
-  } if (arg.value < lowAverage) {
+  }
+  if (arg.value < lowAverage) {
     return getLabelsSettings(lowAverageColor);
   }
+  return null;
 }
 
 function getLabelsSettings(backgroundColor) {

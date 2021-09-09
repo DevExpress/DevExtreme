@@ -58,11 +58,14 @@ class App extends React.Component {
   customizePoint() {
     if (this.value === 1) {
       return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
-    } if (this.value === 2) {
+    }
+    if (this.value === 2) {
       return { image: { url: '../../../../images/Charts/PointImage/icon-medal-silver.png', width: 20, height: 20 }, visible: true };
-    } if (this.value === 3) {
+    }
+    if (this.value === 3) {
       return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
     }
+    return null;
   }
 
   customizeText() {

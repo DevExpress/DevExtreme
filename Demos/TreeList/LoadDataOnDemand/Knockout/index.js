@@ -27,6 +27,7 @@ window.onload = function () {
             if (e.value !== null) {
               return `${Math.ceil(e.value / 1024)} KB`;
             }
+            return null;
           },
         },
         { dataField: 'createdDate', dataType: 'date', width: 150 },

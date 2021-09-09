@@ -42,6 +42,7 @@ function customizeTooltip(arg) {
       color: country.color,
     };
   }
+  return null;
 }
 
 function clickHandler({ target }) {

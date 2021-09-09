@@ -59,6 +59,7 @@ export default {
       if (e.value !== null) {
         return `${Math.ceil(e.value / 1024)} KB`;
       }
+      return null;
     },
   },
 };

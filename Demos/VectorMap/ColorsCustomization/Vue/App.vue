@@ -57,6 +57,7 @@ export default {
           color: country.color,
         };
       }
+      return null;
     },
 
     click({ target }) {

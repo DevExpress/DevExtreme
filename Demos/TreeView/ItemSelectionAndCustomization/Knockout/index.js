@@ -40,6 +40,7 @@ window.onload = function () {
         itemIndex = index;
         return false;
       }
+      return true;
     });
 
     if (product.selected && itemIndex === -1) {
