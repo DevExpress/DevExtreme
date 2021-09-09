@@ -1121,6 +1121,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this._updateScrollable();
     }
 
     getWorkSpaceMinWidth() {
