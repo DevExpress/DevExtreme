@@ -533,6 +533,8 @@
         "dxGantt-sortingDescendingText": "Ordinamento discendente",
         "dxGantt-sortingClearText": "Annulla ordinamento",
         "dxGantt-showResources": "TODO",
-        "dxGantt-showDependencies": "TODO"
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

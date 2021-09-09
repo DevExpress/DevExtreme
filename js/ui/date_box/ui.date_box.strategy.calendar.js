@@ -90,7 +90,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             tabIndex: null,
             disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
             onContouredChanged: this._refreshActiveDescendant.bind(this),
-            hasFocus: function() { return true; }
+            skipFocusCheck: true
         });
     },
 
