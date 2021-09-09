@@ -494,6 +494,10 @@ const Popover = Popup.inherit({
         const defaultOptions = { of: this.option('target'), boundaryOffset: DEFAULT_BOUNDARY_OFFSET };
 
         const position = extend(true, {}, defaultOptions, this._getPositionValue(POSITION_ALIASES));
+
+        if(!this._isInitialOptionValue('position') && this._isInitialOptionValue('position.collision')) {
+            position.collision = 'flip';
+        }
         this._positionSide = this._getDisplaySide(position);
 
         this._position = position;

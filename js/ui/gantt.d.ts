@@ -1347,7 +1347,7 @@ export interface dxGanttSorting {
     /**
      * @docid
      * @type Enums.GanttSortingMode|string
-     * @default "none"
+     * @default "single"
      */
     mode?: 'multiple' | 'none' | 'single';
     /**
