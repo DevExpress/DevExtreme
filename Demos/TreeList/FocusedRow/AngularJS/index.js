@@ -8,8 +8,6 @@ DemoApp.controller('DemoController', ($scope) => {
     loadUrl: `${url}/TaskEmployees`,
   });
 
-  $scope.treeList;
-  $scope.focusedRowKeyEditor;
   $scope.taskSubject = '';
   $scope.taskAssigned = '';
   $scope.startDate = '';

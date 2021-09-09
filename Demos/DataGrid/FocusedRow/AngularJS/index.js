@@ -1,7 +1,6 @@
 const DemoApp = angular.module('DemoApp', ['dx', 'ngSanitize']);
 
 DemoApp.controller('DemoController', ($scope) => {
-  $scope.dataGrid;
   $scope.focusedRowKey = 117;
   $scope.taskSubject = '';
   $scope.taskDetailsHtml = '';

@@ -73,8 +73,10 @@ $(() => {
   $('#customizeTaskTooltip').dxCheckBox({
     value: true,
     onValueChanged(e) {
-      e.value ? gantt.option('taskTooltipContentTemplate', getTaskTooltipContentTemplate)
-        : gantt.option('taskTooltipContentTemplate', undefined);
+      gantt.option(
+        'taskTooltipContentTemplate',
+        e.value ? getTaskTooltipContentTemplate : undefined,
+      );
     },
   });
   $('#startDateContainer').dxDateBox({
