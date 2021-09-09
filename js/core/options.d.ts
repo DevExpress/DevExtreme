@@ -1,10 +1,10 @@
 import {
     Device,
-} from '../devices';
+} from './devices';
 
 import {
     DeepPartial,
-} from '../index';
+} from './index';
 
 /** @public */
 export type DefaultOptionsRule<T> = {
