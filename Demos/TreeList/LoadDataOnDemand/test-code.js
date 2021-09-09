@@ -1,4 +1,4 @@
-testUtils.importAnd(() => 'devextreme/ui/tree_list', () => DevExpress.ui.dxTreeList, (dxTreeList) => new Promise((resolve) => {
+testUtils.importAnd(() => 'devextreme/ui/tree_list', () => DevExpress.ui.dxTreeList, (dxTreeList) => testUtils.postponeUntilFound('#treelist').then(() => new Promise((resolve) => {
   const instance = dxTreeList.getInstance(document.getElementById('treelist'));
   const timeoutId = setTimeout(resolve, 30000);
   instance.option('onContentReady', () => {
@@ -233,4 +233,12 @@ testUtils.importAnd(() => 'devextreme/ui/tree_list', () => DevExpress.ui.dxTreeL
       ])), 100);
     },
   });
-}));
+
+  // NOTE: Ensure, that 'React' can't restore `DataSourse`.
+  const option = instance.option;
+  instance.option = function () {
+    if (arguments[0] !== 'dataSource') {
+      return option.apply(this, arguments);
+    }
+  };
+})));
