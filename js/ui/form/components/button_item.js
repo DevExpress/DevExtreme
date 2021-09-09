@@ -11,7 +11,7 @@ export function renderButtonItem({
     validationGroup,
     createComponentCallback
 }) {
-    const $container_1 = $('<div>')
+    const $itemRootElement = $('<div>')
         .appendTo($parent)
         .addClass(itemRootElementCssClasses)
         .addClass(FIELD_BUTTON_ITEM_CLASS)
@@ -21,10 +21,10 @@ export function renderButtonItem({
     $parent.css('justifyContent', convertAlignmentToJustifyContent(item.verticalAlignment));
 
     const $button = $('<div>')
-        .appendTo($container_1);
+        .appendTo($itemRootElement);
 
     return {
-        $itemRootElement: $container_1,
+        $itemRootElement,
         buttonInstance: createComponentCallback(
             $button, 'dxButton',
             extend({ validationGroup }, item.buttonOptions))
