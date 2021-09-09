@@ -606,7 +606,7 @@ export default {
 
                     const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
                     const columnIndex = this.getFirstEditableColumnIndex();
-                    editRowIndex >= 0 && columnIndex >= 0 && this.editCell(editRowIndex, columnIndex);
+                    columnIndex >= 0 && this.editCell(editRowIndex, columnIndex);
                 }
             }
         },
