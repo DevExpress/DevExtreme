@@ -576,6 +576,8 @@
         "dxGantt-sortingDescendingText": "Orden Descendente",
         "dxGantt-sortingClearText": "Limpiar Ordenamiento",
         "dxGantt-showResources": "Mostrar Recursos",
-        "dxGantt-showDependencies": "Mostrar Dependencias"
+        "dxGantt-showDependencies": "Mostrar Dependencias",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

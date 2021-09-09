@@ -2,10 +2,10 @@ import Popup from '../popup';
 import Form from '../form';
 import '../tag_box';
 import '../radio_group';
+import dateLocalization from '../../localization/date';
+import messageLocalization from '../../localization/message';
 import '../list_light';
 import '../list/modules/deleting';
-
-import messageLocalization from '../../localization/message';
 
 export class GanttDialog {
     constructor(owner, $element) {
@@ -106,9 +106,13 @@ class DialogInfoBase {
         };
     }
     getResult() {
-        const formData = this._form && this._form.option('formData');
+        const formData = this.getFormData();
         this._updateParameters(formData);
         return this._parameters;
+    }
+    getFormData() {
+        const formData = this._form && this._form.option('formData');
+        return formData;
     }
     isValidated() {
         return true;
@@ -139,7 +143,21 @@ class TaskEditDialogInfo extends DialogInfoBase {
             validationRules: [{
                 type: 'required',
                 message: messageLocalization.format('validation-required-formatted', messageLocalization.format('dxGantt-dialogStartTitle'))
-            }]
+            },
+            {
+                type: 'custom',
+                validationCallback: (e) => {
+                    if(this._parameters.isValidationRequired) {
+                        const correctDateRange = this._parameters.getCorrectDateRange(this._parameters.id, e.value, this._parameters.end);
+                        if(correctDateRange.start.getTime() !== e.value.getTime()) {
+                            e.rule.message = this._getValidationMessage(true, correctDateRange.start);
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+            }
+            ]
         }, {
             dataField: 'end',
             editorType: 'dxDateBox',
@@ -153,6 +171,19 @@ class TaskEditDialogInfo extends DialogInfoBase {
             validationRules: [{
                 type: 'required',
                 message: messageLocalization.format('validation-required-formatted', messageLocalization.format('dxGantt-dialogEndTitle'))
+            },
+            {
+                type: 'custom',
+                validationCallback: (e) => {
+                    if(this._parameters.isValidationRequired) {
+                        const correctDateRange = this._parameters.getCorrectDateRange(this._parameters.id, this._parameters.start, e.value);
+                        if(correctDateRange.end.getTime() !== e.value.getTime()) {
+                            e.rule.message = this._getValidationMessage(false, correctDateRange.end);
+                            return false;
+                        }
+                    }
+                    return true;
+                },
             }]
         }, {
             dataField: 'progress',
@@ -190,6 +221,22 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 }]
             }
         }];
+    }
+    _getValidationMessage(isStartDependencies, correctDate) {
+        if(isStartDependencies) {
+            return messageLocalization.format('dxGantt-dialogStartDateValidation', this._getFormattedDateText(correctDate));
+        }
+        return messageLocalization.format('dxGantt-dialogEndDateValidation', this._getFormattedDateText(correctDate));
+
+    }
+    _getFormattedDateText(date) {
+        let result = '';
+        if(date) {
+            const datePart = dateLocalization.format(date, 'shortDate');
+            const timePart = dateLocalization.format(date, 'hh:mm');
+            result = datePart + ' ' + timePart;
+        }
+        return result;
     }
     _isReadOnlyField(field) {
         return this._parameters.readOnlyFields.indexOf(field) > -1;

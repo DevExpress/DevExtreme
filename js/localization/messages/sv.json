@@ -529,6 +529,8 @@
         "dxGantt-fullScreen": "TODO",
         "dxGantt-quarter": "TODO",
         "dxGantt-showResources": "TODO",
-        "dxGantt-showDependencies": "TODO"
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

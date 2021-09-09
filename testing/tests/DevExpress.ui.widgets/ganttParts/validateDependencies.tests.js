@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { getGanttViewCore } from '../../../helpers/ganttHelpers.js';
+import { getGanttViewCore, Consts } from '../../../helpers/ganttHelpers.js';
 import 'ui/gantt';
 const { test } = QUnit;
 
@@ -1031,5 +1031,72 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(task2.end, updatedTask2.end);
         assert.notDeepEqual(updatedTask1.start, updatedTask2.start);
         assert.notDeepEqual(updatedTask1.end, updatedTask2.end);
+    });
+    test('TaskEdit dialog dependency validation', function(assert) {
+        let globalLastInsertedKey = 0;
+        let globalPrevInsertedKey = 0;
+        const globalDependencyType = 0;
+        const tasks = [];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true, validateDependencies: true }
+        };
+        this.createInstance(options);
+        this.instance.option('onTaskInserted', (e) => {
+            globalPrevInsertedKey = globalLastInsertedKey;
+            globalLastInsertedKey = e.key;
+        });
+        this.clock.tick();
+
+        const task1 = {
+            'my_id': 1000,
+            'parentId': 0,
+            'title': 'Task 1 ' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-21T05:00:00.000Z'),
+            'end': new Date('2019-02-24T09:00:00.000Z'),
+            'progress': 100
+        };
+        const task2 = {
+            'my_id': 2000,
+            'parentId': 0,
+            'title': 'Task 2 ' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-17T05:00:00.000Z'),
+            'end': new Date('2019-02-20T09:00:00.000Z'),
+            'progress': 100
+        };
+
+        this.instance.insertTask(task1);
+        this.clock.tick();
+        this.instance.insertTask(task2);
+        this.clock.tick();
+        const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
+        this.instance.insertDependency(dependency);
+        this.clock.tick();
+
+        this.instance.showTaskDetailsDialog(globalLastInsertedKey);
+        this.clock.tick();
+        let $dialog = $('body').find(Consts.POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
+
+        startTextBox.option('value', task1.start);
+
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        $dialog = $('body').find(Consts.POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        let isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        assert.notOk(isValidStartTextBox, 'empty start validation');
+
+        startTextBox.option('value', task1.end);
+        isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        assert.ok(isValidStartTextBox, 'not empty start validation');
+
+        $okButton.trigger('dxclick');
     });
 });
