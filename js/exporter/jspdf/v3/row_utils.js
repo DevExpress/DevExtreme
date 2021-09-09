@@ -69,9 +69,11 @@ function applyRowSpans(rows) {
 
 function recalculateHeightForMergedRows(doc, rows) {
     const rowsAdditionalHeights = Array.from({ length: rows.length }, () => 0);
+
+    const getRowsCount = (rowSpan) => rowSpan + 1;
     const calculateSummaryRowsHeightWithAdditionalHeights = (rowFromIndex, rowSpan) => {
         return rows
-            .slice(rowFromIndex, rowFromIndex + rowSpan + 1)
+            .slice(rowFromIndex, rowFromIndex + getRowsCount(rowSpan))
             .reduce((accumulator, row) => accumulator + row.height + rowsAdditionalHeights[row.rowIndex], 0);
     };
     const getMaxRowSpanValue = (row) => {
@@ -93,8 +95,8 @@ function recalculateHeightForMergedRows(doc, rows) {
                 });
                 const summaryHeight = calculateSummaryRowsHeightWithAdditionalHeights(row.rowIndex, cell.rowSpan);
                 if(textHeight > summaryHeight) {
-                    const delta = (textHeight - summaryHeight) / (cell.rowSpan + 1);
-                    for(let spanIndex = row.rowIndex; spanIndex <= row.rowIndex + cell.rowSpan; spanIndex++) {
+                    const delta = (textHeight - summaryHeight) / getRowsCount(cell.rowSpan);
+                    for(let spanIndex = row.rowIndex; spanIndex < row.rowIndex + getRowsCount(cell.rowSpan); spanIndex++) {
                         rowsAdditionalHeights[spanIndex] += delta;
                     }
                 }
@@ -108,7 +110,7 @@ function recalculateHeightForMergedRows(doc, rows) {
     rows.forEach((currentRow, rowIndex) => {
         currentRow.cells.forEach(cell => {
             cell.pdfCell._rect.h = rows
-                .slice(rowIndex, rowIndex + (isDefined(cell.rowSpan) ? cell.rowSpan + 1 : 1))
+                .slice(rowIndex, rowIndex + (isDefined(cell.rowSpan) ? getRowsCount(cell.rowSpan) : 1))
                 .reduce((accumulator, row) => row.height + accumulator, 0);
         });
     });
