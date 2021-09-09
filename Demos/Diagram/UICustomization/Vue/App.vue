@@ -118,7 +118,7 @@ export default {
         diagram.import(JSON.stringify(json));
       })
       .catch(() => {
-        throw 'Data Loading Error';
+        throw new Error('Data Loading Error');
       });
   },
   methods: {

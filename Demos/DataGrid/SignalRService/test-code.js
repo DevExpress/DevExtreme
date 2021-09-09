@@ -4,7 +4,7 @@ testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/data/data_sour
     i += 1;
     if (i === 200) {
       clearInterval(intervalId);
-      throw 'timeout';
+      throw new Error('timeout');
     }
     if (!dxDataGrid.getInstance(document.querySelector('#gridContainer'))) return;
 

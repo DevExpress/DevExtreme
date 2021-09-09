@@ -25,7 +25,7 @@ class App extends React.Component {
       store: new CustomStore({
         load: () => fetch('../../../../data/monthWeather.json')
           .then((e) => e.json())
-          .catch(() => { throw 'Data Loading Error'; }),
+          .catch(() => { throw new Error('Data Loading Error'); }),
         loadMode: 'raw',
       }),
       filter: ['t', '>', '2'],

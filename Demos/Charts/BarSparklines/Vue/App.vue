@@ -46,7 +46,7 @@ const source = new DataSource({
   store: new CustomStore({
     load: () => fetch('../../../../data/resourceData.json')
       .then((e) => e.json())
-      .catch(() => { throw 'Data Loading Error'; }),
+      .catch(() => { throw new Error('Data Loading Error'); }),
     loadMode: 'raw',
   }),
   filter: ['month', '<=', '12'],

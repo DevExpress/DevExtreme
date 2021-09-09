@@ -24,7 +24,7 @@ export default {
 
       return fetch(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`)
         .then((response) => response.json())
-        .catch(() => { throw 'Data Loading Error'; });
+        .catch(() => { throw new Error('Data Loading Error'); });
     },
   },
 };

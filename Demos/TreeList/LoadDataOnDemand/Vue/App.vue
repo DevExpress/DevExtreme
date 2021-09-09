@@ -49,7 +49,7 @@ export default {
 
           return fetch(`https://js.devexpress.com/Demos/Mvc/api/treeListData?parentIds=${parentIdsParam}`)
             .then((response) => response.json())
-            .catch(() => { throw 'Data Loading Error'; });
+            .catch(() => { throw new Error('Data Loading Error'); });
         },
       },
     };

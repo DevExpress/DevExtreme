@@ -35,7 +35,7 @@ const store = new CustomStore({
         summary: data.summary,
         groupCount: data.groupCount,
       }))
-      .catch(() => { throw 'Data Loading Error'; });
+      .catch(() => { throw new Error('Data Loading Error'); });
   },
 });
 
