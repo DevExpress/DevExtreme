@@ -69,8 +69,8 @@ $(() => {
         showSelectionControls: true,
         disabled: true,
         selectedItems: employeeTasks.filter((task) => task.Status === 'Completed'),
-        itemTemplate(itemData) {
-          return $(`<div>${itemData.Subject}</div>`);
+        itemTemplate(data) {
+          return $(`<div>${data.Subject}</div>`);
         },
       });
   }

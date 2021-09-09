@@ -90,12 +90,12 @@ $(() => {
   }
 
   function getLocale() {
-    const locale = sessionStorage.getItem('locale');
-    return locale != null ? locale : 'en';
+    const storageLocale = sessionStorage.getItem('locale');
+    return storageLocale != null ? storageLocale : 'en';
   }
 
-  function setLocale(locale) {
-    sessionStorage.setItem('locale', locale);
+  function setLocale(savingLocale) {
+    sessionStorage.setItem('locale', savingLocale);
   }
 
   $('#gridContainer').dxDataGrid(dataGridOptions);

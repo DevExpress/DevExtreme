@@ -41,11 +41,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { plannedTasks, doingTasks } = this.state;
     return (
       <div className="widget-container">
         <List
-          dataSource={plannedTasks}
+          dataSource={this.state.plannedTasks}
           keyExpr="id"
           repaintChangesOnly={true}>
           <ItemDragging
@@ -59,7 +58,7 @@ class App extends React.Component {
           </ItemDragging>
         </List>
         <List
-          dataSource={doingTasks}
+          dataSource={this.state.doingTasks}
           keyExpr="id"
           repaintChangesOnly={true}>
           <ItemDragging

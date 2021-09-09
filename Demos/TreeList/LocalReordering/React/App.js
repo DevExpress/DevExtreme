@@ -1,7 +1,7 @@
 import React from 'react';
 import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
 import CheckBox from 'devextreme-react/check-box';
-import { employees } from './data.js';
+import { employees as employeeList } from './data.js';
 
 const expandedRowKeys = [1];
 
@@ -15,7 +15,7 @@ class App extends React.Component {
     this.onShowDragIconsChanged = this.onShowDragIconsChanged.bind(this);
 
     this.state = {
-      employees,
+      employees: employeeList,
       allowDropInsideItem: true,
       allowReordering: true,
       showDragIcons: true,

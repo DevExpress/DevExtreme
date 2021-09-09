@@ -22,7 +22,6 @@ class App extends React.Component {
   }
 
   render() {
-    const { tasks, appointments } = this.state;
     return (
       <React.Fragment>
         <ScrollView id="scroll">
@@ -31,7 +30,7 @@ class App extends React.Component {
             data="dropArea"
             group={draggingGroupName}
             onDragStart={this.onListDragStart}>
-            {tasks.map((task) => <Draggable
+            {this.state.tasks.map((task) => <Draggable
               key={task.text}
               className="item dx-card dx-theme-text-color dx-theme-background-color"
               clone={true}
@@ -46,7 +45,7 @@ class App extends React.Component {
         <Scheduler
           timeZone="America/Los_Angeles"
           id="scheduler"
-          dataSource={appointments}
+          dataSource={this.state.appointments}
           views={views}
           defaultCurrentDate={currentDate}
           height={600}

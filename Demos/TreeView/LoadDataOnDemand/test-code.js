@@ -1,13 +1,13 @@
 testUtils.importAnd(() => 'devextreme/ui/tree_view', () => DevExpress.ui.dxTreeView, (dxTreeView) => {
   const treeView = dxTreeView.getInstance(document.getElementById('simple-treeview'));
-  function changeCreateChildren(treeView) {
-    treeView.option('createChildren', () => [
+  function changeCreateChildren(treeViewInstance) {
+    treeViewInstance.option('createChildren', () => [
       { text: 'Video Players', hasItems: false },
       { text: 'Televisions' },
       { text: 'Monitors' },
       { text: 'Projectors' },
     ]);
-    treeView.option('dataSource', []);
+    treeViewInstance.option('dataSource', []);
   }
 
   changeCreateChildren(treeView);

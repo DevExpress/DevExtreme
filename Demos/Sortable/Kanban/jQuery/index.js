@@ -3,8 +3,8 @@ $(() => {
 
   renderKanban($('#kanban'), statuses);
 
-  function renderKanban($container, statuses) {
-    statuses.forEach((status) => {
+  function renderKanban($container, statusList) {
+    statusList.forEach((status) => {
       renderList($container, status);
     });
 
@@ -66,7 +66,7 @@ $(() => {
       .addClass('dx-theme-background-color')
       .appendTo($container);
 
-    const employee = employees.filter((employee) => employee.ID === task.Task_Assigned_Employee_ID)[0];
+    const employee = employees.filter((e) => e.ID === task.Task_Assigned_Employee_ID)[0];
 
     $('<div>').addClass('card-priority').addClass(`priority-${task.Task_Priority}`).appendTo($item);
     $('<div>').addClass('card-subject').text(task.Task_Subject).appendTo($item);

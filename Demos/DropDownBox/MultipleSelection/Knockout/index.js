@@ -1,16 +1,16 @@
 window.onload = function () {
   let treeView;
 
-  const syncTreeViewSelection = function (treeView, value) {
-    if (!treeView) return;
+  const syncTreeViewSelection = function (treeViewInstance, value) {
+    if (!treeViewInstance) return;
 
     if (!value) {
-      treeView.unselectAll();
+      treeViewInstance.unselectAll();
       return;
     }
 
     value.forEach((key) => {
-      treeView.selectItem(key);
+      treeViewInstance.selectItem(key);
     });
   };
 

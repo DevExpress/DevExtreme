@@ -102,9 +102,9 @@ class App extends React.Component {
     });
   }
 
-  getEmployeeNames(employees) {
-    if (employees.length > 0) {
-      return employees.map((employee) => employee.Full_Name).join(', ');
+  getEmployeeNames(employeeList) {
+    if (employeeList.length > 0) {
+      return employeeList.map((employee) => employee.Full_Name).join(', ');
     }
     return emptySelectedText;
   }

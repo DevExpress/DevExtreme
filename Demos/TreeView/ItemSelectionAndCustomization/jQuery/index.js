@@ -24,8 +24,8 @@ $(() => {
     },
   }).dxTreeView('instance');
 
-  function syncSelection(treeView) {
-    const selectedEmployees = treeView.getSelectedNodes()
+  function syncSelection(treeViewInstance) {
+    const selectedEmployees = treeViewInstance.getSelectedNodes()
       .map((node) => node.itemData);
 
     selectedEmployeesList.option('items', selectedEmployees);

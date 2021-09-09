@@ -56,10 +56,10 @@ window.onload = function () {
             displayExpr: 'text',
             valueExpr: 'value',
             value: 'CustomerStoreState',
-            onValueChanged(e) {
+            onValueChanged(event) {
               dataGrid.clearGrouping();
-              dataGrid.columnOption(e.value, 'groupIndex', 0);
-              viewModel.totalCount(getGroupCount(e.value));
+              dataGrid.columnOption(event.value, 'groupIndex', 0);
+              viewModel.totalCount(getGroupCount(event.value));
             },
           },
         }, {

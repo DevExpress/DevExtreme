@@ -134,14 +134,14 @@ class App extends React.Component {
           beginGroup: true,
           onItemClick: () => {
             if (this.groups) {
-              this.setState((state) => ({
-                ...state,
+              this.setState((currentState) => ({
+                ...currentState,
                 crossScrollingEnabled: false,
                 groups: null,
               }));
             } else {
-              this.setState((state) => ({
-                ...state,
+              this.setState((currentState) => ({
+                ...currentState,
                 crossScrollingEnabled: true,
                 groups: ['roomId'],
               }));
@@ -151,8 +151,8 @@ class App extends React.Component {
         {
           text: 'Go to Today',
           onItemClick: () => {
-            this.setState((state) => ({
-              ...state,
+            this.setState((currentState) => ({
+              ...currentState,
               currentDate: new Date(),
             }));
           },

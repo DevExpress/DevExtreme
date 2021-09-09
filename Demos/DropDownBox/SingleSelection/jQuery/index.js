@@ -2,11 +2,11 @@ $(() => {
   let treeView; let
     dataGrid;
 
-  const syncTreeViewSelection = function (treeView, value) {
+  const syncTreeViewSelection = function (treeViewInstance, value) {
     if (!value) {
-      treeView.unselectAll();
+      treeViewInstance.unselectAll();
     } else {
-      treeView.selectItem(value);
+      treeViewInstance.selectItem(value);
     }
   };
 

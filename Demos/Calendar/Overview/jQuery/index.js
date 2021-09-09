@@ -43,7 +43,7 @@ $(() => {
     text: 'Disable weekend',
     onValueChanged(data) {
       if (data.value) {
-        calendar.option('disabledDates', (data) => data.view === 'month' && isWeekend(data.date));
+        calendar.option('disabledDates', (d) => d.view === 'month' && isWeekend(d.date));
       } else {
         calendar.option('disabledDates', null);
       }
@@ -94,8 +94,8 @@ $(() => {
 
   const holydays = [[1, 0], [4, 6], [25, 11]];
 
-  function isWeekend(date) {
-    const day = date.getDay();
+  function isWeekend(d) {
+    const day = d.getDay();
 
     return day === 0 || day === 6;
   }

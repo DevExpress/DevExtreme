@@ -3,13 +3,13 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', ($scope) => {
   let treeView;
 
-  const syncTreeViewSelection = function (treeView) {
-    if (!treeView) return;
+  const syncTreeViewSelection = function (treeViewInstance) {
+    if (!treeViewInstance) return;
 
     if (!$scope.treeBoxValue) {
-      treeView.unselectAll();
+      treeViewInstance.unselectAll();
     } else {
-      treeView.selectItem($scope.treeBoxValue);
+      treeViewInstance.selectItem($scope.treeBoxValue);
     }
   };
 

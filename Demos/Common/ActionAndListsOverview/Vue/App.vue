@@ -98,8 +98,8 @@ export default {
     };
   },
   methods: {
-    currency(data) {
-      return currencyFormatter.format(data);
+    currency(d) {
+      return currencyFormatter.format(d);
     },
     listSelectionChanged(e) {
       this.currentHotel = e.addedItems[0];

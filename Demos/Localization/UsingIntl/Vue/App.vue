@@ -96,11 +96,11 @@ export default {
   },
   methods: {
     getLocale() {
-      const locale = sessionStorage.getItem('locale');
-      return locale != null ? locale : 'en';
+      const storageLocale = sessionStorage.getItem('locale');
+      return storageLocale != null ? storageLocale : 'en';
     },
-    setLocale(locale) {
-      sessionStorage.setItem('locale', locale);
+    setLocale(savingLocale) {
+      sessionStorage.setItem('locale', savingLocale);
     },
     initMessages() {
       loadMessages(deMessages);

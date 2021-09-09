@@ -13,8 +13,8 @@ window.onload = function () {
       value: 50,
       label: {
         visible: true,
-        format(value) {
-          return `${value}%`;
+        format(v) {
+          return `${v}%`;
         },
         position: 'top',
       },
@@ -26,8 +26,8 @@ window.onload = function () {
       rtlEnabled: false,
       tooltip: {
         enabled: true,
-        format(value) {
-          return `${value}%`;
+        format(v) {
+          return `${v}%`;
         },
         showMode: 'always',
         position: 'bottom',

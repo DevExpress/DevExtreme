@@ -50,10 +50,10 @@ class App extends React.Component {
     );
   }
 
-  onAppointmentFormOpening(data) {
-    const { form } = data;
-    let movieInfo = getMovieById(data.appointmentData.movieId) || {};
-    let { startDate } = data.appointmentData;
+  onAppointmentFormOpening(e) {
+    const { form } = e;
+    let movieInfo = getMovieById(e.appointmentData.movieId) || {};
+    let { startDate } = e.appointmentData;
 
     form.option('items', [{
       label: {

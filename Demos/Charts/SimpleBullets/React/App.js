@@ -24,7 +24,7 @@ class App extends React.Component {
             </tr>
             {service.getWeeksData().map((week, i) => <tr key={i}>
               <th>{`${week.weekCount} week`}</th>
-              {week.bulletsData.map((data, i) => <td key={i}>
+              {week.bulletsData.map((data, j) => <td key={j}>
                 <Bullet
                   className="bullet"
                   startScaleValue={0}

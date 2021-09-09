@@ -1,7 +1,7 @@
 import React from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
-import { tasks, employees } from './data.js';
+import { tasks as taskList, employees } from './data.js';
 
 const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 
@@ -52,7 +52,7 @@ class App extends React.Component {
     const lists = [];
 
     statuses.forEach((status) => {
-      lists.push(tasks.filter((task) => task.Task_Status === status));
+      lists.push(taskList.filter((task) => task.Task_Status === status));
     });
 
     this.state = {
@@ -67,7 +67,6 @@ class App extends React.Component {
   }
 
   render() {
-    const { lists, statuses, employeesMap } = this.state;
     return (
       <div id="kanban">
         <ScrollView
@@ -79,14 +78,14 @@ class App extends React.Component {
             itemOrientation="horizontal"
             handle=".list-title"
             onReorder={this.onListReorder}>
-            {lists.map((tasks, listIndex) => {
-              const status = statuses[listIndex];
+            {this.state.lists.map((tasks, listIndex) => {
+              const status = this.state.statuses[listIndex];
               return <List
                 key={status}
                 title={status}
                 index={listIndex}
                 tasks={tasks}
-                employeesMap={employeesMap}
+                employeesMap={this.state.employeesMap}
                 onTaskDragStart={this.onTaskDragStart}
                 onTaskDrop={this.onTaskDrop}>
               </List>;

@@ -57,13 +57,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { timeZone, demoLocations } = this.state;
+    const { timeZone } = this.state;
     return (
       <React.Fragment>
         <div className="option">
           <span>Office Time Zone</span>
           <SelectBox
-            items={demoLocations}
+            items={this.state.demoLocations}
             displayExpr="title"
             valueExpr="id"
             width={240}

@@ -2,14 +2,14 @@ $(() => {
   let treeView; let
     dataGrid;
 
-  const syncTreeViewSelection = function (treeView, value) {
+  const syncTreeViewSelection = function (treeViewInstance, value) {
     if (!value) {
-      treeView.unselectAll();
+      treeViewInstance.unselectAll();
       return;
     }
 
     value.forEach((key) => {
-      treeView.selectItem(key);
+      treeViewInstance.selectItem(key);
     });
   };
 
@@ -31,7 +31,7 @@ $(() => {
     showClearButton: true,
     dataSource: makeAsyncDataSource('treeProducts.json'),
     contentTemplate(e) {
-      const value = e.component.option('value');
+      const v = e.component.option('value');
       const $treeView = $('<div>').dxTreeView({
         dataSource: e.component.getDataSource(),
         dataStructure: 'plain',
@@ -41,7 +41,7 @@ $(() => {
         displayExpr: 'name',
         selectByClick: true,
         onContentReady(args) {
-          syncTreeViewSelection(args.component, value);
+          syncTreeViewSelection(args.component, v);
         },
         selectNodesRecursive: false,
         showCheckBoxesMode: 'normal',
@@ -70,7 +70,7 @@ $(() => {
     showClearButton: true,
     dataSource: makeAsyncDataSource('customers.json'),
     contentTemplate(e) {
-      const value = e.component.option('value');
+      const v = e.component.option('value');
       const $dataGrid = $('<div>').dxDataGrid({
         dataSource: e.component.getDataSource(),
         columns: ['CompanyName', 'City', 'Phone'],
@@ -80,7 +80,7 @@ $(() => {
         scrolling: { mode: 'virtual' },
         height: 345,
         selection: { mode: 'multiple' },
-        selectedRowKeys: value,
+        selectedRowKeys: v,
         onSelectionChanged(selectedItems) {
           const keys = selectedItems.selectedRowKeys;
           e.component.option('value', keys);
