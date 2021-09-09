@@ -89,7 +89,7 @@ export default class SchedulerCalendar extends Widget {
             firstDayOfWeek: this.option('firstDayOfWeek'),
             focusStateEnabled: this.option('focusStateEnabled'),
             onValueChanged: this.option('onValueChanged'),
-            hasFocus: () => true,
+            skipFocusCheck: true,
             tabIndex: this.option('tabIndex'),
             width: '100%',
         };

@@ -1,3 +1,6 @@
+import type { AppointmentTemplateData } from '../../../../ui/scheduler';
+import { BaseTemplateProps } from '../types';
+
 export interface AppointmentViewModel {
   appointment: {
     startDate: Date;
@@ -26,4 +29,8 @@ export interface AppointmentViewModel {
     dateText: string;
     resourceColor?: string;
   };
+}
+
+export interface AppointmentTemplateProps extends BaseTemplateProps {
+  data: AppointmentTemplateData;
 }

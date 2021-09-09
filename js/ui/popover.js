@@ -165,10 +165,21 @@ const Popover = Popup.inherit({
             dragEnabled: false,
 
             /**
+            * @name dxPopoverOptions.allowDragOutside
+            * @hidden
+            */
+
+            /**
+            * @name dxPopoverOptions.dragAndResizeArea
+            * @hidden
+            */
+
+            /**
             * @name dxPopoverOptions.resizeEnabled
             * @hidden
             */
             resizeEnabled: false,
+
 
             /**
             * @section Utils
@@ -215,7 +226,7 @@ const Popover = Popup.inherit({
             */
 
             fullScreen: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
 

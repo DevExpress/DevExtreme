@@ -1,7 +1,8 @@
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
-import List from '../list';
+import List from '../list_light';
+import '../list/modules/selection';
 import DateBoxStrategy from './ui.date_box.strategy';
 import { noop, ensureDefined } from '../../core/utils/common';
 import { isDate } from '../../core/utils/type';

@@ -1,4 +1,4 @@
-import { isDefined } from '../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 
 export class PdfPage {
     constructor(table) {

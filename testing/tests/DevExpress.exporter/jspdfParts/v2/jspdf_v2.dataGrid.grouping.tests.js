@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
+import { exportDataGrid } from 'exporter/jspdf/v2/export_data_grid_2';
 
 const JSPdfGroupingTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {

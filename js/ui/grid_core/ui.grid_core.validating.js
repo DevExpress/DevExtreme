@@ -1042,7 +1042,6 @@ export const validatingModule = {
                             container: $overlayContainer,
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
-                            closeOnTargetScroll: false,
                             copyRootClassesToWrapper: true,
                             contentTemplate: () => {
                                 const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
@@ -1138,7 +1137,6 @@ export const validatingModule = {
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
-                            closeOnTargetScroll: false,
                             position: {
                                 collision: 'flip',
                                 boundary: this._rowsView.element(),

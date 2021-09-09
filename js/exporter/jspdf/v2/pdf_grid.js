@@ -1,4 +1,4 @@
-import { isDefined } from '../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 import { PdfPage } from './pdf_page';
 import { PdfTable } from './pdf_table';
 

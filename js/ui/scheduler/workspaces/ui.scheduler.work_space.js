@@ -540,6 +540,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this._updateScrollable();
     }
 
     getWorkSpaceMinWidth() {
@@ -1325,8 +1327,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _isSkippedData() { return false; }
-
     getDroppableCellIndex() {
         const $droppableCell = this._getDroppableCell();
         const $row = $droppableCell.parent();
@@ -1618,35 +1618,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 result.push($cell);
             }
         });
-
-        return result;
-    }
-
-    getGroupWidth(groupIndex) { // TODO move to the grouping layer
-        const cellWidth = this.getCellWidth();
-        let result = this._getCellCount() * cellWidth;
-        // TODO: refactor after deleting old render
-        if(this.isVirtualScrolling()) {
-            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
-            const groupLength = groupedData[groupIndex][0].length;
-
-            result = groupLength * cellWidth;
-        }
-
-        const position = this.getMaxAllowedPosition(groupIndex);
-        const currentPosition = position[groupIndex];
-
-        if(currentPosition) {
-            if(this._isRTL()) {
-                result = currentPosition - position[groupIndex + 1];
-            } else {
-                if(groupIndex === 0) {
-                    result = currentPosition;
-                } else {
-                    result = currentPosition - position[groupIndex - 1];
-                }
-            }
-        }
 
         return result;
     }
@@ -2269,7 +2240,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
-            isSkippedDataCallback: this._isSkippedData.bind(this),
             getPositionShiftCallback: this.getPositionShift.bind(this),
             getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
         });

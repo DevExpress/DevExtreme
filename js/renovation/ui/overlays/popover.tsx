@@ -26,7 +26,7 @@ import { BaseWidgetProps } from '../common/base_props';
 const isDesktop = !(!devices.real().generic || devices.isSimulator());
 
 export const viewFunction = ({
-  wrapperRef,
+  domComponentWrapperRef,
   props,
   restAttributes,
 }: Popover): JSX.Element => {
@@ -36,7 +36,7 @@ export const viewFunction = ({
     <DomComponentWrapper
       componentType={LegacyPopover}
       componentProps={props}
-      ref={wrapperRef}
+      ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
@@ -69,8 +69,6 @@ export class PopoverProps extends BaseWidgetProps {
 
   @OneWay() disabled = false;
 
-  @OneWay() elementAttr = {};
-
   @OneWay() height: number | string | (() => number | string) = 'auto';
 
   @OneWay() hideEvent?: string;
@@ -86,10 +84,6 @@ export class PopoverProps extends BaseWidgetProps {
   @OneWay() minHeight?: number | string | (() => number | string) | null = null;
 
   @OneWay() minWidth?: number | string | (() => number | string) | null = null;
-
-  @Event() onContentReady?: () => void;
-
-  @Event() onDisposing?: () => void;
 
   @Event() onHidden?: () => void;
 
@@ -134,7 +128,7 @@ export class PopoverProps extends BaseWidgetProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() toolbarItems?: any;
 
-  @TwoWay() visible!: boolean;
+  @TwoWay() visible = true;
 
   @OneWay() width: number | string | (() => number | string) = 'auto';
 
@@ -143,20 +137,18 @@ export class PopoverProps extends BaseWidgetProps {
 @Component({
   view: viewFunction,
 })
-export class Popover extends JSXComponent<PopoverProps, 'visible'>() {
-  @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
+export class Popover extends JSXComponent(PopoverProps) {
+  @Ref() domComponentWrapperRef!: RefObject<DomComponentWrapper>;
 
-  @Mutable() // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  instance: any;
+  @Mutable() instance!: { option };
 
   @Effect()
   saveInstance(): void {
-    this.instance = this.wrapperRef.current?.getInstance();
+    this.instance = this.domComponentWrapperRef.current?.getInstance() as { option };
   }
 
   @Effect()
-  setListeners(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  setHideEventListener(): void {
     this.instance.option('onHiding', () => {
       this.props.visible = false;
     });

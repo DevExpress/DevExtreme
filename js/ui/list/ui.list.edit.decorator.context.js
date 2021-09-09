@@ -25,7 +25,7 @@ registerDecorator(
             return this._list._createComponent($element, Overlay, {
                 shading: false,
                 deferRendering: true,
-                closeOnTargetScroll: true,
+                hideOnParentScroll: true,
                 closeOnOutsideClick: function(e) {
                     return !$(e.target).closest('.' + CONTEXTMENU_CLASS).length;
                 },

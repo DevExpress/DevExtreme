@@ -532,6 +532,8 @@
     "dxGantt-sortingDescendingText": "Csökkenő",
     "dxGantt-sortingClearText": "Rendezés törlése",
     "dxGantt-showResources": "TODO",
-    "dxGantt-showDependencies": "TODO"
+    "dxGantt-showDependencies": "TODO",
+    "dxGantt-dialogStartDateValidation": "TODO",
+    "dxGantt-dialogEndDateValidation": "TODO"
 }
 }

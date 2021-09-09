@@ -26,7 +26,7 @@ import { BaseWidgetProps } from '../common/base_props';
 const isDesktop = !(!devices.real().generic || devices.isSimulator());
 
 export const viewFunction = ({
-  wrapperRef,
+  domComponentWrapperRef,
   props,
   restAttributes,
 }: Tooltip): JSX.Element => {
@@ -36,7 +36,7 @@ export const viewFunction = ({
     <DomComponentWrapper
       componentType={LegacyTooltip}
       componentProps={props}
-      ref={wrapperRef}
+      ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
@@ -91,10 +91,6 @@ export class TooltipProps extends BaseWidgetProps {
 
   @OneWay() minWidth?: number | string | (() => number | string) | null = null;
 
-  @Event() onContentReady?: () => void;
-
-  @Event() onDisposing?: () => void;
-
   @Event() onHidden?: () => void;
 
   @Event() onHiding?: () => void;
@@ -124,7 +120,7 @@ export class TooltipProps extends BaseWidgetProps {
 
   @OneWay() target?: string | Element; // Todo: default value
 
-  @TwoWay() visible!: boolean;
+  @TwoWay() visible = true;
 
   @OneWay() width?: number | string | (() => number | string) = 'auto';
 
@@ -134,20 +130,18 @@ export class TooltipProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Tooltip extends JSXComponent<TooltipProps, 'visible'>() {
-  @Ref() wrapperRef!: RefObject<DomComponentWrapper>;
+export class Tooltip extends JSXComponent(TooltipProps) {
+  @Ref() domComponentWrapperRef!: RefObject<DomComponentWrapper>;
 
-  @Mutable() // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  instance: any;
+  @Mutable() instance!: { option };
 
   @Effect()
   saveInstance(): void {
-    this.instance = this.wrapperRef.current?.getInstance();
+    this.instance = this.domComponentWrapperRef.current?.getInstance() as { option };
   }
 
   @Effect()
-  setListeners(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  setHideEventListener(): void {
     this.instance.option('onHiding', () => {
       this.props.visible = false;
     });

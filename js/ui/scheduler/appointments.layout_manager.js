@@ -50,6 +50,8 @@ class AppointmentLayoutManager {
             isVirtualScrolling: this.instance.isVirtualScrolling(),
             leftVirtualCellCount: cellCountInsideLeftVirtualCell,
             topVirtualCellCount: cellCountInsideTopVirtualRow,
+            intervalCount: workspace.option('intervalCount'),
+            hoursInterval: workspace.option('hoursInterval'),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
@@ -79,9 +81,7 @@ class AppointmentLayoutManager {
             intervalDuration: workspace.getIntervalDuration(),
             isVerticalOrientation: workspace.isVerticalOrientation(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
-            isSkippedDataCallback: workspace._isSkippedData.bind(workspace),
             getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
-            getGroupWidthCallback: workspace.getGroupWidth.bind(workspace),
             DOMMetaData: workspace.getDOMElementsMetaData(),
         };
     }
