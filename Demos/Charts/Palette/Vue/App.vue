@@ -133,6 +133,6 @@ export default {
 
 .options-container > .option {
     display: flex;
-    align-items: center;
+    align-items: baseline;
 }
 </style>
