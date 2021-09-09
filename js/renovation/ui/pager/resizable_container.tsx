@@ -17,8 +17,34 @@ export const viewFunction = ({
   pagesRef,
   infoTextVisible,
   isLargeDisplayMode,
-  contentAttributes,
-  props: { contentTemplate: Content },
+  props: {
+    contentTemplate: Content,
+    pagerProps: {
+      pageSize,
+      pageIndex,
+      pageIndexChange,
+      pageSizeChange,
+      gridCompatibility,
+      className,
+      showInfo,
+      infoText,
+      lightModeEnabled,
+      displayMode,
+      maxPagesCount,
+      pageCount,
+      pagesCountText,
+      visible,
+      hasKnownLastPage,
+      pagesNavigatorVisible,
+      showPageSizes,
+      pageSizes,
+      rtlEnabled,
+      showNavigationButtons,
+      totalCount,
+      onKeyDown,
+    },
+  },
+  restAttributes,
 }: ResizableContainer): JSX.Element => (
   <Content
     rootElementRef={parentRef}
@@ -27,8 +53,30 @@ export const viewFunction = ({
     pagesRef={pagesRef}
     infoTextVisible={infoTextVisible}
     isLargeDisplayMode={isLargeDisplayMode}
+    pageSize={pageSize}
+    pageIndex={pageIndex}
+    pageIndexChange={pageIndexChange}
+    pageSizeChange={pageSizeChange}
+    gridCompatibility={gridCompatibility}
+    className={className}
+    showInfo={showInfo}
+    infoText={infoText}
+    lightModeEnabled={lightModeEnabled}
+    displayMode={displayMode}
+    maxPagesCount={maxPagesCount}
+    pageCount={pageCount}
+    pagesCountText={pagesCountText}
+    visible={visible}
+    hasKnownLastPage={hasKnownLastPage}
+    pagesNavigatorVisible={pagesNavigatorVisible}
+    showPageSizes={showPageSizes}
+    pageSizes={pageSizes}
+    rtlEnabled={rtlEnabled}
+    showNavigationButtons={showNavigationButtons}
+    totalCount={totalCount}
+    onKeyDown={onKeyDown}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...contentAttributes}
+    {...restAttributes}
   />
 );
 interface ChildElements<T> { pageSizes: T; pages: T; info: T }
@@ -104,62 +152,6 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
     if (parentWidth > 0) {
       this.updateAdaptivityProps();
     }
-  }
-
-  get contentAttributes(): Record<string, unknown> & InternalPagerProps {
-    // Without destructing in react defaultPageSize and defaultPageIndex from this.props.pagerProps
-    // added to contentAttributes after added to Widget.restAttributes
-    // and way to the following error:
-    // React does not recognize the `defaultPageSize` prop on a DOM element.
-    const {
-      pageSize,
-      pageIndex,
-      pageIndexChange,
-      pageSizeChange,
-      gridCompatibility,
-      className,
-      showInfo,
-      infoText,
-      lightModeEnabled,
-      displayMode,
-      maxPagesCount,
-      pageCount,
-      pagesCountText,
-      visible,
-      hasKnownLastPage,
-      pagesNavigatorVisible,
-      showPageSizes,
-      pageSizes,
-      rtlEnabled,
-      showNavigationButtons,
-      totalCount,
-      onKeyDown,
-    } = this.props.pagerProps;
-    return {
-      ...this.restAttributes,
-      pageSize,
-      pageIndex,
-      pageIndexChange,
-      pageSizeChange,
-      gridCompatibility,
-      className,
-      showInfo,
-      infoText,
-      lightModeEnabled,
-      displayMode,
-      maxPagesCount,
-      pageCount,
-      pagesCountText,
-      visible,
-      hasKnownLastPage,
-      pagesNavigatorVisible,
-      showPageSizes,
-      pageSizes,
-      rtlEnabled,
-      showNavigationButtons,
-      totalCount,
-      onKeyDown,
-    };
   }
 
   updateAdaptivityProps(): void {

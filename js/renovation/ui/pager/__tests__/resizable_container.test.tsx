@@ -11,7 +11,6 @@ import {
   calculateAdaptivityProps,
 } from '../resizable_container';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
-import { InternalPagerProps } from '../common/pager_props';
 
 jest.mock('../../../utils/get_computed_style');
 jest.mock('../../../../core/utils/resize_callbacks');
@@ -48,24 +47,21 @@ describe('resizable-container', () => {
         pagesRef: 'pagesRef' as any,
         infoTextVisible: true,
         isLargeDisplayMode: true,
-        contentAttributes: {
-          pagerPropsProp1: 'pagerPropsProp1',
-          pagerPropsProp2: 'pagerPropsProp2',
-          pageIndexChange: jest.fn(),
-          pageSizeChange: jest.fn(),
-        } as Partial<InternalPagerProps>,
         props: {
           contentTemplate,
+          pagerProps: {
+            pageIndexChange: jest.fn(),
+            pageSizeChange: jest.fn(),
+          },
         } as any,
+        restAttributes: { restAttribute: 'restAttribute' },
       } as Partial<ResizableContainer>;
 
       const tree = shallow(
         <ResizableContainerComponent {...props as any} />,
       );
       expect(tree.props()).toEqual({
-        pagerPropsProp1: 'pagerPropsProp1',
-        pagerPropsProp2: 'pagerPropsProp2',
-        restAttribute: props.restAttributes?.restAttribute,
+        restAttribute: 'restAttribute',
         infoTextRef: 'infoTextRef',
         infoTextVisible: true,
         isLargeDisplayMode: true,
@@ -83,7 +79,7 @@ describe('resizable-container', () => {
     function createComponent(sizes: {
       width; pageSizes; info; pages;
     }) {
-      const component = new ResizableContainer({ } as ResizableContainerProps);
+      const component = new ResizableContainer({} as ResizableContainerProps);
       const {
         parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
       } = getElementsRef(sizes);
@@ -107,19 +103,6 @@ describe('resizable-container', () => {
     }
 
     describe('UpdateChildProps', () => {
-      describe('contentAttributes', () => {
-        it('should merge rest attributes with know pager props exclude react twoWay defaultPageSize and defaultPageIndex', () => {
-          const resizableContainer = new ResizableContainer({
-            pagerProps: { defaultPageSize: 5, defaultIndex: 5, infoText: true },
-          } as any);
-
-          expect(resizableContainer.contentAttributes).toMatchObject({
-            'rest-attributes': 'restAttributes',
-            infoText: true,
-          });
-        });
-      });
-
       it('first render should update elementsWidth', () => {
         const component = createComponent({
           width: 400, pageSizes: 100, info: 50, pages: 100,
@@ -359,7 +342,7 @@ describe('resizable-container', () => {
       });
 
       it('visible is changed from false to true', () => {
-      // visible false
+        // visible false
         const component = createComponent({
           width: 0, pageSizes: 0, info: 0, pages: 0,
         });
