@@ -104,3 +104,11 @@ $scheduler-group-header-agenda-font-size: 18px;
     }
   }
 }
+
+.dx-scheduler-small {
+  .dx-scheduler-agenda {
+    .dx-scheduler-time-panel {
+      width: $scheduler-agenda-left-column-width;
+    }
+  }
+}
