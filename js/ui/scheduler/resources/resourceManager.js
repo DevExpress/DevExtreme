@@ -1,6 +1,6 @@
 import { wrapToArray } from '../../../core/utils/array';
 import { isDefined } from '../../../core/utils/type';
-import { each } from '../../../core/utils/iterator';
+// import { each } from '../../../core/utils/iterator';
 import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { when, Deferred } from '../../../core/utils/deferred';
 
@@ -29,16 +29,20 @@ export class ResourceManager {
         this.setResources(resources);
     }
 
-    getDataAccessors(field, type) {
-        let result = null;
-        each(this._dataAccessors[type], function(accessorName, accessors) {
-            if(field === accessorName) {
-                result = accessors;
-                return false;
-            }
-        });
+    getDataAccessors(fieldName, type) {
+        // let result = null;
 
-        return result;
+        const actions = this._dataAccessors[type];
+        return actions[fieldName];
+
+        // each(this._dataAccessors[type], function(accessorName, accessors) {
+        //     if(fieldName === accessorName) {
+        //         result = accessors;
+        //         return false;
+        //     }
+        // });
+
+        // return result;
     }
 
     setResources(resources = []) {
