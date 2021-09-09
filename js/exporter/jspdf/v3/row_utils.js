@@ -88,10 +88,9 @@ function recalculateHeightForMergedRows(doc, rows) {
                 .filter(cell => isDefined(cell.rowSpan));
 
             cellsWithRowSpan.forEach(cell => {
-                const pdfCell = cell.pdfCell;
-                const textHeight = calculateTextHeight(doc, pdfCell.text, pdfCell.font, {
-                    wordWrapEnabled: pdfCell.wordWrapEnabled,
-                    columnWidth: pdfCell._rect.w
+                const textHeight = calculateTextHeight(doc, cell.pdfCell.text, cell.pdfCell.font, {
+                    wordWrapEnabled: cell.pdfCell.wordWrapEnabled,
+                    columnWidth: cell.pdfCell._rect.w
                 });
                 const summaryRowHeight = calculateSummaryRowsHeightWithAdditionalHeights(row.rowIndex, cell.rowSpan);
                 if(textHeight > summaryRowHeight) {
