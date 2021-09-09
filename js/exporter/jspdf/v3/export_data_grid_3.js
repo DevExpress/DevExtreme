@@ -1,6 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { initializeCellsWidth, calculateHeights, calculateCoordinates } from './row_utils';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates } from './row_utils';
 import { generateRowsInfo } from './rows_generator';
 import { drawPdfCells } from './draw_utils';
 
@@ -45,13 +45,13 @@ function exportDataGrid(doc, dataGrid, options) {
             initializeCellsWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
 
             // apply colSpans + recalculate cellsWidth
-            // TODO: applyColSpans();
+            applyColSpans(rowsInfo);
 
             // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled or use value from customizeCell
             calculateHeights(doc, rowsInfo, options);
 
             // apply rowSpans + recalculate cells height
-            // TODO: applyRowSpans();
+            applyRowSpans(rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
             calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
@@ -68,9 +68,11 @@ function exportDataGrid(doc, dataGrid, options) {
 
             const pdfCellsInfo = [].concat.apply([],
                 rowsInfo.map(rowInfo => {
-                    return rowInfo.cells.map(cellInfo => {
-                        return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
-                    });
+                    return rowInfo.cells
+                        .filter(cell => !isDefined(cell.pdfCell.isMerged))
+                        .map(cellInfo => {
+                            return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
+                        });
                 })
             );
 

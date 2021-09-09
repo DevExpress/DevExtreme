@@ -476,7 +476,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        $('.dx-datagrid-export-button').trigger('dxclick');
+        $('.dx-datagrid-export-button .dx-button').trigger('dxclick');
 
         checkDxFontIcon(assert, '.dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
         checkDxFontIcon(assert, '.dx-icon-exportselected', DX_ICON_EXPORT_SELECTED_CONTENT_CODE);

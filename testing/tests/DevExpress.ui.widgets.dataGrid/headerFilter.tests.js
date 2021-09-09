@@ -431,7 +431,7 @@ QUnit.module('Header Filter', {
         // T291384
         assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.collision'), 'flip fit');
         // T756320
-        assert.strictEqual(that.headerFilterView.getPopupContainer().option('closeOnTargetScroll'), false, 'closeOnTargetScroll should be false');
+        assert.strictEqual(that.headerFilterView.getPopupContainer().option('hideOnParentScroll'), false, 'hideOnParentScroll should be false');
     });
 
     // T435785

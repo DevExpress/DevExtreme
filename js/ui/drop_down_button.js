@@ -4,7 +4,7 @@ import { FunctionTemplate } from '../core/templates/function_template';
 import registerComponent from '../core/component_registrator';
 import ButtonGroup from './button_group';
 import Popup from './popup';
-import List from './list';
+import List from './list_light';
 import { compileGetter } from '../core/utils/data';
 import { getPublicElement } from '../core/element';
 import { getImageContainer } from '../core/utils/icon';

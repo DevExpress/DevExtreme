@@ -92,15 +92,16 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     hScrollbarRef, vScrollbarRef,
     topPocketRef, bottomPocketRef, bottomPocketClientHeight, topPocketClientHeight,
     cursorEnterHandler, cursorLeaveHandler,
-    isHovered, contentTranslateOffsetChange, scrollLocationChange,
+    isHovered, scrollLocationChange,
     scrollableOffsetLeft, scrollableOffsetTop,
-    contentWidth, containerClientWidth, contentHeight, containerClientHeight,
+    contentWidth, containerClientWidth, contentHeightWithoutPockets, containerClientHeight,
     scrollableRef, updateHandler, contentStyles, containerStyles, onBounce,
     onReachBottom, onRelease, onPullDown, onScroll, onEnd, direction, topPocketState,
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler,
     lock, unlock, containerHasSizes,
+    hScrollOffsetMax, vScrollOffsetMax,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -175,9 +176,9 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               contentSize={contentWidth}
               containerSize={containerClientWidth}
               isScrollableHovered={isHovered}
+              maxOffset={hScrollOffsetMax}
               scrollLocation={hScrollLocation}
               scrollLocationChange={scrollLocationChange}
-              contentTranslateOffsetChange={contentTranslateOffsetChange}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
@@ -194,12 +195,12 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               direction="vertical"
               ref={vScrollbarRef}
               scrollableOffset={scrollableOffsetTop}
-              contentSize={contentHeight}
+              contentSize={contentHeightWithoutPockets}
               containerSize={containerClientHeight}
               isScrollableHovered={isHovered}
+              maxOffset={vScrollOffsetMax}
               scrollLocation={vScrollLocation}
               scrollLocationChange={scrollLocationChange}
-              contentTranslateOffsetChange={contentTranslateOffsetChange}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
@@ -315,10 +316,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @InternalState() vScrollLocation = 0;
 
   @InternalState() hScrollLocation = 0;
-
-  @InternalState() vContentTranslateOffset = 0;
-
-  @InternalState() hContentTranslateOffset = 0;
 
   @Method()
   content(): HTMLDivElement {
@@ -538,12 +535,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect() effectResetInactiveState(): void {
-    if (this.props.direction === DIRECTION_BOTH
-      || !isDefined(this.containerRef.current)) {
+    if (this.props.direction === DIRECTION_BOTH) {
       return;
     }
 
-    this.containerRef.current[this.fullScrollInactiveProp] = 0;
+    this.scrollLocationChange(this.fullScrollInactiveProp, 0);
   }
 
   @Effect({ run: 'always' }) updateScrollbarSize(): void {
@@ -700,16 +696,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     }
   }
 
-  onScroll(): void {
-    eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
+  get hScrollOffsetMax(): number {
+    return -Math.max(this.contentWidth - this.containerClientWidth, 0);
   }
 
-  contentTranslateOffsetChange(prop: string, translateOffset: number): void {
-    if (prop === 'top') {
-      this.vContentTranslateOffset = translateOffset;
-    } else {
-      this.hContentTranslateOffset = translateOffset;
-    }
+  get vScrollOffsetMax(): number {
+    return -Math.max(this.visibleScrollAreaSize, 0);
+  }
+
+  onScroll(): void {
+    eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
   }
 
   cursorEnterHandler(): void {
@@ -1127,6 +1123,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       : Math.max(this.contentScrollHeight, this.contentClientHeight);
   }
 
+  get contentHeightWithoutPockets(): number {
+    const size = this.contentHeight - this.bottomPocketClientHeight - this.topPocketClientHeight;
+
+    if (this.props.forceGeneratePockets && this.props.reachBottomEnabled) {
+      return Math.max(size - this.contentPaddingBottom, 0);
+    }
+
+    return Math.max(size, 0);
+  }
+
+  get visibleScrollAreaSize(): number {
+    return Math.max(this.contentHeightWithoutPockets - this.containerClientHeight, 0);
+  }
+
   get contentWidth(): number {
     // T320141
     return getElementOverflowX(this.contentRef?.current) === 'hidden'
@@ -1141,8 +1151,37 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   get contentStyles(): { [key: string]: string } {
     return {
-      transform: `translate(${this.hContentTranslateOffset}px, ${this.vContentTranslateOffset}px)`,
+      transform: `translate(${this.contentTranslateX}px, ${this.contentTranslateY}px)`,
     };
+  }
+
+  get contentTranslateY(): number {
+    const location = this.vScrollLocation;
+    let transformValue = location % 1;
+
+    const maxOffset = this.vScrollOffsetMax
+      - this.bottomPocketClientHeight - this.contentPaddingBottom;
+
+    if (location > 0) {
+      transformValue = location;
+    } else if (location <= maxOffset) {
+      transformValue = location - maxOffset;
+    }
+
+    return transformValue - this.topPocketClientHeight;
+  }
+
+  get contentTranslateX(): number {
+    const location = this.hScrollLocation;
+    let transformValue = location % 1;
+
+    if (location > 0) {
+      transformValue = location;
+    } else if (location <= this.hScrollOffsetMax) {
+      transformValue = location - this.hScrollOffsetMax;
+    }
+
+    return transformValue;
   }
 
   get containerStyles(): { [key: string]: string } {
