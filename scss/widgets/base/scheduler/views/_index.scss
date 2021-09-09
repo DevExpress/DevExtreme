@@ -548,14 +548,6 @@ $scheduler-header-panel-top-gap: null !default;
     .dx-scheduler-group-header {
       width: 200px;
     }
-
-    .dx-scheduler-group-row .dx-scheduler-group-header {
-      border-right: $scheduler-base-border;
-    }
-
-    .dx-scheduler-last-group-cell {
-      border-right: $scheduler-accent-border;
-    }
   }
 
   .dx-scheduler-date-table,
@@ -596,6 +588,16 @@ $scheduler-header-panel-top-gap: null !default;
     .dx-scheduler-group-row .dx-scheduler-group-header {
       border: none;
       border-top: $scheduler-base-border;
+    }
+
+    &.dx-scheduler-work-space-group-by-date {
+      .dx-scheduler-group-row .dx-scheduler-group-header {
+        border-right: $scheduler-base-border;
+      }
+
+      .dx-scheduler-group-row .dx-scheduler-last-group-cell {
+        border-right: $scheduler-accent-border;
+      }
     }
   }
 }
