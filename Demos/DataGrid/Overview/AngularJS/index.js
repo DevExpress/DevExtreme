@@ -86,6 +86,6 @@ DemoApp.controller('DemoController', ($scope) => {
   };
 
   $scope.customizeTooltip = function (pointsInfo) {
-    return { text: `${parseInt(pointsInfo.originalValue)}%` };
+    return { text: `${parseInt(pointsInfo.originalValue, 10)}%` };
   };
 });

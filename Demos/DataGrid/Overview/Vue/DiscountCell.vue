@@ -52,7 +52,7 @@ export default {
     return {
       customizeTooltip(data) {
         return {
-          text: `${parseInt(data.value)}%`,
+          text: `${parseInt(data.value, 10)}%`,
         };
       },
     };

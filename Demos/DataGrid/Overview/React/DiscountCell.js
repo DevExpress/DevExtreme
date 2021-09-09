@@ -29,6 +29,6 @@ export default function DiscountCell(cellData) {
 
 function customizeTooltip(data) {
   return {
-    text: `${parseInt(data.value)}%`,
+    text: `${parseInt(data.value, 10)}%`,
   };
 }

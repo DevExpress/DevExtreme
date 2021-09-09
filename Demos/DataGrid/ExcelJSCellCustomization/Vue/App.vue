@@ -94,7 +94,7 @@ export default {
         customizeCell: ({ gridCell, excelCell }) => {
           if (gridCell.rowType === 'data') {
             if (gridCell.column.dataField === 'Phone') {
-              excelCell.value = parseInt(gridCell.value);
+              excelCell.value = parseInt(gridCell.value, 10);
               excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';
             }
             if (gridCell.column.dataField === 'Website') {
