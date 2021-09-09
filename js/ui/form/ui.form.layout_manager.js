@@ -30,7 +30,7 @@ import '../date_box';
 import '../button';
 
 import { getLabelWidthByText } from './components/label';
-import { renderFieldItemTo } from './components/field_item.js';
+import { renderFieldItem } from './components/field_item.js';
 import { renderButtonItem } from './components/button_item.js';
 import { renderEmptyItem } from './components/empty_item.js';
 import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
@@ -351,15 +351,15 @@ const LayoutManager = Widget.inherit({
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
 
-                let itemRootElementCssClasses = item.cssClass;
+                let itemCssClasses = item.cssClass || '';
 
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
-                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_FIRST_ROW_CLASS;
+                    itemCssClasses += ' ' + LAYOUT_MANAGER_FIRST_ROW_CLASS;
                 }
                 if(e.location.col === 0) {
-                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_FIRST_COL_CLASS;
+                    itemCssClasses += ' ' + LAYOUT_MANAGER_FIRST_COL_CLASS;
                 }
 
                 if(item.itemType === SIMPLE_ITEM_TYPE && that.option('isRoot')) {
@@ -369,31 +369,27 @@ const LayoutManager = Widget.inherit({
                 const rowsCount = that._getRowsCount();
                 const isLastRow = e.location.row === rowsCount - 1;
                 if(isLastColumn) {
-                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_LAST_COL_CLASS;
+                    itemCssClasses += ' ' + LAYOUT_MANAGER_LAST_COL_CLASS;
                 }
                 if(isLastRow) {
-                    itemRootElementCssClasses += ' ' + LAYOUT_MANAGER_LAST_ROW_CLASS;
+                    itemCssClasses += ' ' + LAYOUT_MANAGER_LAST_ROW_CLASS;
                 }
 
-                const $fieldItem = $('<div>');
                 switch(item.itemType) {
                     case 'empty':
                         renderEmptyItem()
-                            .addClass(itemRootElementCssClasses)
+                            .addClass(itemCssClasses)
                             .appendTo($itemElement);
                         break;
                     case 'button':
-                        itemRootElementCssClasses += ' ' + FIELD_ITEM_CLASS + ' ' + this.option('cssItemClass');
+                        itemCssClasses += ` ${FIELD_ITEM_CLASS} ${this.option('cssItemClass') || ''}`;
                         if(isDefined(item.col)) {
-                            itemRootElementCssClasses += ' dx-col-' + item.col;
+                            itemCssClasses += ' dx-col-' + item.col;
                         }
-                        that._renderButtonItem({ item, $parent: $itemElement, itemRootElementCssClasses });
+                        that._renderButtonItem({ item, $parent: $itemElement, rootElementCssClasses: itemCssClasses });
                         break;
                     default:
-                        $fieldItem
-                            .addClass(itemRootElementCssClasses)
-                            .appendTo($itemElement);
-                        that._renderFieldItem(item, $fieldItem);
+                        that._renderFieldItem({ item, $parent: $itemElement, rootElementCssClasses: itemCssClasses });
                 }
             },
             cols: that._generateRatio(colCount),
@@ -521,11 +517,11 @@ const LayoutManager = Widget.inherit({
         renderEmptyItem({ $container });
     },
 
-    _renderButtonItem: function({ item, $parent, itemRootElementCssClasses }) {
-        const { $itemRootElement, buttonInstance } = renderButtonItem({
+    _renderButtonItem: function({ item, $parent, rootElementCssClasses }) {
+        const { $rootElement, buttonInstance } = renderButtonItem({
             item,
             $parent,
-            itemRootElementCssClasses,
+            rootElementCssClasses,
             validationGroup: this.option('validationGroup'),
             createComponentCallback: this._createComponent.bind(this),
         });
@@ -535,11 +531,17 @@ const LayoutManager = Widget.inherit({
             item,
             widgetInstance: buttonInstance, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
-            $itemContainer: $itemRootElement
+            $itemContainer: $rootElement
         });
     },
 
-    _renderFieldItem: function(item, $container) {
+    _renderFieldItem: function({ item, $parent, rootElementCssClasses }) {
+        // TODO: move to outer method:
+        rootElementCssClasses += ` ${FIELD_ITEM_CLASS} ${this.option('cssItemClass') || ''}`;
+        if(isDefined(item.col)) {
+            rootElementCssClasses += ` dx-col-${item.col}`;
+        }
+
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -549,17 +551,17 @@ const LayoutManager = Widget.inherit({
 
         const name = item.dataField || item.name;
 
-        $container
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
+        // $container
+        //     .addClass(FIELD_ITEM_CLASS)
+        //     .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
 
-        const { $fieldEditorContainer, instance } = renderFieldItemTo(convertToRenderFieldItemOptions({
-            $container,
+        const { $fieldEditorContainer, instance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
+            $parent,
+            rootElementCssClasses,
             item,
             name,
             editorValue,
             canAssignUndefinedValueToEditor,
-            containerCssClass: this.option('cssItemClass'),
             parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
             useFlexLayout: this._hasBrowserFlex(),
@@ -583,7 +585,7 @@ const LayoutManager = Widget.inherit({
             item,
             widgetInstance: instance,
             guid: item.guid,
-            $itemContainer: $container
+            $itemContainer: $rootElement
         });
     },
 

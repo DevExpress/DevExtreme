@@ -7,13 +7,13 @@ const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
 export function renderButtonItem({
     item,
     $parent,
-    itemRootElementCssClasses,
+    rootElementCssClasses,
     validationGroup,
     createComponentCallback
 }) {
-    const $itemRootElement = $('<div>')
+    const $rootElement = $('<div>')
         .appendTo($parent)
-        .addClass(itemRootElementCssClasses)
+        .addClass(rootElementCssClasses)
         .addClass(FIELD_BUTTON_ITEM_CLASS)
         .css('textAlign', convertAlignmentToTextAlign(item.horizontalAlignment));
 
@@ -21,10 +21,10 @@ export function renderButtonItem({
     $parent.css('justifyContent', convertAlignmentToJustifyContent(item.verticalAlignment));
 
     const $button = $('<div>')
-        .appendTo($itemRootElement);
+        .appendTo($rootElement);
 
     return {
-        $itemRootElement,
+        $rootElement,
         buttonInstance: createComponentCallback(
             $button, 'dxButton',
             extend({ validationGroup }, item.buttonOptions))
