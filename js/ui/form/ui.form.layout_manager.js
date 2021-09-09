@@ -375,17 +375,18 @@ const LayoutManager = Widget.inherit({
                     itemCssClasses += ' ' + LAYOUT_MANAGER_LAST_ROW_CLASS;
                 }
 
+                if(item.itemType !== 'empty') {
+                    itemCssClasses += ` ${FIELD_ITEM_CLASS} ${that.option('cssItemClass') || ''}`;
+                    if(isDefined(item.col)) {
+                        itemCssClasses += ' dx-col-' + item.col;
+                    }
+                }
+
                 switch(item.itemType) {
                     case 'empty':
-                        renderEmptyItem()
-                            .addClass(itemCssClasses)
-                            .appendTo($itemElement);
+                        renderEmptyItem({ $parent: $itemElement, rootElementCssClasses: itemCssClasses });
                         break;
                     case 'button':
-                        itemCssClasses += ` ${FIELD_ITEM_CLASS} ${this.option('cssItemClass') || ''}`;
-                        if(isDefined(item.col)) {
-                            itemCssClasses += ' dx-col-' + item.col;
-                        }
                         that._renderButtonItem({ item, $parent: $itemElement, rootElementCssClasses: itemCssClasses });
                         break;
                     default:
@@ -536,12 +537,6 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderFieldItem: function({ item, $parent, rootElementCssClasses }) {
-        // TODO: move to outer method:
-        rootElementCssClasses += ` ${FIELD_ITEM_CLASS} ${this.option('cssItemClass') || ''}`;
-        if(isDefined(item.col)) {
-            rootElementCssClasses += ` dx-col-${item.col}`;
-        }
-
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -550,10 +545,6 @@ const LayoutManager = Widget.inherit({
         }
 
         const name = item.dataField || item.name;
-
-        // $container
-        //     .addClass(FIELD_ITEM_CLASS)
-        //     .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
 
         const { $fieldEditorContainer, instance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
             $parent,
