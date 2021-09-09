@@ -160,7 +160,7 @@ export default {
         if (target === 'headerFilter' && value === 'weekends') {
           return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
         }
-        return column.defaultCalculateFilterExpression(...arguments);
+        return column.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
       },
       currentFilter,
       dataGridRefName: 'dataGrid',

@@ -32,7 +32,7 @@ $(() => {
         if (target === 'headerFilter' && value === 'weekends') {
           return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
         }
-        return this.defaultCalculateFilterExpression(...arguments);
+        return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
       },
       headerFilter: {
         dataSource(data) {

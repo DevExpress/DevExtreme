@@ -75,12 +75,11 @@ window.onload = function () {
     $.getJSON('../../../../../node_modules/cldr-core/supplemental/weekData.json'),
     $.getJSON('../../../../../node_modules/cldr-core/supplemental/currencyData.json'),
     $.getJSON('../../../../../node_modules/cldr-core/supplemental/numberingSystems.json'),
-  ).then(function () {
-    return [].slice.apply(arguments, [0]).map((result) => result[0]);
-  }).then(
-    Globalize.load,
-  ).then(() => {
-    Globalize.locale(getLocale());
-    ko.applyBindings(viewModel, $('#demo-container')[0]);
-  });
+  )
+    .then((...args) => [].slice.apply(args, [0]).map((result) => result[0]))
+    .then(Globalize.load)
+    .then(() => {
+      Globalize.locale(getLocale());
+      ko.applyBindings(viewModel, $('#demo-container')[0]);
+    });
 };
