@@ -12,6 +12,7 @@ import errors from '../../widget/ui.errors';
 
 import WidgetCollector from './widget_collector';
 import { each } from '../../../core/utils/iterator';
+import browser from '../../../core/utils/browser';
 import { isString, isObject, isDefined, isEmptyObject, isBoolean } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import localizationMessage from '../../../localization/message';
@@ -582,12 +583,13 @@ if(Quill) {
                 const formData = this.quill.getFormat();
                 const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
                 this.editorInstance.formDialogOption('title', localizationMessage.format(caption));
+                const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
                 const promise = this.editorInstance.showFormDialog({
                     formData: formData,
                     items: [{
                         dataField: name,
                         editorType: 'dxColorView',
-                        _forceItemFlexSizeCorrectionInIE: true, // WA for the T702531 (IE only)
+                        _forceItemFlexSizeCorrectionInIE: IS_IE11, // WA for the T702531 (IE only)
                         editorOptions: {
                             focusStateEnabled: false
                         },
