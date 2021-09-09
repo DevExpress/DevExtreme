@@ -46,8 +46,8 @@ DemoApp.controller('DemoController', ($scope) => {
           },
           onClick(e) {
             const clonedItem = angular.copy(e.row.data);
-
-            clonedItem.ID = maxID += 1;
+            maxID += 1;
+            clonedItem.ID = maxID;
             employees.splice(e.row.rowIndex, 0, clonedItem);
             e.component.refresh(true);
             e.event.preventDefault();

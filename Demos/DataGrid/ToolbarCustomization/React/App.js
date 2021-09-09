@@ -29,6 +29,7 @@ class App extends React.Component {
     this.groupChanged = this.groupChanged.bind(this);
     this.collapseAllClick = this.collapseAllClick.bind(this);
     this.refreshDataGrid = this.refreshDataGrid.bind(this);
+    this.getRef = this.getRef.bind(this);
   }
 
   getGroupCount(groupField) {
@@ -59,10 +60,15 @@ class App extends React.Component {
     this.dataGrid.instance.refresh();
   }
 
+  getRef(ref) {
+    this.dataGrid = ref;
+    window.dataGrid = this.dataGrid;
+  }
+
   render() {
     return (
       <DataGrid id="gridContainer"
-        ref={(ref) => window.dataGrid = this.dataGrid = ref}
+        ref={this.getRef}
         dataSource={this.orders}
         keyExpr="ID"
         showBorders={true}>

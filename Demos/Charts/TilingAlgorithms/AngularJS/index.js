@@ -64,7 +64,8 @@ DemoApp.controller('DemoController', ($scope) => {
       const rect = totalRect.slice();
 
       totalSum -= item.value;
-      rect[side + 2] = totalRect[side] += size;
+      totalRect[side] += size;
+      rect[side + 2] = totalRect[side];
       item.rect = rect;
       side = 1 - side;
     });

@@ -165,7 +165,8 @@ class App extends React.Component {
     } else {
       array = directory.dataItem.items;
       if (!array) {
-        directory.dataItem.items = array = [];
+        array = [];
+        directory.dataItem.items = array;
       }
     }
 
