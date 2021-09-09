@@ -3,6 +3,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
+import { getGroupWidth } from 'ui/scheduler/workspaces/helpers/positionHelper';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
@@ -204,9 +205,25 @@ module('Work Space Month', () => {
 
         test('Group width calculation', function(assert) {
             this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }] }]);
-            sinon.stub(this.instance, 'getCellWidth').returns(50);
+            this.instance.option('width', 600);
 
-            assert.equal(this.instance.getGroupWidth(), 350, 'Group width is OK');
+            const groupWidth = getGroupWidth(
+                0,
+                this.instance.viewDataProvider,
+                {
+                    intervalCount: this.instance.option('intervalCount'),
+                    currentDate: this.instance.option('currentDate'),
+                    viewType: this.instance.type,
+                    hoursInterval: this.instance.option('hoursInterval'),
+                    startDayHour: this.instance.option('startDayHour'),
+                    endDayHour: this.instance.option('endDayHour'),
+                    isVirtualScrolling: this.instance.isVirtualScrolling(),
+                    rtlEnabled: this.instance.option('rtlEnabled'),
+                    DOMMetaData: this.instance.getDOMElementsMetaData()
+                }
+            );
+
+            assert.roughEqual(groupWidth, 597, 1.01, 'Group width is OK');
         });
 
         test('Get cell count to last view date', function(assert) {
@@ -312,9 +329,26 @@ module('Work Space Month', () => {
         });
 
         test('Group width calculation', function(assert) {
-            sinon.stub(this.instance, 'getCellWidth').returns(50);
+            this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }] }]);
+            this.instance.option('width', 600);
 
-            assert.equal(this.instance.getGroupWidth(), 350, 'Group width is OK');
+            const groupWidth = getGroupWidth(
+                0,
+                this.instance.viewDataProvider,
+                {
+                    intervalCount: this.instance.option('intervalCount'),
+                    currentDate: this.instance.option('currentDate'),
+                    viewType: this.instance.type,
+                    hoursInterval: this.instance.option('hoursInterval'),
+                    startDayHour: this.instance.option('startDayHour'),
+                    endDayHour: this.instance.option('endDayHour'),
+                    isVirtualScrolling: this.instance.isVirtualScrolling(),
+                    rtlEnabled: this.instance.option('rtlEnabled'),
+                    DOMMetaData: this.instance.getDOMElementsMetaData()
+                }
+            );
+
+            assert.equal(groupWidth, 525, 'Group width is OK');
         });
 
         test('Tables should not be rerendered if dimension was changed and horizontal scrolling is disabled', function(assert) {

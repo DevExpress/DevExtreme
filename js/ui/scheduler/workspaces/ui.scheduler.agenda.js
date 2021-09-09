@@ -494,15 +494,6 @@ class SchedulerAgenda extends WorkSpace {
         return this.getEndViewDate();
     }
 
-    getCoordinatesByDate() {
-        return {
-            top: 0,
-            left: 0,
-            max: 0,
-            groupIndex: 0
-        };
-    }
-
     getCellDataByCoordinates() {
         return {
             startDate: null,
