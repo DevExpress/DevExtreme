@@ -67,6 +67,37 @@ function applyRowSpans(rows) {
     }
 }
 
+function applyBordersConfig(rows) {
+    for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        const cells = rows[rowIndex].cells;
+        for(let columnIndex = 0; columnIndex < cells.length; columnIndex++) {
+            const pdfCell = cells[columnIndex].pdfCell;
+            const leftPdfCell = (columnIndex >= 1) ? cells[columnIndex - 1].pdfCell : null;
+            const topPdfCell = (rowIndex >= 1) ? rows[rowIndex - 1].cells[columnIndex].pdfCell : null;
+
+            if(pdfCell.drawLeftBorder === false && !isDefined(pdfCell.colSpan)) { // TODO: Check this logic after implementing splitting to pages
+                if(isDefined(leftPdfCell)) {
+                    leftPdfCell.drawRightBorder = false;
+                }
+            } else if(!isDefined(pdfCell.drawLeftBorder)) {
+                if(isDefined(leftPdfCell) && leftPdfCell.drawRightBorder === false) {
+                    pdfCell.drawLeftBorder = false;
+                }
+            }
+
+            if(pdfCell.drawTopBorder === false) {
+                if(isDefined(topPdfCell)) {
+                    topPdfCell.drawBottomBorder = false;
+                }
+            } else if(!isDefined(pdfCell.drawTopBorder)) {
+                if(isDefined(topPdfCell) && topPdfCell.drawBottomBorder === false) {
+                    pdfCell.drawTopBorder = false;
+                }
+            }
+        }
+    }
+}
+
 function calculateCoordinates(doc, rows, options) {
     let y = options?.topLeft?.y ?? 0;
     rows.forEach(row => {
@@ -80,4 +111,17 @@ function calculateCoordinates(doc, rows, options) {
     });
 }
 
-export { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates };
+function calculateTableSize(doc, rows, options) {
+    const topLeft = options?.topLeft;
+    const columnWidths = options?.columnWidths;
+    const rowHeights = rows.map(row => row.height);
+
+    return {
+        x: topLeft?.x ?? 0,
+        y: topLeft?.y ?? 0,
+        w: columnWidths?.reduce((a, b) => a + b, 0) ?? 0,
+        h: rowHeights?.reduce((a, b) => a + b, 0) ?? 0
+    };
+}
+
+export { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };

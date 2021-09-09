@@ -1,29 +1,66 @@
 import { isDefined } from '../../../core/utils/type';
-import { drawTextInRect, drawRect } from './pdf_utils_v3';
+import { drawTextInRect, drawLine, drawRect } from './pdf_utils_v3';
 import { extend } from '../../../core/utils/extend';
 
 const defaultBorderLineWidth = 1;
 
-function drawPdfCells(doc, cellsArray) {
+function drawCellsContent(doc, cellsArray) {
     const docStyles = getDocumentStyles(doc);
     cellsArray.forEach(cell => {
-        drawCell(doc, cell, docStyles);
+        // TODO: drawCellBackground(doc, cell);
+        drawCellText(doc, cell, docStyles);
     });
     setDocumentStyles(doc, docStyles);
 }
 
-function drawCell(doc, cell, docStyles) {
-    // TODO: draw background
-
+function drawCellText(doc, cell, docStyles) {
     setCurrentFont(doc, cell, docStyles);
 
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
         drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
+}
 
-    // TODO: move to the separated method "drawGridLines()"
-    doc.setLineWidth(defaultBorderLineWidth);
-    drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
+function drawCellsLines(doc, cellsArray) {
+    cellsArray.forEach(cell => {
+        // TODO: doc.setDrawColor(borderColor); // cell.borderColor OR docStyles.borderColor
+        drawBorders(doc, cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
+    });
+}
+
+function drawGridLines(doc, rect) {
+    drawBorders(doc, rect);
+}
+
+function drawBorders(doc, rect, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true) {
+    if(!isDefined(rect)) {
+        throw 'rect is required';
+    }
+
+    if(!drawLeftBorder && !drawRightBorder && !drawTopBorder && !drawBottomBorder) {
+        return;
+    } else if(drawLeftBorder && drawRightBorder && drawTopBorder && drawBottomBorder) {
+        doc.setLineWidth(defaultBorderLineWidth);
+        drawRect(doc, rect.x, rect.y, rect.w, rect.h);
+    } else {
+        doc.setLineWidth(defaultBorderLineWidth);
+
+        if(drawTopBorder) {
+            drawLine(doc, rect.x, rect.y, rect.x + rect.w, rect.y); // top
+        }
+
+        if(drawLeftBorder) {
+            drawLine(doc, rect.x, rect.y, rect.x, rect.y + rect.h); // left
+        }
+
+        if(drawRightBorder) {
+            drawLine(doc, rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + rect.h); // right
+        }
+
+        if(drawBottomBorder) {
+            drawLine(doc, rect.x, rect.y + rect.h, rect.x + rect.w, rect.y + rect.h); // bottom
+        }
+    }
 }
 
 function setCurrentFont(doc, cell, styles) {
@@ -83,5 +120,5 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawPdfCells };
+export { drawCellsContent, drawCellsLines, drawGridLines };
 

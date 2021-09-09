@@ -1,8 +1,8 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { initializeCellsWidth, applyColSpans, applyRowSpans, calculateHeights, calculateCoordinates } from './row_utils';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize } from './row_utils';
 import { generateRowsInfo } from './rows_generator';
-import { drawPdfCells } from './draw_utils';
+import { drawCellsContent, drawCellsLines, drawGridLines } from './draw_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -59,8 +59,7 @@ function exportDataGrid(doc, dataGrid, options) {
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
 
-            // set/update/initBorders(rows);
-            // TODO: initBorders(rows);
+            applyBordersConfig(rowsInfo);
 
             // splitting to pages
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
@@ -76,9 +75,15 @@ function exportDataGrid(doc, dataGrid, options) {
                 })
             );
 
-            drawPdfCells(doc, pdfCellsInfo); // draw content only ???
+            drawCellsContent(doc, pdfCellsInfo);
+            drawCellsLines(doc, pdfCellsInfo);
 
-            // drawGridLines(); draw grid lines only ???
+            const isDrawTableBorderSpecified = options.drawTableBorder === true;
+            const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
+            if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
+                const tableRect = calculateTableSize(doc, rowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
+                drawGridLines(doc, tableRect);
+            }
 
             resolve();
         });
