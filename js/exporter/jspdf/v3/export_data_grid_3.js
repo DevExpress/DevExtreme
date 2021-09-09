@@ -53,6 +53,7 @@ function exportDataGrid(doc, dataGrid, options) {
             // apply rowSpans + recalculate cells height
             applyRowSpans(rowsInfo);
 
+            // when we know all rowSpans we can recalculate rowsHeight
             recalculateHeightForMergedRows(doc, rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
