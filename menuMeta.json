@@ -1075,7 +1075,6 @@
           {
             "Title": "Drill Down",
             "Name": "DrillDown",
-            "DocUrl": "ApiReference/Data_Layer/PivotGridDataSource/Methods/#createDrillDownDataSourceoptions",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
