@@ -33,12 +33,12 @@ function calculateAdditionalRowsHeights(doc, rows) {
             });
 
             const rowsCount = cell.rowSpan + 1;
-            const summaryRowsHeight = rows
+            const currentRowSpanRowsHeight = rows
                 .slice(row.rowIndex, row.rowIndex + rowsCount)
                 .reduce((accumulator, rowInfo) => accumulator + rowInfo.height + rowsAdditionalHeights[rowInfo.rowIndex], 0);
 
-            if(cellTextHeight > summaryRowsHeight) {
-                const delta = (cellTextHeight - summaryRowsHeight) / rowsCount;
+            if(cellTextHeight > currentRowSpanRowsHeight) {
+                const delta = (cellTextHeight - currentRowSpanRowsHeight) / rowsCount;
                 for(let spanIndex = row.rowIndex; spanIndex < row.rowIndex + rowsCount; spanIndex++) {
                     rowsAdditionalHeights[spanIndex] += delta;
                 }
