@@ -1,1 +1,5 @@
-The PivotGrid ships with virtual scrolling support. Virtual scrolling improves the performance when displaying large numbers of&nbsp;PivotGrid cells. The PivotGrid in&nbsp;this demo contains approximately 4000&nbsp;cells. To&nbsp;see virtual scrolling in&nbsp;action, scroll the PivotGrid horizontally.
+If the PivotGrid is bound to a large dataset, you can enable the virtual scrolling mode to optimize data load time and reduce resource consumption. In this mode, the PivotGrid loads only the cells that are in the viewport. When cells leave the viewport, the PivotGrid removes them from the DOM.
+
+To enable this mode, set the **scrolling**.[mode](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/scrolling/#mode) to _"virtual"_.
+
+In this demo, the PivotGrid stores approximately 4000 values locally. To see virtual scrolling in action, scroll the PivotGrid horizontally.

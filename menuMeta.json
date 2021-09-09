@@ -1088,7 +1088,6 @@
           {
             "Title": "Virtual Scrolling",
             "Name": "VirtualScrolling",
-            "DocUrl": "ApiReference/UI_Components/dxPivotGrid/Configuration/scrolling/#mode",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/SalesDataController.cs",
