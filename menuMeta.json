@@ -1064,7 +1064,6 @@
           {
             "Title": "Summary Display Modes",
             "Name": "SummaryDisplayModes",
-            "DocUrl": "Guide/UI_Components/PivotGrid/Summaries/#Runtime_Summary_Type_Selection",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
