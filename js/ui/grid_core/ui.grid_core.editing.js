@@ -1057,7 +1057,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
                 const columnIndex = that.getFirstEditableColumnIndex();
-                editRowIndex >= 0 && columnIndex >= 0 && that.editCell(editRowIndex, columnIndex);
+                columnIndex >= 0 && that.editCell(editRowIndex, columnIndex);
             });
         },
 
