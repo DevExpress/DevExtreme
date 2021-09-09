@@ -44,7 +44,7 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/html-editor';
-import { DxPopup } from './devextreme-vue/popup';
+import { DxPopup } from 'devextreme-vue/popup';
 import { markup } from './data.js';
 
 export default {

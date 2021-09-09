@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-webpack-loader-syntax */
 import React from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';

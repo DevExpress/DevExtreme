@@ -58,7 +58,8 @@
   </div>
 </template>
 <script>
-
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-webpack-loader-syntax */
 import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
 } from 'devextreme-vue/data-grid';
