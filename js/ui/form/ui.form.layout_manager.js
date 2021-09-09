@@ -383,6 +383,10 @@ const LayoutManager = Widget.inherit({
                             .appendTo($itemElement);
                         break;
                     case 'button':
+                        itemRootElementCssClasses += ' ' + FIELD_ITEM_CLASS + ' ' + this.option('cssItemClass');
+                        if(isDefined(item.col)) {
+                            itemRootElementCssClasses += ' dx-col-' + item.col;
+                        }
                         that._renderButtonItem({ item, $parent: $itemElement, itemRootElementCssClasses });
                         break;
                     default:
@@ -518,11 +522,6 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderButtonItem: function({ item, $parent, itemRootElementCssClasses }) {
-        itemRootElementCssClasses += ' ' + FIELD_ITEM_CLASS + ' ' + this.option('cssItemClass');
-        if(isDefined(item.col)) {
-            itemRootElementCssClasses += ' dx-col-' + item.col;
-        }
-
         const { $itemRootElement, buttonInstance } = renderButtonItem({
             item,
             $parent,
