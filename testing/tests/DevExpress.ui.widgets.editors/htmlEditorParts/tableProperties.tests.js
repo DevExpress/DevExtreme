@@ -27,6 +27,8 @@ const tableMarkup = '\
     </table>\
     <br>after table text<br>';
 
+// const LIST_ITEM_CLASS = 'dx-list-item';
+
 const { test, module } = QUnit;
 
 module('Table properties forms', {
@@ -54,15 +56,16 @@ module('Table properties forms', {
     }
 }, () => {
     test('show table Form', function(assert) {
-
+        // $('#qunit-fixture').css('position', 'static');
         this.createWidget();
 
         const $tableElement = this.$element.find('table').eq(0);
         this.quillInstance.setSelection(50, 1);
 
         showTablePropertiesForm(this.instance, $tableElement);
-        this.clock.tick(500);
+        this.clock.tick(1800);
         const $form = $('.dx-form:not(.dx-formdialog-form)');
+
 
         assert.strictEqual($form.length, 1);
         assert.ok($form.eq(0).is(':visible'));
@@ -81,4 +84,96 @@ module('Table properties forms', {
         assert.strictEqual($form.length, 1);
         assert.ok($form.eq(0).is(':visible'));
     });
+
+    test('Check properties edititng at the cell Form (without dimentions)', function(assert) {
+        // debugger
+        this.createWidget();
+
+        const $tableElement = this.$element.find('table').eq(0);
+        this.quillInstance.setSelection(50, 1);
+
+        showCellPropertiesForm(this.instance, $tableElement);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        const formInstance = $form.dxForm('instance');
+
+        const borderStyleEditor = formInstance.getEditor('borderStyle');
+        borderStyleEditor.option('value', 'dotted');
+
+        const borderWidthEditor = formInstance.getEditor('borderWidth');
+        borderWidthEditor.option('value', '3px');
+
+        const borderColorEditor = formInstance.getEditor('borderColor');
+        borderColorEditor.option('value', 'red');
+
+        // const $editors = $form.find('.dx-texteditor-input');
+
+
+        // const $borderStyleInput = $editors.eq(0);
+        // $borderStyleInput.trigger('dxclick');
+        // $($element.find(`.${LIST_ITEM_CLASS}`).eq(0))
+
+
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
+    });
+
+    test('Check cell height edititng', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('table').eq(0);
+        this.quillInstance.setSelection(50, 1);
+
+        showCellPropertiesForm(this.instance, $tableElement);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
+    });
+
+    test('Check cell width edititng', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('table').eq(0);
+        this.quillInstance.setSelection(50, 1);
+
+        showCellPropertiesForm(this.instance, $tableElement);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
+    });
+
+    test('Check cell width edititing for the last table column', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('table').eq(0);
+        this.quillInstance.setSelection(50, 1);
+
+        showCellPropertiesForm(this.instance, $tableElement);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
+    });
+
+    test('Check cell width edititing if the table has one column', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('table').eq(0);
+        this.quillInstance.setSelection(50, 1);
+
+        showCellPropertiesForm(this.instance, $tableElement);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
+    });
+
+
 });

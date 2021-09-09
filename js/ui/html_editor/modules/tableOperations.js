@@ -13,21 +13,25 @@ const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 
 let formPopup;
 
 const createFormPopup = (editorInstance) => {
-    const $popup = $('<div>').appendTo(editorInstance._$element);
+    const $popup = $('<div>').addClass('test-123').appendTo(editorInstance.$element());
     formPopup = editorInstance._createComponent($popup, Popup, {
-        contentTemplate: () => {},
-        deferRendering: false,
+        contentTemplate: () => { return $('<div>').addClass('test-1234'); },
+        deferRendering: true,
         showTitle: false,
         width: 600,
         height: 'auto',
         shading: false,
         closeOnTargetScroll: true,
         closeOnOutsideClick: true,
-        animation: {
-            show: { type: 'fade', duration: 0, from: 0, to: 1 },
-            hide: { type: 'fade', duration: 400, from: 1, to: 0 }
-        },
+        // animation: {
+        //     show: null,
+        //     hide: null,
+        //     // show: { type: 'fade', duration: 0, from: 0, to: 1 },
+        //     // hide: { type: 'fade', duration: 400, from: 1, to: 0 }
+        // },
+        // animation: null,
         fullScreen: false,
+        visible: false,
         maxHeight: getMaxHeight()
     });
 };
@@ -50,30 +54,30 @@ const applyDimensionChanges = ($target, newHeight, newWidth) => {
 
 const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
-        // const columnIndex = getColumnIndex($target);
-        // $target.css('width', 'initial');
-        // $target.attr('width', newWidth + 'px');
         const index = $($target).index();
-        const $verticalCells = getLineElements($target.closest('table'), index);
+        let $verticalCells = getLineElements($target.closest('table'), index);
 
-
-        // each($verticalCells, (_, currentCell) => {
-        //     $(currentCell).attr('width', newWidth + 'px');
-        // });
-
+        const widthDiff = newWidth - $target.width();
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
+
+        const $nextColumnCell = $target.next();
+
+        if($nextColumnCell.length === 1) {
+            $verticalCells = getLineElements($target.closest('table'), index + 1);
+            setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq().width() - widthDiff);
+        } else {
+            const $prevColumnCell = $target.prev();
+            if($prevColumnCell.length === 1) {
+                $verticalCells = getLineElements($target.closest('table'), index - 1);
+                setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq().width() - widthDiff);
+            }
+        }
     }
 
     const $horizontalCells = $target.closest('tr, thead').find('td');
 
-    // each($horizontalCells, (_, currentCell) => {
-    //     $(currentCell).attr('height', newHeight + 'px');
-
-    // });
 
     setLineElementsAttrValue($horizontalCells, 'height', newHeight);
-
-    // $target.attr('height', newHeight);
 
 };
 
@@ -103,6 +107,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
     let formInstance;
     let alignmentEditorInstance;
     let borderColorEditorInstance;
+    let backgroundColorEditorInstance;
     const startTableWidth = $table.outerWidth();
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
@@ -115,7 +120,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             borderStyle: tableStyles.borderStyle,
             borderColor: tableStyles.borderColor,
             borderWidth: tableStyles.borderWidth,
-            // alignment: startTextAlign,
+            alignment: startTextAlign,
         },
         items: [{
             itemType: 'group',
@@ -130,20 +135,12 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                         items: BORDER_STYLES
                     }
                 },
-                // {
-                //     dataField: 'borderColor',
-                //     label: { text: 'Color' },
-                //     editorType: 'dxColorBox',
-                //     editorOptions: {
-                //         editAlphaChannel: true
-                //     }
-                // },
+
                 {
                     itemType: 'simple',
                     dataField: 'borderColor',
                     label: { text: 'Color' },
                     template: (e) => {
-
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ColorBox, {
                             editAlphaChannel: true,
@@ -172,6 +169,22 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                 //         editAlphaChannel: true
                 //     }
                 // }
+                {
+                    itemType: 'simple',
+                    dataField: 'backgroundColor',
+                    label: { text: 'Color' },
+                    template: (e) => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ColorBox, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').backgroundColor,
+                            onInitialized: (e) => {
+                                backgroundColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    },
+                },
             ]
         }, {
             itemType: 'group',
@@ -180,6 +193,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             items: [
                 'width', 'height', {
                     itemType: 'simple',
+                    // dataField: 'alignment',
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
@@ -205,10 +219,10 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                     const widthArg = formData.width === startTableWidth ? undefined : formData.width;
                     applyDimensionChanges($table, formData.height, widthArg);
                     $table.css({
-                        'backgroundColor': formData.backgroundColor,
+                        'backgroundColor': backgroundColorEditorInstance.option('value'),
                         'borderStyle': formData.borderStyle,
-                        'borderColor': formData.borderColor,
-                        'borderWidth': borderColorEditorInstance.option('value'),
+                        'borderColor': borderColorEditorInstance.option('value'),
+                        'borderWidth': formData.borderWidth,
                         'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0]
                     });
 
@@ -229,8 +243,11 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
 
         return $form;
     });
+    // console.log('formPopup.show()!');
+    // console.log(formPopup);
 
     formPopup.show();
+
 };
 
 
@@ -244,6 +261,8 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     let formInstance;
     let alignmentEditorInstance;
     let verticalAlignmentEditorInstance;
+    let borderColorEditorInstance;
+    let backgroundColorEditorInstance;
     const startCellWidth = $cell.outerWidth();
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
@@ -273,14 +292,22 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                         items: BORDER_STYLES
                     }
                 },
-                // {
-                //     dataField: 'borderColor',
-                //     caption: 'Color',
-                //     editorType: 'dxColorBox',
-                //     editorOptions: {
-                //         editAlphaChannel: true
-                //     }
-                // },
+                {
+                    itemType: 'simple',
+                    dataField: 'borderColor',
+                    label: { text: 'Color' },
+                    template: (e) => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ColorBox, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').borderColor,
+                            onInitialized: (e) => {
+                                borderColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    },
+                },
                 {
                     dataField: 'borderWidth',
                     caption: 'Width'
@@ -290,14 +317,22 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             itemType: 'group',
             caption: 'Background',
             items: [
-                // {
-                //     dataField: 'backgroundColor',
-                //     caption: 'Color',
-                //     editorType: 'dxColorBox',
-                //     editorOptions: {
-                //         editAlphaChannel: true
-                //     }
-                // }
+                {
+                    itemType: 'simple',
+                    dataField: 'backgroundColor',
+                    label: { text: 'Color' },
+                    template: (e) => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ColorBox, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').backgroundColor,
+                            onInitialized: (e) => {
+                                backgroundColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    },
+                }
             ]
         }, {
             itemType: 'group',
@@ -352,9 +387,9 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                     const widthArg = formData.width === startCellWidth ? undefined : formData.width;
                     applyCellDimensionChanges($cell, formData.height, widthArg);
                     $cell.css({
-                        'backgroundColor': formData.backgroundColor,
+                        'backgroundColor': backgroundColorEditorInstance.option('value'),
                         'borderStyle': formData.borderStyle,
-                        'borderColor': formData.borderColor,
+                        'borderColor': borderColorEditorInstance.option('value'),
                         'borderWidth': formData.borderWidth,
                         'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
                         'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
