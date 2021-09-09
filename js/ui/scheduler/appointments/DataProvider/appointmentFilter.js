@@ -11,6 +11,7 @@ import query from '../../../../data/query';
 import timeZoneUtils from '../../utils.timeZone';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
 import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getResourcesDataByGroups } from '../../resources/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -601,7 +602,7 @@ export class AppointmentFilterBaseStrategy {
         const apptEndDayHour = endDate.getHours();
 
         return (apptStartDayHour <= startDayHour && apptEndDayHour <= endDayHour && apptEndDayHour >= startDayHour) ||
-                   (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
+            (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
     }
 
     _filterAppointmentByRRule(appointment, min, max, startDayHour, endDayHour, firstDayOfWeek) {
@@ -788,6 +789,10 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     _getPrerenderFilterResources(groupIndex) {
         const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
 
-        return this.resourceManager.getResourcesDataByGroups([cellGroup]);
+        return getResourcesDataByGroups(
+            this.resourceManager.loadedResources,
+            this.resourceManager.getResources(),
+            [cellGroup]
+        );
     }
 }
