@@ -1,12 +1,16 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { appointmentCollectorData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-and-drop behaviour for the appointment tooltip`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
   const scheduler = new Scheduler('#container');

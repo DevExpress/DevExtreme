@@ -1,10 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Appointments:disable`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Layout:Appointments:disable`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Appointment popup should be readOnly if appointment is disabled', async (t) => {
   const scheduler = new Scheduler('#container');

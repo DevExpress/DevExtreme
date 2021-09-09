@@ -1,10 +1,14 @@
 import { ClientFunction } from 'testcafe';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
-fixture`Scheduler: NativeScrolling`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Scheduler: NativeScrolling`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 const createScheduler = async (options): Promise<void> => createWidget('dxScheduler', options, true);
 

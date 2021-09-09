@@ -1,11 +1,16 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Rendering of the recurrence appointments in  Scheduler `
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Rendering of the recurrence appointments in  Scheduler `
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
   const scheduler = new Scheduler('#container');

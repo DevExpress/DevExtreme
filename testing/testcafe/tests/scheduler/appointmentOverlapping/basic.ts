@@ -1,10 +1,15 @@
 import { simpleData, allDayData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment overlapping in Scheduler`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment overlapping in Scheduler`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Multi-day appointment should not overlap other appointments when specific width is set, \'auto\' mode (T864456)', async (t) => {
   const scheduler = new Scheduler('#container');

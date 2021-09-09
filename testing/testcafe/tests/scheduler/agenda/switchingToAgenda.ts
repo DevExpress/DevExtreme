@@ -1,10 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:view switching`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Agenda:view switching`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('View switching should work for empty agenda', async (t) => {
   const scheduler = new Scheduler('#container');

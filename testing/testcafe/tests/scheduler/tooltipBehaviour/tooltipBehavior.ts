@@ -2,8 +2,9 @@ import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { disposeWidgets } from '../../../helpers/createWidget';
 
-fixture`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
+fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../container.html'));
 
 test('The tooltip of collector should not scroll page and immediately hide', async (t) => {
@@ -54,6 +55,9 @@ test('The tooltip of collector should not scroll page and immediately hide', asy
   }],
 })).after(async (t) => {
   await t.resizeWindow(1200, 800);
+  // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+  await t.wait(200);
+  await disposeWidgets();
 });
 
 test('The tooltip should not hide after automatic scrolling during an appointment click', async (t) => {
@@ -71,6 +75,9 @@ test('The tooltip should not hide after automatic scrolling during an appointmen
   dataSource,
 })).after(async (t) => {
   await t.resizeWindow(1200, 800);
+  // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+  await t.wait(200);
+  await disposeWidgets();
 });
 
 test('The tooltip should hide after manually scrolling in the browser', async (t) => {
@@ -92,4 +99,7 @@ test('The tooltip should hide after manually scrolling in the browser', async (t
   dataSource,
 })).after(async (t) => {
   await t.resizeWindow(1200, 800);
+  // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+  await t.wait(200);
+  await disposeWidgets();
 });

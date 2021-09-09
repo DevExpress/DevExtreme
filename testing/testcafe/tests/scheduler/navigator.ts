@@ -1,10 +1,14 @@
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 
-fixture`Scheduler: Navigator`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Scheduler: Navigator`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 const createScheduler = async (options = {}): Promise<void> => {
   await createWidget('dxScheduler', extend(options, {

@@ -1,10 +1,14 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 
-fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+fixture.disablePageReloads`Scheduler: Material theme layout`
+  .page(url(__dirname, '../../../../containerMaterial.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
   await createWidget('dxScheduler', {

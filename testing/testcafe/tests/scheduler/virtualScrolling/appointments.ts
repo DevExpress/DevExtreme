@@ -1,11 +1,15 @@
 import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domElement';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { scrollTo } from './utils';
 
-fixture`Scheduler: Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler: Virtual Scrolling`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -8,9 +8,14 @@ import {
   checkAllDayCellsWhenInViewport,
   checkAllDayCellsWhenNotInViewport,
 } from './init/widget.setup';
+import { disposeWidgets } from '../../../helpers/createWidget';
 
-fixture`Scheduler: Cells Selection in Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 const scheduler = new Scheduler('#container');
 

@@ -1,11 +1,16 @@
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import FocusableElement from '../../../model/internal/focusable';
 
-fixture`Hotkeys for appointments update and navigation`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Hotkeys for appointments update and navigation`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 ['week', 'month'].forEach((view) => {
   test(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {

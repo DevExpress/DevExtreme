@@ -1,10 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../../model/scheduler';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
-fixture`Layout: Views: IntervalCount with StartDate`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 [{
   view: 'timelineDay',

@@ -1,10 +1,14 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:layout`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Agenda:layout`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 const data = [{
   text: 'Website Re-Design Plan',

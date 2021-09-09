@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 const dataSource = [{
   text: 'test-appt-1',
@@ -26,8 +26,12 @@ const priorityData = [{
   color: 'rgb(225, 142, 146)',
 }];
 
-fixture`Appointment resources`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment resources`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Reosurce color should be correct if group is set in "views"', async (t) => {
   const scheduler = new Scheduler('#container');

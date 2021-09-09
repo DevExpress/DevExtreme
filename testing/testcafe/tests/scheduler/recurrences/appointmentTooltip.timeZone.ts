@@ -1,9 +1,13 @@
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment tooltip with recurrence appointment and custom time zone`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment tooltip with recurrence appointment and custom time zone`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Time in appointment tooltip should has valid value in case with recurrence appointment and custom time zone(T848058)', async (t) => {
   const scheduler = new Scheduler('#container');

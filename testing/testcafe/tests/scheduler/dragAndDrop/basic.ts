@@ -1,10 +1,15 @@
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-and-drop appointments in the Scheduler basic views`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler basic views`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 ['day', 'week', 'workWeek'].forEach((view) => test(`Drag-n-drop in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');

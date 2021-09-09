@@ -1,10 +1,14 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: View with cross-scrolling`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Scheduler: View with cross-scrolling`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Scrollable synchronization should work after changing current date (T1027231)', async (t) => {
   const scheduler = new Scheduler('#container');

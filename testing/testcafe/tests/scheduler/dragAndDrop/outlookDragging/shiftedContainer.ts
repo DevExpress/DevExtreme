@@ -1,10 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Outlook dragging base tests in shifted container`
-  .page(url(__dirname, 'shiftedContainer.html'));
+fixture.disablePageReloads`Outlook dragging base tests in shifted container`
+  .page(url(__dirname, 'shiftedContainer.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Basic drag-n-drop movements in shifted container', async (t) => {
   const scheduler = new Scheduler('#container');

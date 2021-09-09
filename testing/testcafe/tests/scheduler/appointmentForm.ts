@@ -1,10 +1,14 @@
 import { Selector } from 'testcafe';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
-fixture`Appointment popup form`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Appointment popup form`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Subject and description fields should be empty after showing popup on empty cell', async (t) => {
   const APPOINTMENT_TEXT = 'Website Re-Design Plan';

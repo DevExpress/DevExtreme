@@ -1,10 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Appointments collector`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Appointments collector`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Appointment collector has correct offset when adaptivityEnabled=true', async (t) => {
   const scheduler = new Scheduler('#container');

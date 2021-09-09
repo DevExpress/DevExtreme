@@ -1,8 +1,8 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:adaptive`
+fixture.disablePageReloads`Agenda:adaptive`
   .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
@@ -65,6 +65,9 @@ Promise<void> => {
     }).before(async () => createScheduler(testCase.groups, rtlEnabled))
       .after(async (t) => {
         await t.resizeWindow(1200, 800);
+        // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+        await t.wait(200);
+        await disposeWidgets();
       });
   });
 });

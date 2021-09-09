@@ -1,11 +1,15 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Outlook dragging, for case scheduler in container`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Outlook dragging, for case scheduler in container`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 test('Dragging should be work right in case dxScheduler placed in dxTabPanel', async (t) => {
   const scheduler = new Scheduler('.dx-scheduler');

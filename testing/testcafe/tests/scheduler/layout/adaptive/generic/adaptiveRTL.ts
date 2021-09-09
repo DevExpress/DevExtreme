@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 import {
@@ -11,7 +11,7 @@ import {
 } from '../../utils';
 import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 
-fixture`Scheduler: Adaptive Generic theme layout in RTL`
+fixture.disablePageReloads`Scheduler: Adaptive Generic theme layout in RTL`
   .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (
@@ -58,6 +58,9 @@ const createScheduler = async (
     });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+    await t.wait(200);
+    await disposeWidgets();
   });
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t) => {
@@ -87,6 +90,9 @@ const createScheduler = async (
     });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+    await t.wait(200);
+    await disposeWidgets();
   });
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t) => {
@@ -116,5 +122,8 @@ const createScheduler = async (
     });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+    await t.wait(200);
+    await disposeWidgets();
   });
 });

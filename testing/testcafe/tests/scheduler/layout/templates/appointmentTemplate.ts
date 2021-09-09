@@ -1,11 +1,15 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Templates:appointmentTemplate`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Layout:Templates:appointmentTemplate`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'agenda'].forEach((currentView) => {
   test(`appointmentTemplate layout should be rendered right in '${currentView}'`, async (t) => {

@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 
-fixture`Layout:BrowserResize`
+fixture.disablePageReloads`Layout:BrowserResize`
   .page(url(__dirname, '../../../../container.html'));
 
 const data = [{
@@ -145,5 +145,8 @@ const resourceDataSource = [{
     });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    // WA due to the https://github.com/DevExpress/testcafe/issues/2230
+    await t.wait(200);
+    await disposeWidgets();
   });
 });

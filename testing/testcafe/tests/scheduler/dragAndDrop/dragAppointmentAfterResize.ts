@@ -1,9 +1,14 @@
 import createScheduler from './init/widget.setup';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-n-drop appointment after resize(T835545)`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Drag-n-drop appointment after resize(T835545)`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async (t) => {
+    await t.wait(200);
+    await disposeWidgets();
+  });
 
 ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => test(
   `After drag-n-drop appointment, size of appointment shouldn't change in the '${view}' view`, async (t) => {
