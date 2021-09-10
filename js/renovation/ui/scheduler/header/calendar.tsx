@@ -5,6 +5,8 @@ import {
   OneWay,
   TwoWay,
   Fragment,
+  RefObject,
+  Ref,
 } from '@devextreme-generator/declarations';
 import { isMobileLayout } from './utils';
 import { Popup } from '../../overlays/popup';
@@ -26,6 +28,7 @@ export const viewFunction = ({
   updateDate,
   updateVisible,
   isMobile,
+  calendarRef,
 }: SchedulerCalendar): JSX.Element => {
   const children = (
     <div
@@ -38,6 +41,9 @@ export const viewFunction = ({
         max={max}
         firstDayOfWeek={firstDayOfWeek}
         width="100%"
+        focusStateEnabled
+        skipFocusCheck
+        ref={calendarRef}
       />
     </div>
   );
@@ -55,6 +61,7 @@ export const viewFunction = ({
             showCloseButton
             fullScreen
             toolbarItems={[{ shortcut: 'cancel' }]}
+            onShown={(): void => calendarRef.current?.focus()}
           >
             {children}
           </Popup>
@@ -68,6 +75,7 @@ export const viewFunction = ({
             closeOnOutsideClick
             visible={visible}
             visibleChange={updateVisible}
+            onShown={(): void => calendarRef.current?.focus()}
           >
             {children}
           </Popover>
@@ -93,6 +101,8 @@ export class SchedulerCalendarProps {
 
 @Component({ view: viewFunction })
 export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps, 'currentDate' | 'firstDayOfWeek' | 'visible'>() {
+  @Ref() calendarRef!: RefObject<Calendar>;
+
   get isMobile(): boolean {
     return this.props.isMobileLayout;
   }
