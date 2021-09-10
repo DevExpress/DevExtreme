@@ -3251,26 +3251,26 @@ testModule('drag', moduleConfig, () => {
             }
         });
 
-        test('overlay should use window as drag container and 1 as outsideDragFactor value on init with allowDragOutside enable', function(assert) {
-            this.reinit({ allowDragOutside: true });
+        test('overlay should use window as drag container and 1 as outsideDragFactor value on init with dragOutsideBoundary enable', function(assert) {
+            this.reinit({ dragOutsideBoundary: true });
 
             const overlayDrag = this.getDrag();
             assert.strictEqual(overlayDrag.container, window, 'window is a drag container');
             assert.strictEqual(overlayDrag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
         });
 
-        test('overlay should use window as drag container and 1 as outsideDragFactor value after runtime allowDragOutside enable', function(assert) {
-            this.overlay.option('allowDragOutside', true);
+        test('overlay should use window as drag container and 1 as outsideDragFactor value after runtime dragOutsideBoundary enable', function(assert) {
+            this.overlay.option('dragOutsideBoundary', true);
 
             const overlayDrag = this.getDrag();
             assert.strictEqual(overlayDrag.container, window, 'window is a drag container');
             assert.strictEqual(overlayDrag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
         });
 
-        test('overlay should use initial drag container and outsideDragFactor value after allowDragOutside runtime disable', function(assert) {
-            this.reinit({ allowDragOutside: true });
+        test('overlay should use initial drag container and outsideDragFactor value after dragOutsideBoundary runtime disable', function(assert) {
+            this.reinit({ dragOutsideBoundary: true });
 
-            this.overlay.option('allowDragOutside', false);
+            this.overlay.option('dragOutsideBoundary', false);
 
             const overlayDrag = this.getDrag();
             assert.strictEqual(overlayDrag.container, this.$dragContainer.get(0), 'overlay container is a drag container');
@@ -3323,8 +3323,8 @@ testModule('drag', moduleConfig, () => {
             assert.strictEqual(this.getDrag().outsideDragFactor, 1, 'outsideDragFactor is changed');
         });
 
-        test('overlay should not change outsideDragFactor on runtime if allowDragOutside is enabled', function(assert) {
-            this.reinit({ allowDragOutside: true });
+        test('overlay should not change outsideDragFactor on runtime if dragOutsideBoundary is enabled', function(assert) {
+            this.reinit({ dragOutsideBoundary: true });
             this.overlay.option('outsideDragFactor', 0);
 
             assert.strictEqual(this.getDrag().outsideDragFactor, 1, 'outsideDragFactor is not changed');
