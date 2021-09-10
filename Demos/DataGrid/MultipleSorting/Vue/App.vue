@@ -72,7 +72,7 @@ export default {
     onValueChanged() {
       const dataGrid = this.$refs[this.dataGridRefName].instance;
 
-      dataGrid.columnOption(5, 'sortOrder', void 0);
+      dataGrid.columnOption(5, 'sortOrder', undefined);
     },
   },
 };

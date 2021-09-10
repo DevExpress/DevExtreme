@@ -64,7 +64,7 @@ class App extends React.Component {
       positionDisableSorting: !this.state.positionDisableSorting,
     });
 
-    this.dataGrid.instance.columnOption(5, 'sortOrder', void 0);
+    this.dataGrid.instance.columnOption(5, 'sortOrder', undefined);
   }
 }
 
