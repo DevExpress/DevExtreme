@@ -331,7 +331,7 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
 
     appointments.forEach(appointment => {
         const appointmentResources = getResourcesFromItem(
-            () => config.getResources(),
+            config.getResources(),
             (field, action) => config.getDataAccessors(field, action),
             appointment
         );
