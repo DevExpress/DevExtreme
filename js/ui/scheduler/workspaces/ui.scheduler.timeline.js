@@ -17,7 +17,6 @@ import { getDateForHeaderText } from '../../../renovation/ui/scheduler/view_mode
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { hasWindow } from '../../../core/utils/window';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -368,14 +367,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this.updateHeaderEmptyCellWidth();
 
         this._applyCellTemplates(groupCellTemplates);
-    }
-
-    updateHeaderEmptyCellWidth() {
-        if(hasWindow() && this._isRenderHeaderPanelEmptyCell()) {
-            const groupPanelWidth = getBoundingRect(this._$sidebarTable.get(0)).width;
-
-            this._$headerPanelEmptyCell.css('width', groupPanelWidth);
-        }
     }
 
     _setHorizontalGroupHeaderCellsHeight() { return noop(); }

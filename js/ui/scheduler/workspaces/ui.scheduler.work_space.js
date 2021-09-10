@@ -664,8 +664,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     updateHeaderEmptyCellWidth() {
         if(hasWindow() && this._isRenderHeaderPanelEmptyCell()) {
-            const timePanelWidth = getBoundingRect(this._$timePanel.get(0)).width;
-            const groupPanelWidth = getBoundingRect(this._$groupTable.get(0)).width;
+            const timePanelWidth = this.getTimePanelWidth();
+            const groupPanelWidth = this.getGroupTableWidth();
 
             this._$headerPanelEmptyCell.css('width', timePanelWidth + groupPanelWidth);
         }
