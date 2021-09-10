@@ -98,9 +98,8 @@ export const getLineElements = ($table, index, direction) => {
 };
 
 export const showTablePropertiesForm = (editorInstance, $table) => {
-    if(!formPopup) {
-        createFormPopup(editorInstance);
-    }
+    formPopup?.dispose();
+    createFormPopup(editorInstance);
 
     const window = getWindow();
 
@@ -161,14 +160,6 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             itemType: 'group',
             caption: 'Background',
             items: [
-                // {
-                //     dataField: 'backgroundColor',
-                //     label: { text: 'Color' },
-                //     editorType: 'dxColorBox',
-                //     editorOptions: {
-                //         editAlphaChannel: true
-                //     }
-                // }
                 {
                     itemType: 'simple',
                     dataField: 'backgroundColor',
@@ -193,7 +184,6 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             items: [
                 'width', 'height', {
                     itemType: 'simple',
-                    // dataField: 'alignment',
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
@@ -243,8 +233,6 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
 
         return $form;
     });
-    // console.log('formPopup.show()!');
-    // console.log(formPopup.option('visible'));
 
     formPopup.show();
     return formPopup;
@@ -252,9 +240,8 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
 
 
 export const showCellPropertiesForm = (editorInstance, $cell) => {
-    if(!formPopup) {
-        createFormPopup(editorInstance);
-    }
+    formPopup?.dispose();
+    createFormPopup(editorInstance);
 
     const window = getWindow();
 
@@ -362,6 +349,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                     }
                 }, {
                     itemType: 'simple',
+                    label: { text: 'Alignment' },
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {

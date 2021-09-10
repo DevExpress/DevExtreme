@@ -503,7 +503,6 @@ const Overlay = Widget.inherit({
     },
 
     _renderVisibilityAnimate: function(visible) {
-        // console.log('_renderVisibilityAnimate');
         this._observeContentResize(visible);
         this._stopAnimation();
 
@@ -560,7 +559,6 @@ const Overlay = Widget.inherit({
     },
 
     _show: function() {
-        // console.log('overlay show');
         this._showingDeferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
@@ -651,7 +649,6 @@ const Overlay = Widget.inherit({
     },
 
     _hide: function() {
-        // console.log('overlay hide');
         if(!this._currentVisible) {
             return new Deferred().resolve().promise();
         }
@@ -1493,7 +1490,6 @@ const Overlay = Widget.inherit({
                 this._toggleSafariScrolling();
                 break;
             case 'visible':
-                // console.log('visible change ' + value);
                 this._renderVisibilityAnimate(value).done(() => {
                     if(!this._animateDeferred) {
                         return;
@@ -1550,14 +1546,12 @@ const Overlay = Widget.inherit({
     },
 
     toggle: function(showing) {
-        // console.log('overlay toggle ' + showing);
         showing = showing === undefined ? !this.option('visible') : showing;
         const result = new Deferred();
 
-        // if(showing === this.option('visible')) {
-        //     console.log('showing === this.option(visible)');
-        //     return result.resolveWith(this, [showing]).promise();
-        // }
+        if(showing === this.option('visible')) {
+            return result.resolveWith(this, [showing]).promise();
+        }
 
         const animateDeferred = new Deferred();
         this._animateDeferred = animateDeferred;
@@ -1565,7 +1559,6 @@ const Overlay = Widget.inherit({
 
         animateDeferred.promise().done(() => {
             delete this._animateDeferred;
-            // console.log('animateDeferred resolved ' + this.option('visible'));
             result.resolveWith(this, [this.option('visible')]);
         });
 
