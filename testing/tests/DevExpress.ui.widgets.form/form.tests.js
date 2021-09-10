@@ -11,7 +11,6 @@ import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
-import 'ui/color_box';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
