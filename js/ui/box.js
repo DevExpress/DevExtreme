@@ -179,7 +179,7 @@ class FlexLayoutStrategy {
                     width: 'auto',
                     height: 'auto',
                     display: stylePropPrefix('flexDirection') + 'flex',
-                    // WA for the T590137, T702531 (IE only), no test because IE will not be supported in 21.2
+                    // WA for the T590137, T702531 (IE only), manual test only because IE will not be supported since 21.2
                     flexBasis: (IS_IE11 && item._forceItemFlexSizeCorrectionInIE) ? 'auto' : 0
                 });
 
