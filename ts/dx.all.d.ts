@@ -16453,17 +16453,9 @@ declare module DevExpress.ui {
      */
     container?: string | DevExpress.core.UserDefinedElement;
     /**
-     * [descr:dxPopupOptions.dragAndResizeArea]
-     */
-    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
-    /**
      * [descr:dxPopupOptions.dragEnabled]
      */
     dragEnabled?: boolean;
-    /**
-     * [descr:dxPopupOptions.dragOutsideBoundary]
-     */
-    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxPopupOptions.focusStateEnabled]
      */
