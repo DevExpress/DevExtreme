@@ -1,4 +1,8 @@
 {
+    "$schema": "../../../../testing/visualtestrc-schema.json",
+    "comparison-options": {
+        "fouregroundDiffTreshold": 10
+    },
     "angular": {
         "ignore": true
     },
