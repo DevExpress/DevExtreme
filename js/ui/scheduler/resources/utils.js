@@ -262,10 +262,11 @@ export const getResourceColor = (resources, resourceLoaderMap, field, value) => 
     return result.promise();
 };
 
-export const getResourcesFromItem = (_resourceFields, resources, getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
+export const getResourcesFromItem = (resources, getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
     let result = null;
+    const resourceFields = resources.map(resource => getFieldExpr(resource));
 
-    _resourceFields.forEach(field => {
+    resourceFields.forEach(field => {
         each(itemData, (fieldName, fieldValue) => {
             const tempObject = {};
             tempObject[fieldName] = fieldValue;
@@ -330,7 +331,6 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
 
     appointments.forEach(appointment => {
         const appointmentResources = getResourcesFromItem(
-            config._resourceFields,
             () => config.getResources(),
             (field, action) => config.getDataAccessors(field, action),
             appointment
