@@ -79,12 +79,6 @@ export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent> {
     /**
      * @docid
-     * @default false
-     * @public
-     */
-     allowDragOutside?: boolean;
-    /**
-     * @docid
      * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} &for(iOS)
      * @public
      * @type object
@@ -109,6 +103,12 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @public
      */
     dragEnabled?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     dragOutsideBoundary?: boolean;
     /**
      * @docid
      * @default true &for(desktop)

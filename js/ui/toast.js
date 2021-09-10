@@ -106,7 +106,7 @@ const Toast = Overlay.inherit({
             */
 
             /**
-            * @name dxToastOptions.allowDragOutside
+            * @name dxToastOptions.dragOutsideBoundary
             * @hidden
             */
 

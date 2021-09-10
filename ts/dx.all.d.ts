@@ -15377,10 +15377,6 @@ declare module DevExpress.ui {
   export interface dxOverlayOptions<TComponent>
     extends WidgetOptions<TComponent> {
     /**
-     * [descr:dxOverlayOptions.allowDragOutside]
-     */
-    allowDragOutside?: boolean;
-    /**
      * [descr:dxOverlayOptions.animation]
      */
     animation?: dxOverlayAnimation;
@@ -15414,6 +15410,10 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.dragEnabled]
      */
     dragEnabled?: boolean;
+    /**
+     * [descr:dxOverlayOptions.dragOutsideBoundary]
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxOverlayOptions.elementAttr]
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
@@ -16445,10 +16445,6 @@ declare module DevExpress.ui {
   export interface dxPopupOptions<TComponent>
     extends dxOverlayOptions<TComponent> {
     /**
-     * [descr:dxPopupOptions.allowDragOutside]
-     */
-    allowDragOutside?: boolean;
-    /**
      * [descr:dxPopupOptions.animation]
      */
     animation?: dxPopupAnimation;
@@ -16464,6 +16460,10 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.dragEnabled]
      */
     dragEnabled?: boolean;
+    /**
+     * [descr:dxPopupOptions.dragOutsideBoundary]
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxPopupOptions.focusStateEnabled]
      */
