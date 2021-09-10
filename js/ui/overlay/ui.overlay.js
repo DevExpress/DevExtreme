@@ -159,7 +159,7 @@ const Overlay = Widget.inherit({
                 }
             },
 
-            allowDragOutside: false,
+            dragOutsideBoundary: false,
 
             closeOnOutsideClick: false,
 
@@ -980,7 +980,7 @@ const Overlay = Widget.inherit({
             handle: $dragTarget.get(0),
             container: this._getDragResizeContainer().get(0),
             draggableElement: this._$content.get(0),
-            outsideDragFactor: this.option('allowDragOutside') ? 1 : this.option('outsideDragFactor'),
+            outsideDragFactor: this.option('dragOutsideBoundary') ? 1 : this.option('outsideDragFactor'),
             updatePositionChangeHandled
         };
 
@@ -1060,8 +1060,8 @@ const Overlay = Widget.inherit({
     },
 
     _getDragResizeContainer: function() {
-        const { dragAndResizeArea, allowDragOutside } = this.option();
-        if(allowDragOutside) {
+        const { dragAndResizeArea, dragOutsideBoundary } = this.option();
+        if(dragOutsideBoundary) {
             return $(window);
         }
         if(dragAndResizeArea) {
@@ -1469,7 +1469,7 @@ const Overlay = Widget.inherit({
                 }
                 this._positionContent();
                 break;
-            case 'allowDragOutside':
+            case 'dragOutsideBoundary':
                 if(this.option('resizeEnabled')) {
                     this._resizable.option('area', this._getDragResizeContainer());
                 }
@@ -1479,7 +1479,7 @@ const Overlay = Widget.inherit({
                 }
                 break;
             case 'outsideDragFactor':
-                if(this.option('dragEnabled') && !this.option('allowDragOutside')) {
+                if(this.option('dragEnabled') && !this.option('dragOutsideBoundary')) {
                     this._drag.outsideDragFactor = args.value;
                 }
                 break;

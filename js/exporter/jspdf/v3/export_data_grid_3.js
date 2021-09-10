@@ -1,6 +1,7 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize } from './row_utils';
+import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
 import { drawCellsContent, drawCellsLines, drawGridLines } from './draw_utils';
 
@@ -52,6 +53,9 @@ function exportDataGrid(doc, dataGrid, options) {
 
             // apply rowSpans + recalculate cells height
             applyRowSpans(rowsInfo);
+
+            // when we know all rowSpans we can recalculate rowsHeight
+            updateRowsAndCellsHeights(doc, rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
             calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'

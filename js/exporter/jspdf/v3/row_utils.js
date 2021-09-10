@@ -26,7 +26,7 @@ function calculateHeights(doc, rows, options) {
 
         row.height = isDefined(customerHeight)
             ? customerHeight
-            : calculateRowHeight(doc, pdfCells, pdfCells.map(c => c._rect.w));
+            : calculateRowHeight(doc, row.cells, pdfCells.map(c => c._rect.w));
         pdfCells.forEach(cell => {
             cell._rect.h = row.height;
         });
