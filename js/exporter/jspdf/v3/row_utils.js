@@ -67,13 +67,29 @@ function applyRowSpans(rows) {
     }
 }
 
+function applyIntends(rows, options) {
+    rows.forEach(row => {
+        row.cells.forEach((cell, columnIndex) => {
+            if(columnIndex === 0) {
+                cell.pdfCell._rect.w -= row.indentLevel * options.indent;
+            }
+        });
+    });
+}
+
 function applyBordersConfig(rows) {
     for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-        const cells = rows[rowIndex].cells;
+        const row = rows[rowIndex];
+        const cells = row.cells;
         for(let columnIndex = 0; columnIndex < cells.length; columnIndex++) {
             const pdfCell = cells[columnIndex].pdfCell;
             const leftPdfCell = (columnIndex >= 1) ? cells[columnIndex - 1].pdfCell : null;
             const topPdfCell = (rowIndex >= 1) ? rows[rowIndex - 1].cells[columnIndex].pdfCell : null;
+
+            if(row.rowType === 'group') {
+                pdfCell.drawRightBorder = columnIndex === row.cells.length - 1;
+                pdfCell.drawLeftBorder = columnIndex === 0;
+            }
 
             if(pdfCell.drawLeftBorder === false && !isDefined(pdfCell.colSpan)) { // TODO: Check this logic after implementing splitting to pages
                 if(isDefined(leftPdfCell)) {
@@ -102,8 +118,9 @@ function calculateCoordinates(doc, rows, options) {
     let y = options?.topLeft?.y ?? 0;
     rows.forEach(row => {
         let x = options?.topLeft?.x ?? 0;
+        const intend = row.indentLevel * options.indent;
         row.cells.forEach(cell => {
-            cell.pdfCell._rect.x = x;
+            cell.pdfCell._rect.x = x + intend;
             cell.pdfCell._rect.y = y;
             x += cell.pdfCell._rect.w;
         });
@@ -124,4 +141,4 @@ function calculateTableSize(doc, rows, options) {
     };
 }
 
-export { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };
+export { initializeCellsWidth, applyColSpans, applyRowSpans, applyIntends, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };

@@ -1,5 +1,3 @@
-import { isDefined } from '../../../core/utils/type';
-
 // Returns IPdfRowInfo[]
 // [
 //    {
@@ -73,21 +71,6 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
             }
             if(cellMerging && cellMerging.colspan > 0) {
                 cellInfo.colSpan = cellMerging.colspan;
-            }
-        } else if(rowType === 'group') {
-            cellInfo.drawLeftBorder = false;
-            cellInfo.drawRightBorder = false;
-
-            if(cellIndex > 0) {
-                const isEmptyCellsExceptFirst = result.slice(1).reduce(
-                    (accumulate, cellInfo) => { return accumulate && !isDefined(cellInfo.pdfCell.text); },
-                    true);
-                if(!isDefined(cellInfo.pdfCell.text) && isEmptyCellsExceptFirst) {
-                    for(let i = 0; i < result.length; i++) {
-                        result[i].colSpan = result.length;
-                    }
-                    cellInfo.colSpan = result.length;
-                }
             }
         }
 
