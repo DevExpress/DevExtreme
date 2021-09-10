@@ -3314,7 +3314,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
-        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
+        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1.01, 'scrollLeft is in max right position');
         assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
     });
 
@@ -3347,7 +3347,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
-        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
+        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1.01, 'scrollLeft is in max right position');
         assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
         assert.equal(dataAreaFakeTable.css('right'), '0px');
         assert.equal(columnAreaFakeTable.css('right'), '0px');
