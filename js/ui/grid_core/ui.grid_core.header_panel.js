@@ -30,11 +30,13 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     _getToolbarOptions: function() {
+        const userToolbarOptions = this.option('toolbar');
+
         const options = {
             toolbarOptions: {
                 items: this._getToolbarItems(),
-                visible: this.option('toolbar.visible'),
-                disabled: this.option('toolbar.disabled'),
+                visible: userToolbarOptions && userToolbarOptions.visible,
+                disabled: userToolbarOptions && userToolbarOptions.disabled,
                 onItemRendered: function(e) {
                     const itemRenderedCallback = e.itemData.onItemRendered;
 
@@ -45,22 +47,14 @@ const HeaderPanel = ColumnsView.inherit({
             }
         };
 
-        const userItems = this.option('toolbar.items');
+        const userItems = userToolbarOptions.items;
         options.toolbarOptions.items = this._normalizeToolbarItems(options.toolbarOptions.items, userItems);
 
         this.executeAction('onToolbarPreparing', options);
 
-        if(options.toolbarOptions) {
-            if(!isDefined(options.toolbarOptions.visible)) {
-                options.toolbarOptions.visible = true;
-            }
-
+        if(options.toolbarOptions && !isDefined(options.toolbarOptions.visible)) {
             const toolbarItems = options.toolbarOptions.items;
-            options.toolbarOptions.visible = !!(
-                options.toolbarOptions.visible &&
-                toolbarItems &&
-                toolbarItems.length
-            );
+            options.toolbarOptions.visible = !!(toolbarItems && toolbarItems.length);
         }
 
         return options.toolbarOptions;
@@ -209,10 +203,6 @@ const HeaderPanel = ColumnsView.inherit({
 export const headerPanelModule = {
     defaultOptions: function() {
         return {
-            toolbar: {
-                visible: true,
-                disabled: false
-            }
         };
     },
     views: {
