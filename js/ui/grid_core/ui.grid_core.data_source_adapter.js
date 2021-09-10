@@ -393,9 +393,8 @@ export default gridCore.Controller.inherit((function() {
             return currentOperationTypes.some(operationType => remoteOperations[operationType]);
         },
         _customizeRemoteOperations: function(options, operationTypes) {
-            const that = this;
-            let cachedStoreData = that._cachedStoreData;
-            let cachedPagingData = that._cachedPagingData;
+            let cachedStoreData = this._cachedStoreData;
+            let cachedPagingData = this._cachedPagingData;
             let cachedData = this._cachedData;
 
             if((options.storeLoadOptions.filter && !options.remoteOperations.filtering) || (options.storeLoadOptions.sort && !options.remoteOperations.sorting)) {
@@ -417,7 +416,7 @@ export default gridCore.Controller.inherit((function() {
                 }
 
                 each(operationTypes, function(operationType, value) {
-                    if(value && that._needCleanCacheByOperation(operationType, options.remoteOperations)) {
+                    if(value && this._needCleanCacheByOperation(operationType, options.remoteOperations)) {
                         cachedStoreData = undefined;
                         cachedPagingData = undefined;
                     }
@@ -433,8 +432,8 @@ export default gridCore.Controller.inherit((function() {
             options.cachedData = cachedData;
 
             if(!options.isCustomLoading) {
-                that._cachedStoreData = cachedStoreData;
-                that._cachedPagingData = cachedPagingData;
+                this._cachedStoreData = cachedStoreData;
+                this._cachedPagingData = cachedPagingData;
                 this._cachedData = cachedData;
             }
         },
