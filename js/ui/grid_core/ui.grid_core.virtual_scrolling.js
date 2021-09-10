@@ -1215,11 +1215,13 @@ export const virtualScrollingModule = {
                         const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
                         const dataSourceAdapter = this._dataSource;
                         const changedParams = this._getChangedLoadParams();
+                        let result = false;
 
                         if(isVirtualPaging && this._isLoading) {
                             this._needUpdateViewportAfterLoading = true;
                         }
                         if(isVirtualPaging && changedParams) {
+                            result = true;
                             dataSourceAdapter.pageIndex(changedParams.pageIndex);
                             dataSourceAdapter.loadPageCount(changedParams.loadPageCount);
                             this._repaintChangesOnly = true;
@@ -1232,6 +1234,8 @@ export const virtualScrollingModule = {
                                 }
                             });
                         }
+
+                        return result;
                     },
                     loadViewport: function({ checkLoadedParamsOnly, checkLoading }) {
                         const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
@@ -1242,9 +1246,9 @@ export const virtualScrollingModule = {
                                 this._updateVisiblePageIndex();
                             }
 
-                            this._loadItems();
+                            const loadingItemsStarted = this._loadItems();
 
-                            if(!(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
+                            if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
                                 isVirtualPaging && this._updateVisiblePageIndex();
                                 this.updateItems({
                                     repaintChangesOnly: true
