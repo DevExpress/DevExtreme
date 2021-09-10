@@ -9,10 +9,6 @@ $scheduler-agenda-left-column-width: 70px;
 $scheduler-group-header-agenda-font-size: 18px;
 
 .dx-scheduler-agenda {
-  .dx-scheduler-agenda-date-table-container {
-    position: relative;
-  }
-
   .dx-scheduler-date-table-scrollable {
     padding-top: $scheduler-header-panel-top-gap;
   }

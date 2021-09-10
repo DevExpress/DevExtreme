@@ -131,6 +131,7 @@ class SchedulerAgenda extends WorkSpace {
         this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
         this._$dateTable = $('<table>').addClass(DATE_TABLE_CLASS);
         this._$dateTableScrollableContent = $('<div>').addClass('dx-scheduler-date-table-scrollable-content');
+        this._$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
     }
 
     _initGroupTable() {
@@ -315,7 +316,6 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _createWorkSpaceStaticElements() {
-        this._$dateTableContainer = $('<div>').addClass('dx-scheduler-agenda-date-table-container');
         this._$dateTableContainer.append(this._$dateTable);
         this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 

@@ -2352,14 +2352,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
 
             this._$headerTablesContainer.append(this._$headerPanel);
-            this._appendHeaderPanelEmptyCellIfNecessary();
-            this._$headerPanelContainer.append(this._$headerTablesContainer);
-
-            this.$element().append(
-                this._$fixedContainer,
-                this._$headerPanelContainer,
-                this._dateTableScrollable.$element(),
-            );
         } else {
             this._$dateTableScrollableContent.append(
                 this._$timePanel,
@@ -2368,15 +2360,16 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
             this._$headerTablesContainer.append(this._$allDayContainer, this._$headerPanel, this._$allDayPanel);
-            this._appendHeaderPanelEmptyCellIfNecessary();
-            this._$headerPanelContainer.append(this._$headerTablesContainer);
-
-            this.$element().append(
-                this._$fixedContainer,
-                this._$headerPanelContainer,
-                this._dateTableScrollable.$element(),
-            );
         }
+
+        this._appendHeaderPanelEmptyCellIfNecessary();
+        this._$headerPanelContainer.append(this._$headerTablesContainer);
+
+        this.$element().append(
+            this._$fixedContainer,
+            this._$headerPanelContainer,
+            this._dateTableScrollable.$element(),
+        );
     }
 
     _createWorkSpaceScrollableElements() {
