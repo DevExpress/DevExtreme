@@ -56,7 +56,6 @@ module('Table properties forms', {
     }
 }, () => {
     test('show table Form', function(assert) {
-        // $('#qunit-fixture').css('position', 'static');
         this.createWidget();
 
         const $tableElement = this.$element.find('table').eq(0);
@@ -69,6 +68,47 @@ module('Table properties forms', {
 
         assert.strictEqual($form.length, 1);
         assert.ok($form.eq(0).is(':visible'));
+    });
+
+    test('Check properties edititng at the table Form (without dimentions)', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('table').eq(0);
+
+        this.quillInstance.setSelection(50, 1);
+        const $targetCell = $tableElement.find('td').eq(8);
+
+        showCellPropertiesForm(this.instance, $targetCell);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        const formInstance = $form.dxForm('instance');
+
+        const borderStyleEditor = formInstance.getEditor('borderStyle');
+        borderStyleEditor.option('value', 'dotted');
+
+        const borderWidthEditor = formInstance.getEditor('borderWidth');
+        borderWidthEditor.option('value', '3px');
+
+        const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+        borderColorEditor.option('value', 'red');
+
+        const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+        backgroundColorEditor.option('value', 'green');
+
+        const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+        alignmentEditor.option('selectedItemKeys', ['right']);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+
+        this.clock.tick();
+
+        assert.strictEqual($targetCell.css('borderStyle'), 'dotted', 'border style is applied');
+        assert.strictEqual($targetCell.css('borderWidth'), '3px', 'border width is applied');
+        assert.strictEqual($targetCell.css('borderColor'), 'rgb(255, 0, 0)', 'border color is applied');
+        assert.strictEqual($targetCell.css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
+        assert.strictEqual($targetCell.css('textAlign'), 'right', 'text align is applied');
     });
 
     test('show cell Form', function(assert) {

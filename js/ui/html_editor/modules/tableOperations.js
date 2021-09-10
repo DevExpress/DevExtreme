@@ -228,7 +228,6 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
     formPopup.option('contentTemplate', (container) => {
         const $form = $('<div>').appendTo(container);
         editorInstance._createComponent($form, Form, formOptions);
-
         formInstance = $form.dxForm('instance');
 
         return $form;
