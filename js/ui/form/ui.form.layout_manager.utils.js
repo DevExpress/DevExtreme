@@ -10,6 +10,7 @@ import { SIMPLE_ITEM_TYPE } from './constants';
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
 export function convertToRenderFieldItemOptions({
+    // TODO: remove arguments without transformations
     $parent,
     rootElementCssClasses,
     parentComponent,
