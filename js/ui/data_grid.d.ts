@@ -4158,14 +4158,14 @@ export interface dxDataGridToolbar {
   /**
    * @docid
    * @type boolean
-   * @default true
+   * @default undefined
    * @public
    */
   visible?: boolean;
   /**
    * @docid
    * @type boolean
-   * @default false
+   * @default undefined
    * @public
    */
   disabled?: boolean;

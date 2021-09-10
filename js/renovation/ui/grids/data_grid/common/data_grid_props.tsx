@@ -1552,10 +1552,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
 
-  @OneWay() toolbar?: DataGridToolbar = {
-    visible: true,
-    disabled: false,
-  };
+  @OneWay() toolbar?: DataGridToolbar;
 
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 
