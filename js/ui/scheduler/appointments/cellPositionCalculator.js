@@ -15,6 +15,7 @@ class BaseStrategy {
     get viewEndDayHour() { return this.options.viewEndDayHour; }
     get cellDuration() { return this.options.cellDuration; }
     get getPositionShift() { return this.options.getPositionShiftCallback; }
+    get groupCount() { return this.options.groupCount; }
 
     calculateCellPositions(groupIndices, isAllDayRowAppointment, isRecurrentAppointment) {
         const result = [];

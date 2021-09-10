@@ -1165,10 +1165,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         currentDate.setHours(hours, minutes, 0, 0);
 
-        if(!this.isVirtualScrolling()) {
-            return this.positionHelper.getCoordinatesByDate(currentDate, groupIndex, allDay);
-        }
-
         const cell = this.viewDataProvider.findGlobalCellPosition(
             currentDate, groupIndex, allDay,
         );
