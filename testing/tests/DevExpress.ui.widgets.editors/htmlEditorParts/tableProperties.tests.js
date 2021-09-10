@@ -62,7 +62,7 @@ module('Table properties forms', {
         this.quillInstance.setSelection(50, 1);
 
         showTablePropertiesForm(this.instance, $tableElement);
-        this.clock.tick(1800);
+        this.clock.tick(500);
         const $form = $('.dx-form:not(.dx-formdialog-form)');
 
 
@@ -75,10 +75,9 @@ module('Table properties forms', {
 
         const $tableElement = this.$element.find('table').eq(0);
 
-        this.quillInstance.setSelection(50, 1);
-        const $targetCell = $tableElement.find('td').eq(8);
+        // this.quillInstance.setSelection(50, 1);
 
-        showCellPropertiesForm(this.instance, $targetCell);
+        showCellPropertiesForm(this.instance, $tableElement);
         this.clock.tick(500);
         const $form = $('.dx-form:not(.dx-formdialog-form)');
 
@@ -104,18 +103,18 @@ module('Table properties forms', {
 
         this.clock.tick();
 
-        assert.strictEqual($targetCell.css('borderStyle'), 'dotted', 'border style is applied');
-        assert.strictEqual($targetCell.css('borderWidth'), '3px', 'border width is applied');
-        assert.strictEqual($targetCell.css('borderColor'), 'rgb(255, 0, 0)', 'border color is applied');
-        assert.strictEqual($targetCell.css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
-        assert.strictEqual($targetCell.css('textAlign'), 'right', 'text align is applied');
+        assert.strictEqual($tableElement.css('borderStyle'), 'dotted', 'border style is applied');
+        assert.strictEqual($tableElement.css('borderWidth'), '3px', 'border width is applied');
+        assert.strictEqual($tableElement.css('borderColor'), 'rgb(255, 0, 0)', 'border color is applied');
+        assert.strictEqual($tableElement.css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
+        assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
     });
 
     test('show cell Form', function(assert) {
         this.createWidget();
 
         const $tableElement = this.$element.find('table').eq(0);
-        this.quillInstance.setSelection(50, 1);
+        // this.quillInstance.setSelection(50, 1);
 
         showCellPropertiesForm(this.instance, $tableElement);
         this.clock.tick(500);
@@ -130,8 +129,8 @@ module('Table properties forms', {
 
         const $tableElement = this.$element.find('table').eq(0);
 
-        this.quillInstance.setSelection(50, 1);
-        const $targetCell = $tableElement.find('td').eq(8);
+        // this.quillInstance.setSelection(50, 1);
+        const $targetCell = $tableElement.find('td').eq(6);
 
         showCellPropertiesForm(this.instance, $targetCell);
         this.clock.tick(500);
@@ -174,18 +173,42 @@ module('Table properties forms', {
         assert.strictEqual($targetCell.css('verticalAlign'), 'bottom', 'vertical align is applied');
     });
 
-    test('Check cell height edititng', function(assert) {
+    test('Check base cell dimentions edititng', function(assert) {
         this.createWidget();
 
         const $tableElement = this.$element.find('table').eq(0);
-        this.quillInstance.setSelection(50, 1);
+        const initialTableWidth = $tableElement.outerWidth();
+        const initialTableHeight = $tableElement.outerHeight();
+        // this.quillInstance.setSelection(50, 1);
+        const $targetCell = $tableElement.find('td').eq(6);
+        const initialCellHeight = $targetCell.outerHeight();
 
-        showCellPropertiesForm(this.instance, $tableElement);
+        showCellPropertiesForm(this.instance, $targetCell);
         this.clock.tick(500);
         const $form = $('.dx-form:not(.dx-formdialog-form)');
 
-        assert.strictEqual($form.length, 1);
-        assert.ok($form.eq(0).is(':visible'));
+        const formInstance = $form.dxForm('instance');
+
+        const heightEditor = formInstance.getEditor('height');
+        heightEditor.option('value', 80);
+
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 180);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
+        assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
+        assert.strictEqual($targetCell.next().attr('height'), '80px', 'sibling cell height attribute is correct');
+
+        assert.strictEqual($targetCell.outerWidth(), 180, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '180px', 'cell width attribute is correct');
+        assert.strictEqual($tableElement.find('td').eq(2).attr('width'), '180px', 'other this column cell width attribute is correct');
+
+        assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
+        assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
     });
 
     test('Check cell width edititng', function(assert) {
