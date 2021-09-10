@@ -6507,10 +6507,29 @@ QUnit.module('Cache', {
             'items': [
                 {
                     'isContinuation': true,
+                    'isContinuationOnNextPage': true,
                     'items': [
                         array[0],
                         array[1]
                     ],
+                    'key': 1
+                }
+            ],
+            'key': 1
+        }], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(0);
+        dataSource.load();
+
+        // assert
+        assert.equal(this.loadingCount, 0, 'no load during back scroll');
+        assert.deepEqual(dataSource.items(), [{
+            'isContinuationOnNextPage': true,
+            'items': [
+                {
+                    'isContinuationOnNextPage': true,
+                    'items': [],
                     'key': 1
                 }
             ],

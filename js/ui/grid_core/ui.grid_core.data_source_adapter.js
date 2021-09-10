@@ -112,6 +112,12 @@ export default gridCore.Controller.inherit((function() {
                     return;
                 }
                 result.items = [];
+                if(skips.length) {
+                    result.isContinuation = true;
+                }
+                if(take !== undefined && take < result.count) {
+                    result.isContinuationOnNextPage = true;
+                }
                 for(let i = 0; take === undefined ? items[i + skip] : i < take; i++) {
                     const childCacheItem = items[i + skip];
                     const item = getGroupItemFromCache(childCacheItem, groupCount - 1, skips.slice(1), takes.slice(1));
@@ -171,6 +177,8 @@ export default gridCore.Controller.inherit((function() {
     function getCacheItem(cacheItem, loadedItem, groupCount, skips) {
         if(groupCount && loadedItem) {
             const result = { ...loadedItem };
+            delete result.isContinuation;
+            delete result.isContinuationOnNextPage;
             const skip = skips[0] || 0;
             if(loadedItem.items) {
                 result.items = cacheItem?.items || {};
