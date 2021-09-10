@@ -134,9 +134,9 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @type_function_return number|string
-     * @default function() {return $(window).width() * 0.8 }
+     * @default '80vw'
      * @default 'auto' &for(Android)
-     * @default function() { return $(window).width(); } &for(phones_on_Android)
+     * @default '100vw' &for(phones_on_Android)
      * @public
      */
     width?: number | string | (() => number | string);
