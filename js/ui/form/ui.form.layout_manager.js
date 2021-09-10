@@ -546,7 +546,7 @@ const LayoutManager = Widget.inherit({
 
         const name = item.dataField || item.name;
 
-        const { $fieldEditorContainer, instance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
+        const { $fieldEditorContainer, widgetInstance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
             $parent,
             rootElementCssClasses,
             item,
@@ -568,13 +568,13 @@ const LayoutManager = Widget.inherit({
             managerMarkOptions: this._getMarkOptions(),
         }));
 
-        if(instance && item.dataField) {
+        if(widgetInstance && item.dataField) {
             // TODO: move to renderFieldItem ?
-            this._bindDataField(instance, item.dataField, item.editorType, $fieldEditorContainer);
+            this._bindDataField(widgetInstance, item.dataField, item.editorType, $fieldEditorContainer);
         }
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: instance,
+            widgetInstance,
             guid: item.guid,
             $itemContainer: $rootElement
         });

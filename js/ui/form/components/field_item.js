@@ -103,7 +103,7 @@ export function renderFieldItem({
     // Append field editor:
     //
 
-    let instance;
+    let widgetInstance;
     if(template) {
         template.render({
             container: getPublicElement($fieldEditorContainer),
@@ -119,10 +119,10 @@ export function renderFieldItem({
         const $div = $('<div>').appendTo($fieldEditorContainer);
 
         try {
-            instance = createComponentCallback($div, item.editorType, editorOptions);
-            instance.setAria('describedby', helpID);
-            instance.setAria('labelledby', labelID);
-            instance.setAria('required', isRequired);
+            widgetInstance = createComponentCallback($div, item.editorType, editorOptions);
+            widgetInstance.setAria('describedby', helpID);
+            widgetInstance.setAria('labelledby', labelID);
+            widgetInstance.setAria('required', isRequired);
         } catch(e) {
             errors.log('E1035', e.message);
         }
@@ -206,5 +206,5 @@ export function renderFieldItem({
         );
     }
 
-    return { $fieldEditorContainer, $rootElement, instance };
+    return { $fieldEditorContainer, $rootElement, widgetInstance };
 }
