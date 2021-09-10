@@ -36,7 +36,6 @@
   </div>
 </template>
 <script>
-import { customers } from './data.js';
 import DxButton from 'devextreme-vue/button';
 import {
   DxDataGrid,
@@ -52,6 +51,8 @@ import {
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+
+import { customers } from './data.js';
 
 const dataGridRef = 'dataGrid';
 

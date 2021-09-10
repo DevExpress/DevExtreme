@@ -10,12 +10,13 @@ import DataGrid, {
   Item,
 } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
-import { customers } from './data.js';
 
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
 import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+
+import { customers } from './data.js';
 
 export default function App() {
   const dataGridRef = React.createRef();
