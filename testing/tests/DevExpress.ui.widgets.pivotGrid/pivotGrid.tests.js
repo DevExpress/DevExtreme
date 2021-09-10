@@ -5169,7 +5169,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             height: 300,
             scrolling: {
@@ -5215,8 +5215,6 @@ QUnit.module('Tests with stubs', {
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
@@ -5239,7 +5237,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             scrolling: {
                 mode: 'virtual'
@@ -5284,8 +5282,6 @@ QUnit.module('Tests with stubs', {
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
 
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
