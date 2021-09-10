@@ -115,7 +115,7 @@ export default gridCore.Controller.inherit((function() {
                 if(skips.length) {
                     result.isContinuation = true;
                 }
-                if(take !== undefined && take < result.count) {
+                if(takes.length) {
                     result.isContinuationOnNextPage = true;
                 }
                 for(let i = 0; take === undefined ? items[i + skip] : i < take; i++) {
