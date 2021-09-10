@@ -15,11 +15,11 @@
         <div class="dx-field">
             <div class="dx-field-label">Indeterminate</div>
             <div class="dx-field-value">
-                <dx-check-box [(value)]="indeterminateValue"></dx-check-box>
+                <dx-check-box [value]="null"></dx-check-box>
             </div>
         </div>
         <div class="dx-field">
-            <div class="dx-field-label">Value change handling</div>
+            <div class="dx-field-label">Handle value change</div>
             <div class="dx-field-value">
                 <dx-check-box [(value)]="checkBoxValue"></dx-check-box>
             </div>
@@ -34,12 +34,20 @@
             </div>
         </div>
         <div class="dx-field">
+            <div class="dx-field-label">Custom size</div>
+            <div class="dx-field-value">
+                <dx-check-box
+                    [value]="null"
+                    [iconSize]="30"
+                ></dx-check-box>
+            </div>
+        </div>
+        <div class="dx-field">
             <div class="dx-field-label">With label</div>
             <div class="dx-field-value">
                 <dx-check-box
                     [value]="true"
-                    [width]="80"
-                    text="Check"
+                    text="Label"
                 ></dx-check-box>
             </div>
         </div>

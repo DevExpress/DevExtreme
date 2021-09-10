@@ -5,7 +5,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      checkBoxValue: undefined,
+      checkBoxValue: null,
     };
     this.onValueChanged = this.onValueChanged.bind(this);
   }
@@ -35,11 +35,11 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Indeterminate</div>
             <div className="dx-field-value">
-              <CheckBox defaultValue={undefined} />
+              <CheckBox defaultValue={null} />
             </div>
           </div>
           <div className="dx-field">
-            <div className="dx-field-label">Value change handling</div>
+            <div className="dx-field-label">Handle value change</div>
             <div className="dx-field-value">
               <CheckBox value={this.state.checkBoxValue} onValueChanged={this.onValueChanged} />
             </div>
@@ -54,12 +54,20 @@ class App extends React.Component {
             </div>
           </div>
           <div className="dx-field">
+            <div className="dx-field-label">Custom size</div>
+            <div className="dx-field-value">
+              <CheckBox
+                defaultValue={null}
+                iconSize={30}
+              />
+            </div>
+          </div>
+          <div className="dx-field">
             <div className="dx-field-label">With label</div>
             <div className="dx-field-value">
               <CheckBox
                 defaultValue={true}
-                width={80}
-                text="Check"
+                text="Label"
               />
             </div>
           </div>

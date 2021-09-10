@@ -8,24 +8,28 @@ $(() => {
   });
 
   $('#indeterminate').dxCheckBox({
-    value: undefined,
+    value: null,
   });
 
   $('#handler').dxCheckBox({
-    value: undefined,
+    value: null,
     onValueChanged(data) {
       disabledCheckbox.option('value', data.value);
     },
   });
 
   const disabledCheckbox = $('#disabled').dxCheckBox({
-    value: undefined,
+    value: null,
     disabled: true,
   }).dxCheckBox('instance');
 
+  $('#customSize').dxCheckBox({
+    value: null,
+    iconSize: 30,
+  });
+
   $('#withText').dxCheckBox({
     value: true,
-    width: 80,
-    text: 'Check',
+    text: 'Label',
   });
 });
