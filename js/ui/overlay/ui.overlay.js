@@ -503,6 +503,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderVisibilityAnimate: function(visible) {
+        // console.log('_renderVisibilityAnimate');
         this._observeContentResize(visible);
         this._stopAnimation();
 
@@ -1492,7 +1493,7 @@ const Overlay = Widget.inherit({
                 this._toggleSafariScrolling();
                 break;
             case 'visible':
-                // console.log('visible change');
+                // console.log('visible change ' + value);
                 this._renderVisibilityAnimate(value).done(() => {
                     if(!this._animateDeferred) {
                         return;
@@ -1553,10 +1554,10 @@ const Overlay = Widget.inherit({
         showing = showing === undefined ? !this.option('visible') : showing;
         const result = new Deferred();
 
-        if(showing === this.option('visible')) {
-            // console.log('showing === this.option(visible)');
-            return result.resolveWith(this, [showing]).promise();
-        }
+        // if(showing === this.option('visible')) {
+        //     console.log('showing === this.option(visible)');
+        //     return result.resolveWith(this, [showing]).promise();
+        // }
 
         const animateDeferred = new Deferred();
         this._animateDeferred = animateDeferred;

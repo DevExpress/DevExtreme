@@ -98,6 +98,8 @@ module('Table properties forms', {
 
         const formInstance = $form.dxForm('instance');
 
+        // debugger;
+
         const borderStyleEditor = formInstance.getEditor('borderStyle');
         borderStyleEditor.option('value', 'dotted');
 

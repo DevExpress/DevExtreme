@@ -15,13 +15,13 @@ let formPopup;
 const createFormPopup = (editorInstance) => {
     const $popup = $('<div>').addClass('test-123').appendTo(editorInstance.$element());
     formPopup = editorInstance._createComponent($popup, Popup, {
-        contentTemplate: () => { return $('<div>').addClass('test-1234'); },
-        deferRendering: true,
+        // contentTemplate: () => { return $('<div>').addClass('test-1234'); },
+        // deferRendering: true,
         showTitle: false,
         width: 600,
         height: 'auto',
         shading: false,
-        closeOnTargetScroll: true,
+        // closeOnTargetScroll: true,
         closeOnOutsideClick: true,
         // animation: {
         //     show: null,
@@ -244,10 +244,10 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         return $form;
     });
     // console.log('formPopup.show()!');
-    // console.log(formPopup);
+    // console.log(formPopup.option('visible'));
 
     formPopup.show();
-
+    return formPopup;
 };
 
 
@@ -415,6 +415,8 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
         return $form;
     });
     formPopup.show();
+
+    return formPopup;
 };
 
 export const getTableOperationHandler = (quill, operationName, ...rest) => {

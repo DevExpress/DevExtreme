@@ -51,14 +51,14 @@ if(Quill) {
         showTableProperties(e) {
             const $table = $(this._targetElement).closest('table');
             this._contextMenu.hide();
-            showTablePropertiesForm(this.editorInstance, $table);
+            this._popupForm = showTablePropertiesForm(this.editorInstance, $table);
             this._targetElement = null;
         }
 
         showCellProperties(e) {
             const $cell = $(this._targetElement);
             this._contextMenu.hide();
-            showCellPropertiesForm(this.editorInstance, $cell);
+            this._popupForm = showCellPropertiesForm(this.editorInstance, $cell);
             this._targetElement = null;
         }
 
@@ -135,7 +135,7 @@ if(Quill) {
         }
 
         prepareCleanCallback() {
-            return () => { this._detachEvents(); };
+            return () => { this._detachEvents(); this._popupForm.dispose(); };
         }
     };
 }
