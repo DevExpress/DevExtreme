@@ -1603,38 +1603,6 @@ QUnit.test('Get button instance', function(assert) {
     assert.strictEqual(formInvalidateSpy.callCount, 0, 'Invalidate does not called');
 });
 
-QUnit.test('API to apply WA for T590137/T702531', function(assert) {
-    // Cannot set '_forceItemFlexSizeCorrectionInIE: true' by default because it fails in other configs (TODO: list of failed UT)
-    let $form;
-    let $contentElement;
-    $('#form').dxPopup({
-        visible: true,
-        contentTemplate: (contentElem) => {
-            $contentElement = $(contentElem);
-            $form = $('<div>').appendTo(contentElem);
-            $form.dxForm({
-                width: 'auto',
-                height: 'auto',
-                items: [{
-                    editorType: 'dxColorView',
-                    dataField: 'item1',
-                    _forceItemFlexSizeCorrectionInIE: true,
-                    editorOptions: {
-                        focusStateEnabled: false
-                    },
-                    label: { visible: false }
-                }]
-            }).dxForm('instance');
-            return $form;
-        }
-    });
-
-    const popupContentWidth = $contentElement[0].getBoundingClientRect().width;
-    const colorViewContainerWidth = $('.dx-colorview-container')[0].getBoundingClientRect().width;
-    // TODO: cannot reproduce
-    assert.ok(popupContentWidth > colorViewContainerWidth, `popupContentWidth > colorViewContainerWidth, ${popupContentWidth} ? ${colorViewContainerWidth}`);
-});
-
 QUnit.testInActiveWindow('Change \'Button.icon\'', function(assert) {
     ['option', 'itemOption', 'editor.option'].forEach(function(setOptionWay) {
         const form = $('#form').dxForm({
