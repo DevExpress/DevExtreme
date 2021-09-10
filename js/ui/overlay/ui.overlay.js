@@ -1,6 +1,4 @@
 import fx from '../../animation/fx';
-import positionUtils from '../../animation/position';
-import { resetPosition } from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
@@ -650,7 +648,7 @@ const Overlay = Widget.inherit({
         }
 
         this._currentVisible = visible;
-        this._positionChangeHandled = false;
+        this._positionController.restorePositionOnNextRender();
 
         this._stopAnimation();
 
@@ -949,13 +947,10 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        const updatePositionChangeHandled = (value) => this._positionChangeHandled = value;
         const config = {
             dragEnabled: this.option('dragEnabled'),
             handle: $dragTarget.get(0),
             draggableElement: this._$content.get(0),
-            updatePositionChangeHandled,
-            onPositioned: this._actions.onPositioned,
             positionController: this._positionController
         };
 
@@ -991,7 +986,8 @@ const Overlay = Widget.inherit({
         width && this._setOptionWithoutOptionChange('width', width);
         height && this._setOptionWithoutOptionChange('height', height);
         this._cacheDimensions();
-        this._drag.updatePosition();
+
+        this._positionController.detectVisualPositionChange(e.event);
 
         this._actions.onResizeEnd(e);
     },
@@ -1071,7 +1067,7 @@ const Overlay = Widget.inherit({
 
             this._stopAnimation();
             if(options?.shouldOnlyReposition) {
-                this._positionContent();
+                this._positionController.positionContent();
             } else {
                 this._renderGeometryImpl();
             }
@@ -1100,7 +1096,7 @@ const Overlay = Widget.inherit({
         this._renderWrapper();
         this._renderDimensions();
         this._cacheDimensions();
-        this._positionContent();
+        this._positionController.positionContent();
     },
 
     _isAllWindowCovered: function() {
@@ -1169,29 +1165,6 @@ const Overlay = Widget.inherit({
             width: this._getOptionValue('width', content),
             height: this._getOptionValue('height', content)
         });
-    },
-
-    _renderPosition: function() {
-        if(this._positionChangeHandled) {
-            this._drag.moveToLastPosition();
-            this._drag.moveToContainer();
-
-            return this._drag.getPosition();
-        } else {
-            const position = this._positionController._position;
-            this._positionController._renderBoundaryOffset();
-
-            resetPosition(this._$content);
-
-            const resultPosition = positionUtils.setup(this._$content, position);
-            return { top: resultPosition.v.location, left: resultPosition.h.location };
-        }
-    },
-
-    _positionContent: function() {
-        const resultPosition = this._renderPosition();
-
-        this._actions.onPositioned({ position: resultPosition });
     },
 
     _focusTarget: function() {
@@ -1316,7 +1289,7 @@ const Overlay = Widget.inherit({
                 break;
             case 'position':
                 this._positionController.updatePosition(this.option('position'));
-                this._positionChangeHandled = false;
+                this._positionController.restorePositionOnNextRender();
                 this._renderGeometry();
                 this._toggleSafariScrolling();
                 break;
@@ -1380,7 +1353,7 @@ const Overlay = Widget.inherit({
                 if(this.option('resizeEnabled')) {
                     this._resizable?.option('area', this._positionController.$dragResizeContainer);
                 }
-                this._positionContent();
+                this._positionController.positionContent();
                 break;
             case 'allowDragOutside':
                 this._positionController.allowDragOutside = value;
@@ -1434,7 +1407,7 @@ const Overlay = Widget.inherit({
 
     repaint: function() {
         if(this._contentAlreadyRendered) {
-            this._positionChangeHandled = false;
+            this._positionController.restorePositionOnNextRender();
             this._renderGeometry({ forceStopAnimation: true });
             triggerResizeEvent(this._$content);
         } else {

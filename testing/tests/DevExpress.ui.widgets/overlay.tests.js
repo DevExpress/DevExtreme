@@ -458,24 +458,6 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
     });
 
-    test('resizeEnd should not trigger positioned event', function(assert) {
-        const positionedHandlerStub = sinon.stub();
-
-        const instance = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true
-        }).dxOverlay('instance');
-        instance.on('positioned', positionedHandlerStub);
-
-        const $content = $(instance.$content());
-        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_TOP_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(0, 50).dragEnd();
-
-        assert.ok(positionedHandlerStub.notCalled, 'positioned event is not triggered');
-    });
-
     test('resize should change overlay width/height options value', function(assert) {
         const instance = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -4052,20 +4034,19 @@ testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
         this.timeToWaitResize = 50;
-        this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
             dragEnabled: false,
             resizeEnabled: false,
-            onPositioned: this.positionedHandlerStub
         }).dxOverlay('instance');
+        this.renderGeometrySpy = sinon.spy(this.overlayInstance, '_renderGeometry');
         this.checkNoExcessResizeHandle = (assert) => {
             const done = assert.async();
-            const initialPositionHandlerCallCount = this.positionedHandlerStub.callCount;
+            const renderGeometryInitialCallCount = this.renderGeometrySpy.callCount;
             setTimeout(() => {
                 assert.strictEqual(
-                    this.positionedHandlerStub.callCount,
-                    initialPositionHandlerCallCount,
+                    this.renderGeometrySpy.callCount,
+                    renderGeometryInitialCallCount,
                     'no resize observer callback was raised'
                 );
                 done();
@@ -4079,13 +4060,13 @@ testModule('renderGeometry', {
     }
 }, () => {
     QUnit.testInActiveWindow('visibility change', function(assert) {
-        assert.ok(this.positionedHandlerStub.notCalled, 'render geometry isn\'t called yet');
+        assert.ok(this.renderGeometrySpy.notCalled, 'render geometry isn\'t called yet');
 
         const showingResizeHandled = assert.async();
         this.overlayInstance.show();
 
         setTimeout(() => {
-            assert.ok(this.positionedHandlerStub.calledOnce, 'render geometry called once');
+            assert.ok(this.renderGeometrySpy.calledOnce, 'render geometry called once');
             this.checkNoExcessResizeHandle(assert);
             showingResizeHandled();
         }, this.timeToWaitResize);
@@ -4097,7 +4078,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             resizeCallbacks.fire();
-            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            assert.strictEqual(this.renderGeometrySpy.callCount, 2);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
@@ -4108,7 +4089,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             this.overlayInstance.repaint();
-            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            assert.strictEqual(this.renderGeometrySpy.callCount, 2);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
@@ -4140,7 +4121,7 @@ testModule('renderGeometry', {
                 setTimeout(() => {
                     this.overlayInstance.option(optionName, newOptions[optionName]);
 
-                    assert.strictEqual(this.positionedHandlerStub.callCount, 2, 'renderGeomentry called 2 times');
+                    assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeomentry called 2 times');
                     this.checkNoExcessResizeHandle(assert);
                     showingResizeHandled();
                 }, this.timeToWaitResize);
@@ -4314,7 +4295,7 @@ QUnit.module('resizeObserver integration', {
         fx.off = false;
     }
 }, () => {
-    QUnit.testInActiveWindow('overlay should be repositioned only once on window resize', function(assert) {
+    QUnit.skip('overlay should be repositioned only once on window resize', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnWindowResizeDone = assert.async();
         const overlay = $('#overlay').dxOverlay({

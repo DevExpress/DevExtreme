@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { isDefined, isString, isEvent, isWindow } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import positionUtils from '../../animation/position';
-import { resetPosition, locate, move } from '../../animation/translator';
+import { resetPosition, move, locate } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
 import { originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { pairToObject } from '../../core/utils/common';
@@ -68,7 +68,9 @@ class OverlayPositionController {
         this._$content = $content;
         this._$wrapper = $wrapper;
 
+        this._shouldRenderContentInitialPosition = true;
         this._visualPosition = undefined;
+        this._previousVisualPosition = undefined;
         this._$wrapperCoveredElement = undefined;
         this._$dragResizeContainer = undefined;
         this._outsideDragFactor = undefined;
@@ -87,6 +89,11 @@ class OverlayPositionController {
         this._props._fixWrapperPosition = fixWrapperPosition;
 
         this.styleWrapperPosition();
+    }
+
+    _updateVisualPositionValue() {
+        this._previousVisualPosition = this._visualPosition;
+        this._visualPosition = locate(this._$content);
     }
 
     set dragAndResizeArea(dragAndResizeArea) {
@@ -110,6 +117,10 @@ class OverlayPositionController {
         this._props.outsideDragFactor = outsideDragFactor;
 
         this._updateOutsideDragFactor();
+    }
+
+    restorePositionOnNextRender() {
+        this._shouldRenderContentInitialPosition = true;
     }
 
     updateTarget(target) {
@@ -141,26 +152,26 @@ class OverlayPositionController {
         this._updateDragResizeContainer();
     }
 
-    positionContent() {
-        if(!this._visualPosition) {
-            this.renderInitialPosition();
-        } else {
-            const currentPosition = locate(this._$content);
-            move(this._$content, this._visualPosition);
+    detectVisualPositionChange(event) {
+        this._updateVisualPositionValue();
+        this._raisePositionedEvent(event);
+    }
 
-            this._positionedHandler(currentPosition, this._visualPosition);
+    positionContent() {
+        if(this._shouldRenderContentInitialPosition) {
+            this._renderContentInitialPosition();
+            this._shouldRenderContentInitialPosition = false;
+        } else {
+            move(this._$content, this._visualPosition);
+            this.detectVisualPositionChange();
         }
     }
 
-    renderInitialPosition() {
-        const currentPosition = this._visualPosition;
-
+    _renderContentInitialPosition() {
         this._renderBoundaryOffset();
         resetPosition(this._$content);
-        const position = positionUtils.setup(this._$content, this._position);
-        this._visualPosition = { top: position.v.location, left: position.h.location };
-
-        this._positionedHandler(currentPosition, this._visualPosition);
+        positionUtils.setup(this._$content, this._position);
+        this.detectVisualPositionChange();
     }
 
     positionWrapper() {
@@ -178,6 +189,22 @@ class OverlayPositionController {
 
         const positionStyle = useFixed ? 'fixed' : 'absolute';
         this._$wrapper.css('position', positionStyle);
+    }
+
+    _raisePositionedEvent(event) {
+        const previousPosition = this._previousVisualPosition;
+        const newPosition = this._visualPosition;
+
+        const isPositionChanged = previousPosition?.top !== newPosition.top
+            || previousPosition?.left !== newPosition.left;
+
+        if(isPositionChanged) {
+            this._onPositioned({
+                previousPosition,
+                position: newPosition,
+                event
+            });
+        }
     }
 
     _updateOutsideDragFactor() {
@@ -211,10 +238,6 @@ class OverlayPositionController {
 
     _updateWrapperCoveredElement() {
         this._$wrapperCoveredElement = this._getWrapperCoveredElement();
-    }
-
-    _positionedHandler(previousPosition, position) {
-        this._onPositioned({ previousPosition, position });
     }
 
     _renderBoundaryOffset() {
@@ -257,11 +280,19 @@ class OverlayPositionController {
 }
 
 class PopupPositionController extends OverlayPositionController {
-    constructor({ fullScreen, ...args }) {
+    constructor({ fullScreen, forceApplyBindings, ...args }) {
         super(args);
 
         this._fullScreen = fullScreen;
+        this._forceApplyBindings = forceApplyBindings;
+
+        this._lastPositionBeforeFullScreen = undefined;
+
         this.updateContainer();
+    }
+
+    set fullScreen(fullScreen) {
+        this._fullScreen = fullScreen;
     }
 
     _getWrapperCoveredElement() {
@@ -270,6 +301,34 @@ class PopupPositionController extends OverlayPositionController {
         }
 
         return super._getWrapperCoveredElement();
+    }
+
+    positionContent() {
+        if(this._fullScreen) {
+            this._shouldRenderContentInitialPosition = false;
+            if(!this._lastPositionBeforeFullScreen) {
+                this._lastPositionBeforeFullScreen = this._visualPosition;
+
+                move(this._$content, { top: 0, left: 0 });
+                this.detectVisualPositionChange();
+            }
+        } else {
+            this._forceApplyBindings?.();
+
+            if(this._lastPositionBeforeFullScreen) {
+                move(this._$content, this._lastPositionBeforeFullScreen);
+                this._lastPositionBeforeFullScreen = undefined;
+                this.detectVisualPositionChange();
+            } else {
+                super.positionContent();
+            }
+        }
+    }
+
+    _renderContentInitialPosition() {
+        if(!this._fullScreen) {
+            super._renderContentInitialPosition();
+        }
     }
 }
 

@@ -19,16 +19,13 @@ class OverlayDrag {
     }
 
     init(config) {
-        // TODO: get rid of dragEnabled, updatePositionChangeHandled
-        const { dragEnabled, handle, draggableElement, updatePositionChangeHandled, onPositioned, positionController } = config;
+        // TODO: get rid of dragEnabled
+        const { dragEnabled, handle, draggableElement, positionController } = config;
 
         this._positionController = positionController;
         this._draggableElement = draggableElement;
         this._handle = handle;
         this._dragEnabled = dragEnabled;
-        this._updatePositionChangeHandled = updatePositionChangeHandled;
-        this._lastPosition = locate(this._draggableElement);
-        this._onPositioned = onPositioned;
 
         this.unsubscribe();
 
@@ -37,10 +34,6 @@ class OverlayDrag {
         }
 
         this.subscribe();
-    }
-
-    updatePosition() {
-        this._lastPosition = locate(this._draggableElement);
     }
 
     moveDown(e) {
@@ -59,18 +52,10 @@ class OverlayDrag {
         this._moveTo(0, KEYBOARD_DRAG_STEP, e);
     }
 
-    moveToLastPosition() {
-        move(this._draggableElement, this._lastPosition);
-    }
-
-    moveToContainer() {
+    moveToDragContainer() {
         const offset = this._fitOffsetIntoAllowedRange(0, 0);
 
         this._moveByOffset(offset);
-    }
-
-    getPosition() {
-        return this._lastPosition;
     }
 
     subscribe() {
@@ -125,8 +110,8 @@ class OverlayDrag {
         this._prevOffset = e.offset;
     }
 
-    _dragEndHandler(e) {
-        this._onPositioned({ position: this._lastPosition, event: e });
+    _dragEndHandler(event) {
+        this._positionController.detectVisualPositionChange(event);
     }
 
     _moveTo(top, left, e) {
@@ -139,6 +124,7 @@ class OverlayDrag {
 
         const offset = this._fitOffsetIntoAllowedRange(top, left);
         this._moveByOffset(offset);
+        this._dragEndHandler(e);
     }
 
     _fitOffsetIntoAllowedRange(top, left) {
@@ -248,11 +234,6 @@ class OverlayDrag {
         };
 
         move(this._draggableElement, newPosition);
-
-        this._lastPosition = newPosition;
-
-        // TODO: remove
-        this._updatePositionChangeHandled(true);
     }
 }
 

@@ -1,4 +1,3 @@
-import { move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import devices from '../core/devices';
 import { getPublicElement } from '../core/element';
@@ -481,9 +480,12 @@ const Popup = Overlay.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { fullScreen } = this.option();
+        const { fullScreen, forceApplyBindings } = this.option();
 
-        return extend({}, this.callBase(), { fullScreen });
+        return extend({}, this.callBase(), {
+            fullScreen,
+            forceApplyBindings
+        });
     },
 
     _initPositionController() {
@@ -656,19 +658,6 @@ const Popup = Overlay.inherit({
         this._renderPosition();
     },
 
-    _renderPosition: function() {
-        if(this.option('fullScreen')) {
-            const newPosition = { top: 0, left: 0 };
-
-            move(this.$overlayContent(), newPosition);
-            return newPosition;
-        } else {
-            (this.option('forceApplyBindings') || noop)();
-
-            return this.callBase();
-        }
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'showTitle':
@@ -710,11 +699,12 @@ const Popup = Overlay.inherit({
                 triggerResizeEvent(this.$overlayContent());
                 break;
             case 'fullScreen':
+                this._positionController.fullScreen = args.value;
+
                 this._toggleFullScreenClass(args.value);
                 this._toggleSafariScrolling();
 
                 this._renderGeometry();
-
                 triggerResizeEvent(this.$overlayContent());
                 break;
             case 'showCloseButton':
