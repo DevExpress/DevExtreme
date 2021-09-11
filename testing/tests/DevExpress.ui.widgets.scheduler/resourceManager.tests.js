@@ -12,7 +12,8 @@ import {
     getResourceTreeLeaves,
     groupAppointmentsByResourcesCore,
     getResourcesDataByGroups,
-    reduceResourcesTree
+    reduceResourcesTree,
+    setResourceToAppointment
 } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -346,8 +347,8 @@ QUnit.test('Set resources to item', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date() };
 
-    this.instance.setResourcesToItem(item, { roomId: 1 });
-    this.instance.setResourcesToItem(item, { ownerId: 1 });
+    setResourceToAppointment(this.instance.getResources(), this.instance._dataAccessors, item, { roomId: 1 });
+    setResourceToAppointment(this.instance.getResources(), this.instance._dataAccessors, item, { ownerId: 1 });
 
     assert.strictEqual(item.roomId, 1, 'Single resource has scalar value');
     assert.deepEqual(item.ownerId, [1], 'Multiple resource has array value');

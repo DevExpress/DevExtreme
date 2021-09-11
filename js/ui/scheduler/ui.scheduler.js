@@ -4,7 +4,7 @@ import devices from '../../core/devices';
 import $ from '../../core/renderer';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { inArray, wrapToArray } from '../../core/utils/array';
+import { inArray } from '../../core/utils/array';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
 import { compileGetter, compileSetter } from '../../core/utils/data';
@@ -66,7 +66,7 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { createResourceEditorModel, getCellGroups, getResourcesFromItem, isResourceMultiple } from './resources/utils';
+import { createResourceEditorModel, getCellGroups, getResourcesFromItem, setResourceToAppointment } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
@@ -1833,21 +1833,10 @@ class Scheduler extends Widget {
 
         const rawResult = result.source();
 
-        this.setResourceToAppointment(rawResult, targetCell.groups);
+        const resourceManager = getResourceManager(this.key);
+        setResourceToAppointment(resourceManager.getResources(), resourceManager._dataAccessors, rawResult, targetCell.groups);
 
         return rawResult;
-    }
-
-    setResourceToAppointment(appointment, groups) {
-        const resourceManager = getResourceManager(this.key);
-        const resourcesSetter = resourceManager._dataAccessors.setter;
-        const resources = resourceManager.getResources();
-
-        for(const name in groups) {
-            const resourceData = groups[name];
-            const value = isResourceMultiple(resources, name) ? wrapToArray(resourceData) : resourceData;
-            resourcesSetter[name](appointment, value);
-        }
     }
 
     getTargetedAppointment(appointment, element) {

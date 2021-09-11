@@ -487,3 +487,13 @@ export const getResourcesDataByGroups = (loadedResources, resources, groups) => 
 
     return currentResourcesData;
 };
+
+export const setResourceToAppointment = (resources, dataAccessors, appointment, groups) => {
+    const resourcesSetter = dataAccessors.setter;
+
+    for(const name in groups) {
+        const resourceData = groups[name];
+        const value = isResourceMultiple(resources, name) ? wrapToArray(resourceData) : resourceData;
+        resourcesSetter[name](appointment, value);
+    }
+};
