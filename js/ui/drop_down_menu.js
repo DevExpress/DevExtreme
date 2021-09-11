@@ -161,9 +161,6 @@ const DropDownMenu = Widget.inherit({
                     at: (options.usePopover ? 'bottom ' : 'top ') +
                         (options.rtlEnabled ? 'left' : 'right')
                 };
-                if(options.usePopover) {
-                    options.popupPosition = 'flip';
-                }
             }
         }
 
