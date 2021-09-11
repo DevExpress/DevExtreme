@@ -717,7 +717,6 @@ const Lookup = DropDownList.inherit({
                 of: this.element()
             };
 
-            result.position.collision = 'flip';
             result.hideOnParentScroll = true;
         }
 
