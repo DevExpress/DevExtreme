@@ -107,7 +107,7 @@ const DropDownMenu = Widget.inherit({
             {
                 device: { platform: 'generic' },
                 options: {
-                    popupPosition: { offset: { v: 4 } }
+                    popupPosition: { offset: { v: 4 }, collision: 'flip' }
                 }
             },
             {
