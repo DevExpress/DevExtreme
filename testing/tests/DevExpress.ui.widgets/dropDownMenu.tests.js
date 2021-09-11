@@ -634,7 +634,8 @@ QUnit.module('integration', () => {
                 usePopover: true
             }).dxDropDownMenu('instance');
 
-            assert.equal(dropDownMenu.option('popupPosition').at, 'bottom right', 'popover position is OK');
+            assert.equal(dropDownMenu.option('popupPosition').at, 'bottom right', 'popover position.at is OK');
+            assert.equal(dropDownMenu.option('popupPosition').collision, 'flip', 'popover position.collision is OK');
         } finally {
             devices.current.restore();
         }
