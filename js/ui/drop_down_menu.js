@@ -84,7 +84,7 @@ const DropDownMenu = Widget.inherit({
             selectedItemKeys: [],
 
             deferRendering: false,
-            popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 1 } },
+            popupPosition: { my: 'top center', at: 'bottom center', collision: 'flip', offset: { v: 1 } },
             popupAnimation: undefined,
             onItemRendered: null,
             menuWidget: List,

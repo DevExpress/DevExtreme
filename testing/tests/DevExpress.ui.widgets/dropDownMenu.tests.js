@@ -465,9 +465,9 @@ QUnit.module('position', {
         }
         const element = $('#dropDownMenu').dxDropDownMenu();
         const instance = element.dxDropDownMenu('instance');
-        const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
+        const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'flip', offset: { v: 4 } };
 
-        assert.deepEqual(defaultPosition, instance.option('popupPosition'));
+        assert.deepEqual(instance.option('popupPosition'), defaultPosition);
         assert.notOk(instance.option('usePopover'));
     });
 
