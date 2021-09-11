@@ -34,6 +34,7 @@ import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import eventsEngine from 'events/core/events_engine';
+import { getScrollbarWidth } from 'ui/pivot_grid/utils/get_scrollbar_width.js';
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 
@@ -44,30 +45,6 @@ function sumArray(array) {
     }
 
     return sum;
-}
-
-function getScrollBarWidth() {
-    const container = $('<div>').css({
-        position: 'absolute',
-        visibility: 'hidden',
-        top: -1000,
-        left: -1000,
-        width: 100,
-        height: 100
-    }).appendTo('body');
-
-    const content = $('<p>').css({
-        width: '100%',
-        height: 200
-    }).appendTo(container);
-
-    container.dxScrollable({ useNative: true });
-
-    const scrollBarWidth = container.width() - content.width();
-
-    container.remove();
-
-    return scrollBarWidth;
 }
 
 const moduleConfig = {
@@ -1987,7 +1964,10 @@ QUnit.module('dxPivotGrid', {
 
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
         assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has no horizontal scroll');
-        assert.equal(pivotGrid.__scrollBarWidth, getScrollBarWidth());
+
+        const dataAreaContainerElement = $(pivotGrid._dataArea._getScrollable().container()).get(0);
+
+        assert.equal(pivotGrid.__scrollBarWidth, getScrollbarWidth(dataAreaContainerElement));
     });
 
     QUnit.test('Sorting by Summary context menu when sorting defined for grand total', function(assert) {
@@ -2892,7 +2872,7 @@ QUnit.module('dxPivotGrid', {
             }
 
             function triggerScrollEvent(scrollable) {
-                $(scrollable._container()).trigger('scroll');
+                $(scrollable.container()).trigger('scroll');
             }
 
             function filterPivotGrid(pivotGrid, filterValue, area) {
@@ -3246,7 +3226,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'rows area scroll');
     });
 
-    // T518512
+    // T518512;
     QUnit.test('render should be called once after expand item if virtual scrolling enabled', function(assert) {
         $('#pivotGrid').empty();
         $('#pivotGrid').width(100);
@@ -3291,7 +3271,7 @@ QUnit.module('dxPivotGrid', {
         assert.equal(contentReadyCallCount, 1);
     });
 
-    // T529461
+    // T529461;
     QUnit.test('Initial horizontal scroll position when rtl is enabled', function(assert) {
         $('#pivotGrid').empty();
         $('#pivotGrid').width(100);
@@ -3309,11 +3289,13 @@ QUnit.module('dxPivotGrid', {
         const columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
         assert.ok(dataAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
         assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
-        assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
+
+        const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
+        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
     });
 
-    // T529461
+    // T529461;
     QUnit.test('Initial horizontal scroll position when rtl is enabled and scrolling mode is virtual', function(assert) {
         $('#pivotGrid').empty();
         $('#pivotGrid').width(100);
@@ -3340,8 +3322,10 @@ QUnit.module('dxPivotGrid', {
         const columnAreaContentTable = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers .dx-scrollable-content > table');
         assert.ok(dataAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
         assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
-        assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
+
+        const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
+        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
         assert.equal(dataAreaFakeTable.css('right'), '0px');
         assert.equal(columnAreaFakeTable.css('right'), '0px');
         assert.equal(dataAreaContentTable.css('right'), '0px');
@@ -3381,8 +3365,10 @@ QUnit.module('dxPivotGrid', {
             assert.roughEqual(pivotGrid._scrollLeft, 10, 1, '_scrollLeft variable store inverted value');
             assert.ok(dataAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
             assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
-            assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
-            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
+
+            const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
+            assert.roughEqual(dataAreaScrollable.scrollLeft() + 10, dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
+            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + $(columnAreaScrollable.container()).width(), $(columnAreaScrollable.content()).width(), 2.01, 'scrollLeft is in max right position');
 
             done();
         };
@@ -5160,7 +5146,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             height: 300,
             scrolling: {
@@ -5205,8 +5191,6 @@ QUnit.module('Tests with stubs', {
         assert.ok(this.dataArea.updateScrollableOptions.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
@@ -5229,7 +5213,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             scrolling: {
                 mode: 'virtual'
@@ -5273,8 +5257,6 @@ QUnit.module('Tests with stubs', {
         assert.ok(this.dataArea.updateScrollableOptions.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
 
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
@@ -7130,8 +7112,11 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: false });
         area.renderScrollable();
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
 
         const virtualContent = area.tableElement().prev();
 
@@ -7161,6 +7146,9 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.reset();
@@ -7200,6 +7188,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7208,7 +7198,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7272,6 +7262,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7280,7 +7272,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7346,6 +7338,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7354,7 +7348,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7420,6 +7414,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7428,7 +7424,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false, useSimulatedScrollbar: true, direction: 'vertical' });
+        area.updateScrollableOptions({});
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });
