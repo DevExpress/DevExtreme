@@ -94,7 +94,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     scrollLocationChange,
     contentWidth, containerClientWidth, contentHeightWithoutPockets, containerClientHeight,
     scrollableRef, contentStyles, containerStyles, onBounce,
-    onReachBottom, onRelease, onPullDown, onScroll, onEnd, direction, topPocketState,
+    onReachBottom, onRelease, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler,
@@ -181,7 +181,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
-              onScroll={onScroll}
               onEnd={onEnd}
               rtlEnabled={rtlEnabled}
               containerHasSizes={containerHasSizes}
@@ -203,7 +202,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
-              onScroll={onScroll}
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
 
@@ -516,11 +514,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect() effectResetInactiveState(): void {
-    if (this.props.direction === DIRECTION_BOTH) {
+    if (this.direction.isBoth) {
       return;
     }
 
-    this.scrollLocationChange(this.fullScrollInactiveProp, 0, true);
+    const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
+
+    this.scrollLocationChange(inactiveScrollProp, 0, true);
   }
 
   @Effect()
@@ -1116,10 +1116,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     if (!this.props.disabled) {
       this.locked = false;
     }
-  }
-
-  get fullScrollInactiveProp(): 'scrollLeft' | 'scrollTop' {
-    return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
   }
 
   onVisibilityChangeHandler(visible: boolean): void {
