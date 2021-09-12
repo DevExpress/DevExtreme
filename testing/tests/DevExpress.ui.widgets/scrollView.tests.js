@@ -499,6 +499,9 @@ QUnit.module('dynamic', moduleConfig, () => {
     });
 
     QUnit.test('onPullDown enabled doesn\'t change the position of content', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
         assert.expect(1);
 
         const $scrollView = $('#scrollView').dxScrollView({
@@ -518,12 +521,19 @@ QUnit.module('dynamic', moduleConfig, () => {
         $scrollView.dxScrollView('option', 'pullDownEnabled', true);
         $scrollView.dxScrollView('option', 'onPullDown', noop);
 
-        const location = getScrollOffset($scrollView);
+        setTimeout(() => {
+            const location = getScrollOffset($scrollView);
 
-        assert.equal(location.top, -10 - $topPocket.height(), 'content position was not changed');
+            assert.equal(location.top, -10 - $topPocket.height(), 'content position was not changed');
+
+            done();
+        });
     });
 
     QUnit.test('onPullDown disabled does not change the position of content', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
         assert.expect(1);
 
         const $scrollView = $('#scrollView').dxScrollView({
@@ -544,12 +554,19 @@ QUnit.module('dynamic', moduleConfig, () => {
         $scrollView.dxScrollView('option', 'pullDownEnabled', false);
         $scrollView.dxScrollView('option', 'onPullDown', undefined);
 
-        const location = getScrollOffset($scrollView);
+        setTimeout(() => {
+            const location = getScrollOffset($scrollView);
 
-        assert.equal(location.top, -10, 'content position was not changed');
+            assert.equal(location.top, -10, 'content position was not changed');
+
+            done();
+        });
     });
 
     QUnit.test('scroll content stays in bounds when onPullDown turned off', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
         assert.expect(1);
 
         const $scrollView = $('#scrollView').dxScrollView({
@@ -573,11 +590,15 @@ QUnit.module('dynamic', moduleConfig, () => {
         $scrollView.dxScrollView('option', 'pullDownEnabled', false);
         $scrollView.dxScrollView('option', 'onPullDown', null);
 
-        const location = getScrollOffset($scrollView);
+        setTimeout(() => {
+            const location = getScrollOffset($scrollView);
 
-        const maxScrollTopOffset = $content.height() - $container.height();
+            const maxScrollTopOffset = $content.height() - $container.height();
 
-        assert.equal(location.top, -maxScrollTopOffset, 'content position was not changed');
+            assert.equal(location.top, -maxScrollTopOffset, 'content position was not changed');
+
+            done();
+        });
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {
@@ -1236,6 +1257,9 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('release calls moveToBound location immediately when state is released', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
             onPullDown: noop,
@@ -1249,11 +1273,18 @@ QUnit.module('api', moduleConfig, () => {
 
         scrollView.scrollTo(scrollView.scrollHeight());
         $children.remove();
-        pointerMock($scrollableContent).start().down(); // NOTE: call update without moveToBound location
-        scrollView.release();
 
-        const locate = getScrollOffset($scrollView);
-        assert.equal(locate.top, -pullDownSize, 'moveToBound was called immediately after release');
+        setTimeout(() => {
+            pointerMock($scrollableContent).start().down(); // NOTE: call update without moveToBound location
+            scrollView.release();
+
+            setTimeout(() => {
+                const locate = getScrollOffset($scrollView);
+                assert.equal(locate.top, -pullDownSize, 'moveToBound was called immediately after release');
+
+                done();
+            }, 50);
+        }, 50);
     });
 
     QUnit.test('toggleLoading', function(assert) {
