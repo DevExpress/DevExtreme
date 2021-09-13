@@ -1,3 +1,4 @@
+import { setHeight } from '../../../js/core/utils/size';
 QUnit.testStart(function() {
     const markup =
 '<style>\
@@ -5125,7 +5126,7 @@ QUnit.module('Tests with stubs', {
         const tableElement = pivot.$element().find('table').first();
         const descriptionCell = tableElement.find('.dx-area-description-cell');
 
-        descriptionCell.height(80);
+        setHeight(descriptionCell, 80);
 
         const delta = (getSize(descriptionCell[0], 'height', {
             paddings: true,
@@ -5166,7 +5167,7 @@ QUnit.module('Tests with stubs', {
         });
 
         const tableElement = pivot.$element().find('table').first();
-        tableElement.find('.dx-area-description-cell').height(25);
+        setHeight(tableElement.find('.dx-area-description-cell'), 25);
 
         pivot.updateDimensions();
 
