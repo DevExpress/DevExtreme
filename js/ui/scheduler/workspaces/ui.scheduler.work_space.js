@@ -436,7 +436,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getRealGroupOrientation() {
-        return this._isVerticalGroupedWorkSpace() ? 'vertical' : 'horizontal';
+        return this._isVerticalGroupedWorkSpace()
+            ? 'vertical'
+            : 'horizontal';
     }
 
     createRAllDayPanelElements() {
