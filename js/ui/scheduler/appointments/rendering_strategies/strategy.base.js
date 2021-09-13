@@ -563,7 +563,9 @@ class BaseRenderingStrategy {
         const appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
 
         if(isObject(appointmentCountPerCell)) {
-            return isAllDay ? this._getMaxAppointmentCountPerCell().allDay : this._getMaxAppointmentCountPerCell().simple;
+            return isAllDay
+                ? appointmentCountPerCell.allDay
+                : appointmentCountPerCell.simple;
         } else {
             return appointmentCountPerCell;
         }

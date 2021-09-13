@@ -20,7 +20,6 @@ const ValidationMessage = Overlay.inherit({
             width: 'auto',
             height: 'auto',
             closeOnOutsideClick: false,
-            closeOnTargetScroll: false,
             animation: null,
             visible: true,
             propagateOutsideClick: true,
@@ -32,9 +31,9 @@ const ValidationMessage = Overlay.inherit({
             mode: 'auto',
             validationErrors: undefined,
             positionRequest: undefined,
-            describedElement: undefined,
             boundary: undefined,
-            offset: { h: 0, v: 0 }
+            offset: { h: 0, v: 0 },
+            contentId: undefined
         });
     },
 
@@ -54,12 +53,12 @@ const ValidationMessage = Overlay.inherit({
     },
 
     _updateContentId() {
-        const describedElement = this.option('describedElement') || this.option('container');
-        const contentId = $(describedElement).attr('aria-describedby');
+        const { container, contentId } = this.option();
+        const id = contentId ?? $(container).attr('aria-describedby');
 
         this.$content()
             .addClass(INVALID_MESSAGE_CONTENT)
-            .attr('id', contentId);
+            .attr('id', id);
     },
 
     _renderInnerHtml(element) {
@@ -131,6 +130,13 @@ const ValidationMessage = Overlay.inherit({
             case 'offset':
             case 'positionRequest':
                 this._updatePosition();
+                break;
+            case 'container':
+                this._updateContentId();
+                this.callBase(args);
+                break;
+            case 'contentId':
+                this._updateContentId();
                 break;
             case 'validationErrors':
                 this._renderInnerHtml(this.$content());

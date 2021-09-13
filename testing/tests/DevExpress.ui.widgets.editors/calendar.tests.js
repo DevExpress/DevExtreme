@@ -1646,12 +1646,10 @@ QUnit.module('Options', {
         assert.notDeepEqual(getCurrentViewInstance(calendar).option('date'), oldDate, 'view is changed');
     });
 
-    QUnit.test('contoured date displaying should depend on \'hasFocus\' option', function(assert) {
+    QUnit.test('contoured date displaying should depend on \'skipFocusCheck\' option', function(assert) {
         this.reinit({
             value: new Date(2015, 10, 18),
-            hasFocus: () => {
-                return true;
-            }
+            skipFocusCheck: true
         });
 
         assert.deepEqual(getCurrentViewInstance(this.calendar).option('contouredDate'), new Date(2015, 10, 18), 'view contoured is set');

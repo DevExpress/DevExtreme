@@ -146,9 +146,13 @@ describe('Native > Effects', () => {
         refreshStrategy: { get() { return refreshStrategy; } },
       });
       viewModel.wrapperRef = { current: {} } as RefObject;
-      viewModel.containerRef = { current: {} } as RefObject;
+      viewModel.containerRef = {
+        current: {
+          scrollTop: scrollLocation.top,
+          scrollLeft: scrollLocation.left,
+        },
+      } as RefObject;
       viewModel.topPocketRef = { current: { clientHeight: 80 } } as RefObject;
-      viewModel.scrollLocation = jest.fn(() => scrollLocation);
       viewModel.moveScrollbars = jest.fn();
       viewModel.onReachBottom = jest.fn();
       viewModel.isReachBottom = jest.fn(() => isReachBottom);
@@ -176,7 +180,7 @@ describe('Native > Effects', () => {
       const expectedPullDownIconAngle = 0;
       let onReachBottomCalled = false;
 
-      const scrollDelta = prevLocationTop + (scrollLocation as { top: number }).top;
+      const scrollDelta = prevLocationTop + (scrollLocation.top as number);
 
       if (forceGeneratePockets) {
         if (pocketState !== TopPocketState.STATE_REFRESHING) {
@@ -806,8 +810,14 @@ describe('Getters', () => {
       });
 
       viewModel.bottomPocketRef = { current: bottomPocketEl } as RefObject;
-      viewModel.containerRef = { current: { scrollHeight: 750, clientHeight: 200 } } as RefObject;
-      viewModel.scrollLocation = jest.fn(() => scrollLocation);
+      viewModel.containerRef = {
+        current: {
+          scrollTop: scrollLocation.top,
+          scrollLeft: scrollLocation.left,
+          scrollHeight: 750,
+          clientHeight: 200,
+        },
+      } as RefObject;
 
       let expectedIsReachBottom = false;
 
@@ -1371,6 +1381,7 @@ describe('Scrollbar integration', () => {
       const commonOptions = {
         containerSize: 0,
         contentSize: 0,
+        maxOffset: -0,
         scrollLocation: 0,
         forceVisibility: false,
         showScrollbar: 'onScroll',

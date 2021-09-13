@@ -8,7 +8,6 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
-import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
 import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
@@ -895,6 +894,8 @@ const EditingController = modules.ViewController.inherit((function() {
             this._focusFirstEditableCellInRow(rowIndex);
         },
 
+        _beforeFocusElementInRow: noop,
+
         _focusFirstEditableCellInRow: function(rowIndex) {
             const $firstCell = this.getFirstEditableCellInRow(rowIndex);
 
@@ -902,11 +903,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             this._delayedInputFocus($firstCell, () => {
                 this._editCellInProgress = false;
-
-                const $cell = this.getFirstEditableCellInRow(rowIndex);
-                const eventToTrigger = this.option('editing.startEditAction') === 'dblClick' ? doubleClickEvent : clickEventName;
-
-                $cell && eventsEngine.trigger($cell, eventToTrigger);
+                this._beforeFocusElementInRow(rowIndex);
             });
         },
 

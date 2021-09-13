@@ -11,7 +11,7 @@ describe('AppointmentLayout', () => {
     }));
 
     it('it should be rendered correctly with empty items', () => {
-      const layout = render({ props: { items: [] } });
+      const layout = render({ props: { appointments: [] } });
 
       expect(layout.hasClass('dx-scheduler-appointments'))
         .toEqual(true);
@@ -38,6 +38,7 @@ describe('AppointmentLayout', () => {
           },
         },
       };
+      const appointmentTemplate = '<div class="test-template">Some template</div>';
       const viewModel0 = {
         ...defaultViewModel,
         geometry: {
@@ -56,10 +57,11 @@ describe('AppointmentLayout', () => {
       };
       const layout = render({
         props: {
-          items: [
+          appointments: [
             viewModel0,
             viewModel1,
           ],
+          appointmentTemplate,
         },
       });
 
@@ -80,6 +82,8 @@ describe('AppointmentLayout', () => {
         .toEqual('11-1628157600000-1628164800000_2-4-10-20');
       expect(appointment.prop('viewModel'))
         .toBe(viewModel1);
+      expect(appointment.prop('appointmentTemplate'))
+        .toBe(appointmentTemplate);
     });
   });
 });

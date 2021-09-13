@@ -66,10 +66,22 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     deferRendering?: boolean;
     /**
      * @docid
+     * @default undefined
+     * @public
+     */
+    dragAndResizeArea?: string | UserDefinedElement;
+    /**
+     * @docid
      * @default false
      * @public
      */
     dragEnabled?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     dragOutsideBoundary?: boolean;
     /**
      * @docid
      * @deprecated
@@ -198,6 +210,12 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @public
      */
     wrapperAttr?: any;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxOverlayAnimation {

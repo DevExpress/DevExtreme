@@ -66,7 +66,7 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { getCellGroups } from './resources/utils';
+import { createResourceEditorModel, getCellGroups, getResourcesFromItem } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
@@ -84,6 +84,8 @@ const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
 const DEFAULT_AGENDA_DURATION = 7;
+const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
+const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 
 const VIEWS_CONFIG = {
     day: {
@@ -161,9 +163,9 @@ class Scheduler extends Widget {
 
             customizeDateNavigatorText: undefined,
 
-            appointmentTemplate: 'item',
+            appointmentTemplate: DEFAULT_APPOINTMENT_TEMPLATE_NAME,
 
-            appointmentCollectorTemplate: 'appointmentCollector',
+            appointmentCollectorTemplate: DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME,
 
             dataCellTemplate: null,
 
@@ -486,7 +488,6 @@ class Scheduler extends Widget {
             case 'resourceCellTemplate':
             case 'dataCellTemplate':
             case 'timeCellTemplate':
-                this._updateOption('workSpace', name, value);
                 this.repaint();
                 break;
             case 'groups':
@@ -1015,7 +1016,7 @@ class Scheduler extends Widget {
         );
 
         let viewModel = [];
-        if(filteredItems.length && this._isVisible()) {
+        if(this._isVisible()) {
             viewModel = this._getAppointmentsToRepaint();
         }
 
@@ -1036,14 +1037,21 @@ class Scheduler extends Widget {
         const { filteredItems } = getAppointmentDataProvider(this.key);
         const layoutManager = this.getLayoutManager();
 
-        const currentViewModel = layoutManager.createAppointmentsMap(filteredItems);
+        const appointmentsMap = layoutManager.createAppointmentsMap(filteredItems);
         if(this.modelProvider.isRenovatedAppointments) {
-            return currentViewModel;
+            const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
+                ? this.option('appointmentTemplate')
+                : undefined;
+            return {
+                appointments: appointmentsMap,
+                appointmentTemplate
+            };
         }
 
-        const oldViewModel = this.getAppointmentsInstance().option('items');
-
-        return layoutManager.getRepaintedAppointments(currentViewModel, oldViewModel);
+        return layoutManager.getRepaintedAppointments(
+            appointmentsMap,
+            this.getAppointmentsInstance().option('items')
+        );
     }
 
     _initExpressions(fields) {
@@ -1215,7 +1223,10 @@ class Scheduler extends Widget {
 
     createAppointmentForm() {
         const scheduler = {
-            getResourceManager: () => this.fire('getResourceManager'),
+            createResourceEditorModel: () => {
+                const resourceManager = this.fire('getResourceManager');
+                return createResourceEditorModel(resourceManager.getResources(), resourceManager.loadedResources);
+            },
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
 
@@ -1235,7 +1246,18 @@ class Scheduler extends Widget {
             getElement: () => this.$element(),
             createComponent: (element, component, options) => this._createComponent(element, component, options),
             focus: () => this.focus(),
-            getResourceManager: () => this.fire('getResourceManager'),
+
+            getResourcesFromItem: (rawAppointment) => {
+                const resourceManager = this.fire('getResourceManager');
+
+                return getResourcesFromItem(
+                    resourceManager._resourceFields,
+                    resourceManager.getResources(),
+                    (field, action) => resourceManager.getDataAccessors(field, action),
+                    rawAppointment,
+                    true
+                );
+            },
 
             getEditingConfig: () => this._editing,
 
@@ -2109,7 +2131,7 @@ class Scheduler extends Widget {
         const result = {};
         const toMs = dateUtils.dateToMilliseconds;
 
-        const startDate = this.option('currentDate');
+        const startDate = new Date(this.option('currentDate'));
         const endDate = new Date(startDate.getTime() + this.option('cellDuration') * toMs('minute'));
 
         ExpressionUtils.setField(this.key, 'startDate', result, startDate);

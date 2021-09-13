@@ -1182,6 +1182,32 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @public
      */
       showDependencies(value: boolean): void;
+     /**
+     * @docid
+     * @publicName zoomIn()
+     * @public
+     */
+      zoomIn(): void;
+      /**
+     * @docid
+     * @publicName zoomOut()
+     * @public
+     */
+      zoomOut(): void;
+     /**
+     * @docid
+     * @publicName unassignAllResourcesFromTask(taskKey)
+     * @param1 taskKey:object
+     * @public
+     */
+      unassignAllResourcesFromTask(taskKey: any): void;
+     /**
+     * @docid
+     * @publicName showTaskDetailsDialog(taskKey)
+     * @param1 taskKey:object
+     * @public
+     */
+      showTaskDetailsDialog(taskKey: any): void;
 }
 
 /**
@@ -1321,7 +1347,7 @@ export interface dxGanttSorting {
     /**
      * @docid
      * @type Enums.GanttSortingMode|string
-     * @default "none"
+     * @default "single"
      */
     mode?: 'multiple' | 'none' | 'single';
     /**

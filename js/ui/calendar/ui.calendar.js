@@ -53,6 +53,10 @@ const ZOOM_LEVEL = {
     CENTURY: 'century'
 };
 
+function elementHasFocus(element) {
+    return element.hasClass(FOCUSED_STATE_CLASS);
+}
+
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
 
@@ -95,9 +99,7 @@ const Calendar = Editor.inherit({
 
             onCellClick: null,
             onContouredChanged: null,
-            hasFocus: function(element) {
-                return element.hasClass(FOCUSED_STATE_CLASS);
-            },
+            skipFocusCheck: false,
 
             _todayDate: () => new Date()
 
@@ -467,7 +469,7 @@ const Calendar = Editor.inherit({
     },
 
     _setViewContoured: function(date) {
-        if(this.option('hasFocus')(this._focusTarget())) {
+        if(this.option('skipFocusCheck') || elementHasFocus(this._focusTarget())) {
             this._view.option('contouredDate', date);
         }
     },
@@ -1224,7 +1226,7 @@ const Calendar = Editor.inherit({
             case 'showTodayButton':
                 this._invalidate();
                 break;
-            case 'hasFocus':
+            case 'skipFocusCheck':
                 break;
             case '_todayDate':
                 this._refreshViews();

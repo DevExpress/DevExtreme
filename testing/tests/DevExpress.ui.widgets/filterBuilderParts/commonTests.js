@@ -1295,7 +1295,7 @@ QUnit.module('on value changed', function() {
         const popupInstance = container.children('.dx-filterbuilder-overlay').dxPopup('instance');
 
         // assert
-        assert.equal(popupInstance.option('closeOnTargetScroll'), true, 'popup\'s closeOnTargetScroll');
+        assert.equal(popupInstance.option('hideOnParentScroll'), true, 'popup\'s hideOnParentScroll');
     });
 
     // T804262
