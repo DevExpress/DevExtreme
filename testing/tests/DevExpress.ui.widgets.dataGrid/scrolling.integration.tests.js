@@ -218,7 +218,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(scrollable.scrollLeft(), 300, 'scroll position');
 
-        this.clock.restore();
         scrollable.scrollTo({ x: 100 });
         const scrollRight = getRightScrollOffset(scrollable);
 
@@ -235,6 +234,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 done();
             });
         });
+
+        this.clock.tick();
     });
 
     QUnit.test('Scroller state', function(assert) {
