@@ -1,0 +1,7 @@
+{
+  "presets": [
+    ["@babel/preset-env", { "targets": { "chrome": "90" }}],
+    "@babel/preset-react",
+    "babel-preset-react-app/dependencies"
+  ]
+}

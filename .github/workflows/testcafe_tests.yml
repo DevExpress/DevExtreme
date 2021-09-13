@@ -36,10 +36,18 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Run npm install
+      run: |
+        cd testing/renovation
+        npm install --no-audit --no-fund
+
     - name: Build
       env:
         DEVEXTREME_TEST_CI: "true"
       run: npm run build
+
+    - name: Build renovation playgound
+      run: npx gulp build-renovation-testing
 
     - name: Run TestCafe tests
       env:
