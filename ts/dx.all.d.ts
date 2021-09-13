@@ -1772,9 +1772,9 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.on(events)]
      */
-    on(
-      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.DataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:DataSource.pageIndex()]
      */
@@ -2435,11 +2435,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(
-      events: {
-        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
-      }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
@@ -10729,7 +10727,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface ActionEventInfo {
+    interface ActionEventInfo {
       errorCode?: number;
       errorText: string;
       cancel: boolean | PromiseLike<void>;

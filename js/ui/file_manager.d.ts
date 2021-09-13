@@ -33,7 +33,7 @@ import {
     template,
 } from '../core/templates/template';
 
-export interface ActionEventInfo {
+interface ActionEventInfo {
     errorCode?: number;
     errorText: string;
     cancel: boolean | PromiseLike<void>;
