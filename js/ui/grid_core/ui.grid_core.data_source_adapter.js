@@ -415,7 +415,7 @@ export default gridCore.Controller.inherit((function() {
                     cachedData = createEmptyCachedData();
                 }
 
-                each(operationTypes, function(operationType, value) {
+                each(operationTypes, (operationType, value) => {
                     if(value && this._needCleanCacheByOperation(operationType, options.remoteOperations)) {
                         cachedStoreData = undefined;
                         cachedPagingData = undefined;
