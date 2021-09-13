@@ -43,25 +43,47 @@ const getMaxHeight = () => {
 };
 
 
-const applyDimensionChanges = ($target, newHeight, newWidth) => {
+const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
-        $target.attr('width', newWidth);
+        const autoWidthColumns = getAutoWidthColumns($table);
+
+        if(autoWidthColumns.length > 0) {
+            $table.css('width', newWidth); // to do support style width
+        } else {
+            const $columns = $table.find('tr').eq(0).find('td');
+
+            const oldTableWidth = $table.outerWidth();
+
+            each($columns, (i, element) => {
+                const $element = $(element);
+                const newElementWidth = newWidth * oldTableWidth / $element.outerWidth();
+                $element.attr('width', newElementWidth);
+
+            });
+
+
+        }
+
     }
 
-    $target.attr('height', newHeight);
+
+    $table.attr('height', newHeight);
+
+
 };
 
-// const autoWidthColumnsExists = ($table) => {
-//     let result;
-//     $table.find('tr').eq(0).find('td').each((index, element) => {
-//         if($(element).attr('width')) {
-//             result = true;
-//             return false;
-//         }
-//     });
 
-//     return result;
-// };
+const getAutoWidthColumns = ($table) => {
+    const result = [];
+    $table.find('tr').eq(0).find('td').each((index, element) => {
+        const $element = $(element);
+        if($element.attr('width')) {
+            result.push($element);
+        }
+    });
+
+    return result;
+};
 
 const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
@@ -225,7 +247,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                 onClick: (e) => {
                     const formData = formInstance.option('formData');
                     const widthArg = formData.width === startTableWidth ? undefined : formData.width;
-                    applyDimensionChanges($table, formData.height, widthArg);
+                    applyTableDimensionChanges($table, formData.height, widthArg);
                     $table.css({
                         'backgroundColor': backgroundColorEditorInstance.option('value'),
                         'borderStyle': formData.borderStyle,
