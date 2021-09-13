@@ -44,7 +44,8 @@ export class DateGeneratorBaseStrategy {
 
     generate(appointmentAdapter) {
         const itemResources = getResourcesFromItem(
-            this.options.resources,
+            // this.options.resources,
+            this.resourceManager.getResources(),
             (field, action) => this.resourceManager.getDataAccessors(field, action),
             this.rawAppointment
         );
