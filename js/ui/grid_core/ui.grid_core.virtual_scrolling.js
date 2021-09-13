@@ -3,7 +3,7 @@ import { getWindow } from '../../core/utils/window';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
-import { Deferred } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
@@ -1339,8 +1339,24 @@ export const virtualScrollingModule = {
                         return dataSource?.virtualItemsCount.apply(dataSource, arguments);
                     },
                     pageIndex: function(pageIndex) {
-                        if(!isDefined(pageIndex) && this.option(NEW_SCROLLING_MODE)) {
-                            return this.option('paging.pageIndex');
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            if(!isDefined(pageIndex)) {
+                                return this.option('paging.pageIndex');
+                            }
+                            const dataSourceAdapter = this._dataSource;
+                            const oldLoadPageIndex = dataSourceAdapter.pageIndex();
+                            const callBaseResult = this.callBase.apply(this, arguments);
+                            when(callBaseResult).done(() => {
+                                const newLoadPageIndex = dataSourceAdapter.pageIndex();
+                                const visiblePageIndex = this.pageIndex();
+
+                                if(newLoadPageIndex === oldLoadPageIndex && visiblePageIndex !== pageIndex) {
+                                    this._rowsScrollController.setViewportItemIndex(pageIndex * this.pageSize());
+                                    this._updateVisiblePageIndex();
+                                    this.pageChanged.fire();
+                                }
+                            });
+                            return callBaseResult;
                         }
                         return this.callBase.apply(this, arguments);
                     }
