@@ -488,7 +488,6 @@ class Scheduler extends Widget {
             case 'resourceCellTemplate':
             case 'dataCellTemplate':
             case 'timeCellTemplate':
-                this._updateOption('workSpace', name, value);
                 this.repaint();
                 break;
             case 'groups':

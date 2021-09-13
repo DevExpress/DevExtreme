@@ -31,9 +31,13 @@ function calculateRowHeight(doc, cells, columnWidths) {
 
     let rowHeight = 0;
     for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-        const cellText = cells[cellIndex].text;
-        const font = cells[cellIndex].font;
-        const wordWrapEnabled = cells[cellIndex].wordWrapEnabled;
+        if(isDefined(cells[cellIndex].rowSpan)) {
+            // height will be computed at the recalculateHeightForMergedRows step
+            continue;
+        }
+        const cellText = cells[cellIndex].pdfCell.text;
+        const font = cells[cellIndex].pdfCell.font;
+        const wordWrapEnabled = cells[cellIndex].pdfCell.wordWrapEnabled;
         const columnWidth = columnWidths[cellIndex];
         if(isDefined(cellText)) {
             const cellHeight = calculateTextHeight(doc, cellText, font, { wordWrapEnabled, columnWidth });
@@ -72,4 +76,4 @@ function drawTextInRect(doc, text, rect, wordWrapEnabled, jsPdfTextOptions) {
     doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
-export { calculateRowHeight, drawLine, drawRect, drawTextInRect };
+export { calculateRowHeight, calculateTextHeight, drawLine, drawRect, drawTextInRect };

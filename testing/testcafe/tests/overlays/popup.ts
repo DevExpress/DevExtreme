@@ -147,10 +147,10 @@ test('Popup can not be dragged if content bigger than container', async (t) => {
     .eql(newPopupPosition.left);
 });
 
-fixture`Popup drag with enabled allowDragOutside option`
-  .page(url(__dirname, './pages/popupDrag/allowDragOutside.html'));
+fixture`Popup drag with enabled dragOutsideBoundary option`
+  .page(url(__dirname, './pages/popupDrag/dragOutsideBoundary.html'));
 
-test('Popup can be dragged outside of the container if allowDragOutside is enabled', async (t) => {
+test('Popup can be dragged outside of the container if dragOutsideBoundary is enabled', async (t) => {
   const popup = new Popup('#popup');
   const { content, toolbar } = popup;
 
