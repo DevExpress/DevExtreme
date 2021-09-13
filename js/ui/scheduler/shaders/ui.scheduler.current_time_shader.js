@@ -7,7 +7,9 @@ const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 class CurrentTimeShader {
     constructor(workSpace) {
         this._workSpace = workSpace;
-        this._$container = this._workSpace._$dateTableScrollableContent;
+        this._$container = this._workSpace.option('crossScrollingEnabled')
+            ? this._workSpace._$dateTableContainer
+            : this._workSpace._$dateTableScrollableContent;
     }
 
     render() {
