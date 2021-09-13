@@ -1,4 +1,3 @@
-import { setHeight } from '../../../js/core/utils/size';
 QUnit.testStart(function() {
     const markup =
 '<style>\
@@ -20,6 +19,7 @@ import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import browser from 'core/utils/browser';
 import {
+    setHeight,
     getSize,
     getOuterHeight,
     getHeight,
