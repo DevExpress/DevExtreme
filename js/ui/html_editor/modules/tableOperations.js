@@ -45,33 +45,51 @@ const getMaxHeight = () => {
 
 const applyDimensionChanges = ($target, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
-        // $target.css('width', 'initial');
         $target.attr('width', newWidth);
     }
 
     $target.attr('height', newHeight);
 };
 
+// const autoWidthColumnsExists = ($table) => {
+//     let result;
+//     $table.find('tr').eq(0).find('td').each((index, element) => {
+//         if($(element).attr('width')) {
+//             result = true;
+//             return false;
+//         }
+//     });
+
+//     return result;
+// };
+
 const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
         const index = $($target).index();
         let $verticalCells = getLineElements($target.closest('table'), index);
+        const $table = $($target.closest('table'));
 
-        const widthDiff = newWidth - $target.width();
+        const widthDiff = newWidth - $target.outerWidth();
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
+        // const shouldRecalculateOtherColumns = !autoWidthColumnsExists($table);
 
+        $table.css('width', 'initial');
+
+        // if(shouldRecalculateOtherColumns) {
         if($nextColumnCell.length === 1) {
             $verticalCells = getLineElements($target.closest('table'), index + 1);
-            setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq().width() - widthDiff);
+            setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
         } else {
             const $prevColumnCell = $target.prev();
             if($prevColumnCell.length === 1) {
                 $verticalCells = getLineElements($target.closest('table'), index - 1);
-                setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq().width() - widthDiff);
+                setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
             }
         }
+        // }
+
     }
 
     const $horizontalCells = $target.closest('tr, thead').find('td');

@@ -211,46 +211,103 @@ module('Table properties forms', {
         assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
     });
 
-    test('Check cell width edititng', function(assert) {
-        this.createWidget();
+    test('Check cell width edititing if all columns width is fixed', function(assert) {
+        this.createWidget({ value: '\
+        <table>\
+            <tr>\
+                <td width="300px">0_0 content</td>\
+                <td width="300px">0_1</td>\
+            </tr>\
+            <tr>\
+                <td width="300px">1_0</td>\
+                <td width="300px">1_1</td>\
+            </tr>\
+        </table>\
+        <br>' });
 
         const $tableElement = this.$element.find('table').eq(0);
-        this.quillInstance.setSelection(50, 1);
+        const $targetCell = $tableElement.find('td').eq(0);
+        $tableElement.css('width', 'initial');
 
-        showCellPropertiesForm(this.instance, $tableElement);
+        showCellPropertiesForm(this.instance, $targetCell);
         this.clock.tick(500);
         const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
 
-        assert.strictEqual($form.length, 1);
-        assert.ok($form.eq(0).is(':visible'));
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 250);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
+        assert.strictEqual($targetCell.next().outerWidth(), 350, 'previous cell width is correct');
     });
 
-    test('Check cell width edititing for the last table column', function(assert) {
-        this.createWidget();
+    test('Check cell width edititing for the last table column if all columns width is fixed', function(assert) {
+        this.createWidget({ value: '\
+        <table>\
+            <tr>\
+                <td width="300px">0_0 content</td>\
+                <td width="300px">0_1</td>\
+            </tr>\
+            <tr>\
+                <td width="300px">1_0</td>\
+                <td width="300px">1_1</td>\
+            </tr>\
+        </table>\
+        <br>' });
+
 
         const $tableElement = this.$element.find('table').eq(0);
-        this.quillInstance.setSelection(50, 1);
+        const $targetCell = $tableElement.find('td').eq(1);
+        $tableElement.css('width', 'initial');
 
-        showCellPropertiesForm(this.instance, $tableElement);
+        showCellPropertiesForm(this.instance, $targetCell);
         this.clock.tick(500);
         const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
 
-        assert.strictEqual($form.length, 1);
-        assert.ok($form.eq(0).is(':visible'));
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 250);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
+        assert.strictEqual($targetCell.prev().outerWidth(), 350, 'previous cell width is correct');
     });
 
     test('Check cell width edititing if the table has one column', function(assert) {
-        this.createWidget();
+        this.createWidget({ value: '\
+        <table>\
+            <tr>\
+                <td>0_0 content</td>\
+            </tr>\
+            <tr>\
+                <td>1_0</td>\
+            </tr>\
+        </table>\
+        <br>' });
 
         const $tableElement = this.$element.find('table').eq(0);
-        this.quillInstance.setSelection(50, 1);
+        const $targetCell = $tableElement.find('td').eq(0);
 
-        showCellPropertiesForm(this.instance, $tableElement);
+        showCellPropertiesForm(this.instance, $targetCell);
         this.clock.tick(500);
         const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
 
-        assert.strictEqual($form.length, 1);
-        assert.ok($form.eq(0).is(':visible'));
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 250);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
     });
 
 
