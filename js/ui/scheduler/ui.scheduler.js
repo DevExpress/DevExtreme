@@ -66,7 +66,7 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { createResourceEditorModel, getCellGroups, getResourcesFromItem } from './resources/utils';
+import { createResourceEditorModel, getCellGroups, getResourcesFromItem, setResourceToAppointment } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
@@ -1251,7 +1251,6 @@ class Scheduler extends Widget {
                 const resourceManager = this.fire('getResourceManager');
 
                 return getResourcesFromItem(
-                    resourceManager._resourceFields,
                     resourceManager.getResources(),
                     (field, action) => resourceManager.getDataAccessors(field, action),
                     rawAppointment,
@@ -1834,7 +1833,8 @@ class Scheduler extends Widget {
 
         const rawResult = result.source();
 
-        getResourceManager(this.key).setResourcesToItem(rawResult, targetCell.groups);
+        const resourceManager = getResourceManager(this.key);
+        setResourceToAppointment(resourceManager.getResources(), resourceManager._dataAccessors, rawResult, targetCell.groups);
 
         return rawResult;
     }
