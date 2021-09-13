@@ -30,7 +30,7 @@ export const viewFunction = ({
   isMobile,
   calendarRef,
 }: SchedulerCalendar): JSX.Element => {
-  const children = (
+  const calendar = (
     <div
       className={CALENDAR_CLASS}
     >
@@ -63,7 +63,7 @@ export const viewFunction = ({
             toolbarItems={[{ shortcut: 'cancel' }]}
             onShown={(): void => calendarRef.current?.focus()}
           >
-            {children}
+            {calendar}
           </Popup>
         )}
       {!isMobile
@@ -77,7 +77,7 @@ export const viewFunction = ({
             visibleChange={updateVisible}
             onShown={(): void => calendarRef.current?.focus()}
           >
-            {children}
+            {calendar}
           </Popover>
         )}
     </Fragment>

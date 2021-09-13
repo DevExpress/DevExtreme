@@ -21,8 +21,19 @@ describe('Scheduler Toolbar', () => {
     );
 
     it('should render correct markup and pass correct props to the Toolbar', () => {
-      const tree = render({ items: 'items' });
-      const toolbar = tree.childAt(0);
+      const tree = render({
+        items: 'items',
+        changeCalendarDate: () => {},
+        calendarVisible: false,
+        changeCalendarVisible: () => {},
+        props: {
+          currentDate: new Date(2021, 7, 7),
+          min: undefined,
+          max: undefined,
+          firstDayOfWeek: 0,
+        },
+      });
+      const toolbar = tree.childAt(1);
 
       expect(tree.hasClass(HEADER_CLASS)).toBe(true);
       expect(toolbar.is(Toolbar)).toBe(true);
