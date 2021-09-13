@@ -76,30 +76,30 @@ function drawBorders(doc, rect, { borderColor, drawLeftBorder = true, drawRightB
 }
 
 function setTextStyles(doc, { textColor, font }, docStyles) {
-    const _textColor = isDefined(textColor) ? textColor : docStyles.textColor;
-    if(_textColor !== doc.getTextColor()) {
-        doc.setTextColor(_textColor);
+    const currentTextColor = isDefined(textColor) ? textColor : docStyles.textColor;
+    if(currentTextColor !== doc.getTextColor()) {
+        doc.setTextColor(currentTextColor);
     }
 
-    const _font = isDefined(font) ? extend({}, docStyles.font, font) : docStyles.font;
+    const currentFont = isDefined(font) ? extend({}, docStyles.font, font) : docStyles.font;
     const docFont = doc.getFont();
     if(
-        _font.name !== docFont.fontName ||
-        _font.style !== docFont.fontStyle ||
-        isDefined(_font.weight) // fontWeight logic, https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line4842
+        currentFont.name !== docFont.fontName ||
+        currentFont.style !== docFont.fontStyle ||
+        isDefined(currentFont.weight) // fontWeight logic, https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line4842
     ) {
-        doc.setFont(_font.name, _font.style, _font.weight);
+        doc.setFont(currentFont.name, currentFont.style, currentFont.weight);
     }
-    if(_font.size !== doc.getFontSize()) {
-        doc.setFontSize(_font.size);
+    if(currentFont.size !== doc.getFontSize()) {
+        doc.setFontSize(currentFont.size);
     }
 }
 
 function setLinesStyles(doc, { borderColor }, docStyles) {
     doc.setLineWidth(defaultBorderLineWidth);
-    const _borderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
-    if(_borderColor !== doc.getDrawColor()) {
-        doc.setDrawColor(_borderColor);
+    const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
+    if(currentBorderColor !== doc.getDrawColor()) {
+        doc.setDrawColor(currentBorderColor);
     }
 }
 
