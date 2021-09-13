@@ -14,7 +14,8 @@
     margin: 0px 6px 0px 3px;
 }
 
-#app[data-v-app] {
+#app[data-v-app],
+#app[data-r-app] {
     margin: initial;
 }
 

@@ -32,7 +32,7 @@ class App extends React.Component {
               tickInterval={1}
             >
             </Scale>
-          </CircularGauge>&nbsp;
+          </CircularGauge>
           <CircularGauge
             id="rectangleNeedle"
             value={9}
@@ -53,7 +53,7 @@ class App extends React.Component {
               tickInterval={1}
             >
             </Scale>
-          </CircularGauge>&nbsp;
+          </CircularGauge>
           <CircularGauge
             id="triangleNeedle"
             value={5}
@@ -93,7 +93,7 @@ class App extends React.Component {
               tickInterval={1}
             >
             </Scale>
-          </CircularGauge>&nbsp;
+          </CircularGauge>
           <CircularGauge
             id="twoColorNeedle"
             value={4}
