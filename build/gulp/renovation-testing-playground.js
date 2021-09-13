@@ -41,7 +41,7 @@ function namedTask(task, name) {
     return task;
 }
 
-const tasks = ( { isWatch }) => Object.entries(platforms)
+const tasks = ({ isWatch }) => Object.entries(platforms)
     .map(([platform, { pattern, getEntyPoint = (fn) => fn, entryName, getDeclarationFile }]) => {
         const platformRoot = path.join(renovationRoot, platform);
         const platformRootSrc = path.join(platformRoot, 'src');
@@ -119,7 +119,7 @@ const tasks = ( { isWatch }) => Object.entries(platforms)
                 .reduce((result, fn) => {
                     result[entryName(fn)] = path.resolve(getEntyPoint(fn))
                     return result;
-                }, {})
+                }, {});
             const _config = {
                 ...webpackConfig,
                 ...{
@@ -133,8 +133,14 @@ const tasks = ( { isWatch }) => Object.entries(platforms)
                     resolveLoader: {
                         modules: [path.resolve('testing/renovation/node_modules'), 'node_modules'],
                     },
+                    plugins: [
+                        new VueLoaderPlugin(),
+                    ],
                 },
             };
+            if(platform === 'vue') {
+                _config.plugins = require('vue-loader/lib/plugin')
+            }
             return namedTask(() => gulp
                 .src(path.resolve(platformRootSrc))
                 .pipe(webpackStream({ ..._config, watch: isWatch }, webpack))
