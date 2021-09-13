@@ -33,6 +33,11 @@ import {
     EDIT_MODE_ROW,
     EDIT_MODES,
     ROW_BASED_MODES,
+    FIRST_NEW_ROW_POSITION,
+    LAST_NEW_ROW_POSITION,
+    PAGE_BOTTOM_NEW_ROW_POSITION,
+    PAGE_TOP_NEW_ROW_POSITION,
+    VIEWPORT_BOTTOM_NEW_ROW_POSITION
 } from './ui.grid_core.editing_constants';
 
 const READONLY_CLASS = 'readonly';
@@ -586,9 +591,10 @@ const EditingController = modules.ViewController.inherit((function() {
             const isLastPage = endPageIndex === dataSource.pageCount() - 1;
 
             if(scrollingMode !== 'standard') {
+                const newRowPosition = this.option('editing.newRowPosition');
                 const pageSize = dataSource.pageSize() || 1;
                 const changePageIndex = Math.floor(change.index / pageSize);
-                const needInsertOnLastPosition = isLastPage && change.index === -1;
+                const needInsertOnLastPosition = newRowPosition === PAGE_BOTTOM_NEW_ROW_POSITION || isLastPage && change.index === -1;
 
                 switch(changeType) {
                     case 'append':
@@ -654,16 +660,15 @@ const EditingController = modules.ViewController.inherit((function() {
             changes.forEach(change => {
                 const isInsert = change.type === DATA_EDIT_DATA_INSERT_TYPE;
 
-                if(!isInsert) {
+                if(!isInsert || this.needChangePageIndexToInsertRow()) {
                     return;
                 }
 
                 let key = change.key;
                 let insertInfo = this._getInternalData(key)?.insertInfo;
-                if(!isDefined(change.key) || !isDefined(insertInfo)) {
-                    const keys = this._addInsertInfo(change);
-                    key = keys.key;
-                    insertInfo = keys.insertInfo;
+                if(!isDefined(key) || !isDefined(insertInfo)) {
+                    insertInfo = this._addInsertInfo(change);
+                    key = insertInfo.key;
                 }
 
                 const loadedRowIndex = this._getLoadedRowIndex(items, e, key);
@@ -783,24 +788,66 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _setIndexes: function(change, rowIndex) {
             const dataController = this._dataController;
+            const pageSize = dataController.pageSize();
+            const pageIndex = dataController.pageIndex();
+            const pageCount = dataController.pageCount();
+            const newRowPosition = this.option('editing.newRowPosition');
+            const scrollingMode = this.option('scrolling.mode');
 
-            change.index = change.index ?? this._calculateIndex(rowIndex);
+            switch(newRowPosition) {
+                case FIRST_NEW_ROW_POSITION:
+                    change.index = 0;
+                    change.pageIndex = 0;
+                    break;
+                case LAST_NEW_ROW_POSITION:
+                    change.index = -1;
+                    change.pageIndex = pageCount - 1;
+                    break;
+                case PAGE_TOP_NEW_ROW_POSITION:
+                    change.index = scrollingMode === 'standard' ? 0 : pageIndex * pageSize;
+                    break;
+                case PAGE_BOTTOM_NEW_ROW_POSITION:
+                    change.index = scrollingMode === 'standard' ? pageSize : (pageIndex * pageSize) + pageSize;
+                    break;
+                default:
+                    change.index = change.index ?? this._calculateIndex(rowIndex);
+            }
 
-            if(this.option('scrolling.mode') !== 'virtual') {
+            if(scrollingMode !== 'virtual') {
                 change.pageIndex = change.pageIndex ?? dataController.pageIndex();
             }
         },
 
         _getInsertRowIndex: function(parentKey) {
             const rowsView = this.getView('rowsView');
-            const parentRowIndex = this._dataController.getRowIndexByKey(parentKey);
+            const dataController = this._dataController;
+            const items = dataController.items();
+            const parentRowIndex = dataController.getRowIndexByKey(parentKey);
+            const newRowPosition = this.option('editing.newRowPosition');
+            const dataSource = dataController.dataSource();
+            const pageIndex = dataSource.pageIndex();
+            const pageSize = dataSource.pageSize();
+            const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
 
             if(parentRowIndex >= 0) {
                 return parentRowIndex + 1;
             }
 
             if(rowsView) {
-                return rowsView.getTopVisibleItemIndex(true);
+                switch(newRowPosition) {
+                    case FIRST_NEW_ROW_POSITION:
+                        return 0;
+                    case PAGE_TOP_NEW_ROW_POSITION:
+                        return ((pageIndex - beginPageIndex) * pageSize);
+                    case LAST_NEW_ROW_POSITION:
+                        return items.length;
+                    case PAGE_BOTTOM_NEW_ROW_POSITION:
+                        return ((pageIndex - beginPageIndex) * pageSize) + pageSize;
+                    case VIEWPORT_BOTTOM_NEW_ROW_POSITION:
+                        return rowsView.getBottomVisibleItemIndex(true);
+                    default:
+                        return rowsView.getTopVisibleItemIndex(true);
+                }
             }
 
             return 0;
@@ -816,6 +863,33 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             });
             return maxInsertIndex + 1;
+        },
+
+        needChangePageIndexToInsertRow: function() {
+            const newRowPosition = this.option('editing.newRowPosition');
+            const pageIndex = this._dataController.pageIndex();
+            const pageCount = this._dataController.pageCount();
+
+            return newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0 || newRowPosition === LAST_NEW_ROW_POSITION && pageIndex !== (pageCount - 1);
+        },
+
+        changePageIndexToInsertRow: function(insertChange) {
+            const d = new Deferred();
+            const dataController = this._dataController;
+
+            const { key } = this._addInsertInfo(insertChange);
+
+            this._setEditRowKey(key, true);
+
+            dataController.pageIndex(insertChange.pageIndex).done(() => {
+                const rowIndex = dataController.getRowIndexByKey(key);
+
+                this._showAddedRow(rowIndex);
+                this._afterInsertRow(key);
+                d.resolve();
+            }).fail(d.reject);
+
+            return d.promise();
         },
 
         addRow: function(parentKey) {
@@ -870,22 +944,25 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
-            const oldEditRowIndex = this._getVisibleEditRowIndex();
-            const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
-            const { key, rowIndex } = this._addInsertInfo(change, parentKey);
+            let change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
 
-            this._setEditRowKey(key, true);
+            if(this.needChangePageIndexToInsertRow()) {
+                change = this._addChange(change);
 
-            this._addChange(change);
+                return this.changePageIndexToInsertRow(change);
+            } else {
+                const oldEditRowIndex = this._getVisibleEditRowIndex();
+                const { key, rowIndex } = this._addInsertInfo(change, parentKey);
 
-            this._dataController.updateItems({
-                changeType: 'update',
-                rowIndices: [initialOldEditRowIndex, oldEditRowIndex, rowIndex]
-            });
-
-            this._showAddedRow(rowIndex);
-
-            this._afterInsertRow({ key, data });
+                this._setEditRowKey(key, true);
+                this._addChange(change);
+                this._dataController.updateItems({
+                    changeType: 'update',
+                    rowIndices: [initialOldEditRowIndex, oldEditRowIndex, rowIndex]
+                });
+                this._showAddedRow(rowIndex);
+                this._afterInsertRow(key);
+            }
 
             return (new Deferred()).resolve();
         },
@@ -1878,7 +1955,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
 
-            return index;
+            return change;
         },
 
         _getFormEditItemTemplate: function(cellOptions, column) {
@@ -2082,11 +2159,10 @@ const EditingController = modules.ViewController.inherit((function() {
 export const editingModule = {
     defaultOptions: function() {
         return {
-
-
             editing: {
                 mode: 'row', // "batch"
                 refreshMode: 'full',
+                newRowPosition: 'viewportTop',
                 allowAdding: false,
                 allowUpdating: false,
                 allowDeleting: false,
@@ -2130,6 +2206,20 @@ export const editingModule = {
                 init: function() {
                     this._editingController = this.getController('editing');
                     this.callBase();
+                },
+                _fireChanged: function(e) {
+                    const editingController = this._editingController;
+                    const changes = this.option('editing.changes');
+
+                    this.callBase(e);
+
+                    if(editingController.needChangePageIndexToInsertRow()) {
+                        const insertChanges = changes.filter(change => change.type === 'insert' && !(editingController._getInternalData(change.key)?.insertInfo));
+
+                        if(insertChanges.length) {
+                            editingController.changePageIndexToInsertRow(insertChanges[insertChanges.length - 1]);
+                        }
+                    }
                 },
                 reload: function(full, repaintChangesOnly) {
                     !repaintChangesOnly && this._editingController.refresh();
