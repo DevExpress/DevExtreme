@@ -1,3 +1,4 @@
+import { setHeight } from 'core/utils/size';
 import $ from 'core/renderer';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
