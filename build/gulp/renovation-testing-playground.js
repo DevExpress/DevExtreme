@@ -8,6 +8,7 @@ const lazyPipe = require('lazypipe');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const template = require('gulp-template');
+const lazypipe = require('lazypipe');
 
 const cssLightFileName = 'css/dx.light.css';
 const renovationRoot = 'testing/renovation/platforms/';
@@ -51,7 +52,6 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
         const platformDeclarationFiles = declarationFiles
             .map(fn => path.join(platformRootSrc, 'declaration', path.basename(fn, '.tsx')))
             .map(getDeclarationFile || ((basenameFilename) => basenameFilename + '.js'));
-        //const nativeFiles = glob.sync(pattern, {cwd: 'testing/renovation/platforms/angular/src'})
         const nativeFiles = glob.sync(path.join(platformRootSrc, pattern));
 
         const htmlFileGeneratorTask = destDir => fileName => {
@@ -114,36 +114,35 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
         };
         const generateDeclarationFiles = platformDeclarationFiles.map(declarationAppFileGeneratorTask);
         const compileSourceGeneratorTask = (fileEntries, dest) => {
-            const webpackConfig = require(path.resolve(path.join(platformRoot, './webpack.config')))(path.resolve(platformRoot));
-            const entries = fileEntries
+            const getConfig = () => {
+                const webpackConfig = require(path.resolve(path.join(platformRoot, './webpack.config')))(path.resolve(platformRoot));
+                const entries = fileEntries
                 .reduce((result, fn) => {
                     result[entryName(fn)] = path.resolve(getEntyPoint(fn))
                     return result;
                 }, {});
-            const _config = {
-                ...webpackConfig,
-                ...{
-                    entry: entries,
-                    output: {
-                        path: path.resolve(dest),
-                        publicPath: '/',
-                        filename: '[name].js',
-                        chunkFilename: '[id].chunk.js',
+                const _config = {
+                    ...webpackConfig,
+                    ...{
+                        watch: isWatch,
+                        entry: entries,
+                        output: {
+                            path: path.resolve(dest),
+                            publicPath: '/',
+                            filename: '[name].js',
+                            chunkFilename: '[id].chunk.js',
+                        },
+                        resolveLoader: {
+                            modules: [path.resolve('testing/renovation/node_modules'), 'node_modules'],
+                        },
                     },
-                    resolveLoader: {
-                        modules: [path.resolve('testing/renovation/node_modules'), 'node_modules'],
-                    },
-                    plugins: [
-                        new VueLoaderPlugin(),
-                    ],
-                },
+                };
+                return _config;
             };
-            if(platform === 'vue') {
-                _config.plugins = require('vue-loader/lib/plugin')
-            }
+            const webpackPipe = (config) => lazypipe().pipe(webpackStream, config, webpack)();
             return namedTask(() => gulp
                 .src(path.resolve(platformRootSrc))
-                .pipe(webpackStream({ ..._config, watch: isWatch }, webpack))
+                .pipe(webpackPipe(getConfig()))
                 .pipe(gulp.dest(dest)), `${platform}-compile-source`);
         }
         const compileSourceFiles = [

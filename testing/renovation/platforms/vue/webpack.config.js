@@ -1,3 +1,4 @@
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const path = require('path');
 
 module.exports = (dirname) => ({
@@ -75,4 +76,8 @@ module.exports = (dirname) => ({
         filename: '[name].js',
         chunkFilename: '[id].chunk.js',
     },
+
+    plugins: [
+        new VueLoaderPlugin(),
+    ],
 });
