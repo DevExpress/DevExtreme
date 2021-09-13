@@ -29,7 +29,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
         const config = {
             loadedResources: resourceManager.loadedResources,
-            getResources: () => this.options('resources'),
+            getResources: () => this.options.resources,
             getDataAccessors: (field, action) => resourceManager.getDataAccessors(field, action)
         };
 
