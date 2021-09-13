@@ -10,6 +10,10 @@
     padding: 20px;  
 }
 
+#scrollview-content {
+    white-space: pre-wrap;
+}
+
 .options {
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

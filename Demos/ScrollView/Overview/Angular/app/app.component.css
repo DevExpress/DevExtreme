@@ -8,6 +8,9 @@
     bottom: 300px;
     padding: 20px;
 }
+::ng-deep #scrollview-content {
+    white-space: pre-wrap;
+}
 ::ng-deep .options {
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

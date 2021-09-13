@@ -8,7 +8,7 @@
         reachBottomText="Updating..."
         (onPullDown)="updateTopContent($event)"
         (onReachBottom)="updateBottomContent($event)">
-        <div [innerHTML]="content"></div>
+        <div id="scrollview-content" [innerHTML]="content"></div>
     </dx-scroll-view>
     <div class="options">
         <div class="caption">Options</div>
