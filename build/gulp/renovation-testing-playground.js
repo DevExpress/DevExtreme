@@ -21,11 +21,11 @@ const platforms = {
         pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
         getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
     },
-    'vue': {
-        pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
-        getEntyPoint: (fn) => path.join(path.dirname(fn), path.basename(fn, '.vue') + '-app.js'),
-        getDeclarationFile: (basenameFilename) => basenameFilename + '.vue',
-    },
+    // 'vue': {
+    //     pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
+    //     getEntyPoint: (fn) => path.join(path.dirname(fn), path.basename(fn, '.vue') + '-app.js'),
+    //     getDeclarationFile: (basenameFilename) => basenameFilename + '.vue',
+    // },
 };
 
 const declarationFiles = glob.sync(path.join(renovationRoot, 'declaration', '*.tsx'));
@@ -139,6 +139,7 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
                 };
                 return _config;
             };
+            // use lazypipe to prevent resolve webpack require dependencies
             const webpackPipe = (config) => lazypipe().pipe(webpackStream, config, webpack)();
             return namedTask(() => gulp
                 .src(path.resolve(platformRootSrc))
