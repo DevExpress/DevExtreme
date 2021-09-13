@@ -36,6 +36,7 @@ class AppointmentLayoutManager {
         } = virtualScrollingDispatcher;
 
         return {
+            resources: this.instance.option('resources'),
             instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
