@@ -1194,6 +1194,8 @@ class Scheduler extends Widget {
 
         this.modelProvider.updateCurrentView();
 
+        this._renderMainContainer();
+
         this._renderHeader();
 
         this._layoutManager = new AppointmentLayoutManager(this);
@@ -1219,6 +1221,12 @@ class Scheduler extends Widget {
                 this._reloadDataSource();
             });
         }
+    }
+
+    _renderMainContainer() {
+        this._mainContainer = $('<div>').addClass('dx-scheduler-container');
+
+        this.$element().append(this._mainContainer);
     }
 
     createAppointmentForm() {
@@ -1351,7 +1359,7 @@ class Scheduler extends Widget {
     }
 
     _renderHeader() {
-        const $header = $('<div>').appendTo(this.$element());
+        const $header = $('<div>').appendTo(this._mainContainer);
         this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
     }
 
@@ -1444,7 +1452,7 @@ class Scheduler extends Widget {
 
     _renderWorkSpace(groups) {
         this._readyToRenderAppointments && this._toggleSmallClass();
-        const $workSpace = $('<div>').appendTo(this.$element());
+        const $workSpace = $('<div>').appendTo(this._mainContainer);
 
         const countConfig = this._getViewCountConfig();
 

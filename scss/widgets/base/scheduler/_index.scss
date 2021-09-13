@@ -148,9 +148,11 @@ $scheduler-appointment-form-label-padding: 20px;
 }
 
 @mixin scheduler-mixin() {
-  .dx-scheduler {
+  .dx-scheduler-container {
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
   }
 
   .dx-scheduler-header {
