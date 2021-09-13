@@ -1062,7 +1062,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      */
     hideAppointmentTooltip(): void;
     /**
-     * @docid
+     * @docid scrollTo
      * @publicName scrollTo(date, group, allDay)
      * @param1 date:Date
      * @param2 group:Object|undefined
@@ -1076,7 +1076,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @param1 hours:Number
      * @param2 minutes:Number
      * @param3 date:Date|undefined
-     * @deprecated Use scrollTo instead
+     * @deprecated scrollTo
      * @public
      */
     scrollToTime(hours: number, minutes: number, date?: Date): void;
