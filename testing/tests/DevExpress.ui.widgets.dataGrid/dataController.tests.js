@@ -3835,7 +3835,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     // T730143
-    QUnit.test('scroll to end if data if grouped and remoteOperations are enabled (sorting, filtering, paging)', function(assert) {
+    QUnit.test('scroll to end if data is grouped and remoteOperations are enabled (sorting, filtering, paging)', function(assert) {
         this.pageSize(200);
         this.columnOption('value', 'groupIndex', 0);
         this.option('remoteOperations', {
@@ -5531,7 +5531,8 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.options = {
             scrolling: { mode: 'infinite' },
-            grouping: { autoExpandAll: true }
+            grouping: { autoExpandAll: true },
+            paging: {}
         };
         setupModule.apply(this);
 

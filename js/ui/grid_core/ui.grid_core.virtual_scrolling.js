@@ -1203,11 +1203,19 @@ export const virtualScrollingModule = {
                             shouldFireChange = true;
                         }
 
-                        const newPageIndex = Math.floor(this._rowsScrollController.getViewportItemIndex() / this.pageSize());
+                        const loadOptions = this._dataSource?.lastLoadOptions();
+                        let viewPortItemIndex = this._rowsScrollController.getViewportItemIndex();
+                        const bottomLoadIndex = loadOptions ? loadOptions.skip + loadOptions.take : null;
+
+                        if(isDefined(bottomLoadIndex) && bottomLoadIndex < viewPortItemIndex) {
+                            viewPortItemIndex = bottomLoadIndex >= this.pageSize() ? bottomLoadIndex - this.pageSize() : 0;
+                        }
+
+                        const newPageIndex = Math.floor(viewPortItemIndex / this.pageSize());
                         this._silentOption('paging.pageIndex', newPageIndex);
                         shouldFireChange && this.pageChanged.fire();
                     },
-                    _getChangedLoadParams() {
+                    _getChangedLoadParams: function() {
                         const loadedPageParams = this.getLoadPageParams(true);
                         const { pageIndex, loadPageCount } = this.getLoadPageParams();
                         let result = null;
@@ -1250,10 +1258,6 @@ export const virtualScrollingModule = {
                         const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
                         if(isVirtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
-
-                            if(isVirtualPaging && checkLoadedParamsOnly) {
-                                this._updateVisiblePageIndex();
-                            }
 
                             const loadingItemsStarted = this._loadItems();
 
@@ -1362,6 +1366,14 @@ export const virtualScrollingModule = {
                             }
                         }
                         return this.callBase.apply(this, arguments);
+                    },
+                    _handleDataChanged: function() {
+                        this.callBase.apply(this, arguments);
+
+                        const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
+                        if(this.option(NEW_SCROLLING_MODE) && isVirtualPaging) {
+                            this._updateVisiblePageIndex();
+                        }
                     }
                 };
 
