@@ -18,6 +18,7 @@ const BOX_CLASS = 'dx-box';
 const BOX_SELECTOR = '.dx-box';
 const BOX_ITEM_CLASS = 'dx-box-item';
 const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
+const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 
 const MINSIZE_MAP = {
     'row': 'minWidth',
@@ -178,7 +179,8 @@ class FlexLayoutStrategy {
                     width: 'auto',
                     height: 'auto',
                     display: stylePropPrefix('flexDirection') + 'flex',
-                    flexBasis: 0
+                    // WA for the T590137, T702531 (IE only), manual test only because IE will not be supported since 21.2
+                    flexBasis: (IS_IE11 && item._forceItemFlexSizeCorrectionInIE) ? 'auto' : 0
                 });
 
                 setFlexProp(itemContent, 'flexGrow', 1);
