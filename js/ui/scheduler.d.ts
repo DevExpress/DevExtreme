@@ -1104,7 +1104,7 @@ export default class dxScheduler extends Widget {
      * @param1 hours:Number
      * @param2 minutes:Number
      * @param3 date:Date|undefined
-     * @deprecated
+     * @deprecated dxScheduler.scrollTo
      * @public
      */
     scrollToTime(hours: number, minutes: number, date?: Date): void;
