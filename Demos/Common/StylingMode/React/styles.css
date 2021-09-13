@@ -15,7 +15,11 @@
     box-sizing: border-box;
 }
 
-.editors .left > *, .editors .right > *, .editors .center > * {
+.editors .right {
+    padding-right: 27px;
+}
+
+.editors .left > div, .editors .right > div, .editors .center > div {
     margin-bottom: 20px;
 }
 
@@ -44,4 +48,10 @@
 
 .option {
     margin-top: 20px;
+}
+
+.editors-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

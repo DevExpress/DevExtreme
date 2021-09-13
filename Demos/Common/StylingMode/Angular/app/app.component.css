@@ -15,6 +15,10 @@
     box-sizing: border-box;
 }
 
+::ng-deep .editors .right {
+    padding-right: 27px;
+}
+
 ::ng-deep .editors .left > *, ::ng-deep .editors .right > *, ::ng-deep .editors .center > * {
     margin-bottom: 20px;
 }
@@ -44,4 +48,10 @@
 
 ::ng-deep .option {
     margin-top: 20px;
+}
+
+::ng-deep .editors-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

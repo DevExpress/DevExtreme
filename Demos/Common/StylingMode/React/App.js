@@ -34,39 +34,40 @@ class App extends React.Component {
       <React.Fragment>
         <div className="title">Edit Task</div>
         <div className="editors">
-          <div className="left">
-            <TextBox
-              stylingMode={this.state.stylingMode}
-              defaultValue="Samantha Bright"
-              width="100%"
-              placeholder="Owner"
-            />
-            <TextBox
-              stylingMode={this.state.stylingMode}
-              defaultValue=""
-              width="100%"
-              placeholder="Subject"
-            >
-              <Validator>
-                <RequiredRule />
-              </Validator>
-            </TextBox>
-          </div>
-          &nbsp;
-          <div className="right">
-            <DateBox
-              defaultValue={this.state.date}
-              stylingMode={this.state.stylingMode}
-              width="100%"
-              placeholder="Start Date"
-            />
-            <SelectBox
-              items={priorities}
-              stylingMode={this.state.stylingMode}
-              defaultValue="High"
-              width="100%"
-              placeholder="Priority"
-            />
+          <div className="editors-container">
+            <div className="left">
+              <TextBox
+                stylingMode={this.state.stylingMode}
+                defaultValue="Samantha Bright"
+                width="100%"
+                placeholder="Owner"
+              />
+              <TextBox
+                stylingMode={this.state.stylingMode}
+                defaultValue=""
+                width="100%"
+                placeholder="Subject"
+              >
+                <Validator>
+                  <RequiredRule />
+                </Validator>
+              </TextBox>
+            </div>
+            <div className="right">
+              <DateBox
+                defaultValue={this.state.date}
+                stylingMode={this.state.stylingMode}
+                width="100%"
+                placeholder="Start Date"
+              />
+              <SelectBox
+                items={priorities}
+                stylingMode={this.state.stylingMode}
+                defaultValue="High"
+                width="100%"
+                placeholder="Priority"
+              />
+            </div>
           </div>
           <div className="center">
             <TagBox

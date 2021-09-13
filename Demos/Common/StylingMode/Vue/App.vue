@@ -2,38 +2,40 @@
   <div>
     <div class="title">Edit Task</div>
     <div class="editors">
-      <div class="left">
-        <DxTextBox
-          :styling-mode="stylingMode"
-          value="Samantha Bright"
-          width="100%"
-          placeholder="Owner"
-        />
-        <DxTextBox
-          :styling-mode="stylingMode"
-          value=""
-          width="100%"
-          placeholder="Subject"
-        >
-          <DxValidator
-            :validation-rules="[{ type: 'required' }]"
+      <div class="editors-container">
+        <div class="left">
+          <DxTextBox
+            :styling-mode="stylingMode"
+            value="Samantha Bright"
+            width="100%"
+            placeholder="Owner"
           />
-        </DxTextBox>
-      </div>
-      <div class="right">
-        <DxDateBox
-          v-model:value="date"
-          :styling-mode="stylingMode"
-          width="100%"
-          placeholder="Start Date"
-        />
-        <DxSelectBox
-          :items="[ 'High', 'Urgent', 'Normal', 'Low' ]"
-          :styling-mode="stylingMode"
-          value="High"
-          width="100%"
-          placeholder="Priority"
-        />
+          <DxTextBox
+            :styling-mode="stylingMode"
+            value=""
+            width="100%"
+            placeholder="Subject"
+          >
+            <DxValidator
+              :validation-rules="[{ type: 'required' }]"
+            />
+          </DxTextBox>
+        </div>
+        <div class="right">
+          <DxDateBox
+            v-model:value="date"
+            :styling-mode="stylingMode"
+            width="100%"
+            placeholder="Start Date"
+          />
+          <DxSelectBox
+            :items="[ 'High', 'Urgent', 'Normal', 'Low' ]"
+            :styling-mode="stylingMode"
+            value="High"
+            width="100%"
+            placeholder="Priority"
+          />
+        </div>
       </div>
       <div class="center">
         <DxTagBox
@@ -130,8 +132,8 @@ export default {
     box-sizing: border-box;
 }
 
-.editors .left {
-    margin-right: 4px;
+.editors .right {
+    padding-right: 27px;
 }
 
 .editors .left > *, .editors .right > *, .editors .center > * {
@@ -163,5 +165,11 @@ export default {
 
 .option {
     margin-top: 20px;
+}
+
+.editors-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
