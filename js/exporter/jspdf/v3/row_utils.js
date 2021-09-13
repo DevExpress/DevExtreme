@@ -67,13 +67,9 @@ function applyRowSpans(rows) {
     }
 }
 
-function applyIntends(rows, options) {
+function resizeColumnsByIndentLevel(rows, options) {
     rows.forEach(row => {
-        row.cells.forEach((cell, columnIndex) => {
-            if(columnIndex === 0) {
-                cell.pdfCell._rect.w -= row.indentLevel * options.indent;
-            }
-        });
+        row.cells[0].pdfCell._rect.w -= row.indentLevel * options.indent;
     });
 }
 
@@ -135,4 +131,4 @@ function calculateTableSize(doc, rows, options) {
     };
 }
 
-export { initializeCellsWidth, applyColSpans, applyRowSpans, applyIntends, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };
+export { initializeCellsWidth, applyColSpans, applyRowSpans, resizeColumnsByIndentLevel, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };
