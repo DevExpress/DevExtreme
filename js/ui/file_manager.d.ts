@@ -392,11 +392,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onErrorOccurred?: ((e: ErrorOccurredEvent) => void);
     /**
      * @docid
-     * @public
-     */
-    onDirectoryCreating?: ((e: DirectoryCreatingEvent) => void);
-    /**
-     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
@@ -410,7 +405,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @action
      * @public
      */
-    onDirectoryCreated?: ((e: DirectoryCreatedEvent) => void);
+    onDirectoryCreating?: ((e: DirectoryCreatingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -423,7 +418,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @action
      * @public
      */
-    onItemRenaming?: ((e: ItemRenamingEvent) => void);
+    onDirectoryCreated?: ((e: DirectoryCreatedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -439,7 +434,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @action
      * @public
      */
-    onItemRenamed?: ((e: ItemRenamedEvent) => void);
+    onItemRenaming?: ((e: ItemRenamingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -452,7 +447,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @action
      * @public
      */
-    onItemMoving?: ((e: ItemMovingEvent) => void);
+    onItemRenamed?: ((e: ItemRenamedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -464,6 +459,19 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field6 cancel:boolean|Promise<void>
      * @type_function_param1_field7 item:FileSystemItem
      * @type_function_param1_field8 destinationDirectory:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onItemMoving?: ((e: ItemMovingEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 item:FileSystemItem
+     * @type_function_param1_field5 sourceDirectory:FileSystemItem
      * @default null
      * @action
      * @public
@@ -475,8 +483,11 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 item:FileSystemItem
-     * @type_function_param1_field5 sourceDirectory:FileSystemItem
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 item:FileSystemItem
+     * @type_function_param1_field8 destinationDirectory:FileSystemItem
      * @default null
      * @action
      * @public
@@ -488,11 +499,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 errorCode:number
-     * @type_function_param1_field5 errorText:string
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
-     * @type_function_param1_field7 item:FileSystemItem
-     * @type_function_param1_field8 destinationDirectory:FileSystemItem
+     * @type_function_param1_field4 item:FileSystemItem
+     * @type_function_param1_field5 sourceDirectory:FileSystemItem
      * @default null
      * @action
      * @public
@@ -504,8 +512,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 item:FileSystemItem
-     * @type_function_param1_field5 sourceDirectory:FileSystemItem
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 item:FileSystemItem
      * @default null
      * @action
      * @public
@@ -517,27 +527,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 errorCode:number
-     * @type_function_param1_field5 errorText:string
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
-     * @type_function_param1_field7 item:FileSystemItem
-     * @default null
-     * @action
-     * @public
-     */
-    onItemDeleted?: ((e: ItemDeletedEvent) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:FileSystemItem
      * @default null
      * @action
      * @public
      */
-    onFileUploading?: ((e: FileUploadingEvent) => void);
+    onItemDeleted?: ((e: ItemDeletedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -553,7 +548,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @action
      * @public
      */
-    onFileUploaded?: ((e: FileUploadedEvent) => void);
+    onFileUploading?: ((e: FileUploadingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -566,7 +561,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @action
      * @public
      */
-    onItemDownloading?: ((e: ItemDownloadingEvent) => void);
+    onFileUploaded?: ((e: FileUploadedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -579,6 +574,11 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field7 item:FileSystemItem
      * @default null
      * @action
+     * @public
+     */
+    onItemDownloading?: ((e: ItemDownloadingEvent) => void);
+    /**
+     * @docid
      * @public
      */
     permissions?: {
