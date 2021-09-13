@@ -3458,6 +3458,27 @@
             ]
           }
         ]
+      },
+      {
+        "Name": "Sorting",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Sorting",
+            "Badge": "New",
+            "Name": "Sorting",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
       }
     ]
   },
