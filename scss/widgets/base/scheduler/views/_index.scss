@@ -175,6 +175,20 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-header-panel {
       border-bottom: 2px solid $scheduler-base-border-color;
     }
+
+    .dx-scheduler-header-panel-empty-cell {
+      border-bottom: 2px solid $scheduler-base-border-color;
+    }
+
+    &.dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-both-scrollbar {
+      .dx-scheduler-header-panel-empty-cell {
+        border-bottom: none;
+      }
+
+      .dx-scheduler-header-panel {
+        border-bottom: none;
+      }
+    }
   }
 
   &.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-vertical-grouped) {
