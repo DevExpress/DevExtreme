@@ -1,3 +1,7 @@
+#icon-back, #icon-disabled-back {
+    margin-left: 4px;
+}
+
 .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
     width: 520px;
     margin: 30px auto;
@@ -32,4 +36,13 @@
 
 .send .dx-button-content .dx-icon {
     font-size: 18px;
+}
+
+.fields-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.dx-field-value {
+    display: flex;
 }

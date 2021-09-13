@@ -1,3 +1,7 @@
+::ng-deep #icon-back, #icon-disabled-back {
+    margin-left: 4px;
+}
+
 ::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
     width: 520px;
     margin: 30px auto;
@@ -32,4 +36,13 @@
 
 ::ng-deep .send .dx-button-content .dx-icon {
     font-size: 18px;
+}
+
+::ng-deep .fields-container {
+    display: flex;
+    align-items: baseline;
+}
+
+::ng-deep .dx-field-value {
+    display: flex;
 }

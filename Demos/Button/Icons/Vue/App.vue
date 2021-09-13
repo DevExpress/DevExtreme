@@ -1,95 +1,99 @@
 <template>
   <div>
     <div class="dx-fieldset">
-      <div class="dx-field">
-        <div class="dx-field-label">Built-in icon</div>
-        <div class="dx-field-value">
-          <DxButton
-            icon="check"
-            type="success"
-            text="Done"
-            @click="doneClick()"
-          />
+      <div class="fields-container">
+        <div class="dx-field">
+          <div class="dx-field-label">Built-in icon</div>
+          <div class="dx-field-value">
+            <DxButton
+              icon="check"
+              type="success"
+              text="Done"
+              @click="doneClick()"
+            />
+          </div>
         </div>
-      </div>
-      <div class="dx-field">
-        <div class="dx-field-label">Image icon</div>
-        <div class="dx-field-value">
-          <DxButton
-            icon="../../../../images/icons/weather.png"
-            text="Weather"
-            @click="weatherClick()"
-          />
+        <div class="dx-field">
+          <div class="dx-field-label">Image icon</div>
+          <div class="dx-field-value">
+            <DxButton
+              icon="../../../../images/icons/weather.png"
+              text="Weather"
+              @click="weatherClick()"
+            />
+          </div>
         </div>
-      </div>
-      <div class="dx-field">
-        <div class="dx-field-label">External icon</div>
-        <div class="dx-field-value">
-          <DxButton
-            class="send"
-            icon="fa fa-envelope-o"
-            text="Send"
-            @click="sendClick()"
-          />
+        <div class="dx-field">
+          <div class="dx-field-label">External icon</div>
+          <div class="dx-field-value">
+            <DxButton
+              class="send"
+              icon="fa fa-envelope-o"
+              text="Send"
+              @click="sendClick()"
+            />
+          </div>
         </div>
-      </div>
-      <div class="dx-field">
-        <div class="dx-field-label">Icon only</div>
-        <div class="dx-field-value">
-          <DxButton
-            icon="plus"
-            @click="plusClick()"
-          />
-          <DxButton
-            id="back"
-            icon="back"
-            @click="backClick()"
-          />
+        <div class="dx-field">
+          <div class="dx-field-label">Icon only</div>
+          <div class="dx-field-value">
+            <DxButton
+              icon="plus"
+              @click="plusClick()"
+            />
+            <DxButton
+              id="back"
+              icon="back"
+              @click="backClick()"
+            />
+          </div>
         </div>
       </div>
     </div>
     <div class="dx-fieldset">
       <div class="dx-fieldset-header">DISABLED</div>
-      <div class="dx-field">
-        <div class="dx-field-value">
-          <DxButton
-            :disabled="true"
-            icon="check"
-            type="success"
-            text="Done"
-          />
+      <div class="fields-container">
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              icon="check"
+              type="success"
+              text="Done"
+            />
+          </div>
         </div>
-      </div>
-      <div class="dx-field">
-        <div class="dx-field-value">
-          <DxButton
-            :disabled="true"
-            icon="../../../../images/icons/weather.png"
-            text="Weather"
-          />
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              icon="../../../../images/icons/weather.png"
+              text="Weather"
+            />
+          </div>
         </div>
-      </div>
-      <div class="dx-field">
-        <div class="dx-field-value">
-          <DxButton
-            :disabled="true"
-            class="send"
-            icon="fa fa-envelope-o"
-            text="Send"
-          />
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              class="send"
+              icon="fa fa-envelope-o"
+              text="Send"
+            />
+          </div>
         </div>
-      </div>
-      <div class="dx-field">
-        <div class="dx-field-value">
-          <DxButton
-            :disabled="true"
-            icon="plus"
-          />
-          <DxButton
-            id="back-disabled"
-            :disabled="true"
-            icon="back"
-          />
+        <div class="dx-field">
+          <div class="dx-field-value">
+            <DxButton
+              :disabled="true"
+              icon="plus"
+            />
+            <DxButton
+              id="back-disabled"
+              :disabled="true"
+              icon="back"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -141,7 +145,7 @@ export default {
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field {
     display: inline-block;
-    margin-right: 24px;
+    margin-right: 20px;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field-value:not(.dx-widget) > .dx-button {
@@ -160,5 +164,13 @@ export default {
 
 .send .dx-button-content .dx-icon {
     font-size: 18px;
+}
+
+.fields-container {
+    display: flex;
+    align-items: baseline;
+}
+.dx-field-value {
+    display: flex;
 }
 </style>

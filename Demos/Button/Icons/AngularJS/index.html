@@ -17,55 +17,59 @@
 <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">       
         <div class="dx-fieldset">
-            <div class="dx-field">
-                <div class="dx-field-label">Built-in icon</div>
-                <div class="dx-field-value">
-                    <div dx-button="doneButton"></div>
-                </div>
-            </div> 
-            <div class="dx-field">
-                <div class="dx-field-label">Image icon</div>
-                <div class="dx-field-value">
-                    <div dx-button="weatherButton"></div>
-                </div>
-            </div> 
-            <div class="dx-field">
-                <div class="dx-field-label">External icon</div>
-                <div class="dx-field-value">
-                    <div dx-button="sendButton" class="send"></div>
-                </div>
-            </div> 
-            <div class="dx-field">
-                <div class="dx-field-label">Icon only</div>
-                <div class="dx-field-value">
-                    <div dx-button="plusButton"></div>
-                    <div dx-button="backButton"></div>                    
+            <div class="fields-container">
+                <div class="dx-field">
+                    <div class="dx-field-label">Built-in icon</div>
+                    <div class="dx-field-value">
+                        <div dx-button="doneButton"></div>
+                    </div>
+                </div> 
+                <div class="dx-field">
+                    <div class="dx-field-label">Image icon</div>
+                    <div class="dx-field-value">
+                        <div dx-button="weatherButton"></div>
+                    </div>
+                </div> 
+                <div class="dx-field">
+                    <div class="dx-field-label">External icon</div>
+                    <div class="dx-field-value">
+                        <div dx-button="sendButton" class="send"></div>
+                    </div>
+                </div> 
+                <div class="dx-field">
+                    <div class="dx-field-label">Icon only</div>
+                    <div class="dx-field-value">
+                        <div dx-button="plusButton"></div>
+                        <div dx-button="backButton" id="icon-back"></div>                    
+                    </div>
                 </div>
             </div> 
         </div>
         <div class="dx-fieldset">
-            <div class="dx-fieldset-header">DISABLED</div>          
-            <div class="dx-field">
-                <div class="dx-field-value">
-                    <div dx-button="doneDisabledButton"></div>
+            <div class="dx-fieldset-header">DISABLED</div>
+            <div class="fields-container">
+                <div class="dx-field">
+                    <div class="dx-field-value">
+                        <div dx-button="doneDisabledButton"></div>
+                    </div>
+                </div> 
+                <div class="dx-field">
+                    <div class="dx-field-value">
+                        <div dx-button="weatherDisabledButton"></div>
+                    </div>
+                </div> 
+                <div class="dx-field">
+                    <div class="dx-field-value">
+                        <div dx-button="sendDisabledButton" class="send"></div>
+                    </div>
+                </div> 
+                <div class="dx-field">
+                    <div class="dx-field-value">
+                        <div dx-button="plusDisabledButton"></div>
+                        <div dx-button="backDisabledButton" id="icon-disabled-back"></div>
+                    </div>
                 </div>
-            </div> 
-            <div class="dx-field">
-                <div class="dx-field-value">
-                    <div dx-button="weatherDisabledButton"></div>
-                </div>
-            </div> 
-            <div class="dx-field">
-                <div class="dx-field-value">
-                    <div dx-button="sendDisabledButton" class="send"></div>
-                </div>
-            </div> 
-            <div class="dx-field">
-                <div class="dx-field-value">
-                    <div dx-button="plusDisabledButton"></div>
-                    <div dx-button="backDisabledButton"></div>
-                </div>
-            </div> 
+            </div>      
         </div>  
     </div>
 </body>
