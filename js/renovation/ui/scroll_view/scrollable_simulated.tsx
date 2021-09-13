@@ -417,13 +417,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   // run always: effect doesn't rise always after change state needRiseScrollAction in QUnit tests
-  @Effect({ run: 'always' }) riseScroll(): void {
-    if (this.needRiseScrollAction && !this.pendingScrollAction) {
-      this.pendingScrollAction = true;
-      this.props.onScroll?.(this.getEventArgs());
-      this.needRiseScrollAction = false;
-    }
-  }
+  // @Effect({ run: 'always' }) riseScroll(): void {
+  //   if (this.needRiseScrollAction && !this.pendingScrollAction) {
+  //     this.pendingScrollAction = true;
+  //     // debugger
+  //     this.props.onScroll?.(this.getEventArgs());
+  //     this.needRiseScrollAction = false;
+  //   }
+  // }
 
   @Effect()
   initEffect(): EffectReturn {
@@ -639,8 +640,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.syncScrollbarsWithContent();
     }
 
-    this.pendingScrollAction = false;
-    this.needRiseScrollAction = true;
+    this.props.onScroll?.(this.getEventArgs());
+    // this.pendingScrollAction = false;
+    // this.needRiseScrollAction = true;
   }
 
   startLoading(): void {

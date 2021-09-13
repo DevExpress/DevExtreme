@@ -370,13 +370,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   // run always: effect doesn't rise always after change state needRiseScrollAction in QUnit tests
-  @Effect({ run: 'always' }) riseScroll(): void {
-    if (this.needRiseScrollAction && !this.pendingScrollAction) {
-      this.pendingScrollAction = true;
-      this.props.onScroll?.(this.getEventArgs());
-      this.needRiseScrollAction = false;
-    }
-  }
+  // @Effect({ run: 'always' }) riseScroll(): void {
+  //   if (this.needRiseScrollAction && !this.pendingScrollAction) {
+  //     this.pendingScrollAction = true;
+  //     this.props.onScroll?.(this.getEventArgs());
+  //     this.needRiseScrollAction = false;
+  //   }
+  // }
 
   @Effect() effectDisabledState(): void {
     if (this.props.disabled) {
@@ -512,8 +512,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       this.moveScrollbars();
     }
 
-    this.pendingScrollAction = false;
-    this.needRiseScrollAction = true;
+    this.props.onScroll?.(this.getEventArgs());
+    // this.pendingScrollAction = false;
+    // this.needRiseScrollAction = true;
 
     this.handlePocketState();
   }

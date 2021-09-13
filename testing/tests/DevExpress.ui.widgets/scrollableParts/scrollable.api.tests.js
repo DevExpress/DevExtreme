@@ -1084,18 +1084,24 @@ class ScrollableTestHelper {
             });
 
             QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: true -> change content size`, function(assert) {
-                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
+                const clock = sinon.useFakeTimers();
 
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
+                try {
+                    const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
 
-                helper.$scrollable.find('.content1').css('width', '200px');
-                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
+                    helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
+                    helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
-                helper.scrollable.update();
-                helper.checkScrollOffset({ left: useNative || isRenovation ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative && !isRenovation ? 12 : 35 });
+                    helper.$scrollable.find('.content1').css('width', '200px');
+                    helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                    helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
+
+                    helper.scrollable.update();
+                    helper.checkScrollOffset({ left: useNative || isRenovation ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                    helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative && !isRenovation ? 12 : 35 });
+                } finally {
+                    clock.restore();
+                }
             });
         });
 
