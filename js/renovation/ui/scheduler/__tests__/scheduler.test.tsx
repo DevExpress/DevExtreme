@@ -49,7 +49,7 @@ describe('Scheduler', () => {
       />,
     );
 
-    it('should be rendered', () => {
+    it('should render widget', () => {
       const tree = renderComponent({});
 
       expect(tree.is(Widget)).toBe(true);
