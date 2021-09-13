@@ -1,6 +1,0 @@
-{
-    "$schema": "../../../../testing/visualtestrc-schema.json",
-    "vue": {
-        "ignore": true
-    }
-}
