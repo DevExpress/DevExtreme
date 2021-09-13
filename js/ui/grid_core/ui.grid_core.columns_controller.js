@@ -981,7 +981,7 @@ export const columnsControllerModule = {
 
                 if(isNumeric(parsedValue)) {
                     const formattedValue = numberLocalization.format(parsedValue, format);
-                    const formattedValueWithDefaultFormat = numberLocalization.format(parsedValue);
+                    const formattedValueWithDefaultFormat = numberLocalization.format(parsedValue, 'decimal');
 
                     if(formattedValue === text || formattedValueWithDefaultFormat === text) {
                         return parsedValue;
