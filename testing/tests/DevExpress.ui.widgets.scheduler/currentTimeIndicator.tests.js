@@ -53,14 +53,23 @@ QUnit.module('DateTime indicator on Day View', {
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 0, 'Indicator wasn\'t rendered');
     });
 
-    QUnit.test('DateTimeIndicator should be wrapped by scrollable, Day view', function(assert) {
-        const instance = createInstance({
-            indicatorTime: new Date(2017, 8, 5, 12, 45),
+    [{
+        crossScrollingEnabled: true,
+        className: 'dx-scheduler-date-table-container',
+    }, {
+        crossScrollingEnabled: false,
+        className: 'dx-scheduler-date-table-scrollable-content',
+    }].forEach(({ crossScrollingEnabled, className }) => {
+        QUnit.test('DateTimeIndicator should be wrapped by scrollable, Day view', function(assert) {
+            const instance = createInstance({
+                indicatorTime: new Date(2017, 8, 5, 12, 45),
+                crossScrollingEnabled,
+            });
+
+            const $element = instance.$element();
+
+            assert.ok($element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS).parent().hasClass(className), 'Correct container for time indicator');
         });
-
-        const $element = instance.$element();
-
-        assert.ok($element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS).parent().hasClass('dx-scrollable-content'), 'Scrollable contains time indicator');
     });
 
     QUnit.test('Indication should be updated by some timer', function(assert) {
