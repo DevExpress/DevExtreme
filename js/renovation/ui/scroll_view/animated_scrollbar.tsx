@@ -151,10 +151,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     }
 
     this.scrollbarRef.current!.initHandler(event, this.thumbScrolling, offset);
-
-    // if (this.thumbScrolling) {
-    //   this.needRiseEnd = true;
-    // }
   }
 
   @Method()
@@ -215,6 +211,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.props.onRelease?.();
 
     this.wasRelease = true;
+    this.needRiseEnd = true;
 
     this.resetThumbScrolling();
     this.pendingRefreshing = false;
@@ -274,7 +271,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   riseReachBottom(): void {
     if (
       this.props.forceGeneratePockets
-      // && this.needRiseEnd
+      && this.needRiseEnd
       && this.inRange
       && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
       && this.isReachBottom

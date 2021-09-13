@@ -935,12 +935,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     // https://trello.com/c/Jnvnb7qc/2728-renovation-react-cannot-destruct-from-this
     // const { allowedDirections } = this;
 
-    if (this.direction.isBoth
-      && this.allowedDirections.vertical && this.allowedDirections.horizontal) {
+    // if (this.direction.isBoth
+    //   && this.allowedDirections.vertical && this.allowedDirections.horizontal) {
+    //   return DIRECTION_BOTH;
+    // } if (this.direction.isHorizontal && this.allowedDirections.horizontal) {
+    //   return DIRECTION_HORIZONTAL;
+    // } if (this.direction.isVertical && this.allowedDirections.vertical) {
+    //   return DIRECTION_VERTICAL;
+    // }
+    // return undefined;
+
+    const vScrollOffsetMax = getScrollTopMax(this.containerRef.current!);
+    const hScrollOffsetMax = getScrollLeftMax(this.containerRef.current!);
+
+    if (this.direction.isBoth && vScrollOffsetMax > 0 && hScrollOffsetMax > 0) {
       return DIRECTION_BOTH;
-    } if (this.direction.isHorizontal && this.allowedDirections.horizontal) {
+    } if (this.direction.isHorizontal && hScrollOffsetMax > 0) {
       return DIRECTION_HORIZONTAL;
-    } if (this.direction.isVertical && this.allowedDirections.vertical) {
+    } if (this.direction.isVertical && vScrollOffsetMax > 0) {
       return DIRECTION_VERTICAL;
     }
     return undefined;
@@ -949,13 +961,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   get allowedDirections(): { vertical: boolean; horizontal: boolean } {
     return {
       vertical: this.direction.isVertical
-        && (Math.round(
-          -Math.max(this.contentHeight - this.containerClientHeight, 0),
-        ) < 0 || this.props.bounceEnabled),
+      && (this.vScrollOffsetMax < 0 || this.props.bounceEnabled),
       horizontal: this.direction.isHorizontal
-      && (Math.round(
-        -Math.max(this.contentWidth - this.containerClientWidth, 0),
-      ) < 0 || this.props.bounceEnabled),
+      && (this.hScrollOffsetMax < 0 || this.props.bounceEnabled),
     };
   }
 
