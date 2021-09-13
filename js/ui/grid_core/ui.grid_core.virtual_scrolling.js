@@ -1343,14 +1343,12 @@ export const virtualScrollingModule = {
                             if(!isDefined(pageIndex)) {
                                 return this.option('paging.pageIndex');
                             }
-                            const dataSourceAdapter = this._dataSource;
-                            const oldLoadPageIndex = dataSourceAdapter.pageIndex();
                             const callBaseResult = this.callBase.apply(this, arguments);
                             when(callBaseResult).done(() => {
-                                const newLoadPageIndex = dataSourceAdapter.pageIndex();
+                                const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
                                 const visiblePageIndex = this.pageIndex();
 
-                                if(newLoadPageIndex === oldLoadPageIndex && visiblePageIndex !== pageIndex) {
+                                if(isVirtualPaging && visiblePageIndex !== pageIndex) {
                                     this._rowsScrollController.setViewportItemIndex(pageIndex * this.pageSize());
                                     this._updateVisiblePageIndex();
                                     this.pageChanged.fire();
