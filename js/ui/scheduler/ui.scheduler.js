@@ -1387,7 +1387,7 @@ class Scheduler extends Widget {
 
     _appointmentsConfig() {
         const config = {
-            resources: this.option('resources'),
+            getResources: () => this.option('resources'),
 
             key: this.key,
             observer: this,
