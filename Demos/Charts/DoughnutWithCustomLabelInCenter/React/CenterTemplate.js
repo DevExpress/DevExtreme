@@ -5,7 +5,10 @@ const formatNumber = new Intl.NumberFormat('en-US', {
 }).format;
 
 function calculateTotal(pieChart) {
-  return formatNumber(pieChart.getAllSeries()[0].getVisiblePoints().reduce((s, p) => s + p.originalValue, 0));
+  return formatNumber(pieChart
+    .getAllSeries()[0]
+    .getVisiblePoints()
+    .reduce((s, p) => s + p.originalValue, 0));
 }
 
 function getImagePath(country) {

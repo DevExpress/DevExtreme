@@ -39,7 +39,8 @@ class App extends React.Component {
           </Permissions>
         </FileManager>
         <div id="message-box">
-          To run the demo locally, specify your Azure storage account name, access key and container name in the web.config file.
+          To run the demo locally, specify your Azure storage account name,
+          access key and container name in the web.config file.
           Refer to the <a href="https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileManager/AzureServerBinding/React/Light/"
             target="_blank" rel="noopener noreferrer">
             https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileManager/AzureServerBinding/React/Light/</a>

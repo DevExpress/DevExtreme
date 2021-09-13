@@ -12,8 +12,13 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <FileUploader name="file" accept="image/*" uploadUrl="https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/ChunkUpload"
-          chunkSize={200000} onUploadStarted={this.onUploadStarted} onProgress={this.onUploadProgress} />
+        <FileUploader
+          name="file"
+          accept="image/*"
+          uploadUrl="https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/ChunkUpload"
+          chunkSize={200000}
+          onUploadStarted={this.onUploadStarted}
+          onProgress={this.onUploadProgress} />
         <span className="note">Allowed file extensions: <span>.jpg, .jpeg, .gif, .png</span>.</span>
         <span className="note">Maximum file size: <span>4 MB.</span></span>
         <div className="chunk-panel">

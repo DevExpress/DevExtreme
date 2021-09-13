@@ -26,7 +26,10 @@ $(() => {
     },
     title: 'Filter Employee List by Birth Year',
     onValueChanged(e) {
-      const selectedEmployees = $.grep(employees, (employee) => employee.BirthYear >= e.value[0] && employee.BirthYear <= e.value[1]);
+      const selectedEmployees = $.grep(
+        employees,
+        (employee) => employee.BirthYear >= e.value[0] && employee.BirthYear <= e.value[1],
+      );
       $('#data-grid').dxDataGrid({
         dataSource: selectedEmployees,
       });

@@ -57,7 +57,8 @@
 import DxDataGrid, { DxColumn, DxExport } from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
-// Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
+// Our demo infrastructure requires us to use 'file-saver-es'.
+// We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import { countries } from './data.js';
 
@@ -122,7 +123,13 @@ export default {
 }
 
 .long-title h3 {
-  font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+  font-family:
+    'Segoe UI Light',
+    'Helvetica Neue Light',
+    'Segoe UI',
+    'Helvetica Neue',
+    'Trebuchet MS',
+    Verdana;
   font-weight: 200;
   font-size: 28px;
   text-align: center;

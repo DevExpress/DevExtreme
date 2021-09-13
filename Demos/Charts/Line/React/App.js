@@ -40,7 +40,10 @@ class App extends React.Component {
             type={this.state.type}
           />
           {
-            energySources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
+            energySources.map((item) => <Series
+              key={item.value}
+              valueField={item.value}
+              name={item.name} />)
           }
           <Margin bottom={20} />
           <ArgumentAxis

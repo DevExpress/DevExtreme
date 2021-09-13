@@ -108,7 +108,10 @@ export default {
     },
     updateValues() {
       this.$refs.gauge.instance.value(this.mainGeneratorValue);
-      this.$refs.gauge.instance.subvalues([this.additionalGenerator1Value, this.additionalGenerator2Value]);
+      this.$refs.gauge.instance.subvalues([
+        this.additionalGenerator1Value,
+        this.additionalGenerator2Value,
+      ]);
     },
   },
 };

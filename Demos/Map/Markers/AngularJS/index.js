@@ -52,7 +52,12 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.showTooltipsOptions = {
     text: 'Show all tooltips',
     onClick() {
-      $scope.markers = $scope.markers.map((item) => $.extend(true, {}, item, { tooltip: { isShown: true } }));
+      $scope.markers = $scope.markers.map((item) => $.extend(
+        true,
+        {},
+        item,
+        { tooltip: { isShown: true } },
+      ));
     },
   };
 });

@@ -110,7 +110,8 @@ export default {
       });
     },
     syncTreeViewSelection(e) {
-      const treeView = (e.component.selectItem && e.component) || (this.$refs[this.treeViewName] && this.$refs[this.treeViewName].instance);
+      const treeView = (e.component.selectItem && e.component)
+        || (this.$refs[this.treeViewName] && this.$refs[this.treeViewName].instance);
 
       if (treeView) {
         if (e.value === null) {

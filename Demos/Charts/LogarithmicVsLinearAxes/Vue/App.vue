@@ -45,13 +45,31 @@
 </template>
 <script>
 import {
-  DxChart, DxPane, DxSeries, DxCommonAxisSettings, DxValueAxis, DxTooltip, DxCrosshair, DxHorizontalLine, DxLabel, DxLegend,
+  DxChart,
+  DxPane,
+  DxSeries,
+  DxCommonAxisSettings,
+  DxValueAxis,
+  DxTooltip,
+  DxCrosshair,
+  DxHorizontalLine,
+  DxLabel,
+  DxLegend,
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.js';
 
 export default {
   components: {
-    DxChart, DxPane, DxSeries, DxCommonAxisSettings, DxValueAxis, DxTooltip, DxCrosshair, DxHorizontalLine, DxLabel, DxLegend,
+    DxChart,
+    DxPane,
+    DxSeries,
+    DxCommonAxisSettings,
+    DxValueAxis,
+    DxTooltip,
+    DxCrosshair,
+    DxHorizontalLine,
+    DxLabel,
+    DxLegend,
   },
   data() {
     return {

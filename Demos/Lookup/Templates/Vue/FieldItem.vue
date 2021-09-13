@@ -1,6 +1,7 @@
 <template>
   <div class="custom-field">
-    <img :src="itemData.Picture"><div>{{ itemData.Prefix }} {{ itemData.FirstName }} {{ itemData.LastName }}</div>
+    <img :src="itemData.Picture"><div>{{ itemData.Prefix }}
+      {{ itemData.FirstName }} {{ itemData.LastName }}</div>
   </div>
 </template>
 <script>

@@ -111,7 +111,8 @@ class App extends React.Component {
   }
 
   syncTreeViewSelection(e) {
-    const treeView = (e.component.selectItem && e.component) || (this.treeView && this.treeView.instance);
+    const treeView = (e.component.selectItem && e.component)
+      || (this.treeView && this.treeView.instance);
 
     if (treeView) {
       if (e.value === null) {

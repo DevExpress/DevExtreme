@@ -99,7 +99,12 @@ class App extends React.Component {
   onListReorder(e) {
     this.setState({
       lists: this.reorder(this.state.lists, this.state.lists[e.fromIndex], e.fromIndex, e.toIndex),
-      statuses: this.reorder(this.state.statuses, this.state.statuses[e.fromIndex], e.fromIndex, e.toIndex),
+      statuses: this.reorder(
+        this.state.statuses,
+        this.state.statuses[e.fromIndex],
+        e.fromIndex,
+        e.toIndex,
+      ),
     });
   }
 

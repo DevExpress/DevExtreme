@@ -21,9 +21,15 @@ import RangeSelector, {
 } from 'devextreme-react/range-selector';
 import { series, dataSource } from './data.js';
 
-const seriesList = series.map((item) => <Series valueField={item.valueField} name={item.name} key={item.name} />);
+const seriesList = series.map((item) => <Series
+  valueField={item.valueField}
+  name={item.name}
+  key={item.name} />);
 
-const rsChartSeriesList = series.map((item) => <RsChartSeries valueField={item.valueField} name={item.name} key={item.name} />);
+const rsChartSeriesList = series.map((item) => <RsChartSeries
+  valueField={item.valueField}
+  name={item.name}
+  key={item.name} />);
 
 class App extends React.Component {
   constructor(props) {

@@ -19,7 +19,10 @@ class App extends React.Component {
       >
         <CommonSeriesSettings type="line" />
         {
-          fruitSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
+          fruitSources.map((item) => <Series
+            key={item.value}
+            valueField={item.value}
+            name={item.name} />)
         }
         <Export enabled={true} />
         <Tooltip enabled={true} />

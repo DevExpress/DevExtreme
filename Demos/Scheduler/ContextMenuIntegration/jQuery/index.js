@@ -11,7 +11,13 @@ $(() => {
     startDayHour: 9,
     recurrenceEditMode: 'series',
     onAppointmentContextMenu(e) {
-      updateContextMenu(false, appointmentContextMenuItems, appointmentClassName, itemTemplate, onItemClick(e));
+      updateContextMenu(
+        false,
+        appointmentContextMenuItems,
+        appointmentClassName,
+        itemTemplate,
+        onItemClick(e),
+      );
     },
     onCellContextMenu(e) {
       updateContextMenu(false, cellContextMenuItems, cellClassName, 'item', onItemClick(e));

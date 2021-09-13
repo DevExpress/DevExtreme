@@ -1,6 +1,15 @@
 import React from 'react';
 import Diagram, {
-  ContextMenu, ContextToolbox, PropertiesPanel, Group, Tab, HistoryToolbar, ViewToolbar, MainToolbar, Command, Toolbox,
+  ContextMenu,
+  ContextToolbox,
+  PropertiesPanel,
+  Group,
+  Tab,
+  HistoryToolbar,
+  ViewToolbar,
+  MainToolbar,
+  Command,
+  Toolbox,
 } from 'devextreme-react/diagram';
 import dialog from 'devextreme/ui/dialog';
 import 'whatwg-fetch';

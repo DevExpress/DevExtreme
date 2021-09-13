@@ -83,13 +83,29 @@
 </template>
 <script>
 import {
-  DxDataGrid, DxColumn, DxExport, DxSummary, DxGroupPanel, DxGrouping, DxGroupItem, DxSortByGroupSummaryInfo, DxTotalItem,
+  DxDataGrid,
+  DxColumn,
+  DxExport,
+  DxSummary,
+  DxGroupPanel,
+  DxGrouping,
+  DxGroupItem,
+  DxSortByGroupSummaryInfo,
+  DxTotalItem,
 } from 'devextreme-vue/data-grid';
 import service from './data.js';
 
 export default {
   components: {
-    DxDataGrid, DxColumn, DxExport, DxSummary, DxGroupPanel, DxGrouping, DxGroupItem, DxSortByGroupSummaryInfo, DxTotalItem,
+    DxDataGrid,
+    DxColumn,
+    DxExport,
+    DxSummary,
+    DxGroupPanel,
+    DxGrouping,
+    DxGroupItem,
+    DxSortByGroupSummaryInfo,
+    DxTotalItem,
   },
   data() {
     return {

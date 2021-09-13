@@ -78,7 +78,12 @@ class App extends React.Component {
 
   render() {
     const {
-      editBoxValue, searchModeOption, searchExprOption, minSearchLengthOption, showDataBeforeSearchOption, searchTimeoutOption,
+      editBoxValue,
+      searchModeOption,
+      searchExprOption,
+      minSearchLengthOption,
+      showDataBeforeSearchOption,
+      searchTimeoutOption,
     } = this.state;
     return (
       <div id="selectbox-demo">

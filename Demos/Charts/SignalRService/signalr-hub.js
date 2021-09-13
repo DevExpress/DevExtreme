@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*!
  * ASP.NET SignalR JavaScript Library v2.2.2
  * http://signalr.net/
@@ -6,8 +7,6 @@
  * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
  *
  */
-
-/* eslint-disable */
 
 /// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />

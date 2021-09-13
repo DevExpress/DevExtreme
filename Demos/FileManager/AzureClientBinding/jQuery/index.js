@@ -55,7 +55,9 @@ function createDirectory(parentDirectory, name) {
 }
 
 function renameItem(item, name) {
-  return item.isDirectory ? azure.renameDirectory(item.path, name) : azure.renameFile(item.path, name);
+  return item.isDirectory
+    ? azure.renameDirectory(item.path, name)
+    : azure.renameFile(item.path, name);
 }
 
 function deleteItem(item) {
@@ -64,12 +66,16 @@ function deleteItem(item) {
 
 function copyItem(item, destinationDirectory) {
   const destinationPath = destinationDirectory.path ? `${destinationDirectory.path}/${item.name}` : item.name;
-  return item.isDirectory ? azure.copyDirectory(item.path, destinationPath) : azure.copyFile(item.path, destinationPath);
+  return item.isDirectory
+    ? azure.copyDirectory(item.path, destinationPath)
+    : azure.copyFile(item.path, destinationPath);
 }
 
 function moveItem(item, destinationDirectory) {
   const destinationPath = destinationDirectory.path ? `${destinationDirectory.path}/${item.name}` : item.name;
-  return item.isDirectory ? azure.moveDirectory(item.path, destinationPath) : azure.moveFile(item.path, destinationPath);
+  return item.isDirectory
+    ? azure.moveDirectory(item.path, destinationPath)
+    : azure.moveFile(item.path, destinationPath);
 }
 
 function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
@@ -84,10 +90,17 @@ function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
     deferred = $.Deferred().resolve().promise();
   }
 
-  deferred = deferred.then(() => gateway.putBlock(uploadInfo.customData.accessUrl, uploadInfo.chunkIndex, uploadInfo.chunkBlob));
+  deferred = deferred.then(() => gateway.putBlock(
+    uploadInfo.customData.accessUrl,
+    uploadInfo.chunkIndex,
+    uploadInfo.chunkBlob,
+  ));
 
   if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
-    deferred = deferred.then(() => gateway.putBlockList(uploadInfo.customData.accessUrl, uploadInfo.chunkCount));
+    deferred = deferred.then(() => gateway.putBlockList(
+      uploadInfo.customData.accessUrl,
+      uploadInfo.chunkCount,
+    ));
   }
 
   return deferred.promise();

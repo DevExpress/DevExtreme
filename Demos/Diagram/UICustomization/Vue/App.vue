@@ -101,14 +101,34 @@
 </template>
 <script>
 import {
-  DxDiagram, DxContextMenu, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxHistoryToolbar, DxViewToolbar, DxMainToolbar, DxCommand, DxToolbox,
+  DxDiagram,
+  DxContextMenu,
+  DxContextToolbox,
+  DxPropertiesPanel,
+  DxGroup,
+  DxTab,
+  DxHistoryToolbar,
+  DxViewToolbar,
+  DxMainToolbar,
+  DxCommand,
+  DxToolbox,
 } from 'devextreme-vue/diagram';
 import dialog from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
 
 export default {
   components: {
-    DxDiagram, DxContextMenu, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxHistoryToolbar, DxViewToolbar, DxMainToolbar, DxCommand, DxToolbox,
+    DxDiagram,
+    DxContextMenu,
+    DxContextToolbox,
+    DxPropertiesPanel,
+    DxGroup,
+    DxTab,
+    DxHistoryToolbar,
+    DxViewToolbar,
+    DxMainToolbar,
+    DxCommand,
+    DxToolbox,
   },
   mounted() {
     const diagram = this.$refs.diagram.instance;

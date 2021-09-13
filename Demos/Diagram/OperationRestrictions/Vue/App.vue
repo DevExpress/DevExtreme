@@ -57,7 +57,14 @@
 </template>
 <script>
 import {
-  DxDiagram, DxCustomShape, DxNodes, DxAutoLayout, DxContextToolbox, DxToolbox, DxPropertiesPanel, DxGroup,
+  DxDiagram,
+  DxCustomShape,
+  DxNodes,
+  DxAutoLayout,
+  DxContextToolbox,
+  DxToolbox,
+  DxPropertiesPanel,
+  DxGroup,
 } from 'devextreme-vue/diagram';
 import notify from 'devextreme/ui/notify';
 import ArrayStore from 'devextreme/data/array_store';
@@ -65,7 +72,14 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDiagram, DxCustomShape, DxNodes, DxAutoLayout, DxContextToolbox, DxToolbox, DxPropertiesPanel, DxGroup,
+    DxDiagram,
+    DxCustomShape,
+    DxNodes,
+    DxAutoLayout,
+    DxContextToolbox,
+    DxToolbox,
+    DxPropertiesPanel,
+    DxGroup,
   },
   data() {
     return {
@@ -90,7 +104,8 @@ export default {
       for (let i = 0; i < e.changes.length; i += 1) {
         if (e.changes[i].type === 'remove') {
           e.allowed = true;
-        } else if (e.changes[i].data.ParentID !== undefined && e.changes[i].data.ParentID !== null) {
+        } else if (e.changes[i].data.ParentID !== undefined
+          && e.changes[i].data.ParentID !== null) {
           e.allowed = true;
         }
       }
@@ -113,8 +128,9 @@ export default {
           e.allowed = false;
         }
         if (e.args.shape.type === 'team') {
-          for (i = 0; i < e.args.shape.attachedConnectorIds.length; i += 1) {
-            if (diagram.getItemById(e.args.shape.attachedConnectorIds[i]).toId !== e.args.shape.id) {
+          const connectorIds = e.args.shape.attachedConnectorIds;
+          for (i = 0; i < connectorIds.length; i += 1) {
+            if (diagram.getItemById(connectorIds[i]).toId !== e.args.shape.id) {
               if (e.reason !== 'checkUIElementAvailability') {
                 this.showToast('You cannot delete a \'Team\' shape that has a child shape.');
               }

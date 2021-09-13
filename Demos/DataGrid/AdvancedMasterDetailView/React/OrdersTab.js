@@ -32,7 +32,10 @@ class OrdersTab extends React.Component {
   }
 
   renderSelectBox() {
-    return <ProductSelectBox supplierId={this.props.supplierId} productId={this.state.chosenProductId} onProductChanged={this.productChanged} />;
+    return <ProductSelectBox
+      supplierId={this.props.supplierId}
+      productId={this.state.chosenProductId}
+      onProductChanged={this.productChanged} />;
   }
 
   renderOrderHistory() {

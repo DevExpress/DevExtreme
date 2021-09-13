@@ -51,8 +51,14 @@ class App extends React.Component {
     return (
       <div id="container">
         <Diagram id="diagram" customShapeRender={this.customShapeTemplate} readOnly={true}>
-          {this.employees.map((employee, index) => <CustomShape type={`employee${employee.ID}`} baseType="rectangle"
-            defaultWidth={1.5} defaultHeight={1} allowEditText={false} allowResize={false} key={index} />)}
+          {this.employees.map((employee, index) => <CustomShape
+            type={`employee${employee.ID}`}
+            baseType="rectangle"
+            defaultWidth={1.5}
+            defaultHeight={1}
+            allowEditText={false}
+            allowResize={false}
+            key={index} />)}
           <Nodes dataSource={this.dataSource} keyExpr="ID" typeExpr={this.itemTypeExpr} parentKeyExpr="Head_ID">
             <AutoLayout type="tree" />
           </Nodes>

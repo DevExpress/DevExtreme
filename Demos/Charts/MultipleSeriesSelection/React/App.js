@@ -27,7 +27,10 @@ class App extends React.Component {
           type="stackedarea"
         />
         {
-          versionSources.map(({ value, name }) => <Series key={value} valueField={value} name={name} />)
+          versionSources.map(({ value, name }) => <Series
+            key={value}
+            valueField={value}
+            name={name} />)
         }
         <CommonAxisSettings valueMarginsEnabled={false} />
         <ArgumentAxis type="discrete" />

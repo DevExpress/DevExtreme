@@ -31,7 +31,10 @@ class App extends React.Component {
           <Point hoverMode="allArgumentPoints" />
         </CommonSeriesSettings>
         {
-          energySources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
+          energySources.map((item) => <Series
+            key={item.value}
+            valueField={item.value}
+            name={item.name} />)
         }
         <ArgumentAxis
           valueMarginsEnabled={false}

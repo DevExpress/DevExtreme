@@ -29,7 +29,10 @@ window.onload = function () {
       },
       title: 'Filter Employee List by Birth Year',
       onValueChanged(e) {
-        const employeesValue = $.grep(employees, (employee) => employee.BirthYear >= e.value[0] && employee.BirthYear <= e.value[1]);
+        const employeesValue = $.grep(
+          employees,
+          (employee) => employee.BirthYear >= e.value[0] && employee.BirthYear <= e.value[1],
+        );
         selectedEmployees(employeesValue);
       },
     },

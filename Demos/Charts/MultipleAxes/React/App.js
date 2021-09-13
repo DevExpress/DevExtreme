@@ -25,7 +25,10 @@ class App extends React.Component {
           type="fullstackedbar"
         />
         {
-          continentSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
+          continentSources.map((item) => <Series
+            key={item.value}
+            valueField={item.value}
+            name={item.name} />)
         }
         <Series
           axis="total"

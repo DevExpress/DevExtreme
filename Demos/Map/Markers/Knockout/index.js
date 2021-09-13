@@ -50,7 +50,12 @@ window.onload = function () {
     showTooltipsOptions: {
       text: 'Show all tooltips',
       onClick() {
-        markers(markersData.map((item) => $.extend(true, {}, item, { tooltip: { isShown: true } })));
+        markers(markersData.map((item) => $.extend(
+          true,
+          {},
+          item,
+          { tooltip: { isShown: true } },
+        )));
       },
     },
   };

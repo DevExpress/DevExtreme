@@ -1,7 +1,8 @@
 <template>
   <div id="multiview">
     <div>
-      Item <span>{{ selectedIndex + 1 }}</span> of <span>{{ companies.length }}</span>: <i>Swipe the view horizontally to switch to the next view.</i>
+      Item <span>{{ selectedIndex + 1 }}</span> of <span>{{ companies.length }}</span>:
+      <i>Swipe the view horizontally to switch to the next view.</i>
     </div>
     <DxMultiView
       :height="300"

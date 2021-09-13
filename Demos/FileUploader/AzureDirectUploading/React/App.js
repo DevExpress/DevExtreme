@@ -48,7 +48,8 @@ class App extends React.Component {
           </div>
         </div>
         <div id="message-box">
-          To run the demo locally, specify your Azure storage account name, access key and container name in the web.config file.
+          To run the demo locally, specify your Azure storage account name,
+          access key and container name in the web.config file.
           Refer to the <a href="https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileUploader/AzureDirectUploading/React/Light/"
             target="_blank" rel="noopener noreferrer">
             https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileUploader/AzureDirectUploading/React/Light/</a>
@@ -69,10 +70,17 @@ class App extends React.Component {
       promise = Promise.resolve();
     }
 
-    promise = promise.then(() => gateway.putBlock(uploadInfo.customData.accessUrl, uploadInfo.chunkIndex, uploadInfo.chunkBlob));
+    promise = promise.then(() => gateway.putBlock(
+      uploadInfo.customData.accessUrl,
+      uploadInfo.chunkIndex,
+      uploadInfo.chunkBlob,
+    ));
 
     if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
-      promise = promise.then(() => gateway.putBlockList(uploadInfo.customData.accessUrl, uploadInfo.chunkCount));
+      promise = promise.then(() => gateway.putBlockList(
+        uploadInfo.customData.accessUrl,
+        uploadInfo.chunkCount,
+      ));
     }
 
     return promise;

@@ -29,7 +29,11 @@ class App extends React.Component {
           </SelectionStyle>
         </CommonSeriesSettings>
         {
-          medalSources.map(({ value, name, color }) => <Series key={value} valueField={value} name={name} color={color} />)
+          medalSources.map(({ value, name, color }) => <Series
+            key={value}
+            valueField={value}
+            name={name}
+            color={color} />)
         }
         <Legend
           verticalAlignment="bottom"

@@ -30,7 +30,10 @@ DemoApp.controller('DemoController', ($scope) => {
     },
     title: 'Filter Employee List by Birth Year',
     onValueChanged(e) {
-      const selectedEmployees = $.grep(employees, (employee) => employee.BirthYear >= e.value[0] && employee.BirthYear <= e.value[1]);
+      const selectedEmployees = $.grep(
+        employees,
+        (employee) => employee.BirthYear >= e.value[0] && employee.BirthYear <= e.value[1],
+      );
       $scope.employees = selectedEmployees;
     },
   };

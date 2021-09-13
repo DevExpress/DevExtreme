@@ -33,7 +33,8 @@ import DxPivotGrid, {
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
-// Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
+// Our demo infrastructure requires us to use 'file-saver-es'.
+// We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
 import { sales } from './data.js';
 
@@ -122,7 +123,13 @@ export default {
 </script>
 <style scoped>
 .long-title h3 {
-  font-family: "Segoe UI Light", "Helvetica Neue Light", "Segoe UI", "Helvetica Neue", "Trebuchet MS", Verdana;
+  font-family:
+    "Segoe UI Light",
+    "Helvetica Neue Light",
+    "Segoe UI",
+    "Helvetica Neue",
+    "Trebuchet MS",
+    Verdana;
   font-weight: 200;
   font-size: 28px;
   text-align: center;

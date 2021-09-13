@@ -198,11 +198,14 @@ export default {
     overflow: hidden;
 }
 
-.dx-color-scheme-light .base-color, .dx-color-scheme-carmine .base-color, .dx-color-scheme-softblue .base-color {
+.dx-color-scheme-light .base-color,
+.dx-color-scheme-carmine .base-color,
+.dx-color-scheme-softblue .base-color {
     fill: #333;
 }
 
-.dx-color-scheme-contrast .base-color, .dx-color-scheme-darkmoon .base-color {
+.dx-color-scheme-contrast .base-color,
+.dx-color-scheme-darkmoon .base-color {
     fill: #fff;
 }
 

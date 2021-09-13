@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*!
  * ASP.NET SignalR JavaScript Library v2.2.2
  * http://signalr.net/
@@ -7,7 +8,6 @@
  *
  */
 
-/* eslint-disable */
 
 /// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />

@@ -4,7 +4,9 @@
     <div
       id="dropzone-external"
       class="flex-box"
-      :class="[isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color']"
+      :class="[isDropZoneActive
+        ? 'dx-theme-accent-as-border-color dropzone-active'
+        : 'dx-theme-border-color']"
     >
       <img
         id="dropzone-image"

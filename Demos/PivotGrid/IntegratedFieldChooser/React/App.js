@@ -30,7 +30,10 @@ class App extends React.Component {
           height={470}
           showBorders={true}
         >
-          <FieldChooser enabled={true} allowSearch={true} applyChangesMode={this.state.applyChangesMode} />
+          <FieldChooser
+            enabled={true}
+            allowSearch={true}
+            applyChangesMode={this.state.applyChangesMode} />
         </PivotGrid>
         <div className="options">
           <div className="caption">Options</div>

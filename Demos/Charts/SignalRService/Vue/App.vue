@@ -151,7 +151,11 @@ export default {
 
     customizePoint(pointInfo) {
       if (pointInfo.seriesName === 'Volume') {
-        const point = this.$refs.chart.instance.getAllSeries()[0].getPointsByArg(pointInfo.argument)[0].data;
+        const point = this.$refs.chart.instance
+          .getAllSeries()[0]
+          .getPointsByArg(pointInfo.argument)[0]
+          .data;
+
         if (point.close >= point.open) {
           return { color: '#1db2f5' };
         }

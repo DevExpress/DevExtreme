@@ -42,7 +42,10 @@ class App extends React.Component {
             <Grid visible={true} />
           </CommonAxisSettings>
           {
-            architectureSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
+            architectureSources.map((item) => <Series
+              key={item.value}
+              valueField={item.value}
+              name={item.name} />)
           }
           <Margin bottom={20} />
           <ArgumentAxis

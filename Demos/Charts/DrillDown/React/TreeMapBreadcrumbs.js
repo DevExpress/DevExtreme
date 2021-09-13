@@ -9,7 +9,11 @@ class TreeMapBreadcrumbs extends React.Component {
       <div className={this.props.className}>
         {
           treeInfo.map((info, index) => (
-            <Breadcrumb key={info.text} onClick={this.props.onItemClick} info={info} isLast={index === lastIndex} />
+            <Breadcrumb
+              key={info.text}
+              onClick={this.props.onItemClick}
+              info={info}
+              isLast={index === lastIndex} />
           ))
         }
       </div>

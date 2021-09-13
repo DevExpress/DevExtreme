@@ -62,8 +62,9 @@ $(() => {
           e.allowed = false;
         }
         if (e.args.shape.type === 'team') {
-          for (let i = 0; i < e.args.shape.attachedConnectorIds.length; i += 1) {
-            if (diagram.getItemById(e.args.shape.attachedConnectorIds[i]).toId !== e.args.shape.id) {
+          const connectorIds = e.args.shape.attachedConnectorIds;
+          for (let i = 0; i < connectorIds.length; i += 1) {
+            if (diagram.getItemById(connectorIds[i]).toId !== e.args.shape.id) {
               if (e.reason !== 'checkUIElementAvailability') { showToast("You cannot delete a 'Team' shape that has a child shape."); }
               e.allowed = false;
               break;

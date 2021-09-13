@@ -52,7 +52,11 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Without range highlighting</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={defaultValues.withoutRangeHighlighting} showRange={false} />
+              <RangeSlider
+                min={0}
+                max={100}
+                defaultValue={defaultValues.withoutRangeHighlighting}
+                showRange={false} />
             </div>
           </div>
           <div className="dx-field">
@@ -66,25 +70,44 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Disabled</div>
             <div className="dx-field-value">
-              <RangeSlider min={0} max={100} defaultValue={defaultValues.disabled} disabled={true} />
+              <RangeSlider
+                min={0}
+                max={100}
+                defaultValue={defaultValues.disabled}
+                disabled={true} />
             </div>
           </div>
         </div>
         <div className="dx-fieldset">
           <div className="dx-fieldset-header">Event Handling and API</div>
           <div className="dx-field">
-            <RangeSlider min={0} max={100} start={this.state.startValue} end={this.state.endValue} onValueChanged={this.onRangeChanged} />
+            <RangeSlider
+              min={0}
+              max={100}
+              start={this.state.startValue}
+              end={this.state.endValue}
+              onValueChanged={this.onRangeChanged} />
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Start value</div>
             <div className="dx-field-value">
-              <NumberBox value={this.state.startValue} min={0} max={100} showSpinButtons={true} onValueChanged={this.onStartChanged} />
+              <NumberBox
+                value={this.state.startValue}
+                min={0}
+                max={100}
+                showSpinButtons={true}
+                onValueChanged={this.onStartChanged} />
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">End value</div>
             <div className="dx-field-value">
-              <NumberBox value={this.state.endValue} min={0} max={100} showSpinButtons={true} onValueChanged={this.onEndChanged} />
+              <NumberBox
+                value={this.state.endValue}
+                min={0}
+                max={100}
+                showSpinButtons={true}
+                onValueChanged={this.onEndChanged} />
             </div>
           </div>
         </div>

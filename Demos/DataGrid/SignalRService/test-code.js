@@ -48,8 +48,11 @@ testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/data/data_sour
           delete item[key];
         });
       });
-      // eslint-disable-next-line spellcheck/spell-checker
-      if (window.connection && window.connection.methods) { window.connection.methods.updatestockprice.splice(0, 1); }
+
+      if (window.connection && window.connection.methods) {
+        // eslint-disable-next-line spellcheck/spell-checker
+        window.connection.methods.updatestockprice.splice(0, 1);
+      }
     }
 
     const dataSource = new DataSource(dataSourceItems);

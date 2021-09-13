@@ -22,8 +22,14 @@ class App extends React.Component {
   render() {
     return (
       <Diagram id="diagram">
-        <Nodes dataSource={this.orgItemsDataSource} typeExpr={this.itemTypeExpr} textExpr="name"
-          widthExpr={this.itemWidthExpr} heightExpr={this.itemHeightExpr} textStyleExpr={this.itemTextStyleExpr} styleExpr={this.itemStyleExpr}>
+        <Nodes
+          dataSource={this.orgItemsDataSource}
+          typeExpr={this.itemTypeExpr}
+          textExpr="name"
+          widthExpr={this.itemWidthExpr}
+          heightExpr={this.itemHeightExpr}
+          textStyleExpr={this.itemTextStyleExpr}
+          styleExpr={this.itemStyleExpr}>
           <AutoLayout type="tree" orientation="horizontal" />
         </Nodes>
         <Edges dataSource={this.orgLinksDataSource} styleExpr={this.linkStyleExpr}

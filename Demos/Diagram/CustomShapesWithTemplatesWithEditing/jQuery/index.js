@@ -93,8 +93,11 @@ $(function () {
     },
     onRequestLayoutUpdate(e) {
       for (let i = 0; i < e.changes.length; i += 1) {
-        if (e.changes[i].type === 'remove') e.allowed = true;
-        else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) e.allowed = true;
+        if (e.changes[i].type === 'remove') {
+          e.allowed = true;
+        } else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
+          e.allowed = true;
+        }
       }
     },
     contextToolbox: {
@@ -134,7 +137,15 @@ $(function () {
     const $phoneField = $('<div class="dx-field"><div class="dx-field-label">Phone</div><div class="dx-field-value" data-field="Mobile_Phone" /></div>');
     $phoneField.find('.dx-field-value').append('<div /').dxTextBox();
 
-    $editorsContainer.append($nameField, $titleField, $cityField, $stateField, $emailField, $skypeField, $phoneField);
+    $editorsContainer.append(
+      $nameField,
+      $titleField,
+      $cityField,
+      $stateField,
+      $emailField,
+      $skypeField,
+      $phoneField,
+    );
     const $buttonsContainer = $('<div class="dx-fieldset buttons" />').appendTo($container);
     $buttonsContainer.append(
       $('<button />').dxButton({

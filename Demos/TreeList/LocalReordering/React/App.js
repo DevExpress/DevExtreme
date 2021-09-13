@@ -103,7 +103,11 @@ class App extends React.Component {
 
     if (e.dropInsideItem) {
       sourceData = { ...sourceData, Head_ID: visibleRows[e.toIndex].key };
-      employees = [...employees.slice(0, sourceIndex), sourceData, ...employees.slice(sourceIndex + 1)];
+      employees = [
+        ...employees.slice(0, sourceIndex),
+        sourceData,
+        ...employees.slice(sourceIndex + 1),
+      ];
     } else {
       const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
       let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;

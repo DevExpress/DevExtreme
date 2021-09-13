@@ -5,10 +5,16 @@
       <span class="caption">Capital</span>: {{ info.point.data.capital }}
     </div>
     <div>
-      <span class="caption">Population</span>: <span class="population">{{ formatNumber(info.value) }}</span> people
+      <span class="caption">Population</span>:
+      <span class="population">{{ formatNumber(info.value) }}</span>
+      people
     </div>
     <div>
-      <span class="caption">Area</span>: <span class="area-km">{{ formatNumber(info.point.data.area) }}</span> km<sup>2</sup> (<span class="area-mi">{{ formatNumber(0.3861 * info.point.data.area) }}</span> mi<sup>2</sup>)
+      <span class="caption">Area</span>:
+      <span class="area-km">{{ formatNumber(info.point.data.area) }}</span>
+      km<sup>2</sup>
+      (<span class="area-mi">{{ formatNumber(0.3861 * info.point.data.area) }}</span>
+      mi<sup>2</sup>)
     </div>
   </div>
 </template>

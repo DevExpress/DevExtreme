@@ -133,7 +133,15 @@
 <script>
 
 import {
-  DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxToolbox,
+  DxDiagram,
+  DxNodes,
+  DxAutoLayout,
+  DxCustomShape,
+  DxContextToolbox,
+  DxPropertiesPanel,
+  DxGroup,
+  DxTab,
+  DxToolbox,
 } from 'devextreme-vue/diagram';
 import { DxPopup } from 'devextreme-vue/popup';
 import DxTextBox from 'devextreme-vue/text-box';
@@ -145,7 +153,20 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxCustomShape, DxContextToolbox, DxPropertiesPanel, DxGroup, DxTab, DxToolbox, CustomShapeTemplate, CustomShapeToolboxTemplate, DxPopup, DxTextBox, DxButton,
+    DxDiagram,
+    DxNodes,
+    DxAutoLayout,
+    DxCustomShape,
+    DxContextToolbox,
+    DxPropertiesPanel,
+    DxGroup,
+    DxTab,
+    DxToolbox,
+    CustomShapeTemplate,
+    CustomShapeToolboxTemplate,
+    DxPopup,
+    DxTextBox,
+    DxButton,
   },
   data() {
     const that = this;

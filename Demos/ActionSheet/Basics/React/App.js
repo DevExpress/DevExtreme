@@ -25,8 +25,14 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <ActionSheet dataSource={actionSheetItems} title="Choose action" showTitle={this.state.showTitle} showCancelButton={this.state.showCancelButton}
-          visible={this.state.isActionSheetVisible} onItemClick={this.onActionSheetItemClick} onCancelClick={this.onActionSheetCancelClick} />
+        <ActionSheet
+          dataSource={actionSheetItems}
+          title="Choose action"
+          showTitle={this.state.showTitle}
+          showCancelButton={this.state.showCancelButton}
+          visible={this.state.isActionSheetVisible}
+          onItemClick={this.onActionSheetItemClick}
+          onCancelClick={this.onActionSheetCancelClick} />
         <div className="button">
           <Button width="100%" text="Click to show Action Sheet" onClick={this.showActionSheet} />
         </div>

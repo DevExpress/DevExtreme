@@ -1,6 +1,16 @@
 import React from 'react';
 import {
-  LinearGauge, Scale, Tick, Label, RangeContainer, Range, ValueIndicator, SubvalueIndicator, Export, Title, Font,
+  LinearGauge,
+  Scale,
+  Tick,
+  Label,
+  RangeContainer,
+  Range,
+  ValueIndicator,
+  SubvalueIndicator,
+  Export,
+  Title,
+  Font,
 } from 'devextreme-react/linear-gauge';
 
 const subValues = [5, 25];

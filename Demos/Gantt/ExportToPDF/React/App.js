@@ -100,7 +100,9 @@ class App extends React.Component {
               <div className="label">Landscape orientation:</div>
               {' '}
               <div className="value">
-                <CheckBox value={this.state.landscapeCheckBoxValue} onValueChanged={this.onLandscapeCheckBoxChanged} />
+                <CheckBox
+                  value={this.state.landscapeCheckBoxValue}
+                  onValueChanged={this.onLandscapeCheckBoxChanged} />
               </div>
             </div>
             <div className="option">

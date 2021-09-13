@@ -45,7 +45,12 @@ $(() => {
   $('#show-tooltips').dxButton({
     text: 'Show all tooltips',
     onClick() {
-      const newMarkers = $.map(markersData, (item) => $.extend(true, {}, item, { tooltip: { isShown: true } }));
+      const newMarkers = $.map(markersData, (item) => $.extend(
+        true,
+        {},
+        item,
+        { tooltip: { isShown: true } },
+      ));
 
       mapWidget.option('markers', newMarkers);
     },

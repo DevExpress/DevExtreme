@@ -43,7 +43,11 @@ class App extends React.Component {
     return (
       <div id="multiview">
         <div>
-            Item <span>{ this.state.selectedIndex + 1 }</span> of <span>{ companies.length }</span>: <i>Swipe the view horizontally to switch to the next view.</i>
+          Item <span>
+            { this.state.selectedIndex + 1 }
+          </span> of <span>
+            { companies.length }
+          </span>: <i>Swipe the view horizontally to switch to the next view.</i>
         </div>
         <MultiView
           height={300}

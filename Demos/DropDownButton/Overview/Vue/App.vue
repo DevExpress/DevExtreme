@@ -51,7 +51,9 @@
               <i
                 v-for="(itemColor, i) in data"
                 :key="i"
-                :class="itemColor ? 'color dx-icon dx-icon-square' : 'color dx-icon dx-icon-square dx-theme-text-color'"
+                :class="itemColor ?
+                  'color dx-icon dx-icon-square' :
+                  'color dx-icon dx-icon-square dx-theme-text-color'"
                 :style="{ color: itemColor }"
                 @click="onColorClick(itemColor)"
               />
@@ -62,8 +64,19 @@
       <div class="dx-field">
         <p
           id="text"
-          :style="{ textAlign: alignment, fontSize: fontSize, color: color, lineHeight: lineHeight }"
-        >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          :style="{
+            textAlign: alignment,
+            fontSize: fontSize,
+            color: color,
+            lineHeight: lineHeight
+          }"
+        >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+          nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat cupidatat non proident,
+          sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       </div>
     </div>
   </div>

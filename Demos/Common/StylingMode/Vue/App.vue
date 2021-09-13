@@ -48,7 +48,7 @@
         />
         <DxTextArea
           :styling-mode="stylingMode"
-          value="Need sign-off on the new NDA agreement. It\'s important that this is done quickly to prevent any unauthorized leaks."
+          :value="text"
           width="100%"
           placeholder="Details"
         />
@@ -100,6 +100,7 @@ export default {
     return {
       date: new Date(2020, 4, 3),
       stylingMode: 'filled',
+      text: 'Need sign-off on the new NDA agreement. It\'s important that this is done quickly to prevent any unauthorized leaks.',
     };
   },
   methods: {

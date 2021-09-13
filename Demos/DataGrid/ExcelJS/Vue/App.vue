@@ -92,17 +92,36 @@
 </template>
 <script>
 import {
-  DxDataGrid, DxColumn, DxExport, DxSelection, DxSummary, DxGroupPanel, DxGrouping, DxGroupItem, DxSortByGroupSummaryInfo, DxTotalItem,
+  DxDataGrid,
+  DxColumn,
+  DxExport,
+  DxSelection,
+  DxSummary,
+  DxGroupPanel,
+  DxGrouping,
+  DxGroupItem,
+  DxSortByGroupSummaryInfo,
+  DxTotalItem,
 } from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
-// Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
+// Our demo infrastructure requires us to use 'file-saver-es'.
+// We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import service from './data.js';
 
 export default {
   components: {
-    DxDataGrid, DxColumn, DxExport, DxSelection, DxSummary, DxGroupPanel, DxGrouping, DxGroupItem, DxSortByGroupSummaryInfo, DxTotalItem,
+    DxDataGrid,
+    DxColumn,
+    DxExport,
+    DxSelection,
+    DxSummary,
+    DxGroupPanel,
+    DxGrouping,
+    DxGroupItem,
+    DxSortByGroupSummaryInfo,
+    DxTotalItem,
   },
   data() {
     return {

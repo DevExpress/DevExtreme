@@ -71,7 +71,9 @@ DemoApp.controller('DemoController', ($scope) => {
           onItemClick() {
             let fieldIndex;
             if (sourceField.groupName) {
-              fieldIndex = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex].index;
+              fieldIndex = dataSource
+                .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+                .index;
             } else {
               fieldIndex = sourceField.index;
             }

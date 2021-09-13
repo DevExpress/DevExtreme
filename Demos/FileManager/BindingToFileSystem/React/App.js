@@ -12,7 +12,9 @@ const allowedFileExtensions = ['.js', '.json', '.css'];
 class App extends React.Component {
   render() {
     return (
-      <FileManager fileSystemProvider={remoteProvider} allowedFileExtensions={allowedFileExtensions}>
+      <FileManager
+        fileSystemProvider={remoteProvider}
+        allowedFileExtensions={allowedFileExtensions}>
         {/* uncomment the code below to enable file/directory management */}
         <Permissions
           // create={true}

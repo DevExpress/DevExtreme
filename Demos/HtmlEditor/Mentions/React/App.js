@@ -40,7 +40,8 @@ class App extends React.Component {
               07/03/19 - 12:25AM
             </div>
             <div className="text">
-              I&apos;ve been in the audio/video industry since 2001, and I&apos;ve been the CEO of DevAv since 2009.
+              I&apos;ve been in the audio/video industry since 2001,
+              and I&apos;ve been the CEO of DevAv since 2009.
             </div>
           </div>
           <br />

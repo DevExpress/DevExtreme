@@ -43,7 +43,8 @@ class App extends React.Component {
           <p className="address">
             Address:<br />
             <b>{this.state.employeeInfo.City}</b><br />
-            <span>{this.state.employeeInfo.Zipcode}</span> <span>{this.state.employeeInfo.Address}</span>
+            <span>{this.state.employeeInfo.Zipcode}</span>
+            <span>{this.state.employeeInfo.Address}</span>
           </p>
 
           <p>

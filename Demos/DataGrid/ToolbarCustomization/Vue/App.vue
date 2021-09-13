@@ -67,7 +67,13 @@
 </template>
 <script>
 import {
-  DxDataGrid, DxColumn, DxGrouping, DxColumnChooser, DxLoadPanel, DxToolbar, DxItem,
+  DxDataGrid,
+  DxColumn,
+  DxGrouping,
+  DxColumnChooser,
+  DxLoadPanel,
+  DxToolbar,
+  DxItem,
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxButton } from 'devextreme-vue/button';
@@ -76,7 +82,15 @@ import service from './data.js';
 
 export default {
   components: {
-    DxDataGrid, DxColumn, DxGrouping, DxColumnChooser, DxLoadPanel, DxToolbar, DxItem, DxSelectBox, DxButton,
+    DxDataGrid,
+    DxColumn,
+    DxGrouping,
+    DxColumnChooser,
+    DxLoadPanel,
+    DxToolbar,
+    DxItem,
+    DxSelectBox,
+    DxButton,
   },
   data() {
     return {

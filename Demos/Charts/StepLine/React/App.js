@@ -27,7 +27,11 @@ class App extends React.Component {
           <Point visible={false} />
         </CommonSeriesSettings>
         {
-          medalSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} color={item.color} />)
+          medalSources.map((item) => <Series
+            key={item.value}
+            valueField={item.value}
+            name={item.name}
+            color={item.color} />)
         }
         <ArgumentAxis>
           <Label>

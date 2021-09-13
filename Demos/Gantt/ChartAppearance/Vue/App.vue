@@ -96,8 +96,10 @@
         <template #taskTooltipContentTemplate="{ data: task }">
           <div class="custom-task-edit-tooltip">
             <div class="custom-tooltip-title">{{ task.title }}</div>
-            <div class="custom-tooltip-row"><span> Estimate: </span>{{ getTimeEstimate(task) }}<span> hours </span></div>
-            <div class="custom-tooltip-row"><span> Left: </span>{{ getTimeLeft(task) }}<span> hours </span></div>
+            <div class="custom-tooltip-row"><span>
+              Estimate: </span>{{ getTimeEstimate(task) }}<span> hours </span></div>
+            <div class="custom-tooltip-row"><span>
+              Left: </span>{{ getTimeLeft(task) }}<span> hours </span></div>
           </div>
         </template>
       </DxGantt>

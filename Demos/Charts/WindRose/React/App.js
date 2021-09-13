@@ -32,7 +32,10 @@ class App extends React.Component {
         >
           <CommonSeriesSettings type="stackedbar" />
           {
-            windSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
+            windSources.map((item) => <Series
+              key={item.value}
+              valueField={item.value}
+              name={item.name} />)
           }
           <Margin
             bottom={50}

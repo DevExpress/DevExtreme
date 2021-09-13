@@ -32,7 +32,9 @@ export default {
         'day-cell': true,
       };
 
-      classObject[this.getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)] = true;
+      classObject[
+        this.getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)
+      ] = true;
       return classObject;
     },
 

@@ -1,7 +1,11 @@
 <template>
   <div class="form">
     <div class="drive-panel">
-      <div class="drive-header dx-treeview-item"><div class="dx-treeview-item-content"><i class="dx-icon dx-icon-activefolder"/><span>Drive C:</span></div></div>
+      <div
+        class="drive-header dx-treeview-item"
+      ><div
+        class="dx-treeview-item-content"
+      ><i class="dx-icon dx-icon-activefolder"/><span>Drive C:</span></div></div>
       <DxSortable
         filter=".dx-treeview-item"
         group="shared"
@@ -24,7 +28,11 @@
       </DxSortable>
     </div>
     <div class="drive-panel">
-      <div class="drive-header dx-treeview-item"><div class="dx-treeview-item-content"><i class="dx-icon dx-icon-activefolder"/><span>Drive D:</span></div></div>
+      <div
+        class="drive-header dx-treeview-item"
+      ><div
+        class="dx-treeview-item-content"
+      ><i class="dx-icon dx-icon-activefolder"/><span>Drive D:</span></div></div>
       <DxSortable
         filter=".dx-treeview-item"
         group="shared"

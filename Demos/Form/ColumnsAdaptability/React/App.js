@@ -14,7 +14,8 @@ class App extends React.Component {
     this.state = {
       calculateColCountAutomatically: false,
     };
-    this.onCalculateColCountAutomaticallyChanged = this.onCalculateColCountAutomaticallyChanged.bind(this);
+    this.onCalculateColCountAutomaticallyChanged = this.onCalculateColCountAutomaticallyChanged
+      .bind(this);
   }
 
   render() {

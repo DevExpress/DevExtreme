@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export const pangaeaBorders = {
   type: 'FeatureCollection',
   features: [{

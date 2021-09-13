@@ -17,8 +17,9 @@ class App extends React.Component {
       <React.Fragment>
         <div id="pivotgrid-demo">
           <div className="desc-container">Expand, filter, sort and perform other operations
-            on&nbsp;the PivotGrid&rsquo;s columns and rows. <a onClick={this.onRefreshClick}>Refresh</a> the web page
-            and note that the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
+            on&nbsp;the PivotGrid&rsquo;s columns and
+            rows. <a onClick={this.onRefreshClick}>Refresh</a> the web page and note that
+            the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
           </div>
           <Button
             text={"Reset the PivotGrid's State"}
@@ -69,7 +70,9 @@ class App extends React.Component {
           onItemClick() {
             let fieldIndex;
             if (sourceField.groupName) {
-              fieldIndex = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex].index;
+              fieldIndex = dataSource
+                .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+                .index;
             } else {
               fieldIndex = sourceField.index;
             }

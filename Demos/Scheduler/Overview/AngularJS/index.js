@@ -45,7 +45,9 @@ DemoApp.controller('DemoController', ($scope) => {
       'day-cell': true,
     };
 
-    classObject[getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)] = true;
+    classObject[
+      getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)
+    ] = true;
     return classObject;
   };
 

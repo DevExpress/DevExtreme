@@ -47,7 +47,9 @@ class App extends React.Component {
             height={700}
             taskTitlePosition="none">
 
-            <Validation autoUpdateParentTasks={autoUpdateParentTasks} validateDependencies={validateDependencies} />
+            <Validation
+              autoUpdateParentTasks={autoUpdateParentTasks}
+              validateDependencies={validateDependencies} />
 
             <Tasks dataSource={tasks} />
             <Dependencies dataSource={dependencies} />

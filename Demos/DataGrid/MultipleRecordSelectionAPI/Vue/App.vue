@@ -117,7 +117,9 @@ export default {
       } if (prefix === 'All') {
         this.selectedRowKeys = this.employees.map((employee) => employee.ID);
       } else {
-        this.selectedRowKeys = this.employees.filter((employee) => employee.Prefix === prefix).map((employee) => employee.ID);
+        this.selectedRowKeys = this.employees
+          .filter((employee) => employee.Prefix === prefix)
+          .map((employee) => employee.ID);
       }
 
       this.prefix = prefix;

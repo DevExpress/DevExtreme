@@ -1,6 +1,9 @@
 $(() => {
-  const maxDay = dataSource.reduce((prev, current) => (prev.day >= current.day ? prev : current));
-  const minNight = dataSource.reduce((prev, current) => (prev.night <= current.night ? prev : current));
+  const maxDay = dataSource
+    .reduce((prev, current) => (prev.day >= current.day ? prev : current));
+
+  const minNight = dataSource
+    .reduce((prev, current) => (prev.night <= current.night ? prev : current));
 
   $('#radarChart').dxPolarChart({
     dataSource,

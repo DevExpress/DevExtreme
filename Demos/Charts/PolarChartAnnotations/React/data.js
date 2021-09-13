@@ -48,6 +48,8 @@ export const dataSource = [{
   night: 4,
 }];
 
-export const maxDay = dataSource.reduce((prev, current) => (prev.day >= current.day ? prev : current));
+export const maxDay = dataSource
+  .reduce((prev, current) => (prev.day >= current.day ? prev : current));
 
-export const minNight = dataSource.reduce((prev, current) => (prev.day <= current.day ? prev : current));
+export const minNight = dataSource
+  .reduce((prev, current) => (prev.day <= current.day ? prev : current));

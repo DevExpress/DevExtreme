@@ -22,7 +22,9 @@ class App extends React.Component {
       productsActivity[productIndex] = e.value;
       this.setState({
         productsActivity,
-        values: products.map((p, i) => (productsActivity[i] ? p.count : null)).filter((c) => c !== null),
+        values: products
+          .map((p, i) => (productsActivity[i] ? p.count : null))
+          .filter((c) => c !== null),
       });
     };
   }

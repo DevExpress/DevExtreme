@@ -26,7 +26,10 @@ class App extends React.Component {
           <Point hoverMode="allArgumentPoints" />
         </CommonSeriesSettings>
         {
-          yearSources.map((item) => <Series key={item.value} valueField={item.value} name={item.name} />)
+          yearSources.map((item) => <Series
+            key={item.value}
+            valueField={item.value}
+            name={item.name} />)
         }
         <Export enabled={true} />
         <Legend

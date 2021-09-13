@@ -2,7 +2,23 @@ import React from 'react';
 
 import 'devextreme/data/odata/store';
 import {
-  Column, DataGrid, FilterRow, HeaderFilter, GroupPanel, Scrolling, Editing, Grouping, Lookup, MasterDetail, Summary, RangeRule, RequiredRule, StringLengthRule, GroupItem, TotalItem, ValueFormat,
+  Column,
+  DataGrid,
+  FilterRow,
+  HeaderFilter,
+  GroupPanel,
+  Scrolling,
+  Editing,
+  Grouping,
+  Lookup,
+  MasterDetail,
+  Summary,
+  RangeRule,
+  RequiredRule,
+  StringLengthRule,
+  GroupItem,
+  TotalItem,
+  ValueFormat,
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetailGrid from './MasterDetailGrid.js';

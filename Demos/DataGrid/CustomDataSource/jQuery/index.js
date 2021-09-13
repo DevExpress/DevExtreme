@@ -19,7 +19,9 @@ $(() => {
         'group',
         'groupSummary',
       ].forEach((i) => {
-        if (i in loadOptions && isNotEmpty(loadOptions[i])) { args[i] = JSON.stringify(loadOptions[i]); }
+        if (i in loadOptions && isNotEmpty(loadOptions[i])) {
+          args[i] = JSON.stringify(loadOptions[i]);
+        }
       });
       $.ajax({
         url: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders',

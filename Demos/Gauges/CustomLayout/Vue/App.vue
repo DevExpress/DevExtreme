@@ -57,12 +57,32 @@
 </template>
 <script>
 import {
-  DxCircularGauge, DxScale, DxTick, DxLabel, DxRangeContainer, DxRange, DxValueIndicator, DxSubvalueIndicator, DxTitle, DxFont, DxExport,
+  DxCircularGauge,
+  DxScale,
+  DxTick,
+  DxLabel,
+  DxRangeContainer,
+  DxRange,
+  DxValueIndicator,
+  DxSubvalueIndicator,
+  DxTitle,
+  DxFont,
+  DxExport,
 } from 'devextreme-vue/circular-gauge';
 
 export default {
   components: {
-    DxCircularGauge, DxScale, DxTick, DxLabel, DxRangeContainer, DxRange, DxValueIndicator, DxSubvalueIndicator, DxTitle, DxFont, DxExport,
+    DxCircularGauge,
+    DxScale,
+    DxTick,
+    DxLabel,
+    DxRangeContainer,
+    DxRange,
+    DxValueIndicator,
+    DxSubvalueIndicator,
+    DxTitle,
+    DxFont,
+    DxExport,
   },
   data() {
     return {

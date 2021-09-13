@@ -123,7 +123,15 @@
 </template>
 <script>
 import {
-  DxLinearGauge, DxTitle, DxFont, DxGeometry, DxScale, DxRangeContainer, DxRange, DxValueIndicator, DxLabel,
+  DxLinearGauge,
+  DxTitle,
+  DxFont,
+  DxGeometry,
+  DxScale,
+  DxRangeContainer,
+  DxRange,
+  DxValueIndicator,
+  DxLabel,
 } from 'devextreme-vue/linear-gauge';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { cities } from './data.js';

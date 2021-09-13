@@ -54,7 +54,11 @@
       <template #content="{ data }">
         <div class="popup-property-details">
           <div class="large-text">{{ currency(currentHouse.Price) }}</div>
-          <div class="opacity">{{ currentHouse.Address }}, {{ currentHouse.City }}, {{ currentHouse.State }}</div>
+          <div class="opacity">
+            {{ currentHouse.Address }},
+            {{ currentHouse.City }},
+            {{ currentHouse.State }}
+          </div>
           <DxButton
             :text="favoriteText"
             :width="210"

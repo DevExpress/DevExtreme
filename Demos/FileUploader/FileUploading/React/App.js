@@ -32,8 +32,12 @@ class App extends React.Component {
     return (
       <div>
         <div className="widget-container">
-          <FileUploader multiple={this.state.multiple} accept={this.state.accept} uploadMode={this.state.uploadMode}
-            uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload" onValueChanged={this.onSelectedFilesChanged} />
+          <FileUploader
+            multiple={this.state.multiple}
+            accept={this.state.accept}
+            uploadMode={this.state.uploadMode}
+            uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
+            onValueChanged={this.onSelectedFilesChanged} />
           <div className="content" style={{ display: this.state.selectedFiles.length > 0 ? 'block' : 'none' }}>
             <div>
               <h4>Selected Files</h4>

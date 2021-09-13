@@ -83,7 +83,8 @@ export default {
     },
 
     addButtonHandler() {
-      const newItem = allEmployees.filter((employee) => this.employees.every((item) => employee.ID !== item.ID))[0];
+      const newItem = allEmployees
+        .filter((employee) => this.employees.every((item) => employee.ID !== item.ID))[0];
 
       this.selectedIndex = this.employees.length;
       this.employees = [...this.employees, newItem];

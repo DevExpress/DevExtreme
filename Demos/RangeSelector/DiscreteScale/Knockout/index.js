@@ -22,7 +22,11 @@ window.onload = function () {
         let endIndex;
 
         data.forEach((item, i) => {
-          if (item.country === e.value[0]) { startIndex = i; } else if (item.country === e.value[1]) { endIndex = i; }
+          if (item.country === e.value[0]) {
+            startIndex = i;
+          } else if (item.country === e.value[1]) {
+            endIndex = i;
+          }
         });
 
         if (endIndex) {

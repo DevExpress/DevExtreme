@@ -57,12 +57,32 @@
 </template>
 <script>
 import {
-  DxLinearGauge, DxScale, DxTick, DxLabel, DxRangeContainer, DxRange, DxValueIndicator, DxSubvalueIndicator, DxExport, DxTitle, DxFont,
+  DxLinearGauge,
+  DxScale,
+  DxTick,
+  DxLabel,
+  DxRangeContainer,
+  DxRange,
+  DxValueIndicator,
+  DxSubvalueIndicator,
+  DxExport,
+  DxTitle,
+  DxFont,
 } from 'devextreme-vue/linear-gauge';
 
 export default {
   components: {
-    DxLinearGauge, DxScale, DxTick, DxLabel, DxRangeContainer, DxRange, DxValueIndicator, DxSubvalueIndicator, DxExport, DxTitle, DxFont,
+    DxLinearGauge,
+    DxScale,
+    DxTick,
+    DxLabel,
+    DxRangeContainer,
+    DxRange,
+    DxValueIndicator,
+    DxSubvalueIndicator,
+    DxExport,
+    DxTitle,
+    DxFont,
   },
   data() {
     return {

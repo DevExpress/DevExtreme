@@ -48,13 +48,33 @@
 </template>
 <script>
 import {
-  DxChart, DxTitle, DxCommonSeriesSettings, DxSeries, DxLegend, DxArgumentAxis, DxValueAxis, DxCommonAnnotationSettings, DxFont, DxImage, DxAnnotation,
+  DxChart,
+  DxTitle,
+  DxCommonSeriesSettings,
+  DxSeries,
+  DxLegend,
+  DxArgumentAxis,
+  DxValueAxis,
+  DxCommonAnnotationSettings,
+  DxFont,
+  DxImage,
+  DxAnnotation,
 } from 'devextreme-vue/chart';
 import { dataSource, annotationSources } from './data.js';
 
 export default {
   components: {
-    DxChart, DxTitle, DxCommonSeriesSettings, DxSeries, DxLegend, DxArgumentAxis, DxValueAxis, DxCommonAnnotationSettings, DxFont, DxImage, DxAnnotation,
+    DxChart,
+    DxTitle,
+    DxCommonSeriesSettings,
+    DxSeries,
+    DxLegend,
+    DxArgumentAxis,
+    DxValueAxis,
+    DxCommonAnnotationSettings,
+    DxFont,
+    DxImage,
+    DxAnnotation,
   },
   data() {
     return {

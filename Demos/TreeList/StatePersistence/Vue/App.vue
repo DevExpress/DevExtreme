@@ -3,7 +3,8 @@
     <div id="descContainer">
       Sort and filter data, reorder and resize columns, select and expand rows. Once you are done,
       <a @click="onRefreshClick">refresh</a>
-      the web page to see that the grid’s state is automatically persisted to continue working from where you stopped
+      the web page to see that the grid’s state is automatically
+      persisted to continue working from where you stopped
       or you can <a @click="onStateResetClick">reset</a> the grid to its initial state.
     </div>
     <DxTreeList

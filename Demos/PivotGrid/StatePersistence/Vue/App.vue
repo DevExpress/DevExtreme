@@ -1,6 +1,7 @@
 <template>
   <div id="pivotgrid-demo">
-    <div class="desc-container">Expand, filter, sort and perform other operations on&nbsp;the PivotGrid&rsquo;s columns and rows.
+    <div class="desc-container">Expand, filter, sort and perform other operations
+      on&nbsp;the PivotGrid&rsquo;s columns and rows.
       <a @click="onRefreshClick">Refresh</a>
       the web page and note that the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
     </div>
@@ -104,7 +105,9 @@ export default {
             onItemClick() {
               let fieldIndex;
               if (sourceField.groupName) {
-                fieldIndex = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex].index;
+                fieldIndex = dataSource
+                  .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+                  .index;
               } else {
                 fieldIndex = sourceField.index;
               }

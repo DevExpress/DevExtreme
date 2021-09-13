@@ -33,10 +33,17 @@ function uploadChunk(file, uploadInfo) {
     deferred = $.Deferred().resolve().promise();
   }
 
-  deferred = deferred.then(() => gateway.putBlock(uploadInfo.customData.accessUrl, uploadInfo.chunkIndex, uploadInfo.chunkBlob));
+  deferred = deferred.then(() => gateway.putBlock(
+    uploadInfo.customData.accessUrl,
+    uploadInfo.chunkIndex,
+    uploadInfo.chunkBlob,
+  ));
 
   if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
-    deferred = deferred.then(() => gateway.putBlockList(uploadInfo.customData.accessUrl, uploadInfo.chunkCount));
+    deferred = deferred.then(() => gateway.putBlockList(
+      uploadInfo.customData.accessUrl,
+      uploadInfo.chunkCount,
+    ));
   }
 
   return deferred.promise();

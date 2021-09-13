@@ -156,7 +156,8 @@ export default {
 
       const temp = aggregationInfo.data.map((item) => item.temp);
       return {
-        date: new Date((aggregationInfo.intervalStart.valueOf() + aggregationInfo.intervalEnd.valueOf()) / 2),
+        date: new Date((aggregationInfo.intervalStart.valueOf()
+          + aggregationInfo.intervalEnd.valueOf()) / 2),
         maxTemp: Math.max.apply(null, temp),
         minTemp: Math.min.apply(null, temp),
       };

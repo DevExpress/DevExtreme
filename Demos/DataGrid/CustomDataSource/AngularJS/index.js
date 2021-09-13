@@ -19,7 +19,9 @@ DemoApp.controller('DemoController', ($scope, $http, $q) => {
         'group',
         'groupSummary',
       ].forEach((i) => {
-        if (i in loadOptions && isNotEmpty(loadOptions[i])) { params[i] = JSON.stringify(loadOptions[i]); }
+        if (i in loadOptions && isNotEmpty(loadOptions[i])) {
+          params[i] = JSON.stringify(loadOptions[i]);
+        }
       });
       return $http.get('https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders', { params })
         .then((response) => ({

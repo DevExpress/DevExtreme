@@ -43,7 +43,10 @@ class App extends React.Component {
                 <th>Copper (USD/ton)</th>
               </tr>
               {
-                years.map((year, index) => <RowTemplate key={index} year={year} source={this.source} />)
+                years.map((year, index) => <RowTemplate
+                  key={index}
+                  year={year}
+                  source={this.source} />)
               }
             </tbody>
           </table>

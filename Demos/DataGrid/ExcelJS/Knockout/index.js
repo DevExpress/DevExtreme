@@ -83,11 +83,11 @@ window.onload = function () {
         const worksheet = workbook.addWorksheet('Main sheet');
 
         /*
-              The 'DevExpress.excelExporter.exportDataGrid' function uses the ExcelJS library.
-              For more information about ExcelJS, see:
-                - https://github.com/exceljs/exceljs#contents
-                - https://github.com/exceljs/exceljs#browser
-            */
+          The 'DevExpress.excelExporter.exportDataGrid' function uses the ExcelJS library.
+          For more information about ExcelJS, see:
+            - https://github.com/exceljs/exceljs#contents
+            - https://github.com/exceljs/exceljs#browser
+        */
 
         DevExpress.excelExporter.exportDataGrid({
           component: e.component,
@@ -95,16 +95,16 @@ window.onload = function () {
           topLeftCell: { row: 4, column: 1 },
           customizeCell(options) {
             /*
-                  The 'options.excelCell' field contains an ExcelJS object that describes an Excel cell.
-                  Refer to the following topics for more details about its members:
-                    - value and type - https://github.com/exceljs/exceljs#value-types
-                    - alignment - https://github.com/exceljs/exceljs#alignment
-                    - border - https://github.com/exceljs/exceljs#borders
-                    - fill - https://github.com/exceljs/exceljs#fills
-                    - font - https://github.com/exceljs/exceljs#fonts
-                    - numFmt - https://github.com/exceljs/exceljs#number-formats
-                  The 'options.gridCell' object fields are described in https://js.devexpress.com/Documentation/ApiReference/Common/Object_Structures/ExcelDataGridCell/
-                */
+              The 'options.excelCell' field contains an ExcelJS object that describes an Excel cell.
+              Refer to the following topics for more details about its members:
+                - value and type - https://github.com/exceljs/exceljs#value-types
+                - alignment - https://github.com/exceljs/exceljs#alignment
+                - border - https://github.com/exceljs/exceljs#borders
+                - fill - https://github.com/exceljs/exceljs#fills
+                - font - https://github.com/exceljs/exceljs#fonts
+                - numFmt - https://github.com/exceljs/exceljs#number-formats
+              The 'options.gridCell' object fields are described in https://js.devexpress.com/Documentation/ApiReference/Common/Object_Structures/ExcelDataGridCell/
+            */
 
             const { gridCell } = options;
             const { excelCell } = options;
