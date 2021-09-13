@@ -79,19 +79,13 @@ function applyIntends(rows, options) {
 
 function applyBordersConfig(rows) {
     for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-        const row = rows[rowIndex];
-        const cells = row.cells;
+        const cells = rows[rowIndex].cells;
         for(let columnIndex = 0; columnIndex < cells.length; columnIndex++) {
             const pdfCell = cells[columnIndex].pdfCell;
             const leftPdfCell = (columnIndex >= 1) ? cells[columnIndex - 1].pdfCell : null;
             const topPdfCell = (rowIndex >= 1) ? rows[rowIndex - 1].cells[columnIndex].pdfCell : null;
 
-            if(row.rowType === 'group') {
-                pdfCell.drawRightBorder = columnIndex === row.cells.length - 1;
-                pdfCell.drawLeftBorder = columnIndex === 0;
-            }
-
-            if(pdfCell.drawLeftBorder === false && !isDefined(pdfCell.colSpan)) { // TODO: Check this logic after implementing splitting to pages
+            if(pdfCell.drawLeftBorder === false && !isDefined(cells[columnIndex].colSpan)) { // TODO: Check this logic after implementing splitting to pages
                 if(isDefined(leftPdfCell)) {
                     leftPdfCell.drawRightBorder = false;
                 }
