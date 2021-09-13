@@ -24,7 +24,7 @@ function exportDataGrid(doc, dataGrid, options) {
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
-            const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles);
+            const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
 
             if(options.customizeCell) {
                 rowsInfo.forEach(rowInfo => rowInfo.cells.forEach(cellInfo =>
