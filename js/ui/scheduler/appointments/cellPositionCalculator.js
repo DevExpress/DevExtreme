@@ -17,6 +17,7 @@ class BaseStrategy {
     get getPositionShift() { return this.options.getPositionShiftCallback; }
     get groupCount() { return this.options.groupCount; }
     get rtlEnabled() { return this.options.rtlEnabled; }
+    get isVerticalGrouping() { return this.options.isVerticalOrientation; }
 
     calculateCellPositions(groupIndices, isAllDayRowAppointment, isRecurrentAppointment) {
         const result = [];
@@ -80,7 +81,7 @@ class BaseStrategy {
 
         const position = this.getCellPosition(
             positionByMap,
-            inAllDayRow && !this.isVerticalGroupedWorkSpace,
+            inAllDayRow && !this.isVerticalGrouping,
         );
 
         const timeShift = inAllDayRow
