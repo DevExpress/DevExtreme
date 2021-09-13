@@ -16,6 +16,7 @@ class BaseStrategy {
     get cellDuration() { return this.options.cellDuration; }
     get getPositionShift() { return this.options.getPositionShiftCallback; }
     get groupCount() { return this.options.groupCount; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
 
     calculateCellPositions(groupIndices, isAllDayRowAppointment, isRecurrentAppointment) {
         const result = [];
@@ -143,7 +144,7 @@ class BaseStrategy {
 
         const validPosition = { ...position };
 
-        if(this.isRtlEnabled) {
+        if(this.rtlEnabled) {
             validPosition.left += position.width;
         }
 
