@@ -19,6 +19,7 @@ import 'ui/text_box';
 
 import 'generic_light.css!';
 import 'ui/button';
+import 'ui/drop_down_button';
 import 'ui/tabs';
 
 $('#qunit-fixture').html('<style>\
@@ -212,6 +213,30 @@ QUnit.module('render', {
         });
         const button = element.find('.dx-button').first();
 
+        assert.ok(button.hasClass('dx-button-mode-text'));
+
+        themes.isMaterial = origIsMaterial;
+    });
+
+    QUnit.test('drop down buttons has text style in Material', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
+
+        const element = this.$element.dxToolbar({
+            items: [{
+                location: 'before',
+                widget: 'dxDropDownButton',
+                options: {
+                    icon: 'home'
+                }
+            }]
+        });
+        const button = element.find('.dx-button').first();
+
+        // is dropdown button
+        assert.ok(button.hasClass('dx-dropdownbutton-action'));
         assert.ok(button.hasClass('dx-button-mode-text'));
 
         themes.isMaterial = origIsMaterial;
