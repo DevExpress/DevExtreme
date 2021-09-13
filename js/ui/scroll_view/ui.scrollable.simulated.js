@@ -1,4 +1,4 @@
-import { getHeight } from '../../core/utils/size';
+import { getHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -804,7 +804,8 @@ export const SimulatedStrategy = Class.inherit({
         const dimension = this._dimensionByProp(prop);
 
         const distance = {};
-        distance[prop] = page * -this._$container[dimension]();
+        const getter = dimension === 'width' ? getWidth : getHeight;
+        distance[prop] = page * -getter(this._$container);
         this.scrollBy(distance);
     },
 
@@ -829,7 +830,8 @@ export const SimulatedStrategy = Class.inherit({
         const dimension = this._dimensionByProp(prop);
 
         const distance = {};
-        distance[prop] = this._$content[dimension]() - this._$container[dimension]();
+        const getter = dimension === 'width' ? getWidth : getHeight;
+        distance[prop] = getter(this._$content) - getter(this._$container);
         this._component.scrollTo(distance);
     },
 
