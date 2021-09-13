@@ -2,14 +2,5 @@
     "$schema": "../../../../testing/visualtestrc-schema.json",
     "comparison-options": {
         "fouregroundDiffTreshold": 10
-    },
-    "angular": {
-        "ignore": true
-    },
-    "react": {
-        "ignore": true
-    },
-    "vue": {
-        "ignore": true
     }
 }
