@@ -1225,7 +1225,7 @@ class Scheduler extends Widget {
         const scheduler = {
             createResourceEditorModel: () => {
                 const resourceManager = this.fire('getResourceManager');
-                return createResourceEditorModel(resourceManager.getResources(), resourceManager.loadedResources);
+                return createResourceEditorModel(this.option('resources'), resourceManager.loadedResources);
             },
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
@@ -1251,7 +1251,7 @@ class Scheduler extends Widget {
                 const resourceManager = this.fire('getResourceManager');
 
                 return getResourcesFromItem(
-                    resourceManager.getResources(),
+                    this.option('resources'),
                     (field, action) => resourceManager.getDataAccessors(field, action),
                     rawAppointment,
                     true
@@ -1387,6 +1387,8 @@ class Scheduler extends Widget {
 
     _appointmentsConfig() {
         const config = {
+            resources: this.option('resources'),
+
             key: this.key,
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
@@ -1504,6 +1506,8 @@ class Scheduler extends Widget {
             horizontalVirtualScrollingAllowed;
 
         const result = extend({
+            resources: this.option('resources'),
+
             key: this.key,
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -1834,7 +1838,7 @@ class Scheduler extends Widget {
         const rawResult = result.source();
 
         const resourceManager = getResourceManager(this.key);
-        setResourceToAppointment(resourceManager.getResources(), resourceManager._dataAccessors, rawResult, targetCell.groups);
+        setResourceToAppointment(this.option('resources'), resourceManager._dataAccessors, rawResult, targetCell.groups);
 
         return rawResult;
     }
