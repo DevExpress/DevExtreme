@@ -262,7 +262,7 @@ export const getResourceColor = (resources, resourceLoaderMap, field, value) => 
     return result.promise();
 };
 
-export const getResourcesFromItem = (resources, getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
+export const getResourcesFromItem = (resources = [], getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
     let result = null;
     const resourceFields = resources.map(resource => getFieldExpr(resource));
 

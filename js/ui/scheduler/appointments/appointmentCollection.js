@@ -163,7 +163,7 @@ class SchedulerAppointments extends CollectionWidget {
             onAppointmentDblClick: null,
             _collectorOffset: 0,
             groups: [],
-            getResources: () => [],
+            resources: []
         });
     }
 
@@ -569,7 +569,8 @@ class SchedulerAppointments extends CollectionWidget {
     _applyResourceDataAttr($appointment) {
         const resourceManager = this.invoke('getResourceManager');
         const resources = getResourcesFromItem(
-            this.option('getResources')(),
+            this.option('resources'),
+            this.invoke('getResourceManager').getResources(),
             (field, action) => resourceManager.getDataAccessors(field, action),
             this._getItemData($appointment)
         );
