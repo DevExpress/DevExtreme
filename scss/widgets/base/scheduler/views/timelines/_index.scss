@@ -186,5 +186,22 @@ $scheduler-timeline-min-height: 100px;
         border-right: $scheduler-accent-border;
       }
     }
+
+    .dx-scheduler-date-table-cell {
+      &:first-child {
+        border-left: none;
+      }
+    }
+  }
+}
+
+.dx-rtl {
+  .dx-scheduler-timeline.dx-scheduler-work-space-grouped {
+    .dx-scheduler-date-table-cell {
+      &:first-child {
+        border-left: $scheduler-base-border;
+        border-right: none;
+      }
+    }
   }
 }
