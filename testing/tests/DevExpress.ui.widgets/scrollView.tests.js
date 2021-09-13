@@ -590,6 +590,7 @@ QUnit.module('dynamic', moduleConfig, () => {
         $scrollView.dxScrollView('option', 'pullDownEnabled', false);
         $scrollView.dxScrollView('option', 'onPullDown', null);
 
+        const resizeWaitTimer = 50;
         setTimeout(() => {
             const location = getScrollOffset($scrollView);
 
@@ -598,7 +599,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             assert.equal(location.top, -maxScrollTopOffset, 'content position was not changed');
 
             done();
-        });
+        }, resizeWaitTimer);
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {
@@ -1185,7 +1186,7 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('release calls update', function(assert) {
-        assert.expect(isRenovation ? 2 : 1);
+        assert.expect(1);
 
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
