@@ -14,9 +14,8 @@ const JSPdfStylesTests = {
         QUnit.module('Styles - Background color', moduleConfig, () => {
             const rowOptions = {
                 headerStyles: { backgroundColor: '#808080' },
-                groupStyles: { backgroundColor: '#d3d3d3' },
-                totalStyles: { backgroundColor: '#ffffe0' },
-                rowHeight: 16
+                // groupStyles: { backgroundColor: '#d3d3d3' },
+                // totalStyles: { backgroundColor: '#ffffe0' }
             };
 
             QUnit.test('Simple - [{f1, f2]', function(assert) {
@@ -135,10 +134,6 @@ const JSPdfStylesTests = {
         });
 
         QUnit.module('Styles - Text color', moduleConfig, () => {
-            const rowOptions = {
-                rowHeight: 16
-            };
-
             QUnit.test('Simple - [{f1, f2] - Custom color for first table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -169,7 +164,7 @@ const JSPdfStylesTests = {
                     'text,f1_2,100,42.6,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -206,7 +201,7 @@ const JSPdfStylesTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -245,7 +240,7 @@ const JSPdfStylesTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -282,7 +277,7 @@ const JSPdfStylesTests = {
                     'text,f1_2,100,42.6,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -325,7 +320,7 @@ const JSPdfStylesTests = {
                     'text,f1_2,100,42.6,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -362,7 +357,7 @@ const JSPdfStylesTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

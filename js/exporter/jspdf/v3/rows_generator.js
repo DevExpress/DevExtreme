@@ -18,7 +18,7 @@ import { isDefined } from '../../../core/utils/type';
 //    }
 // ]
 
-function generateRowsInfo(dataProvider, dataGrid, rowOptions) {
+function generateRowsInfo(dataProvider, dataGrid, headerStyles) {
     const result = [];
 
     const rowsCount = dataProvider.getRowsCount();
@@ -43,7 +43,7 @@ function generateRowsInfo(dataProvider, dataGrid, rowOptions) {
                 columns,
                 rowType,
                 colCount: columns.length,
-                backgroundColor: (rowType === 'header') ? rowOptions?.headerStyles?.backgroundColor : undefined
+                backgroundColor: (rowType === 'header') ? headerStyles?.backgroundColor : undefined
             }),
             rowIndex,
         });
