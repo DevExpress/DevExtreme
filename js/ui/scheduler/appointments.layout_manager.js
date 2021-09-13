@@ -37,6 +37,8 @@ class AppointmentLayoutManager {
 
         return {
             resources: this.instance.option('resources'),
+            resourceDataAccessors: this.instance.resourceDataAccessors,
+
             instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,

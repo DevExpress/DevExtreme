@@ -66,7 +66,13 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { createResourceEditorModel, getCellGroups, getResourcesFromItem, setResourceToAppointment } from './resources/utils';
+import {
+    createResourceEditorModel,
+    getCellGroups,
+    getFieldExpr as getResourceFieldExpr,
+    getResourcesFromItem,
+    setResourceToAppointment
+} from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
@@ -497,7 +503,7 @@ class Scheduler extends Widget {
                 });
                 break;
             case 'resources':
-
+                this.initResourceExpressions(value);
                 this.updateFactoryInstances();
 
                 this._postponeResourceLoading().done((resources) => {
@@ -855,6 +861,8 @@ class Scheduler extends Widget {
     }
 
     _init() {
+        this.initResourceExpressions(this.option('resources'));
+
         this._initExpressions({
             startDate: this.option('startDateExpr'),
             endDate: this.option('endDateExpr'),
@@ -1054,6 +1062,20 @@ class Scheduler extends Widget {
         );
     }
 
+    initResourceExpressions(resources = []) {
+        this.resourceDataAccessors = {
+            getter: {},
+            setter: {}
+        };
+
+        resources.forEach(resource => {
+            const field = getResourceFieldExpr(resource);
+
+            this.resourceDataAccessors.getter[field] = compileGetter(field);
+            this.resourceDataAccessors.setter[field] = compileSetter(field);
+        });
+    }
+
     _initExpressions(fields) {
         const isDateField = function(field) {
             return field === 'startDate' || field === 'endDate';
@@ -1248,11 +1270,9 @@ class Scheduler extends Widget {
             focus: () => this.focus(),
 
             getResourcesFromItem: (rawAppointment) => {
-                const resourceManager = this.fire('getResourceManager');
-
                 return getResourcesFromItem(
                     this.option('resources'),
-                    (field, action) => resourceManager.getDataAccessors(field, action),
+                    this.resourceDataAccessors,
                     rawAppointment,
                     true
                 );
@@ -1388,6 +1408,7 @@ class Scheduler extends Widget {
     _appointmentsConfig() {
         const config = {
             resources: this.option('resources'),
+            resourceDataAccessors: this.resourceDataAccessors,
 
             key: this.key,
             observer: this,
