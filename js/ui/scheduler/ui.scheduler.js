@@ -67,10 +67,10 @@ import {
     generateKey,
 } from './instanceFactory';
 import {
+    createExpressions,
     createResourceEditorModel,
     getAppointmentColor,
     getCellGroups,
-    getFieldExpr as getResourceFieldExpr,
     getResourcesFromItem,
     setResourceToAppointment
 } from './resources/utils';
@@ -1063,18 +1063,8 @@ class Scheduler extends Widget {
         );
     }
 
-    initResourceExpressions(resources = []) {
-        this.resourceDataAccessors = {
-            getter: {},
-            setter: {}
-        };
-
-        resources.forEach(resource => {
-            const field = getResourceFieldExpr(resource);
-
-            this.resourceDataAccessors.getter[field] = compileGetter(field);
-            this.resourceDataAccessors.setter[field] = compileSetter(field);
-        });
+    initResourceExpressions(resources) {
+        this.resourceDataAccessors = createExpressions(resources);
     }
 
     _initExpressions(fields) {

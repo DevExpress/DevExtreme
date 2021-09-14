@@ -2,7 +2,7 @@ import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import { DataSource } from '../../../data/data_source/data_source';
 import { Deferred } from '../../../core/utils/deferred';
 import query from '../../../data/query';
-import { compileGetter } from '../../../core/utils/data';
+import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { isDefined } from '../../../core/utils/type';
@@ -247,7 +247,7 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
     return result.promise();
 };
 
-const getDataAccessors = (dataAccessors, fieldName, type) => {
+export const getDataAccessors = (dataAccessors, fieldName, type) => {
     const actions = dataAccessors[type];
     return actions[fieldName];
 };
@@ -528,4 +528,20 @@ export const getAppointmentColor = (resourceConfig, appointmentConfig) => {
     }
 
     return new Deferred().resolve().promise();
+};
+
+export const createExpressions = (resources = []) => {
+    const result = {
+        getter: {},
+        setter: {}
+    };
+
+    resources.forEach(resource => {
+        const field = getFieldExpr(resource);
+
+        result.getter[field] = compileGetter(field);
+        result.setter[field] = compileSetter(field);
+    });
+
+    return result;
 };
