@@ -13,10 +13,6 @@ import { Popup } from '../../overlays/popup';
 import { Popover } from '../../overlays/popover';
 import { Calendar } from '../../editors/calendar';
 
-const CAPTION_CLASS = 'dx-scheduler-navigator-caption';
-const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
-const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
-
 export const viewFunction = ({
   props: {
     currentDate,
@@ -32,7 +28,7 @@ export const viewFunction = ({
 }: SchedulerCalendar): JSX.Element => {
   const calendar = (
     <div
-      className={CALENDAR_CLASS}
+      className="dx-scheduler-navigator-calendar"
     >
       <Calendar
         value={currentDate}
@@ -51,9 +47,9 @@ export const viewFunction = ({
   return (
     <Fragment>
       {isMobile
-        && (
+        ? (
           <Popup
-            className={CALENDAR_POPOVER_CLASS}
+            className="dx-scheduler-navigator-calendar-popup"
             showTitle={false}
             closeOnOutsideClick
             visible={visible}
@@ -65,12 +61,11 @@ export const viewFunction = ({
           >
             {calendar}
           </Popup>
-        )}
-      {!isMobile
-        && (
+        )
+        : (
           <Popover
-            target={`.${CAPTION_CLASS}`}
-            className={CALENDAR_POPOVER_CLASS}
+            target=".dx-scheduler-navigator-caption"
+            className="dx-scheduler-navigator-calendar-popover"
             showTitle={false}
             closeOnOutsideClick
             visible={visible}

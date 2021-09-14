@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { shallow } from 'enzyme';
 import SchedulerToolbar, { viewFunction as ViewFunction, SchedulerToolbarBaseProps } from '../header';
