@@ -4,6 +4,7 @@ import {
   JSXComponent,
   OneWay,
   Event,
+  InternalState,
 } from '@devextreme-generator/declarations';
 
 import devices from '../../../../core/devices';
@@ -48,12 +49,12 @@ export const viewFunction = (viewModel: SchedulerToolbar): JSX.Element => {
     >
       <SchedulerCalendar
         currentDate={currentDate}
-        currentDateChange={changeCalendarDate}
+        onCurrentDateUpdate={changeCalendarDate}
         min={min}
         max={max}
         firstDayOfWeek={firstDayOfWeek}
         visible={calendarVisible}
-        visibleChange={changeCalendarVisible}
+        onVisibleUpdate={changeCalendarVisible}
       />
       <Toolbar
         items={items}
@@ -92,9 +93,7 @@ export type SchedulerToolbarProps = SchedulerToolbarBaseProps
 
 @Component({ view: viewFunction })
 export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
-  cssClass = 'dx-scheduler-header';
-
-  calendarVisible = false;
+  @InternalState() calendarVisible = false;
 
   get step(): string {
     return getStep(this.props.currentView) as string;

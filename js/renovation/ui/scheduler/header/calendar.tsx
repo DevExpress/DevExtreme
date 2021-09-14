@@ -3,7 +3,6 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
-  TwoWay,
   Fragment,
   RefObject,
   Ref,
@@ -25,6 +24,7 @@ export const viewFunction = ({
   updateVisible,
   isMobile,
   calendarRef,
+  calendarFocusCallback,
 }: SchedulerCalendar): JSX.Element => {
   const calendar = (
     <div
@@ -57,7 +57,7 @@ export const viewFunction = ({
             showCloseButton
             fullScreen
             toolbarItems={[{ shortcut: 'cancel' }]}
-            onShown={(): void => calendarRef.current?.focus()}
+            onShown={calendarFocusCallback}
           >
             {calendar}
           </Popup>
@@ -70,7 +70,7 @@ export const viewFunction = ({
             closeOnOutsideClick
             visible={visible}
             visibleChange={updateVisible}
-            onShown={(): void => calendarRef.current?.focus()}
+            onShown={calendarFocusCallback}
           >
             {calendar}
           </Popover>
@@ -81,11 +81,15 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class SchedulerCalendarProps {
-  @TwoWay() currentDate!: Date;
+  @OneWay() currentDate!: Date;
+
+  @OneWay() onCurrentDateUpdate!: (date: Date) => void;
 
   @OneWay() firstDayOfWeek!: number;
 
-  @TwoWay() visible!: boolean;
+  @OneWay() visible!: boolean;
+
+  @OneWay() onVisibleUpdate!: (visible: boolean) => void;
 
   @OneWay() min?: string | number | Date;
 
@@ -95,18 +99,21 @@ export class SchedulerCalendarProps {
 }
 
 @Component({ view: viewFunction })
-export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps, 'currentDate' | 'firstDayOfWeek' | 'visible'>() {
+export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps,
+'currentDate' | 'onCurrentDateUpdate' | 'firstDayOfWeek' | 'visible' | 'onVisibleUpdate'>() {
   @Ref() calendarRef!: RefObject<Calendar>;
 
   get isMobile(): boolean {
     return this.props.isMobileLayout;
   }
 
+  calendarFocusCallback = (): void => this.calendarRef.current?.focus();
+
   updateVisible(visible: boolean): void {
-    this.props.visible = visible;
+    this.props.onVisibleUpdate(visible);
   }
 
   updateDate(date: Date): void {
-    this.props.currentDate = date;
+    this.props.onCurrentDateUpdate(date);
   }
 }

@@ -3,28 +3,54 @@ import { shallow } from 'enzyme';
 import { Popup } from '../../../overlays/popup';
 import { Popover } from '../../../overlays/popover';
 import {
-  SchedulerCalendar as Calendar,
+  SchedulerCalendar,
   SchedulerCalendarProps as CalendarProps,
   viewFunction as ViewFunction,
 } from '../calendar';
 
 describe('Calendar', () => {
-  describe('Render', () => {
-    const renderComponent = (viewModel) => shallow(
-      <ViewFunction
-        {...viewModel}
-        props={{
-          ...new CalendarProps(),
-          ...viewModel.props,
-        }}
-      />,
-    );
+  const renderComponent = (viewModel) => shallow(
+    <ViewFunction
+      {...viewModel}
+      props={{
+        ...new CalendarProps(),
+        ...viewModel.props,
+      }}
+    />,
+  );
 
+  describe('Render', () => {
     it('should render Popover if desktop layout', () => {
       const tree = renderComponent({ isMobile: false });
       const popover = tree.childAt(0);
 
       expect(popover.is(Popover)).toBe(true);
+    });
+
+    it('should pass correct props to Popover', () => {
+      const props = {
+        visible: true,
+      };
+      const calendarFocusCallback = () => { };
+      const updateVisible = () => { };
+
+      const tree = renderComponent({
+        isMobile: false,
+        props,
+        updateVisible,
+        calendarFocusCallback,
+      });
+      const popover = tree.childAt(0);
+
+      expect(popover.props()).toMatchObject({
+        target: '.dx-scheduler-navigator-caption',
+        className: 'dx-scheduler-navigator-calendar-popover',
+        showTitle: false,
+        closeOnOutsideClick: true,
+        visible: props.visible,
+        visibleChange: updateVisible,
+        onShown: calendarFocusCallback,
+      });
     });
 
     it('should render Popup if mobile layout', () => {
@@ -33,84 +59,98 @@ describe('Calendar', () => {
 
       expect(popup.is(Popup)).toBe(true);
     });
+
+    it('should pass correct props to Popup', () => {
+      const props = {
+        visible: true,
+      };
+      const calendarFocusCallback = () => { };
+      const updateVisible = () => { };
+
+      const tree = renderComponent({
+        isMobile: true,
+        props,
+        calendarFocusCallback,
+        updateVisible,
+      });
+      const popup = tree.childAt(0);
+
+      expect(popup.props()).toMatchObject({
+        className: 'dx-scheduler-navigator-calendar-popup',
+        showTitle: false,
+        closeOnOutsideClick: true,
+        visible: props.visible,
+        visibleChange: updateVisible,
+        showCloseButton: true,
+        fullScreen: true,
+        toolbarItems: [{ shortcut: 'cancel' }],
+        onShown: calendarFocusCallback,
+      });
+    });
+
+    it('should render overlay child with correct className', () => {
+      const tree = renderComponent({});
+      const overlay = tree.childAt(0);
+      const child = overlay.childAt(0);
+
+      expect(child.prop('className')).toBe('dx-scheduler-navigator-calendar');
+    });
+
+    it('should render Calendar with correct props', () => {
+      const props = {
+        firstDayOfWeek: 2,
+        min: new Date(2021, 6, 6),
+        max: new Date(2021, 8, 6),
+        currentDate: new Date(2021, 7, 7),
+      };
+      const updateDate = () => { };
+
+      const tree = renderComponent({ props, updateDate });
+      const overlay = tree.childAt(0);
+      const calendar = overlay.childAt(0).childAt(0);
+
+      expect(calendar.props()).toEqual({
+        min: props.min,
+        max: props.max,
+        firstDayOfWeek: props.firstDayOfWeek,
+        value: props.currentDate,
+        valueChange: updateDate,
+        focusStateEnabled: true,
+        skipFocusCheck: true,
+        width: '100%',
+      });
+    });
   });
 
   describe('Behaviour', () => {
     describe('Methods', () => {
       describe('updateVisible', () => {
         it('should update prop visible', () => {
-          const toolbar = new Calendar({
+          const mockCallback = jest.fn();
+          const schedulerCalendar = new SchedulerCalendar({
             ...new CalendarProps(),
-            visible: true,
+            onVisibleUpdate: mockCallback,
           });
 
-          toolbar.updateVisible(false);
+          schedulerCalendar.updateVisible(false);
 
-          expect(toolbar.props.visible).toBe(false);
+          expect(mockCallback).toBeCalledTimes(1);
+          expect(mockCallback).toHaveBeenCalledWith(false);
         });
       });
 
       describe('updateDate', () => {
         it('should update prop currentDate', () => {
-          const toolbar = new Calendar({
+          const mockCallback = jest.fn();
+          const schedulerCalendar = new SchedulerCalendar({
             ...new CalendarProps(),
-            currentDate: new Date(2021, 7, 7),
+            onCurrentDateUpdate: mockCallback,
           });
 
-          toolbar.updateDate(new Date(2021, 8, 8));
+          schedulerCalendar.updateDate(new Date(2021, 8, 8));
 
-          expect(toolbar.props.currentDate.getTime()).toBe(new Date(2021, 8, 8).getTime());
-        });
-      });
-    });
-
-    describe('Callbacks', () => {
-      const renderComponent = (viewModel) => shallow(
-        <ViewFunction
-          {...viewModel}
-          props={{
-            ...new CalendarProps(),
-            ...viewModel.props,
-          }}
-        />,
-      );
-
-      describe('onShown', () => {
-        [
-          {
-            isMobile: false,
-            overlayType: 'Popover',
-          },
-          {
-            isMobile: true,
-            overlayType: 'Popup',
-          },
-        ].forEach(({ isMobile, overlayType }) => {
-          it(`should focus calendar if container is ${overlayType}`, () => {
-            const mockCallback = jest.fn();
-            const tree = renderComponent({
-              isMobile,
-              calendarRef: {
-                current: {
-                  focus: mockCallback,
-                },
-              },
-            });
-            const overlay = tree.childAt(0);
-            overlay.prop('onShown')();
-
-            expect(mockCallback).toBeCalledTimes(1);
-          });
-
-          it(`should not fail on focusing if calendar is not provided in ${overlayType}`, () => {
-            const tree = renderComponent({
-              isMobile,
-              calendarRef: {},
-            });
-            const overlay = tree.childAt(0);
-
-            expect(() => overlay.prop('onShown')()).not.toThrow();
-          });
+          expect(mockCallback).toBeCalledTimes(1);
+          expect(mockCallback).toHaveBeenCalledWith(new Date(2021, 8, 8));
         });
       });
     });
@@ -120,13 +160,40 @@ describe('Calendar', () => {
     describe('Getters', () => {
       describe('isMobile', () => {
         it('should return passed prop value', () => {
-          const toolbar = new Calendar({
+          const schedulerCalendar = new SchedulerCalendar({
             ...new CalendarProps(),
             isMobileLayout: false,
           });
 
-          expect(toolbar.isMobile).toBe(false);
+          expect(schedulerCalendar.isMobile).toBe(false);
         });
+      });
+    });
+
+    describe('calendarFocusCallback', () => {
+      it('should focus calendar', () => {
+        const mockCallback = jest.fn();
+        const schedulerCalendar = new SchedulerCalendar({
+          ...new CalendarProps(),
+        });
+        schedulerCalendar.calendarRef = {
+          current: {
+            focus: mockCallback,
+          },
+        } as any;
+
+        schedulerCalendar.calendarFocusCallback();
+
+        expect(mockCallback).toBeCalledTimes(1);
+      });
+
+      it('should not fail if calendar is not provided', () => {
+        const schedulerCalendar = new SchedulerCalendar({
+          ...new CalendarProps(),
+        });
+        schedulerCalendar.calendarRef = {} as any;
+
+        expect(() => schedulerCalendar.calendarFocusCallback()).not.toThrow();
       });
     });
   });
