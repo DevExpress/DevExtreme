@@ -21,8 +21,8 @@ import {
 } from '../common';
 
 import {
-    Rule,
-} from '../../core/options/utils';
+    DefaultOptionsRule,
+} from '../../core/options';
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
 export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
@@ -591,7 +591,7 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @param1_field2 options:Object
      * @hidden
      */
-    static defaultOptions<TProperties>(rule: Partial<Rule<TProperties>>): void;
+    static defaultOptions<TProperties>(rule: DefaultOptionsRule<TProperties>): void;
     /**
      * @docid
      * @publicName exportTo(fileName, format)

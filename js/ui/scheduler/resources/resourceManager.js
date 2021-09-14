@@ -1,6 +1,5 @@
 import { wrapToArray } from '../../../core/utils/array';
 import { isDefined } from '../../../core/utils/type';
-import { each } from '../../../core/utils/iterator';
 import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { when, Deferred } from '../../../core/utils/deferred';
 
@@ -12,7 +11,6 @@ import {
     getValueExpr,
     getWrappedDataSource,
     getResourceColor,
-    isResourceMultiple,
     filterResources,
     getPaintedResources,
 } from './utils';
@@ -30,33 +28,26 @@ export class ResourceManager {
         this.setResources(resources);
     }
 
-    getDataAccessors(field, type) {
-        let result = null;
-        each(this._dataAccessors[type], function(accessorName, accessors) {
-            if(field === accessorName) {
-                result = accessors;
-                return false;
-            }
-        });
-
-        return result;
+    getDataAccessors(fieldName, type) {
+        const actions = this._dataAccessors[type];
+        return actions[fieldName];
     }
 
     setResources(resources = []) {
         this._resources = resources;
         this.resourceLoaderMap = new Map();
+
+
         this._dataAccessors = {
             getter: {},
             setter: {}
         };
 
-        this._resourceFields = resources.map(resource => {
+        resources.forEach(resource => {
             const field = getFieldExpr(resource);
 
             this._dataAccessors.getter[field] = compileGetter(field);
             this._dataAccessors.setter[field] = compileSetter(field);
-
-            return field;
         });
 
         this.agendaProcessor.initializeState(resources);
@@ -64,17 +55,6 @@ export class ResourceManager {
 
     getResources() {
         return this._resources || [];
-    }
-
-    setResourcesToItem(itemData, resources) {
-        const resourcesSetter = this._dataAccessors.setter;
-
-        for(const name in resources) {
-            if(Object.prototype.hasOwnProperty.call(resources, name)) {
-                const resourceData = resources[name];
-                resourcesSetter[name](itemData, isResourceMultiple(this.getResources(), name) ? wrapToArray(resourceData) : resourceData);
-            }
-        }
     }
 
     isLoaded() {

@@ -105,9 +105,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line,10,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'rect,10,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -131,9 +131,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line,10,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'rect,10,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -157,9 +157,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line,10,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,23'
+                    'rect,10,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -182,9 +182,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line,10,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,23'
+                    'rect,10,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -297,9 +297,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line long line,10,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'rect,10,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -323,9 +323,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line\nlong line,10,33.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'rect,10,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -349,9 +349,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line long line,10,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,23'
+                    'rect,10,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -374,9 +374,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line\nlong line,10,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,46'
+                    'rect,10,15,100,46',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -533,9 +533,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line long line long line,10,55,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,80'
+                    'rect,10,15,100,80',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -559,9 +559,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line\nlong line\nlong line,10,32,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,80'
+                    'rect,10,15,100,80',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -585,9 +585,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line long line long line,10,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,23'
+                    'rect,10,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -610,9 +610,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,69'
+                    'rect,10,15,100,69',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -635,9 +635,9 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setFontSize,20',
                     'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
-                    'rect,10,15,100,69'
+                    'rect,10,15,100,69',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
@@ -664,11 +664,12 @@ const JSPdfWordWrapTests = {
                     'text,vert long line,10,45,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line,110,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
+
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -700,11 +701,11 @@ const JSPdfWordWrapTests = {
                     'text,vert long line,10,45,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line,110,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -736,11 +737,11 @@ const JSPdfWordWrapTests = {
                     'text,vert long line,10,26.5,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line,110,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
                     'rect,110,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -771,11 +772,11 @@ const JSPdfWordWrapTests = {
                     'text,vert long line,10,26.5,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line,110,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
                     'rect,110,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -807,11 +808,11 @@ const JSPdfWordWrapTests = {
                     'text,long line,10,45,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line,110,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -846,11 +847,11 @@ const JSPdfWordWrapTests = {
                     'text,long line,10,45,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line,110,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -885,11 +886,11 @@ const JSPdfWordWrapTests = {
                     'text,long line,10,32.25,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line,110,32.25,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
                     'rect,110,15,100,34.5',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -923,11 +924,11 @@ const JSPdfWordWrapTests = {
                     'text,long line,10,32.25,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line,110,32.25,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
                     'rect,110,15,100,34.5',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -960,11 +961,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line very long line,10,45,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line long line,110,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -996,11 +997,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line\nvery long line,10,35.8,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line\nlong line,110,33.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1032,11 +1033,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line very long line,10,26.5,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line long line,110,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
                     'rect,110,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1067,11 +1068,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line\nvery long line,10,28.8,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line\nlong line,110,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,46',
                     'setLineWidth,1',
                     'rect,110,15,100,46',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1103,11 +1104,11 @@ const JSPdfWordWrapTests = {
                     'text,long line long line,10,45,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line big line,110,45,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1142,11 +1143,11 @@ const JSPdfWordWrapTests = {
                     'text,long line\nlong line,10,33.5,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line\nbig line,110,27.75,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
                     'rect,110,15,100,60',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1181,11 +1182,11 @@ const JSPdfWordWrapTests = {
                     'text,long line long line,10,32.25,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line big line,110,32.25,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
                     'rect,110,15,100,34.5',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1219,11 +1220,11 @@ const JSPdfWordWrapTests = {
                     'text,long line\nlong line,10,38,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line\nbig line,110,32.25,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
                     'rect,110,15,100,69',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1256,11 +1257,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line very long line very long line,10,55,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line long line long line,110,55,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setLineWidth,1',
                     'rect,110,15,100,80',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -1292,11 +1293,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line\nvery long line\nvery long line,10,36.6,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line\nlong line\nlong line,110,32,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setLineWidth,1',
                     'rect,110,15,100,80',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -1328,11 +1329,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line very long line very long line,10,26.5,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line long line long line,110,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
                     'rect,110,15,100,23',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1363,11 +1364,11 @@ const JSPdfWordWrapTests = {
                     'text,very long line\nvery long line\nvery long line,10,31.1,{baseline:middle}',
                     'setFontSize,20',
                     'text,long line\nlong line\nlong line,110,26.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
                     'rect,110,15,100,69',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1399,11 +1400,11 @@ const JSPdfWordWrapTests = {
                     'text,long line long line long line,10,60,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line big line big line,110,60,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,90',
                     'setLineWidth,1',
                     'rect,110,15,100,90',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 90; };
@@ -1438,11 +1439,11 @@ const JSPdfWordWrapTests = {
                     'text,long line\nlong line\nlong line,10,37,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line\nbig line\nbig line,110,25.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,90',
                     'setLineWidth,1',
                     'rect,110,15,100,90',
+                    'setFontSize,16',
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 90; };
@@ -1477,11 +1478,11 @@ const JSPdfWordWrapTests = {
                     'text,long line long line long line,10,32.25,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line big line big line,110,32.25,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
                     'rect,110,15,100,34.5',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1515,11 +1516,11 @@ const JSPdfWordWrapTests = {
                     'text,long line\nlong line\nlong line,10,43.75,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line\nbig line\nbig line,110,32.25,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,103.5',
                     'setLineWidth,1',
                     'rect,110,15,100,103.5',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1597,11 +1598,11 @@ const JSPdfWordWrapTests = {
                     'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
                     'setFontSize,30',
                     'text,big line big line big line,110,49.5,{baseline:middle}',
-                    'setFontSize,16',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
                     'rect,110,15,100,69',
+                    'setFontSize,16',
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {

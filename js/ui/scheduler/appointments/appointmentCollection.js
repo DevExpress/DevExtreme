@@ -568,7 +568,6 @@ class SchedulerAppointments extends CollectionWidget {
     _applyResourceDataAttr($appointment) {
         const resourceManager = this.invoke('getResourceManager');
         const resources = getResourcesFromItem(
-            resourceManager._resourceFields,
             resourceManager.getResources(),
             (field, action) => resourceManager.getDataAccessors(field, action),
             this._getItemData($appointment)
