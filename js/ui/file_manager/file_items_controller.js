@@ -264,22 +264,22 @@ export default class FileItemsController {
     }
 
     renameItem(fileItemInfo, name) {
-        const oldName = fileItemInfo.fileItem.name;
+        const sourceItem = fileItemInfo.fileItem.createClone();
         const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory, { itemNewName: name });
         return this._processEditAction(actionInfo,
             (args, itemInfo) => {
                 if(!itemInfo.fileItem.isDirectory) {
                     this._securityController.validateExtension(name);
                 }
-                args.item = itemInfo.fileItem;
+                args.item = sourceItem;
                 args.newName = name;
                 this._editingEvents.onItemRenaming(args);
             },
             item => this._fileProvider.renameItem(item, name),
-            itemInfo => {
+            () => {
                 const args = {
-                    item: itemInfo.fileItem,
-                    oldName
+                    sourceItem,
+                    itemName: name
                 };
                 this._editingEvents.onItemRenamed(args);
             },
@@ -301,8 +301,10 @@ export default class FileItemsController {
             item => this._fileProvider.moveItems([ item ], destinationDirectory.fileItem),
             itemInfo => {
                 const args = {
-                    item: itemInfo.fileItem,
-                    sourceDirectory: itemInfo.parentDirectory.fileItem
+                    sourceItem: itemInfo.fileItem,
+                    parentDirectory: destinationDirectory.fileItem,
+                    itemName: itemInfo.fileItem.name,
+                    itemPath: pathCombine(destinationDirectory.fileItem.path, itemInfo.fileItem.name)
                 };
                 this._editingEvents.onItemMoved(args);
             },
@@ -326,8 +328,10 @@ export default class FileItemsController {
             item => this._fileProvider.copyItems([ item ], destinationDirectory.fileItem),
             itemInfo => {
                 const args = {
-                    item: itemInfo.fileItem,
-                    sourceDirectory: itemInfo.parentDirectory.fileItem
+                    sourceItem: itemInfo.fileItem,
+                    parentDirectory: destinationDirectory.fileItem,
+                    itemName: itemInfo.fileItem.name,
+                    itemPath: pathCombine(destinationDirectory.fileItem.path, itemInfo.fileItem.name)
                 };
                 this._editingEvents.onItemCopied(args);
             },
@@ -387,7 +391,13 @@ export default class FileItemsController {
         let result = startDeferred.then(() => this._fileProvider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
 
         if(chunksInfo.chunkIndex === chunksInfo.chunkCount - 1) {
-            result = result.done(() => this._editingEvents.onFileUploaded({ fileData, destinationDirectory }));
+            result = result.done(() => {
+                const args = {
+                    fileData,
+                    parentDirectory: destinationDirectory
+                };
+                this._editingEvents.onFileUploaded(args);
+            });
         }
 
         return result;

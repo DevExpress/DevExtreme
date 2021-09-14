@@ -243,14 +243,20 @@ QUnit.module('Editing events tests', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.ok(this.events.onItemRenaming.calledOnce);
+        assert.strictEqual(this.events.onItemRenaming.args[0][0].item.name, fileName);
+        assert.strictEqual(this.events.onItemRenaming.args[0][0].item.relativeName, fileName);
         assert.strictEqual(this.events.onItemRenaming.args[0][0].item.parentPath, '');
+        assert.strictEqual(this.events.onItemRenaming.args[0][0].item.pathKeys.join('|'), fileName);
         assert.strictEqual(this.events.onItemRenaming.args[0][0].newName, newName);
 
         assert.ok(this.provider.renameItem.calledOnce);
 
         assert.ok(this.events.onItemRenamed.calledOnce);
-        assert.strictEqual(this.events.onItemRenamed.args[0][0].item.name, newName);
-        assert.strictEqual(this.events.onItemRenamed.args[0][0].oldName, fileName);
+        assert.strictEqual(this.events.onItemRenamed.args[0][0].sourceItem.name, fileName);
+        assert.strictEqual(this.events.onItemRenamed.args[0][0].sourceItem.relativeName, fileName);
+        assert.strictEqual(this.events.onItemRenamed.args[0][0].sourceItem.parentPath, '');
+        assert.strictEqual(this.events.onItemRenamed.args[0][0].sourceItem.pathKeys.join('|'), fileName);
+        assert.strictEqual(this.events.onItemRenamed.args[0][0].itemName, newName);
     });
 
     test('move item', function(assert) {
@@ -266,13 +272,21 @@ QUnit.module('Editing events tests', moduleConfig, () => {
 
         assert.ok(this.events.onItemMoving.calledOnce);
         assert.strictEqual(this.events.onItemMoving.args[0][0].item.name, fileName);
+        assert.strictEqual(this.events.onItemMoving.args[0][0].item.relativeName, fileName);
+        assert.strictEqual(this.events.onItemMoving.args[0][0].item.parentPath, '');
+        assert.strictEqual(this.events.onItemMoving.args[0][0].item.pathKeys.join('|'), fileName);
         assert.strictEqual(this.events.onItemMoving.args[0][0].destinationDirectory.name, 'Folder 2');
 
         assert.ok(this.provider.moveItems.calledOnce);
 
         assert.ok(this.events.onItemMoved.calledOnce);
-        assert.strictEqual(this.events.onItemMoved.args[0][0].item.name, fileName);
-        assert.strictEqual(this.events.onItemMoved.args[0][0].sourceDirectory.name, '');
+        assert.strictEqual(this.events.onItemMoved.args[0][0].sourceItem.name, fileName);
+        assert.strictEqual(this.events.onItemMoved.args[0][0].sourceItem.relativeName, fileName);
+        assert.strictEqual(this.events.onItemMoved.args[0][0].sourceItem.parentPath, '');
+        assert.strictEqual(this.events.onItemMoved.args[0][0].sourceItem.pathKeys.join('|'), fileName);
+        assert.strictEqual(this.events.onItemMoved.args[0][0].parentDirectory.name, 'Folder 2');
+        assert.strictEqual(this.events.onItemMoved.args[0][0].itemName, fileName);
+        assert.strictEqual(this.events.onItemMoved.args[0][0].itemPath, `Folder 2/${fileName}`);
     });
 
     test('copy item', function(assert) {
@@ -288,13 +302,21 @@ QUnit.module('Editing events tests', moduleConfig, () => {
 
         assert.ok(this.events.onItemCopying.calledOnce);
         assert.strictEqual(this.events.onItemCopying.args[0][0].item.name, fileName);
+        assert.strictEqual(this.events.onItemCopying.args[0][0].item.relativeName, fileName);
+        assert.strictEqual(this.events.onItemCopying.args[0][0].item.parentPath, '');
+        assert.strictEqual(this.events.onItemCopying.args[0][0].item.pathKeys.join('|'), fileName);
         assert.strictEqual(this.events.onItemCopying.args[0][0].destinationDirectory.name, 'Folder 2');
 
         assert.ok(this.provider.copyItems.calledOnce);
 
         assert.ok(this.events.onItemCopied.calledOnce);
-        assert.strictEqual(this.events.onItemCopied.args[0][0].item.name, fileName);
-        assert.strictEqual(this.events.onItemCopied.args[0][0].sourceDirectory.name, '');
+        assert.strictEqual(this.events.onItemCopied.args[0][0].sourceItem.name, fileName);
+        assert.strictEqual(this.events.onItemCopied.args[0][0].sourceItem.relativeName, fileName);
+        assert.strictEqual(this.events.onItemCopied.args[0][0].sourceItem.parentPath, '');
+        assert.strictEqual(this.events.onItemCopied.args[0][0].sourceItem.pathKeys.join('|'), fileName);
+        assert.strictEqual(this.events.onItemCopied.args[0][0].parentDirectory.name, 'Folder 2');
+        assert.strictEqual(this.events.onItemCopied.args[0][0].itemName, fileName);
+        assert.strictEqual(this.events.onItemCopied.args[0][0].itemPath, `Folder 2/${fileName}`);
     });
 
     test('upload file', function(assert) {
@@ -313,7 +335,7 @@ QUnit.module('Editing events tests', moduleConfig, () => {
 
         assert.ok(this.events.onFileUploaded.calledOnce);
         assert.strictEqual(this.events.onFileUploaded.args[0][0].fileData.name, file.name);
-        assert.strictEqual(this.events.onFileUploaded.args[0][0].destinationDirectory.name, '');
+        assert.strictEqual(this.events.onFileUploaded.args[0][0].parentDirectory.name, '');
     });
 
     test('download item', function(assert) {

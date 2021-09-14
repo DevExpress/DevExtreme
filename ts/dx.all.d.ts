@@ -10774,7 +10774,7 @@ declare module DevExpress.ui {
     export type FileUploadedEvent =
       DevExpress.events.EventInfo<dxFileManager> & {
         readonly fileData: File;
-        readonly destinationDirectory: DevExpress.fileManagement.FileSystemItem;
+        readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
       };
     export type FileUploadingEvent =
       DevExpress.events.EventInfo<dxFileManager> &
@@ -10790,8 +10790,10 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFileManager>;
     export type ItemCopiedEvent = DevExpress.events.EventInfo<dxFileManager> & {
-      readonly item: DevExpress.fileManagement.FileSystemItem;
-      readonly sourceDirectory: DevExpress.fileManagement.FileSystemItem;
+      readonly sourceItem: DevExpress.fileManagement.FileSystemItem;
+      readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
+      readonly itemName: string;
+      readonly itemPath: string;
     };
     export type ItemCopyingEvent = DevExpress.events.EventInfo<dxFileManager> &
       ActionEventInfo & {
@@ -10812,8 +10814,10 @@ declare module DevExpress.ui {
           readonly item: DevExpress.fileManagement.FileSystemItem;
         };
     export type ItemMovedEvent = DevExpress.events.EventInfo<dxFileManager> & {
-      readonly item: DevExpress.fileManagement.FileSystemItem;
-      readonly sourceDirectory: DevExpress.fileManagement.FileSystemItem;
+      readonly sourceItem: DevExpress.fileManagement.FileSystemItem;
+      readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
+      readonly itemName: string;
+      readonly itemPath: string;
     };
     export type ItemMovingEvent = DevExpress.events.EventInfo<dxFileManager> &
       ActionEventInfo & {
@@ -10822,8 +10826,8 @@ declare module DevExpress.ui {
       };
     export type ItemRenamedEvent =
       DevExpress.events.EventInfo<dxFileManager> & {
-        readonly item: DevExpress.fileManagement.FileSystemItem;
-        readonly oldName: string;
+        readonly sourceItem: DevExpress.fileManagement.FileSystemItem;
+        readonly itemName: string;
       };
     export type ItemRenamingEvent = DevExpress.events.EventInfo<dxFileManager> &
       ActionEventInfo & {

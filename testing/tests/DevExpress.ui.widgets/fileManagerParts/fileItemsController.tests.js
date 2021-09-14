@@ -144,11 +144,16 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
             })
             .then(() => {
                 assert.ok(onRenaming.calledOnce);
+                assert.strictEqual(onRenaming.args[0][0].item.name, 'F1');
+                assert.strictEqual(onRenaming.args[0][0].item.relativeName, 'F1');
+                assert.strictEqual(onRenaming.args[0][0].item.pathKeys.join('|'), 'F1');
                 assert.strictEqual(onRenaming.args[0][0].newName, 'New');
 
                 assert.ok(onRenamed.calledOnce);
-                assert.strictEqual(onRenamed.args[0][0].item.name, 'New');
-                assert.strictEqual(onRenamed.args[0][0].oldName, 'F1');
+                assert.strictEqual(onRenamed.args[0][0].sourceItem.name, 'F1');
+                assert.strictEqual(onRenamed.args[0][0].sourceItem.relativeName, 'F1');
+                assert.strictEqual(onRenamed.args[0][0].sourceItem.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onRenamed.args[0][0].itemName, 'New');
 
                 assert.notOk(currentDir.itemsLoaded);
                 assert.equal(currentDir.items.length, 0);
@@ -180,11 +185,19 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
             .then(() => {
                 assert.ok(onMoving.calledOnce);
                 assert.strictEqual(onMoving.args[0][0].item.name, 'F1');
+                assert.strictEqual(onMoving.args[0][0].item.relativeName, 'F1');
+                assert.strictEqual(onMoving.args[0][0].item.parentPath, '');
+                assert.strictEqual(onMoving.args[0][0].item.pathKeys.join('|'), 'F1');
                 assert.strictEqual(onMoving.args[0][0].destinationDirectory.name, 'F2');
 
                 assert.ok(onMoved.calledOnce);
-                assert.strictEqual(onMoved.args[0][0].item.name, 'F1');
-                assert.strictEqual(onMoved.args[0][0].sourceDirectory.name, '');
+                assert.strictEqual(onMoved.args[0][0].sourceItem.name, 'F1');
+                assert.strictEqual(onMoved.args[0][0].sourceItem.relativeName, 'F1');
+                assert.strictEqual(onMoved.args[0][0].sourceItem.parentPath, '');
+                assert.strictEqual(onMoved.args[0][0].sourceItem.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onMoved.args[0][0].parentDirectory.name, 'F2');
+                assert.strictEqual(onMoved.args[0][0].itemName, 'F1');
+                assert.strictEqual(onMoved.args[0][0].itemPath, 'F2/F1');
 
                 assert.notOk(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 0);
@@ -222,11 +235,19 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
             .then(() => {
                 assert.ok(onCopying.calledOnce);
                 assert.strictEqual(onCopying.args[0][0].item.name, 'F1');
+                assert.strictEqual(onCopying.args[0][0].item.relativeName, 'F1');
+                assert.strictEqual(onCopying.args[0][0].item.parentPath, '');
+                assert.strictEqual(onCopying.args[0][0].item.pathKeys.join('|'), 'F1');
                 assert.strictEqual(onCopying.args[0][0].destinationDirectory.name, 'F2');
 
                 assert.ok(onCopied.calledOnce);
-                assert.strictEqual(onCopied.args[0][0].item.name, 'F1');
-                assert.strictEqual(onCopied.args[0][0].sourceDirectory.name, '');
+                assert.strictEqual(onCopied.args[0][0].sourceItem.name, 'F1');
+                assert.strictEqual(onCopied.args[0][0].sourceItem.relativeName, 'F1');
+                assert.strictEqual(onCopied.args[0][0].sourceItem.parentPath, '');
+                assert.strictEqual(onCopied.args[0][0].sourceItem.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onCopied.args[0][0].parentDirectory.name, 'F2');
+                assert.strictEqual(onCopied.args[0][0].itemName, 'F1');
+                assert.strictEqual(onCopied.args[0][0].itemPath, 'F2/F1');
 
                 assert.ok(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 3);

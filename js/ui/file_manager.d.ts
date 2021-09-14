@@ -125,8 +125,8 @@ export type ItemRenamingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
 
 /** @public */
 export type ItemRenamedEvent = EventInfo<dxFileManager> & {
-    readonly item: FileSystemItem;
-    readonly oldName: string;
+    readonly sourceItem: FileSystemItem;
+    readonly itemName: string;
 };
 
 /** @public */
@@ -137,8 +137,10 @@ export type ItemMovingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
 
 /** @public */
 export type ItemMovedEvent = EventInfo<dxFileManager> & {
-    readonly item: FileSystemItem;
-    readonly sourceDirectory: FileSystemItem;
+    readonly sourceItem: FileSystemItem;
+    readonly parentDirectory: FileSystemItem;
+    readonly itemName: string;
+    readonly itemPath: string;
 };
 
 /** @public */
@@ -149,8 +151,10 @@ export type ItemCopyingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
 
 /** @public */
 export type ItemCopiedEvent = EventInfo<dxFileManager> & {
-    readonly item: FileSystemItem;
-    readonly sourceDirectory: FileSystemItem;
+    readonly sourceItem: FileSystemItem;
+    readonly parentDirectory: FileSystemItem;
+    readonly itemName: string;
+    readonly itemPath: string;
 };
 
 /** @public */
@@ -172,7 +176,7 @@ export type FileUploadingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
 /** @public */
 export type FileUploadedEvent = EventInfo<dxFileManager> & {
     readonly fileData: File;
-    readonly destinationDirectory: FileSystemItem;
+    readonly parentDirectory: FileSystemItem;
 };
 
 /** @public */
@@ -441,8 +445,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 item:FileSystemItem
-     * @type_function_param1_field5 oldName:string
+     * @type_function_param1_field4 sourceItem:FileSystemItem
+     * @type_function_param1_field5 itemName:string
      * @default null
      * @action
      * @public
@@ -470,8 +474,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 item:FileSystemItem
-     * @type_function_param1_field5 sourceDirectory:FileSystemItem
+     * @type_function_param1_field4 sourceItem:FileSystemItem
+     * @type_function_param1_field5 parentDirectory:FileSystemItem
+     * @type_function_param1_field6 itemName:string
+     * @type_function_param1_field7 itemPath:string
      * @default null
      * @action
      * @public
@@ -499,8 +505,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 item:FileSystemItem
-     * @type_function_param1_field5 sourceDirectory:FileSystemItem
+     * @type_function_param1_field4 sourceItem:FileSystemItem
+     * @type_function_param1_field5 parentDirectory:FileSystemItem
+     * @type_function_param1_field6 itemName:string
+     * @type_function_param1_field7 itemPath:string
      * @default null
      * @action
      * @public
@@ -556,7 +564,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileData:File
-     * @type_function_param1_field5 destinationDirectory:FileSystemItem
+     * @type_function_param1_field5 parentDirectory:FileSystemItem
      * @default null
      * @action
      * @public
