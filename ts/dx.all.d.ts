@@ -1304,6 +1304,16 @@ declare module DevExpress.core {
    */
   interface Condition extends JQueryEventObject {}
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+  };
+  export type DefaultOptionsRule<T> = {
+    device?: Device | Device[] | ((device: Device) => boolean);
+    options: DeepPartial<T>;
+  };
+  /**
    * [descr:dxElement]
    * @deprecated [depNote:dxElement]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
