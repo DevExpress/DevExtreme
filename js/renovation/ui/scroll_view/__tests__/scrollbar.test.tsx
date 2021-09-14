@@ -212,80 +212,56 @@ describe('Scrollbar', () => {
     });
   });
 
-  // each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
-  //   each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
-  // eslint-disable-next-line max-len
-  //     each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-  //       each([0, 80]).describe('minOffset: %o', (minOffset) => {
-  //         each([0, 100, 500]).describe('contentSize: %o', (contentSize) => {
-  //           each([0, 50, 200]).describe('containerSize: %o', (containerSize) => {
-  //             each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
-  // eslint-disable-next-line max-len
-  //               // it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
-  //               //   const maxOffset = -300;
+  each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
+    each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
+      each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
+        each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
+          it('syncScrollLocation() should call moveTo(location)', () => {
+            const maxOffset = -300;
 
-  //               //   const viewModel = new Scrollbar({
-  //               //     showScrollbar: 'always',
-  //               //     direction,
-  //               //     rtlEnabled,
-  //               //     scrollLocation,
-  //               //     contentSize,
-  //               //     containerSize,
-  //               //     containerHasSizes,
-  //               //     maxOffset,
-  //               //     minOffset,
-  //               //   });
+            const viewModel = new Scrollbar({
+              showScrollbar: 'always',
+              direction,
+              rtlEnabled,
+              scrollLocation,
+              containerHasSizes,
+              maxOffset,
+            });
 
-  //               //   [0, 100, 500].forEach((prevContentSize) => {
-  //               //     [0, 50, 200].forEach((prevContainerSize) => {
-  //               //       [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-  //               //         viewModel.moveTo = jest.fn();
+            [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
+              viewModel.moveTo = jest.fn();
 
-  //               //         viewModel.prevContentSize = prevContentSize;
-  //               //         viewModel.prevContainerSize = prevContainerSize;
-  //               //         viewModel.rightScrollLocation = rightScrollLocation;
+              viewModel.rightScrollLocation = rightScrollLocation;
 
-  //               //         viewModel.moveToBoundaryOnSizeChange();
+              viewModel.syncScrollLocation();
 
-  //               //         let expectedBoundaryLocation = Math.max(
-  //               //           Math.min(scrollLocation, minOffset), maxOffset,
-  //               //         );
+              let expectedRightScrollLocation = rightScrollLocation;
+              if (containerHasSizes) {
+                let expectedLocation = scrollLocation;
 
-  //               //         const contentSizeChanged = contentSize !== prevContentSize;
-  //               //         const containerSizeChanged = containerSize !== prevContainerSize;
+                expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
 
-  //               //         if (containerHasSizes
-  //               //           && contentSize > 0
-  //               //           && contentSize > containerSize
-  //               //           && (contentSizeChanged || containerSizeChanged)
-  //               //           && scrollLocation <= minOffset
-  //               //         ) {
-  //               //           expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                if (direction === 'horizontal' && rtlEnabled) {
+                  expectedLocation = maxOffset - rightScrollLocation;
 
-  //               //           if (direction === 'horizontal' && rtlEnabled) {
-  //               //             expectedBoundaryLocation = maxOffset - rightScrollLocation;
+                  if (expectedLocation >= 0) {
+                    expectedLocation = 0;
+                    expectedRightScrollLocation = 0;
+                    expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                  }
+                }
 
-  //               //             if (expectedBoundaryLocation >= 0) {
-  //               //               expectedBoundaryLocation = 0;
-  //               //             }
-  //               //           }
-
-  // eslint-disable-next-line max-len
-  //               //           expect(viewModel.moveTo).toHaveBeenCalledWith(expectedBoundaryLocation);
-  //               //         } else {
-  //               //           expect(viewModel.moveTo).not.toBeCalled();
-  //               //         }
-  //               //       });
-  //               //     });
-  //               //   });
-  //               // });
-  //             });
-  //           });
-  //         });
-  //       });
-  //     });
-  //   });
-  // });
+                expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+              } else {
+                expect(viewModel.moveTo).not.toBeCalled();
+              }
+              expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
+            });
+          });
+        });
+      });
+    });
+  });
 
   describe('Methods', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
@@ -302,18 +278,18 @@ describe('Scrollbar', () => {
       });
 
       each([
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: 0, expected: 0 },
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -150, expected: 0 },
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -300, expected: 0 },
+        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: 0, expected: 10 },
+        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -150, expected: 10 },
+        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -300, expected: 10 },
         { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: 0, expected: -52 },
         { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -150, expected: -52 },
         { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -300, expected: -52 },
         { eventData: { pageX: 87, pageY: 87 }, scrollLocation: 0, expected: -138 },
         { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -150, expected: -138 },
         { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -300, expected: -138 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: 0, expected: -300 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -150, expected: -300 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -300, expected: -300 },
+        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: 0, expected: -346 },
+        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -150, expected: -346 },
+        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -300, expected: -346 },
       ]).describe('testData: %o', (testData) => {
         it('moveToMouseLocation(event)', () => {
           const viewModel = new Scrollbar({
@@ -567,14 +543,6 @@ describe('Scrollbar', () => {
           expect(viewModel.expanded).toEqual(expectedExpandedValue);
         });
 
-      // it('change visibility scrollbar state on scrollstart', () => {
-      //   const viewModel = new Scrollbar({ direction } as ScrollbarPropsType);
-
-      //   viewModel.startHandler();
-
-      //   expect(viewModel.visibility).toBe(true);
-      // });
-
       test.each(optionValues.showScrollbar)('change visibility scrollbar on hide(), showScrollbar: %o,', (showScrollbar) => {
         jest.clearAllTimers();
         jest.useFakeTimers();
@@ -606,26 +574,6 @@ describe('Scrollbar', () => {
         viewModel.disposeHideScrollbarTimer()();
         expect(viewModel.hideScrollbarTimer).toBe(undefined);
       });
-
-      // it('scrollTo(delta)', () => {
-      //   const onInertiaAnimatorStart = jest.fn();
-      //   const delta = 50;
-      //   const viewModel = new Scrollbar({
-      //     direction,
-      //     onAnimatorStart: onInertiaAnimatorStart,
-      //   });
-
-      //   viewModel.moveTo = jest.fn();
-      //   viewModel.stopScrolling = jest.fn();
-      //   viewModel.onReachBottomWasFiredOnce = true;
-
-      //   viewModel.scrollTo(delta);
-
-      //   expect(viewModel.onReachBottomWasFiredOnce).toEqual(false);
-      //   expect(viewModel.moveTo).toBeCalledTimes(1);
-      //   expect(viewModel.moveTo).toHaveBeenCalledWith(-delta);
-      //   expect(viewModel.stopScrolling).toBeCalledTimes(1);
-      // });
 
       each([true, false]).describe('thumbScrolling: %o', (thumbScrolling) => {
         each([true, false]).describe('inRange: %o', (inRangeMockValue) => {

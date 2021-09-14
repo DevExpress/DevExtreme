@@ -153,7 +153,7 @@ describe('Native > Effects', () => {
         },
       } as RefObject;
       viewModel.topPocketRef = { current: { clientHeight: 80 } } as RefObject;
-      viewModel.moveScrollbars = jest.fn();
+      viewModel.syncScrollbarsWithContent = jest.fn();
       viewModel.onReachBottom = jest.fn();
       viewModel.isReachBottom = jest.fn(() => isReachBottom);
       viewModel.topPocketState = pocketState;
@@ -169,9 +169,9 @@ describe('Native > Effects', () => {
       expect(viewModel.eventForUserAction).toEqual(event);
 
       if (useSimulatedScrollbar) {
-        expect(viewModel.moveScrollbars).toHaveBeenCalledTimes(1);
+        expect(viewModel.syncScrollbarsWithContent).toHaveBeenCalledTimes(1);
       } else {
-        expect(viewModel.moveScrollbars).not.toBeCalled();
+        expect(viewModel.syncScrollbarsWithContent).not.toBeCalled();
       }
 
       let expectedTopPocketState = pocketState;
@@ -1287,7 +1287,7 @@ describe('Methods', () => {
     });
   });
 
-  describe('moveScrollbars', () => {
+  describe('syncScrollbarsWithContent', () => {
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
       it('should move scrollbar', () => {
         jest.clearAllTimers();
@@ -1298,7 +1298,7 @@ describe('Methods', () => {
         });
 
         viewModel.scrollOffset = () => ({ top: 2, left: 4 });
-        viewModel.moveScrollbars();
+        viewModel.syncScrollbarsWithContent();
 
         const { isVertical, isHorizontal } = new ScrollDirection(direction);
 

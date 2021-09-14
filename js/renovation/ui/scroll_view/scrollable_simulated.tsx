@@ -90,7 +90,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, handleKeyDown,
     hScrollbarRef, vScrollbarRef,
     topPocketRef, bottomPocketRef, bottomPocketClientHeight, topPocketClientHeight,
-    hoverInHandler, hoverOutHandler, hovered,
+    hoverInHandler, hoverOutHandler, hovered, pulledDown,
     scrollLocationChange,
     contentWidth, containerClientWidth, contentHeightWithoutPockets, containerClientHeight,
     scrollableRef, contentStyles, containerStyles, onBounce,
@@ -209,6 +209,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               topPocketSize={topPocketClientHeight}
               bottomPocketSize={bottomPocketClientHeight}
               contentPaddingBottom={contentPaddingBottom}
+              pulledDown={pulledDown}
               onPullDown={onPullDown}
               onRelease={onRelease}
               onReachBottom={onReachBottom}
@@ -252,9 +253,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   endActionDirections:
   { horizontal: boolean; vertical: boolean } = { horizontal: false, vertical: false };
 
-  @Mutable() savedScrollOffset?: { top: number; left: number };
-
-  @Mutable() pendingScrollAction = false;
+  @Mutable() savedScrollOffset?: { scrollTop: number; scrollLeft: number };
 
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
@@ -277,8 +276,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @InternalState() hovered = false;
 
   @InternalState() scrolling = false;
-
-  @InternalState() needRiseScrollAction = false;
 
   @InternalState() containerClientWidth = 0;
 
@@ -416,16 +413,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     return subscribeToScrollEvent(this.containerRef.current, () => { this.handleScroll(); });
   }
 
-  // run always: effect doesn't rise always after change state needRiseScrollAction in QUnit tests
-  // @Effect({ run: 'always' }) riseScroll(): void {
-  //   if (this.needRiseScrollAction && !this.pendingScrollAction) {
-  //     this.pendingScrollAction = true;
-  //     // debugger
-  //     this.props.onScroll?.(this.getEventArgs());
-  //     this.needRiseScrollAction = false;
-  //   }
-  // }
-
   @Effect()
   initEffect(): EffectReturn {
     return subscribeToScrollInitEvent(
@@ -533,19 +520,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @Effect()
   updatePocketState(): void {
     if (this.props.forceGeneratePockets) {
-      this.topPocketState = this.isPullDown
+      this.topPocketState = this.pulledDown
         ? TopPocketState.STATE_READY
         : TopPocketState.STATE_RELEASED;
     }
   }
 
-  get isPullDown(): boolean {
+  get pulledDown(): boolean {
     return this.props.pullDownEnabled
       && this.props.bounceEnabled
+      && this.topPocketClientHeight > 0 // topPocket was initialized
       && (this.vScrollLocation - this.topPocketClientHeight) >= 0;
   }
 
   @Effect({ run: 'once' })
+  /* istanbul ignore next */
   containerResizeObserver(): DisposeEffectReturn {
     this.observe(this.containerRef.current, (containerEl: HTMLDivElement) => {
       const heightChanged = this.containerClientHeight !== containerEl.clientHeight;
@@ -568,6 +557,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect({ run: 'once' })
+  /* istanbul ignore next */
   contentResizeObserver(): DisposeEffectReturn {
     this.observe(this.contentRef.current, (contentEl: HTMLDivElement) => {
       const heightChanged = (this.contentClientHeight !== contentEl.clientHeight)
@@ -641,8 +631,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     }
 
     this.props.onScroll?.(this.getEventArgs());
-    // this.pendingScrollAction = false;
-    // this.needRiseScrollAction = true;
   }
 
   startLoading(): void {
@@ -714,7 +702,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   onBounce(): void {
-    // this.pendingBounce = true;
     this.props.onBounce?.(this.getEventArgs());
   }
 
@@ -767,7 +754,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   get vScrollOffsetMin(): number {
-    return this.isPullDown && this.topPocketState !== TopPocketState.STATE_RELEASED
+    return this.pulledDown && this.topPocketState !== TopPocketState.STATE_RELEASED
       ? this.topPocketClientHeight
       : 0;
   }
@@ -935,24 +922,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     // https://trello.com/c/Jnvnb7qc/2728-renovation-react-cannot-destruct-from-this
     // const { allowedDirections } = this;
 
-    // if (this.direction.isBoth
-    //   && this.allowedDirections.vertical && this.allowedDirections.horizontal) {
-    //   return DIRECTION_BOTH;
-    // } if (this.direction.isHorizontal && this.allowedDirections.horizontal) {
-    //   return DIRECTION_HORIZONTAL;
-    // } if (this.direction.isVertical && this.allowedDirections.vertical) {
-    //   return DIRECTION_VERTICAL;
-    // }
-    // return undefined;
+    const vDirectionAllowed = this.direction.isVertical
+      && (getScrollTopMax(this.containerRef.current!) > 0 || this.props.bounceEnabled);
+    const hDirectionAllowed = this.direction.isHorizontal
+    && (getScrollLeftMax(this.containerRef.current!) > 0 || this.props.bounceEnabled);
 
-    const vScrollOffsetMax = getScrollTopMax(this.containerRef.current!);
-    const hScrollOffsetMax = getScrollLeftMax(this.containerRef.current!);
-
-    if (this.direction.isBoth && vScrollOffsetMax > 0 && hScrollOffsetMax > 0) {
+    if (this.direction.isBoth && vDirectionAllowed && hDirectionAllowed) {
       return DIRECTION_BOTH;
-    } if (this.direction.isHorizontal && hScrollOffsetMax > 0) {
+    } if (this.direction.isHorizontal && hDirectionAllowed) {
       return DIRECTION_HORIZONTAL;
-    } if (this.direction.isVertical && vScrollOffsetMax > 0) {
+    } if (this.direction.isVertical && vDirectionAllowed) {
       return DIRECTION_VERTICAL;
     }
     return undefined;
@@ -1134,16 +1113,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.updateHandler();
 
       if (this.savedScrollOffset) {
-        const containerEl = this.containerRef.current!;
+        const { scrollTop, scrollLeft } = this.savedScrollOffset;
 
-        containerEl.scrollTop = this.savedScrollOffset.top;
-        containerEl.scrollLeft = this.savedScrollOffset.left;
+        this.scrollLocationChange('scrollTop', scrollTop, false);
+        this.scrollLocationChange('scrollLeft', scrollLeft, false);
       }
 
       this.savedScrollOffset = undefined;
     } else {
       const { scrollTop, scrollLeft } = this.containerRef.current!;
-      this.savedScrollOffset = { top: scrollTop, left: scrollLeft };
+      this.savedScrollOffset = { scrollTop, scrollLeft };
     }
 
     this.props.onVisibilityChange?.(visible);

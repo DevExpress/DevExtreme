@@ -311,6 +311,83 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+      each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+        each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
+          each([0, 80]).describe('topPocketClientHeight: %o', (topPocketClientHeight) => {
+            each([-200, -81, -80, -79, -50, 0, 28, 79, 80, 81, 100]).describe('scrollLocation: %o', (scrollLocation) => {
+              it('pulledDown()', () => {
+                const viewModel = new Scrollable({
+                  forceGeneratePockets,
+                  direction: DIRECTION_VERTICAL,
+                  bounceEnabled,
+                  pullDownEnabled,
+                });
+
+                viewModel.vScrollLocation = scrollLocation;
+                viewModel.topPocketClientHeight = topPocketClientHeight;
+
+                expect(viewModel.pulledDown).toEqual(
+                  pullDownEnabled && topPocketClientHeight !== 0
+                  && bounceEnabled && scrollLocation >= topPocketClientHeight,
+                );
+              });
+            });
+          });
+        });
+      });
+
+      each([true, false]).describe('pulledDown: %o', (pulledDown) => {
+        it('updatePocketState()', () => {
+          const viewModel = new Scrollable({ direction: DIRECTION_VERTICAL, forceGeneratePockets });
+
+          viewModel.topPocketState = TopPocketState.STATE_PULLED;
+          Object.defineProperties(viewModel, {
+            pulledDown: { get() { return pulledDown; } },
+          });
+
+          viewModel.updatePocketState();
+
+          let expectedTopPocketState = TopPocketState.STATE_PULLED;
+
+          if (forceGeneratePockets) {
+            expectedTopPocketState = TopPocketState[pulledDown ? 'STATE_READY' : 'STATE_RELEASED'];
+          }
+
+          expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
+        });
+      });
+    });
+
+    each(optionValues.pocketState).describe('pocketState: %o', (pocketState) => {
+      it('vScrollOffsetMin(), pulledDown: false', () => {
+        const viewModel = new Scrollable({ });
+
+        Object.defineProperties(viewModel, {
+          pulledDown: { get() { return false; } },
+        });
+
+        viewModel.topPocketClientHeight = 80;
+        viewModel.topPocketState = pocketState;
+
+        expect(viewModel.vScrollOffsetMin).toEqual(0);
+      });
+
+      it('vScrollOffsetMin(), pulledDown: true', () => {
+        const viewModel = new Scrollable({ });
+
+        Object.defineProperties(viewModel, {
+          pulledDown: { get() { return true; } },
+        });
+
+        viewModel.topPocketClientHeight = 80;
+        viewModel.topPocketState = pocketState;
+
+        expect(viewModel.vScrollOffsetMin)
+          .toEqual(pocketState !== TopPocketState.STATE_RELEASED ? 80 : 0);
+      });
+    });
+
     each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
       it('contentWidth()', () => {
         (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
@@ -660,8 +737,6 @@ describe('Simulated > Behavior', () => {
 
         expect(helper.viewModel.eventForUserAction).toEqual(event);
         helper.checkActionHandlerCalls(expect, ['onStart'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
-        // helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, ['start'], [[]]);
-        // helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, ['start'], [[]]);
       });
 
       test('emit "dxscrollend" event', () => {
@@ -825,18 +900,11 @@ describe('Simulated > Behavior', () => {
         optionValues.bounceEnabled,
         optionValues.isDxWheelEvent,
         [true, false],
-      ]))('tryGetAllowedDirection(event), scrollSize default, ContainerSize: %o, ContentSize: %o, BounceEnabled: %o, IsDxWheelEvent: %o, IsShiftKeyPressed: %o',
+      ]))('tryGetAllowedDirection(event), containerSize: %o, contentSize: %o, bounceEnabled: %o, isDxWheelEvent: %o, isShiftKeyPressed: %o',
         (containerSize, contentSize, bounceEnabled, isDxWheelEvent, shiftKey) => {
           const helper = new ScrollableTestHelper({
             direction, bounceEnabled, contentSize, containerSize,
           });
-
-          Object.defineProperties(helper.viewModel, {
-            contentHeight: { get() { return contentSize; } },
-            contentWidth: { get() { return contentSize; } },
-          });
-          helper.viewModel.containerClientHeight = containerSize;
-          helper.viewModel.containerClientWidth = containerSize;
 
           let expectedDirectionResult = containerSize < contentSize || bounceEnabled
             ? direction
@@ -1194,7 +1262,7 @@ describe('Simulated > Behavior', () => {
       expect(scrollFunc).toBeCalledTimes(0);
     });
 
-    it('handleScroll(), should synchronize scrollbars with content offset after trigger scroll, scrolling: false', () => {
+    test.each([true, false])('handleScroll(), should synchronize scrollbars with content offset after trigger scroll, scrolling: %o', (scrolling) => {
       const helper = new ScrollableTestHelper({ });
 
       helper.viewModel.containerRef.current!.scrollTop = 50;
@@ -1203,14 +1271,12 @@ describe('Simulated > Behavior', () => {
       helper.viewModel.vScrollLocation = 0;
       helper.viewModel.hScrollLocation = 0;
 
-      helper.viewModel.scrolling = false;
+      helper.viewModel.scrolling = scrolling;
 
       helper.viewModel.handleScroll();
 
-      expect(helper.viewModel.vScrollLocation).toEqual(-50);
-      expect(helper.viewModel.hScrollLocation).toEqual(-30);
-      expect(helper.viewModel.pendingScrollAction).toEqual(false);
-      expect(helper.viewModel.needRiseScrollAction).toEqual(true);
+      expect(helper.viewModel.vScrollLocation).toEqual(!scrolling ? -50 : 0);
+      expect(helper.viewModel.hScrollLocation).toEqual(!scrolling ? -30 : 0);
     });
   });
 
@@ -1258,7 +1324,7 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
       });
 
-      each([{ top: 1, left: 1 }, undefined]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
+      each([{ scrollTop: 1, scrollLeft: 1 }, undefined]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
         test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
           const viewModel = new Scrollable({
             onVisibilityChange: actionHandler,
@@ -1288,12 +1354,12 @@ describe('Simulated > Behavior', () => {
             expect(viewModel.updateHandler).toBeCalledTimes(1);
 
             if (initialSavedScrollOffset) {
-              expectedContainerScrollTop = initialSavedScrollOffset.top;
-              expectedContainerScrollLeft = initialSavedScrollOffset.left;
+              expectedContainerScrollTop = initialSavedScrollOffset.scrollTop;
+              expectedContainerScrollLeft = initialSavedScrollOffset.scrollLeft;
             }
           } else {
             expect(viewModel.updateHandler).toBeCalledTimes(0);
-            expectedSavedScrollOffset = { top: 10, left: 20 };
+            expectedSavedScrollOffset = { scrollTop: 10, scrollLeft: 20 };
           }
 
           expect(viewModel.savedScrollOffset).toEqual(expectedSavedScrollOffset);
@@ -1429,7 +1495,7 @@ describe('Simulated > Behavior', () => {
         });
 
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
-        helper.viewModel.topPocketState = 1;
+        helper.viewModel.topPocketState = TopPocketState.STATE_READY;
 
         helper.viewModel.onRelease();
 
@@ -1438,7 +1504,7 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
-        expect(helper.viewModel.topPocketState).toEqual(0);
+        expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_RELEASED);
         expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
         expect(helper.viewModel.isLoadPanelVisible).toEqual(false);
         expect(helper.viewModel.locked).toEqual(false);

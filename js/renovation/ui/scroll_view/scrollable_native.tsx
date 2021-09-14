@@ -219,8 +219,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Mutable() locationTop = 0;
 
-  @Mutable() pendingScrollAction = false;
-
   @InternalState() containerClientWidth = 0;
 
   @InternalState() containerClientHeight = 0;
@@ -230,8 +228,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   @InternalState() contentClientHeight = 0;
 
   @InternalState() needForceScrollbarsVisibility = false;
-
-  @InternalState() needRiseScrollAction = false;
 
   @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
@@ -369,15 +365,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       });
   }
 
-  // run always: effect doesn't rise always after change state needRiseScrollAction in QUnit tests
-  // @Effect({ run: 'always' }) riseScroll(): void {
-  //   if (this.needRiseScrollAction && !this.pendingScrollAction) {
-  //     this.pendingScrollAction = true;
-  //     this.props.onScroll?.(this.getEventArgs());
-  //     this.needRiseScrollAction = false;
-  //   }
-  // }
-
   @Effect() effectDisabledState(): void {
     if (this.props.disabled) {
       this.lock();
@@ -509,13 +496,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.eventForUserAction = event;
 
     if (this.props.useSimulatedScrollbar) {
-      this.moveScrollbars();
+      this.syncScrollbarsWithContent();
     }
 
     this.props.onScroll?.(this.getEventArgs());
-    // this.pendingScrollAction = false;
-    // this.needRiseScrollAction = true;
-
     this.handlePocketState();
   }
 
@@ -536,7 +520,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       }
 
       if (this.isPullDownStrategy) {
-        if (this.isPullDown()) {
+        if (this.pulledDown()) {
           this.pullDownReady();
           return;
         }
@@ -616,7 +600,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     }
   }
 
-  moveScrollbars(): void {
+  syncScrollbarsWithContent(): void {
     const { top, left } = this.scrollOffset();
 
     this.hScrollLocation = -left;
@@ -798,7 +782,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       && this.deltaY >= this.getPullDownHeight() - this.getPullDownStartPosition();
   }
 
-  isPullDown(): boolean {
+  pulledDown(): boolean {
     const { scrollTop } = this.containerRef.current!;
 
     return this.pullDownEnabled && scrollTop <= -this.topPocketHeight;

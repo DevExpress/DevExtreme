@@ -43,7 +43,7 @@ describe('AnimatedScrollbar', () => {
       maxOffset: 0,
       minOffset: 0,
       scrollLocation: 0,
-      topPocketSize: 0,
+      pulledDown: false,
     });
   });
 
@@ -176,38 +176,35 @@ describe('AnimatedScrollbar', () => {
     each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
       each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
         each([0, 55]).describe('bottomPocketSize: %o', (bottomPocketSize) => {
-          each([0, 80]).describe('topPocketSize: %o', (topPocketSize) => {
-            each([0, 8]).describe('contentPaddingBottom: %o', (contentPaddingBottom) => {
-              each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
-                each([true, false]).describe('forceAnimationToBottomBound: %o', (forceAnimationToBottomBound) => {
-                  it('maxOffset()', () => {
-                    const viewModel = new AnimatedScrollbar({
-                      direction,
-                      forceGeneratePockets,
-                      reachBottomEnabled,
-                      bottomPocketSize,
-                      topPocketSize,
-                      contentPaddingBottom,
-                      maxOffset,
-                    });
+          each([0, 8]).describe('contentPaddingBottom: %o', (contentPaddingBottom) => {
+            each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
+              each([true, false]).describe('forceAnimationToBottomBound: %o', (forceAnimationToBottomBound) => {
+                it('maxOffset()', () => {
+                  const viewModel = new AnimatedScrollbar({
+                    direction,
+                    forceGeneratePockets,
+                    reachBottomEnabled,
+                    bottomPocketSize,
+                    contentPaddingBottom,
+                    maxOffset,
+                  });
 
-                    viewModel.forceAnimationToBottomBound = forceAnimationToBottomBound;
+                  viewModel.forceAnimationToBottomBound = forceAnimationToBottomBound;
 
-                    let expectedMaxOffsetValue = 0;
+                  let expectedMaxOffsetValue = 0;
 
-                    if (
-                      forceGeneratePockets
+                  if (
+                    forceGeneratePockets
                         && reachBottomEnabled
                         && !forceAnimationToBottomBound
-                    ) {
-                      expectedMaxOffsetValue = (maxOffset as number)
+                  ) {
+                    expectedMaxOffsetValue = (maxOffset as number)
                         - (bottomPocketSize as number) - (contentPaddingBottom as number);
-                    } else {
-                      expectedMaxOffsetValue = maxOffset;
-                    }
+                  } else {
+                    expectedMaxOffsetValue = maxOffset;
+                  }
 
-                    expect(viewModel.maxOffset).toEqual(expectedMaxOffsetValue);
-                  });
+                  expect(viewModel.maxOffset).toEqual(expectedMaxOffsetValue);
                 });
               });
             });
@@ -315,7 +312,21 @@ describe('Handlers', () => {
   });
 
   each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
-    each([true, false]).describe('ThumbScrolling: %o', (needRiseEnd) => {
+    it('stopHandler()', () => {
+      const viewModel = new AnimatedScrollbar({ direction: 'vertical' });
+
+      viewModel.thumbScrolling = thumbScrolling;
+      viewModel.crossThumbScrolling = true;
+      viewModel.needRiseEnd = false;
+
+      viewModel.stopHandler();
+
+      expect(viewModel.needRiseEnd).toEqual(!!thumbScrolling);
+      expect(viewModel.thumbScrolling).toEqual(false);
+      expect(viewModel.crossThumbScrolling).toEqual(false);
+    });
+
+    each([true, false]).describe('needRiseEnd: %o', (needRiseEnd) => {
       it('endHandler(), should start inertia animator on end', () => {
         const velocityDelta = 10;
         const viewModel = new AnimatedScrollbar({ direction: 'vertical' });
@@ -337,18 +348,6 @@ describe('Handlers', () => {
         expect(viewModel.crossThumbScrolling).toEqual(false);
       });
     });
-  });
-
-  it('stopHandler()', () => {
-    const viewModel = new AnimatedScrollbar({ direction: 'vertical' });
-
-    viewModel.thumbScrolling = true;
-    viewModel.crossThumbScrolling = true;
-
-    viewModel.stopHandler();
-
-    expect(viewModel.thumbScrolling).toEqual(false);
-    expect(viewModel.crossThumbScrolling).toEqual(false);
   });
 });
 
@@ -529,7 +528,7 @@ describe('Animator', () => {
     });
 
     each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-      each([true, false]).describe('isPullDown: %o', (isPullDown) => {
+      each([true, false]).describe('pulledDown: %o', (pulledDown) => {
         each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
           each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
             each([true, false]).describe('wasRelease: %o', (wasRelease) => {
@@ -538,44 +537,20 @@ describe('Animator', () => {
                   direction: DIRECTION_VERTICAL,
                   reachBottomEnabled,
                   pullDownEnabled,
+                  pulledDown,
                 });
 
                 viewModel.wasRelease = wasRelease;
 
                 Object.defineProperties(viewModel, {
-                  isPullDown: { get() { return isPullDown; } },
                   isReachBottom: { get() { return isReachBottom; } },
                 });
 
                 expect(viewModel.pendingRelease).toEqual(
-                  ((isPullDown && pullDownEnabled)
+                  ((pulledDown && pullDownEnabled)
                     || (isReachBottom && reachBottomEnabled)) && !wasRelease,
                 );
               });
-            });
-          });
-        });
-      });
-    });
-
-    each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-      each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
-        each([0, 80]).describe('topPocketSize: %o', (topPocketSize) => {
-          each([-200, -81, -80, -79, -50, 0, 28, 79, 80, 81, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-            it('isPullDown()', () => {
-              const viewModel = new AnimatedScrollbar({
-                direction: DIRECTION_VERTICAL,
-                bounceEnabled,
-                pullDownEnabled,
-                topPocketSize,
-                bottomPocketSize: 55,
-                scrollLocation,
-              });
-
-              expect(viewModel.isPullDown).toEqual(
-                pullDownEnabled && topPocketSize !== 0
-                && bounceEnabled && scrollLocation >= topPocketSize,
-              );
             });
           });
         });
@@ -586,13 +561,11 @@ describe('Animator', () => {
       each([-300, -360, -600]).describe('maxOffset: %o', (maxOffset) => {
         each([-100, -300, -359.9, -360, -360.1, -500]).describe('scrollLocation: %o', (scrollLocation) => {
           it('isReachBottom()', () => {
-            const topPocketSize = 85;
             const bottomPocketSize = 55;
 
             const viewModel = new AnimatedScrollbar({
               direction: 'vertical',
               reachBottomEnabled,
-              topPocketSize,
               bottomPocketSize,
               scrollLocation,
               maxOffset,
