@@ -111,6 +111,23 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
         return this._checkItemsCrossing(firstItem, secondItem, orientation);
     }
+
+    getPositionShift(timeShift) {
+        const positionShift = super.getPositionShift(timeShift);
+        let left = this.cellWidth * timeShift;
+
+        if(this.rtlEnabled) {
+            left *= -1;
+        }
+
+        left += positionShift.left;
+
+        return {
+            top: 0,
+            left: left,
+            cellPosition: left
+        };
+    }
 }
 
 export default HorizontalRenderingStrategy;

@@ -6,6 +6,7 @@ import {
     getAppointmentDataProvider
 } from './instanceFactory';
 import { AppointmentViewModel } from './appointments/viewModelGenerator';
+import { getGroupCount } from './resources/utils';
 
 class AppointmentLayoutManager {
     constructor(instance) {
@@ -34,6 +35,8 @@ class AppointmentLayoutManager {
             cellCountInsideLeftVirtualCell,
             cellCountInsideTopVirtualRow
         } = virtualScrollingDispatcher;
+        const resourceManager = getResourceManager(key);
+        const groupCount = getGroupCount(resourceManager.loadedResources);
 
         return {
             instance: this.instance,
@@ -53,6 +56,7 @@ class AppointmentLayoutManager {
             intervalCount: workspace.option('intervalCount'),
             hoursInterval: workspace.option('hoursInterval'),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
+            groupCount,
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
@@ -64,7 +68,7 @@ class AppointmentLayoutManager {
             getVisibleDayDuration: () => workspace.getVisibleDayDuration(),
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
-            resourceManager: getResourceManager(key),
+            resourceManager,
             appointmentDataProvider: getAppointmentDataProvider(key),
             timeZone: this.modelProvider.timeZone,
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),
@@ -81,7 +85,6 @@ class AppointmentLayoutManager {
             intervalDuration: workspace.getIntervalDuration(),
             isVerticalOrientation: workspace.isVerticalOrientation(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
-            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
             DOMMetaData: workspace.getDOMElementsMetaData(),
         };
     }
