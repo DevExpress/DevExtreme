@@ -43,6 +43,11 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Build
+      env:
+        DEVEXTREME_TEST_CI: "true"
+      run: npm run build
+
     - name: Prepare renovation playground
       if: matrix.ARGS.componentFolder == 'renovation'
       run: |
@@ -53,12 +58,6 @@ jobs:
         npm run build:react
         npm run build:vue
         npx gulp build-renovation-testing
-
-    - name: Build
-      env:
-        DEVEXTREME_TEST_CI: "true"
-      run: npm run build
-
 
     - name: Run TestCafe tests
       run: |
