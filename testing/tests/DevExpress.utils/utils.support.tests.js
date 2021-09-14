@@ -29,7 +29,7 @@ QUnit.module('Touch events detection', () => {
 });
 
 QUnit.module('Pointer event detection', () => {
-    QUnit.test('pointerEvent isn\'t defined when \'PointerEvent\' exists (Surface pro, edge 17+, latest IE11)', function(assert) {
+    QUnit.test('pointerEvent defined when \'PointerEvent\' exists (Surface pro, edge 17+, latest IE11)', function(assert) {
         const hasWindowProperty = createHasPropertyMock('PointerEvent');
 
         assert.ok(detectPointerEvent(hasWindowProperty), 'PointerEvent detected');
