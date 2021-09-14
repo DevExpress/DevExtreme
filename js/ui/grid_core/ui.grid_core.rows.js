@@ -1006,6 +1006,18 @@ export const rowsModule = {
                             animation: animation,
                             visible: isLoading
                         };
+                        if(isLoading) {
+                            const $window = $(getWindow());
+                            let positionOption = { of: $element };
+                            if($element.height() > $window.height()) {
+                                positionOption = {
+                                    of: $window,
+                                    boundary: $element,
+                                    collision: 'fit'
+                                };
+                            }
+                            visibilityOptions.position = positionOption;
+                        }
                         clearTimeout(that._hideLoadingTimeoutID);
                         if(loadPanel.option('visible') && !isLoading) {
                             that._hideLoadingTimeoutID = setTimeout(function() {
