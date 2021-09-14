@@ -3,8 +3,6 @@ import { getNavigator } from './window';
 const navigator = getNavigator();
 
 const webkitRegExp = /(webkit)[ /]([\w.]+)/;
-const ieRegExp = /(msie) (\d{1,2}\.\d)/;
-const ie11RegExp = /(trident).*rv:(\d{1,2}\.\d)/;
 const msEdge = /(edge)\/((\d+)?[\w.]+)/;
 const mozillaRegExp = /(mozilla)(?:.*? rv:([\w.]+))/;
 
@@ -13,8 +11,6 @@ const browserFromUA = function(ua) {
 
     const result = {};
     const matches =
-            ieRegExp.exec(ua) ||
-            ie11RegExp.exec(ua) ||
             msEdge.exec(ua) ||
             ua.indexOf('compatible') < 0 && mozillaRegExp.exec(ua) ||
             webkitRegExp.exec(ua) ||
@@ -44,7 +40,7 @@ const browserFromUA = function(ua) {
         }
     }
 
-    if(browserName === 'trident' || browserName === 'edge') {
+    if(browserName === 'edge') {
         browserName = 'msie';
     }
 
