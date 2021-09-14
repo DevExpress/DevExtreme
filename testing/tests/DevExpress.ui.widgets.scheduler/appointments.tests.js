@@ -127,7 +127,6 @@ const createInstance = (options, subscribesConfig) => {
     };
 
     const key = createFactoryInstances({
-        resources: options.resources,
         getIsVirtualScrolling: () => false,
         getDataAccessors: () => dataAccessors
     });
@@ -136,6 +135,13 @@ const createInstance = (options, subscribesConfig) => {
         key,
         observer,
         ...options,
+        getResources: () => options.resources || [],
+        getResourceDataAccessors: () => {
+            return {
+                getter: {},
+                setter: {}
+            };
+        }
     }).dxSchedulerAppointments('instance');
 
     const workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({

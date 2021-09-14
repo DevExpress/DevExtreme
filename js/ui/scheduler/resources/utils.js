@@ -507,7 +507,7 @@ export const getAppointmentColor = (resourceConfig, appointmentConfig) => {
     const { resources, dataAccessors, loadedResources, resourceLoaderMap } = resourceConfig;
     const { groupIndex, groups, itemData } = appointmentConfig;
 
-    const paintedResources = getPaintedResources(resources, groups);
+    const paintedResources = getPaintedResources(resources || [], groups);
 
     if(paintedResources) {
         const field = getFieldExpr(paintedResources);

@@ -44,7 +44,15 @@ const createInstance = () => {
         })
     });
 
-    return $('#scheduler-appointment').dxSchedulerAppointment({ key, observer }).dxSchedulerAppointment('instance');
+    return $('#scheduler-appointment').dxSchedulerAppointment({
+        key,
+        observer,
+        resources: [],
+        resourceDataAccessors: {
+            getter: {},
+            setter: {}
+        }
+    }).dxSchedulerAppointment('instance');
 };
 
 const moduleOptions = {
