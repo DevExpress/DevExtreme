@@ -39,6 +39,9 @@ class AppointmentLayoutManager {
         const groupCount = getGroupCount(resourceManager.loadedResources);
 
         return {
+            resources: this.instance.option('resources'),
+            resourceDataAccessors: this.instance.resourceDataAccessors,
+
             instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
