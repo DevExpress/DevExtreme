@@ -61,7 +61,7 @@ jobs:
 
     - name: Run TestCafe tests
       run: |
-        all_args="--concurrency 2 --browsers=chrome:headless --componentfolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}}"
+        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
     - name: Copy screenshots artifacts
