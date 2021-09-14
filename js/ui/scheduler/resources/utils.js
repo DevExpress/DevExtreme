@@ -247,21 +247,6 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
     return result.promise();
 };
 
-export const getResourceColor = (resources, resourceLoaderMap, field, value) => {
-    const result = new Deferred();
-
-    const resource = filterResources(resources, [field])[0] || {};
-
-    const colorExpr = resource.colorExpr || 'color';
-    const colorGetter = compileGetter(colorExpr);
-
-    getOrLoadResourceItem(resources, resourceLoaderMap, field, value)
-        .done(resource => result.resolve(colorGetter(resource)))
-        .fail(() => result.reject());
-
-    return result.promise();
-};
-
 const getDataAccessors = (dataAccessors, fieldName, type) => {
     const actions = dataAccessors[type];
     return actions[fieldName];
@@ -501,4 +486,46 @@ export const setResourceToAppointment = (resources, dataAccessors, appointment, 
         const value = isResourceMultiple(resources, name) ? wrapToArray(resourceData) : resourceData;
         resourcesSetter[name](appointment, value);
     }
+};
+
+export const getResourceColor = (resources, resourceLoaderMap, field, value) => {
+    const result = new Deferred();
+
+    const resource = filterResources(resources, [field])[0] || {};
+
+    const colorExpr = resource.colorExpr || 'color';
+    const colorGetter = compileGetter(colorExpr);
+
+    getOrLoadResourceItem(resources, resourceLoaderMap, field, value)
+        .done(resource => result.resolve(colorGetter(resource)))
+        .fail(() => result.reject());
+
+    return result.promise();
+};
+
+export const getAppointmentColor = (resourceConfig, appointmentConfig) => {
+    const { resources, dataAccessors, loadedResources, resourceLoaderMap } = resourceConfig;
+    const { groupIndex, groups, itemData } = appointmentConfig;
+
+    const paintedResources = getPaintedResources(resources, groups);
+
+    if(paintedResources) {
+        const field = getFieldExpr(paintedResources);
+
+        const cellGroups = getCellGroups(groupIndex, loadedResources);
+        const resourceValues = wrapToArray(getDataAccessors(dataAccessors, field, 'getter')(itemData));
+
+        let groupId = resourceValues[0];
+
+        for(let i = 0; i < cellGroups.length; i++) {
+            if(cellGroups[i].name === field) {
+                groupId = cellGroups[i].id;
+                break;
+            }
+        }
+
+        return getResourceColor(resources, resourceLoaderMap, field, groupId);
+    }
+
+    return new Deferred().resolve().promise();
 };

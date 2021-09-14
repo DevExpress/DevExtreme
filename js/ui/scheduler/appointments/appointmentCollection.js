@@ -24,7 +24,7 @@ import { createAgendaAppointmentLayout, createAppointmentLayout } from './appoin
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { getResourcesFromItem } from '../resources/utils';
+import { getAppointmentColor, getResourcesFromItem } from '../resources/utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -525,12 +525,24 @@ class SchedulerAppointments extends CollectionWidget {
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         if(settings.virtual) {
-            const deferredColor = this.invoke('getResourceManager').getAppointmentColor({
+            const resourceManager = this.invoke('getResourceManager');
+
+            const resourceConfig = {
+                resources: this.option('resources'),
+                dataAccessors: this.option('resourceDataAccessors'),
+                loadedResources: resourceManager.loadedResources,
+                resourceLoaderMap: resourceManager.resourceLoaderMap
+            };
+
+            const appointmentConfig = {
                 itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
                 groups: this.option('groups'),
-                workspaceGroups: this.invoke('getWorkspaceOption', 'groups')
-            });
+            };
+
+            const deferredColor = getAppointmentColor(resourceConfig, appointmentConfig);
+
+
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
             const config = {
@@ -548,7 +560,10 @@ class SchedulerAppointments extends CollectionWidget {
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
-                groups: this.option('groups')
+                groups: this.option('groups'),
+
+                resources: this.option('resources'),
+                resourceDataAccessors: this.option('resourceDataAccessors')
             };
 
             if(this.isAgendaView) {

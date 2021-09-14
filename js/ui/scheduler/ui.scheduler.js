@@ -68,6 +68,7 @@ import {
 } from './instanceFactory';
 import {
     createResourceEditorModel,
+    getAppointmentColor,
     getCellGroups,
     getFieldExpr as getResourceFieldExpr,
     getResourcesFromItem,
@@ -2178,12 +2179,22 @@ class Scheduler extends Widget {
         if(appointment) {
             const settings = utils.dataAccessors.getAppointmentSettings(element);
 
-            const deferredColor = getResourceManager(this.key).getAppointmentColor({
+            const resourceManager = getResourceManager(this.key);
+
+            const resourceConfig = {
+                resources: this.option('resources'),
+                dataAccessors: this.resourceDataAccessors,
+                loadedResources: resourceManager.loadedResources,
+                resourceLoaderMap: resourceManager.resourceLoaderMap
+            };
+
+            const appointmentConfig = {
                 itemData: targetedAppointment || appointment,
                 groupIndex: settings?.groupIndex,
-                groups: this.option('groups'),
-                workspaceGroups: this.getWorkSpace().option('groups')
-            });
+                groups: this.option('groups')
+            };
+
+            const deferredColor = getAppointmentColor(resourceConfig, appointmentConfig);
 
             const info = new AppointmentTooltipInfo(appointment, targetedAppointment, deferredColor);
             this.showAppointmentTooltipCore(element, [info]);

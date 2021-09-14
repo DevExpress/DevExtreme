@@ -3,7 +3,7 @@ import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
 import timeZoneUtils from '../utils.timeZone.js';
-import { createResourcesTree, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
+import { createResourcesTree, getAppointmentColor, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
 import { ExpressionUtils } from '../expressionUtils';
@@ -587,7 +587,7 @@ export class AppointmentSettingsGenerator {
                 dateText,
             };
 
-            // this._setResourceColor(info, coordinates.groupIndex);
+            this._setResourceColor(info, coordinates.groupIndex);
 
             infos.push({
                 ...coordinates,
@@ -608,12 +608,19 @@ export class AppointmentSettingsGenerator {
     }
 
     _setResourceColor(info, groupIndex) {
-        this.resourceManager.getAppointmentColor({
+        const resourceConfig = {
+            resources: this.options.resources,
+            dataAccessors: this.options.resourceDataAccessors,
+            loadedResources: this.resourceManager.loadedResources,
+            resourceLoaderMap: this.resourceManager.resourceLoaderMap
+        };
+
+        const appointmentConfig = {
             itemData: this.rawAppointment,
             groupIndex,
             groups: this.modelGroups
-        }).done((color) => {
-            info.resourceColor = color;
-        });
+        };
+
+        getAppointmentColor(resourceConfig, appointmentConfig).done((color) => info.resourceColor = color);
     }
 }
