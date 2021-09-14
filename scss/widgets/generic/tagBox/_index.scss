@@ -46,6 +46,28 @@
   }
 }
 
+
+.dx-texteditor-with-label,
+.dx-texteditor-with-floating-label {
+  &.dx-editor-outlined {
+    .dx-tag-container.dx-texteditor-input-container {
+      padding-top: 8px;
+    }
+  }
+
+  &.dx-editor-filled {
+    .dx-tag-container.dx-texteditor-input-container {
+      padding-top: 10px;
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-tag-container.dx-texteditor-input-container {
+      padding-top: 10px;
+    }
+  }
+}
+
 .dx-tag-content {
   margin: $generic-tagbox-tag-content-margin;
   padding: $generic-tagbox-tag-content-padding;
