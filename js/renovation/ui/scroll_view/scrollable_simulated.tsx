@@ -89,7 +89,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, handleKeyDown,
     hScrollbarRef, vScrollbarRef,
-    topPocketRef, bottomPocketRef, bottomPocketClientHeight, topPocketClientHeight,
+    topPocketRef, bottomPocketRef, bottomPocketClientHeight,
     hoverInHandler, hoverOutHandler, hovered, pulledDown,
     scrollLocationChange,
     contentWidth, containerClientWidth, contentHeightWithoutPockets, containerClientHeight,
@@ -206,7 +206,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               containerHasSizes={containerHasSizes}
 
               forceGeneratePockets={forceGeneratePockets}
-              topPocketSize={topPocketClientHeight}
               bottomPocketSize={bottomPocketClientHeight}
               contentPaddingBottom={contentPaddingBottom}
               pulledDown={pulledDown}
