@@ -824,7 +824,7 @@ declare module DevExpress {
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
-      rule: Partial<DevExpress.core.Rule<TProperties>>
+      rule: DevExpress.core.DefaultOptionsRule<TProperties>
     ): void;
 
     /**
@@ -1461,6 +1461,16 @@ declare module DevExpress.core {
    */
   interface Condition extends JQueryEventObject {}
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+  };
+  export type DefaultOptionsRule<T> = {
+    device?: Device | Device[] | ((device: Device) => boolean);
+    options: DeepPartial<T>;
+  };
+  /**
    * [descr:dxElement]
    * @deprecated [depNote:dxElement]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1530,19 +1540,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type RecursivePartial<T> = {
-    [P in keyof T]?: RecursivePartial<T[P]>;
-  };
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type Rule<T> = {
-    device: ((device: Device) => boolean) | Device | Device[];
-    options: RecursivePartial<T>;
-  };
   /**
    * [descr:template]
    */
@@ -9159,7 +9156,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.customDataExpr]
        */
-      customDataExpr?: string | ((data: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.dataSource]
        */
@@ -9171,59 +9168,59 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.fromExpr]
        */
-      fromExpr?: string | ((data: any) => any);
+      fromExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.fromLineEndExpr]
        */
-      fromLineEndExpr?: string | ((data: any) => any);
+      fromLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.fromPointIndexExpr]
        */
-      fromPointIndexExpr?: string | ((data: any) => any);
+      fromPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.keyExpr]
        */
-      keyExpr?: string | ((data: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.lineTypeExpr]
        */
-      lineTypeExpr?: string | ((data: any) => any);
+      lineTypeExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.lockedExpr]
        */
-      lockedExpr?: string | ((data: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.pointsExpr]
        */
-      pointsExpr?: string | ((data: any) => any);
+      pointsExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.styleExpr]
        */
-      styleExpr?: string | ((data: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.textExpr]
        */
-      textExpr?: string | ((data: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toExpr]
        */
-      toExpr?: string | ((data: any) => any);
+      toExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toLineEndExpr]
        */
-      toLineEndExpr?: string | ((data: any) => any);
+      toLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toPointIndexExpr]
        */
-      toPointIndexExpr?: string | ((data: any) => any);
+      toPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * [descr:dxDiagramOptions.export]
@@ -9286,15 +9283,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.containerChildrenExpr]
        */
-      containerChildrenExpr?: string | ((data: any) => any);
+      containerChildrenExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.containerKeyExpr]
        */
-      containerKeyExpr?: string | ((data: any) => any);
+      containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.customDataExpr]
        */
-      customDataExpr?: string | ((data: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.dataSource]
        */
@@ -9306,59 +9303,59 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.heightExpr]
        */
-      heightExpr?: string | ((data: any) => any);
+      heightExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.imageUrlExpr]
        */
-      imageUrlExpr?: string | ((data: any) => any);
+      imageUrlExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.itemsExpr]
        */
-      itemsExpr?: string | ((data: any) => any);
+      itemsExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.keyExpr]
        */
-      keyExpr?: string | ((data: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.leftExpr]
        */
-      leftExpr?: string | ((data: any) => any);
+      leftExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.lockedExpr]
        */
-      lockedExpr?: string | ((data: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.parentKeyExpr]
        */
-      parentKeyExpr?: string | ((data: any) => any);
+      parentKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.styleExpr]
        */
-      styleExpr?: string | ((data: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.textExpr]
        */
-      textExpr?: string | ((data: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.topExpr]
        */
-      topExpr?: string | ((data: any) => any);
+      topExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.typeExpr]
        */
-      typeExpr?: string | ((data: any) => any);
+      typeExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.widthExpr]
        */
-      widthExpr?: string | ((data: any) => any);
+      widthExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * [descr:dxDiagramOptions.hasChanges]
@@ -11305,6 +11302,10 @@ declare module DevExpress.ui {
      * [descr:dxFileUploaderOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;
+    /**
+     * [descr:dxFileUploaderOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
     /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
      */
@@ -15399,9 +15400,17 @@ declare module DevExpress.ui {
      */
     deferRendering?: boolean;
     /**
+     * [descr:dxOverlayOptions.dragAndResizeArea]
+     */
+    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
+    /**
      * [descr:dxOverlayOptions.dragEnabled]
      */
     dragEnabled?: boolean;
+    /**
+     * [descr:dxOverlayOptions.dragOutsideBoundary]
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxOverlayOptions.elementAttr]
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
@@ -15471,6 +15480,10 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
+    /**
+     * [descr:dxOverlayOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPivotGrid]
@@ -16365,6 +16378,10 @@ declare module DevExpress.ui {
      * [descr:dxPopoverOptions.width]
      */
     width?: number | string | (() => number | string);
+    /**
+     * [descr:dxPopoverOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPopup]
@@ -16604,7 +16621,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number;
+    value?: number | boolean;
   }
   /**
    * [descr:dxRadioGroup]
@@ -23536,7 +23553,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     static defaultOptions<TProperties>(
-      rule: Partial<DevExpress.core.Rule<TProperties>>
+      rule: DevExpress.core.DefaultOptionsRule<TProperties>
     ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]

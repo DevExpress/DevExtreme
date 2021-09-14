@@ -1,4 +1,5 @@
 import HorizontalMonthLineRenderingStrategy from './strategy_horizontal_month_line';
+import { getGroupWidth } from '../../workspaces/helpers/positionHelper';
 
 const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
 const MONTH_APPOINTMENT_MIN_OFFSET = 26;
@@ -9,11 +10,11 @@ const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrategy {
     get dateTableOffset() { return this.options.dateTableOffset; }
     get endViewDate() { return this.options.endViewDate; }
-    get getGroupWidthCallback() { return this.options.getGroupWidthCallback; }
     get adaptivityEnabled() { return this.options.adaptivityEnabled; }
+    get DOMMetaData() { return this.options.DOMMetaData; }
 
     _getLeftPosition(settings) {
-        const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(settings.groupIndex);
+        const fullWeekAppointmentWidth = this.getWorkspaceGroupWidth(settings.groupIndex);
 
         let result = this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
 
@@ -49,7 +50,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     _getAppointmentParts(geometry, settings) {
         const result = [];
 
-        const weekWidth = Math.round(this._getFullWeekAppointmentWidth(settings.groupIndex));
+        const weekWidth = Math.round(this.getWorkspaceGroupWidth(settings.groupIndex));
         const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
         const leftPosition = this._getLeftPosition(settings);
 
@@ -78,13 +79,27 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     }
 
     _calculateMultiWeekAppointmentLeftOffset(max, width) {
-        return this.rtlEnabled ? max : max - width;
+        return this.rtlEnabled
+            ? max
+            : max - width;
     }
 
-    _getFullWeekAppointmentWidth(groupIndex) {
-        this._maxFullWeekAppointmentWidth = this.getGroupWidthCallback(groupIndex);
-
-        return this._maxFullWeekAppointmentWidth;
+    getWorkspaceGroupWidth(groupIndex) {
+        return getGroupWidth(
+            groupIndex,
+            this.viewDataProvider,
+            {
+                intervalCount: this.options.intervalCount,
+                currentDate: this.options.currentDate,
+                viewType: this.options.viewType,
+                hoursInterval: this.options.hoursInterval,
+                startDayHour: this.options.startDayHour,
+                endDayHour: this.options.endDayHour,
+                isVirtualScrolling: this.isVirtualScrolling,
+                rtlEnabled: this.rtlEnabled,
+                DOMMetaData: this.DOMMetaData,
+            }
+        );
     }
 
     _getAppointmentDefaultHeight() {

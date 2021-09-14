@@ -1042,7 +1042,6 @@ export const validatingModule = {
                             container: $overlayContainer,
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
-                            closeOnTargetScroll: false,
                             copyRootClassesToWrapper: true,
                             contentTemplate: () => {
                                 const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
@@ -1138,7 +1137,6 @@ export const validatingModule = {
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
-                            closeOnTargetScroll: false,
                             position: {
                                 collision: 'flip',
                                 boundary: this._rowsView.element(),
@@ -1322,8 +1320,12 @@ export const validatingModule = {
                     const newValidationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
                     const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
                     const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
+                    const editingChanged = oldRow.isEditing !== newRow.isEditing;
+                    const hasValidationRules = cell?.column.validationRules?.length;
 
-                    if((oldValidationStatus !== newValidationStatus && rowIsModified) || (validationData.isValid && cellIsMarkedAsInvalid)) {
+                    if((editingChanged && hasValidationRules) ||
+                        (oldValidationStatus !== newValidationStatus && rowIsModified) ||
+                        (validationData.isValid && cellIsMarkedAsInvalid)) {
                         return true;
                     }
 

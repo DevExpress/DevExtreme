@@ -491,6 +491,8 @@
         "dxGantt-sortingDescendingText": "Azalan Sıralama",
         "dxGantt-sortingClearText": "Sıralamayı Temizle",
         "dxGantt-showResources": "TODO",
-        "dxGantt-showDependencies": "TODO"
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

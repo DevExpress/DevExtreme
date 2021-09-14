@@ -219,11 +219,6 @@ const subscribes = {
         return this.getWorkSpaceDateTableOffset();
     },
 
-    getFullWeekAppointmentWidth: function(options) {
-        const groupIndex = options.groupIndex;
-        return this._workSpace.getGroupWidth(groupIndex);
-    },
-
     getMaxAppointmentWidth: function(options) {
         const workSpace = this._workSpace;
         return workSpace.getCellCountToLastViewDate(options.date) * workSpace.getCellWidth();

@@ -584,6 +584,8 @@
         "dxGantt-sortingDescendingText": "Сортировать по убыванию",
         "dxGantt-sortingClearText": "Сбросить сортировку",
         "dxGantt-showResources": "Отображать Ресурсы",
-        "dxGantt-showDependencies": "Отображать Зависимости"
+        "dxGantt-showDependencies": "Отображать Зависимости",
+        "dxGantt-dialogStartDateValidation": "Начальная дата должна быть позднее {0}",
+        "dxGantt-dialogEndDateValidation": "Конечная дата должна быть позднее {0}"
     }
 }

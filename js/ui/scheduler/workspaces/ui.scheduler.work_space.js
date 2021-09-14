@@ -540,6 +540,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this._updateScrollable();
     }
 
     getWorkSpaceMinWidth() {
@@ -1084,8 +1086,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(this._needCreateCrossScrolling()) {
                 return getBoundingRect(this._$dateTable.get(0)).width;
             }
+            const totalWidth = getBoundingRect(this.$element().get(0)).width;
+            const timePanelWidth = this.getTimePanelWidth();
+            const groupTableWidth = this.getGroupTableWidth();
 
-            return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
+            return totalWidth - timePanelWidth - groupTableWidth;
         });
     }
 
@@ -1321,8 +1326,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellPosition: 0
         };
     }
-
-    _isSkippedData() { return false; }
 
     getDroppableCellIndex() {
         const $droppableCell = this._getDroppableCell();
@@ -1615,35 +1618,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 result.push($cell);
             }
         });
-
-        return result;
-    }
-
-    getGroupWidth(groupIndex) { // TODO move to the grouping layer
-        const cellWidth = this.getCellWidth();
-        let result = this._getCellCount() * cellWidth;
-        // TODO: refactor after deleting old render
-        if(this.isVirtualScrolling()) {
-            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
-            const groupLength = groupedData[groupIndex][0].length;
-
-            result = groupLength * cellWidth;
-        }
-
-        const position = this.getMaxAllowedPosition(groupIndex);
-        const currentPosition = position[groupIndex];
-
-        if(currentPosition) {
-            if(this._isRTL()) {
-                result = currentPosition - position[groupIndex + 1];
-            } else {
-                if(groupIndex === 0) {
-                    result = currentPosition;
-                } else {
-                    result = currentPosition - position[groupIndex - 1];
-                }
-            }
-        }
 
         return result;
     }
@@ -2266,7 +2240,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
-            isSkippedDataCallback: this._isSkippedData.bind(this),
             getPositionShiftCallback: this.getPositionShift.bind(this),
             getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
         });

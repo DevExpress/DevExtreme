@@ -272,7 +272,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const getOptions = function(event) {
             const $cell = $(event.currentTarget);
             const $fieldItemContent = $(event.target).closest('.' + FORM_FIELD_ITEM_CONTENT_CLASS);
-            const rowOptions = $cell.parent().data('options');
+            const $row = $cell.parent();
+            const rowOptions = $row.data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
@@ -282,6 +283,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 event: event,
                 eventType: event.type
             });
+
+            resultOptions.rowIndex = that.getRowIndex($row);
 
             if($fieldItemContent.length) {
                 const formItemOptions = $fieldItemContent.data('dx-form-item');
