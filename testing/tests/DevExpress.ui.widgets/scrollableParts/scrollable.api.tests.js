@@ -1287,18 +1287,24 @@ class ScrollableTestHelper {
             }
 
             QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: true, scroll save the max right position when width of window was changed`, function(assert) {
-                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
-                assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position');
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
+                const clock = sinon.useFakeTimers();
 
-                helper.scrollable.scrollTo({ left: 25 });
-                helper.scrollable.update();
-                resizeCallbacks.fire();
+                try {
+                    const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
+                    assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position');
+                    helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
+                    helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
-                assert.strictEqual(helper.scrollable.scrollLeft(), 25, 'scrolled to max right position');
-                helper.checkScrollOffset({ left: 25, top: 0, maxScrollOffset: 50 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: 12 });
+                    helper.scrollable.scrollTo({ left: 25 });
+                    helper.scrollable.update();
+                    resizeCallbacks.fire();
+
+                    assert.strictEqual(helper.scrollable.scrollLeft(), 25, 'scrolled to max right position');
+                    helper.checkScrollOffset({ left: 25, top: 0, maxScrollOffset: 50 });
+                    helper.checkScrollTranslateValues({ vertical: 0, horizontal: 12 });
+                } finally {
+                    clock.restore();
+                }
             });
         });
     });
