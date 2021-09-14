@@ -76,7 +76,6 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         }));
 
         assert.equal(columnsSeparator.css('cursor'), 'col-resize', 'cursor style');
-        assert.equal(columnsSeparator.css('left'), '0', 'left style is reseted');
     });
 
     // T846832
