@@ -824,7 +824,7 @@ declare module DevExpress {
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
-      rule: Partial<DevExpress.core.Rule<TProperties>>
+      rule: DevExpress.core.DefaultOptionsRule<TProperties>
     ): void;
 
     /**
@@ -1461,6 +1461,16 @@ declare module DevExpress.core {
    */
   interface Condition extends JQueryEventObject {}
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+  };
+  export type DefaultOptionsRule<T> = {
+    device?: Device | Device[] | ((device: Device) => boolean);
+    options: DeepPartial<T>;
+  };
+  /**
    * [descr:dxElement]
    * @deprecated [depNote:dxElement]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1530,19 +1540,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type RecursivePartial<T> = {
-    [P in keyof T]?: RecursivePartial<T[P]>;
-  };
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type Rule<T> = {
-    device: ((device: Device) => boolean) | Device | Device[];
-    options: RecursivePartial<T>;
-  };
   /**
    * [descr:template]
    */
@@ -15377,10 +15374,6 @@ declare module DevExpress.ui {
   export interface dxOverlayOptions<TComponent>
     extends WidgetOptions<TComponent> {
     /**
-     * [descr:dxOverlayOptions.allowDragOutside]
-     */
-    allowDragOutside?: boolean;
-    /**
      * [descr:dxOverlayOptions.animation]
      */
     animation?: dxOverlayAnimation;
@@ -15414,6 +15407,10 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.dragEnabled]
      */
     dragEnabled?: boolean;
+    /**
+     * [descr:dxOverlayOptions.dragOutsideBoundary]
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxOverlayOptions.elementAttr]
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
@@ -16445,10 +16442,6 @@ declare module DevExpress.ui {
   export interface dxPopupOptions<TComponent>
     extends dxOverlayOptions<TComponent> {
     /**
-     * [descr:dxPopupOptions.allowDragOutside]
-     */
-    allowDragOutside?: boolean;
-    /**
      * [descr:dxPopupOptions.animation]
      */
     animation?: dxPopupAnimation;
@@ -16456,10 +16449,6 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.container]
      */
     container?: string | DevExpress.core.UserDefinedElement;
-    /**
-     * [descr:dxPopupOptions.dragAndResizeArea]
-     */
-    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxPopupOptions.dragEnabled]
      */
@@ -23564,7 +23553,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     static defaultOptions<TProperties>(
-      rule: Partial<DevExpress.core.Rule<TProperties>>
+      rule: DevExpress.core.DefaultOptionsRule<TProperties>
     ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]

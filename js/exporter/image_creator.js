@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import Color from '../color';
 import { isFunction, isPromise, isDefined } from '../core/utils/type';
-import { getSvgElement } from '../core/utils/svg';
+import { getSvgElement, HIDDEN_FOR_EXPORT } from '../core/utils/svg';
 import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import domAdapter from '../core/dom_adapter';
@@ -392,7 +392,7 @@ function drawElement(element, context, parentOptions, shared) {
     const isImage = tagName === 'image';
     const options = extend({}, parentOptions, getElementOptions(element, shared.rootAppended));
 
-    if(options.visibility === 'hidden' || options['hidden-for-export']) {
+    if(options.visibility === 'hidden' || options[HIDDEN_FOR_EXPORT]) {
         return;
     }
 

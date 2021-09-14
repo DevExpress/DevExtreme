@@ -28,9 +28,12 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
-                    'text,F1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
-                    'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,100,16',
+                    'setLineWidth,1', 'rect,10,31,100,20',
+                    'setLineWidth,1', 'rect,10,51,100,24',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -55,9 +58,12 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
-                    'text,F1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,100,18.4',
-                    'text,f1_1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,100,18.4'
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,100,18.4',
+                    'setLineWidth,1', 'rect,10,33.4,100,18.4',
+                    'setLineWidth,1', 'rect,10,51.8,100,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
@@ -89,11 +95,16 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,140,16',
-                    'text,F1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,70,20',
-                    'text,F2,80,41,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,70,20',
-                    'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
-                    'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,70,24',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,41,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,140,16',
+                    'setLineWidth,1', 'rect,10,31,70,20',
+                    'setLineWidth,1', 'rect,80,31,70,20',
+                    'setLineWidth,1', 'rect,10,51,70,24',
+                    'setLineWidth,1', 'rect,80,51,70,24',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ], onRowExporting }).then(() => {
@@ -115,11 +126,16 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,140,18.4',
-                    'text,F1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,70,18.4',
-                    'text,F2,80,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,80,33.4,70,18.4',
-                    'text,f1_1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'text,f2_1,80,61,{baseline:middle}', 'setLineWidth,1', 'rect,80,51.8,70,18.4'
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,140,18.4',
+                    'setLineWidth,1', 'rect,10,33.4,70,18.4',
+                    'setLineWidth,1', 'rect,80,33.4,70,18.4',
+                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,80,51.8,70,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ], onRowExporting: () => {} }).then(() => {
@@ -152,13 +168,20 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,140,16',
-                    'text,F3,150,33,{baseline:middle}', 'setLineWidth,1', 'rect,150,15,60,36',
-                    'text,F1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,70,20',
-                    'text,F2,80,41,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,70,20',
-                    'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
-                    'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,70,24',
-                    'text,f3_1,150,63,{baseline:middle}', 'setLineWidth,1', 'rect,150,51,60,24',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F3,150,33,{baseline:middle}',
+                    'text,F1,10,41,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,150,63,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,140,16',
+                    'setLineWidth,1', 'rect,150,15,60,36',
+                    'setLineWidth,1', 'rect,10,31,70,20',
+                    'setLineWidth,1', 'rect,80,31,70,20',
+                    'setLineWidth,1', 'rect,10,51,70,24',
+                    'setLineWidth,1', 'rect,80,51,70,24',
+                    'setLineWidth,1', 'rect,150,51,60,24',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 60 ], onRowExporting }).then(() => {
@@ -181,13 +204,20 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,140,18.4',
-                    'text,F3,150,33.4,{baseline:middle}', 'setLineWidth,1', 'rect,150,15,60,36.8',
-                    'text,F1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,70,18.4',
-                    'text,F2,80,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,80,33.4,70,18.4',
-                    'text,f1_1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'text,f2_1,80,61,{baseline:middle}', 'setLineWidth,1', 'rect,80,51.8,70,18.4',
-                    'text,f3_1,150,61,{baseline:middle}', 'setLineWidth,1', 'rect,150,51.8,60,18.4'
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F3,150,33.4,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,150,61,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,140,18.4',
+                    'setLineWidth,1', 'rect,150,15,60,36.8',
+                    'setLineWidth,1', 'rect,10,33.4,70,18.4',
+                    'setLineWidth,1', 'rect,80,33.4,70,18.4',
+                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,80,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,150,51.8,60,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 60 ], onRowExporting: () => {} }).then(() => {
@@ -227,12 +257,18 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
-                    'text,Band1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,70,20',
-                    'text,F2,80,53,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,44',
-                    'text,F1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
-                    'text,f1_1_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,70,30',
-                    'text,f2_1,80,90,{baseline:middle}', 'setLineWidth,1', 'rect,80,75,80,30',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,Band1_1,10,41,{baseline:middle}',
+                    'text,F2,80,53,{baseline:middle}',
+                    'text,F1,10,63,{baseline:middle}',
+                    'text,f1_1_1,10,90,{baseline:middle}',
+                    'text,f2_1,80,90,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,150,16',
+                    'setLineWidth,1', 'rect,10,31,70,20',
+                    'setLineWidth,1', 'rect,80,31,80,44',
+                    'setLineWidth,1', 'rect,10,51,70,24',
+                    'setLineWidth,1', 'rect,10,75,70,30',
+                    'setLineWidth,1', 'rect,80,75,80,30',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting }).then(() => {
@@ -259,12 +295,18 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,18.4',
-                    'text,Band1_1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,70,18.4',
-                    'text,F2,80,51.8,{baseline:middle}', 'setLineWidth,1', 'rect,80,33.4,80,36.8',
-                    'text,F1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'text,f1_1_1,10,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,70.2,70,18.4',
-                    'text,f2_1,80,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,80,70.2,80,18.4'
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,Band1_1,10,42.6,{baseline:middle}',
+                    'text,F2,80,51.8,{baseline:middle}',
+                    'text,F1,10,61,{baseline:middle}',
+                    'text,f1_1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1,80,79.4,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,150,18.4',
+                    'setLineWidth,1', 'rect,10,33.4,70,18.4',
+                    'setLineWidth,1', 'rect,80,33.4,80,36.8',
+                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,10,70.2,70,18.4',
+                    'setLineWidth,1', 'rect,80,70.2,80,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting: () => {} }).then(() => {
@@ -305,14 +347,22 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,210,16',
-                    'text,Band1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,130,20',
-                    'text,F3,140,53,{baseline:middle}', 'setLineWidth,1', 'rect,140,31,80,44',
-                    'text,F1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,60,24',
-                    'text,F2,70,63,{baseline:middle}', 'setLineWidth,1', 'rect,70,51,70,24',
-                    'text,f1_1_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,60,30',
-                    'text,f2_1_1,70,90,{baseline:middle}', 'setLineWidth,1', 'rect,70,75,70,30',
-                    'text,f3_1,140,90,{baseline:middle}', 'setLineWidth,1', 'rect,140,75,80,30',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,Band1_1,10,41,{baseline:middle}',
+                    'text,F3,140,53,{baseline:middle}',
+                    'text,F1,10,63,{baseline:middle}',
+                    'text,F2,70,63,{baseline:middle}',
+                    'text,f1_1_1,10,90,{baseline:middle}',
+                    'text,f2_1_1,70,90,{baseline:middle}',
+                    'text,f3_1,140,90,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,210,16',
+                    'setLineWidth,1', 'rect,10,31,130,20',
+                    'setLineWidth,1', 'rect,140,31,80,44',
+                    'setLineWidth,1', 'rect,10,51,60,24',
+                    'setLineWidth,1', 'rect,70,51,70,24',
+                    'setLineWidth,1', 'rect,10,75,60,30',
+                    'setLineWidth,1', 'rect,70,75,70,30',
+                    'setLineWidth,1', 'rect,140,75,80,30',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting }).then(() => {
@@ -340,14 +390,22 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,210,18.4',
-                    'text,Band1_1,10,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,130,18.4',
-                    'text,F3,140,51.8,{baseline:middle}', 'setLineWidth,1', 'rect,140,33.4,80,36.8',
-                    'text,F1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,60,18.4',
-                    'text,F2,70,61,{baseline:middle}', 'setLineWidth,1', 'rect,70,51.8,70,18.4',
-                    'text,f1_1_1,10,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,70.2,60,18.4',
-                    'text,f2_1_1,70,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,70,70.2,70,18.4',
-                    'text,f3_1,140,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,140,70.2,80,18.4'
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,Band1_1,10,42.6,{baseline:middle}',
+                    'text,F3,140,51.8,{baseline:middle}',
+                    'text,F1,10,61,{baseline:middle}',
+                    'text,F2,70,61,{baseline:middle}',
+                    'text,f1_1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1_1,70,79.4,{baseline:middle}',
+                    'text,f3_1,140,79.4,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,210,18.4',
+                    'setLineWidth,1', 'rect,10,33.4,130,18.4',
+                    'setLineWidth,1', 'rect,140,33.4,80,36.8',
+                    'setLineWidth,1', 'rect,10,51.8,60,18.4',
+                    'setLineWidth,1', 'rect,70,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,10,70.2,60,18.4',
+                    'setLineWidth,1', 'rect,70,70.2,70,18.4',
+                    'setLineWidth,1', 'rect,140,70.2,80,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting: () => {} }).then(() => {
@@ -388,12 +446,18 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,130,16',
-                    'text,F1,10,53,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,60,44',
-                    'text,Band1_2,70,41,{baseline:middle}', 'setLineWidth,1', 'rect,70,31,70,20',
-                    'text,F2,70,63,{baseline:middle}', 'setLineWidth,1', 'rect,70,51,70,24',
-                    'text,f1_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,60,30',
-                    'text,f2_1_1,70,90,{baseline:middle}', 'setLineWidth,1', 'rect,70,75,70,30',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,53,{baseline:middle}',
+                    'text,Band1_2,70,41,{baseline:middle}',
+                    'text,F2,70,63,{baseline:middle}',
+                    'text,f1_1,10,90,{baseline:middle}',
+                    'text,f2_1_1,70,90,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,130,16',
+                    'setLineWidth,1', 'rect,10,31,60,44',
+                    'setLineWidth,1', 'rect,70,31,70,20',
+                    'setLineWidth,1', 'rect,70,51,70,24',
+                    'setLineWidth,1', 'rect,10,75,60,30',
+                    'setLineWidth,1', 'rect,70,75,70,30',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], onRowExporting }).then(() => {
@@ -423,12 +487,18 @@ const JSPdfBandsTests = {
                 const onRowExporting = () => { };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,130,18.4',
-                    'text,F1,10,51.8,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,60,36.8',
-                    'text,Band1_2,70,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,70,33.4,70,18.4',
-                    'text,F2,70,61,{baseline:middle}', 'setLineWidth,1', 'rect,70,51.8,70,18.4',
-                    'text,f1_1,10,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,70.2,60,18.4',
-                    'text,f2_1_1,70,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,70,70.2,70,18.4'
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,51.8,{baseline:middle}',
+                    'text,Band1_2,70,42.6,{baseline:middle}',
+                    'text,F2,70,61,{baseline:middle}',
+                    'text,f1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1_1,70,79.4,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,130,18.4',
+                    'setLineWidth,1', 'rect,10,33.4,60,36.8',
+                    'setLineWidth,1', 'rect,70,33.4,70,18.4',
+                    'setLineWidth,1', 'rect,70,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,10,70.2,60,18.4',
+                    'setLineWidth,1', 'rect,70,70.2,70,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], onRowExporting }).then(() => {
@@ -469,14 +539,22 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,210,16',
-                    'text,F1,10,53,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,60,44',
-                    'text,Band1_2,70,41,{baseline:middle}', 'setLineWidth,1', 'rect,70,31,150,20',
-                    'text,F2,70,63,{baseline:middle}', 'setLineWidth,1', 'rect,70,51,70,24',
-                    'text,F3,140,63,{baseline:middle}', 'setLineWidth,1', 'rect,140,51,80,24',
-                    'text,f1_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,60,30',
-                    'text,f2_1_2,70,90,{baseline:middle}', 'setLineWidth,1', 'rect,70,75,70,30',
-                    'text,f3_1_2,140,90,{baseline:middle}', 'setLineWidth,1', 'rect,140,75,80,30',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,53,{baseline:middle}',
+                    'text,Band1_2,70,41,{baseline:middle}',
+                    'text,F2,70,63,{baseline:middle}',
+                    'text,F3,140,63,{baseline:middle}',
+                    'text,f1_1,10,90,{baseline:middle}',
+                    'text,f2_1_2,70,90,{baseline:middle}',
+                    'text,f3_1_2,140,90,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,210,16',
+                    'setLineWidth,1', 'rect,10,31,60,44',
+                    'setLineWidth,1', 'rect,70,31,150,20',
+                    'setLineWidth,1', 'rect,70,51,70,24',
+                    'setLineWidth,1', 'rect,140,51,80,24',
+                    'setLineWidth,1', 'rect,10,75,60,30',
+                    'setLineWidth,1', 'rect,70,75,70,30',
+                    'setLineWidth,1', 'rect,140,75,80,30',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting }).then(() => {
@@ -504,14 +582,22 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,210,18.4',
-                    'text,F1,10,51.8,{baseline:middle}', 'setLineWidth,1', 'rect,10,33.4,60,36.8',
-                    'text,Band1_2,70,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,70,33.4,150,18.4',
-                    'text,F2,70,61,{baseline:middle}', 'setLineWidth,1', 'rect,70,51.8,70,18.4',
-                    'text,F3,140,61,{baseline:middle}', 'setLineWidth,1', 'rect,140,51.8,80,18.4',
-                    'text,f1_1,10,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,70.2,60,18.4',
-                    'text,f2_1_2,70,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,70,70.2,70,18.4',
-                    'text,f3_1_2,140,79.4,{baseline:middle}', 'setLineWidth,1', 'rect,140,70.2,80,18.4'
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,51.8,{baseline:middle}',
+                    'text,Band1_2,70,42.6,{baseline:middle}',
+                    'text,F2,70,61,{baseline:middle}',
+                    'text,F3,140,61,{baseline:middle}',
+                    'text,f1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1_2,70,79.4,{baseline:middle}',
+                    'text,f3_1_2,140,79.4,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,210,18.4',
+                    'setLineWidth,1', 'rect,10,33.4,60,36.8',
+                    'setLineWidth,1', 'rect,70,33.4,150,18.4',
+                    'setLineWidth,1', 'rect,70,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,140,51.8,80,18.4',
+                    'setLineWidth,1', 'rect,10,70.2,60,18.4',
+                    'setLineWidth,1', 'rect,70,70.2,70,18.4',
+                    'setLineWidth,1', 'rect,140,70.2,80,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting: () => {} }).then(() => {
@@ -545,11 +631,16 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36',
-                    'text,Band2,80,23,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,80,16',
-                    'text,F2,80,41,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,20',
-                    'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
-                    'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,80,24',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36',
+                    'setLineWidth,1', 'rect,80,15,80,16',
+                    'setLineWidth,1', 'rect,80,31,80,20',
+                    'setLineWidth,1', 'rect,10,51,70,24',
+                    'setLineWidth,1', 'rect,80,51,80,24',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting }).then(() => {
@@ -572,11 +663,16 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36.8',
-                    'text,Band2,80,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,80,18.4',
-                    'text,F2,80,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,80,33.4,80,18.4',
-                    'text,f1_1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'text,f2_1,80,61,{baseline:middle}', 'setLineWidth,1', 'rect,80,51.8,80,18.4'
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36.8',
+                    'setLineWidth,1', 'rect,80,15,80,18.4',
+                    'setLineWidth,1', 'rect,80,33.4,80,18.4',
+                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,80,51.8,80,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting: () => {} }).then(() => {
@@ -610,13 +706,20 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36',
-                    'text,Band2,80,23,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,140,16',
-                    'text,F2,80,41,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,20',
-                    'text,F3,160,41,{baseline:middle}', 'setLineWidth,1', 'rect,160,31,60,20',
-                    'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
-                    'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,80,24',
-                    'text,f3_1,160,63,{baseline:middle}', 'setLineWidth,1', 'rect,160,51,60,24',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,F3,160,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,160,63,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36',
+                    'setLineWidth,1', 'rect,80,15,140,16',
+                    'setLineWidth,1', 'rect,80,31,80,20',
+                    'setLineWidth,1', 'rect,160,31,60,20',
+                    'setLineWidth,1', 'rect,10,51,70,24',
+                    'setLineWidth,1', 'rect,80,51,80,24',
+                    'setLineWidth,1', 'rect,160,51,60,24',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting }).then(() => {
@@ -639,13 +742,20 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36.8',
-                    'text,Band2,80,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,140,18.4',
-                    'text,F2,80,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,80,33.4,80,18.4',
-                    'text,F3,160,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,160,33.4,60,18.4',
-                    'text,f1_1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'text,f2_1,80,61,{baseline:middle}', 'setLineWidth,1', 'rect,80,51.8,80,18.4',
-                    'text,f3_1,160,61,{baseline:middle}', 'setLineWidth,1', 'rect,160,51.8,60,18.4'
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,F3,160,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,160,61,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36.8',
+                    'setLineWidth,1', 'rect,80,15,140,18.4',
+                    'setLineWidth,1', 'rect,80,33.4,80,18.4',
+                    'setLineWidth,1', 'rect,160,33.4,60,18.4',
+                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,80,51.8,80,18.4',
+                    'setLineWidth,1', 'rect,160,51.8,60,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting: () => {} }).then(() => {
@@ -680,13 +790,20 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36',
-                    'text,Band2,80,23,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,80,16',
-                    'text,F3,160,33,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,60,36',
-                    'text,F2,80,41,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,20',
-                    'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
-                    'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,80,24',
-                    'text,f3_1,160,63,{baseline:middle}', 'setLineWidth,1', 'rect,160,51,60,24',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F3,160,33,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,160,63,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36',
+                    'setLineWidth,1', 'rect,80,15,80,16',
+                    'setLineWidth,1', 'rect,160,15,60,36',
+                    'setLineWidth,1', 'rect,80,31,80,20',
+                    'setLineWidth,1', 'rect,10,51,70,24',
+                    'setLineWidth,1', 'rect,80,51,80,24',
+                    'setLineWidth,1', 'rect,160,51,60,24',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting }).then(() => {
@@ -710,13 +827,20 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36.8',
-                    'text,Band2,80,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,80,18.4',
-                    'text,F3,160,33.4,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,60,36.8',
-                    'text,F2,80,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,80,33.4,80,18.4',
-                    'text,f1_1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'text,f2_1,80,61,{baseline:middle}', 'setLineWidth,1', 'rect,80,51.8,80,18.4',
-                    'text,f3_1,160,61,{baseline:middle}', 'setLineWidth,1', 'rect,160,51.8,60,18.4'
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F3,160,33.4,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,160,61,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36.8',
+                    'setLineWidth,1', 'rect,80,15,80,18.4',
+                    'setLineWidth,1', 'rect,160,15,60,36.8',
+                    'setLineWidth,1', 'rect,80,33.4,80,18.4',
+                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,80,51.8,80,18.4',
+                    'setLineWidth,1', 'rect,160,51.8,60,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting: () => {} }).then(() => {
@@ -751,15 +875,24 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36',
-                    'text,Band2,80,23,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,140,16',
-                    'text,F4,220,33,{baseline:middle}', 'setLineWidth,1', 'rect,220,15,70,36',
-                    'text,F2,80,41,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,20',
-                    'text,F3,160,41,{baseline:middle}', 'setLineWidth,1', 'rect,160,31,60,20',
-                    'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
-                    'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,80,24',
-                    'text,f3_1,160,63,{baseline:middle}', 'setLineWidth,1', 'rect,160,51,60,24',
-                    'text,f4_1,220,63,{baseline:middle}', 'setLineWidth,1', 'rect,220,51,70,24',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F4,220,33,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,F3,160,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,160,63,{baseline:middle}',
+                    'text,f4_1,220,63,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36',
+                    'setLineWidth,1', 'rect,80,15,140,16',
+                    'setLineWidth,1', 'rect,220,15,70,36',
+                    'setLineWidth,1', 'rect,80,31,80,20',
+                    'setLineWidth,1', 'rect,160,31,60,20',
+                    'setLineWidth,1', 'rect,10,51,70,24',
+                    'setLineWidth,1', 'rect,80,51,80,24',
+                    'setLineWidth,1', 'rect,160,51,60,24',
+                    'setLineWidth,1', 'rect,220,51,70,24',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting }).then(() => {
@@ -783,15 +916,24 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,36.8',
-                    'text,Band2,80,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,140,18.4',
-                    'text,F4,220,33.4,{baseline:middle}', 'setLineWidth,1', 'rect,220,15,70,36.8',
-                    'text,F2,80,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,80,33.4,80,18.4',
-                    'text,F3,160,42.6,{baseline:middle}', 'setLineWidth,1', 'rect,160,33.4,60,18.4',
-                    'text,f1_1,10,61,{baseline:middle}', 'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'text,f2_1,80,61,{baseline:middle}', 'setLineWidth,1', 'rect,80,51.8,80,18.4',
-                    'text,f3_1,160,61,{baseline:middle}', 'setLineWidth,1', 'rect,160,51.8,60,18.4',
-                    'text,f4_1,220,61,{baseline:middle}', 'setLineWidth,1', 'rect,220,51.8,70,18.4'
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F4,220,33.4,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,F3,160,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,160,61,{baseline:middle}',
+                    'text,f4_1,220,61,{baseline:middle}',
+                    'setLineWidth,1', 'rect,10,15,70,36.8',
+                    'setLineWidth,1', 'rect,80,15,140,18.4',
+                    'setLineWidth,1', 'rect,220,15,70,36.8',
+                    'setLineWidth,1', 'rect,80,33.4,80,18.4',
+                    'setLineWidth,1', 'rect,160,33.4,60,18.4',
+                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
+                    'setLineWidth,1', 'rect,80,51.8,80,18.4',
+                    'setLineWidth,1', 'rect,160,51.8,60,18.4',
+                    'setLineWidth,1', 'rect,220,51.8,70,18.4',
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting: () => {} }).then(() => {

@@ -587,7 +587,7 @@
         "dxGantt-sortingClearText": "並べ替えをクリア",
         "dxGantt-showResources": "リソースを表示",
         "dxGantt-showDependencies": "依存関係を表示",
-        "dxGantt-dialogStartDateValidation": "TODO",
-        "dxGantt-dialogEndDateValidation": "TODO"
+        "dxGantt-dialogStartDateValidation": "開始日を {0} 以降にする必要があります",
+        "dxGantt-dialogEndDateValidation": "終了日は {0} より後にする必要があります"
     }
 }

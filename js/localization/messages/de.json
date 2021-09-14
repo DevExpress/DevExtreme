@@ -587,7 +587,7 @@
         "dxGantt-sortingClearText": "Sortierung aufheben",
         "dxGantt-showResources": "Ressourcen Anzeigen",
         "dxGantt-showDependencies": "Abhängigkeiten Anzeigen",
-        "dxGantt-dialogStartDateValidation": "TODO",
-        "dxGantt-dialogEndDateValidation": "TODO"
+        "dxGantt-dialogStartDateValidation": "Startdatum muss später sein als {0}",
+        "dxGantt-dialogEndDateValidation": "Enddatum muss später sein als {0}"
     }
 }

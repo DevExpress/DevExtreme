@@ -136,7 +136,7 @@ const Overlay = Widget.inherit({
                 }
             },
 
-            allowDragOutside: false,
+            dragOutsideBoundary: false,
 
             closeOnOutsideClick: false,
 
@@ -1365,7 +1365,7 @@ const Overlay = Widget.inherit({
                 }
                 this._positionController.positionContent();
                 break;
-            case 'allowDragOutside':
+            case 'dragOutsideBoundary':
                 this._positionController.allowDragOutside = value;
                 if(this.option('resizeEnabled')) {
                     this._resizable.option('area', this._positionController.$dragResizeContainer);

@@ -139,10 +139,21 @@ const Popover = Popup.inherit({
             dragEnabled: false,
 
             /**
+            * @name dxPopoverOptions.dragOutsideBoundary
+            * @hidden
+            */
+
+            /**
+            * @name dxPopoverOptions.dragAndResizeArea
+            * @hidden
+            */
+
+            /**
             * @name dxPopoverOptions.resizeEnabled
             * @hidden
             */
             resizeEnabled: false,
+
 
             /**
             * @section Utils

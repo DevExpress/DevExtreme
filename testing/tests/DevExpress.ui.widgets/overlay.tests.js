@@ -3176,7 +3176,6 @@ testModule('drag', moduleConfig, () => {
     });
 });
 
-
 testModule('resize', moduleConfig, () => {
     test('overlay should have resizable component on content', function(assert) {
         const $overlay = $('#overlay').dxOverlay({

@@ -50,7 +50,7 @@ class OverlayPositionController {
         position, target, container,
         $root, $content, $wrapper,
         onPositioned,
-        allowDragOutside, dragAndResizeArea, outsideDragFactor,
+        dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
         restorePosition,
         _fixWrapperPosition
     }) {
@@ -58,7 +58,7 @@ class OverlayPositionController {
             position,
             target,
             container,
-            allowDragOutside,
+            dragOutsideBoundary,
             dragAndResizeArea,
             outsideDragFactor,
             restorePosition,
@@ -104,8 +104,8 @@ class OverlayPositionController {
         this._updateDragResizeContainer();
     }
 
-    set allowDragOutside(allowDragOutside) {
-        this._props.allowDragOutside = allowDragOutside;
+    set dragOutsideBoundary(dragOutsideBoundary) {
+        this._props.dragOutsideBoundary = dragOutsideBoundary;
 
         this._updateDragResizeContainer();
         this._updateOutsideDragFactor();
@@ -237,7 +237,7 @@ class OverlayPositionController {
     }
 
     _getOutsideDragFactor() {
-        if(this._props.allowDragOutside) {
+        if(this._props.dragOutsideBoundary) {
             return 1;
         }
 
@@ -249,7 +249,7 @@ class OverlayPositionController {
     }
 
     _getDragResizeContainer() {
-        if(this._props.allowDragOutside) {
+        if(this._props.dragOutsideBoundary) {
             return $(window);
         }
         if(this._props.dragAndResizeArea) {
