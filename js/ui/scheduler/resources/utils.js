@@ -262,15 +262,21 @@ export const getResourceColor = (resources, resourceLoaderMap, field, value) => 
     return result.promise();
 };
 
-export const getResourcesFromItem = (_resourceFields, resources, getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
-    let result = null;
+const getDataAccessors = (dataAccessors, fieldName, type) => {
+    const actions = dataAccessors[type];
+    return actions[fieldName];
+};
 
-    _resourceFields.forEach(field => {
+export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wrapOnlyMultipleResources = false) => {
+    let result = null;
+    const resourceFields = resources.map(resource => getFieldExpr(resource));
+
+    resourceFields.forEach(field => {
         each(itemData, (fieldName, fieldValue) => {
             const tempObject = {};
             tempObject[fieldName] = fieldValue;
 
-            let resourceData = getDataAccessors(field, 'getter')(tempObject);
+            let resourceData = getDataAccessors(dataAccessors, field, 'getter')(tempObject);
             if(isDefined(resourceData)) {
                 if(!result) {
                     result = {};
@@ -279,9 +285,9 @@ export const getResourcesFromItem = (_resourceFields, resources, getDataAccessor
                     resourceData = resourceData[0];
                 }
                 if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field))) {
-                    getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
+                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, wrapToArray(resourceData));
                 } else {
-                    getDataAccessors(field, 'setter')(tempObject, resourceData);
+                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, resourceData);
                 }
 
                 extend(result, tempObject);
@@ -330,13 +336,12 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
 
     appointments.forEach(appointment => {
         const appointmentResources = getResourcesFromItem(
-            config._resourceFields,
-            () => config.getResources(),
-            (field, action) => config.getDataAccessors(field, action),
+            config.resources,
+            config.dataAccessors,
             appointment
         );
 
-        const treeLeaves = getResourceTreeLeaves((field, action) => config.getDataAccessors(field, action), tree, appointmentResources);
+        const treeLeaves = getResourceTreeLeaves((field, action) => getDataAccessors(config.dataAccessors, field, action), tree, appointmentResources);
 
         for(let i = 0; i < treeLeaves.length; i++) {
             if(!result[treeLeaves[i]]) {
@@ -486,4 +491,14 @@ export const getResourcesDataByGroups = (loadedResources, resources, groups) => 
     });
 
     return currentResourcesData;
+};
+
+export const setResourceToAppointment = (resources, dataAccessors, appointment, groups) => {
+    const resourcesSetter = dataAccessors.setter;
+
+    for(const name in groups) {
+        const resourceData = groups[name];
+        const value = isResourceMultiple(resources, name) ? wrapToArray(resourceData) : resourceData;
+        resourcesSetter[name](appointment, value);
+    }
 };

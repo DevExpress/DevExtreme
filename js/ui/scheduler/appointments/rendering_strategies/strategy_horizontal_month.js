@@ -153,6 +153,14 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     _needHorizontalGroupBounds() {
         return true;
     }
+
+    getPositionShift(timeShift) {
+        return {
+            cellPosition: timeShift * this.cellWidth,
+            top: 0,
+            left: 0
+        };
+    }
 }
 
 export default HorizontalMonthRenderingStrategy;

@@ -791,7 +791,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
         return getResourcesDataByGroups(
             this.resourceManager.loadedResources,
-            this.resourceManager.getResources(),
+            this.options.resources,
             [cellGroup]
         );
     }

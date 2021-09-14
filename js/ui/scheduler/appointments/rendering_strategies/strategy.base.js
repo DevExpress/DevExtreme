@@ -216,6 +216,7 @@ class BaseRenderingStrategy {
         return new AppointmentSettingsGenerator({
             rawAppointment,
             appointmentTakesAllDay: this.isAppointmentTakesAllDay(rawAppointment), // TODO move to the settings
+            getPositionShiftCallback: this.getPositionShift.bind(this),
             ...this.options
         });
     }
@@ -776,7 +777,13 @@ class BaseRenderingStrategy {
         return result;
     }
 
-
+    getPositionShift(timeShift, isAllDay) {
+        return {
+            top: timeShift * this.cellHeight,
+            left: 0,
+            cellPosition: 0
+        };
+    }
 }
 
 export default BaseRenderingStrategy;
