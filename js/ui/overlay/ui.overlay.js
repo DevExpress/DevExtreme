@@ -1374,6 +1374,9 @@ const Overlay = Widget.inherit({
             case 'outsideDragFactor':
                 this._positionController.outsideDragFactor = value;
                 break;
+            case 'restorePosition':
+                this._positionController.restorePosition = this.option('restorePosition');
+                break;
             default:
                 this.callBase(args);
         }

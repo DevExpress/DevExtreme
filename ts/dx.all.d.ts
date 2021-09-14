@@ -16501,6 +16501,16 @@ declare module DevExpress.ui {
      */
     resizeEnabled?: boolean;
     /**
+     * [descr:dxPopupOptions.restorePosition]
+     */
+    restorePosition?: {
+      always: boolean;
+      onDimensionChangeAfterDrag: boolean;
+      onDimensionChangeAfterResize: boolean;
+      onOpening: boolean;
+      onFullScreenDisable: boolean;
+    };
+    /**
      * [descr:dxPopupOptions.showCloseButton]
      */
     showCloseButton?: boolean;

@@ -121,6 +121,10 @@ class OverlayPositionController {
         this._updateOutsideDragFactor();
     }
 
+    set restorePosition(restorePosition) {
+        this._props.restorePosition = restorePosition;
+    }
+
     restorePositionOnNextRender(value) {
         this._shouldRenderContentInitialPosition = value;
     }
@@ -358,12 +362,6 @@ class PopupPositionController extends OverlayPositionController {
             } else {
                 super.positionContent();
             }
-        }
-    }
-
-    _renderContentInitialPosition() {
-        if(!this._fullScreen) {
-            super._renderContentInitialPosition();
         }
     }
 }

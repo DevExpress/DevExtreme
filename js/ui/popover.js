@@ -154,6 +154,10 @@ const Popover = Popup.inherit({
             */
             resizeEnabled: false,
 
+            /**
+            * @name dxPopoverOptions.restorePosition
+            * @hidden
+            */
 
             /**
             * @section Utils
