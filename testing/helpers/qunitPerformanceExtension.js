@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
-// import { getOuterWidth } from 'core/utils/size';
+import { getOuterWidth } from 'core/utils/size';
 
 (function(root, factory) {
+    if(QUnit.urlParams['nojquery']) {
+        factory(undefined);
+        return;
+    }
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             factory(require('jquery'));
@@ -197,8 +201,11 @@
                 done();
             };
 
-            // [...document.querySelectorAll('body')].forEach(x => getOuterWidth(x, true));
-            $('body').outerWidth(true);
+            if(!$) {
+                [...document.querySelectorAll('body')].forEach(x => getOuterWidth(x, true));
+            } else {
+                $('body').outerWidth(true);
+            }
 
             chrome.on('Tracing.dataCollected', collectData);
             chrome.on('Tracing.tracingComplete', collectEndData);

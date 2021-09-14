@@ -43,7 +43,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 9);
+        assert.measureStyleRecalculation(measureFunction, (x) => x <= 9);
     });
 
     QUnit.performanceTest(`dxScheduler day view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -77,7 +77,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 10);
+        assert.measureStyleRecalculation(measureFunction, (x) => x <= 10);
     });
 
     QUnit.performanceTest(`dxScheduler week view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -111,7 +111,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 10);
+        assert.measureStyleRecalculation(measureFunction, (x) => x <= 10);
     });
 
     QUnit.performanceTest(`dxScheduler workWeek view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -145,7 +145,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 10);
+        assert.measureStyleRecalculation(measureFunction, (x) => x <= 10);
     });
 
     QUnit.performanceTest(`dxScheduler month view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
