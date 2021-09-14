@@ -54,8 +54,6 @@ const createInstance = (options) => {
     const observer = {
         fire: (command, field, obj, value) => {
             switch(command) {
-                case 'getAppointmentColor':
-                    return $.Deferred().resolve('red').promise();
                 case 'getAppointmentGeometry':
                     return {
                         width: field.width || 0,
@@ -78,6 +76,8 @@ const createInstance = (options) => {
         key,
         observer,
         ...options,
+        getResources: () => [],
+        getResourceDataAccessors: () => ({ getter: {}, setter: {} })
     }).dxSchedulerAppointments('instance');
 };
 

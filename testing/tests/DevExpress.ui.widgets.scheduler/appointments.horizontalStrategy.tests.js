@@ -89,6 +89,8 @@ const createInstance = (options = {}) => {
         key,
         observer: createObserver(options.renderingStrategy),
         ...options,
+        getResources: () => [],
+        getResourceDataAccessors: () => ({ getter: {}, setter: {} })
     }).dxSchedulerAppointments('instance');
 };
 
