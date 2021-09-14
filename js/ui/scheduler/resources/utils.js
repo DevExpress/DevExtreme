@@ -262,10 +262,11 @@ export const getResourceColor = (resources, resourceLoaderMap, field, value) => 
     return result.promise();
 };
 
-export const getResourcesFromItem = (_resourceFields, resources, getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
+export const getResourcesFromItem = (resources, getDataAccessors, itemData, wrapOnlyMultipleResources = false) => {
     let result = null;
+    const resourceFields = resources.map(resource => getFieldExpr(resource));
 
-    _resourceFields.forEach(field => {
+    resourceFields.forEach(field => {
         each(itemData, (fieldName, fieldValue) => {
             const tempObject = {};
             tempObject[fieldName] = fieldValue;
@@ -330,8 +331,7 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
 
     appointments.forEach(appointment => {
         const appointmentResources = getResourcesFromItem(
-            config._resourceFields,
-            () => config.getResources(),
+            config.getResources(),
             (field, action) => config.getDataAccessors(field, action),
             appointment
         );
@@ -486,4 +486,14 @@ export const getResourcesDataByGroups = (loadedResources, resources, groups) => 
     });
 
     return currentResourcesData;
+};
+
+export const setResourceToAppointment = (resources, dataAccessors, appointment, groups) => {
+    const resourcesSetter = dataAccessors.setter;
+
+    for(const name in groups) {
+        const resourceData = groups[name];
+        const value = isResourceMultiple(resources, name) ? wrapToArray(resourceData) : resourceData;
+        resourcesSetter[name](appointment, value);
+    }
 };

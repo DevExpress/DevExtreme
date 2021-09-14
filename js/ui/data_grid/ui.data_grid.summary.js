@@ -333,7 +333,7 @@ const SummaryDataSourceAdapterClientExtender = (function() {
             }
             this.callBase.apply(this, arguments);
 
-            const cachedExtra = options.cachedPagesData.extra;
+            const cachedExtra = options.cachedData.extra;
 
             if(cachedExtra && cachedExtra.summary && !options.isCustomLoading) {
                 options.storeLoadOptions.totalSummary = undefined;

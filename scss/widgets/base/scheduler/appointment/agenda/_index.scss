@@ -8,8 +8,6 @@ $active-bg: null !default;
 $active-color: null !default;
 $title-font-size: null !default;
 
-$title-line-height-offset: 2px;
-
 .dx-scheduler-agenda {
   .dx-scheduler-appointment {
     box-shadow: none;
@@ -65,7 +63,6 @@ $title-line-height-offset: 2px;
     @include use-text-overflow-ellipsis();
 
     font-weight: 700;
-    line-height: $title-font-size + $title-line-height-offset;
     font-size: $title-font-size;
   }
 

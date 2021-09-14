@@ -12,7 +12,8 @@ import {
     getResourceTreeLeaves,
     groupAppointmentsByResourcesCore,
     getResourcesDataByGroups,
-    reduceResourcesTree
+    reduceResourcesTree,
+    setResourceToAppointment
 } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -208,7 +209,6 @@ QUnit.test('Get resources from item data', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date(), roomId: 2, ownerId: [1, 2] };
     const resources = getResourcesFromItem(
-        this.instance._resourceFields,
         this.instance.getResources(),
         (field, action) => this.instance.getDataAccessors(field, action),
         item
@@ -239,7 +239,6 @@ QUnit.test('Get resources from item data with combined resource field', function
 
     const item = { text: 'Item 1', startDate: new Date(), outer: { roomId: 2 }, ownerId: [1, 2] };
     const resources = getResourcesFromItem(
-        this.instance._resourceFields,
         this.instance.getResources(),
         (field, action) => this.instance.getDataAccessors(field, action),
         item,
@@ -320,7 +319,6 @@ QUnit.test('getResourceTreeLeaves should work correctly when resource.field is e
 
 
     const resourcesFromItem = getResourcesFromItem(
-        this.instance._resourceFields,
         this.instance.getResources(),
         (field, action) => this.instance.getDataAccessors(field, action),
         {
@@ -349,8 +347,8 @@ QUnit.test('Set resources to item', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date() };
 
-    this.instance.setResourcesToItem(item, { roomId: 1 });
-    this.instance.setResourcesToItem(item, { ownerId: 1 });
+    setResourceToAppointment(this.instance.getResources(), this.instance._dataAccessors, item, { roomId: 1 });
+    setResourceToAppointment(this.instance.getResources(), this.instance._dataAccessors, item, { ownerId: 1 });
 
     assert.strictEqual(item.roomId, 1, 'Single resource has scalar value');
     assert.deepEqual(item.ownerId, [1], 'Multiple resource has array value');
@@ -361,7 +359,6 @@ QUnit.test('Get resources from item that has no resources', function(assert) {
     const item = { text: 'Item 1', startDate: new Date() };
 
     const resources = getResourcesFromItem(
-        this.instance._resourceFields,
         this.instance.getResources(),
         (field, action) => this.instance.getDataAccessors(field, action),
         item
@@ -375,7 +372,6 @@ QUnit.test('Get resources from item without wrapping result array', function(ass
     const item = { text: 'Item 1', startDate: new Date(), roomId: 1 };
 
     const resources = getResourcesFromItem(
-        this.instance._resourceFields,
         this.instance.getResources(),
         (field, action) => this.instance.getDataAccessors(field, action),
         item,
@@ -611,7 +607,6 @@ QUnit.test('Get appointments by certain resources', function(assert) {
     ];
 
     const config = {
-        _resourceFields: this.instance._resourceFields,
         getResources: () => this.instance.getResources(),
         getDataAccessors: (field, action) => this.instance.getDataAccessors(field, action)
     };

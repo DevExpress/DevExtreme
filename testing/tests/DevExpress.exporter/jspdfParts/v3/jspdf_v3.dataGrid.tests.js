@@ -10,6 +10,7 @@ import { initializeDxObjectAssign, clearDxObjectAssign } from '../../commonParts
 import { JSPdfMultilineTests } from './jspdf_v3.dataGrid.multiline.tests.js';
 import { JSPdfWordWrapTests } from './jspdf_v3.dataGrid.wordwrap.tests.js';
 import { JSPdfStylesTests } from './jspdf_v3.dataGrid.styles.tests.js';
+import { JSPdfBorderColorsTests } from './jspdf_v3.dataGrid.borderColors.tests.js';
 import { JSPdfBandsTests } from './jspdf_v3.dataGrid.bands.tests.js';
 
 import 'generic_light.css!';
@@ -854,4 +855,5 @@ QUnit.module('Table', moduleConfig, () => {
 JSPdfMultilineTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfWordWrapTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfStylesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfBorderColorsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
