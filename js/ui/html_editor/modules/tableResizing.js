@@ -391,22 +391,6 @@ export default class TableResizingModule extends BaseModule {
         return direction === 'horizontal' && this.editorInstance.option('rtlEnabled');
     }
 
-    // _getLineElements($table, index, direction) {
-    //     let result;
-    //     if(direction !== 'vertical') {
-    //         result = $table.find(`td:nth-child(${(1 + index)})`);
-    //     } else {
-    //         result = $table.find('tr').eq(index).find('td');
-    //     }
-    //     return result;
-    // }
-
-    // _setLineElementsAttrValue($lineElements, property, value) {
-    //     each($lineElements, (i, element) => {
-    //         $(element).attr(property, value + 'px');
-    //     });
-    // }
-
     _isNextColumnWidthEnough(nextColumnNewSize, $nextColumnElement, eventOffset) {
         if(!this._nextLineSize) {
             return true;

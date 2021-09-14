@@ -59,6 +59,10 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
                 const newElementWidth = newWidth * oldTableWidth / $element.outerWidth();
                 $element.attr('width', newElementWidth);
 
+                const $lineElements = getLineElements($table, $element.index(), 'horizontal');
+
+                setLineElementsAttrValue($lineElements, 'width', newElementWidth);
+
             });
 
 
@@ -67,13 +71,45 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     }
 
 
-    $table.attr('height', newHeight);
+    // $table.attr('height', newHeight);
+
+    const autoHeightRows = getAutoHeightRows($table);
+
+    if(autoHeightRows?.length > 0) {
+        $table.css('height', newHeight);
+    } else {
+        const $rows = $table.find('td:nth-child(0)');
+
+        const oldTableHeight = $table.outerHeight();
+
+        each($rows, (i, element) => {
+            const $element = $(element);
+            const newElementHeight = newHeight * oldTableHeight / $element.outerHeight();
+            // $element.attr('height', newElementHeight);
+
+            const $lineElements = getLineElements($table, $element.index(), 'vertical');
+
+            setLineElementsAttrValue($lineElements, 'height', newElementHeight);
+        });
+
+    }
 
 
 };
 
+const getAutoHeightRows = ($table) => {
+    const result = [];
+    $table.find('td:nth-child(0)').each((index, element) => {
+        const $element = $(element);
+        if(!isDefined($element.attr('height'))) {
+            result.push($element);
+        }
+    });
 
-const getAutoWidthColumns = ($table) => {
+    return result;
+};
+
+const getAutoWidthColumns = ($table, direction) => {
     const result = [];
     $table.find('tr').eq(0).find('td').each((index, element) => {
         const $element = $(element);
@@ -115,7 +151,7 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
 
     }
 
-    const $horizontalCells = $target.closest('tr, thead').find('td');
+    const $horizontalCells = $target.closest('tr').find('td');
 
 
     setLineElementsAttrValue($horizontalCells, 'height', newHeight);
