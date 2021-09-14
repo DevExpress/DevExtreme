@@ -15,7 +15,7 @@ $(() => {
       dataSource: resourceAssignments,
     },
     editing: {
-      enabled: false,
+      enabled: true,
     },
     columns: [{
       dataField: 'title',

@@ -14,6 +14,12 @@
           text="Enable Dependency Validation"
         />
       </div>
+      <div class="option">
+        <DxCheckBox
+          v-model:value="enablePredecessorGap"
+          text="Enable Predecessor Gap"
+        />
+      </div>
     </div>
     <div class="widget-container">
       <DxGantt
@@ -25,6 +31,7 @@
         <DxValidation
           :auto-update-parent-tasks="autoUpdateParentTasks"
           :validate-dependencies="validateDependencies"
+          :enable-predecessor-gap="enablePredecessorGap"
         />
 
         <DxTasks :data-source="tasks"/>
@@ -81,6 +88,7 @@ export default {
       dependencies,
       autoUpdateParentTasks: true,
       validateDependencies: true,
+      enablePredecessorGap: true,
     };
   },
 };

@@ -24,6 +24,9 @@
         <DxItem name="zoomIn"/>
         <DxItem name="zoomOut"/>
         <DxItem name="separator"/>
+        <DxItem name="showResources"/>
+        <DxItem name="showDependencies"/>
+        <DxItem name="separator"/>
         <DxItem
           :options="aboutButtonOptions"
           widget="dxButton"

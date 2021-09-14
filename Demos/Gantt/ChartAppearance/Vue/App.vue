@@ -29,6 +29,14 @@
             />
           </div>
         </div>
+        <div class="option">
+          <div class="label">Show Dependencies:</div>{{ ' ' }}
+          <div class="value">
+            <DxCheckBox
+              v-model:value="showDependencies"
+            />
+          </div>
+        </div>
       </div>{{ ' ' }}
       <div class="column">
         <div class="option">
@@ -68,9 +76,12 @@
         :task-title-position="taskTitlePosition"
         :scale-type="scaleType"
         :show-resources="showResources"
+        :show-dependencies="showDependencies"
         :start-date-range="startDateRange"
         :end-date-range="endDateRange"
         :task-tooltip-content-template="showCustomTaskTooltip ? 'taskTooltipContentTemplate' : ''"
+        :task-progress-tooltip-content-template="showCustomTaskTooltip ? 'taskProgressTooltipContentTemplate' : ''"
+        :task-time-tooltip-content-template="showCustomTaskTooltip ? 'taskTimeTooltipContentTemplate' : ''"
       >
 
         <DxTasks :data-source="tasks"/>
@@ -102,6 +113,15 @@
               Left: </span>{{ getTimeLeft(task) }}<span> hours </span></div>
           </div>
         </template>
+        <template #taskTimeTooltipContentTemplate="{ data: task }">
+          <div class="custom-task-edit-tooltip">
+            <div class="custom-tooltip-title">Start: {{ getTime(task.start) }}</div>
+            <div class="custom-tooltip-title">End: {{ getTime(task.end) }}</div>
+          </div></template>
+        <template #taskProgressTooltipContentTemplate="{ data: task }">
+          <div class="custom-task-edit-tooltip">
+            <div class="custom-tooltip-title">{{ task.progress }}%</div>
+          </div></template>
       </DxGantt>
     </div>
   </div>
@@ -149,6 +169,7 @@ export default {
       scaleType: 'months',
       taskTitlePosition: 'outside',
       showResources: true,
+      showDependencies: true,
       showCustomTaskTooltip: true,
       startDateRange: new Date(2018, 11, 1),
       endDateRange: new Date(2019, 11, 1),
@@ -161,6 +182,9 @@ export default {
     getTimeLeft(task) {
       const timeEstimate = Math.abs(task.start - task.end) / 36e5;
       return Math.floor(((100 - task.progress) / 100) * timeEstimate);
+    },
+    getTime(date) {
+      return date.toLocaleString();
     },
   },
 };

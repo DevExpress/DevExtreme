@@ -3,6 +3,7 @@ $(() => {
     validation: {
       autoUpdateParentTasks: true,
       validateDependencies: true,
+      enablePredecessorGap: true,
     },
 
     tasks: {
@@ -42,6 +43,14 @@ $(() => {
     value: true,
     onValueChanged(e) {
       gantt.option('validation.validateDependencies', e.value);
+    },
+  });
+
+  $('#enablePredecessorGap').dxCheckBox({
+    text: 'Enable Predecessor Gap',
+    value: true,
+    onValueChanged(e) {
+      gantt.option('validation.enablePredecessorGap', e.value);
     },
   });
 });

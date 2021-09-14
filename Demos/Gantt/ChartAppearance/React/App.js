@@ -9,6 +9,8 @@ import {
   tasks, dependencies, resources, resourceAssignments,
 } from './data.js';
 import TaskTooltipTemplate from './TaskTooltipTemplate.js';
+import TaskProgressTooltipContentTemplate from './TaskProgressTooltipContentTemplate.js';
+import TaskTimeTooltipContentTemplate from './TaskTimeTooltipContentTemplate.js';
 
 const scaleTypes = ['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years'];
 const titlePositions = ['inside', 'outside', 'none'];
@@ -20,6 +22,7 @@ class App extends React.Component {
       scaleType: 'months',
       taskTitlePosition: 'outside',
       showResources: true,
+      showDependencies: true,
       showCustomTaskTooltip: true,
       startDateRange: new Date(2018, 11, 1),
       endDateRange: new Date(2019, 11, 1),
@@ -27,6 +30,7 @@ class App extends React.Component {
     this.onScaleTypeChanged = this.onScaleTypeChanged.bind(this);
     this.onTaskTitlePositionChanged = this.onTaskTitlePositionChanged.bind(this);
     this.onShowResourcesChanged = this.onShowResourcesChanged.bind(this);
+    this.onShowDependenciesChanged = this.onShowDependenciesChanged.bind(this);
     this.onShowCustomTaskTooltip = this.onShowCustomTaskTooltip.bind(this);
     this.onStartDateValueChanged = this.onStartDateValueChanged.bind(this);
     this.onEndDateValueChanged = this.onEndDateValueChanged.bind(this);
@@ -37,6 +41,7 @@ class App extends React.Component {
       scaleType,
       taskTitlePosition,
       showResources,
+      showDependencies,
       showCustomTaskTooltip,
       startDateRange,
       endDateRange,
@@ -75,6 +80,16 @@ class App extends React.Component {
                 <CheckBox
                   value={showResources}
                   onValueChanged={this.onShowResourcesChanged}
+                />
+              </div>
+            </div>
+            <div className="option">
+              <div className="label">Show Dependencies:</div>
+              {' '}
+              <div className="value">
+                <CheckBox
+                  value={showDependencies}
+                  onValueChanged={this.onShowDependenciesChanged}
                 />
               </div>
             </div>
@@ -122,7 +137,12 @@ class App extends React.Component {
             taskTitlePosition={taskTitlePosition}
             scaleType={scaleType}
             showResources={showResources}
+            showDependencies={showDependencies}
             taskTooltipContentRender = {showCustomTaskTooltip ? TaskTooltipTemplate : undefined}
+            taskTimeTooltipContentRender =
+              {showCustomTaskTooltip ? TaskTimeTooltipContentTemplate : undefined}
+            taskProgressTooltipContentRender =
+              {showCustomTaskTooltip ? TaskProgressTooltipContentTemplate : undefined}
             startDateRange = {startDateRange}
             endDateRange = {endDateRange}>
 
@@ -157,6 +177,12 @@ class App extends React.Component {
   onShowResourcesChanged(e) {
     this.setState({
       showResources: e.value,
+    });
+  }
+
+  onShowDependenciesChanged(e) {
+    this.setState({
+      showDependencies: e.value,
     });
   }
 

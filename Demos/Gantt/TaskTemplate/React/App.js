@@ -27,7 +27,7 @@ class App extends React.Component {
             <Column dataField="start" caption="Start Date" />
             <Column dataField="end" caption="End Date" />
 
-            <Editing enabled={false} />
+            <Editing enabled={true} />
           </Gantt>
         </div>
       </div>

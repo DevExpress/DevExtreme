@@ -49,6 +49,9 @@ class App extends React.Component {
             <Item name="zoomIn" />
             <Item name="zoomOut" />
             <Item name="separator" />
+            <Item name="showResources" />
+            <Item name="showDependencies" />
+            <Item name="separator" />
             <Item widget="dxButton" options={this.aboutButtonOptions} />
           </Toolbar>
 

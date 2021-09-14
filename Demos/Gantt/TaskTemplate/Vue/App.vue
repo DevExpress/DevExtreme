@@ -13,7 +13,7 @@
         <DxResources :data-source="resources"/>
         <DxResourceAssignments :data-source="resourceAssignments"/>
 
-        <DxEditing :enabled="false"/>
+        <DxEditing :enabled="true"/>
 
         <DxColumn
           :width="300"

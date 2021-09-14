@@ -25,6 +25,7 @@ export class AppComponent {
     scaleType: string;
     titlePosition: string;
     showResources: boolean;
+    showDependencies: boolean;
     showCustomTaskTooltip: boolean;
     startDateRange: Date;
     endDateRange: Date;
@@ -37,6 +38,7 @@ export class AppComponent {
         this.scaleType = "months";
         this.titlePosition = "outside";
         this.showResources = true;
+        this.showDependencies = true;
         this.showCustomTaskTooltip = true;
         this.startDateRange = new Date(2018, 11, 1);
         this.endDateRange = new Date(2019, 11, 1);
@@ -49,6 +51,10 @@ export class AppComponent {
     getTimeLeft(task) {
         const timeEstimate = Math.abs(task.start - task.end) / 36e5;
         return Math.floor((100 - task.progress) / 100 * timeEstimate);
+    }
+
+    getTime(date) {
+        return  date.toLocaleString();
     }
 }
 

@@ -15,7 +15,7 @@
             <dxi-column dataField="start" caption="Start Date" dataType="date"></dxi-column>
             <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
 
-            <dxo-editing [enabled]="false"></dxo-editing>
+            <dxo-editing [enabled]="true"></dxo-editing>
             <div *dxTemplate="let item of 'taskContentTemplate'" class="custom-task {{getTaskColor(item.taskData.id)}}" style.width="{{item.taskSize.width}}px">
                 <div class="custom-task-img-wrapper">
                     <img class="custom-task-img" attr.src={{getImagePath(item.taskData.id)}}/>

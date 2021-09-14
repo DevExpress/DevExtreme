@@ -22,12 +22,14 @@ export class AppComponent {
     dependencies: Dependency[];
     autoUpdateParentTasks: boolean;
     validateDependencies: boolean;
+    enablePredecessorGap: boolean;
 
     constructor(service: Service) {
         this.tasks = service.getTasks();
         this.dependencies = service.getDependencies();
         this.autoUpdateParentTasks = true;
         this.validateDependencies = true;
+        this.enablePredecessorGap = true;
     }
 }
 

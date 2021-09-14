@@ -11,15 +11,18 @@ class App extends React.Component {
     this.state = {
       autoUpdateParentTasks: true,
       validateDependencies: true,
+      enablePredecessorGap: true,
     };
     this.onAutoUpdateParentTasksChanged = this.onAutoUpdateParentTasksChanged.bind(this);
     this.onValidateDependenciesChanged = this.onValidateDependenciesChanged.bind(this);
+    this.onEnablePredecessorGapChanged = this.onEnablePredecessorGapChanged.bind(this);
   }
 
   render() {
     const {
       autoUpdateParentTasks,
       validateDependencies,
+      enablePredecessorGap,
     } = this.state;
     return (
       <div id="form-demo">
@@ -32,12 +35,20 @@ class App extends React.Component {
               onValueChanged={this.onAutoUpdateParentTasksChanged}
             />
           </div>
-          &nbsp;
+          {' '}
           <div className="option">
             <CheckBox
               text="Enable Dependency Validation"
               value={validateDependencies}
               onValueChanged={this.onValidateDependenciesChanged}
+            />
+          </div>
+          {' '}
+          <div className="option">
+            <CheckBox
+              text="Enable Predecessor Gap"
+              value={enablePredecessorGap}
+              onValueChanged={this.onEnablePredecessorGapChanged}
             />
           </div>
         </div>
@@ -49,7 +60,8 @@ class App extends React.Component {
 
             <Validation
               autoUpdateParentTasks={autoUpdateParentTasks}
-              validateDependencies={validateDependencies} />
+              validateDependencies={validateDependencies}
+              enablePredecessorGap={enablePredecessorGap} />
 
             <Tasks dataSource={tasks} />
             <Dependencies dataSource={dependencies} />
@@ -74,6 +86,12 @@ class App extends React.Component {
   onValidateDependenciesChanged(e) {
     this.setState({
       validateDependencies: e.value,
+    });
+  }
+
+  onEnablePredecessorGapChanged(e) {
+    this.setState({
+      enablePredecessorGap: e.value,
     });
   }
 }

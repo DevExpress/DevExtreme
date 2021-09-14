@@ -11,6 +11,11 @@
                 text="Enable Dependency Validation"
                 [(value)]="validateDependencies"></dx-check-box>
         </div>
+        <div class="option">
+            <dx-check-box
+                text="Enable Predecessor Gap"
+                [(value)]="enablePredecessorGap"></dx-check-box>
+        </div>
     </div>
     <div class="widget-container">
         <dx-gantt
@@ -18,7 +23,7 @@
             height="700"
             taskTitlePosition="none">
 
-            <dxo-validation [autoUpdateParentTasks]="autoUpdateParentTasks" [validateDependencies]="validateDependencies"></dxo-validation>
+            <dxo-validation [autoUpdateParentTasks]="autoUpdateParentTasks" [validateDependencies]="validateDependencies" [enablePredecessorGap]="enablePredecessorGap"></dxo-validation>
 
             <dxo-tasks [dataSource]="tasks"></dxo-tasks>
             <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>

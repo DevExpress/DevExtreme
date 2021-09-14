@@ -14,6 +14,9 @@ $(() => {
         'zoomIn',
         'zoomOut',
         'separator',
+        'showResources',
+        'showDependencies',
+        'separator',
         {
           widget: 'dxButton',
           options: {

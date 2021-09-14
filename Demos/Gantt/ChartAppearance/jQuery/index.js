@@ -32,6 +32,9 @@ $(() => {
     }],
     taskListWidth: 500,
     taskTooltipContentTemplate: getTaskTooltipContentTemplate,
+    taskProgressTooltipContentTemplate: getTaskProgressTooltipContentTemplate,
+    taskTimeTooltipContentTemplate: getTaskTimeTooltipContentTemplate,
+
   }).dxGantt('instance');
 
   $('#scaleType').dxSelectBox({
@@ -69,6 +72,12 @@ $(() => {
       gantt.option('showResources', e.value);
     },
   });
+  $('#showDependencies').dxCheckBox({
+    value: true,
+    onValueChanged(e) {
+      gantt.option('showDependencies', e.value);
+    },
+  });
 
   $('#customizeTaskTooltip').dxCheckBox({
     value: true,
@@ -76,6 +85,14 @@ $(() => {
       gantt.option(
         'taskTooltipContentTemplate',
         e.value ? getTaskTooltipContentTemplate : undefined,
+      );
+      gantt.option(
+        'taskProgressTooltipContentTemplate',
+        e.value ? getTaskProgressTooltipContentTemplate : undefined,
+      );
+      gantt.option(
+        'taskTimeTooltipContentTemplate',
+        e.value ? getTaskTimeTooltipContentTemplate : undefined,
       );
     },
   });
@@ -113,6 +130,37 @@ $(() => {
     $(document.createElement('div'))
       .addClass('custom-tooltip-row')
       .text(`Left: ${timeLeft}hours`)
+      .appendTo($customTooltip);
+
+    return $customTooltip;
+  }
+
+  function getTaskProgressTooltipContentTemplate(task) {
+    const $customTooltip = $(document.createElement('div'))
+      .addClass('custom-task-edit-tooltip');
+
+    $(document.createElement('div'))
+      .addClass('custom-tooltip-title')
+      .text(`${task.progress}%`)
+      .appendTo($customTooltip);
+
+    return $customTooltip;
+  }
+
+  function getTaskTimeTooltipContentTemplate(task) {
+    const start = task.start.toLocaleString();
+    const end = task.end.toLocaleString();
+
+    const $customTooltip = $(document.createElement('div'))
+      .addClass('custom-task-edit-tooltip');
+
+    $(document.createElement('div'))
+      .addClass('custom-tooltip-title')
+      .text(`Start: ${start}`)
+      .appendTo($customTooltip);
+    $(document.createElement('div'))
+      .addClass('custom-tooltip-title')
+      .text(`End: ${end}`)
       .appendTo($customTooltip);
 
     return $customTooltip;
