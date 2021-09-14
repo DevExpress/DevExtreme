@@ -13,7 +13,13 @@ jobs:
   testcafe:
     strategy:
       matrix:
-        ARGS: [ --componentFolder=dataGrid --quarantineMode=true, --componentFolder=scheduler --quarantineMode=true, --componentFolder=editors, --componentFolder=navigation ]
+        ARGS: [ 
+          { componentFolder: "dataGrid", quarantineMode: true }, 
+          { componentFolder: "scheduler", quarantineMode: true }, 
+          { componentFolder: "editors", quarantineMode: false }, 
+          { componentFolder: "navigation", quarantineMode: false }, 
+          { componentFolder: "renovation", quarantineMode: false } 
+        ] 
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -36,24 +42,27 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
-    - name: Run npm install
+    - name: Prepare renovation playground
+      if: ${{ matrix.ARGS.componentFolder == renovation }} 
       run: |
+        pushd
         cd testing/renovation
         npm install --no-audit --no-fund
+        popd
+        npm run build:angular
+        npm run build:react
+        npm run build:vue
+        npx gulp build-renovation-testing
 
     - name: Build
       env:
         DEVEXTREME_TEST_CI: "true"
       run: npm run build
 
-    - name: Build renovation playgound
-      run: npx gulp build-renovation-testing
 
     - name: Run TestCafe tests
-      env:
-        ARGS: ${{ matrix.ARGS }}
       run: |
-        all_args="--concurrency 2 --browsers=chrome:headless ${ARGS}"
+        all_args="--concurrency 2 --browsers=chrome:headless --componentfolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
     - name: Copy screenshots artifacts
