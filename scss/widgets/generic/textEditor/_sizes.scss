@@ -3,11 +3,26 @@
 // adduse
 
 $generic-texteditor-clear-icon-oversize: null !default;
+$generic-texteditor-label-size: null !default;
+
+
+$genric-editor-outlined-with-label-height: null !default;
+$genric-editor-filled-with-label-height: null !default;
+$genric-editor-underlined-with-label-height: null !default;
+
 
 @if $size == "default" {
   $generic-texteditor-clear-icon-oversize: 2px !default;
+  $generic-texteditor-label-size: 12px !default;
+  $genric-editor-outlined-with-label-height: 42px !default;
+  $genric-editor-filled-with-label-height: 50px !default;
+  $genric-editor-underlined-with-label-height: 48px !default;
 }
 
 @else if $size == "compact" {
   $generic-texteditor-clear-icon-oversize: 1px !default;
+  $generic-texteditor-label-size: 10px !default;
+  $genric-editor-outlined-with-label-height: 30px !default;
+  $genric-editor-filled-with-label-height: 38px !default;
+  $genric-editor-underlined-with-label-height: 38px !default;
 }

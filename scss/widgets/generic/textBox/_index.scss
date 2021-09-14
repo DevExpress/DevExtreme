@@ -33,15 +33,46 @@
     @at-root #{selector-append(".dx-rtl", &)},
     .dx-rtl & {
       padding-right: $generic-texteditor-icon-container-size;
+      padding-left: 0;
     }
   }
 
   &.dx-editor-underlined {
-    .dx-texteditor-input,
-    .dx-placeholder::before {
+    .dx-texteditor-buttons-container + .dx-texteditor-input-container .dx-texteditor-input,
+    .dx-texteditor-input {
+      padding-left: $generic-texteditor-icon-container-size + $generic-base-inline-borderedwidget-horizontal-padding;
+
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
-        padding-right: 0;
+        padding-right: $generic-texteditor-icon-container-size + $generic-base-inline-borderedwidget-horizontal-padding;
+        padding-left: 0;
+      }
+    }
+
+    .dx-placeholder::before {
+      left: 0;
+    }
+
+    &.dx-rtl {
+      .dx-placeholder::before {
+        right: 0;
+      }
+    }
+  }
+
+  &.dx-editor-filled {
+    .dx-texteditor-label {
+      .dx-label {
+        padding-left: 0;
+      }
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        .dx-texteditor-label {
+          .dx-label {
+            padding-right: 0;
+          }
+        }
       }
     }
   }

@@ -42,6 +42,21 @@
       }
     }
   }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    &.dx-editor-filled {
+      .dx-tag-container.dx-texteditor-input-container {
+        padding-top: 10px;
+      }
+    }
+
+    &.dx-editor-underlined {
+      .dx-tag-container.dx-texteditor-input-container {
+        padding-top: 10px;
+      }
+    }
+  }
 }
 
 .dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {

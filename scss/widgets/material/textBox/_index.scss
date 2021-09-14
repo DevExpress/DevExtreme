@@ -41,7 +41,7 @@
 
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
-        padding-left: $material-base-standard-texteditor-input-horizontal-padding;
+        padding-left: 0;
         padding-right: $material-texteditor-icon-container-size + $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
@@ -65,8 +65,45 @@
 
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
-        padding-left: $material-filled-texteditor-input-horizontal-padding;
+        padding-left: 0;
         padding-right: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
+      }
+    }
+
+    &.dx-texteditor-with-floating-label {
+      .dx-icon-search {
+        width: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
+        padding-left: $material-filled-texteditor-input-horizontal-padding;
+        left: 0;
+      }
+
+      &.dx-rtl,
+      .dx-rtl & {
+        .dx-icon-search {
+          width: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
+          padding-right: $material-filled-texteditor-input-horizontal-padding;
+          padding-left: 0;
+          right: 0;
+        }
+      }
+    }
+  }
+
+  &.dx-editor-filled {
+    &.dx-texteditor-with-floating-label {
+      .dx-texteditor-label {
+        .dx-label {
+          padding-left: 0;
+        }
+      }
+
+      &.dx-rtl,
+      .dx-rtl & {
+        .dx-texteditor-label {
+          .dx-label {
+            padding-right: 0;
+          }
+        }
       }
     }
   }
