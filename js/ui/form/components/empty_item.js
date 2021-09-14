@@ -5,6 +5,6 @@ export function renderEmptyItem({ $parent, rootElementCssClasses }) {
     return $('<div>')
         .addClass(FIELD_EMPTY_ITEM_CLASS)
         .html('&nbsp;')
-        .addClass(rootElementCssClasses)
+        .addClass(rootElementCssClasses.join(' '))
         .appendTo($parent);
 }

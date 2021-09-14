@@ -13,7 +13,7 @@ export function renderButtonItem({
 }) {
     const $rootElement = $('<div>')
         .appendTo($parent)
-        .addClass(rootElementCssClasses)
+        .addClass(rootElementCssClasses.join(' '))
         .addClass(FIELD_BUTTON_ITEM_CLASS)
         .css('textAlign', convertAlignmentToTextAlign(item.horizontalAlignment));
 

@@ -351,15 +351,15 @@ const LayoutManager = Widget.inherit({
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
 
-                let itemCssClasses = item.cssClass || '';
+                const itemCssClasses = [item.cssClass || ''];
 
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
-                    itemCssClasses += ' ' + LAYOUT_MANAGER_FIRST_ROW_CLASS;
+                    itemCssClasses.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
                 }
                 if(e.location.col === 0) {
-                    itemCssClasses += ' ' + LAYOUT_MANAGER_FIRST_COL_CLASS;
+                    itemCssClasses.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
 
                 if(item.itemType === SIMPLE_ITEM_TYPE && that.option('isRoot')) {
@@ -369,16 +369,17 @@ const LayoutManager = Widget.inherit({
                 const rowsCount = that._getRowsCount();
                 const isLastRow = e.location.row === rowsCount - 1;
                 if(isLastColumn) {
-                    itemCssClasses += ' ' + LAYOUT_MANAGER_LAST_COL_CLASS;
+                    itemCssClasses.push(LAYOUT_MANAGER_LAST_COL_CLASS);
                 }
                 if(isLastRow) {
-                    itemCssClasses += ' ' + LAYOUT_MANAGER_LAST_ROW_CLASS;
+                    itemCssClasses.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
                 }
 
                 if(item.itemType !== 'empty') {
-                    itemCssClasses += ` ${FIELD_ITEM_CLASS} ${that.option('cssItemClass') || ''}`;
+                    itemCssClasses.push(`${FIELD_ITEM_CLASS}`);
+                    itemCssClasses.push(`${that.option('cssItemClass') || ''}`);
                     if(isDefined(item.col)) {
-                        itemCssClasses += ' dx-col-' + item.col;
+                        itemCssClasses.push('dx-col-' + item.col);
                     }
                 }
 

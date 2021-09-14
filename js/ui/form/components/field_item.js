@@ -47,7 +47,7 @@ export function renderFieldItem({
 }) {
 
     const $rootElement = $('<div>')
-        .addClass(rootElementCssClasses)
+        .addClass(rootElementCssClasses.join(' '))
         .appendTo($parent);
 
     $rootElement.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
