@@ -6,7 +6,7 @@ import renderer from 'core/renderer';
 import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import { Deferred } from 'core/utils/deferred';
-import { getHeight, getWidth, setWidth } from 'core/utils/size';
+import { getHeight, getWidth, setWidth, getOffset } from 'core/utils/size';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
@@ -11643,7 +11643,8 @@ QUnit.module('Editing with validation', {
 
         // T526383
         const $modifiedCell = cells.eq(1);
-        assert.ok($overlayContent.offset().top >= ($modifiedCell.offset().top + getHeight($modifiedCell)), 'tooltip is under the cell');
+        const coercion = browser.mozilla ? 1 : 0;
+        assert.ok((getOffset($overlayContent[0]).top + coercion) >= (getOffset($modifiedCell[0]).top + getHeight($modifiedCell)), 'tooltip is under the cell');
     });
 
     // T200857
