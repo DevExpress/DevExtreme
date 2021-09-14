@@ -9,7 +9,7 @@ module.exports = (dirname) => ({
         buttonLight: path.resolve(dirname, './src/button-light.vue')
     },
     resolve: {
-        alias: { vue: 'C:/Work/Devextreme/DevExtreme/testing/renovation/node_modules/vue/dist/vue.esm.js' },
+        alias: { vue: path.resolve(dirname, '../../node_modules/vue/dist/vue.esm.js') },
         extensions: ['.js', '.tsx', '.ts', '.vue'],
     },
     module: {

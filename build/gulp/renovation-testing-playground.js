@@ -21,11 +21,11 @@ const platforms = {
         pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
         getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
     },
-    // 'vue': {
-    //     pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
-    //     getEntyPoint: (fn) => path.join(path.dirname(fn), path.basename(fn, '.vue') + '-app.js'),
-    //     getDeclarationFile: (basenameFilename) => basenameFilename + '.vue',
-    // },
+    'vue': {
+        pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
+        getEntyPoint: (fn) => path.join(path.dirname(fn), path.basename(fn, '.vue') + '-app.js'),
+        getDeclarationFile: (basenameFilename) => basenameFilename + '.vue',
+    },
 };
 
 const declarationFiles = glob.sync(path.join(renovationRoot, 'declaration', '*.tsx'));
@@ -117,10 +117,10 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
             const getConfig = () => {
                 const webpackConfig = require(path.resolve(path.join(platformRoot, './webpack.config')))(path.resolve(platformRoot));
                 const entries = fileEntries
-                .reduce((result, fn) => {
-                    result[entryName(fn)] = path.resolve(getEntyPoint(fn))
-                    return result;
-                }, {});
+                    .reduce((result, fn) => {
+                        result[entryName(fn)] = path.resolve(getEntyPoint(fn))
+                        return result;
+                    }, {});
                 const _config = {
                     ...webpackConfig,
                     ...{
@@ -177,6 +177,5 @@ const foldersToCleanup = [
         }
     });
 gulp.task('clean-renovation-testing',
-    gulp.parallel([...foldersToCleanup, (cb) => { cb(); }
-    ])
+    gulp.parallel([...foldersToCleanup, (cb) => { cb(); }])
 );

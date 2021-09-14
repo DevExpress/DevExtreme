@@ -1,4 +1,3 @@
-// const sites = require('../../server-config');
 import { resolve } from 'path';
 import url from './getPageUrl';
 

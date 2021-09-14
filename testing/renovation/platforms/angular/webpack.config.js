@@ -35,7 +35,6 @@ module.exports = (dirname) => ({
                         loader: 'ts-loader',
                         options: {
                             ignoreDiagnostics: [2614, 2769, 2305],
-                            // errorFormatter: (error) => { debugger; },
                             configFile: path.resolve(dirname, './tsconfig.json'),
                         },
                     },
