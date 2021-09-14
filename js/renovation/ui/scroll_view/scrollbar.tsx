@@ -188,20 +188,28 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   moveTo(location: number): void {
     const scrollDelta = Math.abs(this.prevScrollLocation - location);
-
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.props.maxOffset - location;
 
     this.props.scrollLocationChange?.(this.fullScrollProp, -location, scrollDelta >= 1);
   }
 
-  // TODO: need to use for simulated strategy only
   @Effect()
+  /* istanbul ignore next */
   syncScrollLocation(): void {
     if (this.props.containerHasSizes) {
-      this.moveTo(this.isHorizontal && this.props.rtlEnabled
-        ? this.props.maxOffset - this.rightScrollLocation
-        : this.props.scrollLocation);
+      let newScrollLocation = this.props.scrollLocation;
+
+      if (this.isHorizontal && this.props.rtlEnabled) {
+        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
+
+        if (newScrollLocation >= 0) {
+          newScrollLocation = 0;
+          this.rightScrollLocation = 0;
+        }
+      }
+
+      this.moveTo(newScrollLocation);
     }
   }
 

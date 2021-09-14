@@ -235,7 +235,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       && this.needRiseEnd
       && this.inRange
       && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
-      && this.isPullDown
+      && this.props.pulledDown
       && !this.pendingRefreshing
       && !this.refreshing
       && -this.props.maxOffset > 0
@@ -315,7 +315,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get pendingRelease(): boolean {
-    return ((this.isPullDown && this.props.pullDownEnabled)
+    return ((this.props.pulledDown && this.props.pullDownEnabled)
       || (this.isReachBottom && this.props.reachBottomEnabled)) && !this.wasRelease;
   }
 
@@ -328,15 +328,9 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return inRange(this.props.scrollLocation, this.maxOffset, this.props.minOffset);
   }
 
+  /* istanbul ignore next */
   get inBounds(): boolean {
     return inRange(this.props.scrollLocation, this.props.maxOffset, 0);
-  }
-
-  get isPullDown(): boolean {
-    return this.props.pullDownEnabled
-      && this.props.topPocketSize !== 0 // topPocket was initialized
-      && this.props.bounceEnabled
-      && (this.props.scrollLocation - this.props.topPocketSize) >= 0;
   }
 
   get isReachBottom(): boolean {

@@ -8,7 +8,7 @@ import { ScrollbarProps } from './scrollbar_props';
 
 @ComponentBindings()
 export class AnimatedScrollbarProps extends ScrollbarProps {
-  @OneWay() topPocketSize = 0;
+  @OneWay() pulledDown = false;
 
   @OneWay() bottomPocketSize = 0;
 
