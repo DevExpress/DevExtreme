@@ -77,7 +77,7 @@ const getAutoWidthColumns = ($table) => {
     const result = [];
     $table.find('tr').eq(0).find('td').each((index, element) => {
         const $element = $(element);
-        if($element.attr('width')) {
+        if(!isDefined($element.attr('width'))) {
             result.push($element);
         }
     });
@@ -95,22 +95,23 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
-        // const shouldRecalculateOtherColumns = !autoWidthColumnsExists($table);
+        const shouldKeepOtherColumnsWidth = getAutoWidthColumns($table).length > 0 && (!$table.attr('style') || $table.attr('style').indexOf('width') < 0);
 
-        $table.css('width', 'initial');
+        // $table.css('width', 'initial');
 
-        // if(shouldRecalculateOtherColumns) {
-        if($nextColumnCell.length === 1) {
-            $verticalCells = getLineElements($target.closest('table'), index + 1);
-            setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
-        } else {
-            const $prevColumnCell = $target.prev();
-            if($prevColumnCell.length === 1) {
-                $verticalCells = getLineElements($target.closest('table'), index - 1);
+        if(!shouldKeepOtherColumnsWidth) {
+            $table.css('width', 'initial');
+            if($nextColumnCell.length === 1) {
+                $verticalCells = getLineElements($target.closest('table'), index + 1);
                 setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
+            } else {
+                const $prevColumnCell = $target.prev();
+                if($prevColumnCell.length === 1) {
+                    $verticalCells = getLineElements($target.closest('table'), index - 1);
+                    setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
+                }
             }
         }
-        // }
 
     }
 
