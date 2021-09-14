@@ -22,6 +22,7 @@ import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
 import { hasWindow } from '../../core/utils/window';
 import { getElementWidth, getSizeValue } from './utils';
+import { locate, move } from '../../animation/translator';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -619,6 +620,15 @@ const DropDownEditor = TextBox.inherit({
 
     _popupShownHandler: function() {
         this._openAction();
+
+        const $popupOverlayContent = this._popup.$overlayContent();
+        const position = locate($popupOverlayContent);
+
+        if(this._$label && $popupOverlayContent.hasClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED)) {
+            move($popupOverlayContent, {
+                top: position.top - parseInt(this._$label.css('font-size'))
+            });
+        }
 
         this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
