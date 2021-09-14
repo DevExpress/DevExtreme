@@ -94,6 +94,17 @@ const TextBox = TextEditor.inherit({
         this._$searchIcon = $searchIcon;
     },
 
+
+    _renderLabel: function() {
+        this.callBase();
+
+        if(this._$searchIcon && this._$label) {
+            this._$label.find('.dx-label-before').css('width', this._$label.find('.dx-label-before').width() + this._$searchIcon.outerWidth());
+
+            this._$label.find('.dx-label').css('max-width', this._input().parent().width() - this._$searchIcon.outerWidth());
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'maxLength':

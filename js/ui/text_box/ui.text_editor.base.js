@@ -19,11 +19,14 @@ import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
+const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_SELECTOR = '.' + TEXTEDITOR_INPUT_CLASS;
 const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 
@@ -127,7 +130,11 @@ const TextEditorBase = Editor.inherit({
 
             stylingMode: config().editorStylingMode || 'outlined',
 
-            showValidationMark: true
+            showValidationMark: true,
+
+            label: '',
+
+            labelMode: 'static'
         });
     },
 
@@ -140,7 +147,9 @@ const TextEditorBase = Editor.inherit({
                     return isMaterial(themeName);
                 },
                 options: {
-                    stylingMode: config().editorStylingMode || 'filled'
+                    stylingMode: config().editorStylingMode || 'filled',
+                    label: '',
+                    labelMode: 'floating'
                 }
             }
         ]);
@@ -201,6 +210,8 @@ const TextEditorBase = Editor.inherit({
         this.callBase();
 
         this._renderValue();
+
+        this._renderLabel();
     },
 
     _render: function() {
@@ -437,6 +448,42 @@ const TextEditorBase = Editor.inherit({
 
     _toggleSpellcheckState: function() {
         this._input().prop('spellcheck', this.option('spellcheck'));
+    },
+
+    _renderLabel: function() {
+        const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
+
+        if(!this.label && this.$element().find('.' + TEXTEDITOR_LABEL_CLASS).length === 1 || this.$element().find('.' + TEXTEDITOR_LABEL_CLASS).length === 2) {
+            this.$element().find('.' + TEXTEDITOR_LABEL_CLASS).first().remove();
+        }
+
+        if(this._$label) {
+            this._$label.remove();
+            this._$label = null;
+        }
+
+        this.$element()
+            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
+
+        if(!this.option('label') || this.option('labelMode') === 'hidden') return;
+
+        this.$element().addClass(this.option('labelMode') === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS);
+
+        const labelText = this.option('label');
+        const $label = this._$label = $('<div>')
+            .addClass(TEXTEDITOR_LABEL_CLASS)
+            .html('<div class="dx-label-before"></div><div class="dx-label"><span>' + labelText + '</span></div><div class="dx-label-after"></div>');
+
+        $label.appendTo(this.$element());
+
+        if(this._$beforeButtonsContainer) {
+            this.$element().addClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
+            this._$label.find('.dx-label-before').css('width', this._$beforeButtonsContainer.width());
+        }
+
+        this._$label.find('.dx-label').css('max-width', this._$field ? this._$field.width() : (this._$tagsContainer ? this._$tagsContainer.width() : this._input().width()));
     },
 
     _renderPlaceholder: function() {
@@ -704,6 +751,14 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'placeholder':
                 this._renderPlaceholder();
+                break;
+            case 'label':
+            case 'labelMode':
+                this._renderLabel();
+                break;
+            case 'width':
+                this.callBase(args);
+                this._renderLabel();
                 break;
             case 'readOnly':
             case 'disabled':
