@@ -93,6 +93,16 @@ const LoadPanelTests = {
                 let isFirstCall = true;
                 let exportLoadPanel;
                 let $targetElement;
+                let $loadPanelContainer;
+
+                if(component.NAME === 'dxDataGrid') {
+                    $targetElement = component.$element().find('.dx-datagrid-rowsview');
+                    $loadPanelContainer = component.$element().find('.dx-gridbase-container');
+                } else {
+                    $targetElement = component.$element().find('.dx-pivotgrid-area-data');
+                    $loadPanelContainer = component.$element();
+                }
+                $targetElement.height(5000);
 
                 exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
@@ -105,19 +115,7 @@ const LoadPanelTests = {
                         exportLoadPanel = $exportLoadPanel.dxLoadPanel('instance');
                         assert.strictEqual(exportLoadPanel.option('visible'), true, 'export loadpanel is visible');
 
-                        let $loadPanelContainer;
-
-                        if(component.NAME === 'dxDataGrid') {
-                            $targetElement = component.$element().find('.dx-datagrid-rowsview');
-                            $targetElement.height(5000);
-                            $loadPanelContainer = component.$element().find('.dx-gridbase-container');
-                        } else {
-                            $targetElement = component.$element().find('.dx-pivotgrid-area-data');
-                            $targetElement.height(5000);
-
-                            $loadPanelContainer = component.$element();
-                        }
-                        const actualPosition = exportLoadPanel.option('position')();
+                        const actualPosition = exportLoadPanel.option('position');
 
                         assert.deepEqual(actualPosition.of, $(getWindow()), 'loadPanel.position.of');
                         assert.strictEqual(actualPosition.collision, 'fit', 'loadPanel.position.collision');
@@ -146,8 +144,17 @@ const LoadPanelTests = {
 
                 let isFirstCall = true;
                 let exportLoadPanel;
+                let $loadPanelContainer;
+                let $targetElement;
 
-
+                if(component.NAME === 'dxDataGrid') {
+                    $targetElement = component.$element().find('.dx-datagrid-rowsview');
+                    $loadPanelContainer = component.$element().find('.dx-gridbase-container');
+                } else {
+                    $targetElement = component.$element().find('.dx-pivotgrid-area-data');
+                    $loadPanelContainer = component.$element();
+                }
+                $targetElement.height(100);
                 exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
                         const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
@@ -158,21 +165,7 @@ const LoadPanelTests = {
 
                         exportLoadPanel = $exportLoadPanel.dxLoadPanel('instance');
                         assert.strictEqual(exportLoadPanel.option('visible'), true, 'export loadpanel is visible');
-
-                        let $loadPanelContainer;
-                        let $targetElement;
-
-                        if(component.NAME === 'dxDataGrid') {
-                            $targetElement = component.$element().find('.dx-datagrid-rowsview');
-                            $targetElement.height(100);
-                            $loadPanelContainer = component.$element().find('.dx-gridbase-container');
-                        } else {
-                            $targetElement = component.$element().find('.dx-pivotgrid-area-data');
-                            $targetElement.height(100);
-                            $loadPanelContainer = component.$element();
-                        }
-
-                        assert.deepEqual($(exportLoadPanel.option('position')().of).get(0), $targetElement.get(0), 'loadPanel.position');
+                        assert.deepEqual($(exportLoadPanel.option('position').of).get(0), $targetElement.get(0), 'loadPanel.position');
                         assert.deepEqual(exportLoadPanel.option('container').get(0), $loadPanelContainer.get(0), 'loadPanel.container');
                         isFirstCall = false;
                     }

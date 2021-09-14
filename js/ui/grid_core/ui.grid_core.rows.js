@@ -1007,16 +1007,7 @@ export const rowsModule = {
                             visible: isLoading
                         };
                         if(isLoading) {
-                            const $window = $(getWindow());
-                            let positionOption = { of: $element };
-                            if($element.height() > $window.height()) {
-                                positionOption = {
-                                    of: $window,
-                                    boundary: $element,
-                                    collision: 'fit'
-                                };
-                            }
-                            visibilityOptions.position = positionOption;
+                            visibilityOptions.position = gridCoreUtils.calculateLoadPanelPosition($element);
                         }
                         clearTimeout(that._hideLoadingTimeoutID);
                         if(loadPanel.option('visible') && !isLoading) {
