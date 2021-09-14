@@ -438,7 +438,7 @@ module('Table resizing integration', {
             assert.roughEqual(columnBorderOffsets[1], 200, 2.01);
         });
 
-        test('Check column resizers elements and border positions after drag if the table has a header row', function(assert) {
+        test('Check column resizers elements and border positions after drag if the table has a header row (T1028207)', function(assert) {
             this.createWidget({ width: 430, value: tableMarkupWithHeaderRow });
             this.clock.tick(TIME_TO_WAIT);
 
@@ -812,7 +812,7 @@ module('Table resizing integration', {
             assert.roughEqual($table.outerHeight(), startTableHeight + offset, 3);
         });
 
-        test('Height of the table with header row was changed if we drag the row height resizer', function(assert) {
+        test('Height of the table with header row was changed if we drag the row height resizer (T1028207)', function(assert) {
             this.createWidget({ height: 300, value: tableMarkupWithHeaderRow });
             this.clock.tick(TIME_TO_WAIT);
 
