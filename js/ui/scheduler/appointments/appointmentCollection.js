@@ -528,8 +528,8 @@ class SchedulerAppointments extends CollectionWidget {
             const resourceManager = this.invoke('getResourceManager');
 
             const resourceConfig = {
-                resources: this.option('resources'),
-                dataAccessors: this.option('resourceDataAccessors'),
+                resources: this.option('getResources')(),
+                dataAccessors: this.option('getResourceDataAccessors')(),
                 loadedResources: resourceManager.loadedResources,
                 resourceLoaderMap: resourceManager.resourceLoaderMap
             };
@@ -562,8 +562,8 @@ class SchedulerAppointments extends CollectionWidget {
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
                 groups: this.option('groups'),
 
-                resources: this.option('resources'),
-                resourceDataAccessors: this.option('resourceDataAccessors')
+                resources: this.option('getResources')(),
+                resourceDataAccessors: this.option('getResourceDataAccessors')()
             };
 
             if(this.isAgendaView) {
@@ -584,8 +584,8 @@ class SchedulerAppointments extends CollectionWidget {
 
     _applyResourceDataAttr($appointment) {
         const resources = getResourcesFromItem(
-            this.option('resources'),
-            this.option('resourceDataAccessors'),
+            this.option('getResources')(),
+            this.option('getResourceDataAccessors')(),
             this._getItemData($appointment)
         );
 
