@@ -61,6 +61,13 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                     $container.html(data.html);
                 }
 
+                if(data.widget === 'dxDropDownButton') {
+                    if(this.option('useFlatButtons')) {
+                        data.options = data.options || {};
+                        data.options.stylingMode = data.options.stylingMode || TEXT_BUTTON_MODE;
+                    }
+                }
+
                 if(data.widget === 'dxButton') {
                     if(this.option('useFlatButtons')) {
                         data.options = data.options || {};

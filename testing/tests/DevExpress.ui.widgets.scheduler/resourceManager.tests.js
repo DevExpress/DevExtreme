@@ -208,9 +208,10 @@ QUnit.test('Get resource by field name and value', function(assert) {
 QUnit.test('Get resources from item data', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date(), roomId: 2, ownerId: [1, 2] };
+
     const resources = getResourcesFromItem(
         this.instance.getResources(),
-        (field, action) => this.instance.getDataAccessors(field, action),
+        this.instance._dataAccessors,
         item
     );
 
@@ -240,7 +241,7 @@ QUnit.test('Get resources from item data with combined resource field', function
     const item = { text: 'Item 1', startDate: new Date(), outer: { roomId: 2 }, ownerId: [1, 2] };
     const resources = getResourcesFromItem(
         this.instance.getResources(),
-        (field, action) => this.instance.getDataAccessors(field, action),
+        this.instance._dataAccessors,
         item,
         true
     );
@@ -320,7 +321,7 @@ QUnit.test('getResourceTreeLeaves should work correctly when resource.field is e
 
     const resourcesFromItem = getResourcesFromItem(
         this.instance.getResources(),
-        (field, action) => this.instance.getDataAccessors(field, action),
+        this.instance._dataAccessors,
         {
             text: 'Item 1',
             startDate: new Date(),
@@ -360,7 +361,7 @@ QUnit.test('Get resources from item that has no resources', function(assert) {
 
     const resources = getResourcesFromItem(
         this.instance.getResources(),
-        (field, action) => this.instance.getDataAccessors(field, action),
+        this.instance._dataAccessors,
         item
     );
 
@@ -373,7 +374,7 @@ QUnit.test('Get resources from item without wrapping result array', function(ass
 
     const resources = getResourcesFromItem(
         this.instance.getResources(),
-        (field, action) => this.instance.getDataAccessors(field, action),
+        this.instance._dataAccessors,
         item,
         true
     );
@@ -607,8 +608,8 @@ QUnit.test('Get appointments by certain resources', function(assert) {
     ];
 
     const config = {
-        getResources: () => this.instance.getResources(),
-        getDataAccessors: (field, action) => this.instance.getDataAccessors(field, action)
+        resources: this.instance.getResources(),
+        dataAccessors: this.instance._dataAccessors
     };
 
     const result = groupAppointmentsByResourcesCore(config, appointments, [

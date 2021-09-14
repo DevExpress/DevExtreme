@@ -4,35 +4,47 @@ import { extend } from '../../../core/utils/extend';
 
 const defaultBorderLineWidth = 1;
 
-function drawCellsContent(doc, cellsArray) {
-    const docStyles = getDocumentStyles(doc);
+function drawCellsContent(doc, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
-        // TODO: drawCellBackground(doc, cell);
+        drawCellBackground(doc, cell);
         drawCellText(doc, cell, docStyles);
     });
-    setDocumentStyles(doc, docStyles);
+}
+
+function drawCellBackground(doc, cell) {
+    if(isDefined(cell.backgroundColor)) {
+        doc.setFillColor(cell.backgroundColor);
+        drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
+    }
 }
 
 function drawCellText(doc, cell, docStyles) {
-    setCurrentFont(doc, cell, docStyles);
-
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
+        const { textColor, font } = cell;
+        setTextStyles(doc, { textColor, font }, docStyles);
         drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 }
 
-function drawCellsLines(doc, cellsArray) {
-    cellsArray.forEach(cell => {
-        // TODO: doc.setDrawColor(borderColor); // cell.borderColor OR docStyles.borderColor
-        drawBorders(doc, cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
-    });
+function drawCellsLines(doc, cellsArray, docStyles) {
+    cellsArray
+        .filter(cell => !isDefined(cell.borderColor))
+        .forEach(cell => {
+            drawBorders(doc, cell._rect, cell, docStyles);
+        });
+
+    cellsArray
+        .filter(cell => isDefined(cell.borderColor))
+        .forEach(cell => {
+            drawBorders(doc, cell._rect, cell, docStyles);
+        });
 }
 
-function drawGridLines(doc, rect) {
-    drawBorders(doc, rect);
+function drawGridLines(doc, rect, docStyles) {
+    drawBorders(doc, rect, {}, docStyles);
 }
 
-function drawBorders(doc, rect, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true) {
+function drawBorders(doc, rect, { borderColor, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true }, docStyles) {
     if(!isDefined(rect)) {
         throw 'rect is required';
     }
@@ -40,10 +52,10 @@ function drawBorders(doc, rect, drawLeftBorder = true, drawRightBorder = true, d
     if(!drawLeftBorder && !drawRightBorder && !drawTopBorder && !drawBottomBorder) {
         return;
     } else if(drawLeftBorder && drawRightBorder && drawTopBorder && drawBottomBorder) {
-        doc.setLineWidth(defaultBorderLineWidth);
+        setLinesStyles(doc, { borderColor }, docStyles);
         drawRect(doc, rect.x, rect.y, rect.w, rect.h);
     } else {
-        doc.setLineWidth(defaultBorderLineWidth);
+        setLinesStyles(doc, { borderColor }, docStyles);
 
         if(drawTopBorder) {
             drawLine(doc, rect.x, rect.y, rect.x + rect.w, rect.y); // top
@@ -63,18 +75,31 @@ function drawBorders(doc, rect, drawLeftBorder = true, drawRightBorder = true, d
     }
 }
 
-function setCurrentFont(doc, cell, styles) {
-    const font = isDefined(cell.font) ? extend({}, styles.font, cell.font) : styles.font;
+function setTextStyles(doc, { textColor, font }, docStyles) {
+    const currentTextColor = isDefined(textColor) ? textColor : docStyles.textColor;
+    if(currentTextColor !== doc.getTextColor()) {
+        doc.setTextColor(currentTextColor);
+    }
+
+    const currentFont = isDefined(font) ? extend({}, docStyles.font, font) : docStyles.font;
     const docFont = doc.getFont();
     if(
-        font.name !== docFont.fontName ||
-        font.style !== docFont.fontStyle ||
-        isDefined(font.weight) // fontWeight logic, https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line4842
+        currentFont.name !== docFont.fontName ||
+        currentFont.style !== docFont.fontStyle ||
+        isDefined(currentFont.weight) // fontWeight logic, https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line4842
     ) {
-        doc.setFont(font.name, font.style, font.weight);
+        doc.setFont(currentFont.name, currentFont.style, currentFont.weight);
     }
-    if(font.size !== doc.getFontSize()) {
-        doc.setFontSize(font.size);
+    if(currentFont.size !== doc.getFontSize()) {
+        doc.setFontSize(currentFont.size);
+    }
+}
+
+function setLinesStyles(doc, { borderColor }, docStyles) {
+    doc.setLineWidth(defaultBorderLineWidth);
+    const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
+    if(currentBorderColor !== doc.getDrawColor()) {
+        doc.setDrawColor(currentBorderColor);
     }
 }
 
@@ -120,5 +145,5 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines };
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles };
 

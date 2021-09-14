@@ -109,8 +109,8 @@ QUnit.module('Scrolling to time', () => {
 
                 scheduler.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
 
-                assert.equal(errors.log.callCount, 1, 'warning has been called once');
-                assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
+                assert.equal(errors.log.callCount, 2, 'warning has been called once');
+                assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
             });
 
             QUnit.test('Check scrolling to time for timeline view', function(assert) {
@@ -131,7 +131,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 9)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -158,7 +158,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 9)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -183,7 +183,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 11)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -211,9 +211,26 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 11)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
+                );
+            });
+
+            QUnit.test('scrollToTime should throw a deprecation warning', function(assert) {
+                const scheduler = createWrapper({
+                    views: ['day'],
+                    currentView: 'day',
+                    currentDate: new Date(2021, 8, 9),
+                });
+
+                scheduler.instance.scrollToTime(10, 0);
+
+                assert.equal(errors.log.callCount, 1, 'warning has been called once');
+                assert.deepEqual(
+                    errors.log.getCall(0).args,
+                    ['W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead'],
+                    'Deprecation warning is correct',
                 );
             });
         });
