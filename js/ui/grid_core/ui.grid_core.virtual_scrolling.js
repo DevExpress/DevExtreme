@@ -30,6 +30,10 @@ const isAppendMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE;
 };
 
+const isVirtualPaging = function(that) {
+    return isVirtualMode(that) || isAppendMode(that);
+};
+
 const correctCount = function(items, count, fromEnd, isItemCountableFunc) {
     for(let i = 0; i < count + 1; i++) {
         const item = items[fromEnd ? items.length - 1 - i : i];
@@ -1229,15 +1233,15 @@ export const virtualScrollingModule = {
                         return result;
                     },
                     _loadItems: function() {
-                        const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
+                        const virtualPaging = isVirtualPaging(this);
                         const dataSourceAdapter = this._dataSource;
                         const changedParams = this._getChangedLoadParams();
                         let result = false;
 
-                        if(isVirtualPaging && this._isLoading) {
+                        if(virtualPaging && this._isLoading) {
                             this._needUpdateViewportAfterLoading = true;
                         }
-                        if(isVirtualPaging && changedParams) {
+                        if(virtualPaging && changedParams) {
                             result = true;
                             dataSourceAdapter.pageIndex(changedParams.pageIndex);
                             dataSourceAdapter.loadPageCount(changedParams.loadPageCount);
@@ -1255,14 +1259,14 @@ export const virtualScrollingModule = {
                         return result;
                     },
                     loadViewport: function({ checkLoadedParamsOnly, checkLoading }) {
-                        const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
-                        if(isVirtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
+                        const virtualPaging = isVirtualPaging(this);
+                        if(virtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
 
                             const loadingItemsStarted = this._loadItems();
 
                             if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
-                                isVirtualPaging && this._updateVisiblePageIndex();
+                                virtualPaging && this._updateVisiblePageIndex();
                                 this.updateItems({
                                     repaintChangesOnly: true
                                 });
@@ -1352,26 +1356,27 @@ export const virtualScrollingModule = {
                         return dataSource?.virtualItemsCount.apply(dataSource, arguments);
                     },
                     pageIndex: function(pageIndex) {
-                        if(this.option(NEW_SCROLLING_MODE)) {
+                        const virtualPaging = isVirtualPaging(this);
+                        const rowsScrollController = this._rowsScrollController;
+                        if(this.option(NEW_SCROLLING_MODE) && virtualPaging && rowsScrollController) {
                             if(!isDefined(pageIndex)) {
-                                return this.option('paging.pageIndex');
+                                return this.option('paging.pageIndex') ?? 0;
                             }
-                            const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
-                            if(isVirtualPaging) {
-                                const callBaseResult = this.callBase.apply(this, arguments);
-                                when(callBaseResult).done(() => {
-                                    this._updateVisiblePageIndex(pageIndex);
-                                });
-                                return callBaseResult;
-                            }
+
+                            const callBaseResult = this.callBase.apply(this, arguments);
+                            when(callBaseResult).done(() => {
+                                this._updateVisiblePageIndex(pageIndex);
+                            });
+                            return callBaseResult;
                         }
                         return this.callBase.apply(this, arguments);
                     },
                     _handleDataChanged: function() {
                         this.callBase.apply(this, arguments);
 
-                        const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
-                        if(this.option(NEW_SCROLLING_MODE) && isVirtualPaging) {
+                        const virtualPaging = isVirtualPaging(this);
+                        const rowsScrollController = this._rowsScrollController;
+                        if(this.option(NEW_SCROLLING_MODE) && virtualPaging && rowsScrollController) {
                             this._updateVisiblePageIndex();
                         }
                     }
