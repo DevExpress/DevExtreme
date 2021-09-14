@@ -15,6 +15,26 @@ $scheduler-timeline-min-height: 100px;
     border-bottom: none;
   }
 
+  &.dx-scheduler-group-column-count-two {
+    .dx-scheduler-header-panel-empty-cell {
+      width: 160px;
+    }
+
+    .dx-scheduler-group-flex-container .dx-scheduler-group-row {
+      width: 80px;
+    }
+  }
+
+  &.dx-scheduler-group-column-count-three {
+    .dx-scheduler-header-panel-empty-cell {
+      width: 240px;
+    }
+
+    .dx-scheduler-group-flex-container .dx-scheduler-group-row {
+      width: 80px;
+    }
+  }
+
   // This is a WA for existing behaviour. Refactor with setTableSizes
   .dx-scheduler-date-table-scrollable-content,
   .dx-scheduler-date-table-container {
