@@ -656,7 +656,7 @@ QUnit.module('dimensions', {
         });
     });
 
-    QUnit.module.skip('popup should be repositioned correctly after change height', {
+    QUnit.module('popup should be repositioned correctly after change height', {
         beforeEach: function() {
             this.getCenterY = (rect) => {
                 return (rect.bottom + rect.top) / 2;

@@ -4295,26 +4295,6 @@ QUnit.module('resizeObserver integration', {
         fx.off = false;
     }
 }, () => {
-    QUnit.skip('overlay should be repositioned only once on window resize', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnWindowResizeDone = assert.async();
-        const overlay = $('#overlay').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-        const positionedHandlerStub = sinon.stub();
-
-        overlay.on('positioned', positionedHandlerStub);
-
-        setTimeout(() => {
-            resizeCallbacks.fire();
-            setTimeout(() => {
-                assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
-                resizeOnWindowResizeDone();
-            }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
     QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();

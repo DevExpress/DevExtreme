@@ -111,6 +111,7 @@ class OverlayDrag {
     }
 
     _dragEndHandler(event) {
+        this._positionController.dragHandled();
         this._positionController.detectVisualPositionChange(event);
     }
 

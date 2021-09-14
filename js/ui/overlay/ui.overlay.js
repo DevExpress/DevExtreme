@@ -164,6 +164,14 @@ const Overlay = Widget.inherit({
             onResizeEnd: null,
             innerOverlay: false,
 
+            restorePosition: {
+                always: false,
+                onDimensionChangeAfterDrag: false,
+                onDimensionChangeAfterResize: false,
+                onOpening: true,
+                onFullScreenDisable: false
+            },
+
             // NOTE: private options
 
             target: undefined,
@@ -648,7 +656,6 @@ const Overlay = Widget.inherit({
         }
 
         this._currentVisible = visible;
-        this._positionController.restorePositionOnNextRender();
 
         this._stopAnimation();
 
@@ -662,6 +669,7 @@ const Overlay = Widget.inherit({
         this._updateZIndexStackPosition(visible);
 
         if(visible) {
+            this._positionController.openingHandled();
             this._renderContent();
 
             const showingArgs = { cancel: false };
@@ -917,7 +925,7 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container, dragAndResizeArea, allowDragOutside, outsideDragFactor, _fixWrapperPosition } = this.option();
+        const { target, container, dragAndResizeArea, allowDragOutside, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
 
         return {
             position: this._getOptionValue('position'),
@@ -927,6 +935,7 @@ const Overlay = Widget.inherit({
             $content: this._$content,
             $wrapper: this._$wrapper,
             onPositioned: this._actions.onPositioned,
+            restorePosition,
             dragAndResizeArea,
             allowDragOutside,
             outsideDragFactor,
@@ -987,6 +996,7 @@ const Overlay = Widget.inherit({
         height && this._setOptionWithoutOptionChange('height', height);
         this._cacheDimensions();
 
+        this._positionController.resizeHandled();
         this._positionController.detectVisualPositionChange(e.event);
 
         this._actions.onResizeEnd(e);
@@ -1289,7 +1299,7 @@ const Overlay = Widget.inherit({
                 break;
             case 'position':
                 this._positionController.updatePosition(this.option('position'));
-                this._positionController.restorePositionOnNextRender();
+                this._positionController.restorePositionOnNextRender(true);
                 this._renderGeometry();
                 this._toggleSafariScrolling();
                 break;
@@ -1407,7 +1417,7 @@ const Overlay = Widget.inherit({
 
     repaint: function() {
         if(this._contentAlreadyRendered) {
-            this._positionController.restorePositionOnNextRender();
+            this._positionController.restorePositionOnNextRender(true);
             this._renderGeometry({ forceStopAnimation: true });
             triggerResizeEvent(this._$content);
         } else {

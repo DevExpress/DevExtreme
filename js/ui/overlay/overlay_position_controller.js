@@ -51,6 +51,7 @@ class OverlayPositionController {
         $root, $content, $wrapper,
         onPositioned,
         allowDragOutside, dragAndResizeArea, outsideDragFactor,
+        restorePosition,
         _fixWrapperPosition
     }) {
         this._props = {
@@ -60,6 +61,7 @@ class OverlayPositionController {
             allowDragOutside,
             dragAndResizeArea,
             outsideDragFactor,
+            restorePosition,
             _fixWrapperPosition
         };
 
@@ -119,8 +121,32 @@ class OverlayPositionController {
         this._updateOutsideDragFactor();
     }
 
-    restorePositionOnNextRender() {
-        this._shouldRenderContentInitialPosition = true;
+    restorePositionOnNextRender(value) {
+        this._shouldRenderContentInitialPosition = value;
+    }
+
+    openingHandled() {
+        const shouldRestorePosition = this._props.restorePosition.onOpening
+            || this._props.restorePosition.always;
+
+
+        this.restorePositionOnNextRender(shouldRestorePosition);
+    }
+
+    dragHandled() {
+        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDrag
+            || this._props.restorePosition.always;
+
+
+        this.restorePositionOnNextRender(shouldRestorePosition);
+    }
+
+    resizeHandled() {
+        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterResize
+            || this._props.restorePosition.always;
+
+
+        this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
     updateTarget(target) {
@@ -160,7 +186,6 @@ class OverlayPositionController {
     positionContent() {
         if(this._shouldRenderContentInitialPosition) {
             this._renderContentInitialPosition();
-            this._shouldRenderContentInitialPosition = false;
         } else {
             move(this._$content, this._visualPosition);
             this.detectVisualPositionChange();
@@ -181,7 +206,7 @@ class OverlayPositionController {
     }
 
     isAllWindowCoveredByWrapper() {
-        return !this._$wrapperCoveredElement || isWindow(this._$wrapperCoveredElement);
+        return !this._$wrapperCoveredElement || isWindow(this._$wrapperCoveredElement.get(0));
     }
 
     styleWrapperPosition() {
@@ -293,6 +318,12 @@ class PopupPositionController extends OverlayPositionController {
 
     set fullScreen(fullScreen) {
         this._fullScreen = fullScreen;
+
+        if(fullScreen) {
+            this._fullScreenEnabled();
+        } else {
+            this._fullScreenDisabled();
+        }
     }
 
     _getWrapperCoveredElement() {
@@ -303,21 +334,26 @@ class PopupPositionController extends OverlayPositionController {
         return super._getWrapperCoveredElement();
     }
 
+    _fullScreenEnabled() {
+        this.restorePositionOnNextRender(false);
+        this._lastPositionBeforeFullScreen = this._visualPosition;
+    }
+
+    _fullScreenDisabled() {
+        const shouldRestorePosition = this._props.restorePosition.onFullScreenDisable
+            || this._props.restorePosition.always;
+        this.restorePositionOnNextRender(shouldRestorePosition);
+    }
+
     positionContent() {
         if(this._fullScreen) {
-            this._shouldRenderContentInitialPosition = false;
-            if(!this._lastPositionBeforeFullScreen) {
-                this._lastPositionBeforeFullScreen = this._visualPosition;
-
-                move(this._$content, { top: 0, left: 0 });
-                this.detectVisualPositionChange();
-            }
+            move(this._$content, { top: 0, left: 0 });
+            this.detectVisualPositionChange();
         } else {
             this._forceApplyBindings?.();
 
-            if(this._lastPositionBeforeFullScreen) {
+            if(!this._shouldRenderContentInitialPosition && this._lastPositionBeforeFullScreen) {
                 move(this._$content, this._lastPositionBeforeFullScreen);
-                this._lastPositionBeforeFullScreen = undefined;
                 this.detectVisualPositionChange();
             } else {
                 super.positionContent();
