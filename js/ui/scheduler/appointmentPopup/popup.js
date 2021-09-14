@@ -157,7 +157,7 @@ export class AppointmentPopup {
 
     _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
-        const resources = this.scheduler.getResourceManager().getResourcesFromItem(rawAppointment, true);
+        const resources = this.scheduler.getResourcesFromItem(rawAppointment);
 
         return {
             ...rawAppointment,
@@ -327,7 +327,7 @@ export class AppointmentPopup {
                     const endTime = endDate.getTime();
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
-                    const resources = this.scheduler.getResourceManager().getResourcesFromItem(this.state.lastEditData, true);
+                    const resources = this.scheduler.getResourcesFromItem(this.state.lastEditData);
 
                     this.scheduler.updateScrollPosition(startDate, resources, inAllDayRow);
                     this.state.lastEditData = null;

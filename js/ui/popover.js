@@ -165,10 +165,21 @@ const Popover = Popup.inherit({
             dragEnabled: false,
 
             /**
+            * @name dxPopoverOptions.dragOutsideBoundary
+            * @hidden
+            */
+
+            /**
+            * @name dxPopoverOptions.dragAndResizeArea
+            * @hidden
+            */
+
+            /**
             * @name dxPopoverOptions.resizeEnabled
             * @hidden
             */
             resizeEnabled: false,
+
 
             /**
             * @section Utils
@@ -215,7 +226,7 @@ const Popover = Popup.inherit({
             */
 
             fullScreen: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
 
@@ -494,10 +505,6 @@ const Popover = Popup.inherit({
         const defaultOptions = { of: this.option('target'), boundaryOffset: DEFAULT_BOUNDARY_OFFSET };
 
         const position = extend(true, {}, defaultOptions, this._getPositionValue(POSITION_ALIASES));
-
-        if(!this._isInitialOptionValue('position') && this._isInitialOptionValue('position.collision')) {
-            position.collision = 'flip';
-        }
         this._positionSide = this._getDisplaySide(position);
 
         this._position = position;

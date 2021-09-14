@@ -67,6 +67,14 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     needCorrectAppointmentDates() {
         return false;
     }
+
+    getPositionShift() {
+        return {
+            top: 0,
+            left: 0,
+            cellPosition: 0
+        };
+    }
 }
 
 export default HorizontalMonthLineRenderingStrategy;

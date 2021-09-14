@@ -24,6 +24,7 @@ import { createAgendaAppointmentLayout, createAppointmentLayout } from './appoin
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
+import { getResourcesFromItem } from '../resources/utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -161,7 +162,9 @@ class SchedulerAppointments extends CollectionWidget {
             allowAllDayResize: true,
             onAppointmentDblClick: null,
             _collectorOffset: 0,
-            groups: []
+            groups: [],
+            resources: [],
+            resourceDataAccessors: {}
         });
     }
 
@@ -565,8 +568,12 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
-        const resourceManager = this.invoke('getResourceManager');
-        const resources = resourceManager.getResourcesFromItem(this._getItemData($appointment));
+        const resources = getResourcesFromItem(
+            this.option('resources'),
+            this.option('resourceDataAccessors'),
+            this._getItemData($appointment)
+        );
+
         if(resources) {
             each(resources, function(name, values) {
                 const attr = 'data-' + normalizeKey(name.toLowerCase()) + '-';

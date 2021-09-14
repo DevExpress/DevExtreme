@@ -151,6 +151,10 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     }
 
     this.scrollbarRef.current!.initHandler(event, this.thumbScrolling, offset);
+
+    // if (this.thumbScrolling) {
+    //   this.needRiseEnd = true;
+    // }
   }
 
   @Method()

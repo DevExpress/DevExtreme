@@ -11,6 +11,7 @@ import {
   calculateAdaptivityProps,
 } from '../resizable_container';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
+import { InternalPagerProps } from '../common/pager_props';
 
 jest.mock('../../../utils/get_computed_style');
 jest.mock('../../../../core/utils/resize_callbacks');
@@ -52,7 +53,7 @@ describe('resizable-container', () => {
           pagerPropsProp2: 'pagerPropsProp2',
           pageIndexChange: jest.fn(),
           pageSizeChange: jest.fn(),
-        },
+        } as Partial<InternalPagerProps>,
         props: {
           contentTemplate,
         } as any,
@@ -107,14 +108,14 @@ describe('resizable-container', () => {
 
     describe('UpdateChildProps', () => {
       describe('contentAttributes', () => {
-        it('should merge rest attributes with pager props', () => {
+        it('should merge rest attributes with know pager props exclude react twoWay defaultPageSize and defaultPageIndex', () => {
           const resizableContainer = new ResizableContainer({
-            pagerProps: { prop1: 'value1' },
+            pagerProps: { defaultPageSize: 5, defaultIndex: 5, infoText: true },
           } as any);
 
-          expect(resizableContainer.contentAttributes).toEqual({
+          expect(resizableContainer.contentAttributes).toMatchObject({
             'rest-attributes': 'restAttributes',
-            prop1: 'value1',
+            infoText: true,
           });
         });
       });

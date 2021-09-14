@@ -66,7 +66,13 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { createResourceEditorModel, getCellGroups } from './resources/utils';
+import {
+    createResourceEditorModel,
+    getCellGroups,
+    getFieldExpr as getResourceFieldExpr,
+    getResourcesFromItem,
+    setResourceToAppointment
+} from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
@@ -488,7 +494,6 @@ class Scheduler extends Widget {
             case 'resourceCellTemplate':
             case 'dataCellTemplate':
             case 'timeCellTemplate':
-                this._updateOption('workSpace', name, value);
                 this.repaint();
                 break;
             case 'groups':
@@ -498,7 +503,7 @@ class Scheduler extends Widget {
                 });
                 break;
             case 'resources':
-
+                this.initResourceExpressions(value);
                 this.updateFactoryInstances();
 
                 this._postponeResourceLoading().done((resources) => {
@@ -856,6 +861,8 @@ class Scheduler extends Widget {
     }
 
     _init() {
+        this.initResourceExpressions(this.option('resources'));
+
         this._initExpressions({
             startDate: this.option('startDateExpr'),
             endDate: this.option('endDateExpr'),
@@ -1055,6 +1062,20 @@ class Scheduler extends Widget {
         );
     }
 
+    initResourceExpressions(resources = []) {
+        this.resourceDataAccessors = {
+            getter: {},
+            setter: {}
+        };
+
+        resources.forEach(resource => {
+            const field = getResourceFieldExpr(resource);
+
+            this.resourceDataAccessors.getter[field] = compileGetter(field);
+            this.resourceDataAccessors.setter[field] = compileSetter(field);
+        });
+    }
+
     _initExpressions(fields) {
         const isDateField = function(field) {
             return field === 'startDate' || field === 'endDate';
@@ -1226,7 +1247,7 @@ class Scheduler extends Widget {
         const scheduler = {
             createResourceEditorModel: () => {
                 const resourceManager = this.fire('getResourceManager');
-                return createResourceEditorModel(resourceManager.getResources(), resourceManager.loadedResources);
+                return createResourceEditorModel(this.option('resources'), resourceManager.loadedResources);
             },
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
@@ -1247,7 +1268,15 @@ class Scheduler extends Widget {
             getElement: () => this.$element(),
             createComponent: (element, component, options) => this._createComponent(element, component, options),
             focus: () => this.focus(),
-            getResourceManager: () => this.fire('getResourceManager'),
+
+            getResourcesFromItem: (rawAppointment) => {
+                return getResourcesFromItem(
+                    this.option('resources'),
+                    this.resourceDataAccessors,
+                    rawAppointment,
+                    true
+                );
+            },
 
             getEditingConfig: () => this._editing,
 
@@ -1378,6 +1407,9 @@ class Scheduler extends Widget {
 
     _appointmentsConfig() {
         const config = {
+            resources: this.option('resources'),
+            resourceDataAccessors: this.resourceDataAccessors,
+
             key: this.key,
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
@@ -1495,6 +1527,8 @@ class Scheduler extends Widget {
             horizontalVirtualScrollingAllowed;
 
         const result = extend({
+            resources: this.option('resources'),
+
             key: this.key,
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -1824,7 +1858,8 @@ class Scheduler extends Widget {
 
         const rawResult = result.source();
 
-        getResourceManager(this.key).setResourcesToItem(rawResult, targetCell.groups);
+        const resourceManager = getResourceManager(this.key);
+        setResourceToAppointment(this.option('resources'), resourceManager._dataAccessors, rawResult, targetCell.groups);
 
         return rawResult;
     }
@@ -2168,6 +2203,7 @@ class Scheduler extends Widget {
     }
 
     scrollToTime(hours, minutes, date) {
+        errors.log('W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead');
         this._workSpace.scrollToTime(hours, minutes, date);
     }
 

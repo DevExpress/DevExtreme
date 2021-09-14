@@ -500,6 +500,10 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
 
                 storeLoadOptions.skip = options.skip;
                 storeLoadOptions.take = options.take;
+            } else {
+                options.skip = options.loadOptions.skip;
+                options.take = options.loadOptions.take;
+                that._updatePagingOptions(options);
             }
         },
         handleDataLoadedCore: function(options, callBase) {

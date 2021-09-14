@@ -858,42 +858,72 @@ QUnit.test('End date of appointment should be changed when resize is finished', 
 });
 
 QUnit.test('End date of appointment should be changed when resize is finished, RTL mode', function(assert) {
-    const clock = sinon.useFakeTimers();
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 5, 0, 30) });
 
-    try {
-        this.createInstance(
-            {
-                currentDate: new Date(2015, 1, 4),
-                views: ['timelineWeek'],
-                currentView: 'timelineWeek',
-                rtlEnabled: true,
-                height: 500,
-                dataSource: [item]
-            }
-        );
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 4),
+            views: ['timelineWeek'],
+            currentView: 'timelineWeek',
+            rtlEnabled: true,
+            height: 500,
+            dataSource: [item]
+        }
+    );
 
-        const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-left')).start();
+    const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-left')).start();
 
-        pointer.dragStart().drag(-200, 0).dragEnd();
+    pointer.dragStart().drag(-200, 0).dragEnd();
 
-        const args = stub.getCall(0).args;
-        assert.ok(stub.calledOnce, 'Observer is notified');
+    const args = stub.getCall(0).args;
+    assert.ok(stub.calledOnce, 'Observer is notified');
 
-        checkAppointmentUpdatedCallbackArgs(assert, {
-            old: args[1].target,
-            updated: args[1].data,
-            $appointment: args[1].$appointment
-        }, {
-            old: item,
-            updated: updatedItem,
-            $appointment: this.instance.$element().find('.dx-scheduler-appointment')
-        });
-    } finally {
-        clock.restore();
-    }
+    checkAppointmentUpdatedCallbackArgs(assert, {
+        old: args[1].target,
+        updated: args[1].data,
+        $appointment: args[1].$appointment
+    }, {
+        old: item,
+        updated: updatedItem,
+        $appointment: this.instance.$element().find('.dx-scheduler-appointment')
+    });
+});
+
+QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', function(assert) {
+    const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 10), endDate: new Date(2015, 1, 5, 0) };
+    const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 4, 9, 30) });
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 4),
+            views: ['timelineWeek'],
+            currentView: 'timelineWeek',
+            rtlEnabled: true,
+            height: 500,
+            dataSource: [item]
+        }
+    );
+
+    const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right')).start();
+
+    pointer.dragStart().drag(200, 0).dragEnd();
+
+    const args = stub.getCall(0).args;
+
+    assert.ok(stub.calledOnce, 'Observer is notified');
+
+    checkAppointmentUpdatedCallbackArgs(assert, {
+        old: args[1].target,
+        updated: args[1].data,
+        $appointment: args[1].$appointment
+    }, {
+        old: item,
+        updated: updatedItem,
+        $appointment: this.instance.$element().find('.dx-scheduler-appointment')
+    });
 });
 
 QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', function(assert) {

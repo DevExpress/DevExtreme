@@ -43,6 +43,8 @@ function decodeHtmlEntities(markup) {
         .replace(/&shy;/gi, '&#173;');
 }
 
+export const HIDDEN_FOR_EXPORT = 'hidden-for-export';
+
 export function getSvgMarkup(element, backgroundColor) {
     return fixNamespaces(decodeHtmlEntities(getMarkup(element, backgroundColor)));
 }
