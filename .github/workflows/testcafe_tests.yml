@@ -46,8 +46,7 @@ jobs:
     - name: Prepare renovation playground
       if: matrix.ARGS.componentFolder == 'renovation'
       run: |
-        pushd
-        cd testing/renovation
+        pushd testing/renovation
         npm install --no-audit --no-fund
         popd
         npm run build:angular
