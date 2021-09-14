@@ -846,17 +846,7 @@ const PivotGrid = Widget.inherit({
                 visible: isLoading
             };
             if(isLoading) {
-                const $window = $(getWindow());
-                const $element = that._dataArea.groupElement();
-                let positionOption = { of: $element };
-                if($element.height() > $window.height()) {
-                    positionOption = {
-                        of: $window,
-                        boundary: $element,
-                        collision: 'fit'
-                    };
-                }
-                visibilityOptions.position = positionOption;
+                visibilityOptions.position = gridCoreUtils.calculateLoadPanelPosition(that._dataArea.groupElement());
             }
             that._loadPanel.option(visibilityOptions);
             that.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
