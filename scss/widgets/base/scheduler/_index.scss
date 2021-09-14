@@ -231,7 +231,6 @@ $scheduler-appointment-form-label-padding: 20px;
         width: inherit;
         height: inherit;
         content: "";
-        left: inherit;
         position: absolute;
         margin-left: $scheduler-left-column-width;
         background-color: $scheduler-time-indicator-background-color;
@@ -272,6 +271,7 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-date-time-shader-bottom {
         &::before {
           margin-left: 0;
+          margin-right: $scheduler-left-column-width;
         }
       }
     }
@@ -585,6 +585,17 @@ $scheduler-appointment-form-label-padding: 20px;
         .dx-scheduler-appointment-content {
           padding-right: 5px;
           padding-left: $scheduler-appointment-reduced-content-padding;
+        }
+      }
+    }
+  }
+
+  .dx-scheduler-small {
+    &.dx-rtl {
+      .dx-scheduler-date-time-shader-top,
+      .dx-scheduler-date-time-shader-bottom {
+        &::before {
+          margin-right: $scheduler-left-column-width * $scheduler-small-size-factor;
         }
       }
     }
