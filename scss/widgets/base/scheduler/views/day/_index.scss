@@ -73,6 +73,19 @@ $scheduler-base-border: null !default;
       border-top: $scheduler-base-border;
     }
   }
+
+  &.dx-scheduler-work-space-count:not(.dx-scheduler-work-space-grouped) {
+    .dx-scheduler-date-table-cell,
+    .dx-scheduler-all-day-table-cell,
+    .dx-scheduler-header-panel-cell {
+      border-left: $scheduler-base-border;
+      border-right: $scheduler-base-border;
+
+      &:first-child {
+        border-left: none;
+      }
+    }
+  }
 }
 
 .dx-rtl {
@@ -93,6 +106,17 @@ $scheduler-base-border: null !default;
             border-left: $scheduler-base-border;
             border-right: none;
           }
+        }
+      }
+    }
+
+    &.dx-scheduler-work-space-count:not(.dx-scheduler-work-space-grouped) {
+      .dx-scheduler-date-table-cell,
+      .dx-scheduler-all-day-table-cell,
+      .dx-scheduler-header-panel-cell {
+        &:first-child {
+          border-left: $scheduler-base-border;
+          border-right: none;
         }
       }
     }
