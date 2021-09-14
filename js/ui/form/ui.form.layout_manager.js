@@ -351,15 +351,15 @@ const LayoutManager = Widget.inherit({
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
 
-                const itemCssClasses = [item.cssClass || ''];
+                const itemCssClassList = [item.cssClass];
 
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
-                    itemCssClasses.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
                 }
                 if(e.location.col === 0) {
-                    itemCssClasses.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
 
                 if(item.itemType === SIMPLE_ITEM_TYPE && that.option('isRoot')) {
@@ -369,29 +369,29 @@ const LayoutManager = Widget.inherit({
                 const rowsCount = that._getRowsCount();
                 const isLastRow = e.location.row === rowsCount - 1;
                 if(isLastColumn) {
-                    itemCssClasses.push(LAYOUT_MANAGER_LAST_COL_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_LAST_COL_CLASS);
                 }
                 if(isLastRow) {
-                    itemCssClasses.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
                 }
 
                 if(item.itemType !== 'empty') {
-                    itemCssClasses.push(`${FIELD_ITEM_CLASS}`);
-                    itemCssClasses.push(`${that.option('cssItemClass') || ''}`);
+                    itemCssClassList.push(FIELD_ITEM_CLASS);
+                    itemCssClassList.push(that.option('cssItemClass'));
                     if(isDefined(item.col)) {
-                        itemCssClasses.push('dx-col-' + item.col);
+                        itemCssClassList.push('dx-col-' + item.col);
                     }
                 }
 
                 switch(item.itemType) {
                     case 'empty':
-                        renderEmptyItem({ $parent: $itemElement, rootElementCssClasses: itemCssClasses });
+                        renderEmptyItem({ $parent: $itemElement, rootElementCssClassList: itemCssClassList });
                         break;
                     case 'button':
-                        that._renderButtonItem({ item, $parent: $itemElement, rootElementCssClasses: itemCssClasses });
+                        that._renderButtonItem({ item, $parent: $itemElement, rootElementCssClassList: itemCssClassList });
                         break;
                     default:
-                        that._renderFieldItem({ item, $parent: $itemElement, rootElementCssClasses: itemCssClasses });
+                        that._renderFieldItem({ item, $parent: $itemElement, rootElementCssClassList: itemCssClassList });
                 }
             },
             cols: that._generateRatio(colCount),
@@ -519,11 +519,11 @@ const LayoutManager = Widget.inherit({
         renderEmptyItem({ $container });
     },
 
-    _renderButtonItem: function({ item, $parent, rootElementCssClasses }) {
+    _renderButtonItem: function({ item, $parent, rootElementCssClassList }) {
         const { $rootElement, buttonInstance } = renderButtonItem({
             item,
             $parent,
-            rootElementCssClasses,
+            rootElementCssClassList,
             validationGroup: this.option('validationGroup'),
             createComponentCallback: this._createComponent.bind(this),
         });
@@ -537,7 +537,7 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _renderFieldItem: function({ item, $parent, rootElementCssClasses }) {
+    _renderFieldItem: function({ item, $parent, rootElementCssClassList }) {
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -549,7 +549,7 @@ const LayoutManager = Widget.inherit({
 
         const { $fieldEditorContainer, widgetInstance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
             $parent,
-            rootElementCssClasses,
+            rootElementCssClassList,
             item,
             name,
             editorValue,

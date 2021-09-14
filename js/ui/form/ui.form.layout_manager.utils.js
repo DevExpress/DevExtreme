@@ -11,7 +11,7 @@ const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
 export function convertToRenderFieldItemOptions({
     $parent,
-    rootElementCssClasses,
+    rootElementCssClassList,
     parentComponent,
     createComponentCallback,
     useFlexLayout,
@@ -55,7 +55,7 @@ export function convertToRenderFieldItemOptions({
 
     return {
         $parent,
-        rootElementCssClasses,
+        rootElementCssClassList,
         parentComponent,
         createComponentCallback,
         useFlexLayout,

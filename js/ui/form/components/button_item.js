@@ -7,13 +7,13 @@ const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
 export function renderButtonItem({
     item,
     $parent,
-    rootElementCssClasses,
+    rootElementCssClassList,
     validationGroup,
     createComponentCallback
 }) {
     const $rootElement = $('<div>')
         .appendTo($parent)
-        .addClass(rootElementCssClasses.join(' '))
+        .addClass(rootElementCssClassList.join(' '))
         .addClass(FIELD_BUTTON_ITEM_CLASS)
         .css('textAlign', convertAlignmentToTextAlign(item.horizontalAlignment));
 

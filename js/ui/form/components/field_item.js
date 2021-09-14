@@ -30,7 +30,7 @@ const INVALID_CLASS = 'dx-invalid';
 
 export function renderFieldItem({
     $parent,
-    rootElementCssClasses,
+    rootElementCssClassList,
     parentComponent,
     createComponentCallback,
     useFlexLayout,
@@ -47,7 +47,7 @@ export function renderFieldItem({
 }) {
 
     const $rootElement = $('<div>')
-        .addClass(rootElementCssClasses.join(' '))
+        .addClass(rootElementCssClassList.join(' '))
         .appendTo($parent);
 
     $rootElement.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
