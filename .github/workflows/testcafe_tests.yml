@@ -44,7 +44,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Prepare renovation playground
-      if: matrix.ARGS.componentFolder == renovation
+      if: matrix.ARGS.componentFolder == "renovation"
       run: |
         pushd
         cd testing/renovation
