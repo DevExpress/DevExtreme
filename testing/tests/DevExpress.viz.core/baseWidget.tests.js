@@ -651,8 +651,8 @@ QUnit.test('Do not get size from container if size option is set', function(asse
         assert.ok(!width.called);
         assert.ok(!height.called);
     } finally {
-        commonCallbacks.Width.restore();
-        commonCallbacks.Height.restore();
+        commonCallbacks.getWidth.restore();
+        commonCallbacks.getHeight.restore();
     }
 });
 
@@ -670,8 +670,8 @@ QUnit.test('no options and container has negative sizes - get default size (T607
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        commonCallbacks.Width.restore();
-        commonCallbacks.Height.restore();
+        commonCallbacks.getWidth.restore();
+        commonCallbacks.getHeight.restore();
     }
 });
 
