@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import {
     getWrappedDataSource,
     createResourcesTree,
@@ -15,7 +14,8 @@ import {
     reduceResourcesTree,
     setResourceToAppointment,
     createExpressions,
-    getDataAccessors
+    getDataAccessors,
+    loadResources
 } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -79,14 +79,6 @@ const resourceDataWithDataSource = [
     }
 ];
 
-QUnit.module('Resource Manager', {
-    beforeEach: function() {
-        this.createInstance = function(resources) {
-            this.instance = new ResourceManager(resources);
-        };
-    }
-});
-
 QUnit.module('getWrappedDataSource', () => {
     QUnit.test('JSON declaration should be wrapped to DataSource object', function(assert) {
         const filterValue = ['id', '=', 'emp1'];
@@ -125,11 +117,6 @@ QUnit.module('getWrappedDataSource', () => {
     });
 });
 
-QUnit.test('Init', function(assert) {
-    this.createInstance();
-    assert.ok(this.instance instanceof ResourceManager, 'Resource Manager is initialized');
-});
-
 QUnit.test('Resources dataSource should not be wrapped if it\'s instance of the DataSource', function(assert) {
     const done = assert.async();
 
@@ -144,9 +131,7 @@ QUnit.test('Resources dataSource should not be wrapped if it\'s instance of the 
         dataSource: dataSource
     }];
 
-    this.createInstance(resources);
-
-    getOrLoadResourceItem(resources, this.instance.resourceLoaderMap, 'roomId', 1).done(function() {
+    getOrLoadResourceItem(resources, new Map(), 'roomId', 1).done(function() {
         assert.equal(dataSource.items().length, testData.rooms.length, 'DS items are OK');
         done();
     });
@@ -182,14 +167,11 @@ QUnit.test('Resource editor should always have label', function(assert) {
         dataSource: testData.rooms
     }];
 
-    this.createInstance(resources);
-
     const editors = createResourceEditorModel(resources, []);
     assert.equal(editors[0].label.text, 'roomId');
 });
 
 QUnit.test('Get resource by field name and value', function(assert) {
-    this.createInstance(resourceData);
     const done = assert.async();
 
     getOrLoadResourceItem(resourceData, new Map(), 'roomId', 2).done(function(data) {
@@ -199,12 +181,11 @@ QUnit.test('Get resource by field name and value', function(assert) {
 });
 
 QUnit.test('Get resources from item data', function(assert) {
-    this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date(), roomId: 2, ownerId: [1, 2] };
 
     const resources = getResourcesFromItem(
         resourceData,
-        this.instance._dataAccessors,
+        createExpressions(resourceData),
         item
     );
 
@@ -290,7 +271,7 @@ QUnit.test('getDataAccessors should return dataAccessors (use fieldExpr)', funct
     assert.equal(resourceGetter(item), 1, 'setter & getter is ok');
 });
 
-QUnit.skip('getResourceTreeLeaves should work correctly when resource.field is expr', function(assert) {
+QUnit.test('getResourceTreeLeaves should work correctly when resource.field is expr', function(assert) {
     const done = assert.async();
 
     const resources = [{
@@ -310,9 +291,6 @@ QUnit.skip('getResourceTreeLeaves should work correctly when resource.field is e
         ]
     }];
 
-    this.createInstance(resources);
-
-
     const resourcesFromItem = getResourcesFromItem(
         resources,
         createExpressions(resources),
@@ -323,7 +301,7 @@ QUnit.skip('getResourceTreeLeaves should work correctly when resource.field is e
             ownerId: [1, 2]
         });
 
-    this.instance.loadResources(['outer.roomId', 'ownerId']).done($.proxy(function(groups) {
+    loadResources(['outer.roomId', 'ownerId'], resources, new Map()).done($.proxy(function(groups) {
         const tree = createResourcesTree(groups);
 
         const result = getResourceTreeLeaves(
@@ -357,7 +335,6 @@ QUnit.test('Get resources from item that has no resources', function(assert) {
 });
 
 QUnit.test('Get resources from item without wrapping result array', function(assert) {
-    this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date(), roomId: 1 };
 
     const resources = getResourcesFromItem(resourceData, createExpressions(resourceData), item, true);
@@ -365,11 +342,10 @@ QUnit.test('Get resources from item without wrapping result array', function(ass
     assert.deepEqual(resources, { roomId: 1 }, 'Resources were not found');
 });
 
-QUnit.skip('Get resources value by fields', function(assert) {
-    this.createInstance(resourceData);
+QUnit.test('Get resources value by fields', function(assert) {
     const done = assert.async();
 
-    this.instance.loadResources(['ownerId']).done(function(groups) {
+    loadResources(['ownerId'], resourceData, new Map()).done(function(groups) {
         assert.deepEqual(groups, [
             {
                 name: 'ownerId',
@@ -402,15 +378,14 @@ QUnit.skip('Get resources value by fields', function(assert) {
 });
 
 
-QUnit.skip('Get resources value by fields with long resource dataSource', function(assert) {
-    this.createInstance(resourceDataWithDataSource);
+QUnit.test('Get resources value by fields with long resource dataSource', function(assert) {
     const done = assert.async();
 
     setTimeout(function() {
         promiseData.load();
     });
 
-    this.instance.loadResources(['roomId']).done(function(groups) {
+    loadResources(['roomId'], resourceDataWithDataSource, new Map()).done(function(groups) {
         assert.deepEqual(groups, [
             {
                 items: [
@@ -445,14 +420,13 @@ QUnit.skip('Get resources value by fields with long resource dataSource', functi
 });
 
 QUnit.test('Get resources data with long resource dataSource', function(assert) {
-    this.createInstance(resourceDataWithDataSource);
     const done = assert.async();
 
     setTimeout(function() {
         promiseData.load();
     });
 
-    getOrLoadResourceItem(resourceDataWithDataSource, this.instance.resourceLoaderMap, 'roomId', 2).done(function(data) {
+    getOrLoadResourceItem(resourceDataWithDataSource, new Map(), 'roomId', 2).done(function(data) {
         assert.deepEqual(data, {
             id: 2,
             text: 'Room2',
@@ -463,10 +437,9 @@ QUnit.test('Get resources data with long resource dataSource', function(assert) 
 });
 
 QUnit.test('Get color for resource', function(assert) {
-    this.createInstance(resourceData);
     const done = assert.async();
 
-    getResourceColor(resourceData, this.instance.resourceLoaderMap, 'ownerId', 2).done(function(color) {
+    getResourceColor(resourceData, new Map(), 'ownerId', 2).done(function(color) {
         assert.equal(color, testData.owners[1].color, 'Color is OK');
         done();
     });
@@ -485,16 +458,15 @@ QUnit.test('Get color for resource with colorExpr', function(assert) {
             color1: '#cb6bb2'
         }]
     }];
-    this.createInstance(roomData);
     const done = assert.async();
 
-    getResourceColor(roomData, this.instance.resourceLoaderMap, 'roomId', 1).done(function(color) {
+    getResourceColor(roomData, new Map(), 'roomId', 1).done(function(color) {
         assert.equal(color, roomData[0].dataSource[0].color1, 'Color is OK');
         done();
     });
 });
 
-QUnit.skip('Get color for resource with valueExpr', function(assert) {
+QUnit.test('Get color for resource with valueExpr', function(assert) {
     const roomData =
         {
             field: 'roomId',
@@ -507,11 +479,13 @@ QUnit.skip('Get color for resource with valueExpr', function(assert) {
                 color: '#cb6bb2'
             }]
         };
-    this.createInstance([roomData]);
+
     const done = assert.async();
 
-    this.instance.loadResources(['roomId']).done($.proxy(function(groups) {
-        getResourceColor(this.instance.getResources(), this.instance.resourceLoaderMap, 'roomId', 1).done(function(color) {
+    const resourceLoaderMap = new Map();
+
+    loadResources(['roomId'], [roomData], resourceLoaderMap).done($.proxy(function(groups) {
+        getResourceColor([roomData], resourceLoaderMap, 'roomId', 1).done(function(color) {
             assert.equal(color, roomData.dataSource[0].color, 'Color is OK');
             done();
         });
@@ -519,10 +493,9 @@ QUnit.skip('Get color for resource with valueExpr', function(assert) {
 });
 
 QUnit.test('Color for undefined resource should be undefined', function(assert) {
-    this.createInstance(resourceData);
     const done = assert.async();
 
-    getResourceColor(resourceData, this.instance.resourceLoaderMap, 'ownerId', 777).done(function(color) {
+    getResourceColor(resourceData, new Map(), 'ownerId', 777).done(function(color) {
         assert.strictEqual(color, undefined, 'Color for undefined resource is undefined');
         done();
     });
@@ -620,10 +593,10 @@ QUnit.test('Get appointments by certain resources', function(assert) {
         }, 'Data is correct');
 });
 
-QUnit.skip('Reduce resource tree depend on existing appointments', function(assert) {
+QUnit.test('Reduce resource tree depend on existing appointments', function(assert) {
     const done = assert.async();
 
-    this.createInstance([{
+    const resources = [{
         fieldExpr: 'o',
         allowMultiple: false,
         dataSource: [
@@ -645,7 +618,7 @@ QUnit.skip('Reduce resource tree depend on existing appointments', function(asse
             { id: 1, text: 'a1' },
             { id: 2, text: 'a2' }
         ]
-    }]);
+    }];
 
     const appointments = [{
         o: 1,
@@ -657,10 +630,10 @@ QUnit.skip('Reduce resource tree depend on existing appointments', function(asse
         a: 1
     }];
 
-    this.instance.loadResources(['o', 'r', 'a']).done($.proxy(function(groups) {
+    loadResources(['o', 'r', 'a'], resources, new Map()).done($.proxy(function(groups) {
         const tree = createResourcesTree(groups);
         const reducedTree = reduceResourcesTree(
-            (field, action) => this.instance.getDataAccessors(field, action),
+            (field, action) => getDataAccessors(createExpressions(resources), field, action),
             tree,
             appointments
         );
@@ -745,8 +718,8 @@ QUnit.skip('Reduce resource tree depend on existing appointments', function(asse
 
 });
 
-QUnit.skip('Resource data should be loaded correctly is data source is config object', function(assert) {
-    this.createInstance([
+QUnit.test('Resource data should be loaded correctly is data source is config object', function(assert) {
+    const resources = [
         {
             field: 'ownerId', dataSource: {
                 store: [{
@@ -754,11 +727,11 @@ QUnit.skip('Resource data should be loaded correctly is data source is config ob
                 }]
             }
         }
-    ]);
+    ];
 
     const done = assert.async();
 
-    getOrLoadResourceItem(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1).done(function(result) {
+    getOrLoadResourceItem(resources, new Map(), 'ownerId', 1).done(function(result) {
         assert.deepEqual(result, {
             id: 1
         }, 'Resource data is right');
@@ -767,7 +740,7 @@ QUnit.skip('Resource data should be loaded correctly is data source is config ob
     });
 });
 
-QUnit.skip('Resource data should be loaded correctly is data source is string', function(assert) {
+QUnit.test('Resource data should be loaded correctly is data source is string', function(assert) {
 
     const json = { id: 1 };
     const xhr = sinon.useFakeXMLHttpRequest();
@@ -777,15 +750,13 @@ QUnit.skip('Resource data should be loaded correctly is data source is string', 
         requests.push(x);
     };
 
-    this.createInstance([
-        {
-            field: 'ownerId', dataSource: 'api/appointments'
-        }
-    ]);
+    const resources = [{
+        field: 'ownerId', dataSource: 'api/appointments'
+    }];
 
     const done = assert.async();
 
-    getOrLoadResourceItem(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1).done(function(result) {
+    getOrLoadResourceItem(resources, new Map(), 'ownerId', 1).done(function(result) {
         assert.deepEqual(result, {
             id: 1
         }, 'Resource data is right');
@@ -798,11 +769,11 @@ QUnit.skip('Resource data should be loaded correctly is data source is string', 
 
 });
 
-QUnit.skip('Load should be called once for several resources', function(assert) {
+QUnit.test('Load should be called once for several resources', function(assert) {
     let count = 0;
     const deferred = $.Deferred();
 
-    this.createInstance([{
+    const resources = [{
         fieldExpr: 'ownerId',
         allowMultiple: true,
         dataSource: new DataSource(new CustomStore({
@@ -811,21 +782,22 @@ QUnit.skip('Load should be called once for several resources', function(assert) 
                 return deferred.promise();
             }
         }))
-    }]
-    );
+    }];
 
-    getOrLoadResourceItem(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1).done(function(res) {
+    const loaderMap = new Map();
+
+    getOrLoadResourceItem(resources, loaderMap, 'ownerId', 1).done(function(res) {
         assert.deepEqual(res, { text: 'o1', id: 1 }, 'Resource data is right');
     });
-    getOrLoadResourceItem(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 2);
-    getOrLoadResourceItem(this.instance.getResources(), this.instance.resourceLoaderMap, 'ownerId', 1);
+    getOrLoadResourceItem(resources, loaderMap, 'ownerId', 2);
+    getOrLoadResourceItem(resources, loaderMap, 'ownerId', 1);
 
     deferred.resolve([{ text: 'o1', id: 1 }, { text: 'o2', id: 2 }]);
 
     assert.equal(count, 1, 'Resources are loaded only once');
 });
 
-QUnit.skip('getResourcesData should be correct after reloading resources', function(assert) {
+QUnit.test('getResourcesData should be correct after reloading resources', function(assert) {
     const roomData =
         {
             field: 'roomId',
@@ -838,14 +810,14 @@ QUnit.skip('getResourcesData should be correct after reloading resources', funct
                 color: '#cb6bb2'
             }]
         };
-    this.createInstance([roomData]);
+
     const done = assert.async();
 
-    this.instance.loadResources(['roomId']).done($.proxy(function(groups) {
-        assert.deepEqual(this.instance.loadedResources, groups, 'getResourcesData works correctly');
+    loadResources(['roomId'], [roomData], new Map()).done($.proxy(function(loadedResources) {
+        assert.equal(loadedResources.length, 1, 'getResourcesData works correctly');
 
-        this.instance.loadResources([]).done($.proxy(function(groups) {
-            assert.deepEqual(this.instance.loadedResources, [], 'getResourcesData works correctly');
+        loadResources([], [roomData]).done($.proxy(function(loadedResources) {
+            assert.deepEqual(loadedResources, [], 'getResourcesData works correctly');
             done();
         }, this));
     }, this));
@@ -938,7 +910,7 @@ QUnit.skip('getResourcesData should be correct after reloading resources', funct
         ]
     }
 ].forEach(({ name, groups, loadingGroups, expected }) => {
-    QUnit.skip(`getResourcesDataByGroups if resources: '${name}'`, function(assert) {
+    QUnit.test(`getResourcesDataByGroups if resources: '${name}'`, function(assert) {
         const roomData = [
             {
                 field: 'roomId',
@@ -964,38 +936,23 @@ QUnit.skip('getResourcesData should be correct after reloading resources', funct
             }
         ];
 
-        this.createInstance(roomData);
-
         const done = assert.async();
 
-        this.instance.loadResources(loadingGroups).done($.proxy(() => {
-            const resourcesDataByGroups = getResourcesDataByGroups(
-                this.instance.loadedResources,
-                this.instance.getResources(),
-                groups
-            );
+        loadResources(loadingGroups, roomData, new Map()).done($.proxy(loadedResources => {
+            const resourcesDataByGroups = getResourcesDataByGroups(loadedResources, roomData, groups);
 
-            assert.deepEqual(
-                resourcesDataByGroups,
-                expected,
-                'getResourcesDataByGroups works correctly'
-            );
+            assert.deepEqual(resourcesDataByGroups, expected, 'getResourcesDataByGroups works correctly');
 
             done();
 
         }, this));
     });
 
-    QUnit.skip('getResourcesDataByGroups if empty groups', function(assert) {
-        this.createInstance([]);
-
+    QUnit.test('getResourcesDataByGroups if empty groups', function(assert) {
         const done = assert.async();
 
-        this.instance.loadResources([]).done($.proxy(() => {
-            const resourcesDataByGroups = getResourcesDataByGroups(
-                this.instance.loadedResources,
-                this.instance.getResources(),
-            );
+        loadResources([], [], new Map()).done($.proxy(loadedResources => {
+            const resourcesDataByGroups = getResourcesDataByGroups(loadedResources, []);
 
             assert.deepEqual(resourcesDataByGroups, [], 'getResourcesDataByGroups works correctly');
 
@@ -1004,15 +961,15 @@ QUnit.skip('getResourcesData should be correct after reloading resources', funct
     });
 });
 
-QUnit.skip('resources should be validated (transformed into an empty array) after loading', function(assert) {
+QUnit.test('resources should be validated (transformed into an empty array) after loading', function(assert) {
     const done = assert.async();
 
-    this.createInstance([{
+    const resources = [{
         field: 'ownerId',
         dataSource: []
-    }]);
+    }];
 
-    this.instance.loadResources(['ownerId']).done((resources) => {
+    loadResources(['ownerId'], resources, new Map()).done((resources) => {
         assert.deepEqual(resources, [], 'Correct resources');
 
         done();
