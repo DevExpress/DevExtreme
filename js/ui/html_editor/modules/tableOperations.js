@@ -62,12 +62,8 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
 
                 setLineElementsAttrValue($lineElements, 'width', newElementWidth);
-
             });
-
-
         }
-
     }
 
 
@@ -99,7 +95,7 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
 
 const getAutoHeightRows = ($table) => {
     const result = [];
-    $table.find('td:nth-child(0)').each((index, element) => {
+    $table.find('td:nth-child(1)').each((index, element) => {
         const $element = $(element);
         if(!isDefined($element.attr('height'))) {
             result.push($element);
@@ -122,10 +118,12 @@ const getAutoWidthColumns = ($table, direction) => {
 };
 
 const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
+
+    const $table = $($target.closest('table'));
     if(isDefined(newWidth)) {
         const index = $($target).index();
-        let $verticalCells = getLineElements($target.closest('table'), index);
-        const $table = $($target.closest('table'));
+        let $verticalCells = getLineElements($table, index);
+
 
         const widthDiff = newWidth - $target.outerWidth();
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
@@ -138,12 +136,12 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         if(!shouldKeepOtherColumnsWidth) {
             $table.css('width', 'initial');
             if($nextColumnCell.length === 1) {
-                $verticalCells = getLineElements($target.closest('table'), index + 1);
+                $verticalCells = getLineElements($table, index + 1);
                 setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
             } else {
                 const $prevColumnCell = $target.prev();
                 if($prevColumnCell.length === 1) {
-                    $verticalCells = getLineElements($target.closest('table'), index - 1);
+                    $verticalCells = getLineElements($table, index - 1);
                     setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
                 }
             }
@@ -155,6 +153,11 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
 
 
     setLineElementsAttrValue($horizontalCells, 'height', newHeight);
+    const autoHeightRows = getAutoHeightRows($table);
+
+    if(autoHeightRows.length === 0) {
+        $table.css('height', 'auto');
+    }
 
 };
 
