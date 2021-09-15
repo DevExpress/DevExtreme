@@ -46,6 +46,7 @@ export class AppointmentDataProvider {
         const filterOptions = {
             key: this.key,
             resources: this.options.resources,
+            loadedResources: this.options.loadedResources,
             scheduler: this.scheduler,
             dataSource: this.dataSource,
             dataAccessors: this.dataAccessors,
