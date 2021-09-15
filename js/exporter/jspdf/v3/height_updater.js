@@ -27,7 +27,7 @@ function calculateAdditionalRowsHeights(doc, rows) {
             .filter(cell => isDefined(cell.rowSpan));
 
         cellsWithRowSpan.forEach(cell => {
-            const cellTextHeight = calculateTextHeight(doc, cell.pdfCell.text, cell.pdfCell.font, {
+            const cellTextHeight = calculateTextHeight(doc, cell.pdfCell.text, cell.pdfCell.padding, cell.pdfCell.font, {
                 wordWrapEnabled: cell.pdfCell.wordWrapEnabled,
                 columnWidth: cell.pdfCell._rect.w
             });

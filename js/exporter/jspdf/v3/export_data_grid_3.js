@@ -48,7 +48,7 @@ function exportDataGrid(doc, dataGrid, options) {
             // apply colSpans + recalculate cellsWidth
             applyColSpans(rowsInfo);
 
-            // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled or use value from customizeCell
+            // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled+padding or use value from customizeCell
             calculateHeights(doc, rowsInfo, options);
 
             // apply rowSpans + recalculate cells height
