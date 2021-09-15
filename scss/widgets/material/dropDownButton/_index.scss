@@ -58,26 +58,13 @@ $material-dropdownbutton-horizontal-padding: 8px;
 
           &.dx-icon-right {
             margin-left: 4px;
-
-            .dx-rtl & {
-              margin-left: 0;
-              margin-right: 4px;
-            }
           }
-        }
-
-        .dx-rtl & {
-          padding-left: 0;
         }
       }
     }
 
     .dx-button-content {
       padding-right: 8px;
-
-      .dx-rtl & {
-        padding-left: 8px;
-      }
     }
   }
 
@@ -99,29 +86,51 @@ $material-dropdownbutton-horizontal-padding: 8px;
       border-top-left-radius: $button-border-radius;
       border-bottom-left-radius: $button-border-radius;
     }
+  }
+}
 
-    .dx-rtl & {
-      .dx-buttongroup-last-item {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-top-left-radius: $button-border-radius;
-        border-bottom-left-radius: $button-border-radius;
-        border-left-width: 1px;
-      }
+.dx-rtl {
+  .dx-dropdownbutton,
+  &.dx-dropdownbutton {
+    .dx-button-has-icon,
+    .dx-button-has-text,
+    .dx-button-has-icon.dx-button-has-text {
+      &.dx-buttongroup-last-item {
+        .dx-button-content {
+          padding-left: 0;
 
-      .dx-buttongroup-first-item {
-        border-top-right-radius: $button-border-radius;
-        border-bottom-right-radius: $button-border-radius;
-
-        &:not(.dx-buttongroup-last-item) {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
+          .dx-icon-spindown {
+            &.dx-icon-right {
+              margin-left: 0;
+              margin-right: 4px;
+            }
+          }
         }
       }
-    }
-  }
 
-  .dx-rtl & {
+      .dx-button-content {
+        padding-left: 8px;
+      }
+    }
+
+    .dx-buttongroup-last-item {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-top-left-radius: $button-border-radius;
+      border-bottom-left-radius: $button-border-radius;
+      border-left-width: 1px;
+    }
+
+    .dx-buttongroup-first-item {
+      border-top-right-radius: $button-border-radius;
+      border-bottom-right-radius: $button-border-radius;
+
+      &:not(.dx-buttongroup-last-item) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
     .dx-button-has-text:not(.dx-button-mode-text) .dx-button-content {
       padding-right: $material-button-horizontal-padding;
     }
