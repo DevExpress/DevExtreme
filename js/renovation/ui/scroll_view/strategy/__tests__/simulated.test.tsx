@@ -5,7 +5,6 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 
-import { DxEvent } from 'js/events';
 import {
   DIRECTION_HORIZONTAL,
   DIRECTION_VERTICAL,
@@ -808,7 +807,7 @@ describe('Simulated > Behavior', () => {
           delta: { x: 10.5633, y: 25.5986 },
           preventDefault,
           cancel: false,
-        } as DxEvent;
+        } as any;
 
         const helper = new ScrollableTestHelper({ direction });
 
@@ -846,7 +845,7 @@ describe('Simulated > Behavior', () => {
             originalEvent: {
               type: isDxWheelEvent ? 'dxmousewheel' : undefined,
             },
-          } as DxEvent;
+          } as any;
 
           const viewModel = new Scrollable({ direction });
 
@@ -997,7 +996,7 @@ describe('Simulated > Behavior', () => {
 
       describe('Validate(event)', () => {
         it('locked: true, disabled: false, bounceEnabled: true', () => {
-          const event = { ...defaultEvent } as DxEvent;
+          const event = { ...defaultEvent } as any;
           const viewModel = new Scrollable({
             direction, disabled: false, bounceEnabled: true,
           });
@@ -1210,44 +1209,46 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.scrollByKey).toBeCalledWith('end');
       });
 
-      it('should scroll to start by "home" key', () => {
-        const event = {
-          key: 'home',
-          originalEvent: {
-            preventDefault: jest.fn(),
-            stopPropagation: jest.fn(),
-          },
-        } as unknown as DxKeyboardEvent;
-        const helper = new ScrollableTestHelper({ direction });
-        helper.initContainerPosition({ top: 30, left: 25 });
+      each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+        it('should scroll to start by "home" key', () => {
+          const event = {
+            key: 'home',
+            originalEvent: {
+              preventDefault: jest.fn(),
+              stopPropagation: jest.fn(),
+            },
+          } as unknown as DxKeyboardEvent;
+          const helper = new ScrollableTestHelper({ direction, rtlEnabled });
+          helper.initContainerPosition({ top: 30, left: 25 });
 
-        helper.viewModel.scrollByLocation = jest.fn();
-        helper.viewModel.handleKeyDown(event);
+          helper.viewModel.scrollByLocation = jest.fn();
+          helper.viewModel.handleKeyDown(event);
 
-        expect(helper.viewModel.scrollByLocation).toBeCalledTimes(1);
+          expect(helper.viewModel.scrollByLocation).toBeCalledTimes(1);
 
-        const expectedDistance = { top: -30, left: -25 };
-        expect(helper.viewModel.scrollByLocation).toBeCalledWith(expectedDistance);
-      });
+          const expectedDistance = { top: -30, left: rtlEnabled ? 75 : -25 };
+          expect(helper.viewModel.scrollByLocation).toBeCalledWith(expectedDistance);
+        });
 
-      it('should scroll to start by "end" key', () => {
-        const event = {
-          key: 'end',
-          originalEvent: {
-            preventDefault: jest.fn(),
-            stopPropagation: jest.fn(),
-          },
-        } as unknown as DxKeyboardEvent;
-        const helper = new ScrollableTestHelper({ direction });
-        helper.initContainerPosition({ top: 80, left: 55 });
+        it('should scroll to start by "end" key', () => {
+          const event = {
+            key: 'end',
+            originalEvent: {
+              preventDefault: jest.fn(),
+              stopPropagation: jest.fn(),
+            },
+          } as unknown as DxKeyboardEvent;
+          const helper = new ScrollableTestHelper({ direction, rtlEnabled });
+          helper.initContainerPosition({ top: 80, left: 55 });
 
-        helper.viewModel.scrollByLocation = jest.fn();
-        helper.viewModel.handleKeyDown(event);
+          helper.viewModel.scrollByLocation = jest.fn();
+          helper.viewModel.handleKeyDown(event);
 
-        expect(helper.viewModel.scrollByLocation).toBeCalledTimes(1);
+          expect(helper.viewModel.scrollByLocation).toBeCalledTimes(1);
 
-        const expectedDistance = { top: 20, left: 45 };
-        expect(helper.viewModel.scrollByLocation).toBeCalledWith(expectedDistance);
+          const expectedDistance = { top: 20, left: rtlEnabled ? -55 : 45 };
+          expect(helper.viewModel.scrollByLocation).toBeCalledWith(expectedDistance);
+        });
       });
     });
 

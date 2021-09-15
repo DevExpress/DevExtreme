@@ -392,7 +392,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
                         helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
-                        helper.viewModel.handlePocketState = jest.fn();
+                        (helper.viewModel as any).handlePocketState = jest.fn();
 
                         helper.viewModel.scrollEffect();
                         emit('scroll');
