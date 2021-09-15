@@ -3,9 +3,14 @@ import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { WidgetName } from '../../helpers/createWidget';
 
-const width = {
-  short: 100,
-  long: 300,
+const shortOption = {
+  width: 100,
+  label: 'label',
+};
+
+const longOption = {
+  width: 300,
+  label: 'this is a very very very very very very very very very long label',
 };
 
 async function createComponent(componentName: WidgetName,
@@ -19,16 +24,11 @@ fixture`Label`
 ['floating', 'static'].forEach((labelMode) => {
   test(`Label for TextBox labelMode=${labelMode}`, async (t) => {
     const componentOption = {
-      label: 'short',
       labelMode,
-      width: 0,
     };
 
-    componentOption.width = width.short;
-    await createComponent('dxTextBox', componentOption, '#container');
-
-    componentOption.width = width.long;
-    await createComponent('dxTextBox', componentOption, '#otherContainer');
+    await createComponent('dxTextBox', { ...componentOption, ...shortOption }, '#container');
+    await createComponent('dxTextBox', { ...componentOption, ...longOption }, '#otherContainer');
 
     await t.expect(await compareScreenshot(t, `label-text-box-labelMode=${labelMode}.png`)).ok();
   }).before(async () => {
