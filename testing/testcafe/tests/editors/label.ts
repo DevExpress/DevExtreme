@@ -1,10 +1,16 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { WidgetName } from '../../helpers/createWidget';
 
+const width = {
+  short: 100,
+  long: 300,
+};
+
 async function createComponent(componentName: WidgetName,
-  componentOptions: unknown): Promise<void> {
-  return createWidget(componentName, componentOptions, true);
+  componentOptions: any, selector: string): Promise<void> {
+  return createWidget(componentName, componentOptions, true, selector);
 }
 
 fixture`Label`
@@ -15,10 +21,21 @@ fixture`Label`
     const componentOption = {
       label: 'short',
       labelMode,
+      width: 0,
     };
 
-    await createComponent('dxTextBox', componentOption);
+    componentOption.width = width.short;
+    await createComponent('dxTextBox', componentOption, '#container');
+
+    componentOption.width = width.long;
+    await createComponent('dxTextBox', componentOption, '#otherContainer');
 
     await t.expect(await compareScreenshot(t, `label-text-box-labelMode=${labelMode}.png`)).ok();
+  }).before(async () => {
+    await ClientFunction(() => {
+      $('#otherContainer').css({
+        'margin-top': '20px',
+      });
+    })();
   });
 });
