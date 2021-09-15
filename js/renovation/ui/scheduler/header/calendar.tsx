@@ -24,7 +24,7 @@ export const viewFunction = ({
   updateVisible,
   isMobile,
   calendarRef,
-  calendarFocusCallback,
+  focusCalendar,
 }: SchedulerCalendar): JSX.Element => {
   const calendar = (
     <div
@@ -57,7 +57,7 @@ export const viewFunction = ({
             showCloseButton
             fullScreen
             toolbarItems={[{ shortcut: 'cancel' }]}
-            onShown={calendarFocusCallback}
+            onShown={focusCalendar}
           >
             {calendar}
           </Popup>
@@ -70,7 +70,7 @@ export const viewFunction = ({
             closeOnOutsideClick
             visible={visible}
             visibleChange={updateVisible}
-            onShown={calendarFocusCallback}
+            onShown={focusCalendar}
           >
             {calendar}
           </Popover>
@@ -107,7 +107,7 @@ export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps,
     return this.props.isMobileLayout;
   }
 
-  calendarFocusCallback = (): void => this.calendarRef.current?.focus();
+  focusCalendar = (): void => this.calendarRef.current?.focus();
 
   updateVisible(visible: boolean): void {
     this.props.onVisibleUpdate(visible);

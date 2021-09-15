@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Popup } from '../../../overlays/popup';
-import { Popover } from '../../../overlays/popover';
+import { Popup, PopupProps } from '../../../overlays/popup';
+import { Popover, PopoverProps } from '../../../overlays/popover';
 import {
   SchedulerCalendar,
   SchedulerCalendarProps as CalendarProps,
@@ -31,25 +31,27 @@ describe('Calendar', () => {
       const props = {
         visible: true,
       };
-      const calendarFocusCallback = () => { };
+      const focusCalendar = () => { };
       const updateVisible = () => { };
 
       const tree = renderComponent({
         isMobile: false,
         props,
         updateVisible,
-        calendarFocusCallback,
+        focusCalendar,
       });
       const popover = tree.childAt(0);
 
-      expect(popover.props()).toMatchObject({
+      expect(popover.props()).toEqual({
+        ...new PopoverProps(),
         target: '.dx-scheduler-navigator-caption',
         className: 'dx-scheduler-navigator-calendar-popover',
         showTitle: false,
         closeOnOutsideClick: true,
         visible: props.visible,
         visibleChange: updateVisible,
-        onShown: calendarFocusCallback,
+        onShown: focusCalendar,
+        children: expect.anything(),
       });
     });
 
@@ -64,18 +66,19 @@ describe('Calendar', () => {
       const props = {
         visible: true,
       };
-      const calendarFocusCallback = () => { };
+      const focusCalendar = () => { };
       const updateVisible = () => { };
 
       const tree = renderComponent({
         isMobile: true,
         props,
-        calendarFocusCallback,
+        focusCalendar,
         updateVisible,
       });
       const popup = tree.childAt(0);
 
-      expect(popup.props()).toMatchObject({
+      expect(popup.props()).toEqual({
+        ...new PopupProps(),
         className: 'dx-scheduler-navigator-calendar-popup',
         showTitle: false,
         closeOnOutsideClick: true,
@@ -84,7 +87,8 @@ describe('Calendar', () => {
         showCloseButton: true,
         fullScreen: true,
         toolbarItems: [{ shortcut: 'cancel' }],
-        onShown: calendarFocusCallback,
+        onShown: focusCalendar,
+        children: expect.anything(),
       });
     });
 
@@ -170,7 +174,7 @@ describe('Calendar', () => {
       });
     });
 
-    describe('calendarFocusCallback', () => {
+    describe('focusCalendar', () => {
       it('should focus calendar', () => {
         const mockCallback = jest.fn();
         const schedulerCalendar = new SchedulerCalendar({
@@ -182,7 +186,7 @@ describe('Calendar', () => {
           },
         } as any;
 
-        schedulerCalendar.calendarFocusCallback();
+        schedulerCalendar.focusCalendar();
 
         expect(mockCallback).toBeCalledTimes(1);
       });
@@ -193,7 +197,7 @@ describe('Calendar', () => {
         });
         schedulerCalendar.calendarRef = {} as any;
 
-        expect(() => schedulerCalendar.calendarFocusCallback()).not.toThrow();
+        expect(() => schedulerCalendar.focusCalendar()).not.toThrow();
       });
     });
   });
