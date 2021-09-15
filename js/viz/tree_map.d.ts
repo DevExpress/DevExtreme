@@ -1,3 +1,5 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+
 import {
     UserDefinedElement,
     DxElement,
@@ -12,11 +14,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource from '../data/data_source';
 
 import {
     EventInfo,
@@ -152,7 +150,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @notUsedInTheme
      * @public
      */
-    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
+    dataSource?: ComplexCollectionDataSource<any>;
     /**
      * @docid
      * @public

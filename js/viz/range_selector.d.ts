@@ -1,13 +1,11 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+
 import {
     PaletteType,
     PaletteExtensionModeType,
 } from './palette';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource from '../data/data_source';
 
 import {
     EventInfo,
@@ -300,7 +298,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @notUsedInTheme
      * @public
      */
-    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
+    dataSource?: ComplexCollectionDataSource<any>;
     /**
      * @docid
      * @default 'arg'

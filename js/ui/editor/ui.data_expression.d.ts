@@ -1,3 +1,5 @@
+import { ComplexCollectionDataSource } from '../../data/data_source_aliases';
+
 import {
     UserDefinedElement,
     DxElement,
@@ -7,11 +9,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../../data/data_source';
-
-import Store from '../../data/abstract_store';
+import DataSource from '../../data/data_source';
 
 import {
     CollectionWidgetItem,
@@ -25,7 +23,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: ComplexCollectionDataSource<CollectionWidgetItem | any>;
     /**
      * @docid
      * @default undefined

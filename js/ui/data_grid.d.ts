@@ -1,3 +1,4 @@
+import { ComplexCollectionDataSource, DataSourceMixinArray } from '../data/data_source_aliases';
 import {
   UserDefinedElement,
   DxElement,
@@ -12,15 +13,11 @@ import {
     template,
 } from '../core/templates/template';
 
+import DataSource from '../data/data_source';
 import {
     DeepPartial,
 } from '../core/index';
 
-import Store from '../data/abstract_store';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
 
 import {
     DxEvent,
@@ -30,10 +27,6 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
-
-import {
-    DataGridCell as ExcelCell,
-} from '../excel_exporter';
 
 import {
     ExcelFont,
@@ -542,7 +535,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @public
      * @type string | Array<any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: string | Array<TRowData> | Store<TRowData, string | Array<string>, TKey> | DataSource<TRowData, string | Array<string>, TKey> | DataSourceOptions<TRowData, TRowData, TRowData, string | Array<string>, TKey>;
+    dataSource?: ComplexCollectionDataSource<TRowData, TKey>;
     /**
      * @docid
      * @public
@@ -2682,7 +2675,7 @@ export interface ColumnHeaderFilter {
    * @default undefined
    * @type_function_return void
    */
-  dataSource?: Array<any> | Store | ((options: { component?: any; dataSource?: DataSourceOptions }) => any) | DataSourceOptions;
+  dataSource?: DataSourceMixinArray<any>;
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @type Enums.HeaderFilterGroupInterval|number
@@ -2718,7 +2711,7 @@ export interface ColumnLookup {
    * @type_function_param1_field1 data:object
    * @default undefined
    */
-  dataSource?: Array<any> | DataSourceOptions | Store | ((options: { data?: any; key?: any }) => Array<any> | DataSourceOptions | Store);
+  dataSource?: DataSourceMixinArray<any>;
   /**
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined

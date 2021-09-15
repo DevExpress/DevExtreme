@@ -1,3 +1,5 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+
 import {
     UserDefinedElement,
     DxElement,
@@ -7,11 +9,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource from '../data/data_source';
 
 import {
     EventInfo,
@@ -123,7 +121,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @default null
      * @public
      */
-    dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
+    dataSource?: ComplexCollectionDataSource<any>;
     /**
      * @docid
      * @public

@@ -1,8 +1,4 @@
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
 
 import {
     EventInfo,
@@ -62,7 +58,7 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: ComplexCollectionDataSource<string | Item | any>;
     /**
      * @docid
      * @default true

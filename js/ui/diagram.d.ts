@@ -1,3 +1,5 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+
 import {
     DxElement,
 } from '../core/element';
@@ -6,11 +8,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource from '../data/data_source';
 
 import {
   EventInfo,
@@ -472,7 +470,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: ComplexCollectionDataSource<any>;
       /**
        * @docid
        * @default "from"
@@ -628,7 +626,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: ComplexCollectionDataSource<any>;
       /**
        * @docid
        * @default undefined

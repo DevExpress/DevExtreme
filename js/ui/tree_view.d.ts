@@ -1,3 +1,4 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
 import {
     DxElement,
 } from '../core/element';
@@ -5,12 +6,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -131,7 +126,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
+    dataSource?: ComplexCollectionDataSource<Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure

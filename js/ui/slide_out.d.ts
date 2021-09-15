@@ -1,3 +1,4 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -10,12 +11,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -88,7 +83,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: ComplexCollectionDataSource<string | Item | any>;
     /**
      * @docid
      * @type Array<string | dxSlideOutItem | any>

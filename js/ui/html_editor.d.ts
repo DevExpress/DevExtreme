@@ -1,3 +1,4 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -25,14 +20,10 @@ import Editor, {
     EditorOptions,
 } from './editor/editor';
 
-import {
   MenuBasePlainItem,
 } from './menu';
 
 import {
-    Item as dxToolbarItem,
-} from './toolbar';
-
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
@@ -371,25 +362,25 @@ export interface dxHtmlEditorMediaResizing {
  * @type object
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorTableResizing {
-  /**
-   * @docid
-   * @default 40
-   * @public
-   */
-   minColumnWidth?: number;
-  /**
-   * @docid
-   * @default 24
-   * @public
-   */
-  minRowHeight?: number;
-  /**
-   * @docid
-   * @default false
-   * @public
-   */
-  enabled?: boolean;
+export interface dxHtmlEditorTableResizing {
+ /**
+  * @docid
+  * @default 40
+  * @public
+  */
+  minColumnWidth?: number;
+ /**
+  * @docid
+  * @default 24
+  * @public
+  */
+ minRowHeight?: number;
+ /**
+  * @docid
+  * @default false
+  * @public
+  */
+ enabled?: boolean;
 }
 
 /**
@@ -449,7 +440,7 @@ export interface dxHtmlEditorMention {
      * @default null
      * @public
      */
-    dataSource?: Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: ComplexCollectionDataSource<string>;
     /**
      * @docid
      * @default "this"
@@ -587,7 +578,7 @@ export interface dxHtmlEditorVariables {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: ComplexCollectionDataSource<string>;
     /**
      * @docid
      * @default ""

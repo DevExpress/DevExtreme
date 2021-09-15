@@ -1,14 +1,12 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+
 import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource from '../data/data_source';
 
 import {
     FileSavingEventInfo,
@@ -78,7 +76,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @notUsedInTheme
      * @public
      */
-    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
+    dataSource?: ComplexCollectionDataSource<any>;
     /**
      * @docid
      * @default '#666666'

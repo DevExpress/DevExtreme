@@ -1,3 +1,4 @@
+import { DataSourceMixinArray } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import Store from '../data/abstract_store';
-
-import {
-    Options as DataSourceOptions,
-} from '../data/data_source';
 
 import {
     Cancelable,
@@ -457,7 +452,7 @@ export interface dxFilterBuilderField {
        * @docid
        * @default undefined
        */
-      dataSource?: Array<any> | Store | DataSourceOptions;
+      dataSource?: DataSourceMixinArray<any>;
       /**
        * @docid
        * @default undefined

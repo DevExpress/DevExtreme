@@ -1,3 +1,5 @@
+import { ComplexCollectionDataSource } from '../../data/data_source_aliases';
+
 import {
     UserDefinedElement,
     DxElement,
@@ -7,11 +9,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../../data/data_source';
-
-import Store from '../../data/abstract_store';
+import DataSource from '../../data/data_source';
 
 import {
     EventInfo,
@@ -42,7 +40,7 @@ export interface CollectionWidgetOptions<
      * @public
      * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: ComplexCollectionDataSource<string | CollectionWidgetItem>;
     /**
      * @docid
      * @default 750

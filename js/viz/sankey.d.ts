@@ -1,3 +1,5 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+
 import {
     UserDefinedElement,
     DxElement,
@@ -12,11 +14,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource from '../data/data_source';
 
 import {
     EventInfo,
@@ -115,7 +113,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @notUsedInTheme
      * @public
      */
-    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
+    dataSource?: ComplexCollectionDataSource<any>;
     /**
      * @docid
      * @default true

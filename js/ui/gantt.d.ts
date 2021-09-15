@@ -1,3 +1,4 @@
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -12,12 +13,6 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
-
 import {
     Column,
 } from './tree_list';
@@ -25,14 +20,6 @@ import {
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
-
-import {
-    Item as dxToolbarItem,
-} from './toolbar';
-
-import {
-    Item as dxContextMenuItem,
-} from './context_menu';
 
 import {
     template,
@@ -264,7 +251,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: ComplexCollectionDataSource<any>;
       /**
        * @docid
        * @default "id"
@@ -739,7 +726,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: ComplexCollectionDataSource<any>;
       /**
        * @docid
        * @default "id"
@@ -771,7 +758,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: ComplexCollectionDataSource<any>;
       /**
        * @docid
        * @default "id"
@@ -867,7 +854,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: ComplexCollectionDataSource<any>;
       /**
        * @docid
        * @default "end"
