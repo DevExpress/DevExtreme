@@ -225,8 +225,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
     }
 
-    .dx-scheduler-date-time-shader,
-    .dx-scheduler-date-time-shader-all-day {
+    .dx-scheduler-date-time-shader {
       margin-left: $scheduler-left-column-width;
 
       .dx-scheduler-small & {
