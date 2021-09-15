@@ -242,7 +242,43 @@ module('Table properties forms', {
         this.clock.tick(500);
 
         assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
-        assert.strictEqual($targetCell.next().outerWidth(), 350, 'previous cell width is correct');
+        assert.strictEqual($targetCell.next().outerWidth(), 350, 'next cell width is correct');
+    });
+
+    test('Check cell width attributes after edititing if all columns width is not fixed', function(assert) {
+        this.createWidget({ width: 632, value: '\
+        <table>\
+            <tr>\
+                <td>0_0 content</td>\
+                <td>0_1</td>\
+            </tr>\
+            <tr>\
+                <td>1_0</td>\
+                <td>1_1</td>\
+            </tr>\
+        </table>\
+        <br>' });
+
+        const $tableElement = this.$element.find('table').eq(0);
+        const $targetCell = $tableElement.find('td').eq(0);
+        //  $tableElement.css('width', 'initial');
+
+        showCellPropertiesForm(this.instance, $targetCell);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
+
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 250);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
+        assert.roughEqual($targetCell.next().outerWidth(), 348, 2, 'next cell width attr is correct');
+        assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
     });
 
     test('Check cell width edititing for the last table column if all columns width is fixed', function(assert) {
@@ -308,6 +344,151 @@ module('Table properties forms', {
         this.clock.tick(500);
 
         assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
+    });
+
+
+    test('Check cell width edititing if the table has one column with auto width and one with fixed width', function(assert) {
+        this.createWidget({ width: 632, value: '\
+        <table>\
+            <tr>\
+                <td width="300px">0_0 content</td>\
+                <td>0_1</td>\
+            </tr>\
+            <tr>\
+                <td width="300px">1_0</td>\
+                <td>1_1</td>\
+            </tr>\
+        </table>\
+        <br>' });
+
+        const $tableElement = this.$element.find('table').eq(0);
+        const $targetCell = $tableElement.find('td').eq(1);
+
+        showCellPropertiesForm(this.instance, $targetCell);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
+
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 250);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
+        assert.roughEqual(parseInt($targetCell.prev().outerWidth()), 350, 2, 'previous cell width attr is correct');
+        assert.roughEqual(parseInt($targetCell.prev().outerWidth()), 350, 2, 'previous cell width attr is correct');
+    });
+
+    test('Check cell width edititing if the table has two column with auto width and one with fixed width', function(assert) {
+        this.createWidget({ width: 932, value: '\
+        <table>\
+            <tr>\
+                <td width="300px">0_0 content</td>\
+                <td>0_1</td>\
+                <td>0_2</td>\
+            </tr>\
+            <tr>\
+                <td width="300px">1_0</td>\
+                <td>1_1</td>\
+                <td>1_2</td>\
+            </tr>\
+        </table>\
+        <br>' });
+
+        const $tableElement = this.$element.find('table').eq(0);
+        const $targetCell = $tableElement.find('td').eq(1);
+
+        showCellPropertiesForm(this.instance, $targetCell);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
+
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 400);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 400, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '400px', 'cell width attr is applied');
+        assert.roughEqual($targetCell.prev().outerWidth(), 300, 2, 'previous cell width is correct');
+        assert.roughEqual(parseInt($targetCell.prev().attr('width')), 300, 2, 'previous cell width attr is correct');
+        assert.roughEqual($targetCell.next().outerWidth(), 200, 2, 'next cell width is correct');
+        assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+    });
+
+    test('Check cell width attributes if new value is more than the full table width', function(assert) {
+        this.createWidget({ width: 632, value: '\
+        <table>\
+            <tr>\
+                <td>0_0 content</td>\
+                <td>0_1</td>\
+            </tr>\
+            <tr>\
+                <td>1_0</td>\
+                <td>1_1</td>\
+            </tr>\
+        </table>\
+        <br>' });
+
+        const $tableElement = this.$element.find('table').eq(0);
+        const $targetCell = $tableElement.find('td').eq(0);
+
+        showCellPropertiesForm(this.instance, $targetCell);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
+
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 700);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
+        assert.roughEqual($targetCell.next().outerWidth(), 100, 2, 'next cell width attr is correct');
+        assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+    });
+
+    test('Check cell width attributes if new value is negative', function(assert) {
+        this.createWidget({ width: 632, value: '\
+        <table>\
+            <tr>\
+                <td>0_0 content</td>\
+                <td>0_1</td>\
+            </tr>\
+            <tr>\
+                <td>1_0</td>\
+                <td>1_1</td>\
+            </tr>\
+        </table>\
+        <br>' });
+
+        const $tableElement = this.$element.find('table').eq(0);
+        const $targetCell = $tableElement.find('td').eq(0);
+
+        showCellPropertiesForm(this.instance, $targetCell);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
+
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', -100);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.strictEqual($targetCell.outerWidth(), 300, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '300px', 'cell width attr is applied');
+        assert.roughEqual($targetCell.next().outerWidth(), 300, 2, 'next cell width attr is correct');
+        assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
     });
 
 
