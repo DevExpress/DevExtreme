@@ -11,18 +11,18 @@ import {
   AnimatedScrollbar,
   viewFunction as AnimatedScrollbarComponent,
 } from '../animated_scrollbar';
-import { inRange } from '../../../../core/utils/math';
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
-import { ScrollbarProps } from '../common/scrollbar_props';
+import { inRange } from '../../../../../core/utils/math';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../common/consts';
+import { ScrollbarProps } from '../../common/scrollbar_props';
 import {
   defaultEvent,
-} from '../../../test_utils/events_mock';
-import { AnimatedScrollbarProps } from '../common/animated_scrollbar_props';
+} from '../../../../test_utils/events_mock';
+import { AnimatedScrollbarProps } from '../../common/animated_scrollbar_props';
 
 interface Mock extends jest.Mock {}
 
-jest.mock('../../../../core/utils/math', () => ({
-  ...jest.requireActual('../../../../core/utils/math'),
+jest.mock('../../../../../core/utils/math', () => ({
+  ...jest.requireActual('../../../../../core/utils/math'),
   inRange: jest.fn(() => true),
 }));
 

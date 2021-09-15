@@ -9,12 +9,12 @@ import {
   Mutable,
 } from '@devextreme-generator/declarations';
 
-import { Widget } from '../common/widget';
-import { combineClasses } from '../../utils/combine_classes';
-import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
-import domAdapter from '../../../core/dom_adapter';
-import { isDefined } from '../../../core/utils/type';
-import { isDxMouseWheelEvent } from '../../../events/utils/index';
+import { Widget } from '../../common/widget';
+import { combineClasses } from '../../../utils/combine_classes';
+import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
+import domAdapter from '../../../../core/dom_adapter';
+import { isDefined } from '../../../../core/utils/type';
+import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS,
   SCROLLABLE_SCROLL_CLASS,
@@ -22,20 +22,20 @@ import {
   HIDE_SCROLLBAR_TIMEOUT,
   SCROLLABLE_SCROLLBAR_ACTIVE_CLASS,
   HOVER_ENABLED_STATE,
-} from './common/consts';
+} from '../common/consts';
 
 import {
   subscribeToDXPointerDownEvent,
   subscribeToDXPointerUpEvent,
-} from '../../utils/subscribe_to_event';
+} from '../../../utils/subscribe_to_event';
 
-import { BaseWidgetProps } from '../common/base_props';
-import { inRange } from '../../../core/utils/math';
-import { DxMouseEvent } from './common/types.d';
-import { clampIntoRange } from './utils/clamp_into_range';
-import { ScrollbarProps } from './common/scrollbar_props';
-import { ScrollableProps } from './common/scrollable_props';
-import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
+import { BaseWidgetProps } from '../../common/base_props';
+import { inRange } from '../../../../core/utils/math';
+import { DxMouseEvent } from '../common/types';
+import { clampIntoRange } from '../utils/clamp_into_range';
+import { ScrollbarProps } from '../common/scrollbar_props';
+import { ScrollableProps } from '../common/scrollable_props';
+import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
 export const THUMB_MIN_SIZE = 15;
@@ -53,6 +53,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       classes={cssClasses}
       activeStateEnabled={activeStateEnabled}
       hoverStateEnabled={hoverStateEnabled}
+      focusStateEnabled
       visible={isVisible}
       onHoverStart={hoverInHandler}
       onHoverEnd={hoverOutHandler}
@@ -343,6 +344,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   get hoverStateEnabled(): boolean {
     const { showScrollbar, scrollByThumb } = this.props;
+
     return (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
   }
 }
