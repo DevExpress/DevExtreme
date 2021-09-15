@@ -6,7 +6,6 @@ import {
   Fragment,
   RefObject,
   Ref,
-  Method,
 } from '@devextreme-generator/declarations';
 import { isMobileLayout } from './utils';
 import { Popup } from '../../overlays/popup';
@@ -108,7 +107,6 @@ export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps,
     return this.props.isMobileLayout;
   }
 
-  @Method()
   focusCalendar(): void {
     this.calendarRef.current?.focus();
   }
