@@ -248,12 +248,6 @@ describe('Scheduler Toolbar', () => {
     });
 
     describe('Getters', () => {
-      it('should return correct css class', () => {
-        const toolbar = createToolbar();
-
-        expect(toolbar.cssClass).toBe(HEADER_CLASS);
-      });
-
       describe('Step', () => {
         it('should return correct step for week view', () => {
           const toolbar = createToolbar({ currentView: 'week' });
