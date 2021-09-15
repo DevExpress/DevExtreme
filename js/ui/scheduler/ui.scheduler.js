@@ -2212,14 +2212,16 @@ class Scheduler extends Widget {
     }
 
     createGetAppointmentColor() {
-        const resourceConfig = {
-            resources: this.option('resources'),
-            dataAccessors: createExpressions(this.option('resources')),
-            loadedResources: this.loadedResources,
-            resourceLoaderMap: this.resourceLoaderMap
-        };
+        return (appointmentConfig) => {
+            const resourceConfig = {
+                resources: this.option('resources'),
+                dataAccessors: createExpressions(this.option('resources')),
+                loadedResources: this.loadedResources,
+                resourceLoaderMap: this.resourceLoaderMap
+            };
 
-        return (appointmentConfig) => getAppointmentColor(resourceConfig, appointmentConfig);
+            return getAppointmentColor(resourceConfig, appointmentConfig);
+        };
     }
 
     showAppointmentTooltipCore(target, data, options) {
