@@ -1,5 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
+import { changeTheme } from '../../helpers/changeTheme';
 import url from '../../helpers/getPageUrl';
 import createWidget, { WidgetName } from '../../helpers/createWidget';
 
@@ -30,45 +31,57 @@ components.forEach((component) => {
   ['floating', 'static'].forEach((labelMode) => {
     ['outlined', 'underlined', 'filled'].forEach((stylingMode) => {
       [true, false].forEach((isFocused) => {
-        test(`Label for ${component} labelMode=${labelMode} stylingMode=${stylingMode} focused=${isFocused}`, async (t) => {
-          const componentOption = {
-            labelMode,
-            stylingMode,
-          };
+        [false, true].forEach((isMaterialTheme) => {
+          test(`Label for ${component} labelMode=${labelMode} stylingMode=${stylingMode} focused=${isFocused}`, async (t) => {
+            if (isMaterialTheme) {
+              await changeTheme('material.blue.light');
+            }
 
-          await createComponent(component, { ...componentOption, ...shortOption }, '#container');
-          await createComponent(component, { ...componentOption, ...longOption }, '#otherContainer');
+            const componentOption = {
+              labelMode,
+              stylingMode,
+            };
 
-          if (isFocused) {
+            await createComponent(component, { ...componentOption, ...shortOption }, '#container');
+            await createComponent(component, { ...componentOption, ...longOption }, '#otherContainer');
+
+            if (isFocused) {
+              await ClientFunction(() => {
+                $('#container').addClass('dx-state-focused');
+                $('#otherContainer').addClass('dx-state-focused');
+              })();
+            }
+
+            await t.expect(await compareScreenshot(t, `label-${component}-labelMode=${labelMode}-stylingMode=${stylingMode}-focused=${isFocused}-material=${isMaterialTheme}.png`)).ok();
+          }).before(async () => {
             await ClientFunction(() => {
-              $('#container').addClass('dx-state-focused');
-              $('#otherContainer').addClass('dx-state-focused');
+              $('#otherContainer').css({
+                'margin-top': '20px',
+              });
             })();
-          }
-
-          await t.expect(await compareScreenshot(t, `label-${component}-labelMode=${labelMode}-stylingMode=${stylingMode}-focused=${isFocused}.png`)).ok();
-        }).before(async () => {
-          await ClientFunction(() => {
-            $('#otherContainer').css({
-              'margin-top': '20px',
-            });
-          })();
+          });
         });
       });
     });
   });
 });
 
-test('Lavel scroll input dxTextArea', async (t) => {
-  await createWidget('dxTextArea',
-    {
-      height: 30,
-      width: 200,
-      text: `this content is ${'very '.repeat(10)}long`,
-      label: 'label text',
-    }, true);
+[false, true].forEach((isMaterialTheme) => {
+  test('Label scroll input dxTextArea', async (t) => {
+    if (isMaterialTheme) {
+      await changeTheme('material.blue.light');
+    }
 
-  await t.scroll(Selector('.dx-texteditor-input'), 0, 15);
+    await createWidget('dxTextArea',
+      {
+        height: 30,
+        width: 200,
+        text: `this content is ${'very '.repeat(10)}long`,
+        label: 'label text',
+      }, true);
 
-  await t.expect(await compareScreenshot(t, 'label-text-area-scroll.png')).ok();
+    await t.scroll(Selector('.dx-texteditor-input'), 0, 15);
+
+    await t.expect(await compareScreenshot(t, `label-scroll-text-area-material=${isMaterialTheme}.png`)).ok();
+  });
 });
