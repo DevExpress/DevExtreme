@@ -18,7 +18,8 @@ export type WidgetName =
 'dxSelectBox' |
 'dxButton' |
 'dxTextBox' |
-'dxTextArea';
+'dxTextArea' |
+'dxTagBox';
 
 export default async function createWidget(
   widgetName: WidgetName,

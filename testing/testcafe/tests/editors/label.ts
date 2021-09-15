@@ -4,6 +4,17 @@ import { changeTheme } from '../../helpers/changeTheme';
 import url from '../../helpers/getPageUrl';
 import createWidget, { WidgetName } from '../../helpers/createWidget';
 
+async function createComponent(
+  componentName: WidgetName,
+  componentOptions: any,
+  selector: string,
+): Promise<void> {
+  return createWidget(componentName, componentOptions, true, selector);
+}
+
+const labelMods = ['floating', 'static'];
+const stylingMods = ['outlined', 'underlined', 'filled'];
+
 const shortOption = {
   width: 100,
   label: 'label',
@@ -15,51 +26,38 @@ const longOption = {
   label: `this label is ${'very '.repeat(10)}long`,
   text: `this content is ${'very '.repeat(10)}long`,
   items: ['item1', 'item2'],
-  value: 'item1',
 };
-
-async function createComponent(componentName: WidgetName,
-  componentOptions: any, selector: string): Promise<void> {
-  return createWidget(componentName, componentOptions, true, selector);
-}
 
 fixture`Label`
   .page(url(__dirname, '../container.html'));
 
 const components: WidgetName[] = ['dxTextBox', 'dxTextArea', 'dxSelectBox'];
 components.forEach((component) => {
-  ['floating', 'static'].forEach((labelMode) => {
-    ['outlined', 'underlined', 'filled'].forEach((stylingMode) => {
-      [true, false].forEach((isFocused) => {
-        [false, true].forEach((isMaterialTheme) => {
-          test(`Label for ${component} labelMode=${labelMode} stylingMode=${stylingMode} focused=${isFocused}`, async (t) => {
-            if (isMaterialTheme) {
-              await changeTheme('material.blue.light');
-            }
+  labelMods.forEach((labelMode) => {
+    stylingMods.forEach((stylingMode) => {
+      [false, true].forEach((isMaterialTheme) => {
+        test(`Label for ${component} labelMode=${labelMode} stylingMode=${stylingMode} material=${isMaterialTheme}`, async (t) => {
+          if (isMaterialTheme) {
+            await changeTheme('material.blue.light');
+          }
 
-            const componentOption = {
-              labelMode,
-              stylingMode,
-            };
+          const componentOption = {
+            labelMode,
+            stylingMode,
+          };
 
-            await createComponent(component, { ...componentOption, ...shortOption }, '#container');
-            await createComponent(component, { ...componentOption, ...longOption }, '#otherContainer');
+          await createComponent(component, { ...componentOption, ...shortOption }, '#container');
 
-            if (isFocused) {
-              await ClientFunction(() => {
-                $('#container').addClass('dx-state-focused');
-                $('#otherContainer').addClass('dx-state-focused');
-              })();
-            }
+          await createComponent(component, { ...componentOption, ...longOption }, '#otherContainer');
+          await t.click('#otherContainer');
 
-            await t.expect(await compareScreenshot(t, `label-${component}-labelMode=${labelMode}-stylingMode=${stylingMode}-focused=${isFocused}-material=${isMaterialTheme}.png`)).ok();
-          }).before(async () => {
-            await ClientFunction(() => {
-              $('#otherContainer').css({
-                'margin-top': '20px',
-              });
-            })();
-          });
+          await t.expect(await compareScreenshot(t, `label-${component}-labelMode=${labelMode}-stylingMode=${stylingMode}-material=${isMaterialTheme}.png`)).ok();
+        }).before(async () => {
+          await ClientFunction(() => {
+            $('#otherContainer').css({
+              'margin-top': '20px',
+            });
+          })();
         });
       });
     });
@@ -74,7 +72,7 @@ components.forEach((component) => {
 
     await createWidget('dxTextArea',
       {
-        height: 30,
+        height: 50,
         width: 200,
         text: `this content is ${'very '.repeat(10)}long`,
         label: 'label text',
