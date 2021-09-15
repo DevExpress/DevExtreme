@@ -926,10 +926,8 @@ class Scheduler extends Widget {
     get modelProvider() { return getModelProvider(this.key); }
 
     updateFactoryInstances() {
-        const model = {
-            ...this._options._optionManager._options,
-            loadedResources: this.loadedResources
-        };
+        const model = this._options._optionManager._options;
+        model.loadedResources = this.loadedResources;
 
         if(!isDefined(this.key)) {
             this.key = generateKey();
