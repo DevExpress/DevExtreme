@@ -925,7 +925,7 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container, dragAndResizeArea, allowDragOutside, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
+        const { target, container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
 
         return {
             position: this._getOptionValue('position'),
@@ -937,7 +937,7 @@ const Overlay = Widget.inherit({
             onPositioned: this._actions.onPositioned,
             restorePosition,
             dragAndResizeArea,
-            allowDragOutside,
+            dragOutsideBoundary,
             outsideDragFactor,
             _fixWrapperPosition
         };
@@ -1365,12 +1365,12 @@ const Overlay = Widget.inherit({
             case 'dragAndResizeArea':
                 this._positionController.dragAndResizeArea = value;
                 if(this.option('resizeEnabled')) {
-                    this._resizable?.option('area', this._positionController.$dragResizeContainer);
+                    this._resizable.option('area', this._positionController.$dragResizeContainer);
                 }
                 this._positionController.positionContent();
                 break;
             case 'dragOutsideBoundary':
-                this._positionController.allowDragOutside = value;
+                this._positionController.dragOutsideBoundary = value;
                 if(this.option('resizeEnabled')) {
                     this._resizable.option('area', this._positionController.$dragResizeContainer);
                 }

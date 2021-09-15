@@ -52,12 +52,6 @@ class OverlayDrag {
         this._moveTo(0, KEYBOARD_DRAG_STEP, e);
     }
 
-    moveToDragContainer() {
-        const offset = this._fitOffsetIntoAllowedRange(0, 0);
-
-        this._moveByOffset(offset);
-    }
-
     subscribe() {
         const eventNames = this._getEventNames();
 
