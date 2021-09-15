@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 
-type WidgetName =
+export type WidgetName =
 'dxGallery' |
 'dxTabPanel' |
 'dxForm' |
