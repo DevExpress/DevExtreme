@@ -1165,10 +1165,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         currentDate.setHours(hours, minutes, 0, 0);
 
-        if(!this.isVirtualScrolling()) {
-            return this.positionHelper.getCoordinatesByDate(currentDate, groupIndex, allDay);
-        }
-
         const cell = this.viewDataProvider.findGlobalCellPosition(
             currentDate, groupIndex, allDay,
         );
@@ -1317,14 +1313,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         return index;
-    }
-
-    getPositionShift(timeShift, isAllDay) {
-        return {
-            top: timeShift * this.getCellHeight(),
-            left: 0,
-            cellPosition: 0
-        };
     }
 
     getDroppableCellIndex() {
@@ -2240,7 +2228,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
-            getPositionShiftCallback: this.getPositionShift.bind(this),
             getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
         });
     }

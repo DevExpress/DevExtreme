@@ -1,4 +1,4 @@
-import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
+import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
 import { shallowEquals } from '../../utils/shallow_equals';

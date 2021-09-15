@@ -108,14 +108,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return 0;
     }
 
-    getPositionShift(timeShift) {
-        return {
-            cellPosition: timeShift * this.getCellWidth(),
-            top: 0,
-            left: 0
-        };
-    }
-
     getCellCountToLastViewDate(date) {
         const firstDateTime = date.getTime();
         const lastDateTime = this.getEndViewDate().getTime();
