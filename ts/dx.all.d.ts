@@ -1858,7 +1858,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TKey, TValue>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1869,6 +1869,10 @@ declare module DevExpress.data {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type EventName = 'changed' | 'loadError' | 'loadingChanged';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type StorageType = 'array' | 'local' | 'odata';
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1960,7 +1964,9 @@ declare module DevExpress.data {
      */
     store?:
       | Store<TKey, TSourceValue>
-      | StoreOptions<TKey, TSourceValue>
+      | (StoreOptions<TKey, TSourceValue> & {
+          type: DevExpress.data.DataSource.StorageType;
+        })
       | Array<TSourceValue>;
   }
   /**

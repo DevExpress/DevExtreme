@@ -128,7 +128,7 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> | Array<TSourceValue>;
+    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> & { type: StorageType } | Array<TSourceValue>;
 }
 /**
  * @docid
@@ -391,7 +391,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TKey, TValue>;
     /**
      * @docid
      * @publicName totalCount()
@@ -401,4 +401,5 @@ export default class DataSource<TKey = any, TValue = any> {
     totalCount(): number;
 }
 
+type StorageType = 'array' | 'local' | 'odata';
 type EventName = 'changed' | 'loadError' | 'loadingChanged';
