@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
-import coreBrowserUtils from '../../core/utils/browser';
 import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
 import { getPublicElement } from '../../core/element';
@@ -1242,9 +1241,7 @@ const PivotGrid = Widget.inherit({
                 filterAreaHeight = filterHeaderCell.height();
 
                 const $dataHeader = tableElement.find('.dx-data-header');
-                const dataHeaderHeight = coreBrowserUtils.msie
-                    ? getSize($dataHeader.get(0), 'height', { paddings: false, borders: false, margins: false })
-                    : $dataHeader.height();
+                const dataHeaderHeight = $dataHeader.height();
 
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
                 dataAreaHeight = that.$element().height() - filterAreaHeight - dataHeaderHeight - (Math.max(that._dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
