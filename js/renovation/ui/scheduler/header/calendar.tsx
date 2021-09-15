@@ -6,6 +6,7 @@ import {
   Fragment,
   RefObject,
   Ref,
+  Method,
 } from '@devextreme-generator/declarations';
 import { isMobileLayout } from './utils';
 import { Popup } from '../../overlays/popup';
@@ -107,7 +108,10 @@ export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps,
     return this.props.isMobileLayout;
   }
 
-  focusCalendar = (): void => this.calendarRef.current?.focus();
+  @Method()
+  focusCalendar(): void {
+    this.calendarRef.current?.focus();
+  }
 
   updateVisible(visible: boolean): void {
     this.props.onVisibleUpdate(visible);
