@@ -4,21 +4,6 @@ window.jsPDF = window.jspdf.jsPDF;
 applyPlugin(window.jsPDF);
 
 $(() => {
-  $('#exportButton').dxButton({
-    icon: 'exportpdf',
-    text: 'Export to PDF',
-    onClick() {
-      // eslint-disable-next-line new-cap
-      const doc = new jsPDF();
-      DevExpress.pdfExporter.exportDataGrid({
-        jsPDFDocument: doc,
-        component: dataGrid,
-      }).then(() => {
-        doc.save('Customers.pdf');
-      });
-    },
-  });
-
   const dataGrid = $('#gridContainer').dxDataGrid({
     dataSource: customers,
     keyExpr: 'ID',
