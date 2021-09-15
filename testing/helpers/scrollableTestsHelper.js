@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 
 const SCROLLABLE_CONTAINER = 'dx-scrollable-container';
 const SCROLLABLE_CONTENT = 'dx-scrollable-content';
@@ -17,11 +16,7 @@ $tempVScrollBar.remove();
 
 export function checkScrollableSizes(assert, $rootContainer, { id, width, height, containerWidth, containerScrollWidth, containerHeight, containerScrollHeight, nestedElementWidth, nestedElementHeight, overflowX, overflowY, useNativeScrolling, configDetails }) {
     let expectedContainerClientWidth = containerWidth;
-    if(browser.msie) {
-        if(useNativeScrolling && overflowY || useNativeScrolling && overflowX) {
-            expectedContainerClientWidth = containerWidth - nativeVScrollBarWidth;
-        }
-    } else if(useNativeScrolling && overflowY) {
+    if(useNativeScrolling && overflowY) {
         expectedContainerClientWidth = containerWidth - nativeVScrollBarWidth;
     }
 
@@ -39,10 +34,6 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
     if(devices.real().ios) {
         if(useNativeScrolling) {
             expectedContainerScrollHeight = containerScrollHeight + (overflowY ? 0 : 1); // magic numbers for ios: min-height: 101%;
-        }
-    } else if(browser.msie) {
-        if(useNativeScrolling && overflowX && !overflowY && configDetails !== 'insideResponsiveBox') {
-            expectedContainerScrollHeight = containerScrollHeight - nativeVScrollBarHeight;
         }
     } else if(useNativeScrolling && overflowX && !overflowY) {
         expectedContainerScrollHeight = containerScrollHeight - nativeVScrollBarHeight;
