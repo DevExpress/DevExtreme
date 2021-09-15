@@ -1026,6 +1026,11 @@ QUnit.module('scrollbars', moduleConfig, () => {
     });
 
     QUnit.test('scroll over scrollbar does not hide thumb', function(assert) {
+        if(isRenovation && devices.current().deviceType !== 'desktop') {
+            assert.ok(true, 'there are no mouse events on touch devices');
+            return;
+        }
+
         const $scrollView = $('#scrollView').height(50);
         $scrollView.append('<div>').children().height(100);
         $scrollView.dxScrollView({
@@ -1386,17 +1391,18 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('refresh show load panel', function(assert) {
+        assert.expect(2);
         const deferred = $.Deferred();
 
         const $scrollView = $('#scrollView');
 
         const scrollView = $scrollView.dxScrollView({
             pullDownEnabled: true,
-            onPullDown: function(e) {
-
+            onPullDown: (e) => {
                 assert.equal(loadPanel.option('visible'), true, 'load panel shown on start');
 
-                e.component.release().done(function() {
+                e.component.release().done(() => {
+                    isRenovation && this.clock.tick(1000);
                     deferred.resolve();
                 });
             }
@@ -1409,6 +1415,8 @@ QUnit.module('api', moduleConfig, () => {
         deferred.done(function() {
             assert.equal(loadPanel.option('visible'), false, 'load panel hidden on done');
         });
+
+        this.clock.tick(1000); // NOTE: wait complete for all strategies
     });
 
     QUnit.test('refreshingText pass to dxLoadPanel', function(assert) {
@@ -2106,17 +2114,20 @@ QUnit.module('native swipeDown strategy', {
             assert.ok(true, 'Ziborov: temporary we do not test this case if browser does not supported touch');
             return;
         }
-        const onUpdatedHandler = sinon.spy();
 
+        const onUpdatedHandler = sinon.spy();
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: true,
             onUpdated: onUpdatedHandler
         });
+
+        onUpdatedHandler.reset();
+
         const clock = sinon.useFakeTimers();
         try {
-            $scrollView.dxScrollView('release');
+            $scrollView.dxScrollView('instance').release();
             clock.tick(800);
-            assert.equal(onUpdatedHandler.callCount, 2, 'update fired');
+            assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
         } finally {
             clock.restore();
         }

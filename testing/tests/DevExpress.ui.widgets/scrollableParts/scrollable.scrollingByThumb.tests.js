@@ -4,6 +4,7 @@ import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
+import devices from 'core/devices';
 
 import 'generic_light.css!';
 
@@ -193,6 +194,11 @@ QUnit.test('scroll by thumb should prevent scrolling cross direction', function(
 });
 
 QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\'', function(assert) {
+    if(isRenovation && devices.current().deviceType !== 'desktop') {
+        assert.ok(true, 'there are no mouse events on touch devices');
+        return;
+    }
+
     const $scrollable = $('#scrollable').dxScrollable({
         showScrollbar: 'onHover',
         inertiaEnabled: false,
@@ -236,6 +242,11 @@ QUnit.test('thumb is visible after update when content became more then containe
 });
 
 QUnit.test('showScrollbar: onHover, useNative: false, direction: vertical -> scaleRatio should be recalculated on mouseenter before scrollbar has been shown', function(assert) {
+    if(isRenovation && devices.current().deviceType !== 'desktop') {
+        assert.ok(true, 'there are no mouse events on touch devices');
+        return;
+    }
+
     const $scrollable = $('#scrollable').height(100);
     $scrollable.wrapInner('<div>').children().height(200);
 
@@ -280,6 +291,11 @@ QUnit.test('thumb hide after scroll when showScrollbar = onScroll', function(ass
 });
 
 QUnit.test('thumb stays visible after scroll when mouseEnter on scrollbar and scroll stopped', function(assert) {
+    if(isRenovation && devices.current().deviceType !== 'desktop') {
+        assert.ok(true, 'there are no mouse events on touch devices');
+        return;
+    }
+
     const $scrollable = $('#scrollable').dxScrollable({
         showScrollbar: 'onHover',
         inertiaEnabled: false,
@@ -379,6 +395,11 @@ QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
 });
 
 QUnit.skip('thumb is visible on mouseenter when thumbMode=\'onHover\' only for single scrollable nested in another scrollable', function(assert) {
+    if(isRenovation && devices.current().deviceType !== 'desktop') {
+        assert.ok(true, 'there are no mouse events on touch devices');
+        return;
+    }
+
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 
@@ -432,6 +453,11 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
 });
 
 QUnit.test('leaving inner scroller and releasing in outer scroller should hide inner scrollbar and show outer scrollbar', function(assert) {
+    if(isRenovation && devices.current().deviceType !== 'desktop') {
+        assert.ok(true, 'there are no mouse events on touch devices');
+        return;
+    }
+
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 
