@@ -9,6 +9,7 @@ const Deferred = require('core/utils/deferred').Deferred;
 const logger = require('core/utils/console').logger;
 const { isFunction } = require('core/utils/type');
 const getWindow = require('core/utils/window').getWindow;
+const browser = require('core/utils/browser');
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 
@@ -88,6 +89,10 @@ QUnit.test('Export method. Defined options', function(assert) {
 
 // T1020859
 QUnit.test('Export method params when devicePixelRatio !== 1', function(assert) {
+    if(browser.msie) {
+        assert.ok(true, 'This test is not for IE/Edge');
+        return;
+    }
     let srcDevicePixelRatio;
     try {
         srcDevicePixelRatio = getWindow().devicePixelRatio;
