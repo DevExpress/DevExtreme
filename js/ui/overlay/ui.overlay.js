@@ -926,9 +926,9 @@ const Overlay = Widget.inherit({
 
     _getPositionControllerConfig() {
         const { target, container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
+        // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
-            position: this._getOptionValue('position'),
             target,
             container,
             $root: this.$element(),
