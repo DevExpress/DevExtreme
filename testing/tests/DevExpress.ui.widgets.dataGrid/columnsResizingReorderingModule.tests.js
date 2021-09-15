@@ -2056,6 +2056,7 @@ QUnit.module('Columns resizing', {
         // assert
         assert.ok(!resizeController._isReadyResizing, 'resizing is not ready');
         assert.equal(resizeController._columnsSeparatorView._testCursorName, '', 'cursorName');
+        assert.strictEqual(resizeController._columnsSeparatorView._testPosX, null, 'posX'); // T1027834
         assert.equal(resizeController._pointsByColumns, null, 'points by columns is reset');
     });
 
@@ -2788,7 +2789,7 @@ QUnit.module('Columns resizing', {
         assert.ok(!trackerView._tablePositionController.positionChanged.has(trackerView._positionChanged), 'trackerView is unsubscribe from positionChanged');
     });
 
-    // B239204
+    // B239204, T1027834
     QUnit.test('Reset value cursor when not visible separator_B239204', function(assert) {
         // arrange
         this.component._views.columnsSeparatorView = new MockColumnsSeparatorView($('#container'), true, { top: -10000, left: 0 });
@@ -2824,6 +2825,7 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.equal(resizeController._columnsSeparatorView.cursorName, '');
+        assert.strictEqual(resizeController._columnsSeparatorView.posX, null);
     });
 
     // T694325
