@@ -929,9 +929,8 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should return window.innerHeight if window.outerHeight < window.innerHeight', function(assert) {
-        const isIE = browser.msie && parseInt(browser.version.split('.')[0]) <= 11;
         const isPhone = devices.real().deviceType === 'phone';
-        if(isIE || isPhone) {
+        if(isPhone) {
             // skip for ie because we can not write window.innerHeight in IE
             assert.expect(0);
             return;
