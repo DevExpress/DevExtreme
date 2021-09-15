@@ -4,24 +4,22 @@ import {
   RefObject,
   Ref,
   Mutable,
-  ComponentBindings,
   Method,
-  Event,
   Effect,
   InternalState,
 } from '@devextreme-generator/declarations';
+
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { BaseWidgetProps } from '../common/base_props';
-import { isDefined } from '../../../core/utils/type';
 
 import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
-import { ScrollbarProps } from './common/scrollbar_props';
 import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
-import { EventCallback } from '../common/event_callback';
 import { inRange } from '../../../core/utils/math';
 import { DxMouseEvent } from './common/types.d';
 import { clampIntoRange } from './utils/clamp_into_range';
+import { AnimatedScrollbarProps } from './common/animated_scrollbar_props';
+import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
 
@@ -36,21 +34,15 @@ export const BOUNCE_ACCELERATION_SUM = (1 - ACCELERATION ** BOUNCE_FRAMES) / (1 
 
 export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
   const {
-    scrollbarRef, start, cancel, maxOffset,
-    onEnd, onRelease,
+    scrollbarRef,
     props: {
       direction,
-      scrollableOffset, contentSize, containerSize,
+      contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled,
-      forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
       scrollLocation, scrollLocationChange,
-      isScrollableHovered, topPocketSize, bottomPocketSize,
-      onPullDown, onReachBottom, onScroll,
-      pocketState, pocketStateChange,
-      rtlEnabled, contentPaddingBottom,
+      isScrollableHovered, rtlEnabled,
       containerHasSizes,
-      onLock, onUnlock,
-      // maxOffset,
+      minOffset, maxOffset,
     },
   } = viewModel;
 
@@ -58,51 +50,27 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
     <Scrollbar
       ref={scrollbarRef}
       direction={direction}
-      onAnimatorStart={start}
-      onAnimatorCancel={cancel}
-      scrollableOffset={scrollableOffset}
       contentSize={contentSize}
       containerSize={containerSize}
+      containerHasSizes={containerHasSizes}
       isScrollableHovered={isScrollableHovered}
+      minOffset={minOffset}
       maxOffset={maxOffset}
       scrollLocation={scrollLocation}
       scrollLocationChange={scrollLocationChange}
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
-      onScroll={onScroll}
-      onEnd={onEnd}
-      containerHasSizes={containerHasSizes}
       // Horizontal
       rtlEnabled={rtlEnabled}
-      // Vertical
-      forceGeneratePockets={forceGeneratePockets}
-      topPocketSize={topPocketSize}
-      bottomPocketSize={bottomPocketSize}
-      contentPaddingBottom={contentPaddingBottom}
-      onPullDown={onPullDown}
-      onRelease={onRelease}
-      onReachBottom={onReachBottom}
-      pullDownEnabled={pullDownEnabled}
-      reachBottomEnabled={reachBottomEnabled}
-      pocketState={pocketState}
-      pocketStateChange={pocketStateChange}
-
-      onLock={onLock}
-      onUnlock={onUnlock}
     />
   );
 };
 
-@ComponentBindings()
-export class AnimatedScrollbarProps extends ScrollbarProps {
-  @Event() onBounce?: EventCallback;
-}
-
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
 & Pick<ScrollableSimulatedProps, 'direction' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
-| 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange'>;
+| 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'scrollLocationChange'>;
 
 @Component({
   defaultOptionRules: null,
@@ -111,6 +79,10 @@ type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 
 export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>() {
   @Ref() scrollbarRef!: RefObject<Scrollbar>;
+
+  @Mutable() thumbScrolling = false;
+
+  @Mutable() crossThumbScrolling = false;
 
   @Mutable() stepAnimationFrame = 0;
 
@@ -122,7 +94,25 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Mutable() animator = 'inertia';
 
+  @Mutable() refreshing = false;
+
+  @Mutable() loading = false;
+
   @InternalState() forceAnimationToBottomBound = false;
+
+  @InternalState() forceMoveToBound = false;
+
+  @InternalState() pendingRefreshing = false;
+
+  @InternalState() pendingLoading = false;
+
+  @InternalState() pendingBounceAnimator = false;
+
+  @InternalState() pendingInertiaAnimator = false;
+
+  @InternalState() needRiseEnd = false;
+
+  @InternalState() wasRelease = false;
 
   @Method()
   isThumb(element: EventTarget | null): boolean {
@@ -141,42 +131,94 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Method()
   reachedMax(): boolean {
-    return this.props.scrollLocation >= this.getMinOffset();
+    return this.props.scrollLocation >= this.props.minOffset;
   }
 
   @Method()
-  initHandler(event: DxMouseEvent, crossThumbScrolling: boolean): void {
-    this.scrollbarRef.current!.initHandler(event, crossThumbScrolling);
+  initHandler(
+    event: DxMouseEvent,
+    crossThumbScrolling: boolean,
+    offset: number,
+  ): void {
+    this.scrollbarRef.current!.hide();
+    this.cancel();
+
+    this.refreshing = false;
+    this.loading = false;
+
+    if (!isDxMouseWheelEvent(event.originalEvent)) {
+      this.calcThumbScrolling(event, crossThumbScrolling);
+    }
+
+    this.scrollbarRef.current!.initHandler(event, this.thumbScrolling, offset);
+
+    // if (this.thumbScrolling) {
+    //   this.needRiseEnd = true;
+    // }
   }
 
   @Method()
-  startHandler(): void {
-    this.scrollbarRef.current!.startHandler();
+  show(): void {
+    this.scrollbarRef.current!.show();
+  }
+
+  @Method()
+  hide(): void {
+    this.scrollbarRef.current!.hide();
   }
 
   @Method()
   moveHandler(delta: number): void {
-    this.scrollbarRef.current!.moveHandler(delta);
+    if (this.crossThumbScrolling) {
+      return;
+    }
+
+    this.scrollbarRef.current!.moveHandler(delta,
+      this.props.minOffset, this.maxOffset, this.thumbScrolling);
   }
 
   @Method()
   endHandler(velocity: number, needRiseEnd: boolean): void {
-    this.scrollbarRef.current!.endHandler(velocity, needRiseEnd);
+    this.start('inertia', velocity, this.thumbScrolling, this.crossThumbScrolling);
+
+    this.needRiseEnd = needRiseEnd;
+    this.resetThumbScrolling();
   }
 
   @Method()
   stopHandler(): void {
-    this.scrollbarRef.current!.stopHandler();
+    if (this.thumbScrolling) {
+      this.needRiseEnd = true;
+    }
+
+    this.resetThumbScrolling();
   }
 
   @Method()
   scrollTo(value: number): void {
-    this.scrollbarRef.current!.scrollTo(value);
+    this.loading = false;
+    this.refreshing = false;
+
+    this.scrollbarRef.current!.moveTo(-clampIntoRange(value, -this.maxOffset, 0));
+
+    this.needRiseEnd = true;
+    this.resetThumbScrolling();
   }
 
   @Method()
   releaseHandler(): void {
-    this.scrollbarRef.current!.releaseHandler();
+    if (this.props.forceGeneratePockets && this.props.reachBottomEnabled
+      && inRange(this.props.scrollLocation, this.maxOffset, this.props.maxOffset)) {
+      this.forceAnimationToBottomBound = true;
+    }
+
+    this.props.onRelease?.();
+
+    this.wasRelease = true;
+
+    this.resetThumbScrolling();
+    this.pendingRefreshing = false;
+    this.pendingLoading = false;
   }
 
   @Effect({ run: 'once' })
@@ -184,13 +226,129 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return (): void => { this.cancel(); };
   }
 
+  @Effect()
+  /* istanbul ignore next */
+  risePullDown(): void {
+    if (
+      this.props.forceGeneratePockets
+      // && !this.props.scrolling
+      && this.needRiseEnd
+      && this.inRange
+      && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
+      && this.props.pulledDown
+      && !this.pendingRefreshing
+      && !this.refreshing
+      && -this.props.maxOffset > 0
+    ) {
+      this.refreshing = true;
+      this.pendingRefreshing = true;
+
+      this.props.onPullDown?.();
+    }
+  }
+
+  @Effect()
+  /* istanbul ignore next */
+  riseEnd(): void {
+    if (
+      //! this.props.scrolling
+      // &&
+      this.inBounds
+      && this.needRiseEnd
+      && this.finished
+      && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
+      && !this.pendingRelease
+      && !(this.pendingRefreshing || this.pendingLoading)
+    ) {
+      this.needRiseEnd = false;
+      this.wasRelease = false;
+      this.hide();
+
+      this.props.onUnlock?.();
+
+      this.forceAnimationToBottomBound = false;
+      this.props.onEnd?.(this.props.direction);
+    }
+  }
+
+  @Effect()
+  /* istanbul ignore next */
+  riseReachBottom(): void {
+    if (
+      this.props.forceGeneratePockets
+      // && !this.props.scrolling
+      && this.needRiseEnd
+      && this.inRange
+      && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
+      && this.isReachBottom
+      && !this.pendingLoading
+      && !this.loading
+      && -this.props.maxOffset > 0
+    ) {
+      this.loading = true;
+      this.pendingLoading = true;
+
+      this.props.onReachBottom?.();
+    }
+  }
+
+  @Effect()
+  /* istanbul ignore next */
+  bounceAnimatorStart(): void {
+    if (
+      !this.inRange
+      && this.needRiseEnd// || this.forceMoveToBound)
+      && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
+      && !(this.pendingRefreshing || this.pendingLoading)
+      && -this.props.maxOffset > 0
+    ) {
+      this.forceMoveToBound = false;
+      this.start('bounce');
+    }
+  }
+
+  @Effect()
+  updateLockedState(): void {
+    if (this.pendingBounceAnimator || this.pendingRefreshing || this.pendingLoading) {
+      this.props.onLock?.();
+    }
+  }
+
+  get pendingRelease(): boolean {
+    return ((this.props.pulledDown && this.props.pullDownEnabled)
+      || (this.isReachBottom && this.props.reachBottomEnabled)) && !this.wasRelease;
+  }
+
+  resetThumbScrolling(): void {
+    this.thumbScrolling = false;
+    this.crossThumbScrolling = false;
+  }
+
+  get inRange(): boolean {
+    return inRange(this.props.scrollLocation, this.maxOffset, this.props.minOffset);
+  }
+
+  /* istanbul ignore next */
+  get inBounds(): boolean {
+    return inRange(this.props.scrollLocation, this.props.maxOffset, 0);
+  }
+
+  get isReachBottom(): boolean {
+    // TODO: adapt this method for 4k monitor
+    // when sizes is decimal and a rounding error of about 1px
+    return this.props.reachBottomEnabled
+      && (this.props.scrollLocation - this.props.maxOffset <= 0);
+  }
+
   start(animatorName: 'inertia' | 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {
     this.animator = animatorName;
 
     if (this.isBounceAnimator) {
+      this.pendingBounceAnimator = true;
       this.props.onBounce?.();
       this.setupBounce();
     } else {
+      this.pendingInertiaAnimator = true;
       if (!thumbScrolling && crossThumbScrolling) {
         this.velocity = 0;
       } else {
@@ -206,6 +364,9 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   cancel(): void {
+    this.pendingBounceAnimator = false;
+    this.pendingInertiaAnimator = false;
+
     this.stopped = true;
     cancelAnimationFrame(this.stepAnimationFrame);
   }
@@ -235,7 +396,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       this.velocity = 0;
     }
 
-    this.scrollStep(this.velocity);
+    this.scrollStep(this.velocity, this.props.minOffset, this.maxOffset);
 
     this.velocity *= this.acceleration;
   }
@@ -244,7 +405,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     const { scrollLocation } = this.props;
 
     const bounceDistance = clampIntoRange(
-      scrollLocation, this.getMinOffset(), this.maxOffset,
+      scrollLocation, this.props.minOffset, this.maxOffset,
     ) - scrollLocation;
 
     this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
@@ -253,15 +414,13 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   complete(): void {
     if (this.isBounceAnimator) {
       const boundaryLocation = clampIntoRange(
-        this.props.scrollLocation, this.getMinOffset(), this.maxOffset,
+        this.props.scrollLocation, this.props.minOffset, this.maxOffset,
       );
 
       this.moveTo(boundaryLocation);
-
-      this.stopAnimator('bounce');
-    } else {
-      this.stopAnimator('inertia');
     }
+
+    this.stopAnimator();
   }
 
   get isBounceAnimator(): boolean {
@@ -282,12 +441,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get acceleration(): number {
-    if (!isDefined(this.scrollbarRef?.current)) {
-      return 0;
-    }
-
-    return this.isBounceAnimator
-    || inRange(this.props.scrollLocation, this.maxOffset, this.getMinOffset())
+    return this.isBounceAnimator || this.inRange
       ? ACCELERATION
       : OUT_BOUNDS_ACCELERATION;
   }
@@ -301,20 +455,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return this.props.maxOffset;
   }
 
-  onEnd(direction: string): void {
-    this.forceAnimationToBottomBound = false;
-    this.props.onEnd?.(direction);
-  }
-
-  onRelease(): void {
-    if (this.props.forceGeneratePockets && this.props.reachBottomEnabled
-      && inRange(this.props.scrollLocation, this.maxOffset, this.props.maxOffset)) {
-      this.forceAnimationToBottomBound = true;
-    }
-
-    this.props.onRelease?.();
-  }
-
   suppressInertia(thumbScrolling?: boolean): void {
     if (!this.props.inertiaEnabled || thumbScrolling) {
       this.velocity = 0;
@@ -326,26 +466,30 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     const location = this.props.scrollLocation;
     const nextLocation = location + this.velocity;
 
-    const minOffset = this.getMinOffset();
-
-    return (location < this.maxOffset && nextLocation >= this.maxOffset)
-      || (location > minOffset && nextLocation <= minOffset);
+    return (location <= this.maxOffset && nextLocation >= this.maxOffset)
+      || (location >= this.props.minOffset && nextLocation <= this.props.minOffset);
   }
 
-  getMinOffset(): number {
-    return this.scrollbarRef.current!.getMinOffset();
-  }
-
-  scrollStep(delta: number): void {
-    this.scrollbarRef.current!.scrollStep(delta);
+  scrollStep(delta: number, minOffset: number, maxOffset: number): void {
+    this.scrollbarRef.current!.scrollStep(delta, minOffset, maxOffset) as undefined;
   }
 
   moveTo(location: number): void {
-    this.scrollbarRef.current!.moveTo(location) as undefined;
+    this.scrollbarRef.current!.moveTo(location);
   }
 
-  stopAnimator(animator: string): void {
-    this.scrollbarRef.current!.stopAnimator(animator) as undefined;
+  stopAnimator(): void {
+    // May be animator is single
+    this.pendingBounceAnimator = false;
+    this.pendingInertiaAnimator = false;
+  }
+
+  calcThumbScrolling(event: DxMouseEvent, currentCrossThumbScrolling: boolean): void {
+    const { target } = event.originalEvent;
+    const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
+
+    this.thumbScrolling = scrollbarClicked || (this.props.scrollByThumb && this.isThumb(target));
+    this.crossThumbScrolling = !this.thumbScrolling && currentCrossThumbScrolling;
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react

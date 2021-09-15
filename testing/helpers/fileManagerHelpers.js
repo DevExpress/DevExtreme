@@ -922,3 +922,21 @@ export const isDesktopDevice = () => {
 };
 
 export const getDropFileEvent = file => $.Event($.Event('drop', { dataTransfer: { files: [file] } }));
+
+export const createEditingEvents = () => {
+    return {
+        onDirectoryCreating: sinon.spy(),
+        onDirectoryCreated: sinon.spy(),
+        onItemRenaming: sinon.spy(),
+        onItemRenamed: sinon.spy(),
+        onItemDeleting: sinon.spy(),
+        onItemDeleted: sinon.spy(),
+        onItemMoving: sinon.spy(),
+        onItemMoved: sinon.spy(),
+        onItemCopying: sinon.spy(),
+        onItemCopied: sinon.spy(),
+        onFileUploading: sinon.spy(),
+        onFileUploaded: sinon.spy(),
+        onItemDownloading: sinon.spy()
+    };
+};

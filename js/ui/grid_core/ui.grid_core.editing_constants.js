@@ -8,6 +8,7 @@ export const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 export const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
 
 export const EDITING_POPUP_OPTION_NAME = 'editing.popup';
+export const EDITING_FORM_OPTION_NAME = 'editing.form';
 export const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
 export const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 
