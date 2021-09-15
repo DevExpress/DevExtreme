@@ -77,6 +77,7 @@ import {
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
+import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -528,7 +529,7 @@ class Scheduler extends Widget {
                 });
                 break;
             case 'resources':
-                // this.initResourceExpressions(value);
+                this.agendaResourceProcessor.initializeState(value);
                 this.updateFactoryInstances();
 
                 this._postponeResourceLoading().done((resources) => {
@@ -886,8 +887,6 @@ class Scheduler extends Widget {
     }
 
     _init() {
-        // this.initResourceExpressions(this.option('resources'));
-
         this._initExpressions({
             startDate: this.option('startDateExpr'),
             endDate: this.option('endDateExpr'),
@@ -920,6 +919,8 @@ class Scheduler extends Widget {
         this._dataSourceLoadedCallback = Callbacks();
 
         this._subscribes = subscribes;
+
+        this.agendaResourceProcessor = new AgendaResourceProcessor();
     }
 
     get modelProvider() { return getModelProvider(this.key); }
@@ -1428,6 +1429,7 @@ class Scheduler extends Widget {
     _appointmentsConfig() {
         const config = {
             getResources: () => this.option('resources'),
+            getAgendaResourceProcessor: () => this.agendaResourceProcessor,
             getAppointmentColor: this.createGetAppointmentColor(),
 
             key: this.key,
@@ -1548,6 +1550,7 @@ class Scheduler extends Widget {
 
         const result = extend({
             resources: this.option('resources'),
+            loadedResources: this.loadedResources,
 
             key: this.key,
             noDataText: this.option('noDataText'),

@@ -24,11 +24,10 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     groupAppointmentByResources(appointments) {
-        const resourceManager = this.instance.fire('getResourceManager');
         const groups = this.instance._getCurrentViewOption('groups');
 
         const config = {
-            loadedResources: resourceManager.loadedResources,
+            loadedResources: this.options.loadedResources,
             resources: this.options.resources,
             dataAccessors: createExpressions(this.options.resources)
         };

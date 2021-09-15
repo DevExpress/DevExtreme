@@ -550,13 +550,15 @@ class SchedulerAppointments extends CollectionWidget {
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
                 groups: this.option('groups'),
-                getAppointmentColor: this.option('getAppointmentColor')
 
+                getAppointmentColor: this.option('getAppointmentColor'),
             };
 
             if(this.isAgendaView) {
-                const resourceManager = this.invoke('getResourceManager');
-                config.createPlainResourceListAsync = rawAppointment => resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
+                const agendaResourceProcessor = this.option('getAgendaResourceProcessor')();
+                config.createPlainResourceListAsync = rawAppointment => {
+                    return agendaResourceProcessor.createListAsync(rawAppointment);
+                };
             }
             this._createComponent(
                 element,
