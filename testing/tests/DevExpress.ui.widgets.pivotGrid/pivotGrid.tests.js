@@ -17,7 +17,6 @@ QUnit.testStart(function() {
 import config from 'core/config';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
-import browser from 'core/utils/browser';
 import { getSize } from 'core/utils/size';
 import { isRenderer } from 'core/utils/type';
 import { triggerShownEvent } from 'events/visibility_change';
@@ -6106,9 +6105,6 @@ QUnit.module('Vertical headers', {
     });
 
     function needRunZoomTest() {
-        if(browser.msie) {
-            return false;
-        }
         const isNoJquery = !config().useJQuery;
         const isNewJQuery = parseInt($.fn.jquery) >= 3;
         return isNoJquery || isNewJQuery;
@@ -6345,11 +6341,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as object. Native promise. Retrieve fields as simple array', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6375,11 +6366,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as object. Native promise', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6469,11 +6455,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as object. Native promise', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6506,11 +6487,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as object. Native promise. Retrieve fields as simple array', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6607,11 +6583,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as object. Native promise', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6644,11 +6615,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as object. Native promise. Retrieve fields as simple array', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
