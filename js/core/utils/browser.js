@@ -3,17 +3,15 @@ import { getNavigator } from './window';
 const navigator = getNavigator();
 
 const webkitRegExp = /(webkit)[ /]([\w.]+)/;
-const msEdge = /(edge)\/((\d+)?[\w.]+)/;
 const mozillaRegExp = /(mozilla)(?:.*? rv:([\w.]+))/;
 
-const browserFromUA = function(ua) {
+const browserFromUA = (ua) => {
     ua = ua.toLowerCase();
 
     const result = {};
     const matches =
-            msEdge.exec(ua) ||
-            ua.indexOf('compatible') < 0 && mozillaRegExp.exec(ua) ||
             webkitRegExp.exec(ua) ||
+            ua.indexOf('compatible') < 0 && mozillaRegExp.exec(ua) ||
             [];
     let browserName = matches[1];
     let browserVersion = matches[2];
@@ -38,10 +36,6 @@ const browserFromUA = function(ua) {
             browserVersion = /applewebkit\/([0-9.]+)/.exec(ua);
             browserVersion = browserVersion && browserVersion[1];
         }
-    }
-
-    if(browserName === 'edge') {
-        browserName = 'msie';
     }
 
     if(browserName) {
