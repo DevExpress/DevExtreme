@@ -67,7 +67,7 @@ function applyRowSpans(rows) {
     }
 }
 
-function resizeColumnsByIndentLevel(rows, options) {
+function resizeFirstColumnByIndentLevel(rows, options) {
     rows.forEach(row => {
         row.cells[0].pdfCell._rect.w -= row.indentLevel * options.indent;
     });
@@ -131,4 +131,4 @@ function calculateTableSize(doc, rows, options) {
     };
 }
 
-export { initializeCellsWidth, applyColSpans, applyRowSpans, resizeColumnsByIndentLevel, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };
+export { initializeCellsWidth, applyColSpans, applyRowSpans, resizeFirstColumnByIndentLevel, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };
