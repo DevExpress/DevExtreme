@@ -17,7 +17,8 @@ import {
     FOCUSABLE_ELEMENT_SELECTOR,
     EDITING_EDITROWKEY_OPTION_NAME,
     EDITING_POPUP_OPTION_NAME,
-    DATA_EDIT_DATA_INSERT_TYPE
+    DATA_EDIT_DATA_INSERT_TYPE,
+    EDITING_FORM_OPTION_NAME
 } from './ui.grid_core.editing_constants';
 
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
@@ -218,20 +219,12 @@ export const editingFormBasedModule = {
                 optionChanged: function(args) {
                     if(args.name === 'editing' && this.isFormOrPopupEditMode()) {
                         const fullName = args.fullName;
-                        const editPopup = this._editPopup;
 
-                        if(fullName?.indexOf(EDITING_POPUP_OPTION_NAME) === 0) {
-                            if(editPopup) {
-                                const popupOptionName = fullName.slice(EDITING_POPUP_OPTION_NAME.length + 1);
-                                if(popupOptionName) {
-                                    editPopup.option(popupOptionName, args.value);
-                                } else {
-                                    editPopup.option(args.value);
-                                }
-                            }
+                        if(fullName.indexOf(EDITING_FORM_OPTION_NAME) === 0) {
+                            this._handleFormOptionChange(args);
                             args.handled = true;
-                        } else if(editPopup?.option('visible') && fullName.indexOf('editing.form') === 0) {
-                            this._repaintEditPopup();
+                        } else if(fullName.indexOf(EDITING_POPUP_OPTION_NAME) === 0) {
+                            this._handlePopupOptionChange(args);
                             args.handled = true;
                         }
                     }
@@ -239,6 +232,31 @@ export const editingFormBasedModule = {
                     this.callBase.apply(this, arguments);
                 },
 
+                _handleFormOptionChange: function(args) {
+                    if(this.isFormEditMode()) {
+                        const editRowIndex = this._getVisibleEditRowIndex();
+                        if(editRowIndex >= 0) {
+                            this._dataController.updateItems({
+                                changeType: 'update',
+                                rowIndices: [editRowIndex]
+                            });
+                        }
+                    } else if(this._editPopup?.option('visible') && args.fullName.indexOf(EDITING_FORM_OPTION_NAME) === 0) {
+                        this._repaintEditPopup();
+                    }
+                },
+
+                _handlePopupOptionChange: function(args) {
+                    const editPopup = this._editPopup;
+                    if(editPopup) {
+                        const popupOptionName = args.fullName.slice(EDITING_POPUP_OPTION_NAME.length + 1);
+                        if(popupOptionName) {
+                            editPopup.option(popupOptionName, args.value);
+                        } else {
+                            editPopup.option(args.value);
+                        }
+                    }
+                },
                 renderFormEditTemplate: function(detailCellOptions, item, form, container, isReadOnly) {
                     const that = this;
                     const $container = $(container);
@@ -364,7 +382,7 @@ export const editingFormBasedModule = {
 
                 getEditFormTemplate: function() {
                     return ($container, detailOptions, renderFormOnly) => {
-                        const editFormOptions = this.option('editing.form');
+                        const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
                         const baseEditFormOptions = this.getEditFormOptions(detailOptions);
 
                         this._firstFormItem = undefined;

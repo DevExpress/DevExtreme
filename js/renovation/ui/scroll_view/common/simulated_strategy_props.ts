@@ -32,8 +32,5 @@ export class ScrollableSimulatedProps extends BaseScrollableProps {
   // contentTranslateOffsetChange?: (scrollProp: 'left' | 'top', translateOffset: number) => void;
 
   @Event()
-  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
-
-  @Event()
-  pocketStateChange?: (newState: number) => void;
+  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number, needFireScroll: boolean) => void;
 }

@@ -29,8 +29,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
         const config = {
             loadedResources: resourceManager.loadedResources,
-            getResources: () => resourceManager.getResources(),
-            getDataAccessors: (field, action) => resourceManager.getDataAccessors(field, action)
+            resources: this.options.resources,
+            dataAccessors: this.options.resourceDataAccessors
         };
 
         return groupAppointmentsByResources(

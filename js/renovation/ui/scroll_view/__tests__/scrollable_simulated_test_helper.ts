@@ -195,6 +195,10 @@ class ScrollableTestHelper {
     return this.scrollable.find(`.${SCROLLVIEW_BOTTOM_POCKET_CLASS}`).getDOMNode();
   }
 
+  getAnimatedScrollbars(): any {
+    return this.scrollable.find(AnimatedScrollbar);
+  }
+
   getScrollbars(): any {
     return this.scrollable.find(Scrollbar);
   }
@@ -211,10 +215,9 @@ class ScrollableTestHelper {
   { [key: string]: any } = { props: {} }): void {
     const { vScrollLocation = -50, hScrollLocation = -50, ...restProps } = additionalProps.props;
 
-    const scrollbars = this.getScrollbars();
-
-    const initSettings = (scrollbarRef) => {
-      const scrollbar = scrollbarRef.instance();
+    const initSettings = (animatedScrollbars, scrollbars, index) => {
+      const animatedScrollbar = animatedScrollbars.at(index).instance();
+      const scrollbar = scrollbars.at(index).instance();
 
       if (scrollbar.props.direction === 'vertical') {
         restProps.scrollLocation = vScrollLocation;
@@ -225,9 +228,26 @@ class ScrollableTestHelper {
         scrollbar.prevScrollLocation = hScrollLocation;
       }
       scrollbar.scrollbarRef = React.createRef();
-      scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
+      scrollbar.scrollbarRef.current = scrollbars.at(index).getDOMNode();
+
       scrollbar.scrollRef = React.createRef();
-      scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
+      scrollbar.scrollRef.current = scrollbars.at(index).find('.dx-scrollable-scroll').getDOMNode();
+
+      Object.assign(animatedScrollbar, {
+        props: {
+          ...animatedScrollbar.props,
+          ...{
+            contentSize: 200,
+            containerSize: 100,
+            minOffset: 0,
+            maxOffset: -100,
+            bottomPocketSize: 0,
+            scrollLocationChange:
+              animatedScrollbar.props.scrollLocationChange.bind(this.viewModel),
+            ...restProps,
+          },
+        },
+      });
 
       Object.assign(scrollbar, {
         props: {
@@ -235,28 +255,32 @@ class ScrollableTestHelper {
           ...{
             contentSize: 200,
             containerSize: 100,
-            topPocketSize: 0,
+            minOffset: 0,
             maxOffset: -100,
-            bottomPocketSize: 0,
-            scrollableOffset: 0,
             scrollLocationChange:
               scrollbar.props.scrollLocationChange.bind(this.viewModel),
-            onScroll: scrollbar.props.onScroll.bind(this.viewModel),
             ...restProps,
           },
         },
       });
 
-      return scrollbar;
+      animatedScrollbar.scrollbarRef = {
+        current: scrollbar,
+      };
+
+      return animatedScrollbar;
     };
 
+    const animatedScrollbars = this.getAnimatedScrollbars();
+    const scrollbars = this.getScrollbars();
+
     if (this.isBoth) {
-      this.viewModel.hScrollbarRef.current = initSettings(scrollbars.at(0));
-      this.viewModel.vScrollbarRef.current = initSettings(scrollbars.at(1));
+      this.viewModel.hScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 0);
+      this.viewModel.vScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 1);
     } else if (this.isVertical) {
-      this.viewModel.vScrollbarRef.current = initSettings(scrollbars.at(0));
+      this.viewModel.vScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 0);
     } else if (this.isHorizontal) {
-      this.viewModel.hScrollbarRef.current = initSettings(scrollbars.at(0));
+      this.viewModel.hScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 0);
     }
   }
 

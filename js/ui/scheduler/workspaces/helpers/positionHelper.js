@@ -1,6 +1,3 @@
-import { isDefined } from '../../../../core/utils/type';
-import dateUtils from '../../../../core/utils/date';
-
 const getCellSize = (DOMMetaData) => {
     const { dateTableCellsMeta } = DOMMetaData;
     const length = dateTableCellsMeta?.length;
@@ -148,117 +145,10 @@ export class PositionHelper {
     get isVerticalGroupedWorkSpace() { return this.options.isVerticalGroupedWorkSpace; }
     get groupCount() { return this.options.groupCount; }
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
-    get getPositionShift() { return this.options.getPositionShiftCallback; }
     get getDOMMetaData() { return this.options.getDOMMetaDataCallback; }
-
-    getCoordinatesByDate(date, groupIndex, inAllDayRow) {
-        const validGroupIndex = groupIndex || 0;
-
-        const cellInfo = { groupIndex: validGroupIndex, startDate: date, isAllDay: inAllDayRow };
-        const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
-        if(!positionByMap) {
-            return undefined;
-        }
-
-        const position = this.getCellPosition(
-            positionByMap,
-            inAllDayRow && !this.isVerticalGroupedWorkSpace,
-        );
-
-        const timeShift = inAllDayRow
-            ? 0
-            : this.getTimeShift(date);
-
-        const shift = this.getPositionShift(timeShift, inAllDayRow);
-        const horizontalHMax = this.getHorizontalMax(validGroupIndex, date);
-
-        return {
-            cellPosition: position.left + shift.cellPosition,
-            top: position.top + shift.top,
-            left: position.left + shift.left,
-            rowIndex: position.rowIndex,
-            columnIndex: position.columnIndex,
-            hMax: horizontalHMax,
-            vMax: this.getVerticalMax(validGroupIndex),
-            groupIndex: validGroupIndex
-        };
-    }
 
     getVerticalMax(groupIndex) {
         return this.groupedStrategy.getVerticalMax(groupIndex);
-    }
-
-    getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {
-        const result = [];
-
-        if(this.viewDataProvider.isSkippedDate(startDate)) {
-            return result;
-        }
-
-        let validGroupIndices = [groupIndex];
-
-        if(!isDefined(groupIndex)) {
-            validGroupIndices = this.groupCount
-                ? groupIndices
-                : [0];
-        }
-
-        validGroupIndices.forEach((groupIndex) => {
-            const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
-            if(coordinates) {
-                result.push(coordinates);
-            }
-        });
-
-        return result;
-    }
-
-    getCellPosition(cellCoordinates, isAllDayPanel) {
-        const {
-            dateTableCellsMeta,
-            allDayPanelCellsMeta,
-        } = this.getDOMMetaData();
-        const {
-            columnIndex,
-            rowIndex,
-        } = cellCoordinates;
-
-        const position = isAllDayPanel
-            ? allDayPanelCellsMeta[columnIndex]
-            : dateTableCellsMeta[rowIndex][columnIndex];
-
-        const validPosition = { ...position };
-
-        if(this.isRtlEnabled) {
-            validPosition.left += position.width;
-        }
-
-        if(validPosition) {
-            validPosition.rowIndex = cellCoordinates.rowIndex;
-            validPosition.columnIndex = cellCoordinates.columnIndex;
-        }
-
-        return validPosition;
-    }
-
-    getTimeShift(date) {
-        const currentDayStart = new Date(date);
-
-        const currentDayEndHour = new Date(new Date(date).setHours(this.viewEndDayHour, 0, 0));
-
-        if(date.getTime() <= currentDayEndHour.getTime()) {
-            currentDayStart.setHours(this.viewStartDayHour, 0, 0, 0);
-        }
-
-        const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
-        const currentDateTime = date.getTime();
-        const currentDayStartTime = currentDayStart.getTime();
-
-        const minTime = this.startViewDate.getTime();
-
-        return (currentDateTime > minTime)
-            ? ((currentDateTime - currentDayStartTime + timeZoneDifference) % this.cellDuration) / this.cellDuration
-            : 0;
     }
 
     getHorizontalMax(groupIndex) {
