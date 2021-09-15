@@ -174,6 +174,7 @@ class OverlayPositionController {
         }
 
         this._$container = $container.length ? $container : this._$root.parent();
+
         this._updateWrapperCoveredElement();
         this._updateDragResizeContainer();
     }
@@ -325,8 +326,6 @@ class PopupPositionController extends OverlayPositionController {
         };
 
         this._lastPositionBeforeFullScreen = undefined;
-
-        this.updateContainer();
     }
 
     set fullScreen(fullScreen) {
