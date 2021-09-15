@@ -2165,7 +2165,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._dimensionChanged();
                 break;
             case 'timeZoneCalculator':
-            case 'resourceManager':
             case 'allowMultipleCellSelection':
                 break;
             case 'selectedCellData':

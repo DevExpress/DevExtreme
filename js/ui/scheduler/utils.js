@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { getResourceManager } from './instanceFactory';
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
 import { getPublicElement } from '../../core/element';
 
@@ -16,12 +15,11 @@ export const utils = {
             return settings?.info;
         },
 
-        combine: (key, dataAccessors) => { // TODO get rid of it and rework resourceManager
+        combine: (dataAccessors, resourceDataAccessors) => { // TODO get rid of it and rework resourceManager
             const result = extend(true, {}, dataAccessors);
-            const resourceManager = getResourceManager(key);
 
-            if(dataAccessors && resourceManager) {
-                each(resourceManager._dataAccessors, (type, accessor) => {
+            if(dataAccessors) {
+                each(resourceDataAccessors, (type, accessor) => {
                     result[type].resources = accessor;
                 });
             }

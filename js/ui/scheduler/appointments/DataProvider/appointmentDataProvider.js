@@ -54,7 +54,6 @@ export class AppointmentDataProvider {
             appointmentDuration: this.options.appointmentDuration,
             showAllDayPanel: this.options.showAllDayPanel,
             timeZoneCalculator: this.options.timeZoneCalculator,
-            resourceManager: this.options.resourceManager
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual

@@ -24,7 +24,7 @@ import { createAgendaAppointmentLayout, createAppointmentLayout } from './appoin
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { getAppointmentColor, getResourcesFromItem } from '../resources/utils';
+import { createExpressions, getResourcesFromItem } from '../resources/utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -164,7 +164,6 @@ class SchedulerAppointments extends CollectionWidget {
             _collectorOffset: 0,
             groups: [],
             resources: [],
-            resourceDataAccessors: {}
         });
     }
 
@@ -525,23 +524,13 @@ class SchedulerAppointments extends CollectionWidget {
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         if(settings.virtual) {
-            const resourceManager = this.invoke('getResourceManager');
-
-            const resourceConfig = {
-                resources: this.option('getResources')(),
-                dataAccessors: this.option('getResourceDataAccessors')(),
-                loadedResources: resourceManager.loadedResources,
-                resourceLoaderMap: resourceManager.resourceLoaderMap
-            };
-
             const appointmentConfig = {
                 itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
                 groups: this.option('groups'),
             };
 
-            const deferredColor = getAppointmentColor(resourceConfig, appointmentConfig);
-
+            const deferredColor = this.option('getAppointmentColor')(appointmentConfig);
 
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
@@ -561,9 +550,8 @@ class SchedulerAppointments extends CollectionWidget {
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
                 groups: this.option('groups'),
+                getAppointmentColor: this.option('getAppointmentColor')
 
-                resources: this.option('getResources')(),
-                resourceDataAccessors: this.option('getResourceDataAccessors')()
             };
 
             if(this.isAgendaView) {
@@ -583,11 +571,8 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
-        const resources = getResourcesFromItem(
-            this.option('getResources')(),
-            this.option('getResourceDataAccessors')(),
-            this._getItemData($appointment)
-        );
+        const resourceList = this.option('getResources')();
+        const resources = getResourcesFromItem(resourceList, createExpressions(resourceList), this._getItemData($appointment));
 
         if(resources) {
             each(resources, function(name, values) {

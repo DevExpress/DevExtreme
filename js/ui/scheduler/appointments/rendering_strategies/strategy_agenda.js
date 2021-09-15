@@ -3,7 +3,7 @@ import { each } from '../../../../core/utils/iterator';
 import { merge } from '../../../../core/utils/array';
 import BaseRenderingStrategy from './strategy.base';
 import { ExpressionUtils } from '../../expressionUtils';
-import { groupAppointmentsByResources } from '../../resources/utils';
+import { createExpressions, groupAppointmentsByResources } from '../../resources/utils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     get agendaDuration() { return this.options.agendaDuration; }
@@ -30,7 +30,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         const config = {
             loadedResources: resourceManager.loadedResources,
             resources: this.options.resources,
-            dataAccessors: this.options.resourceDataAccessors
+            dataAccessors: createExpressions(this.options.resources)
         };
 
         return groupAppointmentsByResources(

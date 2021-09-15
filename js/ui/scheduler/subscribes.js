@@ -6,7 +6,6 @@ import { extend } from '../../core/utils/extend';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
 import {
-    getResourceManager,
     getAppointmentDataProvider,
     getTimeZoneCalculator
 } from './instanceFactory';
@@ -16,10 +15,6 @@ import { getFormatType, formatDates } from './appointments/textUtils';
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
-    getResourceManager: function() {
-        return getResourceManager(this.key);
-    },
-
     getAppointmentDataProvider: function() {
         return getAppointmentDataProvider(this.key);
     },
