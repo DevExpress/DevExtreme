@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import eventsEngine from 'events/core/events_engine';
-import browser from 'core/utils/browser';
 import { fileSaver } from 'exporter';
 import errors from 'ui/widget/ui.errors';
 import typeUtils from 'core/utils/type';
@@ -109,32 +108,8 @@ QUnit.test('Proxy Url exportForm generate', function(assert) {
     eventsEngine.trigger = originalTrigger;
 });
 
-QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
-    if(!browser.msie && typeUtils.isFunction(window.Blob)) {
-        const _winJSBlobSave = fileSaver._winJSBlobSave;
-        let isCalled = false;
-        try {
-            window.WinJS = {};
-            fileSaver._winJSBlobSave = function() { isCalled = true; };
-
-            fileSaver.saveAs('test', 'EXCEL', [], 'testUrl');
-
-            assert.ok(isCalled);
-        } finally {
-            delete window.WinJS;
-            fileSaver._winJSBlobSave = _winJSBlobSave;
-        }
-    } else {
-        assert.ok(true, 'This test is for not IE browsers');
-    }
-});
-
 QUnit.test('Save base 64 for Safari', function(assert) {
     if(!typeUtils.isFunction(window.Blob)) {
-        if(browser.msie) {
-            assert.ok(true, 'This test not for IE browsers');
-            return;
-        }
         let exportLinkElementClicked = false;
         const _linkDownloader = fileSaver._linkDownloader;
 
@@ -178,27 +153,6 @@ QUnit.test('No E1034 on iPad', function(assert) {
         errors.log = _devExpressLog;
         fileSaver._click = _fileSaverClick;
         fileSaver._revokeObjectURLTimeout = oldRevokeObjectURLTimeout;
-    }
-});
-
-QUnit.test('Blob is saved via msSaveOrOpenBlob method', function(assert) {
-    if(browser.msie && parseInt(browser.version) > 9) {
-        let isCalled;
-        const _msSaveOrOpenBlob = navigator.msSaveOrOpenBlob;
-
-        navigator.msSaveOrOpenBlob = function(data, fileName) {
-            isCalled = true;
-        };
-
-        fileSaver._saveBlobAs('test', 'EXCEL', new Blob([], { type: 'test/plain' }));
-
-        assert.ok(fileSaver._blobSaved, 'blob is saved');
-        assert.ok(isCalled, 'msSaveOrOpenBlob method is called');
-
-        navigator.msSaveOrOpenBlob = _msSaveOrOpenBlob;
-    } else {
-        assert.ok(true, 'This test for ie10+ browsers');
-        return;
     }
 });
 
