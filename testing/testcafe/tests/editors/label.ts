@@ -22,20 +22,23 @@ fixture`Label`
   .page(url(__dirname, '../container.html'));
 
 ['floating', 'static'].forEach((labelMode) => {
-  test(`Label for TextBox labelMode=${labelMode}`, async (t) => {
-    const componentOption = {
-      labelMode,
-    };
+  ['outlined', 'underlined', 'filled'].forEach((stylingMode) => {
+    test(`Label for TextBox labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
+      const componentOption = {
+        labelMode,
+        stylingMode,
+      };
 
-    await createComponent('dxTextBox', { ...componentOption, ...shortOption }, '#container');
-    await createComponent('dxTextBox', { ...componentOption, ...longOption }, '#otherContainer');
+      await createComponent('dxTextBox', { ...componentOption, ...shortOption }, '#container');
+      await createComponent('dxTextBox', { ...componentOption, ...longOption }, '#otherContainer');
 
-    await t.expect(await compareScreenshot(t, `label-text-box-labelMode=${labelMode}.png`)).ok();
-  }).before(async () => {
-    await ClientFunction(() => {
-      $('#otherContainer').css({
-        'margin-top': '20px',
-      });
-    })();
+      await t.expect(await compareScreenshot(t, `label-text-box-labelMode=${labelMode}-stylingMode=${stylingMode}.png`)).ok();
+    }).before(async () => {
+      await ClientFunction(() => {
+        $('#otherContainer').css({
+          'margin-top': '20px',
+        });
+      })();
+    });
   });
 });
