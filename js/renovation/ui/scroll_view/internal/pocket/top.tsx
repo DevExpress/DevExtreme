@@ -7,9 +7,9 @@ import {
   RefObject,
   Ref,
 } from '@devextreme-generator/declarations';
-import { LoadIndicator } from '../../load_indicator';
-import { combineClasses } from '../../../utils/combine_classes';
-import messageLocalization from '../../../../localization/message';
+import { LoadIndicator } from '../../../load_indicator';
+import { combineClasses } from '../../../../utils/combine_classes';
+import messageLocalization from '../../../../../localization/message';
 
 import {
   PULLDOWN_ICON_CLASS,
@@ -22,11 +22,11 @@ import {
   SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
   TopPocketState,
-} from '../common/consts';
+} from '../../common/consts';
 import {
   RefreshStrategy,
-} from '../common/types.d';
-import { current, isMaterial } from '../../../../ui/themes';
+} from '../../common/types';
+import { current, isMaterial } from '../../../../../ui/themes';
 
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {

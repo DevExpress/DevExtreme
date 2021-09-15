@@ -5,18 +5,18 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 
-import devices from '../../../../core/devices';
+import devices from '../../../../../core/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
-} from '../../../test_utils/events_mock';
+} from '../../../../test_utils/events_mock';
 import {
   ScrollableNative as Scrollable,
   viewFunction,
-} from '../scrollable_native';
+} from '../native';
 
 import {
   ScrollDirection,
-} from '../utils/scroll_direction';
+} from '../../utils/scroll_direction';
 
 import {
   SCROLLABLE_SCROLLBAR_SIMULATED,
@@ -24,24 +24,24 @@ import {
   DIRECTION_HORIZONTAL,
   DIRECTION_BOTH,
   TopPocketState,
-} from '../common/consts';
+} from '../../common/consts';
 
 import {
   getPermutations,
   optionValues,
-} from './utils';
+} from '../../__tests__/utils';
 
-import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
-import { Scrollbar } from '../scrollbar';
-import { ScrollableTestHelper } from './scrollable_native_test_helper';
-import { ScrollableNativeProps } from '../common/native_strategy_props';
+import getScrollRtlBehavior from '../../../../../core/utils/scroll_rtl_behavior';
+import { Scrollbar } from '../../scrollbar/scrollbar';
+import { ScrollableTestHelper } from './native_test_helper';
+import { ScrollableNativeProps } from '../../common/native_strategy_props';
 
 interface Mock extends jest.Mock {}
 
-jest.mock('../../../../core/utils/scroll_rtl_behavior');
+jest.mock('../../../../../core/utils/scroll_rtl_behavior');
 
-jest.mock('../../../../core/devices', () => {
-  const actualDevices = jest.requireActual('../../../../core/devices').default;
+jest.mock('../../../../../core/devices', () => {
+  const actualDevices = jest.requireActual('../../../../../core/devices').default;
   const platform = actualDevices.real.bind(actualDevices);
 
   actualDevices.real = jest.fn(() => ({ platform: 'ios' }));
@@ -909,43 +909,37 @@ describe('Methods', () => {
       return value;
     };
 
-    it('ScrollTo()', () => {
-      optionValues.rtlEnabled.forEach((rtlEnabled) => {
-        optionValues.useSimulatedScrollbar.forEach((useSimulatedScrollbar) => {
-          optionValues.direction.forEach((direction: any) => {
-            // chrome 86 - true {decreasing: true, positive: false} - [-max, 0]
-            // chrome 84 - false {decreasing: true, positive: true} - [0 -> max]
-            // ie11 - true [max -> 0] - {decreasing: false, positive: true}
-            [
-              { decreasing: true, positive: false },
-              { decreasing: true, positive: true },
-              { decreasing: false, positive: true },
-            ].forEach((rtlBehavior) => {
-              (getScrollRtlBehavior as jest.Mock).mockReturnValue(rtlBehavior);
+    each(optionValues.direction).describe('direction: %o', (direction) => {
+      each(optionValues.useSimulatedScrollbar).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+        each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+          // chrome 86 - true {decreasing: true, positive: false} - [-max, 0]
+          // chrome 84 - false {decreasing: true, positive: true} - [0 -> max]
+          // ie11 - true [max -> 0] - {decreasing: false, positive: true}
+          each([
+            { decreasing: true, positive: false },
+            { decreasing: true, positive: true },
+            { decreasing: false, positive: true },
+          ]).describe('rtlBehavior: %o', (rtlBehavior) => {
+            each([
+              [{ top: 150, left: 0 }, { top: 100, left: 100 }, { top: 250, left: 100 }],
+              [{ top: 150, left: 0 }, { top: 100, left: 0 }, { top: 250, left: 0 }],
+              [{ top: 150, left: 0 }, { top: 0, left: 100 }, { top: 150, left: 100 }],
+              [{ top: 0, left: 0 }, { top: -50, left: -50 }, { top: -50, left: -50 }],
+              [{ top: 100, left: 150 }, { top: -50, left: -50 }, { top: 50, left: 100 }],
+              [{ top: 150, left: 0 }, { top: -50, left: 70 }, { top: 100, left: 70 }],
+              [{ top: 150, left: 150 }, { top: 300, left: 300 }, { top: 450, left: 450 }],
+            ]).describe('initScrollPosition: %o,', (initialScrollPosition, scrollByValue, expected) => {
+              it(`scrollByLocation(${JSON.stringify(scrollByValue)})`, () => {
+                (getScrollRtlBehavior as jest.Mock).mockReturnValue(rtlBehavior);
 
-              const helper = new ScrollableTestHelper({
-                direction,
-                rtlEnabled,
-                useSimulatedScrollbar,
-                showScrollbar: 'always',
-                contentSize: 600,
-                containerSize: 300,
-              });
-
-              [
-                // initialScrollPosition, scrollToValue, expected
-                [{ top: 150, left: 50 }, 0, { top: 0, left: 0 }],
-                [{ top: 150, left: 0 }, 200, { top: 200, left: 200 }],
-                [{ top: 150, left: 0 }, { top: 100, left: 70 }, { top: 100, left: 70 }],
-                [{ top: 150, left: 0 }, { top: 70, left: 100 }, { top: 70, left: 100 }],
-                [{ top: 150, left: 50 }, { top: 100 }, { top: 100, left: 50 }],
-                [{ top: 100, left: 50 }, { left: 100 }, { top: 100, left: 100 }],
-                [{ top: 150, left: 150 }, undefined, { top: 150, left: 150 }],
-                [{ top: 150, left: 150 }, {}, { top: 150, left: 150 }],
-              ].forEach((args) => {
-                const initialScrollPosition = args[0] as { top: number; left: number };
-                const scrollToValue = args[1];
-                const expected = args[2] as { top: number; left: number };
+                const helper = new ScrollableTestHelper({
+                  direction,
+                  rtlEnabled,
+                  useSimulatedScrollbar,
+                  showScrollbar: 'always',
+                  contentSize: 600,
+                  containerSize: 300,
+                });
 
                 const initialPosition = {
                   top: initialScrollPosition.top,
@@ -958,82 +952,8 @@ describe('Methods', () => {
                 helper.viewModel.handlePocketState = jest.fn();
                 helper.viewModel.getEventArgs = jest.fn();
 
-                helper.viewModel.scrollTo(scrollToValue as any);
-                if (useSimulatedScrollbar) {
-                  helper.viewModel.scrollEffect();
-                  emit('scroll');
-                }
+                helper.viewModel.scrollByLocation(scrollByValue);
 
-                const { ...expectedScrollOffset } = expected;
-
-                expectedScrollOffset.top = helper.isVertical
-                  ? expected.top : initialScrollPosition.top;
-                expectedScrollOffset.left = helper.isHorizontal
-                  ? expected.left : initialScrollPosition.left;
-
-                expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
-                if (useSimulatedScrollbar) {
-                  expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
-                  expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
-                }
-              });
-            });
-          });
-        });
-      });
-    });
-
-    it('ScrollBy()', () => {
-      optionValues.rtlEnabled.forEach((rtlEnabled) => {
-        optionValues.useSimulatedScrollbar.forEach((useSimulatedScrollbar) => {
-          optionValues.direction.forEach((direction: any) => {
-            // chrome 86 - true {decreasing: true, positive: false} - [-max, 0]
-            // chrome 84 - false {decreasing: true, positive: true} - [0 -> max]
-            // ie11 - true [max -> 0] - {decreasing: false, positive: true}
-            [
-              { decreasing: true, positive: false },
-              { decreasing: true, positive: true },
-              { decreasing: false, positive: true },
-            ].forEach((rtlBehavior) => {
-              (getScrollRtlBehavior as jest.Mock).mockReturnValue(rtlBehavior);
-
-              const helper = new ScrollableTestHelper({
-                direction,
-                rtlEnabled,
-                useSimulatedScrollbar,
-                showScrollbar: 'always',
-                contentSize: 600,
-                containerSize: 300,
-              });
-
-              [
-                // initialScrollPosition, scrollByValue, expected
-                [{ top: 150, left: 0 }, 100, { top: 250, left: 100 }],
-                [{ top: 150, left: 0 }, { top: 100 }, { top: 250, left: 0 }],
-                [{ top: 150, left: 0 }, { left: 100 }, { top: 150, left: 100 }],
-                [{ top: 0, left: 0 }, -50, { top: -50, left: -50 }],
-                [{ top: 100, left: 150 }, -50, { top: 50, left: 100 }],
-                [{ top: 150, left: 0 }, { top: -50, left: 70 }, { top: 100, left: 70 }],
-                [{ top: 150, left: 150 }, 300, { top: 450, left: 450 }],
-                [{ top: 150, left: 150 }, undefined, { top: 150, left: 150 }],
-                [{ top: 150, left: 150 }, {}, { top: 150, left: 150 }],
-              ].forEach((args) => {
-                const initialScrollPosition = args[0] as { top: number; left: number };
-                const scrollByValue = args[1];
-                const expected = args[2] as { top: number; left: number };
-
-                const initialPosition = {
-                  top: initialScrollPosition.top,
-                  left: getInitialOffsetLeft(initialScrollPosition.left, rtlEnabled, rtlBehavior),
-                };
-                if (useSimulatedScrollbar) {
-                  helper.initScrollbarSettings();
-                }
-                helper.initContainerPosition(initialPosition);
-                helper.viewModel.handlePocketState = jest.fn();
-                helper.viewModel.getEventArgs = jest.fn();
-
-                helper.viewModel.scrollBy(scrollByValue as any);
                 if (useSimulatedScrollbar) {
                   helper.viewModel.scrollEffect();
                   emit('scroll');
