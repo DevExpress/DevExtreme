@@ -6,6 +6,7 @@
 @use "../../base/icons" as *;
 @use "../button/mixins" as *;
 @use "../button/sizes" as *;
+@use "../button/colors" as *;
 @use "../common/mixins" as *;
 @use "../../base/dropDownButton" as *;
 
@@ -55,9 +56,13 @@ $material-dropdownbutton-horizontal-padding: 8px;
 
           width: 26px;
 
-          .dx-icon-right {
-            margin-left: 8px;
-            // TODO rtl
+          &.dx-icon-right {
+            margin-left: 4px;
+
+            .dx-rtl & {
+              margin-left: 0;
+              margin-right: 4px;
+            }
           }
         }
 
@@ -76,6 +81,38 @@ $material-dropdownbutton-horizontal-padding: 8px;
     }
   }
 
+  .dx-buttongroup {
+    .dx-button {
+      border-radius: 0;
+    }
+
+    .dx-buttongroup-item {
+      margin-left: 0;
+    }
+
+    .dx-buttongroup-last-item {
+      border-top-right-radius: $button-border-radius;
+      border-bottom-right-radius: $button-border-radius;
+    }
+
+    .dx-buttongroup-first-item {
+      border-top-left-radius: $button-border-radius;
+      border-bottom-left-radius: $button-border-radius;
+    }
+
+    .dx-rtl & {
+      .dx-buttongroup-last-item {
+        border-top-left-radius: $button-border-radius;
+        border-bottom-left-radius: $button-border-radius;
+      }
+
+      .dx-buttongroup-first-item {
+        border-top-right-radius: $button-border-radius;
+        border-bottom-right-radius: $button-border-radius;
+      }
+    }
+  }
+
   .dx-rtl & {
     .dx-button-has-text:not(.dx-button-mode-text) .dx-button-content {
       padding-right: $material-button-horizontal-padding;
@@ -85,7 +122,7 @@ $material-dropdownbutton-horizontal-padding: 8px;
       padding-right: $material-button-icon-text-padding;
     }
 
-    .dx-button-mode-text .dx-button-content {
+    .dx-button-mode-text.dx-buttongroup-first-item .dx-button-content {
       padding-right: $material-text-button-horizontal-padding;
     }
   }
