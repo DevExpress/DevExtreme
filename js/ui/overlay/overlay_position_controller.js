@@ -72,6 +72,7 @@ class OverlayPositionController {
 
         this._shouldRenderContentInitialPosition = true;
         this._visualPosition = undefined;
+        this._initialPosition = undefined;
         this._previousVisualPosition = undefined;
         this._$wrapperCoveredElement = undefined;
         this._$dragResizeContainer = undefined;
@@ -199,7 +200,8 @@ class OverlayPositionController {
     _renderContentInitialPosition() {
         this._renderBoundaryOffset();
         resetPosition(this._$content);
-        positionUtils.setup(this._$content, this._position);
+        const resultPosition = positionUtils.setup(this._$content, this._position);
+        this._initialPosition = resultPosition;
         this.detectVisualPositionChange();
     }
 
@@ -231,6 +233,7 @@ class OverlayPositionController {
             this._onPositioned({
                 previousPosition,
                 position: newPosition,
+                initialPosition: this._initialPosition,
                 event
             });
         }

@@ -608,7 +608,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        e.position && this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.initialPosition.v.flip);
     },
 
     _popupShowingHandler: noop,

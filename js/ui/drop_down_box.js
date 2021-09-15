@@ -264,7 +264,7 @@ const DropDownBox = DropDownEditor.inherit({
 
     _popupPositionedHandler: function(e) {
         this.callBase(e);
-        this._popupPosition = e.position;
+        this._popupPosition = e.initialPosition;
     },
 
     _getDefaultPopupPosition: function(isRtlEnabled) {
