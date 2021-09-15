@@ -16,7 +16,8 @@ export type WidgetName =
 'dxChart' |
 'dxPopup' |
 'dxSelectBox' |
-'dxButton';
+'dxButton' |
+'dxTextBox';
 
 export default async function createWidget(
   widgetName: WidgetName,
