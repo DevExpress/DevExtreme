@@ -2,9 +2,6 @@ import { isObject, isString, isDate, isDefined, isNumeric } from './type';
 import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
-import browser from './browser';
-
-const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 
@@ -626,7 +623,7 @@ const getDatesOfInterval = function(startDate, endDate, step) {
 };
 
 const createDate = function(date) {
-    return new Date(isIE11 && isDate(date) ? date.getTime() : date);
+    return new Date(date);
 };
 
 const createDateWithFullYear = function(year) {
