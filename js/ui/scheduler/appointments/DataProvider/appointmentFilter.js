@@ -178,7 +178,6 @@ export class AppointmentFilterBaseStrategy {
     get key() { return this.options.key; }
 
     // TODO - Use DI to get appropriate services
-    get loadedResources() { return this.options.loadedResources; }
     get scheduler() { return this.options.scheduler; } // TODO get rid
     get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
     get viewDataProvider() { return this.workspace.viewDataProvider; }
@@ -212,7 +211,7 @@ export class AppointmentFilterBaseStrategy {
             viewEndDayHour: this.viewEndDayHour,
             min: dateRange[0],
             max: dateRange[1],
-            resources: this.loadedResources,
+            resources: this.options.getLoadedResources(),
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
         });
@@ -789,7 +788,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
 
         return getResourcesDataByGroups(
-            this.loadedResources,
+            this.options.getLoadedResources(),
             this.options.resources,
             [cellGroup]
         );

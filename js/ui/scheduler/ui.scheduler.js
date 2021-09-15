@@ -935,13 +935,13 @@ class Scheduler extends Widget {
         }
 
         createFactoryInstances({
-            loadedResources: this.loadedResources,
+            getLoadedResources: () => this.loadedResources,
+            resources: this.option('resources'),
 
             key: this.key,
             scheduler: this,
             model,
             getIsVirtualScrolling: this.isVirtualScrolling.bind(this),
-            resources: this.option('resources'),
             dataSource: this._dataSource,
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
@@ -1249,7 +1249,7 @@ class Scheduler extends Widget {
         this._appointmentForm = this.createAppointmentForm();
         this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
 
-        if(this._isLoaded() || this._isDataSourceLoading()) {
+        if(this._isLoaded() || this._isDataSourceLoading()) { // TODO
             this._initMarkupCore(this.loadedResources);
             this._dataSourceChangedHandler(this._dataSource.items());
             this._fireContentReadyAction();
