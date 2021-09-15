@@ -102,13 +102,21 @@ $material-dropdownbutton-horizontal-padding: 8px;
 
     .dx-rtl & {
       .dx-buttongroup-last-item {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
         border-top-left-radius: $button-border-radius;
         border-bottom-left-radius: $button-border-radius;
+        border-left-width: 1px;
       }
 
       .dx-buttongroup-first-item {
         border-top-right-radius: $button-border-radius;
         border-bottom-right-radius: $button-border-radius;
+
+        &:not(.dx-buttongroup-last-item) {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
       }
     }
   }
