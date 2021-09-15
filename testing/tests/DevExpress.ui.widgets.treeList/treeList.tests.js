@@ -1563,6 +1563,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 pageSize: 4
             }
         });
+        this.clock.tick(300);
         const callback = sinon.spy();
 
         // act
@@ -1757,6 +1758,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             // act
             treeList.searchByText('');
             this.clock.tick(200);
+            $(treeList.getScrollable().content()).trigger('scroll');
 
             // assert
             assert.strictEqual(treeList.pageIndex(), 1, 'page is changed');
@@ -1884,7 +1886,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
         setTimeout(function() {
             // assert
-            assert.strictEqual(treeList.pageIndex(), 1, 'page index');
+            assert.strictEqual(treeList.pageIndex(), 2, 'page index');
             done();
         }, 1000);
     });

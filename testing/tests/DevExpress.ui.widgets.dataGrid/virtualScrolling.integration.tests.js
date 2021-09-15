@@ -394,7 +394,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.pageIndex(), 1, 'Page index');
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
         assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Visible row index');
         assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey('Zeb'), 1), 'Navigation row is visible');
     });
@@ -3109,7 +3109,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         $(dataGrid.getScrollable().container()).trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reset');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
     });
 

@@ -21,6 +21,7 @@ const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 const LOAD_TIMEOUT = 300;
 const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const VISIBLE_PAGE_INDEX = 'paging.pageIndex';
 
 const isVirtualMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
@@ -1199,6 +1200,9 @@ export const virtualScrollingModule = {
                         };
                     },
                     _updateVisiblePageIndex: function(currentPageIndex) {
+                        if(!this._rowsScrollController) {
+                            return;
+                        }
                         const oldPageIndex = this.pageIndex();
                         let shouldFireChange = false;
 
@@ -1210,13 +1214,19 @@ export const virtualScrollingModule = {
                         const loadOptions = this._dataSource?.lastLoadOptions();
                         let viewPortItemIndex = this._rowsScrollController.getViewportItemIndex();
                         const bottomLoadIndex = loadOptions ? loadOptions.skip + loadOptions.take : null;
+                        const noItems = !this.items().length;
+                        const viewportOutsideLoadedRange = isDefined(bottomLoadIndex) && (viewPortItemIndex < loadOptions.skip || viewPortItemIndex > bottomLoadIndex);
+
+                        if(!isDefined(currentPageIndex) && (noItems || viewportOutsideLoadedRange)) {
+                            return;
+                        }
 
                         if(isDefined(bottomLoadIndex) && bottomLoadIndex < viewPortItemIndex) {
                             viewPortItemIndex = bottomLoadIndex >= this.pageSize() ? bottomLoadIndex - this.pageSize() : 0;
                         }
 
                         const newPageIndex = Math.floor(viewPortItemIndex / this.pageSize());
-                        this._silentOption('paging.pageIndex', newPageIndex);
+                        this._silentOption(VISIBLE_PAGE_INDEX, newPageIndex);
                         shouldFireChange && this.pageChanged.fire();
                     },
                     _getChangedLoadParams: function() {
@@ -1360,7 +1370,7 @@ export const virtualScrollingModule = {
                         const rowsScrollController = this._rowsScrollController;
                         if(this.option(NEW_SCROLLING_MODE) && virtualPaging && rowsScrollController) {
                             if(!isDefined(pageIndex)) {
-                                return this.option('paging.pageIndex') ?? 0;
+                                return this.option(VISIBLE_PAGE_INDEX) ?? 0;
                             }
 
                             const callBaseResult = this.callBase.apply(this, arguments);
@@ -1374,11 +1384,13 @@ export const virtualScrollingModule = {
                     _handleDataChanged: function() {
                         this.callBase.apply(this, arguments);
 
-                        const virtualPaging = isVirtualPaging(this);
-                        const rowsScrollController = this._rowsScrollController;
-                        if(this.option(NEW_SCROLLING_MODE) && virtualPaging && rowsScrollController) {
+                        if(this.option(NEW_SCROLLING_MODE) && isVirtualPaging(this)) {
                             this._updateVisiblePageIndex();
                         }
+                    },
+                    _applyFilter: function() {
+                        this._updateVisiblePageIndex(0);
+                        return this.callBase.apply(this, arguments);
                     }
                 };
 
