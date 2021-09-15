@@ -23,22 +23,31 @@ fixture`Label`
 
 ['floating', 'static'].forEach((labelMode) => {
   ['outlined', 'underlined', 'filled'].forEach((stylingMode) => {
-    test(`Label for TextBox labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
-      const componentOption = {
-        labelMode,
-        stylingMode,
-      };
+    [true, false].forEach((isFocused) => {
+      test(`Label for TextBox labelMode=${labelMode} stylingMode=${stylingMode} focused=${isFocused}`, async (t) => {
+        const componentOption = {
+          labelMode,
+          stylingMode,
+        };
 
-      await createComponent('dxTextBox', { ...componentOption, ...shortOption }, '#container');
-      await createComponent('dxTextBox', { ...componentOption, ...longOption }, '#otherContainer');
+        await createComponent('dxTextBox', { ...componentOption, ...shortOption }, '#container');
+        await createComponent('dxTextBox', { ...componentOption, ...longOption }, '#otherContainer');
 
-      await t.expect(await compareScreenshot(t, `label-text-box-labelMode=${labelMode}-stylingMode=${stylingMode}.png`)).ok();
-    }).before(async () => {
-      await ClientFunction(() => {
-        $('#otherContainer').css({
-          'margin-top': '20px',
-        });
-      })();
+        if (isFocused) {
+          await ClientFunction(() => {
+            $('#container').addClass('dx-state-focused');
+            $('#otherContainer').addClass('dx-state-focused');
+          })();
+        }
+
+        await t.expect(await compareScreenshot(t, `label-text-box-labelMode=${labelMode}-stylingMode=${stylingMode}-focused=${isFocused}.png`)).ok();
+      }).before(async () => {
+        await ClientFunction(() => {
+          $('#otherContainer').css({
+            'margin-top': '20px',
+          });
+        })();
+      });
     });
   });
 });
