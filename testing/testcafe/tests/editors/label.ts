@@ -1,5 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { WidgetName } from '../../helpers/createWidget';
 
@@ -57,4 +57,18 @@ components.forEach((component) => {
       });
     });
   });
+});
+
+test('Lavel scroll input dxTextArea', async (t) => {
+  await createWidget('dxTextArea',
+    {
+      height: 30,
+      width: 200,
+      text: `this content is ${'very '.repeat(10)}long`,
+      label: 'label text',
+    }, true);
+
+  await t.scroll(Selector('.dx-texteditor-input'), 0, 15);
+
+  await t.expect(await compareScreenshot(t, 'label-text-area-scroll.png')).ok();
 });
