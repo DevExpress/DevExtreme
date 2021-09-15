@@ -14,10 +14,6 @@ const userAgents = {
 
 QUnit.module('browser');
 
-QUnit.test('MSEdge is IE', function(assert) {
-    assert.ok(browser._fromUA(userAgents.msEdge).msie, 'ie detected');
-});
-
 QUnit.test('browser is generic webkit', function(assert) {
     const browserObject = browser._fromUA(userAgents.webkit);
     assert.ok(browserObject.webkit, 'webkit detected');
