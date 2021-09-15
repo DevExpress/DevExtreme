@@ -1,5 +1,5 @@
 $(() => {
-  $('#gantt').dxGantt({
+  const gantt = $('#gantt').dxGantt({
     rootValue: -1,
     tasks: {
       dataSource: tasks,
@@ -30,5 +30,31 @@ $(() => {
     }],
     scaleType: 'weeks',
     taskListWidth: 500,
+    sorting: {
+      mode: 'single',
+    },
+  }).dxGantt('instance');
+
+  $('#sortingMode').dxSelectBox({
+    items: [
+      'single',
+      'multiple',
+      'none',
+    ],
+    value: 'single',
+    onValueChanged(e) {
+      gantt.option('sorting', { mode: e.value });
+      const disabled = e.value !== 'multiple';
+      $('#showSortIndexes').dxCheckBox('instance').option('disabled', disabled);
+    },
+  });
+
+  $('#showSortIndexes').dxCheckBox({
+    value: false,
+    text: 'Show Sort Indexes',
+    disabled: true,
+    onValueChanged(e) {
+      gantt.option('sorting', { showSortIndexes: e.value });
+    },
   });
 });
