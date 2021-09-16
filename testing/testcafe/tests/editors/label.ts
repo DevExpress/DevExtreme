@@ -135,12 +135,12 @@ stylingMods.forEach((stylingMode) => {
         stylingMode,
       };
 
-      await createWidget('dxTagBox', {
+      await createWidget('dxNumberBox', {
         ...componentOption,
         value: 'text',
       }, true);
 
-      await createWidget('dxTagBox', {
+      await createWidget('dxNumberBox', {
         ...componentOption,
         value: 123,
       }, true, '#otherContainer');
@@ -152,6 +152,27 @@ stylingMods.forEach((stylingMode) => {
           'margin-top': '20px',
         });
       })();
+    });
+  });
+});
+
+stylingMods.forEach((stylingMode) => {
+  themes.forEach((theme) => {
+    test(`Label for dxDateBox ${theme} stylingMode=${stylingMode}`, async (t) => {
+      await setTheme(theme);
+
+      const componentOption = {
+        width: 300,
+        label: 'label text',
+        stylingMode,
+      };
+
+      await createWidget('dxDateBox', {
+        ...componentOption,
+        value: new Date(1900, 0, 1),
+      }, true);
+
+      await t.expect(await compareScreenshot(t, `label-date-box-${theme}-styleMode=${stylingMode}.png`)).ok();
     });
   });
 });
