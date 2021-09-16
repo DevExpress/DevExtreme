@@ -19212,6 +19212,14 @@ declare module DevExpress.ui {
      */
     inputAttr?: any;
     /**
+     * [descr:dxTextEditorOptions.label]
+     */
+    label?: boolean;
+    /**
+     * [descr:dxTextEditorOptions.labelMode]
+     */
+    labelMode?: 'static' | 'floating' | 'hidden';
+    /**
      * [descr:dxTextEditorOptions.mask]
      */
     mask?: string;
