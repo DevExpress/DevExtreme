@@ -19,6 +19,7 @@ class BaseStrategy {
     get rtlEnabled() { return this.options.rtlEnabled; }
     get isVerticalGrouping() { return this.options.isVerticalOrientation; }
     get showAllDayPanel() { return this.options.showAllDayPanel; }
+    get supportAllDayRow() { return this.options.supportAllDayRow; }
     get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
     get isVirtualScrolling() { return false; }
 
@@ -97,6 +98,7 @@ class BaseStrategy {
             groupIndex: validGroupIndex,
             isVirtualScrolling: this.isVirtualScrolling,
             isShowAllDayPanel: this.showAllDayPanel,
+            supportAllDayRow: this.supportAllDayRow,
             isGroupedAllDayPanel: this.isGroupedAllDayPanel,
             isVerticalGrouped: this.isVerticalGrouped
         });

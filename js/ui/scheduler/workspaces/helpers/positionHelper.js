@@ -153,6 +153,10 @@ export class PositionHelper {
     getResizableStep() {
         return this.strategy.getResizableStep();
     }
+
+    getOffsetByAllDayPanel(options) {
+        return this.strategy.getOffsetByAllDayPanel(options);
+    }
 }
 
 class PositionHelperBase {
