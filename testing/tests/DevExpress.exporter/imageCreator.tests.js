@@ -437,36 +437,23 @@ QUnit.test('Defined background', function(assert) {
     });
 });
 
-QUnit.test('Defined background, devicePixelRatio is 2 (T892041)', function(assert) {
-    const that = this;
-    const tmpDevicePixelRatio = window.devicePixelRatio;
-    window.devicePixelRatio = 2;
+QUnit.test('Transformation of canvas context args (T892041, T1020859)', function(assert) {
     const done = assert.async();
     const context = window.CanvasRenderingContext2D.prototype;
     const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
         {
             width: 560,
             height: 290,
-            margin: 10,
             format: 'png',
-            backgroundColor: '#ff0000'
+            pixelRatio: 2
         });
 
-    assert.expect(2);
+    assert.expect(1);
     $.when(imageBlob).done(function() {
         try {
-            const backgroundElem = that.drawnElements[0];
-
-            assert.deepEqual(backgroundElem.args, {
-                x: -10,
-                y: -10,
-                width: 1140,
-                height: 600
-            }, 'Background args');
             assert.deepEqual(context.setTransform.getCall(0).args, [2, 0, 0, 2, 0, 0], 'setTransform');
         } finally {
             done();
-            window.devicePixelRatio = tmpDevicePixelRatio;
         }
     });
 });

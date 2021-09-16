@@ -3947,6 +3947,12 @@ declare module DevExpress.pdfExporter {
     options: PdfExportDataGridProps
   ): DevExpress.core.utils.DxPromise<void>;
   /**
+   * [descr:pdfExporter.exportGantt(options)]
+   */
+  export function exportGantt(
+    options: PdfExportGanttProps
+  ): DevExpress.core.utils.DxPromise<any>;
+  /**
    * [descr:PdfDataGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -4025,6 +4031,48 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.loadPanel]
      */
     loadPanel?: ExportLoadPanel;
+  }
+  /**
+   * [descr:PdfExportGanttProps]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfExportGanttProps {
+    /**
+     * [descr:PdfExportGanttProps.createDocumentMethod]
+     */
+    createDocumentMethod?: (options: any) => object;
+    /**
+     * [descr:PdfExportGanttProps.jsPDFDocument]
+     */
+    jsPDFDocument?: object;
+    /**
+     * [descr:PdfExportGanttProps.component]
+     */
+    component?: DevExpress.ui.dxGantt;
+    /**
+     * [descr:PdfExportGanttProps.format]
+     */
+    format?: string | object;
+    /**
+     * [descr:PdfExportGanttProps.landscape]
+     */
+    landscape?: boolean;
+    /**
+     * [descr:PdfExportGanttProps.fileName]
+     */
+    fileName?: string;
+    /**
+     * [descr:PdfExportGanttProps.margins]
+     */
+    margins?: object;
+    /**
+     * [descr:PdfExportGanttProps.exportMode]
+     */
+    exportMode?: 'all' | 'treeList' | 'chart';
+    /**
+     * [descr:PdfExportGanttProps.dateRange]
+     */
+    dateRange?: 'all' | 'visible' | object;
   }
 }
 declare module DevExpress.ui {
@@ -12673,10 +12721,6 @@ declare module DevExpress.ui {
      * [descr:dxGantt.scrollToDate(date)]
      */
     scrollToDate(date: Date | Number | string): void;
-    /**
-     * [descr:dxGantt.exportToPdf(options)]
-     */
-    exportToPdf(options: any): DevExpress.core.utils.DxPromise<any>;
     /**
      * [descr:dxGantt.showResourceManagerDialog()]
      */
