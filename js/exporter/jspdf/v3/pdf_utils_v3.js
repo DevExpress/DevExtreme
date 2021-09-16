@@ -7,7 +7,8 @@ function round(value) {
 
 function getTextLines(doc, text, padding, font, { wordWrapEnabled, columnWidth }) {
     if(wordWrapEnabled) {
-        const cellContentWidth = isDefined(padding) ? (columnWidth - padding * 2) : columnWidth;
+        const cellPadding = padding ?? 0;
+        const cellContentWidth = columnWidth - cellPadding * 2;
         // it also splits text by '\n' automatically
         return doc.splitTextToSize(text, cellContentWidth, {
             fontSize: font?.size || doc.getFontSize()
@@ -22,7 +23,8 @@ function calculateTextHeight(doc, text, padding, font, { wordWrapEnabled, column
     }).h;
 
     const linesCount = getTextLines(doc, text, padding, font, { wordWrapEnabled, columnWidth }).length;
-    return height * linesCount * doc.getLineHeightFactor() + (isDefined(padding) ? padding * 2 : 0);
+    const cellPadding = padding ?? 0;
+    return height * linesCount * doc.getLineHeightFactor() + cellPadding * 2;
 }
 
 function calculateRowHeight(doc, cells, columnWidths) {
@@ -68,22 +70,21 @@ function drawTextInRect(doc, text, padding, rect, wordWrapEnabled, jsPdfTextOpti
     const linesCount = textArray.length;
 
     const heightOfOneLine = calculateTextHeight(doc, textArray[0], 0, doc.getFont(), { wordWrapEnabled: false });
-    const contentRect = isDefined(padding)
-        ? {
-            x: rect.x + padding,
-            y: rect.y + padding,
-            w: rect.w - padding * 2,
-            h: rect.h - padding * 2
-        }
-        : rect;
+    const cellPadding = padding ?? 0;
+    const textRect = {
+        x: rect.x + cellPadding,
+        y: rect.y + cellPadding,
+        w: rect.w - cellPadding * 2,
+        h: rect.h - cellPadding * 2
+    };
 
     // TODO: check lineHeightFactor - https://github.com/MrRio/jsPDF/issues/3234
-    const y = contentRect.y + (contentRect.h / 2)
+    const y = textRect.y + (textRect.h / 2)
         - heightOfOneLine * (linesCount - 1) / 2;
 
     // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
     const textOptions = extend({ baseline: 'middle' }, jsPdfTextOptions);
-    doc.text(textArray.join('\n'), round(contentRect.x), round(y), textOptions);
+    doc.text(textArray.join('\n'), round(textRect.x), round(y), textOptions);
 }
 
 export { calculateRowHeight, calculateTextHeight, drawLine, drawRect, drawTextInRect };
