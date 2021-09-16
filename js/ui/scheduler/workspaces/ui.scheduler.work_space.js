@@ -42,7 +42,7 @@ import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
 
-import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
+import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_model/view_data_provider';
 
 import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
@@ -605,6 +605,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this);
+        this.renderer = new VirtualScrollingRenderer(this);
     }
 
     onDataSourceChanged() {
@@ -2582,6 +2583,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getAllDayContainer() {
         return this._$allDayContainer;
+    }
+
+    updateRender() {
+        this.renderer.updateRender();
+    }
+
+    updateGrid() {
+        this.renderer._renderGrid();
     }
 
     updateAppointments() {

@@ -46,10 +46,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                     ...options
                 });
 
-                const { virtualScrollingDispatcher } = scheduler.instance.getWorkSpace();
-                if(virtualScrollingDispatcher) {
-                    virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-                }
+                const workspace = this.instance.getWorkSpace().virtualScrollingDispatcher;
+                workspace.renderer.getRenderTimeout = () => -1;
 
                 return scheduler;
             };

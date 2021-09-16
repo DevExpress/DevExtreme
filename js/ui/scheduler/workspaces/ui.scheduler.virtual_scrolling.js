@@ -18,12 +18,11 @@ const scrollingOrientations = {
 };
 const DefaultScrollingOrientation = scrollingOrientations.both;
 
-export default class VirtualScrollingDispatcher {
+export class VirtualScrollingDispatcher {
     constructor(workspace) {
         this._workspace = workspace;
         this._rowHeight = this.getCellHeight();
         this._cellWidth = this.getCellWidth();
-        this._renderer = new Renderer(this.workspace);
 
         this._createVirtualScrolling();
         this._attachScrollableEvents();
@@ -31,8 +30,6 @@ export default class VirtualScrollingDispatcher {
 
     get workspace() { return this._workspace; }
     get isRTL() { return this.workspace._isRTL(); }
-
-    get renderer() { return this._renderer; }
 
     get verticalVirtualScrolling() { return this._verticalVirtualScrolling; }
     set verticalVirtualScrolling(value) { this._verticalVirtualScrolling = value; }
@@ -277,7 +274,7 @@ export default class VirtualScrollingDispatcher {
             const horizontalStateChanged = isDefined(left) && this.horizontalVirtualScrolling?.updateState(left);
 
             if(verticalStateChanged || horizontalStateChanged) {
-                this.renderer.updateRender();
+                this.workspace.updateRender();
             }
         }
     }
@@ -300,7 +297,7 @@ export default class VirtualScrollingDispatcher {
         }
 
         if(needUpdateVertical || needUpdateHorizontal) {
-            this.renderer._renderGrid();
+            this.workspace.updateGrid();
         }
     }
 }
@@ -625,7 +622,7 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
     }
 }
 
-class Renderer {
+export class VirtualScrollingRenderer {
     constructor(workspace) {
         this._workspace = workspace;
         this._renderAppointmentTimeout = null;

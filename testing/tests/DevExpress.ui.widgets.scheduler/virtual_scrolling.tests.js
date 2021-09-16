@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import VirtualScrollingDispatcher from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
+import { VirtualScrollingDispatcher } from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
 import { getWindow } from 'core/utils/window';
 import { noop } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
@@ -79,8 +79,9 @@ module('Virtual Scrolling', {
                 _isVerticalGroupedWorkSpace: () => {
                     return false;
                 },
-                updateAppointments: () => {},
                 getCellMinWidth: () => 1,
+                updateRender: () => {},
+                updateGrid: () => {},
             }, workspaceSettings);
 
             this.scrollableMock = {
@@ -112,8 +113,6 @@ module('Virtual Scrolling', {
             };
 
             this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this.workspaceMock);
-
-            this.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
             this.verticalVirtualScrolling = this.virtualScrollingDispatcher.verticalVirtualScrolling;
             this.horizontalVirtualScrolling = this.virtualScrollingDispatcher.horizontalVirtualScrolling;
@@ -428,7 +427,7 @@ module('Virtual Scrolling', {
         test('it should not update render if scroll position has not been changed', function(assert) {
             this.prepareInstance();
 
-            const spy = this.spy(this.virtualScrollingDispatcher.renderer, 'updateRender');
+            const spy = this.spy(this.virtualScrollingDispatcher.workspace, 'updateRender');
 
             const scrollOffset = { left: 300, top: 200 };
 
