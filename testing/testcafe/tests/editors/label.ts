@@ -123,3 +123,35 @@ stylingMods.forEach((stylingMode) => {
     });
   });
 });
+
+stylingMods.forEach((stylingMode) => {
+  themes.forEach((theme) => {
+    test(`Label for dxNumberBox ${theme} stylingMode=${stylingMode}`, async (t) => {
+      await setTheme(theme);
+
+      const componentOption = {
+        width: 300,
+        label: 'label text',
+        stylingMode,
+      };
+
+      await createWidget('dxTagBox', {
+        ...componentOption,
+        value: 'text',
+      }, true);
+
+      await createWidget('dxTagBox', {
+        ...componentOption,
+        value: 123,
+      }, true, '#otherContainer');
+
+      await t.expect(await compareScreenshot(t, `label-number-box-${theme}-styleMode=${stylingMode}.png`)).ok();
+    }).before(async () => {
+      await ClientFunction(() => {
+        $('#otherContainer').css({
+          'margin-top': '20px',
+        });
+      })();
+    });
+  });
+});
