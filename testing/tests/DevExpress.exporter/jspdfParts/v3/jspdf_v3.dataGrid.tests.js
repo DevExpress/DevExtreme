@@ -12,6 +12,8 @@ import { JSPdfWordWrapTests } from './jspdf_v3.dataGrid.wordwrap.tests.js';
 import { JSPdfStylesTests } from './jspdf_v3.dataGrid.styles.tests.js';
 import { JSPdfBorderColorsTests } from './jspdf_v3.dataGrid.borderColors.tests.js';
 import { JSPdfBandsTests } from './jspdf_v3.dataGrid.bands.tests.js';
+import { JSPdfGroupingTests } from './jspdf_v3.dataGrid.grouping.tests.js';
+import { JSPdfSummariesTests } from './jspdf_v3.dataGrid.summaries.tests.js';
 
 import 'generic_light.css!';
 
@@ -857,3 +859,5 @@ JSPdfWordWrapTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfStylesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfBorderColorsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

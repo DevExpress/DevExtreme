@@ -1193,6 +1193,59 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing call count');
     });
 
+    QUnit.test('Edit form should be updated if change editing.form option inside setCellValue (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            columns: [
+                { dataField: 'field1', setCellValue: function(data, value) {
+                    data.field1 = value;
+                    dataGrid.option('editing.form.items[1].visible', false);
+                } },
+                { dataField: 'field2' },
+            ],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.cellValue(0, 0, 2);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
+    QUnit.test('Edit form should be updated if change editing.form option (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.option('editing.form.items[1].visible', false);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
     // T558301
     QUnit.testInActiveWindow('Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled', function(assert) {
         // arrange

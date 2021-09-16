@@ -30,9 +30,9 @@ import '../date_box';
 import '../button';
 
 import { getLabelWidthByText } from './components/label';
-import { renderFieldItemTo } from './components/field_item.js';
-import { renderButtonItemTo } from './components/button_item.js';
-import { renderEmptyItemTo } from './components/empty_item.js';
+import { renderFieldItem } from './components/field_item.js';
+import { renderButtonItem } from './components/button_item.js';
+import { renderEmptyItem } from './components/empty_item.js';
 import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
@@ -305,7 +305,6 @@ const LayoutManager = Widget.inherit({
 
     _renderResponsiveBox: function() {
         const that = this;
-        const templatesInfo = [];
 
         if(that._items && that._items.length) {
             const colCount = that._getColCount();
@@ -314,10 +313,7 @@ const LayoutManager = Widget.inherit({
             that._prepareItemsWithMerging(colCount);
 
             const layoutItems = that._generateLayoutItems();
-            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
-            if(!hasWindow()) {
-                that._renderTemplates(templatesInfo);
-            }
+            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount));
         }
     },
 
@@ -325,27 +321,7 @@ const LayoutManager = Widget.inherit({
         this._refresh();
     },
 
-    _renderTemplate: function($container, item) {
-        switch(item.itemType) {
-            case 'empty':
-                this._renderEmptyItem($container);
-                break;
-            case 'button':
-                this._renderButtonItem(item, $container);
-                break;
-            default:
-                this._renderFieldItem(item, $container);
-        }
-    },
-
-    _renderTemplates: function(templatesInfo) {
-        const that = this;
-        each(templatesInfo, function(index, info) {
-            that._renderTemplate(info.container, info.formItem);
-        });
-    },
-
-    _getResponsiveBoxConfig: function(layoutItems, colCount, templatesInfo) {
+    _getResponsiveBoxConfig: function(layoutItems, colCount) {
         const that = this;
         const colCountByScreen = that.option('colCountByScreen');
         const xsColCount = colCountByScreen && colCountByScreen.xs;
@@ -363,9 +339,6 @@ const LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
-                if(hasWindow()) {
-                    that._renderTemplates(templatesInfo);
-                }
                 if(that.option('onLayoutChanged')) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
@@ -377,22 +350,16 @@ const LayoutManager = Widget.inherit({
                 const $itemElement = $(itemElement);
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
-                const $fieldItem = $('<div>')
-                    .addClass(item.cssClass)
-                    .appendTo($itemElement);
 
-                templatesInfo.push({
-                    container: $fieldItem,
-                    formItem: item
-                });
+                const itemCssClassList = [item.cssClass];
 
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
-                    $fieldItem.addClass(LAYOUT_MANAGER_FIRST_ROW_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
                 }
                 if(e.location.col === 0) {
-                    $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
 
                 if(item.itemType === SIMPLE_ITEM_TYPE && that.option('isRoot')) {
@@ -402,10 +369,29 @@ const LayoutManager = Widget.inherit({
                 const rowsCount = that._getRowsCount();
                 const isLastRow = e.location.row === rowsCount - 1;
                 if(isLastColumn) {
-                    $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_LAST_COL_CLASS);
                 }
                 if(isLastRow) {
-                    $fieldItem.addClass(LAYOUT_MANAGER_LAST_ROW_CLASS);
+                    itemCssClassList.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
+                }
+
+                if(item.itemType !== 'empty') {
+                    itemCssClassList.push(FIELD_ITEM_CLASS);
+                    itemCssClassList.push(that.option('cssItemClass'));
+                    if(isDefined(item.col)) {
+                        itemCssClassList.push('dx-col-' + item.col);
+                    }
+                }
+
+                switch(item.itemType) {
+                    case 'empty':
+                        renderEmptyItem({ $parent: $itemElement, rootElementCssClassList: itemCssClassList });
+                        break;
+                    case 'button':
+                        that._renderButtonItem({ item, $parent: $itemElement, rootElementCssClassList: itemCssClassList });
+                        break;
+                    default:
+                        that._renderFieldItem({ item, $parent: $itemElement, rootElementCssClassList: itemCssClassList });
                 }
             },
             cols: that._generateRatio(colCount),
@@ -530,32 +516,28 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderEmptyItem: function($container) {
-        renderEmptyItemTo({ $container });
+        renderEmptyItem({ $container });
     },
 
-    _renderButtonItem: function(item, $container) {
-        $container
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
-
-        const instance = renderButtonItemTo({
+    _renderButtonItem: function({ item, $parent, rootElementCssClassList }) {
+        const { $rootElement, buttonInstance } = renderButtonItem({
             item,
-            $container,
+            $parent,
+            rootElementCssClassList,
             validationGroup: this.option('validationGroup'),
             createComponentCallback: this._createComponent.bind(this),
-            cssItemClass: this.option('cssItemClass'),
         });
 
         // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: instance, // TODO: try to remove 'widgetInstance'
+            widgetInstance: buttonInstance, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
-            $itemContainer: $container
+            $itemContainer: $rootElement
         });
     },
 
-    _renderFieldItem: function(item, $container) {
+    _renderFieldItem: function({ item, $parent, rootElementCssClassList }) {
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -565,17 +547,13 @@ const LayoutManager = Widget.inherit({
 
         const name = item.dataField || item.name;
 
-        $container
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
-
-        const { $fieldEditorContainer, instance } = renderFieldItemTo(convertToRenderFieldItemOptions({
-            $container,
+        const { $fieldEditorContainer, widgetInstance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
+            $parent,
+            rootElementCssClassList,
             item,
             name,
             editorValue,
             canAssignUndefinedValueToEditor,
-            containerCssClass: this.option('cssItemClass'),
             parentComponent: this._getComponentOwner(),
             createComponentCallback: this._createComponent.bind(this),
             useFlexLayout: this._hasBrowserFlex(),
@@ -591,15 +569,15 @@ const LayoutManager = Widget.inherit({
             managerMarkOptions: this._getMarkOptions(),
         }));
 
-        if(instance && item.dataField) {
+        if(widgetInstance && item.dataField) {
             // TODO: move to renderFieldItem ?
-            this._bindDataField(instance, item.dataField, item.editorType, $fieldEditorContainer);
+            this._bindDataField(widgetInstance, item.dataField, item.editorType, $fieldEditorContainer);
         }
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: instance,
+            widgetInstance,
             guid: item.guid,
-            $itemContainer: $container
+            $itemContainer: $rootElement
         });
     },
 

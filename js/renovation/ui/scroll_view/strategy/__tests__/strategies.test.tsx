@@ -3,43 +3,43 @@ import each from 'jest-each';
 import {
   RefObject,
 } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
-} from '../../../test_utils/events_mock';
+} from '../../../../test_utils/events_mock';
 
 import {
   optionValues,
-} from './utils';
+} from '../../__tests__/utils';
 
 import {
   SCROLLABLE_DISABLED_CLASS, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
-} from '../common/consts';
+} from '../../common/consts';
 
-import { titleize } from '../../../../core/utils/inflector';
+import { titleize } from '../../../../../core/utils/inflector';
 
 import {
   ScrollableNative,
-} from '../scrollable_native';
+} from '../native';
 
 import {
   ScrollableSimulated,
-} from '../scrollable_simulated';
+} from '../simulated';
 
-import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
+import getScrollRtlBehavior from '../../../../../core/utils/scroll_rtl_behavior';
 
-import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './scrollable_simulated_test_helper';
-import { ScrollableTestHelper as ScrollableNativeTestHelper } from './scrollable_native_test_helper';
+import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './simulated_test_helper';
+import { ScrollableTestHelper as ScrollableNativeTestHelper } from './native_test_helper';
 
-import { getTranslateValues } from '../utils/get_translate_values';
+import { getTranslateValues } from '../../utils/get_translate_values';
 
-jest.mock('../utils/get_translate_values', () => ({
-  ...jest.requireActual('../utils/get_translate_values'),
+jest.mock('../../utils/get_translate_values', () => ({
+  ...jest.requireActual('../../utils/get_translate_values'),
   getTranslateValues: jest.fn(() => ({ top: 0, left: 0 })),
 }));
 
-jest.mock('../../../../core/utils/scroll_rtl_behavior');
-jest.mock('../../../../ui/themes', () => ({
+jest.mock('../../../../../core/utils/scroll_rtl_behavior');
+jest.mock('../../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
   isGeneric: jest.fn(() => true),
   current: jest.fn(() => 'generic'),
@@ -162,6 +162,17 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
         beforeEach(clearEventHandlers);
 
         each(optionValues.direction).describe('ScrollEffect params. Direction: %o', (direction) => {
+          it('handleScroll(), should not raise any errors when onScroll is not defined', () => {
+            const viewModel = new Scrollable({
+              direction,
+              onScroll: undefined,
+            });
+
+            viewModel.syncScrollbarsWithContent = jest.fn();
+
+            expect(() => { (viewModel as any).handleScroll(); }).not.toThrow();
+          });
+
           each([
             { eventName: 'dxscrollinit', effectName: 'init', passEvent: true },
             { eventName: 'dxscroll', effectName: 'move', passEvent: true },
@@ -282,7 +293,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                       return value;
                     };
 
-                    const isPullDown = Scrollable === ScrollableSimulated
+                    const pulledDown = Scrollable === ScrollableSimulated
                       && pullDownEnabled && forceGeneratePockets;
                     each([
                       [{ top: -81, left: getRequiredOffsetLeft(-81) }, {
@@ -363,7 +374,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                         (getScrollRtlBehavior as jest.Mock)
                           .mockReturnValue(rtlBehavior);
                         (getTranslateValues as jest.Mock).mockReturnValue({
-                          top: isPullDown ? -80 : 0,
+                          top: pulledDown ? -80 : 0,
                           left: 0,
                         });
 
@@ -382,15 +393,9 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                         helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
                         (helper.viewModel as any).handlePocketState = jest.fn();
-                        helper.viewModel.needRiseScrollAction = false;
 
                         helper.viewModel.scrollEffect();
                         emit('scroll');
-
-                        expect(helper.viewModel.pendingScrollAction).toEqual(false);
-                        expect(helper.viewModel.needRiseScrollAction).toEqual(true);
-
-                        helper.viewModel.riseScroll();
 
                         const expectedArgs = expected;
                         expectedArgs.event = { ...defaultEvent };
@@ -405,8 +410,6 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
                         expect(onScrollHandler).toBeCalledTimes(1);
                         expect(onScrollHandler).toBeCalledWith(expectedArgs);
-                        expect(helper.viewModel.pendingScrollAction).toEqual(true);
-                        expect(helper.viewModel.needRiseScrollAction).toEqual(false);
                       });
                     });
                   });
@@ -414,48 +417,6 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
               });
             });
           });
-        });
-
-        it('should not raise any error if onScroll is not defined', () => {
-          const scrollable = new Scrollable({ onScroll: undefined });
-          scrollable.containerRef = { current: {} as HTMLDivElement } as RefObject;
-
-          scrollable.scrollEffect();
-          emit('scroll');
-
-          expect(scrollable.riseScroll.bind(scrollable)).not.toThrow();
-        });
-
-        it('should not raise scrollAction when needRiseScrollAction is false', () => {
-          const onScrollHandler = jest.fn();
-          const scrollable = new Scrollable({ onScroll: onScrollHandler });
-          scrollable.needRiseScrollAction = false;
-
-          scrollable.riseScroll();
-
-          expect(onScrollHandler).toBeCalledTimes(0);
-          scrollable.needRiseScrollAction = false;
-        });
-
-        it('should raise scrollAction when needRiseScrollAction is true', () => {
-          const onScrollHandler = jest.fn();
-          const viewModel = new Scrollable({
-            onScroll: (args) => {
-              expect(viewModel.pendingScrollAction).toEqual(true);
-              expect(viewModel.needRiseScrollAction).toEqual(true);
-              onScrollHandler(args);
-            },
-          });
-
-          viewModel.needRiseScrollAction = true;
-          viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
-
-          viewModel.riseScroll();
-
-          expect(viewModel.needRiseScrollAction).toEqual(false);
-          expect(viewModel.pendingScrollAction).toEqual(true);
-          expect(onScrollHandler).toBeCalledTimes(1);
-          expect(onScrollHandler).toBeCalledWith({ scrollOffset: { top: 5, left: 10 } });
         });
       });
     });

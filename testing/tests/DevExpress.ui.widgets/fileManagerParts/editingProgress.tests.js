@@ -4,7 +4,7 @@ import { Deferred } from 'core/utils/deferred';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import ErrorCode from 'file_management/error_codes';
 import FileItemsController from 'ui/file_manager/file_items_controller';
-import { createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import { createTestFileSystem, createUploaderFiles, stubFileReader, createEditingEvents } from '../../../helpers/fileManagerHelpers.js';
 import TestFileSystemProvider from '../../../helpers/fileManager/file_provider.test.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerNotificationControlMock from '../../../helpers/fileManager/notification.mock.js';
@@ -47,7 +47,8 @@ const createController = (context, providerOptions) => {
 
     context.controller = new FileItemsController({
         fileProvider: provider,
-        rootText: 'Files'
+        rootText: 'Files',
+        editingEvents: createEditingEvents()
     });
 };
 
@@ -283,118 +284,6 @@ const createTestData = () => {
             { errorMode: true, commonText: 'Item was not deleted', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
             { operationId: 1, commonText: 'Item was not deleted', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
-        ],
-
-        'single request - delete multiple items': [
-            { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
-            {
-                details: [
-                    {
-                        commonText: 'Folder 3',
-                        imageUrl: 'folder'
-                    },
-                    {
-                        commonText: 'File 1.txt',
-                        imageUrl: 'txtfile'
-                    },
-                    {
-                        commonText: 'File 2.jpg',
-                        imageUrl: 'image'
-                    }
-                ],
-                operationId: 1,
-                type: 'progress-addOperationDetails'
-            },
-            {
-                commonProgress: 100,
-                itemIndex: 0,
-                operationId: 1,
-                type: 'progress-completeOperationItem'
-            },
-            {
-                commonProgress: 100,
-                itemIndex: 0,
-                itemProgress: 100,
-                operationId: 1,
-                type: 'progress-updateOperationItemProgress'
-            },
-            { commonText: 'Deleted 3 items from Files', type: 'notification-_showPopup' },
-            { operationId: 1, commonText: 'Deleted 3 items from Files', isError: false, type: 'progress-completeOperation' },
-            { message: '', status: 'success', type: 'notification-onActionProgress' },
-            { updatedOnlyFiles: false, type: 'editing-onSuccess' }
-        ],
-
-        'single request - delete multiple items with error': [
-            { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
-            {
-                details: [
-                    {
-                        commonText: 'Folder 3',
-                        imageUrl: 'folder'
-                    },
-                    {
-                        commonText: 'File 1.txt',
-                        imageUrl: 'txtfile'
-                    },
-                    {
-                        commonText: 'File 2.jpg',
-                        imageUrl: 'image'
-                    }
-                ],
-                operationId: 1,
-                type: 'progress-addOperationDetails'
-            },
-            { operationId: 1, errorText: 'Unspecified error.', type: 'progress-completeSingleOperationWithError' },
-            { errorText: 'Unspecified error.', type: 'progress-_renderError' },
-            { message: 'Some items were not deleted', status: 'error', type: 'notification-onActionProgress' },
-            { errorText: 'Unspecified error.', type: 'notification_manager-renderError' },
-            { errorMode: true, commonText: 'Some items were not deleted', detailsText: 'Unspecified error.', type: 'notification-_showPopup' },
-            { updatedOnlyFiles: false, type: 'editing-onSuccess' },
-            { operationId: 1, commonText: 'Some items were not deleted', isError: true, type: 'progress-completeOperation' },
-            { message: '', status: 'error', type: 'notification-onActionProgress' },
-            { updatedOnlyFiles: false, type: 'editing-onSuccess' }
-        ],
-
-        'single request - delete multiple items with opened progress panel': [
-            { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
-            {
-                details: [
-                    {
-                        commonText: 'Folder 3',
-                        imageUrl: 'folder'
-                    },
-                    {
-                        commonText: 'File 1.txt',
-                        imageUrl: 'txtfile'
-                    },
-                    {
-                        commonText: 'File 2.jpg',
-                        imageUrl: 'image'
-                    }
-                ],
-                operationId: 1,
-                type: 'progress-addOperationDetails'
-            },
-            {
-                commonProgress: 100,
-                itemIndex: 0,
-                operationId: 1,
-                type: 'progress-completeOperationItem'
-            },
-            {
-                commonProgress: 100,
-                itemIndex: 0,
-                itemProgress: 100,
-                operationId: 1,
-                type: 'progress-updateOperationItemProgress'
-            },
-            { commonText: 'Deleted 3 items from Files', type: 'notification-_showPopup' },
-            { operationId: 1, commonText: 'Deleted 3 items from Files', isError: false, type: 'progress-completeOperation' },
-            { message: '', status: 'default', type: 'notification-onActionProgress' },
-            { updatedOnlyFiles: false, type: 'editing-onSuccess' }
         ],
 
         'upload multiple files': [
@@ -648,61 +537,6 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         startDeleteItems(this, 1)
             .then((items, itemCount) => {
                 assert.equal(items.length, itemCount, 'item count decreased');
-                assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
-                done();
-            });
-
-        this.clock.tick(10000);
-    });
-
-    test('single request - delete multiple items', function(assert) {
-        prepareEnvironment(this, {
-            provider: { requestMode: 'single' }
-        });
-
-        const done = assert.async();
-        const expectedEvents = createTestData()['single request - delete multiple items'];
-
-        startDeleteItems(this, 3)
-            .then((items, itemCount) => {
-                assert.equal(items.length, itemCount - 3, 'item count decreased');
-                assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
-                done();
-            });
-
-        this.clock.tick(10000);
-    });
-
-    test('single request - delete multiple items with error', function(assert) {
-        prepareEnvironment(this, {
-            provider: { raiseErrorMode: 'auto', requestMode: 'single' }
-        });
-
-        const done = assert.async();
-        const expectedEvents = createTestData()['single request - delete multiple items with error'];
-
-        startDeleteItems(this, 3)
-            .then((items, itemCount) => {
-                assert.equal(items.length, itemCount, 'item count decreased');
-                assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
-                done();
-            });
-
-        this.clock.tick(10000);
-    });
-
-    test('single request - delete multiple items with opened progress panel', function(assert) {
-        prepareEnvironment(this, {
-            provider: { requestMode: 'single' },
-            notification: { progressPanelOpened: true }
-        });
-
-        const done = assert.async();
-        const expectedEvents = createTestData()['single request - delete multiple items with opened progress panel'];
-
-        startDeleteItems(this, 3)
-            .then((items, itemCount) => {
-                assert.equal(items.length, itemCount - 3, 'item count decreased');
                 assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
                 done();
             });

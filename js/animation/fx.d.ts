@@ -42,7 +42,7 @@ export type AnimationState = string | number | {
 /**
  * @docid
  * @namespace DevExpress
- * @type object
+ * @type object|number|string
  * @public
  */
 export type AnimationConfig = {

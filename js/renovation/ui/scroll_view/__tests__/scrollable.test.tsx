@@ -12,9 +12,9 @@ import {
 
 import {
   ScrollViewLoadPanel,
-} from '../load_panel';
-import { ScrollableNative } from '../scrollable_native';
-import { ScrollableSimulated } from '../scrollable_simulated';
+} from '../internal/load_panel';
+import { ScrollableNative } from '../strategy/native';
+import { ScrollableSimulated } from '../strategy/simulated';
 
 import { Widget } from '../../common/widget';
 import { ScrollableDirection, ScrollOffset } from '../common/types.d';
@@ -108,8 +108,6 @@ describe('Scrollable', () => {
       { name: 'scrollOffset', calledWith: [] },
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
-      { name: 'scrollTo', calledWith: ['arg1'] },
-      { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
       { name: 'container', calledWith: [] },
       { name: 'updateHandler', calledWith: [] },
@@ -256,6 +254,141 @@ describe('Scrollable', () => {
         scrollOffset,
         additionalOffset,
       );
+    });
+
+    each([false, true]).describe('useNative: %o', (useNative) => {
+      each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('direction: %o', (direction) => {
+        test.each([0, undefined, null, {},
+          { top: 0 }, { left: 0 }, { top: 0, left: 0 },
+          { x: 0 }, { y: 0 }, { x: 0, y: 0 },
+        ])('scrollBy(%o), not pass info to strategy handler if location not changed', (distance: any) => {
+          const viewModel = new Scrollable({ useNative, direction });
+
+          const scrollByLocationHandler = jest.fn();
+          Object.defineProperties(viewModel, {
+            scrollableRef: {
+              get() { return { current: { scrollByLocation: scrollByLocationHandler } }; },
+            },
+          });
+
+          viewModel.scrollBy(distance);
+
+          expect(scrollByLocationHandler).not.toBeCalled();
+        });
+
+        test.each([20, -20])('scrollBy(%o), distance as number, pass info to strategy handler', (distance) => {
+          const viewModel = new Scrollable({ useNative, direction });
+
+          const scrollByLocationHandler = jest.fn();
+          Object.defineProperties(viewModel, {
+            scrollableRef: {
+              get() { return { scrollByLocation: scrollByLocationHandler }; },
+            },
+          });
+
+          viewModel.scrollBy(distance);
+
+          const expectedDistance = { top: distance, left: distance };
+          if (direction === DIRECTION_VERTICAL) {
+            expectedDistance.left = 0;
+          }
+          if (direction === DIRECTION_HORIZONTAL) {
+            expectedDistance.top = 0;
+          }
+          expect(scrollByLocationHandler).toBeCalledTimes(1);
+          expect(scrollByLocationHandler).toBeCalledWith(expectedDistance);
+        });
+
+        test.each([
+          { top: 20, left: 15 }, { top: -20, left: -15 },
+          { y: 20, x: 15 }, { y: -20, x: -15 },
+        ])('scrollBy(%o), distance as full object, pass info to strategy handler', (distance) => {
+          const viewModel = new Scrollable({ useNative, direction });
+
+          const scrollByLocationHandler = jest.fn();
+          Object.defineProperties(viewModel, {
+            scrollableRef: {
+              get() { return { scrollByLocation: scrollByLocationHandler }; },
+            },
+          });
+
+          viewModel.scrollBy(distance);
+
+          const expectedDistance = {
+            top: distance.top ?? distance.y,
+            left: distance.left ?? distance.x,
+          };
+
+          expect(scrollByLocationHandler).toBeCalledTimes(1);
+          expect(scrollByLocationHandler).toBeCalledWith(expectedDistance);
+        });
+
+        test.each([
+          { top: 20 }, { left: 15 }, { top: -20 }, { left: -15 },
+          { y: 20 }, { x: 15 }, { y: -20 }, { x: -15 },
+        ])('scrollBy(%o), distance as partial object, pass info to strategy handler', (distance) => {
+          const viewModel = new Scrollable({ useNative, direction });
+
+          const scrollByLocationHandler = jest.fn();
+          Object.defineProperties(viewModel, {
+            scrollableRef: {
+              get() { return { scrollByLocation: scrollByLocationHandler }; },
+            },
+          });
+
+          viewModel.scrollBy(distance);
+
+          const expectedDistance = {
+            top: distance.top ?? distance.y ?? 0,
+            left: distance.left ?? distance.x ?? 0,
+          };
+
+          expect(scrollByLocationHandler).toBeCalledTimes(1);
+          expect(scrollByLocationHandler).toBeCalledWith(expectedDistance);
+        });
+
+        const vertical = direction === DIRECTION_VERTICAL || direction === DIRECTION_BOTH;
+        const horizontal = direction === DIRECTION_HORIZONTAL || direction === DIRECTION_BOTH;
+
+        each([
+          [{ top: 30, left: 20 }, undefined, { top: 0, left: 0 }],
+          [{ top: 30, left: 20 }, null, { top: 0, left: 0 }],
+          [{ top: 30, left: 20 }, {}, { top: 0, left: 0 }],
+          [{ top: 30, left: 20 }, 0, { top: vertical ? -30 : 0, left: horizontal ? -20 : 0 }],
+          [{ top: 30, left: 20 }, 20, { top: vertical ? -10 : 0, left: 0 }],
+          [{ top: 30, left: 20 }, 50, { top: vertical ? 20 : 0, left: horizontal ? 30 : 0 }],
+          [{ top: 50, left: 50 }, -100, { top: vertical ? -150 : 0, left: horizontal ? -150 : 0 }],
+          [{ top: 30, left: 20 }, { top: 10 }, { top: -20, left: 0 }],
+          [{ top: 30, left: 20 }, { left: 10 }, { top: 0, left: -10 }],
+          [{ top: 30, left: 20 }, { y: 40 }, { top: 10, left: 0 }],
+          [{ top: 30, left: 20 }, { x: 40 }, { top: 0, left: 20 }],
+          [{ top: 30, left: 20 }, { top: 10, left: 15 }, { top: -20, left: -5 }],
+          [{ top: 30, left: 20 }, { y: 10, x: 15 }, { top: -20, left: -5 }],
+          [{ top: 15, left: 5 }, { top: 40, left: 40 }, { top: 25, left: 35 }],
+
+        ]).describe('initialOffset: %o,', (initialOffset, scrollToValue, expectedScrollByArg) => {
+          it(`scrollTo(${scrollToValue}), calculate correct offset to targetElement and pass it to scrollBy() method`, () => {
+            const viewModel = new Scrollable({ useNative, direction });
+
+            viewModel.scrollBy = jest.fn();
+
+            const currentContentOffset = {
+              scrollTop: initialOffset.top,
+              scrollLeft: initialOffset.left,
+            };
+            viewModel.scrollOffset = () => ({
+              top: currentContentOffset.scrollTop,
+              left: currentContentOffset.scrollLeft,
+            });
+            viewModel.container = () => ({ ...currentContentOffset } as any);
+
+            viewModel.scrollTo(scrollToValue);
+
+            expect(viewModel.scrollBy).toBeCalledTimes(1);
+            expect(viewModel.scrollBy).toBeCalledWith(expectedScrollByArg);
+          });
+        });
+      });
     });
   });
 
