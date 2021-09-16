@@ -102,7 +102,7 @@ class Submenu extends ContextMenu {
         const position = {
             of: $submenu
         };
-        const containerOffset = arg.initialPosition;
+        const containerOffset = arg.position;
         const vLocation = containerOffset.v.location;
         const hLocation = containerOffset.h.location;
         const rootOffset = $rootItem.offset();

@@ -1910,14 +1910,14 @@ QUnit.module('positioning', {
             assert.deepEqual(visualPositionAfterFullScreen, visualPositionBeforeFullScreen, 'visual position was not changed');
         });
 
-        QUnit.test('fullScreen option change to true should trigger positioned event', function(assert) {
-            const positionedHandlerStub = sinon.stub();
-            this.popup.on('positioned', positionedHandlerStub);
+        QUnit.test('fullScreen option change to true should trigger visualPositionChanged event', function(assert) {
+            const visualPositionChangedHandlerStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedHandlerStub);
 
             this.popup.option('fullScreen', true);
 
-            assert.ok(positionedHandlerStub.calledOnce, 'positioned event is raised');
-            assert.deepEqual(positionedHandlerStub.getCall(0).args[0].position, { top: 0, left: 0 }, 'parameter is correct');
+            assert.ok(visualPositionChangedHandlerStub.calledOnce, 'visualPositionChanged event is raised');
+            assert.deepEqual(visualPositionChangedHandlerStub.getCall(0).args[0].position, { top: 0, left: 0 }, 'parameter is correct');
         });
 
         [{ onFullScreenDisable: true }, { always: true }].forEach(restorePosition => {
@@ -1961,71 +1961,71 @@ QUnit.module('positioning', {
         }
     }, () => {
         QUnit.test('dragEnd should trigger positioned event with correct parameters', function(assert) {
-            const positionedStub = sinon.stub();
-            this.popup.on('positioned', positionedStub);
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
             this.drag();
             const { left, top } = this.getPosition();
 
-            assert.ok(positionedStub.calledOnce, 'positioned event was raised');
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
 
-            const args = positionedStub.getCall(0).args[0];
+            const args = visualPositionChangedStub.getCall(0).args[0];
             assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
             assert.strictEqual(args.event.type, 'dxdragend', 'event parameter is correct');
         });
 
-        QUnit.test('drag using kbn should raise positioned event with correct parameters', function(assert) {
-            const positionedStub = sinon.stub();
-            this.popup.on('positioned', positionedStub);
+        QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
             this.keyboard = keyboardMock(this.$overlayContent);
             this.keyboard.press('down');
             const { left, top } = this.getPosition();
 
-            assert.ok(positionedStub.calledOnce, 'positioned event was raised');
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
 
-            const args = positionedStub.getCall(0).args[0];
+            const args = visualPositionChangedStub.getCall(0).args[0];
             assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
             assert.strictEqual(args.event.type, 'keydown', 'event parameter is correct');
         });
 
-        QUnit.test('resizeEnd should trigger positioned event with correct parameters', function(assert) {
-            const positionedStub = sinon.stub();
-            this.popup.on('positioned', positionedStub);
+        QUnit.test('resizeEnd should trigger visualPositionChanged event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
             this.resize();
             const { left, top } = this.getPosition();
 
-            assert.ok(positionedStub.calledOnce, 'positioned event was raised');
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
 
-            const args = positionedStub.getCall(0).args[0];
+            const args = visualPositionChangedStub.getCall(0).args[0];
             assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
             assert.strictEqual(args.event.type, 'dxdragend', 'event parameter type is correct');
             assert.strictEqual(args.event.target, this.$resizeHandle.get(0), 'event parameter target is correct');
         });
 
-        QUnit.test('fullScrren change after drag should trigger positioned event with correct parameters', function(assert) {
-            const positionedStub = sinon.stub();
-            this.popup.on('positioned', positionedStub);
+        QUnit.test('fullScrren change after drag should trigger visualPositionChanged event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
             this.drag();
             const { left, top } = this.getPosition();
 
             this.popup.option('fullScreen', true);
-            assert.deepEqual(positionedStub.getCall(1).args[0].position, { top: 0, left: 0 }, 'position parameter is correct after change to true');
+            assert.deepEqual(visualPositionChangedStub.getCall(1).args[0].position, { top: 0, left: 0 }, 'position parameter is correct after change to true');
 
             this.popup.option('fullScreen', false);
-            assert.deepEqual(positionedStub.getCall(2).args[0].position, { top, left }, 'position parameter is correct after change to false');
+            assert.deepEqual(visualPositionChangedStub.getCall(2).args[0].position, { top, left }, 'position parameter is correct after change to false');
         });
 
-        QUnit.test('position change should not trigger positioned event if fullScreen=true', function(assert) {
+        QUnit.test('position change should not trigger visualPositionChanged event if fullScreen=true', function(assert) {
             this.popup.option('fullScreen', true);
 
-            const positionedStub = sinon.stub();
-            this.popup.on('positioned', positionedStub);
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
             this.popup.option('position', { of: '#container' });
-            assert.ok(positionedStub.notCalled, 'positioned event is not called');
+            assert.ok(visualPositionChangedStub.notCalled, 'visualPositionChanged event is not called');
         });
 
         QUnit.test('restorePosition option runtime change', function(assert) {

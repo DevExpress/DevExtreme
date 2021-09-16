@@ -49,7 +49,7 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const RTL_DIRECTION_CLASS = 'dx-rtl';
 
-const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'];
+const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd', 'onVisualPositionChanged'];
 
 const OVERLAY_STACK = [];
 
@@ -935,6 +935,7 @@ const Overlay = Widget.inherit({
             $content: this._$content,
             $wrapper: this._$wrapper,
             onPositioned: this._actions.onPositioned,
+            onVisualPositionChanged: this._actions.onVisualPositionChanged,
             restorePosition,
             dragAndResizeArea,
             dragOutsideBoundary,

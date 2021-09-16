@@ -49,7 +49,7 @@ class OverlayPositionController {
     constructor({
         position, target, container,
         $root, $content, $wrapper,
-        onPositioned,
+        onPositioned, onVisualPositionChanged,
         dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
         restorePosition,
         _fixWrapperPosition
@@ -62,10 +62,11 @@ class OverlayPositionController {
             dragAndResizeArea,
             outsideDragFactor,
             restorePosition,
+            onPositioned,
+            onVisualPositionChanged,
             _fixWrapperPosition
         };
 
-        this._onPositioned = onPositioned;
         this._$root = $root;
         this._$content = $content;
         this._$wrapper = $wrapper;
@@ -181,7 +182,7 @@ class OverlayPositionController {
 
     detectVisualPositionChange(event) {
         this._updateVisualPositionValue();
-        this._raisePositionedEvent(event);
+        this._raisePositionedEvents(event);
     }
 
     positionContent() {
@@ -223,21 +224,24 @@ class OverlayPositionController {
         this.detectVisualPositionChange();
     }
 
-    _raisePositionedEvent(event) {
+    _raisePositionedEvents(event) {
         const previousPosition = this._previousVisualPosition;
         const newPosition = this._visualPosition;
 
-        const isPositionChanged = previousPosition?.top !== newPosition.top
+        const isVisualPositionChanged = previousPosition?.top !== newPosition.top
             || previousPosition?.left !== newPosition.left;
 
-        if(isPositionChanged) {
-            this._onPositioned({
-                previousPosition,
+        if(isVisualPositionChanged) {
+            this._props.onVisualPositionChanged({
+                previousPosition: previousPosition,
                 position: newPosition,
-                initialPosition: this._initialPosition,
                 event
             });
         }
+
+        this._props.onPositioned({
+            position: this._initialPosition
+        });
     }
 
     _updateOutsideDragFactor() {
