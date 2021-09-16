@@ -604,7 +604,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.virtualScrollingDispatcher = null;
         }
 
-        this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this);
+        this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
         this.renderer = new VirtualScrollingRenderer(this);
     }
 
@@ -2180,6 +2180,29 @@ class SchedulerWorkSpace extends WidgetObserver {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    _getVirtualScrollingDispatcherOptions() {
+        return {
+            getCellHeight: this.getCellHeight.bind(this),
+            getCellWidth: this.getCellWidth.bind(this),
+            getCellMinWidth: this.getCellMinWidth.bind(this),
+            isRTL: this._isRTL.bind(this),
+            getSchedulerHeight: () => this.option('schdulerHeight'),
+            getSchedulerWidth: () => this.option('schedulerWidth'),
+            getViewHeight: () => this.$element().height(),
+            getViewWidth: () => this.$element().width(),
+            getScrolling: () => this.option('scrolling'),
+            getScrollableOuterWidth: this.getScrollableOuterWidth.bind(this),
+            getScrollable: this.getScrollable.bind(this),
+            createAction: this._createAction.bind(this),
+            updateRender: this.updateRender.bind(this),
+            updateGrid: this.updateGrid.bind(this),
+            getGroupCount: this._getGroupCount.bind(this),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace.bind(this),
+            getTotalRowCount: this._getTotalRowCount.bind(this),
+            getTotalCellCount: this._getTotalCellCount.bind(this),
+        };
     }
 
     _cleanWorkSpace() {
