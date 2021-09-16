@@ -612,7 +612,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                     return 30;
                 }
             },
-            getCellHeight: () => 50
+            cellHeight: 50
         });
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 

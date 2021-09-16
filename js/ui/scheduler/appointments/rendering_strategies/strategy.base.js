@@ -30,10 +30,10 @@ class BaseRenderingStrategy {
     get startDayHour() { return this.options.startDayHour; }
     get endDayHour() { return this.options.endDayHour; }
     get maxAppointmentsPerCell() { return this.options.maxAppointmentsPerCell; }
-    get cellWidth() { return this.options.getCellWidth(); }
-    get cellHeight() { return this.options.getCellHeight(); }
-    get allDayHeight() { return this.options.getAllDayHeight(); }
-    get resizableStep() { return this.options.getResizableStep(); }
+    get cellWidth() { return this.options.cellWidth; }
+    get cellHeight() { return this.options.cellHeight; }
+    get allDayHeight() { return this.options.allDayHeight; }
+    get resizableStep() { return this.options.resizableStep; }
     get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
     get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
     get viewStartDayHour() { return this.options.viewStartDayHour; }

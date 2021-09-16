@@ -142,6 +142,7 @@ class SchedulerAgenda extends WorkSpace {
     _renderView() {
         this._startViewDate = this._calculateStartViewDate();
         this._rows = [];
+        this._initPositionHelper();
     }
 
     _recalculateAgenda(rows) {
