@@ -157,6 +157,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
 
 import {
   tasks,
@@ -249,8 +250,10 @@ export default {
       } else {
         dataRange = dataRangeMode;
       }
-      this.gantt.exportToPdf({
-        createDocumentMethod: jsPDF,
+      exportGanttToPdf({
+        component: this.gantt,
+        // eslint-disable-next-line new-cap
+        createDocumentMethod: (args) => new jsPDF(args),
         format,
         landscape: isLandscape,
         exportMode,

@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxGanttComponent, DxGanttModule, DxSelectBoxModule, DxCheckBoxModule, DxNumberBoxModule, DxDateBoxModule } from 'devextreme-angular';
-
+import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
 import { Service, Task, Dependency, Resource, ResourceAssignment } from './app.service';
 
 import { jsPDF } from 'jspdf';
@@ -71,7 +71,7 @@ export class AppComponent {
         const gantt = this.gantt.instance;  
         const format = this.formatBoxValue.toLowerCase();
         const isLandscape = this.landscapeCheckBoxValue;
-        const exportMode = this.exportModeBoxValue === "Tree List" ? "treeList" : this.exportModeBoxValue.toLowerCase();
+        const exportMode = this.getExportMode();
         const dataRangeMode = this.dateRangeBoxValue.toLowerCase();
         let dataRange;
         if(dataRangeMode === 'custom') {
@@ -85,15 +85,25 @@ export class AppComponent {
         else {
             dataRange = dataRangeMode
         }
-        gantt.exportToPdf(
+        exportGanttToPdf(
             {
-                createDocumentMethod: jsPDF,
+                component: gantt,
+                createDocumentMethod: (args?: any) => new jsPDF(args),
                 format: format,
                 landscape: isLandscape,
                 exportMode: exportMode,
                 dateRange: dataRange
             }            
         ).then(doc => doc.save('gantt.pdf'));
+    }
+    getExportMode() {
+        if(this.exportModeBoxValue === "Tree List")
+            return 'treeList';
+        if(this.exportModeBoxValue === "All")
+            return 'all';
+        if(this.exportModeBoxValue === "Chart")
+            return 'chart';
+        return 'all';
     }
     onDateRangeBoxSelectionChanged(e) {
         this.customRangeDisabled = e.value !== "Custom";

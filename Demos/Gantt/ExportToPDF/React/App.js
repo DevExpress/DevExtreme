@@ -8,6 +8,8 @@ import {
   Gantt, Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item,
 } from 'devextreme-react/gantt';
 
+import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
+
 import { jsPDF } from 'jspdf';
 import {
   tasks, dependencies, resources, resourceAssignments,
@@ -204,9 +206,11 @@ class App extends React.Component {
     } else {
       dataRange = dataRangeMode;
     }
-    gantt.exportToPdf(
+    exportGanttToPdf(
       {
-        createDocumentMethod: jsPDF,
+        component: gantt,
+        // eslint-disable-next-line new-cap
+        createDocumentMethod: (args) => new jsPDF(args),
         format,
         landscape: isLandscape,
         exportMode,
