@@ -354,11 +354,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.containerRef.current![this.fullScrollInactiveProp] = 0;
   }
 
-  @Effect() updateElementDimensions(): void {
-    this.setContainerDimensions(this.containerRef.current!);
-    this.setContentDimensions(this.contentRef.current!);
-  }
-
   @Effect({ run: 'once' })
   disposeHideScrollbarTimer(): DisposeEffectReturn {
     return (): void => this.clearHideScrollbarTimer();
@@ -608,6 +603,11 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   get fullScrollInactiveProp(): 'scrollLeft' | 'scrollTop' {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
+  }
+
+  updateElementDimensions(): void {
+    this.setContentDimensions(this.contentRef.current!);
+    this.setContainerDimensions(this.containerRef.current!);
   }
 
   setContainerDimensions(containerEl: HTMLDivElement): void {
