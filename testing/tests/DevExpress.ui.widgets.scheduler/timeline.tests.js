@@ -519,7 +519,6 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 
         QUnit.module(moduleDescription, {
             beforeEach: function() {
-                this.clock = sinon.useFakeTimers();
                 this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
                     currentDate: new Date(2015, 9, 16),
                     focusStateEnabled: true,
@@ -532,9 +531,6 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                     renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
                 }).dxSchedulerTimelineMonth('instance');
-            },
-            afterEach: function() {
-                this.clock.restore();
             }
         }, () => {
             QUnit.test('Timeline should select/unselect cells with shift & arrows', function(assert) {

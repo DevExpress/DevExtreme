@@ -1254,36 +1254,30 @@ QUnit.module('Expand/Collapse rows', () => {
         // arrange
         $('#treeList').css('max-height', 400);
 
-        const clock = sinon.useFakeTimers();
         const done = assert.async();
 
-        try {
-            const treeList = createTreeList({
-                loadingTimeout: null,
-                scrolling: {
-                    mode: 'virtual',
-                    useNative: false
-                },
-                dataSource: generateData(100)
-            });
+        const treeList = createTreeList({
+            loadingTimeout: null,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            dataSource: generateData(100)
+        });
 
-            treeList.getScrollable().scrollTo({ y: 1000 });
+        treeList.getScrollable().scrollTo({ y: 1000 });
+
+        setTimeout(function() {
+            // act
+            treeList.expandRow(69);
 
             setTimeout(function() {
-                // act
-                treeList.expandRow(69);
+                // assert
+                assert.ok($(treeList.element()).find('.dx-treelist-rowsview .dx-scrollbar-vertical > .dx-scrollable-scroll').position().top > 0, 'scrollbar position top');
+                done();
+            }, 310);
+        });
 
-                setTimeout(function() {
-                    // assert
-                    assert.ok($(treeList.element()).find('.dx-treelist-rowsview .dx-scrollbar-vertical > .dx-scrollable-scroll').position().top > 0, 'scrollbar position top');
-                    done();
-                }, 310);
-                clock.tick(310);
-            });
-            clock.tick();
-        } finally {
-            clock.restore();
-        }
     });
 
     // T692068

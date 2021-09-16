@@ -96,8 +96,7 @@ QUnit.test('support pageup and pagedown', function(assert) {
     $scrollable.children().height(1000);
 
     $scrollable.dxScrollable({
-        useNative: false,
-        showScrollbar: 'always'
+        useNative: false
     });
 
     const scrollable = $scrollable.dxScrollable('instance');

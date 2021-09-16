@@ -1846,6 +1846,8 @@ QUnit.module('Horizontal direction. RTL', {
         assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(0).offset().left + $sortable.find('.test-item').eq(0).outerWidth(true), 1);
         assert.ok(indicator.hasClass('dx-position-indicator-last'));
     });
+
+
 });
 
 QUnit.module('Scroll group content', {

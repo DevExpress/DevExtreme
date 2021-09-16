@@ -3921,8 +3921,6 @@ testModule('scrollable interaction', {
     });
 
     test('scroll event prevented on overlay', function(assert) {
-        const clock = sinon.useFakeTimers();
-
         assert.expect(1);
 
         const $overlay = $($('#overlay').dxOverlay());
@@ -3931,43 +3929,37 @@ testModule('scrollable interaction', {
         $overlay.dxOverlay('option', 'visible', true);
         const $content = $($overlay.dxOverlay('$content')).append($scrollable);
 
-        try {
+        $scrollable.dxScrollable({
+            useNative: false,
+            bounceEnabled: false,
+            direction: 'vertical',
+            inertiaEnabled: false
+        });
 
-            $scrollable.dxScrollable({
-                useNative: false,
-                bounceEnabled: false,
-                direction: 'vertical',
-                inertiaEnabled: false
-            });
+        const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
 
-            const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
+        $($overlayWrapper).on('dxdrag.TEST', {
+            getDirection: function() { return 'both'; },
+            validate: function() { return true; }
+        }, function(e) {
+            assert.ok(e.isDefaultPrevented(), 'scroll event prevented');
+        });
 
-            $($overlayWrapper).on('dxdrag.TEST', {
-                getDirection: function() { return 'both'; },
-                validate: function() { return true; }
-            }, function(e) {
-                assert.ok(e.isDefaultPrevented(), 'scroll event prevented');
-            });
+        $($overlayWrapper.parent()).on('dxdrag.TEST', {
+            getDirection: function() { return 'both'; },
+            validate: function() { return true; }
+        }, function() {
+            assert.ok(false, 'scroll should not be fired');
+        });
 
-            $($overlayWrapper.parent()).on('dxdrag.TEST', {
-                getDirection: function() { return 'both'; },
-                validate: function() { return true; }
-            }, function() {
-                assert.ok(false, 'scroll should not be fired');
-            });
+        pointerMock($scrollable.find('.dx-scrollable-container'))
+            .start()
+            .wheel(10);
 
-            pointerMock($scrollable.find('.dx-scrollable-container'))
-                .start()
-                .wheel(10);
-
-            $overlayWrapper
-                .off('.TEST')
-                .parent()
-                .off('.TEST');
-
-        } finally {
-            clock.restore();
-        }
+        $overlayWrapper
+            .off('.TEST')
+            .parent()
+            .off('.TEST');
     });
 
     // T886654

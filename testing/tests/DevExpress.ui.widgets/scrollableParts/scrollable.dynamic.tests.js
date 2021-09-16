@@ -536,18 +536,22 @@ QUnit.test('velocity calculated correctly when content height less than containe
 });
 
 QUnit.test('window resize should call update', function(assert) {
-    assert.expect(isRenovation ? 1 : 2);
+    assert.expect(1);
 
     const $scrollable = $('#scrollable');
 
+    const updateHandler = sinon.spy();
+
     $scrollable.dxScrollable({
         useNative: true,
-        onUpdated: function() {
-            assert.ok(true, 'update fired');
-        }
+        onUpdated: updateHandler
     });
 
+    updateHandler.reset();
+
     resizeCallbacks.fire();
+
+    assert.equal(updateHandler.callCount, 1, 'onUpdate handler was fired once');
 });
 
 QUnit.test('scrollable should have correct scrollPosition when content is not cropped by overflow hidden', function(assert) {
