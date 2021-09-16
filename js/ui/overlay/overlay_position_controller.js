@@ -123,7 +123,8 @@ class OverlayPositionController {
     }
 
     restorePositionOnNextRender(value) {
-        this._shouldRenderContentInitialPosition = value;
+        // NOTE: no visual position means it's a first render
+        this._shouldRenderContentInitialPosition = value || !this._visualPosition;
     }
 
     openingHandled() {
