@@ -352,6 +352,7 @@ class PopupPositionController extends OverlayPositionController {
 
             if(!this._shouldRenderContentInitialPosition && this._lastPositionBeforeFullScreen) {
                 move(this._$content, this._lastPositionBeforeFullScreen);
+                this._lastPositionBeforeFullScreen = undefined;
                 this.detectVisualPositionChange();
             } else {
                 super.positionContent();

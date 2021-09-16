@@ -1988,6 +1988,18 @@ QUnit.module('positioning', {
             this.init();
         }
     }, () => {
+        QUnit.test('popup should not restore position on rerender after fullScreen changed to false', function(assert) {
+            this.popup.option('fullScreen', true);
+            this.popup.option('fullScreen', false);
+            this.drag();
+
+            const expectedPosition = this.getPosition();
+            this.popup.option('height', 'auto');
+
+            const position = this.getPosition();
+            assert.deepEqual(position, expectedPosition, 'visual position was not changed');
+        });
+
         QUnit.test('dragEnd should trigger positioned event with correct parameters', function(assert) {
             const visualPositionChangedStub = sinon.stub();
             this.popup.on('visualPositionChanged', visualPositionChangedStub);
