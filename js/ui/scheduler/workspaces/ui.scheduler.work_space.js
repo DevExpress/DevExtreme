@@ -2188,7 +2188,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             getCellWidth: this.getCellWidth.bind(this),
             getCellMinWidth: this.getCellMinWidth.bind(this),
             isRTL: this._isRTL.bind(this),
-            getSchedulerHeight: () => this.option('schdulerHeight'),
+            getSchedulerHeight: () => this.option('schedulerHeight'),
             getSchedulerWidth: () => this.option('schedulerWidth'),
             getViewHeight: () => this.$element().height(),
             getViewWidth: () => this.$element().width(),
