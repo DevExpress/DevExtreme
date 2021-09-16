@@ -458,11 +458,24 @@ export const AreaItem = Class.inherit({
             height: params.height
         });
 
-        this.groupElement().addClass('dx-virtual-mode');
+        // console.log('!!!!!', this._getAreaName());
+        const scrollable = this._getScrollable();
+
+        if(isDefined(scrollable) && scrollable.isRenovated()) {
+            this._getScrollable().option('classes', 'dx-virtual-mode');
+        } else {
+            this.groupElement().addClass('dx-virtual-mode');
+        }
     },
 
     disableVirtualMode: function() {
-        this.groupElement().removeClass('dx-virtual-mode');
+        const scrollable = this._getScrollable();
+
+        if(isDefined(scrollable) && scrollable.isRenovated()) {
+            this._getScrollable().option('classes', '');
+        } else {
+            this.groupElement().removeClass('dx-virtual-mode');
+        }
     },
 
     _renderVirtualContent: function() {
