@@ -84,7 +84,7 @@ window.config = {
         /** vectormap */
         'devextreme/dist/js/vectormap-data': 'npm:devextreme/dist/js/vectormap-data',
         /**/
-        
+
         'rrule': 'npm:rrule/dist/es5/rrule.js',
         'luxon': 'npm:luxon/build/global/luxon.min.js',
         'es6-object-assign': 'npm:es6-object-assign',
@@ -97,6 +97,7 @@ window.config = {
         'devexpress-gantt': 'npm:devexpress-gantt',
         'devextreme-angular': 'npm:devextreme-angular',
         '@devextreme/vdom': 'npm:@devextreme/vdom',
+        '@devextreme/runtime': 'npm:@devextreme/runtime',
         'inferno': 'npm:inferno/dist/inferno.min.js',
         'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
         'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
@@ -138,6 +139,7 @@ window.config = {
     },
     packageConfigPaths: [
         "npm:@devextreme/*/package.json",
+        "npm:@devextreme/runtime/inferno/package.json",
         "npm:@angular/*/package.json",
         "npm:@angular/common/*/package.json",
         "npm:rxjs/package.json",
