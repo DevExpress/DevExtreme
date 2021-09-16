@@ -12,6 +12,14 @@ async function createComponent(
   return createWidget(componentName, componentOptions, true, selector);
 }
 
+async function setTheme(theme: string): Promise<void> {
+  if (theme === 'material') {
+    await changeTheme('material.blue.light');
+  } else {
+    await changeTheme('generic.light');
+  }
+}
+
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
 const themes = ['generic', 'material'];
@@ -38,9 +46,7 @@ components.forEach((component) => {
     stylingMods.forEach((stylingMode) => {
       themes.forEach((theme) => {
         test(`Label for ${component} labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
-          if (theme === 'material') {
-            await changeTheme('material.blue.light');
-          }
+          await setTheme(theme);
 
           const componentOption = {
             labelMode,
@@ -67,9 +73,7 @@ components.forEach((component) => {
 
 themes.forEach((theme) => {
   test('Label scroll input dxTextArea', async (t) => {
-    if (theme === 'material') {
-      await changeTheme('material.blue.light');
-    }
+    await setTheme(theme);
 
     await createWidget('dxTextArea',
       {
@@ -82,5 +86,40 @@ themes.forEach((theme) => {
     await t.scroll(Selector('.dx-texteditor-input'), 0, 15);
 
     await t.expect(await compareScreenshot(t, `label-scroll-text-area-${theme}.png`)).ok();
+  });
+});
+
+stylingMods.forEach((stylingMode) => {
+  themes.forEach((theme) => {
+    test(`Label for dxTagBox ${theme} stylingMode=${stylingMode}`, async (t) => {
+      await setTheme(theme);
+
+      const componentOption = {
+        width: 300,
+        label: 'label text',
+        items: [...Array(10)].map((_, i) => `item${i}`),
+        value: [...Array(5)].map((_, i) => `item${i}`),
+        stylingMode,
+      };
+
+      await createWidget('dxTagBox', {
+        ...componentOption,
+        multiline: false,
+      }, true);
+
+      await createWidget('dxTagBox', {
+        ...componentOption,
+        multiline: true,
+      }, true, '#otherContainer');
+      await t.click('#otherContainer');
+
+      await t.expect(await compareScreenshot(t, `label-tag-box-${theme}-styleMode=${stylingMode}.png`)).ok();
+    }).before(async () => {
+      await ClientFunction(() => {
+        $('#otherContainer').css({
+          'margin-top': '20px',
+        });
+      })();
+    });
   });
 });
