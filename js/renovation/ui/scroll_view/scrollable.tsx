@@ -292,6 +292,12 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     }
   }
 
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  isRenovated(): boolean {
+    return true;
+  }
+
   validate(event: DxMouseEvent): boolean {
     return this.scrollableRef.validate(event) as boolean;
   }
