@@ -1177,6 +1177,7 @@ const Form = Widget.inherit({
         return this.$element().find('.' + FIELD_ITEM_CONTENT_CLASS + ' [tabindex]').first();
     },
 
+    // TODO. Deleting this method causes the DataGrid.editing test error.
     _visibilityChanged: function() {},
 
     _dispose: function() {
