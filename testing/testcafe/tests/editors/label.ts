@@ -14,6 +14,7 @@ async function createComponent(
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
+const themes = ['generic', 'material'];
 
 const shortOption = {
   width: 100,
@@ -35,9 +36,9 @@ const components: WidgetName[] = ['dxTextBox', 'dxTextArea', 'dxSelectBox'];
 components.forEach((component) => {
   labelMods.forEach((labelMode) => {
     stylingMods.forEach((stylingMode) => {
-      [false, true].forEach((isMaterialTheme) => {
-        test(`Label for ${component} labelMode=${labelMode} stylingMode=${stylingMode} material=${isMaterialTheme}`, async (t) => {
-          if (isMaterialTheme) {
+      themes.forEach((theme) => {
+        test(`Label for ${component} labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
+          if (theme === 'material') {
             await changeTheme('material.blue.light');
           }
 
@@ -51,7 +52,7 @@ components.forEach((component) => {
           await createComponent(component, { ...componentOption, ...longOption }, '#otherContainer');
           await t.click('#otherContainer');
 
-          await t.expect(await compareScreenshot(t, `label-${component}-labelMode=${labelMode}-stylingMode=${stylingMode}-material=${isMaterialTheme}.png`)).ok();
+          await t.expect(await compareScreenshot(t, `label-${component}-labelMode=${labelMode}-stylingMode=${stylingMode}-${theme}.png`)).ok();
         }).before(async () => {
           await ClientFunction(() => {
             $('#otherContainer').css({
@@ -64,9 +65,9 @@ components.forEach((component) => {
   });
 });
 
-[false, true].forEach((isMaterialTheme) => {
+themes.forEach((theme) => {
   test('Label scroll input dxTextArea', async (t) => {
-    if (isMaterialTheme) {
+    if (theme === 'material') {
       await changeTheme('material.blue.light');
     }
 
@@ -80,6 +81,6 @@ components.forEach((component) => {
 
     await t.scroll(Selector('.dx-texteditor-input'), 0, 15);
 
-    await t.expect(await compareScreenshot(t, `label-scroll-text-area-material=${isMaterialTheme}.png`)).ok();
+    await t.expect(await compareScreenshot(t, `label-scroll-text-area-${theme}.png`)).ok();
   });
 });
