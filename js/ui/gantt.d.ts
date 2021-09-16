@@ -365,7 +365,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @type object
      * @public
      */
      sorting?: dxGanttSorting;
