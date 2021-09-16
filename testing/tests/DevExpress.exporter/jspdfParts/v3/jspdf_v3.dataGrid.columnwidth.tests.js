@@ -398,6 +398,7 @@ const JSPdfColumnWidthsTests = {
                 const doc = createMockPdfDoc();
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     wordWrapEnabled: true,
                     columns: [
                         { caption: 'Band1 long line 1 ling line 2', columns: [ 'f1', 'f2', 'f3' ] }
@@ -408,25 +409,25 @@ const JSPdfColumnWidthsTests = {
                 const expectedLog = [
                     'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle}',
                     'text,F1,0,42.6,{baseline:middle}',
-                    'text,F2,198.424,42.6,{baseline:middle}',
-                    'text,F3,396.847,42.6,{baseline:middle}',
+                    'text,F2,198.427,42.6,{baseline:middle}',
+                    'text,F3,396.853,42.6,{baseline:middle}',
                     'text,f1_1 line,0,61,{baseline:middle}',
-                    'text,f2_1 line long line long line,198.424,61,{baseline:middle}',
-                    'text,f3,396.847,61,{baseline:middle}',
+                    'text,f2_1 line long line long line,198.427,61,{baseline:middle}',
+                    'text,f3,396.853,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4',
                     'setLineWidth,1',
-                    'rect,0,33.4,198.424,18.4',
+                    'rect,0,33.4,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,33.4,198.424,18.4',
+                    'rect,198.427,33.4,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,33.4,198.433,18.4',
+                    'rect,396.853,33.4,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,0,51.8,198.424,18.4',
+                    'rect,0,51.8,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,51.8,198.424,18.4',
+                    'rect,198.427,51.8,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,51.8,198.433,18.4'
+                    'rect,396.853,51.8,198.427,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
@@ -440,6 +441,7 @@ const JSPdfColumnWidthsTests = {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
                 const dataGrid = createDataGrid({
+                    width: 600,
                     wordWrapEnabled: true,
                     columns: [
                         { caption: 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9', dataField: 'f1' },
@@ -466,29 +468,29 @@ const JSPdfColumnWidthsTests = {
 
                 const expectedLog = [
                     'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,24.2,{baseline:middle}',
-                    'text,Band1 line,198.424,30.333,{baseline:middle}',
-                    'text,Band1_2,198.424,79.4,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,396.847,67.133,{baseline:middle}',
-                    'text,f3,198.424,146.867,{baseline:middle}',
+                    'text,Band1 line,198.427,30.333,{baseline:middle}',
+                    'text,Band1_2,198.427,79.4,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,396.853,67.133,{baseline:middle}',
+                    'text,f3,198.427,146.867,{baseline:middle}',
                     'text,f1_1,0,189.8,{baseline:middle}',
-                    'text,f3_1,198.424,189.8,{baseline:middle}',
-                    'text,f4_1,396.847,189.8,{baseline:middle}',
+                    'text,f3_1,198.427,189.8,{baseline:middle}',
+                    'text,f4_1,396.853,189.8,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,15,198.424,165.6',
+                    'rect,0,15,198.427,165.6',
                     'setLineWidth,1',
-                    'rect,198.424,15,396.856,30.667',
+                    'rect,198.427,15,396.853,30.667',
                     'setLineWidth,1',
-                    'rect,198.424,45.667,198.424,67.467',
+                    'rect,198.427,45.667,198.427,67.467',
                     'setLineWidth,1',
-                    'rect,396.847,45.667,198.433,134.933',
+                    'rect,396.853,45.667,198.427,134.933',
                     'setLineWidth,1',
-                    'rect,198.424,113.133,198.424,67.467',
+                    'rect,198.427,113.133,198.427,67.467',
                     'setLineWidth,1',
-                    'rect,0,180.6,198.424,18.4',
+                    'rect,0,180.6,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,180.6,198.424,18.4',
+                    'rect,198.427,180.6,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,180.6,198.433,18.4'
+                    'rect,396.853,180.6,198.427,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -501,6 +503,7 @@ const JSPdfColumnWidthsTests = {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
                 const dataGrid = createDataGrid({
+                    width: 600,
                     wordWrapEnabled: true,
                     columns: [
                         { caption: 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9', dataField: 'f1' },
@@ -527,29 +530,29 @@ const JSPdfColumnWidthsTests = {
 
                 const expectedLog = [
                     'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,24.2,{baseline:middle}',
-                    'text,Band1 line,198.424,24.2,{baseline:middle}',
-                    'text,Band1_2,198.424,70.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,396.847,42.6,{baseline:middle}',
-                    'text,f3,198.424,143.8,{baseline:middle}',
+                    'text,Band1 line,198.427,24.2,{baseline:middle}',
+                    'text,Band1_2,198.427,70.2,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,396.853,42.6,{baseline:middle}',
+                    'text,f3,198.427,143.8,{baseline:middle}',
                     'text,f1_1,0,189.8,{baseline:middle}',
-                    'text,f3_1,198.424,189.8,{baseline:middle}',
-                    'text,f4_1,396.847,189.8,{baseline:middle}',
+                    'text,f3_1,198.427,189.8,{baseline:middle}',
+                    'text,f4_1,396.853,189.8,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,15,198.424,165.6',
+                    'rect,0,15,198.427,165.6',
                     'setLineWidth,1',
-                    'rect,198.424,15,396.856,18.4',
+                    'rect,198.427,15,396.853,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,33.4,198.424,73.6',
+                    'rect,198.427,33.4,198.427,73.6',
                     'setLineWidth,1',
-                    'rect,396.847,33.4,198.433,147.2',
+                    'rect,396.853,33.4,198.427,147.2',
                     'setLineWidth,1',
-                    'rect,198.424,107,198.424,73.6',
+                    'rect,198.427,107,198.427,73.6',
                     'setLineWidth,1',
-                    'rect,0,180.6,198.424,18.4',
+                    'rect,0,180.6,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,180.6,198.424,18.4',
+                    'rect,198.427,180.6,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,180.6,198.433,18.4'
+                    'rect,396.853,180.6,198.427,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -562,6 +565,7 @@ const JSPdfColumnWidthsTests = {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
                 const dataGrid = createDataGrid({
+                    width: 600,
                     wordWrapEnabled: true,
                     columns: [
                         { caption: 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9', dataField: 'f1' },
@@ -588,32 +592,32 @@ const JSPdfColumnWidthsTests = {
 
                 const expectedLog = [
                     'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,33.4,{baseline:middle}',
-                    'text,Band1 line,198.424,24.2,{baseline:middle}',
-                    'text,Band1_2,198.424,51.8,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.847,42.6,{baseline:middle}',
-                    'text,f1_2_3,198.424,88.6,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4,198.424,125.4,{baseline:middle}',
+                    'text,Band1 line,198.427,24.2,{baseline:middle}',
+                    'text,Band1_2,198.427,51.8,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.853,42.6,{baseline:middle}',
+                    'text,f1_2_3,198.427,88.6,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4,198.427,125.4,{baseline:middle}',
                     'text,f1_1,0,208.2,{baseline:middle}',
-                    'text,f3_1_1,198.424,208.2,{baseline:middle}',
-                    'text,f4_1,396.847,208.2,{baseline:middle}',
+                    'text,f3_1_1,198.427,208.2,{baseline:middle}',
+                    'text,f4_1,396.853,208.2,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,15,198.424,184',
+                    'rect,0,15,198.427,184',
                     'setLineWidth,1',
-                    'rect,198.424,15,396.856,18.4',
+                    'rect,198.427,15,396.853,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,33.4,198.424,36.8',
+                    'rect,198.427,33.4,198.427,36.8',
                     'setLineWidth,1',
-                    'rect,396.847,33.4,198.433,165.6',
+                    'rect,396.853,33.4,198.427,165.6',
                     'setLineWidth,1',
-                    'rect,198.424,70.2,198.424,36.8',
+                    'rect,198.427,70.2,198.427,36.8',
                     'setLineWidth,1',
-                    'rect,198.424,107,198.424,92',
+                    'rect,198.427,107,198.427,92',
                     'setLineWidth,1',
-                    'rect,0,199,198.424,18.4',
+                    'rect,0,199,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,199,198.424,18.4',
+                    'rect,198.427,199,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,199,198.433,18.4'
+                    'rect,396.853,199,198.427,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -626,6 +630,7 @@ const JSPdfColumnWidthsTests = {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
                 const dataGrid = createDataGrid({
+                    width: 600,
                     wordWrapEnabled: true,
                     columns: [
                         { caption: 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9', dataField: 'f1' },
@@ -652,32 +657,32 @@ const JSPdfColumnWidthsTests = {
 
                 const expectedLog = [
                     'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,33.4,{baseline:middle}',
-                    'text,Band1 line,198.424,24.2,{baseline:middle}',
-                    'text,Band1_2,198.424,45.667,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.847,42.6,{baseline:middle}',
-                    'text,f1_2_3,198.424,70.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,198.424,94.733,{baseline:middle}',
+                    'text,Band1 line,198.427,24.2,{baseline:middle}',
+                    'text,Band1_2,198.427,45.667,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.853,42.6,{baseline:middle}',
+                    'text,f1_2_3,198.427,70.2,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,198.427,94.733,{baseline:middle}',
                     'text,f1_1,0,208.2,{baseline:middle}',
-                    'text,f3_1_1,198.424,208.2,{baseline:middle}',
-                    'text,f4_1,396.847,208.2,{baseline:middle}',
+                    'text,f3_1_1,198.427,208.2,{baseline:middle}',
+                    'text,f4_1,396.853,208.2,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,15,198.424,184',
+                    'rect,0,15,198.427,184',
                     'setLineWidth,1',
-                    'rect,198.424,15,396.856,18.4',
+                    'rect,198.427,15,396.853,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,33.4,198.424,24.533',
+                    'rect,198.427,33.4,198.427,24.533',
                     'setLineWidth,1',
-                    'rect,396.847,33.4,198.433,165.6',
+                    'rect,396.853,33.4,198.427,165.6',
                     'setLineWidth,1',
-                    'rect,198.424,57.933,198.424,24.533',
+                    'rect,198.427,57.933,198.427,24.533',
                     'setLineWidth,1',
-                    'rect,198.424,82.467,198.424,116.533',
+                    'rect,198.427,82.467,198.427,116.533',
                     'setLineWidth,1',
-                    'rect,0,199,198.424,18.4',
+                    'rect,0,199,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,198.424,199,198.424,18.4',
+                    'rect,198.427,199,198.427,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,199,198.433,18.4'
+                    'rect,396.853,199,198.427,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -881,6 +886,7 @@ const JSPdfColumnWidthsTests = {
                 const doc = createMockPdfDoc();
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     wordWrapEnabled: true,
                     columns: [
                         { dataField: 'f1', groupIndex: 0 },
@@ -896,26 +902,26 @@ const JSPdfColumnWidthsTests = {
 
                 const expectedLog = [
                     'text,F2,0,24.2,{baseline:middle}',
-                    'text,F3,198.423,24.2,{baseline:middle}',
-                    'text,F4,396.847,24.2,{baseline:middle}',
+                    'text,F3,190,24.2,{baseline:middle}',
+                    'text,F4,380,24.2,{baseline:middle}',
                     'text,F1: f1 line long line (Max: f1 line long line),0,42.6,{baseline:middle}',
                     'text,f2 line,10,70.2,{baseline:middle}',
-                    'text,f3 long line long line long\nline,198.423,61,{baseline:middle}',
-                    'text,f4 long line,396.847,70.2,{baseline:middle}',
+                    'text,f3 long line long line long\nline,190,61,{baseline:middle}',
+                    'text,f4 long line,380,70.2,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,15,198.423,18.4',
+                    'rect,0,15,190,18.4',
                     'setLineWidth,1',
-                    'rect,198.423,15,198.423,18.4',
+                    'rect,190,15,190,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,15,198.433,18.4',
+                    'rect,380,15,190,18.4',
                     'setLineWidth,1',
-                    'rect,0,33.4,595.28,18.4',
+                    'rect,0,33.4,570,18.4',
                     'setLineWidth,1',
-                    'rect,10,51.8,188.423,36.8',
+                    'rect,10,51.8,180,36.8',
                     'setLineWidth,1',
-                    'rect,198.423,51.8,198.423,36.8',
+                    'rect,190,51.8,190,36.8',
                     'setLineWidth,1',
-                    'rect,396.847,51.8,198.433,36.8'
+                    'rect,380,51.8,190,36.8'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
@@ -993,6 +999,7 @@ const JSPdfColumnWidthsTests = {
                 const doc = createMockPdfDoc();
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     wordWrapEnabled: true,
                     columns: [
                         { dataField: 'f1', groupIndex: 0 },
@@ -1011,33 +1018,33 @@ const JSPdfColumnWidthsTests = {
 
                 const expectedLog = [
                     'text,F2,0,24.2,{baseline:middle}',
-                    'text,F3,198.423,24.2,{baseline:middle}',
-                    'text,F4,396.847,24.2,{baseline:middle}',
+                    'text,F3,190,24.2,{baseline:middle}',
+                    'text,F4,380,24.2,{baseline:middle}',
                     'text,F1: f1 long line (Max: f1 long line),0,42.6,{baseline:middle}',
-                    'text,f2 very long line very long\nline,10,61,{baseline:middle}',
-                    'text,f3 line,198.423,70.2,{baseline:middle}',
-                    'text,f4 long line,396.847,70.2,{baseline:middle}',
-                    'text,Max: f3 line,198.423,97.8,{baseline:middle}',
+                    'text,f2 very long line very\nlong line,10,61,{baseline:middle}',
+                    'text,f3 line,190,70.2,{baseline:middle}',
+                    'text,f4 long line,380,70.2,{baseline:middle}',
+                    'text,Max: f3 line,190,97.8,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,15,198.423,18.4',
+                    'rect,0,15,190,18.4',
                     'setLineWidth,1',
-                    'rect,198.423,15,198.423,18.4',
+                    'rect,190,15,190,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,15,198.433,18.4',
+                    'rect,380,15,190,18.4',
                     'setLineWidth,1',
-                    'rect,0,33.4,595.28,18.4',
+                    'rect,0,33.4,570,18.4',
                     'setLineWidth,1',
-                    'rect,10,51.8,188.423,36.8',
+                    'rect,10,51.8,180,36.8',
                     'setLineWidth,1',
-                    'rect,198.423,51.8,198.423,36.8',
+                    'rect,190,51.8,190,36.8',
                     'setLineWidth,1',
-                    'rect,396.847,51.8,198.433,36.8',
+                    'rect,380,51.8,190,36.8',
                     'setLineWidth,1',
-                    'rect,10,88.6,188.423,18.4',
+                    'rect,10,88.6,180,18.4',
                     'setLineWidth,1',
-                    'rect,198.423,88.6,198.423,18.4',
+                    'rect,190,88.6,190,18.4',
                     'setLineWidth,1',
-                    'rect,396.847,88.6,198.433,18.4'
+                    'rect,380,88.6,190,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {

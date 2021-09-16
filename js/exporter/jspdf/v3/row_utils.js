@@ -1,7 +1,7 @@
 import { isDefined } from '../../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils_v3';
 
-function calculateColumnsWidths(doc, dataProvider, options) {
+function calculateColumnsWidths(doc, dataProvider, topLeft) {
     const columnsWidths = dataProvider.getColumnsWidths();
     if(!columnsWidths.length) {
         return [];
@@ -11,16 +11,16 @@ function calculateColumnsWidths(doc, dataProvider, options) {
         .reduce((accumulator, width) => accumulator + width);
 
     // TODO: check future orientation, measure units and margins there
-    const pageWidth = doc.internal.pageSize.getWidth() - (options?.topLeft?.x ?? 0);
-    const ratio = pageWidth >= summaryGridWidth
+    const availablePageWidth = doc.internal.pageSize.getWidth() - (topLeft?.x ?? 0);
+    const ratio = availablePageWidth >= summaryGridWidth
         ? 1
-        : pageWidth / summaryGridWidth;
+        : availablePageWidth / summaryGridWidth;
 
     return columnsWidths.map(width => width * ratio);
 }
 
 function initializeCellsWidth(doc, dataProvider, rows, options) {
-    const columnWidths = options?.columnWidths ?? calculateColumnsWidths(doc, dataProvider, options);
+    const columnWidths = options?.columnWidths ?? calculateColumnsWidths(doc, dataProvider, options?.topLeft);
     rows.forEach(row => {
         row.cells.forEach(({ gridCell, pdfCell }, index) => {
             pdfCell._rect.w = columnWidths[index];
