@@ -188,7 +188,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 tailHeight = minHeight;
             }
 
-            currentPartTop += this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
+            const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
+                groupIndex: appointmentSettings.groupIndex,
+                supportAllDayRow: this.allDaySupported(),
+                showAllDayPanel: this.showAllDayPanel
+            });
+
+            currentPartTop += allDayPanelOffset;
 
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
