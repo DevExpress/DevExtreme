@@ -108,6 +108,24 @@ QUnit.test('Proxy Url exportForm generate', function(assert) {
     eventsEngine.trigger = originalTrigger;
 });
 
+QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
+    if(typeUtils.isFunction(window.Blob)) {
+        const _winJSBlobSave = fileSaver._winJSBlobSave;
+        let isCalled = false;
+        try {
+            window.WinJS = {};
+            fileSaver._winJSBlobSave = function() { isCalled = true; };
+
+            fileSaver.saveAs('test', 'EXCEL', [], 'testUrl');
+
+            assert.ok(isCalled);
+        } finally {
+            delete window.WinJS;
+            fileSaver._winJSBlobSave = _winJSBlobSave;
+        }
+    }
+});
+
 QUnit.test('Save base 64 for Safari', function(assert) {
     if(!typeUtils.isFunction(window.Blob)) {
         let exportLinkElementClicked = false;

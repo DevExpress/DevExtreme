@@ -1804,7 +1804,7 @@ QUnit.test('Text with °. On error behavior', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="0" y="0" transform="translate(100,10) rotate(270,100,10)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Temperature, °C</text>' + testingMarkupEnd;
-    const imageBlob = getData(markup, false);
+    const imageBlob = getData(markup);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {
