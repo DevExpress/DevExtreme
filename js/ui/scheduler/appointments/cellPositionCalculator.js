@@ -18,6 +18,9 @@ class BaseStrategy {
     get groupCount() { return this.options.groupCount; }
     get rtlEnabled() { return this.options.rtlEnabled; }
     get isVerticalGrouping() { return this.options.isVerticalOrientation; }
+    get showAllDayPanel() { return this.options.showAllDayPanel; }
+    get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
+    get isVirtualScrolling() { return false; }
 
     calculateCellPositions(groupIndices, isAllDayRowAppointment, isRecurrentAppointment) {
         const result = [];
@@ -90,7 +93,13 @@ class BaseStrategy {
 
         const shift = this.getPositionShift(timeShift, inAllDayRow);
         const horizontalHMax = this.positionHelper.getHorizontalMax(validGroupIndex, date);
-        const verticalMax = this.positionHelper.getVerticalMax(validGroupIndex);
+        const verticalMax = this.positionHelper.getVerticalMax({
+            groupIndex: validGroupIndex,
+            isVirtualScrolling: this.isVirtualScrolling,
+            isShowAllDayPanel: this.showAllDayPanel,
+            isGroupedAllDayPanel: this.isGroupedAllDayPanel,
+            isVerticalGrouped: this.isVerticalGrouped
+        });
 
         return {
             cellPosition: position.left + shift.cellPosition,
@@ -179,6 +188,8 @@ class BaseStrategy {
 }
 
 class VirtualStrategy extends BaseStrategy {
+    get isVirtualScrolling() { return true; }
+
     calculateCellPositions(groupIndices, isAllDayRowAppointment, isRecurrentAppointment) {
         const appointments = isAllDayRowAppointment
             ? this.appointments

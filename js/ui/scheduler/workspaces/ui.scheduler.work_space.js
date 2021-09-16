@@ -1280,10 +1280,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return cellData ? cellData : undefined;
     }
 
-    _getOffsetByAllDayPanel(groupIndex) {
-        return this._groupedStrategy._getOffsetByAllDayPanel(groupIndex);
-    }
-
     _getGroupTop(groupIndex) {
         return this._groupedStrategy._getGroupTop(groupIndex);
     }

@@ -69,7 +69,14 @@ export const getMaxAllowedPosition = (groupIndex, viewDataProvider, isRtlEnabled
     return getMaxAllowedHorizontalPosition(validGroupIndex, viewDataProvider, isRtlEnabled, DOMMetaData);
 };
 
-export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, isShowAllDayPanel, isGroupedAllDayPanel, isVerticalGrouped, DOMMetaData }) => {
+export const getMaxAllowedVerticalPosition = ({
+    groupIndex,
+    viewDataProvider,
+    isShowAllDayPanel,
+    isGroupedAllDayPanel,
+    isVerticalGrouped,
+    DOMMetaData
+}) => {
     const { rowIndex } = viewDataProvider.getLastGroupCellPosition(groupIndex);
     const { dateTableCellsMeta } = DOMMetaData;
     const lastGroupRow = dateTableCellsMeta[rowIndex];
@@ -130,33 +137,42 @@ export const getGroupWidth = (groupIndex, viewDataProvider, options) => {
 
 export class PositionHelper {
     constructor(options) {
+        this.strategy = options.isVerticalGroupedWorkSpace
+            ? new PositionHelperVertical(options)
+            : new PositionHelperHorizontal(options);
+    }
+
+    getHorizontalMax(groupIndex) {
+        return this.strategy.getHorizontalMax(groupIndex);
+    }
+
+    getVerticalMax(options) {
+        return this.strategy.getVerticalMax(options);
+    }
+
+    getResizableStep() {
+        return this.strategy.getResizableStep();
+    }
+}
+
+class PositionHelperBase {
+    constructor(options) {
         this.options = options;
     }
 
-    get key() { return this.options.key; }
     get viewDataProvider() { return this.options.viewDataProvider; }
-    get viewStartDayHour() { return this.options.viewStartDayHour; }
-    get viewEndDayHour() { return this.options.viewEndDayHour; }
-    get cellDuration() { return this.options.cellDuration; }
     get groupedStrategy() { return this.options.groupedStrategy; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
-    get isRtlEnabled() { return this.options.isRtlEnabled; }
-    get startViewDate() { return this.options.startViewDate; }
-    get isVerticalGroupedWorkSpace() { return this.options.isVerticalGroupedWorkSpace; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
     get groupCount() { return this.options.groupCount; }
-    get isVirtualScrolling() { return this.options.isVirtualScrolling; }
     get getDOMMetaData() { return this.options.getDOMMetaDataCallback; }
-
-    getVerticalMax(groupIndex) {
-        return this.groupedStrategy.getVerticalMax(groupIndex);
-    }
 
     getHorizontalMax(groupIndex) {
         const getMaxPosition = (groupIndex) => {
             return getMaxAllowedPosition(
                 groupIndex,
                 this.viewDataProvider,
-                this.isRtlEnabled,
+                this.rtlEnabled,
                 this.getDOMMetaData()
             );
         };
@@ -179,5 +195,64 @@ export class PositionHelper {
         }
 
         return cellWidth;
+    }
+}
+
+class PositionHelperVertical extends PositionHelperBase {
+    getOffsetByAllDayPanel({
+        groupIndex,
+        supportAllDayRow,
+        showAllDayPanel
+    }) {
+        let result = 0;
+
+        if(supportAllDayRow && showAllDayPanel) {
+            const allDayPanelHeight = getAllDayHeight(
+                showAllDayPanel,
+                true,
+                this.getDOMMetaData()
+            );
+            result = allDayPanelHeight * (groupIndex + 1);
+        }
+
+        return result;
+    }
+
+    getVerticalMax(options) {
+        let maxAllowedPosition = getMaxAllowedVerticalPosition({
+            ...options,
+            viewDataProvider: this.viewDataProvider,
+            isRtlEnabled: this.rtlEnabled,
+            DOMMetaData: this.getDOMMetaData()
+        });
+
+        maxAllowedPosition += this.getOffsetByAllDayPanel(options);
+
+        return maxAllowedPosition;
+    }
+}
+
+class PositionHelperHorizontal extends PositionHelperBase {
+    getOffsetByAllDayPanel(options) {
+        return 0;
+    }
+
+    getVerticalMax(options) {
+        const {
+            isVirtualScrolling,
+            groupIndex
+        } = options;
+
+        const correctedGroupIndex = isVirtualScrolling
+            ? groupIndex
+            : 0;
+
+        return getMaxAllowedVerticalPosition({
+            ...options,
+            groupIndex: correctedGroupIndex,
+            viewDataProvider: this.viewDataProvider,
+            isRtlEnabled: this.rtlEnabled,
+            DOMMetaData: this.getDOMMetaData()
+        });
     }
 }
