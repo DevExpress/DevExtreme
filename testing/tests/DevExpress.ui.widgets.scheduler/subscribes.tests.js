@@ -841,7 +841,7 @@ module('Subscribes', {
         const config = {
             resources: this.instance.option('resources'),
             dataAccessors: createExpressions(this.instance.option('resources')),
-            loadedResources: this.instance.loadedResources,
+            loadedResources: this.instance.option('loadedResources'),
             resourceLoaderMap: this.instance.resourceLoaderMap
         };
 
@@ -899,7 +899,7 @@ module('Subscribes', {
         const config = {
             resources: this.instance.option('resources'),
             dataAccessors: createExpressions(this.instance.option('resources')),
-            loadedResources: this.instance.loadedResources,
+            loadedResources: this.instance.option('loadedResources'),
             resourceLoaderMap: this.instance.resourceLoaderMap
         };
 

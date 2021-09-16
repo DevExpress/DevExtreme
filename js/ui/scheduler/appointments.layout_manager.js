@@ -35,7 +35,7 @@ class AppointmentLayoutManager {
             cellCountInsideLeftVirtualCell,
             cellCountInsideTopVirtualRow
         } = virtualScrollingDispatcher;
-        const groupCount = getGroupCount(this.instance.loadedResources);
+        const groupCount = getGroupCount(this.instance.option('loadedResources'));
         const DOMMetaData = workspace.getDOMElementsMetaData();
         const allDayHeight = getAllDayHeight(
             workspace.option('showAllDayPanel'),
@@ -46,7 +46,7 @@ class AppointmentLayoutManager {
 
         return {
             resources: this.instance.option('resources'),
-            loadedResources: this.instance.loadedResources,
+            loadedResources: this.instance.option('loadedResources'),
             getAppointmentColor: this.instance.createGetAppointmentColor(),
 
             instance: this.instance,

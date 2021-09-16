@@ -166,6 +166,7 @@ class Scheduler extends Widget {
             groups: [],
 
             resources: [],
+            loadedResources: [],
 
             dataSource: null,
 
@@ -410,17 +411,6 @@ class Scheduler extends Widget {
         this._resourceLoaderMap = value;
     }
 
-    get loadedResources() {
-        if(!this._loadedResources) {
-            this._loadedResources = [];
-        }
-        return this._loadedResources;
-    }
-
-    set loadedResources(value) {
-        this._loadedResources = value;
-    }
-
     _postponeResourceLoading() {
         const whenLoaded = this.postponedOperations.add('loadResources', () => {
             const groups = this._getCurrentViewOption('groups');
@@ -431,7 +421,7 @@ class Scheduler extends Widget {
         const resolveCallbacks = new Deferred();
 
         whenLoaded.done((resources) => {
-            this.loadedResources = resources;
+            this.option('loadedResources', resources);
             resolveCallbacks.resolve(resources);
         });
 
@@ -708,6 +698,8 @@ class Scheduler extends Widget {
             case 'toolbar':
                 this._header.option('items', value);
                 break;
+            case 'loadedResources':
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -927,7 +919,6 @@ class Scheduler extends Widget {
 
     updateFactoryInstances() {
         const model = this._options._optionManager._options;
-        model.loadedResources = this.loadedResources;
 
         if(!isDefined(this.key)) {
             this.key = generateKey();
@@ -935,7 +926,7 @@ class Scheduler extends Widget {
         }
 
         createFactoryInstances({
-            getLoadedResources: () => this.loadedResources,
+            getLoadedResources: () => this.option('loadedResources'),
             resources: this.option('resources'),
 
             key: this.key,
@@ -1250,13 +1241,13 @@ class Scheduler extends Widget {
         this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
 
         if(this._isLoaded() || this._isDataSourceLoading()) { // TODO
-            this._initMarkupCore(this.loadedResources);
+            this._initMarkupCore(this.option('loadedResources'));
             this._dataSourceChangedHandler(this._dataSource.items());
             this._fireContentReadyAction();
         } else {
             const groups = this._getCurrentViewOption('groups');
             loadResources(groups, this.option('resources'), this.resourceLoaderMap).done((resources) => {
-                this.loadedResources = resources;
+                this.option('loadedResources', resources);
                 this._initMarkupCore(resources);
                 this._reloadDataSource();
             });
@@ -1266,7 +1257,7 @@ class Scheduler extends Widget {
     createAppointmentForm() {
         const scheduler = {
             createResourceEditorModel: () => {
-                return createResourceEditorModel(this.option('resources'), this.loadedResources);
+                return createResourceEditorModel(this.option('resources'), this.option('loadedResources'));
             },
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
@@ -1548,7 +1539,7 @@ class Scheduler extends Widget {
 
         const result = extend({
             resources: this.option('resources'),
-            loadedResources: this.loadedResources,
+            loadedResources: this.option('loadedResources'),
 
             key: this.key,
             noDataText: this.option('noDataText'),
@@ -2216,7 +2207,7 @@ class Scheduler extends Widget {
             const resourceConfig = {
                 resources: this.option('resources'),
                 dataAccessors: createExpressions(this.option('resources')),
-                loadedResources: this.loadedResources,
+                loadedResources: this.option('loadedResources'),
                 resourceLoaderMap: this.resourceLoaderMap
             };
 
