@@ -34,6 +34,68 @@ const JSPdfPaddingsTests = {
                 });
             });
 
+            QUnit.test('[{f1, padding: { left: 10, top: 5, right: 10, bottom: 5 }}]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [ 'f1' ],
+                    dataSource: [{ f1: 'f1_1' }],
+                });
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.rowType === 'data') {
+                        pdfCell.padding = { left: 10, top: 5, right: 10, bottom: 5 };
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,f1_1,20,47.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,100,28.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, padding: { left: 10, right: 10 }}]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [ 'f1' ],
+                    dataSource: [{ f1: 'f1_1' }],
+                });
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.rowType === 'data') {
+                        pdfCell.padding = { left: 10, right: 10 };
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,f1_1,20,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,100,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[{f1, padding: 5, fontSize 20}]', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -163,6 +225,80 @@ const JSPdfPaddingsTests = {
                     'rect,10,33.4,100,28.4',
                     'setLineWidth,1',
                     'rect,110,33.4,100,28.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, padding: { left: 10, top: 5, right: 10, bottom: 5 }}, {f2}]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [ 'f1', 'f2' ],
+                    dataSource: [{ f1: 'f1_1', f2: 'f1_2' }],
+                });
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.rowType === 'data' && gridCell.column.index === 0) {
+                        pdfCell.padding = { left: 10, top: 5, right: 10, bottom: 5 };
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,110,24.2,{baseline:middle}',
+                    'text,f1_1,20,47.6,{baseline:middle}',
+                    'text,f1_2,110,47.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,110,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,100,28.4',
+                    'setLineWidth,1',
+                    'rect,110,33.4,100,28.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, padding: { left: 10, right: 10 }}, {f2}]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [ 'f1', 'f2' ],
+                    dataSource: [{ f1: 'f1_1', f2: 'f1_2' }],
+                });
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.rowType === 'data' && gridCell.column.index === 0) {
+                        pdfCell.padding = { left: 10, right: 10 };
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,110,24.2,{baseline:middle}',
+                    'text,f1_1,20,42.6,{baseline:middle}',
+                    'text,f1_2,110,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,110,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,100,18.4',
+                    'setLineWidth,1',
+                    'rect,110,33.4,100,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
@@ -319,6 +455,43 @@ const JSPdfPaddingsTests = {
                     'rect,10,33.4,100,38.4',
                     'setLineWidth,1',
                     'rect,110,33.4,100,38.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, padding: { top: 5 }}, {f2, padding: { top: 15 }}]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [ 'f1', 'f2' ],
+                    dataSource: [{ f1: 'f1_1', f2: 'f1_2' }],
+                });
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.rowType === 'data') {
+                        pdfCell.padding = gridCell.column.index === 0 ? { top: 5 } : { top: 15 };
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,110,24.2,{baseline:middle}',
+                    'text,f1_1,10,52.6,{baseline:middle}',
+                    'text,f1_2,110,57.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,110,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,100,33.4',
+                    'setLineWidth,1',
+                    'rect,110,33.4,100,33.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {

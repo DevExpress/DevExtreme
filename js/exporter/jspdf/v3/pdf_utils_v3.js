@@ -7,8 +7,7 @@ function round(value) {
 
 function getTextLines(doc, text, padding, font, { wordWrapEnabled, columnWidth }) {
     if(wordWrapEnabled) {
-        const cellPadding = padding ?? 0;
-        const cellContentWidth = columnWidth - cellPadding * 2;
+        const cellContentWidth = columnWidth - (padding.left + padding.right);
         // it also splits text by '\n' automatically
         return doc.splitTextToSize(text, cellContentWidth, {
             fontSize: font?.size || doc.getFontSize()
@@ -23,8 +22,7 @@ function calculateTextHeight(doc, text, padding, font, { wordWrapEnabled, column
     }).h;
 
     const linesCount = getTextLines(doc, text, padding, font, { wordWrapEnabled, columnWidth }).length;
-    const cellPadding = padding ?? 0;
-    return height * linesCount * doc.getLineHeightFactor() + cellPadding * 2;
+    return height * linesCount * doc.getLineHeightFactor() + (padding.top + padding.bottom);
 }
 
 function calculateRowHeight(doc, cells, columnWidths) {
@@ -69,13 +67,13 @@ function drawTextInRect(doc, text, padding, rect, wordWrapEnabled, jsPdfTextOpti
     const textArray = getTextLines(doc, text, padding, doc.getFont(), { wordWrapEnabled, columnWidth: rect.w });
     const linesCount = textArray.length;
 
-    const heightOfOneLine = calculateTextHeight(doc, textArray[0], 0, doc.getFont(), { wordWrapEnabled: false });
-    const cellPadding = padding ?? 0;
+    const emptyPadding = { top: 0, right: 0, bottom: 0, left: 0 }; // for calculating height of one line only
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0], emptyPadding, doc.getFont(), { wordWrapEnabled: false });
     const textRect = {
-        x: rect.x + cellPadding,
-        y: rect.y + cellPadding,
-        w: rect.w - cellPadding * 2,
-        h: rect.h - cellPadding * 2
+        x: rect.x + padding.left,
+        y: rect.y + padding.top,
+        w: rect.w - (padding.left + padding.right),
+        h: rect.h - (padding.top + padding.bottom)
     };
 
     // TODO: check lineHeightFactor - https://github.com/MrRio/jsPDF/issues/3234
