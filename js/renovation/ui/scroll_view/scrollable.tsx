@@ -12,10 +12,13 @@ import {
   ScrollOffset,
 } from './common/types.d';
 
-import { ScrollableNative } from './scrollable_native';
-import { ScrollableSimulated } from './scrollable_simulated';
+import { ScrollableNative } from './strategy/native';
+import { ScrollableSimulated } from './strategy/simulated';
 import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable';
 import { getElementLocationInternal } from './utils/get_element_location_internal';
+import { convertToLocation } from './utils/convert_location';
+import { getOffsetDistance } from './utils/get_offset_distance';
+import { isDefined } from '../../../core/utils/type';
 
 import { hasWindow } from '../../../core/utils/window';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
@@ -149,8 +152,41 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
   }
 
   @Method()
+  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
+    // !this.props.useNative && this.updateHandler();
+
+    const currentScrollOffset = this.props.useNative
+      ? this.scrollOffset()
+      : { top: this.container().scrollTop, left: this.container().scrollLeft };
+
+    const distance = getOffsetDistance(
+      convertToLocation(targetLocation, this.props.direction),
+      currentScrollOffset,
+    );
+
+    this.scrollBy(distance);
+  }
+
+  @Method()
   scrollBy(distance: number | Partial<ScrollOffset>): void {
-    this.scrollableRef.scrollBy(distance);
+    let { top = 0, left = 0 } = convertToLocation(distance, this.props.direction);
+
+    // destructuring assignment with default values not working
+    // TODO: delete next two conditions after fix - https://github.com/DevExpress/devextreme-renovation/issues/734
+    /* istanbul ignore next */
+    if (!isDefined(top)) {
+      top = 0;
+    }
+    /* istanbul ignore next */
+    if (!isDefined(left)) {
+      left = 0;
+    }
+
+    if (top === 0 && left === 0) {
+      return;
+    }
+
+    this.scrollableRef.scrollByLocation({ top, left });
   }
 
   @Method()
@@ -170,11 +206,6 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     if (!isServerSide) {
       this.scrollableRef.refresh();
     }
-  }
-
-  @Method()
-  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    this.scrollableRef.scrollTo(targetLocation);
   }
 
   @Method()

@@ -3,43 +3,43 @@ import each from 'jest-each';
 import {
   RefObject,
 } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
-} from '../../../test_utils/events_mock';
+} from '../../../../test_utils/events_mock';
 
 import {
   optionValues,
-} from './utils';
+} from '../../__tests__/utils';
 
 import {
   SCROLLABLE_DISABLED_CLASS, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
-} from '../common/consts';
+} from '../../common/consts';
 
-import { titleize } from '../../../../core/utils/inflector';
+import { titleize } from '../../../../../core/utils/inflector';
 
 import {
   ScrollableNative,
-} from '../scrollable_native';
+} from '../native';
 
 import {
   ScrollableSimulated,
-} from '../scrollable_simulated';
+} from '../simulated';
 
-import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
+import getScrollRtlBehavior from '../../../../../core/utils/scroll_rtl_behavior';
 
-import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './scrollable_simulated_test_helper';
-import { ScrollableTestHelper as ScrollableNativeTestHelper } from './scrollable_native_test_helper';
+import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './simulated_test_helper';
+import { ScrollableTestHelper as ScrollableNativeTestHelper } from './native_test_helper';
 
-import { getTranslateValues } from '../utils/get_translate_values';
+import { getTranslateValues } from '../../utils/get_translate_values';
 
-jest.mock('../utils/get_translate_values', () => ({
-  ...jest.requireActual('../utils/get_translate_values'),
+jest.mock('../../utils/get_translate_values', () => ({
+  ...jest.requireActual('../../utils/get_translate_values'),
   getTranslateValues: jest.fn(() => ({ top: 0, left: 0 })),
 }));
 
-jest.mock('../../../../core/utils/scroll_rtl_behavior');
-jest.mock('../../../../ui/themes', () => ({
+jest.mock('../../../../../core/utils/scroll_rtl_behavior');
+jest.mock('../../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
   isGeneric: jest.fn(() => true),
   current: jest.fn(() => 'generic'),

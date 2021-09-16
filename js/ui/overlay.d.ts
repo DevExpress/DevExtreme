@@ -91,7 +91,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     elementAttr?: any;
     /**
      * @docid
-     * @default function() { return $(window).height() * 0.8 }
+     * @default '80vh'
      * @type_function_return number|string
      * @public
      */
@@ -199,7 +199,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     visible?: boolean;
     /**
      * @docid
-     * @default function() {return $(window).width() * 0.8 }
+     * @default '80vw'
      * @type_function_return number|string
      * @public
      */

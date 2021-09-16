@@ -9,7 +9,7 @@ import {
   Mutable,
   ForwardRef,
 } from '@devextreme-generator/declarations';
-import '../../../events/gesture/emitter.gesture.scroll';
+import '../../../../events/gesture/emitter.gesture.scroll';
 import {
   subscribeToScrollEvent,
   subscribeToScrollInitEvent,
@@ -18,26 +18,27 @@ import {
   subscribeToDXScrollEndEvent,
   subscribeToDXScrollStopEvent,
   subscribeToDXScrollCancelEvent,
-} from '../../utils/subscribe_to_event';
-import { ScrollViewLoadPanel } from './load_panel';
+} from '../../../utils/subscribe_to_event';
+import { ScrollViewLoadPanel } from '../internal/load_panel';
 
-import { AnimatedScrollbar } from './animated_scrollbar';
-import { Widget } from '../common/widget';
-import { combineClasses } from '../../utils/combine_classes';
-import { getBoundaryProps } from './utils/get_boundary_props';
+import { AnimatedScrollbar } from '../scrollbar/animated_scrollbar';
+import { Widget } from '../../common/widget';
+import { combineClasses } from '../../../utils/combine_classes';
+import { getOffsetDistance } from '../utils/get_offset_distance';
+import { getBoundaryProps } from '../utils/get_boundary_props';
 
-import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
 import {
   isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
-} from '../../../events/utils/index';
-import { isDefined } from '../../../core/utils/type';
-import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
-import eventsEngine from '../../../events/core/events_engine';
-import resizeObserverSingleton from '../../../core/resize_observer';
+} from '../../../../events/utils/index';
+import { isDefined } from '../../../../core/utils/type';
+import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
+import eventsEngine from '../../../../events/core/events_engine';
+import resizeObserverSingleton from '../../../../core/resize_observer';
 
 import {
   ScrollDirection,
-} from './utils/scroll_direction';
+} from '../utils/scroll_direction';
 
 import {
   DIRECTION_VERTICAL,
@@ -55,7 +56,7 @@ import {
   KEY_CODES,
   VALIDATE_WHEEL_TIMEOUT,
   TopPocketState,
-} from './common/consts';
+} from '../common/consts';
 
 import {
   ScrollOffset,
@@ -64,26 +65,24 @@ import {
   DxMouseEvent,
   DxMouseWheelEvent,
   DxKeyboardEvent,
-} from './common/types.d';
+} from '../common/types';
 
-import { getElementOffset } from '../../utils/get_element_offset';
+import { getElementOffset } from '../../../utils/get_element_offset';
 import {
   getElementPadding,
   getElementOverflowX,
   getElementOverflowY,
-} from './utils/get_element_style';
+} from '../utils/get_element_style';
 
-import { TopPocket } from './internal/top_pocket';
-import { BottomPocket } from './internal/bottom_pocket';
+import { TopPocket } from '../internal/pocket/top';
+import { BottomPocket } from '../internal/pocket/bottom';
 
-import { getOffsetDistance } from './utils/get_offset_distance';
-import { convertToLocation } from './utils/convert_location';
-import { getScrollTopMax } from './utils/get_scroll_top_max';
-import { getScrollLeftMax } from './utils/get_scroll_left_max';
-import { getDevicePixelRatio } from './utils/get_device_pixel_ratio';
-import { isVisible } from './utils/is_element_visible';
-import { getTranslateValues } from './utils/get_translate_values';
-import { clampIntoRange } from './utils/clamp_into_range';
+import { getScrollTopMax } from '../utils/get_scroll_top_max';
+import { getScrollLeftMax } from '../utils/get_scroll_left_max';
+import { getDevicePixelRatio } from '../utils/get_device_pixel_ratio';
+import { isVisible } from '../utils/is_element_visible';
+import { getTranslateValues } from '../utils/get_translate_values';
+import { clampIntoRange } from '../utils/clamp_into_range';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -332,24 +331,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Method()
-  scrollBy(distance: number | Partial<ScrollOffset>): void {
-    this.scrolling = true;
-    this.scrollByLocation(convertToLocation(distance, this.props.direction));
-    this.scrolling = false;
-  }
-
-  @Method()
-  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    this.updateHandler();
-
-    const { scrollTop, scrollLeft } = this.containerRef.current!;
-    const distance = getOffsetDistance(
-      targetLocation,
-      this.props.direction,
-      { top: scrollTop, left: scrollLeft },
-    );
-
-    this.scrollBy(distance);
+  updateHandler(): void {
+    this.updateSizes();
+    this.onUpdated();
   }
 
   @Method()
@@ -590,23 +574,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     resizeObserverSingleton.unobserve(element);
   }
 
-  scrollByLocation(location: Partial<ScrollOffset>): void {
-    let { top = 0, left = 0 } = location;
-
-    // destructuring assignment with default values not working
-    // TODO: delete next two conditions after fix - https://github.com/DevExpress/devextreme-renovation/issues/734
-    /* istanbul ignore next */
-    if (!isDefined(top)) {
-      top = 0;
-    }
-    /* istanbul ignore next */
-    if (!isDefined(left)) {
-      left = 0;
-    }
-
-    if (top === 0 && left === 0) {
-      return;
-    }
+  scrollByLocation(location: ScrollOffset): void {
+    this.scrolling = true;
 
     this.updateHandler();
     this.prepareDirections(true);
@@ -614,13 +583,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     const { scrollLeft, scrollTop } = this.containerRef.current!;
 
-    this.hScrollbarRef.current?.scrollTo(scrollLeft + left);
-    this.vScrollbarRef.current?.scrollTo(scrollTop + top);
-  }
+    this.hScrollbarRef.current?.scrollTo(scrollLeft + location.left);
+    this.vScrollbarRef.current?.scrollTo(scrollTop + location.top);
 
-  updateHandler(): void {
-    this.updateSizes();
-    this.onUpdated();
+    this.scrolling = false;
   }
 
   handleScroll(): void {
@@ -938,13 +904,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   get allowedDirections(): { vertical: boolean; horizontal: boolean } {
     return {
       vertical: this.direction.isVertical
-        && (Math.round(
-          -Math.max(this.contentHeight - this.containerClientHeight, 0),
-        ) < 0 || this.props.bounceEnabled),
+      && (this.vScrollOffsetMax < 0 || this.props.bounceEnabled),
       horizontal: this.direction.isHorizontal
-      && (Math.round(
-        -Math.max(this.contentWidth - this.containerClientWidth, 0),
-      ) < 0 || this.props.bounceEnabled),
+      && (this.hScrollOffsetMax < 0 || this.props.bounceEnabled),
     };
   }
 
@@ -1018,16 +980,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     switch (normalizeKeyName(event)) {
       case KEY_CODES.DOWN:
-        this.scrollByLine({ y: 1 });
+        this.scrollByLine({ top: 1, left: 0 });
         break;
       case KEY_CODES.UP:
-        this.scrollByLine({ y: -1 });
+        this.scrollByLine({ top: -1, left: 0 });
         break;
       case KEY_CODES.RIGHT:
-        this.scrollByLine({ x: 1 });
+        this.scrollByLine({ top: 0, left: 1 });
         break;
       case KEY_CODES.LEFT:
-        this.scrollByLine({ x: -1 });
+        this.scrollByLine({ top: 0, left: -1 });
         break;
       case KEY_CODES.PAGE_DOWN:
         this.scrollByPage(1);
@@ -1036,28 +998,29 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
         this.scrollByPage(-1);
         break;
       case KEY_CODES.HOME:
-        this.scrollToHome();
+        this.scrollByKey(KEY_CODES.HOME);
         break;
       case KEY_CODES.END:
-        this.scrollToEnd();
+        this.scrollByKey(KEY_CODES.END);
         break;
       default:
         break;
     }
   }
 
-  scrollByLine(lines: { x?: number; y?: number }): void {
+  // https://github.com/DevExpress/devextreme-renovation/issues/734
+  scrollByLine(lines: { left: number; top: number }): void {
     const scrollOffset = Math.abs((SCROLL_LINE_HEIGHT / getDevicePixelRatio()) * 100) / 100;
 
-    this.scrollBy({
-      top: (lines.y ?? 0) * scrollOffset,
-      left: (lines.x ?? 0) * scrollOffset,
+    this.scrollByLocation({
+      top: lines.top * scrollOffset,
+      left: lines.left * scrollOffset,
     });
   }
 
   scrollByPage(page: number): void {
     const { isVertical } = new ScrollDirection(this.wheelDirection());
-    const distance: { left?: number; top?: number } = {};
+    const distance = { left: 0, top: 0 };
     const { clientHeight, clientWidth } = this.containerRef.current!;
 
     if (isVertical) {
@@ -1066,7 +1029,29 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       distance.left = page * clientWidth;
     }
 
-    this.scrollBy(distance);
+    this.scrollByLocation(distance);
+  }
+
+  scrollByKey(key: string): void {
+    const containerEl = this.containerRef.current!;
+
+    const vOffsetMin = 0;
+    const vOffsetMax = Math.max(this.contentHeight - containerEl.clientHeight, 0);
+
+    const hOffsetMin = 0;
+    const hOffsetMax = Math.max(this.contentWidth - containerEl.clientWidth, 0);
+
+    const offset = getOffsetDistance(
+      key === KEY_CODES.HOME
+        ? { top: vOffsetMin, left: this.props.rtlEnabled ? hOffsetMax : hOffsetMin }
+        : { top: vOffsetMax, left: this.props.rtlEnabled ? hOffsetMin : hOffsetMax },
+      { top: containerEl.scrollTop, left: containerEl.scrollLeft },
+    );
+
+    this.scrollByLocation({
+      top: offset.top,
+      left: offset.left,
+    });
   }
 
   wheelDirection(event?: DxMouseWheelEvent): ScrollableDirection {
@@ -1078,26 +1063,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       default:
         return event?.shiftKey ? DIRECTION_HORIZONTAL : DIRECTION_VERTICAL;
     }
-  }
-
-  scrollToHome(): void {
-    const distance = { [this.direction.isVertical ? 'top' : 'left']: 0 };
-
-    this.scrollTo(distance);
-  }
-
-  scrollToEnd(): void {
-    const { isVertical } = new ScrollDirection(this.wheelDirection());
-    const distance: { left?: number; top?: number } = {};
-    const containerEl = this.containerRef.current!;
-
-    if (isVertical) {
-      distance.top = getScrollTopMax(containerEl);
-    } else {
-      distance.left = getScrollLeftMax(containerEl);
-    }
-
-    this.scrollTo(distance);
   }
 
   lock(): void {
