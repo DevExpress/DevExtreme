@@ -1109,14 +1109,6 @@ export default class dxGantt extends Widget<dxGanttOptions> {
     scrollToDate(date: Date | Number | string): void;
     /**
      * @docid
-     * @publicName exportToPdf(options)
-     * @param1 options:object
-     * @return Promise<any>
-     * @public
-     */
-    exportToPdf(options: any): DxPromise<any>;
-    /**
-     * @docid
      * @publicName showResourceManagerDialog()
      * @public
      */
