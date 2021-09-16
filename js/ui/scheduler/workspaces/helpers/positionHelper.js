@@ -42,12 +42,12 @@ export const getCellWidth = (DOMMetaData) => {
     return getCellSize(DOMMetaData).width;
 };
 
-export const getAllDayHeight = (isShowAllDayPanel, isVerticalGrouped, DOMMetaData) => {
-    if(!isShowAllDayPanel) {
+export const getAllDayHeight = (showAllDayPanel, isVerticalGrouping, DOMMetaData) => {
+    if(!showAllDayPanel) {
         return 0;
     }
 
-    if(isVerticalGrouped) {
+    if(isVerticalGrouping) {
         const { dateTableCellsMeta } = DOMMetaData;
         const length = dateTableCellsMeta?.length;
 
@@ -72,9 +72,9 @@ export const getMaxAllowedPosition = (groupIndex, viewDataProvider, isRtlEnabled
 export const getMaxAllowedVerticalPosition = ({
     groupIndex,
     viewDataProvider,
-    isShowAllDayPanel,
+    showAllDayPanel,
     isGroupedAllDayPanel,
-    isVerticalGrouped,
+    isVerticalGrouping,
     DOMMetaData
 }) => {
     const { rowIndex } = viewDataProvider.getLastGroupCellPosition(groupIndex);
@@ -88,7 +88,7 @@ export const getMaxAllowedVerticalPosition = ({
     // TODO remove while refactoring dual calculcations.
     // Should decrease allDayPanel amount due to the dual calculation corrections.
     if(isGroupedAllDayPanel) {
-        result -= (groupIndex + 1) * getAllDayHeight(isShowAllDayPanel, isVerticalGrouped, DOMMetaData);
+        result -= (groupIndex + 1) * getAllDayHeight(showAllDayPanel, isVerticalGrouping, DOMMetaData);
     }
 
     return result;

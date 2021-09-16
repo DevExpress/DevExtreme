@@ -1399,9 +1399,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         return getMaxAllowedVerticalPosition({
             groupIndex,
             viewDataProvider: this.viewDataProvider,
-            isShowAllDayPanel: this.option('showAllDayPanel'),
+            showAllDayPanel: this.option('showAllDayPanel'),
             isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
-            isVerticalGrouped: this._isVerticalGroupedWorkSpace(),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
             DOMMetaData: this.getDOMElementsMetaData()
         });
     }

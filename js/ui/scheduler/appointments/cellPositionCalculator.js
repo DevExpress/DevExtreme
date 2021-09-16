@@ -97,10 +97,10 @@ class BaseStrategy {
         const verticalMax = this.positionHelper.getVerticalMax({
             groupIndex: validGroupIndex,
             isVirtualScrolling: this.isVirtualScrolling,
-            isShowAllDayPanel: this.showAllDayPanel,
+            showAllDayPanel: this.showAllDayPanel,
             supportAllDayRow: this.supportAllDayRow,
             isGroupedAllDayPanel: this.isGroupedAllDayPanel,
-            isVerticalGrouped: this.isVerticalGrouped
+            isVerticalGrouping: this.isVerticalGrouping
         });
 
         return {

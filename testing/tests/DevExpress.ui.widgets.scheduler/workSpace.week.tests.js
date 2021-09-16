@@ -428,7 +428,7 @@ module('Work Space Week', () => {
                     isShowAllDayPanel: true,
                     supportAllDayRow: true,
                     isGroupedAllDayPanel: true,
-                    isVerticalGrouped: true
+                    isVerticalGrouping: true
                 });
             };
 
