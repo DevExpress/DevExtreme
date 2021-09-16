@@ -1068,7 +1068,7 @@ QUnit.module('dxPivotGrid', {
         pivotGrid.getFieldChooserPopup().show();
         this.clock.tick(500);
 
-        const $fieldChooserPopup = $('.dx-fieldchooser-popup');
+        const $fieldChooserPopup = $('.dx-fieldchooser-popup').dxPopup('instance').$wrapper();
         assert.ok($fieldChooserPopup.is(':visible'), 'fieldChooser popup is visible');
 
         const $handle = $fieldChooserPopup.find('.dx-resizable-handle-corner-bottom-right');
@@ -7146,7 +7146,7 @@ QUnit.module('Data area', () => {
         area.component.option = sinon.stub();
         area.component.option.withArgs('scrolling').returns({ useNative: false });
         area.renderScrollable();
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
 
         const virtualContent = area.tableElement().prev();
 
@@ -7228,7 +7228,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7302,7 +7302,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7378,7 +7378,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7455,7 +7455,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false, useSimulatedScrollbar: true, direction: 'vertical' });
+        area.updateScrollableOptions({ direction: 'vertical' });
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });

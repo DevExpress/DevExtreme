@@ -565,11 +565,15 @@ class Gantt extends Widget {
         this._ganttView._ganttViewCore.showTaskDetailsDialog(taskKey);
     }
     exportToPdf(options) {
+        return this._exportToPdf(options);
+    }
+    _exportToPdf(options) {
         this._exportHelper.reset();
         const fullOptions = extend({}, options);
         if(fullOptions.createDocumentMethod) {
             fullOptions.docCreateMethod = fullOptions.createDocumentMethod;
         }
+        fullOptions.pdfDocument ??= fullOptions.jsPDFDocument;
         fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
         fullOptions.format ??= 'a4';
         return new Promise((resolve) => {

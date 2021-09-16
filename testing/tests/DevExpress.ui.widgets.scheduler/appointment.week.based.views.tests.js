@@ -353,20 +353,13 @@ module('Integration: Appointment Day, Week views', {
                     width: 1700
                 }, this.clock);
 
-                const { positionHelper } = scheduler.instance.getWorkSpace();
-                const spy = sinon.spy(positionHelper, 'getCoordinatesByDateInGroup');
-
                 scheduler.instance.option('dataSource', data);
 
                 const itemShift = ($('.dx-scheduler-date-table').outerWidth()) * 0.5;
+                const position = $('.dx-scheduler-appointment').position();
 
-                try {
-                    const value = spy.returnValues[0];
-                    assert.roughEqual(value[0].top, 0, 1.001, 'Top is OK');
-                    assert.roughEqual(value[0].left, itemShift, 1.001, 'Left is OK');
-                } finally {
-                    positionHelper.getCoordinatesByDateInGroup.restore();
-                }
+                assert.roughEqual(position.top, 0, 1.001, 'top is correct');
+                assert.roughEqual(position.left, itemShift, 1.001, 'left is correct');
             });
 
             test('Tasks should have a right color', function(assert) {

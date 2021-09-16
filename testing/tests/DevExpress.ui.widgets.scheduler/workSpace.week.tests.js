@@ -12,6 +12,7 @@ QUnit.dump.maxDepth = 10;
 
 const {
     test,
+    skip,
     module,
     testStart
 } = QUnit;
@@ -28,7 +29,7 @@ module('Work Space Week', () => {
             }).dxSchedulerWorkSpaceWeek('instance');
         }
     }, () => {
-        test('Work space should find cell coordinates by date', function(assert) {
+        skip('Work space should find cell coordinates by date', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -37,7 +38,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(32).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date in allDay panel', function(assert) {
+        skip('Work space should find cell coordinates by date in allDay panel', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -47,7 +48,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-all-day-table tbody td').eq(4).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date depend on start day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on start day hour', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -59,7 +60,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(18).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date depend on start/end day hour & cellDuration', function(assert) {
+        skip('Work space should find cell coordinates by date depend on start/end day hour & cellDuration', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option({
@@ -75,7 +76,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(29).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date depend on end day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on end day hour', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -87,7 +88,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(10).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date inside group', function(assert) {
+        skip('Work space should find cell coordinates by date inside group', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -99,7 +100,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords[0].left, $element.find('.dx-scheduler-date-table tbody td').eq(67).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cells coordinates by date inside the same groups', function(assert) {
+        skip('Work space should find cells coordinates by date inside the same groups', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -114,7 +115,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords[1].left, $cells.eq(67).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cells coordinates by date inside the different groups', function(assert) {
+        skip('Work space should find cells coordinates by date inside the different groups', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -196,7 +197,7 @@ module('Work Space Week', () => {
             });
         });
 
-        test('getCoordinatesByDate should return right coordinates for all day appointments', function(assert) {
+        skip('getCoordinatesByDate should return right coordinates for all day appointments', function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 4),
                 firstDayOfWeek: 1,
@@ -212,7 +213,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coordinates.left, cellPosition.left, 0.01);
         });
 
-        test('getCoordinatesByDate should return rowIndex and columnIndex', function(assert) {
+        skip('getCoordinatesByDate should return rowIndex and columnIndex', function(assert) {
             this.instance.option('currentDate', new Date(2015, 2, 4));
 
             const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 2, 45));
@@ -448,7 +449,7 @@ module('Work Space Week', () => {
             assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 1, 25, 0, 0), new Date(2018, 2, 17, 23, 59)], 'Range is OK');
         });
 
-        test('Work space should find cell coordinates by date, groupByDate = true', function(assert) {
+        skip('Work space should find cell coordinates by date, groupByDate = true', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -464,7 +465,7 @@ module('Work Space Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(40).position().left, 0.01, 'Left cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date in allDay row, groupByDate = true', function(assert) {
+        skip('Work space should find cell coordinates by date in allDay row, groupByDate = true', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -574,7 +575,7 @@ module('Work Space Work Week', () => {
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({}).dxSchedulerWorkSpaceWorkWeek('instance');
         }
     }, () => {
-        test('Work space should find cell coordinates by date', function(assert) {
+        skip('Work space should find cell coordinates by date', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -583,7 +584,7 @@ module('Work Space Work Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(23).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date depend on start day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on start day hour', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -595,7 +596,7 @@ module('Work Space Work Week', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(14).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date depend on end day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on end day hour', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -631,7 +632,7 @@ module('Work Space Work Week', () => {
             };
         }
     }, () => {
-        test('getCoordinatesByDate should return right coordinates with view option intervalCount', function(assert) {
+        skip('getCoordinatesByDate should return right coordinates with view option intervalCount', function(assert) {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 25),
@@ -648,7 +649,7 @@ module('Work Space Work Week', () => {
             assert.roughEqual(coords.left, targetCellPosition.left, 0.01, 'Cell coordinates are right');
         });
 
-        test('getCoordinatesByDate should return right coordinates with view option intervalCount, short day duration', function(assert) {
+        skip('getCoordinatesByDate should return right coordinates with view option intervalCount, short day duration', function(assert) {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 25),
@@ -775,7 +776,7 @@ module('Work Space Work Week', () => {
             assert.deepEqual(lastCellData.endDate, new Date(2017, 6, 10, 1), 'cell has right endtDate');
         });
 
-        test('getCoordinatesByDateInGroup method should return only work week days (t853629)', function(assert) {
+        skip('getCoordinatesByDateInGroup method should return only work week days (t853629)', function(assert) {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2018, 4, 21),

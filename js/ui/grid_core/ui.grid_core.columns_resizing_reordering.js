@@ -247,7 +247,7 @@ const ColumnsSeparatorView = SeparatorView.inherit({
     moveByX: function(outerX) {
         const $element = this.element();
         if($element) {
-            $element.css('left', outerX - this._parentElement().offset().left);
+            $element.css('left', outerX === null ? 0 : outerX - this._parentElement().offset().left);
             ///#DEBUG
             this._testPosX = outerX;
             ///#ENDDEBUG
@@ -663,11 +663,13 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                     e.preventDefault();
                 } else {
                     that._columnsSeparatorView.changeCursor();
+                    that._columnsSeparatorView.moveByX(null);
                 }
             } else {
                 that.pointsByColumns(null);
                 that._isReadyResizing = false;
                 that._columnsSeparatorView.changeCursor();
+                that._columnsSeparatorView.moveByX(null);
             }
         }
     },

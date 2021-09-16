@@ -4,7 +4,7 @@ import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import { isFunction } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
-import { getSvgElement, getSvgMarkup } from '../core/utils/svg';
+import { getSvgElement, getSvgMarkup, HIDDEN_FOR_EXPORT } from '../core/utils/svg';
 import { when, Deferred } from '../core/utils/deferred';
 
 export const svgCreator = {
@@ -79,6 +79,7 @@ export const svgCreator = {
         const xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
         const svgElem = getSvgElement(data);
         const $svgObject = $(svgElem);
+        $svgObject.find(`[${HIDDEN_FOR_EXPORT}]`).remove();
 
         markup = xmlVersion + getSvgMarkup($svgObject.get(0), options.backgroundColor);
 

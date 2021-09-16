@@ -132,10 +132,6 @@ const createInstance = (options, subscribesConfig) => {
         getDataAccessors: () => dataAccessors
     });
 
-    getResourceManager(key).getResourcesFromItem = () => {
-        return { someId: ['with space'] };
-    };
-
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
         key,
         observer,
@@ -709,30 +705,6 @@ QUnit.module('Appointments', moduleOptions, () => {
             { settings: { startDate: new Date(2017, 7, 21, 9, 0, 10), endDate: new Date(2017, 7, 21, 20) }, startDate: appt1.startDate, endDate: appt1.endDate },
             { settings: { startDate: new Date(2017, 7, 22, 8, 0, 0), endDate: new Date(2017, 7, 22, 18) }, startDate: appt1.startDate, endDate: appt1.endDate }
         ], 'Parts are OK');
-    });
-
-    QUnit.test('Appointment should process resource names with spaces', function(assert) {
-        const item = {
-            itemData: {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 10, 3, 9),
-                endDate: new Date(2015, 10, 3, 11)
-            },
-            settings: [
-                { top: 0, left: 0, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
-                { top: 10, left: 10, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
-                { top: 20, left: 20, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 }
-            ]
-        };
-
-        createInstance({
-            currentDate: new Date(2015, 10, 3),
-            items: [item],
-        }, testConfig);
-
-
-        const $appointment = $('.dx-scheduler-appointment').eq(0);
-        assert.equal($appointment.filter('[data-someid-with__32__space]').length, 1, 'attr is right');
     });
 });
 

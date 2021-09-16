@@ -15,17 +15,6 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
         return calculateViewStartDate(this.option('startDate'), this._firstDayOfWeek());
     }
 
-    getPositionShift(timeShift, isAllDay) {
-        if(!isAllDay && this.invoke('isAdaptive') && this.invoke('getMaxAppointmentCountPerCellByType') === 0) {
-            return {
-                top: 0,
-                left: 0,
-                cellPosition: 0
-            };
-        }
-        return super.getPositionShift(timeShift, isAllDay);
-    }
-
     _isApplyCompactAppointmentOffset() {
         if(this.invoke('isAdaptive') && this.invoke('getMaxAppointmentCountPerCellByType') === 0) {
             return false;

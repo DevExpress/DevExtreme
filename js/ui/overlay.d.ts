@@ -29,12 +29,6 @@ import Widget, {
 export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
-     * @default false
-     * @public
-     */
-     allowDragOutside?: boolean;
-    /**
-     * @docid
      * @default { show: { type: "pop", duration: 300, from: { scale: 0.55 } }, hide: { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
      * @ref
      * @default { show: { type: 'fade', duration: 400 }, hide: { type: 'fade', duration: 400, to: { opacity: 0 }, from: { opacity: 1 } }} &for(Android_below_version_4.2)
@@ -84,6 +78,12 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     dragEnabled?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+     dragOutsideBoundary?: boolean;
+    /**
+     * @docid
      * @deprecated
      * @default {}
      * @public
@@ -91,7 +91,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     elementAttr?: any;
     /**
      * @docid
-     * @default function() { return $(window).height() * 0.8 }
+     * @default '80vh'
      * @type_function_return number|string
      * @public
      */
@@ -199,7 +199,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     visible?: boolean;
     /**
      * @docid
-     * @default function() {return $(window).width() * 0.8 }
+     * @default '80vw'
      * @type_function_return number|string
      * @public
      */

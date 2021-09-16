@@ -18,3 +18,7 @@ export type Xor<T1, T2 = never, T3 = never, T4 = never, T5 = never, T6 = never, 
   | Seal<T7, KeysOf<T1, T2, T3, T4, T5, T6, T8, T9>>
   | Seal<T8, KeysOf<T1, T2, T3, T4, T5, T6, T7, T9>>
   | Seal<T9, KeysOf<T1, T2, T3, T4, T5, T6, T7, T8>>;
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>;
+};

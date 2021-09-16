@@ -55,14 +55,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     }
 
-    getPositionShift() {
-        return {
-            top: 0,
-            left: 0,
-            cellPosition: 0
-        };
-    }
-
     _getViewStartByOptions() {
         return getViewStartByOptions(
             this.option('startDate'),

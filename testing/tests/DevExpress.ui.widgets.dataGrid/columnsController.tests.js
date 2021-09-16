@@ -13,6 +13,10 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/data_grid';
 
+import 'localization/globalize/currency';
+import 'localization/globalize/number';
+import { locale } from 'localization/core';
+
 QUnit.testDone(function() {
     ajaxMock.clear();
 });
@@ -84,6 +88,8 @@ const processColumnsForCompare = function(columns, parameterNames, ignoreParamet
 };
 
 const setupModule = function(moduleNames) {
+    locale('en');
+
     executeAsyncMock.setup();
 
     dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'editingRowBased', 'filterRow', 'masterDetail'].concat(moduleNames || []), {

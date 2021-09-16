@@ -6,6 +6,7 @@ import {
     getAppointmentDataProvider
 } from './instanceFactory';
 import { AppointmentViewModel } from './appointments/viewModelGenerator';
+import { getGroupCount } from './resources/utils';
 
 class AppointmentLayoutManager {
     constructor(instance) {
@@ -34,8 +35,13 @@ class AppointmentLayoutManager {
             cellCountInsideLeftVirtualCell,
             cellCountInsideTopVirtualRow
         } = virtualScrollingDispatcher;
+        const resourceManager = getResourceManager(key);
+        const groupCount = getGroupCount(resourceManager.loadedResources);
 
         return {
+            resources: this.instance.option('resources'),
+            resourceDataAccessors: this.instance.resourceDataAccessors,
+
             instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
@@ -50,7 +56,10 @@ class AppointmentLayoutManager {
             isVirtualScrolling: this.instance.isVirtualScrolling(),
             leftVirtualCellCount: cellCountInsideLeftVirtualCell,
             topVirtualCellCount: cellCountInsideTopVirtualRow,
+            intervalCount: workspace.option('intervalCount'),
+            hoursInterval: workspace.option('hoursInterval'),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
+            groupCount,
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
@@ -62,7 +71,7 @@ class AppointmentLayoutManager {
             getVisibleDayDuration: () => workspace.getVisibleDayDuration(),
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
-            resourceManager: getResourceManager(key),
+            resourceManager,
             appointmentDataProvider: getAppointmentDataProvider(key),
             timeZone: this.modelProvider.timeZone,
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),
@@ -79,8 +88,6 @@ class AppointmentLayoutManager {
             intervalDuration: workspace.getIntervalDuration(),
             isVerticalOrientation: workspace.isVerticalOrientation(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
-            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
-            getGroupWidthCallback: workspace.getGroupWidth.bind(workspace),
             DOMMetaData: workspace.getDOMElementsMetaData(),
         };
     }
