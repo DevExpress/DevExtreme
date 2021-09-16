@@ -2406,7 +2406,7 @@ module('Appointment dragging', {
                     this.scheduler = new SchedulerTestWrapper(this.instance);
 
                     if(scrollingMode === 'virtual') {
-                        const workspace = this.instance.getWorkSpace().virtualScrollingDispatcher;
+                        const workspace = this.instance.getWorkSpace();
                         workspace.renderer.getRenderTimeout = () => -1;
                     }
                 };
