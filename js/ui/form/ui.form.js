@@ -1177,6 +1177,8 @@ const Form = Widget.inherit({
         return this.$element().find('.' + FIELD_ITEM_CONTENT_CLASS + ' [tabindex]').first();
     },
 
+    _visibilityChanged: function() {},
+
     _dispose: function() {
         ValidationEngine.removeGroup(this._getValidationGroup());
         this.callBase();
