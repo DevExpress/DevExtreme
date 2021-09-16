@@ -567,11 +567,13 @@ const _mapResourceData = (resource, data) => {
 export const loadResources = (groups, resources, resourceLoaderMap) => {
     const result = new Deferred();
     const deferreds = [];
+
     const newGroups = groups || [];
+    const newResources = resources || [];
 
     let loadedResources = [];
 
-    filterResources(resources, newGroups)
+    filterResources(newResources, newGroups)
         .forEach(resource => {
             const deferred = new Deferred();
             const name = getFieldExpr(resource);
