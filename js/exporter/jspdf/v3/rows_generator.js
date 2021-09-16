@@ -43,7 +43,8 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
                 columns,
                 rowType,
                 colCount: columns.length,
-                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined
+                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined,
+                padding: 0
             }),
             rowIndex,
         });
@@ -52,7 +53,7 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, rowType, backgroundColor }) {
+function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, rowType, backgroundColor, padding }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < colCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -62,6 +63,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 text: cellData.value,
                 wordWrapEnabled,
                 backgroundColor,
+                padding,
                 _rect: {}
             }
         };
