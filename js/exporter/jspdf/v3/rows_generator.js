@@ -75,14 +75,15 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 cellInfo.colSpan = cellMerging.colspan;
             }
         } else if(rowType === 'group') {
-            cellInfo.drawLeftBorder = false;
-            cellInfo.drawRightBorder = false;
+            cellInfo.pdfCell.drawLeftBorder = cellIndex === 0;
+            cellInfo.pdfCell.drawRightBorder = cellIndex === colCount - 1;
 
             if(cellIndex > 0) {
                 const isEmptyCellsExceptFirst = result.slice(1).reduce(
                     (accumulate, cellInfo) => { return accumulate && !isDefined(cellInfo.pdfCell.text); },
                     true);
                 if(!isDefined(cellInfo.pdfCell.text) && isEmptyCellsExceptFirst) {
+                    result[0].pdfCell.drawRightBorder = true;
                     for(let i = 0; i < result.length; i++) {
                         result[i].colSpan = result.length;
                     }

@@ -1,12 +1,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
-import { BottomPocket, BottomPocketProps } from '../bottom_pocket';
+import { BottomPocket, BottomPocketProps } from '../bottom';
 
-import { current } from '../../../../../ui/themes';
+import { current } from '../../../../../../ui/themes';
 
-jest.mock('../../../../../ui/themes', () => ({
-  ...jest.requireActual('../../../../../ui/themes'),
+jest.mock('../../../../../../ui/themes', () => ({
+  ...jest.requireActual('../../../../../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
 

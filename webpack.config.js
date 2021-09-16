@@ -37,7 +37,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            '@devextreme/vdom': path.resolve('./node_modules/@devextreme/vdom/dist/cjs/index.js'),
+            '@devextreme/runtime/inferno': path.resolve('./node_modules/@devextreme/runtime/cjs/inferno/index.js')
         }
     },
 };

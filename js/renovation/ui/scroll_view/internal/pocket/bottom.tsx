@@ -6,18 +6,18 @@ import {
   ForwardRef,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { LoadIndicator } from '../../load_indicator';
+import { LoadIndicator } from '../../../load_indicator';
 
 import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_REACHBOTTOM_CLASS,
   SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS,
   SCROLLVIEW_REACHBOTTOM_TEXT_CLASS,
-} from '../common/consts';
+} from '../../common/consts';
 
-import { current, isMaterial } from '../../../../ui/themes';
-import { combineClasses } from '../../../utils/combine_classes';
-import messageLocalization from '../../../../localization/message';
+import { current, isMaterial } from '../../../../../ui/themes';
+import { combineClasses } from '../../../../utils/combine_classes';
+import messageLocalization from '../../../../../localization/message';
 
 export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
   const {
