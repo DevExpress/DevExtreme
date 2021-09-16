@@ -33,6 +33,12 @@ import {
     template,
 } from '../core/templates/template';
 
+interface ActionEventInfo {
+    errorCode?: number;
+    errorText: string;
+    cancel: boolean | PromiseLike<void>;
+}
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileManager>;
 
@@ -97,6 +103,85 @@ export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
+};
+
+/** @public */
+export type DirectoryCreatingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    readonly parentDirectory: FileSystemItem;
+    readonly name: string;
+};
+
+/** @public */
+export type DirectoryCreatedEvent = EventInfo<dxFileManager> & {
+    readonly parentDirectory: FileSystemItem;
+    readonly name: string;
+};
+
+/** @public */
+export type ItemRenamingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    readonly item: FileSystemItem;
+    readonly newName: string;
+};
+
+/** @public */
+export type ItemRenamedEvent = EventInfo<dxFileManager> & {
+    readonly sourceItem: FileSystemItem;
+    readonly itemName: string;
+};
+
+/** @public */
+export type ItemMovingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    readonly item: FileSystemItem;
+    readonly destinationDirectory: FileSystemItem;
+};
+
+/** @public */
+export type ItemMovedEvent = EventInfo<dxFileManager> & {
+    readonly sourceItem: FileSystemItem;
+    readonly parentDirectory: FileSystemItem;
+    readonly itemName: string;
+    readonly itemPath: string;
+};
+
+/** @public */
+export type ItemCopyingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    readonly item: FileSystemItem;
+    readonly destinationDirectory: FileSystemItem;
+};
+
+/** @public */
+export type ItemCopiedEvent = EventInfo<dxFileManager> & {
+    readonly sourceItem: FileSystemItem;
+    readonly parentDirectory: FileSystemItem;
+    readonly itemName: string;
+    readonly itemPath: string;
+};
+
+/** @public */
+export type ItemDeletingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    readonly item: FileSystemItem;
+};
+
+/** @public */
+export type ItemDeletedEvent = EventInfo<dxFileManager> & {
+    readonly item: FileSystemItem;
+};
+
+/** @public */
+export type FileUploadingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    readonly fileData: File;
+    readonly destinationDirectory: FileSystemItem;
+};
+
+/** @public */
+export type FileUploadedEvent = EventInfo<dxFileManager> & {
+    readonly fileData: File;
+    readonly parentDirectory: FileSystemItem;
+};
+
+/** @public */
+export type ItemDownloadingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    readonly item: FileSystemItem;
 };
 
 /**
@@ -309,6 +394,197 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @public
      */
     onErrorOccurred?: ((e: ErrorOccurredEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 parentDirectory:FileSystemItem
+     * @type_function_param1_field8 name:string
+     * @default null
+     * @action
+     * @public
+     */
+    onDirectoryCreating?: ((e: DirectoryCreatingEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 parentDirectory:FileSystemItem
+     * @type_function_param1_field5 name:string
+     * @default null
+     * @action
+     * @public
+     */
+    onDirectoryCreated?: ((e: DirectoryCreatedEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 item:FileSystemItem
+     * @type_function_param1_field8 newName:string
+     * @default null
+     * @action
+     * @public
+     */
+    onItemRenaming?: ((e: ItemRenamingEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 sourceItem:FileSystemItem
+     * @type_function_param1_field5 itemName:string
+     * @default null
+     * @action
+     * @public
+     */
+    onItemRenamed?: ((e: ItemRenamedEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 item:FileSystemItem
+     * @type_function_param1_field8 destinationDirectory:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onItemMoving?: ((e: ItemMovingEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 sourceItem:FileSystemItem
+     * @type_function_param1_field5 parentDirectory:FileSystemItem
+     * @type_function_param1_field6 itemName:string
+     * @type_function_param1_field7 itemPath:string
+     * @default null
+     * @action
+     * @public
+     */
+    onItemMoved?: ((e: ItemMovedEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 item:FileSystemItem
+     * @type_function_param1_field8 destinationDirectory:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onItemCopying?: ((e: ItemCopyingEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 sourceItem:FileSystemItem
+     * @type_function_param1_field5 parentDirectory:FileSystemItem
+     * @type_function_param1_field6 itemName:string
+     * @type_function_param1_field7 itemPath:string
+     * @default null
+     * @action
+     * @public
+     */
+    onItemCopied?: ((e: ItemCopiedEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 item:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onItemDeleting?: ((e: ItemDeletingEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 item:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onItemDeleted?: ((e: ItemDeletedEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 fileData:File
+     * @type_function_param1_field8 destinationDirectory:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onFileUploading?: ((e: FileUploadingEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 fileData:File
+     * @type_function_param1_field5 parentDirectory:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onFileUploaded?: ((e: FileUploadedEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 errorCode:number
+     * @type_function_param1_field5 errorText:string
+     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field7 item:FileSystemItem
+     * @default null
+     * @action
+     * @public
+     */
+    onItemDownloading?: ((e: ItemDownloadingEvent) => void);
     /**
      * @docid
      * @public

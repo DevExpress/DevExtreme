@@ -1,39 +1,37 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
-import { titleize } from '../../../../core/utils/inflector';
-import {
-  ScrollDirection,
-} from '../utils/scroll_direction';
+import { titleize } from '../../../../../core/utils/inflector';
 
 import {
-  ScrollableSimulated as Scrollable,
-  ScrollableSimulated,
+  ScrollDirection,
+} from '../../utils/scroll_direction';
+
+import {
+  ScrollableNative as Scrollable,
   viewFunction,
-} from '../scrollable_simulated';
+  ScrollableNative,
+} from '../native';
 
 import {
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
-} from '../common/consts';
+} from '../../common/consts';
 
-import { Scrollbar, ScrollbarPropsType } from '../scrollbar';
-import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
-import { AnimatedScrollbar } from '../animated_scrollbar';
+import { Scrollbar, ScrollbarPropsType } from '../../scrollbar/scrollbar';
+import { ScrollableNativeProps } from '../../common/native_strategy_props';
 
-jest.mock('../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
-jest.mock('../../scroll_view/load_panel', () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
+jest.mock('../../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
+jest.mock('../../internal/load_panel', () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
 
-const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
 
-interface Mock extends jest.Mock {}
 class ScrollableTestHelper {
-  options: Partial<ScrollableSimulatedProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
+  options: Partial<ScrollableNativeProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
 
-  viewModel: ScrollableSimulated;
+  viewModel: ScrollableNative;
 
   scrollable: any;
 
@@ -43,34 +41,28 @@ class ScrollableTestHelper {
 
   isBoth: boolean;
 
-  scrollBarHandlers?: { name: string }[];
-
   actionHandlers: { [key: string]: any };
 
-  constructor(props: Partial<ScrollableSimulatedProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
+  constructor(props: Partial<ScrollableNativeProps & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
     this.actionHandlers = this.getActionHandlers(this.options);
 
     this.viewModel = new Scrollable({
-      onStart: this.actionHandlers.onStart,
       onScroll: this.actionHandlers.onScroll,
       onUpdated: this.actionHandlers.onUpdated,
-      onEnd: this.actionHandlers.onEnd,
       onPullDown: this.actionHandlers.onPullDown,
       onReachBottom: this.actionHandlers.onReachBottom,
-      onBounce: this.actionHandlers.onBounce,
-      onVisibilityChange: this.actionHandlers.onVisibilityChange,
       needRenderScrollbars: true,
       ...this.options,
-    });
+    }) as any;
     this.viewModel.scrollableRef = React.createRef() as RefObject<HTMLDivElement>;
     this.viewModel.containerRef = React.createRef() as RefObject<HTMLDivElement>;
     this.viewModel.contentRef = React.createRef() as RefObject<HTMLDivElement>;
     this.viewModel.wrapperRef = React.createRef() as RefObject<HTMLDivElement>;
     this.viewModel.topPocketRef = React.createRef() as RefObject<HTMLDivElement>;
     this.viewModel.bottomPocketRef = React.createRef() as RefObject<HTMLDivElement>;
-    this.viewModel.vScrollbarRef = React.createRef() as RefObject<AnimatedScrollbar>;
-    this.viewModel.hScrollbarRef = React.createRef() as RefObject<AnimatedScrollbar>;
+    this.viewModel.vScrollbarRef = React.createRef() as RefObject<Scrollbar>;
+    this.viewModel.hScrollbarRef = React.createRef() as RefObject<Scrollbar>;
 
     const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.options.direction);
     this.isVertical = isVertical;
@@ -87,15 +79,6 @@ class ScrollableTestHelper {
     let contentHeight = contentSize;
 
     if (this.options.forceGeneratePockets) {
-      if (this.options.pullDownEnabled) {
-        contentHeight += TOP_POCKET_HEIGHT;
-
-        this.viewModel.topPocketRef.current = this.getTopPocketElement();
-        Object.defineProperties(this.viewModel.topPocketRef.current, {
-          clientWidth: { configurable: true, get() { return 100; } },
-          clientHeight: { configurable: true, get() { return TOP_POCKET_HEIGHT; } },
-        });
-      }
       if (this.options.reachBottomEnabled) {
         contentHeight += BOTTOM_POCKET_HEIGHT;
 
@@ -175,7 +158,7 @@ class ScrollableTestHelper {
     return el;
   }
 
-  getScrollable(): ReactWrapper<ScrollableSimulated> {
+  getScrollable(): ReactWrapper<ScrollableNative> {
     return this.scrollable;
   }
 
@@ -195,59 +178,28 @@ class ScrollableTestHelper {
     return this.scrollable.find(`.${SCROLLVIEW_BOTTOM_POCKET_CLASS}`).getDOMNode();
   }
 
-  getAnimatedScrollbars(): any {
-    return this.scrollable.find(AnimatedScrollbar);
-  }
-
   getScrollbars(): any {
     return this.scrollable.find(Scrollbar);
   }
 
-  getVScrollbar(): AnimatedScrollbar {
+  getVScrollbar(): Scrollbar {
     return this.viewModel.vScrollbarRef.current!;
   }
 
-  getHScrollbar(): AnimatedScrollbar {
+  getHScrollbar(): Scrollbar {
     return this.viewModel.hScrollbarRef.current!;
   }
 
   initScrollbarSettings(additionalProps:
   { [key: string]: any } = { props: {} }): void {
-    const { vScrollLocation = -50, hScrollLocation = -50, ...restProps } = additionalProps.props;
+    const scrollbars = this.getScrollbars();
 
-    const initSettings = (animatedScrollbars, scrollbars, index) => {
-      const animatedScrollbar = animatedScrollbars.at(index).instance();
-      const scrollbar = scrollbars.at(index).instance();
-
-      if (scrollbar.props.direction === 'vertical') {
-        restProps.scrollLocation = vScrollLocation;
-        scrollbar.prevScrollLocation = vScrollLocation;
-      }
-      if (scrollbar.props.direction === 'horizontal') {
-        restProps.scrollLocation = hScrollLocation;
-        scrollbar.prevScrollLocation = hScrollLocation;
-      }
+    const initSettings = (scrollbarRef) => {
+      const scrollbar = scrollbarRef.instance();
       scrollbar.scrollbarRef = React.createRef();
-      scrollbar.scrollbarRef.current = scrollbars.at(index).getDOMNode();
-
+      scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
       scrollbar.scrollRef = React.createRef();
-      scrollbar.scrollRef.current = scrollbars.at(index).find('.dx-scrollable-scroll').getDOMNode();
-
-      Object.assign(animatedScrollbar, {
-        props: {
-          ...animatedScrollbar.props,
-          ...{
-            contentSize: 200,
-            containerSize: 100,
-            minOffset: 0,
-            maxOffset: -100,
-            bottomPocketSize: 0,
-            scrollLocationChange:
-              animatedScrollbar.props.scrollLocationChange.bind(this.viewModel),
-            ...restProps,
-          },
-        },
-      });
+      scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
 
       Object.assign(scrollbar, {
         props: {
@@ -255,64 +207,23 @@ class ScrollableTestHelper {
           ...{
             contentSize: 200,
             containerSize: 100,
-            minOffset: 0,
             maxOffset: -100,
-            scrollLocationChange:
-              scrollbar.props.scrollLocationChange.bind(this.viewModel),
-            ...restProps,
+            scrollLocation: -50,
+            ...additionalProps.props,
           },
         },
       });
 
-      animatedScrollbar.scrollbarRef = {
-        current: scrollbar,
-      };
-
-      return animatedScrollbar;
+      return scrollbar;
     };
 
-    const animatedScrollbars = this.getAnimatedScrollbars();
-    const scrollbars = this.getScrollbars();
-
     if (this.isBoth) {
-      this.viewModel.hScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 0);
-      this.viewModel.vScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 1);
+      this.viewModel.hScrollbarRef.current = initSettings(scrollbars.at(0));
+      this.viewModel.vScrollbarRef.current = initSettings(scrollbars.at(1));
     } else if (this.isVertical) {
-      this.viewModel.vScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 0);
+      this.viewModel.vScrollbarRef.current = initSettings(scrollbars.at(0));
     } else if (this.isHorizontal) {
-      this.viewModel.hScrollbarRef.current = initSettings(animatedScrollbars, scrollbars, 0);
-    }
-  }
-
-  initScrollbarHandlerMocks(): void {
-    this.scrollBarHandlers = [
-      { name: 'init' },
-      { name: 'start' },
-      { name: 'end' },
-      { name: 'cancel' },
-      { name: 'stop' },
-      { name: 'move' },
-      { name: 'release' }];
-
-    this.scrollBarHandlers.forEach(({ name }) => {
-      this[`${name}VScrollbarHandlerMock`] = jest.fn();
-      this[`${name}HScrollbarHandlerMock`] = jest.fn();
-
-      if (this.isVertical) {
-        this.getVScrollbar()[`${name}Handler`] = this[`${name}VScrollbarHandlerMock`];
-      }
-      if (this.isHorizontal) {
-        this.getHScrollbar()[`${name}Handler`] = this[`${name}HScrollbarHandlerMock`];
-      }
-    });
-  }
-
-  changeScrollbarMethod(method: string, mock: Mock): void {
-    if (this.isVertical) {
-      this.getVScrollbar()[method] = mock;
-    }
-    if (this.isHorizontal) {
-      this.getHScrollbar()[method] = mock;
+      this.viewModel.hScrollbarRef.current = initSettings(scrollbars.at(0));
     }
   }
 
@@ -320,33 +231,13 @@ class ScrollableTestHelper {
     this.viewModel.containerRef.current!.scrollTop = top;
     this.viewModel.containerRef.current!.scrollLeft = left;
 
-    this.viewModel.vScrollLocation = -top;
-    this.viewModel.hScrollLocation = -left;
-  }
+    if (this.isVertical && this.options.useSimulatedScrollbar) {
+      this.getVScrollbar().props.scrollLocation = -top;
+    }
 
-  checkContainerPosition(jestExpect: (any) => any,
-    expectedPosition: { top: number; left: number }): void {
-    const { scrollTop, scrollLeft } = this.viewModel.containerRef.current!;
-
-    jestExpect(scrollTop).toEqual(expectedPosition.top);
-    jestExpect(scrollLeft).toEqual(expectedPosition.left);
-  }
-
-  checkScrollbarEventHandlerCalls(jestExpect: (any) => any,
-    direction: 'vertical' | 'horizontal',
-    expectedHandlers: string[],
-    expectedArgs: (boolean | number | { [key: string]: any })[][]): void {
-    const prefix = direction === 'vertical' ? 'V' : 'H';
-    this.scrollBarHandlers?.forEach((handler) => {
-      const indexOf = expectedHandlers.indexOf(handler.name);
-
-      if (indexOf !== -1 && this[`is${titleize(direction)}`]) {
-        jestExpect(this[`${handler.name}${prefix}ScrollbarHandlerMock`]).toBeCalledTimes(1);
-        jestExpect(this[`${handler.name}${prefix}ScrollbarHandlerMock`].mock.calls).toEqual([expectedArgs[indexOf]]);
-      } else {
-        jestExpect(this[`${handler.name}${prefix}ScrollbarHandlerMock`]).toBeCalledTimes(0);
-      }
-    });
+    if (this.isHorizontal && this.options.useSimulatedScrollbar) {
+      this.getHScrollbar().props.scrollLocation = -left;
+    }
   }
 
   checkActionHandlerCalls(jestExpect: (any) => any,
@@ -367,17 +258,13 @@ class ScrollableTestHelper {
 
   // eslint-disable-next-line class-methods-use-this
   getActionHandlers(
-    props: Pick<ScrollableSimulatedProps, 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce' | 'onVisibilityChange'>,
-  ): { [T in 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce' | 'onVisibilityChange']: any } {
+    props: Pick<ScrollableNativeProps, 'onScroll' | 'onUpdated' | 'onPullDown' | 'onReachBottom'>,
+  ): { [T in 'onScroll' | 'onUpdated' | 'onPullDown' | 'onReachBottom']: any } {
     const actionHandlers = {
-      onStart: jest.fn(),
       onScroll: jest.fn(),
       onUpdated: jest.fn(),
-      onEnd: jest.fn(),
       onPullDown: jest.fn(),
       onReachBottom: jest.fn(),
-      onBounce: jest.fn(),
-      onVisibilityChange: jest.fn(),
     };
 
     Object.keys(actionHandlers).forEach((key) => {

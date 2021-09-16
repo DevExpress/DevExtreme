@@ -6,16 +6,16 @@ import {
   TopPocket,
   viewFunction,
   TopPocketProps,
-} from '../top_pocket';
+} from '../top';
 
 import {
   TopPocketState,
-} from '../../common/consts';
+} from '../../../common/consts';
 
-import { current } from '../../../../../ui/themes';
+import { current } from '../../../../../../ui/themes';
 
-jest.mock('../../../../../ui/themes', () => ({
-  ...jest.requireActual('../../../../../ui/themes'),
+jest.mock('../../../../../../ui/themes', () => ({
+  ...jest.requireActual('../../../../../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
 

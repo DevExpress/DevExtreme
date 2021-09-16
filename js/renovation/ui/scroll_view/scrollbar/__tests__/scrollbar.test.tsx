@@ -5,7 +5,7 @@ import { mount } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
-} from '../../../test_utils/events_mock';
+} from '../../../../test_utils/events_mock';
 
 import {
   Scrollbar,
@@ -14,19 +14,19 @@ import {
   THUMB_MIN_SIZE,
 } from '../scrollbar';
 
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../common/consts';
 
 import {
   optionValues,
   getPermutations,
-} from './utils';
-import { ScrollbarProps } from '../common/scrollbar_props';
-import { inRange } from '../../../../core/utils/math';
+} from '../../__tests__/utils';
+import { ScrollbarProps } from '../../common/scrollbar_props';
+import { inRange } from '../../../../../core/utils/math';
 
 interface Mock extends jest.Mock {}
 
-jest.mock('../../../../core/utils/math', () => ({
-  ...jest.requireActual('../../../../core/utils/math'),
+jest.mock('../../../../../core/utils/math', () => ({
+  ...jest.requireActual('../../../../../core/utils/math'),
   inRange: jest.fn(() => true),
 }));
 

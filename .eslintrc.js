@@ -13,6 +13,9 @@ module.exports = {
             'jsx': true
         }
     },
+    'plugins': [
+        'no-only-tests'
+    ],
     'overrides': [
         {
             'files': [
@@ -186,6 +189,7 @@ module.exports = {
                 'devextreme/typescript'
             ],
             'rules': {
+                'no-only-tests/no-only-tests': 'error',
                 '@typescript-eslint/adjacent-overload-signatures': 'error',
                 '@typescript-eslint/array-type': 'error',
                 '@typescript-eslint/await-thenable': 'error',

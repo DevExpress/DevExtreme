@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
+import { getElementOverflowY, getElementOverflowX } from 'renovation/ui/scroll_view/utils/get_element_style';
 import { getScrollbarSize } from 'renovation/ui/scroll_view/utils/get_scrollbar_size';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
@@ -124,7 +125,7 @@ QUnit.test('scroll event should be triggered if scroll position changed', functi
 });
 
 [true, false].forEach((useNative) => {
-    QUnit.test('content', function(assert) {
+    QUnit.test(`content(), useNative: ${useNative}`, function(assert) {
         const $scrollable = $('#scrollable').dxScrollable({ useNative });
         const content = $scrollable.dxScrollable('instance').content();
 
@@ -132,28 +133,59 @@ QUnit.test('scroll event should be triggered if scroll position changed', functi
         assert.ok($(content).hasClass(SCROLLABLE_CONTENT_CLASS), 'returns content');
     });
 
-    QUnit.test('container', function(assert) {
+    QUnit.test(`container(), useNative: ${useNative}`, function(assert) {
         const $scrollable = $('#scrollable').dxScrollable({ useNative });
         const container = $scrollable.dxScrollable('instance').container();
 
         assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
         assert.ok($(container).hasClass(SCROLLABLE_CONTAINER_CLASS), 'returns container');
     });
-});
 
-QUnit.test('scrollBy with plain object', function(assert) {
-    const distance = 10;
-    const $scrollable = $('#scrollable').dxScrollable({
-        useNative: false,
-        onEnd: function() {
+    QUnit.test(`scrollBy with plain object: { left: value; top: value}, useNative: ${useNative}`, function(assert) {
+        assert.expect(2);
+
+        const distance = 10;
+        const $scrollable = $('#scrollable').dxScrollable({
+            useNative,
+            onEnd: function() {
+                const location = getScrollOffset($scrollable);
+                assert.equal(location.top, -distance, 'scroll to correctly vertical position');
+                assert.equal(location.left, 0, 'scroll to correctly horizontal position');
+            }
+        });
+        const scrollable = $scrollable.dxScrollable('instance');
+
+        scrollable.scrollBy({ left: distance, top: distance });
+
+        if(useNative) {
             const location = getScrollOffset($scrollable);
             assert.equal(location.top, -distance, 'scroll to correctly vertical position');
-            assert.equal(location.left, 0, 'scroll to correctly horizontal position');
+            assert.equal(location.left, isRenovation ? 0 : -distance, 'scroll to correctly horizontal position');
         }
     });
-    const scrollable = $scrollable.dxScrollable('instance');
 
-    scrollable.scrollBy({ left: distance, top: distance });
+    QUnit.test(`scrollBy with plain object: { x: value; y: value}, useNative: ${useNative}`, function(assert) {
+        assert.expect(2);
+
+        const distance = 10;
+        const $scrollable = $('#scrollable').dxScrollable({
+            useNative,
+            onEnd: function() {
+                const location = getScrollOffset($scrollable);
+                assert.equal(location.top, -distance, 'scroll to correctly vertical position');
+                assert.equal(location.left, 0, 'scroll to correctly horizontal position');
+            }
+        });
+        const scrollable = $scrollable.dxScrollable('instance');
+
+        scrollable.scrollBy({ x: distance, y: distance });
+
+        if(useNative) {
+            const location = getScrollOffset($scrollable);
+            assert.equal(location.top, -distance, 'scroll to correctly vertical position');
+            assert.equal(location.left, isRenovation ? 0 : -distance, 'scroll to correctly horizontal position');
+        }
+    });
 });
 
 QUnit.test('scrollBy with numeric', function(assert) {
@@ -480,16 +512,19 @@ QUnit.test('changing option showScrollbar does not duplicate scrollbar', functio
 });
 
 QUnit.test('switching useNative to false turns off native scrolling', function(assert) {
-    const $scrollable = $('#scrollable').dxScrollable({
+    const scrollable = $('#scrollable').dxScrollable({
         useNative: true
-    });
+    }).dxScrollable('instance');
 
-    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    assert.notEqual($container.css('overflowY'), 'hidden');
+    let containerEl = $(scrollable.container()).get(0);
+    assert.equal(getElementOverflowX(containerEl), 'hidden');
+    assert.equal(getElementOverflowY(containerEl), 'auto');
 
-    $scrollable.dxScrollable('option', 'useNative', false);
+    scrollable.option('useNative', false);
 
-    assert.equal($container.css('overflowY'), 'hidden');
+    containerEl = $(scrollable.container()).get(0);
+    assert.equal(getElementOverflowX(containerEl), 'hidden');
+    assert.equal(getElementOverflowY(containerEl), 'hidden');
 });
 
 QUnit.test('scrollToElement', function(assert) {

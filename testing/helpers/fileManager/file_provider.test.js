@@ -15,6 +15,12 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
         this._requestMode = options.requestMode || 'multiple';
         this._raiseErrorMode = options.raiseErrorMode || 'none';
         this._onRaiseError = options.onRaiseError;
+
+        this._counters = {
+            deletion: 0,
+            moving: 0,
+            copying: 0
+        };
     }
 
     getItems(path) {
@@ -42,7 +48,7 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
     deleteItems(items) {
         // multiple request
         if(this._useMultipleRequestMode()) {
-            return this._getDelayedDeferreds(items, item => this._provider.deleteItems([ item ]));
+            return this._getDelayedDeferreds(items, item => this._provider.deleteItems([ item ]), 'deletion');
         }
 
         // single request
@@ -57,7 +63,7 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
     moveItems(items, destinationDir) {
         // multiple request
         if(this._useMultipleRequestMode()) {
-            return this._getDelayedDeferreds(items, item => this._provider.moveItems([ item ], destinationDir));
+            return this._getDelayedDeferreds(items, item => this._provider.moveItems([ item ], destinationDir), 'moving');
         }
 
         // single request
@@ -72,7 +78,7 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
     copyItems(items, destinationDir) {
         // multiple request
         if(this._useMultipleRequestMode()) {
-            return this._getDelayedDeferreds(items, item => this._provider.copyItems([ item ], destinationDir));
+            return this._getDelayedDeferreds(items, item => this._provider.copyItems([ item ], destinationDir), 'copying');
         }
 
         // single request
@@ -115,8 +121,10 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
         return this._doDelay(null, DEFAULT_DELAY, true);
     }
 
-    _getDelayedDeferreds(items, itemAction) {
-        return items.map((item, index) => this._doDelay(() => {
+    _getDelayedDeferreds(items, itemAction, counterName) {
+        const index = this._counters[counterName];
+        this._counters[counterName]++;
+        return items.map(item => this._doDelay(() => {
             this._raiseError(item, index);
             return itemAction(item, index);
         }, (1 + 0.5 * index) * DEFAULT_DELAY, true));

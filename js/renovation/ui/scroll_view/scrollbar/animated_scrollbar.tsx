@@ -9,17 +9,17 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
-import { BaseWidgetProps } from '../common/base_props';
+import { DisposeEffectReturn } from '../../../utils/effect_return';
+import { BaseWidgetProps } from '../../common/base_props';
 
 import { Scrollbar } from './scrollbar';
-import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
-import { ScrollableSimulatedProps } from './common/simulated_strategy_props';
-import { inRange } from '../../../core/utils/math';
-import { DxMouseEvent } from './common/types.d';
-import { clampIntoRange } from './utils/clamp_into_range';
-import { AnimatedScrollbarProps } from './common/animated_scrollbar_props';
-import { isDxMouseWheelEvent } from '../../../events/utils/index';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../../animation/frame';
+import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
+import { inRange } from '../../../../core/utils/math';
+import { DxMouseEvent } from '../common/types';
+import { clampIntoRange } from '../utils/clamp_into_range';
+import { AnimatedScrollbarProps } from '../common/animated_scrollbar_props';
+import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
 
@@ -215,6 +215,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.props.onRelease?.();
 
     this.wasRelease = true;
+    this.needRiseEnd = true;
 
     this.resetThumbScrolling();
     this.pendingRefreshing = false;
@@ -251,8 +252,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   /* istanbul ignore next */
   riseEnd(): void {
     if (
-      //! this.props.scrolling
-      // &&
       this.inBounds
       && this.needRiseEnd
       && this.finished
@@ -276,7 +275,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   riseReachBottom(): void {
     if (
       this.props.forceGeneratePockets
-      // && !this.props.scrolling
       && this.needRiseEnd
       && this.inRange
       && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
@@ -297,7 +295,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   bounceAnimatorStart(): void {
     if (
       !this.inRange
-      && this.needRiseEnd// || this.forceMoveToBound)
+      && this.needRiseEnd
       && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
       && !(this.pendingRefreshing || this.pendingLoading)
       && -this.props.maxOffset > 0
@@ -336,6 +334,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   get isReachBottom(): boolean {
     // TODO: adapt this method for 4k monitor
     // when sizes is decimal and a rounding error of about 1px
+    // scrollLocation = 72.3422123432px | maxOffset = 73px
     return this.props.reachBottomEnabled
       && (this.props.scrollLocation - this.props.maxOffset <= 0);
   }

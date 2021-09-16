@@ -7,9 +7,9 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 
-import { isDefined } from '../../../core/utils/type';
-import messageLocalization from '../../../localization/message';
-import { LoadPanel, LoadPanelProps } from '../overlays/load_panel';
+import { isDefined } from '../../../../core/utils/type';
+import messageLocalization from '../../../../localization/message';
+import { LoadPanel, LoadPanelProps } from '../../overlays/load_panel';
 
 const SCROLLVIEW_LOADPANEL = 'dx-scrollview-loadpanel';
 
