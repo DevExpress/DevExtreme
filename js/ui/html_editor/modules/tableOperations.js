@@ -137,12 +137,14 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
             $table.css('width', 'initial');
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
-                setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
+                const nextColumnWidth = $verticalCells.eq(0).outerWidth() - widthDiff;
+                setLineElementsAttrValue($verticalCells, 'width', nextColumnWidth > 0 ? nextColumnWidth : 0);
             } else {
                 const $prevColumnCell = $target.prev();
                 if($prevColumnCell.length === 1) {
                     $verticalCells = getLineElements($table, index - 1);
-                    setLineElementsAttrValue($verticalCells, 'width', $verticalCells.eq(0).outerWidth() - widthDiff);
+                    const prevColumnWidth = $verticalCells.eq(0).outerWidth() - widthDiff;
+                    setLineElementsAttrValue($verticalCells, 'width', prevColumnWidth > 0 ? prevColumnWidth : 0);
                 }
             }
         }
@@ -262,7 +264,19 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             caption: 'Dimentions',
             colCount: 3,
             items: [
-                'width', 'height', {
+                {
+                    dataField: 'width',
+                    editorOptions: {
+                        min: 0
+                    }
+                },
+                {
+                    dataField: 'height',
+                    editorOptions: {
+                        min: 0
+                    }
+                },
+                {
                     itemType: 'simple',
                     template: () => {
                         const $content = $('<div>');
@@ -405,7 +419,18 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             caption: 'Dimentions',
             colCount: 3,
             items: [
-                'width', 'height', 'padding'
+                {
+                    dataField: 'width',
+                    editorOptions: {
+                        min: 0
+                    }
+                },
+                {
+                    dataField: 'height',
+                    editorOptions: {
+                        min: 0
+                    }
+                }, 'padding'
             ]
         }, {
             itemType: 'group',

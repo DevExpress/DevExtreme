@@ -450,13 +450,50 @@ module('Table properties forms', {
         $okButton.trigger('dxclick');
         this.clock.tick(500);
 
-        assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
-        assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
-        assert.roughEqual($targetCell.next().outerWidth(), 100, 2, 'next cell width attr is correct');
+        assert.strictEqual($targetCell.outerWidth(), 700, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
+        assert.roughEqual($targetCell.next().outerWidth(), 0, 1, 'next cell width attr is correct');
         assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+        assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
     });
 
-    test('Check cell width attributes if new value is negative', function(assert) {
+    test('Check cell width attributes if new value is more than the full table width and all columns has fixed width', function(assert) {
+        this.createWidget({ width: 632, value: '\
+            <table>\
+                <tr>\
+                    <td width="300px">0_0 content</td>\
+                    <td width="300px">0_1</td>\
+                </tr>\
+                <tr>\
+                    <td width="300px">1_0</td>\
+                    <td width="300px">1_1</td>\
+                </tr>\
+            </table>\
+            <br>' });
+
+        const $tableElement = this.$element.find('table').eq(0);
+        const $targetCell = $tableElement.find('td').eq(0);
+
+        showCellPropertiesForm(this.instance, $targetCell);
+        this.clock.tick(500);
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+        const formInstance = $form.dxForm('instance');
+
+        const widthEditor = formInstance.getEditor('width');
+        widthEditor.option('value', 700);
+
+        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+        $okButton.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.roughEqual($targetCell.outerWidth(), 567, 1, 'cell width is applied');
+        assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
+        assert.roughEqual($targetCell.next().outerWidth(), 32, 1, 'next cell width attr is correct');
+        assert.strictEqual($targetCell.next().attr('width'), '0px', 'next cell width attr is correct');
+        assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
+    });
+
+    test('Check cell width and height editor min options', function(assert) {
         this.createWidget({ width: 632, value: '\
         <table>\
             <tr>\
@@ -481,14 +518,12 @@ module('Table properties forms', {
         const widthEditor = formInstance.getEditor('width');
         widthEditor.option('value', -100);
 
-        const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-        $okButton.trigger('dxclick');
-        this.clock.tick(500);
 
-        assert.strictEqual($targetCell.outerWidth(), 300, 'cell width is applied');
-        assert.strictEqual($targetCell.attr('width'), '300px', 'cell width attr is applied');
-        assert.roughEqual($targetCell.next().outerWidth(), 300, 2, 'next cell width attr is correct');
-        assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+        const heightEditor = formInstance.getEditor('width');
+        widthEditor.option('value', -100);
+
+        assert.strictEqual(widthEditor.option('min'), 0);
+        assert.strictEqual(heightEditor.option('min'), 0);
     });
 
 
