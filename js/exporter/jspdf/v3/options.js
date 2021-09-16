@@ -4,6 +4,9 @@ function normalizeOptions(rows) {
     rows.forEach(row => {
         row.cells.forEach(({ pdfCell }) => {
             normalizePadding(pdfCell);
+            // TODO: normalizeTextColor()
+            // TODO: normalizeBackgroundColor()
+            // TODO: ...
         });
     });
 }
