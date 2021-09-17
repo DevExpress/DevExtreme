@@ -308,7 +308,6 @@ if(devices.real().deviceType === 'desktop') {
                     $contentContainer2.css('display', 'inline-block');
                 }
 
-
                 $scrollable.dxScrollable('option', 'onScroll', () => {
                     setTimeout(() => {
                         this.clock.tick(400);
@@ -323,7 +322,6 @@ if(devices.real().deviceType === 'desktop') {
                 const keyboard = keyboardMock($contentContainer1);
                 $contentContainer2.focus();
                 keyboard.keyDown('tab');
-
             });
         });
     });
