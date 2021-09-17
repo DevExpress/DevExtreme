@@ -168,10 +168,6 @@ class Scheduler extends Widget {
             resources: [],
             loadedResources: [],
             resourceLoaderMap: new Map(),
-            resourceDataFields: {
-                getter: {},
-                setter: {}
-            },
 
             dataSource: null,
 
