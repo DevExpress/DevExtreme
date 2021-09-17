@@ -38,7 +38,7 @@ class BaseRenderingStrategy {
     get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
     get viewStartDayHour() { return this.options.viewStartDayHour; }
     get viewEndDayHour() { return this.options.viewEndDayHour; }
-    get viewCellDuration() { return this.options.viewCellDuration; }
+    get cellDuration() { return this.options.cellDuration; }
     get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
     get topVirtualCellCount() { return this.options.topVirtualCellCount; }
     get groupOrientation() { return this.options.groupOrientation; }
