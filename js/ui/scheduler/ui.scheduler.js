@@ -168,6 +168,10 @@ class Scheduler extends Widget {
             resources: [],
             loadedResources: [],
             resourceLoaderMap: new Map(),
+            resourceDataFields: {
+                getter: {},
+                setter: {}
+            },
 
             dataSource: null,
 
@@ -509,6 +513,7 @@ class Scheduler extends Widget {
                 });
                 break;
             case 'resources':
+                this.option('resourceDataFields', createExpressions(this.option('resources')));
                 this.agendaResourceProcessor.initializeState(value);
                 this.updateFactoryInstances();
 
@@ -664,7 +669,7 @@ class Scheduler extends Widget {
                 this._updateExpression(name, value);
 
                 getAppointmentDataProvider(this.key).updateDataAccessors(
-                    utils.dataAccessors.combine(this._dataAccessors, createExpressions(this.option('resources')))
+                    utils.dataAccessors.combine(this._dataAccessors, this.option('resourceDataFields'))
                 );
 
                 this._initAppointmentTemplate();
@@ -690,6 +695,7 @@ class Scheduler extends Widget {
                 break;
             case 'loadedResources':
             case 'resourceLoaderMap':
+            case 'resourceDataFields':
                 break;
             default:
                 super._optionChanged(args);
@@ -883,6 +889,8 @@ class Scheduler extends Widget {
             disabled: this.option('disabledExpr')
         });
 
+        this.option('resourceDataFields', createExpressions(this.option('resources')));
+
         super._init();
 
         this._initDataSource();
@@ -931,8 +939,8 @@ class Scheduler extends Widget {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
             timeZone: this.option('timeZone'),
-            getDataAccessors: (key) => {
-                return utils.dataAccessors.combine(this._dataAccessors, createExpressions(this.option('resources')));
+            getDataAccessors: () => {
+                return utils.dataAccessors.combine(this._dataAccessors, this.option('resourceDataFields'));
             },
         });
     }
@@ -1072,10 +1080,6 @@ class Scheduler extends Widget {
             this.getAppointmentsInstance().option('items')
         );
     }
-
-    // initResourceExpressions(resources) {
-    //     this.resourceDataAccessors = createExpressions(resources);
-    // }
 
     _initExpressions(fields) {
         const isDateField = function(field) {
@@ -1231,7 +1235,7 @@ class Scheduler extends Widget {
         this._appointmentForm = this.createAppointmentForm();
         this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
 
-        if(this._isDataSourceLoading()) {
+        if(this._isDataSourceLoaded()) {
             this._initMarkupCore(this.option('loadedResources'));
             this._dataSourceChangedHandler(this._dataSource.items());
             this._fireContentReadyAction();
@@ -1273,7 +1277,7 @@ class Scheduler extends Widget {
             getResourcesFromItem: (rawAppointment) => {
                 return getResourcesFromItem(
                     this.option('resources'),
-                    createExpressions(this.option('resources')),
+                    this.option('resourceDataFields'),
                     rawAppointment,
                     true
                 );
@@ -1351,7 +1355,7 @@ class Scheduler extends Widget {
         this._filterAppointmentsByDate();
     }
 
-    _isDataSourceLoaded() {
+    _isDataSourceLoaded() { // TODO
         return this._dataSource && this._dataSource.isLoaded();
     }
 
@@ -1858,7 +1862,7 @@ class Scheduler extends Widget {
 
         const rawResult = result.source();
 
-        setResourceToAppointment(this.option('resources'), createExpressions(this.option('resources')), rawResult, targetCell.groups);
+        setResourceToAppointment(this.option('resources'), this.option('resourceDataFields'), rawResult, targetCell.groups);
 
         return rawResult;
     }
@@ -2068,7 +2072,7 @@ class Scheduler extends Widget {
         const groups = this._getCurrentViewOption('groups');
 
         if(groups?.length) {
-            const resourcesSetter = createExpressions(this.option('resources')).setter;
+            const resourcesSetter = this.option('resourceDataFields').setter;
             const workSpace = this._workSpace;
             let getGroups;
             let setResourceCallback;
@@ -2193,7 +2197,7 @@ class Scheduler extends Widget {
         return (appointmentConfig) => {
             const resourceConfig = {
                 resources: this.option('resources'),
-                dataAccessors: createExpressions(this.option('resources')),
+                dataAccessors: this.option('resourceDataFields'),
                 loadedResources: this.option('loadedResources'),
                 resourceLoaderMap: this.option('resourceLoaderMap')
             };
