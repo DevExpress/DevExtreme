@@ -1233,7 +1233,7 @@ export interface dxTreeListColumn extends ColumnBase {
      * @type Enums.TreeListCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons';
+    type?: 'adaptive' | 'buttons' | 'drag';
 }
 
 /**

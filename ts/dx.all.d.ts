@@ -7423,7 +7423,8 @@ declare module DevExpress.ui {
       | 'buttons'
       | 'detailExpand'
       | 'groupExpand'
-      | 'selection';
+      | 'selection'
+      | 'drag';
   }
   /**
    * @deprecated Use the DataGrid's ColumnButton type instead
@@ -20006,7 +20007,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumn.type]
      */
-    type?: 'adaptive' | 'buttons';
+    type?: 'adaptive' | 'buttons' | 'drag';
   }
   /**
    * @deprecated Use the TreeList's ColumnButton type instead

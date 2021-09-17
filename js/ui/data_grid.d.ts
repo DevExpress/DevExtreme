@@ -4490,7 +4490,7 @@ export interface dxDataGridColumn extends ColumnBase {
      * @type Enums.GridCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
+    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 }
 
 /**
