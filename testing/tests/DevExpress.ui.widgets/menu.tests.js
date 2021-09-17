@@ -16,7 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'generic_light.css!';
-import { commonCallbacks, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
+import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 
 QUnit.testStart(function() {
     const markup =
@@ -2163,7 +2163,7 @@ QUnit.module('adaptivity: render', {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(commonCallbacks, 'getInnerHeight').returns(700);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(700);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         try {
@@ -2645,8 +2645,8 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('Adaptive menu should not flick when the window has been resized with jQuery 3.3.1', function(assert) {
-        const getOuterWidth = sinon.spy(commonCallbacks, 'getOuterWidth');
-        const setOuterWidth = sinon.spy(commonCallbacks, 'setOuterWidth');
+        const getOuterWidth = sinon.spy(implementationsMap, 'getOuterWidth');
+        const setOuterWidth = sinon.spy(implementationsMap, 'setOuterWidth');
 
         try {
             new Menu(this.$element, {

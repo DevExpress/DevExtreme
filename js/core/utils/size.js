@@ -144,7 +144,8 @@ export const getVisibleHeight = function(element) {
     return 0;
 };
 
-export const commonCallbacks = {
+// TODO: remove when we'll start mocking named exports
+export const implementationsMap = {
     getWidth: (...args) => elementSizeHelper('width', ...args),
     setWidth: (...args) => elementSizeHelper('width', ...args),
     getHeight: (...args) => elementSizeHelper('height', ...args),
@@ -162,18 +163,18 @@ function elementSizeHelper(sizeProperty, el, value) {
     return arguments.length === 2 ? elementSize(el, sizeProperty) : elementSize(el, sizeProperty, value);
 }
 
-export const getWidth = (el) => commonCallbacks.getWidth(el);
-export const setWidth = (el, value) => commonCallbacks.setWidth(el, value);
-export const getHeight = (el) => commonCallbacks.getHeight(el);
-export const setHeight = (el, value) => commonCallbacks.setHeight(el, value);
-export const getOuterWidth = (el, includeMargin) => commonCallbacks.getOuterWidth(el, includeMargin || false);
-export const setOuterWidth = (el, value) => commonCallbacks.setOuterWidth(el, value);
-export const getOuterHeight = (el, includeMargin) => commonCallbacks.getOuterHeight(el, includeMargin || false);
-export const setOuterHeight = (el, value) => commonCallbacks.setOuterHeight(el, value);
-export const getInnerWidth = (el) => commonCallbacks.getInnerWidth(el);
-export const setInnerWidth = (el, value) => commonCallbacks.setInnerWidth(el, value);
-export const getInnerHeight = (el) => commonCallbacks.getInnerHeight(el);
-export const setInnerHeight = (el, value) => commonCallbacks.setInnerHeight(el, value);
+export const getWidth = (el) => implementationsMap.getWidth(el);
+export const setWidth = (el, value) => implementationsMap.setWidth(el, value);
+export const getHeight = (el) => implementationsMap.getHeight(el);
+export const setHeight = (el, value) => implementationsMap.setHeight(el, value);
+export const getOuterWidth = (el, includeMargin) => implementationsMap.getOuterWidth(el, includeMargin || false);
+export const setOuterWidth = (el, value) => implementationsMap.setOuterWidth(el, value);
+export const getOuterHeight = (el, includeMargin) => implementationsMap.getOuterHeight(el, includeMargin || false);
+export const setOuterHeight = (el, value) => implementationsMap.setOuterHeight(el, value);
+export const getInnerWidth = (el) => implementationsMap.getInnerWidth(el);
+export const setInnerWidth = (el, value) => implementationsMap.setInnerWidth(el, value);
+export const getInnerHeight = (el) => implementationsMap.getInnerHeight(el);
+export const setInnerHeight = (el, value) => implementationsMap.setInnerHeight(el, value);
 
 export const elementSize = function(el, sizeProperty, value) {
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';

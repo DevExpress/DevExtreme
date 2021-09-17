@@ -7,7 +7,7 @@ import FileItemsController from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
 import fx from 'animation/fx';
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
-import { commonCallbacks } from 'core/utils/size';
+import { implementationsMap } from 'core/utils/size';
 
 const moduleConfig = {
 
@@ -321,8 +321,8 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('splitter should change width of dirs tree and file items areas', function(assert) {
-        const originalFunc = commonCallbacks.getWidth;
-        commonCallbacks.getWidth = () => 900;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 900;
 
         $('#fileManager').css('width', '900px');
         this.wrapper.getInstance().repaint();
@@ -356,7 +356,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.equal(this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, 'Dirs tree has correct width');
         assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, splitterWidth, 'Item view has correct width');
 
-        commonCallbacks.getWidth = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 
     test('file items with the wrong extension is not shown', function(assert) {

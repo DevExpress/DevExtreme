@@ -1,4 +1,4 @@
-import { commonCallbacks } from 'core/utils/size';
+import { implementationsMap } from 'core/utils/size';
 
 const defaultCommonCallbacks = {};
 
@@ -13,11 +13,11 @@ function enumerateProperties(callback) {
 }
 
 export function initializeSizeMocks() {
-    if(commonCallbacks.for) { return; }
+    if(implementationsMap.for) { return; }
 
-    commonCallbacks.map = new Map();
+    implementationsMap.map = new Map();
     enumerateProperties(propertyName => {
-        defaultCommonCallbacks[propertyName] = commonCallbacks[propertyName];
+        defaultCommonCallbacks[propertyName] = implementationsMap[propertyName];
         const newCallback = function(element, value) {
             const target = this.map.get(element);
             if(target) {
@@ -25,9 +25,9 @@ export function initializeSizeMocks() {
             }
             return defaultCommonCallbacks[propertyName](...arguments);
         };
-        commonCallbacks[propertyName] = newCallback.bind(commonCallbacks);
+        implementationsMap[propertyName] = newCallback.bind(implementationsMap);
     });
-    commonCallbacks.for = function(target) {
+    implementationsMap.for = function(target) {
         let targetCallbacks = this.map.get(target);
 
         if(!targetCallbacks) {
@@ -39,13 +39,13 @@ export function initializeSizeMocks() {
         }
 
         return targetCallbacks;
-    }.bind(commonCallbacks);
+    }.bind(implementationsMap);
 }
 
 export function destroySizeMocks() {
     enumerateProperties(propertyName => {
-        commonCallbacks[propertyName] = defaultCommonCallbacks[propertyName];
+        implementationsMap[propertyName] = defaultCommonCallbacks[propertyName];
     });
-    delete commonCallbacks.for;
-    delete commonCallbacks.map;
+    delete implementationsMap.for;
+    delete implementationsMap.map;
 }

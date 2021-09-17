@@ -1,4 +1,4 @@
-const { setHeight, setWidth, commonCallbacks } = require('core/utils/size');
+const { setHeight, setWidth, implementationsMap } = require('core/utils/size');
 const renderer = require('core/renderer');
 
 QUnit.module('renderer');
@@ -255,7 +255,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
     const innerPropName = 'inner' + propName;
     propName = propName.toLocaleLowerCase();
     const setter = function(target, $el, value) {
-        return commonCallbacks['set' + target[0].toUpperCase() + target.slice(1)](...[...arguments].slice(1));
+        return implementationsMap['set' + target[0].toUpperCase() + target.slice(1)](...[...arguments].slice(1));
     };
 
     QUnit.test(propName + ' shouldn\'t take into consideration borders and paddings if box-sizing isn\'t border-box', function(assert) {

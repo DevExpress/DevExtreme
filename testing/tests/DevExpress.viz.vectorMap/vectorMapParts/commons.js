@@ -28,7 +28,7 @@ const rendererModule = require('viz/core/renderers/renderer');
 const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const tooltipModule = require('viz/core/tooltip');
-const { commonCallbacks } = require('core/utils/size');
+const { implementationsMap } = require('core/utils/size');
 
 require('viz/vector_map');
 
@@ -85,17 +85,17 @@ exports.environment = {
         this.title = new vizMocks.Title();
         this.exportMenu = new StubExportMenu();
         this.tooltip = new vizMocks.Tooltip();
-        this._$fn_width = commonCallbacks.getWidth;
-        this._$fn_height = commonCallbacks.getHeight;
-        commonCallbacks.getWidth = returnValue(400);
-        commonCallbacks.getHeight = returnValue(300);
+        this._$fn_width = implementationsMap.getWidth;
+        this._$fn_height = implementationsMap.getHeight;
+        implementationsMap.getWidth = returnValue(400);
+        implementationsMap.getHeight = returnValue(300);
         stubComponentConstructors(this);
     },
 
     afterEach: function() {
         this.$container.remove(); //  To invoke Component disposing mechanism
-        commonCallbacks.getWidth = this._$fn_width;
-        commonCallbacks.getHeight = this._$fn_height;
+        implementationsMap.getWidth = this._$fn_width;
+        implementationsMap.getHeight = this._$fn_height;
     },
 
     createMap: function(options) {

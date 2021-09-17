@@ -7,7 +7,7 @@ const Tooltip = tooltipModule.Tooltip;
 import vizUtils from 'viz/core/utils';
 import rendererModule from 'viz/core/renderers/renderer';
 import domAdapter from 'core/dom_adapter';
-import { commonCallbacks } from 'core/utils/size';
+import { implementationsMap } from 'core/utils/size';
 import { initializeSizeMocks, destroySizeMocks } from '../../helpers/sizeMocks.js';
 
 QUnit.testStart(function() {
@@ -1065,8 +1065,8 @@ QUnit.test('Show. W/o params', function(assert) {
         this.tooltip.move = sinon.spy(function() { return this; });
         this.tooltip._wrapper.appendTo = sinon.spy();
         this.tooltip._textGroupHtml.css = sinon.spy();
-        commonCallbacks.for(this.tooltip._textGroupHtml).getWidth = sinon.spy(function() { return 85; });
-        commonCallbacks.for(this.tooltip._textGroupHtml).getHeight = sinon.spy(function() { return 43; });
+        implementationsMap.for(this.tooltip._textGroupHtml).getWidth = sinon.spy(function() { return 85; });
+        implementationsMap.for(this.tooltip._textGroupHtml).getHeight = sinon.spy(function() { return 43; });
         this.tooltip._textHtml.empty = sinon.spy();
         const eventData = { tag: 'event-data' };
 
@@ -1098,7 +1098,7 @@ QUnit.test('Show. W/o params', function(assert) {
         assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
 
         assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
-        assert.equal(commonCallbacks.for(this.tooltip._textGroupHtml).getWidth.callCount, 0, 'textGroupHtml width');
+        assert.equal(implementationsMap.for(this.tooltip._textGroupHtml).getWidth.callCount, 0, 'textGroupHtml width');
 
         assert.equal(this.tooltip._textHtml.empty.callCount, 1, 'textHtml empty');
     } finally {
@@ -1423,8 +1423,8 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
         this.tooltip.move = sinon.spy(function() { return this; });
         this.tooltip._wrapper.appendTo = sinon.spy();
         this.tooltip._textGroupHtml.css = sinon.spy();
-        commonCallbacks.for(this.tooltip._textGroupHtml).getWidth = sinon.spy(function() { return 85; });
-        commonCallbacks.for(this.tooltip._textGroupHtml).getHeight = sinon.spy(function() { return 43; });
+        implementationsMap.for(this.tooltip._textGroupHtml).getWidth = sinon.spy(function() { return 85; });
+        implementationsMap.for(this.tooltip._textGroupHtml).getHeight = sinon.spy(function() { return 43; });
         this.tooltip._textHtml.empty = sinon.spy();
         const eventData = { tag: 'event-data' };
 
@@ -1456,7 +1456,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
         assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
 
         assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
-        assert.equal(commonCallbacks.for(this.tooltip._textGroupHtml).getWidth.callCount, 0, 'textGroupHtml width');
+        assert.equal(implementationsMap.for(this.tooltip._textGroupHtml).getWidth.callCount, 0, 'textGroupHtml width');
 
         assert.equal(this.tooltip._textHtml.empty.callCount, 1, 'textHtml empty');
 
@@ -1776,7 +1776,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
 
     try {
         this.tooltip._textGroupHtml.css = sinon.spy();
-        commonCallbacks.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 59.2; });
+        implementationsMap.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 59.2; });
 
         // act
         this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
@@ -1864,7 +1864,7 @@ QUnit.test('Center-center side of page, Html', function(assert) {
 
         this.tooltip._textGroupHtml.css = sinon.spy();
         sinon.spy(this.tooltip._textHtml, 'css');
-        commonCallbacks.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 60; });
+        implementationsMap.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 60; });
 
         // act
         this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300, offset: 30 });

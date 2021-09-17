@@ -10,7 +10,7 @@ const viewPortChanged = viewPort.changeCallback;
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import readyCallbacks from 'core/utils/ready_callbacks';
 import config from 'core/config';
-import { commonCallbacks } from 'core/utils/size';
+import { implementationsMap } from 'core/utils/size';
 
 const userAgents = {
     iphone_12: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1',
@@ -426,20 +426,20 @@ QUnit.module('orientation', {
 
         that.currentWidth = 100;
         that.currentHeight = 200;
-        that.originalWidth = commonCallbacks.getWidth;
-        that.originalHeight = commonCallbacks.getHeight;
+        that.originalWidth = implementationsMap.getWidth;
+        that.originalHeight = implementationsMap.getHeight;
 
         // NOTE: using renderer.height() and renderer.width() for correct window size detecting on WP8
-        commonCallbacks.getWidth = function() {
+        implementationsMap.getWidth = function() {
             return that.currentWidth;
         };
-        commonCallbacks.getHeight = function() {
+        implementationsMap.getHeight = function() {
             return that.currentHeight;
         };
     },
     afterEach: function() {
-        commonCallbacks.getWidth = this.originalWidth;
-        commonCallbacks.getHeight = this.originalHeight;
+        implementationsMap.getWidth = this.originalWidth;
+        implementationsMap.getHeight = this.originalHeight;
     }
 });
 

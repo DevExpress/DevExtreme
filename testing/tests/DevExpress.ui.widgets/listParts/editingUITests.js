@@ -18,7 +18,7 @@ import ArrayStore from 'data/array_store';
 
 import 'ui/action_sheet';
 import 'ui/list';
-import { commonCallbacks } from 'core/utils/size';
+import { implementationsMap } from 'core/utils/size';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
@@ -945,8 +945,8 @@ QUnit.test('multiple swipes should not break deletion', function(assert) {
 });
 
 QUnit.test('optimizations', function(assert) {
-    const getOrigOuterWidth = commonCallbacks.getOuterWidth;
-    const setOrigOuterWidth = commonCallbacks.setOuterWidth;
+    const getOrigOuterWidth = implementationsMap.getOuterWidth;
+    const setOrigOuterWidth = implementationsMap.setOuterWidth;
     const outerWidthStub = sinon.stub();
 
     try {
@@ -960,11 +960,11 @@ QUnit.test('optimizations', function(assert) {
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
 
-        commonCallbacks.getOuterWidth = function() {
+        implementationsMap.getOuterWidth = function() {
             outerWidthStub();
             return getOrigOuterWidth.apply(this, arguments);
         };
-        commonCallbacks.setOuterWidth = function() {
+        implementationsMap.setOuterWidth = function() {
             outerWidthStub();
             return setOrigOuterWidth.apply(this, arguments);
         };
@@ -973,8 +973,8 @@ QUnit.test('optimizations', function(assert) {
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     } finally {
         assert.strictEqual(outerWidthStub.callCount, 2, 'outerWidth should be calculated only once for item and button');
-        commonCallbacks.getOuterWidth = getOrigOuterWidth;
-        commonCallbacks.setOuterWidth = setOrigOuterWidth;
+        implementationsMap.getOuterWidth = getOrigOuterWidth;
+        implementationsMap.setOuterWidth = setOrigOuterWidth;
     }
 });
 

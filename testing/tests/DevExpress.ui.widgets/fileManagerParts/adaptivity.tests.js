@@ -3,7 +3,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
-import { commonCallbacks, getOuterWidth } from 'core/utils/size';
+import { implementationsMap, getOuterWidth } from 'core/utils/size';
 
 const { test } = QUnit;
 
@@ -18,23 +18,23 @@ const moduleConfig = {
         this.currentWidth = 400;
         this.currentHeight = 300;
 
-        this.originalWidth = commonCallbacks.getWidth;
-        this.originalHeight = commonCallbacks.getHeight;
+        this.originalWidth = implementationsMap.getWidth;
+        this.originalHeight = implementationsMap.getHeight;
 
-        commonCallbacks.getWidth = function() {
+        implementationsMap.getWidth = function() {
             const arg = arguments[0];
             if(arg && arg[0] && arg[0] instanceof Window) {
                 return that.currentWidth;
             }
-            return that.originalWidth.apply(commonCallbacks, arguments);
+            return that.originalWidth.apply(implementationsMap, arguments);
         };
 
-        commonCallbacks.getHeight = function() {
+        implementationsMap.getHeight = function() {
             const arg = arguments[0];
             if(arg && arg[0] && arg[0] instanceof Window) {
                 return that.currentHeight;
             }
-            return that.originalHeight.apply(commonCallbacks, arguments);
+            return that.originalHeight.apply(implementationsMap, arguments);
         };
 
         this.$element = $('#fileManager')
@@ -62,8 +62,8 @@ const moduleConfig = {
         this.clock.restore();
         fx.off = false;
 
-        commonCallbacks.getWidth = this.originalWidth;
-        commonCallbacks.getHeight = this.originalHeight;
+        implementationsMap.getWidth = this.originalWidth;
+        implementationsMap.getHeight = this.originalHeight;
     }
 
 };
@@ -131,19 +131,19 @@ QUnit.module('Adaptivity', moduleConfig, () => {
     });
 
     test('progressPanel should change its mode on small screens', function(assert) {
-        const originalWidth = commonCallbacks.getWidth;
-        commonCallbacks.getWidth = () => 1200;
+        const originalWidth = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
         $('#fileManager').css('width', '100%');
         this.wrapper.getInstance().repaint();
 
         assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_SHRINK));
 
-        commonCallbacks.getWidth = () => 999;
+        implementationsMap.getWidth = () => 999;
         this.wrapper.getInstance().repaint();
 
         assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_OVERLAP));
 
-        commonCallbacks.getWidth = originalWidth;
+        implementationsMap.getWidth = originalWidth;
     });
 
     test('dirs panel must complete its expand on small screens', function(assert) {
