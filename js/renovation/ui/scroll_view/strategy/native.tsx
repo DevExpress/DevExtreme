@@ -433,33 +433,29 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     }
   }
 
-  @Effect()
+  @Effect({ run: 'once' })
   /* istanbul ignore next */
-  containerResizeObserver(): DisposeEffectReturn | null {
-    if (this.props.useSimulatedScrollbar) {
-      return null;
-    }
-
+  containerResizeObserver(): DisposeEffectReturn {
     const containerEl = this.containerRef.current;
 
     resizeObserverSingleton.observe(containerEl, ({ target }) => {
-      this.setContainerDimensions(target);
+      if (this.props.useSimulatedScrollbar) {
+        this.setContainerDimensions(target);
+      }
     });
 
     return (): void => { resizeObserverSingleton.unobserve(containerEl); };
   }
 
-  @Effect()
+  @Effect({ run: 'once' })
   /* istanbul ignore next */
-  contentResizeObserver(): DisposeEffectReturn | null {
-    if (this.props.useSimulatedScrollbar) {
-      return null;
-    }
-
+  contentResizeObserver(): DisposeEffectReturn {
     const contentEl = this.contentRef.current;
 
     resizeObserverSingleton.observe(contentEl, ({ target }) => {
-      this.setContentDimensions(target);
+      if (this.props.useSimulatedScrollbar) {
+        this.setContentDimensions(target);
+      }
     });
 
     return (): void => { resizeObserverSingleton.unobserve(contentEl); };
