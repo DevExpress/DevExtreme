@@ -1235,7 +1235,7 @@ class Scheduler extends Widget {
         this._appointmentForm = this.createAppointmentForm();
         this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
 
-        if(this._isDataSourceLoaded()) {
+        if(this._isDataSourceLoaded() || this._isDataSourceLoading()) {
             this._initMarkupCore(this.option('loadedResources'));
             this._dataSourceChangedHandler(this._dataSource.items());
             this._fireContentReadyAction();
