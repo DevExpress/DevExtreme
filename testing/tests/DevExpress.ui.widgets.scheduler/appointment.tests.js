@@ -43,7 +43,7 @@ const createInstance = () => {
     return $('#scheduler-appointment').dxSchedulerAppointment({
         key,
         observer,
-        getAppointmentColor: () => new Deferred().resolve().promise()
+        getAppointmentColor: () => new Deferred()
     }).dxSchedulerAppointment('instance');
 };
 
