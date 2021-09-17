@@ -1,6 +1,4 @@
 import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
 import { getPublicElement } from '../../core/element';
 
@@ -14,18 +12,6 @@ export const utils = {
             const settings = utils.dataAccessors.getAppointmentSettings(element);
             return settings?.info;
         },
-
-        combine: (dataAccessors, resourceDataAccessors) => { // TODO get rid of it and rework resourceManager
-            const result = extend(true, {}, dataAccessors);
-
-            if(dataAccessors) {
-                each(resourceDataAccessors, (type, accessor) => {
-                    result[type].resources = accessor;
-                });
-            }
-
-            return result;
-        }
     },
     DOM: {
         getHeaderHeight: (header) => {
