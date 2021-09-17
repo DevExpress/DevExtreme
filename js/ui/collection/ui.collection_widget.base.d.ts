@@ -46,8 +46,6 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -173,8 +171,6 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
 /**
  * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/collection/ui.collection_widget.base
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

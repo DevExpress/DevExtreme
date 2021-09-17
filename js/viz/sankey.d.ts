@@ -112,7 +112,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     alignment?: 'bottom' | 'center' | 'top' | Array<'bottom' | 'center' | 'top'>;
     /**
      * @docid
-     * @type Array<any>|Store|DataSource|DataSourceOptions|string
      * @notUsedInTheme
      * @public
      */
@@ -151,7 +150,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       /**
        * @docid
        * @type_function_param1 itemInfo: dxSankeyNode
-       * @type_function_return string
        * @notUsedInTheme
        */
       customizeText?: ((itemInfo: dxSankeyNode) => string);
@@ -531,9 +529,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
      * @default undefined
-     * @type_function_param1 info:object
-     * @type_function_param1_field1 source:string
-     * @type_function_param1_field2 target:string
      * @type_function_param1_field3 weight:Number
      * @type_function_return object
      * @public
@@ -542,9 +537,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
-     * @type_function_param1 info:object
      * @type_function_param1_field1 title:string:deprecated(label)
-     * @type_function_param1_field2 label:string
      * @type_function_param1_field3 weightIn:Number
      * @type_function_param1_field4 weightOut:Number
      * @type_function_return object
@@ -559,11 +552,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid dxSankeyOptions.tooltip.linkTooltipTemplate
-     * @type_function_param1 info:object
-     * @type_function_param1_field1 source:string
-     * @type_function_param1_field2 target:string
      * @type_function_param1_field3 weight:Number
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -571,11 +560,8 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
-     * @type_function_param1 info:object
-     * @type_function_param1_field1 label:string
      * @type_function_param1_field2 weightIn:Number
      * @type_function_param1_field3 weightOut:Number
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -585,8 +571,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
 /**
  * @docid
  * @inherits BaseWidget, DataHelperMixin
- * @module viz/sankey
- * @export default
  * @namespace DevExpress.viz
  * @public
  */
@@ -594,14 +578,12 @@ export default class dxSankey extends BaseWidget<dxSankeyOptions> {
     /**
      * @docid
      * @publicName getAllLinks()
-     * @return Array<dxSankeyLink>
      * @public
      */
     getAllLinks(): Array<dxSankeyLink>;
     /**
      * @docid
      * @publicName getAllNodes()
-     * @return Array<dxSankeyNode>
      * @public
      */
     getAllNodes(): Array<dxSankeyNode>;

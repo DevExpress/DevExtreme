@@ -8,15 +8,12 @@ export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOption
     /**
      * @docid
      * @public
-     * @type Array<any>
      */
     data?: Array<TValue>;
 }
 /**
  * @docid
  * @inherits Store
- * @module data/array_store
- * @export default
  * @public
  */
 export default class ArrayStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
