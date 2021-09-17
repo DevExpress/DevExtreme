@@ -8,10 +8,9 @@ const window = getWindow();
 
 export const resetActiveElement = () => {
     const activeElement = domAdapter.getActiveElement();
-    const body = domAdapter.getBody();
 
-    if(activeElement && activeElement !== body && activeElement.blur) {
-        activeElement.blur();
+    if(activeElement && activeElement !== domAdapter.getBody()) {
+        activeElement.blur?.();
     }
 };
 
