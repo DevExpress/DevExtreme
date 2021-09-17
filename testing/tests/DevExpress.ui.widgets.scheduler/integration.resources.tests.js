@@ -381,7 +381,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         getOrLoadResourceItem(
             instance.option('resources'),
-            instance.resourceLoaderMap,
+            instance.option('resourceLoaderMap'),
             'ownerId',
             1
         ).done(function(resource) {

@@ -842,7 +842,7 @@ module('Subscribes', {
             resources: this.instance.option('resources'),
             dataAccessors: createExpressions(this.instance.option('resources')),
             loadedResources: this.instance.option('loadedResources'),
-            resourceLoaderMap: this.instance.resourceLoaderMap
+            resourceLoaderMap: this.instance.option('resourceLoaderMap')
         };
 
         const result = getAppointmentColor(config, {
@@ -900,7 +900,7 @@ module('Subscribes', {
             resources: this.instance.option('resources'),
             dataAccessors: createExpressions(this.instance.option('resources')),
             loadedResources: this.instance.option('loadedResources'),
-            resourceLoaderMap: this.instance.resourceLoaderMap
+            resourceLoaderMap: this.instance.option('resourceLoaderMap')
         };
 
         const result = getAppointmentColor(config, {
