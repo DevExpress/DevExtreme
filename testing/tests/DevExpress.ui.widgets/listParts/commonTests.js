@@ -35,8 +35,6 @@ const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
 
-const isRenovation = !!ScrollView.IS_RENOVATED_WIDGET;
-
 const toSelector = cssClass => {
     return '.' + cssClass;
 };
@@ -3098,9 +3096,7 @@ QUnit.module('scrollView integration', {
         $list.dxScrollView('instance').scrollToElement = scrollToElementSpy;
 
         list.scrollToItem($item);
-
-        const firstCallArgs = scrollToElementSpy.firstCall.args[0];
-        assert.equal(isRenovation ? firstCallArgs : firstCallArgs, $item.get(0), 'list scrolled to item');
+        assert.equal(scrollToElementSpy.firstCall.args[0].get(0), $item.get(0), 'list scrolled to item');
     });
 
     QUnit.test('it should be possible to scroll to an item by denormalized index', function(assert) {
@@ -3118,9 +3114,7 @@ QUnit.module('scrollView integration', {
         const scrollToElementSpy = sinon.spy($list.dxScrollView('instance'), 'scrollToElement');
 
         list.scrollToItem(list.option('items')[1]);
-
-        const firstCallArgs = scrollToElementSpy.getCall(0).args[0];
-        assert.equal($(firstCallArgs).text(), $item.text(), 'list scrolled to correct item');
+        assert.equal(scrollToElementSpy.getCall(0).args[0].text(), $item.text(), 'list scrolled to correct item');
     });
 
     QUnit.test('list shouldn\'t be scrolled if item isn\'t specified', function(assert) {

@@ -218,6 +218,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(scrollable.scrollLeft(), 300, 'scroll position');
 
+        this.clock.restore();
         scrollable.scrollTo({ x: 100 });
         const scrollRight = getRightScrollOffset(scrollable);
 
@@ -234,8 +235,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 done();
             });
         });
-
-        this.clock.tick();
     });
 
     QUnit.test('Scroller state', function(assert) {
@@ -301,18 +300,19 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             columns: ['column1', 'column2', 'column3']
         });
 
-        this.clock.tick(400);
-
         const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
-        const rowsViewScrollable = $(dataGrid.$element().find('.dx-datagrid-rowsview')).dxScrollable('instance');
+        const $scrollContainer = $(dataGrid.$element().find('.dx-datagrid-rowsview .dx-scrollable-container'));
 
         // act
-        rowsViewScrollable.scrollTo({ left: 50 });
-        rowsViewScrollable.scrollTo({ left: 60 });
+        $scrollContainer.scrollLeft(50);
+        $scrollContainer.trigger('scroll');
+
+        $scrollContainer.scrollLeft(60);
+        $scrollContainer.trigger('scroll');
 
         // assert
         assert.equal($headerScrollContainer.scrollLeft(), 60, 'headersView scrollleft');
-        assert.equal($(rowsViewScrollable.container()).scrollLeft(), 60, 'rowsview scrollleft');
+        assert.equal($scrollContainer.scrollLeft(), 60, 'rowsview scrollleft');
     });
 
     // T608687

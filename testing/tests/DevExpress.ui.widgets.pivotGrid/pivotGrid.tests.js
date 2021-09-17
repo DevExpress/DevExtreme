@@ -4899,10 +4899,7 @@ QUnit.module('Tests with real timer', {}, () => {
                 contentReadyCount++;
                 if(contentReadyCount > 0) {
                     assert.equal(contentReadyCount, 1);
-
-                    setTimeout(() => { // wait to clear timer
-                        done();
-                    }, 400);
+                    done();
                 }
 
                 if(contentReadyCount > 2) {

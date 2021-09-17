@@ -1255,7 +1255,6 @@ QUnit.module('Expand/Collapse rows', () => {
         $('#treeList').css('max-height', 400);
 
         const done = assert.async();
-
         const treeList = createTreeList({
             loadingTimeout: null,
             scrolling: {
@@ -1277,7 +1276,6 @@ QUnit.module('Expand/Collapse rows', () => {
                 done();
             }, 310);
         });
-
     });
 
     // T692068
