@@ -61,18 +61,27 @@ function drawRect(doc, x, y, width, height, style) {
     }
 }
 
-function drawTextInRect(doc, text, rect, wordWrapEnabled, jsPdfTextOptions) {
+function getLineHeightShift(doc) {
+    const DEFAULT_LINE_HEIGHT = 1.15;
+
+    // TODO: check lineHeightFactor from text options. Currently supports only doc options - https://github.com/MrRio/jsPDF/issues/3234
+    return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
+}
+
+function drawTextInRect(doc, text, rect, verticalAlign, wordWrapEnabled, jsPdfTextOptions) {
     const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, columnWidth: rect.w });
     const linesCount = textArray.length;
 
     const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
 
-    // TODO: check lineHeightFactor - https://github.com/MrRio/jsPDF/issues/3234
-    const y = rect.y + (rect.h / 2)
-        - heightOfOneLine * (linesCount - 1) / 2;
+    const vAlign = verticalAlign ?? 'middle';
+    const verticalAlignCoefficientsMap = { top: 0, middle: 0.5, bottom: 1 };
+    const y = rect.y
+        + (rect.h * verticalAlignCoefficientsMap[vAlign])
+        - heightOfOneLine * (linesCount - 1) * verticalAlignCoefficientsMap[vAlign]
+        + getLineHeightShift(doc);
 
-    // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
-    const textOptions = extend({ baseline: 'middle' }, jsPdfTextOptions);
+    const textOptions = extend({ baseline: vAlign }, jsPdfTextOptions);
     doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
