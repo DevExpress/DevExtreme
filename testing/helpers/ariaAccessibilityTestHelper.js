@@ -36,19 +36,7 @@ class ariaAccessibilityTestHelper {
     }
 
     _getAttributeNames(element) {
-        let result = [];
-
-        if(isDefined(Element.prototype.getAttributeNames)) {
-            result = element.getAttributeNames();
-        } else {
-            // IE11 support
-            const attributes = element.attributes;
-            const length = attributes.length;
-            for(let i = 0; i < length; i++) {
-                result.push(attributes[i].name);
-            }
-        }
-        return result;
+        return element.getAttributeNames();
     }
 
     checkAttributes($target, expectedAttributes, prefix) {
