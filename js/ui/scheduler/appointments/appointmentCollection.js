@@ -24,7 +24,7 @@ import { createAgendaAppointmentLayout, createAppointmentLayout } from './appoin
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { createExpressions, getResourcesFromItem } from '../resources/utils';
+import { getResourcesFromItem } from '../resources/utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -552,6 +552,7 @@ class SchedulerAppointments extends CollectionWidget {
                 groups: this.option('groups'),
 
                 getAppointmentColor: this.option('getAppointmentColor'),
+                getResourceDataAccessors: this.option('getResourceDataAccessors')
             };
 
             if(this.isAgendaView) {
@@ -574,7 +575,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     _applyResourceDataAttr($appointment) {
         const resourceList = this.option('getResources')();
-        const resources = getResourcesFromItem(resourceList, createExpressions(resourceList), this._getItemData($appointment));
+        const resources = getResourcesFromItem(resourceList, this.option('getResourceDataAccessors')(), this._getItemData($appointment));
 
         if(resources) {
             each(resources, function(name, values) {

@@ -3,7 +3,7 @@ import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
 import timeZoneUtils from '../utils.timeZone.js';
-import { createExpressions, createResourcesTree, getDataAccessors, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
+import { createResourcesTree, getDataAccessors, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
 import { ExpressionUtils } from '../expressionUtils';
@@ -46,7 +46,7 @@ export class DateGeneratorBaseStrategy {
     generate(appointmentAdapter) {
         const itemResources = getResourcesFromItem(
             this.options.resources,
-            createExpressions(this.options.resources),
+            this.options.dataAccessors.resources,
             this.rawAppointment
         );
 
@@ -435,7 +435,7 @@ export class DateGeneratorBaseStrategy {
             const tree = createResourcesTree(this.loadedResources);
 
             result = getResourceTreeLeaves(
-                (field, action) => getDataAccessors(createExpressions(this.options.resources), field, action),
+                (field, action) => getDataAccessors(this.options.dataAccessors.resources, field, action),
                 tree,
                 appointmentResources
             );

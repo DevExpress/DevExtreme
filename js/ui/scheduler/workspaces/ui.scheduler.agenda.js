@@ -15,7 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { createExpressions, createReducedResourcesTree, getDataAccessors, getPathToLeaf } from '../resources/utils';
+import { createReducedResourcesTree, getDataAccessors, getPathToLeaf } from '../resources/utils';
 import { calculateStartViewDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
 import { formatWeekday, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
@@ -242,7 +242,7 @@ class SchedulerAgenda extends WorkSpace {
 
         const tree = createReducedResourcesTree(
             this.option('loadedResources'),
-            (field, action) => getDataAccessors(createExpressions(this.option('resources')), field, action),
+            (field, action) => getDataAccessors(this.option('getResourceDataAccessors')(), field, action),
             filteredItems
         );
 

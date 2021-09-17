@@ -1405,6 +1405,7 @@ class Scheduler extends Widget {
     _appointmentsConfig() {
         const config = {
             getResources: () => this.option('resources'),
+            getResourceDataAccessors: this.getResourceDataAccessors.bind(this),
             getAgendaResourceProcessor: () => this.agendaResourceProcessor,
             getAppointmentColor: this.createGetAppointmentColor(),
 
