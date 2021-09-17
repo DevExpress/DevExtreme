@@ -187,7 +187,6 @@ export class Editor extends JSXComponent<EditorPropsType>() {
 
   get validationErrors(): Record<string, unknown>[] | null | undefined {
     const { validationErrors, validationError } = this.props;
-
     let allValidationErrors = validationErrors && [...validationErrors];
     if (!allValidationErrors && validationError) {
       allValidationErrors = [validationError];
