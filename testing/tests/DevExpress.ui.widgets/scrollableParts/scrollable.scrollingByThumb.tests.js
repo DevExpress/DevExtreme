@@ -220,6 +220,11 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\'', function
 });
 
 QUnit.test('thumb is visible after update when content became more then container', function(assert) {
+    if(isRenovation && devices.current().deviceType !== 'desktop') {
+        assert.ok(true, 'there are no mouse events on touch devices');
+        return;
+    }
+
     const $scrollable = $('#scrollable').height(100);
     const $innerWrapper = $scrollable.wrapInner('<div>').children().height(50);
 

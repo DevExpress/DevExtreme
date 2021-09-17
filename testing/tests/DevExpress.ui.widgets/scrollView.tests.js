@@ -1614,21 +1614,28 @@ QUnit.module('native pullDown strategy', {
     });
 
     QUnit.test('pull down element position after dynamic action specification', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: true,
-            refreshStrategy: 'pullDown'
+            refreshStrategy: 'pullDown',
+            showScrollbar: 'always'
         });
 
         $scrollView.dxScrollView('option', 'pullDownEnabled', true);
         $scrollView.dxScrollView('option', 'onPullDown', noop);
-        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
-        const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
+        setTimeout(() => {
+            const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
+            const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
 
-        const containerOffset = $container.offset().top;
-        const topPocketOffset = $topPocket.offset().top;
-        const topPocketSize = $topPocket.height();
+            const containerOffset = $container.offset().top;
+            const topPocketOffset = $topPocket.offset().top;
+            const topPocketSize = $topPocket.height();
 
-        assert.equal(containerOffset, topPocketOffset + topPocketSize, 'pull down element located above content');
+            assert.equal(containerOffset, topPocketOffset + topPocketSize, 'pull down element located above content');
+
+            done();
+        });
     });
 
     QUnit.test('scrollTop method should have correct position on init', function(assert) {
