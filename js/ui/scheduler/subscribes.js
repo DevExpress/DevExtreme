@@ -270,10 +270,6 @@ const subscribes = {
         return this._workSpace._isApplyCompactAppointmentOffset();
     },
 
-    getGroupCount: function() {
-        return this._workSpace._getGroupCount();
-    },
-
     mapAppointmentFields: function(config) {
         const { itemData, itemElement, targetedAppointment } = config;
         const targetedData = targetedAppointment || this.getTargetedAppointment(itemData, itemElement);

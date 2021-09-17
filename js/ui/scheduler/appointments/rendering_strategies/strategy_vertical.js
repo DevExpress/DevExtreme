@@ -12,6 +12,8 @@ const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 const toMs = dateUtils.dateToMilliseconds;
 
 class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
+    get groupCount() { return this.options.groupCount; }
+
     getDeltaTime(args, initialSize, appointment) {
         let deltaTime = 0;
 
@@ -176,7 +178,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const result = [];
         let currentPartTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
         const cellsDiff = this.isGroupedByDate
-            ? this.instance.fire('getGroupCount')
+            ? this.groupCount
             : 1;
         const offset = this.cellWidth * cellsDiff;
         const left = appointmentSettings.left + offset;

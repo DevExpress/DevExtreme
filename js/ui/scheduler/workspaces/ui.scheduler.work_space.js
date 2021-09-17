@@ -64,7 +64,7 @@ import {
     isDateAndTimeView,
     calculateIsGroupedAllDayPanel,
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
+import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray } from '../resources/utils';
 import Semaphore from '../semaphore';
 import {
     getCellWidth,
@@ -914,10 +914,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             viewDataGenerator.getInterval(this.option('hoursInterval')),
             this.option('endDayHour'),
         );
-    }
-
-    _getGroupCount() {
-        return getGroupCount(this.option('groups'));
     }
 
     _attachTablesEvents() {
