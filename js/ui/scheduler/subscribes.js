@@ -285,10 +285,6 @@ const subscribes = {
         };
     },
 
-    getGroupTop: function(groupIndex) {
-        return this._workSpace._getGroupTop(groupIndex);
-    },
-
     dayHasAppointment: function(day, appointment, trimTime) {
         return this.dayHasAppointment(day, appointment, trimTime);
     },

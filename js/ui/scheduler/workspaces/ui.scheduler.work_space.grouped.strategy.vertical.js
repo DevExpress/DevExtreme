@@ -49,15 +49,6 @@ class VerticalGroupedStrategy {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
     }
 
-    _getGroupTop(groupIndex) {
-        const workspace = this._workSpace;
-        const rowCount = workspace.isVirtualScrolling()
-            ? workspace.viewDataProvider.getRowCountInGroup(groupIndex)
-            : workspace._getRowCount();
-
-        return workspace.getMaxAllowedVerticalPosition(groupIndex) - workspace.getCellHeight() * rowCount;
-    }
-
     calculateTimeCellRepeatCount() {
         return this._workSpace._getGroupCount() || 1;
     }

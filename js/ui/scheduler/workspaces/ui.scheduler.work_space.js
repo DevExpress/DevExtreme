@@ -71,7 +71,6 @@ import {
     getCellHeight,
     getAllDayHeight,
     getMaxAllowedPosition,
-    getMaxAllowedVerticalPosition,
     PositionHelper
 } from './helpers/positionHelper';
 
@@ -1280,10 +1279,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return cellData ? cellData : undefined;
     }
 
-    _getGroupTop(groupIndex) {
-        return this._groupedStrategy._getGroupTop(groupIndex);
-    }
-
     isGroupedByDate() { // TODO move to the ModelProvider
         return this.option('groupByDate')
             && this._isHorizontalGroupedWorkSpace()
@@ -1394,18 +1389,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.getDOMElementsMetaData()
         );
     }
-
-    getMaxAllowedVerticalPosition(groupIndex) {
-        return getMaxAllowedVerticalPosition({
-            groupIndex,
-            viewDataProvider: this.viewDataProvider,
-            showAllDayPanel: this.option('showAllDayPanel'),
-            isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
-            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
-            DOMMetaData: this.getDOMElementsMetaData()
-        });
-    }
-    // ---
 
     getAllDayOffset() {
         return this._groupedStrategy.getAllDayOffset();
@@ -2223,7 +2206,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             isGroupedByDate: this.isGroupedByDate(),
             rtlEnabled: this.option('rtlEnabled'),
             startViewDate: this.getStartViewDate(),
-            isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
             getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
