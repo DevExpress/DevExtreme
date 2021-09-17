@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import domAdapter from '../../../core/dom_adapter';
+import domAdapter from '../core/dom_adapter';
 import { getWindow } from '../core/utils/window';
 import { getBoundingRect } from '../core/utils/position';
 import eventsEngine from '../events/core/events_engine';
