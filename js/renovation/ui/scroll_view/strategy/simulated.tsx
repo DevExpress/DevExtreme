@@ -513,49 +513,25 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @Effect({ run: 'once' })
   /* istanbul ignore next */
   containerResizeObserver(): DisposeEffectReturn {
-    resizeObserverSingleton.observe(this.containerRef.current,
-      ({ target }: { target: HTMLDivElement }) => {
-        const heightChanged = this.containerClientHeight !== target.clientHeight;
-        const widthChanged = this.containerClientWidth !== target.clientWidth;
+    const containerEl = this.containerRef.current;
 
-        if (heightChanged) {
-          this.vScrollLocation = clampIntoRange(this.vScrollLocation, 0,
-            -Math.max(this.contentHeight - this.topPocketClientHeight - target.clientHeight, 0));
-        }
+    resizeObserverSingleton.observe(containerEl, ({ target }) => {
+      this.setContainerDimensions(target);
+    });
 
-        if (widthChanged) {
-          this.hScrollLocation = clampIntoRange(this.hScrollLocation, 0,
-            -Math.max(this.contentWidth - target.clientWidth, 0));
-        }
-
-        this.setContainerDimensions(target);
-      });
-
-    return (): void => { resizeObserverSingleton.unobserve(this.containerRef.current); };
+    return (): void => { resizeObserverSingleton.unobserve(containerEl); };
   }
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
   contentResizeObserver(): DisposeEffectReturn {
-    resizeObserverSingleton.observe(this.contentRef.current,
-      ({ target }: { target: HTMLDivElement }) => {
-        const heightChanged = (this.contentClientHeight !== target.clientHeight)
-      || (this.contentScrollHeight !== target.scrollHeight);
+    const contentEl = this.contentRef.current;
 
-        const widthChanged = (this.contentClientWidth !== target.clientWidth)
-      || (this.contentScrollWidth !== target.scrollWidth);
+    resizeObserverSingleton.observe(contentEl, ({ target }) => {
+      this.setContentDimensions(target);
+    });
 
-        this.setContentDimensions(target);
-
-        if (heightChanged) {
-          this.vScrollLocation = clampIntoRange(this.vScrollLocation, 0, this.vScrollOffsetMax);
-        }
-        if (widthChanged) {
-          this.hScrollLocation = clampIntoRange(this.hScrollLocation, 0, this.hScrollOffsetMax);
-        }
-      });
-
-    return (): void => { resizeObserverSingleton.unobserve(this.contentRef.current); };
+    return (): void => { resizeObserverSingleton.unobserve(contentEl); };
   }
 
   // if delete this effect we need to wait changing size inside resizeObservable
@@ -1091,20 +1067,46 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   setContentDimensions(contentEl: HTMLDivElement): void {
+    const heightChanged = (this.contentClientHeight !== contentEl.clientHeight)
+      || (this.contentScrollHeight !== contentEl.scrollHeight);
+
+    const widthChanged = (this.contentClientWidth !== contentEl.clientWidth)
+      || (this.contentScrollWidth !== contentEl.scrollWidth);
+
     this.contentClientWidth = contentEl.clientWidth;
     this.contentClientHeight = contentEl.clientHeight;
     this.contentScrollWidth = contentEl.scrollWidth;
     this.contentScrollHeight = contentEl.scrollHeight;
 
-    this.contentPaddingBottom = getElementPadding(contentEl, 'bottom');
-
     if (this.props.forceGeneratePockets) {
       this.topPocketClientHeight = this.topPocketRef.current!.clientHeight;
       this.bottomPocketClientHeight = this.bottomPocketRef.current!.clientHeight;
     }
+
+    this.contentPaddingBottom = getElementPadding(contentEl, 'bottom');
+
+    if (heightChanged) {
+      this.vScrollLocation = clampIntoRange(this.vScrollLocation, 0, this.vScrollOffsetMax);
+    }
+    if (widthChanged) {
+      this.hScrollLocation = clampIntoRange(this.hScrollLocation, 0, this.hScrollOffsetMax);
+    }
   }
 
   setContainerDimensions(containerEl: HTMLDivElement): void {
+    const heightChanged = this.containerClientHeight !== containerEl.clientHeight;
+    const widthChanged = this.containerClientWidth !== containerEl.clientWidth;
+
+    if (heightChanged) {
+      this.vScrollLocation = clampIntoRange(this.vScrollLocation, 0,
+        -Math.max(this.contentHeight - this.topPocketClientHeight - containerEl.clientHeight, 0));
+    }
+
+    if (widthChanged) {
+      this.hScrollLocation = clampIntoRange(this.hScrollLocation, 0,
+        -Math.max(this.contentWidth - containerEl.clientWidth, 0));
+    }
+
     this.containerClientWidth = containerEl.clientWidth;
     this.containerClientHeight = containerEl.clientHeight;
   }
