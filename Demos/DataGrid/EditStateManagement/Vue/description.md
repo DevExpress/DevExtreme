@@ -39,5 +39,3 @@ If the server successfully saves changes, call the **applyChanges** method to sa
 
 1. **Reset edit state**         
 Assign **null** to the **editRowKey** and an empty array to the **changes** property (see the `updateEditRowKey` and `updateChanges` mutations in `store.js`).
-
-[note] This functionality is available as a <a href="https://www.devexpress.com/aboutus/pre-release.xml" target="_blank">community technology preview (CTP)</a>. Should you have any questions or suggestions prior to its official release, please email your comments to <a href="mailto:support@devexpress.com">support@devexpress.com</a>.
