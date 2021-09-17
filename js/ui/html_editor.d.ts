@@ -159,8 +159,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @inherits Editor
  * @hasTranscludedContent
  * @isEditor
- * @module ui/html_editor
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -181,8 +179,6 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName delete(index, length)
-     * @param1 index:number
-     * @param2 length:number
      * @public
      */
     delete(index: number, length: number): void;
@@ -190,25 +186,19 @@ export default class dxHtmlEditor extends Editor {
      * @docid
      * @publicName format(formatName, formatValue)
      * @param1 formatName:Enums.HtmlEditorFormat|string
-     * @param2 formatValue:any
      * @public
      */
     format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
      * @publicName formatLine(index, length, formatName, formatValue)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
      * @public
      */
     formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
      * @publicName formatLine(index, length, formats)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formats:object
      * @public
      */
@@ -216,18 +206,13 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName formatText(index, length, formatName, formatValue)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
      * @public
      */
     formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
      * @publicName formatText(index, length, formats)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formats:object
      * @public
      */
@@ -235,7 +220,6 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName get(componentPath)
-     * @param1 componentPath:string
      * @return Object
      * @public
      */
@@ -243,8 +227,6 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName getBounds(index, length)
-     * @param1 index:number
-     * @param2 length:number
      * @return Object
      * @public
      */
@@ -259,8 +241,6 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName getFormat(index, length)
-     * @param1 index:number
-     * @param2 length:number
      * @return Object
      * @public
      */
@@ -268,14 +248,12 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName getLength()
-     * @return number
      * @public
      */
     getLength(): number;
     /**
      * @docid
      * @publicName getModule(moduleName)
-     * @param1 moduleName:string
      * @return Object
      * @public
      */
@@ -290,7 +268,6 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName getSelection()
-     * @param1 focus:boolean|undefined
      * @return Object
      * @public
      */
@@ -298,35 +275,25 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName getText(index, length)
-     * @param1 index:number
-     * @param2 length:number
      * @public
      */
     getText(index: number, length: number): string;
     /**
      * @docid
      * @publicName insertEmbed(index, type, config)
-     * @param1 index:number
-     * @param2 type:string
-     * @param3 config:any
      * @public
      */
     insertEmbed(index: number, type: string, config: any): void;
     /**
      * @docid
      * @publicName insertText(index, text, formatName, formatValue)
-     * @param1 index:number
-     * @param2 text:string
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
      * @public
      */
     insertText(index: number, text: string, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
      * @publicName insertText(index, text, formats)
-     * @param1 index:number
-     * @param2 text:string
      * @param3 formats:object
      * @public
      */
@@ -347,16 +314,12 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName removeFormat(index, length)
-     * @param1 index:number
-     * @param2 length:number
      * @public
      */
     removeFormat(index: number, length: number): void;
     /**
      * @docid
      * @publicName setSelection(index, length)
-     * @param1 index:number
-     * @param2 length:number
      * @public
      */
     setSelection(index: number, length: number): void;
@@ -430,7 +393,6 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default "this"
      * @type_function_param1 item:object
-     * @type_function_return string
      * @public
      */
     displayExpr?: string | ((item: any) => string);
@@ -438,8 +400,6 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -476,7 +436,6 @@ export interface dxHtmlEditorMention {
      * @type_function_param1_field1 marker:string
      * @type_function_param1_field2 id:string|number
      * @type_function_param1_field3 value:any
-     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */

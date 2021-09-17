@@ -25,8 +25,6 @@ export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
 /**
  * @docid
  * @inherits ArrayStore
- * @module data/local_store
- * @export default
  * @public
  */
 export default class LocalStore extends ArrayStore {

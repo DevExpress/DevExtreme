@@ -89,14 +89,12 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     displayTime?: number;
     /**
      * @docid
-     * @type_function_return number|string
      * @default 'auto'
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
-     * @type_function_return number|string
      * @default 568 &for(Material)
      * @public
      */
@@ -109,7 +107,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     message?: string;
     /**
      * @docid
-     * @type_function_return number|string
      * @default 344 &for(Material)
      * @public
      */
@@ -137,7 +134,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
     /**
      * @docid
-     * @type_function_return number|string
      * @default function() {return $(window).width() * 0.8 }
      * @default 'auto' &for(Android)
      * @default function() { return $(window).width(); } &for(phones_on_Android)
@@ -163,8 +159,6 @@ export interface dxToastAnimation extends dxOverlayAnimation {
 /**
  * @docid
  * @inherits dxOverlay
- * @module ui/toast
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

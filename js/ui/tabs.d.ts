@@ -122,8 +122,6 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/tabs
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

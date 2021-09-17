@@ -285,7 +285,6 @@ export default class dxTextEditor extends Editor {
     /**
      * @docid
      * @publicName getButton(name)
-     * @param1 name:string
      * @return dxButton | undefined
      * @public
      */

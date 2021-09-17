@@ -183,7 +183,6 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
     /**
      * @docid
      * @type_function_param1 options:Object
-     * @type_function_param1_field1 gridCell:ExcelDataGridCell
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
@@ -227,10 +226,8 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
 /**
  * @docid excelExporter.exportDataGrid
  * @publicName exportDataGrid(options)
- * @param1 options:ExcelExportDataGridProps
  * @return Promise<CellRange>
  * @namespace DevExpress.excelExporter
- * @module excel_exporter
  * @static
  * @public
  */
@@ -239,10 +236,8 @@ export function exportDataGrid(options: ExcelExportDataGridProps): DxPromise<Cel
 /**
  * @docid excelExporter.exportPivotGrid
  * @publicName exportPivotGrid(options)
- * @param1 options:ExcelExportPivotGridProps
  * @return Promise<CellRange>
  * @namespace DevExpress.excelExporter
- * @module excel_exporter
  * @static
  * @public
  */

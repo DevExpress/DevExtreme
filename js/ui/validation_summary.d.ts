@@ -44,8 +44,6 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/validation_summary
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

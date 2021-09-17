@@ -39,8 +39,6 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/load_indicator
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

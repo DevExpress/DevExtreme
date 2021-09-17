@@ -23,9 +23,7 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
 /**
  * @docid
  * @inherits FileSystemProviderBase
- * @module file_management/object_provider
  * @namespace DevExpress.fileManagement
- * @export default
  * @public
  */
 export default class ObjectFileSystemProvider extends FileSystemProviderBase {

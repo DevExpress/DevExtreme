@@ -170,8 +170,6 @@ export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
 /**
  * @docid
  * @inherits BaseGauge
- * @module viz/linear_gauge
- * @export default
  * @namespace DevExpress.viz
  * @public
  */

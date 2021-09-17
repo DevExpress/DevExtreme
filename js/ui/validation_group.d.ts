@@ -47,8 +47,6 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @docid
  * @inherits DOMComponent
  * @hasTranscludedContent
- * @module ui/validation_group
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -63,7 +61,6 @@ export default class dxValidationGroup extends DOMComponent {
     /**
      * @docid
      * @publicName validate()
-     * @return dxValidationGroupResult
      * @public
      */
     validate(): dxValidationGroupResult;

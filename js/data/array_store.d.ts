@@ -13,8 +13,6 @@ export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
 /**
  * @docid
  * @inherits Store
- * @module data/array_store
- * @export default
  * @public
  */
 export default class ArrayStore extends Store {

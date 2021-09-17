@@ -47,7 +47,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -67,35 +66,30 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
      * @docid
      * @default function() { return $(window).height() * 0.8 }
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     maxHeight?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     maxWidth?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     minHeight?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     minWidth?: number | string | (() => number | string);
@@ -174,7 +168,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
      * @docid
      * @default function() {return $(window).width() * 0.8 }
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -197,7 +190,6 @@ export interface dxOverlayAnimation {
 /**
  * @docid
  * @inherits Widget
- * @module ui/overlay
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -206,7 +198,6 @@ export default class dxOverlay extends Widget {
     /**
      * @docid
      * @publicName content()
-     * @return DxElement
      * @public
      */
     content(): DxElement;
@@ -233,7 +224,6 @@ export default class dxOverlay extends Widget {
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<boolean>
      * @public
      */
@@ -243,10 +233,7 @@ export default class dxOverlay extends Widget {
 /**
  * @docid ui.dxOverlay.baseZIndex
  * @publicName baseZIndex(zIndex)
- * @param1 zIndex:number
  * @namespace DevExpress.ui.dxOverlay
- * @module ui/overlay
- * @export baseZIndex
  * @static
  * @public
  */

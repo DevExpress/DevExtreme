@@ -78,7 +78,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 container:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -101,7 +100,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @docid
      * @default "menuGroup"
      * @type_function_param1 groupData:object
-     * @type_function_param2 groupIndex:number
      * @type_function_param3 groupElement:object
      * @type_function_return string|Element|jQuery
      * @public
@@ -117,8 +115,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @docid
      * @default "menuItem"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -174,8 +170,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/slide_out
- * @export default
  * @namespace DevExpress.ui
  * @deprecated dxDrawer
  * @public

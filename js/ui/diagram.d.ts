@@ -1028,8 +1028,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/diagram
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -1038,21 +1036,18 @@ export default class dxDiagram extends Widget {
     /**
      * @docid
      * @publicName getNodeDataSource()
-     * @return DataSource
      * @public
      */
     getNodeDataSource(): DataSource;
     /**
      * @docid
      * @publicName getEdgeDataSource()
-     * @return DataSource
      * @public
      */
     getEdgeDataSource(): DataSource;
     /**
      * @docid
      * @publicName getItemByKey(key)
-     * @param1 key:Object
      * @return dxDiagramItem
      * @public
      */
@@ -1096,7 +1091,6 @@ export default class dxDiagram extends Widget {
     /**
      * @docid
      * @publicName export()
-     * @return string
      * @public
      */
     export(): string;
@@ -1111,7 +1105,6 @@ export default class dxDiagram extends Widget {
     /**
      * @docid
      * @publicName import(data, updateExistingItemsOnly)
-     * @param1 data:string
      * @param2 updateExistingItemsOnly?:boolean
      * @public
      */
@@ -1275,7 +1268,6 @@ export interface dxDiagramShape extends Item {
     containerId?: string;
     /**
      * @docid dxDiagramShape.containerChildItemIds
-     * @type Array<String>
      * @public
      */
     containerChildItemIds?: Array<String>;

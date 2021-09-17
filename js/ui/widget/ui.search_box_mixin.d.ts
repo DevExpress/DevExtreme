@@ -46,8 +46,6 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
 }
 /**
  * @docid
- * @module ui/widget/ui.search_box_mixin
- * @export default
  * @hidden
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class

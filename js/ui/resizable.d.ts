@@ -56,7 +56,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @public
      */
@@ -129,7 +128,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @public
      */
@@ -139,8 +137,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @docid
  * @inherits DOMComponent
  * @hasTranscludedContent
- * @module ui/resizable
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
