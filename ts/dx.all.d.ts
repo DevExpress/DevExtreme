@@ -20287,11 +20287,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeView.getNodes()]
      */
-    getNodes(): Array<dxTreeViewNode>;
+    getNodes(): Array<DevExpress.ui.dxTreeView.Node>;
     /**
      * [descr:dxTreeView.getSelectedNodes()]
      */
-    getSelectedNodes(): Array<dxTreeViewNode>;
+    getSelectedNodes(): Array<DevExpress.ui.dxTreeView.Node>;
     /**
      * [descr:dxTreeView.getSelectedNodeKeys()]
      */
@@ -20355,50 +20355,51 @@ declare module DevExpress.ui {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly itemIndex?: number | any;
-        readonly node?: dxTreeViewNode;
+        readonly node?: Node;
       };
     export type ItemCollapsedEvent =
       DevExpress.events.NativeEventInfo<dxTreeView> & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
+        readonly node?: Node;
       };
     export type ItemContextMenuEvent =
       DevExpress.events.NativeEventInfo<dxTreeView> & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly itemIndex?: number | any;
-        readonly node?: dxTreeViewNode;
+        readonly node?: Node;
       };
     export type ItemExpandedEvent =
       DevExpress.events.NativeEventInfo<dxTreeView> & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
+        readonly node?: Node;
       };
     export type ItemHoldEvent =
       DevExpress.events.NativeEventInfo<dxTreeView> & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
+        readonly node?: Node;
       };
     export type ItemRenderedEvent =
       DevExpress.events.NativeEventInfo<dxTreeView> & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
+        readonly node?: Node;
       };
     export type ItemSelectionChangedEvent =
       DevExpress.events.EventInfo<dxTreeView> & {
-        readonly node?: dxTreeViewNode;
+        readonly node?: Node;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly itemData?: any;
         readonly itemIndex?: number;
       };
+    export type Node = dxTreeViewNode;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTreeView> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxTreeViewOptions;
@@ -20444,6 +20445,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxTreeViewNode]
+   * @deprecated [depNote:dxTreeViewNode]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewNode {
@@ -20495,7 +20497,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.createChildren]
      */
     createChildren?: (
-      parentNode: dxTreeViewNode
+      parentNode: DevExpress.ui.dxTreeView.Node
     ) => PromiseLike<any> | Array<any>;
     /**
      * [descr:dxTreeViewOptions.dataSource]
