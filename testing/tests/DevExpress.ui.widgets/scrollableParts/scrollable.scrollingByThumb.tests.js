@@ -504,6 +504,7 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
 
 // TODO: fix it
 QUnit.skip('scrollbar is visible for parent scrollable after mouse leave for children scrollable', function(assert) {
+
     const $scrollable = $('#scrollable').height(250);
     const $childScrollable = $('<div>').height(500);
 

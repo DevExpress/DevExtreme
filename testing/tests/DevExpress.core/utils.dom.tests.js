@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import domUtils from 'core/utils/dom';
-import domAdapter from 'core/dom_adapter';
 import support from 'core/utils/support';
 import styleUtils from 'core/utils/style';
 import devices from 'core/devices';
@@ -64,24 +63,6 @@ QUnit.test('clearSelection should not run if selectionType is \'Caret\'', functi
         window.getSelection = originalGetSelection;
     }
 });
-
-QUnit.test('resetActiveElement should not throw an error in IE', function(assert) {
-    const getActiveElement = sinon.stub(domAdapter, 'getActiveElement').returns({
-        blur: function() {
-            throw 'IE throws an \'Incorrect Function\' exception in blur method';
-        }
-    });
-    const bodyBlur = sinon.spy(document.body, 'blur');
-
-    try {
-        domUtils.resetActiveElement();
-        assert.strictEqual(bodyBlur.callCount, 1, 'body should be blured if blur function on element does not work');
-    } finally {
-        bodyBlur.restore();
-        getActiveElement.restore();
-    }
-});
-
 
 QUnit.module('initMobileViewPort');
 
