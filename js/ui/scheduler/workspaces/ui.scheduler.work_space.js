@@ -42,7 +42,7 @@ import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
 
-import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
+import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_model/view_data_provider';
 
 import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
@@ -605,7 +605,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.virtualScrollingDispatcher = null;
         }
 
-        this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this);
+        this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
+        this.renderer = new VirtualScrollingRenderer(this);
     }
 
     onDataSourceChanged() {
@@ -2162,6 +2163,29 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
+    _getVirtualScrollingDispatcherOptions() {
+        return {
+            getCellHeight: this.getCellHeight.bind(this),
+            getCellWidth: this.getCellWidth.bind(this),
+            getCellMinWidth: this.getCellMinWidth.bind(this),
+            isRTL: this._isRTL.bind(this),
+            getSchedulerHeight: () => this.option('schedulerHeight'),
+            getSchedulerWidth: () => this.option('schedulerWidth'),
+            getViewHeight: () => this.$element().height(),
+            getViewWidth: () => this.$element().width(),
+            getScrolling: () => this.option('scrolling'),
+            getScrollableOuterWidth: this.getScrollableOuterWidth.bind(this),
+            getScrollable: this.getScrollable.bind(this),
+            createAction: this._createAction.bind(this),
+            updateRender: this.updateRender.bind(this),
+            updateGrid: this.updateGrid.bind(this),
+            getGroupCount: this._getGroupCount.bind(this),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace.bind(this),
+            getTotalRowCount: this._getTotalRowCount.bind(this),
+            getTotalCellCount: this._getTotalCellCount.bind(this),
+        };
+    }
+
     _cleanWorkSpace() {
         this._cleanView();
         this._toggleGroupedClass();
@@ -2563,6 +2587,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getAllDayContainer() {
         return this._$allDayContainer;
+    }
+
+    updateRender() {
+        this.renderer.updateRender();
+    }
+
+    updateGrid() {
+        this.renderer._renderGrid();
     }
 
     updateAppointments() {
