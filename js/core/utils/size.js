@@ -36,13 +36,13 @@ const getBoxSizingOffset = function(name, elementStyles, boxParams) {
 
     return 0;
 };
-const getComputedStyle = function(element) {
+const getElementComputedStyle = function(element) {
     const view = element?.ownerDocument?.defaultView || window;
     return view.getComputedStyle && view.getComputedStyle(element);
 };
 
 export const getSize = function(element, name, include) {
-    const elementStyles = getComputedStyle(element);
+    const elementStyles = getElementComputedStyle(element);
 
     const boxParams = getElementBoxParams(name, elementStyles);
 
@@ -145,35 +145,35 @@ export const getVisibleHeight = function(element) {
 };
 
 export const commonCallbacks = {
-    getWidth: function(el, value) { return elementSizeHelper('width', ...arguments); },
-    setWidth: function(el, value) { return elementSizeHelper('width', ...arguments); },
-    getHeight: function(el, value) { return elementSizeHelper('height', ...arguments); },
-    setHeight: function(el, value) { return elementSizeHelper('height', ...arguments); },
-    getOuterWidth: function(el, value) { return elementSizeHelper('outerWidth', ...arguments); },
-    setOuterWidth: function(el, value) { return elementSizeHelper('outerWidth', ...arguments); },
-    getOuterHeight: function(el, value) { return elementSizeHelper('outerHeight', ...arguments); },
-    setOuterHeight: function(el, value) { return elementSizeHelper('outerHeight', ...arguments); },
-    getInnerWidth: function(el, value) { return elementSizeHelper('innerWidth', ...arguments); },
-    setInnerWidth: function(el, value) { return elementSizeHelper('innerWidth', ...arguments); },
-    getInnerHeight: function(el, value) { return elementSizeHelper('innerHeight', ...arguments); },
-    setInnerHeight: function(el, value) { return elementSizeHelper('innerHeight', ...arguments); },
+    getWidth: (...args) => elementSizeHelper('width', ...args),
+    setWidth: (...args) => elementSizeHelper('width', ...args),
+    getHeight: (...args) => elementSizeHelper('height', ...args),
+    setHeight: (...args) => elementSizeHelper('height', ...args),
+    getOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args),
+    setOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args),
+    getOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args),
+    setOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args),
+    getInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args),
+    setInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args),
+    getInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args),
+    setInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args),
 };
 function elementSizeHelper(sizeProperty, el, value) {
     return arguments.length === 2 ? elementSize(el, sizeProperty) : elementSize(el, sizeProperty, value);
 }
 
-export const getWidth = function(el, value) { return commonCallbacks.getWidth(...arguments); };
-export const setWidth = function(el, value) { return commonCallbacks.setWidth(...arguments); };
-export const getHeight = function(el, value) { return commonCallbacks.getHeight(...arguments); };
-export const setHeight = function(el, value) { return commonCallbacks.setHeight(...arguments); };
-export const getOuterWidth = function(el, value) { return commonCallbacks.getOuterWidth(...arguments); };
-export const setOuterWidth = function(el, value) { return commonCallbacks.setOuterWidth(...arguments); };
-export const getOuterHeight = function(el, value) { return commonCallbacks.getOuterHeight(...arguments); };
-export const setOuterHeight = function(el, value) { return commonCallbacks.setOuterHeight(...arguments); };
-export const getInnerWidth = function(el, value) { return commonCallbacks.getInnerWidth(...arguments); };
-export const setInnerWidth = function(el, value) { return commonCallbacks.setInnerWidth(...arguments); };
-export const getInnerHeight = function(el, value) { return commonCallbacks.getInnerHeight(...arguments); };
-export const setInnerHeight = function(el, value) { return commonCallbacks.setInnerHeight(...arguments); };
+export const getWidth = (el) => commonCallbacks.getWidth(el);
+export const setWidth = (el, value) => commonCallbacks.setWidth(el, value);
+export const getHeight = (el) => commonCallbacks.getHeight(el);
+export const setHeight = (el, value) => commonCallbacks.setHeight(el, value);
+export const getOuterWidth = (el, includeMargin) => commonCallbacks.getOuterWidth(el, includeMargin || false);
+export const setOuterWidth = (el, value) => commonCallbacks.setOuterWidth(el, value);
+export const getOuterHeight = (el, includeMargin) => commonCallbacks.getOuterHeight(el, includeMargin || false);
+export const setOuterHeight = (el, value) => commonCallbacks.setOuterHeight(el, value);
+export const getInnerWidth = (el) => commonCallbacks.getInnerWidth(el);
+export const setInnerWidth = (el, value) => commonCallbacks.setInnerWidth(el, value);
+export const getInnerHeight = (el) => commonCallbacks.getInnerHeight(el);
+export const setInnerHeight = (el, value) => commonCallbacks.setInnerHeight(el, value);
 
 export const elementSize = function(el, sizeProperty, value) {
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
@@ -184,8 +184,8 @@ export const elementSize = function(el, sizeProperty, value) {
 
     if(isRenderer(el)) {
         if(el.length > 1 && !isGetter) {
-            for(let innerIndex = 0; innerIndex < el.length; innerIndex++) {
-                elementSize(el[innerIndex], sizeProperty, value);
+            for(let i = 0; i < el.length; i++) {
+                elementSize(el[i], sizeProperty, value);
             }
             return;
         }
@@ -222,7 +222,7 @@ export const elementSize = function(el, sizeProperty, value) {
     }
 
     if(isNumeric(value)) {
-        const elementStyles = getComputedStyle(el);
+        const elementStyles = getElementComputedStyle(el);
         const sizeAdjustment = getElementBoxParams(propName, elementStyles);
         const isBorderBox = elementStyles.boxSizing === 'border-box';
         value = Number(value);
