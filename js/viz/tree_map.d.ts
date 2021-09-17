@@ -149,7 +149,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     };
     /**
      * @docid
-     * @type Array<any>|Store|DataSource|DataSourceOptions|string
      * @notUsedInTheme
      * @public
      */
@@ -294,10 +293,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
      * @type Enums.TreeMapLayoutAlgorithm | function
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 rect:Array<number>
-     * @type_function_param1_field2 sum:number
-     * @type_function_param1_field3 items:Array<any>
      * @default 'squarified'
      * @public
      */
@@ -534,11 +529,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
-     * @type_function_param1 info:object
      * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param1_field3 node:dxTreeMapNode
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -547,10 +538,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1 info:object
      * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param1_field3 node:dxTreeMapNode
      * @type_function_return object
      * @public
      */
@@ -559,8 +547,6 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
 /**
  * @docid
  * @inherits BaseWidget, DataHelperMixin
- * @module viz/tree_map
- * @export default
  * @namespace DevExpress.viz
  * @public
  */
@@ -580,7 +566,6 @@ export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
     /**
      * @docid
      * @publicName getCurrentNode()
-     * @return dxTreeMapNode
      * @public
      */
     getCurrentNode(): dxTreeMapNode;
@@ -588,7 +573,6 @@ export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
     /**
      * @docid
      * @publicName getRootNode()
-     * @return dxTreeMapNode
      * @public
      */
     getRootNode(): dxTreeMapNode;

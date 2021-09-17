@@ -32,9 +32,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
     load?: ((options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>);
     /**
      * @docid
-     * @type string
      * @default 'processed'
-     * @acceptValues 'processed'|'raw'
      * @public
      */
     loadMode?: 'processed' | 'raw';
@@ -47,7 +45,6 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
     remove?: ((key: TKey) => PromiseLike<void>);
     /**
      * @docid
-     * @type_function_param1 loadOptions:object
      * @type_function_param1_field1 filter:object
      * @type_function_param1_field2 group:object
      * @type_function_return Promise<number>
@@ -72,8 +69,6 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
 /**
  * @docid
  * @inherits Store
- * @module data/custom_store
- * @export default
  * @public
  */
 export default class CustomStore<TKey = any, TValue = any> extends Store<TKey, TValue> {

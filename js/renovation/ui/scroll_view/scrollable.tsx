@@ -153,7 +153,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    // !this.props.useNative && this.updateHandler();
+    !this.props.useNative && this.updateHandler();
 
     const currentScrollOffset = this.props.useNative
       ? this.scrollOffset()
@@ -290,6 +290,12 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     if (!isServerSide) {
       this.scrollableRef.finishLoading();
     }
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  isRenovated(): boolean {
+    return true;
   }
 
   validate(event: DxMouseEvent): boolean {

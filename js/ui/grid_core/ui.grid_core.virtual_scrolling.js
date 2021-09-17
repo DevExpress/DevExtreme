@@ -1158,16 +1158,34 @@ export const virtualScrollingModule = {
 
                         return dataSource?.setContentItemSizes(sizes);
                     },
+                    getPreloadCount: function() {
+                        const preloadCount = this.option('scrolling.preloadCount');
+                        const preloadEnabled = this.option('scrolling.preloadEnabled');
+
+                        if(isDefined(preloadCount)) {
+                            return preloadCount;
+                        }
+
+                        const viewportSize = this.viewportSize();
+
+                        return preloadEnabled ? 2 * viewportSize : viewportSize;
+                    },
                     getLoadPageParams: function(byLoadedPage) {
                         const viewportParams = this._loadViewportParams;
                         const lastLoadOptions = this._dataSource?.lastLoadOptions();
                         const loadedPageIndex = lastLoadOptions?.pageIndex || 0;
                         const loadedTake = lastLoadOptions?.take || 0;
 
-                        const takeCorrection = loadedTake ? loadedTake - this._itemCount : 0;
-                        const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(viewportParams.skip / this.pageSize());
-                        const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());
-                        const take = byLoadedPage ? loadedTake : skipForCurrentPage + takeCorrection + viewportParams.take;
+                        const isScrollingBack = this._rowsScrollController.isScrollingBack();
+                        const topPreloadCount = isScrollingBack ? this.getPreloadCount() : 0;
+                        const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadCount();
+                        const totalCountCorrection = this._dataSource?.totalCountCorrection() || 0;
+                        const skipWithPreload = Math.max(0, viewportParams.skip - topPreloadCount);
+                        const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(skipWithPreload / this.pageSize());
+                        const pageOffset = pageIndex * this.pageSize();
+                        const skipForCurrentPage = viewportParams.skip - pageOffset;
+                        const loadingTake = viewportParams.take + skipForCurrentPage + bottomPreloadCount - totalCountCorrection;
+                        const take = byLoadedPage ? loadedTake : loadingTake;
                         const loadPageCount = Math.ceil(take / this.pageSize());
 
                         return {
@@ -1176,7 +1194,7 @@ export const virtualScrollingModule = {
                             skipForCurrentPage: Math.max(0, skipForCurrentPage)
                         };
                     },
-                    loadViewport: function(checkLoadedParamsOnly) {
+                    loadViewport: function(checkLoadedParamsOnly, checkLoading) {
                         const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
                         if(isVirtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
@@ -1201,7 +1219,7 @@ export const virtualScrollingModule = {
                                         this.loadViewport(true);
                                     }
                                 });
-                            } else if(!isLoading && !checkLoadedParamsOnly) {
+                            } else if(!checkLoadedParamsOnly && !(checkLoading && isLoading)) {
                                 this.updateItems({
                                     repaintChangesOnly: true
                                 });
@@ -1213,7 +1231,7 @@ export const virtualScrollingModule = {
                         const viewportIsNotFilled = viewportSize > this.items().length;
                         const currentTake = this._loadViewportParams?.take ?? 0;
                         const newTake = this._rowsScrollController?.getViewportParams().take;
-                        (viewportIsNotFilled || currentTake < newTake) && this.loadViewport();
+                        (viewportIsNotFilled || currentTake < newTake) && this.loadViewport(false, true);
                     },
                     loadIfNeed: function() {
                         if(this.option(NEW_SCROLLING_MODE)) {

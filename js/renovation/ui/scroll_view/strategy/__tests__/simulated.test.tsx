@@ -448,91 +448,86 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    it('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o, pullDownEnabled: %o, reachBottomEnabled: %o', () => {
-      (getElementPadding as jest.Mock).mockReturnValue(8);
+    [true, false].forEach((forceGeneratePockets) => {
+      it('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o', () => {
+        (getElementPadding as jest.Mock).mockReturnValue(8);
 
-      const viewModel = new Scrollable({});
-
-      viewModel.scrollableRef = {
-        current: {},
-      } as RefObject;
-
-      viewModel.containerClientWidth = 1;
-      viewModel.containerClientHeight = 2;
-
-      viewModel.contentClientWidth = 5;
-      viewModel.contentClientHeight = 6;
-      viewModel.contentScrollWidth = 7;
-      viewModel.contentScrollHeight = 8;
-
-      viewModel.topPocketClientHeight = 11;
-      viewModel.bottomPocketClientHeight = 12;
-
-      viewModel.contentPaddingBottom = 13;
-
-      [-50, 0, 50].forEach((vScrollLocation) => {
-        [true, false].forEach((elementRefExist) => {
+        [-50, 0, 50].forEach((vScrollLocation) => {
           [true, false].forEach((pullDownEnabled) => {
             [true, false].forEach((reachBottomEnabled) => {
+              const viewModel = new Scrollable({
+                forceGeneratePockets,
+                pullDownEnabled,
+                reachBottomEnabled,
+              });
+
+              viewModel.scrollableRef = {
+                current: {},
+              } as RefObject;
+
+              viewModel.containerClientWidth = 1;
+              viewModel.containerClientHeight = 2;
+
+              viewModel.contentClientWidth = 5;
+              viewModel.contentClientHeight = 6;
+              viewModel.contentScrollWidth = 7;
+              viewModel.contentScrollHeight = 8;
+
+              viewModel.contentPaddingBottom = 13;
+
               viewModel.vScrollLocation = vScrollLocation;
 
-              const containerRef = {
-                current: elementRefExist ? {
+              viewModel.containerRef = {
+                current: {
                   clientWidth: 10,
                   clientHeight: 20,
                   scrollLeft: 150,
                   scrollTop: 200,
-                } : null,
+                },
               } as RefObject;
 
-              const contentRef = {
-                current: elementRefExist ? {
+              viewModel.contentRef = {
+                current: {
                   clientWidth: 50,
                   clientHeight: 60,
                   scrollWidth: 70,
                   scrollHeight: 80,
-                } : null,
+                },
               } as RefObject;
 
-              const topPocketRef = {
-                current: elementRefExist ? { // elementRefExist = forceGeneratePockets
-                  clientHeight: pullDownEnabled ? 80 : 0,
-                } : null,
-              } as RefObject;
+              if (forceGeneratePockets) {
+                viewModel.topPocketRef = {
+                  current: {
+                    clientHeight: pullDownEnabled ? 80 : 0,
+                  },
+                } as RefObject;
 
-              const bottomPocketRef = {
-                current: elementRefExist // elementRefExist = forceGeneratePockets
-                  ? {
+                viewModel.bottomPocketRef = {
+                  current: {
                     clientHeight: reachBottomEnabled ? 55 : 0,
-                  } : null,
-              } as RefObject;
+                  },
+                } as RefObject;
+              }
 
-              viewModel.containerRef = containerRef;
-              viewModel.contentRef = contentRef;
-              viewModel.topPocketRef = topPocketRef;
-              viewModel.bottomPocketRef = bottomPocketRef;
-
-              viewModel.updateScrollbarSize();
+              viewModel.updateDimensions();
 
               let expectedTopPocketSize = 0;
               let expectedBottomPocketSize = 0;
 
-              if (elementRefExist) {
-                expect(viewModel.containerClientWidth).toEqual(10);
-                expect(viewModel.containerClientHeight).toEqual(20);
+              expect(viewModel.containerClientWidth).toEqual(10);
+              expect(viewModel.containerClientHeight).toEqual(20);
 
-                expect(viewModel.contentClientWidth).toEqual(50);
-                expect(viewModel.contentClientHeight).toEqual(60);
-                expect(viewModel.contentScrollWidth).toEqual(70);
-                expect(viewModel.contentScrollHeight).toEqual(80);
+              expect(viewModel.contentClientWidth).toEqual(50);
+              expect(viewModel.contentClientHeight).toEqual(60);
+              expect(viewModel.contentScrollWidth).toEqual(70);
+              expect(viewModel.contentScrollHeight).toEqual(80);
 
-                if (pullDownEnabled) {
-                  expectedTopPocketSize = 80;
-                }
+              if (forceGeneratePockets && pullDownEnabled) {
+                expectedTopPocketSize = 80;
+              }
 
-                if (reachBottomEnabled) {
-                  expectedBottomPocketSize = 55;
-                }
+              if (forceGeneratePockets && reachBottomEnabled) {
+                expectedBottomPocketSize = 55;
               }
 
               expect(viewModel.contentPaddingBottom).toEqual(8);
@@ -1321,7 +1316,7 @@ describe('Simulated > Behavior', () => {
         });
 
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
-        helper.viewModel.updateSizes = jest.fn();
+        helper.viewModel.updateElementDimensions = jest.fn();
 
         helper.viewModel.updateHandler();
 
@@ -1330,7 +1325,7 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
-        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
+        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
       });
 
       each([{ scrollTop: 1, scrollLeft: 1 }, undefined]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {

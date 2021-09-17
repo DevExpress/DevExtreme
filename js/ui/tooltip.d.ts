@@ -43,8 +43,6 @@ export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
  * @docid
  * @inherits dxPopover
  * @hasTranscludedContent
- * @module ui/tooltip
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

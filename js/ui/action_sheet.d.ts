@@ -133,8 +133,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/action_sheet
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -156,7 +154,6 @@ export default class dxActionSheet extends CollectionWidget<dxActionSheetOptions
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<void>
      * @public
      */
@@ -182,9 +179,6 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @public
