@@ -128,7 +128,7 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> & { type: StorageType } | Array<TSourceValue>;
+    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> & { type: StorageType } | CustomStoreOptions<TKey, TSourceValue> | Array<TSourceValue>;
 }
 /**
  * @docid

@@ -1658,9 +1658,7 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (
-      options: LoadOptions<TValue>
-    ) => PromiseLike<TValue> | Array<TValue>;
+    load: (options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1967,6 +1965,7 @@ declare module DevExpress.data {
       | (StoreOptions<TKey, TSourceValue> & {
           type: DevExpress.data.DataSource.StorageType;
         })
+      | CustomStoreOptions<TKey, TSourceValue>
       | Array<TSourceValue>;
   }
   /**
