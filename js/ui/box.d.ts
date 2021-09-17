@@ -85,8 +85,6 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

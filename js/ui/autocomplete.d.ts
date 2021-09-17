@@ -126,8 +126,6 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/autocomplete
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
