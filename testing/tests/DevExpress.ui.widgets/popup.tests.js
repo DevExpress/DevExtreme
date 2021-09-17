@@ -143,8 +143,8 @@ QUnit.module('basic', () => {
 
         const $wrapper = $('.' + POPUP_WRAPPER_CLASS);
 
-        assert.equal(getOuterHeight($wrapper), getOuterHeight($(document.body)), 'height is 100%');
-        assert.equal(getOuterWidth($wrapper), getOuterWidth($(document.body)), 'width is 100%');
+        assert.equal(getOuterHeight($wrapper), getOuterHeight(document.body), 'height is 100%');
+        assert.equal(getOuterWidth($wrapper), getOuterWidth(document.body), 'width is 100%');
     });
 
     QUnit.test('default options', function(assert) {
@@ -814,7 +814,7 @@ QUnit.module('options changed callbacks', {
         }).dxPopup('instance');
 
         const $popup = popup.$content().parent();
-        const windowHeight = getInnerHeight($(window));
+        const windowHeight = getInnerHeight(window);
         const $popupContent = popup.$content();
         const topToolbarHeight = getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`).eq(0));
         const popupContentPadding = getOuterHeight($popupContent) - getHeight($popupContent);
@@ -880,7 +880,7 @@ QUnit.module('options changed callbacks', {
         });
 
         let treeviewContentHeight = 0;
-        $content.children().each(function(_, item) { treeviewContentHeight += getHeight($(item)); });
+        $content.children().each(function(_, item) { treeviewContentHeight += getHeight(item); });
         assert.roughEqual(getHeight($content), treeviewContentHeight, 1, 'treeview content can not be heighter than container');
     });
 
@@ -921,8 +921,8 @@ QUnit.module('options changed callbacks', {
 
         const $overlayContent = this.instance.$content().parent();
 
-        assert.equal(getOuterWidth($overlayContent), getOuterWidth($(document.body)), 'wrapper has 100% width');
-        assert.equal(getOuterHeight($overlayContent), getOuterHeight($(document.body)), 'wrapper has 100% height');
+        assert.equal(getOuterWidth($overlayContent), getOuterWidth(document.body), 'wrapper has 100% width');
+        assert.equal(getOuterHeight($overlayContent), getOuterHeight(document.body), 'wrapper has 100% height');
 
         assert.ok($overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), 'fullscreen class added');
         assert.ok(!$overlayContent.hasClass(POPUP_NORMAL_CLASS), 'normal class is removed');
@@ -948,8 +948,8 @@ QUnit.module('options changed callbacks', {
 
         const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
-        assert.equal(getOuterWidth($overlayWrapper), getInnerWidth($(window)), 'wrapper has correct width');
-        assert.equal(getOuterHeight($overlayWrapper), getInnerHeight($(window)), 'wrapper has correct height');
+        assert.equal(getOuterWidth($overlayWrapper), getInnerWidth(window), 'wrapper has correct width');
+        assert.equal(getOuterHeight($overlayWrapper), getInnerHeight(window), 'wrapper has correct height');
     });
 
     QUnit.test('start scroll position is saved after full screen popup hiding', function(assert) {
@@ -1014,8 +1014,8 @@ QUnit.module('options changed callbacks', {
 
         const wrapper = this.instance.$wrapper().get(0);
 
-        assert.equal(parseInt(getComputedStyle(wrapper).width), getWidth($(window)), 'wrappers width specified');
-        assert.equal(parseInt(getComputedStyle(wrapper).height), getHeight($(window)), 'wrappers height specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).width), getWidth(window), 'wrappers width specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).height), getHeight(window), 'wrappers height specified');
     });
 
     QUnit.test('title', function(assert) {
@@ -1635,11 +1635,11 @@ QUnit.module('rendering', {
 
 
     QUnit.test('dx-popup-fullscreen-width class should be attached when width is equal to screen width', function(assert) {
-        this.instance.option('width', function() { return getWidth($(window)); });
+        this.instance.option('width', function() { return getWidth(window); });
         this.instance.show();
         assert.ok(this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
 
-        this.instance.option('width', function() { return getWidth($(window)) - 1; });
+        this.instance.option('width', function() { return getWidth(window) - 1; });
         assert.ok(!this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
     });
 

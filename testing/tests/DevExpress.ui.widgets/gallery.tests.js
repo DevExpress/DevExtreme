@@ -844,7 +844,7 @@ QUnit.module('render', {
         const len = items.length - 2;
         items.each(function(index) {
             if(index >= len) return;
-            assert.equal(calculateItemPosition($(this), $gallery), (-currentIndex + index) * getOuterWidth($(this)));
+            assert.equal(calculateItemPosition($(this), $gallery), (-currentIndex + index) * getOuterWidth(this));
         });
     };
 

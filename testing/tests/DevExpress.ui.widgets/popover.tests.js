@@ -905,7 +905,7 @@ QUnit.module('content positioning', () => {
             const $popoverContent = popover.$content();
             const $popoverBottom = $popover.find('.dx-popup-bottom');
 
-            $where.css('top', getHeight($(window)) - getHeight($where) - getHeight($overlayContent));
+            $where.css('top', getHeight(window) - getHeight($where) - getHeight($overlayContent));
             popover.repaint();
 
             popover.show().done(function() {
@@ -1076,8 +1076,8 @@ QUnit.module('positioning', () => {
 
             const $shader = $('.dx-overlay-shader');
 
-            assert.roughEqual(getHeight($shader), getHeight($(window)), 1.01, 'shader height is equal to window height');
-            assert.roughEqual(getWidth($shader), getWidth($(window)), 1.01, 'shader width is equal to window width');
+            assert.roughEqual(getHeight($shader), getHeight(window), 1.01, 'shader height is equal to window height');
+            assert.roughEqual(getWidth($shader), getWidth(window), 1.01, 'shader width is equal to window width');
         } finally {
             $scrollElement.remove();
             fixtures.simple.drop();
@@ -1387,7 +1387,7 @@ QUnit.module('flipping', () => {
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
             const $overlayContent = $('.dx-overlay-content');
 
-            const arrowOffsetTop = getHeight($(window)) - getHeight($target) - getHeight($arrow);
+            const arrowOffsetTop = getHeight(window) - getHeight($target) - getHeight($arrow);
             const overlayContentBorderWidth = parseInt($overlayContent.css('borderBottomWidth'));
             const overlayContentOffsetTop = arrowOffsetTop + overlayContentBorderWidth - getOuterHeight($overlayContent);
 
@@ -1443,8 +1443,8 @@ QUnit.module('flipping', () => {
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
             assert.ok(wrapper().hasClass('dx-position-left'), 'arrow has flipping css class');
-            assert.equal($arrow.offset().left, getWidth($(window)) - getWidth($target) - getWidth($arrow));
-            assert.equal($('.dx-popup-content').offset().left, getWidth($(window)) - getWidth($target) - getWidth($arrow) - getOuterWidth($('.dx-popup-content')));
+            assert.equal($arrow.offset().left, getWidth(window) - getWidth($target) - getWidth($arrow));
+            assert.equal($('.dx-popup-content').offset().left, getWidth(window) - getWidth($target) - getWidth($arrow) - getOuterWidth('.dx-popup-content'));
 
         } finally {
             fixtures.collisionBottomRight.drop();

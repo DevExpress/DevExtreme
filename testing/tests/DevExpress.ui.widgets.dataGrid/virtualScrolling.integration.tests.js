@@ -1316,7 +1316,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // assert
-        assert.roughEqual(getHeight($('.dx-freespace-row')), 0.5, 0.51, 'freespace height');
+        assert.roughEqual(getHeight('.dx-freespace-row'), 0.5, 0.51, 'freespace height');
     });
 
     // T256314

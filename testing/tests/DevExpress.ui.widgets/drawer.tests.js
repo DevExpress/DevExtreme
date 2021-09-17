@@ -652,7 +652,7 @@ QUnit.module('Drawer behavior', () => {
         $('#drawerContainer').width(elementWidth * 2);
         resizeCallbacks.fire();
 
-        assert.equal(position($content), getWidth($(instance.content())), 'container rendered at correct position');
+        assert.equal(position($content), getWidth(instance.content()), 'container rendered at correct position');
     });
 
     QUnit.test('content container should have correct position if it is rendered in invisible container', function(assert) {
@@ -1149,7 +1149,7 @@ QUnit.module('Shader', () => {
         const instance = $element.dxDrawer('instance');
         const $content = $(instance.viewContent());
         const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-        const panelWidth = getWidth($(instance.content()));
+        const panelWidth = getWidth(instance.content());
 
         $('#drawerContainer').width(panelWidth * 2);
         resizeCallbacks.fire();

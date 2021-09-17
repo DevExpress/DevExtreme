@@ -196,7 +196,7 @@ testModule('render', moduleConfig, () => {
 
                 onContentReady: function() {
                     resizeCallbacks.fire();
-                    getWidth($(toSelector(OVERLAY_CONTENT_CLASS)));
+                    getWidth(toSelector(OVERLAY_CONTENT_CLASS));
                     resizeCallbacks.fire();
                 }
             }).remove();
@@ -254,8 +254,8 @@ testModule('render', moduleConfig, () => {
 
         assert.ok(!$content.is(':visible'));
         assert.ok(!viewport().children(toSelector(OVERLAY_SHADER_CLASS)).is(':visible'));
-        assert.ok(getWidth($content) < getWidth($(window)));
-        assert.ok(getHeight($content) < getHeight($(window)));
+        assert.ok(getWidth($content) < getWidth(window));
+        assert.ok(getHeight($content) < getHeight(window));
     });
 
     test('RTL markup - rtlEnabled by default', function(assert) {
@@ -934,8 +934,8 @@ testModule('position', moduleConfig, () => {
         const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
         const wrapperStyle = getComputedStyle($overlayWrapper.get(0));
 
-        assert.strictEqual(parseInt(wrapperStyle.width), getWidth($(window)), 'width is 100%');
-        assert.strictEqual(parseInt(wrapperStyle.height), getHeight($(window)), 'height is 100%');
+        assert.strictEqual(parseInt(wrapperStyle.width), getWidth(window), 'width is 100%');
+        assert.strictEqual(parseInt(wrapperStyle.height), getHeight(window), 'height is 100%');
     });
 
     test('overlay should be correctly animated with custom \'animation.show.to\'', function(assert) {
@@ -1001,8 +1001,8 @@ testModule('position', moduleConfig, () => {
 
         const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
-        assert.roughEqual(getWidth($overlayWrapper), getWidth($(window)), 1.01, 'overlay wrapper width is correct');
-        assert.roughEqual(getHeight($overlayWrapper), getHeight($(window)), 1.01, 'overlay wrapper height is correct');
+        assert.roughEqual(getWidth($overlayWrapper), getWidth(window), 1.01, 'overlay wrapper width is correct');
+        assert.roughEqual(getHeight($overlayWrapper), getHeight(window), 1.01, 'overlay wrapper height is correct');
     });
 });
 
@@ -1087,20 +1087,20 @@ testModule('dimensions', moduleConfig, () => {
         const $content = $('#overlay').dxOverlay({
             visible: true,
             width: () => {
-                return getWidth($(window));
+                return getWidth(window);
             },
             height: () => {
-                return getHeight($(window));
+                return getHeight(window);
             }
         }).dxOverlay('instance').$content();
 
-        assert.strictEqual(getWidth($content), getWidth($(window)));
-        assert.strictEqual(getHeight($content), getHeight($(window)));
+        assert.strictEqual(getWidth($content), getWidth(window));
+        assert.strictEqual(getHeight($content), getHeight(window));
 
         resizeCallbacks.fire();
 
-        assert.strictEqual(getWidth($content), getWidth($(window)));
-        assert.strictEqual(getHeight($content), getHeight($(window)));
+        assert.strictEqual(getWidth($content), getWidth(window));
+        assert.strictEqual(getHeight($content), getHeight(window));
     });
 
     test('dimensions should be shrunk correctly with max sizes specified', function(assert) {
@@ -2270,8 +2270,8 @@ testModule('container', moduleConfig, () => {
 
         const $wrapper = overlay.$wrapper();
         overlay.option('container', null);
-        assert.strictEqual(getWidth($wrapper), getWidth($(window)), 'width is restored after container option value changed to window');
-        assert.strictEqual(getHeight($wrapper), getHeight($(window)), 'height is restored after container option value changed to window');
+        assert.strictEqual(getWidth($wrapper), getWidth(window), 'width is restored after container option value changed to window');
+        assert.strictEqual(getHeight($wrapper), getHeight(window), 'height is restored after container option value changed to window');
     });
 
     test('content should not be moved to container', function(assert) {

@@ -258,7 +258,7 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
 
             assert.strictEqual(overlayContentWidth, getOuterWidth($dropDownButton), 'width is correct on init');
             assert.strictEqual(overlayContentWidth, 500, 'width is correct on init');
@@ -277,7 +277,7 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
 
             assert.strictEqual(overlayContentWidth, getOuterWidth($dropDownButton), 'width is correct on init');
             assert.strictEqual(overlayContentWidth, 100, 'width is correct on init');
@@ -309,7 +309,7 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const popupContentWidth = getWidth($(`.${POPUP_CONTENT_CLASS}`));
+            const popupContentWidth = getWidth(`.${POPUP_CONTENT_CLASS}`);
 
             assert.strictEqual(popupContentWidth, 300, 'width is correct');
         });
@@ -326,7 +326,7 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const popupContentWidth = getWidth($(`.${POPUP_CONTENT_CLASS}`));
+            const popupContentWidth = getWidth(`.${POPUP_CONTENT_CLASS}`);
 
             assert.strictEqual(popupContentWidth, 100, 'width is correct');
         });
@@ -343,8 +343,8 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
-            const overlayWrapperWidth = getOuterWidth($(`.${OVERLAY_WRAPPER_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
+            const overlayWrapperWidth = getOuterWidth(`.${OVERLAY_WRAPPER_CLASS}`);
 
             assert.strictEqual(overlayContentWidth, 300, 'width is correct');
             assert.strictEqual(overlayContentWidth, overlayWrapperWidth, 'width is correct');
@@ -362,8 +362,8 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
-            const overlayWrapperWidth = getOuterWidth($(`.${OVERLAY_WRAPPER_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
+            const overlayWrapperWidth = getOuterWidth(`.${OVERLAY_WRAPPER_CLASS}`);
 
             assert.strictEqual(overlayContentWidth, 100, 'width is correct');
             assert.strictEqual(overlayContentWidth, overlayWrapperWidth, 'width is correct');
@@ -383,8 +383,8 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
-            const overlayWrapperWidth = getOuterWidth($(`.${OVERLAY_WRAPPER_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
+            const overlayWrapperWidth = getOuterWidth(`.${OVERLAY_WRAPPER_CLASS}`);
 
             assert.strictEqual(overlayContentWidth, getOuterWidth($container), 'width is correct');
             assert.strictEqual(overlayContentWidth, overlayWrapperWidth, 'width is correct');
@@ -399,7 +399,7 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
 
             assert.strictEqual(overlayContentWidth, 200, 'width is correct');
         });
@@ -413,7 +413,7 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
 
             assert.strictEqual(overlayContentWidth, 100, 'width is correct');
         });
@@ -427,8 +427,8 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
-            const overlayWrapperWidth = getOuterWidth($(`.${OVERLAY_WRAPPER_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
+            const overlayWrapperWidth = getOuterWidth(`.${OVERLAY_WRAPPER_CLASS}`);
 
             assert.roughEqual(overlayContentWidth, overlayWrapperWidth / 2, 0.1, 'width is correct');
             assert.roughEqual(overlayContentWidth, 150, 0.1, 'width is correct');
@@ -443,8 +443,8 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
-            const overlayWrapperWidth = getOuterWidth($(`.${OVERLAY_WRAPPER_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
+            const overlayWrapperWidth = getOuterWidth(`.${OVERLAY_WRAPPER_CLASS}`);
 
             assert.roughEqual(overlayContentWidth, overlayWrapperWidth * 1.5, 0.1, 'width is correct');
             assert.roughEqual(overlayContentWidth, 450, 0.1, 'width is correct');
@@ -464,8 +464,8 @@ QUnit.module('popup integration', {
                 }
             });
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
-            const overlayWrapperWidth = getOuterWidth($(`.${OVERLAY_WRAPPER_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
+            const overlayWrapperWidth = getOuterWidth(`.${OVERLAY_WRAPPER_CLASS}`);
 
             assert.roughEqual(overlayContentWidth, overlayWrapperWidth * 1.5, 0.1, 'width is correct');
             assert.roughEqual(overlayContentWidth, 750, 0.1, 'width is correct');
@@ -482,8 +482,8 @@ QUnit.module('popup integration', {
 
             dropDownButton.option('width', 500);
 
-            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
-            const overlayWrapperWidth = getOuterWidth($(`.${OVERLAY_WRAPPER_CLASS}`));
+            const overlayContentWidth = getOuterWidth(`.${OVERLAY_CONTENT_CLASS}`);
+            const overlayWrapperWidth = getOuterWidth(`.${OVERLAY_WRAPPER_CLASS}`);
 
             assert.roughEqual(overlayContentWidth, overlayWrapperWidth * 1.5, 0.1, 'width is correct');
             assert.roughEqual(overlayContentWidth, 750, 0.1, 'width is correct');

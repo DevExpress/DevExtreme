@@ -360,7 +360,7 @@ module('Integration: Appointment Day, Week views', {
 
                 scheduler.instance.option('dataSource', data);
 
-                const itemShift = (getOuterWidth($('.dx-scheduler-date-table'))) * 0.5;
+                const itemShift = (getOuterWidth('.dx-scheduler-date-table')) * 0.5;
                 const position = $('.dx-scheduler-appointment').position();
 
                 assert.roughEqual(position.top, 0, 1.001, 'top is correct');

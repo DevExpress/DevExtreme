@@ -52,8 +52,8 @@ QUnit.module('general', moduleConfig, () => {
         assert.ok($wrapper.hasClass(TOAST_WRAPPER_CLASS));
         assert.ok($content.hasClass(TOAST_CONTENT_CLASS));
 
-        assert.ok(getWidth($content) < getWidth($(window)));
-        assert.ok(getHeight($content) < getHeight($(window)));
+        assert.ok(getWidth($content) < getWidth(window));
+        assert.ok(getHeight($content) < getHeight(window));
     });
 
     QUnit.test('default template', function(assert) {
@@ -82,7 +82,7 @@ QUnit.module('general', moduleConfig, () => {
         this.instance.show();
 
         const $content = this.instance.$content();
-        assert.roughEqual($content.offset().top + getOuterHeight($content), getHeight($(window)), 1.01);
+        assert.roughEqual($content.offset().top + getOuterHeight($content), getHeight(window), 1.01);
     });
 
     QUnit.test('position on mobile devices', function(assert) {

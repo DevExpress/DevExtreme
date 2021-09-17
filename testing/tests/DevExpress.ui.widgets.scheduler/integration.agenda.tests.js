@@ -1263,8 +1263,8 @@ module('Integration: Agenda', moduleConfig, () => {
                 owner: 1
             }],
             resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                assert.equal(getOuterWidth($(cellElement)), 80, 'Resource cell width is OK');
-                assert.equal(getOuterHeight($(cellElement)), 80, 'Resource cell height is OK');
+                assert.equal(getOuterWidth(cellElement), 80, 'Resource cell width is OK');
+                assert.equal(getOuterHeight(cellElement), 80, 'Resource cell height is OK');
             }
         });
     });

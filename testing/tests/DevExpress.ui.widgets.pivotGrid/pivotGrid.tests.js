@@ -2948,7 +2948,7 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth(columnAreaScrollable.container()), getWidth(columnAreaScrollable.content()), 2.01, 'scrollLeft is in max right position');
     });
 
     // T529461;
@@ -2981,7 +2981,7 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth(columnAreaScrollable.container()), getWidth(columnAreaScrollable.content()), 2.01, 'scrollLeft is in max right position');
         assert.equal(dataAreaFakeTable.css('right'), '0px');
         assert.equal(columnAreaFakeTable.css('right'), '0px');
         assert.equal(dataAreaContentTable.css('right'), '0px');
@@ -3024,7 +3024,7 @@ QUnit.module('dxPivotGrid', {
 
             const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
             assert.roughEqual(dataAreaScrollable.scrollLeft() + 10, dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
+            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + getWidth(columnAreaScrollable.container()), getWidth(columnAreaScrollable.content()), 2.01, 'scrollLeft is in max right position');
 
             done();
         };
@@ -5294,7 +5294,7 @@ QUnit.module('Tests with stubs', {
             itemHeights: [43, 28],
             itemWidths: [20, 40, 60, 20],
             rowCount: 2,
-            viewportHeight: getOuterHeight($(window)),
+            viewportHeight: getOuterHeight(window),
             viewportWidth: 899,
             virtualColumnWidth: 100,
             virtualRowHeight: 50

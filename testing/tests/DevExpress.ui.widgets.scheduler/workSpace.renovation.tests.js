@@ -986,7 +986,7 @@ module('Renovated Render', {
         const dateTableWidth = getOuterWidth($element.find(`.${DATE_TABLE_CLASS}`));
 
         cells.each(function() {
-            assert.equal(getOuterWidth($(this)), dateTableWidth / 2, 'Correct cell width');
+            assert.equal(getOuterWidth(this), dateTableWidth / 2, 'Correct cell width');
         });
     });
 
