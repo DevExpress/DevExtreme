@@ -622,10 +622,6 @@ const getDatesOfInterval = function(startDate, endDate, step) {
     return result;
 };
 
-const createDate = function(date) {
-    return new Date(date);
-};
-
 const createDateWithFullYear = function(year) {
     const result = new Date(...arguments);
     result.setFullYear(year);
@@ -690,7 +686,6 @@ const dateUtils = {
 
     getDatesOfInterval: getDatesOfInterval,
 
-    createDate: createDate,
     createDateWithFullYear: createDateWithFullYear
 };
 

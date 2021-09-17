@@ -342,7 +342,7 @@ const Calendar = Editor.inherit({
     },
 
     _moveToClosestAvailableDate: function(baseDate = this.option('currentDate')) {
-        let currentDate = dateUtils.createDate(baseDate);
+        let currentDate = new Date(baseDate);
         const zoomLevel = this.option('zoomLevel');
 
         const isCurrentDateAvailable = !this._isDateNotAvailable(currentDate);
@@ -353,8 +353,8 @@ const Calendar = Editor.inherit({
         let isDateForwardInStartView;
         let isDateBackwardInStartView;
 
-        const dateForward = dateUtils.createDate(currentDate);
-        const dateBackward = dateUtils.createDate(currentDate);
+        const dateForward = new Date(currentDate);
+        const dateBackward = new Date(currentDate);
 
         do {
             if(isDateForwardAvailable) {
@@ -451,7 +451,7 @@ const Calendar = Editor.inherit({
         const normalizedDate = this._getNormalizedDate(date);
 
         if(date.getTime() !== normalizedDate.getTime()) {
-            this.option('currentDate', dateUtils.createDate(normalizedDate));
+            this.option('currentDate', new Date(normalizedDate));
             return;
         }
 
@@ -705,7 +705,7 @@ const Calendar = Editor.inherit({
     },
 
     _updateTimeComponent: function(date) {
-        const result = dateUtils.createDate(date);
+        const result = new Date(date);
         const currentValue = this._dateOption('value');
 
         if(currentValue) {
@@ -1005,7 +1005,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDate(value) {
-        return dateUtils.createDate(value);
+        return new Date(value);
     },
 
     _toTodayView: function(args) {
@@ -1209,7 +1209,7 @@ const Calendar = Editor.inherit({
                 value = this._convertToDate(value);
                 previousValue = this._convertToDate(previousValue);
                 this._updateAriaSelected(value, previousValue);
-                this.option('currentDate', isDefined(value) ? dateUtils.createDate(value) : new Date());
+                this.option('currentDate', isDefined(value) ? new Date(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
                 this.callBase(args);
