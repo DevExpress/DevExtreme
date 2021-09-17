@@ -185,7 +185,7 @@ export class VirtualScrollingDispatcher {
             ? columnIndex * cellWidth
             : (columnIndex + scrollInCell) * cellWidth;
 
-        if(this.options.isRTL) {
+        if(this.isRTL) {
             left = this.options.getScrollableOuterWidth() - left;
         }
 
