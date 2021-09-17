@@ -516,8 +516,6 @@ const FadeAnimationConfigurator = {
             case 'fadeOut':
                 toOpacity = 0;
                 break;
-            default:
-                toOpacity = String(config.to);
         }
 
         config.from = {
