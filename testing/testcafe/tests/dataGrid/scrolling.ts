@@ -561,7 +561,7 @@ test('New virtual mode. Virtual rows should not be in view port', async (t) => {
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(10)
+    .eql(15)
     .expect(visibleRows[0].key)
     .eql(91)
     .expect(virtualRowInfo.count)
