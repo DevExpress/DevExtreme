@@ -1229,13 +1229,13 @@ export const virtualScrollingModule = {
                         }
                         return result;
                     },
-                    _loadItems: function() {
+                    _loadItems: function(checkLoading) {
                         const virtualPaging = isVirtualPaging(this);
                         const dataSourceAdapter = this._dataSource;
                         const changedParams = this._getChangedLoadParams();
                         let result = false;
 
-                        if(virtualPaging && this._viewportUpdating && changedParams && changedParams.pageIndex > dataSourceAdapter.pageIndex()) {
+                        if(virtualPaging && checkLoading && changedParams && changedParams.pageIndex > dataSourceAdapter.pageIndex()) {
                             return result;
                         }
 
@@ -1255,19 +1255,20 @@ export const virtualScrollingModule = {
                                 (viewportChanging || isLastPage) && this._updateVisiblePageIndex();
                                 if(this._needUpdateViewportAfterLoading) {
                                     this._needUpdateViewportAfterLoading = false;
-                                    this.loadViewport(true);
+                                    this.loadViewport({ checkLoadedParamsOnly: true });
                                 }
                             });
                         }
 
                         return result;
                     },
-                    loadViewport: function({ checkLoadedParamsOnly, checkLoading }) {
+                    loadViewport: function(params) {
+                        const { checkLoadedParamsOnly, checkLoading } = params ?? {};
                         const virtualPaging = isVirtualPaging(this);
                         if(virtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
 
-                            const loadingItemsStarted = this._loadItems();
+                            const loadingItemsStarted = this._loadItems(checkLoading);
 
                             if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
                                 this.updateItems({
@@ -1281,11 +1282,10 @@ export const virtualScrollingModule = {
                         const viewportIsNotFilled = viewportSize > this.items().length;
                         const currentTake = this._loadViewportParams?.take ?? 0;
                         const newTake = this._rowsScrollController?.getViewportParams().take;
-                        this._viewportUpdating = true;
+
                         (viewportIsNotFilled || currentTake < newTake) && this.loadViewport({
                             checkLoading: true
                         });
-                        this._viewportUpdating = false;
                     },
                     loadIfNeed: function() {
                         if(this.option(NEW_SCROLLING_MODE)) {
