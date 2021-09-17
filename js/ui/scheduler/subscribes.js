@@ -219,11 +219,6 @@ const subscribes = {
         return this.getWorkSpaceDateTableOffset();
     },
 
-    getMaxAppointmentWidth: function(options) {
-        const workSpace = this._workSpace;
-        return workSpace.getCellCountToLastViewDate(options.date) * workSpace.getCellWidth();
-    },
-
     updateAppointmentStartDate: function(options) {
         const appointment = options.appointment;
         const firstViewDate = this._workSpace.getStartViewDate();
@@ -288,14 +283,6 @@ const subscribes = {
             appointmentElement: config.itemElement,
             targetedAppointmentData: targetedData,
         };
-    },
-
-    getOffsetByAllDayPanel: function(groupIndex) {
-        return this._workSpace._getOffsetByAllDayPanel(groupIndex);
-    },
-
-    getGroupTop: function(groupIndex) {
-        return this._workSpace._getGroupTop(groupIndex);
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

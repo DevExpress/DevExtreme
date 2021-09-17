@@ -536,7 +536,7 @@ module('Virtual scrolling Month View', () => {
                 const { viewDataProvider } = workspace;
                 const scrollable = workspace.getScrollable();
 
-                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                workspace.renderer.getRenderTimeout = () => -1;
 
                 return asyncWrapper(assert, promise => {
                     [
@@ -624,7 +624,7 @@ module('Virtual scrolling Month View', () => {
                 const workspace = instance.getWorkSpace();
                 const scrollable = workspace.getScrollable();
 
-                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                workspace.renderer.getRenderTimeout = () => -1;
 
                 return asyncWrapper(assert, promise => {
                     [{

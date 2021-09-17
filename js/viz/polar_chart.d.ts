@@ -230,8 +230,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     containerBackgroundColor?: string;
     /**
      * @docid
-     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
-     * @type_function_return dxPolarChartAnnotationConfig
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -254,10 +252,8 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
       convertToAxisDataType?: boolean;
       /**
        * @docid
-       * @type_function_param1 a:object
        * @type_function_param1_field1 arg:Date|Number|string
        * @type_function_param1_field2 val:Date|Number|string
-       * @type_function_param2 b:object
        * @type_function_param2_field1 arg:Date|Number|string
        * @type_function_param2_field2 val:Date|Number|string
        * @type_function_return Number
@@ -281,7 +277,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
      * @notUsedInTheme
@@ -412,8 +407,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     seriesTemplate?: {
       /**
        * @docid
-       * @type_function_param1 seriesName:any
-       * @type_function_return PolarChartSeries
        */
       customizeSeries?: ((seriesName: any) => PolarChartSeries);
       /**
@@ -622,26 +615,19 @@ export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChart
 export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeHint
-     * @type_function_param1 argument:object
      * @type_function_param1_field1 value:Date|Number|string
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @public
      */
     customizeHint?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeText
-     * @type_function_param1 argument:object
      * @type_function_param1_field1 value:Date|Number|string
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
     customizeText?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.format
-     * @type Format
      * @default undefined
      * @public
      */
@@ -1029,21 +1015,13 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
 export interface dxPolarChartLegend extends BaseChartLegend {
     /**
      * @docid dxPolarChartOptions.legend.customizeHint
-     * @type_function_param1 seriesInfo:object
-     * @type_function_param1_field1 seriesName:any
      * @type_function_param1_field2 seriesIndex:Number
-     * @type_function_param1_field3 seriesColor:string
-     * @type_function_return string
      * @public
      */
     customizeHint?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
      * @docid dxPolarChartOptions.legend.customizeText
-     * @type_function_param1 seriesInfo:object
-     * @type_function_param1_field1 seriesName:any
      * @type_function_param1_field2 seriesIndex:Number
-     * @type_function_param1_field3 seriesColor:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
@@ -1252,26 +1230,19 @@ export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCom
 export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeHint
-     * @type_function_param1 axisValue:object
      * @type_function_param1_field1 value:Date|Number|string
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @public
      */
     customizeHint?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeText
-     * @type_function_param1 axisValue:object
      * @type_function_param1_field1 value:Date|Number|string
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
     customizeText?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.valueAxis.label.format
-     * @type Format
      * @default undefined
      * @public
      */
@@ -1325,8 +1296,6 @@ export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSetting
 /**
  * @docid dxPolarChart
  * @inherits BaseChart
- * @module viz/polar_chart
- * @export default
  * @namespace DevExpress.viz
  * @public
  */
@@ -1334,7 +1303,6 @@ export default class dxPolarChart extends BaseChart<dxPolarChartOptions> {
     /**
      * @docid dxPolarChart.getValueAxis
      * @publicName getValueAxis()
-     * @return chartAxisObject
      * @public
      */
     getValueAxis(): chartAxisObject;
@@ -1382,7 +1350,6 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
     radius?: number;
     /**
      * @docid
-     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
@@ -1393,15 +1360,12 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @docid
      * @default undefined
      * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
     template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
-     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -1847,7 +1811,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat
-     * @type Format
      * @default undefined
      * @public
      */
@@ -1913,7 +1876,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.customizeText
      * @type_function_param1 pointInfo:object
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
@@ -1927,7 +1889,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     font?: Font;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format
-     * @type Format
      * @default undefined
      * @public
      */
@@ -2149,7 +2110,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
 export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.hoverMode
-     * @type string
      * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
@@ -2163,7 +2123,6 @@ export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeri
     point?: dxPolarChartSeriesTypesAreapolarseriesPoint;
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.selectionMode
-     * @type string
      * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
@@ -2183,7 +2142,6 @@ export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChar
 export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.barpolarseries.hoverMode
-     * @type string
      * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
@@ -2191,7 +2149,6 @@ export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSerie
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
      * @docid dxPolarChartSeriesTypes.barpolarseries.selectionMode
-     * @type string
      * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
@@ -2202,7 +2159,6 @@ export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSerie
 export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.linepolarseries.hoverMode
-     * @type string
      * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
      * @default 'excludePoints'
      * @public
@@ -2210,7 +2166,6 @@ export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeri
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
      * @docid dxPolarChartSeriesTypes.linepolarseries.selectionMode
-     * @type string
      * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
@@ -2221,7 +2176,6 @@ export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeri
 export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode
-     * @type string
      * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
@@ -2235,7 +2189,6 @@ export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarCha
     label?: dxPolarChartSeriesTypesStackedbarpolarseriesLabel;
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode
-     * @type string
      * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public

@@ -420,6 +420,12 @@ describe('Scrollable', () => {
     });
 
     describe('Getters', () => {
+      it('isRenovated', () => {
+        const viewModel = new Scrollable({ });
+
+        expect(viewModel.isRenovated()).toEqual(true);
+      });
+
       each([false, true]).describe('useNative: %o', (useNative) => {
         it('scrollableRef', () => {
           const viewModel = new Scrollable({ useNative });

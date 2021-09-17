@@ -513,6 +513,10 @@ const Scrollable = DOMComponent.inherit({
     _useTemplates: function() {
         return false;
     },
+
+    isRenovated: function() {
+        return false;
+    }
 });
 
 registerComponent(SCROLLABLE, Scrollable);

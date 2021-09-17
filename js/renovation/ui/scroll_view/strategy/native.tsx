@@ -37,6 +37,7 @@ import {
   ScrollOffset, ScrollableDirection, RefreshStrategy, DxMouseEvent,
   DxMouseWheelEvent,
 } from '../common/types';
+import resizeObserverSingleton from '../../../../core/resize_observer';
 
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 
@@ -353,10 +354,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.containerRef.current![this.fullScrollInactiveProp] = 0;
   }
 
-  @Effect({ run: 'always' }) updateScrollbarSize(): void {
-    this.updateSizes();
-  }
-
   @Effect({ run: 'once' })
   disposeHideScrollbarTimer(): DisposeEffectReturn {
     return (): void => this.clearHideScrollbarTimer();
@@ -428,6 +425,46 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.updateHandleInternal();
   }
 
+  // if delete this effect we need to wait changing size inside resizeObservable
+  // it needs for support qunit tests
+  @Effect({ run: 'once' }) updateDimensions(): void {
+    if (this.props.useSimulatedScrollbar) {
+      this.updateElementDimensions();
+    }
+  }
+
+  @Effect()
+  /* istanbul ignore next */
+  containerResizeObserver(): DisposeEffectReturn | null {
+    if (this.props.useSimulatedScrollbar) {
+      return null;
+    }
+
+    const containerEl = this.containerRef.current;
+
+    resizeObserverSingleton.observe(containerEl, ({ target }) => {
+      this.setContainerDimensions(target);
+    });
+
+    return (): void => { resizeObserverSingleton.unobserve(containerEl); };
+  }
+
+  @Effect()
+  /* istanbul ignore next */
+  contentResizeObserver(): DisposeEffectReturn | null {
+    if (this.props.useSimulatedScrollbar) {
+      return null;
+    }
+
+    const contentEl = this.contentRef.current;
+
+    resizeObserverSingleton.observe(contentEl, ({ target }) => {
+      this.setContentDimensions(target);
+    });
+
+    return (): void => { resizeObserverSingleton.unobserve(contentEl); };
+  }
+
   scrollByLocation(location: ScrollOffset): void {
     const containerEl = this.containerRef.current!;
 
@@ -440,7 +477,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   updateHandleInternal(): void {
-    this.updateSizes();
+    this.updateElementDimensions();
     this.onUpdated();
   }
 
@@ -568,19 +605,19 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
   }
 
-  updateSizes(): void {
-    const containerEl = this.containerRef.current;
-    const contentEl = this.contentRef.current;
+  updateElementDimensions(): void {
+    this.setContentDimensions(this.contentRef.current!);
+    this.setContainerDimensions(this.containerRef.current!);
+  }
 
-    if (isDefined(containerEl)) {
-      this.containerClientWidth = containerEl.clientWidth;
-      this.containerClientHeight = containerEl.clientHeight;
-    }
+  setContainerDimensions(containerEl: HTMLDivElement): void {
+    this.containerClientWidth = containerEl.clientWidth;
+    this.containerClientHeight = containerEl.clientHeight;
+  }
 
-    if (isDefined(contentEl)) {
-      this.contentClientWidth = contentEl.clientWidth;
-      this.contentClientHeight = contentEl.clientHeight;
-    }
+  setContentDimensions(contentEl: HTMLDivElement): void {
+    this.contentClientWidth = contentEl.clientWidth;
+    this.contentClientHeight = contentEl.clientHeight;
   }
 
   syncScrollbarsWithContent(): void {

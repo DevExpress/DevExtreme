@@ -421,10 +421,21 @@ module('Work Space Week', () => {
             const $thirdGroupLastCell = $rows.eq(8).find('td').first();
             const $fourthGroupLastCell = $rows.eq(11).find('td').first();
 
-            assert.roughEqual($firstGroupLastCell.position().top + $firstGroupLastCell.get(0).getBoundingClientRect().height, this.instance.positionHelper.getVerticalMax(0), 1.1, 'Max top is OK');
-            assert.roughEqual($secondGroupLastCell.position().top + $secondGroupLastCell.get(0).getBoundingClientRect().height, this.instance.positionHelper.getVerticalMax(1), 1.1, 'Max top is OK');
-            assert.roughEqual($thirdGroupLastCell.position().top + $thirdGroupLastCell.get(0).getBoundingClientRect().height, this.instance.positionHelper.getVerticalMax(2), 1.1, 'Max top is OK');
-            assert.roughEqual($fourthGroupLastCell.position().top + $fourthGroupLastCell.get(0).getBoundingClientRect().height, this.instance.positionHelper.getVerticalMax(3), 1.1, 'Max top is OK');
+            const getVerticalMax = (groupIndex) => {
+                return this.instance.positionHelper.getVerticalMax({
+                    groupIndex,
+                    isVirtualScrolling: false,
+                    isShowAllDayPanel: true,
+                    supportAllDayRow: true,
+                    isGroupedAllDayPanel: true,
+                    isVerticalGrouping: true
+                });
+            };
+
+            assert.roughEqual($firstGroupLastCell.position().top + $firstGroupLastCell.get(0).getBoundingClientRect().height, getVerticalMax(0), 1.1, 'Max top is OK');
+            assert.roughEqual($secondGroupLastCell.position().top + $secondGroupLastCell.get(0).getBoundingClientRect().height, getVerticalMax(1), 1.1, 'Max top is OK');
+            assert.roughEqual($thirdGroupLastCell.position().top + $thirdGroupLastCell.get(0).getBoundingClientRect().height, getVerticalMax(2), 1.1, 'Max top is OK');
+            assert.roughEqual($fourthGroupLastCell.position().top + $fourthGroupLastCell.get(0).getBoundingClientRect().height, getVerticalMax(3), 1.1, 'Max top is OK');
         });
     });
 

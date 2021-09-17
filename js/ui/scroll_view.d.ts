@@ -94,8 +94,6 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @docid
  * @inherits dxScrollable
  * @hasTranscludedContent
- * @module ui/scroll_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -109,7 +107,6 @@ export default class dxScrollView extends dxScrollable<dxScrollViewOptions> {
     /**
      * @docid
      * @publicName release(preventScrollBottom)
-     * @param1 preventScrollBottom:boolean
      * @return Promise<void>
      * @public
      */
