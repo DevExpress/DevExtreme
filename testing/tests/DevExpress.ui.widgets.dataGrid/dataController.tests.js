@@ -3653,6 +3653,19 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
                 undefined,
                 undefined,
             ],
+            operationTypes: {
+                filtering: false,
+                fullReload: false,
+                groupExpanding: undefined,
+                grouping: false,
+                pageIndex: false,
+                pageSize: false,
+                paging: true,
+                reload: false,
+                skip: false,
+                sorting: false,
+                take: true
+            },
             rowIndices: [0, 0, 0, 0, 0, 5, 6, 7, 8, 9],
             items: oldItems.slice(0, 5).concat(this.dataController.items().slice(5, 10)),
         }]);
@@ -4840,12 +4853,12 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const loadedItems = this.dataController.dataSource().items();
 
         // assert
-        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 0 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 0 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
-        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
-        assert.equal(loadedItems.length, 30, 'loaded items count');
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 4, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 40, 'loaded items count');
         assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
-        assert.deepEqual(loadedItems[29], { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.deepEqual(loadedItems[39], { id: 60, name: 'Name 60' }, 'last loaded item');
         assert.equal(visibleItems.length, 25, 'visible items count');
         assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
         assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
@@ -5046,7 +5059,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         }
     });
 
-    QUnit.test('New mode. updateItems should not be called on data loading when loadViewport method is called', function(assert) {
+    QUnit.test('New mode. updateItems should be called on data loading when loadViewport method is called', function(assert) {
         // arrange
         this.applyOptions({
             scrolling: {
@@ -5070,7 +5083,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             this.dataController.loadViewport();
 
             // assert
-            assert.notOk(updateItemsSpy.called, 'not called');
+            assert.ok(updateItemsSpy.called, 'called');
 
             // act
             this.dataController._isLoading = false;
@@ -5083,6 +5096,193 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         }
     });
 
+    QUnit.test('New mode. updateItems should not be called on data loading when updateViewport method is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const updateItemsSpy = sinon.spy(this.dataController, 'updateItems');
+
+        try {
+            // act
+            this.dataController._isLoading = true;
+            this.dataController.updateViewport();
+
+            // assert
+            assert.notOk(updateItemsSpy.called, 'not called');
+
+            // act
+            this.dataController._isLoading = false;
+            this.dataController.updateViewport();
+
+            // assert
+            assert.ok(updateItemsSpy.called, 'called');
+        } finally {
+            updateItemsSpy.restore();
+        }
+    });
+});
+
+QUnit.module('Virtual scrolling preload', {
+    beforeEach: function() {
+
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({ id: i + 1 });
+            }
+            return items;
+        };
+
+        this.options = {
+            dataSource: getData(100),
+            scrolling: { mode: 'virtual', newMode: true, minGap: 0, rowPageSize: 5 },
+            pager: { visible: 'auto' },
+            paging: { pageSize: 20 },
+            remoteOperations: { filtering: true, sorting: true, paging: true },
+            grouping: { autoExpandAll: true }
+        };
+        setupModule.apply(this);
+
+        this.dataController.viewportSize(15);
+        this.dataController.updateViewport();
+    },
+    afterEach: teardownModule
+}, () => {
+    QUnit.test('New mode. One page should be loaded on start', function(assert) {
+        // arrange
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.getVisibleRows().length, 20, 'initial visible items count');
+    });
+
+    QUnit.test('New mode. One viewport should be preloaded on scroll', function(assert) {
+        // act
+        this.dataController.setViewportPosition(1);
+        const visibleRows = this.getVisibleRows();
+        const dataSourceAdapter = this.dataController.dataSource();
+        const loadedItems = dataSourceAdapter.items();
+
+        // assert
+        assert.deepEqual(dataSourceAdapter.pageIndex(), 0, 'page index after scrolling');
+        assert.strictEqual(dataSourceAdapter.loadPageCount(), 2, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 40, 'loaded items count');
+        assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
+        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
+    });
+
+    QUnit.test('New mode. Two viewports should be preloaded on scroll if preloadEnabled', function(assert) {
+        this.options.scrolling.preloadEnabled = true;
+        // act
+        this.dataController.setViewportPosition(1);
+        const visibleRows = this.getVisibleRows();
+        const dataSourceAdapter = this.dataController.dataSource();
+        const loadedItems = dataSourceAdapter.items();
+
+        // assert
+        assert.deepEqual(dataSourceAdapter.pageIndex(), 0, 'page index after scrolling');
+        assert.strictEqual(dataSourceAdapter.loadPageCount(), 3, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 60, 'loaded items count');
+        assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
+        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
+    });
+
+    QUnit.test('New mode. Data should not be preloaded on scroll if preloadCount is 0', function(assert) {
+        this.options.scrolling.preloadCount = 0;
+        // act
+        this.dataController.setViewportPosition(1);
+        const visibleRows = this.getVisibleRows();
+        const dataSourceAdapter = this.dataController.dataSource();
+        const loadedItems = dataSourceAdapter.items();
+
+        // assert
+        assert.deepEqual(dataSourceAdapter.pageIndex(), 0, 'page index after scrolling');
+        assert.strictEqual(dataSourceAdapter.loadPageCount(), 1, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 20, 'loaded items count');
+        assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
+        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
+    });
+
+    QUnit.test('New mode. Data should be preloaded on scroll if preloadCount is defined', function(assert) {
+        this.options.scrolling.preloadCount = 50;
+        // act
+        this.dataController.setViewportPosition(1);
+        const visibleRows = this.getVisibleRows();
+        const dataSourceAdapter = this.dataController.dataSource();
+        const loadedItems = dataSourceAdapter.items();
+
+        // assert
+        assert.deepEqual(dataSourceAdapter.pageIndex(), 0, 'page index after scrolling');
+        assert.strictEqual(dataSourceAdapter.loadPageCount(), 4, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 80, 'loaded items count');
+        assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
+        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
+    });
+
+    QUnit.test('New mode. One viewport should be preloaded on far scroll', function(assert) {
+        // act
+        this.dataController.setViewportPosition(1000);
+        const visibleRows = this.getVisibleRows();
+        const dataSourceAdapter = this.dataController.dataSource();
+        const loadedItems = dataSourceAdapter.items();
+
+        // assert
+        assert.deepEqual(dataSourceAdapter.pageIndex(), 2, 'page index after scrolling');
+        assert.strictEqual(dataSourceAdapter.loadPageCount(), 2, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 40, 'loaded items count');
+        assert.deepEqual(loadedItems[0].id, 41, 'first loaded item');
+        assert.equal(visibleRows.length, 15, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 51, 'first visible item');
+    });
+
+    QUnit.test('New mode. One viewport should be preloaded before viewport on scroll back', function(assert) {
+        // act
+        this.dataController.setViewportPosition(1000);
+        this.dataController.setViewportPosition(999);
+        const visibleRows = this.getVisibleRows();
+        const dataSourceAdapter = this.dataController.dataSource();
+        const loadedItems = dataSourceAdapter.items();
+
+        // assert
+        assert.deepEqual(dataSourceAdapter.pageIndex(), 1, 'page index after scrolling');
+        assert.strictEqual(dataSourceAdapter.loadPageCount(), 3, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 60, 'loaded items count');
+        assert.deepEqual(loadedItems[0].id, 21, 'first loaded item');
+        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 46, 'first visible item');
+    });
+
+    QUnit.test('New mode. Data should be preloaded before viewport on scroll back if preloadCount is defined', function(assert) {
+        this.options.scrolling.preloadCount = 50;
+        // act
+        this.dataController.setViewportPosition(1000);
+        this.dataController.setViewportPosition(999);
+        const visibleRows = this.getVisibleRows();
+        const dataSourceAdapter = this.dataController.dataSource();
+        const loadedItems = dataSourceAdapter.items();
+
+        // assert
+        assert.deepEqual(dataSourceAdapter.pageIndex(), 0, 'page index after scrolling');
+        assert.strictEqual(dataSourceAdapter.loadPageCount(), 4, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 80, 'loaded items count');
+        assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
+        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 46, 'first visible item');
+    });
 });
 
 QUnit.module('Infinite scrolling', {
@@ -5518,12 +5718,12 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         const loadedItems = this.dataController.dataSource().items();
 
         // assert
-        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 0 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 0 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
-        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
-        assert.equal(loadedItems.length, 30, 'loaded items count');
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 4, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 40, 'loaded items count');
         assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
-        assert.deepEqual(loadedItems[29], { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.deepEqual(loadedItems[39], { id: 60, name: 'Name 60' }, 'last loaded item');
         assert.equal(visibleItems.length, 25, 'visible items count');
         assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
         assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
