@@ -1243,7 +1243,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             height: 300,
             scrolling: { mode: 'virtual', orientation: 'both' },
         });
-        scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+        scheduler.instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
 
         const $cells = scheduler.workSpace.getCells();
         const $table = scheduler.workSpace.getDateTable();
@@ -1288,7 +1288,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                 onOptionChangedCalls += 1;
             },
         });
-        scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+        scheduler.instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
 
         const $cells = scheduler.workSpace.getCells();
         const $table = scheduler.workSpace.getDateTable();
@@ -1330,7 +1330,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
 
         const { instance } = scheduler;
-        instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+        instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
         const showAppointmentPopupSpy = sinon.spy();
         instance.showAppointmentPopup = showAppointmentPopupSpy;
 

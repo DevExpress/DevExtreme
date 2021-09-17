@@ -597,7 +597,8 @@ const Overlay = Widget.inherit({
     _normalizeAnimation: function(animation, prop) {
         if(animation) {
             animation = extend({
-                type: 'slide'
+                type: 'slide',
+                skipElementInitialStyles: true, // NOTE: for fadeIn animation
             }, animation);
 
             if(animation[prop] && typeof animation[prop] === 'object') {

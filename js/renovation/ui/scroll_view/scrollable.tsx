@@ -153,7 +153,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    // !this.props.useNative && this.updateHandler();
+    !this.props.useNative && this.updateHandler();
 
     const currentScrollOffset = this.props.useNative
       ? this.scrollOffset()

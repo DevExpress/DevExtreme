@@ -83,12 +83,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         return ['left', 'right', 'top'];
     }
 
-    _getMaxAppointmentWidth(startDate) {
-        return this.instance.fire('getMaxAppointmentWidth', {
-            date: startDate,
-        });
-    }
-
     getDropDownAppointmentWidth() {
         return this.cellWidth - DROP_DOWN_BUTTON_OFFSET * 2;
     }

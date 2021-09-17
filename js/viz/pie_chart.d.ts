@@ -171,8 +171,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 component:dxPieChart
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -263,8 +261,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     seriesTemplate?: {
       /**
        * @docid
-       * @type_function_param1 seriesName:any
-       * @type_function_return PieChartSeries
        */
       customizeSeries?: ((seriesName: any) => PieChartSeries);
       /**
@@ -305,8 +301,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     commonAnnotationSettings?: dxPieChartCommonAnnotationConfig;
     /**
      * @docid
-     * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
-     * @type_function_return dxPieChartAnnotationConfig
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -357,7 +351,6 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
     series?: string;
     /**
      * @docid
-     * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
@@ -368,15 +361,12 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @docid
      * @default undefined
      * @type_function_param1 annotation:dxPieChartCommonAnnotationConfig|any
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
     template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
-     * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -396,11 +386,7 @@ export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
 export interface dxPieChartLegend extends BaseChartLegend {
     /**
      * @docid dxPieChartOptions.legend.customizeHint
-     * @type_function_param1 pointInfo:object
-     * @type_function_param1_field1 pointName:any
      * @type_function_param1_field2 pointIndex:Number
-     * @type_function_param1_field3 pointColor:string
-     * @type_function_return string
      * @public
      */
     customizeHint?: ((pointInfo: { pointName?: any; pointIndex?: number; pointColor?: string }) => string);
@@ -413,11 +399,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxPieChartOptions.legend.customizeText
-     * @type_function_param1 pointInfo:object
-     * @type_function_param1_field1 pointName:any
      * @type_function_param1_field2 pointIndex:Number
-     * @type_function_param1_field3 pointColor:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
@@ -433,7 +415,6 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @docid dxPieChartOptions.legend.markerTemplate
      * @default undefined
      * @type_function_param1 legendItem:PieChartLegendItem
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -442,8 +423,6 @@ export interface dxPieChartLegend extends BaseChartLegend {
 /**
  * @docid
  * @inherits BaseChart
- * @module viz/pie_chart
- * @export default
  * @namespace DevExpress.viz
  * @public
  */
@@ -451,7 +430,6 @@ export default class dxPieChart extends BaseChart<dxPieChartOptions> {
     /**
      * @docid
      * @publicName getInnerRadius()
-     * @return number
      * @public
      */
     getInnerRadius(): number;
@@ -607,7 +585,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     label?: {
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
-       * @type Format
        * @default undefined
        */
       argumentFormat?: Format;
@@ -665,7 +642,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.customizeText
        * @type_function_param1 pointInfo:object
-       * @type_function_return string
        * @notUsedInTheme
        */
       customizeText?: ((pointInfo: any) => string);
@@ -677,7 +653,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       font?: Font;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
-       * @type Format
        * @default undefined
        */
       format?: Format;

@@ -4184,7 +4184,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'infinite',
-                useNative: false
+                useNative: false,
+                preloadCount: 0
             },
             editing: {
                 allowUpdating: true,
