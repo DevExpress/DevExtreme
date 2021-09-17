@@ -3189,9 +3189,15 @@ declare module DevExpress.fileManagement {
    * [descr:CustomFileSystemProvider]
    */
   export class CustomFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: CustomFileSystemProviderOptions);
+    constructor(
+      options?: DevExpress.fileManagement.CustomFileSystemProvider.Options
+    );
+  }
+  module CustomFileSystemProvider {
+    export type Options = CustomFileSystemProviderOptions;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface CustomFileSystemProviderOptions
@@ -3473,9 +3479,15 @@ declare module DevExpress.fileManagement {
    * [descr:ObjectFileSystemProvider]
    */
   export class ObjectFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: ObjectFileSystemProviderOptions);
+    constructor(
+      options?: DevExpress.fileManagement.ObjectFileSystemProvider.Options
+    );
+  }
+  module ObjectFileSystemProvider {
+    export type Options = ObjectFileSystemProviderOptions;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ObjectFileSystemProviderOptions
@@ -3497,9 +3509,15 @@ declare module DevExpress.fileManagement {
    * [descr:RemoteFileSystemProvider]
    */
   export class RemoteFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: RemoteFileSystemProviderOptions);
+    constructor(
+      options?: DevExpress.fileManagement.RemoteFileSystemProvider.Options
+    );
+  }
+  module RemoteFileSystemProvider {
+    export type Options = RemoteFileSystemProviderOptions;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface RemoteFileSystemProviderOptions
