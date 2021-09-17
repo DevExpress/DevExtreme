@@ -86,7 +86,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @type_function_return number|string
      * @default '100%'
      * @public
      */
@@ -139,7 +138,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     singleColumnScreen?: string;
     /**
      * @docid
-     * @type_function_return number|string
      * @default '100%'
      * @public
      */
@@ -148,8 +146,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/responsive_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

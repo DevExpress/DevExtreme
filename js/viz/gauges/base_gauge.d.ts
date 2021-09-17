@@ -319,10 +319,7 @@ export interface BaseGaugeScale {
 export interface BaseGaugeScaleLabel {
     /**
      * @docid BaseGaugeOptions.scale.label.customizeText
-     * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
@@ -335,7 +332,6 @@ export interface BaseGaugeScaleLabel {
     font?: Font;
     /**
      * @docid BaseGaugeOptions.scale.label.format
-     * @type format
      * @default undefined
      * @public
      */
@@ -364,10 +360,7 @@ export interface BaseGaugeScaleLabel {
 export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.contentTemplate
-     * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -376,9 +369,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
      * @type_function_return object
      * @public
      */
@@ -402,28 +393,24 @@ export class BaseGauge extends BaseWidget {
     /**
      * @docid
      * @publicName subvalues()
-     * @return Array<number>
      * @public
      */
     subvalues(): Array<number>;
     /**
      * @docid
      * @publicName subvalues(subvalues)
-     * @param1 subvalues:Array<number>
      * @public
      */
     subvalues(subvalues: Array<number>): void;
     /**
      * @docid
      * @publicName value()
-     * @return number
      * @public
      */
     value(): number;
     /**
      * @docid
      * @publicName value(value)
-     * @param1 value:number
      * @public
      */
     value(value: number): void;
@@ -549,10 +536,7 @@ export interface CommonIndicator {
     text?: {
       /**
        * @docid
-       * @type_function_param1 indicatedValue:object
        * @type_function_param1_field1 value:Number
-       * @type_function_param1_field2 valueText:string
-       * @type_function_return string
        * @notUsedInTheme
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
@@ -566,7 +550,6 @@ export interface CommonIndicator {
       font?: Font;
       /**
        * @docid
-       * @type format
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */

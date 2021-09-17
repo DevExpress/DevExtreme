@@ -61,7 +61,6 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     export?: BaseWidgetExport;
     /**
      * @docid
-     * @type_function_return number|string
      * @hidden
      */
     height?: number | string | (() => number | string);
@@ -189,7 +188,6 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     tooltip?: BaseWidgetTooltip;
     /**
      * @docid
-     * @type_function_return number|string
      * @hidden
      */
     width?: number | string | (() => number | string);
@@ -242,8 +240,6 @@ export interface BaseWidgetExport {
     proxyUrl?: string;
     /**
      * @docid BaseWidgetOptions.export.svgToCanvas
-     * @type_function_param1 svg:SVGElement
-     * @type_function_param2 canvas:HTMLCanvasElement
      * @type_function_return Promise<void>
      * @default undefined
      * @public
@@ -514,7 +510,6 @@ export interface BaseWidgetTooltip {
     font?: Font;
     /**
      * @docid BaseWidgetOptions.tooltip.format
-     * @type format
      * @default undefined
      * @public
      */
@@ -596,8 +591,6 @@ export default class BaseWidget extends DOMComponent {
     /**
      * @docid
      * @publicName exportTo(fileName, format)
-     * @param1 fileName:string
-     * @param2 format:string
      * @public
      */
     exportTo(fileName: string, format: string): void;
@@ -635,7 +628,6 @@ export default class BaseWidget extends DOMComponent {
     /**
      * @docid
      * @publicName svg()
-     * @return string
      * @public
      */
     svg(): string;

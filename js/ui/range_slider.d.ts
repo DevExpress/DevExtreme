@@ -91,8 +91,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @docid
  * @isEditor
  * @inherits dxSliderBase
- * @module ui/range_slider
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

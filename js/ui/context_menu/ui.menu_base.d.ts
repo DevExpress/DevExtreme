@@ -118,14 +118,12 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
     /**
      * @docid
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Element
      * @public
      */
     selectItem(itemElement: Element): void;
     /**
      * @docid
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Element
      * @public
      */
     unselectItem(itemElement: Element): void;

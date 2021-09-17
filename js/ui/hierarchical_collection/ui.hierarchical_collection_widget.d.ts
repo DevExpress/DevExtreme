@@ -18,7 +18,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      * @docid
      * @default 'text'
      * @type_function_param1 item:object
-     * @type_function_return string
      * @public
      */
     displayExpr?: string | ((item: any) => string);
@@ -56,8 +55,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/hierarchical_collection/ui.hierarchical_collection_widget
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

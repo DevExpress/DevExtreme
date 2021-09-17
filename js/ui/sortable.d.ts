@@ -152,7 +152,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:DxElement
      * @type_function_param1_field3 fromIndex:number
-     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -335,8 +334,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @docid
  * @inherits DraggableBase
  * @hasTranscludedContent
- * @module ui/sortable
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

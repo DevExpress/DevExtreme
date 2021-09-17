@@ -852,8 +852,6 @@ export interface Editing extends EditingBase {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
@@ -862,8 +860,6 @@ export interface Editing extends EditingBase {
     /**
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
@@ -872,8 +868,6 @@ export interface Editing extends EditingBase {
     /**
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
@@ -954,8 +948,6 @@ export interface Selection extends SelectionBase {
 /**
  * @docid
  * @inherits GridBase
- * @module ui/tree_list
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -978,7 +970,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName addRow(parentId)
-     * @param1 parentId:any
      * @return Promise<void>
      * @public
      */
@@ -986,7 +977,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName collapseRow(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -994,7 +984,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName expandRow(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -1032,30 +1021,24 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName getSelectedRowKeys()
-     * @return Array<any>
      * @public
      */
     getSelectedRowKeys(): Array<any>;
     /**
      * @docid
      * @publicName getSelectedRowKeys(mode)
-     * @param1 mode:string
-     * @return Array<any>
      * @public
      */
     getSelectedRowKeys(mode: string): Array<any>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
-     * @return Array<any>
      * @public
      */
     getSelectedRowsData(): Array<any>;
     /**
      * @docid
      * @publicName getSelectedRowsData(mode)
-     * @param1 mode:string
-     * @return Array<any>
      * @public
      */
     getSelectedRowsData(mode: string): Array<any>;
@@ -1069,7 +1052,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName getVisibleColumns(headerLevel)
-     * @param1 headerLevel:number
      * @return Array<dxTreeListColumn>
      * @public
      */
@@ -1084,8 +1066,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName isRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowExpanded(key: any): boolean;
@@ -1099,7 +1079,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName loadDescendants(keys)
-     * @param1 keys:Array<any>
      * @return Promise<void>
      * @public
      */
@@ -1107,8 +1086,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName loadDescendants(keys, childrenOnly)
-     * @param1 keys:Array<any>
-     * @param2 childrenOnly:boolean
      * @return Promise<void>
      * @public
      */
@@ -1200,7 +1177,6 @@ export interface dxTreeListColumn extends ColumnBase {
     buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton>;
     /**
      * @docid dxTreeListColumn.cellTemplate
-     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxTreeList
@@ -1226,7 +1202,6 @@ export interface dxTreeListColumn extends ColumnBase {
     columns?: Array<Column | string>;
     /**
      * @docid dxTreeListColumn.editCellTemplate
-     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 setValue(newValue, newText):any
      * @type_function_param2_field2 data:object
@@ -1245,7 +1220,6 @@ export interface dxTreeListColumn extends ColumnBase {
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.headerCellTemplate
-     * @type_function_param1 columnHeader:DxElement
      * @type_function_param2 headerInfo:object
      * @type_function_param2_field1 component:dxTreeList
      * @type_function_param2_field2 columnIndex:number
@@ -1292,7 +1266,6 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
     onClick?: ((e: ColumnButtonClickEvent) => void);
     /**
      * @docid dxTreeListColumnButton.template
-     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 component:dxTreeList
      * @type_function_param2_field2 data:object
@@ -1309,8 +1282,6 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.visible
      * @default true
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
      * @type_function_return Boolean

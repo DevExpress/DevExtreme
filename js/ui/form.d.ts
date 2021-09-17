@@ -247,8 +247,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/form
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -257,7 +255,6 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName getButton(name)
-     * @param1 name:string
      * @return dxButton | undefined
      * @public
      */
@@ -265,7 +262,6 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName getEditor(dataField)
-     * @param1 dataField:string
      * @return Editor | undefined
      * @public
      */
@@ -273,24 +269,18 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName itemOption(id)
-     * @param1 id:string
-     * @return any
      * @public
      */
     itemOption(id: string): any;
     /**
      * @docid
      * @publicName itemOption(id, option, value)
-     * @param1 id:string
-     * @param2 option:string
-     * @param3 value:any
      * @public
      */
     itemOption(id: string, option: string, value: any): void;
     /**
      * @docid
      * @publicName itemOption(id, options)
-     * @param1 id:string
      * @param2 options:object
      * @public
      */
@@ -311,7 +301,6 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName updateData(dataField, value)
-     * @param1 dataField:string
      * @param2 value:object
      * @public
      */
@@ -326,7 +315,6 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName validate()
-     * @return dxValidationGroupResult
      * @public
      */
     validate(): dxValidationGroupResult;
@@ -532,7 +520,6 @@ export interface dxFormGroupItem {
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 formData:object
-     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -659,7 +646,6 @@ export interface dxFormSimpleItem {
      * @type_function_param1_field3 editorOptions:object
      * @type_function_param1_field4 editorType:string
      * @type_function_param1_field5 name:string
-     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -773,16 +759,12 @@ export interface dxFormTabbedItem {
       /**
        * @docid
        * @type_function_param1 tabData:object
-       * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
       tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
       /**
        * @docid
        * @type_function_param1 tabData:object
-       * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
       template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
