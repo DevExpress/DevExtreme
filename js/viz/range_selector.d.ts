@@ -550,7 +550,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|TimeIntervalType
        */
       minorTickInterval?: VizTimeInterval;
       /**

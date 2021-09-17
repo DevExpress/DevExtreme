@@ -368,7 +368,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1_field6 range:VizRange
      * @type_function_param1_field7 previousRange:VizRange
      * @type_function_param1_field8 cancel:boolean
-     * @type_function_param1_field9 actionType:ChartZoomPanActionType
+     * @type_function_param1_field9 actionType:{docEnums.ChartZoomPanActionType}
      * @type_function_param1_field10 zoomFactor:Number
      * @type_function_param1_field11 shift:Number
      * @notUsedInTheme
@@ -387,7 +387,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1_field5 axis:chartAxisObject
      * @type_function_param1_field6 range:VizRange
      * @type_function_param1_field7 cancel:boolean
-     * @type_function_param1_field8 actionType:ChartZoomPanActionType
+     * @type_function_param1_field8 actionType:{docEnums.ChartZoomPanActionType}
      * @notUsedInTheme
      * @action
      * @public

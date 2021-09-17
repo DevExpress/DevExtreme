@@ -1331,7 +1331,6 @@ export interface dxGanttSorting {
     descendingText?: string;
     /**
      * @docid
-     * @default "none"
      * @type {docEnums.GanttSortingMode}|string
      * @default "single"
      */
