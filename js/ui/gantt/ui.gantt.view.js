@@ -281,6 +281,11 @@ export class GanttView extends Widget {
         }
         return this._taskAreaContainer;
     }
+    prepareExternalTaskAreaContainer(element, info) {
+        if(info?.height) {
+            this._taskAreaContainer._scrollView.option('height', info.height);
+        }
+    }
     changeGanttTaskSelection(id, selected) {
         this._onSelectionChanged({ id: id, selected: selected });
     }

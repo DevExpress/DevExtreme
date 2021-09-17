@@ -186,11 +186,7 @@ export interface Query {
 /**
  * @docid Utils.query
  * @publicName query(array)
- * @param1 array:Array<any>
- * @return Query
  * @namespace DevExpress.data
- * @module data/query
- * @export default
  * @public
  */
 declare function query(array: Array<any>): Query;
@@ -198,12 +194,8 @@ declare function query(array: Array<any>): Query;
 /**
  * @docid Utils.query
  * @publicName query(url, queryOptions)
- * @param1 url:string
  * @param2 queryOptions:object
- * @return Query
  * @namespace DevExpress.data
- * @module data/query
- * @export default
  * @public
  */
 declare function query(url: string, queryOptions: any): Query;

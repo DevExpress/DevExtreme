@@ -92,7 +92,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default undefined
      * @type_function_param1 itemData:object
-     * @type_function_return string
      * @public
      */
     displayExpr?: string | ((itemData: any) => string);
@@ -100,7 +99,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default "content"
      * @type_function_param1 data:Array<string,number,Object>|DataSource
-     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -134,8 +132,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -264,8 +260,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
 /**
  * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/drop_down_button
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -295,7 +289,6 @@ export default class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
     /**
      * @docid
      * @publicName toggle(visibility)
-     * @param1 visibility:boolean
      * @return Promise<void>
      * @public
      */
@@ -316,9 +309,6 @@ export interface dxDropDownButtonItem extends dxListItem {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @public

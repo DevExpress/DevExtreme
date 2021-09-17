@@ -47,13 +47,12 @@ export type AnimationState = string | number | {
 /**
  * @docid
  * @namespace DevExpress
- * @type object
+ * @type object|number|string
  * @public
  */
 export type AnimationConfig = {
     /**
      * @docid
-     * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @public
      */
@@ -96,8 +95,6 @@ export type AnimationConfig = {
     staggerDelay?: number;
     /**
      * @docid
-     * @type_function_param1 $element:DxElement
-     * @type_function_param2 config:AnimationConfig
      * @public
      */
     start?: (($element: DxElement, config: AnimationConfig) => void);
@@ -124,9 +121,7 @@ export type animationConfig = AnimationConfig;
 /**
  * @docid
  * @section utils
- * @module animation/fx
  * @namespace DevExpress
- * @export default
  */
 declare const fx: {
     /**

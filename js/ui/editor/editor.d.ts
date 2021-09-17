@@ -87,8 +87,6 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/editor/editor
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

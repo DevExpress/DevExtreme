@@ -2,8 +2,9 @@ const { test } = QUnit;
 
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import ErrorCode from 'file_management/error_codes';
-import { createUploaderFiles, createUploadInfo, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import { createUploaderFiles, createUploadInfo, stubFileReader, createEditingEvents } from '../../../helpers/fileManagerHelpers.js';
 import { isString } from 'core/utils/type';
+import { extend } from 'core/utils/extend';
 
 const moduleConfig = {
 
@@ -13,15 +14,25 @@ const moduleConfig = {
             { name: 'F2', isDirectory: true },
             { name: 'File1' }
         ];
-        this.controller = new FileItemsController({
-            fileProvider: this.data
-        });
+
+        this.createController();
 
         this.clock = sinon.useFakeTimers();
     },
 
     afterEach: function() {
         this.clock.restore();
+    },
+
+    createController: function(options) {
+        this.editingEvents = createEditingEvents();
+
+        const actualOptions = extend({
+            fileProvider: this.data,
+            editingEvents: this.editingEvents
+        }, options || { });
+
+        this.controller = new FileItemsController(actualOptions);
     }
 
 };
@@ -87,6 +98,8 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
     test('create new directory', function(assert) {
         const done = assert.async();
         const selectedDir = this.controller.getCurrentDirectory();
+        const onCreating = this.editingEvents.onDirectoryCreating;
+        const onCreated = this.editingEvents.onDirectoryCreated;
 
         this.controller
             .getDirectories(selectedDir)
@@ -96,6 +109,14 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 return this.controller.createDirectory(selectedDir, 'New');
             })
             .then(() => {
+                assert.ok(onCreating.calledOnce);
+                assert.strictEqual(onCreating.args[0][0].parentDirectory.name, '');
+                assert.strictEqual(onCreating.args[0][0].name, 'New');
+
+                assert.ok(onCreated.calledOnce);
+                assert.strictEqual(onCreated.args[0][0].parentDirectory.name, '');
+                assert.strictEqual(onCreated.args[0][0].name, 'New');
+
                 assert.notOk(selectedDir.itemsLoaded);
                 assert.notOk(selectedDir.items.length > 0);
                 return this.controller.getDirectories(selectedDir);
@@ -112,6 +133,8 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
         const done = assert.async();
         const currentDir = this.controller.getCurrentDirectory();
         let targetDir = null;
+        const onRenaming = this.editingEvents.onItemRenaming;
+        const onRenamed = this.editingEvents.onItemRenamed;
 
         this.controller
             .getDirectories(currentDir)
@@ -120,6 +143,18 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 return this.controller.renameItem(targetDir, 'New');
             })
             .then(() => {
+                assert.ok(onRenaming.calledOnce);
+                assert.strictEqual(onRenaming.args[0][0].item.name, 'F1');
+                assert.strictEqual(onRenaming.args[0][0].item.relativeName, 'F1');
+                assert.strictEqual(onRenaming.args[0][0].item.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onRenaming.args[0][0].newName, 'New');
+
+                assert.ok(onRenamed.calledOnce);
+                assert.strictEqual(onRenamed.args[0][0].sourceItem.name, 'F1');
+                assert.strictEqual(onRenamed.args[0][0].sourceItem.relativeName, 'F1');
+                assert.strictEqual(onRenamed.args[0][0].sourceItem.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onRenamed.args[0][0].itemName, 'New');
+
                 assert.notOk(currentDir.itemsLoaded);
                 assert.equal(currentDir.items.length, 0);
                 return this.controller.getDirectories(currentDir);
@@ -137,6 +172,8 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
         const rootDir = this.controller.getCurrentDirectory();
         let targetItems = null;
         let destinationDir = null;
+        const onMoving = this.editingEvents.onItemMoving;
+        const onMoved = this.editingEvents.onItemMoved;
 
         this.controller
             .getDirectories(rootDir)
@@ -146,6 +183,22 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 return this.controller.moveItems(targetItems, destinationDir);
             })
             .then(() => {
+                assert.ok(onMoving.calledOnce);
+                assert.strictEqual(onMoving.args[0][0].item.name, 'F1');
+                assert.strictEqual(onMoving.args[0][0].item.relativeName, 'F1');
+                assert.strictEqual(onMoving.args[0][0].item.parentPath, '');
+                assert.strictEqual(onMoving.args[0][0].item.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onMoving.args[0][0].destinationDirectory.name, 'F2');
+
+                assert.ok(onMoved.calledOnce);
+                assert.strictEqual(onMoved.args[0][0].sourceItem.name, 'F1');
+                assert.strictEqual(onMoved.args[0][0].sourceItem.relativeName, 'F1');
+                assert.strictEqual(onMoved.args[0][0].sourceItem.parentPath, '');
+                assert.strictEqual(onMoved.args[0][0].sourceItem.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onMoved.args[0][0].parentDirectory.name, 'F2');
+                assert.strictEqual(onMoved.args[0][0].itemName, 'F1');
+                assert.strictEqual(onMoved.args[0][0].itemPath, 'F2/F1');
+
                 assert.notOk(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 0);
                 return this.controller.getDirectories(rootDir);
@@ -169,6 +222,8 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
         const rootDir = this.controller.getCurrentDirectory();
         let targetItems = null;
         let destinationDir = null;
+        const onCopying = this.editingEvents.onItemCopying;
+        const onCopied = this.editingEvents.onItemCopied;
 
         this.controller
             .getDirectories(rootDir)
@@ -178,6 +233,22 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 return this.controller.copyItems(targetItems, destinationDir);
             })
             .then(() => {
+                assert.ok(onCopying.calledOnce);
+                assert.strictEqual(onCopying.args[0][0].item.name, 'F1');
+                assert.strictEqual(onCopying.args[0][0].item.relativeName, 'F1');
+                assert.strictEqual(onCopying.args[0][0].item.parentPath, '');
+                assert.strictEqual(onCopying.args[0][0].item.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onCopying.args[0][0].destinationDirectory.name, 'F2');
+
+                assert.ok(onCopied.calledOnce);
+                assert.strictEqual(onCopied.args[0][0].sourceItem.name, 'F1');
+                assert.strictEqual(onCopied.args[0][0].sourceItem.relativeName, 'F1');
+                assert.strictEqual(onCopied.args[0][0].sourceItem.parentPath, '');
+                assert.strictEqual(onCopied.args[0][0].sourceItem.pathKeys.join('|'), 'F1');
+                assert.strictEqual(onCopied.args[0][0].parentDirectory.name, 'F2');
+                assert.strictEqual(onCopied.args[0][0].itemName, 'F1');
+                assert.strictEqual(onCopied.args[0][0].itemPath, 'F2/F1');
+
                 assert.ok(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 3);
                 return this.controller.getDirectories(destinationDir);
@@ -196,6 +267,8 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
         const done = assert.async();
         const currentDir = this.controller.getCurrentDirectory();
         let targetItems = null;
+        const onDeleting = this.editingEvents.onItemDeleting;
+        const onDeleted = this.editingEvents.onItemDeleted;
 
         this.controller
             .getDirectoryContents(currentDir)
@@ -204,6 +277,14 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 return this.controller.deleteItems(targetItems);
             })
             .then(() => {
+                assert.ok(onDeleting.calledTwice);
+                assert.strictEqual(onDeleting.args[0][0].item.name, 'F2');
+                assert.strictEqual(onDeleting.args[1][0].item.name, 'File1');
+
+                assert.ok(onDeleted.calledTwice);
+                assert.strictEqual(onDeleted.args[0][0].item.name, 'F2');
+                assert.strictEqual(onDeleted.args[1][0].item.name, 'File1');
+
                 assert.notOk(currentDir.itemsLoaded);
                 assert.equal(currentDir.items.length, 0);
                 return this.controller.getDirectoryContents(currentDir);
@@ -386,10 +467,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
     });
 
     test('upload fails when max file size exceeded', function(assert) {
-        this.controller = new FileItemsController({
-            fileProvider: this.data,
-            uploadMaxFileSize: 400000
-        });
+        this.createController({ uploadMaxFileSize: 400000 });
 
         stubFileReaderInProvider(this.controller);
 
@@ -416,10 +494,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
     });
 
     test('upload fails when file has wrong extension', function(assert) {
-        this.controller = new FileItemsController({
-            fileProvider: this.data,
-            allowedFileExtensions: [ '.tiff' ]
-        });
+        this.createController({ allowedFileExtensions: [ '.tiff' ] });
 
         stubFileReaderInProvider(this.controller);
 
@@ -447,10 +522,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
     });
 
     test('files with empty extensions can be allowed or denied', function(assert) {
-        this.controller = new FileItemsController({
-            fileProvider: this.data,
-            allowedFileExtensions: [ '.txt' ]
-        });
+        this.createController({ allowedFileExtensions: [ '.txt' ] });
         let selectedDir = this.controller.getCurrentDirectory();
         const done1 = assert.async();
         this.controller
@@ -462,10 +534,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 done1();
             });
 
-        this.controller = new FileItemsController({
-            fileProvider: this.data,
-            allowedFileExtensions: [ '.txt', '' ]
-        });
+        this.createController({ allowedFileExtensions: [ '.txt', '' ] });
         selectedDir = this.controller.getCurrentDirectory();
         const done2 = assert.async();
         this.controller
@@ -498,7 +567,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
 
     test('files can have extensions of any letter case', function(assert) {
         const extendedData = this.data.concat({ name: 'File2.JPEG' }, { name: 'File3.Doc' });
-        this.controller = new FileItemsController({
+        this.createController({
             fileProvider: extendedData,
             allowedFileExtensions: [ '.jpeg', '.doC' ]
         });

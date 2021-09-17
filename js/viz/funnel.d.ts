@@ -157,7 +157,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     colorField?: string;
     /**
      * @docid
-     * @type Array<any>|Store|DataSource|DataSourceOptions|string
      * @notUsedInTheme
      * @public
      */
@@ -361,13 +360,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       };
       /**
        * @docid
-       * @type_function_param1 itemInfo:object
        * @type_function_param1_field1 item:dxFunnelItem
        * @type_function_param1_field2 value:Number
-       * @type_function_param1_field3 valueText:string
        * @type_function_param1_field4 percent:Number
-       * @type_function_param1_field5 percentText:string
-       * @type_function_return string
        * @notUsedInTheme
        */
       customizeText?: ((itemInfo: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => string);
@@ -378,7 +373,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       font?: Font;
       /**
        * @docid
-       * @type Format
        * @default undefined
        */
       format?: Format;
@@ -538,10 +532,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
 export interface dxFunnelLegend extends BaseLegend {
     /**
      * @docid dxFunnelOptions.legend.customizeHint
-     * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 text:string
-     * @type_function_return string
      * @public
      */
     customizeHint?: ((itemInfo: { item?: Item; text?: string }) => string);
@@ -554,10 +545,7 @@ export interface dxFunnelLegend extends BaseLegend {
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxFunnelOptions.legend.customizeText
-     * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 text:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
@@ -566,7 +554,6 @@ export interface dxFunnelLegend extends BaseLegend {
      * @docid dxFunnelOptions.legend.markerTemplate
      * @default undefined
      * @type_function_param1 legendItem:FunnelLegendItem
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -582,13 +569,9 @@ export interface dxFunnelLegend extends BaseLegend {
 export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.contentTemplate
-     * @type_function_param1 info:object
      * @type_function_param1_field1 item:dxFunnelItem
      * @type_function_param1_field2 value:Number
-     * @type_function_param1_field3 valueText:string
      * @type_function_param1_field4 percent:Number
-     * @type_function_param1_field5 percentText:string
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -597,12 +580,9 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1 info:object
      * @type_function_param1_field1 item:dxFunnelItem
      * @type_function_param1_field2 value:Number
-     * @type_function_param1_field3 valueText:string
      * @type_function_param1_field4 percent:Number
-     * @type_function_param1_field5 percentText:string
      * @type_function_return object
      * @public
      */
@@ -611,8 +591,6 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
 /**
  * @docid
  * @inherits BaseWidget, DataHelperMixin
- * @module viz/funnel
- * @export default
  * @namespace DevExpress.viz
  * @public
  */

@@ -42,7 +42,7 @@ import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
 
-import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
+import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_model/view_data_provider';
 
 import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
@@ -71,7 +71,6 @@ import {
     getCellHeight,
     getAllDayHeight,
     getMaxAllowedPosition,
-    getMaxAllowedVerticalPosition,
     PositionHelper
 } from './helpers/positionHelper';
 
@@ -436,7 +435,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getRealGroupOrientation() {
-        return this._isVerticalGroupedWorkSpace() ? 'vertical' : 'horizontal';
+        return this._isVerticalGroupedWorkSpace()
+            ? 'vertical'
+            : 'horizontal';
     }
 
     createRAllDayPanelElements() {
@@ -540,6 +541,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this._updateScrollable();
     }
 
     getWorkSpaceMinWidth() {
@@ -602,7 +605,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.virtualScrollingDispatcher = null;
         }
 
-        this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this);
+        this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
+        this.renderer = new VirtualScrollingRenderer(this);
     }
 
     onDataSourceChanged() {
@@ -1163,10 +1167,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         currentDate.setHours(hours, minutes, 0, 0);
 
-        if(!this.isVirtualScrolling()) {
-            return this.positionHelper.getCoordinatesByDate(currentDate, groupIndex, allDay);
-        }
-
         const cell = this.viewDataProvider.findGlobalCellPosition(
             currentDate, groupIndex, allDay,
         );
@@ -1280,14 +1280,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return cellData ? cellData : undefined;
     }
 
-    _getOffsetByAllDayPanel(groupIndex) {
-        return this._groupedStrategy._getOffsetByAllDayPanel(groupIndex);
-    }
-
-    _getGroupTop(groupIndex) {
-        return this._groupedStrategy._getGroupTop(groupIndex);
-    }
-
     isGroupedByDate() { // TODO move to the ModelProvider
         return this.option('groupByDate')
             && this._isHorizontalGroupedWorkSpace()
@@ -1316,16 +1308,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         return index;
     }
-
-    getPositionShift(timeShift, isAllDay) {
-        return {
-            top: timeShift * this.getCellHeight(),
-            left: 0,
-            cellPosition: 0
-        };
-    }
-
-    _isSkippedData() { return false; }
 
     getDroppableCellIndex() {
         const $droppableCell = this._getDroppableCell();
@@ -1408,18 +1390,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.getDOMElementsMetaData()
         );
     }
-
-    getMaxAllowedVerticalPosition(groupIndex) {
-        return getMaxAllowedVerticalPosition({
-            groupIndex,
-            viewDataProvider: this.viewDataProvider,
-            isShowAllDayPanel: this.option('showAllDayPanel'),
-            isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
-            isVerticalGrouped: this._isVerticalGroupedWorkSpace(),
-            DOMMetaData: this.getDOMElementsMetaData()
-        });
-    }
-    // ---
 
     getAllDayOffset() {
         return this._groupedStrategy.getAllDayOffset();
@@ -1618,35 +1588,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 result.push($cell);
             }
         });
-
-        return result;
-    }
-
-    getGroupWidth(groupIndex) { // TODO move to the grouping layer
-        const cellWidth = this.getCellWidth();
-        let result = this._getCellCount() * cellWidth;
-        // TODO: refactor after deleting old render
-        if(this.isVirtualScrolling()) {
-            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
-            const groupLength = groupedData[groupIndex][0].length;
-
-            result = groupLength * cellWidth;
-        }
-
-        const position = this.getMaxAllowedPosition(groupIndex);
-        const currentPosition = position[groupIndex];
-
-        if(currentPosition) {
-            if(this._isRTL()) {
-                result = currentPosition - position[groupIndex + 1];
-            } else {
-                if(groupIndex === 0) {
-                    result = currentPosition;
-                } else {
-                    result = currentPosition - position[groupIndex - 1];
-                }
-            }
-        }
 
         return result;
     }
@@ -2222,6 +2163,29 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
+    _getVirtualScrollingDispatcherOptions() {
+        return {
+            getCellHeight: this.getCellHeight.bind(this),
+            getCellWidth: this.getCellWidth.bind(this),
+            getCellMinWidth: this.getCellMinWidth.bind(this),
+            isRTL: this._isRTL.bind(this),
+            getSchedulerHeight: () => this.option('schedulerHeight'),
+            getSchedulerWidth: () => this.option('schedulerWidth'),
+            getViewHeight: () => this.$element().height(),
+            getViewWidth: () => this.$element().width(),
+            getScrolling: () => this.option('scrolling'),
+            getScrollableOuterWidth: this.getScrollableOuterWidth.bind(this),
+            getScrollable: this.getScrollable.bind(this),
+            createAction: this._createAction.bind(this),
+            updateRender: this.updateRender.bind(this),
+            updateGrid: this.updateGrid.bind(this),
+            getGroupCount: this._getGroupCount.bind(this),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace.bind(this),
+            getTotalRowCount: this._getTotalRowCount.bind(this),
+            getTotalCellCount: this._getTotalCellCount.bind(this),
+        };
+    }
+
     _cleanWorkSpace() {
         this._cleanView();
         this._toggleGroupedClass();
@@ -2264,13 +2228,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellDuration: this.getCellDuration(),
             groupedStrategy: this._groupedStrategy,
             isGroupedByDate: this.isGroupedByDate(),
-            isRtlEnabled: this.option('rtlEnabled'),
+            rtlEnabled: this.option('rtlEnabled'),
             startViewDate: this.getStartViewDate(),
-            isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
-            isSkippedDataCallback: this._isSkippedData.bind(this),
-            getPositionShiftCallback: this.getPositionShift.bind(this),
             getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
         });
     }
@@ -2625,6 +2587,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getAllDayContainer() {
         return this._$allDayContainer;
+    }
+
+    updateRender() {
+        this.renderer.updateRender();
+    }
+
+    updateGrid() {
+        this.renderer._renderGrid();
     }
 
     updateAppointments() {

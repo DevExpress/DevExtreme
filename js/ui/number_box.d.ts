@@ -143,8 +143,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
  * @docid
  * @isEditor
  * @inherits dxTextEditor
- * @module ui/number_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

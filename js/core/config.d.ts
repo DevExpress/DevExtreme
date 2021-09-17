@@ -11,10 +11,7 @@ import {
 /**
  * @docid
  * @publicName config()
- * @return globalConfig
  * @namespace DevExpress
- * @module core/config
- * @export default
  * @public
  */
 declare function config(): globalConfig;
@@ -22,10 +19,7 @@ declare function config(): globalConfig;
 /**
  * @docid
  * @publicName config(config)
- * @param1 config:globalConfig
  * @namespace DevExpress
- * @module core/config
- * @export default
  * @public
  */
 // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -35,7 +29,6 @@ declare function config(config: globalConfig): void;
  * @docid
  * @section commonObjectStructures
  * @namespace DevExpress
- * @module core/config
  * @export default
  * @type object
  */

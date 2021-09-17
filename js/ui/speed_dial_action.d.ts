@@ -87,8 +87,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
 /**
  * @docid
  * @inherits Widget
- * @module ui/speed_dial_action
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

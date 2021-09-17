@@ -118,7 +118,6 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     fullScreen?: boolean;
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxPopupOptions.onResize
      * @public
      */
@@ -202,7 +201,6 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -215,7 +213,6 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     toolbarItems?: Array<ToolbarItem>;
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxPopupOptions.onResize
      * @public
      */
@@ -302,8 +299,6 @@ export interface dxPopupToolbarItem {
  * @docid
  * @inherits dxOverlay
  * @hasTranscludedContent
- * @module ui/popup
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

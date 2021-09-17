@@ -3,7 +3,6 @@ import { VIEWS } from '../constants';
 import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
 import {
     getWeekendsCount,
-    isDataOnWeekend,
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
@@ -20,10 +19,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
 
     _getElementClass() {
         return TIMELINE_CLASS;
-    }
-
-    _isSkippedData(date) {
-        return isDataOnWeekend(date);
     }
 
     _incrementDate(date) {

@@ -9,9 +9,6 @@ import UploadInfo from './upload_info';
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
      * @docid
-     * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:UploadInfo
-     * @type_function_param3 destinationDirectory:FileSystemItem
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -19,8 +16,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 item:FileSystemItem
-     * @type_function_param2 destinationDirectory:FileSystemItem
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -28,8 +23,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 parentDirectory:FileSystemItem
-     * @type_function_param2 name:string
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -37,7 +30,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 item:FileSystemItem
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -45,14 +37,12 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 items:Array<FileSystemItem>
      * @public
      */
     downloadItems?: ((items: Array<FileSystemItem>) => void);
 
     /**
      * @docid
-     * @type_function_param1 parentDirectory:FileSystemItem
      * @type_function_return Promise<Array<object>>|Array<object>
      * @public
      */
@@ -60,7 +50,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 items:Array<FileSystemItem>
      * @type_function_return Promise<object>|object
      * @public
      */
@@ -74,8 +63,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 item:FileSystemItem
-     * @type_function_param2 destinationDirectory:FileSystemItem
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -83,8 +70,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 item:FileSystemItem
-     * @type_function_param2 newName:string
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -92,9 +77,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid
-     * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:UploadInfo
-     * @type_function_param3 destinationDirectory:FileSystemItem
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -104,9 +86,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 /**
  * @docid
  * @inherits FileSystemProviderBase
- * @module file_management/custom_provider
  * @namespace DevExpress.fileManagement
- * @export default
  * @public
  */
 export default class CustomFileSystemProvider extends FileSystemProviderBase {

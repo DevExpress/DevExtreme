@@ -54,7 +54,6 @@ export const KEY_CODES = {
   UP: 'upArrow',
   RIGHT: 'rightArrow',
   DOWN: 'downArrow',
-  TAB: 'tab',
 };
 
 export const VALIDATE_WHEEL_TIMEOUT = 500;

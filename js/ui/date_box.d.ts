@@ -140,7 +140,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @type_function_param1_field1 component:dxDateBox
      * @type_function_param1_field2 date:Date
      * @type_function_param1_field3 view:string
-     * @type_function_return boolean
      * @public
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
@@ -225,8 +224,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @docid
  * @isEditor
  * @inherits dxDropDownEditor
- * @module ui/date_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

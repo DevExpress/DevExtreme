@@ -128,7 +128,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     animationEnabled?: boolean;
     /**
      * @docid
-     * @type_function_param1 parentNode:dxTreeViewNode
      * @type_function_return Promise<any>|Array<Object>
      * @public
      */
@@ -383,8 +382,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
 /**
  * @docid
  * @inherits HierarchicalCollectionWidget, SearchBoxMixin
- * @module ui/tree_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -406,7 +403,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
     /**
      * @docid
      * @publicName collapseItem(itemElement)
-     * @param1 itemElement:Element
      * @return Promise<void>
      * @public
      */
@@ -414,7 +410,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
     /**
      * @docid
      * @publicName collapseItem(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -436,7 +431,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
     /**
      * @docid
      * @publicName expandItem(itemElement)
-     * @param1 itemElement:Element
      * @return Promise<void>
      * @public
      */
@@ -444,7 +438,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
     /**
      * @docid
      * @publicName expandItem(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -452,21 +445,18 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
     /**
      * @docid
      * @publicName getNodes()
-     * @return Array<dxTreeViewNode>
      * @public
      */
     getNodes(): Array<dxTreeViewNode>;
     /**
      * @docid
      * @publicName getSelectedNodes()
-     * @return Array<dxTreeViewNode>
      * @public
      */
     getSelectedNodes(): Array<dxTreeViewNode>;
     /**
      * @docid
      * @publicName getSelectedNodeKeys()
-     * @return Array<any>
      * @public
      */
     getSelectedNodeKeys(): Array<any>;
@@ -480,23 +470,18 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @docid
      * @publicName selectItem(itemData)
      * @param1 itemData:Object
-     * @return boolean
      * @public
      */
     selectItem(itemData: any): boolean;
     /**
      * @docid
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Element
-     * @return boolean
      * @public
      */
     selectItem(itemElement: Element): boolean;
     /**
      * @docid
      * @publicName selectItem(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     selectItem(key: any): boolean;
@@ -510,23 +495,18 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @docid
      * @publicName unselectItem(itemData)
      * @param1 itemData:Object
-     * @return boolean
      * @public
      */
     unselectItem(itemData: any): boolean;
     /**
      * @docid
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Element
-     * @return boolean
      * @public
      */
     unselectItem(itemElement: Element): boolean;
     /**
      * @docid
      * @publicName unselectItem(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     unselectItem(key: any): boolean;
@@ -548,7 +528,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
     /**
      * @docid
      * @publicName scrollToItem(itemElement)
-     * @param1 itemElement:Element
      * @return Promise<void>
      * @public
      */
@@ -556,7 +535,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
     /**
      * @docid
      * @publicName scrollToItem(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */

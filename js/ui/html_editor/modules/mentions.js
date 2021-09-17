@@ -377,7 +377,7 @@ if(Quill) {
 
         _getPopupConfig() {
             return extend(super._getPopupConfig(), {
-                closeOnTargetScroll: false,
+                hideOnParentScroll: false,
                 onShown: () => {
                     this._isMentionActive = true;
                     this._hasSearch = false;

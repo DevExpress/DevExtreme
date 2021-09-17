@@ -1181,6 +1181,64 @@ QUnit.test('fade', function(assert) {
     });
 });
 
+QUnit.test('fade - using AnimationState object', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test');
+
+    fx.animate($element, {
+        type: 'fade',
+        to: {
+            opacity: 0.5
+        },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '0.5');
+            done();
+        }
+    });
+});
+
+QUnit.test('fade - using AnimationState object - opacity fallback to 1', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test');
+
+    fx.animate($element, {
+        type: 'fade',
+        to: { },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '1');
+            done();
+        }
+    });
+});
+QUnit.test('fade - using AnimationState object - skipElementInitialStyles', function(assert) {
+    assert.expect(2);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fade',
+        skipElementInitialStyles: true,
+        from: {
+            opacity: 0.7
+        },
+        duration: 100,
+        start: function() {
+            assert.equal($element.css('opacity'), 0.7, 'starts from zero not from element\'s opacity');
+        },
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '1');
+            done();
+        }
+    });
+});
+
 QUnit.test('fadeIn', function(assert) {
     assert.expect(2);
 

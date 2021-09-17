@@ -1,26 +1,24 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
+  RefObject, Ref, Method, Mutable, Effect,
 } from '@devextreme-generator/declarations';
 import LegacyCalendar from '../../../ui/calendar';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { EventCallback } from '../common/event_callback';
 import { BaseWidgetProps } from '../common/base_props';
 
-const FOCUSED_STATE_CLASS = 'dx-state-focused';
-
 function today(): Date { return new Date(); }
-function hasFocus(element: HTMLElement): boolean {
-  return element.classList.contains(FOCUSED_STATE_CLASS);
-}
 
 export const viewFunction = ({
   props,
   restAttributes,
+  domComponentWrapperRef,
 }: Calendar): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyCalendar}
     componentProps={props}
-  // eslint-disable-next-line react/jsx-props-no-spreading
+    ref={domComponentWrapperRef}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
@@ -44,10 +42,24 @@ export class CalendarProps extends BaseWidgetProps {
   // Scheduler private API
   @OneWay() _todayDate? = today;
 
-  @OneWay() hasFocus?: (e: HTMLElement) => boolean = hasFocus;
+  @OneWay() skipFocusCheck?: boolean = false;
 }
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Calendar extends JSXComponent<CalendarProps>() { }
+export class Calendar extends JSXComponent<CalendarProps>() {
+  @Ref() domComponentWrapperRef!: RefObject<DomComponentWrapper>;
+
+  @Mutable() instance!: { focus };
+
+  @Effect()
+  saveInstance(): void {
+    this.instance = this.domComponentWrapperRef.current?.getInstance() as unknown as { focus };
+  }
+
+  @Method()
+  focus(): void {
+    this.instance?.focus();
+  }
+}

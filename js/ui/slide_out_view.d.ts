@@ -40,7 +40,6 @@ export type OptionChangedEvent = EventInfo<dxSlideOutView> & ChangedOptionInfo;
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
      * @docid
-     * @type_function_param1 contentElement:DxElement
      * @default "content"
      * @public
      */
@@ -53,7 +52,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     menuPosition?: SlideOutMenuPosition;
     /**
      * @docid
-     * @type_function_param1 menuElement:DxElement
      * @default null
      * @public
      */
@@ -75,8 +73,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @docid
  * @inherits Widget
  * @hasTranscludedContent
- * @module ui/slide_out_view
- * @export default
  * @namespace DevExpress.ui
  * @deprecated dxDrawer
  * @public
@@ -85,7 +81,6 @@ export default class dxSlideOutView extends Widget<dxSlideOutViewOptions> {
     /**
      * @docid
      * @publicName content()
-     * @return DxElement
      * @public
      */
     content(): DxElement;
@@ -99,7 +94,6 @@ export default class dxSlideOutView extends Widget<dxSlideOutViewOptions> {
     /**
      * @docid
      * @publicName menuContent()
-     * @return DxElement
      * @public
      */
     menuContent(): DxElement;

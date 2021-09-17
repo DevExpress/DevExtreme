@@ -15,7 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getPathToLeaf } from '../resources/utils';
+import { createReducedResourcesTree, getPathToLeaf } from '../resources/utils';
 import { calculateStartViewDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
 import { formatWeekday, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
@@ -142,6 +142,7 @@ class SchedulerAgenda extends WorkSpace {
     _renderView() {
         this._startViewDate = this._calculateStartViewDate();
         this._rows = [];
+        this._initPositionHelper();
     }
 
     _recalculateAgenda(rows) {
@@ -238,8 +239,15 @@ class SchedulerAgenda extends WorkSpace {
 
     _makeGroupRows() {
         const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
+
         const resourceManager = this.option('resourceManager');
-        const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
+
+        const tree = createReducedResourcesTree(
+            resourceManager.loadedResources,
+            (field, action) => resourceManager.getDataAccessors(field, action),
+            filteredItems
+        ); // TODO refactoring
+
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
         const cellTemplates = [];
@@ -492,15 +500,6 @@ class SchedulerAgenda extends WorkSpace {
 
     getEndViewDateByEndDayHour() {
         return this.getEndViewDate();
-    }
-
-    getCoordinatesByDate() {
-        return {
-            top: 0,
-            left: 0,
-            max: 0,
-            groupIndex: 0
-        };
     }
 
     getCellDataByCoordinates() {

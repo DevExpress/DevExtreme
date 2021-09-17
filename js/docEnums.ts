@@ -510,3 +510,7 @@ export type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButt
 // was TreeListToolbarItem
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+
+export type GanttPdfExportDateRange = 'all' | 'visible';

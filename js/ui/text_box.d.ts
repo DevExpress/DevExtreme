@@ -93,8 +93,6 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
  * @docid
  * @isEditor
  * @inherits dxTextEditor
- * @module ui/text_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

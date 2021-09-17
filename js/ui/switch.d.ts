@@ -77,8 +77,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/switch
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

@@ -216,8 +216,6 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
 /**
  * @docid
  * @inherits dxMenuBase
- * @module ui/context_menu
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -239,7 +237,6 @@ export default class dxContextMenu extends dxMenuBase<dxContextMenuOptions> {
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<void>
      * @public
      */

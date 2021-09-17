@@ -210,7 +210,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @docid
      * @default "tag"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -226,8 +225,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @docid
  * @isEditor
  * @inherits dxSelectBox
- * @module ui/tag_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

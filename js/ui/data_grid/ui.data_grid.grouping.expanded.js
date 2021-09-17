@@ -251,7 +251,6 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
         },
         handleDataLoaded: function(options, callBase) {
             const that = this;
-            let data = options.data;
             const collapsedGroups = options.collapsedGroups;
             const groups = dataGridCore.normalizeSortingInfo(options.group);
             const groupCount = groups.length;
@@ -285,6 +284,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             callBase(options);
 
             if(groupCount) {
+                let data = options.data;
                 const query = dataQuery(data);
                 storeHelper.multiLevelGroup(query, groups).enumerate().done(function(groupedData) {
                     data = groupedData;

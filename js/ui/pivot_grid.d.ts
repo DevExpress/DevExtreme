@@ -682,8 +682,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/pivot_grid
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -692,11 +690,6 @@ export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
      * @docid
      * @publicName bindChart(chart, integrationOptions)
      * @param1 chart:string|jQuery|object
-     * @param2 integrationOptions:object
-     * @param2_field1 inverted:boolean
-     * @param2_field2 dataFieldsDisplayMode:string
-     * @param2_field3 putDataFieldsInto:string
-     * @param2_field4 alternateDataFields:boolean
      * @param2_field5 processCell:function(cellData)
      * @param2_field6 customizeChart:function(chartOptions)
      * @param2_field7 customizeSeries:function(seriesName, seriesOptions)
@@ -714,14 +707,12 @@ export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
     /**
      * @docid
      * @publicName getDataSource()
-     * @return PivotGridDataSource
      * @public
      */
     getDataSource(): PivotGridDataSource;
     /**
      * @docid
      * @publicName getFieldChooserPopup()
-     * @return dxPopup
      * @public
      */
     getFieldChooserPopup(): dxPopup;
@@ -752,7 +743,6 @@ export interface dxPivotGridPivotGridCell {
     /**
      * @docid
      * @acceptValues "D" | "T" | "GT"
-     * @type string
      * @public
      */
     columnType?: 'D' | 'T' | 'GT';
@@ -779,7 +769,6 @@ export interface dxPivotGridPivotGridCell {
     /**
      * @docid
      * @acceptValues "D" | "T" | "GT"
-     * @type string
      * @public
      */
     rowType?: 'D' | 'T' | 'GT';
@@ -791,7 +780,6 @@ export interface dxPivotGridPivotGridCell {
     /**
      * @docid
      * @acceptValues "D" | "T" | "GT"
-     * @type string
      * @public
      */
     type?: 'D' | 'T' | 'GT';

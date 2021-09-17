@@ -375,7 +375,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @type object
      * @public
      */
      sorting?: dxGanttSorting;
@@ -898,15 +897,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     stripLines?: Array<dxGanttStripLine>;
     /**
      * @docid
-     * @type_function_param1 container:DxElement
-     * @type_function_param2 task:any
      * @type_function_return string|Element|jQuery
      * @public
      */
     taskTooltipContentTemplate?: template | ((container: DxElement, task: any) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 start:Date
      * @type_function_param2_field2 end:Date
@@ -916,7 +912,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskTimeTooltipContentTemplate?: template | ((container: DxElement, item: TimeTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 progress:number
      * @type_function_return string|Element|jQuery
@@ -925,7 +920,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskProgressTooltipContentTemplate?: template | ((container: DxElement, item: ProgressTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 cellSize:object
      * @type_function_param2_field2 isMilestone:boolean
@@ -960,8 +954,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/gantt
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -1110,18 +1102,9 @@ export default class dxGantt extends Widget<dxGanttOptions> {
     /**
      * @docid
      * @publicName scrollToDate(date)
-     * @param1 date:Date|Number|string
      * @public
      */
     scrollToDate(date: Date | Number | string): void;
-    /**
-     * @docid
-     * @publicName exportToPdf(options)
-     * @param1 options:object
-     * @return Promise<any>
-     * @public
-     */
-    exportToPdf(options: any): DxPromise<any>;
     /**
      * @docid
      * @publicName showResourceManagerDialog()
@@ -1178,14 +1161,12 @@ export default class dxGantt extends Widget<dxGanttOptions> {
     /**
      * @docid
      * @publicName showResources(value)
-     * @param1 value:boolean
      * @public
      */
      showResources(value: boolean): void;
      /**
      * @docid
      * @publicName showDependencies(value)
-     * @param1 value:boolean
      * @public
      */
       showDependencies(value: boolean): void;
@@ -1309,14 +1290,12 @@ export interface dxGanttStripLine {
     cssClass?: string;
     /**
      * @docid
-     * @type_function_return Date|number|string
      * @default undefined
      * @public
      */
     end?: Date | number | string | (() => Date | number | string);
     /**
      * @docid
-     * @type_function_return Date|number|string
      * @default undefined
      * @public
      */
@@ -1353,6 +1332,8 @@ export interface dxGanttSorting {
     /**
      * @docid
      * @default "none"
+     * @type {docEnums.GanttSortingMode}|string
+     * @default "single"
      */
     mode?: GanttSortingMode;
     /**

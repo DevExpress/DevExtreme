@@ -7,7 +7,13 @@ import {
     getPaintedResources,
     filterResources,
     getOrLoadResourceItem,
-    getResourceColor
+    getResourceColor,
+    getResourcesFromItem,
+    getResourceTreeLeaves,
+    groupAppointmentsByResourcesCore,
+    getResourcesDataByGroups,
+    reduceResourcesTree,
+    setResourceToAppointment
 } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -202,7 +208,12 @@ QUnit.test('Get resource by field name and value', function(assert) {
 QUnit.test('Get resources from item data', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date(), roomId: 2, ownerId: [1, 2] };
-    const resources = this.instance.getResourcesFromItem(item);
+
+    const resources = getResourcesFromItem(
+        this.instance.getResources(),
+        this.instance._dataAccessors,
+        item
+    );
 
     assert.deepEqual(resources, { roomId: [2], ownerId: [1, 2] }, 'Resources were found');
 });
@@ -228,7 +239,12 @@ QUnit.test('Get resources from item data with combined resource field', function
     }]);
 
     const item = { text: 'Item 1', startDate: new Date(), outer: { roomId: 2 }, ownerId: [1, 2] };
-    const resources = this.instance.getResourcesFromItem(item, true);
+    const resources = getResourcesFromItem(
+        this.instance.getResources(),
+        this.instance._dataAccessors,
+        item,
+        true
+    );
 
     assert.deepEqual(resources, {
         outer: { roomId: 2 },
@@ -303,16 +319,24 @@ QUnit.test('getResourceTreeLeaves should work correctly when resource.field is e
     }]);
 
 
-    const resourcesFromItem = this.instance.getResourcesFromItem({
-        text: 'Item 1',
-        startDate: new Date(),
-        outer: { roomId: 2 },
-        ownerId: [1, 2]
-    });
+    const resourcesFromItem = getResourcesFromItem(
+        this.instance.getResources(),
+        this.instance._dataAccessors,
+        {
+            text: 'Item 1',
+            startDate: new Date(),
+            outer: { roomId: 2 },
+            ownerId: [1, 2]
+        });
 
     this.instance.loadResources(['outer.roomId', 'ownerId']).done($.proxy(function(groups) {
         const tree = createResourcesTree(groups);
-        const result = this.instance.getResourceTreeLeaves(tree, resourcesFromItem);
+
+        const result = getResourceTreeLeaves(
+            (field, action) => this.instance.getDataAccessors(field, action),
+            tree,
+            resourcesFromItem
+        );
 
         assert.deepEqual(result, [2, 3], 'Leaves are OK');
 
@@ -324,8 +348,8 @@ QUnit.test('Set resources to item', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date() };
 
-    this.instance.setResourcesToItem(item, { roomId: 1 });
-    this.instance.setResourcesToItem(item, { ownerId: 1 });
+    setResourceToAppointment(this.instance.getResources(), this.instance._dataAccessors, item, { roomId: 1 });
+    setResourceToAppointment(this.instance.getResources(), this.instance._dataAccessors, item, { ownerId: 1 });
 
     assert.strictEqual(item.roomId, 1, 'Single resource has scalar value');
     assert.deepEqual(item.ownerId, [1], 'Multiple resource has array value');
@@ -334,7 +358,12 @@ QUnit.test('Set resources to item', function(assert) {
 QUnit.test('Get resources from item that has no resources', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date() };
-    const resources = this.instance.getResourcesFromItem(item);
+
+    const resources = getResourcesFromItem(
+        this.instance.getResources(),
+        this.instance._dataAccessors,
+        item
+    );
 
     assert.strictEqual(resources, null, 'Resources were not found');
 });
@@ -342,7 +371,13 @@ QUnit.test('Get resources from item that has no resources', function(assert) {
 QUnit.test('Get resources from item without wrapping result array', function(assert) {
     this.createInstance(resourceData);
     const item = { text: 'Item 1', startDate: new Date(), roomId: 1 };
-    const resources = this.instance.getResourcesFromItem(item, true);
+
+    const resources = getResourcesFromItem(
+        this.instance.getResources(),
+        this.instance._dataAccessors,
+        item,
+        true
+    );
 
     assert.deepEqual(resources, { roomId: 1 }, 'Resources were not found');
 });
@@ -572,7 +607,12 @@ QUnit.test('Get appointments by certain resources', function(assert) {
         { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 1), ownerId: [1, 2], roomId: [1, 2] }
     ];
 
-    const result = this.instance.groupAppointmentsByResourcesCore(appointments, [
+    const config = {
+        resources: this.instance.getResources(),
+        dataAccessors: this.instance._dataAccessors
+    };
+
+    const result = groupAppointmentsByResourcesCore(config, appointments, [
         {
             name: 'ownerId',
             items: [{ id: 1 }, { id: 2 }]
@@ -644,7 +684,11 @@ QUnit.test('Reduce resource tree depend on existing appointments', function(asse
 
     this.instance.loadResources(['o', 'r', 'a']).done($.proxy(function(groups) {
         const tree = createResourcesTree(groups);
-        const reducedTree = this.instance.reduceResourcesTree(tree, appointments);
+        const reducedTree = reduceResourcesTree(
+            (field, action) => this.instance.getDataAccessors(field, action),
+            tree,
+            appointments
+        );
 
         assert.equal(reducedTree.length, 1, 'reducedTree has 1 item');
         assert.equal(reducedTree[0].name, 'o', 'reducedTree has correct name');
@@ -950,8 +994,11 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         const done = assert.async();
 
         this.instance.loadResources(loadingGroups).done($.proxy(() => {
-
-            const resourcesDataByGroups = this.instance.getResourcesDataByGroups(groups);
+            const resourcesDataByGroups = getResourcesDataByGroups(
+                this.instance.loadedResources,
+                this.instance.getResources(),
+                groups
+            );
 
             assert.deepEqual(
                 resourcesDataByGroups,
@@ -970,7 +1017,10 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         const done = assert.async();
 
         this.instance.loadResources([]).done($.proxy(() => {
-            const resourcesDataByGroups = this.instance.getResourcesDataByGroups();
+            const resourcesDataByGroups = getResourcesDataByGroups(
+                this.instance.loadedResources,
+                this.instance.getResources(),
+            );
 
             assert.deepEqual(resourcesDataByGroups, [], 'getResourcesDataByGroups works correctly');
 

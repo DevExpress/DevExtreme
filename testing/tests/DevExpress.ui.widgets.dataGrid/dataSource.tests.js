@@ -6077,7 +6077,7 @@ QUnit.module('Cache', {
         assert.deepEqual(dataSource.items(), [1, 2, 3], 'items are correct');
     });
 
-    QUnit.test('reset pages cache on pageSize change when all remoteOperations', function(assert) {
+    QUnit.test('not reset pages cache on pageSize change when all remoteOperations', function(assert) {
         const dataSource = this.createDataSource({
             remoteOperations: true
         });
@@ -6090,7 +6090,7 @@ QUnit.module('Cache', {
         dataSource.load();
 
         // assert
-        assert.deepEqual(this.loadingCount, 1, 'one loading');
+        assert.deepEqual(this.loadingCount, 0, 'data is loaded from cache');
         assert.deepEqual(dataSource.items(), [1, 2], 'items are correct');
     });
 
@@ -6444,7 +6444,7 @@ QUnit.module('Cache', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.loadingCount, 3, 'third load');
+        assert.equal(this.loadingCount, 2, 'data is loaded from cache');
         assert.deepEqual(dataSource.items(), [7, 8, 9], 'items on the third load');
 
         // act
@@ -6454,11 +6454,90 @@ QUnit.module('Cache', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.loadingCount, 3, 'data is loaded from cache');
+        assert.equal(this.loadingCount, 2, 'data is loaded from cache');
         assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items from cache');
     });
 
-    QUnit.test('New mode. Cache should be reset when pageSize is changed', function(assert) {
+    QUnit.test('New mode. Data should be loaded from the cache with the same load params if remote groupPaging', function(assert) {
+        const remoteGroupPaging = true;
+        const array = [
+            { group1: 1, group2: 1, id: 1 },
+            { group1: 1, group2: 1, id: 2 },
+            { group1: 1, group2: 1, id: 3 },
+            { group1: 1, group2: 1, id: 4 },
+            { group1: 1, group2: 2, id: 5 },
+            { group1: 2, group2: 1, id: 6 },
+        ];
+
+        const dataSource = createDataSourceWithRemoteGrouping({
+            store: array,
+            paginate: true,
+            pageSize: 2,
+            requireTotalCount: true,
+            requireGroupCount: true,
+            group: ['group1', 'group2'],
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            }
+        }, remoteGroupPaging);
+
+        dataSource.load();
+        dataSource.changeRowExpand([1]);
+        dataSource.load();
+        dataSource.changeRowExpand([1, 1]);
+        dataSource.load();
+        dataSource.pageIndex(1);
+        dataSource.load();
+        dataSource.pageIndex(2);
+        dataSource.load();
+
+        this.loadingCount = 0;
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.load();
+
+        // assert
+        assert.equal(this.loadingCount, 0, 'no load during back scroll');
+        assert.deepEqual(dataSource.items(), [{
+            'isContinuation': true,
+            'isContinuationOnNextPage': true,
+            'items': [
+                {
+                    'isContinuation': true,
+                    'isContinuationOnNextPage': true,
+                    'items': [
+                        array[0],
+                        array[1]
+                    ],
+                    'key': 1
+                }
+            ],
+            'key': 1
+        }], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(0);
+        dataSource.load();
+
+        // assert
+        assert.equal(this.loadingCount, 0, 'no load during back scroll');
+        assert.deepEqual(dataSource.items(), [{
+            'isContinuationOnNextPage': true,
+            'items': [
+                {
+                    'isContinuationOnNextPage': true,
+                    'items': [],
+                    'key': 1
+                }
+            ],
+            'key': 1
+        }], 'items on the second load');
+    });
+
+    QUnit.test('New mode. Cache should not be reset when pageSize is changed', function(assert) {
         const dataSource = this.createDataSource({
             remoteOperations: {
                 paging: true,
@@ -6495,7 +6574,7 @@ QUnit.module('Cache', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.loadingCount, 3, 'third load');
+        assert.equal(this.loadingCount, 2, 'data is loaded from the cache');
         assert.deepEqual(dataSource.items(), [1, 2], 'new loaded items for the first page');
     });
 
@@ -7107,20 +7186,22 @@ QUnit.module('New virtual scrolling mode', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test('loadPageCount affects the take parameter', function(assert) {
+    QUnit.test('loadPageCount affects the skip and take parameter', function(assert) {
         // arrange
         const dataSource = this.createDataSource({
             pageSize: 3
         });
-        const dataLoadingHandler = dataSource._dataLoadingHandler;
+        const dataLoadingHandler = dataSource._customizeStoreLoadOptionsHandler;
         const takeValues = [];
+        const skipValues = [];
 
-        dataSource._dataLoadingHandler = function(options) {
+        dataSource._customizeStoreLoadOptionsHandler = function(options) {
             dataLoadingHandler.apply(dataSource, arguments);
+            skipValues.push(options.storeLoadOptions.skip);
             takeValues.push(options.storeLoadOptions.take);
         };
         dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
-        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
+        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._customizeStoreLoadOptionsHandler);
 
         try {
             // act
@@ -7128,14 +7209,18 @@ QUnit.module('New virtual scrolling mode', {
             dataSource.load();
 
             // assert
+            assert.strictEqual(skipValues[0], 0, 'first skip value');
             assert.strictEqual(takeValues[0], 6, 'first take value');
+            assert.deepEqual(dataSource.items(), TEN_NUMBERS.slice(0, 6), 'first load items');
 
             // act
             dataSource.loadPageCount(3);
             dataSource.load();
 
             // assert
-            assert.strictEqual(takeValues[1], 9, 'second take value');
+            assert.strictEqual(skipValues[1], 6, 'second skip value');
+            assert.strictEqual(takeValues[1], 3, 'second take value');
+            assert.deepEqual(dataSource.items(), TEN_NUMBERS.slice(0, 9), 'second load items');
         } finally {
             dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
             dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);

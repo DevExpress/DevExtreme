@@ -138,7 +138,6 @@ export interface CustomRule {
     type: 'custom';
     /**
      * @docid
-     * @type_function_return boolean
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object

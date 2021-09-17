@@ -106,8 +106,60 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
     }
   }
 
-  get contentAttributes(): Record<string, unknown> & Pick<InternalPagerProps, 'pageIndexChange' | 'pageSizeChange'> {
-    return { ...this.restAttributes, ...this.props.pagerProps };
+  get contentAttributes(): Record<string, unknown> & InternalPagerProps {
+    // Without destructing in react defaultPageSize and defaultPageIndex from this.props.pagerProps
+    // added to contentAttributes after added to Widget.restAttributes
+    // and way to the following error:
+    // React does not recognize the `defaultPageSize` prop on a DOM element.
+    const {
+      pageSize,
+      pageIndex,
+      pageIndexChange,
+      pageSizeChange,
+      gridCompatibility,
+      className,
+      showInfo,
+      infoText,
+      lightModeEnabled,
+      displayMode,
+      maxPagesCount,
+      pageCount,
+      pagesCountText,
+      visible,
+      hasKnownLastPage,
+      pagesNavigatorVisible,
+      showPageSizes,
+      pageSizes,
+      rtlEnabled,
+      showNavigationButtons,
+      totalCount,
+      onKeyDown,
+    } = this.props.pagerProps;
+    return {
+      ...this.restAttributes,
+      pageSize,
+      pageIndex,
+      pageIndexChange,
+      pageSizeChange,
+      gridCompatibility,
+      className,
+      showInfo,
+      infoText,
+      lightModeEnabled,
+      displayMode,
+      maxPagesCount,
+      pageCount,
+      pagesCountText,
+      visible,
+      hasKnownLastPage,
+      pagesNavigatorVisible,
+      showPageSizes,
+      pageSizes,
+      rtlEnabled,
+      showNavigationButtons,
+      totalCount,
+      onKeyDown,
+    };
   }
 
   updateAdaptivityProps(): void {
@@ -118,8 +170,8 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       pages: this.pagesRef.current,
     });
     if (isDefined(this.actualAdaptivityProps)
-    && (this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible
-      || this.actualAdaptivityProps.isLargeDisplayMode !== this.isLargeDisplayMode)) {
+      && (this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible
+        || this.actualAdaptivityProps.isLargeDisplayMode !== this.isLargeDisplayMode)) {
       return;
     }
     const isEmpty = !isDefined(this.elementsWidth);
