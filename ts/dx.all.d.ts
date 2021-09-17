@@ -1644,10 +1644,12 @@ declare module DevExpress.data {
     selector: KeySelector<T>;
   };
   /**
+   * [descr:BaseMixinDataSource]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type BaseMixinDataSource = Store | DataSource | DataSourceOptions;
   /**
+   * [descr:ComplexCollectionDataSource]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type ComplexCollectionDataSource<T> = Array<T> | DataSourceMixinString;
@@ -1918,11 +1920,12 @@ declare module DevExpress.data {
     > = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
   }
   /**
-   * @deprecated Use Options instead
+   * [descr:DataSourceMixinArray]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type DataSourceMixinArray<T> = Array<T> | Store | DataSourceOptions;
   /**
+   * [descr:DataSourceMixinString]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type DataSourceMixinString = string | BaseMixinDataSource;
@@ -6646,7 +6649,7 @@ declare module DevExpress.ui {
       font?: DevExpress.exporter.ExcelFont;
       readonly value?: string | number | Date;
       numberFormat?: string;
-      gridCell?: ExcelCell;
+      gridCell?: DevExpress.excelExporter.DataGridCell;
     }
     export type ExplicitTypes<TRowData, TKey> = {
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
@@ -13391,7 +13394,8 @@ declare module DevExpress.ui {
    * @deprecated Use ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxGanttContextMenuItem extends dxContextMenuItem {
+  export interface dxGanttContextMenuItem
+    extends DevExpress.ui.dxContextMenu.Item {
     /**
      * [descr:dxGanttContextMenuItem.name]
      */
@@ -14072,7 +14076,7 @@ declare module DevExpress.ui {
    * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxGanttToolbarItem extends dxToolbarItem {
+  export interface dxGanttToolbarItem extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxGanttToolbarItem.name]
      */
@@ -14659,7 +14663,8 @@ declare module DevExpress.ui {
    * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
+  export interface dxHtmlEditorToolbarItem
+    extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxHtmlEditorToolbarItem.name]
      */

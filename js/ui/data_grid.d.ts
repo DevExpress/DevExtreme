@@ -29,6 +29,10 @@ import {
 } from '../events/index';
 
 import {
+    DataGridCell as ExcelCell,
+} from '../excel_exporter';
+
+import {
     ExcelFont,
 } from '../exporter/excel/excel.doc_comments';
 

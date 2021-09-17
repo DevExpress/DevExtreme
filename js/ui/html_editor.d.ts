@@ -23,7 +23,11 @@ import Editor, {
   MenuBasePlainItem,
 } from './menu';
 
+
 import {
+    Item as dxToolbarItem,
+} from './toolbar';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 

@@ -22,6 +22,14 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
+    Item as dxToolbarItem,
+} from './toolbar';
+
+import {
+    Item as dxContextMenuItem,
+} from './context_menu';
+
+import {
     template,
 } from '../core/templates/template';
 
