@@ -1,6 +1,5 @@
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
-const document = domAdapter.getDocument();
 import eventsEngine from '../../../events/core/events_engine';
 import dateUtils from '../../../core/utils/date';
 import { getWindow, hasWindow } from '../../../core/utils/window';
@@ -78,6 +77,7 @@ import {
 
 import { utils } from '../utils';
 
+const document = domAdapter.getDocument();
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
 

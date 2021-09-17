@@ -1,9 +1,7 @@
 import $ from '../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
-const document = domAdapter.getDocument();
 import { getWindow } from '../core/utils/window';
 import { getBoundingRect } from '../core/utils/position';
-const window = getWindow();
 import eventsEngine from '../events/core/events_engine';
 import { quadToObject } from '../core/utils/string';
 import registerComponent from '../core/component_registrator';
@@ -28,6 +26,9 @@ import { noop, splitPair } from '../core/utils/common';
 import { value as viewPort } from '../core/utils/view_port';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
+
+const window = getWindow();
+const document = domAdapter.getDocument();
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
