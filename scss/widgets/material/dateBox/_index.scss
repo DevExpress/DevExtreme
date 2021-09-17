@@ -8,6 +8,7 @@
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/colors" as *;
+@use "../calendar/sizes" as *;
 @use "../../base/dateBox";
 
 // adduse
@@ -95,9 +96,16 @@
 
   .dx-timeview {
     padding: $material-datebox-overlay-item-margin;
+    height:
+      $material-datebox-overlay-item-margin +
+      $material-calendar-body-height +
+      $material-calendar-body-top +
+      $material-calendar-header-bottom-padding +
+      $material-calendar-cell-font-size;
 
     @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      margin: 0 math.div($material-datebox-overlay-item-margin, 2) math.div($material-datebox-overlay-item-margin, 2);
+      margin: 0;
+      height: auto;
     }
   }
 

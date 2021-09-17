@@ -5,44 +5,19 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../textEditor/sizes" as *;
+@use "../../base/timeView/mixins" as *;
 @use "../../base/timeView";
 
 // adduse
+
+@include clock-action-icons-mixin($base-accent, $base-bg, $clock-digits-color);
 
 .dx-timeview {
   height: auto;
   width: auto;
   background-color: $timeview-bg;
-}
 
-.dx-timeview-clock {
-  min-height: $material-timeview-clock-min-size + $material-timeview-clock-additional-size;
-  min-width: $material-timeview-clock-min-size + $material-timeview-clock-additional-size;
-  background-size: $material-timeview-clock-image-min-size;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-}
-
-.dx-timeview-hourarrow {
-  background-size: 5px 57px - $material-timeview-arrow-height-reduce;
-}
-
-.dx-timeview-minutearrow {
-  background-size: 5px 79px - math.div($material-timeview-arrow-height-reduce, 2);
-}
-
-.dx-timeview-format12 {
-  width: $material-timeview-format12-width;
-  margin-left: $material-timeview-time-separator-margin;
-  margin-right: auto;
-
-  &.dx-rtl,
-  .dx-rtl & {
-    margin-left: auto;
-    margin-right: $material-timeview-time-separator-margin;
-  }
-
-  &.dx-dropdowneditor-button-visible {
+  .dx-texteditor {
     .dx-texteditor-container {
       .dx-texteditor-input {
         padding-right: 0;
@@ -73,6 +48,18 @@
         }
       }
     }
+  }
+}
+
+.dx-timeview-format12 {
+  width: $material-timeview-format12-width;
+  margin-left: $material-timeview-time-separator-margin;
+  margin-right: auto;
+
+  &.dx-rtl,
+  .dx-rtl & {
+    margin-left: auto;
+    margin-right: $material-timeview-time-separator-margin;
   }
 }
 
