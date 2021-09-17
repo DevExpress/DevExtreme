@@ -6,6 +6,7 @@ import { resetPosition, move, locate } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
 import { originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { pairToObject } from '../../core/utils/common';
+import { borderWidthStyles } from '../../renovation/ui/resizable/utils';
 
 const window = getWindow();
 
@@ -22,13 +23,6 @@ const OVERLAY_POSITION_ALIASES = {
 };
 const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
-
-const SIDE_BORDER_WIDTH_STYLES = {
-    'left': 'borderLeftWidth',
-    'top': 'borderTopWidth',
-    'right': 'borderRightWidth',
-    'bottom': 'borderBottomWidth'
-};
 const WEIGHT_OF_SIDES = {
     'left': -1,
     'top': -1,
@@ -131,7 +125,6 @@ class OverlayPositionController {
         const shouldRestorePosition = this._props.restorePosition.onOpening
             || this._props.restorePosition.always;
 
-
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
@@ -139,14 +132,12 @@ class OverlayPositionController {
         const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDrag
             || this._props.restorePosition.always;
 
-
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
     resizeHandled() {
         const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterResize
             || this._props.restorePosition.always;
-
 
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
@@ -404,8 +395,7 @@ class PopoverPositionController extends OverlayPositionController {
 
     _getContainerPosition() {
         const offset = pairToObject(this._position.offset || '');
-        let hOffset = offset.h;
-        let vOffset = offset.v;
+        let { h: hOffset, v: vOffset } = offset;
         const isVerticalSide = this._isVerticalSide();
         const isHorizontalSide = this._isHorizontalSide();
 
@@ -423,7 +413,7 @@ class PopoverPositionController extends OverlayPositionController {
     }
 
     _getContentBorderWidth(side) {
-        const borderWidth = this._$content.css(SIDE_BORDER_WIDTH_STYLES[side]);
+        const borderWidth = this._$content.css(borderWidthStyles[side]);
 
         return parseInt(borderWidth) || 0;
     }
@@ -435,13 +425,11 @@ class PopoverPositionController extends OverlayPositionController {
         return my.h === at.h && my.v === at.v;
     }
 
-    _isVerticalSide(side) {
-        side = side || this._positionSide;
+    _isVerticalSide(side = this._positionSide) {
         return side === 'top' || side === 'bottom';
     }
 
-    _isHorizontalSide(side) {
-        side = side || this._positionSide;
+    _isHorizontalSide(side = this._positionSide) {
         return side === 'left' || side === 'right';
     }
 

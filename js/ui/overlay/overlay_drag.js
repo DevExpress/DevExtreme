@@ -18,9 +18,8 @@ class OverlayDrag {
         this.init(config);
     }
 
-    init(config) {
+    init({ dragEnabled, handle, draggableElement, positionController }) {
         // TODO: get rid of dragEnabled
-        const { dragEnabled, handle, draggableElement, positionController } = config;
 
         this._positionController = positionController;
         this._draggableElement = draggableElement;
