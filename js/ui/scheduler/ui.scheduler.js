@@ -513,7 +513,7 @@ class Scheduler extends Widget {
                 });
                 break;
             case 'resources':
-                this.option('resourceDataFields', createExpressions(this.option('resources')));
+                this._dataAccessors.resources = createExpressions(this.option('resources'));
                 this.agendaResourceProcessor.initializeState(value);
                 this.updateFactoryInstances();
 
@@ -667,11 +667,6 @@ class Scheduler extends Widget {
             case 'recurrenceExceptionExpr':
             case 'disabledExpr':
                 this._updateExpression(name, value);
-
-                getAppointmentDataProvider(this.key).updateDataAccessors(
-                    utils.dataAccessors.combine(this._dataAccessors, this.option('resourceDataFields'))
-                );
-
                 this._initAppointmentTemplate();
                 this.repaint();
                 break;
@@ -695,7 +690,6 @@ class Scheduler extends Widget {
                 break;
             case 'loadedResources':
             case 'resourceLoaderMap':
-            case 'resourceDataFields':
                 break;
             default:
                 super._optionChanged(args);
@@ -889,8 +883,6 @@ class Scheduler extends Widget {
             disabled: this.option('disabledExpr')
         });
 
-        this.option('resourceDataFields', createExpressions(this.option('resources')));
-
         super._init();
 
         this._initDataSource();
@@ -939,9 +931,7 @@ class Scheduler extends Widget {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
             timeZone: this.option('timeZone'),
-            getDataAccessors: () => {
-                return utils.dataAccessors.combine(this._dataAccessors, this.option('resourceDataFields'));
-            },
+            getDataAccessors: () => this._dataAccessors,
         });
     }
 
@@ -1135,12 +1125,18 @@ class Scheduler extends Widget {
                 delete this._dataAccessors.expr[name + 'Expr'];
             }
         }).bind(this));
+
+        this._dataAccessors.resources = createExpressions(this.option('resources'));
     }
 
     _updateExpression(name, value) {
         const exprObj = {};
         exprObj[name.replace('Expr', '')] = value;
         this._initExpressions(exprObj);
+    }
+
+    getResourceDataAccessors() {
+        return this._dataAccessors.resources;
     }
 
     _initEditing() {
@@ -1277,7 +1273,7 @@ class Scheduler extends Widget {
             getResourcesFromItem: (rawAppointment) => {
                 return getResourcesFromItem(
                     this.option('resources'),
-                    this.option('resourceDataFields'),
+                    this.getResourceDataAccessors(),
                     rawAppointment,
                     true
                 );
@@ -1862,7 +1858,7 @@ class Scheduler extends Widget {
 
         const rawResult = result.source();
 
-        setResourceToAppointment(this.option('resources'), this.option('resourceDataFields'), rawResult, targetCell.groups);
+        setResourceToAppointment(this.option('resources'), this.getResourceDataAccessors(), rawResult, targetCell.groups);
 
         return rawResult;
     }
@@ -2072,7 +2068,7 @@ class Scheduler extends Widget {
         const groups = this._getCurrentViewOption('groups');
 
         if(groups?.length) {
-            const resourcesSetter = this.option('resourceDataFields').setter;
+            const resourcesSetter = this.getResourceDataAccessors().setter;
             const workSpace = this._workSpace;
             let getGroups;
             let setResourceCallback;
@@ -2197,7 +2193,7 @@ class Scheduler extends Widget {
         return (appointmentConfig) => {
             const resourceConfig = {
                 resources: this.option('resources'),
-                dataAccessors: this.option('resourceDataFields'),
+                dataAccessors: this.getResourceDataAccessors(),
                 loadedResources: this.option('loadedResources'),
                 resourceLoaderMap: this.option('resourceLoaderMap')
             };
