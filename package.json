@@ -37,7 +37,7 @@
     "inferno-compat": "^7.4.6",
     "inferno-create-element": "^7.4.6",
     "inferno-hydrate": "^7.4.6",
-    "jszip": "^2.0.0 || ^3.0.0",
+    "jszip": "^3.7.1",
     "rrule": "2.6.6",
     "showdown": "^1.9.1",
     "turndown": "~7.0.0"
