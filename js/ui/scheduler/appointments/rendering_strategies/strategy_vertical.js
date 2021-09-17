@@ -144,8 +144,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getGroupTopOffset(appointmentSettings) {
-        const groupTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
-        const allDayPanelOffset = this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
+        const { groupIndex } = appointmentSettings;
+        const groupTop = Math.max(0, this.instance.fire('getGroupTop', groupIndex));
+        const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
+            groupIndex,
+            supportAllDayRow: this.allDaySupported(),
+            showAllDayPanel: this.showAllDayPanel
+        });
         const appointmentGroupTopOffset = appointmentSettings.top - groupTop - allDayPanelOffset;
 
         return appointmentGroupTopOffset;
@@ -183,7 +188,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 tailHeight = minHeight;
             }
 
-            currentPartTop += this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
+            const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
+                groupIndex: appointmentSettings.groupIndex,
+                supportAllDayRow: this.allDaySupported(),
+                showAllDayPanel: this.showAllDayPanel
+            });
+
+            currentPartTop += allDayPanelOffset;
 
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,

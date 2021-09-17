@@ -1280,10 +1280,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return cellData ? cellData : undefined;
     }
 
-    _getOffsetByAllDayPanel(groupIndex) {
-        return this._groupedStrategy._getOffsetByAllDayPanel(groupIndex);
-    }
-
     _getGroupTop(groupIndex) {
         return this._groupedStrategy._getGroupTop(groupIndex);
     }
@@ -1403,9 +1399,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         return getMaxAllowedVerticalPosition({
             groupIndex,
             viewDataProvider: this.viewDataProvider,
-            isShowAllDayPanel: this.option('showAllDayPanel'),
+            showAllDayPanel: this.option('showAllDayPanel'),
             isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
-            isVerticalGrouped: this._isVerticalGroupedWorkSpace(),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
             DOMMetaData: this.getDOMElementsMetaData()
         });
     }
@@ -2225,7 +2221,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellDuration: this.getCellDuration(),
             groupedStrategy: this._groupedStrategy,
             isGroupedByDate: this.isGroupedByDate(),
-            isRtlEnabled: this.option('rtlEnabled'),
+            rtlEnabled: this.option('rtlEnabled'),
             startViewDate: this.getStartViewDate(),
             isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),

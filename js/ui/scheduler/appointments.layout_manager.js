@@ -66,6 +66,8 @@ class AppointmentLayoutManager {
             topVirtualCellCount: cellCountInsideTopVirtualRow,
             intervalCount: workspace.option('intervalCount'),
             hoursInterval: workspace.option('hoursInterval'),
+            showAllDayPanel: workspace.option('showAllDayPanel'),
+            isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             groupCount,
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),

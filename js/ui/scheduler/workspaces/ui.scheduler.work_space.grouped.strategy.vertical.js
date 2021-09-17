@@ -49,24 +49,6 @@ class VerticalGroupedStrategy {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
     }
 
-    getVerticalMax(groupIndex) {
-        let maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition(groupIndex);
-
-        maxAllowedPosition += this._getOffsetByAllDayPanel(groupIndex);
-
-        return maxAllowedPosition;
-    }
-
-    _getOffsetByAllDayPanel(groupIndex) {
-        let result = 0;
-
-        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-            result = this._workSpace.getAllDayHeight() * (groupIndex + 1);
-        }
-
-        return result;
-    }
-
     _getGroupTop(groupIndex) {
         const workspace = this._workSpace;
         const rowCount = workspace.isVirtualScrolling()

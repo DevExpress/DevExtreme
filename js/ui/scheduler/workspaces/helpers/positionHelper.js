@@ -18,7 +18,7 @@ const getCellSize = (DOMMetaData) => {
     };
 };
 
-const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, isRtlEnabled, DOMMetaData) => {
+const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, rtlEnabled, DOMMetaData) => {
     const { dateTableCellsMeta } = DOMMetaData;
     const firstRow = dateTableCellsMeta[0];
 
@@ -29,7 +29,7 @@ const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, isRtlEnab
 
     if(!cellPosition) return 0;
 
-    return !isRtlEnabled
+    return !rtlEnabled
         ? cellPosition.left + cellPosition.width
         : cellPosition.left;
 };
@@ -42,12 +42,12 @@ export const getCellWidth = (DOMMetaData) => {
     return getCellSize(DOMMetaData).width;
 };
 
-export const getAllDayHeight = (isShowAllDayPanel, isVerticalGrouped, DOMMetaData) => {
-    if(!isShowAllDayPanel) {
+export const getAllDayHeight = (showAllDayPanel, isVerticalGrouping, DOMMetaData) => {
+    if(!showAllDayPanel) {
         return 0;
     }
 
-    if(isVerticalGrouped) {
+    if(isVerticalGrouping) {
         const { dateTableCellsMeta } = DOMMetaData;
         const length = dateTableCellsMeta?.length;
 
@@ -63,13 +63,20 @@ export const getAllDayHeight = (isShowAllDayPanel, isVerticalGrouped, DOMMetaDat
         : 0;
 };
 
-export const getMaxAllowedPosition = (groupIndex, viewDataProvider, isRtlEnabled, DOMMetaData) => {
+export const getMaxAllowedPosition = (groupIndex, viewDataProvider, rtlEnabled, DOMMetaData) => {
     const validGroupIndex = groupIndex || 0;
 
-    return getMaxAllowedHorizontalPosition(validGroupIndex, viewDataProvider, isRtlEnabled, DOMMetaData);
+    return getMaxAllowedHorizontalPosition(validGroupIndex, viewDataProvider, rtlEnabled, DOMMetaData);
 };
 
-export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, isShowAllDayPanel, isGroupedAllDayPanel, isVerticalGrouped, DOMMetaData }) => {
+export const getMaxAllowedVerticalPosition = ({
+    groupIndex,
+    viewDataProvider,
+    showAllDayPanel,
+    isGroupedAllDayPanel,
+    isVerticalGrouping,
+    DOMMetaData
+}) => {
     const { rowIndex } = viewDataProvider.getLastGroupCellPosition(groupIndex);
     const { dateTableCellsMeta } = DOMMetaData;
     const lastGroupRow = dateTableCellsMeta[rowIndex];
@@ -81,7 +88,7 @@ export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, is
     // TODO remove while refactoring dual calculcations.
     // Should decrease allDayPanel amount due to the dual calculation corrections.
     if(isGroupedAllDayPanel) {
-        result -= (groupIndex + 1) * getAllDayHeight(isShowAllDayPanel, isVerticalGrouped, DOMMetaData);
+        result -= (groupIndex + 1) * getAllDayHeight(showAllDayPanel, isVerticalGrouping, DOMMetaData);
     }
 
     return result;
@@ -130,33 +137,46 @@ export const getGroupWidth = (groupIndex, viewDataProvider, options) => {
 
 export class PositionHelper {
     constructor(options) {
+        this.strategy = options.isVerticalGroupedWorkSpace
+            ? new PositionHelperVertical(options)
+            : new PositionHelperHorizontal(options);
+    }
+
+    getHorizontalMax(groupIndex) {
+        return this.strategy.getHorizontalMax(groupIndex);
+    }
+
+    getVerticalMax(options) {
+        return this.strategy.getVerticalMax(options);
+    }
+
+    getResizableStep() {
+        return this.strategy.getResizableStep();
+    }
+
+    getOffsetByAllDayPanel(options) {
+        return this.strategy.getOffsetByAllDayPanel(options);
+    }
+}
+
+class PositionHelperBase {
+    constructor(options) {
         this.options = options;
     }
 
-    get key() { return this.options.key; }
     get viewDataProvider() { return this.options.viewDataProvider; }
-    get viewStartDayHour() { return this.options.viewStartDayHour; }
-    get viewEndDayHour() { return this.options.viewEndDayHour; }
-    get cellDuration() { return this.options.cellDuration; }
     get groupedStrategy() { return this.options.groupedStrategy; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
-    get isRtlEnabled() { return this.options.isRtlEnabled; }
-    get startViewDate() { return this.options.startViewDate; }
-    get isVerticalGroupedWorkSpace() { return this.options.isVerticalGroupedWorkSpace; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
     get groupCount() { return this.options.groupCount; }
-    get isVirtualScrolling() { return this.options.isVirtualScrolling; }
     get getDOMMetaData() { return this.options.getDOMMetaDataCallback; }
-
-    getVerticalMax(groupIndex) {
-        return this.groupedStrategy.getVerticalMax(groupIndex);
-    }
 
     getHorizontalMax(groupIndex) {
         const getMaxPosition = (groupIndex) => {
             return getMaxAllowedPosition(
                 groupIndex,
                 this.viewDataProvider,
-                this.isRtlEnabled,
+                this.rtlEnabled,
                 this.getDOMMetaData()
             );
         };
@@ -179,5 +199,64 @@ export class PositionHelper {
         }
 
         return cellWidth;
+    }
+}
+
+class PositionHelperVertical extends PositionHelperBase {
+    getOffsetByAllDayPanel({
+        groupIndex,
+        supportAllDayRow,
+        showAllDayPanel
+    }) {
+        let result = 0;
+
+        if(supportAllDayRow && showAllDayPanel) {
+            const allDayPanelHeight = getAllDayHeight(
+                showAllDayPanel,
+                true,
+                this.getDOMMetaData()
+            );
+            result = allDayPanelHeight * (groupIndex + 1);
+        }
+
+        return result;
+    }
+
+    getVerticalMax(options) {
+        let maxAllowedPosition = getMaxAllowedVerticalPosition({
+            ...options,
+            viewDataProvider: this.viewDataProvider,
+            rtlEnabled: this.rtlEnabled,
+            DOMMetaData: this.getDOMMetaData()
+        });
+
+        maxAllowedPosition += this.getOffsetByAllDayPanel(options);
+
+        return maxAllowedPosition;
+    }
+}
+
+class PositionHelperHorizontal extends PositionHelperBase {
+    getOffsetByAllDayPanel(options) {
+        return 0;
+    }
+
+    getVerticalMax(options) {
+        const {
+            isVirtualScrolling,
+            groupIndex
+        } = options;
+
+        const correctedGroupIndex = isVirtualScrolling
+            ? groupIndex
+            : 0;
+
+        return getMaxAllowedVerticalPosition({
+            ...options,
+            groupIndex: correctedGroupIndex,
+            viewDataProvider: this.viewDataProvider,
+            rtlEnabled: this.rtlEnabled,
+            DOMMetaData: this.getDOMMetaData()
+        });
     }
 }

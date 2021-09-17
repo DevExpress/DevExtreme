@@ -285,10 +285,6 @@ const subscribes = {
         };
     },
 
-    getOffsetByAllDayPanel: function(groupIndex) {
-        return this._workSpace._getOffsetByAllDayPanel(groupIndex);
-    },
-
     getGroupTop: function(groupIndex) {
         return this._workSpace._getGroupTop(groupIndex);
     },
