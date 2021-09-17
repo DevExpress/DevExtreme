@@ -104,10 +104,10 @@ const nativeDOMAdapterStrategy = {
     },
 
     setClass(element, className, isAdd) {
-        if(element.nodeType === 1) {
+        if(element.nodeType === 1 && className) {
             isAdd
-                ? element?.classList.add(className)
-                : element?.classList.remove(className);
+                ? element.classList.add(className)
+                : element.classList.remove(className);
         }
     },
 
