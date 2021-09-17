@@ -531,7 +531,7 @@ describe('Native > Effects', () => {
         onUpdated: actionHandler,
       });
 
-      viewModel.updateSizes = jest.fn();
+      viewModel.updateElementDimensions = jest.fn();
       (viewModel as any).getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 3 } }));
 
       viewModel.updateHandler();
@@ -540,7 +540,7 @@ describe('Native > Effects', () => {
         expect(actionHandler).toHaveBeenCalledTimes(1);
         expect(actionHandler).toHaveBeenLastCalledWith({ fakeEventArg: { value: 3 } });
       }
-      expect(viewModel.updateSizes).toBeCalledTimes(1);
+      expect(viewModel.updateElementDimensions).toBeCalledTimes(1);
     });
 
     it('onReachBottom()', () => {
@@ -657,97 +657,46 @@ describe('Native > Effects', () => {
     });
   });
 
-  it('updateScrollbarSize()', () => {
-    const viewModel = new Scrollable({});
-    viewModel.containerClientWidth = 1;
-    viewModel.containerClientHeight = 2;
+  each([true, false]).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+    it('updateDimensions()', () => {
+      const viewModel = new Scrollable({ useSimulatedScrollbar });
+      viewModel.containerClientWidth = 1;
+      viewModel.containerClientHeight = 2;
 
-    viewModel.contentClientWidth = 3;
-    viewModel.contentClientHeight = 4;
+      viewModel.contentClientWidth = 3;
+      viewModel.contentClientHeight = 4;
 
-    const containerRef = {
-      current: {
-        clientWidth: 10,
-        clientHeight: 20,
-      },
-    } as RefObject;
+      const containerRef = {
+        current: {
+          clientWidth: 10,
+          clientHeight: 20,
+        },
+      } as RefObject;
 
-    const contentRef = {
-      current: {
-        clientWidth: 30,
-        clientHeight: 40,
-      },
-    } as RefObject;
+      const contentRef = {
+        current: {
+          clientWidth: 30,
+          clientHeight: 40,
+        },
+      } as RefObject;
 
-    viewModel.containerRef = containerRef;
-    viewModel.contentRef = contentRef;
+      viewModel.containerRef = containerRef;
+      viewModel.contentRef = contentRef;
 
-    viewModel.updateScrollbarSize();
+      viewModel.updateDimensions();
 
-    expect(viewModel.containerClientWidth).toEqual(10);
-    expect(viewModel.containerClientHeight).toEqual(20);
-    expect(viewModel.contentClientWidth).toEqual(30);
-    expect(viewModel.contentClientHeight).toEqual(40);
-  });
-
-  it('updateScrollbarSize(), contentRef.current: null', () => {
-    const viewModel = new Scrollable({});
-    viewModel.containerClientWidth = 1;
-    viewModel.containerClientHeight = 2;
-
-    viewModel.contentClientWidth = 3;
-    viewModel.contentClientHeight = 4;
-
-    const containerRef = {
-      current: {
-        clientWidth: 10,
-        clientHeight: 20,
-      },
-    } as RefObject;
-
-    const contentRef = {
-      current: null,
-    } as RefObject;
-
-    viewModel.containerRef = containerRef;
-    viewModel.contentRef = contentRef;
-
-    viewModel.updateScrollbarSize();
-
-    expect(viewModel.containerClientWidth).toEqual(10);
-    expect(viewModel.containerClientHeight).toEqual(20);
-    expect(viewModel.contentClientWidth).toEqual(3);
-    expect(viewModel.contentClientHeight).toEqual(4);
-  });
-
-  it('updateScrollbarSize(), container.current: null', () => {
-    const viewModel = new Scrollable({});
-    viewModel.containerClientWidth = 1;
-    viewModel.containerClientHeight = 2;
-
-    viewModel.contentClientWidth = 3;
-    viewModel.contentClientHeight = 4;
-
-    const containerRef = {
-      current: null,
-    } as RefObject;
-
-    const contentRef = {
-      current: {
-        clientWidth: 30,
-        clientHeight: 40,
-      },
-    } as RefObject;
-
-    viewModel.containerRef = containerRef;
-    viewModel.contentRef = contentRef;
-
-    viewModel.updateScrollbarSize();
-
-    expect(viewModel.containerClientWidth).toEqual(1);
-    expect(viewModel.containerClientHeight).toEqual(2);
-    expect(viewModel.contentClientWidth).toEqual(30);
-    expect(viewModel.contentClientHeight).toEqual(40);
+      if (useSimulatedScrollbar) {
+        expect(viewModel.containerClientWidth).toEqual(10);
+        expect(viewModel.containerClientHeight).toEqual(20);
+        expect(viewModel.contentClientWidth).toEqual(30);
+        expect(viewModel.contentClientHeight).toEqual(40);
+      } else {
+        expect(viewModel.containerClientWidth).toEqual(1);
+        expect(viewModel.containerClientHeight).toEqual(2);
+        expect(viewModel.contentClientWidth).toEqual(3);
+        expect(viewModel.contentClientHeight).toEqual(4);
+      }
+    });
   });
 
   it('initEventData()', () => {
