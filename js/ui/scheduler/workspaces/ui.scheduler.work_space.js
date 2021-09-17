@@ -1,11 +1,12 @@
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
+const document = domAdapter.getDocument();
 import eventsEngine from '../../../events/core/events_engine';
 import dateUtils from '../../../core/utils/date';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
-import { getBoundingRect, getElementsFromPoint } from '../../../core/utils/position';
+import { getBoundingRect } from '../../../core/utils/position';
 import messageLocalization from '../../../localization/message';
 import { noop } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
@@ -958,8 +959,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 this.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-                eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-                eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, () => {
+                eventsEngine.off(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+                eventsEngine.on(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, () => {
                     isPointerDown = false;
                     this.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 });
@@ -2543,7 +2544,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _clean() {
-        eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+        eventsEngine.off(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
         this._disposeRenovatedComponents();
 
         super._clean();
@@ -3009,8 +3010,8 @@ const createDragBehaviorConfig = (
         const newY = boundingRect.top + MOUSE_IDENT;
 
         const elements = isWideAppointment ?
-            getElementsFromPoint(newX, newY) :
-            getElementsFromPoint(newX + appointmentWidth / 2, newY);
+            document.elementsFromPoint(newX, newY) :
+            document.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const droppableCell = elements.filter(el => {
             const classList = el.classList;

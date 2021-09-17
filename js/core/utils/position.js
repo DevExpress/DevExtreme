@@ -1,15 +1,10 @@
 import config from '../config';
-import domAdapter from '../dom_adapter';
 import { isWindow } from '../utils/type';
 
 const getDefaultAlignment = (isRtlEnabled) => {
     const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;
 
     return rtlEnabled ? 'right' : 'left';
-};
-
-const getElementsFromPoint = (x, y) => {
-    return domAdapter.getDocument().elementsFromPoint(x, y);
 };
 
 const getBoundingRect = (element) => {
@@ -41,6 +36,5 @@ const getBoundingRect = (element) => {
 
 export {
     getBoundingRect,
-    getDefaultAlignment,
-    getElementsFromPoint
+    getDefaultAlignment
 };
