@@ -4,7 +4,6 @@
 
 // adduse
 $clock-digits-color: null !default;
-$timeview-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.2) !default;
 
 @if $mode == "light" {
   $clock-digits-color: color.change($base-text-color, $alpha: 0.54) !default;

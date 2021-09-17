@@ -14,7 +14,10 @@
 .dx-timeview {
   height: auto;
   width: auto;
-  background-color: $timeview-bg;
+}
+
+.dx-timeview-clock {
+  margin-bottom: 20px;
 }
 
 .dx-timeview-format12 {

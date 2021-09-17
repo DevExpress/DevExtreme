@@ -34,6 +34,10 @@
   }
 }
 
+.dx-datebox-datetime-time-side {
+  background-color: $timeview-bg;
+}
+
 .dx-datebox-wrapper-rollers.dx-datebox-wrapper-time .dx-popup-content {
   margin: $generic-datebox-popup-content-margin;
 }
@@ -74,12 +78,11 @@
 .dx-datebox-wrapper-calendar {
   .dx-popup-content {
     padding: 0;
-    margin: 0 math.div($generic-datebox-overlay-item-margin, 2);
   }
 
   .dx-calendar {
     border: none;
-    margin: $generic-datebox-overlay-item-margin math.div($generic-datebox-overlay-item-margin, 2);
+    margin: $generic-datebox-overlay-item-margin;
   }
 
   .dx-datebox-container-cell {
@@ -94,22 +97,11 @@
   }
 
   .dx-calendar {
-    margin-bottom: math.div($generic-datebox-overlay-item-margin, 2);
+    margin-bottom: $generic-datebox-overlay-item-margin;
   }
 
   .dx-timeview {
-    padding: $generic-datebox-overlay-item-margin math.div($generic-datebox-overlay-item-margin, 2) math.div($generic-datebox-overlay-item-margin, 2);
-    height:
-      $generic-datebox-overlay-item-margin +
-      $generic-calendar-body-height +
-      $generic-calendar-body-top +
-      $generic-calendar-header-bottom-padding +
-      $generic-calendar-cell-font-size;
-
-    @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      padding: 0 math.div($generic-datebox-overlay-item-margin, 2) math.div($generic-datebox-overlay-item-margin, 2);
-      height: auto;
-    }
+    padding: $generic-datebox-overlay-item-margin;
   }
 
   .dx-datebox-container-cell {

@@ -6,48 +6,38 @@
 
 $clock-digits-color: null !default;
 $clock-bg-color: null !default;
-$timeview-bg: null !default;
-
 
 @if $color == "carmine" {
   $clock-digits-color: $base-label-color !default;
-  $timeview-bg: darken($base-bg, 2.7%) !default;
 }
 
 @if $color == "contrast" {
   $clock-digits-color: $base-inverted-text-color !default;
   $clock-bg-color: $base-inverted-bg !default;
-  $timeview-bg: $base-bg !default;
 }
 
 @if $color == "dark" {
   $clock-digits-color: darken($base-text-color, 38.5%) !default;
-  $timeview-bg: lighten($base-bg, 2.5%) !default;
 }
 
 @if $color == "darkmoon" {
   $clock-digits-color: $screen-text-color !default;
-  $timeview-bg: darken($base-bg, 2%) !default;
 }
 
 @if $color == "darkviolet" {
   $clock-digits-color: darken($base-text-color, 38.5%) !default;
-  $timeview-bg: #1f1f2b !default;
 }
 
 @if $color == "greenmist" {
   $clock-digits-color: lighten($base-text-color, 38.5%) !default;
-  $timeview-bg: darken($base-bg, 1%) !default;
 }
 
 @if $color == "light" {
   $clock-digits-color: lighten($base-text-color, 38.5%) !default;
-  $timeview-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.2) !default;
 }
 
 @if $color == "softblue" {
   $clock-digits-color: $base-icon-color !default;
-  $timeview-bg: color.change(darken($base-bg, 4%), $alpha: 0.7) !default;
 }
 
 $clock-bg-color: $base-bg !default; // stylelint-disable-line scss/no-duplicate-dollar-variables

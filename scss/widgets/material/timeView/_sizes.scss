@@ -2,14 +2,9 @@
 
 // adduse
 
-$material-timeview-clock-min-size: null !default;
-$material-timeview-clock-image-min-size: null !default;
 $material-timeview-format12-width: null !default;
 
 $material-timeview-field-min-height: 35px !default;
-$material-timeview-arrow-height-reduce: 0 !default;
-$material-timeview-field-numberbox-reduce: 0 !default;
-$material-timeview-clock-additional-size: 8px !default;
 $material-timeview-time-separator-margin: 5px !default;
 
 @if $size == "default" {

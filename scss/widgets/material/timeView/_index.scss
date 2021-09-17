@@ -15,7 +15,6 @@
 .dx-timeview {
   height: auto;
   width: auto;
-  background-color: $timeview-bg;
 
   .dx-texteditor {
     .dx-texteditor-container {
@@ -51,6 +50,10 @@
   }
 }
 
+.dx-timeview-clock {
+  margin-bottom: 10px;
+}
+
 .dx-timeview-format12 {
   width: $material-timeview-format12-width;
   margin-left: $material-timeview-time-separator-margin;
@@ -72,9 +75,9 @@
 }
 
 .dx-timeview-field .dx-numberbox {
-  width: $material-timeview-format12-width - $material-timeview-field-numberbox-reduce;
+  width: $material-timeview-format12-width;
 
   &.dx-numberbox-spin-touch-friendly {
-    width: 110px - $material-timeview-field-numberbox-reduce;
+    width: 110px;
   }
 }

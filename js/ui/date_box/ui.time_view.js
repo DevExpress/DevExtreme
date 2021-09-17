@@ -72,7 +72,7 @@ const TimeView = Editor.inherit({
         items.push({
             ratio: 0,
             shrink: 0,
-            baseSize: 50,
+            baseSize: 'auto',
             template: this._renderField.bind(this)
         });
 
