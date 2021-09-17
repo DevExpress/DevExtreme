@@ -3,7 +3,7 @@ import { getWindow } from '../../core/utils/window';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
@@ -1200,34 +1200,21 @@ export const virtualScrollingModule = {
                         };
                     },
                     _updateVisiblePageIndex: function(currentPageIndex) {
-                        if(!this._rowsScrollController) {
-                            return;
-                        }
-                        const oldPageIndex = this.pageIndex();
-                        let shouldFireChange = false;
-
-                        if(isDefined(currentPageIndex) && oldPageIndex !== currentPageIndex) {
-                            this._rowsScrollController.setViewportItemIndex(currentPageIndex * this.pageSize());
-                            shouldFireChange = true;
-                        }
-
-                        const loadOptions = this._dataSource?.lastLoadOptions();
-                        let viewPortItemIndex = this._rowsScrollController.getViewportItemIndex();
-                        const bottomLoadIndex = loadOptions ? loadOptions.skip + loadOptions.take : null;
-                        const noItems = !this.items().length;
-                        const viewportOutsideLoadedRange = isDefined(bottomLoadIndex) && (viewPortItemIndex < loadOptions.skip || viewPortItemIndex > bottomLoadIndex);
-
-                        if(!isDefined(currentPageIndex) && (noItems || viewportOutsideLoadedRange)) {
+                        if(isDefined(currentPageIndex)) {
+                            this._silentOption(VISIBLE_PAGE_INDEX, currentPageIndex);
+                            this.pageChanged.fire();
                             return;
                         }
 
-                        if(isDefined(bottomLoadIndex) && bottomLoadIndex < viewPortItemIndex) {
-                            viewPortItemIndex = bottomLoadIndex >= this.pageSize() ? bottomLoadIndex - this.pageSize() : 0;
-                        }
-
+                        const viewPortItemIndex = this._rowsScrollController.getItemIndexByPosition();
                         const newPageIndex = Math.floor(viewPortItemIndex / this.pageSize());
-                        this._silentOption(VISIBLE_PAGE_INDEX, newPageIndex);
-                        shouldFireChange && this.pageChanged.fire();
+
+                        if(this.pageIndex() !== newPageIndex) {
+                            this._silentOption(VISIBLE_PAGE_INDEX, newPageIndex);
+                            this.updateItems({
+                                changeType: 'pageIndex'
+                            });
+                        }
                     },
                     _getChangedLoadParams: function() {
                         const loadedPageParams = this.getLoadPageParams(true);
@@ -1248,6 +1235,10 @@ export const virtualScrollingModule = {
                         const changedParams = this._getChangedLoadParams();
                         let result = false;
 
+                        if(virtualPaging && this._viewportUpdating && changedParams && changedParams.pageIndex > dataSourceAdapter.pageIndex()) {
+                            return result;
+                        }
+
                         if(virtualPaging && this._isLoading) {
                             this._needUpdateViewportAfterLoading = true;
                         }
@@ -1256,9 +1247,12 @@ export const virtualScrollingModule = {
                             dataSourceAdapter.pageIndex(changedParams.pageIndex);
                             dataSourceAdapter.loadPageCount(changedParams.loadPageCount);
                             this._repaintChangesOnly = true;
+                            const viewportChanging = this._viewportChanging;
                             this.load().always(() => {
                                 this._repaintChangesOnly = undefined;
                             }).done(() => {
+                                const isLastPage = this.pageCount() > 0 && this.pageIndex() === this.pageCount() - 1;
+                                (viewportChanging || isLastPage) && this._updateVisiblePageIndex();
                                 if(this._needUpdateViewportAfterLoading) {
                                     this._needUpdateViewportAfterLoading = false;
                                     this.loadViewport(true);
@@ -1276,7 +1270,6 @@ export const virtualScrollingModule = {
                             const loadingItemsStarted = this._loadItems();
 
                             if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
-                                virtualPaging && this._updateVisiblePageIndex();
                                 this.updateItems({
                                     repaintChangesOnly: true
                                 });
@@ -1288,9 +1281,11 @@ export const virtualScrollingModule = {
                         const viewportIsNotFilled = viewportSize > this.items().length;
                         const currentTake = this._loadViewportParams?.take ?? 0;
                         const newTake = this._rowsScrollController?.getViewportParams().take;
+                        this._viewportUpdating = true;
                         (viewportIsNotFilled || currentTake < newTake) && this.loadViewport({
                             checkLoading: true
                         });
+                        this._viewportUpdating = false;
                     },
                     loadIfNeed: function() {
                         if(this.option(NEW_SCROLLING_MODE)) {
@@ -1372,25 +1367,24 @@ export const virtualScrollingModule = {
                             if(!isDefined(pageIndex)) {
                                 return this.option(VISIBLE_PAGE_INDEX) ?? 0;
                             }
-
-                            const callBaseResult = this.callBase.apply(this, arguments);
-                            when(callBaseResult).done(() => {
-                                this._updateVisiblePageIndex(pageIndex);
-                            });
-                            return callBaseResult;
                         }
                         return this.callBase.apply(this, arguments);
                     },
-                    _handleDataChanged: function() {
+                    _handleDataChanged: function(e) {
                         this.callBase.apply(this, arguments);
 
                         if(this.option(NEW_SCROLLING_MODE) && isVirtualPaging(this)) {
-                            this._updateVisiblePageIndex();
+                            !this._repaintChangesOnly && this._updateVisiblePageIndex(this._dataSource.pageIndex());
                         }
                     },
-                    _applyFilter: function() {
-                        this._updateVisiblePageIndex(0);
-                        return this.callBase.apply(this, arguments);
+                    _getPagingOptionValue: function(optionName) {
+                        let result = this.callBase.apply(this, arguments);
+
+                        if(this.option(NEW_SCROLLING_MODE) && isVirtualPaging(this)) {
+                            result = this[optionName]();
+                        }
+
+                        return result;
                     }
                 };
 
