@@ -1528,6 +1528,7 @@ class Scheduler extends Widget {
         const result = extend({
             resources: this.option('resources'),
             loadedResources: this.option('loadedResources'),
+            getResourceDataAccessors: this.getResourceDataAccessors.bind(this),
 
             key: this.key,
             noDataText: this.option('noDataText'),
