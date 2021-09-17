@@ -185,10 +185,6 @@ class HorizontalGroupedStrategy {
         return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
     }
 
-    _getGroupTop() {
-        return 0;
-    }
-
     // ---------------
     // We do not need these nethods in renovation
     // ---------------
