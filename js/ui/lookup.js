@@ -130,9 +130,9 @@ const Lookup = DropDownList.inherit({
             dropDownOptions: {
                 showTitle: true,
 
-                width: function() { return getWidth($(window)) * 0.8; },
+                width: function() { return getWidth(window) * 0.8; },
 
-                height: function() { return getHeight($(window)) * 0.8; },
+                height: function() { return getHeight(window) * 0.8; },
 
                 shading: true,
 
@@ -270,7 +270,7 @@ const Lookup = DropDownList.inherit({
                 device: { platform: 'ios', tablet: true },
                 options: {
                     dropDownOptions: {
-                        width: function() { return Math.min(getWidth($(window)), getHeight($(window))) * 0.4; },
+                        width: function() { return Math.min(getWidth(window), getHeight(window)) * 0.4; },
                         height: 'auto'
                     },
 
@@ -502,11 +502,11 @@ const Lookup = DropDownList.inherit({
 
         const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
         const selectedIndex = this._listItemElements().index(selectedListItem);
-        const differenceOfHeights = (getHeight(selectedListItem) - getHeight($(this.element()))) / 2;
+        const differenceOfHeights = (getHeight(selectedListItem) - getHeight(this.element())) / 2;
         const lookupOffset = $(this._list.element()).offset().top;
         const dropDownHeightOption = this.option('dropDownOptions.height');
         const popupHeight = (typeof dropDownHeightOption === 'function') ? dropDownHeightOption() : dropDownHeightOption;
-        const windowHeight = getHeight($(window));
+        const windowHeight = getHeight(window);
 
         let offsetTop = 0;
 
@@ -541,11 +541,11 @@ const Lookup = DropDownList.inherit({
             }
         }
 
-        const offsetBottom = popupHeight - offsetTop - getHeight($(this.element()));
+        const offsetBottom = popupHeight - offsetTop - getHeight(this.element());
 
         if(windowHeight - lookupOffset < offsetBottom) {
             this._list.scrollTo(this._list.scrollTop() + differenceOfHeights - offsetBottom);
-            offsetTop = popupHeight - getHeight($(this.element())) - MATERIAL_LOOKUP_LIST_PADDING;
+            offsetTop = popupHeight - getHeight(this.element()) - MATERIAL_LOOKUP_LIST_PADDING;
         }
 
         return offsetTop;
@@ -595,7 +595,7 @@ const Lookup = DropDownList.inherit({
             listHeight += MATERIAL_LOOKUP_LIST_PADDING;
         } else if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
             listItems.each((_, item) => {
-                listHeight += getOuterHeight($(item));
+                listHeight += getOuterHeight(item);
             });
         } else {
             if(selectedIndex <= 1) {
@@ -607,7 +607,7 @@ const Lookup = DropDownList.inherit({
             }
 
             requireListItems.each((_, item) => {
-                listHeight += getOuterHeight($(item));
+                listHeight += getOuterHeight(item);
             });
         }
 

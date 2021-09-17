@@ -423,7 +423,7 @@ export default class TableResizingModule extends BaseModule {
         const isCurrentColumnWidthEnough = currentLineNewSize >= this._minColumnWidth;
         const $lineElements = this._getLineElements(frame.$table, index);
         const $nextLineElements = this._getLineElements(frame.$table, index + 1);
-        const realWidthDiff = getOuterWidth($($lineElements.eq(0))) - currentLineNewSize;
+        const realWidthDiff = getOuterWidth($lineElements.eq(0)) - currentLineNewSize;
 
         if(isCurrentColumnWidthEnough) {
             if(this._isNextColumnWidthEnough(nextColumnNewSize, $determinantElements.eq(index + 1), eventOffset)) {
@@ -438,9 +438,9 @@ export default class TableResizingModule extends BaseModule {
                 const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET || (!this._nextLineSize && isTableWidthChanged);
 
                 if(shouldRevertNewValue) {
-                    this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, getOuterWidth($($lineElements.eq(0))));
+                    this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, getOuterWidth($lineElements.eq(0)));
 
-                    nextColumnNewSize += currentLineNewSize - getOuterWidth($($lineElements.eq(0)));
+                    nextColumnNewSize += currentLineNewSize - getOuterWidth($lineElements.eq(0));
 
                     if(this._shouldSetNextColumnWidth(nextColumnNewSize)) {
                         this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
@@ -502,7 +502,7 @@ export default class TableResizingModule extends BaseModule {
         if(options.direction === 'vertical') {
             result.boundary = options.frame.$table;
             result.boundOffset = {
-                bottom: hasWindow() ? -getHeight($(getWindow())) : -getOuterHeight($(this._quillContainer)),
+                bottom: hasWindow() ? -getHeight(getWindow()) : -getOuterHeight(this._quillContainer),
                 top: 0,
                 left: 0,
                 right: 0
@@ -558,7 +558,7 @@ export default class TableResizingModule extends BaseModule {
         const determinantElements = this._getTableDeterminantElements($table);
 
         each(determinantElements, (index, element) => {
-            const columnWidth = getOuterWidth($(element));
+            const columnWidth = getOuterWidth(element);
             const $lineElements = this._getLineElements($table, index);
             this._setLineElementsAttrValue($lineElements, 'width', Math.max(columnWidth, this._minColumnWidth));
         });

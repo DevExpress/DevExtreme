@@ -338,7 +338,7 @@ export const columnHeadersModule = {
                     const $headerRows = $tableElement && $tableElement.find('.' + HEADER_ROW_CLASS);
 
                     return $headerRows && $headerRows.toArray().reduce(function(sum, headerRow) {
-                        return sum + getHeight($(headerRow));
+                        return sum + getHeight(headerRow);
                     }, 0) || 0;
                 },
 

@@ -646,7 +646,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderFullscreenWidthClass: function() {
-        this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, getOuterWidth(this.$overlayContent()) === getWidth($(window)));
+        this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, getOuterWidth(this.$overlayContent()) === getWidth(window));
     },
 
     refreshPosition: function() {

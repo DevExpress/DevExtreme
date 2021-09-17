@@ -446,8 +446,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._dataController.pageIndex(pageIndex + pageStep);
                 eventArgs.originalEvent.preventDefault();
             }
-        } else if(scrollable && getHeight($(scrollable.container())) < getHeight(scrollable.$content())) {
-            this._scrollBy(0, getHeight($(scrollable.container())) * pageStep);
+        } else if(scrollable && getHeight(scrollable.container()) < getHeight(scrollable.$content())) {
+            this._scrollBy(0, getHeight(scrollable.container()) * pageStep);
             eventArgs.originalEvent.preventDefault();
         }
     },
@@ -525,7 +525,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _getMaxHorizontalOffset: function() {
         const scrollable = this.component.getScrollable();
         const rowsView = this.getView('rowsView');
-        const offset = scrollable ? scrollable.scrollWidth() - getWidth($(rowsView.element())) : 0;
+        const offset = scrollable ? scrollable.scrollWidth() - getWidth(rowsView.element()) : 0;
         return offset;
     },
     _isColumnRendered: function(columnIndex) {

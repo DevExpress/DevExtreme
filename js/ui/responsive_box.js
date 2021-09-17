@@ -281,7 +281,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _screenWidth: function() {
-        return hasWindow() ? getWidth($(window)) : HD_SCREEN_WIDTH;
+        return hasWindow() ? getWidth(window) : HD_SCREEN_WIDTH;
     },
 
     _createEmptyCell: function() {

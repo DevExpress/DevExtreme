@@ -74,7 +74,7 @@ export const initMobileViewport = function(options) {
         if(!isPhoneGap) {
             // NOTE: fix app size after device rotation in Safari when keyboard was shown
             resizeCallbacks.add(function() {
-                const windowWidth = getWidth($(window));
+                const windowWidth = getWidth(window);
                 setWidth($('body'), windowWidth);
             });
         }

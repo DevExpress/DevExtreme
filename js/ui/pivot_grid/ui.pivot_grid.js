@@ -1396,7 +1396,7 @@ const PivotGrid = Widget.inherit({
             rowCount: resultHeights.length,
             columnCount: resultWidths.length,
             viewportWidth: groupWidth,
-            viewportHeight: hasHeight ? groupHeight : getOuterHeight($(window))
+            viewportHeight: hasHeight ? groupHeight : getOuterHeight(window)
         });
 
         this._dataArea.setVirtualContentParams({

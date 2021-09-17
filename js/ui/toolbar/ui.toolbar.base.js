@@ -259,7 +259,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         let elemsAtSectionWidth = 0;
 
         $section.children().not(TOOLBAR_LABEL_SELECTOR).each(function() {
-            elemsAtSectionWidth += getOuterWidth($(this));
+            elemsAtSectionWidth += getOuterWidth(this);
         });
 
         const freeSpace = elementWidth - elemsAtSectionWidth;
@@ -347,7 +347,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         let width = 0;
 
         labels.forEach(function(label, index) {
-            width += getOuterWidth($(label));
+            width += getOuterWidth(label);
         });
 
         return width;
@@ -357,7 +357,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         let padding = 0;
 
         labels.forEach(function(label, index) {
-            padding += (getOuterWidth($(label)) - getWidth($(label)));
+            padding += (getOuterWidth(label) - getWidth(label));
         });
 
         return padding;

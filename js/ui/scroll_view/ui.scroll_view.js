@@ -299,7 +299,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     * @hidden
     */
     isFull: function() {
-        return getHeight($(this.content())) > getHeight($(this.container()));
+        return getHeight(this.content()) > getHeight(this.container());
     },
 
     refresh: function() {

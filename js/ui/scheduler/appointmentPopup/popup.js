@@ -221,7 +221,7 @@ export class AppointmentPopup {
     _tryGetWindowWidth() {
         if(hasWindow()) {
             const window = getWindow();
-            return getWidth($(window));
+            return getWidth(window);
         }
     }
 

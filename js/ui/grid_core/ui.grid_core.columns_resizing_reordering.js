@@ -747,7 +747,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             const scrollable = that.component.getScrollable();
 
             if(scrollable && that._isRtlParentStyle()) {
-                that._scrollRight = getWidth(scrollable.$content()) - getWidth($(scrollable.container())) - scrollable.scrollLeft();
+                that._scrollRight = getWidth(scrollable.$content()) - getWidth(scrollable.container()) - scrollable.scrollLeft();
             }
 
             e.preventDefault();
@@ -902,7 +902,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
 
                 const scrollable = this.component.getScrollable();
                 if(scrollable && isRtlParentStyle) {
-                    const left = getWidth(scrollable.$content()) - getWidth($(scrollable.container())) - this._scrollRight;
+                    const left = getWidth(scrollable.$content()) - getWidth(scrollable.container()) - this._scrollRight;
                     scrollable.scrollTo({ left: left });
                 }
             }

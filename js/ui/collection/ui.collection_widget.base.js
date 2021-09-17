@@ -1045,7 +1045,7 @@ const CollectionWidget = Widget.inherit({
 
         if(items) {
             each(items, function(_, item) {
-                result += getOuterWidth($(item), includeMargin || false);
+                result += getOuterWidth(item, includeMargin || false);
             });
         }
 

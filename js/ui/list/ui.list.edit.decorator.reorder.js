@@ -52,7 +52,7 @@ registerDecorator(
                 .clone()
                 .addClass(REORDERING_ITEM_GHOST_CLASS)
                 .addClass(STATE_HOVER_CLASS);
-            setWidth(result, getWidth($(e.itemElement)));
+            setWidth(result, getWidth(e.itemElement));
             return result;
         },
 

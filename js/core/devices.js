@@ -325,7 +325,7 @@ class Devices {
     }
 
     _recalculateOrientation() {
-        const windowWidth = getWidth($(this._window));
+        const windowWidth = getWidth(this._window);
 
         if(this._currentWidth === windowWidth) {
             return;

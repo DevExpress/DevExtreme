@@ -216,7 +216,7 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                     $item = $sourceItem.clone();
                     if(target === 'drag') {
                         each($sourceItem, function(index, sourceItem) {
-                            $item.eq(index).css('width', parseInt(getOuterWidth($(sourceItem)), 10) + IE_FIELD_WIDTH_CORRECTION);
+                            $item.eq(index).css('width', parseInt(getOuterWidth(sourceItem), 10) + IE_FIELD_WIDTH_CORRECTION);
                         });
                     }
                 } else {

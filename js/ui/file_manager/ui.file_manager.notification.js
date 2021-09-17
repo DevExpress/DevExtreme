@@ -164,7 +164,7 @@ export default class FileManagerNotificationControl extends Widget {
         if(!hasWindow()) {
             return false;
         }
-        return getWidth($(window)) <= ADAPTIVE_STATE_SCREEN_WIDTH;
+        return getWidth(window) <= ADAPTIVE_STATE_SCREEN_WIDTH;
     }
 
     _dimensionChanged(dimension) {

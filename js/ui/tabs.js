@@ -240,7 +240,7 @@ const Tabs = CollectionWidget.inherit({
         const itemsWidth = [];
 
         each($visibleItems, (_, item) => {
-            itemsWidth.push(getOuterWidth($(item), true));
+            itemsWidth.push(getOuterWidth(item, true));
         });
 
         const maxTabWidth = Math.max.apply(null, itemsWidth);

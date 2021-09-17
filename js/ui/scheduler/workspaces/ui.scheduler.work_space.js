@@ -3054,7 +3054,7 @@ const createDragBehaviorConfig = (
 
         const MOUSE_IDENT = 10;
 
-        const appointmentWidth = getWidth($(state.dragElement));
+        const appointmentWidth = getWidth(state.dragElement);
         const cellWidth = getCellWidth();
         const isWideAppointment = appointmentWidth > cellWidth;
 

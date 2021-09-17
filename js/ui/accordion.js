@@ -354,7 +354,7 @@ const Accordion = CollectionWidget.inherit({
         let itemsHeight = 0;
 
         iteratorUtils.each($titles, function(_, title) {
-            itemsHeight += getOuterHeight($(title));
+            itemsHeight += getOuterHeight(title);
         });
 
         return getHeight(this.$element()) - itemsHeight;

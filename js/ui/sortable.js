@@ -783,9 +783,9 @@ const Sortable = Draggable.inherit({
                 position = $(prevVisibleItemElement).offset();
 
                 if(isVerticalOrientation) {
-                    position.top += getOuterHeight($(prevVisibleItemElement), true);
+                    position.top += getOuterHeight(prevVisibleItemElement, true);
                 } else if(!rtlEnabled) {
-                    position.left += getOuterWidth($(prevVisibleItemElement), true);
+                    position.left += getOuterWidth(prevVisibleItemElement, true);
                 }
             }
         }

@@ -112,7 +112,7 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     _isSmallScreen() {
-        return getWidth($(window)) <= ADAPTIVE_STATE_SCREEN_WIDTH;
+        return getWidth(window) <= ADAPTIVE_STATE_SCREEN_WIDTH;
     }
 
     _isDrawerOpened() {

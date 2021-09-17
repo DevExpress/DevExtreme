@@ -645,7 +645,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 this._updateContentPosition();
 
-                const viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight($(getWindow()));
+                const viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
                 const dataController = this._dataController;
                 dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 

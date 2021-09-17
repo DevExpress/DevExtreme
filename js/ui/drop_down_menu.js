@@ -322,7 +322,7 @@ const DropDownMenu = Widget.inherit({
 
         this._setListDataSource();
 
-        const listMaxHeight = getHeight($(window)) * 0.5;
+        const listMaxHeight = getHeight(window) * 0.5;
         if(getHeight($content) > listMaxHeight) {
             setHeight($content, listMaxHeight);
         }

@@ -101,7 +101,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _isSmallScreen: function() {
-        return getWidth($(window)) <= SHRINK_VIEW_SCREEN_WIDTH;
+        return getWidth(window) <= SHRINK_VIEW_SCREEN_WIDTH;
     },
 
     _isShrinkView: function() {

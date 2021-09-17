@@ -88,7 +88,7 @@ if(Quill) {
 
         get maxHeight() {
             const window = getWindow();
-            const windowHeight = window && getHeight($(window)) || 0;
+            const windowHeight = window && getHeight(window) || 0;
             return Math.max(MIN_HEIGHT, windowHeight * 0.5);
         }
 
