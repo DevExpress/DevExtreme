@@ -546,7 +546,7 @@ export const createExpressions = (resources = []) => {
     return result;
 };
 
-const _mapResourceData = (resource, data) => {
+const getTransformedResourceData = (resource, data) => {
     const valueGetter = compileGetter(getValueExpr(resource));
     const displayGetter = compileGetter(getDisplayExpr(resource));
 
@@ -584,7 +584,7 @@ export const loadResources = (groups, resources, resourceLoaderMap) => {
 
             dataSourcePromise
                 .done(data => {
-                    const items = _mapResourceData(resource, data);
+                    const items = getTransformedResourceData(resource, data);
 
                     deferred.resolve({ name, items, data });
                 })

@@ -167,6 +167,7 @@ class Scheduler extends Widget {
 
             resources: [],
             loadedResources: [],
+            resourceLoaderMap: new Map(),
 
             dataSource: null,
 
@@ -400,22 +401,11 @@ class Scheduler extends Widget {
         this.postponedOperations.add('_reloadDataSource', this._reloadDataSource.bind(this), promise);
     }
 
-    get resourceLoaderMap() {
-        if(!this._resourceLoaderMap) {
-            this._resourceLoaderMap = new Map();
-        }
-        return this._resourceLoaderMap;
-    }
-
-    set resourceLoaderMap(value) {
-        this._resourceLoaderMap = value;
-    }
-
     _postponeResourceLoading() {
         const whenLoaded = this.postponedOperations.add('loadResources', () => {
             const groups = this._getCurrentViewOption('groups');
 
-            return loadResources(groups, this.option('resources'), this.resourceLoaderMap);
+            return loadResources(groups, this.option('resources'), this.option('resourceLoaderMap'));
         });
 
         const resolveCallbacks = new Deferred();
@@ -699,6 +689,7 @@ class Scheduler extends Widget {
                 this._header.option('items', value);
                 break;
             case 'loadedResources':
+            case 'resourceLoaderMap':
                 break;
             default:
                 super._optionChanged(args);
@@ -1240,13 +1231,13 @@ class Scheduler extends Widget {
         this._appointmentForm = this.createAppointmentForm();
         this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
 
-        if(this._isLoaded() || this._isDataSourceLoading()) { // TODO
+        if(this._isDataSourceLoading()) {
             this._initMarkupCore(this.option('loadedResources'));
             this._dataSourceChangedHandler(this._dataSource.items());
             this._fireContentReadyAction();
         } else {
             const groups = this._getCurrentViewOption('groups');
-            loadResources(groups, this.option('resources'), this.resourceLoaderMap).done((resources) => {
+            loadResources(groups, this.option('resources'), this.option('resourceLoaderMap')).done((resources) => {
                 this.option('loadedResources', resources);
                 this._initMarkupCore(resources);
                 this._reloadDataSource();
@@ -1358,10 +1349,6 @@ class Scheduler extends Widget {
         });
         this._waitAsyncTemplate(() => this._workSpaceRecalculation?.resolve());
         this._filterAppointmentsByDate();
-    }
-
-    _isLoaded() {
-        return this._isDataSourceLoaded();
     }
 
     _isDataSourceLoaded() {
@@ -2208,7 +2195,7 @@ class Scheduler extends Widget {
                 resources: this.option('resources'),
                 dataAccessors: createExpressions(this.option('resources')),
                 loadedResources: this.option('loadedResources'),
-                resourceLoaderMap: this.resourceLoaderMap
+                resourceLoaderMap: this.option('resourceLoaderMap')
             };
 
             return getAppointmentColor(resourceConfig, appointmentConfig);
