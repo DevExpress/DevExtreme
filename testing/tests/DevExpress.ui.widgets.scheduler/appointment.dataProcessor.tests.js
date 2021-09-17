@@ -1146,8 +1146,10 @@ module('Client side after filtering', () => {
                     recurrenceExceptionExpr: 'RecException'
                 },
                 resources: {
-                    ownerId: { getter: compileGetter('ownerId') },
-                    roomId: { getter: compileGetter('roomId') }
+                    getter: {
+                        ownerId: compileGetter('ownerId'),
+                        roomId: compileGetter('roomId')
+                    }
                 }
             })
         });
