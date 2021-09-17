@@ -142,7 +142,7 @@ type ExternalFormat = any;
 
 /**
  * @docid
- * @type Object|PredefinedFormat|string|function
+ * @type Object|{docEnums.PredefinedFormat}|string|function
  * @type_function_param1 value:number|date
  * @type_function_return string
  * @default undefined

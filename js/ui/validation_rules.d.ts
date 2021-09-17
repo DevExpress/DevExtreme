@@ -41,7 +41,7 @@ export interface AsyncRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'async';
@@ -99,7 +99,7 @@ export interface CompareRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'compare';
@@ -132,7 +132,7 @@ export interface CustomRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'custom';
@@ -172,7 +172,7 @@ export interface EmailRule {
     message?: string;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'email';
@@ -199,7 +199,7 @@ export interface NumericRule {
     message?: string;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'numeric';
@@ -232,7 +232,7 @@ export interface PatternRule {
     pattern?: RegExp | string;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'pattern';
@@ -275,7 +275,7 @@ export interface RangeRule {
     reevaluate?: boolean;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'range';
@@ -302,7 +302,7 @@ export interface RequiredRule {
     trim?: boolean;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'required';
@@ -345,7 +345,7 @@ export interface StringLengthRule {
     trim?: boolean;
     /**
      * @docid
-     * @type ValidationRuleType
+     * @type {docEnums.ValidationRuleType}
      * @public
      */
     type: 'stringLength';

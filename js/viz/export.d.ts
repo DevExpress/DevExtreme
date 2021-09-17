@@ -46,7 +46,7 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
  * @param1 widgetInstances:Array<Array<DOMComponent>>
  * @param2 options:object
  * @param2_field1 fileName:string
- * @param2_field2 format:ExportFormat
+ * @param2_field2 format:{docEnums.ExportFormat}
  * @param2_field3 backgroundColor:string
  * @param2_field4 margin:number
  * @param2_field5 gridLayout:boolean

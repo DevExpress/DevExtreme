@@ -57,7 +57,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     cols?: Array<{
       /**
        * @docid
-       * @type number | Mode
        * @default 0
        */
       baseSize?: number | Mode;

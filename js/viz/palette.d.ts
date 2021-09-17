@@ -29,7 +29,6 @@ export function currentPalette(paletteName: string): void;
 /**
  * @docid viz.generateColors
  * @publicName generateColors(palette, count, options)
- * @param1 palette:PaletteType|Array<string>
  * @param2 count:number
  * @param3 options:object
  * @param3_field1 paletteExtensionMode:PaletteExtensionModeType
