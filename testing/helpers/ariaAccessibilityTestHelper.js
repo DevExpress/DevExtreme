@@ -35,14 +35,10 @@ class ariaAccessibilityTestHelper {
         }
     }
 
-    _getAttributeNames(element) {
-        return element.getAttributeNames();
-    }
-
     checkAttributes($target, expectedAttributes, prefix) {
         const element = $target.get(0);
         const skipAttributes = ['class', 'style', 'onclick'];
-        const attributeNames = this._getAttributeNames(element).filter(name => skipAttributes.indexOf(name) === -1).map(name => name.toLowerCase());
+        const attributeNames = element.getAttributeNames().filter(name => skipAttributes.indexOf(name) === -1).map(name => name.toLowerCase());
 
         assert.strictEqual(attributeNames.length, Object.keys(expectedAttributes).length, `${prefix || ''}.attributes.count`);
         attributeNames.forEach((attributeName) => {
