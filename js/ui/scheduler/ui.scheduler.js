@@ -903,7 +903,7 @@ class Scheduler extends Widget {
 
         this._subscribes = subscribes;
 
-        this.agendaResourceProcessor = new AgendaResourceProcessor();
+        this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
     }
 
     get modelProvider() { return getModelProvider(this.key); }
