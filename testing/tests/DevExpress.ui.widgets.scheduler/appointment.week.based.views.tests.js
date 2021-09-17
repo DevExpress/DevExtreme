@@ -23,7 +23,8 @@ import 'generic_light.css!';
 
 const {
     module,
-    test
+    test,
+    skip
 } = QUnit;
 
 QUnit.testStart(() => initTestMarkup());
@@ -451,7 +452,7 @@ module('Integration: Appointment Day, Week views', {
                 }
             });
 
-            test('Appointment width should depend on cell width', function(assert) {
+            skip('Appointment width should depend on cell width', function(assert) {
                 const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 18),
                     maxAppointmentsPerCell: 'auto'

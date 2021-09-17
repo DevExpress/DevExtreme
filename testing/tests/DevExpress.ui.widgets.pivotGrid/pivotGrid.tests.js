@@ -1068,7 +1068,7 @@ QUnit.module('dxPivotGrid', {
         pivotGrid.getFieldChooserPopup().show();
         this.clock.tick(500);
 
-        const $fieldChooserPopup = $('.dx-fieldchooser-popup');
+        const $fieldChooserPopup = $('.dx-fieldchooser-popup').dxPopup('instance').$wrapper();
         assert.ok($fieldChooserPopup.is(':visible'), 'fieldChooser popup is visible');
 
         const $handle = $fieldChooserPopup.find('.dx-resizable-handle-corner-bottom-right');

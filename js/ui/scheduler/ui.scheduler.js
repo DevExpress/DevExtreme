@@ -1663,7 +1663,9 @@ class Scheduler extends Widget {
     }
 
     getWorkSpaceDateTableOffset() {
-        return !this.option('crossScrollingEnabled') || this.option('rtlEnabled') ? this._workSpace.getWorkSpaceLeftOffset() : 0;
+        return !this.option('crossScrollingEnabled') || this.option('rtlEnabled')
+            ? this._workSpace.getWorkSpaceLeftOffset()
+            : 0;
     }
 
     getWorkSpace() {

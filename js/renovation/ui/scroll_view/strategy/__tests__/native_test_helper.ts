@@ -102,7 +102,7 @@ class ScrollableTestHelper {
       { width: containerSize, height: containerSize },
       { width: contentSize, height: contentHeight });
 
-    this.viewModel.updateSizes();
+    this.viewModel.updateElementDimensions();
   }
 
   // eslint-disable-next-line class-methods-use-this
