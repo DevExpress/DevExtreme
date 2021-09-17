@@ -2221,7 +2221,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellDuration: this.getCellDuration(),
             groupedStrategy: this._groupedStrategy,
             isGroupedByDate: this.isGroupedByDate(),
-            isRtlEnabled: this.option('rtlEnabled'),
+            rtlEnabled: this.option('rtlEnabled'),
             startViewDate: this.getStartViewDate(),
             isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
             groupCount: this._getGroupCount(),

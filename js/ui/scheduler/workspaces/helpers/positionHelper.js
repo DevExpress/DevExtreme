@@ -18,7 +18,7 @@ const getCellSize = (DOMMetaData) => {
     };
 };
 
-const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, isRtlEnabled, DOMMetaData) => {
+const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, rtlEnabled, DOMMetaData) => {
     const { dateTableCellsMeta } = DOMMetaData;
     const firstRow = dateTableCellsMeta[0];
 
@@ -29,7 +29,7 @@ const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, isRtlEnab
 
     if(!cellPosition) return 0;
 
-    return !isRtlEnabled
+    return !rtlEnabled
         ? cellPosition.left + cellPosition.width
         : cellPosition.left;
 };
@@ -63,10 +63,10 @@ export const getAllDayHeight = (showAllDayPanel, isVerticalGrouping, DOMMetaData
         : 0;
 };
 
-export const getMaxAllowedPosition = (groupIndex, viewDataProvider, isRtlEnabled, DOMMetaData) => {
+export const getMaxAllowedPosition = (groupIndex, viewDataProvider, rtlEnabled, DOMMetaData) => {
     const validGroupIndex = groupIndex || 0;
 
-    return getMaxAllowedHorizontalPosition(validGroupIndex, viewDataProvider, isRtlEnabled, DOMMetaData);
+    return getMaxAllowedHorizontalPosition(validGroupIndex, viewDataProvider, rtlEnabled, DOMMetaData);
 };
 
 export const getMaxAllowedVerticalPosition = ({
@@ -226,7 +226,7 @@ class PositionHelperVertical extends PositionHelperBase {
         let maxAllowedPosition = getMaxAllowedVerticalPosition({
             ...options,
             viewDataProvider: this.viewDataProvider,
-            isRtlEnabled: this.rtlEnabled,
+            rtlEnabled: this.rtlEnabled,
             DOMMetaData: this.getDOMMetaData()
         });
 
@@ -255,7 +255,7 @@ class PositionHelperHorizontal extends PositionHelperBase {
             ...options,
             groupIndex: correctedGroupIndex,
             viewDataProvider: this.viewDataProvider,
-            isRtlEnabled: this.rtlEnabled,
+            rtlEnabled: this.rtlEnabled,
             DOMMetaData: this.getDOMMetaData()
         });
     }
