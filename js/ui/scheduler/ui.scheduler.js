@@ -667,6 +667,8 @@ class Scheduler extends Widget {
             case 'recurrenceExceptionExpr':
             case 'disabledExpr':
                 this._updateExpression(name, value);
+                getAppointmentDataProvider(this.key).updateDataAccessors(this._dataAccessors);
+
                 this._initAppointmentTemplate();
                 this.repaint();
                 break;

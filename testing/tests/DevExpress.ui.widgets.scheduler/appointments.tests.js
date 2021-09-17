@@ -21,6 +21,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { Deferred } from 'core/utils/deferred';
+import { createExpressions } from 'ui/scheduler/resources/utils';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -136,6 +137,7 @@ const createInstance = (options, subscribesConfig) => {
         getResources: () => [],
         getAgendaResourceProcessor: () => ({}),
         getAppointmentColor: () => new Deferred(),
+        getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');
 
     const workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({

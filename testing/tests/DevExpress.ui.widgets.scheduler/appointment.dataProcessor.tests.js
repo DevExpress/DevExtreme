@@ -1137,10 +1137,6 @@ module('Client side after filtering', () => {
                     allDay: compileGetter('AllDay'),
                     startDateTimeZone: compileGetter('StartDateTimeZone'),
                     endDateTimeZone: compileGetter('EndDateTimeZone'),
-                    resources: {
-                        ownerId: compileGetter('ownerId'),
-                        roomId: compileGetter('roomId')
-                    }
                 },
                 expr: {
                     startDateExpr: 'StartDate',
@@ -1148,6 +1144,10 @@ module('Client side after filtering', () => {
                     allDayExpr: 'AllDay',
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
+                },
+                resources: {
+                    ownerId: { getter: compileGetter('ownerId') },
+                    roomId: { getter: compileGetter('roomId') }
                 }
             })
         });

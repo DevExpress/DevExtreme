@@ -7,6 +7,7 @@ import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
 import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { createExpressions } from 'ui/scheduler/resources/utils';
 
 const { module, test, testStart } = QUnit;
 
@@ -76,7 +77,8 @@ const createInstance = (options) => {
         observer,
         ...options,
         getResources: () => [],
-        getAppointmentColor: () => new Deferred()
+        getAppointmentColor: () => new Deferred(),
+        getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');
 };
 

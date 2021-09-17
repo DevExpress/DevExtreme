@@ -558,7 +558,7 @@ export class AppointmentFilterBaseStrategy {
 
     _filterAppointmentByResources(appointment, resources) {
         const checkAppointmentResourceValues = (resourceName, resourceIndex) => {
-            const resourceGetter = this.dataAccessors.resources.getter[resourceName];
+            const resourceGetter = this.dataAccessors.resources[resourceName].getter;
             let resource;
 
             if(isFunction(resourceGetter)) {
