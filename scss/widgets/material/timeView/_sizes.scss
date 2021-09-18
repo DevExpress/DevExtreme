@@ -2,15 +2,6 @@
 
 // adduse
 
-$material-timeview-format12-width: null !default;
-
 $material-timeview-field-min-height: 35px !default;
 $material-timeview-time-separator-margin: 5px !default;
-
-@if $size == "default" {
-  $material-timeview-format12-width: 74px !default;
-}
-
-@else if $size == "compact" {
-  $material-timeview-format12-width: 63px !default;
-}
+$material-timeview-format12-width: 64px !default;

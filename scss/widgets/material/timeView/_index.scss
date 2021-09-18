@@ -20,9 +20,11 @@
     .dx-texteditor-container {
       .dx-texteditor-input {
         padding-right: 0;
+        padding-left: 12px;
 
         .dx-rtl & {
           padding-left: 0;
+          padding-right: 12px;
         }
       }
 
@@ -32,18 +34,6 @@
         &.dx-rtl,
         .dx-rtl & {
           margin-left: 0;
-        }
-      }
-    }
-
-    &.dx-editor-filled,
-    &.dx-editor-outlined {
-      .dx-texteditor-container {
-        .dx-texteditor-input {
-          @at-root #{selector-append(".dx-rtl", &)},
-          .dx-rtl & {
-            padding-right: $material-filled-texteditor-input-horizontal-padding;
-          }
         }
       }
     }
