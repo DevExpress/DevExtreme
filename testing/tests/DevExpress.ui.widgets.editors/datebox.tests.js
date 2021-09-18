@@ -4312,7 +4312,7 @@ QUnit.module('width of datebox with calendar', {
             }).dxDateBox('instance');
 
             const $calendar = $(`.${CALENDAR_CLASS}`);
-            const paddingsWidth = parseInt($calendar.css('margin-left')) * 4;
+            const paddingsWidth = parseInt($calendar.css('margin-left')) * 2;
             const calendarWidth = $calendar.outerWidth() + paddingsWidth;
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
@@ -4326,7 +4326,7 @@ QUnit.module('width of datebox with calendar', {
             }).dxDateBox('instance');
 
             const $calendar = $(`.${CALENDAR_CLASS}`);
-            const paddingsWidth = parseInt($calendar.css('margin-left')) * 4;
+            const paddingsWidth = parseInt($calendar.css('margin-left')) * 2;
             const calendarWidth = $calendar.outerWidth() + paddingsWidth;
 
             dateBox.option('width', 153);
@@ -4373,7 +4373,7 @@ QUnit.module('width of datebox with calendar', {
             });
 
             const $calendar = $(`.${CALENDAR_CLASS}`);
-            const paddingsWidth = parseInt($calendar.css('margin-left')) * 4;
+            const paddingsWidth = parseInt($calendar.css('margin-left')) * 2;
             const calendarWidth = $calendar.outerWidth() + paddingsWidth;
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
@@ -4436,7 +4436,7 @@ QUnit.module('width of datebox with calendar', {
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
             const $calendar = $(`.${CALENDAR_CLASS}`);
-            const paddingsWidth = parseInt($calendar.css('margin-left')) * 4;
+            const paddingsWidth = parseInt($calendar.css('margin-left')) * 2;
             const calendarWidth = $calendar.outerWidth() + paddingsWidth;
 
             assert.strictEqual($overlayContent.width(), calendarWidth, 'width is correct');
