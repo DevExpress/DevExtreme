@@ -1951,65 +1951,6 @@ QUnit.module('datebox and calendar integration', () => {
         assert.equal(stub.callCount, 2, '\'opened\' optionChanged event has been raised');
     });
 
-    QUnit.test('check popup margins', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            opened: true
-        });
-
-        const instance = $element.dxDateBox('instance');
-        const $content = $(instance.content());
-
-        const leftPopupMargin = parseInt($content.css('marginLeft'));
-        const leftCalendarMargin = parseInt($content.find('.dx-calendar').css('marginLeft'));
-        const rightPopupMargin = parseInt($content.css('marginRight'));
-        const rightCalendarMargin = parseInt($content.find('.dx-timeview').css('marginRight'));
-
-        assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
-    });
-
-    QUnit.test('check popup margins if analogClocks is hidden', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            showAnalogClock: false,
-            opened: true
-        });
-
-        const instance = $element.dxDateBox('instance');
-        const $content = $(instance.content());
-
-        const leftPopupMargin = parseInt($content.css('marginLeft'));
-        const leftCalendarMargin = parseInt($content.find('.dx-calendar').css('marginLeft'));
-        const rightPopupMargin = parseInt($content.css('marginRight'));
-        const rightCalendarMargin = parseInt($content.find('.dx-calendar').css('marginRight'));
-
-        assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
-    });
-
-    QUnit.test('check popup margins if calendar is hidden (T896846)', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            displayFormat: 'HH:mm',
-            calendarOptions: {
-                visible: false
-            },
-            opened: true
-        });
-
-        const instance = $element.dxDateBox('instance');
-        const $content = $(instance.content());
-
-        const leftPopupMargin = parseInt($content.css('marginLeft'));
-        const leftCalendarMargin = parseInt($content.find('.dx-timeview').css('marginLeft'));
-        const rightPopupMargin = parseInt($content.css('marginRight'));
-        const rightCalendarMargin = parseInt($content.find('.dx-timeview').css('marginRight'));
-
-        assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
-    });
-
     QUnit.test('Today button should be hidden if calendar is hidden', function(assert) {
         const $element = $('#dateBox').dxDateBox({
             pickerType: 'calendar',
