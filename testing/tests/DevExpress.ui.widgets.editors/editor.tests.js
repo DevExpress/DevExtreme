@@ -332,6 +332,34 @@ QUnit.module('validation', {
                 assert.strictEqual(validationMessage.option('mode'), 'auto', 'validationMessage has correct "mode" option after option change');
             });
 
+            QUnit.test('validationMessage should be updated after validationError option runtime change', function(assert) {
+                this.reinitEditor({
+                    isValid: true,
+                    validationError: {
+                        message: '1'
+                    },
+                    validationStatus: 'invalid'
+                });
+
+                this.editor.option({ validationError: { message: '2' } });
+                const message = this.getValidationMessage().$content().text();
+                assert.strictEqual(message, '2', 'validation message is updated');
+            });
+
+            QUnit.test('validationMessage should be updated after validationErrors option runtime change', function(assert) {
+                this.reinitEditor({
+                    isValid: true,
+                    validationError: {
+                        message: '2'
+                    },
+                    validationStatus: 'invalid'
+                });
+
+                this.editor.option({ validationErrors: [{ message: '3' }] });
+                const message = this.getValidationMessage().$content().text();
+                assert.strictEqual(message, '3', 'validation message is updated');
+            });
+
             if(!Editor.IS_RENOVATED_WIDGET) {
                 QUnit.test('editor should clear validation message cache on dispose (T968422)', function(assert) {
                     assert.expect(0);
