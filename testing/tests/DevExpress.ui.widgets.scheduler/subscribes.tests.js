@@ -1239,9 +1239,9 @@ module('Grouping By Date', {
             const results = layoutManager._positionMap[0];
 
             assert.equal(results.length, 3, 'Result length is OK');
-            this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 196, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[1], 5, 0, 0, 260, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[2], 7, 0, 0, 324, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 96, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[1], 5, 0, 0, 160, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[2], 7, 0, 0, 224, 1.1);
         });
 
         test(`"createAppointmentSettings" should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, function(assert) {

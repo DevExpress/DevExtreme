@@ -131,7 +131,7 @@ module('Work Space cellData Cache', {
         };
         const geometry = {
             top: 10,
-            left: 120
+            left: 20
         };
         const testDataList = [
             {

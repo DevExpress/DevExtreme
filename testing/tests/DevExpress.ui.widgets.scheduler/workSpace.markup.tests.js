@@ -108,10 +108,11 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 
     QUnit.module(`Base Workspace markup for ${viewName}`, moduleConfig, () => {
         if(viewName === 'Day' || viewName === 'Week') {
-            QUnit.test('All day title should be rendered in workspace directly', function(assert) {
+            QUnit.test('All day title should be rendered in header panel empty cell', function(assert) {
                 const $element = this.instance.$element();
+                const headerEmptyCell = $element.find(toSelector('dx-scheduler-header-panel-empty-cell'));
 
-                assert.equal($element.children(toSelector(ALL_DAY_TITLE_CLASS)).length, 1, 'All-day-title is OK');
+                assert.equal(headerEmptyCell.children(toSelector(ALL_DAY_TITLE_CLASS)).length, 1, 'All-day-title is OK');
             });
 
             QUnit.test('All day title has a special CSS class, if showAllDayPanel = false', function(assert) {
@@ -191,10 +192,10 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
                 assert.ok($row.hasClass('dx-scheduler-all-day-table-row'), 'Css class of row is correct');
             });
 
-            QUnit.test('All-day-appointments container should be rendered directly in workspace', function(assert) {
+            QUnit.test('All-day-appointments container should be rendered inside all-day-panael', function(assert) {
                 const $element = this.instance.$element();
 
-                assert.equal($element.children('.dx-scheduler-all-day-appointments').length, 1, 'Container is rendered correctly');
+                assert.equal($element.find('.dx-scheduler-all-day-panel').children('.dx-scheduler-all-day-appointments').length, 1, 'Container is rendered correctly');
             });
 
             QUnit.test('Scheduler workspace day should have right groupedStrategy by default', function(assert) {
@@ -270,8 +271,11 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
         QUnit.test('Scheduler workspace parts should be wrapped by scrollable', function(assert) {
             const $element = this.instance.$element();
 
-            assert.ok($element.find('.dx-scheduler-time-panel').parent().hasClass('dx-scrollable-content'), 'Scrollable contains the time panel');
-            assert.ok($element.find('.dx-scheduler-date-table').parent().hasClass('dx-scrollable-content'), 'Scrollable contains date table');
+            assert.ok($element.find('.dx-scheduler-time-panel').parent().parent().hasClass('dx-scrollable-content'), 'Scrollable contains the time panel');
+            assert.ok(
+                $element.find('.dx-scheduler-date-table-container').parent().parent().hasClass('dx-scrollable-content'),
+                'Scrollable contains date table',
+            );
         });
 
         QUnit.test('Fixed appointments container should be rendered directly in workspace', function(assert) {

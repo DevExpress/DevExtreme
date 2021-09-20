@@ -9,8 +9,6 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
             const isFirstShader = i === 0;
             const $shader = isFirstShader ? this._$shader : this.createShader();
 
-            this.applyShaderMargin($shader);
-
             if(this._workSpace.isGroupedByDate()) {
                 this._customizeGroupedByDateShader($shader, i);
             } else {

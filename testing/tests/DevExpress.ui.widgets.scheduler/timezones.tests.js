@@ -92,7 +92,7 @@ module('Common', moduleConfig, () => {
                 expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
                 expectedPosition: {
                     top: 500,
-                    left: 100
+                    left: 0
                 },
                 expectedPopupDates: {
                     startDate: '2/4/2020, 7:00 AM',
@@ -112,7 +112,7 @@ module('Common', moduleConfig, () => {
                 expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
                 expectedPosition: {
                     top: 500,
-                    left: 100
+                    left: 0
                 },
                 expectedPopupDates: {
                     startDate: '2/4/2020, 5:00 AM',
@@ -133,7 +133,7 @@ module('Common', moduleConfig, () => {
                 expectedContent: '7:00 PM - 8:00 PM',
                 expectedPosition: {
                     top: 1900,
-                    left: 100
+                    left: 0
                 },
                 expectedPopupDates: {
                     startDate: '2/4/2020, 3:00 PM',
@@ -154,7 +154,7 @@ module('Common', moduleConfig, () => {
                 expectedContent: '7:00 PM - 8:00 PM',
                 expectedPosition: {
                     top: 1900,
-                    left: 100
+                    left: 0
                 },
                 expectedPopupDates: {
                     startDate: '2/4/2020, 3:00 PM',
@@ -1981,7 +1981,7 @@ module('Fixed client time zone offset', {
         assert.equal(scheduler.appointments.getDateText(), resultDate, 'Appointment content has correct dates');
         assert.deepEqual(scheduler.appointments.getAppointmentPosition(), {
             top: 10 * cellHeight,
-            left: 100
+            left: 0
         }, 'Appointment is rendered in right cell');
     });
 

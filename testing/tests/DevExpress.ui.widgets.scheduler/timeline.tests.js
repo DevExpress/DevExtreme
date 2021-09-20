@@ -90,7 +90,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
         this.instance.option({
             crossScrollingEnabled: true,
             width: 400,
-            height: 200,
+            height: 150,
             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
             renovateRender,
         });
@@ -114,7 +114,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
         this.instance.option({
             crossScrollingEnabled: true,
             width: 400,
-            height: 200,
+            height: 150,
             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
             renovateRender,
         });

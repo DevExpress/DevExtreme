@@ -5,7 +5,7 @@ import $ from 'jquery';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
+    $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
 });
 
 QUnit.module('Vertical Workspace with horizontal scrollbar', {
@@ -71,36 +71,6 @@ QUnit.test('Header scrollable should update position if date scrollable position
         assert.equal(headerScrollable.scrollLeft(), 100, 'Scroll position is OK');
         done();
     });
-});
-
-QUnit.test('Time panel scrollable should update position if date scrollable position is changed', function(assert) {
-    const done = assert.async();
-    const $element = this.instance.$element();
-    const timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-    triggerHidingEvent($element);
-    triggerShownEvent($element);
-
-    dateTableScrollable.scrollTo({ top: 100 });
-
-    setTimeout(() => {
-        assert.equal(timePanelScrollable.scrollTop(), 100, 'Scroll position is OK');
-        done();
-    }, 100);
-});
-
-QUnit.test('Date table scrollable should update position if time panel position is changed', function(assert) {
-    const $element = this.instance.$element();
-    const timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-    triggerHidingEvent($element);
-    triggerShownEvent($element);
-
-    timePanelScrollable.scrollTo({ top: 100 });
-
-    assert.equal(dateTableScrollable.scrollTop(), 100, 'Scroll position is OK');
 });
 
 QUnit.test('Date table scrollable should update position if header scrollable position is changed', function(assert) {
