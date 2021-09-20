@@ -47,7 +47,6 @@ import {
     VERTICAL_GROUP_COUNT_CLASSES,
     HORIZONTAL_GROUP_COUNT_CLASSES,
 } from '../classes';
-import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
 
@@ -1409,29 +1408,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getEndViewDate() {
-        return new Date(this.viewDataProvider.getLastViewDate().getTime() - toMs('minute'));
+        return this.viewDataProvider.getLastCellEndDate();
     }
 
     getEndViewDateByEndDayHour() {
-        const dateOfLastViewCell = this.getEndViewDate();
-        const endTime = dateUtils.dateTimeFromDecimal(this.option('endDayHour'));
-
-        const endDateOfLastViewCell = new Date(dateOfLastViewCell.setHours(endTime.hours, endTime.minutes));
-
-        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
-
-    }
-
-    _adjustEndViewDateByDaylightDiff(startDate, endDate) {
-        const daylightDiff = timeZoneUtils.getDaylightOffsetInMs(startDate, endDate);
-
-        const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
-
-        return new Date(endDateOfLastViewCell.getTime() - this._getEndViewDateTimeDiff());
-    }
-
-    _getEndViewDateTimeDiff() {
-        return toMs('minute');
+        return this.viewDataProvider.getLastViewDateByEndDayHour(this.option('endDayHour'));
     }
 
     getCellDuration() { // TODO move to the ModelProvider
@@ -1439,7 +1420,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getIntervalDuration(allDay) {
-        return allDay ? toMs('day') : this.getCellDuration();
+        return allDay
+            ? toMs('day')
+            : this.getCellDuration();
     }
 
     getVisibleDayDuration() {

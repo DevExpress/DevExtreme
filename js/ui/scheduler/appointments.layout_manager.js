@@ -15,7 +15,7 @@ class AppointmentLayoutManager {
     }
 
     get modelProvider() { return getModelProvider(this.instance.key); }
-    get viewRenderingStrategyName() { return this.modelProvider.getViewRenderingStrategyName(); }
+    get appointmentRenderingStrategyName() { return this.modelProvider.getAppointmentRenderingStrategyName(); }
 
     getCellDimensions(options) {
         if(this.instance._workSpace) {
@@ -53,7 +53,7 @@ class AppointmentLayoutManager {
             instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
-            viewRenderingStrategyName: this.viewRenderingStrategyName,
+            appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
             adaptivityEnabled: this.modelProvider.adaptivityEnabled,
             rtlEnabled: this.modelProvider.rtlEnabled,
             startDayHour: this.modelProvider.startDayHour,
@@ -198,7 +198,7 @@ class AppointmentLayoutManager {
     }
 
     getRepaintedAppointments(currentAppointments, sourceAppointments) {
-        if(sourceAppointments.length === 0 || this.viewRenderingStrategyName === 'agenda') {
+        if(sourceAppointments.length === 0 || this.appointmentRenderingStrategyName === 'agenda') {
             return currentAppointments;
         }
 

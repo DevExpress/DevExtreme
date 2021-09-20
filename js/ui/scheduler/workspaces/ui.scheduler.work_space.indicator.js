@@ -43,7 +43,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         const today = this._getToday();
 
         // Subtracts 1 ms from the real endViewDate instead of 1 minute
-        const endViewDate = new Date(this.getEndViewDate().getTime() + this._getEndViewDateTimeDiff() - 1);
+        const endViewDate = new Date(this.getEndViewDate().getTime() + toMs('minute') - 1);
         const firstViewDate = new Date(this.getStartViewDate());
         firstViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         endViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
