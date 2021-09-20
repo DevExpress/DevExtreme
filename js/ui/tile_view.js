@@ -159,7 +159,7 @@ const TileView = CollectionWidget.inherit({
         const { width, height } = this.option();
 
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
-            activeStateUnit: TILEVIEW_ITEM_SELECTOR,
+            // activeStateUnit: TILEVIEW_ITEM_SELECTOR,
             width,
             height,
             scrollByContent: true,

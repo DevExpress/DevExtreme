@@ -1044,11 +1044,6 @@ QUnit.module('scrollbars', moduleConfig, () => {
     });
 
     QUnit.test('scroll over scrollbar does not hide thumb', function(assert) {
-        if(isRenovation && devices.current().deviceType !== 'desktop') {
-            assert.ok(true, 'there are no mouse events on touch devices');
-            return;
-        }
-
         const $scrollView = $('#scrollView').height(50);
         $scrollView.append('<div>').children().height(100);
         $scrollView.dxScrollView({

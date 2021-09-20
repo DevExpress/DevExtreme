@@ -11,7 +11,6 @@ import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
-import devices from 'core/devices';
 
 import 'generic_light.css!';
 
@@ -390,7 +389,7 @@ QUnit.test('scrollTop', function(assert) {
     assert.equal($scrollable.dxScrollable('scrollTop'), 10, 'scrollTop is correct');
 });
 
-QUnit.test('scrollbar hidden while scrolling when showScrollbar is false', function(assert) {
+QUnit.test('scrollbar hidden while scrolling when showScrollbar is never', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         showScrollbar: 'never'
@@ -471,11 +470,6 @@ QUnit.test('disabled: scroll was not moved when disabled is true', function(asse
 });
 
 QUnit.test('simulated strategy should subscribe to the poiner events after disabled option changed', function(assert) {
-    if(isRenovation && devices.current().deviceType !== 'desktop') {
-        assert.ok(true, 'there are no mouse events on touch devices');
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     const scrollableInstance = $('#scrollable').dxScrollable({
         useNative: false,
