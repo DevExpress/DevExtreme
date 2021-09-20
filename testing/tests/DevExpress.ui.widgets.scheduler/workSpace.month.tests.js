@@ -9,6 +9,7 @@ const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
 const {
     test,
+    skip,
     module,
     testStart
 } = QUnit;
@@ -45,7 +46,7 @@ module('Work Space Month', () => {
             });
         });
 
-        test('Work space should find cell coordinates by date', function(assert) {
+        skip('Work space should find cell coordinates by date', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('firstDayOfWeek', 1);
@@ -58,7 +59,7 @@ module('Work Space Month', () => {
             assert.roughEqual(coords.left, expectedCoordinates.left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date depend on start day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on start day hour', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -70,7 +71,7 @@ module('Work Space Month', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Work space should find cell coordinates by date depend on end day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on end day hour', function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -226,15 +227,6 @@ module('Work Space Month', () => {
             assert.roughEqual(groupWidth, 597, 1.01, 'Group width is OK');
         });
 
-        test('Get cell count to last view date', function(assert) {
-            this.instance.option({
-                currentDate: new Date(2015, 1, 16),
-                firstDayOfWeek: 1
-            });
-
-            assert.equal(this.instance.getCellCountToLastViewDate(new Date(2015, 1, 17)), 20, 'Cell count is OK');
-        });
-
         test('Get cell count to last view dates', function(assert) {
             this.instance.option('renovateRender', false);
 
@@ -276,7 +268,7 @@ module('Work Space Month', () => {
 
     });
 
-    module('it with grouping by date', {
+    skip('it with grouping by date', {
         beforeEach: function() {
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),

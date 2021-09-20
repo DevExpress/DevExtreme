@@ -144,8 +144,17 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getGroupTopOffset(appointmentSettings) {
-        const groupTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
-        const allDayPanelOffset = this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
+        const { groupIndex } = appointmentSettings;
+        const groupTop = Math.max(0, this.positionHelper.getGroupTop({
+            groupIndex,
+            showAllDayPanel: this.showAllDayPanel,
+            isGroupedAllDayPanel: this.isGroupedAllDayPanel,
+        }));
+        const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
+            groupIndex,
+            supportAllDayRow: this.allDaySupported(),
+            showAllDayPanel: this.showAllDayPanel
+        });
         const appointmentGroupTopOffset = appointmentSettings.top - groupTop - allDayPanelOffset;
 
         return appointmentGroupTopOffset;
@@ -169,7 +178,11 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
         const width = appointmentGeometry.width;
         const result = [];
-        let currentPartTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
+        let currentPartTop = Math.max(0, this.positionHelper.getGroupTop({
+            groupIndex: appointmentSettings.groupIndex,
+            showAllDayPanel: this.showAllDayPanel,
+            isGroupedAllDayPanel: this.isGroupedAllDayPanel
+        }));
         const cellsDiff = this.isGroupedByDate
             ? this.instance.fire('getGroupCount')
             : 1;
@@ -183,7 +196,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 tailHeight = minHeight;
             }
 
-            currentPartTop += this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
+            const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
+                groupIndex: appointmentSettings.groupIndex,
+                supportAllDayRow: this.allDaySupported(),
+                showAllDayPanel: this.showAllDayPanel
+            });
+
+            currentPartTop += allDayPanelOffset;
 
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
@@ -374,6 +393,18 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     _needHorizontalGroupBounds() {
         return false;
+    }
+
+    getPositionShift(timeShift, isAllDay) {
+        if(!isAllDay && this.isAdaptive && this._getMaxAppointmentCountPerCellByType(isAllDay) === 0) {
+            return {
+                top: 0,
+                left: 0,
+                cellPosition: 0
+            };
+        }
+
+        return super.getPositionShift(timeShift, isAllDay);
     }
 }
 

@@ -47,14 +47,12 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
     /**
      * @docid
      * @type_function_param1 error:Object
-     * @type_function_param1_field1 message:string
      * @action
      * @public
      */
     onLoadError?: ((error: { readonly message?: string }) => void);
     /**
      * @docid
-     * @type_function_param1 isLoading:boolean
      * @action
      * @public
      */
@@ -134,8 +132,6 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
 }
 /**
  * @docid
- * @module data/data_source
- * @export default
  * @public
  */
 export default class DataSource<TKey = any, TValue = any> {
@@ -146,7 +142,6 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName cancel(operationId)
-     * @return boolean
      * @public
      */
     cancel(operationId: number): boolean;
@@ -187,28 +182,24 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName isLastPage()
-     * @return boolean
      * @public
      */
     isLastPage(): boolean;
     /**
      * @docid
      * @publicName isLoaded()
-     * @return boolean
      * @public
      */
     isLoaded(): boolean;
     /**
      * @docid
      * @publicName isLoading()
-     * @return boolean
      * @public
      */
     isLoading(): boolean;
     /**
      * @docid
      * @publicName items()
-     * @return Array<any>
      * @public
      */
     items(): Array<any>;
@@ -319,14 +310,12 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName requireTotalCount()
-     * @return boolean
      * @public
      */
     requireTotalCount(): boolean;
     /**
      * @docid
      * @publicName requireTotalCount(value)
-     * @param1 value:boolean
      * @public
      */
     requireTotalCount(value: boolean): void;
@@ -347,28 +336,24 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName searchOperation()
-     * @return string
      * @public
      */
     searchOperation(): string;
     /**
      * @docid
      * @publicName searchOperation(op)
-     * @param1 op:string
      * @public
      */
     searchOperation(op: string): void;
     /**
      * @docid
      * @publicName searchValue()
-     * @return any
      * @public
      */
     searchValue(): any;
     /**
      * @docid
      * @publicName searchValue(value)
-     * @param1 value:any
      * @public
      */
     searchValue(value: any): void;

@@ -83,12 +83,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         return ['left', 'right', 'top'];
     }
 
-    _getMaxAppointmentWidth(startDate) {
-        return this.instance.fire('getMaxAppointmentWidth', {
-            date: startDate,
-        });
-    }
-
     getDropDownAppointmentWidth() {
         return this.cellWidth - DROP_DOWN_BUTTON_OFFSET * 2;
     }
@@ -110,6 +104,23 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         const orientation = this._getOrientation();
 
         return this._checkItemsCrossing(firstItem, secondItem, orientation);
+    }
+
+    getPositionShift(timeShift) {
+        const positionShift = super.getPositionShift(timeShift);
+        let left = this.cellWidth * timeShift;
+
+        if(this.rtlEnabled) {
+            left *= -1;
+        }
+
+        left += positionShift.left;
+
+        return {
+            top: 0,
+            left: left,
+            cellPosition: left
+        };
     }
 }
 

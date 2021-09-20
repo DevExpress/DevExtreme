@@ -468,116 +468,101 @@ QUnit.test('Start date of appointment should be changed when resize is finished'
 });
 
 QUnit.test('End date of appointment should be changed when resize is finished', function(assert) {
-    const clock = sinon.useFakeTimers();
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 6, 0) });
 
-    try {
-        this.createInstance(
-            {
-                currentDate: new Date(2015, 1, 4),
-                currentView: 'timelineMonth',
-                height: 500,
-                dataSource: [item]
-            }
-        );
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 4),
+            currentView: 'timelineMonth',
+            height: 500,
+            dataSource: [item]
+        }
+    );
 
-        const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right')).start();
+    const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right')).start();
 
-        pointer.dragStart().drag(200, 0).dragEnd();
+    pointer.dragStart().drag(200, 0).dragEnd();
 
-        const args = stub.getCall(0).args;
-        assert.ok(stub.calledOnce, 'Observer is notified');
+    const args = stub.getCall(0).args;
+    assert.ok(stub.calledOnce, 'Observer is notified');
 
-        checkAppointmentUpdatedCallbackArgs(assert, {
-            old: args[1].target,
-            updated: args[1].data,
-            $appointment: args[1].$appointment
-        }, {
-            old: item,
-            updated: updatedItem,
-            $appointment: this.instance.$element().find('.dx-scheduler-appointment')
-        });
-    } finally {
-        clock.restore();
-    }
+    checkAppointmentUpdatedCallbackArgs(assert, {
+        old: args[1].target,
+        updated: args[1].data,
+        $appointment: args[1].$appointment
+    }, {
+        old: item,
+        updated: updatedItem,
+        $appointment: this.instance.$element().find('.dx-scheduler-appointment')
+    });
 });
 
 QUnit.test('End date of appointment should be changed when resize is finished, RTL mode', function(assert) {
-    const clock = sinon.useFakeTimers();
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 6, 0) });
 
-    try {
-        this.createInstance(
-            {
-                currentDate: new Date(2015, 1, 4),
-                currentView: 'timelineMonth',
-                rtlEnabled: true,
-                height: 500,
-                dataSource: [item]
-            }
-        );
-        const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-left')).start();
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 4),
+            currentView: 'timelineMonth',
+            rtlEnabled: true,
+            height: 500,
+            dataSource: [item]
+        }
+    );
+    const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-left')).start();
 
-        pointer.dragStart().drag(-200, 0).dragEnd();
+    pointer.dragStart().drag(-200, 0).dragEnd();
 
-        const args = stub.getCall(0).args;
-        assert.ok(stub.calledOnce, 'Observer is notified');
+    const args = stub.getCall(0).args;
+    assert.ok(stub.calledOnce, 'Observer is notified');
 
-        checkAppointmentUpdatedCallbackArgs(assert, {
-            old: args[1].target,
-            updated: args[1].data,
-            $appointment: args[1].$appointment
-        }, {
-            old: item,
-            updated: updatedItem,
-            $appointment: this.instance.$element().find('.dx-scheduler-appointment')
-        });
-    } finally {
-        clock.restore();
-    }
+    checkAppointmentUpdatedCallbackArgs(assert, {
+        old: args[1].target,
+        updated: args[1].data,
+        $appointment: args[1].$appointment
+    }, {
+        old: item,
+        updated: updatedItem,
+        $appointment: this.instance.$element().find('.dx-scheduler-appointment')
+    });
 });
 
 QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', function(assert) {
-    const clock = sinon.useFakeTimers();
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 3, 0) });
 
-    try {
-        this.createInstance(
-            {
-                currentDate: new Date(2015, 1, 4),
-                currentView: 'timelineMonth',
-                rtlEnabled: true,
-                height: 500,
-                dataSource: [item]
-            }
-        );
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 4),
+            currentView: 'timelineMonth',
+            rtlEnabled: true,
+            height: 500,
+            dataSource: [item]
+        }
+    );
 
-        const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right')).start();
+    const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right')).start();
 
-        pointer.dragStart().drag(200, 0).dragEnd();
+    pointer.dragStart().drag(200, 0).dragEnd();
 
-        const args = stub.getCall(0).args;
+    const args = stub.getCall(0).args;
 
-        assert.ok(stub.calledOnce, 'Observer is notified');
+    assert.ok(stub.calledOnce, 'Observer is notified');
 
-        checkAppointmentUpdatedCallbackArgs(assert, {
-            old: args[1].target,
-            updated: args[1].data,
-            $appointment: args[1].$appointment
-        }, {
-            old: item,
-            updated: updatedItem,
-            $appointment: this.instance.$element().find('.dx-scheduler-appointment')
-        });
-    } finally {
-        clock.restore();
-    }
+    checkAppointmentUpdatedCallbackArgs(assert, {
+        old: args[1].target,
+        updated: args[1].data,
+        $appointment: args[1].$appointment
+    }, {
+        old: item,
+        updated: updatedItem,
+        $appointment: this.instance.$element().find('.dx-scheduler-appointment')
+    });
 });
 
 QUnit.module('Horizontal Month Strategy', {
@@ -907,43 +892,38 @@ QUnit.test('End date of appointment should be changed when resize is finished, R
 });
 
 QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', function(assert) {
-    const clock = sinon.useFakeTimers();
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 10), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 4, 9, 30) });
 
-    try {
-        this.createInstance(
-            {
-                currentDate: new Date(2015, 1, 4),
-                views: ['timelineWeek'],
-                currentView: 'timelineWeek',
-                rtlEnabled: true,
-                height: 500,
-                dataSource: [item]
-            }
-        );
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 4),
+            views: ['timelineWeek'],
+            currentView: 'timelineWeek',
+            rtlEnabled: true,
+            height: 500,
+            dataSource: [item]
+        }
+    );
 
-        const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right')).start();
+    const stub = sinon.stub(this.instance.getAppointmentsInstance(), 'notifyObserver').withArgs('updateAppointmentAfterResize');
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right')).start();
 
-        pointer.dragStart().drag(200, 0).dragEnd();
+    pointer.dragStart().drag(200, 0).dragEnd();
 
-        const args = stub.getCall(0).args;
+    const args = stub.getCall(0).args;
 
-        assert.ok(stub.calledOnce, 'Observer is notified');
+    assert.ok(stub.calledOnce, 'Observer is notified');
 
-        checkAppointmentUpdatedCallbackArgs(assert, {
-            old: args[1].target,
-            updated: args[1].data,
-            $appointment: args[1].$appointment
-        }, {
-            old: item,
-            updated: updatedItem,
-            $appointment: this.instance.$element().find('.dx-scheduler-appointment')
-        });
-    } finally {
-        clock.restore();
-    }
+    checkAppointmentUpdatedCallbackArgs(assert, {
+        old: args[1].target,
+        updated: args[1].data,
+        $appointment: args[1].$appointment
+    }, {
+        old: item,
+        updated: updatedItem,
+        $appointment: this.instance.$element().find('.dx-scheduler-appointment')
+    });
 });
 
 QUnit.test('End date of appointment should be changed considering endDayHour and startDayHour when resize is finished', function(assert) {
@@ -1373,11 +1353,11 @@ QUnit.test('Two rival appointments should have correct positions, vertical strat
     const secondAppointmentPosition = translator.locate($appointment.eq(1));
 
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, cellWidth + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.left, cellWidth, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(0).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 });
 
@@ -1407,15 +1387,15 @@ QUnit.test('Three rival appointments with two columns should have correct positi
 
     assert.equal($appointment.length, 3, 'All appointments are rendered');
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, cellWidth + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.left, cellWidth, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(0).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
     assert.equal(thirdAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(thirdAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(thirdAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 });
 
@@ -1443,16 +1423,16 @@ QUnit.test('Four rival appointments with three columns should have correct posit
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 4, 'All appointments are rendered');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth + 100 }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 2 * cellHeight, left: cellWidth + 100 + 2 * expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 2 * cellHeight, left: cellWidth + 2 * expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(1), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 0, left: cellWidth + 100 + expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 0, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(2), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(3), { top: 4 * cellHeight, left: cellWidth + 100 + expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(3), { top: 4 * cellHeight, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(3), expectedAppWidth, 1, 'appointment has a right size');
 });
 
@@ -1476,10 +1456,10 @@ QUnit.test('Rival duplicated appointments should have correct positions', functi
     const offset = APPOINTMENT_DEFAULT_LEFT_OFFSET;
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'All appointments are rendered');
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth + 100 }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth }, 'appointment is rendered in right place');
     assert.equal(this.scheduler.appointments.getAppointmentWidth(0), cellWidth - offset, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 0, left: 2 * cellWidth + 100 }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 0, left: 2 * cellWidth }, 'appointment is rendered in right place');
     assert.equal(this.scheduler.appointments.getAppointmentWidth(1), cellWidth - offset, 'appointment has a right size');
 
     assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Compact button is rendered');
@@ -1530,12 +1510,12 @@ QUnit.test('Two rival all day appointments should have correct sizes and positio
     assert.equal($appointment.length, 2, 'All appointments are rendered');
 
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(0).outerWidth(), 798, 1.1, 'appointment has a right width');
     assert.roughEqual($appointment.eq(0).outerHeight(), 24.5, 1.1, 'appointment has a right height');
 
     assert.roughEqual(secondAppointmentPosition.top, 24.5, 1, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, 100, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
     assert.roughEqual($appointment.eq(1).outerWidth(), 798, 1.1, 'appointment has a right width');
     assert.roughEqual($appointment.eq(1).outerHeight(), 24.5, 1.1, 'appointment has a right height');
 });
@@ -2064,15 +2044,14 @@ QUnit.test('Appointment should have a right top position, Day view, \'auto\' mod
     );
 
     let $appointment = $(this.instance.$element().find('.dx-scheduler-all-day-appointment'));
-    const $header = $(this.instance.$element().find('.dx-scheduler-header'));
 
-    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(0).position().top, 0, 1.5, 'appointment has a correct position');
 
     this.instance.addAppointment({ text: 'Task 2', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true });
     $appointment = $(this.instance.$element().find('.dx-scheduler-all-day-appointment'));
 
-    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, 'appointment has a correct position');
-    assert.roughEqual($appointment.eq(1).position().top, $header.outerHeight() + $appointment.outerHeight(), 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(0).position().top, 0, 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(1).position().top, 0 + $appointment.outerHeight(), 1.5, 'appointment has a correct position');
 });
 
 QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Week view, \'unlimited\' mode', function(assert) {

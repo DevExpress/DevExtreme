@@ -66,7 +66,13 @@ import {
     createModelProvider,
     generateKey,
 } from './instanceFactory';
-import { createResourceEditorModel, getCellGroups, getResourcesFromItem, setResourceToAppointment } from './resources/utils';
+import {
+    createResourceEditorModel,
+    getCellGroups,
+    getFieldExpr as getResourceFieldExpr,
+    getResourcesFromItem,
+    setResourceToAppointment
+} from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
@@ -497,7 +503,7 @@ class Scheduler extends Widget {
                 });
                 break;
             case 'resources':
-
+                this.initResourceExpressions(value);
                 this.updateFactoryInstances();
 
                 this._postponeResourceLoading().done((resources) => {
@@ -855,6 +861,8 @@ class Scheduler extends Widget {
     }
 
     _init() {
+        this.initResourceExpressions(this.option('resources'));
+
         this._initExpressions({
             startDate: this.option('startDateExpr'),
             endDate: this.option('endDateExpr'),
@@ -1054,6 +1062,20 @@ class Scheduler extends Widget {
         );
     }
 
+    initResourceExpressions(resources = []) {
+        this.resourceDataAccessors = {
+            getter: {},
+            setter: {}
+        };
+
+        resources.forEach(resource => {
+            const field = getResourceFieldExpr(resource);
+
+            this.resourceDataAccessors.getter[field] = compileGetter(field);
+            this.resourceDataAccessors.setter[field] = compileSetter(field);
+        });
+    }
+
     _initExpressions(fields) {
         const isDateField = function(field) {
             return field === 'startDate' || field === 'endDate';
@@ -1194,6 +1216,8 @@ class Scheduler extends Widget {
 
         this.modelProvider.updateCurrentView();
 
+        this._renderMainContainer();
+
         this._renderHeader();
 
         this._layoutManager = new AppointmentLayoutManager(this);
@@ -1221,11 +1245,17 @@ class Scheduler extends Widget {
         }
     }
 
+    _renderMainContainer() {
+        this._mainContainer = $('<div>').addClass('dx-scheduler-container');
+
+        this.$element().append(this._mainContainer);
+    }
+
     createAppointmentForm() {
         const scheduler = {
             createResourceEditorModel: () => {
                 const resourceManager = this.fire('getResourceManager');
-                return createResourceEditorModel(resourceManager.getResources(), resourceManager.loadedResources);
+                return createResourceEditorModel(this.option('resources'), resourceManager.loadedResources);
             },
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
@@ -1248,11 +1278,9 @@ class Scheduler extends Widget {
             focus: () => this.focus(),
 
             getResourcesFromItem: (rawAppointment) => {
-                const resourceManager = this.fire('getResourceManager');
-
                 return getResourcesFromItem(
-                    resourceManager.getResources(),
-                    (field, action) => resourceManager.getDataAccessors(field, action),
+                    this.option('resources'),
+                    this.resourceDataAccessors,
                     rawAppointment,
                     true
                 );
@@ -1344,11 +1372,13 @@ class Scheduler extends Widget {
 
         this._toggleAdaptiveClass();
 
+        this.getWorkSpace()?.updateHeaderEmptyCellWidth();
+
         super._render();
     }
 
     _renderHeader() {
-        const $header = $('<div>').appendTo(this.$element());
+        const $header = $('<div>').appendTo(this._mainContainer);
         this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
     }
 
@@ -1387,6 +1417,9 @@ class Scheduler extends Widget {
 
     _appointmentsConfig() {
         const config = {
+            resources: this.option('resources'),
+            resourceDataAccessors: this.resourceDataAccessors,
+
             key: this.key,
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
@@ -1441,7 +1474,7 @@ class Scheduler extends Widget {
 
     _renderWorkSpace(groups) {
         this._readyToRenderAppointments && this._toggleSmallClass();
-        const $workSpace = $('<div>').appendTo(this.$element());
+        const $workSpace = $('<div>').appendTo(this._mainContainer);
 
         const countConfig = this._getViewCountConfig();
 
@@ -1504,6 +1537,8 @@ class Scheduler extends Widget {
             horizontalVirtualScrollingAllowed;
 
         const result = extend({
+            resources: this.option('resources'),
+
             key: this.key,
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -1638,7 +1673,9 @@ class Scheduler extends Widget {
     }
 
     getWorkSpaceDateTableOffset() {
-        return !this.option('crossScrollingEnabled') || this.option('rtlEnabled') ? this._workSpace.getWorkSpaceLeftOffset() : 0;
+        return !this.option('crossScrollingEnabled') || this.option('rtlEnabled')
+            ? this._workSpace.getWorkSpaceLeftOffset()
+            : 0;
     }
 
     getWorkSpace() {
@@ -1834,7 +1871,7 @@ class Scheduler extends Widget {
         const rawResult = result.source();
 
         const resourceManager = getResourceManager(this.key);
-        setResourceToAppointment(resourceManager.getResources(), resourceManager._dataAccessors, rawResult, targetCell.groups);
+        setResourceToAppointment(this.option('resources'), resourceManager._dataAccessors, rawResult, targetCell.groups);
 
         return rawResult;
     }
@@ -2178,6 +2215,7 @@ class Scheduler extends Widget {
     }
 
     scrollToTime(hours, minutes, date) {
+        errors.log('W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead');
         this._workSpace.scrollToTime(hours, minutes, date);
     }
 

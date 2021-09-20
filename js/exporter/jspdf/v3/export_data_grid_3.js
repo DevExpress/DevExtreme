@@ -1,9 +1,9 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize } from './row_utils';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
-import { drawCellsContent, drawCellsLines, drawGridLines } from './draw_utils';
+import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -24,7 +24,7 @@ function exportDataGrid(doc, dataGrid, options) {
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
-            const rowsInfo = generateRowsInfo(dataProvider, dataGrid);
+            const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
 
             if(options.customizeCell) {
                 rowsInfo.forEach(rowInfo => rowInfo.cells.forEach(cellInfo =>
@@ -44,6 +44,9 @@ function exportDataGrid(doc, dataGrid, options) {
             }
 
             initializeCellsWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
+
+            // apply intends for correctly set width and colSpan for grouped rows
+            resizeFirstColumnByIndentLevel(rowsInfo, options);
 
             // apply colSpans + recalculate cellsWidth
             applyColSpans(rowsInfo);
@@ -79,15 +82,17 @@ function exportDataGrid(doc, dataGrid, options) {
                 })
             );
 
-            drawCellsContent(doc, pdfCellsInfo);
-            drawCellsLines(doc, pdfCellsInfo);
+            const docStyles = getDocumentStyles(doc);
+            drawCellsContent(doc, pdfCellsInfo, docStyles);
+            drawCellsLines(doc, pdfCellsInfo, docStyles);
 
             const isDrawTableBorderSpecified = options.drawTableBorder === true;
             const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
             if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
                 const tableRect = calculateTableSize(doc, rowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                drawGridLines(doc, tableRect);
+                drawGridLines(doc, tableRect, docStyles);
             }
+            setDocumentStyles(doc, docStyles);
 
             resolve();
         });

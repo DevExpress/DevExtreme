@@ -248,23 +248,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return 0;
     }
 
-    getPositionShift(timeShift) {
-        const positionShift = super.getPositionShift(timeShift);
-        let left = this.getCellWidth() * timeShift;
-
-        if(this.option('rtlEnabled')) {
-            left *= -1;
-        }
-
-        left += positionShift.left;
-
-        return {
-            top: 0,
-            left: left,
-            cellPosition: left
-        };
-    }
-
     getIntervalDuration(allDay) {
         return this.getCellDuration();
     }
@@ -363,6 +346,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
             this.renderRGroupPanel();
         }
+
+        this.updateHeaderEmptyCellWidth();
 
         this._applyCellTemplates(groupCellTemplates);
     }

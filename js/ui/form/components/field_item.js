@@ -4,7 +4,6 @@ import { name as clickEventName } from '../../../events/click';
 import { getPublicElement } from '../../../core/element';
 import { captionize } from '../../../core/utils/inflector';
 import { format } from '../../../core/utils/string';
-import { isDefined } from '../../../core/utils/type';
 import { isMaterial } from '../../themes';
 import errors from '../../widget/ui.errors';
 
@@ -29,9 +28,9 @@ import { renderLabel } from './label';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const INVALID_CLASS = 'dx-invalid';
 
-export function renderFieldItemTo({
-    $container,
-    containerCssClass,
+export function renderFieldItem({
+    $parent,
+    rootElementCssClassList,
     parentComponent,
     createComponentCallback,
     useFlexLayout,
@@ -47,21 +46,17 @@ export function renderFieldItemTo({
     validationGroup
 }) {
 
-    //
-    // Setup the root $element:
-    //
+    const $rootElement = $('<div>')
+        .addClass(rootElementCssClassList.join(' '))
+        .appendTo($parent);
 
-    $container
-        .addClass(containerCssClass)
-        .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');// TODO: this is a part of Form markup settings, move it to form.js
-
-    $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
+    $rootElement.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
     if(isSimpleItem && useFlexLayout) {
-        $container.addClass(FLEX_LAYOUT_CLASS);
+        $rootElement.addClass(FLEX_LAYOUT_CLASS);
     }
     if(isSimpleItem && labelNeedBaselineAlign) {
         // TODO: label related code, execute ony if needRenderLabel ?
-        $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
+        $rootElement.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
     }
 
     //
@@ -81,18 +76,18 @@ export function renderFieldItemTo({
 
     const $label = needRenderLabel ? renderLabel(labelOptions) : null;
     if($label) {
-        $container.append($label);
+        $rootElement.append($label);
         if(labelLocation === 'top' || labelLocation === 'left') {
-            $container.append($fieldEditorContainer);
+            $rootElement.append($fieldEditorContainer);
         }
         if(labelLocation === 'right') {
-            $container.prepend($fieldEditorContainer);
+            $rootElement.prepend($fieldEditorContainer);
         }
 
         if(labelLocation === 'top') {
-            $container.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
+            $rootElement.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
-            $container.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
+            $rootElement.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
         }
 
         if(item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch') {
@@ -101,14 +96,14 @@ export function renderFieldItemTo({
             });
         }
     } else {
-        $container.append($fieldEditorContainer);
+        $rootElement.append($fieldEditorContainer);
     }
 
     //
     // Append field editor:
     //
 
-    let instance;
+    let widgetInstance;
     if(template) {
         template.render({
             container: getPublicElement($fieldEditorContainer),
@@ -124,10 +119,10 @@ export function renderFieldItemTo({
         const $div = $('<div>').appendTo($fieldEditorContainer);
 
         try {
-            instance = createComponentCallback($div, item.editorType, editorOptions);
-            instance.setAria('describedby', helpID);
-            instance.setAria('labelledby', labelID);
-            instance.setAria('required', isRequired);
+            widgetInstance = createComponentCallback($div, item.editorType, editorOptions);
+            widgetInstance.setAria('describedby', helpID);
+            widgetInstance.setAria('labelledby', labelID);
+            widgetInstance.setAria('required', isRequired);
         } catch(e) {
             errors.log('E1035', e.message);
         }
@@ -211,5 +206,5 @@ export function renderFieldItemTo({
         );
     }
 
-    return { $fieldEditorContainer, instance };
+    return { $fieldEditorContainer, $rootElement, widgetInstance };
 }
