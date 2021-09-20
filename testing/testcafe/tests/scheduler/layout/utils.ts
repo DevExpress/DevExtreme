@@ -17,11 +17,9 @@ export const resourceDataSource = [{
 export const views = [
   'day',
   'week',
-  'workWeek',
   'month',
   'timelineDay',
   'timelineWeek',
-  'timelineWorkWeek',
   'timelineMonth',
 ];
 export const verticalViews = views

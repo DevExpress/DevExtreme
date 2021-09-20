@@ -1,10 +1,12 @@
 import $ from 'jquery';
 import dataCoreUtils from 'core/utils/data';
 import typeUtils from 'core/utils/type';
+import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
-import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { createExpressions } from 'ui/scheduler/resources/utils';
 
 const { testStart, module, test } = QUnit;
 
@@ -75,8 +77,6 @@ const createInstance = (options = {}) => {
                         top: field.top || 0,
                         empty: field.empty || false
                     };
-                case 'getResourceManager':
-                    return getResourceManager(key);
                 case 'getAppointmentDataProvider':
                     return getAppointmentDataProvider(key);
                 default:
@@ -89,6 +89,9 @@ const createInstance = (options = {}) => {
         key,
         observer: createObserver(options.renderingStrategy),
         ...options,
+        getResources: () => [],
+        getAppointmentColor: () => new Deferred(),
+        getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');
 };
 

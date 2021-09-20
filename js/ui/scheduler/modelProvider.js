@@ -1,5 +1,4 @@
 import { getGroupCount } from './resources/utils';
-import { getResourceManager } from './instanceFactory';
 import { isObject } from '../../core/utils/type';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 
@@ -40,8 +39,7 @@ export class ModelProvider {
     }
 
     get key() { return this.model.key; }
-    get resourceManager() { return getResourceManager(this.key); }
-    get loadedResources() { return this.resourceManager.loadedResources; }
+    get loadedResources() { return this.model.loadedResources; }
 
     get startDayHour() { return this.model['startDayHour']; }
     get endDayHour() { return this.model['endDayHour']; }

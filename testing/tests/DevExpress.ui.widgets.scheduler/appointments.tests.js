@@ -5,7 +5,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import VerticalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -20,6 +20,8 @@ import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { Deferred } from 'core/utils/deferred';
+import { createExpressions } from 'ui/scheduler/resources/utils';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -102,9 +104,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
         return result;
     },
     appendSingleAppointmentData: (data) => data,
-    getResourceManager: () => {
-        return getResourceManager(0);
-    },
     getAppointmentDataProvider: () => {
         return getAppointmentDataProvider(0);
     }
@@ -127,7 +126,6 @@ const createInstance = (options, subscribesConfig) => {
     };
 
     const key = createFactoryInstances({
-        resources: options.resources,
         getIsVirtualScrolling: () => false,
         getDataAccessors: () => dataAccessors
     });
@@ -136,17 +134,14 @@ const createInstance = (options, subscribesConfig) => {
         key,
         observer,
         ...options,
+        getResources: () => [],
+        getAgendaResourceProcessor: () => ({}),
+        getAppointmentColor: () => new Deferred(),
+        getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');
 
     const workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
         draggingMode: 'default',
-        observer: {
-            fire: (functionName) => {
-                if(functionName === 'getResourceManager') {
-                    return getResourceManager(key);
-                }
-            }
-        }
     }).dxSchedulerWorkSpaceWeek('instance');
 
     workspaceInstance.getWorkArea().append(instance.$element());

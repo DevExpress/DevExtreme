@@ -3943,9 +3943,10 @@ QUnit.module('Rows view', {
         // act
         rowsView.render($testElement);
         rowsView.height(10000);
+        rowsView.setLoading(true, 'some text');
 
         // assert
-        const options = rowsView._loadPanel.option('position')();
+        const options = rowsView._loadPanel.option('position');
         assert.deepEqual(options.of[0], window);
         // need when "grid.height > window.height" and grid places with vertical offset
         assert.deepEqual(options.boundary[0], $testElement.find('.dx-datagrid-rowsview')[0]);

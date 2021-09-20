@@ -2267,6 +2267,25 @@ QUnit.test('show selected point (points are hidden automatically)', function(ass
     assert.notOk(point.graphic);
 });
 
+// T1027922
+QUnit.test('View hovered point marker for invisible point', function(assert) {
+    const pointIndex = 1;
+    const chart = this.createChart({
+        customizePoint(args) {
+            if(args.index === pointIndex) {
+                return { visible: false };
+            }
+        }
+    });
+
+    const point = chart.getAllSeries()[0].getAllPoints()[pointIndex];
+
+    // act
+    point.hover();
+
+    assert.notOk(point.graphic);
+});
+
 QUnit.module('B237847. Groups and classes', moduleSetup);
 
 QUnit.test('dxChart groups and classes', function(assert) {

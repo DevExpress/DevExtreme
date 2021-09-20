@@ -347,6 +347,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             this.renderRGroupPanel();
         }
 
+        this.updateHeaderEmptyCellWidth();
+
         this._applyCellTemplates(groupCellTemplates);
     }
 
