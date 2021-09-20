@@ -13283,6 +13283,33 @@ declare module DevExpress.ui {
       | 'quarters'
       | 'years';
     /**
+     * [descr:dxGanttOptions.scaleTypeRange]
+     */
+    scaleTypeRange?: {
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.start]
+       */
+      start?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.end]
+       */
+      end?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+    };
+    /**
      * [descr:dxGanttOptions.selectedRowKey]
      */
     selectedRowKey?: any;
