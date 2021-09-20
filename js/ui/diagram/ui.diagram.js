@@ -1165,6 +1165,10 @@ class Diagram extends Widget {
             ));
         }
     }
+    _getViewport() {
+        const $viewPort = this.$element().closest('.dx-viewport');
+        return $viewPort.length ? $viewPort : $('body');
+    }
     _onToggleFullScreen(fullScreen) {
         if(this.toggleFullscreenLock > 0) return;
 
@@ -1175,12 +1179,12 @@ class Diagram extends Widget {
             this._prevFullScreenZIndex = this.$element().css('zIndex');
             this._fullScreenZIndex = zIndexPool.create(Overlay.baseZIndex());
             this.$element().css('zIndex', this._fullScreenZIndex);
-            this.$element().appendTo($('body'));
+            this.$element().appendTo(this._getViewport());
         } else {
             this.$element().appendTo(this._prevParent);
             if(this._fullScreenZIndex) {
                 zIndexPool.remove(this._fullScreenZIndex);
-                this.$element().css('z-index', this._prevFullScreenZIndex);
+                this.$element().css('zIndex', this._prevFullScreenZIndex);
             }
         }
 
