@@ -6,7 +6,6 @@ import { extend } from '../../core/utils/extend';
 import { isFunction, isDefined } from '../../core/utils/type';
 import { compileSetter, compileGetter } from '../../core/utils/data';
 import positionUtils from '../../animation/position';
-import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { getPublicElement } from '../../core/element';
@@ -71,7 +70,6 @@ class Diagram extends Widget {
     _init() {
         this._updateDiagramLockCount = 0;
         this.toggleFullscreenLock = 0;
-        this._browserResizeTimer = -1;
         this._toolbars = [];
 
         super._init();
@@ -155,23 +153,23 @@ class Diagram extends Widget {
             });
         }
 
-        if(hasWindow()) {
-            resizeCallbacks.add(() => {
-                this._killBrowserResizeTimer();
-                this._browserResizeTimer = setTimeout(() => this._processBrowserResize(), 100);
-            });
-        }
-
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, this._isPropertiesPanelVisible());
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, this._isToolboxVisible());
     }
-    _processBrowserResize() {
+    _dimensionChanged() {
         this._isMobileScreenSize = undefined;
 
         this._processDiagramResize();
-        this._killBrowserResizeTimer();
+    }
+    _visibilityChanged(visible) {
+        if(visible) {
+            this._bindDiagramData();
+            this.repaint();
+        }
     }
     _processDiagramResize() {
+        this._diagramInstance.updateLayout(true);
+
         if(this._historyToolbarResizeCallback) {
             this._historyToolbarResizeCallback.call(this);
         }
@@ -187,12 +185,6 @@ class Diagram extends Widget {
         if(this._toolboxResizeCallback) {
             this._toolboxResizeCallback.call(this);
         }
-    }
-    _killBrowserResizeTimer() {
-        if(this._browserResizeTimer > -1) {
-            clearTimeout(this._browserResizeTimer);
-        }
-        this._browserResizeTimer = -1;
     }
     isMobileScreenSize() {
         if(this._isMobileScreenSize === undefined) {
@@ -1177,8 +1169,22 @@ class Diagram extends Widget {
         if(this.toggleFullscreenLock > 0) return;
 
         this._changeNativeFullscreen(fullScreen);
+
+        if(fullScreen) {
+            this._prevParent = this.$element().parent();
+            this._prevFullScreenZIndex = this.$element().css('zIndex');
+            this._fullScreenZIndex = zIndexPool.create(Overlay.baseZIndex());
+            this.$element().css('zIndex', this._fullScreenZIndex);
+            this.$element().appendTo($('body'));
+        } else {
+            this.$element().appendTo(this._prevParent);
+            if(this._fullScreenZIndex) {
+                zIndexPool.remove(this._fullScreenZIndex);
+                this.$element().css('z-index', this._prevFullScreenZIndex);
+            }
+        }
+
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
-        this._diagramInstance.updateLayout(true);
 
         this._processDiagramResize();
         if(this._toolbox) {
