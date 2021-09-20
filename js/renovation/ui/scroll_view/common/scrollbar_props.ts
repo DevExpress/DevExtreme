@@ -5,9 +5,7 @@ import {
 
 @ComponentBindings()
 export class ScrollbarProps {
-  @OneWay() activeStateEnabled?: boolean = false;
-
-  @OneWay() hoverStateEnabled?: boolean;
+  @OneWay() direction: 'vertical' | 'horizontal' = 'vertical';
 
   @OneWay() containerHasSizes = false;
 
@@ -15,9 +13,7 @@ export class ScrollbarProps {
 
   @OneWay() contentSize = 0;
 
-  @OneWay() isScrollableHovered = false;
-
-  @OneWay() forceVisibility = false;
+  @OneWay() visible = false;
 
   @OneWay() scrollLocation = 0;
 

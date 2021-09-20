@@ -240,8 +240,8 @@ class ScrollableTestHelper {
       scrollbar.scrollbarRef = React.createRef();
       scrollbar.scrollbarRef.current = scrollbars.at(index).getDOMNode();
 
-      scrollbar.scrollRef = React.createRef();
-      scrollbar.scrollRef.current = scrollbars.at(index).find('.dx-scrollable-scroll').getDOMNode();
+      scrollbar.thumbRef = React.createRef();
+      scrollbar.thumbRef.current = scrollbars.at(index).find('.dx-scrollable-scroll').getDOMNode();
 
       Object.assign(animatedScrollbar, {
         props: {

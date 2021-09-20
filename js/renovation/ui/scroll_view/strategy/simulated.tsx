@@ -18,6 +18,8 @@ import {
   subscribeToDXScrollEndEvent,
   subscribeToDXScrollStopEvent,
   subscribeToDXScrollCancelEvent,
+  subscribeToMouseEnterEvent,
+  subscribeToMouseLeaveEvent,
 } from '../../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from '../internal/load_panel';
 
@@ -89,15 +91,14 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, handleKeyDown,
     hScrollbarRef, vScrollbarRef,
     topPocketRef, bottomPocketRef, bottomPocketHeight,
-    hoverInHandler, hoverOutHandler, hovered, pulledDown,
-    scrollLocationChange,
+    hovered, pulledDown, scrollLocationChange,
     contentWidth, containerClientWidth, contentHeight, containerClientHeight,
     scrollableRef, contentStyles, containerStyles, onBounce,
     onReachBottom, onRelease, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler,
-    lock, unlock, containerHasSizes,
+    scrolling, lock, unlock, containerHasSizes,
     hScrollOffsetMax, vScrollOffsetMax, vScrollOffsetMin,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
@@ -115,7 +116,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       rootElementRef={scrollableRef}
       focusStateEnabled={useKeyboard}
       activeStateUnit={activeStateUnit}
-      hoverStateEnabled
       aria={aria}
       addWidgetClass={false}
       classes={cssClasses}
@@ -124,8 +124,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       height={height}
       width={width}
       visible={visible}
-      onHoverStart={hoverInHandler}
-      onHoverEnd={hoverOutHandler}
       onVisibilityChange={onVisibilityChangeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
       // onKeyDown exist in restAttributes and has undefined value
@@ -170,7 +168,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               ref={hScrollbarRef}
               contentSize={contentWidth}
               containerSize={containerClientWidth}
-              isScrollableHovered={hovered}
+              visible={hovered || scrolling}
               minOffset={0}
               maxOffset={hScrollOffsetMax}
               scrollLocation={hScrollLocation}
@@ -191,7 +189,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               ref={vScrollbarRef}
               contentSize={contentHeight}
               containerSize={containerClientHeight}
-              isScrollableHovered={hovered}
+              visible={hovered || scrolling}
               minOffset={vScrollOffsetMin}
               maxOffset={vScrollOffsetMax}
               scrollLocation={vScrollLocation}
@@ -444,6 +442,32 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
         this.handleCancel(event);
       },
     );
+  }
+
+  @Effect()
+  mouseEnterEffect(): EffectReturn {
+    if (this.isHoverable) {
+      return subscribeToMouseEnterEvent(
+        this.scrollableRef.current, () => {
+          this.hovered = true;
+        },
+      );
+    }
+
+    return undefined;
+  }
+
+  @Effect()
+  mouseLeaveEffect(): EffectReturn {
+    if (this.isHoverable) {
+      return subscribeToMouseLeaveEvent(
+        this.scrollableRef.current, () => {
+          this.hovered = false;
+        },
+      );
+    }
+
+    return undefined;
   }
 
   @Method()
@@ -725,18 +749,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
   }
 
-  hoverInHandler(): void {
-    if (this.props.showScrollbar === 'onHover') {
-      this.hovered = true;
-    }
-  }
-
-  hoverOutHandler(): void {
-    if (this.props.showScrollbar === 'onHover') {
-      this.hovered = false;
-    }
-  }
-
   handleInit(event: DxMouseEvent): void {
     this.suppressDirections(event);
     this.eventForUserAction = event;
@@ -751,9 +763,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   handleStart(event: DxMouseEvent): void {
     this.eventForUserAction = event;
-
-    this.hScrollbarRef.current?.show();
-    this.vScrollbarRef.current?.show();
 
     this.onStart();
   }
@@ -1218,5 +1227,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     return allowedDirection(
       this.props.direction, -this.vScrollOffsetMax, -this.hScrollOffsetMax, bounceEnabled,
     );
+  }
+
+  get isHoverable(): boolean {
+    return !this.props.disabled && this.props.showScrollbar === 'onHover';
   }
 }
