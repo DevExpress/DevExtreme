@@ -76,7 +76,6 @@ import {
 
 import { utils } from '../utils';
 
-const document = domAdapter.getDocument();
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -961,8 +960,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 this.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-                eventsEngine.off(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-                eventsEngine.on(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, () => {
+                eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+                eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, () => {
                     isPointerDown = false;
                     this.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 });
@@ -2549,7 +2548,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _clean() {
-        eventsEngine.off(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+        eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
         this._disposeRenovatedComponents();
 
         super._clean();
@@ -3023,8 +3022,8 @@ const createDragBehaviorConfig = (
         const newY = boundingRect.top + MOUSE_IDENT;
 
         const elements = isWideAppointment ?
-            document.elementsFromPoint(newX, newY) :
-            document.elementsFromPoint(newX + appointmentWidth / 2, newY);
+            domAdapter.elementsFromPoint(newX, newY) :
+            domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const droppableCell = elements.filter(el => {
             const classList = el.classList;

@@ -28,7 +28,6 @@ import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
 
 const window = getWindow();
-const document = domAdapter.getDocument();
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
@@ -739,7 +738,7 @@ const Draggable = DOMComponent.inherit({
 
         if(that.option('autoScroll')) {
             const mousePosition = getMousePosition(e);
-            const allObjects = document.elementsFromPoint(mousePosition.x, mousePosition.y);
+            const allObjects = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y);
 
             that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
             that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
@@ -863,7 +862,7 @@ const Draggable = DOMComponent.inherit({
         const $targetDraggableElement = this.$element();
 
         const mousePosition = getMousePosition(e);
-        const elements = document.elementsFromPoint(mousePosition.x, mousePosition.y);
+        const elements = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y);
         const firstWidgetElement = elements.filter((element) => {
             const $element = $(element);
 
