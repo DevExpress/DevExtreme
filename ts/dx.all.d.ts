@@ -1770,9 +1770,9 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.on(events)]
      */
-    on(
-      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.DataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:DataSource.pageIndex()]
      */
@@ -1867,10 +1867,6 @@ declare module DevExpress.data {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type EventName = 'changed' | 'loadError' | 'loadingChanged';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    type StorageType = 'array' | 'local' | 'odata';
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1961,12 +1957,12 @@ declare module DevExpress.data {
      * [descr:DataSourceOptions.store]
      */
     store?:
+      | Array<TSourceValue>
       | Store<TKey, TSourceValue>
-      | (StoreOptions<TKey, TSourceValue> & {
-          type: DevExpress.data.DataSource.StorageType;
-        })
-      | CustomStoreOptions<TKey, TSourceValue>
-      | Array<TSourceValue>;
+      | (ArrayStoreOptions<TKey, TSourceValue> & { type: 'array' })
+      | (LocalStoreOptions<TKey, TSourceValue> & { type: 'local' })
+      | (ODataStoreOptions<TKey, TSourceValue> & { type: 'odata' })
+      | CustomStoreOptions<TKey, TSourceValue>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2091,8 +2087,11 @@ declare module DevExpress.data {
   /**
    * [descr:LocalStore]
    */
-  export class LocalStore extends ArrayStore {
-    constructor(options?: LocalStoreOptions);
+  export class LocalStore<TKey = any, TValue = any> extends ArrayStore<
+    TKey,
+    TValue
+  > {
+    constructor(options?: LocalStoreOptions<TKey, TValue>);
     /**
      * [descr:LocalStore.clear()]
      */
@@ -2101,7 +2100,8 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
+  export interface LocalStoreOptions<TKey = any, TValue = any>
+    extends ArrayStoreOptions<TKey, TValue> {
     /**
      * [descr:LocalStoreOptions.flushInterval]
      */
@@ -2440,11 +2440,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(
-      events: {
-        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
-      }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
