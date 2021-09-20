@@ -4088,10 +4088,11 @@ export interface SummaryTexts {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
 export type dxDataGridEditing = Editing;
 
+/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxDataGridOptions.editing.allowAdding

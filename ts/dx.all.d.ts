@@ -5887,9 +5887,6 @@ declare module DevExpress.ui {
     export type EditCancelingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid> &
       DataChangeInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export interface Editing extends EditingBase {
       /**
        * [descr:dxDataGridOptions.editing.allowAdding]
@@ -7460,7 +7457,7 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxDataGrid.Editing instead
    */
   export type dxDataGridEditing = DevExpress.ui.dxDataGrid.Editing;
   /**
@@ -19617,9 +19614,6 @@ declare module DevExpress.ui {
     export type EditCancelingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.DataChangeInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export interface Editing extends DevExpress.ui.dxDataGrid.EditingBase {
       /**
        * [descr:dxTreeListOptions.editing.allowAdding]
@@ -20037,7 +20031,7 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxTreeList.Editing instead
    */
   export type dxTreeListEditing = DevExpress.ui.dxTreeList.Editing;
   /**

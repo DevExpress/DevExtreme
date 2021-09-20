@@ -844,10 +844,11 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
 export type dxTreeListEditing = Editing;
 
+/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
