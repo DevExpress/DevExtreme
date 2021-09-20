@@ -25,7 +25,6 @@ export class VirtualScrollingDispatcher {
         this._cellWidth = this.getCellWidth();
 
         this._createVirtualScrolling();
-        this._attachScrollableEvents();
     }
 
     get isRTL() { return this.options.isRTL(); }
@@ -218,30 +217,14 @@ export class VirtualScrollingDispatcher {
         }
     }
 
-    _attachScrollableEvents() {
+    attachScrollableEvents() {
         if(this.horizontalScrollingAllowed || this.verticalScrollingAllowed) {
-            if(this.height || this.horizontalScrollingAllowed) {
-                this._attachScrollableScroll();
-            }
             if(!this.height) {
                 this._attachWindowScroll();
             }
         }
     }
 
-    _attachScrollableScroll() {
-        const scrollable = this.options.getScrollable();
-        const currentOnScroll = scrollable.option('onScroll');
-
-        scrollable.option('onScroll', e => {
-
-            currentOnScroll?.apply(scrollable, [e]);
-
-            this._process(e?.scrollOffset);
-        });
-    }
-
-    // TODO: it seems we need to move it out of this class
     _attachWindowScroll() {
         const window = getWindow();
 
@@ -252,7 +235,7 @@ export class VirtualScrollingDispatcher {
             } = window;
 
             if(scrollX >= MIN_SCROLL_OFFSET || scrollY >= MIN_SCROLL_OFFSET) {
-                this._process({
+                this.process({
                     left: scrollX,
                     top: scrollY,
                 });
@@ -262,7 +245,7 @@ export class VirtualScrollingDispatcher {
         eventsEngine.on(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
     }
 
-    _process(scrollPosition) {
+    process(scrollPosition) {
         if(scrollPosition) {
             const {
                 left,

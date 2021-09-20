@@ -454,6 +454,17 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
         }
+        if(this.isVirtualScrolling()) {
+            config = {
+                ...config,
+                onScroll: (e) => {
+
+                    config.onScroll?.(e);
+
+                    this.virtualScrollingDispatcher.process(e?.scrollOffset);
+                },
+            };
+        }
 
         return config;
     }
@@ -606,6 +617,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
+        this.virtualScrollingDispatcher.attachScrollableEvents();
         this.renderer = new VirtualScrollingRenderer(this);
     }
 
