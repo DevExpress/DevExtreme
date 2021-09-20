@@ -5,6 +5,7 @@ import 'generic_light.css!';
 
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
+import { getOuterHeight } from 'core/utils/size';
 import CustomStore from 'data/custom_store';
 import Color from 'color';
 import translator from 'animation/translator';
@@ -641,7 +642,7 @@ if(devices.real().deviceType === 'desktop') {
 
             assert.roughEqual(
                 scrollbar.offset().top + scrollbar.outerHeight(),
-                scheduler.instance.$element().outerHeight() - 1,
+                getOuterHeight(scheduler.instance.$element()) - 1,
                 1,
                 'Horizontal scrollbar has visible top coordinate',
             );

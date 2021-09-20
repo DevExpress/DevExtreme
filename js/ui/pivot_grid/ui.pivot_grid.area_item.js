@@ -1,3 +1,4 @@
+import { setWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { getPublicElement } from '../../core/element';
@@ -394,7 +395,7 @@ export const AreaItem = Class.inherit({
     },
 
     resetColumnsWidth: function() {
-        this._colgroupElement.find('col').width('auto');
+        setWidth(this._colgroupElement.find('col'), 'auto');
         this._tableElement.css({
             width: '',
             tableLayout: ''

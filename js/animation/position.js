@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getWidth, getHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 
 import { splitPair, pairToObject } from '../core/utils/common';
@@ -223,7 +224,7 @@ const calculatePosition = function(what, options) {
     const boundaryOffset = normalizeOffset(options.boundaryOffset);
 
     const h = {
-        mySize: $what.outerWidth(),
+        mySize: getOuterWidth($what),
         myAlign: my.h,
         atAlign: at.h,
         offset: offset.h,
@@ -232,7 +233,7 @@ const calculatePosition = function(what, options) {
     };
 
     const v = {
-        mySize: $what.outerHeight(),
+        mySize: getOuterHeight($what),
         myAlign: my.v,
         atAlign: at.v,
         offset: offset.v,
@@ -256,21 +257,21 @@ const calculatePosition = function(what, options) {
                 h.atSize = of[0].visualViewport.width;
                 v.atSize = of[0].visualViewport.height;
             } else {
-                h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : of.width();
-                v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
+                h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : getWidth(of);
+                v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : getHeight(of);
             }
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
             v.atLocation = 0;
-            h.atSize = of.width();
-            v.atSize = of.height();
+            h.atSize = getWidth(of);
+            v.atSize = getHeight(of);
         } else {
             const ofRect = getBoundingRect(of.get(0));
             const o = getOffsetWithoutScale(of);
             h.atLocation = o.left;
             v.atLocation = o.top;
-            h.atSize = Math.max(ofRect.width, of.outerWidth());
-            v.atSize = Math.max(ofRect.height, of.outerHeight());
+            h.atSize = Math.max(ofRect.width, getOuterWidth(of));
+            v.atSize = Math.max(ofRect.height, getOuterHeight(of));
         }
     }
 
@@ -279,8 +280,8 @@ const calculatePosition = function(what, options) {
 
     const bounds = (function() {
         const win = $(window);
-        const windowWidth = win.width();
-        const windowHeight = win.height();
+        const windowWidth = getWidth(win);
+        const windowHeight = getHeight(win);
         let left = win.scrollLeft();
         let top = win.scrollTop();
         const documentElement = domAdapter.getDocumentElement();
@@ -301,8 +302,8 @@ const calculatePosition = function(what, options) {
             left = boundaryPosition.left;
             top = boundaryPosition.top;
 
-            boundaryWidth = $boundary.width();
-            boundaryHeight = $boundary.height();
+            boundaryWidth = getWidth($boundary);
+            boundaryHeight = getHeight($boundary);
         }
 
         return {

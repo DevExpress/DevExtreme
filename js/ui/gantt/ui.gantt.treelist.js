@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import dxTreeList from '../tree_list';
 import { getBoundingRect } from '../../core/utils/position';
@@ -109,8 +110,8 @@ export class GanttTreeList {
     }
 
     _getHeight() {
-        if(this._$treeList.height()) {
-            return this._$treeList.height();
+        if(getHeight(this._$treeList)) {
+            return getHeight(this._$treeList);
         }
         this._gantt._hasHeight = isDefined(this._gantt.option('height')) && this._gantt.option('height') !== '';
         return this._gantt._hasHeight ? '100%' : '';

@@ -8,6 +8,7 @@ import { dasherize } from '../core/utils/inflector';
 import { isDefined } from '../core/utils/type';
 import { normalizeStyleProp, styleProp, stylePropPrefix } from '../core/utils/style';
 import { each } from '../core/utils/iterator';
+import { getWidth, setWidth, getHeight, setHeight } from '../core/utils/size';
 import browser from '../core/utils/browser';
 import CollectionWidgetItem from './collection/item';
 import CollectionWidget from './collection/ui.collection_widget.edit';
@@ -79,12 +80,20 @@ const FALLBACK_WRAP_MAP = {
     'col': 'normal'
 };
 const FALLBACK_MAIN_SIZE_MAP = {
-    'row': 'width',
-    'col': 'height'
+    'row': {
+        name: 'width',
+        getter: getWidth,
+        setter: setWidth,
+    },
+    'col': {
+        name: 'height',
+        getter: getHeight,
+        setter: setHeight,
+    }
 };
 const FALLBACK_CROSS_SIZE_MAP = {
-    'row': 'height',
-    'col': 'width'
+    'row': FALLBACK_MAIN_SIZE_MAP.col,
+    'col': FALLBACK_MAIN_SIZE_MAP.row
 };
 const FALLBACK_PRE_MARGIN_MAP = {
     'row': 'marginLeft',
@@ -216,7 +225,7 @@ class FallbackLayoutStrategy {
         const align = this._option('align');
         const totalItemSize = this.totalItemSize;
         const direction = this._option('direction');
-        const boxSize = this._$element[FALLBACK_MAIN_SIZE_MAP[direction]]();
+        const boxSize = FALLBACK_MAIN_SIZE_MAP[direction].getter(this._$element);
         const freeSpace = boxSize - totalItemSize;
 
         let shift = 0;
@@ -264,7 +273,7 @@ class FallbackLayoutStrategy {
 
         const crossAlign = this._option('crossAlign');
         const direction = this._option('direction');
-        const size = this._$element[FALLBACK_CROSS_SIZE_MAP[direction]]();
+        const size = FALLBACK_CROSS_SIZE_MAP[direction].getter(this._$element);
 
         const that = this;
 
@@ -274,7 +283,7 @@ class FallbackLayoutStrategy {
             case 'end':
                 each($items, function() {
                     const $item = $(this);
-                    const itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]]();
+                    const itemSize = FALLBACK_CROSS_SIZE_MAP[direction].getter($item);
                     const shift = size - itemSize;
                     $item.css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), shift);
                 });
@@ -282,7 +291,7 @@ class FallbackLayoutStrategy {
             case 'center':
                 each($items, function() {
                     const $item = $(this);
-                    const itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]]();
+                    const itemSize = FALLBACK_CROSS_SIZE_MAP[direction].getter($item);
                     const shift = 0.5 * (size - itemSize);
                     $item
                         .css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), shift)
@@ -293,7 +302,7 @@ class FallbackLayoutStrategy {
                 $items
                     .css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), 0)
                     .css(that._chooseMarginSide(FALLBACK_CROSS_POST_MARGIN_MAP[direction]), 0)
-                    .css(FALLBACK_CROSS_SIZE_MAP[direction], '100%');
+                    .css(FALLBACK_CROSS_SIZE_MAP[direction].name, '100%');
                 break;
         }
     }
@@ -323,7 +332,7 @@ class FallbackLayoutStrategy {
                 verticalAlign: 'top'
             });
 
-            $item[FALLBACK_MAIN_SIZE_MAP[direction]]('auto');
+            FALLBACK_MAIN_SIZE_MAP[direction].setter($item, 'auto');
 
             $item.removeClass(FALLBACK_BOX_ITEM);
 
@@ -359,7 +368,7 @@ class FallbackLayoutStrategy {
             $item
                 .css(MAXSIZE_MAP[direction], itemData.maxSize || 'none')
                 .css(MINSIZE_MAP[direction], itemData.minSize || '0')
-                .css(FALLBACK_MAIN_SIZE_MAP[direction], size);
+                .css(FALLBACK_MAIN_SIZE_MAP[direction].name, size);
 
             $item.addClass(FALLBACK_BOX_ITEM);
         });
@@ -373,7 +382,7 @@ class FallbackLayoutStrategy {
     }
 
     _contentSize(item) {
-        return $(item)[FALLBACK_MAIN_SIZE_MAP[this._option('direction')]]();
+        return FALLBACK_MAIN_SIZE_MAP[this._option('direction')].getter($(item));
     }
 
     _parseSize(size) {
@@ -399,7 +408,7 @@ class FallbackLayoutStrategy {
     }
 
     initSize() {
-        this._boxSize(this._$element[FALLBACK_MAIN_SIZE_MAP[this._option('direction')]]());
+        this._boxSize(FALLBACK_MAIN_SIZE_MAP[this._option('direction')].getter(this._$element));
     }
 
     update() {

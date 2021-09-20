@@ -1,6 +1,6 @@
 import { getWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
-import { isWindow, isString, isNumeric } from '../utils/type';
+import { isWindow, isString, isNumeric, isRenderer } from '../utils/type';
 
 const window = getWindow();
 
@@ -36,14 +36,18 @@ const getBoxSizingOffset = function(name, elementStyles, boxParams) {
 
     return 0;
 };
+const getElementComputedStyle = function(element) {
+    const view = element?.ownerDocument?.defaultView || window;
+    return view.getComputedStyle && view.getComputedStyle(element);
+};
 
 export const getSize = function(element, name, include) {
-    const elementStyles = window.getComputedStyle(element);
+    const elementStyles = getElementComputedStyle(element);
 
     const boxParams = getElementBoxParams(name, elementStyles);
 
-    const clientRect = element.getClientRects().length;
-    const boundingClientRect = element.getBoundingClientRect()[name];
+    const clientRect = element.getClientRects && element.getClientRects().length;
+    const boundingClientRect = element.getBoundingClientRect && element.getBoundingClientRect()[name];
 
     let result = clientRect ? boundingClientRect : 0;
 
@@ -140,24 +144,56 @@ export const getVisibleHeight = function(element) {
     return 0;
 };
 
-export const getWidth = (el) => elementSize(el, 'width');
-export const setWidth = (el, value) => elementSize(el, 'width', value);
-export const getHeight = (el) => elementSize(el, 'height');
-export const setHeight = (el, value) => elementSize(el, 'height', value);
-export const getOuterWidth = (el) => elementSize(el, 'outerWidth');
-export const setOuterWidth = (el, value) => elementSize(el, 'outerWidth', value);
-export const getOuterHeight = (el) => elementSize(el, 'outerHeight');
-export const setOuterHeight = (el, value) => elementSize(el, 'outerHeight', value);
-export const getInnerWidth = (el) => elementSize(el, 'innerWidth');
-export const setInnerWidth = (el, value) => elementSize(el, 'innerWidth', value);
-export const getInnerHeight = (el) => elementSize(el, 'innerHeight');
-export const setInnerHeight = (el, value) => elementSize(el, 'innerHeight', value);
+// TODO: remove when we'll start mocking named exports
+export const implementationsMap = {
+    getWidth: (...args) => elementSizeHelper('width', ...args),
+    setWidth: (...args) => elementSizeHelper('width', ...args),
+    getHeight: (...args) => elementSizeHelper('height', ...args),
+    setHeight: (...args) => elementSizeHelper('height', ...args),
+    getOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args),
+    setOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args),
+    getOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args),
+    setOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args),
+    getInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args),
+    setInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args),
+    getInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args),
+    setInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args),
+};
+function elementSizeHelper(sizeProperty, el, value) {
+    return arguments.length === 2 ? elementSize(el, sizeProperty) : elementSize(el, sizeProperty, value);
+}
+
+export const getWidth = (el) => implementationsMap.getWidth(el);
+export const setWidth = (el, value) => implementationsMap.setWidth(el, value);
+export const getHeight = (el) => implementationsMap.getHeight(el);
+export const setHeight = (el, value) => implementationsMap.setHeight(el, value);
+export const getOuterWidth = (el, includeMargin) => implementationsMap.getOuterWidth(el, includeMargin || false);
+export const setOuterWidth = (el, value) => implementationsMap.setOuterWidth(el, value);
+export const getOuterHeight = (el, includeMargin) => implementationsMap.getOuterHeight(el, includeMargin || false);
+export const setOuterHeight = (el, value) => implementationsMap.setOuterHeight(el, value);
+export const getInnerWidth = (el) => implementationsMap.getInnerWidth(el);
+export const setInnerWidth = (el, value) => implementationsMap.setInnerWidth(el, value);
+export const getInnerHeight = (el) => implementationsMap.getInnerHeight(el);
+export const setInnerHeight = (el, value) => implementationsMap.setInnerHeight(el, value);
 
 export const elementSize = function(el, sizeProperty, value) {
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;
     const isInner = sizeProperty.indexOf('inner') === 0;
+    const isGetter = arguments.length === 2 || typeof value === 'boolean';
+
+    if(isRenderer(el)) {
+        if(el.length > 1 && !isGetter) {
+            for(let i = 0; i < el.length; i++) {
+                elementSize(el[i], sizeProperty, value);
+            }
+            return;
+        }
+        el = el[0];
+    }
+
+    if(!el) return;
 
     if(isWindow(el)) {
         return isOuter ? el['inner' + partialName] : domAdapter.getDocumentElement()['client' + partialName];
@@ -176,7 +212,7 @@ export const elementSize = function(el, sizeProperty, value) {
         );
     }
 
-    if(arguments.length === 2 || typeof value === 'boolean') {
+    if(isGetter) {
         const include = {
             paddings: isInner || isOuter,
             borders: isOuter,
@@ -187,7 +223,7 @@ export const elementSize = function(el, sizeProperty, value) {
     }
 
     if(isNumeric(value)) {
-        const elementStyles = window.getComputedStyle(el);
+        const elementStyles = getElementComputedStyle(el);
         const sizeAdjustment = getElementBoxParams(propName, elementStyles);
         const isBorderBox = elementStyles.boxSizing === 'border-box';
         value = Number(value);

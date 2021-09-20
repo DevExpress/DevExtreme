@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getWidth, getHeight } from '../../core/utils/size';
 import fx from '../../animation/fx';
 import positionUtils from '../../animation/position';
 import { resetPosition } from '../../animation/translator';
@@ -1130,8 +1131,8 @@ const Overlay = Widget.inherit({
         }
 
         this._renderedDimensions = {
-            width: parseInt(this._$content.width(), 10),
-            height: parseInt(this._$content.height(), 10)
+            width: parseInt(getWidth(this._$content), 10),
+            height: parseInt(getHeight(this._$content), 10)
         };
     },
 
@@ -1199,8 +1200,8 @@ const Overlay = Widget.inherit({
 
         const isWindow = this._isWindow($container);
         const documentElement = domAdapter.getDocumentElement();
-        wrapperWidth = isWindow ? documentElement.clientWidth : $container.outerWidth(),
-        wrapperHeight = isWindow ? window.innerHeight : $container.outerHeight();
+        wrapperWidth = isWindow ? documentElement.clientWidth : getOuterWidth($container),
+        wrapperHeight = isWindow ? window.innerHeight : getOuterHeight($container);
 
         this._$wrapper.css({
             width: wrapperWidth,
