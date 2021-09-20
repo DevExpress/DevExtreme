@@ -841,7 +841,13 @@ const PivotGrid = Widget.inherit({
                 that.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
             });
         } else {
-            that._loadPanel.option('visible', isLoading);
+            const visibilityOptions = {
+                visible: isLoading
+            };
+            if(isLoading) {
+                visibilityOptions.position = gridCoreUtils.calculateLoadPanelPosition(that._dataArea.groupElement());
+            }
+            that._loadPanel.option(visibilityOptions);
             that.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
         }
     },

@@ -188,17 +188,6 @@ export default {
             loadPanelOptions = extend({
                 shading: false,
                 message: loadPanelOptions.text,
-                position: function() {
-                    const $window = $(getWindow());
-                    if($element.height() > $window.height()) {
-                        return {
-                            of: $window,
-                            boundary: $element,
-                            collision: 'fit'
-                        };
-                    }
-                    return { of: $element };
-                },
                 container: $container
             }, loadPanelOptions);
 
@@ -206,6 +195,18 @@ export default {
         } else {
             that._loadPanel = null;
         }
+    },
+
+    calculateLoadPanelPosition($element) {
+        const $window = $(getWindow());
+        if($element.height() > $window.height()) {
+            return {
+                of: $window,
+                boundary: $element,
+                collision: 'fit'
+            };
+        }
+        return { of: $element };
     },
 
     getIndexByKey: function(key, items, keyName) {
