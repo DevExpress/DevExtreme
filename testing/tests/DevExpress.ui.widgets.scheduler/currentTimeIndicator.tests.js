@@ -667,7 +667,7 @@ QUnit.module('DateTime indicator on Week View', () => {
         assert.roughEqual(getOuterHeight($topShader), 9.5 * cellHeight, 1, 'Top indicator has correct height');
         assert.roughEqual(getOuterHeight($bottomShader), 22.5 * cellHeight, 1.5, 'Bottom indicator has correct height');
 
-        assert.roughEqual($shader.outerWidth(), 898, 1, 'Shader has correct width');
+        assert.roughEqual(getOuterWidth($shader), 898, 1, 'Shader has correct width');
         assert.roughEqual(getOuterWidth($topShader), 4 * cellWidth, 1.5, 'Top indicator has correct width');
         assert.roughEqual(getOuterWidth($bottomShader), 3 * cellWidth, 1.5, 'Bottom indicator has correct width');
     });
