@@ -1257,13 +1257,13 @@ declare module DevExpress {
     /**
      * [descr:validationEngine.validateGroup()]
      */
-    static validateGroup(): DevExpress.ui.dxValidationGroupResult;
+    static validateGroup(): DevExpress.ui.dxValidationGroup.ValidationResult;
     /**
      * [descr:validationEngine.validateGroup(group)]
      */
     static validateGroup(
       group: string | any
-    ): DevExpress.ui.dxValidationGroupResult;
+    ): DevExpress.ui.dxValidationGroup.ValidationResult;
     /**
      * [descr:validationEngine.validateModel(model)]
      */
@@ -11551,7 +11551,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxForm.validate()]
      */
-    validate(): dxValidationGroupResult;
+    validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxForm>;
@@ -20633,7 +20633,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidationGroup.validate()]
      */
-    validate(): dxValidationGroupResult;
+    validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxValidationGroup {
     export type DisposingEvent = DevExpress.events.EventInfo<dxValidationGroup>;
@@ -20643,6 +20643,7 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxValidationGroup> &
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxValidationGroupOptions;
+    export type ValidationResult = dxValidationGroupResult;
   }
   /**
    * @deprecated use Properties instead
@@ -20652,6 +20653,7 @@ declare module DevExpress.ui {
     extends DOMComponentOptions<dxValidationGroup> {}
   /**
    * [descr:dxValidationGroupResult]
+   * @deprecated [depNote:dxValidationGroupResult]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxValidationGroupResult {
@@ -20764,7 +20766,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidator.validate()]
      */
-    validate(): dxValidatorResult;
+    validate(): DevExpress.ui.dxValidator.ValidationResult;
   }
   module dxValidator {
     export type DisposingEvent = DevExpress.events.EventInfo<dxValidator>;
@@ -20782,6 +20784,7 @@ declare module DevExpress.ui {
       brokenRules?: ValidationRule;
       status?: 'valid' | 'invalid' | 'pending';
     };
+    export type ValidationResult = dxValidatorResult;
   }
   /**
    * @deprecated use Properties instead
@@ -20838,6 +20841,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxValidatorResult]
+   * @deprecated [depNote:dxValidatorResult]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxValidatorResult {
