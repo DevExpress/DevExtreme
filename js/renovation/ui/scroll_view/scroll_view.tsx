@@ -31,7 +31,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       scrollByContent, useKeyboard, pullDownEnabled,
       useSimulatedScrollbar, inertiaEnabled,
       onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
-      pulledDownText, refreshingText, pullingDownText, reachBottomText,
+      pulledDownText, refreshingText, pullingDownText, reachBottomText, refreshStrategy,
     },
     restAttributes,
   } = viewModel;
@@ -57,6 +57,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       onUpdated={onUpdated}
       onPullDown={onPullDown}
       onReachBottom={onReachBottom}
+      refreshStrategy={refreshStrategy}
       pulledDownText={pulledDownText}
       pullingDownText={pullingDownText}
       refreshingText={refreshingText}
