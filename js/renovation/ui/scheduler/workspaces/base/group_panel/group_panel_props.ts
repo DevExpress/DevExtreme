@@ -1,7 +1,9 @@
 import {
   ComponentBindings,
+  ForwardRef,
   JSXTemplate,
   OneWay,
+  RefObject,
   Template,
 } from '@devextreme-generator/declarations';
 import {
@@ -23,4 +25,6 @@ export class GroupPanelBaseProps {
   @OneWay() className?: string;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
+
+  @ForwardRef() elementRef?: RefObject<HTMLDivElement>;
 }

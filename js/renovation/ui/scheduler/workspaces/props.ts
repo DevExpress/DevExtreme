@@ -3,6 +3,7 @@ import {
   Event,
   JSXTemplate,
   OneWay,
+  Slot,
   Template,
 } from '@devextreme-generator/declarations';
 import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
@@ -91,6 +92,10 @@ export class WorkSpaceProps extends BaseWidgetProps {
   @OneWay() type: ViewType = 'week';
 
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
+
+  @Slot() appointments?: JSX.Element;
+
+  @Slot() allDayAppointments?: JSX.Element;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias

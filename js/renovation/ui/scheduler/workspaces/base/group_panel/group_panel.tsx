@@ -1,9 +1,11 @@
 import {
   Component,
   ComponentBindings,
+  ForwardRef,
   JSXComponent,
   JSXTemplate,
   OneWay,
+  RefObject,
 } from '@devextreme-generator/declarations';
 import { isVerticalGroupingApplied } from '../../utils';
 import { GroupPanelBaseProps } from './group_panel_props';
@@ -22,6 +24,7 @@ export const viewFunction = ({
     className,
     groupPanelData,
     resourceCellTemplate,
+    elementRef,
   },
 }: GroupPanel): JSX.Element => (
   <Layout
@@ -29,7 +32,7 @@ export const viewFunction = ({
     resourceCellTemplate={resourceCellTemplate}
     className={className}
     groupPanelData={groupPanelData}
-    // eslint-disable-next-line react/jsx-props-no-spreading
+    elementRef={elementRef}
     styles={restAttributes.style}
   />
 );
@@ -39,6 +42,8 @@ export class GroupPanelProps extends GroupPanelBaseProps {
   @OneWay() groups: Group[] = [];
 
   @OneWay() groupOrientation: GroupOrientation = VERTICAL_GROUP_ORIENTATION;
+
+  @ForwardRef() elementRef?: RefObject<HTMLDivElement>;
 }
 
 @Component({

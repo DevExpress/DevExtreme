@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+import React from 'react';
 import {
   GroupPanelVerticalLayout as Layout,
   viewFunction as LayoutView,
@@ -95,6 +96,18 @@ describe('GroupPanel Vertical Layout', () => {
           groupItems: groupPanelData.groupPanelItems[1],
           cellTemplate: resourceCellTemplate,
         });
+    });
+
+    it('should pass ref to the root', () => {
+      const ref = React.createRef();
+      render({
+        props: {
+          elementRef: ref,
+        },
+      });
+
+      expect(ref.current)
+        .not.toBe(null);
     });
   });
 

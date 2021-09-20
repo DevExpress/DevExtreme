@@ -15,10 +15,12 @@ export const viewFunction = ({
     className,
     groupPanelData,
     resourceCellTemplate,
+    elementRef,
   },
 }: GroupPanelVerticalLayout): JSX.Element => (
   <div
     className={className}
+    ref={elementRef}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
     style={style}
