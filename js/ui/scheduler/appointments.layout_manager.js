@@ -2,7 +2,6 @@ import { equalByValue } from '../../core/utils/common';
 import {
     getModelProvider,
     getTimeZoneCalculator,
-    getResourceManager,
     getAppointmentDataProvider
 } from './instanceFactory';
 import { AppointmentViewModel } from './appointments/viewModelGenerator';
@@ -36,8 +35,7 @@ class AppointmentLayoutManager {
             cellCountInsideLeftVirtualCell,
             cellCountInsideTopVirtualRow
         } = virtualScrollingDispatcher;
-        const resourceManager = getResourceManager(key);
-        const groupCount = getGroupCount(resourceManager.loadedResources);
+        const groupCount = getGroupCount(this.instance.option('loadedResources'));
         const DOMMetaData = workspace.getDOMElementsMetaData();
         const allDayHeight = getAllDayHeight(
             workspace.option('showAllDayPanel'),
@@ -48,7 +46,9 @@ class AppointmentLayoutManager {
 
         return {
             resources: this.instance.option('resources'),
-            resourceDataAccessors: this.instance.resourceDataAccessors,
+            loadedResources: this.instance.option('loadedResources'),
+            getAppointmentColor: this.instance.createGetAppointmentColor(),
+            dataAccessors: this.instance._dataAccessors,
 
             instance: this.instance,
             key,
@@ -81,7 +81,6 @@ class AppointmentLayoutManager {
             getVisibleDayDuration: () => workspace.getVisibleDayDuration(),
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
-            resourceManager,
             appointmentDataProvider: getAppointmentDataProvider(key),
             timeZone: this.modelProvider.timeZone,
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),

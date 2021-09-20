@@ -5,7 +5,7 @@ import {
     DateGeneratorBaseStrategy,
     DateGeneratorVirtualStrategy
 } from 'ui/scheduler/appointments/settingsGenerator';
-import { getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
@@ -14,6 +14,8 @@ import config from 'core/config';
 
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
+
+import { getAppointmentColor, createExpressions } from 'ui/scheduler/resources/utils';
 
 const {
     module,
@@ -835,15 +837,21 @@ module('Subscribes', {
         });
 
         const groups = this.instance._getCurrentViewOption('groups');
-        const workspaceGroups = this.instance.getWorkSpace().option('groups');
-        const result = getResourceManager(this.instance.key).getAppointmentColor({
+
+        const config = {
+            resources: this.instance.option('resources'),
+            dataAccessors: createExpressions(this.instance.option('resources')),
+            loadedResources: this.instance.option('loadedResources'),
+            resourceLoaderMap: this.instance.option('resourceLoaderMap')
+        };
+
+        const result = getAppointmentColor(config, {
             itemData: {
                 typeId: 1,
                 priorityId: 1
             },
             groupIndex: 0,
             groups,
-            workspaceGroups
         });
 
         result.done(function(color) {
@@ -887,8 +895,15 @@ module('Subscribes', {
         });
 
         const groups = this.instance._getCurrentViewOption('groups');
-        const workspaceGroups = this.instance.getWorkSpace().option('groups');
-        const result = getResourceManager(this.instance.key).getAppointmentColor({
+
+        const config = {
+            resources: this.instance.option('resources'),
+            dataAccessors: createExpressions(this.instance.option('resources')),
+            loadedResources: this.instance.option('loadedResources'),
+            resourceLoaderMap: this.instance.option('resourceLoaderMap')
+        };
+
+        const result = getAppointmentColor(config, {
             itemData: {
                 'Price': 10,
                 'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -899,8 +914,7 @@ module('Subscribes', {
                 'TheatreId': 1
             },
             groupIndex: 0,
-            groups,
-            workspaceGroups
+            groups
         });
 
         result.done(function(color) {

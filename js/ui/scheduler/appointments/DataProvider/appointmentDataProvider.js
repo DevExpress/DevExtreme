@@ -45,7 +45,10 @@ export class AppointmentDataProvider {
     initFilterStrategy() {
         const filterOptions = {
             key: this.key,
+
             resources: this.options.resources,
+            getLoadedResources: this.options.getLoadedResources,
+
             scheduler: this.scheduler,
             dataSource: this.dataSource,
             dataAccessors: this.dataAccessors,
@@ -54,7 +57,6 @@ export class AppointmentDataProvider {
             appointmentDuration: this.options.appointmentDuration,
             showAllDayPanel: this.options.showAllDayPanel,
             timeZoneCalculator: this.options.timeZoneCalculator,
-            resourceManager: this.options.resourceManager
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual

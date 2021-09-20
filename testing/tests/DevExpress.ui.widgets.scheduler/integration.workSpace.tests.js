@@ -1284,8 +1284,10 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             currentDate: new Date(2020, 8, 21),
             height: 300,
             scrolling: { mode: 'virtual', orientation: 'both' },
-            onOptionChanged: () => {
-                onOptionChangedCalls += 1;
+            onOptionChanged: ({ name }) => {
+                if(name !== 'loadedResources') {
+                    onOptionChangedCalls += 1;
+                }
             },
         });
         scheduler.instance.getWorkSpace().renderer.getRenderTimeout = () => -1;

@@ -10,7 +10,6 @@ import Color from 'color';
 import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
-import { getResourceManager } from 'ui/scheduler/instanceFactory';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
@@ -380,10 +379,9 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const done = assert.async();
 
-        const resourceManager = getResourceManager(instance.key);
         getOrLoadResourceItem(
-            resourceManager.getResources(),
-            resourceManager.resourceLoaderMap,
+            instance.option('resources'),
+            instance.option('resourceLoaderMap'),
             'ownerId',
             1
         ).done(function(resource) {
@@ -559,9 +557,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             });
 
             instance.option('resources[0].dataSource', resourceData);
-            const resources = getResourceManager(instance.key).getResources();
 
-            assert.deepEqual(resources, [{
+            assert.deepEqual(instance.option('resources'), [{
                 fieldExpr: 'ownerId',
                 dataSource: resourceData
             }], 'Resources were changed correctly');

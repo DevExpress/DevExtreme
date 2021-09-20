@@ -122,9 +122,10 @@ QUnit.module('Options', {
 
             const dataAccessors = instance._dataAccessors;
 
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
+            assert.deepEqual(dataAccessors.getter, appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
+            assert.deepEqual(dataAccessors.setter, appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
             assert.deepEqual(dataAccessors.expr, appointmentDataProvider.dataAccessors.expr, 'dataExpressions were passed to appointmentDataProvider');
+            assert.deepEqual(dataAccessors.resources, appointmentDataProvider.dataAccessors.resources, 'resources were passed to appointmentDataProvider');
         } finally {
             repaintStub.restore();
         }
