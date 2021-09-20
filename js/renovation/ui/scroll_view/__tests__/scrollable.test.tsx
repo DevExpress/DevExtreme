@@ -57,6 +57,7 @@ describe('Scrollable', () => {
       pullingDownText: 'Pull down to refresh...',
       reachBottomEnabled: false,
       reachBottomText: 'Loading...',
+      refreshStrategy: 'pullDown',
       refreshingText: 'Refreshing...',
       rtlEnabled: false,
       scrollByContent: false,
@@ -381,9 +382,11 @@ describe('Scrollable', () => {
               left: currentContentOffset.scrollLeft,
             });
             viewModel.container = () => ({ ...currentContentOffset } as any);
+            viewModel.updateHandler = jest.fn();
 
             viewModel.scrollTo(scrollToValue);
 
+            expect(viewModel.updateHandler).toBeCalledTimes(!useNative ? 1 : 0);
             expect(viewModel.scrollBy).toBeCalledTimes(1);
             expect(viewModel.scrollBy).toBeCalledWith(expectedScrollByArg);
           });
@@ -420,6 +423,12 @@ describe('Scrollable', () => {
     });
 
     describe('Getters', () => {
+      it('isRenovated', () => {
+        const viewModel = new Scrollable({ });
+
+        expect(viewModel.isRenovated()).toEqual(true);
+      });
+
       each([false, true]).describe('useNative: %o', (useNative) => {
         it('scrollableRef', () => {
           const viewModel = new Scrollable({ useNative });

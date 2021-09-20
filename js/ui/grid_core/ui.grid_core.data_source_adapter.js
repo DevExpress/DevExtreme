@@ -372,7 +372,7 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(!this.option('scrolling.newMode') && this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
+            if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
                 this._totalCountCorrection += getItemCount() - oldItemCount;
             }
 
@@ -653,7 +653,10 @@ export default gridCore.Controller.inherit((function() {
                 }
             } else if(!args || isDefined(args.changeType)) {
                 currentTotalCount = dataSource.pageIndex() * this.pageSize() + itemsCount;
-                this._currentTotalCount = Math.max(this._currentTotalCount, currentTotalCount);
+                if(currentTotalCount > this._currentTotalCount) {
+                    this._currentTotalCount = currentTotalCount;
+                    this._totalCountCorrection = 0;
+                }
                 if(itemsCount === 0 && dataSource.pageIndex() >= this.pageCount()) {
                     dataSource.pageIndex(this.pageCount() - 1);
                     if(this.option('scrolling.mode') !== 'infinite') {
@@ -694,6 +697,9 @@ export default gridCore.Controller.inherit((function() {
         },
         totalCount: function() {
             return parseInt((this._currentTotalCount || this._dataSource.totalCount()) + this._totalCountCorrection);
+        },
+        totalCountCorrection: function() {
+            return this._totalCountCorrection;
         },
         itemsCount: function() {
             return this._dataSource.items().length;

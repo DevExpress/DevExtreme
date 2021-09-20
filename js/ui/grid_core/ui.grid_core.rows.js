@@ -1006,6 +1006,9 @@ export const rowsModule = {
                             animation: animation,
                             visible: isLoading
                         };
+                        if(isLoading) {
+                            visibilityOptions.position = gridCoreUtils.calculateLoadPanelPosition($element);
+                        }
                         clearTimeout(that._hideLoadingTimeoutID);
                         if(loadPanel.option('visible') && !isLoading) {
                             that._hideLoadingTimeoutID = setTimeout(function() {

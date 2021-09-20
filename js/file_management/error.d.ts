@@ -2,9 +2,7 @@ import FileSystemItem from './file_system_item';
 
 /**
  * @docid FileSystemError
- * @module file_management/error
  * @namespace DevExpress.fileManagement
- * @export default
  * @public
  */
  export default class FileSystemError {
@@ -17,7 +15,6 @@ import FileSystemItem from './file_system_item';
 
     /**
      * @docid FileSystemError.errorCode
-     * @type number
      * @public
      */
     errorCode?: number;

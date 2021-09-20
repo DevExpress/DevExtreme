@@ -90,7 +90,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
         this.instance.option({
             crossScrollingEnabled: true,
             width: 400,
-            height: 200,
+            height: 150,
             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
             renovateRender,
         });
@@ -114,7 +114,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
         this.instance.option({
             crossScrollingEnabled: true,
             width: 400,
-            height: 200,
+            height: 150,
             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
             renovateRender,
         });
@@ -281,11 +281,7 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
 
 QUnit.module('Timeline Day', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
-    },
-    afterEach: function() {
-        this.clock.restore();
     }
 });
 
@@ -328,14 +324,10 @@ QUnit.module('Timeline Day', {
 
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
             groupOrientation: 'horizontal',
             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
         }).dxSchedulerTimelineDay('instance');
-    },
-    afterEach: function() {
-        this.clock.restore();
     }
 });
 

@@ -34,9 +34,10 @@ import { BottomPocket } from '../internal/pocket/bottom';
 
 import {
   ScrollEventArgs,
-  ScrollOffset, ScrollableDirection, RefreshStrategy, DxMouseEvent,
+  ScrollOffset, ScrollableDirection, DxMouseEvent,
   DxMouseWheelEvent,
 } from '../common/types';
+import resizeObserverSingleton from '../../../../core/resize_observer';
 
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 
@@ -45,7 +46,6 @@ import {
 } from '../utils/scroll_direction';
 
 import {
-  DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   DIRECTION_BOTH,
   SCROLLABLE_CONTAINER_CLASS,
@@ -61,6 +61,8 @@ import {
 import { Scrollbar } from '../scrollbar/scrollbar';
 import { isVisible } from '../utils/is_element_visible';
 import { ScrollableNativeProps } from '../common/native_strategy_props';
+import { allowedDirection } from '../utils/get_allowed_direction';
+import { getScrollTopMax } from '../utils/get_scroll_top_max';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
@@ -70,7 +72,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     hScrollbarRef, vScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     updateHandleInternal, needForceScrollbarsVisibility,
-    scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
+    scrollableRef, isLoadPanelVisible, topPocketState,
     pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
     topPocketHeight, contentStyles, scrollViewContentRef, contentTranslateTop,
     hScrollLocation, vScrollLocation, vScrollOffsetMax, hScrollOffsetMax,
@@ -78,7 +80,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       aria, activeStateUnit, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, needRenderScrollbars,
-      pullingDownText, pulledDownText, refreshingText, reachBottomText,
+      pullingDownText, pulledDownText, refreshingText, reachBottomText, refreshStrategy,
       pullDownEnabled, reachBottomEnabled, showScrollbar,
       useSimulatedScrollbar,
     },
@@ -224,6 +226,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @InternalState() contentClientHeight = 0;
 
+  @InternalState() topPocketHeight = 0;
+
+  @InternalState() bottomPocketHeight = 0;
+
   @InternalState() needForceScrollbarsVisibility = false;
 
   @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
@@ -300,24 +306,23 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Method()
   scrollOffset(): ScrollOffset {
-    const containerEl = this.containerRef.current!;
-    const { scrollTop, scrollLeft } = containerEl;
-    const scrollLeftMax = getScrollLeftMax(containerEl);
-
     return {
-      top: scrollTop,
-      left: normalizeOffsetLeft(scrollLeft, scrollLeftMax, !!this.props.rtlEnabled),
+      top: this.scrollTop(),
+      left: this.scrollLeft(),
     };
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollOffset().top;
+    return this.containerRef.current!.scrollTop;
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollOffset().left;
+    const containerEl = this.containerRef.current!;
+    const scrollLeftMax = getScrollLeftMax(containerEl);
+
+    return normalizeOffsetLeft(containerEl.scrollLeft, scrollLeftMax, !!this.props.rtlEnabled);
   }
 
   @Method()
@@ -351,10 +356,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     }
 
     this.containerRef.current![this.fullScrollInactiveProp] = 0;
-  }
-
-  @Effect({ run: 'always' }) updateScrollbarSize(): void {
-    this.updateSizes();
   }
 
   @Effect({ run: 'once' })
@@ -428,6 +429,36 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.updateHandleInternal();
   }
 
+  // if delete this effect we need to wait changing size inside resizeObservable
+  // it needs for support qunit tests
+  @Effect({ run: 'once' }) updateDimensions(): void {
+    this.updateElementDimensions();
+  }
+
+  @Effect({ run: 'once' })
+  /* istanbul ignore next */
+  containerResizeObserver(): DisposeEffectReturn {
+    const containerEl = this.containerRef.current;
+
+    resizeObserverSingleton.observe(containerEl, ({ target }) => {
+      this.setContainerDimensions(target);
+    });
+
+    return (): void => { resizeObserverSingleton.unobserve(containerEl); };
+  }
+
+  @Effect({ run: 'once' })
+  /* istanbul ignore next */
+  contentResizeObserver(): DisposeEffectReturn {
+    const contentEl = this.contentRef.current;
+
+    resizeObserverSingleton.observe(contentEl, ({ target }) => {
+      this.setContentDimensions(target);
+    });
+
+    return (): void => { resizeObserverSingleton.unobserve(contentEl); };
+  }
+
   scrollByLocation(location: ScrollOffset): void {
     const containerEl = this.containerRef.current!;
 
@@ -440,7 +471,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   updateHandleInternal(): void {
-    this.updateSizes();
+    this.updateElementDimensions();
     this.onUpdated();
   }
 
@@ -568,18 +599,27 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
   }
 
-  updateSizes(): void {
-    const containerEl = this.containerRef.current;
-    const contentEl = this.contentRef.current;
+  updateElementDimensions(): void {
+    this.setContentDimensions(this.contentRef.current!);
+    this.setContainerDimensions(this.containerRef.current!);
+  }
 
-    if (isDefined(containerEl)) {
+  setContainerDimensions(containerEl: HTMLDivElement): void {
+    if (this.props.useSimulatedScrollbar) {
       this.containerClientWidth = containerEl.clientWidth;
       this.containerClientHeight = containerEl.clientHeight;
     }
+  }
 
-    if (isDefined(contentEl)) {
+  setContentDimensions(contentEl: HTMLDivElement): void {
+    if (this.props.useSimulatedScrollbar) {
       this.contentClientWidth = contentEl.clientWidth;
       this.contentClientHeight = contentEl.clientHeight;
+    }
+
+    if (this.props.forceGeneratePockets) {
+      this.topPocketHeight = this.topPocketRef.current!.clientHeight;
+      this.bottomPocketHeight = this.bottomPocketRef.current!.clientHeight;
     }
   }
 
@@ -700,10 +740,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.refreshTimer = undefined;
   }
 
-  get topPocketHeight(): number {
-    return this.topPocketRef?.current?.clientHeight ?? 0;
-  }
-
   pullDownRefreshing(): void {
     if (this.topPocketState === TopPocketState.STATE_REFRESHING) {
       return;
@@ -732,7 +768,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   getPullDownStartPosition(): number {
-    return -Math.round(this.topPocketRef.current!.clientHeight * 1.5);
+    return -Math.round(this.topPocketHeight * 1.5);
   }
 
   complete(): void {
@@ -747,16 +783,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.pullDownOpacity = 0;
   }
 
-  get refreshStrategy(): RefreshStrategy {
-    return this.platform === 'android' ? 'swipeDown' : 'pullDown';
-  }
-
   get isSwipeDownStrategy(): boolean {
-    return this.refreshStrategy === 'swipeDown';
+    return this.props.refreshStrategy === 'swipeDown';
   }
 
   get isPullDownStrategy(): boolean {
-    return this.refreshStrategy === 'pullDown';
+    return this.props.refreshStrategy === 'pullDown';
   }
 
   isSwipeDown(): boolean {
@@ -778,33 +810,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       && isReachedBottom(this.containerRef.current!, scrollTop, this.bottomPocketHeight);
   }
 
-  get bottomPocketHeight(): number {
-    if (this.props.reachBottomEnabled && this.bottomPocketRef.current) {
-      return this.bottomPocketRef.current.clientHeight;
-    }
-
-    return 0;
-  }
-
   tryGetAllowedDirection(): ScrollableDirection | undefined {
-    const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.props.direction);
-
-    const contentEl = this.contentRef.current!;
     const containerEl = this.containerRef.current!;
 
-    const isOverflowVertical = (isVertical && contentEl.clientHeight > containerEl.clientHeight)
-      || this.pullDownEnabled;
-    const isOverflowHorizontal = (isHorizontal && contentEl.clientWidth > containerEl.clientWidth)
-      || this.pullDownEnabled;
-
-    if (isBoth && isOverflowVertical && isOverflowHorizontal) {
-      return DIRECTION_BOTH;
-    } if (isHorizontal && isOverflowHorizontal) {
-      return DIRECTION_HORIZONTAL;
-    } if (isVertical && isOverflowVertical) {
-      return DIRECTION_VERTICAL;
-    }
-    return undefined;
+    return allowedDirection(
+      this.props.direction, getScrollTopMax(containerEl), getScrollLeftMax(containerEl), false,
+    );
   }
 
   isLocked(): boolean {
@@ -832,7 +843,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     } = this.props;
 
     const classesMap = {
-      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform}`]: true,
+      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.real().platform}`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar !== 'never' && this.props.useSimulatedScrollbar,
@@ -842,19 +853,15 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     return combineClasses(classesMap);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  get platform(): string | undefined {
-    return devices.real().platform;
-  }
-
   get direction(): { isVertical: boolean; isHorizontal: boolean } {
     return new ScrollDirection(this.props.direction);
   }
 
   get pullDownEnabled(): boolean {
-    return this.props.pullDownEnabled && this.platform !== 'generic';
+    return this.props.pullDownEnabled && devices.real().platform !== 'generic';
   }
 
+  /* istanbul ignore next */
   get contentStyles(): { [key: string]: string | number } | undefined {
     if (this.props.forceGeneratePockets && this.isPullDownStrategy) {
       return {

@@ -95,8 +95,6 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @docid
  * @isEditor
  * @inherits dxTextBox
- * @module ui/text_area
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

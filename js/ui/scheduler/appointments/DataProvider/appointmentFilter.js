@@ -181,7 +181,6 @@ export class AppointmentFilterBaseStrategy {
     get scheduler() { return this.options.scheduler; } // TODO get rid
     get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
     get viewDataProvider() { return this.workspace.viewDataProvider; }
-    get resourceManager() { return this.options.resourceManager; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.options.startDayHour; }
@@ -198,7 +197,6 @@ export class AppointmentFilterBaseStrategy {
 
     filter() {
         const dateRange = this.workspace.getDateRange();
-        const resources = this.resourceManager.loadedResources;
 
         let allDay;
 
@@ -213,7 +211,7 @@ export class AppointmentFilterBaseStrategy {
             viewEndDayHour: this.viewEndDayHour,
             min: dateRange[0],
             max: dateRange[1],
-            resources: resources,
+            resources: this.options.getLoadedResources(),
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
         });
@@ -560,7 +558,7 @@ export class AppointmentFilterBaseStrategy {
 
     _filterAppointmentByResources(appointment, resources) {
         const checkAppointmentResourceValues = (resourceName, resourceIndex) => {
-            const resourceGetter = this.dataAccessors.getter.resources[resourceName];
+            const resourceGetter = this.dataAccessors.resources.getter[resourceName];
             let resource;
 
             if(isFunction(resourceGetter)) {
@@ -790,7 +788,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
 
         return getResourcesDataByGroups(
-            this.resourceManager.loadedResources,
+            this.options.getLoadedResources(),
             this.options.resources,
             [cellGroup]
         );

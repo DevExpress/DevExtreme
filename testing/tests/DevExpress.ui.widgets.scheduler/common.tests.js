@@ -384,7 +384,7 @@ QUnit.module('Small size', {
             this.clock.tick();
 
             const $appointment = $(schedulerInstance.$element().find('.dx-scheduler-appointment'));
-            assert.roughEqual($appointment.position().left, 100, 1.001, 'Appointment is rendered correctly');
+            assert.roughEqual($appointment.position().left, 0, 1.001, 'Appointment is rendered correctly');
         }
     });
 });
@@ -818,7 +818,7 @@ QUnit.module('View with configuration', {
         const scrollHeight = scrollable.scrollHeight();
         const scrollableHeight = scrollable.$element().height();
 
-        assert.equal(scrollableHeight, dateTableHeight, 'Correct dateTable height');
+        assert.roughEqual(scrollableHeight, dateTableHeight, 1.001, 'Correct dateTable height');
         assert.equal(scrollableHeight, scrollHeight, 'Correct scroll content height');
     });
 

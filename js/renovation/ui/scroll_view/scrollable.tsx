@@ -37,7 +37,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       scrollByContent, useKeyboard, pullDownEnabled,
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
-      pulledDownText, pullingDownText, refreshingText, reachBottomText,
+      pulledDownText, pullingDownText, refreshingText, reachBottomText, refreshStrategy,
       onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
     },
     restAttributes,
@@ -69,6 +69,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onUpdated={onUpdated}
         onPullDown={onPullDown}
         onReachBottom={onReachBottom}
+        refreshStrategy={refreshStrategy}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
@@ -105,6 +106,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onUpdated={onUpdated}
         onPullDown={onPullDown}
         onReachBottom={onReachBottom}
+        refreshStrategy="simulated"
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
@@ -153,7 +155,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    // !this.props.useNative && this.updateHandler();
+    !this.props.useNative && this.updateHandler();
 
     const currentScrollOffset = this.props.useNative
       ? this.scrollOffset()
@@ -290,6 +292,12 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     if (!isServerSide) {
       this.scrollableRef.finishLoading();
     }
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  isRenovated(): boolean {
+    return true;
   }
 
   validate(event: DxMouseEvent): boolean {
