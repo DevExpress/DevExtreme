@@ -23,7 +23,7 @@ const moduleConfig = {
 
         implementationsMap.getWidth = function() {
             const arg = arguments[0];
-            if(arg && arg[0] && arg[0] instanceof Window) {
+            if((arg && arg[0] || arg) instanceof Window) {
                 return that.currentWidth;
             }
             return that.originalWidth.apply(implementationsMap, arguments);
@@ -31,7 +31,7 @@ const moduleConfig = {
 
         implementationsMap.getHeight = function() {
             const arg = arguments[0];
-            if(arg && arg[0] && arg[0] instanceof Window) {
+            if((arg && arg[0] || arg) instanceof Window) {
                 return that.currentHeight;
             }
             return that.originalHeight.apply(implementationsMap, arguments);
