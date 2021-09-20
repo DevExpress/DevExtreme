@@ -336,7 +336,6 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
-            //  $tableElement.css('width', 'initial');
 
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick(500);
@@ -544,6 +543,46 @@ module('Table properties forms', {
             assert.strictEqual($targetCell.next().attr('width'), '0px', 'next cell width attr is correct');
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
+
+        test('Check cell width attributes if it is changed after the table width was changed', function(assert) {
+            this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            let $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            let formInstance = $form.dxForm('instance');
+
+            let widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 400);
+
+            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            const $targetCell = $tableElement.find('td').eq(0);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(500);
+            $form = $('.dx-form:not(.dx-formdialog-form)');
+            formInstance = $form.dxForm('instance');
+
+            widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 150);
+
+            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
+            assert.strictEqual($targetCell.attr('width'), '150px', 'cell width attr is applied');
+            assert.roughEqual(parseInt($targetCell.next().outerWidth()), 250, 2, 'next cell width attr is correct');
+            assert.roughEqual(parseInt($targetCell.next().attr('width')), 250, 2, 'next cell width attr is correct');
+            assert.roughEqual($tableElement.outerWidth(), 400, 2, 'table width is correct');
+        });
     });
 
     module('Cell height calculations', {}, () => {
@@ -748,6 +787,55 @@ module('Table properties forms', {
             assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 30, 2, 'first column cell width attr is applied');
             assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 2, 'second column cell width attr is applied');
             assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 30, 2, 'second column cell width attr is applied');
+        });
+
+        test('Check table width attributes if it is changed after the cell width was changed', function(assert) {
+            this.createWidget({ width: 632, value: '\
+            <table>\
+                <tr>\
+                    <td>0_0 content</td>\
+                    <td>0_1</td>\
+                </tr>\
+                <tr>\
+                    <td>1_0</td>\
+                    <td>1_1</td>\
+                </tr>\
+            </table>\
+            <br>' });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(0);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(500);
+            let $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            let formInstance = $form.dxForm('instance');
+
+            let widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 200);
+
+            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            $form = $('.dx-form:not(.dx-formdialog-form)');
+            formInstance = $form.dxForm('instance');
+
+            widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 800);
+
+            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            assert.roughEqual($targetCell.outerWidth(), 200, 2, 'cell width is applied');
+            assert.strictEqual($targetCell.attr('width'), '200px', 'cell width attr is applied');
+            assert.roughEqual($targetCell.next().outerWidth(), 600, 2, 'next cell width attr is correct');
+            assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is not defined');
+            assert.roughEqual($tableElement.outerWidth(), 800, 2, 'table width is correct');
         });
     });
 
