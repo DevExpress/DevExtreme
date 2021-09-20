@@ -1,4 +1,3 @@
-import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
