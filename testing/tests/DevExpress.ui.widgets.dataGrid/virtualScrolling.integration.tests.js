@@ -183,7 +183,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 dataGrid.navigateToRow(20);
 
                 // assert
-                assert.equal(dataGrid.pageIndex(), scrollingMode === 'virtual' ? 0 : 1, 'Page index'); // TODO pageIndex should return another value then dataSource pageIndex
+                assert.equal(dataGrid.pageIndex(), 1, 'Page index');
             });
         });
 
