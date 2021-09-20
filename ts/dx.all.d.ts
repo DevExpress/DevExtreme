@@ -5134,7 +5134,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.getVisibleRows()]
      */
-    getVisibleRows(): Array<DevExpress.ui.dxDataGrid.RowObject>;
+    getVisibleRows(): Array<DevExpress.ui.dxDataGrid.Row>;
     /**
      * [descr:dxDataGrid.isRowExpanded(key)]
      */
@@ -5253,7 +5253,7 @@ declare module DevExpress.ui {
         readonly rowIndex: number;
         readonly rowType: string;
         readonly cellElement: DevExpress.core.DxElement;
-        readonly row: RowObject;
+        readonly row: Row;
       };
     export type CellDblClickEvent =
       DevExpress.events.NativeEventInfo<dxDataGrid> & {
@@ -5267,7 +5267,7 @@ declare module DevExpress.ui {
         readonly rowIndex: number;
         readonly rowType: string;
         readonly cellElement: DevExpress.core.DxElement;
-        readonly row: RowObject;
+        readonly row: Row;
       };
     export type CellHoverChangedEvent =
       DevExpress.events.EventInfo<dxDataGrid> & {
@@ -5282,7 +5282,7 @@ declare module DevExpress.ui {
         readonly column: Column;
         readonly rowType: string;
         readonly cellElement: DevExpress.core.DxElement;
-        readonly row: RowObject;
+        readonly row: Row;
       };
     export type CellPreparedEvent = DevExpress.events.EventInfo<dxDataGrid> & {
       readonly data: any;
@@ -5294,7 +5294,7 @@ declare module DevExpress.ui {
       readonly column: Column;
       readonly rowIndex: number;
       readonly rowType: string;
-      readonly row: RowObject;
+      readonly row: Row;
       readonly isSelected?: boolean;
       readonly isExpanded?: boolean;
       readonly isNewRow?: boolean;
@@ -5585,7 +5585,7 @@ declare module DevExpress.ui {
     }
     export type ColumnButtonClickEvent =
       DevExpress.events.NativeEventInfo<dxDataGrid> & {
-        row?: RowObject;
+        row?: Row;
         column?: Column;
       };
     export type ColumnButtonTemplateData = {
@@ -5596,7 +5596,7 @@ declare module DevExpress.ui {
       readonly column: Column;
       readonly rowIndex: number;
       readonly rowType: string;
-      readonly row: RowObject;
+      readonly row: Row;
     };
     export type ColumnCellTemplateData = {
       readonly data?: any;
@@ -5608,7 +5608,7 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly rowIndex: number;
       readonly column: Column;
-      readonly row: RowObject;
+      readonly row: Row;
       readonly rowType: string;
       readonly watch?: Function;
     };
@@ -5668,7 +5668,7 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly rowIndex: number;
       readonly column: Column;
-      readonly row: RowObject;
+      readonly row: Row;
       readonly rowType: string;
       readonly watch?: Function;
     };
@@ -5715,7 +5715,7 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly rowIndex: number;
       readonly column: Column;
-      readonly row: RowObject;
+      readonly row: Row;
       readonly summaryItems: Array<any>;
       readonly groupContinuesMessage?: string;
       readonly groupContinuedMessage?: string;
@@ -5813,7 +5813,7 @@ declare module DevExpress.ui {
         readonly columnIndex: number;
         readonly column?: Column;
         readonly rowIndex: number;
-        readonly row?: RowObject;
+        readonly row?: Row;
       };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -5900,13 +5900,13 @@ declare module DevExpress.ui {
        */
       allowDeleting?:
         | boolean
-        | ((options: { component?: dxDataGrid; row?: RowObject }) => boolean);
+        | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
       /**
        * [descr:dxDataGridOptions.editing.allowUpdating]
        */
       allowUpdating?:
         | boolean
-        | ((options: { component?: dxDataGrid; row?: RowObject }) => boolean);
+        | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
       /**
        * [descr:dxDataGridOptions.editing.texts]
        */
@@ -6032,7 +6032,7 @@ declare module DevExpress.ui {
         readonly editorElement: DevExpress.core.DxElement;
         readonly readOnly: boolean;
         readonly dataField?: string;
-        readonly row?: RowObject;
+        readonly row?: Row;
       };
     export type EditorPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & {
@@ -6049,7 +6049,7 @@ declare module DevExpress.ui {
         editorName: string;
         editorOptions: any;
         readonly dataField?: string;
-        readonly row?: RowObject;
+        readonly row?: Row;
       };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6316,7 +6316,7 @@ declare module DevExpress.ui {
         readonly cellElement: DevExpress.core.DxElement;
         readonly columnIndex: number;
         readonly rowIndex: number;
-        readonly row?: RowObject;
+        readonly row?: Row;
         readonly column?: Column;
       };
     export type FocusedCellChangingEvent = DevExpress.events.Cancelable &
@@ -6326,7 +6326,7 @@ declare module DevExpress.ui {
         readonly prevRowIndex: number;
         newColumnIndex: number;
         newRowIndex: number;
-        readonly rows: Array<RowObject>;
+        readonly rows: Array<Row>;
         readonly columns: Array<Column>;
         isHighlighted: boolean;
       };
@@ -6334,14 +6334,14 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxDataGrid> & {
         readonly rowElement: DevExpress.core.DxElement;
         readonly rowIndex: number;
-        readonly row?: RowObject;
+        readonly row?: Row;
       };
     export type FocusedRowChangingEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<dxDataGrid> & {
         readonly rowElement: DevExpress.core.DxElement;
         readonly prevRowIndex: number;
         newRowIndex: number;
-        readonly rows: Array<RowObject>;
+        readonly rows: Array<Row>;
       };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6617,6 +6617,51 @@ declare module DevExpress.ui {
       pageSize?: number;
     }
     export type Properties = dxDataGridOptions;
+    /**
+     * [descr:dxDataGridRowObject]
+     */
+    export interface Row {
+      /**
+       * [descr:dxDataGridRowObject.data]
+       */
+      readonly data: any;
+      /**
+       * [descr:dxDataGridRowObject.groupIndex]
+       */
+      readonly groupIndex?: number;
+      /**
+       * [descr:dxDataGridRowObject.isEditing]
+       */
+      readonly isEditing?: boolean;
+      /**
+       * [descr:dxDataGridRowObject.isExpanded]
+       */
+      readonly isExpanded?: boolean;
+      /**
+       * [descr:dxDataGridRowObject.isNewRow]
+       */
+      readonly isNewRow?: boolean;
+      /**
+       * [descr:dxDataGridRowObject.isSelected]
+       */
+      readonly isSelected?: boolean;
+      /**
+       * [descr:dxDataGridRowObject.key]
+       */
+      readonly key: any;
+      /**
+       * [descr:dxDataGridRowObject.rowIndex]
+       */
+      readonly rowIndex: number;
+      /**
+       * [descr:dxDataGridRowObject.rowType]
+       */
+      readonly rowType: string;
+      /**
+       * [descr:dxDataGridRowObject.values]
+       */
+      readonly values: Array<any>;
+    }
     export type RowClickEvent =
       DevExpress.events.NativeEventInfo<dxDataGrid> & {
         readonly data: any;
@@ -6842,52 +6887,6 @@ declare module DevExpress.ui {
      */
     export interface RowKeyInfo {
       readonly key: any;
-    }
-    /**
-     * [descr:dxDataGridRowObject]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowObject {
-      /**
-       * [descr:dxDataGridRowObject.data]
-       */
-      readonly data: any;
-      /**
-       * [descr:dxDataGridRowObject.groupIndex]
-       */
-      readonly groupIndex?: number;
-      /**
-       * [descr:dxDataGridRowObject.isEditing]
-       */
-      readonly isEditing?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.isExpanded]
-       */
-      readonly isExpanded?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.isNewRow]
-       */
-      readonly isNewRow?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.isSelected]
-       */
-      readonly isSelected?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.key]
-       */
-      readonly key: any;
-      /**
-       * [descr:dxDataGridRowObject.rowIndex]
-       */
-      readonly rowIndex: number;
-      /**
-       * [descr:dxDataGridRowObject.rowType]
-       */
-      readonly rowType: string;
-      /**
-       * [descr:dxDataGridRowObject.values]
-       */
-      readonly values: Array<any>;
     }
     export type RowPreparedEvent = DevExpress.events.EventInfo<dxDataGrid> & {
       readonly data: any;
@@ -7456,7 +7455,7 @@ declare module DevExpress.ui {
       | boolean
       | ((options: {
           component?: dxDataGrid;
-          row?: DevExpress.ui.dxDataGrid.RowObject;
+          row?: DevExpress.ui.dxDataGrid.Row;
           column?: DevExpress.ui.dxDataGrid.Column;
         }) => boolean);
   }
@@ -7485,7 +7484,7 @@ declare module DevExpress.ui {
      */
     customizeExportData?: (
       columns: Array<DevExpress.ui.dxDataGrid.Column>,
-      rows: Array<DevExpress.ui.dxDataGrid.RowObject>
+      rows: Array<DevExpress.ui.dxDataGrid.Row>
     ) => void;
     /**
      * [descr:dxDataGridOptions.editing]
@@ -7663,10 +7662,6 @@ declare module DevExpress.ui {
      */
     summary?: DevExpress.ui.dxDataGrid.Summary;
   }
-  /**
-   * @deprecated 
-   */
-  export type dxDataGridRowObject = DevExpress.ui.dxDataGrid.RowObject;
   /**
    * @deprecated 
    */
@@ -19407,7 +19402,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeList.getVisibleRows()]
      */
-    getVisibleRows(): Array<DevExpress.ui.dxTreeList.RowObject>;
+    getVisibleRows(): Array<DevExpress.ui.dxTreeList.Row>;
     /**
      * [descr:dxTreeList.isRowExpanded(key)]
      */
@@ -19539,7 +19534,7 @@ declare module DevExpress.ui {
       readonly rowIndex: number;
       readonly rowType: string;
       readonly cellElement: DevExpress.core.DxElement;
-      readonly row: RowObject;
+      readonly row: Row;
     }
     export type CellPreparedEvent = DevExpress.events.EventInfo<dxTreeList> &
       CellInfo & {
@@ -19553,7 +19548,7 @@ declare module DevExpress.ui {
     export type ColumnButton = dxTreeListColumnButton;
     export type ColumnButtonClickEvent =
       DevExpress.events.NativeEventInfo<dxTreeList> & {
-        row?: RowObject;
+        row?: Row;
         column?: Column;
       };
     export type ColumnButtonTemplateData = {
@@ -19564,7 +19559,7 @@ declare module DevExpress.ui {
       readonly column: Column;
       readonly rowIndex: number;
       readonly rowType: string;
-      readonly row: RowObject;
+      readonly row: Row;
     };
     export type ColumnCellTemplateData = {
       readonly data: any;
@@ -19576,7 +19571,7 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly rowIndex: number;
       readonly column: Column;
-      readonly row: RowObject;
+      readonly row: Row;
       readonly rowType: string;
       readonly watch?: Function;
     };
@@ -19590,7 +19585,7 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly rowIndex: number;
       readonly column: Column;
-      readonly row: RowObject;
+      readonly row: Row;
       readonly rowType: string;
       readonly watch?: Function;
     };
@@ -19611,7 +19606,7 @@ declare module DevExpress.ui {
         readonly columnIndex: number;
         readonly column?: Column;
         readonly rowIndex: number;
-        readonly row?: RowObject;
+        readonly row?: Row;
       };
     export type DataErrorOccurredEvent =
       DevExpress.events.EventInfo<dxTreeList> &
@@ -19633,7 +19628,7 @@ declare module DevExpress.ui {
         | boolean
         | ((options: {
             readonly component: dxTreeList;
-            readonly row?: RowObject;
+            readonly row?: Row;
           }) => boolean);
       /**
        * [descr:dxTreeListOptions.editing.allowDeleting]
@@ -19642,7 +19637,7 @@ declare module DevExpress.ui {
         | boolean
         | ((options: {
             readonly component: dxTreeList;
-            readonly row?: RowObject;
+            readonly row?: Row;
           }) => boolean);
       /**
        * [descr:dxTreeListOptions.editing.allowUpdating]
@@ -19651,7 +19646,7 @@ declare module DevExpress.ui {
         | boolean
         | ((options: {
             readonly component: dxTreeList;
-            readonly row?: RowObject;
+            readonly row?: Row;
           }) => boolean);
       /**
        * [descr:dxTreeListOptions.editing.texts]
@@ -19686,7 +19681,7 @@ declare module DevExpress.ui {
         readonly editorElement: DevExpress.core.DxElement;
         readonly readOnly: boolean;
         readonly dataField?: string;
-        readonly row?: RowObject;
+        readonly row?: Row;
       };
     export type EditorPreparingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList> & {
@@ -19702,14 +19697,14 @@ declare module DevExpress.ui {
         editorName: string;
         editorOptions: any;
         readonly dataField?: string;
-        readonly row?: RowObject;
+        readonly row?: Row;
       };
     export type FocusedCellChangedEvent =
       DevExpress.events.EventInfo<dxTreeList> & {
         readonly cellElement: DevExpress.core.DxElement;
         readonly columnIndex: number;
         readonly rowIndex: number;
-        readonly row: RowObject;
+        readonly row: Row;
         readonly column: Column;
       };
     export type FocusedCellChangingEvent = DevExpress.events.Cancelable &
@@ -19719,7 +19714,7 @@ declare module DevExpress.ui {
         readonly prevRowIndex: number;
         newColumnIndex: number;
         newRowIndex: number;
-        readonly rows: Array<RowObject>;
+        readonly rows: Array<Row>;
         readonly columns: Array<Column>;
         isHighlighted: boolean;
       };
@@ -19727,14 +19722,14 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxTreeList> & {
         readonly rowElement: DevExpress.core.DxElement;
         readonly rowIndex: number;
-        readonly row: RowObject;
+        readonly row: Row;
       };
     export type FocusedRowChangingEvent =
       DevExpress.events.NativeEventInfo<dxTreeList> & {
         readonly rowElement: DevExpress.core.DxElement;
         readonly prevRowIndex: number;
         newRowIndex: number;
-        readonly rows: Array<RowObject>;
+        readonly rows: Array<Row>;
       };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxTreeList>;
@@ -19791,6 +19786,51 @@ declare module DevExpress.ui {
       enabled?: boolean;
     }
     export type Properties = dxTreeListOptions;
+    /**
+     * [descr:dxTreeListRowObject]
+     */
+    export interface Row {
+      /**
+       * [descr:dxTreeListRowObject.isEditing]
+       */
+      readonly isEditing?: boolean;
+      /**
+       * [descr:dxTreeListRowObject.isExpanded]
+       */
+      readonly isExpanded?: boolean;
+      /**
+       * [descr:dxTreeListRowObject.isNewRow]
+       */
+      readonly isNewRow?: boolean;
+      /**
+       * [descr:dxTreeListRowObject.isSelected]
+       */
+      readonly isSelected?: boolean;
+      /**
+       * [descr:dxTreeListRowObject.key]
+       */
+      readonly key: any;
+      /**
+       * [descr:dxTreeListRowObject.level]
+       */
+      readonly level: number;
+      /**
+       * [descr:dxTreeListRowObject.node]
+       */
+      readonly node: Node;
+      /**
+       * [descr:dxTreeListRowObject.rowIndex]
+       */
+      readonly rowIndex: number;
+      /**
+       * [descr:dxTreeListRowObject.rowType]
+       */
+      readonly rowType: string;
+      /**
+       * [descr:dxTreeListRowObject.values]
+       */
+      readonly values: Array<any>;
+    }
     export type RowClickEvent =
       DevExpress.events.NativeEventInfo<dxTreeList> & {
         readonly data: any;
@@ -19855,52 +19895,6 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.RowInsertedInfo;
     export type RowInsertingEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.RowInsertingInfo;
-    /**
-     * [descr:dxTreeListRowObject]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowObject {
-      /**
-       * [descr:dxTreeListRowObject.isEditing]
-       */
-      readonly isEditing?: boolean;
-      /**
-       * [descr:dxTreeListRowObject.isExpanded]
-       */
-      readonly isExpanded?: boolean;
-      /**
-       * [descr:dxTreeListRowObject.isNewRow]
-       */
-      readonly isNewRow?: boolean;
-      /**
-       * [descr:dxTreeListRowObject.isSelected]
-       */
-      readonly isSelected?: boolean;
-      /**
-       * [descr:dxTreeListRowObject.key]
-       */
-      readonly key: any;
-      /**
-       * [descr:dxTreeListRowObject.level]
-       */
-      readonly level: number;
-      /**
-       * [descr:dxTreeListRowObject.node]
-       */
-      readonly node: Node;
-      /**
-       * [descr:dxTreeListRowObject.rowIndex]
-       */
-      readonly rowIndex: number;
-      /**
-       * [descr:dxTreeListRowObject.rowType]
-       */
-      readonly rowType: string;
-      /**
-       * [descr:dxTreeListRowObject.values]
-       */
-      readonly values: Array<any>;
-    }
     export type RowPreparedEvent = DevExpress.events.EventInfo<dxTreeList> & {
       readonly data: any;
       readonly key: any;
@@ -20038,7 +20032,7 @@ declare module DevExpress.ui {
       | boolean
       | ((options: {
           readonly component: dxTreeList;
-          row?: DevExpress.ui.dxTreeList.RowObject;
+          row?: DevExpress.ui.dxTreeList.Row;
           readonly column: DevExpress.ui.dxTreeList.Column;
         }) => boolean);
   }
@@ -20232,10 +20226,6 @@ declare module DevExpress.ui {
    * @deprecated 
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
-  /**
-   * @deprecated Use DevExpress.ui.dxTreeList.RowObject instead
-   */
-  export type dxTreeListRowObject = DevExpress.ui.dxTreeList.RowObject;
   /**
    * @deprecated 
    */
