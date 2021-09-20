@@ -33,7 +33,7 @@ themes.forEach((theme) => {
       await setConfig(theme, config);
 
       await t
-        .expect(await takeScreenshot(`datebox-geometry-${theme}-${name}.png`, '.dx-overlay-wrapper > .dx-overlay-content'))
+        .expect(await takeScreenshot(`datebox-geometry-${theme}-${name}.png`, '.dx-overlay-content'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
