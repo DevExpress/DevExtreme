@@ -35,8 +35,8 @@ const tableWithFixedDimensionsMarkup = '\
             <td width="300px" height="24px">0_1</td>\
         </tr>\
         <tr>\
-            <td width="300px" height="50px">1_0</td>\
-            <td width="300px" height="50px">1_1</td>\
+            <td width="300px" height="48px">1_0</td>\
+            <td width="300px" height="48px">1_1</td>\
         </tr>\
     </table>\
     <br>';
@@ -574,7 +574,7 @@ module('Table properties forms', {
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
         });
 
-        test('Check cell height edititng if all rows height is fixed nad new value is less than the minimum row content height ', function(assert) {
+        test('Check cell height edititng if all rows height is fixed nad new value is less than the minimum row content height', function(assert) {
             this.createWidget({ value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -602,7 +602,59 @@ module('Table properties forms', {
     });
 
     module('Table height calculations', {}, () => {
+        test('Check cell height edititng if all rows height is fixed', function(assert) {
+            this.createWidget({ value: tableWithFixedDimensionsMarkup });
 
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', 150);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            const $verticalCells = $tableElement.find('td:nth-child(1)');
+
+            assert.roughEqual($tableElement.outerHeight(), 150, 2, 'table height is changed as expected');
+            assert.roughEqual($verticalCells.eq(0).outerHeight(), 50, 2, 'first row cell height is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(0).attr('height')), 50, 2, 'first row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 99, 2, 'second row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).attr('height')), 99, 2, 'second row cell height attr is applied');
+        });
+
+        test('Check cell height edititng if new value is less than the content', function(assert) {
+            this.createWidget({ value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', 30);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            const $verticalCells = $tableElement.find('td:nth-child(1)');
+
+            assert.roughEqual($tableElement.outerHeight(), 48, 2, 'table height is changed as expected');
+            assert.roughEqual($verticalCells.eq(0).outerHeight(), 24, 2, 'first row cell height is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(0).attr('height')), 10, 2, 'first row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 24, 2, 'second row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).attr('height')), 20, 2, 'second row cell height attr is applied');
+        });
     });
 
     module('Table width calculations', {}, () => {

@@ -55,7 +55,7 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
 
             each($columns, (i, element) => {
                 const $element = $(element);
-                const newElementWidth = newWidth / oldTableWidth * $element.outerWidth();
+                const newElementWidth = newWidth * oldTableWidth / $element.outerWidth();
                 $element.attr('width', newElementWidth);
 
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
@@ -65,31 +65,22 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
         }
     }
 
-
-    // $table.attr('height', newHeight);
-
     const autoHeightRows = getAutoHeightRows($table);
 
     if(autoHeightRows?.length > 0) {
         $table.css('height', newHeight);
     } else {
-        const $rows = $table.find('td:nth-child(0)');
-
+        const $rows = $table.find('td:nth-child(1)');
         const oldTableHeight = $table.outerHeight();
 
         each($rows, (i, element) => {
             const $element = $(element);
-            const newElementHeight = newHeight * oldTableHeight / $element.outerHeight();
-            // $element.attr('height', newElementHeight);
-
-            const $lineElements = getLineElements($table, $element.index(), 'vertical');
+            const newElementHeight = newHeight / oldTableHeight * $element.outerHeight();
+            const $lineElements = getLineElements($table, i, 'vertical');
 
             setLineElementsAttrValue($lineElements, 'height', newElementHeight);
         });
-
     }
-
-
 };
 
 const getAutoHeightRows = ($table) => {
