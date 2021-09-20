@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
+import { changeTheme } from '../../helpers/changeTheme';
 
 const setConfig = ClientFunction(
   (theme, config) => (window as any).createDateBoxInTheme(theme, config),
@@ -28,10 +29,11 @@ themes.forEach((theme) => {
   cases.forEach(({ name, config }) => {
     test(`Geometry is good (${name}, ${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      await changeTheme(theme);
       await setConfig(theme, config);
 
       await t
-        .expect(await takeScreenshot(`datebox-geometry-${theme}-${name}.png`, '.dx-popup-done-visible > .dx-overlay-content'))
+        .expect(await takeScreenshot(`datebox-geometry-${theme}-${name}.png`, '.dx-overlay-wrapper > .dx-overlay-content'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
