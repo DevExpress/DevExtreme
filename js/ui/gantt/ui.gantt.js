@@ -159,6 +159,7 @@ class Gantt extends Widget {
             firstDayOfWeek: this.option('firstDayOfWeek'),
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
+            scaleTypeRange: this.option('scaleTypeRange'),
             editing: this.option('editing'),
             validation: this.option('validation'),
             stripLines: this.option('stripLines'),
@@ -765,6 +766,9 @@ class Gantt extends Widget {
                 break;
             case 'scaleType':
                 this._setGanttViewOption('scaleType', args.value);
+                break;
+            case 'scaleTypeRange':
+                this._setGanttViewOption('scaleTypeRange', this.option(args.name));
                 break;
             case 'editing':
                 this._setGanttViewOption('editing', this.option(args.name));
