@@ -19,14 +19,14 @@ $material-calendar-cell-horizontal-padding: 8px !default;
 $material-calendar-caption-button-padding: 2px 15px 4px !default;
 
 @if $size == "default" {
-  $material-calendar-body-width: 320px !default;
-  $material-calendar-body-height: 267px !default;
-  $material-calendar-body-top: 49px !default;
+  $material-calendar-body-width: 226px !default;
+  $material-calendar-body-height: 204px !default;
+  $material-calendar-body-top: 45px !default;
   $material-calendar-navigator-height: 36px !default;
   $material-nav-button-width: 32px !default;
-  $material-calendar-cell-width: 39px !default;
-  $material-calendar-cell-diameter: 32px !default;
-  $material-calendar-cell-vertical-padding: 4px !default;
+  $material-calendar-cell-width: 32px !default;
+  $material-calendar-cell-diameter: 28px !default;
+  $material-calendar-cell-vertical-padding: 0 !default;
 }
 
 @else if $size == "compact" {
