@@ -55,6 +55,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getOuterWidth } from 'core/utils/size';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -2688,6 +2689,38 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         const selectBoxDisabled = $selectBoxDisabled.dxSelectBox('instance');
         assert.equal(selectBoxDisabled.option('value'), 'item2', 'selectbox state saved');
     });
+
+    QUnit.test('Change toolbar.visible and toolbar.disabled options', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true
+            },
+            toolbar: {
+                visible: true
+            }
+        });
+
+        const $toolbar = dataGrid.$element().find('.dx-toolbar');
+
+        // assert
+        assert.notOk($toolbar.hasClass('dx-state-invisible'), 'toolbar is shown');
+        assert.notOk($toolbar.hasClass('dx-state-disabled'), 'toolbar is not disabled');
+
+        // act
+        dataGrid.option('toolbar.visible', false);
+
+        // assert
+        assert.ok($toolbar.hasClass('dx-state-invisible'), 'toolbar is hidden');
+
+        // act
+        dataGrid.option('toolbar.disabled', true);
+
+        // assert
+        assert.ok($toolbar.hasClass('dx-state-disabled'), 'toolbar is disabled');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
@@ -4163,9 +4196,9 @@ QUnit.module('templates', baseModuleConfig, () => {
         // assert
         const $row = $(dataGrid.getRowElement(0));
         const $cells = $row.find('td');
-        assert.equal($cells.eq(0).outerWidth(), 900, 'first cell width');
-        assert.equal($cells.eq(1).outerWidth(), 100, 'second cell width');
-        assert.equal(dataGrid.$element().outerWidth(), 1000, 'dataGrid width');
+        assert.equal(getOuterWidth($cells.eq(0)), 900, 'first cell width');
+        assert.equal(getOuterWidth($cells.eq(1)), 100, 'second cell width');
+        assert.equal(getOuterWidth(dataGrid.$element()), 1000, 'dataGrid width');
     });
 
     // T952701
@@ -4207,9 +4240,9 @@ QUnit.module('templates', baseModuleConfig, () => {
         // assert
         const $row = $(dataGrid.getRowElement(0));
         const $cells = $row.find('td');
-        assert.equal($cells.eq(0).outerWidth(), 900, 'first cell width');
-        assert.equal($cells.eq(1).outerWidth(), 100, 'second cell width');
-        assert.equal(dataGrid.$element().outerWidth(), 1000, 'dataGrid width');
+        assert.equal(getOuterWidth($cells.eq(0)), 900, 'first cell width');
+        assert.equal(getOuterWidth($cells.eq(1)), 100, 'second cell width');
+        assert.equal(getOuterWidth(dataGrid.$element()), 1000, 'dataGrid width');
     });
 
     QUnit.test('rowElement argument of rowTemplate option is correct', function(assert) {

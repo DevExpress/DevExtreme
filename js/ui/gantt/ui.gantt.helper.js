@@ -173,6 +173,10 @@ export const GanttHelper = {
             showRowLines: true,
             stripLines: undefined,
             scaleType: 'auto',
+            scaleTypeRange: {
+                start: 'minutes',
+                end: 'years'
+            },
             editing: {
                 enabled: false,
                 allowTaskAdding: true,

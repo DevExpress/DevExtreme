@@ -1,15 +1,14 @@
-const RenovatedScrollView = require('renovation/ui/scroll_view/scroll_view.j.js');
+const RenovatedScrollable = require('renovation/ui/scroll_view/scrollable.j.js');
 // eslint-disable-next-line spellcheck/spell-checker
 const reRender = require('inferno').rerender;
-const Deferred = require('core/utils/deferred').Deferred;
 
 // default export not supported
-exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
+exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
 
     _initMarkup() {
         super._initMarkup.apply(this, arguments);
 
-        const scrollable = this._viewRef.current.scrollableRef.current.scrollableRef;
+        const scrollable = this._viewRef.current.scrollableRef;
 
         const setContainerDimensions = scrollable.setContainerDimensions;
 
@@ -24,16 +23,6 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
             setContentDimensions.apply(this, arguments);
             reRender();
         };
-
-
-        if(this.option('useNative')) {
-            const setPocketState = scrollable.setPocketState;
-
-            scrollable.setPocketState = function() {
-                setPocketState.apply(this, arguments);
-                reRender();
-            };
-        }
 
         let vScrollbar;
         let hScrollbar;
@@ -52,8 +41,8 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
         if(vScrollbar) {
             const moveTo = vScrollbar.moveTo;
 
-            vScrollbar.moveTo = function() {
-                moveTo.apply(this, arguments);
+            vScrollbar.moveTo = function(location) {
+                moveTo(location);
                 reRender();
             };
         }
@@ -61,35 +50,23 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
         if(hScrollbar) {
             const moveTo = hScrollbar.moveTo;
 
-            hScrollbar.moveTo = function() {
-                moveTo.apply(this, arguments);
+            hScrollbar.moveTo = function(location) {
+                moveTo(location);
                 reRender();
             };
         }
     }
 
-    startLoading() {
-        this._viewRef.current.scrollableRef.current.scrollableRef.startLoading();
-        reRender();
+    _lock() {
+        this._viewRef.current.scrollableRef.locked = true;
     }
 
-    finishLoading() {
-        this._viewRef.current.scrollableRef.current.scrollableRef.finishLoading();
-        reRender();
-    }
-
-    toggleLoading() {
-        this._viewRef.current.toggleLoading.apply(this, arguments);
-        reRender();
+    _validate(e) {
+        return this._viewRef.current.validate(e);
     }
 
     scrollTo() {
         super.scrollTo.apply(this, arguments);
-        reRender();
-    }
-
-    scrollToElement() {
-        super.scrollToElement.apply(this, arguments);
         reRender();
     }
 
@@ -98,9 +75,8 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
         reRender();
     }
 
-    release() {
-        super.release.apply(this, arguments);
-
-        return new Deferred().resolve();
+    scrollToElement() {
+        super.scrollToElement.apply(this, arguments);
+        reRender();
     }
 };

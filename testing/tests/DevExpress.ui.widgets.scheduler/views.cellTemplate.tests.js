@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import { isRenderer } from 'core/utils/type';
@@ -411,8 +412,8 @@ module('CellTemplate tests', moduleConfig, () => {
                         dataCellTemplate: function(cellData, cellIndex, cellElement) {
                         // all-day table cell size
                             if(cellData.allDay && !cellIndex) {
-                                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Data cell width is OK');
-                                assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, 'Data cell height is OK');
+                                assert.roughEqual(getOuterWidth($(cellElement)), 85, 1.001, 'Data cell width is OK');
+                                assert.roughEqual(getOuterHeight($(cellElement)), 24, 1.001, 'Data cell height is OK');
                             }
 
                             // scheduler table cell size
@@ -1422,8 +1423,8 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDate: new Date(2016, 10, 28, 2)
                 }],
                 dateCellTemplate: function(cellData, cellIndex, cellElement) {
-                    assert.equal($(cellElement).outerWidth(), 70, 'Date cell width is OK');
-                    assert.equal($(cellElement).outerHeight(), 80, 'Date cell height is OK');
+                    assert.equal(getOuterWidth($(cellElement)), 70, 'Date cell width is OK');
+                    assert.equal(getOuterHeight($(cellElement)), 80, 'Date cell height is OK');
                 }
             });
         });
@@ -1568,8 +1569,8 @@ module('CellTemplate tests', moduleConfig, () => {
                         dateCellTemplate: function(cellData, cellIndex, cellElement) {
                             if(!cellIndex) {
                                 assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Date cell width is OK');
-                                assert.equal($(cellElement).outerHeight(), 40, 'Date cell height is OK');
+                                assert.roughEqual(getOuterWidth($(cellElement)), 85, 1.001, 'Date cell width is OK');
+                                assert.equal(getOuterHeight($(cellElement)), 40, 'Date cell height is OK');
                             }
                         }
                     });
@@ -1743,34 +1744,6 @@ module('CellTemplate tests', moduleConfig, () => {
 
                 });
 
-                test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
-                    this.createInstance({
-                        currentView: 'week',
-                        currentDate: new Date(2016, 8, 5),
-                        dataSource: [{
-                            text: 'a',
-                            ownerId: 1,
-                            startDate: new Date(2016, 8, 5, 7),
-                            endDate: new Date(2016, 8, 5, 8),
-                            allDay: true
-                        }],
-                        crossScrollingEnabled: true,
-                        dateCellTemplate: function(itemData, index, $container) {
-                            return $('<div>').css({ height: '150px' });
-                        }
-                    });
-
-                    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
-                    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-                    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
-                    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
-                    const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
-
-                    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
-                    assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
-                    assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
-                });
-
                 [
                     {
                         description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate',
@@ -1900,7 +1873,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     if(!cellIndex) {
                         assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
                         assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Time cell height is OK');
-                        assert.equal($(cellElement).outerWidth(), 100, 'Time cell width is OK');
+                        assert.roughEqual(getOuterWidth($(cellElement)), 100, 1.01, 'Time cell width is OK');
                     }
                 }
             });

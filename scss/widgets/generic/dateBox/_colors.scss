@@ -4,3 +4,37 @@
 
 // adduse
 
+$timeview-bg: null !default;
+
+
+@if $color == "carmine" {
+  $timeview-bg: darken($base-bg, 2.7%) !default;
+}
+
+@if $color == "contrast" {
+  $timeview-bg: $base-bg !default;
+}
+
+@if $color == "dark" {
+  $timeview-bg: lighten($base-bg, 2.5%) !default;
+}
+
+@if $color == "darkmoon" {
+  $timeview-bg: darken($base-bg, 2%) !default;
+}
+
+@if $color == "darkviolet" {
+  $timeview-bg: #1f1f2b !default;
+}
+
+@if $color == "greenmist" {
+  $timeview-bg: darken($base-bg, 1%) !default;
+}
+
+@if $color == "light" {
+  $timeview-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.2) !default;
+}
+
+@if $color == "softblue" {
+  $timeview-bg: color.change(darken($base-bg, 4%), $alpha: 0.7) !default;
+}

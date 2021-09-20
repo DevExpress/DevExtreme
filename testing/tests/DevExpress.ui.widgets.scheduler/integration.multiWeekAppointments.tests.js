@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 import translator from 'animation/translator';
@@ -54,7 +55,7 @@ QUnit.test('Appointment width should be decreased if it greater than work space 
     const $appointment = $(this.instance.$element()).find('.dx-scheduler-appointment');
     const $cell = $(this.instance.$element()).find('.dx-scheduler-date-table-cell');
 
-    assert.roughEqual($appointment.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
 QUnit.test('Appointment width should be decreased if it greater than work space width (rtl mode)', function(assert) {
@@ -74,8 +75,8 @@ QUnit.test('Appointment width should be decreased if it greater than work space 
     const $appointment2 = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(1);
     const $cell = $(this.instance.$element()).find('.dx-scheduler-date-table-cell');
 
-    assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
-    assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment1), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment2), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
 QUnit.test('Appointment width should be decreased if it greater than work space width (grouped mode)', function(assert) {
@@ -113,16 +114,16 @@ QUnit.test('Appointment width should be decreased if it greater than work space 
     let $appointment2 = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(1);
     let $cell = $(this.instance.$element()).find('.dx-scheduler-date-table-cell');
 
-    assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
-    assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment1), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment2), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 
     this.instance.option('rtlEnabled', true);
     $appointment1 = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
     $appointment2 = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(1);
     $cell = $(this.instance.$element()).find('.dx-scheduler-date-table-cell');
 
-    assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
-    assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment1), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment2), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
 QUnit.test('Max allowed position of appointment should be calculated correctly (grouped mode)', function(assert) {
@@ -173,7 +174,7 @@ QUnit.test('Max allowed position of appointment should be calculated correctly (
     const $cell = $(this.instance.$element()).find('.dx-scheduler-date-table-cell');
     const $appointment = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
 
-    assert.roughEqual($appointment.outerWidth(), Math.floor($cell.outerWidth()), 1.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointment), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
 QUnit.test('Appointment should have a special icon and class if it greater than work space width', function(assert) {
@@ -243,8 +244,10 @@ QUnit.test('Multi-week appointments should be split by several parts', function(
     });
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-    const rowHeight = this.instance.getWorkSpace().getWorkArea().find('.dx-scheduler-date-table tr').eq(0).outerHeight();
-    const appointmentHeight = $appointments.outerHeight();
+    const rowHeight = getOuterHeight(
+        this.instance.getWorkSpace().getWorkArea().find('.dx-scheduler-date-table tr').eq(0)
+    );
+    const appointmentHeight = getOuterHeight($appointments);
     const appointmentTopOffsetInsideCell = (rowHeight - appointmentHeight) / 2;
 
     const firstAppointmentTop = translator.locate($appointments.eq(0)).top;
@@ -253,10 +256,10 @@ QUnit.test('Multi-week appointments should be split by several parts', function(
     const fourthAppointmentTop = translator.locate($appointments.eq(3)).top;
 
     assert.equal($appointments.length, 4, 'Appointment is split by 3 parts');
-    assert.roughEqual($appointments.eq(0).outerWidth(), 600, 2.001, 'Appointment width is OK');
-    assert.roughEqual($appointments.eq(1).outerWidth(), 699, 2.001, 'Appointment width is OK');
-    assert.roughEqual($appointments.eq(2).outerWidth(), 699, 2.001, 'Appointment width is OK');
-    assert.roughEqual($appointments.eq(3).outerWidth(), 200, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(0)), 600, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(1)), 699, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(2)), 699, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(3)), 200, 2.001, 'Appointment width is OK');
 
     assert.roughEqual(firstAppointmentTop, rowHeight * 2 + appointmentTopOffsetInsideCell + 1, 3.51, 'The first appointment height is OK');
     assert.roughEqual(secondAppointmentTop, rowHeight * 3 + appointmentTopOffsetInsideCell + 1, 3.51, 'The second appointment height is OK');
@@ -422,7 +425,7 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
 
         const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
         const $dateTable = $(this.instance.$element()).find('.dx-scheduler-date-table');
-        const expectedLeft = $dateTable.outerWidth() - $appointments.eq(0).outerWidth() - 400;
+        const expectedLeft = getOuterWidth($dateTable) - getOuterWidth($appointments.eq(0)) - 400;
 
         assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, 'Left coordinate is OK');
         assert.roughEqual(translator.locate($appointments.eq(1)).left, expectedLeft, 1.001, 'Left coordinate is OK');

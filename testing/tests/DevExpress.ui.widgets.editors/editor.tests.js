@@ -7,6 +7,7 @@ import ValidationEngine from 'ui/validation_engine';
 import hoverEvents from 'events/hover';
 import { wrapRenovatedWidget } from '../../helpers/wrapRenovatedWidget.js';
 import Validator from 'ui/validator';
+import { getOuterWidth } from 'core/utils/size';
 
 import 'generic_light.css!';
 
@@ -488,7 +489,7 @@ QUnit.module('validation', {
                 });
 
                 const $validationMessage = this.getValidationMessageElement();
-                assert.strictEqual($validationMessage.outerWidth(), width, 'validation message width is correct');
+                assert.strictEqual(getOuterWidth($validationMessage), width, 'validation message width is correct');
             });
 
             QUnit.test('should be equal to editor width after property runtime change', function(assert) {
@@ -496,7 +497,7 @@ QUnit.module('validation', {
                 this.editor.option('width', width);
 
                 const $validationMessage = this.getValidationMessageElement();
-                assert.strictEqual($validationMessage.outerWidth(), width, 'validation message width is correct');
+                assert.strictEqual(getOuterWidth($validationMessage), width, 'validation message width is correct');
             });
 
             QUnit.test('should be correct for small content', function(assert) {
@@ -510,9 +511,9 @@ QUnit.module('validation', {
                 });
 
                 const $content = this.getValidationMessage().$content();
-                const contentWidth = $content.outerWidth();
+                const contentWidth = getOuterWidth($content);
 
-                assert.strictEqual($content.css('width', 'auto').outerWidth(), contentWidth, 'validation message width is correct');
+                assert.strictEqual(getOuterWidth($content.css('width', 'auto')), contentWidth, 'validation message width is correct');
             });
 
             QUnit.test('should be min 100px if the editor has smaller size (T376114)', function(assert) {
@@ -526,7 +527,7 @@ QUnit.module('validation', {
                 });
                 const $content = this.getValidationMessage().$content();
 
-                assert.strictEqual($content.outerWidth(), 100, 'the validation message width is correct');
+                assert.strictEqual(getOuterWidth($content), 100, 'the validation message width is correct');
             });
 
             QUnit.test('should be equal to width in visible area after render in hidden area', function(assert) {
@@ -549,7 +550,7 @@ QUnit.module('validation', {
                 $hiddenDiv.css('display', 'block');
 
                 const $validationMessage = this.getValidationMessageElement();
-                assert.strictEqual($validationMessage.outerWidth(), 305, 'overlay width was set correctly');
+                assert.strictEqual(getOuterWidth($validationMessage), 305, 'overlay width was set correctly');
             });
 
             QUnit.test('content width should be less or equal to message width', function(assert) {
@@ -566,7 +567,7 @@ QUnit.module('validation', {
                 const $validationMessage = validationMessage.$content();
                 const $content = validationMessage.$content();
 
-                assert.ok($content.outerWidth() <= $validationMessage.outerWidth(), 'validation message width is correct');
+                assert.ok(getOuterWidth($content) <= getOuterWidth($validationMessage), 'validation message width is correct');
             });
 
             skipForRenovated('update validation message maxWidth on editor width change', () => {
@@ -582,11 +583,11 @@ QUnit.module('validation', {
 
                     this.editor.option('width', 200);
                     let $content = this.getValidationMessage().$content();
-                    assert.strictEqual($content.outerWidth(), 200, 'the validation message width is correct');
+                    assert.strictEqual(getOuterWidth($content), 200, 'the validation message width is correct');
 
                     this.editor.option('width', 80);
                     $content = this.getValidationMessage().$content();
-                    assert.strictEqual($content.outerWidth(), 100, 'the validation message width is correct');
+                    assert.strictEqual(getOuterWidth($content), 100, 'the validation message width is correct');
                 });
             });
         });
