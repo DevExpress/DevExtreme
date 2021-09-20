@@ -8061,6 +8061,14 @@ declare module DevExpress.ui {
       | DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName
       | dxDataGridToolbarItem
     >;
+    /**
+     * [descr:dxDataGridToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxDataGridToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxDataGridToolbarItem]
@@ -20811,6 +20819,14 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
+    /**
+     * [descr:dxTreeListToolbarItem.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbarItem.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeView]

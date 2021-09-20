@@ -2689,6 +2689,38 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         const selectBoxDisabled = $selectBoxDisabled.dxSelectBox('instance');
         assert.equal(selectBoxDisabled.option('value'), 'item2', 'selectbox state saved');
     });
+
+    QUnit.test('Change toolbar.visible and toolbar.disabled options', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true
+            },
+            toolbar: {
+                visible: true
+            }
+        });
+
+        const $toolbar = dataGrid.$element().find('.dx-toolbar');
+
+        // assert
+        assert.notOk($toolbar.hasClass('dx-state-invisible'), 'toolbar is shown');
+        assert.notOk($toolbar.hasClass('dx-state-disabled'), 'toolbar is not disabled');
+
+        // act
+        dataGrid.option('toolbar.visible', false);
+
+        // assert
+        assert.ok($toolbar.hasClass('dx-state-invisible'), 'toolbar is hidden');
+
+        // act
+        dataGrid.option('toolbar.disabled', true);
+
+        // assert
+        assert.ok($toolbar.hasClass('dx-state-disabled'), 'toolbar is disabled');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
