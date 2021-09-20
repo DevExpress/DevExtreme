@@ -1,3 +1,4 @@
+import { setWidth } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import SchedulerWorkSpace from './ui.scheduler.work_space';
 import registerComponent from '../../../core/component_registrator';
@@ -74,7 +75,10 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         for(let i = 0; i < repeatCount; i++) {
             const $indicator = this._createIndicator($container);
 
-            $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
+            setWidth(
+                $indicator,
+                groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth()
+            );
             this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
         }
     }

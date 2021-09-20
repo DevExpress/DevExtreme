@@ -1,3 +1,4 @@
+import { getWidth, getHeight } from 'core/utils/size';
 import device from 'core/devices';
 import config from 'core/config';
 import domAdapter from 'core/dom_adapter';
@@ -133,10 +134,10 @@ QUnit.test('Check field  wodth on render form with colspan', function(assert) {
 
     const $fieldItems = $testContainer.find('.' + FIELD_ITEM_CLASS);
     const fieldWidths = {
-        ID: $fieldItems.eq(1).width(),
-        FirstName: $fieldItems.eq(2).width(),
-        LastName: $fieldItems.eq(3).width(),
-        HireDate: $fieldItems.eq(4).width()
+        ID: getWidth($fieldItems.eq(1)),
+        FirstName: getWidth($fieldItems.eq(2)),
+        LastName: getWidth($fieldItems.eq(3)),
+        HireDate: getWidth($fieldItems.eq(4))
     };
 
     assert.equal($fieldItems.length, 5, '4 simple items + 1 group item');
@@ -601,7 +602,7 @@ QUnit.test('items aren\'t tiny', function(assert) {
                     }]
             }]
     });
-    assert.ok(testContainer.find('.dx-multiview-item .dx-textbox').first().width() / testContainer.width() > 0.5, 'Editors are not tiny');
+    assert.ok(getWidth(testContainer.find('.dx-multiview-item .dx-textbox').first()) / getWidth(testContainer) > 0.5, 'Editors are not tiny');
 });
 
 QUnit.test('Render tabs when formData is changed', function(assert) {
@@ -715,16 +716,16 @@ QUnit.test('Check align labels', function(assert) {
 
     $layoutManager = $layoutManagers.eq(0);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
-    assert.roughEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 1, 'col 1');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 1, 'col 1');
 
     $layoutManager = $layoutManagers.eq(1);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
     labelWidth = getLabelWidth($layoutManager, form, 'Address room:');
-    assert.roughEqual($labelTexts.eq(0).width(), labelWidth, 1, 'tab 1 col 1');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), labelWidth, 1, 'tab 1 col 1');
 
     $labelTexts = findLabelTextsInColumn($layoutManager, 1);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
-    assert.roughEqual($labelTexts.eq(1).width(), labelWidth, 1, 'tab 1 col 2');
+    assert.roughEqual(getWidth($labelTexts.eq(1)), labelWidth, 1, 'tab 1 col 2');
 
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
@@ -733,11 +734,11 @@ QUnit.test('Check align labels', function(assert) {
     $layoutManager = $layoutManagers.eq(3);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
-    assert.roughEqual($labelTexts.eq(0).width(), labelWidth, 1, 'tab 2 col 1');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), labelWidth, 1, 'tab 2 col 1');
 
     $labelTexts = findLabelTextsInColumn($layoutManager, 1);
     labelWidth = getLabelWidth($layoutManager, form, 'Last Name:');
-    assert.roughEqual($labelTexts.eq(0).width(), labelWidth, 1, 'tab 2 col 2');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), labelWidth, 1, 'tab 2 col 2');
 });
 
 QUnit.test('Check align labels when layout is changed by default_T306106', function(assert) {
@@ -788,7 +789,7 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
     for(i = 0; i < 4; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 1, item ' + i);
     }
@@ -801,7 +802,7 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
     for(i = 0; i < 2; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 2, item ' + i);
     }
@@ -855,7 +856,7 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
     for(i = 0; i < 4; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 1, item ' + i);
     }
@@ -868,7 +869,7 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
     for(i = 0; i < 2; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 2, item ' + i);
     }
@@ -949,7 +950,7 @@ QUnit.module('Align labels', {
 
 function getLabelWidth(container, form, text) {
     const $label = renderLabel({ text: text, location: 'left' }).appendTo(container);
-    const width = $label.children().first().width();
+    const width = getWidth($label.children().first());
 
     $label.remove();
     return width;
@@ -993,28 +994,28 @@ QUnit.test('Align labels in column', function(assert) {
     let labelWidth;
 
     for(i = 0; i < 4; i++) {
-        labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'First Name:');
     for(i = 0; i < 3; i++) {
-        labelWidth = $col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col1 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Birth Date:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col3.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col3.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col2 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Last Name:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col4.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col4.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col3 item ' + i);
     }
@@ -1033,7 +1034,7 @@ QUnit.test('Align labels in column when labels text is identical', function(asse
     let i;
 
     for(i = 0; i < 2; i++) {
-        const labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        const labelWidth = getWidth($col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
@@ -1049,7 +1050,7 @@ QUnit.test('Disable alignItemLabels', function(assert) {
 
     const $labelTexts = $('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
 
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)));
 });
 
 QUnit.test('Disable alignItemLabels in group', function(assert) {
@@ -1073,10 +1074,10 @@ QUnit.test('Disable alignItemLabels in group', function(assert) {
     const $groups = $('.' + FORM_GROUP_CLASS);
     let $labelTexts = $groups.eq(0).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
 
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 1');
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 1');
 
     $labelTexts = $groups.eq(1).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
-    assert.equal($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 2');
+    assert.equal(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 2');
 });
 
 QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', function(assert) {
@@ -1128,24 +1129,24 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', 
     $texts = findLabelTextsInColumn($groups, 0);
     labelWidth = getLabelWidth(testContainer, form, 'Address city:');
     for(i = 0; i < 2; i++) {
-        textWidth = $texts.eq(i).width();
+        textWidth = getWidth($texts.eq(i));
 
         assert.roughEqual(textWidth, labelWidth, 1, 'group col 1, col1 item ' + i);
     }
 
     $texts = findLabelTextsInColumn($groups, 1);
-    assert.roughEqual($texts.eq(0).width(), getLabelWidth(testContainer, form, 'Last Name:'), 1, 'group col 1, col2 item 1');
-    assert.roughEqual($texts.eq(1).width(), getLabelWidth(testContainer, form, 'Address street:'), 1, 'group col 1, col2 item 2');
+    assert.roughEqual(getWidth($texts.eq(0)), getLabelWidth(testContainer, form, 'Last Name:'), 1, 'group col 1, col2 item 1');
+    assert.roughEqual(getWidth($texts.eq(1)), getLabelWidth(testContainer, form, 'Address street:'), 1, 'group col 1, col2 item 2');
 
     $texts = findLabelTextsInColumn($groups, 2);
     labelWidth = getLabelWidth(testContainer, form, 'Middle Name:');
-    assert.roughEqual($texts.eq(0).width(), labelWidth, 1, 'group col 1, col3 item 1');
+    assert.roughEqual(getWidth($texts.eq(0)), labelWidth, 1, 'group col 1, col3 item 1');
 
     $groups = form._getGroupElementsInColumn(testContainer, 1);
     $texts = findLabelTextsInColumn($groups, 0);
     labelWidth = getLabelWidth(testContainer, form, 'Address room:');
     for(i = 0; i < 2; i++) {
-        textWidth = $texts.eq(i).width();
+        textWidth = getWidth($texts.eq(i));
 
         assert.roughEqual(textWidth, labelWidth, 1, 'group col 2, col1 item ' + i);
     }
@@ -1153,7 +1154,7 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', 
     $texts = findLabelTextsInColumn($groups, 1);
     labelWidth = getLabelWidth(testContainer, form, 'Address house:');
     for(i = 0; i < 2; i++) {
-        textWidth = $texts.eq(i).width();
+        textWidth = getWidth($texts.eq(i));
 
         assert.roughEqual(textWidth, labelWidth, 1, 'group col , col2 item ' + i);
     }
@@ -1201,10 +1202,10 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is disabled',
     let $groups;
 
     $groups = form._getGroupElementsInColumn(testContainer, 0);
-    assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), 'compare group1 with group2');
+    assert.notEqual(getWidth(findLabelTextsInColumn($groups.eq(0), 0).eq(0)), getWidth(findLabelTextsInColumn($groups.eq(1), 0).eq(0)), 'compare group1 with group2');
 
     $groups = form._getGroupElementsInColumn(testContainer, 1);
-    assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), 'compare group1 with group2');
+    assert.notEqual(getWidth(findLabelTextsInColumn($groups.eq(0), 0).eq(0)), getWidth(findLabelTextsInColumn($groups.eq(1), 0).eq(0)), 'compare group1 with group2');
 });
 
 QUnit.test('Align labels in columns when there are rows', function(assert) {
@@ -1254,14 +1255,14 @@ QUnit.test('Align labels in columns when there are rows', function(assert) {
     let labelWidth;
 
     for(i = 0; i < 2; i++) {
-        labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Field four:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col2 item ' + i);
     }
@@ -1327,7 +1328,7 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
     this.updateScreenSize(500);
 
     for(i = 0; i < 11; i++) {
-        const labelWidth = $labelsContent.eq(i).width();
+        const labelWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
@@ -1367,7 +1368,7 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
     let i;
 
     for(i = 0; i < 11; i++) {
-        const labelWidth = $labelsContent.eq(i).width();
+        const labelWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
@@ -1385,7 +1386,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
     }).dxForm('instance');
 
     const $labelTexts = $(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)));
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top with the groups', function(assert) {
@@ -1412,10 +1413,10 @@ QUnit.test('Labels are not aligned when labelLocation is top with the groups', f
     const $groups = $(`.${FORM_GROUP_CLASS}`);
     let $labelTexts = $groups.eq(0).find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
 
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 1');
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 1');
 
     $labelTexts = $groups.eq(1).find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 2');
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 2');
 });
 
 QUnit.test('required mark aligned', function(assert) {
@@ -1433,7 +1434,7 @@ QUnit.test('required mark aligned', function(assert) {
 
     $labelsContent.width(200);
 
-    assert.roughEqual($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, 0.5, 'position of requared mark is right');
+    assert.roughEqual($labelsContent.offset().left + getWidth($requiredLabel), $requiredMark.offset().left, 0.5, 'position of requared mark is right');
     assert.ok($requiredLabel.position().left < $requiredMark.position().left, 'required mark should be after of the text');
 });
 
@@ -1450,7 +1451,7 @@ QUnit.test('optional mark aligned', function(assert) {
 
     $labelsContent.width(200);
 
-    assert.roughEqual($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, 0.5, 'position of optional mark is right');
+    assert.roughEqual($labelsContent.offset().left + getWidth($optionalLabel), $optionalMark.offset().left, 0.5, 'position of optional mark is right');
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, 'optional mark should be after of the text');
 });
 
@@ -1488,8 +1489,8 @@ QUnit.module('T986577', () => {
         const resizeEventArg = resizeEventSpy.getCall(0).args[0];
         assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
         assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
-        assert.roughEqual(resizeEventArg.width(), 164, 5, 'toolbar width is correct');
-        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+        assert.roughEqual(getWidth(resizeEventArg), 164, 5, 'toolbar width is correct');
+        assert.roughEqual(getHeight(resizeEventArg), 36, 1, 'toolbar height is correct');
 
         resizeEventSpy.restore();
     });
@@ -1502,8 +1503,8 @@ QUnit.module('T986577', () => {
         const resizeEventArg = resizeEventSpy.getCall(0).args[0];
         assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
         assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
-        assert.roughEqual(resizeEventArg.width(), 72, 5, 'toolbar width is correct');
-        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+        assert.roughEqual(getWidth(resizeEventArg), 72, 5, 'toolbar width is correct');
+        assert.roughEqual(getHeight(resizeEventArg), 36, 1, 'toolbar height is correct');
 
         resizeEventSpy.restore();
     });

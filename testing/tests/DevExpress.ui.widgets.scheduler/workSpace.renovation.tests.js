@@ -1,3 +1,4 @@
+import { getOuterWidth } from 'core/utils/size';
 import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -982,10 +983,10 @@ module('Renovated Render', {
 
         const $element = this.instance.$element();
         const cells = $element.find(`.${CELL_CLASS}`);
-        const dateTableWidth = $element.find(`.${DATE_TABLE_CLASS}`).outerWidth();
+        const dateTableWidth = getOuterWidth($element.find(`.${DATE_TABLE_CLASS}`));
 
         cells.each(function() {
-            assert.equal($(this).outerWidth(), dateTableWidth / 2, 'Correct cell width');
+            assert.equal(getOuterWidth($(this)), dateTableWidth / 2, 'Correct cell width');
         });
     });
 

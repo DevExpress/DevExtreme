@@ -1,3 +1,4 @@
+import { setHeight } from 'core/utils/size';
 import $ from 'core/renderer';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
@@ -102,7 +103,7 @@ const LoadPanelTests = {
                     $targetElement = component.$element().find('.dx-pivotgrid-area-data');
                     $loadPanelContainer = component.$element();
                 }
-                $targetElement.height(5000);
+                setHeight($targetElement, 5000);
 
                 exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
@@ -154,7 +155,7 @@ const LoadPanelTests = {
                     $targetElement = component.$element().find('.dx-pivotgrid-area-data');
                     $loadPanelContainer = component.$element();
                 }
-                $targetElement.height(100);
+                setHeight($targetElement, 100);
                 exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
                         const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);

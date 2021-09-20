@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
@@ -82,8 +83,8 @@ QUnit.module('action sheet', {
             width: setUpWidth,
             height: setUpHeight
         });
-        const initialWidth = $actionSheet.width();
-        const initialHeight = $actionSheet.height();
+        const initialWidth = getWidth($actionSheet);
+        const initialHeight = getHeight($actionSheet);
         const actionSheet = $actionSheet.dxActionSheet('instance');
         const popup = actionSheet._popup;
 
@@ -105,8 +106,8 @@ QUnit.module('action sheet', {
             w: initialWidth,
             h: initialHeight
         }, {
-            w: $actionSheet.width(),
-            h: $actionSheet.height()
+            w: getWidth($actionSheet),
+            h: getHeight($actionSheet)
         }, 'Resize does NOT effect element itself');
 
         assert.deepEqual({
@@ -587,7 +588,7 @@ QUnit.module('widget sizing render', () => {
 
         instance.show();
 
-        assert.ok(instance._popup.$overlayContent().outerWidth() > 0, 'outer width of the element must be more than zero');
+        assert.ok(getOuterWidth(instance._popup.$overlayContent()) > 0, 'outer width of the element must be more than zero');
     });
 
     QUnit.test('constructor', function(assert) {
@@ -597,7 +598,7 @@ QUnit.module('widget sizing render', () => {
         instance.show();
 
         assert.strictEqual(instance.option('width'), 400);
-        assert.strictEqual(instance._popup.$overlayContent().outerWidth(), 400, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance._popup.$overlayContent()), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
@@ -608,6 +609,6 @@ QUnit.module('widget sizing render', () => {
         instance.option('width', customWidth);
 
         instance.show();
-        assert.strictEqual(instance._popup.$overlayContent().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance._popup.$overlayContent()), customWidth, 'outer width of the element must be equal to custom width');
     });
 });

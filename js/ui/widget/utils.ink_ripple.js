@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 const INKRIPPLE_CLASS = 'dx-inkripple';
 const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';
@@ -58,8 +59,8 @@ const getWaves = function(element, wavesNumber) {
 
 const getWaveStyleConfig = function(args, config) {
     const element = $(config.element);
-    const elementWidth = element.outerWidth();
-    const elementHeight = element.outerHeight();
+    const elementWidth = getOuterWidth(element);
+    const elementHeight = getOuterHeight(element);
     const elementDiagonal = parseInt(Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight));
     const waveSize = Math.min(MAX_WAVE_SIZE, parseInt(elementDiagonal * args.waveSizeCoefficient));
     let left;

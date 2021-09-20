@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
@@ -79,7 +80,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
     triggerHidingEvent($element);
     triggerShownEvent($element);
 
-    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
     assert.equal(dateTableWidth, 1440, 'Width is OK');
 });
 
@@ -202,7 +203,7 @@ QUnit.skip('the "getCoordinatesByDate" method should return right coordinates fo
 
 
 QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordinates', function(assert) {
-    const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+    const cellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     const cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15, top: 1 });
 
     assert.equal(cellIndex, 15, 'Cell index is OK');
@@ -214,8 +215,8 @@ QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordin
         { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
     ]);
 
-    const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
-    const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
+    const cellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
+    const cellHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
 
     let cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15 + 0.656, top: cellHeight * 2 - 0.656 });
 
@@ -269,8 +270,8 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
 
     try {
         this.instance.option('currentDate', new Date(2010, 10, 10));
-        const height = this.instance.$element().find('.dx-scheduler-group-header').eq(0).outerHeight();
-        const expectedHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').first().outerHeight() - 1;
+        const height = getOuterHeight(this.instance.$element().find('.dx-scheduler-group-header').eq(0));
+        const expectedHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').first()) - 1;
 
         assert.roughEqual(height, expectedHeight, 2.001, 'Group cell height is OK');
 
@@ -297,7 +298,7 @@ QUnit.module('Timeline Day', {
         const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
         const $expectedCell = this.instance.$element()
             .find('.dx-scheduler-date-table-cell').eq(1);
-        const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
+        const expectedPositionLeft = $expectedCell.position().left + 0.5 * getOuterWidth($expectedCell);
 
         assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
@@ -316,7 +317,7 @@ QUnit.module('Timeline Day', {
         const $expectedCell = this.instance.$element()
             .find('.dx-scheduler-date-table-cell').eq(1);
 
-        const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
+        const expectedPositionLeft = $expectedCell.position().left + getOuterWidth($expectedCell) - 0.5 * getOuterWidth($expectedCell);
 
         assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
@@ -385,7 +386,7 @@ QUnit.test('Scheduler timeline week header cells should have right width', funct
     const $firstHeaderCell = $firstRow.find('.dx-scheduler-header-panel-cell').eq(0);
     const $lastHeaderCell = $lastRow.find('.dx-scheduler-header-panel-cell').eq(0);
 
-    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, 'First row cell has correct width');
+    assert.roughEqual(getOuterWidth($firstHeaderCell), 48 * getOuterWidth($lastHeaderCell), 1.5, 'First row cell has correct width');
 });
 
 QUnit.test('Scheduler timeline week header cells should have right width if crossScrollingEnabled = true', function(assert) {
@@ -403,8 +404,8 @@ QUnit.test('Scheduler timeline week header cells should have right width if cros
     const $lastHeaderCell = $lastRow.find('.dx-scheduler-header-panel-cell').eq(0);
     const $dateTableCell = $element.find('.dx-scheduler-date-table-cell').eq(0);
 
-    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.get(0).getBoundingClientRect().width, 1.5, 'First row cell has correct width');
-    assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.get(0).getBoundingClientRect().width, 1.5, 'Last row cell has correct width');
+    assert.roughEqual(getOuterWidth($firstHeaderCell), 48 * $lastHeaderCell.get(0).getBoundingClientRect().width, 1.5, 'First row cell has correct width');
+    assert.roughEqual(getOuterWidth($lastHeaderCell), $dateTableCell.get(0).getBoundingClientRect().width, 1.5, 'Last row cell has correct width');
 });
 
 QUnit.test('Scheduler timeline week cells should have right height if crossScrollingEnabled = true', function(assert) {
@@ -420,7 +421,7 @@ QUnit.test('Scheduler timeline week cells should have right height if crossScrol
     const $firstRowCell = $element.find('.dx-scheduler-date-table-cell').first();
     const $lastRowCell = $element.find('.dx-scheduler-date-table-cell').eq(336);
 
-    assert.roughEqual($firstRowCell.outerHeight(), $lastRowCell.outerHeight(), 1.5, 'Cells has correct height');
+    assert.roughEqual(getOuterHeight($firstRowCell), getOuterHeight($lastRowCell), 1.5, 'Cells has correct height');
 });
 
 QUnit.skip('The part of long appointment should have right coordinates on current week (T342192) №3', function(assert) {

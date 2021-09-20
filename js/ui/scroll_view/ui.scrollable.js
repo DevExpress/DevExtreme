@@ -1,3 +1,4 @@
+import { getHeight, getOuterHeight, getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { nativeScrolling } from '../../core/utils/support';
@@ -397,19 +398,19 @@ const Scrollable = DOMComponent.inherit({
     },
 
     clientHeight: function() {
-        return this._$container.height();
+        return getHeight(this._$container);
     },
 
     scrollHeight: function() {
-        return this.$content().outerHeight();
+        return getOuterHeight(this.$content());
     },
 
     clientWidth: function() {
-        return this._$container.width();
+        return getWidth(this._$container);
     },
 
     scrollWidth: function() {
-        return this.$content().outerWidth();
+        return getOuterWidth(this.$content());
     },
 
     update: function() {
