@@ -110,4 +110,3 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
         return new Deferred().resolve();
     }
 };
-
