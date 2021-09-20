@@ -6,7 +6,7 @@ import {
   BaseScrollableProps,
 } from './base_scrollable_props';
 import {
-  ScrollEventArgs, ScrollableShowScrollbar,
+  ScrollEventArgs, ScrollableShowScrollbar, RefreshStrategy,
 } from './types.d';
 import { isDesktop } from '../utils/get_default_option_value';
 
@@ -19,6 +19,8 @@ export class ScrollableSimulatedProps extends BaseScrollableProps {
   @OneWay() showScrollbar: ScrollableShowScrollbar = isDesktop() ? 'onHover' : 'onScroll';
 
   @OneWay() scrollByThumb = isDesktop();
+
+  @OneWay() refreshStrategy: RefreshStrategy = 'simulated';
 
   @Event() onVisibilityChange?: (args: boolean) => void;
 
