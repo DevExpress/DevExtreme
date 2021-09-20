@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import renderer from 'core/renderer';
 const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import { FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createHugeFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
+import { implementationsMap } from 'core/utils/size';
 
 const moduleConfig = {
 
@@ -70,8 +70,8 @@ QUnit.module('Scroll', moduleConfig, () => {
     });
 
     test('Thumbnails view - must keep scroll position', function(assert) {
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 1200;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
 
         this.fileManager.option({
             width: 500,
@@ -89,7 +89,7 @@ QUnit.module('Scroll', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
 
-        renderer.fn.width = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 
     test('All views - must keep scroll position for sync focused item', function(assert) {
@@ -169,8 +169,8 @@ QUnit.module('Scroll', moduleConfig, () => {
     });
 
     test('NavPane - must keep scroll position after refresh', function(assert) {
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 1200;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
 
         this.fileManager.option({
             width: 500,
@@ -188,6 +188,6 @@ QUnit.module('Scroll', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getTreeViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
 
-        renderer.fn.width = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 });

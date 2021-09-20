@@ -11,6 +11,7 @@ QUnit.testStart(function() {
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getWidth } from 'core/utils/size';
 
 
 QUnit.module('Column Resizing', baseModuleConfig, () => {
@@ -238,7 +239,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().width(), 400);
+        assert.strictEqual(getWidth(instance.$element()), 400);
         assert.strictEqual(instance.columnOption(0, 'width'), '60.000%');
         assert.strictEqual(instance.columnOption(1, 'width'), '40.000%');
 
@@ -285,7 +286,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().width(), 200);
+        assert.strictEqual(getWidth(instance.$element()), 200);
         assert.strictEqual(instance.columnOption(0, 'width'), 120);
         assert.strictEqual(instance.columnOption(1, 'width'), 80);
 
@@ -331,7 +332,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 280);
+        assert.strictEqual(getWidth(instance.$element().children()), 280);
         assert.strictEqual(instance.columnOption(0, 'width'), 80);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -493,7 +494,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
 
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 250);
+        assert.strictEqual(getWidth(instance.$element().children()), 250);
         assert.strictEqual(instance.columnOption(0, 'width'), 50);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -550,7 +551,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 200);
+        assert.strictEqual(getWidth(instance.$element().children()), 200);
         assert.strictEqual(instance.columnOption(0, 'width'), '75.000%');
         assert.strictEqual(instance.columnOption(1, 'width'), '25.000%');
 
@@ -603,7 +604,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 200);
+        assert.strictEqual(getWidth(instance.$element().children()), 200);
         assert.strictEqual(instance.columnOption(0, 'width'), '75.000%');
         assert.strictEqual(instance.columnOption(1, 'width'), '25.000%');
 
@@ -649,7 +650,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 300);
+        assert.strictEqual(getWidth(instance.$element().children()), 300);
         assert.strictEqual(instance.columnOption(0, 'width'), 80);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -696,7 +697,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 300);
+        assert.strictEqual(getWidth(instance.$element().children()), 300);
         assert.strictEqual(instance.columnOption(0, 'width'), 220);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -842,7 +843,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         // assert
         const $headerRowsCells = dataGrid.$element().find('.dx-header-row').children();
         for(let i = 0; i < $headerRowsCells.length; i++) {
-            assert.ok($headerRowsCells.eq(i).width() > 0, 'width is more than zero');
+            assert.ok(getWidth($headerRowsCells.eq(i)) > 0, 'width is more than zero');
         }
     });
 

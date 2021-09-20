@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import renderer from 'core/renderer';
 import pointerEvents from 'events/pointer';
 import localization from 'localization';
 import messageLocalization from 'localization/message';
 import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
+import { implementationsMap } from 'core/utils/size';
 
 const { test } = QUnit;
 
@@ -697,8 +697,8 @@ QUnit.module('Details View', moduleConfig, () => {
 
     test('columns without hidingPriority auto hide disabled (T950675)', function(assert) {
         const thumbnailsColumnCaption = 'thumbnailsColumnCaption';
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 500;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 500;
         this.wrapper.getInstance().option({
             fileSystemProvider: [{
                 name: 'Some_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_folder',
@@ -717,7 +717,7 @@ QUnit.module('Details View', moduleConfig, () => {
         this.clock.tick(600);
 
         assert.strictEqual(this.wrapper.getDetailsCell(thumbnailsColumnCaption, 0).outerWidth(), 36, 'thumbnails column width is correct');
-        renderer.fn.width = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 
     test('sorting by file size is correct (T962735)', function(assert) {

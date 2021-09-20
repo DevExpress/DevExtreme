@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from 'core/utils/size';
 import devices from 'core/devices';
 import commonUtils from 'core/utils/common';
 import ArrayStore from 'data/array_store';
@@ -106,7 +107,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         const scrollTop = dataGrid.getScrollable().scrollTop();
         assert.ok(scrollTop > 0, 'scrollTop');
-        assert.ok(dataGrid.$element().find('.dx-virtual-row').first().children().first().height() <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
+        assert.ok(getHeight(dataGrid.$element().find('.dx-virtual-row').first().children().first()) <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
     });
 
     // T916093
@@ -250,11 +251,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.option('scrolling.mode', 'virtual');
 
         // assert
-        assert.ok($(dataGrid.$element()).find('.dx-datagrid-rowsview').height() > 0);
+        assert.ok(getHeight($(dataGrid.$element()).find('.dx-datagrid-rowsview')) > 0);
         // act
         this.clock.tick();
         // assert
-        assert.ok($(dataGrid.$element()).find('.dx-datagrid-rowsview').height() > 0);
+        assert.ok(getHeight($(dataGrid.$element()).find('.dx-datagrid-rowsview')) > 0);
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-bottom-load-panel').length, 0);
     });
 
@@ -449,7 +450,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.ok($dataGrid.find('.dx-datagrid-rowsview').height() > 300, 'rowsView has height');
+        assert.ok(getHeight($dataGrid.find('.dx-datagrid-rowsview')) > 300, 'rowsView has height');
     });
 
     QUnit.test('aria-colindex if scrolling.columnRenderingMode: virtual', function(assert) {
@@ -1062,7 +1063,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             columnHidingEnabled: true,
             onContentReady: function(e) {
                 const $freeSpaceRow = $(e.component.getView('rowsView')._getFreeSpaceRowElements());
-                freeSpaceRowHeightStatuses.push($freeSpaceRow.height() <= 1);
+                freeSpaceRowHeightStatuses.push(getHeight($freeSpaceRow) <= 1);
             }
         };
 
@@ -1131,7 +1132,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
             // assert
             assert.equal(dataGrid.getTopVisibleRowData().id, topVisibleRowKey, 'top visible item is not changed');
-            assert.ok($(dataGrid.element()).find('.dx-virtual-row').first().height() <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
+            assert.ok(getHeight($(dataGrid.element()).find('.dx-virtual-row').first()) <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
             done();
         });
@@ -1213,7 +1214,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.ok(dataGrid.getTopVisibleRowData().key > 110, 'top visible row is correct');
-        assert.ok($(dataGrid.element()).find('.dx-virtual-row').first().height() <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
+        assert.ok(getHeight($(dataGrid.element()).find('.dx-virtual-row').first()) <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
         assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
     });
 
@@ -1315,7 +1316,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // assert
-        assert.roughEqual($('.dx-freespace-row').height(), 0.5, 0.51, 'freespace height');
+        assert.roughEqual(getHeight($('.dx-freespace-row')), 0.5, 0.51, 'freespace height');
     });
 
     // T256314
@@ -2302,7 +2303,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $tables = $('.dx-datagrid-rowsview .dx-datagrid-table');
 
         // assert
-        assert.equal($tables.eq(0).find('col').eq(0).width(), 400, 'width of first column for first table');
+        assert.equal(getWidth($tables.eq(0).find('col').eq(0)), 400, 'width of first column for first table');
     });
 
     QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \'virtual\' and paging is disabled (T820359)', function(assert) {
@@ -2663,7 +2664,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $dataGrid = $(dataGrid.element());
         const scrollable = dataGrid.getScrollable();
         const getTopVirtualRowHeight = () => {
-            return $dataGrid.find('.dx-datagrid-rowsview .dx-row').first().filter('.dx-virtual-row').height() || 0;
+            return getHeight(
+                $dataGrid.find('.dx-datagrid-rowsview .dx-row').first().filter('.dx-virtual-row')
+            ) || 0;
         };
 
         oldVirtualRowHeight = getTopVirtualRowHeight();

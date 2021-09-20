@@ -1,3 +1,4 @@
+import { getOuterHeight, getHeight, getWidth, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
 import devices from 'core/devices';
@@ -193,7 +194,7 @@ const testRendering = function(usePopover) {
 
             const $overlay = $('.dx-overlay-content').first();
             const overlayTop = $overlay.offset().top;
-            const buttonBottom = $button.offset().top + $button.outerHeight();
+            const buttonBottom = $button.offset().top + getOuterHeight($button);
 
             assert.ok(overlayTop >= buttonBottom);
         });
@@ -650,8 +651,8 @@ QUnit.module('integration', () => {
         let $arrow = $('.dx-popover-arrow');
 
         assert.equal($('.dx-popover').length, 1, 'popup is selected');
-        assert.equal($arrow.height(), 0, 'no arrow height in popup mode');
-        assert.equal($arrow.width(), 0, 'no arrow width in popup mode');
+        assert.equal(getHeight($arrow), 0, 'no arrow height in popup mode');
+        assert.equal(getWidth($arrow), 0, 'no arrow width in popup mode');
 
         $('.dx-dropdownmenu-button').trigger('dxclick');
         dropDownMenu.option('usePopover', true);
@@ -659,8 +660,8 @@ QUnit.module('integration', () => {
         $arrow = $('.dx-popover-arrow');
 
         assert.equal($('.dx-popover').length, 1, 'popover is selected');
-        assert.notEqual($arrow.height(), 0, 'arrow height in popover mode');
-        assert.notEqual($arrow.width(), 0, 'arrow width in popover mode');
+        assert.notEqual(getHeight($arrow), 0, 'arrow height in popover mode');
+        assert.notEqual(getWidth($arrow), 0, 'arrow width in popover mode');
     });
 
     QUnit.test('paginateEnabled is false by default', function(assert) {
@@ -794,8 +795,8 @@ QUnit.module('widget sizing render', {
         instance.open();
 
         assert.strictEqual(instance.option('width'), dropDownMenuWidth);
-        assert.strictEqual($element.outerWidth(), dropDownMenuWidth, 'outer width of the element must be equal to custom width');
-        assert.strictEqual(instance._popup.$element().outerWidth(), dropDownMenuWidth - 2 * borderWidth, 'outer width of the popup must be equal to custom width minus border');
+        assert.strictEqual(getOuterWidth($element), dropDownMenuWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance._popup.$element()), dropDownMenuWidth - 2 * borderWidth, 'outer width of the popup must be equal to custom width minus border');
     });
 
     QUnit.test('change width', function(assert) {
@@ -813,7 +814,7 @@ QUnit.module('widget sizing render', {
         instance.option('width', customWidth);
         instance.open();
 
-        assert.strictEqual(instance._popup.$element().outerWidth(), customWidth - 2 * borderWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance._popup.$element()), customWidth - 2 * borderWidth, 'outer width of the element must be equal to custom width');
     });
 });
 

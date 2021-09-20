@@ -2,8 +2,11 @@ import {
  FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation,
 } from './index';
 import { DxPromise } from '../core/utils/deferred';
-import Store, { StoreOptions } from './abstract_store';
+import Store from './abstract_store';
 import { CustomStoreOptions } from './custom_store';
+import { ArrayStoreOptions } from './array_store';
+import { LocalStoreOptions } from './local_store';
+import { ODataStoreOptions } from './odata/store';
 
 /** @namespace DevExpress.data */
 export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
@@ -128,7 +131,12 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> | Array<TSourceValue>;
+    store?: Array<TSourceValue> |
+        Store<TKey, TSourceValue> |
+        ArrayStoreOptions<TKey, TSourceValue> & { type: 'array' } |
+        LocalStoreOptions<TKey, TSourceValue> & { type: 'local' } |
+        ODataStoreOptions<TKey, TSourceValue> & { type: 'odata' } |
+        CustomStoreOptions<TKey, TSourceValue>;
 }
 /**
  * @docid
@@ -391,7 +399,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TKey, TValue>;
     /**
      * @docid
      * @publicName totalCount()

@@ -1,3 +1,4 @@
+import { getHeight, getOuterHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -780,8 +781,8 @@ export const rowsModule = {
                                 freeSpaceRowElements.hide();
                                 deferUpdate(() => {
                                     const scrollbarWidth = this.getScrollbarWidth(true);
-                                    const elementHeightWithoutScrollbar = this.element().height() - scrollbarWidth;
-                                    const contentHeight = contentElement.outerHeight();
+                                    const elementHeightWithoutScrollbar = getHeight(this.element()) - scrollbarWidth;
+                                    const contentHeight = getOuterHeight(contentElement);
                                     const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
                                     const rowsHeight = this._getRowsHeight(contentElement.children().first());
                                     const $tableElement = $table || this.getTableElements();
@@ -874,7 +875,7 @@ export const rowsModule = {
                 },
 
                 contentWidth: function() {
-                    return this.element().width() - this.getScrollbarWidth();
+                    return getWidth(this.element()) - this.getScrollbarWidth();
                 },
 
                 getScrollbarWidth: function(isHorizontal) {
@@ -974,7 +975,7 @@ export const rowsModule = {
                     const $element = this.element();
 
                     if(arguments.length === 0) {
-                        return $element ? $element.outerHeight(true) : 0;
+                        return $element ? getOuterHeight($element, true) : 0;
                     }
 
                     that._hasHeight = hasHeight === undefined ? height !== 'auto' : hasHeight;

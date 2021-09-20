@@ -1,3 +1,4 @@
+import { getOuterHeight, getOuterWidth, getWidth, getHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import translator from 'animation/translator';
@@ -47,7 +48,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const cellHeight = $element.find('.' + DATE_TABLE_CELL_CLASS).first().get(0).getBoundingClientRect().height;
 
         assert.equal($appointment.position().top, 0, 'Appointment has a right top position');
-        assert.equal($appointment.outerHeight(), cellHeight, 'Appointment has a right height');
+        assert.equal(getOuterHeight($appointment), cellHeight, 'Appointment has a right height');
     });
 
     QUnit.test('Appointments on Week view should have a right position if widget is small', function(assert) {
@@ -65,7 +66,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
         const $element = scheduler.instance.$element();
         const $appointment = $element.find('.' + APPOINTMENT_CLASS);
-        const cellWidth = $element.find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
+        const cellWidth = getOuterWidth($element.find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointment.position().left, cellWidth * 4, 2, 'Appointment has a right left position');
     });
@@ -100,7 +101,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         assert.equal($appointment.length, 1, 'Only one appt is rendered');
         assert.equal($appointment.position().top, cellHeight * 20, 'Appointment has a right top position');
-        assert.equal($appointment.outerHeight(), cellHeight * 4, 'Appointment has a right height');
+        assert.equal(getOuterHeight($appointment), cellHeight * 4, 'Appointment has a right height');
     });
 
     QUnit.test('Breaking an appointment into parts depends on the timezone', function(assert) {
@@ -176,7 +177,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointment = $element.find('.' + APPOINTMENT_CLASS).eq(1);
         const cellHeight = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
 
-        assert.equal($appointment.outerHeight(), cellHeight, 'appt part has right height');
+        assert.equal(getOuterHeight($appointment), cellHeight, 'appt part has right height');
     });
 
     QUnit.test('The parts of recurrence appointment before and after midnight should be shown on Week view', function(assert) {
@@ -264,7 +265,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointment = $element.find('.' + APPOINTMENT_CLASS).eq(0);
         const cellHeight = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
 
-        assert.equal($appointment.outerHeight(), cellHeight * 3, 'appt part has right height');
+        assert.equal(getOuterHeight($appointment), cellHeight * 3, 'appt part has right height');
     });
 
     QUnit.test('Recurring appointments should be rendered correctly with a custom timezone(T385377)', function(assert) {
@@ -322,10 +323,10 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
             const $element = scheduler.instance.$element();
             const $appts = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
-            const cellHeight = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+            const cellHeight = getOuterHeight($element.find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
-            assert.roughEqual($appts.eq(0).outerHeight(), cellHeight / 2, 2.001, 'Appts top is OK');
-            assert.roughEqual($appts.eq(1).outerHeight(), cellHeight * 4, 2.001, 'Appts top is OK');
+            assert.roughEqual(getOuterHeight($appts.eq(0)), cellHeight / 2, 2.001, 'Appts top is OK');
+            assert.roughEqual(getOuterHeight($appts.eq(1)), cellHeight * 4, 2.001, 'Appts top is OK');
 
         } finally {
             tzOffsetStub.restore();
@@ -363,15 +364,15 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         const $commonAppointments = scheduler.instance.$element().find('.dx-scheduler-scrollable-appointments .dx-scheduler-appointment');
         const $allDayAppts = scheduler.instance.$element().find('.dx-scheduler-all-day-appointment');
-        const cellWidth = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+        const cellWidth = getOuterWidth(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
         assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 0, 2.001, 'Left position is OK');
         assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 0, 2.001, 'Left position is OK');
         assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 0, 2.001, 'Left position is OK');
 
-        assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
-        assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
-        assert.roughEqual($allDayAppts.eq(0).outerWidth(), cellWidth, 1.001, 'Width is OK');
+        assert.roughEqual(getOuterWidth($commonAppointments.eq(0)), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
+        assert.roughEqual(getOuterWidth($commonAppointments.eq(1)), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
+        assert.roughEqual(getOuterWidth($allDayAppts.eq(0)), cellWidth, 1.001, 'Width is OK');
     });
 
     QUnit.test('Appointment size should depend on neighbor appointments', function(assert) {
@@ -388,7 +389,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
 
         const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
-        assert.roughEqual($appointments.eq(0).width(), $appointments.eq(3).width(), 0.1);
+        assert.roughEqual(getWidth($appointments.eq(0)), getWidth($appointments.eq(3)), 0.1);
     });
 
     QUnit.test('Recurrence appointment should be rendered correctly when currentDate was changed: all-day', function(assert) {
@@ -433,7 +434,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
-        assert.roughEqual($appointment.height(), 100, 1.001, 'Appointment is rendered correctly');
+        assert.roughEqual(getHeight($appointment), 100, 1.001, 'Appointment is rendered correctly');
     });
 
     QUnit.test('Appointments should have correct position, rtl mode, editing=false', function(assert) {
@@ -500,7 +501,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
 
         assert.roughEqual($appointment.position().top, cellHeight, 2.001, 'Appointment top is correct');
-        assert.roughEqual($appointment.outerHeight(), 2 * cellHeight, 2.001, 'Appointment height is correct');
+        assert.roughEqual(getOuterHeight($appointment), 2 * cellHeight, 2.001, 'Appointment height is correct');
     });
 
     QUnit.test('dropDown appointment should not compact class on vertical view', function(assert) {
@@ -697,9 +698,9 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
 
         const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
-        const cellWidth = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+        const cellWidth = getOuterWidth(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
-        assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
+        assert.roughEqual(getOuterWidth($appointments.eq(0)), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
     });
 
     QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Day', function(assert) {
@@ -834,10 +835,10 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointments are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, 'correct top position of allDay appointment');
-        assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
         assert.roughEqual(translator.locate($appointments.eq(0)).left, 256, 1.1, 'correct left position of allDay appointment');
 
         assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
@@ -887,14 +888,14 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointments are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, 'correct top position of allDay appointment');
-        assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
         assert.roughEqual(translator.locate($appointments.eq(0)).left, 114, 1, 'correct left position of allDay appointment');
 
         assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, 'correct top position of allDay appointment');
-        assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
+        assert.roughEqual(getOuterHeight($appointments.eq(1)), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
         assert.roughEqual(translator.locate($appointments.eq(1)).left, 114, 1, 'correct left position of allDay appointment');
     });
 
@@ -940,10 +941,10 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, 'correct top position of allDay appointment');
-        assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), 0.5 * cellHeight, 2, 'correct size of allDay appointment');
         assert.roughEqual(translator.locate($appointments.eq(0)).left, 114, 1, 'correct left position of allDay appointment');
     });
 
@@ -991,14 +992,14 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointments are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
-        assert.roughEqual($appointments.eq(0).outerWidth(), 59, 2, 'correct size of appointment');
+        assert.roughEqual(getOuterWidth($appointments.eq(0)), 59, 2, 'correct size of appointment');
         assert.roughEqual($appointments.eq(0).position().left, 85, 1.1, 'correct left position of appointment');
 
         assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, 'correct top position of appointment');
-        assert.roughEqual($appointments.eq(1).outerWidth(), 59, 2, 'correct size of appointment');
+        assert.roughEqual(getOuterWidth($appointments.eq(1)), 59, 2, 'correct size of appointment');
         assert.roughEqual($appointments.eq(1).position().left, 170, 1.1, 'correct left position of appointment');
     });
 
@@ -1037,10 +1038,10 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, 12 * cellHeight, 1.5, 'correct top position of appointment');
-        assert.roughEqual($appointments.eq(0).outerHeight(), 100, 2, 'correct size of appointment');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), 100, 2, 'correct size of appointment');
     });
 
     QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Day', function(assert) {
@@ -1198,7 +1199,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         const $appointment = $element.find('.' + APPOINTMENT_CLASS).eq(0);
 
-        assert.equal($appointment.position().top + $appointment.outerHeight(), cellHeight * 8, 'Correct bottom coordinate');
+        assert.equal($appointment.position().top + getOuterHeight($appointment), cellHeight * 8, 'Correct bottom coordinate');
     });
 
     QUnit.test('Appt shouldn\'t be resized to the group border after scrolling in horizontal grouped workspace Day', function(assert) {
@@ -1236,7 +1237,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         scrollable.scrollTo({ left: 0, top: 400 });
 
         const $element = $(scheduler.instance.$element());
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0));
         const pointer = pointerMock($element.find('.dx-resizable-handle-top').eq(0)).start();
 
         pointer.dragStart().drag(0, -cellHeight * 5).dragEnd();
@@ -1244,7 +1245,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointment = $element.find('.' + APPOINTMENT_CLASS).eq(0);
 
         assert.roughEqual($appointment.position().top, 500, 1.1, 'Correct top coordinate');
-        assert.equal($appointment.outerHeight(), cellHeight * 6, 'Correct height');
+        assert.equal(getOuterHeight($appointment), cellHeight * 6, 'Correct height');
     });
 
     QUnit.test('Appointment inside vertical grouped view should have a right resizable area in Day view', function(assert) {
@@ -1327,15 +1328,15 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointment parts are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
-        const cellWidth = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
+        const cellWidth = getOuterWidth($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, cellHeight, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight * 2.5, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), cellHeight * 2.5, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(0).position().left, cellWidth, 1.1, 'correct left position of  appointment part');
 
         assert.roughEqual($appointments.eq(1).position().top, cellHeight * 9, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 2.5, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight * 2.5, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(1).position().left, cellWidth, 1.1, 'correct left position of appointment part');
     });
 
@@ -1381,15 +1382,15 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointment parts are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
-        const cellWidth = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
+        const cellWidth = getOuterWidth($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, cellHeight * 7, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), cellHeight, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(0).position().left, cellWidth, 1.1, 'correct left position of  appointment part');
 
         assert.roughEqual($appointments.eq(1).position().top, cellHeight * 15, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(1).position().left, cellWidth, 1.1, 'correct left position of appointment part');
     });
 
@@ -1435,14 +1436,14 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointment parts are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, cellHeight, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight * 2, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), cellHeight * 2, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(0).position().left, 0, 1.1, 'correct left position of  appointment part');
 
         assert.roughEqual($appointments.eq(1).position().top, cellHeight * 9, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 2, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight * 2, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(1).position().left, 0, 1.1, 'correct left position of appointment part');
     });
 
@@ -1482,15 +1483,15 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointment parts are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
-        const cellWidth = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
+        const cellWidth = getOuterWidth($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), cellHeight, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(0).position().left, cellWidth, 1.1, 'correct left position of  appointment part');
 
         assert.roughEqual($appointments.eq(1).position().top, cellHeight, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 2.5, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight * 2.5, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(1).position().left, cellWidth * 2, 1.1, 'correct left position of appointment part');
     });
 
@@ -1530,15 +1531,15 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointment parts are rendered');
 
-        const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerHeight();
-        const cellWidth = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
+        const cellHeight = getOuterHeight($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
+        const cellWidth = getOuterWidth($(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).first());
 
         assert.roughEqual($appointments.eq(0).position().top, 15 * cellHeight, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), cellHeight, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(0).position().left, cellWidth, 1.1, 'correct left position of  appointment part');
 
         assert.roughEqual($appointments.eq(1).position().top, 9 * cellHeight, 1.5, 'correct top position of appointment part');
-        assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 2.5, 2, 'correct size of appointment part');
+        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight * 2.5, 2, 'correct size of appointment part');
         assert.roughEqual($appointments.eq(1).position().left, cellWidth * 2, 1.1, 'correct left position of appointment part');
     });
 

@@ -1,3 +1,4 @@
+import { getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/form/ui.form';
 import 'ui/form/ui.form.layout_manager';
@@ -34,7 +35,7 @@ class FormTestWrapper {
 
     _getLabelWidth(text) {
         const $label = renderLabel({ text: text, location: 'left' }).appendTo(this._getTestContainer());
-        const width = $label.children().first().width();
+        const width = getWidth($label.children().first());
         $label.remove();
         return width;
     }
@@ -48,7 +49,7 @@ class FormTestWrapper {
         const etalonLabelWidth = this._getLabelWidth(`${etalonLabelText}:`);
         $labelTexts.toArray().forEach(text => {
             const $text = $(text);
-            const textWidth = $text.width();
+            const textWidth = getWidth($text);
             QUnit.assert.roughEqual(textWidth, etalonLabelWidth, 1, `width of the ${$text.text()}`);
         });
     }
