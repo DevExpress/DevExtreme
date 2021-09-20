@@ -23,9 +23,9 @@ export function currentPalette(paletteName: string): void;
 /**
  * @docid viz.generateColors
  * @publicName generateColors(palette, count, options)
- * @param1 palette:{docEnums.PaletteType}|Array<string>
- * @param3_field1 paletteExtensionMode:{docEnums.PaletteExtensionModeType}
- * @param3_field2 baseColorSet:{docEnums.VizPaletteColorSet}
+ * @param1 palette:docEnums.PaletteType|Array<string>
+ * @param3_field1 paletteExtensionMode:docEnums.PaletteExtensionModeType
+ * @param3_field2 baseColorSet:docEnums.VizPaletteColorSet
  * @static
  * @public
  */

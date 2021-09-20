@@ -66,6 +66,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     validationMessageMode?: ValidationMessageMode;
     /**
      * @docid
+     * @type docEnums.ValidationStatus
      * @default "valid"
      * @public
      */

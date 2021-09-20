@@ -102,6 +102,7 @@ export interface FormatObject {
    precision?: number;
    /**
     * @docid Format.type
+    * @type docEnums.PredefinedFormat|string
     * @public
     */
    type?: PredefinedFormat | string;
@@ -110,7 +111,7 @@ type ExternalFormat = any;
 
 /**
  * @docid
- * @type Object|{docEnums.PredefinedFormat}|string|function
+ * @type Object|docEnums.PredefinedFormat|string|function
  * @type_function_param1 value:number|date
  * @default undefined
  * @section Common

@@ -487,6 +487,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
+     * @type Array<string>|docEnums.PaletteType
      * @default "Material"
      * @public
      */

@@ -559,6 +559,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     columnResizingMode?: ColumnResizingMode;
     /**
      * @docid
+     * @type number|docEnums.Mode
      * @default undefined
      * @public
      */
@@ -622,6 +623,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     filterRow?: FilterRow;
     /**
      * @docid
+     * @type boolean|docEnums.Mode
      * @default "auto"
      * @public
      */
@@ -1370,6 +1372,7 @@ export interface KeyboardNavigation {
 export interface LoadPanel {
     /**
      * @docid GridBaseOptions.loadPanel.enabled
+     * @type boolean|docEnums.Mode
      * @default "auto"
      */
     enabled?: boolean | Mode;
@@ -1418,6 +1421,7 @@ export interface LoadPanel {
 export interface Pager {
     /**
      * @docid GridBaseOptions.pager.allowedPageSizes
+     * @type Array<(number|docEnums.GridPagerPageSize)>|docEnums.Mode;
      * @default "auto"
      */
     allowedPageSizes?: Array<(number | GridPagerPageSize)> | Mode;
@@ -1448,7 +1452,7 @@ export interface Pager {
     showPageSizeSelector?: boolean;
     /**
      * @docid GridBaseOptions.pager.visible
-     * @type boolean|Mode
+     * @type boolean|docEnums.Mode
      * @default "auto"
      */
     visible?: boolean | Mode;
@@ -1816,7 +1820,7 @@ export interface ScrollingBase {
     showScrollbar?: ShowScrollbarMode;
     /**
      * @docid GridBaseOptions.scrolling.useNative
-     * @type boolean|Mode
+     * @type boolean|docEnums.Mode
      * @default "auto"
      * @public
      */
@@ -2488,6 +2492,7 @@ export interface ColumnBase {
     falseText?: string;
     /**
      * @docid GridBaseColumn.filterOperations
+     * @type Array<docEnums.GridFilterOperations>
      * @default undefined
      * @public
      */
@@ -2681,6 +2686,7 @@ export interface ColumnHeaderFilter {
   dataSource?: Array<any> | Store | ((options: { component?: any; dataSource?: DataSourceOptions }) => any) | DataSourceOptions;
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
+   * @type docEnums.HeaderFilterGroupInterval|number
    * @default undefined
    */
   groupInterval?: HeaderFilterGroupInterval | number;
@@ -3591,6 +3597,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     onRowPrepared?: ((e: RowPreparedEvent) => void);
     /**
      * @docid
+     * @type boolean|object|docEnums.Mode
      * @default "auto"
      * @public
      */
@@ -3793,6 +3800,7 @@ export interface GroupPanel {
   emptyPanelText?: string;
   /**
    * @docid dxDataGridOptions.groupPanel.visible
+   * @type boolean|docEnums.Mode
    * @default false
    */
   visible?: boolean | Mode;
@@ -3995,6 +4003,7 @@ export interface SummaryGroupItem {
     skipEmptyValues?: boolean;
     /**
      * @docid dxDataGridOptions.summary.groupItems.summaryType
+     * @type docEnums.SummaryType
      * @default undefined
      */
     summaryType?: SummaryType | string;
@@ -4049,6 +4058,7 @@ export interface SummaryTotalItem {
   skipEmptyValues?: boolean;
   /**
    * @docid dxDataGridOptions.summary.totalItems.summaryType
+   * @type docEnums.SummaryType
    * @default undefined
    */
   summaryType?: SummaryType | string;

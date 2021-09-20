@@ -217,6 +217,7 @@ export interface BaseWidgetExport {
     fileName?: string;
     /**
      * @docid BaseWidgetOptions.export.formats
+     * @type Array<docEnums.ExportFormat>
      * @default ['PNG', 'PDF', 'JPEG', 'SVG', 'GIF']
      * @public
      */

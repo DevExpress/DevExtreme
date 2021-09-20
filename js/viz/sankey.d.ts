@@ -478,6 +478,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
      * @docid
+     * @type Array<string>|docEnums.PaletteType
      * @default "Material"
      * @public
      */

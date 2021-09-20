@@ -107,6 +107,7 @@ export type Item = dxBoxItem;
 export interface dxBoxItem extends CollectionWidgetItem {
     /**
      * @docid
+     * @type number|docEnums.Mode
      * @default 0
      * @public
      */

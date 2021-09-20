@@ -372,6 +372,7 @@ export interface PivotGridDataSourceField {
     groupIndex?: number;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupInterval
+     * @type docEnums.PivotGridGroupInterval|number
      * @default undefined
      * @public
      */
@@ -468,6 +469,7 @@ export interface PivotGridDataSourceField {
     summaryDisplayMode?: PivotGridSummaryDisplayMode;
     /**
      * @docid PivotGridDataSourceOptions.fields.summaryType
+     * @type docEnums.SummaryType|string
      * @default 'count'
      * @public
      */

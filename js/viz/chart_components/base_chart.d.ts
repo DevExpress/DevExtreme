@@ -194,6 +194,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
+     * @type Array<string>|docEnums.PaletteType
      * @default "Material"
      * @public
      */

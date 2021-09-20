@@ -202,7 +202,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
     /**
      * @docid
      * @publicName format(formatName, formatValue)
-     * @param1 formatName:{docEnums.HtmlEditorFormat}|string
+     * @param1 formatName:docEnums.HtmlEditorFormat|string
      * @param2 formatValue:any
      * @public
      */
@@ -212,7 +212,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @publicName formatLine(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
-     * @param3 formatName:{docEnums.HtmlEditorFormat}|string
+     * @param3 formatName:docEnums.HtmlEditorFormat|string
      * @param4 formatValue:any
      * @public
      */
@@ -229,7 +229,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @publicName formatText(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
-     * @param3 formatName:{docEnums.HtmlEditorFormat}|string
+     * @param3 formatName:docEnums.HtmlEditorFormat|string
      * @param4 formatValue:any
      * @public
      */
@@ -313,7 +313,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @publicName insertText(index, text, formatName, formatValue)
      * @param1 index:number
      * @param2 text:string
-     * @param3 formatName:{docEnums.HtmlEditorFormat}|string
+     * @param3 formatName:docEnums.HtmlEditorFormat|string
      * @param4 formatValue:any
      * @public
      */

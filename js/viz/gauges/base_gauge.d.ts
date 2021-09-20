@@ -161,6 +161,7 @@ export interface BaseGaugeRangeContainer {
     offset?: number;
     /**
      * @docid BaseGaugeOptions.rangeContainer.palette
+     * @type Array<string>|docEnums.PaletteType
      * @default "Material"
      * @public
      */
@@ -487,6 +488,7 @@ export interface CommonIndicator {
     /**
      * @docid
      * @default "Material"
+     * @type Array<string>|docEnums.PaletteType
      * @public
      */
     palette?: Array<string> | PaletteType;

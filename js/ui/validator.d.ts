@@ -90,7 +90,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      * @type_function_param1_field4 validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @type_function_param1_field5 brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
      * @type_function_param1_field6 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @type_function_param1_field7 status:ValidationStatus
+     * @type_function_param1_field7 status:docEnums.ValidationStatus
      * @action
      * @public
      */
@@ -172,6 +172,7 @@ export interface dxValidatorResult {
     pendingRules?: Array<AsyncRule>;
     /**
      * @docid
+     * @type docEnums.ValidationStatus
      * @public
      */
     status?: ValidationStatus;

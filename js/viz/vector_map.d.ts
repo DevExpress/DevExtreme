@@ -437,6 +437,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       opacity?: number;
       /**
        * @docid
+       * @type Array<string>|docEnums.PaletteType
        * @default "Material"
        */
       palette?: Array<string> | PaletteType;
@@ -598,7 +599,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     panningEnabled?: boolean;
     /**
      * @docid
-     * @type {docEnums.VectorMapProjection}|VectorMapProjectionConfig|string|object
+     * @type docEnums.VectorMapProjection|VectorMapProjectionConfig|string|object
      * @default "mercator"
      * @notUsedInTheme
      * @public

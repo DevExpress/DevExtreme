@@ -170,6 +170,7 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
   exportMode?: GanttPdfExportMode;
    /**
    * @docid
+   * @type docEnums.GanttPdfExportDateRange
    * @public
    */
   dateRange?: GanttPdfExportDateRange | object;

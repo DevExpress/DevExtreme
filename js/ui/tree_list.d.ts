@@ -810,6 +810,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     parentIdExpr?: string | Function;
     /**
      * @docid
+     * @type object|docEnums.Mode
      * @default "auto"
      * @public
      */
@@ -1180,6 +1181,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
 export interface dxTreeListToolbarItem extends dxToolbarItem {
     /**
      * @docid
+     * @type docEnums.dxTreeListDefaultToolbarItemName|string
      * @public
      */
     name?: dxTreeListDefaultToolbarItemName | string;
@@ -1193,6 +1195,7 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
 export interface dxTreeListToolbar {
     /**
      * @docid
+     * @type docEnums.dxTreeListDefaultToolbarItemName|dxTreeListToolbarItem
      * @public
      */
     items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
@@ -1210,7 +1213,7 @@ export type Column = dxTreeListColumn;
 export interface dxTreeListColumn extends ColumnBase {
     /**
      * @docid dxTreeListColumn.buttons
-     * @type Array<TreeListColumnButtonName,dxTreeListColumnButton>
+     * @type Array<docEnums.TreeListColumnButtonName,dxTreeListColumnButton>
      * @public
      */
     buttons?: Array<TreeListColumnButtonName | ColumnButton>;
@@ -1286,6 +1289,7 @@ export type ColumnButton = dxTreeListColumnButton;
 export interface dxTreeListColumnButton extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.name
+     * @type docEnums.TreeListColumnButtonName|string
      * @public
      */
     name?: TreeListColumnButtonName | string;

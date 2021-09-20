@@ -57,6 +57,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     cols?: Array<{
       /**
        * @docid
+       * @type number|docEnums.Mode
        * @default 0
        */
       baseSize?: number | Mode;
@@ -103,6 +104,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     rows?: Array<{
       /**
        * @docid
+       * @type number|docEnums.Mode
        * @default 0
        */
       baseSize?: number | Mode;

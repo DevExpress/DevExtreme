@@ -84,6 +84,7 @@ export interface globalConfig {
       maxSpeedDialActionCount?: number;
       /**
        * @docid
+       * @type docEnums.PositionAlignment|PositionConfig|Function
        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
        */
       position?: PositionAlignment | PositionConfig | Function;

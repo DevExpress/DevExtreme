@@ -89,6 +89,7 @@ export interface dxValidationGroupResult {
     isValid?: boolean;
     /**
      * @docid
+     * @type docEnums.ValidationStatus
      * @public
      */
     status?: ValidationStatus;
