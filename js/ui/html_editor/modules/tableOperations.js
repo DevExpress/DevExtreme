@@ -50,12 +50,13 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
             $table.css('width', newWidth); // to do support style width
         } else {
             const $columns = $table.find('tr').eq(0).find('td');
-
             const oldTableWidth = $table.outerWidth();
+
+            $table.css('width', 'initial');
 
             each($columns, (i, element) => {
                 const $element = $(element);
-                const newElementWidth = newWidth * oldTableWidth / $element.outerWidth();
+                const newElementWidth = newWidth / oldTableWidth * $element.outerWidth();
                 $element.attr('width', newElementWidth);
 
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');

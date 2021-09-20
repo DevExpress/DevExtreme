@@ -658,7 +658,97 @@ module('Table properties forms', {
     });
 
     module('Table width calculations', {}, () => {
+        test('Check cell width edititng if all columns height is fixed', function(assert) {
+            this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 400);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            const $horizontalCells = $tableElement.find('tr:eq(0) td');
+
+            assert.roughEqual($tableElement.outerWidth(), 400, 2, 'table width is changed as expected');
+            assert.roughEqual($horizontalCells.eq(0).outerWidth(), 200, 2, 'first column cell width is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 200, 2, 'first column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 200, 2, 'second column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 200, 2, 'second column cell width attr is applied');
+        });
+
+        test('Check table width edititng if one column width is fixed', function(assert) {
+            this.createWidget({ width: 632, value: '\
+            <table>\
+                <tr>\
+                    <td width="400">0_0 content</td>\
+                    <td>0_1</td>\
+                </tr>\
+                <tr>\
+                    <td width="400">1_0</td>\
+                    <td>1_1</td>\
+                </tr>\
+            </table>\
+            <br>' });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 900);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            const $horizontalCells = $tableElement.find('tr:eq(0) td');
+
+            assert.roughEqual($tableElement.outerWidth(), 900, 2, 'table width is changed as expected');
+            assert.roughEqual($horizontalCells.eq(0).outerWidth(), 400, 2, 'first column cell width is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 400, 2, 'first column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 500, 2, 'second column cell width attr is applied');
+            assert.strictEqual($horizontalCells.eq(1).attr('width'), undefined, 'second column cell width attr is undefined');
+        });
+
+        test('Check table width edititng if new width is less than the content', function(assert) {
+            this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 60);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            const $horizontalCells = $tableElement.find('tr:eq(0) td');
+
+            assert.roughEqual($tableElement.outerWidth(), 90, 2, 'table width is changed as expected');
+            assert.roughEqual($horizontalCells.eq(0).outerWidth(), 60, 2, 'first column cell width is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 30, 2, 'first column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 2, 'second column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 30, 2, 'second column cell width attr is applied');
+        });
     });
 
 });
