@@ -27,6 +27,20 @@ const tableMarkup = '\
     </table>\
     <br>after table text<br>';
 
+
+const tableWithFixedDimensionsMarkup = '\
+    <table>\
+        <tr>\
+            <td width="300px" height="24px">0_0 content</td>\
+            <td width="300px" height="24px">0_1</td>\
+        </tr>\
+        <tr>\
+            <td width="300px" height="50px">1_0</td>\
+            <td width="300px" height="50px">1_1</td>\
+        </tr>\
+    </table>\
+    <br>';
+
 // const LIST_ITEM_CLASS = 'dx-list-item';
 
 const { test, module } = QUnit;
@@ -71,14 +85,12 @@ module('Table properties forms', {
             assert.ok($form.eq(0).is(':visible'));
         });
 
-        test('Check properties edititng at the table Form (without dimentions)', function(assert) {
+        test('Check properties edititng at the table Form (without dimensions)', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            // this.quillInstance.setSelection(50, 1);
-
-            showCellPropertiesForm(this.instance, $tableElement);
+            showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick(500);
             const $form = $('.dx-form:not(.dx-formdialog-form)');
 
@@ -111,6 +123,49 @@ module('Table properties forms', {
             assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
         });
 
+        test('Check table width and height editor min options', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+            const formInstance = $form.dxForm('instance');
+
+            const widthEditor = formInstance.getEditor('width');
+            const heightEditor = formInstance.getEditor('height');
+
+            assert.strictEqual(widthEditor.option('min'), 0);
+            assert.strictEqual(heightEditor.option('min'), 0);
+        });
+
+        test('Check base dimensions edititng at the table Form', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', 90);
+
+            const widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 600);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+
+            this.clock.tick();
+
+            assert.strictEqual($tableElement.outerHeight(), 90, 'cell height is applied');
+            assert.strictEqual($tableElement.outerWidth(), 600, 'cell width is applied');
+        });
+
         test('show cell Form', function(assert) {
             this.createWidget();
 
@@ -125,7 +180,7 @@ module('Table properties forms', {
             assert.ok($form.eq(0).is(':visible'));
         });
 
-        test('Check properties edititng at the cell Form (without dimentions)', function(assert) {
+        test('Check properties edititng at the cell Form (without dimensions)', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -175,18 +230,7 @@ module('Table properties forms', {
         });
 
         test('Check cell width and height editor min options', function(assert) {
-            this.createWidget({ width: 632, value: '\
-            <table>\
-                <tr>\
-                    <td>0_0 content</td>\
-                    <td>0_1</td>\
-                </tr>\
-                <tr>\
-                    <td>1_0</td>\
-                    <td>1_1</td>\
-                </tr>\
-            </table>\
-            <br>' });
+            this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
@@ -197,17 +241,13 @@ module('Table properties forms', {
             const formInstance = $form.dxForm('instance');
 
             const widthEditor = formInstance.getEditor('width');
-            widthEditor.option('value', -100);
-
-
-            const heightEditor = formInstance.getEditor('width');
-            widthEditor.option('value', -100);
+            const heightEditor = formInstance.getEditor('height');
 
             assert.strictEqual(widthEditor.option('min'), 0);
             assert.strictEqual(heightEditor.option('min'), 0);
         });
 
-        test('Check base cell dimentions edititng', function(assert) {
+        test('Check base cell dimensions edititng', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -245,7 +285,7 @@ module('Table properties forms', {
         });
     });
 
-    module('Cell width editing cases', {}, () => {
+    module('Cell width calculations', {}, () => {
         test('Check cell width edititing if all columns width is fixed', function(assert) {
             this.createWidget({ value: '\
             <table>\
@@ -317,19 +357,7 @@ module('Table properties forms', {
         });
 
         test('Check cell width edititing for the last table column if all columns width is fixed', function(assert) {
-            this.createWidget({ value: '\
-            <table>\
-                <tr>\
-                    <td width="300px">0_0 content</td>\
-                    <td width="300px">0_1</td>\
-                </tr>\
-                <tr>\
-                    <td width="300px">1_0</td>\
-                    <td width="300px">1_1</td>\
-                </tr>\
-            </table>\
-            <br>' });
-
+            this.createWidget({ value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(1);
@@ -485,26 +513,15 @@ module('Table properties forms', {
             $okButton.trigger('dxclick');
             this.clock.tick(500);
 
-            assert.strictEqual($targetCell.outerWidth(), 700, 'cell width is applied');
+            assert.roughEqual($targetCell.outerWidth(), 567, 1, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 0, 1, 'next cell width attr is correct');
-            assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+            assert.roughEqual($targetCell.next().outerWidth(), 32, 1, 'next cell width attr is correct');
+            assert.strictEqual($targetCell.next().attr('width'), '0px', 'next cell width attr is correct');
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
 
         test('Check cell width attributes if new value is more than the full table width and all columns has fixed width', function(assert) {
-            this.createWidget({ width: 632, value: '\
-                <table>\
-                    <tr>\
-                        <td width="300px">0_0 content</td>\
-                        <td width="300px">0_1</td>\
-                    </tr>\
-                    <tr>\
-                        <td width="300px">1_0</td>\
-                        <td width="300px">1_1</td>\
-                    </tr>\
-                </table>\
-                <br>' });
+            this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
@@ -529,8 +546,67 @@ module('Table properties forms', {
         });
     });
 
-    module('Cell height editing cases', {}, () => {
+    module('Cell height calculations', {}, () => {
+        test('Check cell height edititng if all rows height is fixed', function(assert) {
+            this.createWidget({ value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const initialTableHeight = $tableElement.outerHeight();
+            const $targetCell = $tableElement.find('td').eq(0);
+            const initialCellHeight = $targetCell.outerHeight();
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', 80);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
+            assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
+
+            assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
+        });
+
+        test('Check cell height edititng if all rows height is fixed nad new value is less than the minimum row content height ', function(assert) {
+            this.createWidget({ value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(2);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(500);
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            const formInstance = $form.dxForm('instance');
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', 10);
+
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            assert.strictEqual($targetCell.outerHeight(), 24, 'cell height is applied');
+            assert.strictEqual($targetCell.attr('height'), '10px', 'cell height attribute is correct');
+
+            assert.roughEqual($tableElement.outerHeight(), 48, 2), 'table height is changed as expected';
+        });
+
     });
 
+    module('Table height calculations', {}, () => {
+
+    });
+
+    module('Table width calculations', {}, () => {
+
+    });
 
 });

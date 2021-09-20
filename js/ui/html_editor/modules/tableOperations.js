@@ -42,7 +42,6 @@ const getMaxHeight = () => {
     return Math.max(MIN_HEIGHT, windowHeight * 0.9);
 };
 
-
 const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
         const autoWidthColumns = getAutoWidthColumns($table);
@@ -56,7 +55,7 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
 
             each($columns, (i, element) => {
                 const $element = $(element);
-                const newElementWidth = newWidth * oldTableWidth / $element.outerWidth();
+                const newElementWidth = newWidth / oldTableWidth * $element.outerWidth();
                 $element.attr('width', newElementWidth);
 
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
@@ -126,6 +125,12 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
 
 
         const widthDiff = newWidth - $target.outerWidth();
+        const tableWidth = $table.outerWidth();
+
+        if(newWidth > tableWidth) {
+            $table.css('width', 'initial');
+        }
+
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
