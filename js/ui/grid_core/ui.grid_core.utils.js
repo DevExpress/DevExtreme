@@ -200,7 +200,7 @@ export default {
 
     calculateLoadPanelPosition($element) {
         const $window = $(getWindow());
-        if(getHeight($element)) > getHeight($window)) {
+        if(getHeight($element) > getHeight($window)) {
             return {
                 of: $window,
                 boundary: $element,
