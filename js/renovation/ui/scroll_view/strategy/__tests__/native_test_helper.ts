@@ -198,8 +198,8 @@ class ScrollableTestHelper {
       const scrollbar = scrollbarRef.instance();
       scrollbar.scrollbarRef = React.createRef();
       scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
-      scrollbar.scrollRef = React.createRef();
-      scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
+      scrollbar.thumbRef = React.createRef();
+      scrollbar.thumbRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
 
       Object.assign(scrollbar, {
         props: {

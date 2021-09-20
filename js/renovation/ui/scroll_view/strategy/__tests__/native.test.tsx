@@ -1083,22 +1083,6 @@ describe('Methods', () => {
         if (isHorizontal) {
           expect(viewModel.hScrollLocation).toEqual(-4);
         }
-
-        expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
-
-        expect(viewModel.hideScrollbarTimer === undefined).toBe(false);
-
-        expect(setTimeout).toHaveBeenCalledTimes(1);
-        expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
-
-        expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
-
-        jest.runOnlyPendingTimers();
-
-        expect(viewModel.needForceScrollbarsVisibility).toEqual(false);
-
-        viewModel.disposeHideScrollbarTimer()();
-        expect(viewModel.hideScrollbarTimer).toBe(undefined);
       });
     });
   });
@@ -1158,11 +1142,11 @@ describe('Scrollbar integration', () => {
         contentSize: 0,
         maxOffset: -0,
         scrollLocation: 0,
-        forceVisibility: false,
+        visible: false,
         showScrollbar: 'onScroll',
       };
-      const vScrollbarClasses = 'dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical dx-state-invisible';
-      const hScrollbarClasses = 'dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal dx-state-invisible';
+      const vScrollbarClasses = 'dx-scrollable-scrollbar dx-scrollbar-vertical dx-state-invisible';
+      const hScrollbarClasses = 'dx-scrollable-scrollbar dx-scrollbar-horizontal dx-state-invisible';
 
       if (helper.isBoth) {
         expect(scrollbars.length).toEqual(2);
