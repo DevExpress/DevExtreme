@@ -3669,6 +3669,7 @@ export interface ExcelCellInfo {
   gridCell?: ExcelCell;
 }
 
+/** @public */
 export interface Export {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
