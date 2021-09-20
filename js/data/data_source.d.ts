@@ -409,5 +409,4 @@ export default class DataSource<TKey = any, TValue = any> {
     totalCount(): number;
 }
 
-type StorageType = 'array' | 'local' | 'odata';
 type EventName = 'changed' | 'loadError' | 'loadingChanged';
