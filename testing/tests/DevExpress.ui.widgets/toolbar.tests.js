@@ -10,6 +10,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
 import { deferUpdate } from 'core/utils/common';
+import { getHeight } from 'core/utils/size';
 import domAdapter from 'core/dom_adapter';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
@@ -19,6 +20,7 @@ import 'ui/text_box';
 
 import 'generic_light.css!';
 import 'ui/button';
+import 'ui/drop_down_button';
 import 'ui/tabs';
 
 $('#qunit-fixture').html('<style>\
@@ -212,6 +214,30 @@ QUnit.module('render', {
         });
         const button = element.find('.dx-button').first();
 
+        assert.ok(button.hasClass('dx-button-mode-text'));
+
+        themes.isMaterial = origIsMaterial;
+    });
+
+    QUnit.test('drop down buttons has text style in Material', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
+
+        const element = this.$element.dxToolbar({
+            items: [{
+                location: 'before',
+                widget: 'dxDropDownButton',
+                options: {
+                    icon: 'home'
+                }
+            }]
+        });
+        const button = element.find('.dx-button').first();
+
+        // is dropdown button
+        assert.ok(button.hasClass('dx-dropdownbutton-action'));
         assert.ok(button.hasClass('dx-button-mode-text'));
 
         themes.isMaterial = origIsMaterial;
@@ -1752,7 +1778,7 @@ QUnit.module('adaptivity', {
             .dxDropDownMenu('instance')._popup._$content;
 
         const document = domAdapter.getDocumentElement();
-        assert.equal($popupContent.height() < document.clientHeight, true, `popup height must be less then document height (${$popupContent.height()} < ${document.clientHeight})`);
+        assert.equal(getHeight($popupContent) < document.clientHeight, true, `popup height must be less then document height (${getHeight($popupContent)} < ${document.clientHeight})`);
         devices.current(null);
     });
 });

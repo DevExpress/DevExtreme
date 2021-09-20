@@ -30,17 +30,20 @@ class BaseRenderingStrategy {
     get startDayHour() { return this.options.startDayHour; }
     get endDayHour() { return this.options.endDayHour; }
     get maxAppointmentsPerCell() { return this.options.maxAppointmentsPerCell; }
-    get cellWidth() { return this.options.getCellWidth(); }
-    get cellHeight() { return this.options.getCellHeight(); }
-    get allDayHeight() { return this.options.getAllDayHeight(); }
-    get resizableStep() { return this.options.getResizableStep(); }
+    get cellWidth() { return this.options.cellWidth; }
+    get cellHeight() { return this.options.cellHeight; }
+    get allDayHeight() { return this.options.allDayHeight; }
+    get resizableStep() { return this.options.resizableStep; }
     get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
     get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
     get viewStartDayHour() { return this.options.viewStartDayHour; }
     get viewEndDayHour() { return this.options.viewEndDayHour; }
-    get viewCellDuration() { return this.options.viewCellDuration; }
+    get cellDuration() { return this.options.cellDuration; }
     get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
     get topVirtualCellCount() { return this.options.topVirtualCellCount; }
+    get positionHelper() { return this.options.positionHelper; }
+    get showAllDayPanel() { return this.options.showAllDayPanel; }
+    get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
     get groupOrientation() { return this.options.groupOrientation; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
@@ -216,6 +219,7 @@ class BaseRenderingStrategy {
         return new AppointmentSettingsGenerator({
             rawAppointment,
             appointmentTakesAllDay: this.isAppointmentTakesAllDay(rawAppointment), // TODO move to the settings
+            getPositionShiftCallback: this.getPositionShift.bind(this),
             ...this.options
         });
     }
@@ -776,7 +780,13 @@ class BaseRenderingStrategy {
         return result;
     }
 
-
+    getPositionShift(timeShift, isAllDay) {
+        return {
+            top: timeShift * this.cellHeight,
+            left: 0,
+            cellPosition: 0
+        };
+    }
 }
 
 export default BaseRenderingStrategy;

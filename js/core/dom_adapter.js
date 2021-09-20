@@ -105,33 +105,9 @@ const nativeDOMAdapterStrategy = {
 
     setClass(element, className, isAdd) {
         if(element.nodeType === 1 && className) {
-            if(element.classList) {
-                if(isAdd) {
-                    element.classList.add(className);
-                } else {
-                    element.classList.remove(className);
-                }
-            } else { // IE9
-                const classNameSupported = typeof element.className === 'string';
-                const elementClass = classNameSupported ? element.className : (this.getAttribute(element, 'class') || '');
-                const classNames = elementClass.split(' ');
-                const classIndex = classNames.indexOf(className);
-                let resultClassName;
-                if(isAdd && classIndex < 0) {
-                    resultClassName = elementClass ? elementClass + ' ' + className : className;
-                }
-                if(!isAdd && classIndex >= 0) {
-                    classNames.splice(classIndex, 1);
-                    resultClassName = classNames.join(' ');
-                }
-                if(resultClassName !== undefined) {
-                    if(classNameSupported) {
-                        element.className = resultClassName;
-                    } else {
-                        this.setAttribute(element, 'class', resultClassName);
-                    }
-                }
-            }
+            isAdd
+                ? element.classList.add(className)
+                : element.classList.remove(className);
         }
     },
 

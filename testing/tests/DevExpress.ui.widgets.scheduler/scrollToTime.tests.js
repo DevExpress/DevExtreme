@@ -1,3 +1,4 @@
+import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
@@ -41,7 +42,7 @@ QUnit.module('Scrolling to time', () => {
 
                 scheduler.instance.scrollToTime(9, 5);
 
-                const cellHeight = scheduler.workSpace.getCells().eq(0).outerHeight();
+                const cellHeight = getOuterHeight(scheduler.workSpace.getCells().eq(0));
                 const expectedTop = cellHeight * (18 + 1 / 6);
 
                 assert.roughEqual(scrollBy.getCall(0).args[0].top, expectedTop, 1.001, 'scrollBy was called with right distance');
@@ -65,7 +66,7 @@ QUnit.module('Scrolling to time', () => {
 
                 scheduler.instance.scrollToTime(5, 0);
 
-                const cellHeight = scheduler.workSpace.getCells().eq(0).outerHeight();
+                const cellHeight = getOuterHeight(scheduler.workSpace.getCells().eq(0));
                 const expectedTop = cellHeight * 4;
 
                 assert.roughEqual(
@@ -89,7 +90,7 @@ QUnit.module('Scrolling to time', () => {
 
                 scheduler.instance.scrollToTime(12, 0);
 
-                const cellHeight = scheduler.workSpace.getCells().eq(0).outerHeight();
+                const cellHeight = getOuterHeight(scheduler.workSpace.getCells().eq(0));
                 const expectedTop = cellHeight * 18;
 
                 assert.roughEqual(
@@ -109,8 +110,8 @@ QUnit.module('Scrolling to time', () => {
 
                 scheduler.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
 
-                assert.equal(errors.log.callCount, 1, 'warning has been called once');
-                assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
+                assert.equal(errors.log.callCount, 2, 'warning has been called once');
+                assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
             });
 
             QUnit.test('Check scrolling to time for timeline view', function(assert) {
@@ -131,7 +132,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 9)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -152,13 +153,13 @@ QUnit.module('Scrolling to time', () => {
                 const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
                 const scrollLeft = scrollable.scrollLeft();
                 const scrollBy = sinon.spy(scrollable, 'scrollBy');
-                const offset = scheduler.instance.getWorkSpace().getScrollableContainer().outerWidth();
+                const offset = getOuterWidth(scheduler.instance.getWorkSpace().getScrollableContainer());
 
                 scheduler.instance.scrollToTime(9, 5);
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 9)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -183,7 +184,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 11)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -205,15 +206,32 @@ QUnit.module('Scrolling to time', () => {
                 const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
                 const scrollLeft = scrollable.scrollLeft();
                 const scrollBy = sinon.spy(scrollable, 'scrollBy');
-                const offset = scheduler.workSpace.getDataTableScrollableContainer().outerWidth();
+                const offset = getOuterWidth(scheduler.workSpace.getDataTableScrollableContainer());
 
                 scheduler.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace.positionHelper.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 11)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
+                );
+            });
+
+            QUnit.test('scrollToTime should throw a deprecation warning', function(assert) {
+                const scheduler = createWrapper({
+                    views: ['day'],
+                    currentView: 'day',
+                    currentDate: new Date(2021, 8, 9),
+                });
+
+                scheduler.instance.scrollToTime(10, 0);
+
+                assert.equal(errors.log.callCount, 1, 'warning has been called once');
+                assert.deepEqual(
+                    errors.log.getCall(0).args,
+                    ['W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead'],
+                    'Deprecation warning is correct',
                 );
             });
         });

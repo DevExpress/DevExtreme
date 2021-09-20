@@ -536,7 +536,7 @@ module('Virtual scrolling Month View', () => {
                 const { viewDataProvider } = workspace;
                 const scrollable = workspace.getScrollable();
 
-                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                workspace.renderer.getRenderTimeout = () => -1;
 
                 return asyncWrapper(assert, promise => {
                     [
@@ -624,7 +624,7 @@ module('Virtual scrolling Month View', () => {
                 const workspace = instance.getWorkSpace();
                 const scrollable = workspace.getScrollable();
 
-                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                workspace.renderer.getRenderTimeout = () => -1;
 
                 return asyncWrapper(assert, promise => {
                     [{
@@ -927,7 +927,7 @@ module('Virtual scrolling Month View', () => {
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9624,
+                            top: -9625,
                             width: 301
                         }]
                     },
@@ -947,7 +947,7 @@ module('Virtual scrolling Month View', () => {
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9624,
+                            top: -9625,
                             width: 301
                         }]
                     },
@@ -967,7 +967,7 @@ module('Virtual scrolling Month View', () => {
                             width: 525
                         }, {
                             left: -10249,
-                            top: -9624,
+                            top: -9625,
                             width: 301
                         }]
                     }

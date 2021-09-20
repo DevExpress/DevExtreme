@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { compileGetter, compileSetter } from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
@@ -158,6 +159,7 @@ class Gantt extends Widget {
             firstDayOfWeek: this.option('firstDayOfWeek'),
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
+            scaleTypeRange: this.option('scaleTypeRange'),
             editing: this.option('editing'),
             validation: this.option('validation'),
             stripLines: this.option('stripLines'),
@@ -565,11 +567,15 @@ class Gantt extends Widget {
         this._ganttView._ganttViewCore.showTaskDetailsDialog(taskKey);
     }
     exportToPdf(options) {
+        return this._exportToPdf(options);
+    }
+    _exportToPdf(options) {
         this._exportHelper.reset();
         const fullOptions = extend({}, options);
         if(fullOptions.createDocumentMethod) {
             fullOptions.docCreateMethod = fullOptions.createDocumentMethod;
         }
+        fullOptions.pdfDocument ??= fullOptions.jsPDFDocument;
         fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
         fullOptions.format ??= 'a4';
         return new Promise((resolve) => {
@@ -761,6 +767,9 @@ class Gantt extends Widget {
             case 'scaleType':
                 this._setGanttViewOption('scaleType', args.value);
                 break;
+            case 'scaleTypeRange':
+                this._setGanttViewOption('scaleTypeRange', this.option(args.name));
+                break;
             case 'editing':
                 this._setGanttViewOption('editing', this.option(args.name));
                 break;
@@ -794,7 +803,7 @@ class Gantt extends Widget {
                 break;
             case 'height':
                 super._optionChanged(args);
-                this._sizeHelper?.setGanttHeight(this._$element.height());
+                this._sizeHelper?.setGanttHeight(getHeight(this._$element));
                 break;
             case 'sorting':
                 this._ganttTreeList?.setOption('sorting', args.value);

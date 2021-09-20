@@ -1,3 +1,4 @@
+import { setOuterWidth, setOuterHeight } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
@@ -162,7 +163,8 @@ class SchedulerAppointments extends CollectionWidget {
             allowAllDayResize: true,
             onAppointmentDblClick: null,
             _collectorOffset: 0,
-            groups: []
+            groups: [],
+            resources: [],
         });
     }
 
@@ -523,12 +525,14 @@ class SchedulerAppointments extends CollectionWidget {
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         if(settings.virtual) {
-            const deferredColor = this.invoke('getResourceManager').getAppointmentColor({
+            const appointmentConfig = {
                 itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
                 groups: this.option('groups'),
-                workspaceGroups: this.invoke('getWorkspaceOption', 'groups')
-            });
+            };
+
+            const deferredColor = this.option('getAppointmentColor')(appointmentConfig);
+
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
             const config = {
@@ -546,12 +550,17 @@ class SchedulerAppointments extends CollectionWidget {
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
-                groups: this.option('groups')
+                groups: this.option('groups'),
+
+                getAppointmentColor: this.option('getAppointmentColor'),
+                getResourceDataAccessors: this.option('getResourceDataAccessors')
             };
 
             if(this.isAgendaView) {
-                const resourceManager = this.invoke('getResourceManager');
-                config.createPlainResourceListAsync = rawAppointment => resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
+                const agendaResourceProcessor = this.option('getAgendaResourceProcessor')();
+                config.createPlainResourceListAsync = rawAppointment => {
+                    return agendaResourceProcessor.createListAsync(rawAppointment);
+                };
             }
             this._createComponent(
                 element,
@@ -566,13 +575,8 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
-        const resourceManager = this.invoke('getResourceManager');
-        const resources = getResourcesFromItem(
-            resourceManager._resourceFields,
-            resourceManager.getResources(),
-            (field, action) => resourceManager.getDataAccessors(field, action),
-            this._getItemData($appointment)
-        );
+        const resourceList = this.option('getResources')();
+        const resources = getResourcesFromItem(resourceList, this.option('getResourceDataAccessors')(), this._getItemData($appointment));
 
         if(resources) {
             each(resources, function(name, values) {
@@ -941,8 +945,8 @@ class SchedulerAppointments extends CollectionWidget {
                 delete this._initialSize;
             }
             if(size) {
-                $appointment.outerWidth(size.width);
-                $appointment.outerHeight(size.height);
+                setOuterWidth($appointment, size.width);
+                setOuterHeight($appointment, size.height);
                 delete this._initialCoordinates;
             }
         }

@@ -1,3 +1,4 @@
+import { setHeight, getHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred } from 'viz/core/base_widget.utils';
 import commons from './rangeSelectorParts/commons.js';
@@ -1666,7 +1667,7 @@ QUnit.test('Render. Container size is changed - redraw widget', function(assert)
     const spy = sinon.spy();
     const widget = this.createWidget({ onDrawn: spy });
 
-    widget.$element().height(widget.$element().height() + 1);
+    setHeight(widget.$element(), getHeight(widget.$element()) + 1);
     spy.reset();
     widget.render();
 

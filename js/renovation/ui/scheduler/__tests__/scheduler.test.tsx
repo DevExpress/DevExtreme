@@ -49,7 +49,7 @@ describe('Scheduler', () => {
       />,
     );
 
-    it('should render correct markup and pass correct props to the toolbar', () => {
+    it('should render widget', () => {
       const tree = renderComponent({});
 
       expect(tree.is(Widget)).toBe(true);

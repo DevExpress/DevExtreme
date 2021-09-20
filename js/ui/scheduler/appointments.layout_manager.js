@@ -2,10 +2,11 @@ import { equalByValue } from '../../core/utils/common';
 import {
     getModelProvider,
     getTimeZoneCalculator,
-    getResourceManager,
     getAppointmentDataProvider
 } from './instanceFactory';
 import { AppointmentViewModel } from './appointments/viewModelGenerator';
+import { getGroupCount } from './resources/utils';
+import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
 
 class AppointmentLayoutManager {
     constructor(instance) {
@@ -14,7 +15,7 @@ class AppointmentLayoutManager {
     }
 
     get modelProvider() { return getModelProvider(this.instance.key); }
-    get viewRenderingStrategyName() { return this.modelProvider.getViewRenderingStrategyName(); }
+    get appointmentRenderingStrategyName() { return this.modelProvider.getAppointmentRenderingStrategyName(); }
 
     getCellDimensions(options) {
         if(this.instance._workSpace) {
@@ -34,12 +35,25 @@ class AppointmentLayoutManager {
             cellCountInsideLeftVirtualCell,
             cellCountInsideTopVirtualRow
         } = virtualScrollingDispatcher;
+        const groupCount = getGroupCount(this.instance.option('loadedResources'));
+        const DOMMetaData = workspace.getDOMElementsMetaData();
+        const allDayHeight = getAllDayHeight(
+            workspace.option('showAllDayPanel'),
+            workspace._isVerticalGroupedWorkSpace(),
+            DOMMetaData
+        );
+        const { positionHelper } = workspace;
 
         return {
+            resources: this.instance.option('resources'),
+            loadedResources: this.instance.option('loadedResources'),
+            getAppointmentColor: this.instance.createGetAppointmentColor(),
+            dataAccessors: this.instance._dataAccessors,
+
             instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
-            viewRenderingStrategyName: this.viewRenderingStrategyName,
+            appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
             adaptivityEnabled: this.modelProvider.adaptivityEnabled,
             rtlEnabled: this.modelProvider.rtlEnabled,
             startDayHour: this.modelProvider.startDayHour,
@@ -52,19 +66,21 @@ class AppointmentLayoutManager {
             topVirtualCellCount: cellCountInsideTopVirtualRow,
             intervalCount: workspace.option('intervalCount'),
             hoursInterval: workspace.option('hoursInterval'),
+            showAllDayPanel: workspace.option('showAllDayPanel'),
+            isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
+            groupCount,
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),
-            getCellWidth: () => workspace.getCellWidth(),
-            getCellHeight: () => workspace.getCellHeight(),
-            getAllDayHeight: () => workspace.getAllDayHeight(),
-            getResizableStep: () => workspace.positionHelper.getResizableStep(),
+            cellWidth: getCellWidth(DOMMetaData),
+            cellHeight: getCellHeight(DOMMetaData),
+            allDayHeight: allDayHeight,
+            resizableStep: positionHelper.getResizableStep(),
             getVisibleDayDuration: () => workspace.getVisibleDayDuration(),
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
-            resourceManager: getResourceManager(key),
             appointmentDataProvider: getAppointmentDataProvider(key),
             timeZone: this.modelProvider.timeZone,
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),
@@ -72,7 +88,7 @@ class AppointmentLayoutManager {
             viewEndDayHour: this.modelProvider.getCurrentViewOption('endDayHour'),
             viewType: workspace.type,
             endViewDate: workspace.getEndViewDate(),
-            positionHelper: workspace.positionHelper,
+            positionHelper,
             isGroupedByDate: workspace.isGroupedByDate(),
             cellDuration: workspace.getCellDuration(),
             viewDataProvider: workspace.viewDataProvider,
@@ -81,8 +97,7 @@ class AppointmentLayoutManager {
             intervalDuration: workspace.getIntervalDuration(),
             isVerticalOrientation: workspace.isVerticalOrientation(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
-            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
-            DOMMetaData: workspace.getDOMElementsMetaData(),
+            DOMMetaData,
         };
     }
 
@@ -183,7 +198,7 @@ class AppointmentLayoutManager {
     }
 
     getRepaintedAppointments(currentAppointments, sourceAppointments) {
-        if(sourceAppointments.length === 0 || this.viewRenderingStrategyName === 'agenda') {
+        if(sourceAppointments.length === 0 || this.appointmentRenderingStrategyName === 'agenda') {
             return currentAppointments;
         }
 

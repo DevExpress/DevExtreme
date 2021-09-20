@@ -1,3 +1,4 @@
+import { getWidth, getHeight, setHeight, setWidth } from '../../core/utils/size';
 import { hasWindow } from '../../core/utils/window';
 
 export class GanttSizeHelper {
@@ -6,22 +7,26 @@ export class GanttSizeHelper {
     }
 
     _setTreeListDimension(dimension, value) {
-        this._gantt._$treeListWrapper[dimension](value);
-        this._gantt._ganttTreeList?.setOption(dimension, this._gantt._$treeListWrapper[dimension]());
+        const setter = dimension === 'width' ? setWidth : setHeight;
+        const getter = dimension === 'width' ? getWidth : getHeight;
+        setter(this._gantt._$treeListWrapper, value);
+        this._gantt._ganttTreeList?.setOption(dimension, getter(this._gantt._$treeListWrapper));
     }
     _setGanttViewDimension(dimension, value) {
-        this._gantt._$ganttView[dimension](value);
-        this._gantt._setGanttViewOption(dimension, this._gantt._$ganttView[dimension]());
+        const setter = dimension === 'width' ? setWidth : setHeight;
+        const getter = dimension === 'width' ? getWidth : getHeight;
+        setter(this._gantt._$ganttView, value);
+        this._gantt._setGanttViewOption(dimension, getter(this._gantt._$ganttView));
     }
     _getPanelsWidthByOption() {
         return {
             leftPanelWidth: this._gantt.option('taskListWidth'),
-            rightPanelWidth: this._gantt._$element.width() - this._gantt.option('taskListWidth')
+            rightPanelWidth: getWidth(this._gantt._$element) - this._gantt.option('taskListWidth')
         };
     }
 
     onAdjustControl() {
-        const elementHeight = this._gantt._$element.height();
+        const elementHeight = getHeight(this._gantt._$element);
         this.updateGanttWidth();
         this.setGanttHeight(elementHeight);
     }

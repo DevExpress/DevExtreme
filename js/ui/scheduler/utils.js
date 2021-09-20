@@ -1,7 +1,5 @@
+import { getOuterHeight, setHeight, setWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
-import { each } from '../../core/utils/iterator';
-import { getResourceManager } from './instanceFactory';
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
 import { getPublicElement } from '../../core/element';
 
@@ -15,23 +13,10 @@ export const utils = {
             const settings = utils.dataAccessors.getAppointmentSettings(element);
             return settings?.info;
         },
-
-        combine: (key, dataAccessors) => { // TODO get rid of it and rework resourceManager
-            const result = extend(true, {}, dataAccessors);
-            const resourceManager = getResourceManager(key);
-
-            if(dataAccessors && resourceManager) {
-                each(resourceManager._dataAccessors, (type, accessor) => {
-                    result[type].resources = accessor;
-                });
-            }
-
-            return result;
-        }
     },
     DOM: {
         getHeaderHeight: (header) => {
-            return header._$element && parseInt(header._$element.outerHeight(), 10);
+            return header._$element && parseInt(getOuterHeight(header._$element), 10);
         },
     },
     renovation: {
@@ -50,8 +35,12 @@ export const utils = {
 
                 component.option(viewModel);
 
-                height && $element.height(height);
-                width && $element.width(width);
+                if(height) {
+                    setHeight($element, height);
+                }
+                if(width) {
+                    setWidth($element, width);
+                }
             }
         }
     }

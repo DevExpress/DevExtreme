@@ -16,8 +16,6 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/recurrence_editor
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

@@ -1178,6 +1178,10 @@ export interface DataGridToolbarItem extends dxToolbarItem {
 @ComponentBindings()
 export class DataGridToolbar {
   @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
+
+  @OneWay() visible?: boolean;
+
+  @OneWay() disabled?: boolean;
 }
 
 @ComponentBindings()

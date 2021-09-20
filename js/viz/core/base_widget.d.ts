@@ -21,8 +21,8 @@ import {
 } from '../common';
 
 import {
-    Rule,
-} from '../../core/options/utils';
+    DefaultOptionsRule,
+} from '../../core/options';
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
 export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
@@ -61,7 +61,6 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     export?: BaseWidgetExport;
     /**
      * @docid
-     * @type_function_return number|string
      * @hidden
      */
     height?: number | string | (() => number | string);
@@ -189,7 +188,6 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     tooltip?: BaseWidgetTooltip;
     /**
      * @docid
-     * @type_function_return number|string
      * @hidden
      */
     width?: number | string | (() => number | string);
@@ -242,8 +240,6 @@ export interface BaseWidgetExport {
     proxyUrl?: string;
     /**
      * @docid BaseWidgetOptions.export.svgToCanvas
-     * @type_function_param1 svg:SVGElement
-     * @type_function_param2 canvas:HTMLCanvasElement
      * @type_function_return Promise<void>
      * @default undefined
      * @public
@@ -514,7 +510,6 @@ export interface BaseWidgetTooltip {
     font?: Font;
     /**
      * @docid BaseWidgetOptions.tooltip.format
-     * @type Format
      * @default undefined
      * @public
      */
@@ -591,12 +586,10 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @param1_field2 options:Object
      * @hidden
      */
-    static defaultOptions<TProperties>(rule: Partial<Rule<TProperties>>): void;
+    static defaultOptions<TProperties>(rule: DefaultOptionsRule<TProperties>): void;
     /**
      * @docid
      * @publicName exportTo(fileName, format)
-     * @param1 fileName:string
-     * @param2 format:string
      * @public
      */
     exportTo(fileName: string, format: string): void;
@@ -634,7 +627,6 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @publicName svg()
-     * @return string
      * @public
      */
     svg(): string;
