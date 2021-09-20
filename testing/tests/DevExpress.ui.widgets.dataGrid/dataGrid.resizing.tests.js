@@ -541,7 +541,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         const scrollable = dataGrid.getScrollable();
         assert.ok(scrollable, 'scrollable is created');
-        assert.ok(getHeight(scrollable.$content()) > getHeight(scrollable.container()), 'scroll is exists');
+        assert.ok(getHeight(scrollable.$content()) > getHeight($(scrollable.container())), 'scroll is exists');
     });
 
     // T820186

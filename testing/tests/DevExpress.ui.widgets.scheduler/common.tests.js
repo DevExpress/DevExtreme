@@ -742,7 +742,7 @@ QUnit.module('View with configuration', {
 
             const $groupHeaders = $(scheduler.workSpace.groups.getGroupHeaders(0));
             $groupHeaders.each((index, groupHeader) => {
-                const groupHeaderHeight = getOuterHeight(groupHeader);
+                const groupHeaderHeight = getOuterHeight($(groupHeader));
                 const groupingCellHeight = scheduler.workSpace.getCellHeight(index, 0);
                 assert.equal(groupHeaderHeight, groupingCellHeight, `Group header ${index} has min height`);
             });

@@ -6916,7 +6916,7 @@ QUnit.module('Scrollbar', {
         rowsView.resize();
 
         // assert
-        assert.strictEqual(getOuterHeight(rowsView.getScrollable().$content()), getOuterHeight(rowsView.getScrollable().container()), 'No vertical scroll');
+        assert.strictEqual(getOuterHeight(rowsView.getScrollable().$content()), getOuterHeight($(rowsView.getScrollable().container())), 'No vertical scroll');
     });
 });
 

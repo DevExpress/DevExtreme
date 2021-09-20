@@ -43,18 +43,18 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         this.instance.option('taskListWidth', 200);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
-        assert.ok(getHeight(this.instance.$element()) < getHeight(window), '1.normalMode: gantt height < window height');
-        assert.ok(getWidth(this.instance.$element()) < getWidth(window), '1.normalMode: gantt width < window width');
+        assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '1.normalMode: gantt height < window height');
+        assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '1.normalMode: gantt width < window width');
         fullScreenCommand.execute();
-        assert.equal(getHeight(this.instance.$element()), getHeight(window), '1.fullScreenMode: gantt height == window height');
-        assert.equal(getWidth(this.instance.$element()), getWidth(window), '1.fullScreenMode: gantt width == window width');
+        assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '1.fullScreenMode: gantt height == window height');
+        assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '1.fullScreenMode: gantt width == window width');
         fullScreenCommand.execute();
         this.clock.tick();
-        assert.ok(getHeight(this.instance.$element()) < getHeight(window), '2.normalMode: gantt height < window height');
-        assert.ok(getWidth(this.instance.$element()) < getWidth(window), '2.normalMode: gantt width < window width');
+        assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '2.normalMode: gantt height < window height');
+        assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '2.normalMode: gantt width < window width');
         fullScreenCommand.execute();
-        assert.equal(getHeight(this.instance.$element()), getHeight(window), '2.fullScreenMode: gantt height == window height');
-        assert.equal(getWidth(this.instance.$element()), getWidth(window), '2.fullScreenMode: gantt width == window width');
+        assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '2.fullScreenMode: gantt height == window height');
+        assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '2.fullScreenMode: gantt width == window width');
         fullScreenCommand.execute();
     });
 

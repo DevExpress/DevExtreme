@@ -412,8 +412,8 @@ module('CellTemplate tests', moduleConfig, () => {
                         dataCellTemplate: function(cellData, cellIndex, cellElement) {
                         // all-day table cell size
                             if(cellData.allDay && !cellIndex) {
-                                assert.roughEqual(getOuterWidth(cellElement), 85, 1.001, 'Data cell width is OK');
-                                assert.roughEqual(getOuterHeight(cellElement), 24, 1.001, 'Data cell height is OK');
+                                assert.roughEqual(getOuterWidth($(cellElement)), 85, 1.001, 'Data cell width is OK');
+                                assert.roughEqual(getOuterHeight($(cellElement)), 24, 1.001, 'Data cell height is OK');
                             }
 
                             // scheduler table cell size
@@ -1423,8 +1423,8 @@ module('CellTemplate tests', moduleConfig, () => {
                     endDate: new Date(2016, 10, 28, 2)
                 }],
                 dateCellTemplate: function(cellData, cellIndex, cellElement) {
-                    assert.equal(getOuterWidth(cellElement), 70, 'Date cell width is OK');
-                    assert.equal(getOuterHeight(cellElement), 80, 'Date cell height is OK');
+                    assert.equal(getOuterWidth($(cellElement)), 70, 'Date cell width is OK');
+                    assert.equal(getOuterHeight($(cellElement)), 80, 'Date cell height is OK');
                 }
             });
         });
@@ -1569,8 +1569,8 @@ module('CellTemplate tests', moduleConfig, () => {
                         dateCellTemplate: function(cellData, cellIndex, cellElement) {
                             if(!cellIndex) {
                                 assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                                assert.roughEqual(getOuterWidth(cellElement), 85, 1.001, 'Date cell width is OK');
-                                assert.equal(getOuterHeight(cellElement), 40, 'Date cell height is OK');
+                                assert.roughEqual(getOuterWidth($(cellElement)), 85, 1.001, 'Date cell width is OK');
+                                assert.equal(getOuterHeight($(cellElement)), 40, 'Date cell height is OK');
                             }
                         }
                     });

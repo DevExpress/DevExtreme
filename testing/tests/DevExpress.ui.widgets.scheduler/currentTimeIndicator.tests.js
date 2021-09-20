@@ -839,13 +839,13 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
         assert.equal($bottomShader.length, 0, 'BottomShader wasn\'t rendered for overdue view');
 
         $topShader.each((index, element) => {
-            assert.roughEqual(getOuterWidth(element), 4 * cellWidth, 2, 'TopShader has correct width');
-            assert.roughEqual(getOuterHeight(element), 1000, 2, 'TopShader has correct height');
+            assert.roughEqual(getOuterWidth($(element)), 4 * cellWidth, 2, 'TopShader has correct width');
+            assert.roughEqual(getOuterHeight($(element)), 1000, 2, 'TopShader has correct height');
             assert.roughEqual(parseInt($(element).css('left')), index * 7 * cellWidth, 2, 'TopShader has correct left');
         });
 
         $allDayShader.each((index, element) => {
-            assert.roughEqual(getOuterWidth(element), 4 * cellWidth, 2, 'AllDay has correct width');
+            assert.roughEqual(getOuterWidth($(element)), 4 * cellWidth, 2, 'AllDay has correct width');
         });
     });
 
