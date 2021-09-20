@@ -52,19 +52,6 @@ describe('GroupPanel Vertical Layout', () => {
       },
     }) as any);
 
-    it('should spread restAttributes correctly', () => {
-      const layout = render({
-        restAttributes: {
-          'custom-attribute': 'customAttribute', style: { color: 'green' },
-        },
-      });
-
-      expect(layout.prop('custom-attribute'))
-        .toBe('customAttribute');
-      expect(layout.prop('style'))
-        .toEqual({ color: 'red' });
-    });
-
     it('should pass correct class names to components', () => {
       const layout = render({
         props: { className: 'custom-class' },

@@ -1,5 +1,5 @@
 import {
-  Component, CSSAttributes, JSXComponent,
+  Component, ComponentBindings, CSSAttributes, ForwardRef, JSXComponent, RefObject,
 } from '@devextreme-generator/declarations';
 import {
   GroupRenderItem,
@@ -9,7 +9,6 @@ import { addHeightToStyle } from '../../../utils';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';
 
 export const viewFunction = ({
-  restAttributes,
   style,
   props: {
     className,
@@ -21,8 +20,6 @@ export const viewFunction = ({
   <div
     className={className}
     ref={elementRef}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     style={style}
   >
     <div className="dx-scheduler-group-flex-container">
@@ -37,11 +34,16 @@ export const viewFunction = ({
   </div>
 );
 
+@ComponentBindings()
+export class VerticalGroupPanelLayoutProps extends GroupPanelLayoutProps {
+  @ForwardRef() elementRef?: RefObject<HTMLDivElement>;
+}
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelLayoutProps) {
+export class GroupPanelVerticalLayout extends JSXComponent(VerticalGroupPanelLayoutProps) {
   get style(): CSSAttributes {
     const { height, styles } = this.props;
 
