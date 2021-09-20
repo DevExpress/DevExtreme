@@ -37,7 +37,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       scrollByContent, useKeyboard, pullDownEnabled,
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
-      pulledDownText, pullingDownText, refreshingText, reachBottomText,
+      pulledDownText, pullingDownText, refreshingText, reachBottomText, refreshStrategy,
       onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
     },
     restAttributes,
@@ -69,6 +69,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onUpdated={onUpdated}
         onPullDown={onPullDown}
         onReachBottom={onReachBottom}
+        refreshStrategy={refreshStrategy}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
@@ -105,6 +106,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onUpdated={onUpdated}
         onPullDown={onPullDown}
         onReachBottom={onReachBottom}
+        refreshStrategy="simulated"
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}

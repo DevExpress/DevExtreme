@@ -16,6 +16,7 @@ import {
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
+  SCROLLVIEW_CONTENT_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
 } from '../../common/consts';
 
@@ -85,6 +86,11 @@ class ScrollableTestHelper {
 
     const { contentSize = 200, containerSize = 100, overflow = 'hidden' } = this.options;
     let contentHeight = contentSize;
+
+    if (this.options.needScrollViewContentWrapper) {
+      this.viewModel.scrollViewContentRef = React.createRef() as RefObject<HTMLDivElement>;
+      this.viewModel.scrollViewContentRef.current = this.getScrollViewContentElement();
+    }
 
     if (this.options.forceGeneratePockets) {
       if (this.options.pullDownEnabled) {
@@ -185,6 +191,10 @@ class ScrollableTestHelper {
 
   getContentElement(): HTMLDivElement {
     return this.scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`).getDOMNode();
+  }
+
+  getScrollViewContentElement(): HTMLDivElement {
+    return this.scrollable.find(`.${SCROLLVIEW_CONTENT_CLASS}`).getDOMNode();
   }
 
   getTopPocketElement(): HTMLDivElement {
