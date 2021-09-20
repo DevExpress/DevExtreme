@@ -508,7 +508,7 @@ QUnit.skip('scrollbar is visible for parent scrollable after mouse leave for chi
     assert.equal($childrenScroll.hasClass('dx-state-invisible'), true, 'children scrollbar is hidden');
 });
 
-QUnit.test('scrollbar is visible for parent scrollable after start', function(assert) {
+QUnit.skip('scrollbar is visible for parent scrollable after start', function(assert) {
     const $scrollable = $('#scrollable').height(25);
     const $childScrollable = $('<div>').height(50);
 
