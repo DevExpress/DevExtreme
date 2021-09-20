@@ -19744,7 +19744,6 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.KeyDownInfo;
     /**
      * [descr:dxTreeListNode]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface Node {
       /**
@@ -20052,7 +20051,8 @@ declare module DevExpress.ui {
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxTreeList.Node instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type dxTreeListNode = DevExpress.ui.dxTreeList.Node;
   /**

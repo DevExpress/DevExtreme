@@ -1291,13 +1291,13 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Node instead
  */
 export type dxTreeListNode = Node;
 
 /**
+ * @public
  * @docid dxTreeListNode
  * @type object
  */
