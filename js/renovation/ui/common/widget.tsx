@@ -373,17 +373,31 @@ export class Widget extends JSXComponent(WidgetProps) {
     };
   }
 
-  get styles(): Record<string, string | number> {
-    const { width, height } = this.props;
+  get styles(): Record<string, string | number | undefined> {
     const style = this.restAttributes.style as Record<string, string | number> || {};
-    const computedWidth = normalizeStyleProp('width', isFunction(width) ? width() : width);
-    const computedHeight = normalizeStyleProp('height', isFunction(height) ? height() : height);
+    const height = this.getDimensionStyle('height');
+    const width = this.getDimensionStyle('width');
 
     return {
       ...style,
-      height: computedHeight ?? style.height,
-      width: computedWidth ?? style.width,
+      width,
+      height,
     };
+  }
+
+  getDimensionStyle(name: string): string | undefined {
+    const restStyles = this.restAttributes.style as Record<string, string | number> || {};
+    const value = this.props[name];
+
+    const computedValue: string | null = normalizeStyleProp(
+      name,
+      isFunction(value) ? value() : value,
+    );
+
+    if (computedValue === null) {
+      return undefined;
+    }
+    return computedValue ?? restStyles[name];
   }
 
   get cssClasses(): string {

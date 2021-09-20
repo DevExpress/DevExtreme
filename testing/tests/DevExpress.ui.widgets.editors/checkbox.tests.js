@@ -221,6 +221,34 @@ QUnit.module('Checkbox', function() {
 
             assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
         });
+
+        ['width', 'height'].forEach(dimension => {
+            QUnit.test(`${dimension} change to null should reset inline style`, function(assert) {
+                const $checkBox = $('#checkBox').dxCheckBox({
+                    width: 100,
+                    height: 100
+                });
+                const checkBox = $checkBox.dxCheckBox('instance');
+
+                checkBox.option(dimension, null);
+
+                assert.strictEqual($checkBox.get(0).style[dimension], '', 'inline style is reset');
+            });
+
+            if(dxCheckBox.IS_RENOVATED_WIDGET) {
+                QUnit.test(`${dimension} change to undefined should reset inline style`, function(assert) {
+                    const $checkBox = $('#checkBox').dxCheckBox({
+                        width: 100,
+                        height: 100
+                    });
+                    const checkBox = $checkBox.dxCheckBox('instance');
+
+                    checkBox.option(dimension, undefined);
+
+                    assert.strictEqual($checkBox.get(0).style[dimension], '', 'inline style is reset');
+                });
+            }
+        });
     });
 
     QUnit.module('keyboard navigation', function() {

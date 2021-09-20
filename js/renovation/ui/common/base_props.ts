@@ -14,7 +14,7 @@ export class BaseWidgetProps {
 
   @OneWay() focusStateEnabled?: boolean = false;
 
-  @OneWay() height?: string | number | (() => (string | number));
+  @OneWay() height?: string | number | (() => (string | number | null)) | null = null;
 
   @OneWay() hint?: string;
 
@@ -32,5 +32,5 @@ export class BaseWidgetProps {
 
   @OneWay() visible?: boolean = true;
 
-  @OneWay() width?: string | number | (() => (string | number));
+  @OneWay() width?: string | number | (() => (string | number | null)) | null = null;
 }

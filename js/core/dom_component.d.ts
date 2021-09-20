@@ -33,7 +33,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @default undefined
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string | (() => number | string | null) | null;
     /**
      * @docid
      * @action
@@ -58,10 +58,10 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
     rtlEnabled?: boolean;
     /**
      * @docid
-     * @default undefined
+     * @default null
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string | (() => number | string | null) | null;
 }
 /**
  * @docid
