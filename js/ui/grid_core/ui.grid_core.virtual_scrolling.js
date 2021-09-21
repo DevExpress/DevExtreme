@@ -1393,10 +1393,6 @@ export const virtualScrollingModule = {
                         }
 
                         return result;
-                    },
-                    _applyFilter: function() {
-                        this._updateVisiblePageIndex(0);
-                        return this.callBase.apply(this, arguments);
                     }
                 };
 
