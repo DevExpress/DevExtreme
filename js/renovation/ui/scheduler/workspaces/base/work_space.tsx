@@ -24,6 +24,7 @@ import { getViewRenderConfigByType } from './work_space_config';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { DateTableLayoutProps } from './date_table/layout';
 import { TimePaneLayoutProps } from './time_panel/layout';
+import { isVerticalGroupingApplied } from '../utils';
 
 const prepareGenerationOptions = (
   workSpaceProps: WorkSpaceProps,
@@ -86,6 +87,7 @@ export const viewFunction = ({
   groupPanelData,
   layout: Layout,
   isAllDayPanelVisible,
+  isRenderHeaderEmptyCell,
   viewDataProvider,
   dateTableRef,
   allDayPanelRef,
@@ -101,11 +103,13 @@ export const viewFunction = ({
     groupOrientation,
     allDayPanelExpanded,
     intervalCount,
+
+    appointments,
+    allDayAppointments,
   },
 
   renderConfig: {
     className,
-    isAllDayPanelSupported,
     isRenderDateHeader,
     scrollingDirection,
   },
@@ -133,14 +137,17 @@ export const viewFunction = ({
     timePanelTemplate={timePanelTemplate}
 
     isAllDayPanelCollapsed={!allDayPanelExpanded}
-    isAllDayPanelSupported={isAllDayPanelSupported}
     isAllDayPanelVisible={isAllDayPanelVisible}
     isRenderDateHeader={isRenderDateHeader}
+    isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
     scrollingDirection={scrollingDirection}
 
     className={className}
     dateTableRef={dateTableRef}
     allDayPanelRef={allDayPanelRef}
+
+    appointments={appointments}
+    allDayAppointments={allDayAppointments}
   />
 );
 
@@ -257,6 +264,14 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   get timePanelTemplate(): JSXTemplate<TimePaneLayoutProps> | undefined {
     const { timePanelTemplate } = this.renderConfig;
     return timePanelTemplate;
+  }
+
+  get isRenderHeaderEmptyCell(): boolean {
+    const isVerticalGrouping = isVerticalGroupingApplied(
+      this.props.groups, this.props.groupOrientation,
+    );
+
+    return isVerticalGrouping || !!this.timePanelTemplate;
   }
 
   @Effect()

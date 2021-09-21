@@ -6,6 +6,8 @@ import {
   Fragment,
   Template,
   JSXTemplate,
+  ForwardRef,
+  RefObject,
 } from '@devextreme-generator/declarations';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
@@ -24,6 +26,7 @@ export const viewFunction = ({
     groupOrientation,
     timePanelData,
     timeCellTemplate,
+    tableRef,
   },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
@@ -36,6 +39,7 @@ export const viewFunction = ({
     bottomVirtualRowHeight={bottomVirtualRowHeight}
     virtualCellsCount={1}
     className="dx-scheduler-time-panel"
+    tableRef={tableRef}
   >
     {timePanelData
       .groupedData.map(({ dateTable, groupIndex }, index) => (
@@ -94,6 +98,8 @@ export class TimePaneLayoutProps {
   };
 
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({

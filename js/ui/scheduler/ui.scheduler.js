@@ -7,7 +7,7 @@ import { EmptyTemplate } from '../../core/templates/empty_template';
 import { inArray } from '../../core/utils/array';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
-import { compileGetter, compileSetter } from '../../core/utils/data';
+import { compileGetter } from '../../core/utils/data';
 import { getBoundingRect } from '../../core/utils/position';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
@@ -1070,59 +1070,14 @@ class Scheduler extends Widget {
     }
 
     _initExpressions(fields) {
-        const isDateField = function(field) {
-            return field === 'startDate' || field === 'endDate';
-        };
-
-        if(!this._dataAccessors) {
-            this._dataAccessors = {
-                getter: {},
-                setter: {},
-                expr: {}
-            };
-        }
-
-        each(fields, (function(name, expr) {
-            if(expr) {
-
-                const getter = compileGetter(expr);
-                const setter = compileSetter(expr);
-
-                let dateGetter;
-                let dateSetter;
-
-                if(isDateField(name)) {
-                    const that = this;
-                    dateGetter = function() {
-                        let value = getter.apply(this, arguments);
-                        if(config().forceIsoDateParsing) {
-                            if(!that.option('dateSerializationFormat')) {
-                                const format = dateSerialization.getDateSerializationFormat(value);
-                                if(format) {
-                                    that.option('dateSerializationFormat', format);
-                                }
-                            }
-                            value = dateSerialization.deserializeDate(value);
-                        }
-                        return value;
-                    };
-                    dateSetter = function(object, value) {
-                        if(config().forceIsoDateParsing || that.option('dateSerializationFormat')) {
-                            value = dateSerialization.serializeDate(value, that.option('dateSerializationFormat'));
-                        }
-                        setter.call(this, object, value);
-                    };
-                }
-
-                this._dataAccessors.getter[name] = dateGetter || getter;
-                this._dataAccessors.setter[name] = dateSetter || setter;
-                this._dataAccessors.expr[name + 'Expr'] = expr;
-            } else {
-                delete this._dataAccessors.getter[name];
-                delete this._dataAccessors.setter[name];
-                delete this._dataAccessors.expr[name + 'Expr'];
-            }
-        }).bind(this));
+        this._dataAccessors = utils.dataAccessors.init({
+            instance: this,
+            fields,
+            currentDataAccessors: this._dataAccessors,
+            forceIsoDateParsing: config().forceIsoDateParsing,
+            getDateSerializationFormat: () => this.option('dateSerializationFormat'),
+            setDateSerializationFormat: (value) => this.option('dateSerializationFormat', value)
+        });
 
         this._dataAccessors.resources = createExpressions(this.option('resources'));
     }
