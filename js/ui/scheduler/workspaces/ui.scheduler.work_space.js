@@ -457,11 +457,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(this.isVirtualScrolling()
             && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
                 || this.virtualScrollingDispatcher.height)) {
+            const currentOnScroll = config.onScroll();
             config = {
                 ...config,
                 onScroll: (e) => {
 
-                    config.onScroll?.(e);
+                    currentOnScroll?.(e);
 
                     this.virtualScrollingDispatcher.process(e?.scrollOffset);
                 },
