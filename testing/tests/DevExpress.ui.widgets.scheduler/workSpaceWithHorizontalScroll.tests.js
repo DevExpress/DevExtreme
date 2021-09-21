@@ -1,3 +1,4 @@
+import { getOuterWidth } from 'core/utils/size';
 import devices from 'core/devices';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
@@ -112,9 +113,9 @@ QUnit.test('Header panel, all-day panel, date table should have a correct width'
     triggerHidingEvent($element);
     triggerShownEvent($element);
 
-    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
-    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
-    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'));
+    const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
+    const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
 
     assert.equal(headerPanelWidth, 525, 'Width is OK');
     assert.equal(allDayTableWidth, 525, 'Width is OK');
@@ -130,9 +131,9 @@ QUnit.test('Header panel, all-day panel, date table should have a correct width 
     triggerHidingEvent($element);
     triggerShownEvent($element);
 
-    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
-    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
-    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'));
+    const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
+    const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
 
     assert.equal(headerPanelWidth, 2100, 'Width is OK');
     assert.equal(allDayTableWidth, 2100, 'Width is OK');
@@ -147,9 +148,9 @@ QUnit.test('Header panel, all-day panel, date table should always take all work 
     triggerHidingEvent($element);
     triggerShownEvent($element);
 
-    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
-    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
-    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'));
+    const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
+    const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
 
     assert.roughEqual(headerPanelWidth, 896, 5, 'Width of the header panel is OK');
     assert.roughEqual(allDayTableWidth, 896, 5, 'Width of the allDay table is OK');
@@ -165,9 +166,9 @@ QUnit.test('Workspace tables width should not be less than element width', funct
     triggerHidingEvent($element);
     triggerShownEvent($element);
 
-    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
-    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
-    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'));
+    const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
+    const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
     const expectedWidth = 1000 - this.instance.getTimePanelWidth();
 
     assert.equal(headerPanelWidth, expectedWidth, 'Width is OK');
@@ -232,8 +233,8 @@ QUnit.test('Header panel and date table should have a correct width, groupOrient
     triggerHidingEvent($element);
     triggerShownEvent($element);
 
-    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(true);
-    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth(true);
+    const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'), true);
+    const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'), true);
 
     assert.equal(headerPanelWidth, 797, 'Width is OK');
     assert.equal(dateTableWidth, 797, 'Width is OK');

@@ -1,3 +1,4 @@
+import { getOuterHeight } from 'core/utils/size';
 import dragEvents from 'events/drag';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -53,7 +54,7 @@ module('Work Space Day', {
 
         coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 2, 45));
 
-        position.top += $cell.outerHeight() * 0.5;
+        position.top += getOuterHeight($cell) * 0.5;
         assert.equal(coords.top, position.top, 'Cell coordinates are right');
         assert.equal(coords.left, position.left, 'Cell coordinates are right');
     });
@@ -66,7 +67,7 @@ module('Work Space Day', {
 
         const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2017, 5, 16, 1, 1, 30));
         const $cell = $element.find('.dx-scheduler-date-table tbody td').eq(1);
-        const top = $cell.position().top + (1.5 / 60) * $cell.outerHeight();
+        const top = $cell.position().top + (1.5 / 60) * getOuterHeight($cell);
 
         assert.equal(coords.top, top, 'Cell coordinates are right');
         assert.equal(coords.left, $cell.position().left, 'Cell coordinates are right');
@@ -273,8 +274,8 @@ module('Work Space Day with grouping by date', () => {
 
             resizeCallbacks.fire();
 
-            assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 19, 5, 'Group header content height is OK');
-            assert.roughEqual($groupHeaderContents.eq(3).outerHeight(), 19, 5, 'Group header content height is OK');
+            assert.roughEqual(getOuterHeight($groupHeaderContents.eq(0)), 19, 5, 'Group header content height is OK');
+            assert.roughEqual(getOuterHeight($groupHeaderContents.eq(3)), 19, 5, 'Group header content height is OK');
         });
 
         test('Date table cells shoud have right cellData, groupByDate = true', function(assert) {

@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import renderer from 'core/renderer';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { implementationsMap } from 'core/utils/size';
 
 const { test } = QUnit;
 
@@ -733,8 +733,8 @@ QUnit.module('Toolbar', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const originalWidth = renderer.fn.width;
-        renderer.fn.width = () => 700;
+        const originalWidth = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 700;
         $('#fileManager').css('width', '100%');
         fileManager.repaint();
         this.clock.tick(800);
@@ -746,7 +746,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         const $separators = this.wrapper.getToolbarSeparators();
         assert.equal($separators.length, 0, 'file toolbar has no separators');
 
-        renderer.fn.width = originalWidth;
+        implementationsMap.getWidth = originalWidth;
     });
 
     test('toolbar separators must support custom items in menu', function(assert) {
@@ -770,8 +770,8 @@ QUnit.module('Toolbar', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const originalWidth = renderer.fn.width;
-        renderer.fn.width = () => 360;
+        const originalWidth = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 360;
         $('#fileManager').css('width', '100%');
         fileManager.repaint();
         this.clock.tick(800);
@@ -782,7 +782,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         const $separators = this.wrapper.getToolbarSeparators();
         assert.equal($separators.length, 0, 'file toolbar has no separators');
 
-        renderer.fn.width = originalWidth;
+        implementationsMap.getWidth = originalWidth;
     });
 
     test('items can render in menu after first load', function(assert) {
@@ -806,8 +806,8 @@ QUnit.module('Toolbar', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const originalWidth = renderer.fn.width;
-        renderer.fn.width = () => 360;
+        const originalWidth = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 360;
         $('#fileManager').css('width', '100%');
         fileManager.repaint();
         this.clock.tick(800);
@@ -822,7 +822,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
         assert.notStrictEqual($(toolbarDropDownMenuItem).find('.dx-button-text').text().indexOf('some item 1 with text'), -1, 'custom button is rendered in the dropDown menu');
-        renderer.fn.width = originalWidth;
+        implementationsMap.getWidth = originalWidth;
     });
 
     test('items must render in \'before\' section by default', function(assert) {
@@ -932,8 +932,8 @@ QUnit.module('Toolbar', moduleConfig, () => {
         ]);
         this.clock.tick(400);
 
-        const originalWidth = renderer.fn.width;
-        renderer.fn.width = () => 400;
+        const originalWidth = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 400;
         $('#fileManager').css('width', '100%');
         fileManager.repaint();
         this.clock.tick(800);
@@ -945,7 +945,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.strictEqual($generalToolbarElements.eq(1).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), '', 'second general element correct');
         assert.strictEqual($generalToolbarElements.eq(2).find(`.${Consts.BUTTON_TEXT_CLASS}:visible`).text(), 'item with long name 2', 'third general element correct');
 
-        renderer.fn.width = originalWidth;
+        implementationsMap.getWidth = originalWidth;
     });
 
     test('buttons without text have tooltip', function(assert) {

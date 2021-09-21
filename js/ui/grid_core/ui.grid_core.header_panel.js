@@ -30,9 +30,13 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     _getToolbarOptions: function() {
+        const userToolbarOptions = this.option('toolbar');
+
         const options = {
             toolbarOptions: {
                 items: this._getToolbarItems(),
+                visible: userToolbarOptions?.visible,
+                disabled: userToolbarOptions?.disabled,
                 onItemRendered: function(e) {
                     const itemRenderedCallback = e.itemData.onItemRendered;
 
@@ -43,14 +47,14 @@ const HeaderPanel = ColumnsView.inherit({
             }
         };
 
-        const userItems = this.option('toolbar.items');
+        const userItems = userToolbarOptions?.items;
         options.toolbarOptions.items = this._normalizeToolbarItems(options.toolbarOptions.items, userItems);
 
         this.executeAction('onToolbarPreparing', options);
 
         if(options.toolbarOptions && !isDefined(options.toolbarOptions.visible)) {
             const toolbarItems = options.toolbarOptions.items;
-            options.toolbarOptions.visible = !!(toolbarItems && toolbarItems.length);
+            options.toolbarOptions.visible = !!(toolbarItems?.length);
         }
 
         return options.toolbarOptions;
@@ -158,20 +162,32 @@ const HeaderPanel = ColumnsView.inherit({
             args.handled = true;
         }
         if(args.name === 'toolbar') {
-            const parts = getPathParts(args.fullName);
-            const optionName = args.fullName.replace(/^toolbar\./, '');
+            args.handled = true;
+            if(this._toolbar) {
+                const parts = getPathParts(args.fullName);
+                const optionName = args.fullName.replace(/^toolbar\./, '');
 
-            if(parts.length <= 2) {
-                // toolbar and toolbar.items case
-                const toolbarOptions = this._getToolbarOptions();
-                this._toolbar.option(toolbarOptions);
-            } else if(parts.length === 3) {
-                // toolbar.items[i] case
-                const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);
-                this._toolbar.option(optionName, normalizedItem);
-            } else if(parts.length >= 4) {
-                // toolbar.items[i].prop case
-                this._toolbar.option(optionName, args.value);
+                if(parts.length === 1) {
+                    // `toolbar` case
+                    const toolbarOptions = this._getToolbarOptions();
+                    this._toolbar.option(toolbarOptions);
+                } else if(parts[1] === 'items') {
+                    if(parts.length === 2) {
+                        // `toolbar.items` case
+                        const toolbarOptions = this._getToolbarOptions();
+                        this._toolbar.option('items', toolbarOptions.items);
+                    } else if(parts.length === 3) {
+                        // `toolbar.items[i]` case
+                        const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);
+                        this._toolbar.option(optionName, normalizedItem);
+                    } else if(parts.length >= 4) {
+                        // `toolbar.items[i].prop` case
+                        this._toolbar.option(optionName, args.value);
+                    }
+                } else {
+                    // `toolbar.visible`, `toolbar.disabled` case
+                    this._toolbar.option(optionName, args.value);
+                }
             }
         }
         this.callBase(args);

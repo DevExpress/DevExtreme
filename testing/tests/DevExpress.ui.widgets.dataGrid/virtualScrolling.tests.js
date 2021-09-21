@@ -7,6 +7,7 @@ import virtualScrollingCore, { VirtualScrollController, getPixelRatio } from 'ui
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import renderer from 'core/renderer';
+import { setHeight } from 'core/utils/size';
 
 const mockComponent = {
     option: sinon.stub()
@@ -679,7 +680,9 @@ QUnit.module('Subscribe to external scrollable events', {
 
         $('<div>').height(300).appendTo(this.$fixtureElement);
 
-        const $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement);
+        const $element = renderer('<div>');
+        setHeight($element, 40000);
+        $element.appendTo(this.$fixtureElement);
         const scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
 
         this.scrollController.subscribeToWindowScrollEvents($element);
@@ -776,7 +779,10 @@ QUnit.module('Subscribe to external scrollable events', {
 
         $('<div>').height(300).appendTo(this.$fixtureElement);
 
-        const $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement);
+        const $element = renderer('<div>');
+        setHeight($element, 40000);
+        $element.appendTo(this.$fixtureElement);
+
         const scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
 
         this.scrollController.subscribeToWindowScrollEvents($element);

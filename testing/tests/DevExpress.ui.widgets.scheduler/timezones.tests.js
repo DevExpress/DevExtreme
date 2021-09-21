@@ -1,3 +1,4 @@
+import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import {
@@ -1228,7 +1229,7 @@ module('Scheduler grid', moduleConfig, () => {
                 const rootElement = scheduler.getElement();
                 let $appointment = $(rootElement).find(CLASSES.appointment).first();
                 const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(21);
-                const initialAppointmentHeight = $appointment.outerHeight();
+                const initialAppointmentHeight = getOuterHeight($appointment);
 
                 const pointer = pointerMock($appointment).start().down().move(10, 10);
                 $cell.trigger(dragEvents.enter);
@@ -1236,8 +1237,8 @@ module('Scheduler grid', moduleConfig, () => {
 
                 $appointment = rootElement.find(CLASSES.appointment).not('.dx-scheduler-appointment-recurrence');
 
-                assert.roughEqual($appointment.position().top, $cell.outerHeight() * 3, 2.001, 'Appointment top is OK');
-                assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
+                assert.roughEqual($appointment.position().top, getOuterHeight($cell) * 3, 2.001, 'Appointment top is OK');
+                assert.equal(getOuterHeight($appointment), initialAppointmentHeight, 'Appointment height is OK');
 
                 const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
 
@@ -1320,10 +1321,10 @@ module('Scheduler grid', moduleConfig, () => {
 
                 let $appointment = $(rootElement).find(CLASSES.appointment).first();
                 const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(6);
-                const initialAppointmentHeight = $appointment.outerHeight();
+                const initialAppointmentHeight = getOuterHeight($appointment);
 
-                assert.roughEqual($appointment.position().top, $cell.outerHeight() * 2, 2.001, 'Appointment top is OK');
-                assert.roughEqual($appointment.outerHeight(), $cell.outerHeight(), 2.001, 'Appointment height is OK');
+                assert.roughEqual($appointment.position().top, getOuterHeight($cell) * 2, 2.001, 'Appointment top is OK');
+                assert.roughEqual(getOuterHeight($appointment), getOuterHeight($cell), 2.001, 'Appointment height is OK');
 
                 const pointer = pointerMock($appointment).start().down().move(10, 10);
                 $cell.trigger(dragEvents.enter);
@@ -1331,8 +1332,8 @@ module('Scheduler grid', moduleConfig, () => {
 
                 $appointment = rootElement.find(CLASSES.appointment).first();
 
-                assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
-                assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
+                assert.roughEqual($appointment.position().top, getOuterHeight($cell) * 6, 2.001, 'Appointment top is OK');
+                assert.equal(getOuterHeight($appointment), initialAppointmentHeight, 'Appointment height is OK');
 
                 const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
 
@@ -1413,7 +1414,7 @@ module('Scheduler grid', moduleConfig, () => {
 
         const rootElement = scheduler.getElement();
 
-        const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+        const cellHeight = getOuterHeight(rootElement.find(CLASSES.dateTableCell).eq(0));
         let $appointment = rootElement.find(CLASSES.appointment).first();
         const initialAppointmentTop = $appointment.position().top;
 
@@ -1424,7 +1425,7 @@ module('Scheduler grid', moduleConfig, () => {
         $appointment = rootElement.find(CLASSES.appointment).first();
 
         assert.equal($appointment.position().top, initialAppointmentTop, 'Appointment top is OK');
-        assert.roughEqual($appointment.outerHeight(), cellHeight * 2, 2.001, 'Appointment height is OK');
+        assert.roughEqual(getOuterHeight($appointment), cellHeight * 2, 2.001, 'Appointment height is OK');
     });
 
     [true, false].forEach((renovateRender) => {
@@ -1452,7 +1453,7 @@ module('Scheduler grid', moduleConfig, () => {
 
             let $appointment = $(rootElement).find(CLASSES.appointment).first();
             const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(6);
-            const initialAppointmentHeight = $appointment.outerHeight();
+            const initialAppointmentHeight = getOuterHeight($appointment);
 
             const pointer = pointerMock($appointment).start().down().move(10, 10);
             $cell.trigger(dragEvents.enter);
@@ -1461,8 +1462,8 @@ module('Scheduler grid', moduleConfig, () => {
             $appointment = rootElement.find(CLASSES.appointment).first();
 
 
-            assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
-            assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
+            assert.roughEqual($appointment.position().top, getOuterHeight($cell) * 6, 2.001, 'Appointment top is OK');
+            assert.equal(getOuterHeight($appointment), initialAppointmentHeight, 'Appointment height is OK');
 
             const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
 
@@ -1700,8 +1701,8 @@ module('Scheduler grid', moduleConfig, () => {
         });
 
         const rootElement = scheduler.getElement();
-        const apptWidth = rootElement.find(CLASSES.appointment).first().outerWidth();
-        const cellWidth = rootElement.find(CLASSES.allDayTableCell).first().outerWidth();
+        const apptWidth = getOuterWidth(rootElement.find(CLASSES.appointment).first());
+        const cellWidth = getOuterWidth(rootElement.find(CLASSES.allDayTableCell).first());
 
         assert.roughEqual(apptWidth, cellWidth, 2.001, 'Appt width is OK');
     });
@@ -1892,7 +1893,7 @@ module('Fixed client time zone offset', {
         const $appointment = $(rootElement).find(CLASSES.appointment).eq(0);
         const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(9);
 
-        assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 2, 2.001, 'Task has a right width');
+        assert.roughEqual(getOuterWidth($appointment), getOuterWidth($cell) * 2, 2.001, 'Task has a right width');
     });
 
     test('Appointments should have correct size with custom time zone & hourly bounds', function(assert) {
@@ -1924,10 +1925,10 @@ module('Fixed client time zone offset', {
         const $appointments = rootElement.find(CLASSES.appointment);
         const $first = $appointments.eq(0);
         const $second = $appointments.eq(1);
-        const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+        const cellHeight = getOuterHeight(rootElement.find(CLASSES.dateTableCell).eq(0));
 
-        assert.roughEqual($first.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
-        assert.roughEqual($second.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
+        assert.roughEqual(getOuterHeight($first), cellHeight * 4, 2.001, 'Appointment height is correct');
+        assert.roughEqual(getOuterHeight($second), cellHeight * 4, 2.001, 'Appointment height is correct');
 
         assert.equal($first.find('.dx-scheduler-appointment-content-date').eq(0).text(), '6:00 AM - 10:00 AM', 'First appointment is correct');
         assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 PM - 6:00 PM', 'Second appointment is correct');
@@ -1954,7 +1955,7 @@ module('Fixed client time zone offset', {
 
         const rootElement = scheduler.instance.$element();
         const $appointment = $(rootElement).find(CLASSES.appointment).eq(0);
-        const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+        const cellHeight = getOuterHeight(rootElement.find(CLASSES.dateTableCell).eq(0));
 
         assert.roughEqual($appointment.position().top, cellHeight * 2, 2.001, 'Appointment top is correct');
     });
@@ -2013,7 +2014,7 @@ module('Fixed client time zone offset', {
 
         $appointment = rootElement.find(CLASSES.appointment).eq(0);
 
-        assert.roughEqual($appointment.outerWidth(), cellWidth * 3, 2.001, 'Appointment width is OK');
+        assert.roughEqual(getOuterWidth($appointment), cellWidth * 3, 2.001, 'Appointment width is OK');
     });
 
     test('Arguments in event args should be correct when timezone is set(T579457)', function(assert) {
@@ -2076,7 +2077,7 @@ module('Fixed client time zone offset', {
 
         assert.equal($appointments.length, 2, 'Appointment count is OK');
         assert.equal($appointments.eq(1).position().top, initialAppointmentTop, 'Appointment top is OK');
-        assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 5, 2.001, 'Appointment height is OK');
+        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight * 5, 2.001, 'Appointment height is OK');
     });
 
     [{
@@ -2154,7 +2155,7 @@ module('Fixed client time zone offset', {
 
             const rootElement = scheduler.instance.$element();
 
-            const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+            const cellHeight = getOuterHeight(rootElement.find(CLASSES.dateTableCell).eq(0));
             let $appointment = rootElement.find(CLASSES.appointment).first();
             const initialAppointmentTop = $appointment.position().top;
 
@@ -2165,7 +2166,7 @@ module('Fixed client time zone offset', {
             $appointment = rootElement.find(CLASSES.appointment).first();
 
             assert.equal($appointment.position().top, initialAppointmentTop, 'Appointment top is OK');
-            assert.roughEqual($appointment.outerHeight(), cellHeight * 2, 2.001, 'Appointment height is OK');
+            assert.roughEqual(getOuterHeight($appointment), cellHeight * 2, 2.001, 'Appointment height is OK');
 
         });
     });

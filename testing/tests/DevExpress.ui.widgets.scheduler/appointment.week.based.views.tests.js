@@ -1,3 +1,4 @@
+import { getHeight, getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
@@ -113,7 +114,7 @@ module('Integration: Appointment Day, Week views', {
 
             const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
-            assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
+            assert.roughEqual(getHeight($appointment), 3, 0.5, 'Task has a right height');
         });
 
         test('DblClick on appointment should not affect the related cell start date (T395620)', function(assert) {
@@ -211,7 +212,7 @@ module('Integration: Appointment Day, Week views', {
                 const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
                 const resultHeight = cellHeight * 2;
 
-                assert.equal(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).outerHeight(), resultHeight, 'Task has a right height');
+                assert.equal(getOuterHeight(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0)), resultHeight, 'Task has a right height');
             });
 
             test('Appointment dates should not be normalized before sending to the details view', function(assert) {
@@ -286,7 +287,7 @@ module('Integration: Appointment Day, Week views', {
                     }]
                 }, this.clock);
 
-                const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                const cellHeight = getOuterHeight(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
                 const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
                 pointer.dragStart().drag(0, cellHeight).dragEnd();
@@ -306,7 +307,7 @@ module('Integration: Appointment Day, Week views', {
                     }]
                 }, this.clock);
 
-                const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                const cellHeight = getOuterHeight(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
                 const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-top').eq(0)).start();
                 pointer.dragStart().drag(0, -3 * cellHeight).dragEnd();
@@ -331,7 +332,7 @@ module('Integration: Appointment Day, Week views', {
                 scheduler.instance.getWorkSpace().getScrollable().scrollTo({ y: 1000 });
 
                 return asyncAssert(assert, () => {
-                    const cellHeight = scheduler.instance.$element().find(`.${DATE_TABLE_CELL_CLASS}`).eq(0).outerHeight();
+                    const cellHeight = getOuterHeight(scheduler.instance.$element().find(`.${DATE_TABLE_CELL_CLASS}`).eq(0));
 
                     const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
                     pointer.dragStart().drag(0, cellHeight).dragEnd();
@@ -359,7 +360,7 @@ module('Integration: Appointment Day, Week views', {
 
                 scheduler.instance.option('dataSource', data);
 
-                const itemShift = ($('.dx-scheduler-date-table').outerWidth()) * 0.5;
+                const itemShift = (getOuterWidth($('.dx-scheduler-date-table'))) * 0.5;
                 const position = $('.dx-scheduler-appointment').position();
 
                 assert.roughEqual(position.top, 0, 1.001, 'top is correct');
@@ -966,7 +967,7 @@ module('Integration: Appointment Day, Week views', {
                 const workspace = scheduler.instance.getWorkSpace();
                 workspace.getScrollable().scrollTo({ y: 3000 });
 
-                const cellWidth = $element.find(`.${DATE_TABLE_CELL_CLASS}`).eq(0).outerHeight();
+                const cellWidth = getOuterHeight($element.find(`.${DATE_TABLE_CELL_CLASS}`).eq(0));
                 const pointer = pointerMock($element.find('.dx-resizable-handle-bottom').eq(0)).start();
 
                 pointer.dragStart().drag(0, -cellWidth);

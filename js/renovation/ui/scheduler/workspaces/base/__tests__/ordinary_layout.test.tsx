@@ -1,4 +1,5 @@
 import { shallow, mount } from 'enzyme';
+import React from 'react';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
 import {
@@ -8,9 +9,10 @@ import {
 } from '../ordinary_layout';
 import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
-import { AllDayPanelTitle, AllDayPanelTitleProps } from '../date_table/all_day_panel/title';
+import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import { isVerticalGroupingApplied } from '../../utils';
+import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(),
@@ -94,6 +96,7 @@ describe('OrdinaryLayout', () => {
       viewData,
       dateHeaderData,
       timePanelData,
+      isRenderHeaderEmptyCell: true,
     };
 
     const render = (viewModel) => shallow(LayoutView({
@@ -120,6 +123,50 @@ describe('OrdinaryLayout', () => {
         .toBe(true);
       expect(layout.prop('className'))
         .toBe('custom-classes');
+    });
+
+    it('should render heder panel container', () => {
+      const layout = render({});
+
+      expect(layout.find('.dx-scheduler-header-panel-container').exists())
+        .toBe(true);
+    });
+
+    it('should render correct content inside headr panel container', () => {
+      const layout = render({
+        headerEmptyCellWidth: 132,
+        isStandaloneAllDayPanel: true,
+        isSetAllDayTitleClass: true,
+      });
+
+      const headerPanelContainer = layout.find('.dx-scheduler-header-panel-container');
+
+      expect(headerPanelContainer.children().length)
+        .toBe(2);
+
+      const headerEmptyCell = headerPanelContainer.childAt(0);
+      expect(headerEmptyCell.is(HeaderPanelEmptyCell))
+        .toBe(true);
+      expect(headerEmptyCell.props())
+        .toEqual({
+          width: 132,
+          isRenderAllDayTitle: true,
+          isSetAllDayTitleClass: true,
+        });
+
+      expect(headerPanelContainer.childAt(1).hasClass('dx-scheduler-header-tables-container'))
+        .toBe(true);
+    });
+
+    it('should not render header empty cell if isRenderHeaderEmptyCell is false', () => {
+      const layout = render({
+        props: {
+          isRenderHeaderEmptyCell: false,
+        },
+      });
+
+      expect(layout.find('.dx-scheduler-header-panel-empty-cell').exists())
+        .toBe(false);
     });
 
     it('should render HeaderPanel and pass to it correct props', () => {
@@ -198,6 +245,17 @@ describe('OrdinaryLayout', () => {
         });
     });
 
+    it('should render date-table scrollable content', () => {
+      const layout = render({});
+
+      const scrollable = layout.find(Scrollable);
+
+      expect(scrollable.children().length)
+        .toBe(1);
+      expect(scrollable.childAt(0).hasClass('dx-scheduler-date-table-scrollable-content'))
+        .toBe(true);
+    });
+
     it('should not render time panel and group panel', () => {
       const layout = render({});
 
@@ -205,11 +263,12 @@ describe('OrdinaryLayout', () => {
 
       expect(scrollable.children().length)
         .toBe(1);
-      expect(scrollable.childAt(0).is(dateTableTemplate))
+      expect(scrollable.childAt(0).childAt(0).hasClass('dx-scheduler-date-table-container'))
         .toBe(true);
     });
 
     it('should render time panel when it is passed as a prop', () => {
+      const timePanelRef = React.createRef();
       const timePanelTemplate = () => null;
       const props = {
         timeCellTemplate: () => {},
@@ -222,22 +281,28 @@ describe('OrdinaryLayout', () => {
           timePanelTemplate,
           ...props,
         },
+        timePanelRef,
       });
 
       const scrollable = layout.find(Scrollable);
+      const scrollableContent = scrollable.childAt(0);
 
-      expect(scrollable.children().length)
+      expect(scrollableContent.children().length)
         .toBe(2);
 
-      const timePanel = scrollable.childAt(0);
+      const timePanel = scrollableContent.childAt(0);
 
       expect(timePanel.is(timePanelTemplate))
         .toBe(true);
       expect(timePanel.props())
-        .toEqual(props);
+        .toEqual({
+          ...props,
+          tableRef: timePanelRef,
+        });
     });
 
     it('should render group panel when isRenderGroupPanel is true', () => {
+      const groupPanelRef = React.createRef();
       const resourceCellTemplate = () => null;
       const props = {
         groupOrientation: 'vertical',
@@ -254,14 +319,16 @@ describe('OrdinaryLayout', () => {
         isRenderGroupPanel: true,
         props,
         groupPanelHeight: 497,
+        groupPanelRef,
       });
 
       const scrollable = layout.find(Scrollable);
+      const scrollableContent = scrollable.childAt(0);
 
-      expect(scrollable.children().length)
+      expect(scrollableContent.children().length)
         .toBe(2);
 
-      const groupPanel = scrollable.childAt(0);
+      const groupPanel = scrollableContent.childAt(0);
 
       expect(groupPanel.is(GroupPanel))
         .toBe(true);
@@ -277,6 +344,7 @@ describe('OrdinaryLayout', () => {
             groupPanelItems: [],
             baseColSpan: 34,
           },
+          elementRef: groupPanelRef,
         });
     });
 
@@ -289,24 +357,20 @@ describe('OrdinaryLayout', () => {
         .toBe(false);
     });
 
-    it('should render all-day panel when it is supported', () => {
+    it('should render all-day panel when it is visible', () => {
       const dataCellTemplate = () => null;
       const layout = render({
         props: {
-          isAllDayPanelSupported: true,
+          isAllDayPanelVisible: true,
           dataCellTemplate,
           allDayPanelRef: 'allDayPanelRef',
         },
         isStandaloneAllDayPanel: true,
-        isSetAllDayTitleClass: true,
       });
 
       const allDayPanel = layout.find(AllDayPanelLayout);
-      const allDayPanelTitle = layout.find(AllDayPanelTitle);
 
       expect(allDayPanel.exists())
-        .toBe(true);
-      expect(allDayPanelTitle.exists())
         .toBe(true);
 
       expect(allDayPanel.props())
@@ -317,12 +381,17 @@ describe('OrdinaryLayout', () => {
           visible: true,
           tableRef: 'allDayPanelRef',
         });
-      expect(allDayPanelTitle.props())
-        .toEqual({
-          ...new AllDayPanelTitleProps(),
-          isSetTitleClass: true,
-          visible: true,
-        });
+    });
+
+    it('should render appointments', () => {
+      const layout = render({
+        props: {
+          appointments: <div className="appointments" />,
+        },
+      });
+
+      expect(layout.find('.appointments').exists())
+        .toBe(true);
     });
   });
 
@@ -357,6 +426,74 @@ describe('OrdinaryLayout', () => {
 
           expect(layout.groupPanelHeight)
             .toBe(undefined);
+        });
+      });
+
+      describe('headerEmptyCellWidthEffect', () => {
+        const timePanelRef = {
+          current: {
+            getBoundingClientRect: () => ({
+              width: 100,
+            }),
+          },
+        };
+        const groupPanelRef = {
+          current: {
+            getBoundingClientRect: () => ({
+              width: 160,
+            }),
+          },
+        };
+        const emptyRef = {
+          current: null,
+        };
+
+        it('should work if refs are not initialized', () => {
+          const layout = new OrdinaryLayout({} as any);
+
+          layout.timePanelRef = emptyRef as any;
+          layout.groupPanelRef = emptyRef as any;
+
+          layout.headerEmptyCellWidthEffect();
+
+          expect(layout.headerEmptyCellWidth)
+            .toBe(0);
+        });
+
+        it('should work when group panel is present', () => {
+          const layout = new OrdinaryLayout({} as any);
+
+          layout.timePanelRef = emptyRef as any;
+          layout.groupPanelRef = groupPanelRef as any;
+
+          layout.headerEmptyCellWidthEffect();
+
+          expect(layout.headerEmptyCellWidth)
+            .toBe(160);
+        });
+
+        it('should work when time-panel is present', () => {
+          const layout = new OrdinaryLayout({} as any);
+
+          layout.timePanelRef = timePanelRef as any;
+          layout.groupPanelRef = emptyRef as any;
+
+          layout.headerEmptyCellWidthEffect();
+
+          expect(layout.headerEmptyCellWidth)
+            .toBe(100);
+        });
+
+        it('should work when both time-panel and grup-panel are present', () => {
+          const layout = new OrdinaryLayout({} as any);
+
+          layout.timePanelRef = timePanelRef as any;
+          layout.groupPanelRef = groupPanelRef as any;
+
+          layout.headerEmptyCellWidthEffect();
+
+          expect(layout.headerEmptyCellWidth)
+            .toBe(260);
         });
       });
     });
