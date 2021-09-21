@@ -163,10 +163,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         rowsView.renderCompleted.add((e) => {
             const $rowsView = rowsView.element();
-            const isFullUpdate = !e || e.changeType === 'refresh';
+            // const isFullUpdate = !e || e.changeType === 'refresh';
             const isFocusedViewCorrect = this._focusedView && this._focusedView.name === rowsView.name;
-            let needUpdateFocus = false;
-            const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
+            const needUpdateFocus = false;
+            // const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
             const $focusedElement = $(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length;
 
@@ -178,7 +178,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._setRowsViewAttributes();
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
-                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate;
+                // needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate;
                 needUpdateFocus && this._updateFocus(true);
             }
         });
