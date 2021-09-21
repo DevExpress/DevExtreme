@@ -73,7 +73,6 @@ describe('Scrollable', () => {
   each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
     it('should pass all necessary properties to the Widget', () => {
       const config = {
-        activeStateUnit: '.UIFeedback',
         useNative: useNativeScrolling,
         direction: 'vertical' as ScrollableDirection,
         width: '120px',
