@@ -1070,14 +1070,14 @@ class Scheduler extends Widget {
     }
 
     _initExpressions(fields) {
-        this._dataAccessors = utils.dataAccessors.init({
-            instance: this,
+        this._dataAccessors = utils.dataAccessors.create(
+            this,
             fields,
-            currentDataAccessors: this._dataAccessors,
-            forceIsoDateParsing: config().forceIsoDateParsing,
-            getDateSerializationFormat: () => this.option('dateSerializationFormat'),
-            setDateSerializationFormat: (value) => this.option('dateSerializationFormat', value)
-        });
+            this._dataAccessors,
+            config().forceIsoDateParsing,
+            () => this.option('dateSerializationFormat'),
+            (value) => this.option('dateSerializationFormat', value)
+        );
 
         this._dataAccessors.resources = createExpressions(this.option('resources'));
     }
