@@ -8,11 +8,9 @@ import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
 import { hasWindow } from '../../core/utils/window';
-import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
-import { focusable } from '../widget/selectors';
 import { addNamespace } from '../../events/utils/index';
 import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
 import { SimulatedStrategy } from './ui.scrollable.simulated';
@@ -104,14 +102,6 @@ const Scrollable = DOMComponent.inherit({
         const $container = this._$container = $('<div>').addClass(SCROLLABLE_CONTAINER_CLASS);
         const $wrapper = this._$wrapper = $('<div>').addClass(SCROLLABLE_WRAPPER_CLASS);
         const $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
-            eventsEngine.on($element, addNamespace('beforeactivate', SCROLLABLE), function(e) {
-                if(!$(e.target).is(focusable)) {
-                    e.preventDefault();
-                }
-            });
-        }
 
         $content.append($element.contents()).appendTo($container);
         $container.appendTo($wrapper);

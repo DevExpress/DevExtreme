@@ -2,7 +2,6 @@ import { getWidth, getHeight } from 'core/utils/size';
 import device from 'core/devices';
 import config from 'core/config';
 import domAdapter from 'core/dom_adapter';
-import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
@@ -333,9 +332,9 @@ QUnit.test('The \'dataField\' option of a simple item should not affect existing
     assert.equal(form.getEditor('firstName').option('name'), 'UserName', 'Editor name is OK');
 });
 
-QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', function(assert) {
+QUnit.test('Don\'t refresh form when visibility changed to \'true\'', function(assert) {
     const $testContainer = $('#form');
-    const expectedRefreshCount = browser.msie ? 1 : 0;
+    const expectedRefreshCount = 0;
     const form = $testContainer.dxForm({
         formData: { name: 'TestName' },
         items: [{ dataField: 'name' }]
@@ -345,16 +344,11 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
     visibilityEventsModule.triggerHidingEvent($testContainer);
     visibilityEventsModule.triggerShownEvent($testContainer);
 
-    assert.equal(refreshStub.callCount, expectedRefreshCount, 'Refresh on visibility changed to \'true\' if browser is IE or Edge');
+    assert.equal(refreshStub.callCount, expectedRefreshCount, 'Don\'t refresh on visibility changed to \'true\'');
     refreshStub.restore();
 });
 
 QUnit.test('Hide helper text when validation message shows for material theme', function(assert) {
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-        return;
-    }
-
     const origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
 
