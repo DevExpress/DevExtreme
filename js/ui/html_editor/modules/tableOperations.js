@@ -97,7 +97,7 @@ const getAutoHeightRows = ($table) => {
     return result;
 };
 
-const getAutoWidthColumns = ($table, direction) => {
+export const getAutoWidthColumns = ($table) => {
     const result = [];
     $table.find('tr').eq(0).find('td').each((index, element) => {
         const $element = $(element);

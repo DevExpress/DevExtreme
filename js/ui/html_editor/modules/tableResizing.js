@@ -10,7 +10,7 @@ import Draggable from '../../draggable';
 import { each } from '../../../core/utils/iterator';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { extend } from '../../../core/utils/extend';
-import { setLineElementsAttrValue, getLineElements } from './tableOperations';
+import { setLineElementsAttrValue, getLineElements, getAutoWidthColumns } from './tableOperations';
 
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
@@ -157,7 +157,7 @@ export default class TableResizingModule extends BaseModule {
                 this._tableResizeFrames.push({ $table: $table });
             }
 
-            if($columnElements.eq(0).attr('width')) {
+            if(getAutoWidthColumns($table).length === 0) {
                 const { columnsSum } = this._getColumnElementsSum($columnElements);
 
                 $table.css('width', 'initial');
