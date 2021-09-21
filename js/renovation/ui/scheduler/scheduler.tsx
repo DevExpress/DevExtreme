@@ -91,46 +91,51 @@ export const viewFunction = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
-      <SchedulerToolbar
-        items={toolbarItems}
-        views={views}
-        currentView={currentView}
-        onCurrentViewUpdate={setCurrentView}
-        currentDate={currentDate}
-        onCurrentDateUpdate={setCurrentDate}
-        startViewDate={startViewDate}
-        min={min}
-        max={max}
-        intervalCount={intervalCount}
-        firstDayOfWeek={firstDayOfWeek}
-        useDropDownViewSwitcher={useDropDownViewSwitcher}
-        customizationFunction={customizeDateNavigatorText}
-      />
-      <WorkSpace
-        firstDayOfWeek={firstDayOfWeek}
-        startDayHour={startDayHour}
-        endDayHour={endDayHour}
-        cellDuration={cellDuration}
-        groupByDate={groupByDate}
-        scrolling={scrolling}
-        currentDate={currentDate}
-        intervalCount={intervalCount}
-        groupOrientation={groupOrientation}
-        startDate={startDate}
-        showAllDayPanel={showAllDayPanel}
-        showCurrentTimeIndicator={showCurrentTimeIndicator}
-        indicatorUpdateInterval={indicatorUpdateInterval}
-        shadeUntilCurrentTime={shadeUntilCurrentTime}
-        crossScrollingEnabled={crossScrollingEnabled}
-        hoursInterval={hoursInterval}
-        groups={groups}
-        type={type}
+      <div className="dx-scheduler-container">
+        <SchedulerToolbar
+          items={toolbarItems}
+          views={views}
+          currentView={currentView}
+          onCurrentViewUpdate={setCurrentView}
+          currentDate={currentDate}
+          onCurrentDateUpdate={setCurrentDate}
+          startViewDate={startViewDate}
+          min={min}
+          max={max}
+          intervalCount={intervalCount}
+          firstDayOfWeek={firstDayOfWeek}
+          useDropDownViewSwitcher={useDropDownViewSwitcher}
+          customizationFunction={customizeDateNavigatorText}
+        />
+        <WorkSpace
+          firstDayOfWeek={firstDayOfWeek}
+          startDayHour={startDayHour}
+          endDayHour={endDayHour}
+          cellDuration={cellDuration}
+          groupByDate={groupByDate}
+          scrolling={scrolling}
+          currentDate={currentDate}
+          intervalCount={intervalCount}
+          groupOrientation={groupOrientation}
+          startDate={startDate}
+          showAllDayPanel={showAllDayPanel}
+          showCurrentTimeIndicator={showCurrentTimeIndicator}
+          indicatorUpdateInterval={indicatorUpdateInterval}
+          shadeUntilCurrentTime={shadeUntilCurrentTime}
+          crossScrollingEnabled={crossScrollingEnabled}
+          hoursInterval={hoursInterval}
+          groups={groups}
+          type={type}
 
-        indicatorTime={indicatorTime}
-        allowMultipleCellSelection={allowMultipleCellSelection}
-        allDayPanelExpanded={allDayPanelExpanded}
-        onViewRendered={onViewRendered}
-      />
+          indicatorTime={indicatorTime}
+          allowMultipleCellSelection={allowMultipleCellSelection}
+          allDayPanelExpanded={allDayPanelExpanded}
+          onViewRendered={onViewRendered}
+
+          appointments={<div className="appointments" />} // Appointments go here
+          allDayAppointments={<div className="all-day-appointments" />}
+        />
+      </div>
     </Widget>
   );
 };

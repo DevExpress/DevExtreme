@@ -2,8 +2,11 @@ import {
  FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation,
 } from './index';
 import { DxPromise } from '../core/utils/deferred';
-import Store, { StoreOptions } from './abstract_store';
+import Store from './abstract_store';
 import { CustomStoreOptions } from './custom_store';
+import { ArrayStoreOptions } from './array_store';
+import { LocalStoreOptions } from './local_store';
+import { ODataStoreOptions } from './odata/store';
 
 /** @namespace DevExpress.data */
 export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
@@ -47,14 +50,12 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
     /**
      * @docid
      * @type_function_param1 error:Object
-     * @type_function_param1_field1 message:string
      * @action
      * @public
      */
     onLoadError?: ((error: { readonly message?: string }) => void);
     /**
      * @docid
-     * @type_function_param1 isLoading:boolean
      * @action
      * @public
      */
@@ -130,12 +131,15 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> | Array<TSourceValue>;
+    store?: Array<TSourceValue> |
+        Store<TKey, TSourceValue> |
+        ArrayStoreOptions<TKey, TSourceValue> & { type: 'array' } |
+        LocalStoreOptions<TKey, TSourceValue> & { type: 'local' } |
+        ODataStoreOptions<TKey, TSourceValue> & { type: 'odata' } |
+        CustomStoreOptions<TKey, TSourceValue>;
 }
 /**
  * @docid
- * @module data/data_source
- * @export default
  * @public
  */
 export default class DataSource<TKey = any, TValue = any> {
@@ -146,7 +150,6 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName cancel(operationId)
-     * @return boolean
      * @public
      */
     cancel(operationId: number): boolean;
@@ -187,28 +190,24 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName isLastPage()
-     * @return boolean
      * @public
      */
     isLastPage(): boolean;
     /**
      * @docid
      * @publicName isLoaded()
-     * @return boolean
      * @public
      */
     isLoaded(): boolean;
     /**
      * @docid
      * @publicName isLoading()
-     * @return boolean
      * @public
      */
     isLoading(): boolean;
     /**
      * @docid
      * @publicName items()
-     * @return Array<any>
      * @public
      */
     items(): Array<any>;
@@ -319,14 +318,12 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName requireTotalCount()
-     * @return boolean
      * @public
      */
     requireTotalCount(): boolean;
     /**
      * @docid
      * @publicName requireTotalCount(value)
-     * @param1 value:boolean
      * @public
      */
     requireTotalCount(value: boolean): void;
@@ -347,28 +344,24 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName searchOperation()
-     * @return string
      * @public
      */
     searchOperation(): string;
     /**
      * @docid
      * @publicName searchOperation(op)
-     * @param1 op:string
      * @public
      */
     searchOperation(op: string): void;
     /**
      * @docid
      * @publicName searchValue()
-     * @return any
      * @public
      */
     searchValue(): any;
     /**
      * @docid
      * @publicName searchValue(value)
-     * @param1 value:any
      * @public
      */
     searchValue(value: any): void;
@@ -406,7 +399,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TKey, TValue>;
     /**
      * @docid
      * @publicName totalCount()

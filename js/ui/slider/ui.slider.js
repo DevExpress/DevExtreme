@@ -1,3 +1,4 @@
+import { getWidth, setWidth } from '../../core/utils/size';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import $ from '../../core/renderer';
@@ -436,7 +437,7 @@ const Slider = TrackBar.inherit({
         e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
         e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
-        this._itemWidthRatio = this.$element().width() / this._swipePixelRatio();
+        this._itemWidthRatio = getWidth(this.$element()) / this._swipePixelRatio();
 
         this._needPreventAnimation = true;
     },
@@ -466,7 +467,7 @@ const Slider = TrackBar.inherit({
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         const newRatio = Math.min(this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio(), 1);
 
-        this._$range.width(newRatio * 100 + '%');
+        setWidth(this._$range, newRatio * 100 + '%');
 
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
@@ -532,7 +533,7 @@ const Slider = TrackBar.inherit({
     _startHandler: function(args) {
         const e = args.event;
 
-        this._currentRatio = (eventData(e).x - this._$bar.offset().left) / this._$bar.width();
+        this._currentRatio = (eventData(e).x - this._$bar.offset().left) / getWidth(this._$bar);
 
         if(this.option('rtlEnabled')) {
             this._currentRatio = 1 - this._currentRatio;

@@ -41,6 +41,9 @@ class BaseRenderingStrategy {
     get cellDuration() { return this.options.cellDuration; }
     get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
     get topVirtualCellCount() { return this.options.topVirtualCellCount; }
+    get positionHelper() { return this.options.positionHelper; }
+    get showAllDayPanel() { return this.options.showAllDayPanel; }
+    get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
     get groupOrientation() { return this.options.groupOrientation; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }

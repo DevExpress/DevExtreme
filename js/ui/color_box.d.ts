@@ -114,8 +114,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 value:string
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -142,8 +140,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @docid
  * @isEditor
  * @inherits dxDropDownEditor
- * @module ui/color_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

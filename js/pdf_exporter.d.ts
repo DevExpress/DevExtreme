@@ -94,7 +94,6 @@ export interface PdfExportDataGridProps {
     /**
      * @docid
      * @type_function_param1 options:Object
-     * @type_function_param1_field1 gridCell:PdfDataGridCell
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */
@@ -109,10 +108,8 @@ export interface PdfExportDataGridProps {
 /**
  * @docid pdfExporter.exportDataGrid
  * @publicName exportDataGrid(options)
- * @param1 options:PdfExportDataGridProps
  * @return Promise<void>
  * @namespace DevExpress.pdfExporter
- * @module pdf_exporter
  * @static
  * @public
  */
@@ -126,7 +123,6 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
   /**
    * @docid
    * @type_function_param1 options:object
-   * @type_function_return object
    * @public
    */
   createDocumentMethod?: ((options: any) => object);
@@ -183,10 +179,8 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
 /**
  * @docid pdfExporter.exportGantt
  * @publicName exportGantt(options)
- * @param1 options:PdfExportGanttProps
  * @return Promise<any>
  * @namespace DevExpress.pdfExporter
- * @module pdf_exporter
  * @static
  * @public
  */

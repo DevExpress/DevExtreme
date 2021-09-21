@@ -1,15 +1,16 @@
 import {
   Component,
   ComponentBindings,
+  ForwardRef,
   JSXComponent,
   JSXTemplate,
   OneWay,
+  RefObject,
 } from '@devextreme-generator/declarations';
 import { isVerticalGroupingApplied } from '../../utils';
 import { GroupPanelBaseProps } from './group_panel_props';
-import { GroupPanelVerticalLayout } from './vertical/layout';
-import { GroupPanelHorizontalLayout } from './horizontal/layout';
-import { GroupPanelLayoutProps } from './group_panel_layout_props';
+import { GroupPanelVerticalLayout, VerticalGroupPanelLayoutProps } from './vertical/layout';
+import { GroupPanelHorizontalLayout, HorizontalGroupPanelLayoutProps } from './horizontal/layout';
 import { Group } from '../../types';
 import { GroupOrientation } from '../../../types';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
@@ -22,6 +23,7 @@ export const viewFunction = ({
     className,
     groupPanelData,
     resourceCellTemplate,
+    elementRef,
   },
 }: GroupPanel): JSX.Element => (
   <Layout
@@ -29,7 +31,7 @@ export const viewFunction = ({
     resourceCellTemplate={resourceCellTemplate}
     className={className}
     groupPanelData={groupPanelData}
-    // eslint-disable-next-line react/jsx-props-no-spreading
+    elementRef={elementRef}
     styles={restAttributes.style}
   />
 );
@@ -39,6 +41,8 @@ export class GroupPanelProps extends GroupPanelBaseProps {
   @OneWay() groups: Group[] = [];
 
   @OneWay() groupOrientation: GroupOrientation = VERTICAL_GROUP_ORIENTATION;
+
+  @ForwardRef() elementRef?: RefObject<HTMLDivElement>;
 }
 
 @Component({
@@ -47,7 +51,8 @@ export class GroupPanelProps extends GroupPanelBaseProps {
   jQuery: { register: true },
 })
 export class GroupPanel extends JSXComponent(GroupPanelProps) {
-  get layout(): JSXTemplate<GroupPanelLayoutProps> {
+  get layout():
+  JSXTemplate<VerticalGroupPanelLayoutProps> | JSXTemplate<HorizontalGroupPanelLayoutProps> {
     const { groupOrientation, groups } = this.props;
 
     return isVerticalGroupingApplied(groups, groupOrientation)

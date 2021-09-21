@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
@@ -51,8 +52,8 @@ QUnit.module('general', moduleConfig, () => {
         assert.ok($wrapper.hasClass(TOAST_WRAPPER_CLASS));
         assert.ok($content.hasClass(TOAST_CONTENT_CLASS));
 
-        assert.ok($content.width() < $(window).width());
-        assert.ok($content.height() < $(window).height());
+        assert.ok(getWidth($content) < getWidth($(window)));
+        assert.ok(getHeight($content) < getHeight($(window)));
     });
 
     QUnit.test('default template', function(assert) {
@@ -81,7 +82,7 @@ QUnit.module('general', moduleConfig, () => {
         this.instance.show();
 
         const $content = this.instance.$content();
-        assert.roughEqual($content.offset().top + $content.outerHeight(), $(window).height(), 1.01);
+        assert.roughEqual($content.offset().top + getOuterHeight($content), getHeight($(window)), 1.01);
     });
 
     QUnit.test('position on mobile devices', function(assert) {
@@ -96,8 +97,8 @@ QUnit.module('general', moduleConfig, () => {
         this.instance = this.$element.dxToast({
             onShown: function(e) {
                 const $content = e.component.$content();
-                assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
-                assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
+                assert.roughEqual($content.offset().top + getOuterHeight($content), window.visualViewport.height, 1.01);
+                assert.roughEqual(getOuterWidth($content), window.visualViewport.width, 1.01);
 
                 done();
             }

@@ -413,10 +413,6 @@ QUnit.test('Compensate root coordinates on creation', function(assert) {
     // assert
     if(browser.mozilla) {
         assert.deepEqual(renderer.root.move.firstCall.args, [-0.76, -0.15]);
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.getCall(1).args, [{
-            transform: 'translate(-0.76px,-0.15px)'
-        }]);
     } else {
         assert.deepEqual(renderer.root.stub('move').callCount, 0);
         assert.deepEqual(renderer.root.css.callCount, 1);
@@ -439,11 +435,6 @@ QUnit.test('Compensate root coordinates on Unlock', function(assert) {
     if(browser.mozilla) {
         assert.deepEqual(renderer.root.move.callCount, 2);
         assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.callCount, 3);
-        assert.deepEqual(renderer.root.css.getCall(2).args, [{
-            transform: 'translate(-0.34px,-0.5px)'
-        }]);
     } else {
         assert.deepEqual(renderer.root.stub('move').callCount, 0);
         assert.deepEqual(renderer.root.css.callCount, 1);
@@ -464,11 +455,6 @@ QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) 
     if(browser.mozilla) {
         assert.deepEqual(renderer.root.move.callCount, 2);
         assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.callCount, 3);
-        assert.deepEqual(renderer.root.css.getCall(2).args, [{
-            transform: 'translate(-0.34px,-0.5px)'
-        }]);
     } else {
         assert.deepEqual(renderer.root.stub('move').callCount, 0);
         assert.deepEqual(renderer.root.css.callCount, 1);
@@ -501,17 +487,6 @@ QUnit.test('Remove compensation before getting markup, compensate again after', 
         assert.deepEqual(renderer.root.move.getCall(0).args, [-0.34, -0.5]);
         assert.ok(renderer.root.move.getCall(0).calledAfter(renderer.root.markup.getCall(0)));
 
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.callCount, 2);
-        assert.deepEqual(renderer.root.css.getCall(0).args, [{ transform: '' }]);
-
-        assert.strictEqual(renderer.root.markup.callCount, 1);
-        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.css.getCall(0)));
-
-        assert.deepEqual(renderer.root.css.getCall(1).args, [{
-            transform: 'translate(-0.34px,-0.5px)'
-        }]);
-        assert.ok(renderer.root.css.getCall(1).calledAfter(renderer.root.markup.getCall(0)));
     } else {
         assert.deepEqual(renderer.root.stub('move').callCount, 0);
         assert.deepEqual(renderer.root.stub('css').callCount, 0);

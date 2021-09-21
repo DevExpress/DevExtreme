@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { noop } from '../core/utils/common';
@@ -265,10 +266,10 @@ const SlideOutView = Widget.inherit({
 
     _getMenuWidth: function() {
         if(!this._menuWidth) {
-            const maxMenuWidth = this.$element().width() - this.option('contentOffset');
+            const maxMenuWidth = getWidth(this.$element()) - this.option('contentOffset');
             const menuContent = $(this.menuContent());
             menuContent.css('maxWidth', maxMenuWidth < 0 ? 0 : maxMenuWidth);
-            const currentMenuWidth = menuContent.width();
+            const currentMenuWidth = getWidth(menuContent);
 
             this._menuWidth = Math.min(currentMenuWidth, maxMenuWidth);
         }

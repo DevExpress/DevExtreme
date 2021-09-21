@@ -113,14 +113,12 @@ export default class dxMenuBase<TProperties> extends HierarchicalCollectionWidge
     /**
      * @docid
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Element
      * @public
      */
     selectItem(itemElement: Element): void;
     /**
      * @docid
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Element
      * @public
      */
     unselectItem(itemElement: Element): void;

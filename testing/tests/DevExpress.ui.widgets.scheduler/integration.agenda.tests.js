@@ -1,3 +1,4 @@
+import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import devices from 'core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -611,8 +612,8 @@ module('Integration: Agenda', moduleConfig, () => {
         const $headers = $groupTable.find('.dx-scheduler-group-header-content');
 
         assert.equal($headers.length, 4, 'Header count is OK');
-        assert.roughEqual($headers.eq(1).outerHeight(), 240, 2, 'Header height is OK');
-        assert.roughEqual($headers.eq(3).outerHeight(), 240, 2, 'Header height is OK');
+        assert.roughEqual(getOuterHeight($headers.eq(1)), 240, 2, 'Header height is OK');
+        assert.roughEqual(getOuterHeight($headers.eq(3)), 240, 2, 'Header height is OK');
     });
 
     test('Group agenda with recurrence appointments should be rendered correctly (T683374)', function(assert) {
@@ -716,7 +717,7 @@ module('Integration: Agenda', moduleConfig, () => {
         }]);
 
         const $groupTable = instance.$element().find('.dx-scheduler-group-table');
-        const $container = instance.$element().find('.dx-scheduler-date-table-scrollable .dx-scrollable-content');
+        const $container = instance.$element().find('.dx-scheduler-date-table-scrollable-content');
 
         assert.equal($groupTable.length, 1, 'Group table was rendered');
         assert.equal($container.children().get(0), $groupTable.get(0), 'Group table was rendered in right place');
@@ -875,8 +876,7 @@ module('Integration: Agenda', moduleConfig, () => {
         const agenda = instance.getWorkSpace();
         const rowHeight = 77;
         const $element = instance.$element();
-        const timePanelWidth = $element.find('.dx-scheduler-time-panel').outerWidth();
-        const expectedWidth = $element.find('.dx-scheduler-date-table').outerWidth() - timePanelWidth;
+        const expectedWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
         const agendaStub = sinon.stub(agenda, '_getRowHeight').returns(rowHeight);
 
         try {
@@ -887,13 +887,13 @@ module('Integration: Agenda', moduleConfig, () => {
 
             const $appointments = instance.$element().find('.dx-scheduler-appointment');
 
-            assert.roughEqual($appointments.eq(0).outerHeight(), 2.001, rowHeight, 'Appointment height is OK');
+            assert.roughEqual(getOuterHeight($appointments.eq(0)), 2.001, rowHeight, 'Appointment height is OK');
             assert.equal(parseInt($appointments.eq(0).css('marginBottom'), 10), 5, 'Appointment offset is OK');
-            assert.roughEqual($appointments.eq(0).outerWidth(), 2.001, expectedWidth, 'Appointment width is OK');
+            assert.roughEqual(getOuterWidth($appointments.eq(0)), 2.001, expectedWidth, 'Appointment width is OK');
 
-            assert.roughEqual($appointments.eq(1).outerHeight(), 2.001, rowHeight, 'Appointment height is OK');
+            assert.roughEqual(getOuterHeight($appointments.eq(1)), 2.001, rowHeight, 'Appointment height is OK');
             assert.equal(parseInt($appointments.eq(1).css('marginBottom'), 10), 20, 'Appointment offset is OK');
-            assert.roughEqual($appointments.eq(1).outerWidth(), 2.001, expectedWidth, 'Appointment width is OK');
+            assert.roughEqual(getOuterWidth($appointments.eq(1)), 2.001, expectedWidth, 'Appointment width is OK');
 
         } finally {
             agendaStub.restore();
@@ -1263,8 +1263,8 @@ module('Integration: Agenda', moduleConfig, () => {
                 owner: 1
             }],
             resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                assert.equal($(cellElement).outerWidth(), 80, 'Resource cell width is OK');
-                assert.equal($(cellElement).outerHeight(), 80, 'Resource cell height is OK');
+                assert.equal(getOuterWidth($(cellElement)), 80, 'Resource cell width is OK');
+                assert.equal(getOuterHeight($(cellElement)), 80, 'Resource cell height is OK');
             }
         });
     });
@@ -1369,11 +1369,11 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.equal($appointments.length, 4, 'appointments are OK');
 
         instance.option('currentView', 'month');
-        const cellWidth = instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+        const cellWidth = getOuterWidth(instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
         $appointments = instance.$element().find('.dx-scheduler-appointment');
 
         assert.equal($appointments.length, 1, 'appointment is OK');
-        assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth * 4, 2.5, 'appointment size is OK');
+        assert.roughEqual(getOuterWidth($appointments.eq(0)), cellWidth * 4, 2.5, 'appointment size is OK');
     });
 
     test('Timepanel rows count should be OK for long appointment', function(assert) {

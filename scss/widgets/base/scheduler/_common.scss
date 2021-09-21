@@ -77,7 +77,8 @@ $scheduler-popup-scrollable-content-padding: 20px;
 
 .dx-scheduler-work-space-mouse-selection {
   .dx-scheduler-fixed-appointments,
-  .dx-scheduler-scrollable-appointments {
+  .dx-scheduler-scrollable-appointments,
+  .dx-scheduler-all-day-appointments {
     pointer-events: none;
   }
 }

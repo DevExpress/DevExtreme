@@ -435,9 +435,9 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 
-    $wrapScrollable.height(10);
-    $scrollable.height(20);
-    $scrollable.children().height(30);
+    $wrapScrollable.height(100);
+    $scrollable.height(200);
+    $scrollable.children().height(300);
 
     const scrollableOption = {
         useNative: false,
@@ -471,10 +471,10 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
 });
 
 QUnit.test('scrollbar is visible for parent scrollable after mouse leave for children scrollable', function(assert) {
-    const $scrollable = $('#scrollable').height(25);
-    const $childScrollable = $('<div>').height(50);
+    const $scrollable = $('#scrollable').height(250);
+    const $childScrollable = $('<div>').height(500);
 
-    $childScrollable.append('<div>').children().height(75);
+    $childScrollable.append('<div>').children().height(750);
     $childScrollable.appendTo($scrollable).dxScrollable({
         useNative: false,
         showScrollbar: 'onHover',

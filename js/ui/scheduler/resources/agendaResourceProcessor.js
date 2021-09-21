@@ -24,8 +24,8 @@ export class AgendaResourceProcessor {
         this.appointmentPromiseQueue = [];
     }
 
-    constructor() {
-        this._resourceDeclarations = [];
+    constructor(resourceDeclarations = []) {
+        this._resourceDeclarations = resourceDeclarations;
         this.isLoaded = false;
         this.isLoading = false;
 

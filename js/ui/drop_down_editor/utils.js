@@ -1,8 +1,9 @@
+import { getOuterWidth } from '../../core/utils/size';
 import { hasWindow } from '../../core/utils/window';
 
 const getElementWidth = function($element) {
     if(hasWindow()) {
-        return $element.outerWidth();
+        return getOuterWidth($element);
     }
 };
 
