@@ -245,7 +245,7 @@ const Overlay = Widget.inherit({
     ctor: function(element, options) {
         this.callBase(element, options);
 
-        if(options.copyRootClassesToWrapper && !options.hideCopyClassesDeprecationWarning) {
+        if(options && options.copyRootClassesToWrapper && !options.hideCopyClassesDeprecationWarning) {
             errors.log('W0001', this.NAME, 'copyRootClassesToWrapper', '21.2', 'Use the "wrapperAttr" option instead');
         }
     },
