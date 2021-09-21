@@ -518,7 +518,7 @@ module('Table properties forms', {
             assert.roughEqual($targetCell.outerWidth(), 567, 1, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
             assert.roughEqual($targetCell.next().outerWidth(), 32, 1, 'next cell width attr is correct');
-            assert.strictEqual($targetCell.next().attr('width'), '0px', 'next cell width attr is correct');
+            assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
 

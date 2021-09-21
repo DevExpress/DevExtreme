@@ -127,15 +127,9 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
-        const autoWidthColumns = getAutoWidthColumns($table);
-        // const noWidthStyle = !$table.attr('style') || $table.attr('style').indexOf('width') < 0;
-        // const hasWidthStyle = $table.attr('style') && $table.attr('style').indexOf('width') >= 0;
-        const shouldKeepOtherColumnsWidth = autoWidthColumns.length > 0 && (!$table.attr('style') || $table.attr('style').indexOf('width') < 0);
-        // const shouldKeepOtherColumnsWidth = autoWidthColumns.length > 0 && !hasWidthStyle;
+        const shouldUpdateNearestColumnWidth = getAutoWidthColumns($table).length === 0;
 
-        // $table.css('width', 'initial');
-
-        if(!shouldKeepOtherColumnsWidth) {
+        if(shouldUpdateNearestColumnWidth) {
             $table.css('width', 'initial');
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
@@ -149,9 +143,7 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
                     setLineElementsAttrValue($verticalCells, 'width', prevColumnWidth > 0 ? prevColumnWidth : 0);
                 }
             }
-
         }
-
     }
 
     const $horizontalCells = $target.closest('tr').find('td');
