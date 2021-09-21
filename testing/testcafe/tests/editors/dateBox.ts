@@ -9,7 +9,7 @@ const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;
 
 [[11, 12, 1925], [10, 23, 2001]].forEach(([month, day, year]) => {
-  test.skip(`Rollers should be scrolled correctly when value is changed to ${day}/${month}/${year} using kbn and valueChangeEvent=keyup (T948310)`, async (t) => {
+  test(`Rollers should be scrolled correctly when value is changed to ${day}/${month}/${year} using kbn and valueChangeEvent=keyup (T948310)`, async (t) => {
     const dateBox = new DateBox('#dateBox');
     const { dropDownEditorButton } = dateBox;
 
