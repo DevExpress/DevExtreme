@@ -55,7 +55,7 @@ export interface PositionConfig {
     };
     /**
      * @docid
-     * @type docEnums.PositionResolveCollisionXY
+     * @type docEnums.PositionResolveCollisionXY|object
      * @public
      */
     collision?: PositionResolveCollisionXY | {

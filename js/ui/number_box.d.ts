@@ -78,6 +78,7 @@ export type ValueChangedEvent = NativeEventInfo<dxNumberBox> & ValueChangedInfo;
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
+     * @type Array<docEnums.NumberBoxButtonName|dxTextEditorButton>
      * @default undefined
      * @public
      */

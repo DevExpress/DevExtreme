@@ -49,6 +49,7 @@ export type ResizeEndEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
+     * @type docEnums.ResizeHandle|string
      * @default "all"
      * @public
      */

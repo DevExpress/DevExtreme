@@ -220,6 +220,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     };
     /**
      * @docid
+     * @type Array<docEnums.FilterBuilderGroupOperations>
      * @default ['and', 'or', 'notAnd', 'notOr']
      * @public
      */
@@ -340,6 +341,7 @@ export interface dxFilterBuilderCustomOperation {
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: dxFilterBuilderField }) => string);
     /**
      * @docid
+     * @type Array<docEnums.FilterBuilderFieldDataType>
      * @default undefined
      * @public
      */
@@ -435,6 +437,7 @@ export interface dxFilterBuilderField {
     /**
      * @docid
      * @default undefined
+     * @type Array<docEnums.FilterBuilderFieldFilterOperations|string>
      * @public
      */
     filterOperations?: Array<FilterBuilderFieldFilterOperations | string>;

@@ -19,7 +19,7 @@ import {
 
 /**
  * @docid
- * @type object|number|docEnums.TimeIntervalType
+ * @type number|object|docEnums.TimeIntervalType
  * @hidden
  * @default undefined
  */
@@ -392,7 +392,7 @@ export interface VizRange {
     /**
      * @docid
      * @inherits VizTimeInterval
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @default undefined
      * @public
      */

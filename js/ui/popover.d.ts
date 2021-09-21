@@ -102,6 +102,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     } | string;
     /**
      * @docid
+     * @type docEnums.Position|PositionConfig
      * @default { my: 'top center', at: 'bottom center', collision: 'fit flip' }
      * @public
      */

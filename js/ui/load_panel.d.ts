@@ -114,6 +114,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     message?: string;
     /**
      * @docid
+     * @type docEnums.PositionAlignment|PositionConfig|Function
      * @public
      */
     position?: PositionAlignment | PositionConfig | Function;

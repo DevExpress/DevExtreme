@@ -1206,7 +1206,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
 export interface dxGanttToolbar {
     /**
      * @docid
-     * @type Array<dxGanttToolbarItem,GanttToolbarItem>
+     * @type Array<dxGanttToolbarItem,docEnums.GanttToolbarItem>
      * @public
      */
     items?: Array<ToolbarItem | GanttToolbarItem>;
@@ -1226,7 +1226,7 @@ export interface dxGanttContextMenu {
     enabled?: boolean;
     /**
      * @docid
-     * @type Array<dxGanttContextMenuItem,GanttContextMenuItem>
+     * @type Array<dxGanttContextMenuItem,docEnums.GanttContextMenuItem>
      * @public
      */
     items?: Array<ContextMenuItem | GanttContextMenuItem | 'resourceManager'>;
@@ -1245,7 +1245,7 @@ export type ToolbarItem = dxGanttToolbarItem;
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type GanttToolbarItem|string
+     * @type docEnums.GanttToolbarItem|string
      * @public
      */
     name?: GanttToolbarItem | string;
@@ -1270,7 +1270,7 @@ export type ContextMenuItem = dxGanttContextMenuItem;
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
-     * @type GanttContextMenuItem|string
+     * @type docEnums.GanttContextMenuItem|string
      * @public
      */
     name?: GanttContextMenuItem | 'resourceManager' | string;

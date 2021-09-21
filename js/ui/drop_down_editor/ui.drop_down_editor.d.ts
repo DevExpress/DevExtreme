@@ -67,6 +67,7 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
     dropDownOptions?: PopupProperties | PopoverProperties;
     /**
      * @docid
+     * @type Array<docEnums.DropDownEditorButtonName|dxTextEditorButton>
      * @default undefined
      * @public
      */

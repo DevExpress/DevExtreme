@@ -78,6 +78,7 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
     selectionMode?: MenuSelectionMode;
     /**
      * @docid
+     * @type object|docEnums.ShowSubmenuMode
      * @default { name: "onHover", delay: { show: 50, hide: 300 } }
      * @public
      */

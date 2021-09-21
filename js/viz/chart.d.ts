@@ -1010,7 +1010,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1_field8 range:VizRange
      * @type_function_param1_field9 previousRange:VizRange
      * @type_function_param1_field10 cancel:boolean
-     * @type_function_param1_field11 actionType:ChartZoomPanActionType
+     * @type_function_param1_field11 actionType:docEnums.ChartZoomPanActionType
      * @type_function_param1_field12 zoomFactor:Number
      * @type_function_param1_field13 shift:Number
      * @notUsedInTheme
@@ -1029,7 +1029,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1_field5 axis:chartAxisObject
      * @type_function_param1_field6 range:VizRange
      * @type_function_param1_field7 cancel:boolean
-     * @type_function_param1_field8 actionType:ChartZoomPanActionType
+     * @type_function_param1_field8 actionType:docEnums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
      * @public
@@ -1222,7 +1222,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     aggregationGroupWidth?: number;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationInterval
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1304,7 +1304,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     logarithmBase?: number;
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @default undefined
      * @notUsedInTheme
@@ -1319,7 +1319,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     minorTickCount?: number;
     /**
      * @docid dxChartOptions.argumentAxis.minorTickInterval
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1364,7 +1364,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     strips?: Array<dxChartArgumentAxisStrips>;
     /**
      * @docid dxChartOptions.argumentAxis.tickInterval
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -2324,7 +2324,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -2338,7 +2338,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     minorTickCount?: number;
     /**
      * @docid dxChartOptions.valueAxis.minorTickInterval
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -2402,7 +2402,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     synchronizedValue?: number;
     /**
      * @docid dxChartOptions.valueAxis.tickInterval
-     * @type docEnums.VizTimeInterval
+     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */

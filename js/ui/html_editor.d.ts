@@ -497,7 +497,7 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,HtmlEditorToolbarItem>
+     * @type Array<dxHtmlEditorToolbarItem,docEnums.HtmlEditorToolbarItem>
      * @public
      */
     items?: Array<ToolbarItem | HtmlEditorToolbarItem>;
@@ -522,11 +522,13 @@ export type ToolbarItem = dxHtmlEditorToolbarItem;
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
+     * @type docEnums.HtmlEditorToolbarItem|string
      * @public
      */
     name?: HtmlEditorToolbarItem | string;
     /**
      * @docid
+     * @type docEnums.HtmlEditorToolbarItem|string
      * @deprecated dxHtmlEditorToolbarItem.name
      */
     formatName?: HtmlEditorToolbarItem | string;

@@ -108,6 +108,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
      * @default 'center'
+     * @type docEnums.VerticalAlignment|Array<docEnums.VerticalAlignment>
      * @public
      */
     alignment?: VerticalAlignment | Array<VerticalAlignment>;
