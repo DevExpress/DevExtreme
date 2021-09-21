@@ -205,6 +205,12 @@ describe('Editor', () => {
             .toEqual(validationErrors);
         });
 
+        it('returned array should not be reference to a passed array', () => {
+          const validationErrors = [{ message: 'error message' }];
+          expect(new Editor({ validationErrors }).validationErrors)
+            .not.toBe(validationErrors);
+        });
+
         it('should return array with one element equal to "validationError" props value when "validationErrors" is not specified', () => {
           const validationError = { message: 'error message' };
           expect(new Editor({ validationError }).validationErrors)

@@ -74,15 +74,15 @@ const isWindow = function(object) {
 };
 
 const isRenderer = function(object) {
-    return !!(object.jquery || object.dxRenderer);
+    return !!object && !!(object.jquery || object.dxRenderer);
 };
 
 const isPromise = function(object) {
-    return object && isFunction(object.then);
+    return !!object && isFunction(object.then);
 };
 
 const isDeferred = function(object) {
-    return object && isFunction(object.done) && isFunction(object.fail);
+    return !!object && isFunction(object.done) && isFunction(object.fail);
 };
 
 const isEvent = function(object) {

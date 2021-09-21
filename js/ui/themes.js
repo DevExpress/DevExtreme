@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../core/utils/size';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import Promise from '../core/polyfills/promise';
@@ -297,7 +298,7 @@ export function attachCssClasses(element, themeName) {
         const $tester = $('<div>');
         $tester.css('border', '.5px solid transparent');
         $('body').append($tester);
-        if($tester.outerHeight() === 1) {
+        if(getOuterHeight($tester) === 1) {
             $(element).addClass(DX_HAIRLINES_CLASS);
             themeClasses += ' ' + DX_HAIRLINES_CLASS;
         }

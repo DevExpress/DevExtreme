@@ -12,6 +12,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 import 'generic_light.css!';
 import 'ui/validator';
+import { implementationsMap } from 'core/utils/size';
 
 const realDevice = devices.real();
 
@@ -496,7 +497,7 @@ QUnit.module('popup options', moduleConfig, () => {
         const editorHeight = this.$element.outerHeight();
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(scrollTopValue);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(windowHeightValue);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(windowHeightValue);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
         const instance = this.$element.dxDropDownBox('instance');
 

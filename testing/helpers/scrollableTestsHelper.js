@@ -1,5 +1,4 @@
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import { calculateScrollbarWidth } from 'ui/pivot_grid/utils/calculate_scrollbar_width';
 
 const SCROLLABLE_CONTAINER = 'dx-scrollable-container';
@@ -10,11 +9,7 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
 
     let expectedContainerClientWidth = containerWidth;
 
-    if(browser.msie) {
-        if(useNativeScrolling && overflowY || useNativeScrolling && overflowX) {
-            expectedContainerClientWidth = containerWidth - nativeScrollbarWidth;
-        }
-    } else if(useNativeScrolling && overflowY) {
+    if(useNativeScrolling && overflowY) {
         expectedContainerClientWidth = containerWidth - nativeScrollbarWidth;
     }
 
@@ -32,10 +27,6 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
     if(devices.real().ios) {
         if(useNativeScrolling) {
             expectedContainerScrollHeight = containerScrollHeight + (overflowY ? 0 : 1); // magic numbers for ios: min-height: 101%;
-        }
-    } else if(browser.msie) {
-        if(useNativeScrolling && overflowX && !overflowY && configDetails !== 'insideResponsiveBox') {
-            expectedContainerScrollHeight = containerScrollHeight - nativeScrollbarWidth;
         }
     } else if(useNativeScrolling && overflowX && !overflowY) {
         expectedContainerScrollHeight = containerScrollHeight - nativeScrollbarWidth;

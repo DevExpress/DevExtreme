@@ -88,7 +88,7 @@ export class ModelProvider {
         return this.model[optionName];
     }
 
-    getViewRenderingStrategyName() {
+    getAppointmentRenderingStrategyName() {
         const { renderingStrategy } = VIEW_RENDERING_CONFIG[this.currentViewType];
         return renderingStrategy;
     }
