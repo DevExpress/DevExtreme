@@ -203,7 +203,7 @@ class SpeedDialMainItem extends SpeedDialItem {
             if(actionsHeight < offsetTop) {
                 return -directionIndex;
             } else {
-                const offsetBottom = getHeight(this._getContainer()) - contentHeight - offsetTop;
+                const offsetBottom = getHeight(this._positionController._$wrapperCoveredElement) - contentHeight - offsetTop;
 
                 return offsetTop >= offsetBottom ? -directionIndex : directionIndex;
             }

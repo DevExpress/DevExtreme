@@ -14,7 +14,7 @@ import dateUtils from '../../../core/utils/date';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
-import { getBoundingRect, getElementsFromPoint } from '../../../core/utils/position';
+import { getBoundingRect } from '../../../core/utils/position';
 import messageLocalization from '../../../localization/message';
 import { noop } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
@@ -3048,8 +3048,8 @@ const createDragBehaviorConfig = (
         const newY = boundingRect.top + MOUSE_IDENT;
 
         const elements = isWideAppointment ?
-            getElementsFromPoint(newX, newY) :
-            getElementsFromPoint(newX + appointmentWidth / 2, newY);
+            domAdapter.elementsFromPoint(newX, newY) :
+            domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const droppableCell = elements.filter(el => {
             const classList = el.classList;

@@ -118,7 +118,7 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setDate(date.getDate() + 1);
             return date;
         },
@@ -174,7 +174,7 @@ const Views = {
 
         _getFirstCellData: function() {
             const currentDate = this.option('date');
-            const data = dateUtils.createDate(currentDate);
+            const data = new Date(currentDate);
 
             data.setDate(1);
             data.setMonth(0);
@@ -183,13 +183,13 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setMonth(date.getMonth() + 1);
             return date;
         },
 
         _getCellByDate: function(date) {
-            const foundDate = dateUtils.createDate(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
 
             return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
@@ -228,7 +228,7 @@ const Views = {
         },
 
         _isOtherView: function(cellDate) {
-            const date = dateUtils.createDate(cellDate);
+            const date = new Date(cellDate);
             date.setMonth(1);
 
             return !dateUtils.sameDecade(date, this.option('date'));
@@ -244,7 +244,7 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setFullYear(date.getFullYear() + 1);
             return date;
         },
@@ -252,8 +252,8 @@ const Views = {
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
             const firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate);
-            const startDate = dateUtils.createDate(currentDate);
-            const endDate = dateUtils.createDate(currentDate);
+            const startDate = new Date(currentDate);
+            const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstYearInDecade);
             endDate.setFullYear(firstYearInDecade + 9);
@@ -266,7 +266,7 @@ const Views = {
         },
 
         _getCellByDate: function(date) {
-            const foundDate = dateUtils.createDate(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
 
@@ -299,7 +299,7 @@ const Views = {
         },
 
         _isOtherView: function(cellDate) {
-            const date = dateUtils.createDate(cellDate);
+            const date = new Date(cellDate);
             date.setMonth(1);
 
             return !dateUtils.sameCentury(date, this.option('date'));
@@ -307,7 +307,7 @@ const Views = {
 
         _getCellText: function(cellDate) {
             const startDate = dateLocalization.format(cellDate, 'yyyy');
-            const endDate = dateUtils.createDate(cellDate);
+            const endDate = new Date(cellDate);
 
             endDate.setFullYear(endDate.getFullYear() + 9);
 
@@ -320,13 +320,13 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setFullYear(date.getFullYear() + 10);
             return date;
         },
 
         _getCellByDate: function(date) {
-            const foundDate = dateUtils.createDate(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
             foundDate.setFullYear(dateUtils.getFirstYearInDecade(foundDate));
@@ -337,8 +337,8 @@ const Views = {
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
             const firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate);
-            const startDate = dateUtils.createDate(currentDate);
-            const endDate = dateUtils.createDate(currentDate);
+            const startDate = new Date(currentDate);
+            const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstDecadeInCentury);
             endDate.setFullYear(firstDecadeInCentury + 99);
