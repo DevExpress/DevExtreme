@@ -2,8 +2,6 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
-import browser from 'core/utils/browser';
-import { compare as compareVersion } from 'core/utils/version';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import ErrorCode from 'file_management/error_codes';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, getDropFileEvent } from '../../../helpers/fileManagerHelpers.js';
@@ -1309,10 +1307,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('parent and selected folders must be disabled: copy folder in deep location (T939043)', function(assert) {
-        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
-            assert.ok(true, 'This test not for IE + jQuery 3.x');
-            return;
-        }
         this.$element.dxFileManager('option', {
             currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1',
             itemView: {
@@ -1353,10 +1347,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('parent and selected folders must be disabled and selected folder must be collapsed: copy folder in deep location (T939043)', function(assert) {
-        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
-            assert.ok(true, 'This test not for IE + jQuery 3.x');
-            return;
-        }
         this.$element.dxFileManager('option', {
             currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1',
             itemView: {
@@ -1506,10 +1496,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('treeView must update expand node icons on folder move - detailsView (T946436)', function(assert) {
-        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
-            assert.ok(true, 'This test not for IE + jQuery 3.x');
-            return;
-        }
         const operationDelay = 400;
         this.fileManager.option({
             fileSystemProvider: new SlowFileProvider({
@@ -1548,10 +1534,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('treeView must update expand node icons on folder move - thumbnailsView (T946436)', function(assert) {
-        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
-            assert.ok(true, 'This test not for IE + jQuery 3.x');
-            return;
-        }
         const operationDelay = 400;
         this.fileManager.option({
             fileSystemProvider: new SlowFileProvider({
@@ -1591,10 +1573,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('treeView must update expand node icons on folder create - treeView (T946436)', function(assert) {
-        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
-            assert.ok(true, 'This test not for IE + jQuery 3.x');
-            return;
-        }
         const operationDelay = 400;
         this.fileManager.option({
             fileSystemProvider: new SlowFileProvider({

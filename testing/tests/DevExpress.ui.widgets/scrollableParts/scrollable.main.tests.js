@@ -2,7 +2,6 @@ import animationFrame from 'animation/frame';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import 'generic_light.css!';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import domUtils from 'core/utils/dom';
 import styleUtils from 'core/utils/style';
 import support from 'core/utils/support';
@@ -332,11 +331,7 @@ QUnit.module('Hoverable interaction',
                             assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
                             assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, 'scrollable-disabled-class');
 
-                            if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
-                                assert.ok(true, 'Skip assert for Edge. The pointer-event property processed with a timeout');
-                            } else {
-                                assert.strictEqual($scrollBar.css('pointer-events'), disabled ? 'none' : 'auto', 'pointer-events');
-                            }
+                            assert.strictEqual($scrollBar.css('pointer-events'), disabled ? 'none' : 'auto', 'pointer-events');
                         });
                     });
                 });

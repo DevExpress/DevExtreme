@@ -6,7 +6,6 @@ import { getScrollbarSize } from 'renovation/ui/scroll_view/utils/get_scrollbar_
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
 import config from 'core/config';
-import browser from 'core/utils/browser';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
@@ -28,8 +27,8 @@ import {
 
 import {
     DIRECTION_HORIZONTAL,
-    DIRECTION_VERTICAL
-} from 'renovation/ui/scroll_view/common/consts.js';
+    DIRECTION_VERTICAL,
+    SCROLLABLE_WRAPPER_CLASS } from 'renovation/ui/scroll_view/common/consts.js';
 
 
 const moduleConfig = {
@@ -527,6 +526,71 @@ QUnit.test('switching useNative to false turns off native scrolling', function(a
     assert.equal(getElementOverflowX(containerEl), 'hidden');
     assert.equal(getElementOverflowY(containerEl), 'hidden');
 });
+
+QUnit.test('event handlers should be reattached after changing to simulated strategy ', function(assert) {
+    if(QUnit.urlParams['nojquery']) {
+        assert.ok(true);
+    } else {
+        const $scrollable = $('#scrollable').dxScrollable({
+            useNative: true
+        });
+
+        const scrollable = $scrollable.dxScrollable('instance');
+
+        let wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        let eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, isRenovation ? 4 : 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+
+        scrollable.option('useNative', false);
+
+        wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+    }
+});
+
+QUnit.test('event handlers should be reattached after changing to native strategy ', function(assert) {
+    if(QUnit.urlParams['nojquery']) {
+        assert.ok(true);
+    } else {
+        const $scrollable = $('#scrollable').dxScrollable({
+            useNative: false
+        });
+
+        const scrollable = $scrollable.dxScrollable('instance');
+
+        let wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        let eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+
+        scrollable.option('useNative', true);
+
+        wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, isRenovation ? 4 : 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+    }
+});
+
 
 QUnit.test('scrollToElement', function(assert) {
     const $scrollable = $('#scrollable').height(50);
@@ -1282,47 +1346,45 @@ class ScrollableTestHelper {
                 });
             });
 
-            if(!browser.msie) {
-                [0, 10, 20].forEach(scrollRight => {
-                    QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right - ${scrollRight}), css.zoomIn -> css.zoomOut`, function() {
-                        const helper = new ScrollableTestHelper({
-                            direction: DIRECTION_HORIZONTAL,
-                            useNative,
-                            useSimulatedScrollbar,
-                            rtlEnabled: true
-                        });
-                        const maxOffset = helper.getMaxScrollOffset();
-                        helper.scrollable.scrollTo({ left: maxOffset.horizontal - scrollRight });
-                        helper.scrollable.update();
-                        [1, 1.1, 1].forEach(zoomLevel => {
-                            helper.scrollable._getWindowDevicePixelRatio = () => zoomLevel;
-                            helper.scrollable.$element().css('zoom', zoomLevel);
-
-                            helper.checkScrollOffset({ left: 50 - scrollRight, top: 0, maxScrollOffset: 50, epsilon: 1.1 });
-                            helper.checkScrollTranslateValues({ vertical: 0, horizontal: (50 - scrollRight) * 0.5 });
-                        });
+            [0, 10, 20].forEach(scrollRight => {
+                QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right - ${scrollRight}), css.zoomIn -> css.zoomOut`, function() {
+                    const helper = new ScrollableTestHelper({
+                        direction: DIRECTION_HORIZONTAL,
+                        useNative,
+                        useSimulatedScrollbar,
+                        rtlEnabled: true
                     });
+                    const maxOffset = helper.getMaxScrollOffset();
+                    helper.scrollable.scrollTo({ left: maxOffset.horizontal - scrollRight });
+                    helper.scrollable.update();
+                    [1, 1.1, 1].forEach(zoomLevel => {
+                        helper.scrollable._getWindowDevicePixelRatio = () => zoomLevel;
+                        helper.scrollable.$element().css('zoom', zoomLevel);
 
-                    QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Left: ${scrollRight}), css.zoomIn -> css.zoomOut`, function() {
-                        const helper = new ScrollableTestHelper({
-                            direction: DIRECTION_HORIZONTAL,
-                            useNative,
-                            useSimulatedScrollbar,
-                            rtlEnabled: true
-                        });
-
-                        helper.scrollable.scrollTo({ left: scrollRight });
-                        helper.scrollable.update();
-                        [1, 1.1, 1].forEach(zoomLevel => {
-                            helper.scrollable._getWindowDevicePixelRatio = () => zoomLevel;
-                            helper.scrollable.$element().css('zoom', zoomLevel);
-
-                            helper.checkScrollOffset({ left: scrollRight, top: 0, maxScrollOffset: 50, epsilon: 1.1 });
-                            helper.checkScrollTranslateValues({ vertical: 0, horizontal: scrollRight * 0.5 });
-                        });
+                        helper.checkScrollOffset({ left: 50 - scrollRight, top: 0, maxScrollOffset: 50, epsilon: 1.1 });
+                        helper.checkScrollTranslateValues({ vertical: 0, horizontal: (50 - scrollRight) * 0.5 });
                     });
                 });
-            }
+
+                QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Left: ${scrollRight}), css.zoomIn -> css.zoomOut`, function() {
+                    const helper = new ScrollableTestHelper({
+                        direction: DIRECTION_HORIZONTAL,
+                        useNative,
+                        useSimulatedScrollbar,
+                        rtlEnabled: true
+                    });
+
+                    helper.scrollable.scrollTo({ left: scrollRight });
+                    helper.scrollable.update();
+                    [1, 1.1, 1].forEach(zoomLevel => {
+                        helper.scrollable._getWindowDevicePixelRatio = () => zoomLevel;
+                        helper.scrollable.$element().css('zoom', zoomLevel);
+
+                        helper.checkScrollOffset({ left: scrollRight, top: 0, maxScrollOffset: 50, epsilon: 1.1 });
+                        helper.checkScrollTranslateValues({ vertical: 0, horizontal: scrollRight * 0.5 });
+                    });
+                });
+            });
 
             QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: true, scroll save the max right position when width of window was changed`, function(assert) {
                 const clock = sinon.useFakeTimers();

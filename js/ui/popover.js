@@ -5,7 +5,6 @@ import { getPublicElement } from '../core/element';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import { noop, pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { move } from '../animation/translator';
 import positionUtils from '../animation/position';
@@ -15,7 +14,7 @@ import { addNamespace } from '../events/utils/index';
 import errors from './widget/ui.errors';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
-import { POPOVER_BOUNDARY_OFFSET } from './popover_contants';
+import { PopoverPositionController, POPOVER_POSITION_ALIASES } from './overlay/overlay_position_controller';
 
 // STYLE popover
 
@@ -30,31 +29,6 @@ const POSITION_FLIP_MAP = {
     'right': 'left',
     'bottom': 'top',
     'center': 'center'
-};
-
-const WEIGHT_OF_SIDES = {
-    'left': -1,
-    'top': -1,
-    'center': 0,
-    'right': 1,
-    'bottom': 1
-};
-
-const POSITION_ALIASES = {
-    // NOTE: public API
-    'top': { my: 'bottom center', at: 'top center', collision: 'fit flip' },
-    'bottom': { my: 'top center', at: 'bottom center', collision: 'fit flip' },
-    'right': { my: 'left center', at: 'right center', collision: 'flip fit' },
-    'left': { my: 'right center', at: 'left center', collision: 'flip fit' }
-};
-
-const DEFAULT_BOUNDARY_OFFSET = { h: POPOVER_BOUNDARY_OFFSET, v: POPOVER_BOUNDARY_OFFSET };
-
-const SIDE_BORDER_WIDTH_STYLES = {
-    'left': 'borderLeftWidth',
-    'top': 'borderTopWidth',
-    'right': 'borderRightWidth',
-    'bottom': 'borderBottomWidth'
 };
 
 const getEventNameByOption = function(optionValue) {
@@ -137,7 +111,7 @@ const Popover = Popup.inherit({
 
             shading: false,
 
-            position: extend({}, POSITION_ALIASES.bottom),
+            position: extend({}, POPOVER_POSITION_ALIASES.bottom),
 
             closeOnOutsideClick: true,
 
@@ -181,6 +155,10 @@ const Popover = Popup.inherit({
             */
             resizeEnabled: false,
 
+            /**
+            * @name dxPopoverOptions.restorePosition
+            * @hidden
+            */
 
             /**
             * @section Utils
@@ -336,9 +314,8 @@ const Popover = Popup.inherit({
     _renderPosition: function() {
         this.callBase();
         this._renderOverlayPosition();
+        this._actions.onPositioned();
     },
-
-    _renderOverlayBoundaryOffset: noop,
 
     _renderOverlayPosition: function() {
         this._resetOverlayPosition();
@@ -361,7 +338,7 @@ const Popover = Popup.inherit({
 
     _resetOverlayPosition: function() {
         this._setContentHeight(true);
-        this._togglePositionClass('dx-position-' + this._positionSide);
+        this._togglePositionClass('dx-position-' + this._positionController._positionSide);
 
         move(this.$overlayContent(), { left: 0, top: 0 });
 
@@ -393,28 +370,7 @@ const Popover = Popup.inherit({
     },
 
     _getContainerPosition: function() {
-        const offset = pairToObject(this._position.offset || '');
-        let hOffset = offset.h;
-        let vOffset = offset.v;
-        const isVerticalSide = this._isVerticalSide();
-        const isHorizontalSide = this._isHorizontalSide();
-
-        if(isVerticalSide || isHorizontalSide) {
-            const isPopoverInside = this._isPopoverInside();
-            const sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
-            const arrowSize = isVerticalSide ? getHeight(this._$arrow) : getWidth(this._$arrow);
-            const arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
-            const arrowOffset = sign * (arrowSize - arrowSizeCorrection);
-
-            isVerticalSide ? vOffset += arrowOffset : hOffset += arrowOffset;
-        }
-
-        return extend({}, this._position, { offset: hOffset + ' ' + vOffset });
-    },
-
-    _getContentBorderWidth: function(side) {
-        const borderWidth = this.$overlayContent().css(SIDE_BORDER_WIDTH_STYLES[side]);
-        return parseInt(borderWidth) || 0;
+        return this._positionController._getContainerPosition();
     },
 
     _getSideByLocation: function(location) {
@@ -422,8 +378,8 @@ const Popover = Popup.inherit({
         const isFlippedByHorizontal = location.h.flip;
 
         return (this._isVerticalSide() && isFlippedByVertical || this._isHorizontalSide() && isFlippedByHorizontal || this._isPopoverInside())
-            ? POSITION_FLIP_MAP[this._positionSide]
-            : this._positionSide;
+            ? POSITION_FLIP_MAP[this._positionController._positionSide]
+            : this._positionController._positionSide;
     },
 
     _togglePositionClass: function(positionClass) {
@@ -445,7 +401,7 @@ const Popover = Popup.inherit({
 
         const axis = this._isVerticalSide(side) ? 'left' : 'top';
         const sizeProperty = this._isVerticalSide(side) ? 'width' : 'height';
-        const $target = $(this._position.of);
+        const $target = $(this._positionController._position.of);
 
         const targetOffset = positionUtils.offset($target) || { top: 0, left: 0 };
         const contentOffset = positionUtils.offset(this.$overlayContent());
@@ -467,18 +423,13 @@ const Popover = Popup.inherit({
             arrowLocation = (min + max) / 2 - contentLocation - arrowSize / 2;
         }
 
-        const borderWidth = this._getContentBorderWidth(side);
+        const borderWidth = this._positionController._getContentBorderWidth(side);
         const finalArrowLocation = fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
         this._$arrow.css(axis, finalArrowLocation);
     },
 
     _isPopoverInside: function() {
-        const position = this._getPositionValue(POSITION_ALIASES);
-
-        const my = positionUtils.setup.normalizeAlign(position.my);
-        const at = positionUtils.setup.normalizeAlign(position.at);
-
-        return my.h === at.h && my.v === at.v;
+        return this._positionController._isPopoverInside();
     },
 
     _setContentHeight: function(fullUpdate) {
@@ -487,10 +438,19 @@ const Popover = Popup.inherit({
         }
     },
 
-    _renderWrapperPosition: function() {
-        if(this.option('shading')) {
-            this.$wrapper().css({ top: 0, left: 0 });
-        }
+    _getPositionControllerConfig() {
+        const { shading } = this.option();
+
+        return extend({}, this.callBase(), {
+            shading,
+            $arrow: this._$arrow
+        });
+    },
+
+    _initPositionController() {
+        this._positionController = new PopoverPositionController(
+            this._getPositionControllerConfig()
+        );
     },
 
     _renderWrapperDimensions: function() {
@@ -502,34 +462,12 @@ const Popover = Popup.inherit({
         }
     },
 
-    _normalizePosition: function() {
-        const defaultOptions = { of: this.option('target'), boundaryOffset: DEFAULT_BOUNDARY_OFFSET };
-
-        const position = extend(true, {}, defaultOptions, this._getPositionValue(POSITION_ALIASES));
-        this._positionSide = this._getDisplaySide(position);
-
-        this._position = position;
-    },
-
-    _getDisplaySide: function(position) {
-        const my = positionUtils.setup.normalizeAlign(position.my);
-        const at = positionUtils.setup.normalizeAlign(position.at);
-
-        const weightSign = WEIGHT_OF_SIDES[my.h] === WEIGHT_OF_SIDES[at.h] && WEIGHT_OF_SIDES[my.v] === WEIGHT_OF_SIDES[at.v] ? -1 : 1;
-        const horizontalWeight = Math.abs(WEIGHT_OF_SIDES[my.h] - weightSign * WEIGHT_OF_SIDES[at.h]);
-        const verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
-
-        return horizontalWeight > verticalWeight ? at.h : at.v;
-    },
-
     _isVerticalSide: function(side) {
-        side = side || this._positionSide;
-        return side === 'top' || side === 'bottom';
+        return this._positionController._isVerticalSide(side);
     },
 
     _isHorizontalSide: function(side) {
-        side = side || this._positionSide;
-        return side === 'left' || side === 'right';
+        return this._positionController._isHorizontalSide(side);
     },
 
     _clearEventTimeout: function(name) {

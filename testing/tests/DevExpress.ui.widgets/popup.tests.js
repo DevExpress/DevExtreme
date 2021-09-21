@@ -13,6 +13,7 @@ import devices from 'core/devices';
 import fx from 'animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
 import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
@@ -103,6 +104,8 @@ const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
+const POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-bottom-right';
+const POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-top-left';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -1198,43 +1201,6 @@ QUnit.module('options changed callbacks', {
         assert.equal($toolbarItems.length, 0, 'no items are rendered inside top toolbar');
     });
 
-    QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
-        const positionedHandlerStub = sinon.stub();
-        this.instance.on('positioned', positionedHandlerStub);
-
-        this.instance.option('toolbarItems[0].visible', true);
-        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for visibility option');
-
-        this.instance.option('toolbarItems', [{
-            widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
-        }]);
-        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
-
-        this.instance.option('toolbarItems[0]', {
-            widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
-        });
-
-        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
-    });
-
-
-    QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
-        const positionedHandlerStub = sinon.stub();
-        this.instance.option({
-            visible: true,
-            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
-        });
-        this.instance.on('positioned', positionedHandlerStub);
-
-        this.instance.option('toolbarItems[0].options', { text: 'test', disabled: true });
-        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called on partial update of a widget');
-
-        this.instance.option('toolbarItems[0].toolbar', 'top');
-        assert.ok(positionedHandlerStub.calledOnce, 'renderGeometry is called on item location changing');
-    });
-
     QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
         const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
@@ -1408,32 +1374,11 @@ QUnit.module('resize', {
         });
         const popup = $popup.dxPopup('instance');
         const $overlayContent = popup.$content().parent();
-        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
+        const $handle = $overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(-100, -100);
         assert.roughEqual(getOuterHeight(popup.$content()), getHeight($overlayContent), 0.1, 'size of popup and overlay is equal');
-    });
-
-    QUnit.test('popup content position should be reset after show/hide', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            resizeEnabled: true,
-            height: 'auto',
-            position: { of: viewPort() }
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-
-        popup.$content().append($('<div>').height(10));
-        popup.show();
-        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
-        const pointer = pointerMock($handle);
-        const position = $overlayContent.offset();
-        pointer.start().dragStart().drag(-100, -100).dragEnd();
-
-        popup.hide();
-        popup.show();
-        assert.deepEqual($overlayContent.offset(), position, 'position is same');
     });
 
     QUnit.test('resize callbacks', function(assert) {
@@ -1855,14 +1800,59 @@ QUnit.module('templates', () => {
     });
 });
 
-QUnit.module('renderGeometry', () => {
-    QUnit.test('option change', function(assert) {
-        this.positionedHandlerStub = sinon.stub();
-        const instance = $('#popup').dxPopup({
+QUnit.module('renderGeometry', {
+    beforeEach: function() {
+        const initialOptions = {
+            visible: true
+        };
+        this.init = (options) => {
+            this.popup = $('#popup')
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.renderGeometrySpy = sinon.spy(this.popup, '_renderGeometry');
+        };
+        this.reinit = (options) => {
+            this.renderGeometrySpy.restore();
+            this.init(options);
+        };
+
+        this.init();
+
+    }
+}, () => {
+    QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
+        this.popup.option('toolbarItems[0].visible', true);
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for visibility option');
+
+        this.popup.option('toolbarItems', [{
+            widget: 'dxButton',
+            options: { text: 'Supprimer', type: 'danger' }
+        }]);
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
+
+        this.popup.option('toolbarItems[0]', {
+            widget: 'dxButton',
+            options: { text: 'Supprimer', type: 'danger' }
+        });
+
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
+    });
+
+    QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
+        this.reinit({
             visible: true,
-            onPositioned: this.positionedHandlerStub
-        }).dxPopup('instance');
-        const options = instance.option();
+            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+        });
+
+        this.popup.option('toolbarItems[0].options', { text: 'test', disabled: true });
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called on partial update of a widget');
+
+        this.popup.option('toolbarItems[0].toolbar', 'top');
+        assert.ok(this.renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+    });
+
+    QUnit.test('option change', function(assert) {
+        const options = this.popup.option();
         const newOptions = {
             fullScreen: !options.fullScreen,
             autoResizeEnabled: !options.autoResizeEnabled,
@@ -1875,27 +1865,385 @@ QUnit.module('renderGeometry', () => {
         };
 
         for(const optionName in newOptions) {
-            const initialCallCount = this.positionedHandlerStub.callCount;
+            const initialCallCount = this.renderGeometrySpy.callCount;
 
-            instance.option(optionName, newOptions[optionName]);
+            this.popup.option(optionName, newOptions[optionName]);
 
-            assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
+            assert.ok(initialCallCount < this.renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
         }
+    });
+});
 
-        instance.hide();
+QUnit.module('positioning', {
+    beforeEach: function() {
+        const initialOptions = {
+            width: 100,
+            height: 100,
+            visible: true,
+            animation: null,
+            position: { my: 'top left', at: 'center', of: window }
+        };
+
+        this.init = (options = {}) => {
+            this.$popup = $('#popup').dxPopup($.extend({}, initialOptions, options));
+            this.popup = this.$popup.dxPopup('instance');
+
+            this.$overlayContent = this.popup.$overlayContent();
+            this.getPosition = () => this.$overlayContent.position();
+        };
+        this.reinit = (options) => {
+            this.popup.dispose();
+            this.init(options);
+        };
+
+        this.init();
+    }
+}, () => {
+    QUnit.module('after fullScreen option change', () => {
+        QUnit.test('popup should render on initial position if it is first render', function(assert) {
+            const $target = $('#container');
+            this.reinit({
+                fullScreen: true,
+                visible: false,
+                position: {
+                    my: 'top left',
+                    at: 'top left',
+                    of: $target
+                },
+                restorePosition: {
+                    onOpening: false
+                }
+            });
+            this.popup.option('fullScreen', false);
+
+            this.popup.show();
+
+            const visualPosition = this.getPosition();
+            const expectedPosition = $target.position();
+
+            assert.deepEqual(visualPosition, expectedPosition, 'position is correct');
+        });
+
+        QUnit.test('popup should not restore position after fullScreen disable', function(assert) {
+            const visualPositionBeforeFullScreen = this.getPosition();
+
+            this.popup.option('fullScreen', true);
+            this.popup.option('position', { of: '#container' });
+            this.popup.option('fullScreen', false);
+
+            const visualPositionAfterFullScreen = this.getPosition();
+            assert.deepEqual(visualPositionAfterFullScreen, visualPositionBeforeFullScreen, 'visual position was not changed');
+        });
+
+        QUnit.test('popup should not restore position on rerender after fullScreen changed to false', function(assert) {
+            const visualPositionBeforeFullScreen = this.getPosition();
+
+            this.popup.option('fullScreen', true);
+            this.popup.option('position', { of: '#container' });
+            this.popup.option('fullScreen', false);
+
+            this.popup.option('height', 'auto');
+            const visualPositionAfterFullScreen = this.getPosition();
+
+            assert.deepEqual(visualPositionAfterFullScreen, visualPositionBeforeFullScreen, 'visual position was not changed');
+        });
+
+        QUnit.test('fullScreen option change to true should trigger visualPositionChanged event', function(assert) {
+            const visualPositionChangedHandlerStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedHandlerStub);
+
+            this.popup.option('fullScreen', true);
+
+            assert.ok(visualPositionChangedHandlerStub.calledOnce, 'visualPositionChanged event is raised');
+            assert.deepEqual(visualPositionChangedHandlerStub.getCall(0).args[0].position, { top: 0, left: 0 }, 'parameter is correct');
+        });
+
+        [{ onFullScreenDisable: true }, { always: true }].forEach(restorePosition => {
+            QUnit.test(`popup should restore position after fullScreen disable if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
+                const $container = $('#container');
+                this.reinit({ restorePosition });
+
+                this.popup.option('fullScreen', true);
+                this.popup.option('position', { my: 'top', at: 'top', of: $container });
+                this.popup.option('fullScreen', false);
+
+                const position = this.getPosition();
+                const containerPosition = $container.position();
+                assert.strictEqual(position.top, containerPosition.top, 'visual position is restored');
+            });
+        });
     });
 
-    QUnit.test('fullScreen option change to true should trigger positioned event', function(assert) {
-        const positionedHandlerStub = sinon.stub();
+    QUnit.module('drag and resize', {
+        beforeEach: function() {
+            const baseInit = this.init;
+            const initialOptions = {
+                dragEnabled: true,
+                resizeEnabled: true,
+                dragAndResizeArea: window,
+            };
+            this.init = (options = {}) => {
+                baseInit($.extend(initialOptions, options));
+                this.$title = this.$overlayContent.children(`.${POPUP_TITLE_CLASS}`);
+                this.$resizeHandle = this.$overlayContent.find(`.${POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS}`);
 
-        const instance = $('#popup').dxPopup({
-            visible: true
-        }).dxPopup('instance');
-        instance.on('positioned', positionedHandlerStub);
+                this.dragPointer = pointerMock(this.$title);
+                this.resizePointer = pointerMock(this.$resizeHandle);
 
-        instance.option('fullScreen', true);
+                this.getPosition = () => this.$overlayContent.position();
+                this.drag = () => { this.dragPointer.start().down().move(100, 100).up(); };
+                this.resize = () => { this.resizePointer.start().down().move(-100, -100).up(); };
+            };
 
-        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is raised');
-        assert.deepEqual(positionedHandlerStub.getCall(0).args[0].position, { h: { location: 0 }, v: { location: 0 } }, 'parameter is correct');
+            this.init();
+        }
+    }, () => {
+        QUnit.test('popup should not restore position on rerender after fullScreen changed to false', function(assert) {
+            this.popup.option('fullScreen', true);
+            this.popup.option('fullScreen', false);
+            this.drag();
+
+            const expectedPosition = this.getPosition();
+            this.popup.option('height', 'auto');
+
+            const position = this.getPosition();
+            assert.deepEqual(position, expectedPosition, 'visual position was not changed');
+        });
+
+        QUnit.test('dragEnd should trigger positioned event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.drag();
+            const { left, top } = this.getPosition();
+
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
+
+            const args = visualPositionChangedStub.getCall(0).args[0];
+            assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
+            assert.strictEqual(args.event.type, 'dxdragend', 'event parameter is correct');
+        });
+
+        QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
+            const isDesktop = devices.real().deviceType === 'desktop';
+            if(!isDesktop) {
+                assert.ok(true, 'test is actual only for desktop');
+                return;
+            }
+
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.keyboard = keyboardMock(this.$overlayContent);
+            this.keyboard.press('down');
+            const { left, top } = this.getPosition();
+
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
+
+            const args = visualPositionChangedStub.getCall(0).args[0];
+            assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
+            assert.strictEqual(args.event.type, 'keydown', 'event parameter is correct');
+        });
+
+        QUnit.test('resizeEnd should trigger visualPositionChanged event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.resize();
+            const { left, top } = this.getPosition();
+
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
+
+            const args = visualPositionChangedStub.getCall(0).args[0];
+            assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
+            assert.strictEqual(args.event.type, 'dxdragend', 'event parameter type is correct');
+            assert.strictEqual(args.event.target, this.$resizeHandle.get(0), 'event parameter target is correct');
+        });
+
+        QUnit.test('fullScrren change after drag should trigger visualPositionChanged event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.drag();
+            const { left, top } = this.getPosition();
+
+            this.popup.option('fullScreen', true);
+            assert.deepEqual(visualPositionChangedStub.getCall(1).args[0].position, { top: 0, left: 0 }, 'position parameter is correct after change to true');
+
+            this.popup.option('fullScreen', false);
+            assert.deepEqual(visualPositionChangedStub.getCall(2).args[0].position, { top, left }, 'position parameter is correct after change to false');
+        });
+
+        QUnit.test('position change should not trigger visualPositionChanged event if fullScreen=true', function(assert) {
+            this.popup.option('fullScreen', true);
+
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.popup.option('position', { of: '#container' });
+            assert.ok(visualPositionChangedStub.notCalled, 'visualPositionChanged event is not called');
+        });
+
+        QUnit.test('restorePosition option runtime change', function(assert) {
+            this.popup.option('restorePosition', undefined);
+            this.popup.option('restorePosition', { always: true });
+
+            const initialPosition = this.getPosition();
+            this.drag();
+
+            this.popup.option('height', 'auto');
+
+            const newPosition = this.getPosition();
+            assert.deepEqual(newPosition, initialPosition, 'position is restored');
+        });
+
+        QUnit.module('position after', () => {
+            QUnit.test('resize should not be restored to initial', function(assert) {
+                const position = this.getPosition();
+
+                this.resize();
+
+                const newPosition = this.getPosition();
+                assert.strictEqual(newPosition.left, position.left - 100, 'left coordinate is correct');
+                assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
+            });
+
+            [{ onDimensionChangeAfterDrag: true }, { always: true }].forEach(restorePosition => {
+                QUnit.test(`drag should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
+                    this.reinit({ restorePosition });
+
+                    const initialPosition = this.getPosition();
+                    this.drag();
+
+                    this.popup.option('height', 'auto');
+
+                    const newPosition = this.getPosition();
+                    assert.deepEqual(newPosition, initialPosition, 'position is restored');
+                });
+            });
+
+            [{ onDimensionChangeAfterResize: true }, { always: true }].forEach(restorePosition => {
+                QUnit.test(`resize should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
+                    this.reinit({ restorePosition });
+
+                    const initialPosition = this.getPosition();
+                    this.resize();
+
+                    this.popup.option('height', 'auto');
+
+                    const newPosition = this.getPosition();
+                    assert.deepEqual(newPosition, initialPosition, 'position is restored');
+                });
+            });
+
+            ['drag', 'resize'].forEach(moveMethodName => {
+                QUnit.module(moveMethodName, () => {
+                    QUnit.test('should not be changed after fullScreen is enabled and disabled', function(assert) {
+                        this[moveMethodName]();
+                        const position = this.getPosition();
+
+                        this.popup.option('fullScreen', true);
+                        this.popup.option('fullScreen', false);
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should not be changed after width or height change', function(assert) {
+                        this[moveMethodName]();
+                        const position = this.getPosition();
+
+                        this.popup.option('width', 200);
+                        this.popup.option('height', 200);
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should not be changed after content dimension change', function(assert) {
+                        const done = assert.async();
+
+                        this.popup.option({
+                            width: 'auto',
+                            height: 'auto',
+                            contentTemplate: () => {
+                                return $('<div>')
+                                    .attr('id', 'content')
+                                    .width(100)
+                                    .height(100);
+                            }
+                        });
+
+                        this[moveMethodName]();
+                        const position = this.getPosition();
+
+                        $('#content')
+                            .width(300)
+                            .height(300);
+
+                        setTimeout(() => {
+                            const newPosition = this.getPosition();
+                            assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                            assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+
+                            done();
+                        }, 250);
+                    });
+
+                    QUnit.test('should be restored to position from option after repaint', function(assert) {
+                        const position = this.getPosition();
+
+                        this[moveMethodName]();
+
+                        this.popup.repaint();
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should be change after position option change', function(assert) {
+                        const position = this.getPosition();
+
+                        this[moveMethodName]();
+
+                        this.popup.option('position.offset', '100 100');
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left + 100, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top + 100, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should be restored to position from option after reopening', function(assert) {
+                        const position = this.getPosition();
+
+                        this[moveMethodName]();
+
+                        this.popup.hide();
+                        this.popup.show();
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should not be restored to position from option after reopening if restorePosition.onOpening=false', function(assert) {
+                        this.reinit({ restorePosition: { onOpening: false } });
+
+                        this[moveMethodName]();
+
+                        const visualPosition = this.getPosition();
+                        this.popup.hide();
+                        this.popup.show();
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, visualPosition.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, visualPosition.top, 'top coordinate is correct');
+                    });
+                });
+            });
+        });
     });
 });

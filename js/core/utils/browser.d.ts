@@ -4,7 +4,6 @@ export type BrowserInfo = {
     mozilla?: boolean;
     safari?: boolean;
     unknown?: boolean;
-    msie?: boolean;
     version?: string;
 };
 
