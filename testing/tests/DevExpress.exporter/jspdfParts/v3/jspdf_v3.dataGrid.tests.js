@@ -14,7 +14,7 @@ import { JSPdfBorderColorsTests } from './jspdf_v3.dataGrid.borderColors.tests.j
 import { JSPdfBandsTests } from './jspdf_v3.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v3.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v3.dataGrid.summaries.tests.js';
-import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnwidth.tests.js';
+import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
 
 import 'generic_light.css!';
 

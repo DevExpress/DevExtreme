@@ -2,7 +2,7 @@ import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
 
 const JSPdfColumnWidthsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
-        QUnit.module('column widths', moduleConfig, () => {
+        QUnit.module('column auto width', moduleConfig, () => {
             QUnit.test('Empty', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -321,7 +321,7 @@ const JSPdfColumnWidthsTests = {
             });
         });
 
-        QUnit.module('column widths with wordWrap and Bands', moduleConfig, () => {
+        QUnit.module('column auto width with wordWrap and Bands', moduleConfig, () => {
             QUnit.test('[band1-[f1]]', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -692,7 +692,7 @@ const JSPdfColumnWidthsTests = {
             });
         });
 
-        QUnit.module('column widths with wordWrap and grouping', moduleConfig, () => {
+        QUnit.module('column auto width with wordWrap and grouping', moduleConfig, () => {
             QUnit.test('1 level - 1 group - [{f1, groupIndex: 0}, f2, f3], word wrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -880,7 +880,7 @@ const JSPdfColumnWidthsTests = {
             });
         });
 
-        QUnit.module('column widths with wordWrap, summaries and totals', moduleConfig, () => {
+        QUnit.module('column auto width with wordWrap, summaries and totals', moduleConfig, () => {
             QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1], word wrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1146,8 +1146,8 @@ const JSPdfColumnWidthsTests = {
             });
         });
 
-        QUnit.module('column widths with wordWrap, summaries, totals and bands', moduleConfig, () => {
-            QUnit.test('[band1-[f1, f2]], f1.groupIndex=0,f2.groupIndex=0', function(assert) {
+        QUnit.module('column auto width with wordWrap, summaries, totals and bands', moduleConfig, () => {
+            QUnit.test('[band1-[f1, f2]], f1.groupIndex=0,f2.groupIndex=1', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -1156,7 +1156,7 @@ const JSPdfColumnWidthsTests = {
                     columns: [
                         { caption: 'Band1 long line 1 ling line 2', columns: [
                             { dataField: 'f1', groupIndex: 0 },
-                            { dataField: 'f2', groupIndex: 0 }
+                            { dataField: 'f2', groupIndex: 1 }
                         ] }
                     ],
                     dataSource: [
