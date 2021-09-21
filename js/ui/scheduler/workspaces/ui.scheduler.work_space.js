@@ -2469,11 +2469,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._initWorkSpaceUnits();
 
+        this._initVirtualScrolling();
+
         this._initDateTableScrollable();
 
         this._createWorkSpaceElements();
-
-        this._initVirtualScrolling();
 
         super._initMarkup();
 
