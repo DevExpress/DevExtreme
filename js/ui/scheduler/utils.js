@@ -1,7 +1,10 @@
 import { getOuterHeight, setHeight, setWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
+import { each } from '../../core/utils/iterator';
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
 import { getPublicElement } from '../../core/element';
+import { compileGetter, compileSetter } from '../../core/utils/data';
+import dateSerialization from '../../core/utils/date_serialization';
 
 export const utils = {
     dataAccessors: {
@@ -13,6 +16,66 @@ export const utils = {
             const settings = utils.dataAccessors.getAppointmentSettings(element);
             return settings?.info;
         },
+
+        init: ({
+            instance,
+            fields,
+            currentDataAccessors,
+            forceIsoDateParsing,
+            getDateSerializationFormat,
+            setDateSerializationFormat
+        }) => {
+            const isDateField = (field) => field === 'startDate' || field === 'endDate';
+            const defaultDataAccessors = {
+                getter: {},
+                setter: {},
+                expr: {}
+            };
+            const dataAccessors = currentDataAccessors
+                ? { ...currentDataAccessors }
+                : defaultDataAccessors;
+
+            each(fields, (name, expr) => {
+                if(expr) {
+                    const getter = compileGetter(expr);
+                    const setter = compileSetter(expr);
+
+                    let dateGetter;
+                    let dateSetter;
+
+                    if(isDateField(name)) {
+                        dateGetter = function() {
+                            let value = getter.apply(instance, arguments);
+                            if(forceIsoDateParsing) {
+                                if(!getDateSerializationFormat()) {
+                                    const format = dateSerialization.getDateSerializationFormat(value);
+                                    if(format) {
+                                        setDateSerializationFormat(format);
+                                    }
+                                }
+                                value = dateSerialization.deserializeDate(value);
+                            }
+                            return value;
+                        };
+                        dateSetter = function(object, value) {
+                            if(forceIsoDateParsing || getDateSerializationFormat()) {
+                                value = dateSerialization.serializeDate(value, getDateSerializationFormat());
+                            }
+                            setter.call(this, object, value);
+                        };
+                    }
+                    dataAccessors.getter[name] = dateGetter || getter;
+                    dataAccessors.setter[name] = dateSetter || setter;
+                    dataAccessors.expr[`${name}Expr`] = expr;
+                } else {
+                    delete dataAccessors.getter[name];
+                    delete dataAccessors.setter[name];
+                    delete dataAccessors.expr[`${name}Expr`];
+                }
+            });
+
+            return dataAccessors;
+        }
     },
     DOM: {
         getHeaderHeight: (header) => {
