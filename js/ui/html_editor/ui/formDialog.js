@@ -58,8 +58,7 @@ class FormDialog {
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
-            copyRootClassesToWrapper: true,
-            hideCopyClassesDeprecationWarning: true,
+            wrapperAttr: { class: 'dx-formdialog' },
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
 
