@@ -1883,14 +1883,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const options = {
                 viewData: this.viewDataProvider.viewData,
-                visible,
                 dataCellTemplate: this.option('dataCellTemplate'),
                 startCellIndex: 0,
                 ...(this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {}),
             };
 
             utils.renovation.renderComponent(this, this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
-            utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
+            utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
 
