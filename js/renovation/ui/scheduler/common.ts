@@ -1,11 +1,26 @@
-import dxScheduler from '../../../ui/scheduler';
 import { utils } from '../../../ui/scheduler/utils';
 import { SchedulerProps } from './props';
 import { DataAccessorType } from './types';
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type SchedulerDataAccessorsType = Pick<
+SchedulerProps,
+'startDateExpr'
+| 'endDateExpr'
+| 'startDateTimeZoneExpr'
+| 'endDateTimeZoneExpr'
+| 'allDayExpr'
+| 'textExpr'
+| 'descriptionExpr'
+| 'recurrenceRuleExpr'
+| 'recurrenceExceptionExpr'
+| 'forceIsoDateParsing'
+| 'dateSerializationFormat'
+>;
+
 export const createDataAccessors = (
-  instance: dxScheduler,
-  props: SchedulerProps,
+  instance: unknown,
+  props: SchedulerDataAccessorsType,
   dataAccessors: DataAccessorType,
   setDateSerializationFormat: (value: string) => void,
 ): DataAccessorType => {
