@@ -1575,47 +1575,47 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
         });
 
         // act, assert
-        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop #1');
 
         this.pointer.down().move(0, 240);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop #2');
 
         this.pointer.move(0, 1);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 1, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 1, 'scrollTop #3');
 
         this.pointer.down().move(0, 4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 6, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 6, 'scrollTop #4');
 
         this.pointer.down().move(0, 4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop #5');
 
         this.pointer.move(0, -239);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop #6');
 
         this.pointer.move(0, -1);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 22, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 22, 'scrollTop #7');
 
         this.pointer.down().move(0, -4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 17, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 17, 'scrollTop #8');
 
         this.pointer.down().move(0, -4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop #9');
     });
 
     QUnit.test('onDragMove should be fired during scrolling', function(assert) {

@@ -1,10 +1,13 @@
+import { getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import dataCoreUtils from 'core/utils/data';
 import typeUtils from 'core/utils/type';
+import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
-import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { createExpressions } from 'ui/scheduler/resources/utils';
 
 const { testStart, module, test } = QUnit;
 
@@ -75,8 +78,6 @@ const createInstance = (options = {}) => {
                         top: field.top || 0,
                         empty: field.empty || false
                     };
-                case 'getResourceManager':
-                    return getResourceManager(key);
                 case 'getAppointmentDataProvider':
                     return getAppointmentDataProvider(key);
                 default:
@@ -89,6 +90,9 @@ const createInstance = (options = {}) => {
         key,
         observer: createObserver(options.renderingStrategy),
         ...options,
+        getResources: () => [],
+        getAppointmentColor: () => new Deferred(),
+        getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');
 };
 
@@ -121,7 +125,7 @@ module('Horizontal Month Strategy', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
         const allDayAppointmentWidth = BASE_WIDTH * 2;
-        assert.equal($appointment.eq(0).outerWidth(), allDayAppointmentWidth, 'appointment has right width');
+        assert.equal(getOuterWidth($appointment.eq(0)), allDayAppointmentWidth, 'appointment has right width');
     });
 
     test('Appointment should not be multiweek when its width some more than maxAllowedPosition(ie & ff pixels)', function(assert) {
@@ -242,7 +246,7 @@ module('Horizontal Strategy', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.outerWidth(), 2, 'Min width is OK');
+        assert.equal(getOuterWidth($appointment), 2, 'Min width is OK');
     });
 
 });

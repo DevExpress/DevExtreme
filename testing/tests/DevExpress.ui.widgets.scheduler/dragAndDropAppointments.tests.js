@@ -2335,7 +2335,6 @@ module('Appointment dragging', {
             this.instance = $('#scheduler').dxScheduler({ _draggingMode: 'default', ...options }).dxScheduler('instance');
 
             this.clock.tick(300);
-            this.instance.focus();
 
             this.scheduler = new SchedulerTestWrapper(this.instance);
         };
@@ -2380,7 +2379,7 @@ module('Appointment dragging', {
             editing: true,
         });
 
-        const $workspace = $(this.instance.$element()).find('.dx-scrollable-content');
+        const $workspace = $(this.instance.$element()).find('.dx-scheduler-date-table-container');
         const immediate = $workspace.dxDraggable('instance').option('immediate');
 
         assert.notOk(immediate, 'immediate option is false');
@@ -2401,7 +2400,6 @@ module('Appointment dragging', {
                     ).dxScheduler('instance');
 
                     this.clock.tick(300);
-                    this.instance.focus();
 
                     this.scheduler = new SchedulerTestWrapper(this.instance);
 

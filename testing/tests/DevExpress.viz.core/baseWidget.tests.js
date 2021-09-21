@@ -1,7 +1,6 @@
 /* global currentTest */
 
 const $ = require('jquery');
-const renderer = require('core/renderer');
 const { version } = require('core/version');
 const resizeCallbacks = require('core/utils/resize_callbacks');
 const registerComponent = require('core/component_registrator');
@@ -24,6 +23,7 @@ let dxBaseWidgetTester;
 let StubThemeManager;
 let StubTitle;
 const vizMocks = require('../../helpers/vizMocks.js');
+const { implementationsMap } = require('core/utils/size');
 require('viz/core/base_widget');
 
 // TODO: Move export tests to a separate file
@@ -618,8 +618,8 @@ QUnit.test('no options', function(assert) {
 
 QUnit.test('no options and container has no sizes', function(assert) {
     try {
-        sinon.stub(renderer.fn, 'width').returns(0);
-        sinon.stub(renderer.fn, 'height').returns(0);
+        sinon.stub(implementationsMap, 'getWidth').returns(0);
+        sinon.stub(implementationsMap, 'getHeight').returns(0);
         this.onGetDefaultSize = function() {
             return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
         };
@@ -630,16 +630,16 @@ QUnit.test('no options and container has no sizes', function(assert) {
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        implementationsMap.getWidth.restore();
+        implementationsMap.getHeight.restore();
     }
 });
 
 // T665179
 QUnit.test('Do not get size from container if size option is set', function(assert) {
     try {
-        const width = sinon.stub(renderer.fn, 'width').returns(0);
-        const height = sinon.stub(renderer.fn, 'height').returns(0);
+        const width = sinon.stub(implementationsMap, 'getWidth').returns(0);
+        const height = sinon.stub(implementationsMap, 'getHeight').returns(0);
 
         this.createWidget({
             size: {
@@ -651,15 +651,15 @@ QUnit.test('Do not get size from container if size option is set', function(asse
         assert.ok(!width.called);
         assert.ok(!height.called);
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        implementationsMap.getWidth.restore();
+        implementationsMap.getHeight.restore();
     }
 });
 
 QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
     try {
-        sinon.stub(renderer.fn, 'width').returns(-2);
-        sinon.stub(renderer.fn, 'height').returns(-3);
+        sinon.stub(implementationsMap, 'getWidth').returns(-2);
+        sinon.stub(implementationsMap, 'getHeight').returns(-3);
         this.onGetDefaultSize = function() {
             return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
         };
@@ -670,8 +670,8 @@ QUnit.test('no options and container has negative sizes - get default size (T607
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        implementationsMap.getWidth.restore();
+        implementationsMap.getHeight.restore();
     }
 });
 

@@ -38,6 +38,7 @@ export class GanttView extends Widget {
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
             viewType: this._getViewTypeByScaleType(this.option('scaleType')),
+            viewTypeRange: this._parseViewTypeRangeSettings(this.option('scaleTypeRange')),
             cultureInfo: this._getCultureInfo(),
             taskTooltipContentTemplate: this.option('taskTooltipContentTemplate'),
             taskProgressTooltipContentTemplate: this.option('taskProgressTooltipContentTemplate'),
@@ -159,6 +160,13 @@ export class GanttView extends Widget {
         };
     }
 
+    _parseViewTypeRangeSettings(value) {
+        return {
+            start: this._getViewTypeByScaleType(value.start),
+            end: this._getViewTypeByScaleType(value.end)
+        };
+    }
+
     _optionChanged(args) {
         switch(args.name) {
             case 'width':
@@ -211,6 +219,9 @@ export class GanttView extends Widget {
                 break;
             case 'scaleType':
                 this._ganttViewCore.setViewType(this._getViewTypeByScaleType(args.value));
+                break;
+            case 'scaleTypeRange':
+                this._ganttViewCore.setViewTypeRange(this._getViewTypeByScaleType(args.value.start), this._getViewTypeByScaleType(args.value.end));
                 break;
             case 'stripLines':
                 this._ganttViewCore.setStripLines({ stripLines: args.value });

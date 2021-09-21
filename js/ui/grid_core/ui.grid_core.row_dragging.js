@@ -1,3 +1,4 @@
+import { setWidth, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Sortable from '../sortable';
@@ -152,7 +153,8 @@ const RowDraggingExtender = {
     _getDraggableRowTemplate: function() {
         return (options) => {
             const $rootElement = this.component.$element();
-            const $dataGridContainer = $('<div>').width($rootElement.width());
+            const $dataGridContainer = $('<div>');
+            setWidth($dataGridContainer, getWidth($rootElement));
             const items = this._dataController.items();
             const row = items && items[options.fromIndex];
             const gridOptions = this._getDraggableGridOptions(row);

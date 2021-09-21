@@ -35,6 +35,7 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import dataUtils from 'core/element_data';
 import translator from 'animation/translator';
+import { getOuterHeight } from 'core/utils/size';
 
 const device = devices.real();
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
@@ -1252,7 +1253,7 @@ QUnit.module('Fixed columns', {
 
         // assert
         assert.ok(scrollableInstance, 'has scrollable');
-        assert.equal(that.rowsView.element().outerHeight(), 50, 'height rowsView');
+        assert.equal(getOuterHeight(that.rowsView.element()), 50, 'height rowsView');
         assert.equal(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content').length, 1, 'has main content');
         assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
         assert.equal($fixTable.position().top, 0, 'fixed table - position top');
@@ -1298,7 +1299,7 @@ QUnit.module('Fixed columns', {
 
         // assert
         assert.ok(scrollableInstance, 'has scrollable');
-        assert.equal(that.rowsView.element().outerHeight(), 50, 'height rowsView');
+        assert.equal(getOuterHeight(that.rowsView.element()), 50, 'height rowsView');
         assert.equal(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content').length, 1, 'has main content');
         assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
         assert.equal($fixTable.position().top, 0, 'fixed table - position top');
@@ -1384,7 +1385,7 @@ QUnit.module('Fixed columns', {
 
             // assert
             assert.ok(scrollableInstance, 'has scrollable');
-            assert.equal(that.rowsView.element().outerHeight(), 50, 'height rowsView');
+            assert.equal(getOuterHeight(that.rowsView.element()), 50, 'height rowsView');
             assert.equal(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content').length, 1, 'has main content');
             assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
             assert.equal($fixTable.position().top, 0, 'fixed table - position top');
@@ -1437,7 +1438,7 @@ QUnit.module('Fixed columns', {
 
             // assert
             assert.ok(scrollableInstance, 'has scrollable');
-            assert.equal(that.rowsView.element().outerHeight(), 50, 'height rowsView');
+            assert.equal(getOuterHeight(that.rowsView.element()), 50, 'height rowsView');
             assert.equal(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content').length, 1, 'has main content');
             assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
             assert.equal($fixTable.position().top, 0, 'fixed table - position top');
@@ -1530,7 +1531,7 @@ QUnit.module('Fixed columns', {
 
             // assert
             assert.ok(scrollableInstance, 'has scrollable');
-            assert.equal(that.rowsView.element().outerHeight(), 50, 'height rowsView');
+            assert.equal(getOuterHeight(that.rowsView.element()), 50, 'height rowsView');
             assert.equal($testElement.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content').length, 1, 'has main content');
             assert.ok($testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
             assert.equal($fixTable.position().top, 0, 'fixed table - position top');

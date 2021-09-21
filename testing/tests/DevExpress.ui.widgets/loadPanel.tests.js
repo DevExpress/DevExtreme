@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
@@ -143,10 +144,10 @@ QUnit.module('options changed callbacks', {
     QUnit.test('width/height', function(assert) {
         this.instance.option('visible', true);
         this.instance.option('width', 123);
-        assert.equal(this.instance.$content().outerWidth(), 123);
+        assert.equal(getOuterWidth(this.instance.$content()), 123);
 
         this.instance.option('height', 321);
-        assert.equal(this.instance.$content().outerHeight(), 321);
+        assert.equal(getOuterHeight(this.instance.$content()), 321);
     });
 
     QUnit.test('showIndicator option', function(assert) {
