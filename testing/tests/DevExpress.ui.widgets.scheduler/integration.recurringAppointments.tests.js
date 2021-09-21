@@ -1,3 +1,4 @@
+import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import dblclickEvent from 'events/dblclick';
 import Color from 'color';
@@ -554,7 +555,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                 endDate: new Date(2015, 1, 10, 3)
             };
 
-            const cellHeight = $(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
+            const cellHeight = getOuterHeight(
+                $(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0)
+            );
             const hourHeight = cellHeight * 2;
 
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(1)).start();
@@ -584,7 +587,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }]
             });
 
-            const cellHeight = $(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
+            const cellHeight = getOuterHeight(
+                $(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0)
+            );
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
 
             pointer.dragStart().drag(0, cellHeight).dragEnd();
@@ -1101,9 +1106,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                 width: 600
             });
             const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
+            const cellWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-date-table-cell'));
 
-            assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 2, '2d appt has correct width');
+            assert.roughEqual(getOuterWidth($appointments.eq(1)), cellWidth * 2, 2, '2d appt has correct width');
         });
 
         test('The second appointment in recurring series in Week view should have correct width', function(assert) {
@@ -1120,9 +1125,9 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
 
             const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
+            const cellWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-date-table-cell'));
 
-            assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 1.001, '2d appt has correct width');
+            assert.roughEqual(getOuterWidth($appointments.eq(1)), cellWidth * 2, 1.001, '2d appt has correct width');
         });
 
         test('The second appointment in recurring series in Week view should be rendered correctly', function(assert) {
@@ -1224,7 +1229,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
 
             const $reducedAppointment = scheduler.instance.$element().find('.dx-scheduler-appointment-reduced');
-            const cellWidth = scheduler.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
+            const cellWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-date-table-cell'));
 
             assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 4.01, 'first appt in 2d group has right left position');
         });

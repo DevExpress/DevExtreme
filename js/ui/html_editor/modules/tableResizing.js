@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getHeight } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import eventsEngine from '../../../events/core/events_engine';
 import { isDefined } from '../../../core/utils/type';
@@ -112,7 +113,7 @@ export default class TableResizingModule extends BaseModule {
             each($tables, (index, table) => {
                 const $table = $(table);
                 const frame = this._tableResizeFrames[index];
-                const actualTableWidth = $table.outerWidth();
+                const actualTableWidth = getOuterWidth($table);
                 const lastTableWidth = this._tableLastWidth(frame);
                 if(Math.abs(actualTableWidth - lastTableWidth) > 1) {
                     this._tableLastWidth(frame, actualTableWidth);
@@ -160,7 +161,7 @@ export default class TableResizingModule extends BaseModule {
 
                 $table.css('width', 'initial');
 
-                const tableWidth = this._tableLastWidth(frame) ?? $table.outerWidth();
+                const tableWidth = this._tableLastWidth(frame) ?? getOuterWidth($table);
 
                 if(frame) {
                     this._tableLastWidth(frame, Math.max(columnsSum, tableWidth));
@@ -288,7 +289,7 @@ export default class TableResizingModule extends BaseModule {
         if(direction === 'vertical') {
             return {
                 lineResizerClass: DX_ROW_RESIZER_CLASS,
-                sizeFunction: 'outerHeight',
+                sizeFunction: (x) => getOuterHeight(x),
                 positionCoordinate: 'top',
                 positionStyleProperty: 'height',
                 positionCoordinateName: 'y'
@@ -296,7 +297,7 @@ export default class TableResizingModule extends BaseModule {
         } else {
             return {
                 lineResizerClass: DX_COLUMN_RESIZER_CLASS,
-                sizeFunction: 'outerWidth',
+                sizeFunction: (x) => getOuterWidth(x),
                 positionCoordinate: this.editorInstance.option('rtlEnabled') ? 'right' : 'left',
                 positionStyleProperty: 'width',
                 positionCoordinateName: 'x'
@@ -305,7 +306,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _getSize($element, directionInfo) {
-        return $element[directionInfo.sizeFunction]();
+        return directionInfo.sizeFunction($element);
     }
 
     _updateFrameSeparators(frame, direction) {
@@ -370,7 +371,7 @@ export default class TableResizingModule extends BaseModule {
 
         this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
-        this._startTableWidth = frame.$table.outerWidth();
+        this._startTableWidth = getOuterWidth(frame.$table);
         this._startLineSeparatorPosition = parseInt($(lineSeparator).css(directionInfo.positionCoordinate));
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
@@ -405,7 +406,7 @@ export default class TableResizingModule extends BaseModule {
             return true;
         } else if((nextColumnNewSize >= this._minColumnWidth)) {
             const isWidthIncreased = this._nextColumnOffsetLimit ? (eventOffset < this._nextColumnOffsetLimit) : (eventOffset < 0);
-            const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - $nextColumnElement.outerWidth()) > ROUGH_OFFSET;
+            const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - getOuterWidth($nextColumnElement)) > ROUGH_OFFSET;
 
             return (isWidthIncreased || !isWidthLimited);
         }
@@ -422,7 +423,7 @@ export default class TableResizingModule extends BaseModule {
         const isCurrentColumnWidthEnough = currentLineNewSize >= this._minColumnWidth;
         const $lineElements = this._getLineElements(frame.$table, index);
         const $nextLineElements = this._getLineElements(frame.$table, index + 1);
-        const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
+        const realWidthDiff = getOuterWidth($lineElements.eq(0)) - currentLineNewSize;
 
         if(isCurrentColumnWidthEnough) {
             if(this._isNextColumnWidthEnough(nextColumnNewSize, $determinantElements.eq(index + 1), eventOffset)) {
@@ -433,13 +434,13 @@ export default class TableResizingModule extends BaseModule {
                 }
 
 
-                const isTableWidthChanged = Math.abs(this._startTableWidth - frame.$table.outerWidth()) < ROUGH_OFFSET;
+                const isTableWidthChanged = Math.abs(this._startTableWidth - getOuterWidth(frame.$table)) < ROUGH_OFFSET;
                 const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET || (!this._nextLineSize && isTableWidthChanged);
 
                 if(shouldRevertNewValue) {
-                    this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth());
+                    this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, getOuterWidth($lineElements.eq(0)));
 
-                    nextColumnNewSize += currentLineNewSize - $($lineElements.eq(0)).outerWidth();
+                    nextColumnNewSize += currentLineNewSize - getOuterWidth($lineElements.eq(0));
 
                     if(this._shouldSetNextColumnWidth(nextColumnNewSize)) {
                         this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
@@ -459,7 +460,7 @@ export default class TableResizingModule extends BaseModule {
 
         this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, newHeight);
 
-        const rowHeightDiff = $determinantElements.eq(index).outerHeight() - currentLineNewSize;
+        const rowHeightDiff = getOuterHeight($determinantElements.eq(index)) - currentLineNewSize;
 
         this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + rowHeightDiff) + 'px');
     }
@@ -486,7 +487,7 @@ export default class TableResizingModule extends BaseModule {
         this._$highlightedElement?.remove();
         this._isVerticalDragging = undefined;
         this._nextColumnOffsetLimit = undefined;
-        this._tableLastWidth(options.frame, options.frame.$table.outerWidth());
+        this._tableLastWidth(options.frame, getOuterWidth(options.frame.$table));
         this._updateFramesPositions();
         this._updateFramesSeparators();
     }
@@ -501,7 +502,7 @@ export default class TableResizingModule extends BaseModule {
         if(options.direction === 'vertical') {
             result.boundary = options.frame.$table;
             result.boundOffset = {
-                bottom: hasWindow() ? -$(getWindow()).height() : -$(this._quillContainer).outerHeight(),
+                bottom: hasWindow() ? -getHeight(getWindow()) : -getOuterHeight(this._quillContainer),
                 top: 0,
                 left: 0,
                 right: 0
@@ -557,7 +558,7 @@ export default class TableResizingModule extends BaseModule {
         const determinantElements = this._getTableDeterminantElements($table);
 
         each(determinantElements, (index, element) => {
-            const columnWidth = $(element).outerWidth();
+            const columnWidth = getOuterWidth(element);
             const $lineElements = this._getLineElements($table, index);
             this._setLineElementsAttrValue($lineElements, 'width', Math.max(columnWidth, this._minColumnWidth));
         });
@@ -569,7 +570,7 @@ export default class TableResizingModule extends BaseModule {
 
         each(columnElements, (index, element) => {
             const $element = $(element);
-            const columnWidth = this._getWidthAttrValue($element) || $element.outerWidth();
+            const columnWidth = this._getWidthAttrValue($element) || getOuterWidth($element);
 
             columnsWidths[index] = Math.max(columnWidth, this._minColumnWidth);
             columnsSum += columnsWidths[index];
@@ -604,7 +605,7 @@ export default class TableResizingModule extends BaseModule {
         }
 
         frame = this._tableResizeFrames[frameIndex];
-        const tableWidth = this._tableLastWidth(frame) || $table.outerWidth();
+        const tableWidth = this._tableLastWidth(frame) || getOuterWidth($table);
         let ratio;
 
         const { columnsWidths, columnsSum } = this._getColumnElementsSum(determinantElements);

@@ -30,6 +30,7 @@ import 'ui/data_grid';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
+import { getHeight, getOuterWidth, getWidth } from 'core/utils/size';
 
 function getTextFromCell(cell) {
     return $(cell).text();
@@ -334,7 +335,7 @@ QUnit.module('Grid view', {
         }));
 
         const columnHeadersViewHeight = gridView.getView('columnHeadersView').getHeight();
-        const rowsViewHeight = gridView.getView('rowsView').element().height();
+        const rowsViewHeight = getHeight(gridView.getView('rowsView').element());
 
         // act
         this.options.filterRow = { visible: true };
@@ -343,7 +344,7 @@ QUnit.module('Grid view', {
 
         // assert
         assert.notEqual(columnHeadersViewHeight, gridView.getView('columnHeadersView').getHeight());
-        assert.roughEqual(Math.round(columnHeadersViewHeight + rowsViewHeight), Math.round(gridView.getView('columnHeadersView').getHeight() + gridView.getView('rowsView').element().height()), 1.01);
+        assert.roughEqual(Math.round(columnHeadersViewHeight + rowsViewHeight), Math.round(gridView.getView('columnHeadersView').getHeight() + getHeight(gridView.getView('rowsView').element())), 1.01);
     });
 
     QUnit.test('Show headers', function(assert) {
@@ -560,9 +561,9 @@ QUnit.module('Grid view', {
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
         }
-        assert.strictEqual(headersContainer.outerWidth() - headersTable.width(), scrollerWidth);
+        assert.strictEqual(getOuterWidth(headersContainer) - getWidth(headersTable), scrollerWidth);
         // T351379
-        assert.strictEqual(footerTable.width(), headersTable.width(), 'headers and footer table widths must be equals');
+        assert.strictEqual(getWidth(footerTable), getWidth(headersTable), 'headers and footer table widths must be equals');
     });
 
     QUnit.test('Footer fixed container should have padding-right when using native scrolling and fixed columns (T846658)', function(assert) {
@@ -814,7 +815,7 @@ QUnit.module('Grid view', {
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
         }
-        assert.strictEqual(headersContainer.outerWidth() - headersTable.width(), scrollerWidth);
+        assert.strictEqual(getOuterWidth(headersContainer) - getWidth(headersTable), scrollerWidth);
     });
 
     // B254732
@@ -1376,7 +1377,7 @@ QUnit.module('Synchronize columns', {
         gridView.update();
 
         // assert
-        assert.ok(that.rowsView.getTableElement().find('td').eq(1).outerWidth(true) > 30, 'width second column');
+        assert.ok(getOuterWidth(that.rowsView.getTableElement().find('td').eq(1), true) > 30, 'width second column');
     });
 
     QUnit.test('Columns synchronize with groupPanel', function(assert) {

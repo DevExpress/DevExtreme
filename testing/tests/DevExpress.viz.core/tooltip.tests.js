@@ -7,6 +7,8 @@ const Tooltip = tooltipModule.Tooltip;
 import vizUtils from 'viz/core/utils';
 import rendererModule from 'viz/core/renderers/renderer';
 import domAdapter from 'core/dom_adapter';
+import { implementationsMap } from 'core/utils/size';
+import { initializeSizeMocks, destroySizeMocks } from '../../helpers/sizeMocks.js';
 
 QUnit.testStart(function() {
     $('<div>')
@@ -1057,45 +1059,52 @@ QUnit.test('Show. W/o params', function(assert) {
 
     this.resetTooltipMocks();
 
-    this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip._wrapper.appendTo = sinon.spy();
-    this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
-    this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
-    this.tooltip._textHtml.empty = sinon.spy();
-    const eventData = { tag: 'event-data' };
+    initializeSizeMocks();
 
-    const formatObject = { valueText: 'some-text' };
-    // act
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    try {
+        this.tooltip.move = sinon.spy(function() { return this; });
+        this.tooltip._wrapper.appendTo = sinon.spy();
+        this.tooltip._textGroupHtml.css = sinon.spy();
+        implementationsMap.for(this.tooltip._textGroupHtml).getWidth = sinon.spy(function() { return 85; });
+        implementationsMap.for(this.tooltip._textGroupHtml).getHeight = sinon.spy(function() { return 43; });
+        this.tooltip._textHtml.empty = sinon.spy();
+        const eventData = { tag: 'event-data' };
 
-    assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
+        const formatObject = { valueText: 'some-text' };
+        // act
+        const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
-    assert.deepEqual(this.tooltip._state, {
-        color: '#ffffff',
-        borderColor: '#252525',
-        textColor: 'rgba(147,147,147,0.7)',
-        text: 'some-text',
-        eventData,
-        formatObject,
-        templateCallback: undefined
-    }, 'state');
+        assert.strictEqual(result, true);
+        assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
-    const cloud = this.renderer.path.lastCall.returnValue;
-    assert.equal(cloud._stored_settings.fill, '#ffffff');
-    assert.equal(cloud._stored_settings.stroke, '#252525');
+        assert.deepEqual(this.tooltip._state, {
+            color: '#ffffff',
+            borderColor: '#252525',
+            textColor: 'rgba(147,147,147,0.7)',
+            text: 'some-text',
+            eventData,
+            formatObject,
+            templateCallback: undefined
+        }, 'state');
 
-    assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
-    assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
+        const cloud = this.renderer.path.lastCall.returnValue;
+        assert.equal(cloud._stored_settings.fill, '#ffffff');
+        assert.equal(cloud._stored_settings.stroke, '#252525');
 
-    assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
-    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
+        assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
+        assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
-    assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, 'textGroupHtml width');
+        assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
+        assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
 
-    assert.equal(this.tooltip._textHtml.empty.callCount, 1, 'textHtml empty');
+        assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
+        assert.equal(implementationsMap.for(this.tooltip._textGroupHtml).getWidth.callCount, 0, 'textGroupHtml width');
+
+        assert.equal(this.tooltip._textHtml.empty.callCount, 1, 'textHtml empty');
+    } finally {
+        destroySizeMocks();
+    }
+
 });
 
 QUnit.test('Show. W/o params. Html', function(assert) {
@@ -1105,12 +1114,11 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
+    initializeSizeMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     this.tooltip._textHtml.html = sinon.spy();
     this.tooltip._textHtml.empty = sinon.spy();
 
@@ -1243,8 +1251,6 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
@@ -1283,8 +1289,6 @@ QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div',
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
@@ -1385,8 +1389,6 @@ QUnit.test('Call template if empty text', function(assert) {
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
@@ -1416,47 +1418,52 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
 
     this.resetTooltipMocks();
 
-    this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip._wrapper.appendTo = sinon.spy();
-    this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
-    this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
-    this.tooltip._textHtml.empty = sinon.spy();
-    const eventData = { tag: 'event-data' };
+    initializeSizeMocks();
+    try {
+        this.tooltip.move = sinon.spy(function() { return this; });
+        this.tooltip._wrapper.appendTo = sinon.spy();
+        this.tooltip._textGroupHtml.css = sinon.spy();
+        implementationsMap.for(this.tooltip._textGroupHtml).getWidth = sinon.spy(function() { return 85; });
+        implementationsMap.for(this.tooltip._textGroupHtml).getHeight = sinon.spy(function() { return 43; });
+        this.tooltip._textHtml.empty = sinon.spy();
+        const eventData = { tag: 'event-data' };
 
-    const formatObject = { valueText: 'some-text', skipTemplate: true };
-    // act
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+        const formatObject = { valueText: 'some-text', skipTemplate: true };
+        // act
+        const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
-    assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
+        assert.strictEqual(result, true);
+        assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
-    assert.deepEqual(this.tooltip._state, {
-        color: '#ffffff',
-        borderColor: '#252525',
-        textColor: 'rgba(147,147,147,0.7)',
-        eventData,
-        text: 'some-text',
-        formatObject,
-        templateCallback: undefined
-    }, 'state');
+        assert.deepEqual(this.tooltip._state, {
+            color: '#ffffff',
+            borderColor: '#252525',
+            textColor: 'rgba(147,147,147,0.7)',
+            eventData,
+            text: 'some-text',
+            formatObject,
+            templateCallback: undefined
+        }, 'state');
 
-    const cloud = this.renderer.path.lastCall.returnValue;
-    assert.equal(cloud._stored_settings.fill, '#ffffff');
-    assert.equal(cloud._stored_settings.stroke, '#252525');
+        const cloud = this.renderer.path.lastCall.returnValue;
+        assert.equal(cloud._stored_settings.fill, '#ffffff');
+        assert.equal(cloud._stored_settings.stroke, '#252525');
 
-    assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
-    assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
+        assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
+        assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
-    assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
-    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
+        assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
+        assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
 
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
-    assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, 'textGroupHtml width');
+        assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, 'textGroupHtml styles');
+        assert.equal(implementationsMap.for(this.tooltip._textGroupHtml).getWidth.callCount, 0, 'textGroupHtml width');
 
-    assert.equal(this.tooltip._textHtml.empty.callCount, 1, 'textHtml empty');
+        assert.equal(this.tooltip._textHtml.empty.callCount, 1, 'textHtml empty');
 
-    assert.equal(this.options.contentTemplate.callCount, 0);
+        assert.equal(this.options.contentTemplate.callCount, 0);
+    } finally {
+        destroySizeMocks();
+    }
 });
 
 QUnit.test('Show. W/o params. Html. T298249', function(assert) {
@@ -1470,8 +1477,6 @@ QUnit.test('Show. W/o params. Html. T298249', function(assert) {
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     this.tooltip._textHtml.html = sinon.spy();
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
@@ -1767,21 +1772,27 @@ QUnit.test('Center-top side of page, Html', function(assert) {
 
     this.resetTooltipMocks();
 
-    this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textHtml.width = sinon.spy(function() { return 59.2; });
+    initializeSizeMocks();
 
-    // act
-    this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
+    try {
+        this.tooltip._textGroupHtml.css = sinon.spy();
+        implementationsMap.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 59.2; });
 
-    // assert
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 135 }]);
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
+        // act
+        this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
 
-    assert.equal(this.getContentGroup().stub('move').callCount, 0);
+        // assert
+        assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
+        assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 135 }]);
+        assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
 
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
+        assert.equal(this.getContentGroup().stub('move').callCount, 0);
+
+        assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
+        assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
+    } finally {
+        destroySizeMocks();
+    }
 });
 
 QUnit.test('Right-top corner of page', function(assert) {
@@ -1848,27 +1859,32 @@ QUnit.test('Center-center side of page, Html', function(assert) {
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
+    initializeSizeMocks();
+    try {
 
-    this.tooltip._textGroupHtml.css = sinon.spy();
-    sinon.spy(this.tooltip._textHtml, 'css');
-    this.tooltip._textHtml.width = sinon.spy(function() { return 60; });
+        this.tooltip._textGroupHtml.css = sinon.spy();
+        sinon.spy(this.tooltip._textHtml, 'css');
+        implementationsMap.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 60; });
 
-    // act
-    this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300, offset: 30 });
+        // act
+        this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300, offset: 30 });
 
-    // assert
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 205 }]);
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
+        // assert
+        assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
+        assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 205 }]);
+        assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
 
-    assert.equal(this.getContentGroup().stub('move').callCount, 0);
+        assert.equal(this.getContentGroup().stub('move').callCount, 0);
 
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
-    assert.deepEqual(this.tooltip._textHtml.css.lastCall.args[0], {
-        left: -342,
-        top: -181
-    });
+        assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
+        assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
+        assert.deepEqual(this.tooltip._textHtml.css.lastCall.args[0], {
+            left: -342,
+            top: -181
+        });
+    } finally {
+        destroySizeMocks();
+    }
 });
 
 QUnit.test('Right-center side of page', function(assert) {

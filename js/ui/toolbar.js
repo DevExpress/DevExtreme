@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
 import { grep, deferRender } from '../core/utils/common';
@@ -151,14 +152,14 @@ const Toolbar = ToolbarBase.inherit({
             return;
         }
 
-        elementWidth = elementWidth || this.$element().width();
+        elementWidth = elementWidth || getWidth(this.$element());
         $(overflowItems).removeClass(TOOLBAR_HIDDEN_ITEM);
 
         let itemsWidth = this._getItemsWidth();
 
         while(overflowItems.length && elementWidth < itemsWidth) {
             const $item = overflowItems.eq(-1);
-            itemsWidth -= $item.outerWidth();
+            itemsWidth -= getOuterWidth($item);
             $item.addClass(TOOLBAR_HIDDEN_ITEM);
             overflowItems.splice(-1, 1);
         }
@@ -254,7 +255,7 @@ const Toolbar = ToolbarBase.inherit({
         });
         this._restoreItems = [];
 
-        const elementWidth = this.$element().width();
+        const elementWidth = getWidth(this.$element());
 
         this._hideOverflowItems(elementWidth);
         this.callBase(elementWidth);

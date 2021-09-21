@@ -15,6 +15,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
+import { getOuterHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
@@ -221,7 +222,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         });
 
         // assert
-        assert.equal(treeList.$element().find('.dx-treelist-rowsview').outerHeight(), 200, 'height rows view');
+        assert.equal(getOuterHeight(treeList.$element().find('.dx-treelist-rowsview')), 200, 'height rows view');
     });
 
     QUnit.test('Virtual scrolling enabled by default and should render two virtual rows', function(assert) {

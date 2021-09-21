@@ -1,3 +1,4 @@
+import { getHeight, setHeight, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { hasWindow, getWindow } from '../../core/utils/window';
@@ -126,14 +127,14 @@ class DiagramToolbox extends DiagramFloatingPanel {
             this._updateElementWidth($inputContainer);
             this._renderSearchInput($inputContainer);
             if(hasWindow()) {
-                panelHeight = 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
+                panelHeight = 'calc(100% - ' + getHeight(this._searchInput.$element()) + 'px)';
             }
         }
 
         const $panel = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_PANEL_CLASS)
-            .appendTo($parent)
-            .height(panelHeight);
+            .appendTo($parent);
+        setHeight($panel, panelHeight);
         this._updateElementWidth($panel);
         this._renderScrollView($panel);
     }
@@ -148,13 +149,13 @@ class DiagramToolbox extends DiagramFloatingPanel {
         let maxHeight = 6;
         if(this._popup) {
             const $title = this._getPopupTitle();
-            maxHeight += $title.outerHeight();
+            maxHeight += getOuterHeight($title);
         }
         if(this._accordion) {
-            maxHeight += this._accordion.$element().outerHeight();
+            maxHeight += getOuterHeight(this._accordion.$element());
         }
         if(this._searchInput) {
-            maxHeight += this._searchInput.$element().outerHeight();
+            maxHeight += getOuterHeight(this._searchInput.$element());
         }
         this.option('maxHeight', maxHeight);
     }

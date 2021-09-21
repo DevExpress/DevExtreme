@@ -19,6 +19,7 @@ import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { normalizeKeyName } from 'events/utils/index';
+import { getWidth, getHeight } from 'core/utils/size';
 
 import 'generic_light.css!';
 
@@ -3339,7 +3340,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             const inputCopy = createTextElementHiddenCopy($input, text);
             inputCopy.appendTo('#qunit-fixture');
 
-            assert.ok(inputWidth >= inputCopy.width());
+            assert.ok(inputWidth >= getWidth(inputCopy));
             inputCopy.remove();
         });
     });
@@ -3371,9 +3372,9 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $inputCopy
             .css('whiteSpace', 'pre')
             .appendTo('#qunit-fixture');
-        const textWidth = $inputCopy.width();
+        const textWidth = getWidth($inputCopy);
 
-        const currentWidth = $tagBox.find(`.${TEXTBOX_CLASS}`).width();
+        const currentWidth = getWidth($tagBox.find(`.${TEXTBOX_CLASS}`));
         assert.ok(currentWidth > textWidth, `input width (${currentWidth}) should be grester then input text width (${textWidth})`);
         $inputCopy.remove();
     });
@@ -4410,14 +4411,14 @@ QUnit.module('popup position and size', moduleSetup, () => {
         });
 
         const instance = $element.dxTagBox('instance');
-        const height = instance._popup._$popupContent.height();
+        const height = getHeight(instance._popup._$popupContent);
 
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
         $input.focus();
 
         keyboardMock($input).type('American Samo');
 
-        const currentHeight = instance._popup._$popupContent.height();
+        const currentHeight = getHeight(instance._popup._$popupContent);
 
         assert.notEqual(height, currentHeight);
     });

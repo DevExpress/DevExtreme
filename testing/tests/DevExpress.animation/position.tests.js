@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import renderer from 'core/renderer';
 import positionUtils from 'animation/position';
 import translator from 'animation/translator';
 import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
 import devices from 'core/devices.js';
+import { implementationsMap } from 'core/utils/size';
 
 const setupPosition = positionUtils.setup;
 const calculatePosition = positionUtils.calculate;
@@ -967,7 +967,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;
 
-        const heightStub = sinon.stub(renderer.fn, 'height').returns(1000);
+        const heightStub = sinon.stub(implementationsMap, 'getHeight').returns(1000);
 
         try {
             window.innerHeight = 500;
@@ -996,7 +996,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const initialInnerWidth = window.innerWidth;
         const initialOuterWidth = window.outerWidth;
 
-        const widthStub = sinon.stub(renderer.fn, 'width').returns(1000);
+        const widthStub = sinon.stub(implementationsMap, 'getWidth').returns(1000);
 
         try {
             window.innerWidth = 500;
