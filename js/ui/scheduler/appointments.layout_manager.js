@@ -70,7 +70,6 @@ class AppointmentLayoutManager {
             isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             groupCount,
-            dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),
