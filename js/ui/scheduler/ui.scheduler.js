@@ -1792,7 +1792,7 @@ class Scheduler extends Widget {
                     e.component.$element().remove();
                 },
                 copyRootClassesToWrapper: true,
-                hideCopyClassesDeprecationWarning: true
+                _ignoreCopyRootClassesToWrapperDeprecation: true
             },
         });
 

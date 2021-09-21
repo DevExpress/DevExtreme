@@ -1043,7 +1043,7 @@ export const validatingModule = {
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
-                            hideCopyClassesDeprecationWarning: true,
+                            _ignoreCopyRootClassesToWrapperDeprecation: true,
                             contentTemplate: () => {
                                 const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
                                 const buttonOptions = {
@@ -1138,7 +1138,7 @@ export const validatingModule = {
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
-                            hideCopyClassesDeprecationWarning: true,
+                            _ignoreCopyRootClassesToWrapperDeprecation: true,
                             position: {
                                 collision: 'flip',
                                 boundary: this._rowsView.element(),

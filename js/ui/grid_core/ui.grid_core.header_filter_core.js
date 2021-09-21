@@ -208,7 +208,7 @@ export const HeaderFilterView = modules.View.inherit({
             closeOnOutsideClick: true,
             focusStateEnabled: false,
             copyRootClassesToWrapper: true,
-            hideCopyClassesDeprecationWarning: true,
+            _ignoreCopyRootClassesToWrapperDeprecation: true,
             toolbarItems: [
                 {
                     toolbar: 'bottom', location: 'after', widget: 'dxButton', options: {

@@ -570,13 +570,13 @@ testModule('option', moduleConfig, () => {
         });
     });
 
-    test('should not show "copyRootClassesToWrapper" deprecation warning if "hideCopyClassesDeprecationWarning" option enabled', function(assert) {
+    test('should not show "copyRootClassesToWrapper" deprecation warning if "_ignoreCopyRootClassesToWrapperDeprecation" option enabled', function(assert) {
         sinon.spy(errors, 'log');
 
         try {
             $('#overlay').dxOverlay({
                 copyRootClassesToWrapper: { class: '123' },
-                hideCopyClassesDeprecationWarning: true
+                _ignoreCopyRootClassesToWrapperDeprecation: true
             });
             assert.ok(errors.log.notCalled, 'no warnings were logged');
         } finally {

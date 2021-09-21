@@ -87,7 +87,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
             onShown: this._onShown.bind(this),
             contentTemplate: this._getContentTemplate(dataList),
             copyRootClassesToWrapper: true,
-            hideCopyClassesDeprecationWarning: true
+            _ignoreCopyRootClassesToWrapperDeprecation: true
         });
     }
 }

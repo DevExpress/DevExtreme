@@ -127,7 +127,7 @@ export class AppointmentPopup {
             contentTemplate: () => this._createPopupContent(),
             onShowing: e => this._onShowing(e),
             copyRootClassesToWrapper: true,
-            hideCopyClassesDeprecationWarning: true
+            _ignoreCopyRootClassesToWrapperDeprecation: true
         };
     }
 
@@ -352,7 +352,7 @@ export class AppointmentPopup {
                 of: container
             },
             copyRootClassesToWrapper: true,
-            hideCopyClassesDeprecationWarning: true
+            _ignoreCopyRootClassesToWrapperDeprecation: true
         });
     }
 
