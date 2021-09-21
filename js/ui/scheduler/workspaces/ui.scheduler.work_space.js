@@ -454,7 +454,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
         }
-        if(this.isVirtualScrolling()) {
+        if(this.isVirtualScrolling()
+            && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
+                || this.virtualScrollingDispatcher.height)) {
             config = {
                 ...config,
                 onScroll: (e) => {
