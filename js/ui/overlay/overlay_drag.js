@@ -5,8 +5,9 @@ import { fitIntoRange } from '../../core/utils/math';
 import { isWindow } from '../../core/utils/type';
 import eventsEngine from '../../events/core/events_engine';
 import {
-    start as dragEventStart,
-    move as dragEventMove
+    start as dragStartEvent,
+    move as dragMoveEvent,
+    end as dragEndEvent
 } from '../../events/drag';
 import { addNamespace } from '../../events/utils/index';
 
@@ -17,16 +18,13 @@ class OverlayDrag {
         this.init(config);
     }
 
-    init(config) {
-        // TODO: get rid of dragEnabled, updatePositionChangeHandled
-        const { dragEnabled, handle, container, draggableElement, outsideDragFactor, updatePositionChangeHandled } = config;
+    init({ dragEnabled, handle, draggableElement, positionController }) {
+        // TODO: get rid of dragEnabled
 
-        this._container = container;
-        this._outsideDragFactor = outsideDragFactor ?? 0;
+        this._positionController = positionController;
         this._draggableElement = draggableElement;
         this._handle = handle;
         this._dragEnabled = dragEnabled;
-        this._updatePositionChangeHandled = updatePositionChangeHandled;
 
         this.unsubscribe();
 
@@ -58,6 +56,7 @@ class OverlayDrag {
 
         eventsEngine.on(this._handle, eventNames.startEventName, (e) => { this._dragStartHandler(e); });
         eventsEngine.on(this._handle, eventNames.updateEventName, (e) => { this._dragUpdateHandler(e); });
+        eventsEngine.on(this._handle, eventNames.endEventName, (e) => { this._dragEndHandler(e); });
     }
 
     unsubscribe() {
@@ -65,32 +64,19 @@ class OverlayDrag {
 
         eventsEngine.off(this._handle, eventNames.startEventName);
         eventsEngine.off(this._handle, eventNames.updateEventName);
-    }
-
-    get container() {
-        return this._container;
-    }
-
-    set container(element) {
-        this._container = element;
-    }
-
-    get outsideDragFactor() {
-        return this._outsideDragFactor;
-    }
-
-    set outsideDragFactor(value) {
-        this._outsideDragFactor = value;
+        eventsEngine.off(this._handle, eventNames.endEventName);
     }
 
     _getEventNames() {
         const namespace = 'overlayDrag';
-        const startEventName = addNamespace(dragEventStart, namespace);
-        const updateEventName = addNamespace(dragEventMove, namespace);
+        const startEventName = addNamespace(dragStartEvent, namespace);
+        const updateEventName = addNamespace(dragMoveEvent, namespace);
+        const endEventName = addNamespace(dragEndEvent, namespace);
 
         return {
             startEventName,
-            updateEventName
+            updateEventName,
+            endEventName
         };
     }
 
@@ -117,6 +103,11 @@ class OverlayDrag {
         this._prevOffset = e.offset;
     }
 
+    _dragEndHandler(event) {
+        this._positionController.dragHandled();
+        this._positionController.detectVisualPositionChange(event);
+    }
+
     _moveTo(top, left, e) {
         if(!this._dragEnabled) {
             return;
@@ -125,21 +116,27 @@ class OverlayDrag {
         e.preventDefault();
         e.stopPropagation();
 
+        const offset = this._fitOffsetIntoAllowedRange(top, left);
+        this._moveByOffset(offset);
+        this._dragEndHandler(e);
+    }
+
+    _fitOffsetIntoAllowedRange(top, left) {
         const allowedOffsets = this._getAllowedOffsets();
-        const offset = {
+
+        return {
             top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
             left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
         };
-
-        this._moveByOffset(offset);
     }
 
     _getContainerDimensions() {
         const document = domAdapter.getDocument();
+        const container = this._positionController.$dragResizeContainer.get(0);
 
-        let containerWidth = getOuterWidth(this._container);
-        let containerHeight = getOuterHeight(this._container);
-        if(isWindow(this._container)) {
+        let containerWidth = getOuterWidth(container);
+        let containerHeight = getOuterHeight(container);
+        if(isWindow(container)) {
             containerHeight = Math.max(document.body.clientHeight, containerHeight);
             containerWidth = Math.max(document.body.clientWidth, containerWidth);
         }
@@ -151,9 +148,11 @@ class OverlayDrag {
     }
 
     _getContainerPosition() {
-        return isWindow(this._container)
+        const container = this._positionController.$dragResizeContainer.get(0);
+
+        return isWindow(container)
             ? { top: 0, left: 0 }
-            : getOffset(this._container);
+            : getOffset(container);
     }
 
     _getElementPosition() {
@@ -172,10 +171,11 @@ class OverlayDrag {
 
     _getOuterDelta() {
         const { width, height } = this._getElementDimensions();
+        const outsideDragFactor = this._positionController.outsideDragFactor;
 
         return {
-            x: width * this._outsideDragFactor,
-            y: height * this._outsideDragFactor
+            x: width * outsideDragFactor,
+            y: height * outsideDragFactor
         };
     }
 
@@ -228,21 +228,6 @@ class OverlayDrag {
         };
 
         move(this._draggableElement, newPosition);
-
-        // TODO: remove
-        this._updatePositionChangeHandled(true);
-
-        return { h: { location: newPosition.left }, v: { location: newPosition.top } };
-    }
-
-    // TO REMOVE
-    renderPositionHandler() {
-        const allowedOffsets = this._getAllowedOffsets();
-
-        return this._moveByOffset({
-            top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
-            left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
-        });
     }
 }
 
