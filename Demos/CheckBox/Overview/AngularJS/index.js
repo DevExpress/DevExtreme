@@ -1,7 +1,7 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
-  $scope.checkBoxValue = undefined;
+  $scope.checkBoxValue = null;
   $scope.checkBox = {
     checked: {
       value: true,
@@ -10,7 +10,7 @@ DemoApp.controller('DemoController', ($scope) => {
       value: false,
     },
     indeterminate: {
-      value: undefined,
+      value: null,
     },
     handler: {
       bindingOptions: {
@@ -23,10 +23,13 @@ DemoApp.controller('DemoController', ($scope) => {
         value: 'checkBoxValue',
       },
     },
+    customSize: {
+      value: null,
+      iconSize: 30,
+    },
     withText: {
       value: true,
-      width: 80,
-      text: 'Check',
+      text: 'Label',
     },
   };
 });
