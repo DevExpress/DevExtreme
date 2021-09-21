@@ -8,6 +8,7 @@ import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
 import SchedulerToolbar from '../header/header';
+import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -300,29 +301,75 @@ describe('Scheduler', () => {
         expect(scrollToTime).toHaveBeenCalled();
       });
 
-      it('onViewRendered should save viewDataProvider and cells meta data to the state', () => {
-        const scheduler = new Scheduler({});
+      it('should initialize key', () => {
+        const scheduler = new Scheduler(new SchedulerProps());
 
-        expect(scheduler.viewDataProvider)
-          .toBe(undefined);
-        expect(scheduler.cellsMetaData)
-          .toBe(undefined);
+        expect(scheduler.key)
+          .toBeGreaterThan(-1);
+      });
 
-        const viewDataProvider = new ViewDataProvider('week') as any;
-        const cellsMetaData = {
-          dateTableCellsMeta: [],
-          allDayPanelCellsMeta: [],
-        };
+      describe('onViewRendered', () => {
+        it('should save viewDataProvider and cells meta data to the state', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
 
-        scheduler.onViewRendered({
-          viewDataProvider,
-          cellsMetaData,
+          expect(scheduler.viewDataProvider)
+            .toBe(undefined);
+          expect(scheduler.cellsMetaData)
+            .toBe(undefined);
+
+          const viewDataProvider = new ViewDataProvider('week') as any;
+          const cellsMetaData = {
+            dateTableCellsMeta: [],
+            allDayPanelCellsMeta: [],
+          };
+
+          scheduler.onViewRendered({
+            viewDataProvider,
+            cellsMetaData,
+          });
+
+          expect(scheduler.viewDataProvider)
+            .toBe(viewDataProvider);
+          expect(scheduler.cellsMetaData)
+            .toBe(cellsMetaData);
         });
 
-        expect(scheduler.viewDataProvider)
-          .toBe(viewDataProvider);
-        expect(scheduler.cellsMetaData)
-          .toBe(cellsMetaData);
+        it('should create data accessors and factory instances', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.viewDataProvider)
+            .toBe(undefined);
+          expect(scheduler.cellsMetaData)
+            .toBe(undefined);
+
+          const viewDataProvider = new ViewDataProvider('week') as any;
+          const cellsMetaData = {
+            dateTableCellsMeta: [],
+            allDayPanelCellsMeta: [],
+          };
+
+          scheduler.onViewRendered({
+            viewDataProvider,
+            cellsMetaData,
+          });
+
+          expect(scheduler.dataAccessors.expr)
+            .toEqual({
+              startDateExpr: 'startDate',
+              endDateExpr: 'endDate',
+              startDateTimeZoneExpr: 'startDateTimeZone',
+              endDateTimeZoneExpr: 'endDateTimeZone',
+              allDayExpr: 'allDay',
+              textExpr: 'text',
+              descriptionExpr: 'description',
+              recurrenceRuleExpr: 'recurrenceRule',
+              recurrenceExceptionExpr: 'recurrenceException',
+            });
+          expect(getAppointmentDataProvider(scheduler.key))
+            .toBeDefined();
+          expect(getTimeZoneCalculator(scheduler.key))
+            .toBeDefined();
+        });
       });
 
       describe('setCurrentView', () => {

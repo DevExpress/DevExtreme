@@ -20,6 +20,9 @@ import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/
 import { WorkSpace } from './workspaces/base/work_space';
 import SchedulerToolbar from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
+import { createFactoryInstances, generateKey } from '../../../ui/scheduler/instanceFactory';
+import { DataAccessorType } from './types';
+import { createDataAccessors } from './common';
 
 export const viewFunction = ({
   restAttributes,
@@ -151,6 +154,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() cellsMetaData!: CellsMetaData;
 
+  @InternalState() key = generateKey();
+
+  @InternalState() dataAccessors!: DataAccessorType;
+
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
@@ -263,6 +270,9 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   onViewRendered(viewMetaData: ViewMetaData): void {
     this.viewDataProvider = viewMetaData.viewDataProvider;
     this.cellsMetaData = viewMetaData.cellsMetaData;
+    if (this.viewDataProvider) {
+      this.createInstances();
+    }
   }
 
   setCurrentView(view: string): void {
@@ -271,5 +281,30 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   setCurrentDate(date: Date): void {
     this.props.currentDate = date;
+  }
+
+  createInstances(): void {
+    this.dataAccessors = createDataAccessors(
+      this.instance,
+      this.props,
+      this.dataAccessors,
+      (value: string) => {
+        this.props.dateSerializationFormat = value;
+      },
+    );
+
+    createFactoryInstances({
+      key: this.key,
+      resources: this.props.resources,
+      dataSource: this.props.dataSource,
+      startDayHour: this.currentViewConfig.startDayHour,
+      endDayHour: this.currentViewConfig.endDayHour,
+      appointmentDuration: this.currentViewConfig.cellDuration,
+      firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
+      showAllDayPanel: this.props.showAllDayPanel,
+      timeZone: this.props.timeZone,
+      getIsVirtualScrolling: () => this.props.scrolling.mode === 'virtual',
+      getDataAccessors: () => this.dataAccessors,
+    });
   }
 }
