@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -56,7 +56,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<string | Item | any>;
+    dataSource?: DataSourceDefinition<string | Item | any>;
     /**
      * @docid
      * @type Array<string | dxToolbarItem | any>

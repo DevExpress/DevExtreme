@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -154,7 +154,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @notUsedInTheme
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<any>;
+    dataSource?: DataSourceDefinition<any>;
     /**
      * @docid
      * @default true

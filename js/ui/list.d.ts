@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -157,7 +157,7 @@ export interface dxListOptions<
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<string | TItem | any, TKey>;
+    dataSource?: DataSourceDefinition<string | Item | any, TKey>;
     /**
      * @docid
      * @default undefined

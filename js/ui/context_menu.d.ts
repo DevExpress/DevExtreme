@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     PositionConfig,
 } from '../animation/position';
@@ -93,7 +93,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<Item>;
+    dataSource?: DataSourceDefinition<Item>;
     /**
      * @docid
      * @type Array<dxContextMenuItem>

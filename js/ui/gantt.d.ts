@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -259,7 +259,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: ComplexCollectionDataSource<any>;
+      dataSource?: DataSourceDefinition<any>;
       /**
        * @docid
        * @default "id"
@@ -734,7 +734,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: ComplexCollectionDataSource<any>;
+      dataSource?: DataSourceDefinition<any>;
       /**
        * @docid
        * @default "id"
@@ -766,7 +766,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: ComplexCollectionDataSource<any>;
+      dataSource?: DataSourceDefinition<any>;
       /**
        * @docid
        * @default "id"
@@ -862,7 +862,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: ComplexCollectionDataSource<any>;
+      dataSource?: DataSourceDefinition<any>;
       /**
        * @docid
        * @default "end"

@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../../data/data_source_aliases';
+import { DataSourceDefinition } from '../../data/data_source_aliases';
 import {
     AnimationConfig,
 } from '../../animation/fx';
@@ -48,7 +48,7 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<dxMenuBaseItem>;
+    dataSource?: DataSourceDefinition<dxMenuBaseItem>;
     /**
      * @docid
      * @public

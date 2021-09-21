@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
   UserDefinedElement,
   DxElement,
@@ -540,7 +540,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @public
      * @type string | Array<any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: ComplexCollectionDataSource<TRowData, TKey>;
+    dataSource?: DataSourceDefinition<TRowData, TKey>;
     /**
      * @docid
      * @public

@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     DxElement,
 } from '../core/element';
@@ -126,7 +126,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<Item>;
+    dataSource?: DataSourceDefinition<Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure

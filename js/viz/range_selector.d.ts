@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     PaletteType,
@@ -298,7 +298,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @notUsedInTheme
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<any>;
+    dataSource?: DataSourceDefinition<any>;
     /**
      * @docid
      * @default 'arg'

@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -150,7 +150,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @notUsedInTheme
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<any>;
+    dataSource?: DataSourceDefinition<any>;
     /**
      * @docid
      * @public

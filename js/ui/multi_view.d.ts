@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     EventInfo,
@@ -58,7 +58,7 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<string | Item | any>;
+    dataSource?: DataSourceDefinition<string | Item | any>;
     /**
      * @docid
      * @default true

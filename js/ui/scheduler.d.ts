@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -371,7 +371,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
      */
-    dataSource?: ComplexCollectionDataSource<Appointment>;
+    dataSource?: DataSourceDefinition<Appointment>;
     /**
      * @docid
      * @default null
@@ -751,7 +751,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default null
        */
-      dataSource?: ComplexCollectionDataSource<any>;
+      dataSource?: DataSourceDefinition<any>;
       /**
        * @docid
        * @type_function_param1 resource:object

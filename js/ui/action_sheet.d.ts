@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -67,7 +67,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<string | Item | any>;
+    dataSource?: DataSourceDefinition<string | Item | any>;
     /**
      * @docid
      * @type Array<string | dxActionSheetItem | any>

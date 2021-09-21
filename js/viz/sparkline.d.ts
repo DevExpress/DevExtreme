@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     EventInfo,
@@ -76,7 +76,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @notUsedInTheme
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<any>;
+    dataSource?: DataSourceDefinition<any>;
     /**
      * @docid
      * @default '#666666'

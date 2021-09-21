@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../../data/data_source_aliases';
+import { DataSourceDefinition } from '../../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -23,7 +23,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<CollectionWidgetItem | any>;
+    dataSource?: DataSourceDefinition<CollectionWidgetItem | any>;
     /**
      * @docid
      * @default undefined

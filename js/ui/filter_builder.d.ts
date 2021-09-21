@@ -1,4 +1,4 @@
-import { DataSourceMixinArray } from '../data/data_source_aliases';
+import { DataSourceFactory } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -365,7 +365,7 @@ export interface dxFilterBuilderCustomOperation {
     name?: string;
 }
 
-export type FilterLookupDataSource<T> = Exclude<DataSourceMixinArray<T>, string>;
+export type FilterLookupDataSource<T> = Exclude<DataSourceFactory<T>, string>;
 
 /**
  * @@docid

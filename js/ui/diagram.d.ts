@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     DxElement,
@@ -470,7 +470,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default null
        */
-      dataSource?: ComplexCollectionDataSource<any>;
+      dataSource?: DataSourceDefinition<any>;
       /**
        * @docid
        * @default "from"
@@ -626,7 +626,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default null
        */
-      dataSource?: ComplexCollectionDataSource<any>;
+      dataSource?: DataSourceDefinition<any>;
       /**
        * @docid
        * @default undefined

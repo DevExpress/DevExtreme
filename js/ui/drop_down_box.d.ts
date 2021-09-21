@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -121,7 +121,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<any>;
+    dataSource?: DataSourceDefinition<any>;
     /**
      * @docid
      * @public

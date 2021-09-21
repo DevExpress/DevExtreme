@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -74,7 +74,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<Item | any>;
+    dataSource?: DataSourceDefinition<Item | any>;
     /**
      * @docid
      * @default true

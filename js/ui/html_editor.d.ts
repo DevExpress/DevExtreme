@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -444,7 +444,7 @@ export interface dxHtmlEditorMention {
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<string>;
+    dataSource?: DataSourceDefinition<string>;
     /**
      * @docid
      * @default "this"
@@ -582,7 +582,7 @@ export interface dxHtmlEditorVariables {
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<string>;
+    dataSource?: DataSourceDefinition<string>;
     /**
      * @docid
      * @default ""

@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
 import {
     DxPromise,
 } from '../core/utils/deferred';
@@ -67,7 +67,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
      * @default null
      * @public
      */
-    dataSource?: ComplexCollectionDataSource<string | Item | any>;
+    dataSource?: DataSourceDefinition<string | Item | any>;
     /**
      * @docid
      * @default true &for(desktop)

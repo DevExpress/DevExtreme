@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource } from '../../data/data_source_aliases';
+import { DataSourceDefinition } from '../../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -40,7 +40,7 @@ export interface CollectionWidgetOptions<
      * @public
      * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: ComplexCollectionDataSource<string | CollectionWidgetItem>;
+    dataSource?: DataSourceDefinition<string | CollectionWidgetItem>;
     /**
      * @docid
      * @default 750
