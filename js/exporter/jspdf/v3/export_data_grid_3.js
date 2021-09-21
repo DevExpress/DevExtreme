@@ -43,7 +43,8 @@ function exportDataGrid(doc, dataGrid, options) {
                 ));
             }
 
-            initializeCellsWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
+            // computes withs of the cells depending of the options
+            initializeCellsWidth(doc, dataProvider, rowsInfo, options);
 
             // apply intends for correctly set width and colSpan for grouped rows
             resizeFirstColumnByIndentLevel(rowsInfo, options);

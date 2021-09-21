@@ -1625,12 +1625,6 @@ class Scheduler extends Widget {
         return this._workSpace.getScrollableContainer();
     }
 
-    getWorkSpaceDateTableOffset() {
-        return !this.option('crossScrollingEnabled') || this.option('rtlEnabled')
-            ? this._workSpace.getWorkSpaceLeftOffset()
-            : 0;
-    }
-
     getWorkSpace() {
         return this._workSpace;
     }
