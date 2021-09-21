@@ -14,7 +14,6 @@ import ajax from '../core/utils/ajax';
 import Editor from './editor/editor';
 import Button from './button';
 import ProgressBar from './progress_bar';
-import browser from '../core/utils/browser';
 import devices from '../core/devices';
 import { addNamespace } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
@@ -224,7 +223,7 @@ class FileUploader extends Editor {
                 }
             },
             {
-                device: () => browser.msie || devices.real().deviceType !== 'desktop',
+                device: () => devices.real().deviceType !== 'desktop',
                 options: {
                     nativeDropSupported: false
                 }
