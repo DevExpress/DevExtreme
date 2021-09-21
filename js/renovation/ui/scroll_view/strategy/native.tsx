@@ -37,7 +37,6 @@ import {
   ScrollOffset, ScrollableDirection, DxMouseEvent,
   DxMouseWheelEvent,
 } from '../common/types';
-import resizeObserverSingleton from '../../../../core/resize_observer';
 
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 
@@ -63,15 +62,14 @@ import { isVisible } from '../utils/is_element_visible';
 import { ScrollableNativeProps } from '../common/native_strategy_props';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { getScrollTopMax } from '../utils/get_scroll_top_max';
-
-const HIDE_SCROLLBAR_TIMEOUT = 500;
+import { subscribeToResize } from '../utils/subscribe_to_resize';
 
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, topPocketRef, bottomPocketRef, direction,
     hScrollbarRef, vScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
-    updateHandleInternal, needForceScrollbarsVisibility,
+    updateHandleInternal, scrolling,
     scrollableRef, isLoadPanelVisible, topPocketState,
     pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
     topPocketHeight, contentStyles, scrollViewContentRef, contentTranslateTop,
@@ -158,7 +156,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           containerSize={containerClientWidth}
           maxOffset={hScrollOffsetMax}
           scrollLocation={hScrollLocation}
-          forceVisibility={needForceScrollbarsVisibility}
+          visible={scrolling}
         />
       )}
       { needRenderScrollbars && showScrollbar !== 'never' && useSimulatedScrollbar && direction.isVertical && (
@@ -170,7 +168,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           containerSize={containerClientHeight}
           maxOffset={vScrollOffsetMax}
           scrollLocation={vScrollLocation}
-          forceVisibility={needForceScrollbarsVisibility}
+          visible={scrolling}
         />
       )}
     </Widget>
@@ -230,7 +228,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @InternalState() bottomPocketHeight = 0;
 
-  @InternalState() needForceScrollbarsVisibility = false;
+  @InternalState() scrolling = false;
 
   @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
@@ -358,11 +356,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.containerRef.current![this.fullScrollInactiveProp] = 0;
   }
 
-  @Effect({ run: 'once' })
-  disposeHideScrollbarTimer(): DisposeEffectReturn {
-    return (): void => this.clearHideScrollbarTimer();
-  }
-
   @Effect()
   initEffect(): EffectReturn {
     return subscribeToScrollInitEvent(
@@ -437,26 +430,20 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  containerResizeObserver(): DisposeEffectReturn {
-    const containerEl = this.containerRef.current;
-
-    resizeObserverSingleton.observe(containerEl, ({ target }) => {
-      this.setContainerDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(containerEl); };
+  subscribeContainerToResize(): EffectReturn {
+    return subscribeToResize(
+      this.containerRef.current,
+      (element: HTMLDivElement) => { this.setContainerDimensions(element); },
+    );
   }
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  contentResizeObserver(): DisposeEffectReturn {
-    const contentEl = this.contentRef.current;
-
-    resizeObserverSingleton.observe(contentEl, ({ target }) => {
-      this.setContentDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(contentEl); };
+  subscribeContentToResize(): EffectReturn {
+    return subscribeToResize(
+      this.contentRef.current,
+      (element: HTMLDivElement) => { this.setContentDimensions(element); },
+    );
   }
 
   scrollByLocation(location: ScrollOffset): void {
@@ -510,7 +497,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.eventForUserAction = event;
 
     if (this.props.useSimulatedScrollbar) {
+      this.scrolling = true;
       this.syncScrollbarsWithContent();
+      this.scrolling = false;
     }
 
     this.props.onScroll?.(this.getEventArgs());
@@ -628,19 +617,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
     this.hScrollLocation = -left;
     this.vScrollLocation = -top;
-
-    this.needForceScrollbarsVisibility = true;
-
-    this.clearHideScrollbarTimer();
-
-    this.hideScrollbarTimer = setTimeout(() => {
-      this.needForceScrollbarsVisibility = false;
-    }, HIDE_SCROLLBAR_TIMEOUT);
-  }
-
-  clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer as number);
-    this.hideScrollbarTimer = undefined;
   }
 
   getInitEventData(): {

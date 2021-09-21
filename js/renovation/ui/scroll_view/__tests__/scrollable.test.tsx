@@ -83,7 +83,7 @@ describe('Scrollable', () => {
         rtlEnabled: true,
         disabled: true,
         focusStateEnabled: false,
-        hoverStateEnabled: !useNativeScrolling,
+        hoverStateEnabled: false,
         tabIndex: 0,
         visible: true,
       };
