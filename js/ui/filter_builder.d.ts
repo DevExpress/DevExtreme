@@ -365,6 +365,8 @@ export interface dxFilterBuilderCustomOperation {
     name?: string;
 }
 
+export type FilterLookupDataSource<T> = Exclude<DataSourceMixinArray<T>, string>;
+
 /**
  * @@docid
  * @type object
@@ -452,7 +454,7 @@ export interface dxFilterBuilderField {
        * @docid
        * @default undefined
        */
-      dataSource?: DataSourceMixinArray<any>;
+      dataSource?: FilterLookupDataSource<any>;
       /**
        * @docid
        * @default undefined

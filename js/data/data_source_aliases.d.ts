@@ -3,24 +3,12 @@ import Store from './abstract_store';
 
 /**
  * @docid
- * @type Store|DataSource|DataSourceOptions
+ * @type string|Store|DataSourceOptions|Array<any>
  * */
-export type BaseMixinDataSource = Store | DataSource | DataSourceOptions;
-
-/**
- * @docid
- * @type Store|DataSourceOptions|Array<any>
- * */
-export type DataSourceMixinArray<T> = Array<T> | Store | DataSourceOptions;
-
-/**
- * @docid
- * @type Store|DataSource|DataSourceOptions|string
- * */
-export type DataSourceMixinString = string | BaseMixinDataSource;
+export type DataSourceMixinArray<T> = string | Array<T> | Store | DataSourceOptions;
 
 /**
  * @docid
  * @type Store|DataSource|DataSourceOptions|string|Array<any>
  * */
-export type ComplexCollectionDataSource<T> = Array<T> | DataSourceMixinString;
+export type ComplexCollectionDataSource<T> = DataSourceMixinArray<T> | DataSource;

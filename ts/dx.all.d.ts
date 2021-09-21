@@ -1644,15 +1644,12 @@ declare module DevExpress.data {
     selector: KeySelector<T>;
   };
   /**
-   * [descr:BaseMixinDataSource]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type BaseMixinDataSource = Store | DataSource | DataSourceOptions;
-  /**
    * [descr:ComplexCollectionDataSource]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ComplexCollectionDataSource<T> = Array<T> | DataSourceMixinString;
+  export type ComplexCollectionDataSource<T> =
+    | DataSourceMixinArray<T>
+    | DataSource;
   /**
    * [descr:CustomStore]
    */
@@ -1923,12 +1920,11 @@ declare module DevExpress.data {
    * [descr:DataSourceMixinArray]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DataSourceMixinArray<T> = Array<T> | Store | DataSourceOptions;
-  /**
-   * [descr:DataSourceMixinString]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DataSourceMixinString = string | BaseMixinDataSource;
+  export type DataSourceMixinArray<T> =
+    | string
+    | Array<T>
+    | Store
+    | DataSourceOptions;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -6237,7 +6233,9 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.headerFilter.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceMixinArray<any>;
+      dataSource?:
+        | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
+        | (() => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>);
       /**
        * [descr:GridBaseColumn.headerFilter.groupInterval]
        */
@@ -6274,7 +6272,9 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.lookup.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceMixinArray<any>;
+      dataSource?:
+        | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
+        | (() => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>);
       /**
        * [descr:GridBaseColumn.lookup.displayExpr]
        */
@@ -12144,6 +12144,13 @@ declare module DevExpress.ui {
       readonly field: dxFilterBuilderField;
       readonly setValue: Function;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type FilterLookupDataSource<T> = Exclude<
+      DevExpress.data.DataSourceMixinArray<T>,
+      string
+    >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFilterBuilder>;
     export type OptionChangedEvent =
@@ -12290,7 +12297,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFilterBuilderField.lookup.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceMixinArray<any>;
+      dataSource?: DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>;
       /**
        * [descr:dxFilterBuilderField.lookup.displayExpr]
        */
@@ -34387,7 +34394,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.dataSource]
            */
-          dataSource?: DevExpress.data.BaseMixinDataSource;
+          dataSource?: DevExpress.data.ComplexCollectionDataSource<any>;
           /**
            * [descr:dxVectorMapOptions.layers.elementType]
            */
@@ -34494,7 +34501,7 @@ declare module DevExpress.viz {
           colorGroups?: Array<number>;
           customize?: (elements: Array<MapLayerElement>) => any;
           dataField?: string;
-          dataSource?: DevExpress.data.BaseMixinDataSource;
+          dataSource?: DevExpress.data.ComplexCollectionDataSource<any>;
           elementType?: 'bubble' | 'dot' | 'image' | 'pie';
           hoverEnabled?: boolean;
           hoveredBorderColor?: string;

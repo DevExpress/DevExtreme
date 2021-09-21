@@ -1,4 +1,4 @@
-import { ComplexCollectionDataSource, DataSourceMixinArray } from '../data/data_source_aliases';
+import { ComplexCollectionDataSource } from '../data/data_source_aliases';
 import {
   UserDefinedElement,
   DxElement,
@@ -40,6 +40,7 @@ import dxDraggable from './draggable';
 
 import {
     dxFilterBuilderOptions,
+    FilterLookupDataSource,
 } from './filter_builder';
 
 import {
@@ -2679,7 +2680,7 @@ export interface ColumnHeaderFilter {
    * @default undefined
    * @type_function_return void
    */
-  dataSource?: DataSourceMixinArray<any>;
+  dataSource?: FilterLookupDataSource<any> | (() => FilterLookupDataSource<any>);
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @type Enums.HeaderFilterGroupInterval|number
@@ -2715,7 +2716,7 @@ export interface ColumnLookup {
    * @type_function_param1_field1 data:object
    * @default undefined
    */
-  dataSource?: DataSourceMixinArray<any>;
+  dataSource?: FilterLookupDataSource<any> | (() => FilterLookupDataSource<any>);
   /**
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
