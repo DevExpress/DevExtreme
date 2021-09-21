@@ -82,9 +82,9 @@ if(Quill) {
                             { text: 'Delete Table', icon: 'deletetable', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
                         ]
                     },
-                    { text: 'Cell Properties', onClick: (e) => { this.showCellProperties(e); } },
-                    { text: 'Table Properties', onClick: (e) => { this.showTableProperties(e); } },
-                ],
+                    { text: 'Cell Properties', icon: 'cellproperties', onClick: (e) => { this.showCellProperties(e); } },
+                    { text: 'Table Properties', icon: 'tableproperties', onClick: (e) => { this.showTableProperties(e); } }
+                ]
             };
         }
 
