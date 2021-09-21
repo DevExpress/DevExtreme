@@ -1,5 +1,5 @@
 import {
-  Component, Fragment, JSXComponent,
+  Component, ComponentBindings, ForwardRef, Fragment, JSXComponent, RefObject,
 } from '@devextreme-generator/declarations';
 import { GroupRenderItem } from '../../../types.d';
 import { Row } from './row';
@@ -22,11 +22,16 @@ export const viewFunction = ({
   </Fragment>
 );
 
+@ComponentBindings()
+export class HorizontalGroupPanelLayoutProps extends GroupPanelLayoutProps {
+  @ForwardRef() elementRef?: RefObject<HTMLDivElement>;
+}
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GroupPanelHorizontalLayout extends JSXComponent(GroupPanelLayoutProps) {
+export class GroupPanelHorizontalLayout extends JSXComponent(HorizontalGroupPanelLayoutProps) {
   get groupPanelItems(): GroupRenderItem[][] {
     const { groupPanelData } = this.props;
     const { baseColSpan, groupPanelItems } = groupPanelData;
