@@ -36,6 +36,7 @@ describe('Scrollbar', () => {
     const viewModel = mount<Scrollbar>(<Scrollbar {...props} />);
 
     expect({ ...viewModel.props() }).toEqual({
+      direction: 'vertical',
       containerHasSizes: false,
       containerSize: 0,
       contentSize: 0,
