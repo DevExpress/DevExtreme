@@ -1,3 +1,4 @@
+import { setWidth, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
@@ -47,11 +48,12 @@ registerDecorator(
         },
 
         _dragTemplate: function(e) {
-            return $(e.itemElement)
+            const result = $(e.itemElement)
                 .clone()
-                .width($(e.itemElement).width())
                 .addClass(REORDERING_ITEM_GHOST_CLASS)
                 .addClass(STATE_HOVER_CLASS);
+            setWidth(result, getWidth(e.itemElement));
+            return result;
         },
 
         _dragStartHandler: function(e) {

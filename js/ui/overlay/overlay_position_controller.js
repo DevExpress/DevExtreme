@@ -7,6 +7,7 @@ import { getWindow } from '../../core/utils/window';
 import { originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { pairToObject } from '../../core/utils/common';
 import { borderWidthStyles } from '../../renovation/ui/resizable/utils';
+import { getWidth, getHeight } from '../../core/utils/size';
 
 const window = getWindow();
 
@@ -402,7 +403,7 @@ class PopoverPositionController extends OverlayPositionController {
         if(isVerticalSide || isHorizontalSide) {
             const isPopoverInside = this._isPopoverInside();
             const sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
-            const arrowSize = isVerticalSide ? this._$arrow.height() : this._$arrow.width();
+            const arrowSize = isVerticalSide ? getHeight(this._$arrow) : getWidth(this._$arrow);
             const arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
             const arrowOffset = sign * (arrowSize - arrowSizeCorrection);
 

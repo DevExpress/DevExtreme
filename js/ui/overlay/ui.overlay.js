@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getWidth, getHeight } from '../../core/utils/size';
 import fx from '../../animation/fx';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
@@ -553,7 +554,8 @@ const Overlay = Widget.inherit({
     _normalizeAnimation: function(animation, prop) {
         if(animation) {
             animation = extend({
-                type: 'slide'
+                type: 'slide',
+                skipElementInitialStyles: true, // NOTE: for fadeIn animation
             }, animation);
 
             if(animation[prop] && typeof animation[prop] === 'object') {
@@ -1096,8 +1098,8 @@ const Overlay = Widget.inherit({
         }
 
         this._renderedDimensions = {
-            width: parseInt(this._$content.width(), 10),
-            height: parseInt(this._$content.height(), 10)
+            width: parseInt(getWidth(this._$content), 10),
+            height: parseInt(getHeight(this._$content), 10)
         };
     },
 
@@ -1160,8 +1162,8 @@ const Overlay = Widget.inherit({
 
         const isWindow = this._positionController.isAllWindowCoveredByWrapper();
         const documentElement = domAdapter.getDocumentElement();
-        wrapperWidth = isWindow ? documentElement.clientWidth : $container.outerWidth(),
-        wrapperHeight = isWindow ? window.innerHeight : $container.outerHeight();
+        wrapperWidth = isWindow ? documentElement.clientWidth : getOuterWidth($container),
+        wrapperHeight = isWindow ? window.innerHeight : getOuterHeight($container);
 
         this._$wrapper.css({
             width: wrapperWidth,

@@ -14,3 +14,7 @@ export function getDefaultBounceEnabled(): boolean {
 export function getDefaultUseNative(): boolean {
   return !!nativeScrolling;
 }
+
+export function getDefaultNativeRefreshStrategy(): 'swipeDown' | 'pullDown' {
+  return devices.real().platform === 'android' ? 'swipeDown' : 'pullDown';
+}

@@ -10,6 +10,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'events/utils/index';
+import { getHeight, getOuterHeight } from 'core/utils/size';
 
 import 'generic_light.css!';
 import 'ui/select_box';
@@ -1097,10 +1098,10 @@ QUnit.module('Overlay integration', {
         const keyboard = this.keyboard;
         keyboard.type('item ');
 
-        const popupHeightWithAllItems = popup.$content().height();
+        const popupHeightWithAllItems = getHeight(popup.$content());
 
         keyboard.type('1');
-        const popupHeightWithSingleItem = popup.$content().height();
+        const popupHeightWithSingleItem = getHeight(popup.$content());
         assert.ok(popupHeightWithSingleItem < popupHeightWithAllItems, 'height recalculated');
     });
 
@@ -1112,7 +1113,7 @@ QUnit.module('Overlay integration', {
 
         popup.show();
 
-        const initialHeight = popup.$content().height();
+        const initialHeight = getHeight(popup.$content());
         const testHeight = initialHeight + 100;
 
         popup.option('height', testHeight);
@@ -1148,7 +1149,7 @@ QUnit.module('Overlay integration', {
         popup.show();
         this.clock.tick();
 
-        assert.equal($scrollableContainer.outerHeight(), $popupContent.height());
+        assert.equal(getOuterHeight($scrollableContainer), getHeight($popupContent));
     });
 
     QUnit.testInActiveWindow('popup should not reopened on Enter key press', function(assert) {

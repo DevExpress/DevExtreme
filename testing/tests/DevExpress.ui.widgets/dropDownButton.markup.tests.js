@@ -1,3 +1,4 @@
+import { getHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
 import windowUtils from 'core/utils/window';
@@ -118,13 +119,13 @@ QUnit.module('common markup', {
         const toggleButton = $dropDownButton.find('.dx-dropdownbutton-toggle');
 
         $dropDownButton.find('img.dx-icon').css('height', '50px');
-        let mainButtonHeight = actionButton.height();
-        let dropDownButtonHeight = toggleButton.height();
+        let mainButtonHeight = getHeight(actionButton);
+        let dropDownButtonHeight = getHeight(toggleButton);
         assert.strictEqual(dropDownButtonHeight, mainButtonHeight, 'heights are equal after main button content change');
 
         $dropDownButton.find('i.dx-icon').css('height', '100px');
-        mainButtonHeight = actionButton.height();
-        dropDownButtonHeight = toggleButton.height();
+        mainButtonHeight = getHeight(actionButton);
+        dropDownButtonHeight = getHeight(toggleButton);
         assert.strictEqual(mainButtonHeight, dropDownButtonHeight, 'heights are equal after toggle button content change');
     });
 
@@ -849,8 +850,8 @@ QUnit.module('option change', {}, () => {
         const buttonGroup = getButtonGroup(dropDownButton);
         const $buttonGroupElement = buttonGroup.$element();
 
-        assert.strictEqual($buttonGroupElement.height(), 450, 'height has been transfered to buttonGroup');
-        assert.strictEqual(dropDownButton.$element().height(), 450, 'height is correct after option change');
+        assert.strictEqual(getHeight($buttonGroupElement), 450, 'height has been transfered to buttonGroup');
+        assert.strictEqual(getHeight(dropDownButton.$element()), 450, 'height is correct after option change');
     });
 
     QUnit.test('itemTemplate option change', function(assert) {
@@ -981,8 +982,8 @@ QUnit.module('option change', {}, () => {
         const buttonGroup = getButtonGroup(dropDownButton);
         const $buttonGroupElement = buttonGroup.$element();
 
-        assert.strictEqual(dropDownButton.$element().outerWidth(), 135, 'width is correct after option change');
-        assert.strictEqual($buttonGroupElement.width(), 135, 'option has been transfered to buttonGroup');
+        assert.strictEqual(getOuterWidth(dropDownButton.$element()), 135, 'width is correct after option change');
+        assert.strictEqual(getWidth($buttonGroupElement), 135, 'option has been transfered to buttonGroup');
     });
 
     QUnit.test('wrapItemText option change', function(assert) {

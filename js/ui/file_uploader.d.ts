@@ -98,7 +98,6 @@ export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
-     * @type_function_param1 file:File
      * @type_function_param2 uploadInfo?:UploadInfo
      * @type_function_return Promise<any>|any
      * @public
@@ -381,8 +380,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     uploadButtonText?: string;
     /**
      * @docid
-     * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:UploadInfo
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -401,8 +398,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     uploadAbortedMessage?: string;
     /**
      * @docid
-     * @type_function_param1 file:File
-     * @type_function_param2 progressCallback:Function
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -455,8 +450,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
 /**
  * @docid
  * @inherits Editor
- * @module ui/file_uploader
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -470,14 +463,12 @@ export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
     /**
      * @docid
      * @publicName upload(fileIndex)
-     * @param1 fileIndex:number
      * @public
      */
     upload(fileIndex: number): void;
     /**
      * @docid
      * @publicName upload(file)
-     * @param1 file:File
      * @public
      */
     upload(file: File): void;
@@ -490,28 +481,24 @@ export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
     /**
      * @docid
      * @publicName abortUpload(fileIndex)
-     * @param1 fileIndex:number
      * @public
      */
     abortUpload(fileIndex: number): void;
     /**
      * @docid
      * @publicName abortUpload(file)
-     * @param1 file:File
      * @public
      */
     abortUpload(file: File): void;
     /**
      * @docid
      * @publicName removeFile(fileIndex)
-     * @param1 fileIndex:number
      * @public
      */
     removeFile(fileIndex: number): void;
     /**
      * @docid
      * @publicName removeFile(file)
-     * @param1 file:File
      * @public
      */
     removeFile(file: File): void;

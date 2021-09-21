@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterWidth, getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 import { getElementsFromPoint, getBoundingRect } from '../core/utils/position';
@@ -109,7 +110,7 @@ class ScrollHelper {
         const that = this;
 
         return ($element.css(that._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
-            && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+            && $element.prop(that._scrollSizeProp) > (that._sizeAttr === 'width' ? getWidth($element) : getHeight($element));
     }
 
     _trySetScrollable(element, mousePosition) {
@@ -568,11 +569,11 @@ const Draggable = DOMComponent.inherit({
         const dragDirection = this.option('dragDirection');
 
         if(dragDirection === 'horizontal' || dragDirection === 'both') {
-            position.left = e.pageX - $element.offset().left + locate($element).left - $element.width() / 2;
+            position.left = e.pageX - $element.offset().left + locate($element).left - getWidth($element) / 2;
         }
 
         if(dragDirection === 'vertical' || dragDirection === 'both') {
-            position.top = e.pageY - $element.offset().top + locate($element).top - $element.height() / 2;
+            position.top = e.pageY - $element.offset().top + locate($element).top - getHeight($element) / 2;
         }
 
         this._move(position, $element);
@@ -633,10 +634,10 @@ const Draggable = DOMComponent.inherit({
         const $area = this._getArea();
         const areaOffset = this._getAreaOffset($area);
         const boundOffset = this._getBoundOffset();
-        const areaWidth = $area.outerWidth();
-        const areaHeight = $area.outerHeight();
-        const elementWidth = $dragElement.width();
-        const elementHeight = $dragElement.height();
+        const areaWidth = getOuterWidth($area);
+        const areaHeight = getOuterHeight($area);
+        const elementWidth = getWidth($dragElement);
+        const elementHeight = getHeight($dragElement);
 
         const startOffset = {
             left: $dragElement.offset().left - areaOffset.left,

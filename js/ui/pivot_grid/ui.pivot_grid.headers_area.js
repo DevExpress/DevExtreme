@@ -1,3 +1,4 @@
+import { setWidth, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
@@ -132,7 +133,7 @@ export const HorizontalHeadersArea = AreaItem.inherit({
 
         this._groupElement.toggleClass(PIVOTGRID_VERTICAL_SCROLL_CLASS, scrollBarWidth > 0);
 
-        this._groupElement.css('float', groupAlignment).width(this.getGroupHeight());
+        setWidth(this._groupElement.css('float', groupAlignment), this.getGroupHeight());
         this._scrollBarWidth = scrollBarWidth;
     },
 
@@ -226,11 +227,10 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
         }
 
         if(scrollBarWidth) {
-            this._groupElement.after(
-                $('<div>')
-                    .width('100%')
-                    .height(scrollBarWidth - 1)
-            );
+            const $div = $('<div>');
+            setWidth($div, '100%');
+            setHeight($div, scrollBarWidth - 1);
+            this._groupElement.after($div);
         }
 
         this._scrollBarWidth = scrollBarWidth;

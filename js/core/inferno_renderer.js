@@ -1,5 +1,5 @@
 import { render } from 'inferno';
-import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
+import { InfernoEffectHost, hydrate } from '@devextreme/runtime/inferno';
 import { createElement } from 'inferno-create-element';
 import domAdapter from './dom_adapter';
 import { cleanDataRecursive } from './element_data';

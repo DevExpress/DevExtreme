@@ -108,14 +108,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return 0;
     }
 
-    getCellCountToLastViewDate(date) {
-        const firstDateTime = date.getTime();
-        const lastDateTime = this.getEndViewDate().getTime();
-        const dayDurationInMs = this.getCellDuration();
-
-        return Math.ceil((lastDateTime - firstDateTime) / dayDurationInMs);
-    }
-
     supportAllDayRow() {
         return false;
     }

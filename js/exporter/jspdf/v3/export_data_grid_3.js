@@ -1,6 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize } from './row_utils';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
@@ -44,6 +44,9 @@ function exportDataGrid(doc, dataGrid, options) {
             }
 
             initializeCellsWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
+
+            // apply intends for correctly set width and colSpan for grouped rows
+            resizeFirstColumnByIndentLevel(rowsInfo, options);
 
             // apply colSpans + recalculate cellsWidth
             applyColSpans(rowsInfo);

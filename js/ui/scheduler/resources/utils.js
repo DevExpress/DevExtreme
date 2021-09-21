@@ -1,8 +1,8 @@
 import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import { DataSource } from '../../../data/data_source/data_source';
-import { Deferred } from '../../../core/utils/deferred';
+import { when, Deferred } from '../../../core/utils/deferred';
 import query from '../../../data/query';
-import { compileGetter } from '../../../core/utils/data';
+import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { isDefined } from '../../../core/utils/type';
@@ -247,22 +247,7 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
     return result.promise();
 };
 
-export const getResourceColor = (resources, resourceLoaderMap, field, value) => {
-    const result = new Deferred();
-
-    const resource = filterResources(resources, [field])[0] || {};
-
-    const colorExpr = resource.colorExpr || 'color';
-    const colorGetter = compileGetter(colorExpr);
-
-    getOrLoadResourceItem(resources, resourceLoaderMap, field, value)
-        .done(resource => result.resolve(colorGetter(resource)))
-        .fail(() => result.reject());
-
-    return result.promise();
-};
-
-const getDataAccessors = (dataAccessors, fieldName, type) => {
+export const getDataAccessors = (dataAccessors, fieldName, type) => {
     const actions = dataAccessors[type];
     return actions[fieldName];
 };
@@ -501,4 +486,122 @@ export const setResourceToAppointment = (resources, dataAccessors, appointment, 
         const value = isResourceMultiple(resources, name) ? wrapToArray(resourceData) : resourceData;
         resourcesSetter[name](appointment, value);
     }
+};
+
+export const getResourceColor = (resources, resourceLoaderMap, field, value) => {
+    const result = new Deferred();
+
+    const resource = filterResources(resources, [field])[0] || {};
+
+    const colorExpr = resource.colorExpr || 'color';
+    const colorGetter = compileGetter(colorExpr);
+
+    getOrLoadResourceItem(resources, resourceLoaderMap, field, value)
+        .done(resource => result.resolve(colorGetter(resource)))
+        .fail(() => result.reject());
+
+    return result.promise();
+};
+
+export const getAppointmentColor = (resourceConfig, appointmentConfig) => {
+    const { resources, dataAccessors, loadedResources, resourceLoaderMap } = resourceConfig;
+    const { groupIndex, groups, itemData } = appointmentConfig;
+
+    const paintedResources = getPaintedResources(resources || [], groups);
+
+    if(paintedResources) {
+        const field = getFieldExpr(paintedResources);
+
+        const cellGroups = getCellGroups(groupIndex, loadedResources);
+        const resourceValues = wrapToArray(getDataAccessors(dataAccessors, field, 'getter')(itemData));
+
+        let groupId = resourceValues[0];
+
+        for(let i = 0; i < cellGroups.length; i++) {
+            if(cellGroups[i].name === field) {
+                groupId = cellGroups[i].id;
+                break;
+            }
+        }
+
+        return getResourceColor(resources, resourceLoaderMap, field, groupId);
+    }
+
+    return new Deferred().resolve().promise();
+};
+
+export const createExpressions = (resources = []) => {
+    const result = {
+        getter: {},
+        setter: {}
+    };
+
+    resources.forEach(resource => {
+        const field = getFieldExpr(resource);
+
+        result.getter[field] = compileGetter(field);
+        result.setter[field] = compileSetter(field);
+    });
+
+    return result;
+};
+
+const getTransformedResourceData = (resource, data) => {
+    const valueGetter = compileGetter(getValueExpr(resource));
+    const displayGetter = compileGetter(getDisplayExpr(resource));
+
+    return data.map(item => {
+        const result = {
+            id: valueGetter(item),
+            text: displayGetter(item),
+        };
+
+        if(item.color) { // TODO for passed tests
+            result.color = item.color;
+        }
+
+        return result;
+    });
+};
+
+export const loadResources = (groups, resources, resourceLoaderMap) => {
+    const result = new Deferred();
+    const deferreds = [];
+
+    const newGroups = groups || [];
+    const newResources = resources || [];
+
+    let loadedResources = [];
+
+    filterResources(newResources, newGroups)
+        .forEach(resource => {
+            const deferred = new Deferred();
+            const name = getFieldExpr(resource);
+            deferreds.push(deferred);
+
+            const dataSourcePromise = getWrappedDataSource(resource.dataSource).load();
+            resourceLoaderMap.set(name, dataSourcePromise);
+
+            dataSourcePromise
+                .done(data => {
+                    const items = getTransformedResourceData(resource, data);
+
+                    deferred.resolve({ name, items, data });
+                })
+                .fail(() => deferred.reject());
+        });
+
+    if(!deferreds.length) {
+        return result.resolve(loadedResources);
+    }
+
+    when.apply(null, deferreds).done((...resources) => {
+        const hasEmpty = resources.some(r => r.items.length === 0);
+
+        loadedResources = hasEmpty ? [] : resources;
+
+        result.resolve(loadedResources);
+    }).fail(() => result.reject());
+
+    return result.promise();
 };

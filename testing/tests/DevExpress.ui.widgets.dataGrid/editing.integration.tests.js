@@ -50,6 +50,7 @@ import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
+import { getOuterHeight } from 'core/utils/size';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -1193,6 +1194,59 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing call count');
     });
 
+    QUnit.test('Edit form should be updated if change editing.form option inside setCellValue (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            columns: [
+                { dataField: 'field1', setCellValue: function(data, value) {
+                    data.field1 = value;
+                    dataGrid.option('editing.form.items[1].visible', false);
+                } },
+                { dataField: 'field2' },
+            ],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.cellValue(0, 0, 2);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
+    QUnit.test('Edit form should be updated if change editing.form option (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.option('editing.form.items[1].visible', false);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
     // T558301
     QUnit.testInActiveWindow('Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled', function(assert) {
         // arrange
@@ -1216,7 +1270,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
 
         // act
         dataGrid.editCell(0, 0);
@@ -1224,14 +1278,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3.01, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 68, 3.01, 'height main table');
 
         dataGrid.closeEditCell();
         this.clock.tick();
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
     });
 
     QUnit.test('Error row is not hidden when rowKey is undefined by mode is cell', function(assert) {
@@ -4131,7 +4185,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'infinite',
-                useNative: false
+                useNative: false,
+                preloadCount: 0
             },
             editing: {
                 allowUpdating: true,

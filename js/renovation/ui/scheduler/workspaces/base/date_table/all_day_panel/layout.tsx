@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay, RefObject,
+  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay, RefObject, Slot,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 import { Table } from '../../table';
@@ -8,25 +8,39 @@ import { ViewCellData } from '../../../types.d';
 import { LayoutProps } from '../../layout_props';
 import { DefaultSizes } from '../../../const';
 
-export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
+export const viewFunction = ({
+  emptyTableHeight,
+  allDayPanelData,
+  classes,
+  restAttributes,
+
+  props: {
+    visible,
+    tableRef,
+    viewData,
+    dataCellTemplate,
+    allDayAppointments,
+  },
+}: AllDayPanelLayout): JSX.Element => (
   <div
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    className={viewModel.classes}
+    {...restAttributes}
+    className={classes}
   >
-    {viewModel.props.visible && (
+    {allDayAppointments}
+    {visible && (
       <Table
         className="dx-scheduler-all-day-table"
-        height={viewModel.emptyTableHeight}
-        tableRef={viewModel.props.tableRef}
+        height={emptyTableHeight}
+        tableRef={tableRef}
       >
         <AllDayPanelTableBody
-          viewData={viewModel.allDayPanelData}
-          leftVirtualCellWidth={viewModel.props.viewData.leftVirtualCellWidth}
-          rightVirtualCellWidth={viewModel.props.viewData.rightVirtualCellWidth}
-          leftVirtualCellCount={viewModel.props.viewData.leftVirtualCellCount}
-          rightVirtualCellCount={viewModel.props.viewData.rightVirtualCellCount}
-          dataCellTemplate={viewModel.props.dataCellTemplate}
+          viewData={allDayPanelData}
+          leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+          rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+          leftVirtualCellCount={viewData.leftVirtualCellCount}
+          rightVirtualCellCount={viewData.rightVirtualCellCount}
+          dataCellTemplate={dataCellTemplate}
         />
       </Table>
     )}
@@ -40,6 +54,8 @@ export class AllDayPanelLayoutProps extends LayoutProps {
   @OneWay() visible? = true;
 
   @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
+
+  @Slot() allDayAppointments?: JSX.Element;
 }
 
 @Component({

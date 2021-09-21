@@ -127,7 +127,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid
      * @default 300
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -322,7 +321,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid
      * @default 300
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -337,8 +335,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/map
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

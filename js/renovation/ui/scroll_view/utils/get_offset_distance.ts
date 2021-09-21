@@ -1,22 +1,14 @@
 import {
-  ScrollableDirection,
   ScrollOffset,
 } from '../common/types.d';
 import { ensureDefined } from '../../../../core/utils/common';
-import {
-  convertToLocation,
-} from './convert_location';
 
 export function getOffsetDistance(
-  targetLocation: number | Partial<ScrollOffset>,
-  direction: ScrollableDirection,
+  targetLocation: Partial<ScrollOffset>,
   scrollOffset: ScrollOffset,
-):
-  { left: number; top: number } {
-  const location = convertToLocation(targetLocation, direction);
-
-  const top = ensureDefined(location.top, scrollOffset.top) - scrollOffset.top;
-  const left = ensureDefined(location.left, scrollOffset.left) - scrollOffset.left;
-
-  return { top, left };
+): { left: number; top: number } {
+  return {
+    top: ensureDefined(targetLocation.top, scrollOffset.top) - scrollOffset.top,
+    left: ensureDefined(targetLocation.left, scrollOffset.left) - scrollOffset.left,
+  };
 }

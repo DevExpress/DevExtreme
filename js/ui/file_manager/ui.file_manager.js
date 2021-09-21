@@ -46,6 +46,8 @@ class FileManager extends Widget {
     _init() {
         super._init();
 
+        this._initActions();
+
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
             currentPathKeys: this.option('currentPathKeys'),
@@ -56,14 +58,13 @@ class FileManager extends Widget {
             uploadChunkSize: this.option('upload').chunkSize,
             onInitialized: this._onControllerInitialized.bind(this),
             onDataLoading: this._onDataLoading.bind(this),
-            onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
+            onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this),
+            editingEvents: this._actions.editing
         });
     }
 
     _initMarkup() {
         super._initMarkup();
-
-        this._initActions();
 
         this._firstItemViewLoad = true;
         this._lockSelectionProcessing = false;
@@ -464,6 +465,20 @@ class FileManager extends Widget {
 
             onErrorOccurred: null,
 
+            onDirectoryCreating: null,
+            onDirectoryCreated: null,
+            onItemRenaming: null,
+            onItemRenamed: null,
+            onItemDeleting: null,
+            onItemDeleted: null,
+            onItemCopying: null,
+            onItemCopied: null,
+            onItemMoving: null,
+            onItemMoved: null,
+            onFileUploading: null,
+            onFileUploaded: null,
+            onItemDownloading: null,
+
             allowedFileExtensions: [],
 
             upload: {
@@ -578,6 +593,21 @@ class FileManager extends Widget {
             case 'onErrorOccurred':
                 this._actions[name] = this._createActionByOption(name);
                 break;
+            case 'onDirectoryCreating':
+            case 'onDirectoryCreated':
+            case 'onItemRenaming':
+            case 'onItemRenamed':
+            case 'onItemDeleting':
+            case 'onItemDeleted':
+            case 'onItemCopying':
+            case 'onItemCopied':
+            case 'onItemMoving':
+            case 'onItemMoved':
+            case 'onFileUploading':
+            case 'onFileUploaded':
+            case 'onItemDownloading':
+                this._actions.editing[name] = this._createActionByOption(name);
+                break;
             case 'rtlEnabled':
                 this._editing.updateDialogRtl(args.value);
                 super._optionChanged(args);
@@ -596,7 +626,23 @@ class FileManager extends Widget {
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
             onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged'),
             onToolbarItemClick: this._createActionByOption('onToolbarItemClick'),
-            onErrorOccurred: this._createActionByOption('onErrorOccurred')
+            onErrorOccurred: this._createActionByOption('onErrorOccurred'),
+
+            editing: {
+                onDirectoryCreating: this._createActionByOption('onDirectoryCreating'),
+                onDirectoryCreated: this._createActionByOption('onDirectoryCreated'),
+                onItemRenaming: this._createActionByOption('onItemRenaming'),
+                onItemRenamed: this._createActionByOption('onItemRenamed'),
+                onItemDeleting: this._createActionByOption('onItemDeleting'),
+                onItemDeleted: this._createActionByOption('onItemDeleted'),
+                onItemCopying: this._createActionByOption('onItemCopying'),
+                onItemCopied: this._createActionByOption('onItemCopied'),
+                onItemMoving: this._createActionByOption('onItemMoving'),
+                onItemMoved: this._createActionByOption('onItemMoved'),
+                onFileUploading: this._createActionByOption('onFileUploading'),
+                onFileUploaded: this._createActionByOption('onFileUploaded'),
+                onItemDownloading: this._createActionByOption('onItemDownloading')
+            }
         };
     }
 
