@@ -693,9 +693,8 @@ declare module DevExpress {
   }
   /**
    * [descr:Device]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface Device {
+  export type Device = {
     /**
      * [descr:Device.android]
      */
@@ -732,7 +731,7 @@ declare module DevExpress {
      * [descr:Device.version]
      */
     version?: Array<number>;
-  }
+  };
   /**
     * [descr:devices]
     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
