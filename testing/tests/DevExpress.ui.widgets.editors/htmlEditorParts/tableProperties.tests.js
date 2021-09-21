@@ -79,10 +79,11 @@ module('Table properties forms', {
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick(500);
             const $form = $('.dx-form:not(.dx-formdialog-form)');
-
+            const $scrollView = $form.closest('.dx-scrollview');
 
             assert.strictEqual($form.length, 1);
             assert.ok($form.eq(0).is(':visible'));
+            assert.ok($scrollView.length, 'Form should be in the ScrollView');
         });
 
         test('Check properties edititng at the table Form (without dimensions)', function(assert) {
@@ -175,9 +176,11 @@ module('Table properties forms', {
             showCellPropertiesForm(this.instance, $tableElement);
             this.clock.tick(500);
             const $form = $('.dx-form:not(.dx-formdialog-form)');
+            const $scrollView = $form.closest('.dx-scrollview');
 
             assert.strictEqual($form.length, 1);
             assert.ok($form.eq(0).is(':visible'));
+            assert.ok($scrollView.length, 'Form should be in the ScrollView');
         });
 
         test('Check properties edititng at the cell Form (without dimensions)', function(assert) {
@@ -544,11 +547,10 @@ module('Table properties forms', {
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
 
-        test('Check cell width attributes if it is changed after the table width was changed', function(assert) {
+        test('Check cell width attributes if it is changed after the table width was changed (columns width is fixed)', function(assert) {
             this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
-
 
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick(500);
@@ -582,6 +584,50 @@ module('Table properties forms', {
             assert.roughEqual(parseInt($targetCell.next().outerWidth()), 250, 2, 'next cell width attr is correct');
             assert.roughEqual(parseInt($targetCell.next().attr('width')), 250, 2, 'next cell width attr is correct');
             assert.roughEqual($tableElement.outerWidth(), 400, 2, 'table width is correct');
+        });
+
+        test('Check cell width attributes if it is changed after the table width was changed (columns width is not fixed)', function(assert) {
+            this.createWidget({ width: 1032 });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            let $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            let formInstance = $form.dxForm('instance');
+
+            let widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 800);
+
+            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            const $targetCell = $tableElement.find('td').eq(0);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(500);
+            $form = $('.dx-form:not(.dx-formdialog-form)');
+            formInstance = $form.dxForm('instance');
+
+            widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 110);
+
+            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+            const $rowCells = $targetCell.closest('tr').find('td');
+
+            assert.roughEqual($targetCell.outerWidth(), 110, 2, 'cell width is applied');
+            assert.strictEqual($targetCell.attr('width'), '110px', 'cell width attr is applied');
+            assert.roughEqual(parseInt($rowCells.eq(1).outerWidth()), 230, 2, 'second cell width attr is correct');
+            // assert.roughEqual(parseInt($rowCells.eq(1).attr('width')), 230, 2, 'second cell width attr is correct');
+            assert.roughEqual(parseInt($rowCells.eq(2).outerWidth()), 230, 2, 'third cell width attr is correct');
+            // assert.roughEqual(parseInt($rowCells.eq(2).attr('width')), 230, 2, 'third cell width attr is correct');
+            assert.roughEqual(parseInt($rowCells.eq(3).outerWidth()), 230, 2, 'fourth cell width attr is correct');
+            // assert.roughEqual(parseInt($rowCells.eq(3).attr('width')), 230, 2, 'fourth cell width attr is correct');
+            assert.roughEqual($tableElement.outerWidth(), 800, 2, 'table width is correct');
         });
     });
 
@@ -789,7 +835,7 @@ module('Table properties forms', {
             assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 30, 2, 'second column cell width attr is applied');
         });
 
-        test('Check table width attributes if it is changed after the cell width was changed', function(assert) {
+        test('Check table width attributes if it is changed after the cell width was changed (columns width is not fixed)', function(assert) {
             this.createWidget({ width: 632, value: '\
             <table>\
                 <tr>\
@@ -836,6 +882,44 @@ module('Table properties forms', {
             assert.roughEqual($targetCell.next().outerWidth(), 600, 2, 'next cell width attr is correct');
             assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is not defined');
             assert.roughEqual($tableElement.outerWidth(), 800, 2, 'table width is correct');
+        });
+
+        test('Check table width attributes if it is changed after the cell width was changed (columns width is fixed)', function(assert) {
+            this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(0);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(500);
+            let $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            let formInstance = $form.dxForm('instance');
+
+            let widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 200);
+
+            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(500);
+            $form = $('.dx-form:not(.dx-formdialog-form)');
+            formInstance = $form.dxForm('instance');
+
+            widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 450);
+
+            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+            this.clock.tick(500);
+
+            assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
+            assert.roughEqual(parseInt($targetCell.attr('width')), 150, 2, 'cell width attr is applied');
+            assert.roughEqual($targetCell.next().outerWidth(), 300, 2, 'next cell width attr is correct');
+            assert.strictEqual(parseInt($targetCell.next().attr('width')), 300, 'next cell width attr is not defined');
+            assert.roughEqual($tableElement.outerWidth(), 450, 2, 'table width is correct');
         });
     });
 

@@ -2,6 +2,7 @@ import Popup from '../../popup';
 import Form from '../../form';
 import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
+import ScrollView from '../../scroll_view';
 
 import $ from '../../../core/renderer';
 import { getWindow } from '../../../core/utils/window';
@@ -126,7 +127,11 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
-        const shouldKeepOtherColumnsWidth = getAutoWidthColumns($table).length > 0 && (!$table.attr('style') || $table.attr('style').indexOf('width') < 0);
+        const autoWidthColumns = getAutoWidthColumns($table);
+        // const noWidthStyle = !$table.attr('style') || $table.attr('style').indexOf('width') < 0;
+        // const hasWidthStyle = $table.attr('style') && $table.attr('style').indexOf('width') >= 0;
+        const shouldKeepOtherColumnsWidth = autoWidthColumns.length > 0 && (!$table.attr('style') || $table.attr('style').indexOf('width') < 0);
+        // const shouldKeepOtherColumnsWidth = autoWidthColumns.length > 0 && !hasWidthStyle;
 
         // $table.css('width', 'initial');
 
@@ -144,6 +149,7 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
                     setLineElementsAttrValue($verticalCells, 'width', prevColumnWidth > 0 ? prevColumnWidth : 0);
                 }
             }
+
         }
 
     }
@@ -317,11 +323,13 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
     };
 
     formPopup.option('contentTemplate', (container) => {
-        const $form = $('<div>').appendTo(container);
+        const $content = $('<div>').appendTo(container);
+        const $form = $('<div>').appendTo($content);
         editorInstance._createComponent($form, Form, formOptions);
+        editorInstance._createComponent($content, ScrollView, {});
         formInstance = $form.dxForm('instance');
 
-        return $form;
+        return $content;
     });
 
     formPopup.show();
@@ -496,12 +504,13 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     };
 
     formPopup.option('contentTemplate', (container) => {
-        const $form = $('<div>').appendTo(container);
+        const $content = $('<div>').appendTo(container);
+        const $form = $('<div>').appendTo($content);
         editorInstance._createComponent($form, Form, formOptions);
-
+        editorInstance._createComponent($content, ScrollView, {});
         formInstance = $form.dxForm('instance');
 
-        return $form;
+        return $content;
     });
     formPopup.show();
 
