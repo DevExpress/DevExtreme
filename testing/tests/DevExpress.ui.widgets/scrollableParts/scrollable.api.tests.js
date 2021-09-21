@@ -540,7 +540,7 @@ QUnit.test('event handlers should be reattached after changing to simulated stra
 
         let eventListeners = Object.values($._data(wrapperEl).events || {});
 
-        assert.equal(eventListeners.length, 4, 'event listeners');
+        assert.equal(eventListeners.length, isRenovation ? 4 : 6, 'event listeners');
         eventListeners.forEach((event) => {
             assert.equal(event.length, 1, 'event handler');
         });
@@ -583,7 +583,7 @@ QUnit.test('event handlers should be reattached after changing to native strateg
 
         eventListeners = Object.values($._data(wrapperEl).events || {});
 
-        assert.equal(eventListeners.length, 4, 'event listeners');
+        assert.equal(eventListeners.length, isRenovation ? 4 : 6, 'event listeners');
         eventListeners.forEach((event) => {
             assert.equal(event.length, 1, 'event handler');
         });
