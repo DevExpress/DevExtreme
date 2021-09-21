@@ -15,16 +15,18 @@ const getBoundingRect = (element) => {
         };
     }
 
-    return element.getBoundingClientRect
-        ? element.getBoundingClientRect()
-        : {
-            width: 0,
-            height: 0,
-            bottom: 0,
-            top: 0,
-            left: 0,
-            right: 0
-        };
+    if(element && element.getBoundingClientRect) {
+        return element.getBoundingClientRect();
+    }
+
+    return {
+        width: 0,
+        height: 0,
+        bottom: 0,
+        top: 0,
+        left: 0,
+        right: 0
+    };
 };
 
 export {
