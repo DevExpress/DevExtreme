@@ -459,30 +459,6 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
     });
 
-    test('resizeEnd should trigger positioned event', function(assert) {
-        const positionedHandlerStub = sinon.stub();
-
-        const instance = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true
-        }).dxOverlay('instance');
-        instance.on('positioned', positionedHandlerStub);
-
-        const $content = $(instance.$content());
-        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_TOP_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(0, 50).dragEnd();
-
-        const contentRect = $content.get(0).getBoundingClientRect();
-        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is triggered');
-        assert.deepEqual(
-            positionedHandlerStub.getCall(0).args[0].position,
-            { h: { location: contentRect.left }, v: { location: contentRect.top } },
-            'position parameter is correct'
-        );
-    });
-
     test('resize should change overlay width/height options value', function(assert) {
         const instance = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -1003,6 +979,18 @@ testModule('position', moduleConfig, () => {
 
         assert.roughEqual(getWidth($overlayWrapper), getWidth($(window)), 1.01, 'overlay wrapper width is correct');
         assert.roughEqual(getHeight($overlayWrapper), getHeight($(window)), 1.01, 'overlay wrapper height is correct');
+    });
+
+    test('position.of as an event', function(assert) {
+        const event = $.Event('click', { target: $('#overlayInputTarget') });
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            position: { my: 'top', at: 'top', of: event }
+        }).dxOverlay('instance');
+
+        const $content = overlay.$content();
+
+        assert.strictEqual($content.position().top, event.target.position().top, 'overlay is positioned correctly');
     });
 });
 
@@ -3003,30 +2991,6 @@ testModule('drag', moduleConfig, () => {
         assert.strictEqual($overlayContent.position().left, prevPosition, 'correct position after next move');
     });
 
-    test('dragged overlay should not be positioned at default location after toggle visibility', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            dragEnabled: true,
-            visible: true,
-            height: 10,
-            width: 10,
-            position: { of: viewPort() }
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const pointer = pointerMock($overlayContent);
-        const position = $overlayContent.position();
-
-        pointer.start().dragStart().drag(50, 50).dragEnd();
-
-        overlay.hide();
-        overlay.show();
-
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top + 50,
-            left: position.left + 50
-        }, 'overlay dragged position was reset');
-    });
-
     test('overlay should not be dragged out of target', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             dragEnabled: true,
@@ -3211,128 +3175,7 @@ testModule('drag', moduleConfig, () => {
         assert.notStrictEqual(startOverlayPosition, newOverlayPosition, 'overlay repositioned after dragging');
         assert.ok(newOverlayPosition < -9000, 'overlay now is positioned in viewport');
     });
-
-    QUnit.module('overlayDrag integration', {
-        beforeEach: function() {
-            this.$container = $('#parentContainer');
-            this.$dragContainer = $('#container');
-            this.initialOptions = {
-                dragEnabled: true,
-                visible: true,
-                container: this.$container,
-                dragAndResizeArea: this.$dragContainer,
-                outsideDragFactor: 0.5
-            };
-            this.reinit = (options) => {
-                this.overlay && this.overlay.dispose();
-
-                const newOptions = $.extend({}, this.initialOptions, options);
-                this.overlay = $('#overlay').dxOverlay(newOptions).dxOverlay('instance');
-                this.getDrag = () => this.overlay._drag;
-            };
-
-            this.reinit({});
-        }
-    }, () => {
-        test('overlay should use dragAndResizeArea->container->viewport as a container ', function(assert) {
-            try {
-                assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'drag container is dragAndResizeArea if it defined');
-
-                this.overlay.option('dragAndResizeArea', undefined);
-                assert.strictEqual(this.getDrag().container, this.$container.get(0), 'drag container is container if dragAndResizeArea is not defined');
-
-                this.overlay.option('container', undefined);
-                assert.strictEqual(this.getDrag().container, viewPort().get(0), 'drag container is viewport if container is not defined');
-
-                viewPort(null);
-                this.reinit({ dragAndResizeArea: null, container: null });
-                assert.strictEqual(this.getDrag().container, window, 'drag container is window if there is no vieport');
-            } finally {
-                viewPort(toSelector(VIEWPORT_CLASS));
-            }
-        });
-
-        test('overlay should use window as drag container and 1 as outsideDragFactor value on init with dragOutsideBoundary enable', function(assert) {
-            this.reinit({ dragOutsideBoundary: true });
-
-            const overlayDrag = this.getDrag();
-            assert.strictEqual(overlayDrag.container, window, 'window is a drag container');
-            assert.strictEqual(overlayDrag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
-        });
-
-        test('overlay should use window as drag container and 1 as outsideDragFactor value after runtime dragOutsideBoundary enable', function(assert) {
-            this.overlay.option('dragOutsideBoundary', true);
-
-            const overlayDrag = this.getDrag();
-            assert.strictEqual(overlayDrag.container, window, 'window is a drag container');
-            assert.strictEqual(overlayDrag.outsideDragFactor, 1, 'outsideDragFactor equals 1');
-        });
-
-        test('overlay should use initial drag container and outsideDragFactor value after dragOutsideBoundary runtime disable', function(assert) {
-            this.reinit({ dragOutsideBoundary: true });
-
-            this.overlay.option('dragOutsideBoundary', false);
-
-            const overlayDrag = this.getDrag();
-            assert.strictEqual(overlayDrag.container, this.$dragContainer.get(0), 'overlay container is a drag container');
-            assert.strictEqual(overlayDrag.outsideDragFactor, 0.5, 'outsideDragFactor equals 0');
-        });
-
-        test('dragAndResizeArea can be specified as a string', function(assert) {
-            this.reinit({ dragAndResizeArea: '#parentContainer' });
-
-            assert.strictEqual(this.getDrag().container, $('#parentContainer').get(0), 'drag container was specified as a string');
-        });
-
-        test('overlay should use dragAndResizeArea as drag container if it is specified on init', function(assert) {
-            assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'overlay container is a drag container');
-        });
-
-        test('overlay should use dragAndResizeArea as drag container after its runtime enable', function(assert) {
-            this.reinit({ dragAndResizeArea: null });
-            this.overlay.option('dragAndResizeArea', this.$dragContainer);
-
-            assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'overlay container is a drag container');
-        });
-
-        test('overlay should change drag container after dragAndResizeArea runtime disable', function(assert) {
-            this.overlay.option('dragAndResizeArea', undefined);
-
-            assert.strictEqual(this.getDrag().container, $('#parentContainer').get(0), 'drag container was changed');
-        });
-
-        test('overlay should use container as drag container if dragAndResizeArea is not defined', function(assert) {
-            this.reinit({ dragAndResizeArea: null });
-
-            assert.strictEqual(this.getDrag().container, this.$container.get(0), 'drag container is container');
-        });
-
-        test('overlay should change drag container after container runtime change if dragAndResizeArea is not defined', function(assert) {
-            this.reinit({ dragAndResizeArea: null });
-            this.overlay.option('container', this.$dragContainer);
-
-            assert.strictEqual(this.getDrag().container, this.$dragContainer.get(0), 'drag container was changed');
-        });
-
-        test('overlay should apply outsideDragFactor if it is specified on init', function(assert) {
-            assert.strictEqual(this.getDrag().outsideDragFactor, 0.5, 'outsideDragFactor is applied');
-        });
-
-        test('overlay should change outsideDragFactor on runtime', function(assert) {
-            this.overlay.option('outsideDragFactor', 1);
-
-            assert.strictEqual(this.getDrag().outsideDragFactor, 1, 'outsideDragFactor is changed');
-        });
-
-        test('overlay should not change outsideDragFactor on runtime if dragOutsideBoundary is enabled', function(assert) {
-            this.reinit({ dragOutsideBoundary: true });
-            this.overlay.option('outsideDragFactor', 0);
-
-            assert.strictEqual(this.getDrag().outsideDragFactor, 1, 'outsideDragFactor is not changed');
-        });
-    });
 });
-
 
 testModule('resize', moduleConfig, () => {
     test('overlay should have resizable component on content', function(assert) {
@@ -4191,20 +4034,19 @@ testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
         this.timeToWaitResize = 50;
-        this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
             dragEnabled: false,
             resizeEnabled: false,
-            onPositioned: this.positionedHandlerStub
         }).dxOverlay('instance');
+        this.renderGeometrySpy = sinon.spy(this.overlayInstance, '_renderGeometry');
         this.checkNoExcessResizeHandle = (assert) => {
             const done = assert.async();
-            const initialPositionHandlerCallCount = this.positionedHandlerStub.callCount;
+            const renderGeometryInitialCallCount = this.renderGeometrySpy.callCount;
             setTimeout(() => {
                 assert.strictEqual(
-                    this.positionedHandlerStub.callCount,
-                    initialPositionHandlerCallCount,
+                    this.renderGeometrySpy.callCount,
+                    renderGeometryInitialCallCount,
                     'no resize observer callback was raised'
                 );
                 done();
@@ -4218,13 +4060,13 @@ testModule('renderGeometry', {
     }
 }, () => {
     QUnit.testInActiveWindow('visibility change', function(assert) {
-        assert.ok(this.positionedHandlerStub.notCalled, 'render geometry isn\'t called yet');
+        assert.ok(this.renderGeometrySpy.notCalled, 'render geometry isn\'t called yet');
 
         const showingResizeHandled = assert.async();
         this.overlayInstance.show();
 
         setTimeout(() => {
-            assert.ok(this.positionedHandlerStub.calledOnce, 'render geometry called once');
+            assert.ok(this.renderGeometrySpy.calledOnce, 'render geometry called once');
             this.checkNoExcessResizeHandle(assert);
             showingResizeHandled();
         }, this.timeToWaitResize);
@@ -4236,7 +4078,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             resizeCallbacks.fire();
-            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            assert.strictEqual(this.renderGeometrySpy.callCount, 2);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
@@ -4247,7 +4089,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             this.overlayInstance.repaint();
-            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            assert.strictEqual(this.renderGeometrySpy.callCount, 2);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
@@ -4279,7 +4121,7 @@ testModule('renderGeometry', {
                 setTimeout(() => {
                     this.overlayInstance.option(optionName, newOptions[optionName]);
 
-                    assert.strictEqual(this.positionedHandlerStub.callCount, 2, 'renderGeomentry called 2 times');
+                    assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeomentry called 2 times');
                     this.checkNoExcessResizeHandle(assert);
                     showingResizeHandled();
                 }, this.timeToWaitResize);
@@ -4453,26 +4295,6 @@ QUnit.module('resizeObserver integration', {
         fx.off = false;
     }
 }, () => {
-    QUnit.testInActiveWindow('overlay should be repositioned only once on window resize', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnWindowResizeDone = assert.async();
-        const overlay = $('#overlay').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-        const positionedHandlerStub = sinon.stub();
-
-        overlay.on('positioned', positionedHandlerStub);
-
-        setTimeout(() => {
-            resizeCallbacks.fire();
-            setTimeout(() => {
-                assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
-                resizeOnWindowResizeDone();
-            }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
     QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();
@@ -4492,32 +4314,6 @@ QUnit.module('resizeObserver integration', {
             pointer.start().dragStart().drag(10);
             setTimeout(() => {
                 assert.strictEqual(getWidth($overlayContent), 210, 'width was changed before pointerdown');
-                resizeOnDraggingDone();
-            }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
-    QUnit.testInActiveWindow('resize end should trigger the single geometry rendering', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnDraggingDone = assert.async();
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-        const positionedHandlerStub = sinon.stub();
-        overlay.on('positioned', positionedHandlerStub);
-
-        setTimeout(() => {
-            pointer.start().dragStart().drag(10, 10).dragEnd();
-            setTimeout(() => {
-                assert.ok(positionedHandlerStub.calledOnce);
                 resizeOnDraggingDone();
             }, this.timeToWaitResize);
             resizeOnOpeningDone();
