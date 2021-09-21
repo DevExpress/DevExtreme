@@ -1210,7 +1210,7 @@ export const virtualScrollingModule = {
                             return;
                         }
 
-                        const viewPortItemIndex = this._rowsScrollController.getItemIndexByPosition();
+                        const viewPortItemIndex = this._rowsScrollController.getViewportItemIndex();
                         const newPageIndex = Math.floor(viewPortItemIndex / this.pageSize());
 
                         if(this.pageIndex() !== newPageIndex) {

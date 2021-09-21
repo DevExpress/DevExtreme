@@ -4096,7 +4096,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         this.clock.tick();
-        const rowHeight = parseFloat(getComputedStyle($(dataGrid.getRowElement(0)).get(0)).height);
+        const rowHeight = parseFloat(getComputedStyle($(dataGrid.getRowElement(1)).get(0)).height);
 
         // navigate forward
         for(let i = 0; i < dataGrid.pageCount(); i++) {
