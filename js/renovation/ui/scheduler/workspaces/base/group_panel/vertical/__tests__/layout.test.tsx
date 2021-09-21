@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+import React from 'react';
 import {
   GroupPanelVerticalLayout as Layout,
   viewFunction as LayoutView,
@@ -51,19 +52,6 @@ describe('GroupPanel Vertical Layout', () => {
       },
     }) as any);
 
-    it('should spread restAttributes correctly', () => {
-      const layout = render({
-        restAttributes: {
-          'custom-attribute': 'customAttribute', style: { color: 'green' },
-        },
-      });
-
-      expect(layout.prop('custom-attribute'))
-        .toBe('customAttribute');
-      expect(layout.prop('style'))
-        .toEqual({ color: 'red' });
-    });
-
     it('should pass correct class names to components', () => {
       const layout = render({
         props: { className: 'custom-class' },
@@ -95,6 +83,18 @@ describe('GroupPanel Vertical Layout', () => {
           groupItems: groupPanelData.groupPanelItems[1],
           cellTemplate: resourceCellTemplate,
         });
+    });
+
+    it('should pass ref to the root', () => {
+      const ref = React.createRef();
+      render({
+        props: {
+          elementRef: ref,
+        },
+      });
+
+      expect(ref.current)
+        .not.toBe(null);
     });
   });
 

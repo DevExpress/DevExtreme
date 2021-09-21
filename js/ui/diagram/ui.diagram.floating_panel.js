@@ -1,3 +1,4 @@
+import { getOuterHeight, getHeight, getOuterWidth, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
@@ -61,11 +62,11 @@ class DiagramFloatingPanel extends DiagramPanel {
     }
     _getVerticalPaddingsAndBorders() {
         const $content = $(this._getPopupContent());
-        return $content.outerHeight() - $content.height();
+        return getOuterHeight($content) - getHeight($content);
     }
     _getHorizontalPaddingsAndBorders() {
         const $content = $(this._getPopupContent());
-        return $content.outerWidth() - $content.width();
+        return getOuterWidth($content) - getWidth($content);
     }
     _getPopupClass() {
         return '';

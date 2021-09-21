@@ -705,7 +705,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         const isAllDayWorkspace = !this.workspace.supportAllDayRow();
         const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
 
-        const endViewDate = this.workspace.getEndViewDateByEndDayHour();
+        const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
         const filterOptions = [];
 
         const groupsInfo = this.viewDataProvider.getCompletedGroupsInfo();

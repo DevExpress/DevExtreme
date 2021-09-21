@@ -1,6 +1,7 @@
 
 import $ from 'jquery';
 import OverlayDrag from 'ui/overlay/overlay_drag';
+import { OverlayPositionController } from 'ui/overlay/overlay_position_controller';
 
 const KEYBOARD_DRAG_STEP = 5;
 
@@ -29,10 +30,17 @@ QUnit.module('overlay_drag', {
             beforeEach: function() {
                 this.drag = new OverlayDrag({
                     dragEnabled: true,
-                    container: $('#qunit-fixture').get(0),
                     handle: this.handle,
                     draggableElement: this.draggableElement,
-                    updatePositionChangeHandled: () => {}
+                    positionController: new OverlayPositionController({
+                        container: $('#qunit-fixture'),
+                        $root: $('#qunit-fixture'),
+                        $content: this.draggableElement,
+                        restorePosition: {},
+                        onVisualPositionChanged: () => {},
+                        onPositioned: () => {},
+                        outsideDragFactor: 0,
+                    })
                 });
                 this.initialPosition = this.draggableElement.getBoundingClientRect();
                 this.delta = {

@@ -1,7 +1,6 @@
 window.includeThemesLinks();
 
 import $ from 'jquery';
-import renderer from 'core/renderer';
 import domAdapter from 'core/dom_adapter';
 import themes from 'ui/themes';
 import devices from 'core/devices';
@@ -11,6 +10,7 @@ const viewPortChanged = viewPort.changeCallback;
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import readyCallbacks from 'core/utils/ready_callbacks';
 import config from 'core/config';
+import { implementationsMap } from 'core/utils/size';
 
 const userAgents = {
     iphone_12: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1',
@@ -426,20 +426,20 @@ QUnit.module('orientation', {
 
         that.currentWidth = 100;
         that.currentHeight = 200;
-        that.originalWidth = renderer.fn.width;
-        that.originalHeight = renderer.fn.height;
+        that.originalWidth = implementationsMap.getWidth;
+        that.originalHeight = implementationsMap.getHeight;
 
         // NOTE: using renderer.height() and renderer.width() for correct window size detecting on WP8
-        renderer.fn.width = function() {
+        implementationsMap.getWidth = function() {
             return that.currentWidth;
         };
-        renderer.fn.height = function() {
+        implementationsMap.getHeight = function() {
             return that.currentHeight;
         };
     },
     afterEach: function() {
-        renderer.fn.width = this.originalWidth;
-        renderer.fn.height = this.originalHeight;
+        implementationsMap.getWidth = this.originalWidth;
+        implementationsMap.getHeight = this.originalHeight;
     }
 });
 

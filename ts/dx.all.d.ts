@@ -1658,9 +1658,7 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (
-      options: LoadOptions<TValue>
-    ) => PromiseLike<TValue> | Array<TValue>;
+    load: (options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1858,7 +1856,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TKey, TValue>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1959,9 +1957,12 @@ declare module DevExpress.data {
      * [descr:DataSourceOptions.store]
      */
     store?:
+      | Array<TSourceValue>
       | Store<TKey, TSourceValue>
-      | StoreOptions<TKey, TSourceValue>
-      | Array<TSourceValue>;
+      | (ArrayStoreOptions<TKey, TSourceValue> & { type: 'array' })
+      | (LocalStoreOptions<TKey, TSourceValue> & { type: 'local' })
+      | (ODataStoreOptions<TKey, TSourceValue> & { type: 'odata' })
+      | CustomStoreOptions<TKey, TSourceValue>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2086,8 +2087,11 @@ declare module DevExpress.data {
   /**
    * [descr:LocalStore]
    */
-  export class LocalStore extends ArrayStore {
-    constructor(options?: LocalStoreOptions);
+  export class LocalStore<TKey = any, TValue = any> extends ArrayStore<
+    TKey,
+    TValue
+  > {
+    constructor(options?: LocalStoreOptions<TKey, TValue>);
     /**
      * [descr:LocalStore.clear()]
      */
@@ -2096,7 +2100,8 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
+  export interface LocalStoreOptions<TKey = any, TValue = any>
+    extends ArrayStoreOptions<TKey, TValue> {
     /**
      * [descr:LocalStoreOptions.flushInterval]
      */
@@ -8061,6 +8066,14 @@ declare module DevExpress.ui {
       | DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName
       | dxDataGridToolbarItem
     >;
+    /**
+     * [descr:dxDataGridToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxDataGridToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxDataGridToolbarItem]
@@ -13283,6 +13296,33 @@ declare module DevExpress.ui {
       | 'quarters'
       | 'years';
     /**
+     * [descr:dxGanttOptions.scaleTypeRange]
+     */
+    scaleTypeRange?: {
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.start]
+       */
+      start?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.end]
+       */
+      end?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+    };
+    /**
      * [descr:dxGanttOptions.selectedRowKey]
      */
     selectedRowKey?: any;
@@ -16680,6 +16720,16 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.resizeEnabled]
      */
     resizeEnabled?: boolean;
+    /**
+     * [descr:dxPopupOptions.restorePosition]
+     */
+    restorePosition?: {
+      always: boolean;
+      onDimensionChangeAfterDrag: boolean;
+      onDimensionChangeAfterResize: boolean;
+      onOpening: boolean;
+      onFullScreenDisable: boolean;
+    };
     /**
      * [descr:dxPopupOptions.showCloseButton]
      */
@@ -20785,6 +20835,14 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
+    /**
+     * [descr:dxTreeListToolbarItem.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbarItem.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeView]

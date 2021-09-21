@@ -1,9 +1,9 @@
 import $ from 'jquery';
-import renderer from 'core/renderer';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
+import { implementationsMap, getOuterWidth } from 'core/utils/size';
 
 const { test } = QUnit;
 
@@ -18,21 +18,23 @@ const moduleConfig = {
         this.currentWidth = 400;
         this.currentHeight = 300;
 
-        this.originalWidth = renderer.fn.width;
-        this.originalHeight = renderer.fn.height;
+        this.originalWidth = implementationsMap.getWidth;
+        this.originalHeight = implementationsMap.getHeight;
 
-        renderer.fn.width = function() {
-            if(this[0] && this[0] instanceof Window) {
+        implementationsMap.getWidth = function() {
+            const arg = arguments[0];
+            if((arg && arg[0] || arg) instanceof Window) {
                 return that.currentWidth;
             }
-            return that.originalWidth.apply(renderer.fn, arguments);
+            return that.originalWidth.apply(implementationsMap, arguments);
         };
 
-        renderer.fn.height = function() {
-            if(this[0] && this[0] instanceof Window) {
+        implementationsMap.getHeight = function() {
+            const arg = arguments[0];
+            if((arg && arg[0] || arg) instanceof Window) {
                 return that.currentHeight;
             }
-            return that.originalHeight.apply(renderer.fn, arguments);
+            return that.originalHeight.apply(implementationsMap, arguments);
         };
 
         this.$element = $('#fileManager')
@@ -60,8 +62,8 @@ const moduleConfig = {
         this.clock.restore();
         fx.off = false;
 
-        renderer.fn.width = this.originalWidth;
-        renderer.fn.height = this.originalHeight;
+        implementationsMap.getWidth = this.originalWidth;
+        implementationsMap.getHeight = this.originalHeight;
     }
 
 };
@@ -129,19 +131,19 @@ QUnit.module('Adaptivity', moduleConfig, () => {
     });
 
     test('progressPanel should change its mode on small screens', function(assert) {
-        const originalWidth = renderer.fn.width;
-        renderer.fn.width = () => 1200;
+        const originalWidth = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
         $('#fileManager').css('width', '100%');
         this.wrapper.getInstance().repaint();
 
         assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_SHRINK));
 
-        renderer.fn.width = () => 999;
+        implementationsMap.getWidth = () => 999;
         this.wrapper.getInstance().repaint();
 
         assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_OVERLAP));
 
-        renderer.fn.width = originalWidth;
+        implementationsMap.getWidth = originalWidth;
     });
 
     test('dirs panel must complete its expand on small screens', function(assert) {
@@ -166,7 +168,7 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         this.clock.tick(400);
 
         const contentPane = this.wrapper.getNavPaneDrawerPanelContent();
-        assert.roughEqual(this.wrapper.getSplitterPosition(), contentPane.outerWidth(), 0.2, 'Splitter is on the correct position');
+        assert.roughEqual(this.wrapper.getSplitterPosition(), getOuterWidth(contentPane), 0.3, 'Splitter is on the correct position');
     });
 
 });

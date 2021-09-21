@@ -1,3 +1,12 @@
+import {
+    setWidth,
+    getOuterHeight,
+    getOuterWidth,
+    setOuterHeight,
+    getHeight,
+    getWidth,
+} from '../../../core/utils/size';
+
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
@@ -5,7 +14,7 @@ import dateUtils from '../../../core/utils/date';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
-import { getBoundingRect, getElementsFromPoint } from '../../../core/utils/position';
+import { getBoundingRect } from '../../../core/utils/position';
 import messageLocalization from '../../../localization/message';
 import { noop } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
@@ -38,7 +47,6 @@ import {
     VERTICAL_GROUP_COUNT_CLASSES,
     HORIZONTAL_GROUP_COUNT_CLASSES,
 } from '../classes';
-import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
 
@@ -534,9 +542,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             width = minWidth;
         }
 
-        this._$headerPanel.width(width);
-        this._$dateTable.width(width);
-        this._$allDayTable && this._$allDayTable.width(width);
+        setWidth(this._$headerPanel, width);
+        setWidth(this._$dateTable, width);
+        if(this._$allDayTable) {
+            setWidth(this._$allDayTable, width);
+        }
 
         this._attachHeaderTableClasses();
 
@@ -991,7 +1001,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getHeaderPanelHeight() {
-        return this._$headerPanel && this._$headerPanel.outerHeight(true);
+        return this._$headerPanel && getOuterHeight(this._$headerPanel, true);
     }
 
     getTimePanelWidth() {
@@ -999,7 +1009,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getGroupTableWidth() {
-        return this._$groupTable ? this._$groupTable.outerWidth() : 0;
+        return this._$groupTable ? getOuterWidth(this._$groupTable) : 0;
     }
 
     getWorkSpaceLeftOffset() {
@@ -1128,7 +1138,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setHorizontalGroupHeaderCellsHeight() {
         const height = getBoundingRect(this._$dateTable.get(0)).height;
-        this._$groupTable.outerHeight(height);
+        setOuterHeight(this._$groupTable, height);
     }
 
     _getGroupHeaderCells() {
@@ -1398,29 +1408,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getEndViewDate() {
-        return new Date(this.viewDataProvider.getLastViewDate().getTime() - toMs('minute'));
+        return this.viewDataProvider.getLastCellEndDate();
     }
 
     getEndViewDateByEndDayHour() {
-        const dateOfLastViewCell = this.getEndViewDate();
-        const endTime = dateUtils.dateTimeFromDecimal(this.option('endDayHour'));
-
-        const endDateOfLastViewCell = new Date(dateOfLastViewCell.setHours(endTime.hours, endTime.minutes));
-
-        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
-
-    }
-
-    _adjustEndViewDateByDaylightDiff(startDate, endDate) {
-        const daylightDiff = timeZoneUtils.getDaylightOffsetInMs(startDate, endDate);
-
-        const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
-
-        return new Date(endDateOfLastViewCell.getTime() - this._getEndViewDateTimeDiff());
-    }
-
-    _getEndViewDateTimeDiff() {
-        return toMs('minute');
+        return this.viewDataProvider.getLastViewDateByEndDayHour(this.option('endDayHour'));
     }
 
     getCellDuration() { // TODO move to the ModelProvider
@@ -1428,7 +1420,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getIntervalDuration(allDay) {
-        return allDay ? toMs('day') : this.getCellDuration();
+        return allDay
+            ? toMs('day')
+            : this.getCellDuration();
     }
 
     getVisibleDayDuration() {
@@ -1478,7 +1472,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $scrollable = this.getScrollable().$element();
         const cellHeight = this.getCellHeight();
         const scrolledCellCount = this.getScrollableScrollTop() / cellHeight;
-        const totalCellCount = scrolledCellCount + $scrollable.height() / cellHeight;
+        const totalCellCount = scrolledCellCount + getHeight($scrollable) / cellHeight;
 
         result.top = {
             hours: Math.floor(scrolledCellCount * this.option('hoursInterval')) + this.option('startDayHour'),
@@ -1552,8 +1546,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolledColumnCount += 1;
         }
 
-        const rowCount = Math.floor(fullScrolledRowCount + $scrollable.height() / cellHeight);
-        const columnCount = Math.floor(fullScrolledColumnCount + $scrollable.width() / cellWidth);
+        const rowCount = Math.floor(fullScrolledRowCount + getHeight($scrollable) / cellHeight);
+        const columnCount = Math.floor(fullScrolledColumnCount + getWidth($scrollable) / cellWidth);
 
         const $cells = this._getAllCells(inAllDayRow);
         const result = [];
@@ -1610,8 +1604,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         const offset = this.option('rtlEnabled')
             ? cellWidth
             : 0;
-        const scrollableHeight = $scrollable.height();
-        const scrollableWidth = $scrollable.width();
+        const scrollableHeight = getHeight($scrollable);
+        const scrollableWidth = getWidth($scrollable);
         const cellHeight = this.getCellHeight();
 
         const xShift = (scrollableWidth - cellWidth) / 2;
@@ -2157,8 +2151,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             isRTL: this._isRTL.bind(this),
             getSchedulerHeight: () => this.option('schedulerHeight'),
             getSchedulerWidth: () => this.option('schedulerWidth'),
-            getViewHeight: () => this.$element().height(),
-            getViewWidth: () => this.$element().width(),
+            getViewHeight: () => this.$element().height ? this.$element().height() : getHeight(this.$element()),
+            getViewWidth: () => this.$element().width ? this.$element().width() : getWidth(this.$element()),
             getScrolling: () => this.option('scrolling'),
             getScrollableOuterWidth: this.getScrollableOuterWidth.bind(this),
             getScrollable: this.getScrollable.bind(this),
@@ -3043,7 +3037,7 @@ const createDragBehaviorConfig = (
 
         const MOUSE_IDENT = 10;
 
-        const appointmentWidth = $(state.dragElement).width();
+        const appointmentWidth = getWidth(state.dragElement);
         const cellWidth = getCellWidth();
         const isWideAppointment = appointmentWidth > cellWidth;
 
@@ -3054,8 +3048,8 @@ const createDragBehaviorConfig = (
         const newY = boundingRect.top + MOUSE_IDENT;
 
         const elements = isWideAppointment ?
-            getElementsFromPoint(newX, newY) :
-            getElementsFromPoint(newX + appointmentWidth / 2, newY);
+            domAdapter.elementsFromPoint(newX, newY) :
+            domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const droppableCell = elements.filter(el => {
             const classList = el.classList;
@@ -3090,8 +3084,8 @@ const createDragBehaviorConfig = (
         ? () => {
             const $dragElement = $(state.dragElement);
             return {
-                x: $dragElement.width() / 2,
-                y: $dragElement.height() / 2
+                x: getWidth($dragElement) / 2,
+                y: getHeight($dragElement) / 2
             };
         }
         : undefined;
