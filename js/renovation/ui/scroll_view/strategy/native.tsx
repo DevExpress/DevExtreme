@@ -37,7 +37,6 @@ import {
   ScrollOffset, ScrollableDirection, DxMouseEvent,
   DxMouseWheelEvent,
 } from '../common/types';
-import resizeObserverSingleton from '../../../../core/resize_observer';
 
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 
@@ -63,6 +62,7 @@ import { isVisible } from '../utils/is_element_visible';
 import { ScrollableNativeProps } from '../common/native_strategy_props';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { getScrollTopMax } from '../utils/get_scroll_top_max';
+import { subscribeToResize } from '../utils/subscribe_to_resize';
 
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
@@ -430,26 +430,20 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  containerResizeObserver(): DisposeEffectReturn {
-    const containerEl = this.containerRef.current;
-
-    resizeObserverSingleton.observe(containerEl, ({ target }) => {
-      this.setContainerDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(containerEl); };
+  subscribeContainerToResize(): EffectReturn {
+    return subscribeToResize(
+      this.containerRef.current,
+      (element: HTMLDivElement) => { this.setContainerDimensions(element); },
+    );
   }
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  contentResizeObserver(): DisposeEffectReturn {
-    const contentEl = this.contentRef.current;
-
-    resizeObserverSingleton.observe(contentEl, ({ target }) => {
-      this.setContentDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(contentEl); };
+  subscribeContentToResize(): EffectReturn {
+    return subscribeToResize(
+      this.contentRef.current,
+      (element: HTMLDivElement) => { this.setContentDimensions(element); },
+    );
   }
 
   scrollByLocation(location: ScrollOffset): void {

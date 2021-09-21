@@ -40,11 +40,11 @@ export const THUMB_MIN_SIZE = 15;
 
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
-    scrollbarRef, thumbRef, scrollbarClasses, thumbClasses, thumbStyles,
+    scrollbarRef, thumbRef, scrollbarClasses, thumbClasses, thumbStyles, hidden,
   } = viewModel;
 
   return (
-    <div className={scrollbarClasses} ref={scrollbarRef}>
+    <div className={scrollbarClasses} ref={scrollbarRef} hidden={hidden}>
       <div className={thumbClasses} style={thumbStyles} ref={thumbRef}>
         <div className={SCROLLABLE_SCROLL_CONTENT_CLASS} />
       </div>
