@@ -37,7 +37,6 @@ import {
 import { isDefined } from '../../../../core/utils/type';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 import eventsEngine from '../../../../events/core/events_engine';
-import resizeObserverSingleton from '../../../../core/resize_observer';
 
 import {
   ScrollDirection,
@@ -85,6 +84,7 @@ import { isVisible } from '../utils/is_element_visible';
 import { getTranslateValues } from '../utils/get_translate_values';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { allowedDirection } from '../utils/get_allowed_direction';
+import { subscribeToResize } from '../utils/subscribe_to_resize';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -536,58 +536,38 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  topPocketResizeObserver(): DisposeEffectReturn | undefined {
-    if (!this.props.forceGeneratePockets) {
-      return undefined;
-    }
-
-    const topPocketEl = this.topPocketRef.current;
-
-    resizeObserverSingleton.observe(topPocketEl, ({ target }) => {
-      this.setTopPocketDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(topPocketEl); };
+  subscribeTopPocketToResize(): EffectReturn {
+    return subscribeToResize(
+      this.topPocketRef.current,
+      (element: HTMLDivElement) => { this.setTopPocketDimensions(element); },
+    );
   }
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  bottomPocketResizeObserver(): DisposeEffectReturn | undefined {
-    if (!this.props.forceGeneratePockets) {
-      return undefined;
-    }
-
-    const bottomPocketEl = this.bottomPocketRef.current;
-
-    resizeObserverSingleton.observe(bottomPocketEl, ({ target }) => {
-      this.setBottomPocketDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(bottomPocketEl); };
+  subscribeBottomPocketToResize(): EffectReturn {
+    return subscribeToResize(
+      this.bottomPocketRef.current,
+      (element: HTMLDivElement) => { this.setBottomPocketDimensions(element); },
+    );
   }
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  containerResizeObserver(): DisposeEffectReturn {
-    const containerEl = this.containerRef.current;
-
-    resizeObserverSingleton.observe(containerEl, ({ target }) => {
-      this.setContainerDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(containerEl); };
+  subscribeContainerToResize(): EffectReturn {
+    return subscribeToResize(
+      this.containerRef.current,
+      (element: HTMLDivElement) => { this.setContainerDimensions(element); },
+    );
   }
 
   @Effect({ run: 'once' })
   /* istanbul ignore next */
-  contentResizeObserver(): DisposeEffectReturn {
-    const contentEl = this.content();
-
-    resizeObserverSingleton.observe(contentEl, ({ target }) => {
-      this.setContentDimensions(target);
-    });
-
-    return (): void => { resizeObserverSingleton.unobserve(contentEl); };
+  subscribeContentToResize(): EffectReturn {
+    return subscribeToResize(
+      this.content(),
+      (element: HTMLDivElement) => { this.setContentDimensions(element); },
+    );
   }
 
   // if delete this effect we need to wait changing size inside resizeObservable
