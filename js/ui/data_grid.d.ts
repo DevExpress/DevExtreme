@@ -4127,10 +4127,11 @@ export interface Editing extends EditingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type dxDataGridScrolling = Scrolling;
 
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxDataGridOptions.scrolling.mode

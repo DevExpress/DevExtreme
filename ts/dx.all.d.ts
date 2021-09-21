@@ -6984,9 +6984,6 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export interface Scrolling extends ScrollingBase {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
@@ -7654,7 +7651,7 @@ declare module DevExpress.ui {
     summary?: DevExpress.ui.dxDataGrid.Summary;
   }
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
    */
   export type dxDataGridScrolling = DevExpress.ui.dxDataGrid.Scrolling;
   /**
@@ -19911,9 +19908,6 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.DataChangeInfo;
     export type SavingEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.SavingInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
@@ -20212,7 +20206,7 @@ declare module DevExpress.ui {
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxTreeList.Scrolling instead
    */
   export type dxTreeListScrolling = DevExpress.ui.dxTreeList.Scrolling;
   /**

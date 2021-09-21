@@ -917,10 +917,11 @@ export interface Paging extends PagingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type dxTreeListScrolling = Scrolling;
 
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
