@@ -1,9 +1,9 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { getWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import { isDefined } from '../../core/utils/type';
 import LoadPanel from '../../ui/load_panel';
+import gridUtils from '../../ui/grid_core/ui.grid_core.utils';
 
 
 const EXPORT_LOAD_PANEL_CLASS = 'dx-export-loadpanel';
@@ -21,17 +21,6 @@ class ExportLoadPanel {
             shading: false,
             height: 90,
             width: 200,
-            position: () => {
-                const $window = $(getWindow());
-                if(this._$targetElement.height() > $window.height()) {
-                    return {
-                        of: $window,
-                        boundary: this._$targetElement,
-                        collision: 'fit'
-                    };
-                }
-                return { of: this._$targetElement };
-            },
             container: this._$container
         };
     }
@@ -47,6 +36,7 @@ class ExportLoadPanel {
     }
 
     show() {
+        this._loadPanel.option('position', gridUtils.calculateLoadPanelPosition(this._$targetElement));
         this._loadPanel.show();
     }
 

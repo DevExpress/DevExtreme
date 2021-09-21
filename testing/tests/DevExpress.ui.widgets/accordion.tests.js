@@ -1,6 +1,7 @@
 import fx from 'animation/fx';
 import 'generic_light.css!';
 import config from 'core/config';
+import { getHeight } from 'core/utils/size';
 import { deferUpdate, noop } from 'core/utils/common';
 import { extend } from 'core/utils/extend';
 import { isRenderer } from 'core/utils/type';
@@ -961,11 +962,11 @@ QUnit.module('update method', () => {
             height: '100%'
         });
         const $item = $accordion.dxAccordion('itemElements').eq(0);
-        const height = $item.height();
+        const height = getHeight($item);
 
         $container.height(200);
         $accordion.dxAccordion('updateDimensions').done(function() {
-            assert.equal($item.height(), height + 100, 'height was recalculated');
+            assert.equal(getHeight($item), height + 100, 'height was recalculated');
             done();
         });
     });

@@ -9,8 +9,6 @@ import {
 /**
  * @docid
  * @namespace DevExpress
- * @module animation/presets
- * @export default
  * @public
  */
 declare const animationPresets: {

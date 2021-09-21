@@ -7,7 +7,6 @@ import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
 import { isString } from 'core/utils/type';
-import browser from 'core/utils/browser';
 import { extend } from 'core/utils/extend';
 import { isFunction } from '../../../../js/core/utils/type.js';
 
@@ -166,12 +165,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => {
                 assert.equal(request.method, 'POST');
 
-                if(browser.msie) {
-                    return;
-                }
-
                 const data = request.data;
-
                 const args = JSON.parse(data.get('arguments'));
 
                 const chunkMetadata = JSON.parse(args.chunkMetadata);
@@ -290,11 +284,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => {
                 assert.strictEqual(request.method, 'GET', 'request method is GET');
                 assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
-                if(browser.msie) {
-                    assert.ok(true, 'IE does not support FormData.get()');
-                } else {
-                    assert.strictEqual(request.data.dataValue, dataValueText, 'custom formData value presents');
-                }
+                assert.strictEqual(request.data.dataValue, dataValueText, 'custom formData value presents');
                 assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
             }
         });
@@ -323,11 +313,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => {
                 assert.strictEqual(request.method, 'POST', 'request method is POST');
                 assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
-                if(browser.msie) {
-                    assert.ok(true, 'IE does not support FormData.get()');
-                } else {
-                    assert.strictEqual(request.data.get('dataValue'), dataValueText, 'custom formData value presents');
-                }
+                assert.strictEqual(request.data.get('dataValue'), dataValueText, 'custom formData value presents');
                 assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
             }
         });

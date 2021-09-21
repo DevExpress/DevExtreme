@@ -296,8 +296,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/filter_builder
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -319,8 +317,6 @@ export default class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
 export interface dxFilterBuilderCustomOperation {
     /**
      * @docid
-     * @type_function_param1 filterValue:any
-     * @type_function_param2 field:dxFilterBuilderField
      * @type_function_return Filter expression
      * @public
      */
@@ -333,11 +329,7 @@ export interface dxFilterBuilderCustomOperation {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1 fieldInfo:object
      * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param1_field3 field:dxFilterBuilderField
-     * @type_function_return string
      * @public
      */
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: dxFilterBuilderField }) => string);
@@ -354,7 +346,6 @@ export interface dxFilterBuilderCustomOperation {
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 field:dxFilterBuilderField
      * @type_function_param1_field3 setValue:function
-     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -387,8 +378,6 @@ export interface dxFilterBuilderCustomOperation {
 export interface dxFilterBuilderField {
     /**
      * @docid
-     * @type_function_param1 filterValue:any
-     * @type_function_param2 selectedFilterOperation:string
      * @type_function_return Filter expression
      * @public
      */
@@ -401,10 +390,7 @@ export interface dxFilterBuilderField {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1 fieldInfo:object
      * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @public
      */
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string }) => string);
@@ -433,7 +419,6 @@ export interface dxFilterBuilderField {
      * @type_function_param1_field2 filterOperation:string
      * @type_function_param1_field3 field:dxFilterBuilderField
      * @type_function_param1_field4 setValue:function
-     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -477,14 +462,12 @@ export interface dxFilterBuilderField {
        * @docid
        * @default undefined
        * @type_function_param1 data:object
-       * @type_function_return string
        */
       displayExpr?: string | ((data: any) => string);
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
-       * @type_function_return string|number|boolean
        */
       valueExpr?: string | ((data: any) => string | number | boolean);
     };

@@ -478,15 +478,6 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
           expect(helper.viewModel.scrollLeft()).toEqual(130);
         });
-
-        it('scrollLeft(), scrollTop()', () => {
-          const helper = new ScrollableTestHelper({});
-
-          helper.viewModel.scrollOffset = jest.fn(() => ({ left: 25, top: 30 }));
-
-          expect(helper.viewModel.scrollLeft()).toEqual(25);
-          expect(helper.viewModel.scrollTop()).toEqual(30);
-        });
       });
     });
 

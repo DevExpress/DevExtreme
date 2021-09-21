@@ -31,7 +31,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -60,7 +59,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -70,8 +68,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
  * @section uiWidgets
  * @inherits Component
  * @namespace DevExpress
- * @module core/dom_component
- * @export default
  * @hidden
  */
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
@@ -113,7 +109,6 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     /**
      * @docid
      * @publicName element()
-     * @return DxElement
      * @public
      */
     element(): DxElement;

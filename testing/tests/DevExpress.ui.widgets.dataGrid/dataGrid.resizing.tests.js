@@ -26,6 +26,7 @@ import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import browser from 'core/utils/browser';
 import { getWindow } from 'core/utils/window';
+import { getWidth, getHeight } from 'core/utils/size';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
 QUnit.module('Initialization', baseModuleConfig, () => {
@@ -135,7 +136,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let $cols;
 
         // act
-        assert.strictEqual(instance.$element().children().width(), 200);
+        assert.strictEqual(getWidth(instance.$element().children()), 200);
         assert.ok(instance.getScrollable(), 'scrollable is created');
 
         const $colGroups = $('.dx-datagrid colgroup');
@@ -164,7 +165,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let $cols;
 
         // act
-        assert.strictEqual(instance.$element().children().width(), 200);
+        assert.strictEqual(getWidth(instance.$element().children()), 200);
         assert.ok(instance.getScrollable(), 'scrollable is created');
 
         const $colGroups = $('.dx-datagrid colgroup');
@@ -517,15 +518,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataGrid = $dataGrid.dxDataGrid('instance');
 
         // assert
-        assert.equal(Math.round($dataGrid.find('.dx-datagrid').height()), 400, 'height is equal max-height');
-        assert.ok(dataGrid.getScrollable().$content().height() > $(dataGrid.getScrollable().container()).height(), 'scroll is exists');
+        assert.equal(Math.round(getHeight($dataGrid.find('.dx-datagrid'))), 400, 'height is equal max-height');
+        assert.ok(getHeight(dataGrid.getScrollable().$content()) > getHeight(dataGrid.getScrollable().container()), 'scroll is exists');
 
         // act
         dataGrid.searchByText('test');
 
         // assert
         assert.equal(dataGrid.totalCount(), 0, 'no items');
-        assert.ok($dataGrid.find('.dx-datagrid').height() < 400, 'height is less then max-height');
+        assert.ok(getHeight($dataGrid.find('.dx-datagrid')) < 400, 'height is less then max-height');
     });
 
     // T849902
@@ -540,7 +541,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         const scrollable = dataGrid.getScrollable();
         assert.ok(scrollable, 'scrollable is created');
-        assert.ok(scrollable.$content().height() > $(scrollable.container()).height(), 'scroll is exists');
+        assert.ok(getHeight(scrollable.$content()) > getHeight($(scrollable.container())), 'scroll is exists');
     });
 
     // T820186
@@ -1120,7 +1121,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         dataGrid.option('columns[0].width', 1);
 
         // assert
-        assert.strictEqual(dataGrid.$element().width(), 101);
+        assert.strictEqual(getWidth(dataGrid.$element()), 101);
         assert.strictEqual(dataGrid.columnOption(0, 'visibleWidth'), 1);
         assert.strictEqual(dataGrid.columnOption(1, 'visibleWidth'), 'auto');
     });
@@ -1139,7 +1140,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         dataGrid.endUpdate();
 
         // assert
-        assert.strictEqual(dataGrid.$element().width(), 101);
+        assert.strictEqual(getWidth(dataGrid.$element()), 101);
         assert.strictEqual(dataGrid.columnOption(0, 'visibleWidth'), 1);
         assert.strictEqual(dataGrid.columnOption(1, 'visibleWidth'), 'auto');
     });

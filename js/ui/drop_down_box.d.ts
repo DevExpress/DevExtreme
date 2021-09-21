@@ -114,7 +114,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_param1 templateData:object
      * @type_function_param1_field1 component:dxDropDownBox
      * @type_function_param1_field2 value:any
-     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -127,8 +126,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
     dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @type_function_param1 value:string|Array<any>
-     * @type_function_return string
      * @public
      */
     displayValueFormatter?: ((value: string | Array<any>) => string);
@@ -136,7 +133,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default null
      * @type_function_param1 value:object
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -170,8 +166,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
  * @isEditor
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @hasTranscludedContent
- * @module ui/drop_down_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

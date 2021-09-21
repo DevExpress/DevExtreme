@@ -214,15 +214,11 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     currentPathKeys?: Array<string>;
     /**
      * @docid
-     * @type_function_param1 columns:Array<dxFileManagerDetailsColumn>
-     * @type_function_return Array<dxFileManagerDetailsColumn>
      * @public
      */
     customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
     /**
      * @docid
-     * @type_function_param1 fileSystemItem:FileSystemItem
-     * @type_function_return string
      * @public
      */
     customizeThumbnail?: ((fileSystemItem: FileSystemItem) => string);
@@ -676,8 +672,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/file_manager
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

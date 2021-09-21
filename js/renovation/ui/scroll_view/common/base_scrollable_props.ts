@@ -2,9 +2,9 @@ import {
   ComponentBindings, OneWay, Event, Slot,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
-import { ScrollableDirection, ScrollEventArgs } from './types.d';
+import { ScrollableDirection, ScrollEventArgs, RefreshStrategy } from './types.d';
 import { touch } from '../../../../core/utils/support';
-import { getDefaultBounceEnabled, getDefaultUseNative, isDesktop } from '../utils/get_default_option_value';
+import { getDefaultBounceEnabled, isDesktop } from '../utils/get_default_option_value';
 import { current, isMaterial } from '../../../../ui/themes';
 import messageLocalization from '../../../../localization/message';
 
@@ -13,8 +13,6 @@ export class BaseScrollableProps {
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
   @OneWay() aria?: Record<string, string> = {};
-
-  @OneWay() useNative = getDefaultUseNative();
 
   @OneWay() addWidgetClass = false;
 
@@ -57,6 +55,8 @@ export class BaseScrollableProps {
   @Event() onPullDown?: EventCallback<unknown>;
 
   @Event() onReachBottom?: EventCallback<unknown>;
+
+  @OneWay() refreshStrategy: RefreshStrategy = 'simulated';
 
   @OneWay() pullingDownText: string = isMaterial(current()) ? '' : messageLocalization.format('dxScrollView-pullingDownText');
 
