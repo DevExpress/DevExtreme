@@ -538,7 +538,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @default null
      * @public
-     * @type string | Array<any> | Store | DataSource | DataSourceOptions
+     * @type DataSourceDefinition
      */
     dataSource?: DataSourceDefinition<TRowData, TKey>;
     /**
@@ -2678,7 +2678,8 @@ export interface ColumnHeaderFilter {
    * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field1 component:object
    * @default undefined
-   * @type_function_return void
+   * @type_function_return Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions
    */
   dataSource?: FilterLookupDataSource<any> | (() => FilterLookupDataSource<any>);
   /**
@@ -2715,6 +2716,8 @@ export interface ColumnLookup {
    * @docid GridBaseColumn.lookup.dataSource
    * @type_function_param1_field1 data:object
    * @default undefined
+   * @type_function_return Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions
    */
   dataSource?: FilterLookupDataSource<any> | (() => FilterLookupDataSource<any>);
   /**

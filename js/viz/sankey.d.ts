@@ -112,6 +112,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @notUsedInTheme
      * @public
+     * @type DataSourceDefinition
      */
     dataSource?: DataSourceDefinition<any>;
     /**

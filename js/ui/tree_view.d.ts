@@ -126,7 +126,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<Item>;
+    dataSource?: DataSourceDefinition<string | Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure

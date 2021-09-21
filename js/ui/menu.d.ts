@@ -82,7 +82,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<Item>;
+    dataSource?: DataSourceDefinition<string | Item>;
     /**
      * @docid
      * @default false

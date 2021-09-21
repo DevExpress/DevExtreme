@@ -153,6 +153,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @notUsedInTheme
      * @public
+     * @type DataSourceDefinition
      */
     dataSource?: DataSourceDefinition<any>;
     /**

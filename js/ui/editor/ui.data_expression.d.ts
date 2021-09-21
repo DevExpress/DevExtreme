@@ -21,6 +21,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * @docid
      * @default null
+     * @type DataSourceDefinition
      * @public
      */
     dataSource?: DataSourceDefinition<CollectionWidgetItem | any>;

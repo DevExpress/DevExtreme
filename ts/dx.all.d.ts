@@ -1644,13 +1644,6 @@ declare module DevExpress.data {
     selector: KeySelector<T>;
   };
   /**
-   * [descr:DataSourceDefinition]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DataSourceDefinition<T> =
-    | DataSourceMixinArray<T>
-    | DataSource;
-  /**
    * [descr:CustomStore]
    */
   export class CustomStore<
@@ -1917,14 +1910,15 @@ declare module DevExpress.data {
     > = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
   }
   /**
-   * [descr:DataSourceMixinArray]
+   * [descr:DataSourceDefinition]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DataSourceMixinArray<T> =
+  export type DataSourceDefinition<T> =
     | string
     | Array<T>
-    | Store
-    | DataSourceOptions;
+    | Store<any, T>
+    | DataSourceOptions<any, T>
+    | DataSource<any, T>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -5473,7 +5467,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<DevExpress.ui.dxContextMenu.Item>;
+    dataSource?: DevExpress.data.DataSourceDefinition<
+      string | DevExpress.ui.dxContextMenu.Item
+    >;
     /**
      * [descr:dxContextMenuOptions.items]
      */
@@ -12148,8 +12144,8 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type FilterLookupDataSource<T> = Exclude<
-      DevExpress.data.DataSourceMixinArray<T>,
-      string
+      DevExpress.data.DataSourceDefinition<T>,
+      string | DevExpress.data.DataSource
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFilterBuilder>;
@@ -15922,7 +15918,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuBaseOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<dxMenuBaseItem>;
+    dataSource?: DevExpress.data.DataSourceDefinition<string | dxMenuBaseItem>;
     /**
      * [descr:dxMenuBaseOptions.items]
      */
@@ -15985,7 +15981,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<DevExpress.ui.dxMenu.Item>;
+    dataSource?: DevExpress.data.DataSourceDefinition<
+      string | DevExpress.ui.dxMenu.Item
+    >;
     /**
      * [descr:dxMenuOptions.hideSubmenuOnMouseLeave]
      */
@@ -22044,7 +22042,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<DevExpress.ui.dxTreeView.Item>;
+    dataSource?: DevExpress.data.DataSourceDefinition<
+      string | DevExpress.ui.dxTreeView.Item
+    >;
     /**
      * [descr:dxTreeViewOptions.dataStructure]
      */

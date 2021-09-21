@@ -47,8 +47,9 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
      * @docid
      * @default null
      * @public
+     * @type DataSourceDefinition
      */
-    dataSource?: DataSourceDefinition<dxMenuBaseItem>;
+    dataSource?: DataSourceDefinition<string | dxMenuBaseItem>;
     /**
      * @docid
      * @public

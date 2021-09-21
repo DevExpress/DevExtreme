@@ -106,6 +106,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @docid BaseChartOptions.dataSource
      * @notUsedInTheme
      * @public
+     * @type DataSourceDefinition
      */
     dataSource?: DataSourceDefinition<any>;
     /**

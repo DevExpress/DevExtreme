@@ -750,6 +750,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default null
+       * @type DataSourceDefinition
        */
       dataSource?: DataSourceDefinition<any>;
       /**

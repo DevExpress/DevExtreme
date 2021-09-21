@@ -1,4 +1,5 @@
-import { DataSourceFactory } from '../data/data_source_aliases';
+import { DataSourceDefinition } from '../data/data_source_aliases';
+import DataSource from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -365,7 +366,7 @@ export interface dxFilterBuilderCustomOperation {
     name?: string;
 }
 
-export type FilterLookupDataSource<T> = Exclude<DataSourceFactory<T>, string>;
+export type FilterLookupDataSource<T> = Exclude<DataSourceDefinition<T>, string | DataSource>;
 
 /**
  * @@docid
@@ -453,6 +454,7 @@ export interface dxFilterBuilderField {
       /**
        * @docid
        * @default undefined
+       * @type Array<any> | Store | DataSourceOptions
        */
       dataSource?: FilterLookupDataSource<any>;
       /**

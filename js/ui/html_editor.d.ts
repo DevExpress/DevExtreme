@@ -443,6 +443,7 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default null
      * @public
+     * @type DataSourceDefinition
      */
     dataSource?: DataSourceDefinition<string>;
     /**
@@ -581,6 +582,7 @@ export interface dxHtmlEditorVariables {
      * @docid
      * @default null
      * @public
+     * @type DataSourceDefinition
      */
     dataSource?: DataSourceDefinition<string>;
     /**
