@@ -2091,11 +2091,10 @@ QUnit.module('renderGeometry', () => {
         fixtures.simple.create();
         try {
             const $popover = $('#what');
-            this.positionedHandlerStub = sinon.stub();
             const instance = new Popover($popover, {
                 visible: true,
-                onPositioned: this.positionedHandlerStub
             });
+            const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
             const newOptions = {
                 arrowPosition: {
                     boundaryOffset: { h: 30, v: 20 },
@@ -2105,12 +2104,30 @@ QUnit.module('renderGeometry', () => {
             };
 
             for(const optionName in newOptions) {
-                const initialCallCount = this.positionedHandlerStub.callCount;
+                const initialCallCount = renderGeometrySpy.callCount;
 
                 instance.option(optionName, newOptions[optionName]);
 
-                assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
+                assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
             }
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+});
+
+QUnit.module('shading', () => {
+    QUnit.test('overlay wrapper should be positioned at {top: 0, left: 0}', function(assert) {
+        fixtures.simple.create();
+        try {
+            const popover = new Popover($('#what'), {
+                shading: true,
+                target: '#where',
+                visible: true
+            });
+
+            const $wrapper = popover.$wrapper();
+            assert.deepEqual($wrapper.position(), { top: 0, left: 0 }, 'wrapper is positioned correctly');
         } finally {
             fixtures.simple.drop();
         }

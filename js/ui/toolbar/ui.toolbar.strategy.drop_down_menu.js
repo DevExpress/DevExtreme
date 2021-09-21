@@ -4,9 +4,9 @@ import ToolbarStrategy from './ui.toolbar.strategy';
 import ToolbarMenu from './ui.toolbar.menu';
 import DropDownMenu from '../drop_down_menu';
 import devices from '../../core/devices';
-import { POPOVER_BOUNDARY_OFFSET } from '../popover_contants';
 
 const MENU_INVISIBLE_CLASS = 'dx-state-invisible';
+const POPOVER_BOUNDARY_OFFSET = 10;
 
 const DropDownMenuStrategy = ToolbarStrategy.inherit({
 

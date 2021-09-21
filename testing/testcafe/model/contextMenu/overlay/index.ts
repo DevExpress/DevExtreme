@@ -26,7 +26,7 @@ export default class Overlay {
         const {
           offsetX, offsetY, pageX, pageY,
         // eslint-disable-next-line no-underscore-dangle
-        } = (getOverlayInstance() as any)._position.of;
+        } = (getOverlayInstance() as any)._positionController._position.of;
 
         return {
           offsetX, offsetY, pageX, pageY,
