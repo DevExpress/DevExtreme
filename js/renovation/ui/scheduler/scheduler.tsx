@@ -270,9 +270,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   onViewRendered(viewMetaData: ViewMetaData): void {
     this.viewDataProvider = viewMetaData.viewDataProvider;
     this.cellsMetaData = viewMetaData.cellsMetaData;
-    if (this.viewDataProvider) {
-      this.createInstances();
-    }
+    this.createInstances();
   }
 
   setCurrentView(view: string): void {
@@ -284,6 +282,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   createInstances(): void {
+    if (!this.viewDataProvider) {
+      return;
+    }
+
     this.dataAccessors = createDataAccessors(
       this.instance,
       this.props,
@@ -304,7 +306,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       showAllDayPanel: this.props.showAllDayPanel,
       timeZone: this.props.timeZone,
       getIsVirtualScrolling: () => this.props.scrolling.mode === 'virtual',
-      getDataAccessors: () => this.dataAccessors,
+      getDataAccessors: (): DataAccessorType => this.dataAccessors,
     });
   }
 }

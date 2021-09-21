@@ -334,41 +334,80 @@ describe('Scheduler', () => {
             .toBe(cellsMetaData);
         });
 
-        it('should create data accessors and factory instances', () => {
-          const scheduler = new Scheduler(new SchedulerProps());
+        describe('createInstances', () => {
+          it('should correctly create factory instances', () => {
+            const scheduler = new Scheduler(new SchedulerProps());
 
-          expect(scheduler.viewDataProvider)
-            .toBe(undefined);
-          expect(scheduler.cellsMetaData)
-            .toBe(undefined);
+            const viewDataProvider = new ViewDataProvider('week') as any;
+            const cellsMetaData = {
+              dateTableCellsMeta: [],
+              allDayPanelCellsMeta: [],
+            };
 
-          const viewDataProvider = new ViewDataProvider('week') as any;
-          const cellsMetaData = {
-            dateTableCellsMeta: [],
-            allDayPanelCellsMeta: [],
-          };
+            scheduler.onViewRendered({
+              viewDataProvider,
+              cellsMetaData,
+            });
 
-          scheduler.onViewRendered({
-            viewDataProvider,
-            cellsMetaData,
+            expect(getAppointmentDataProvider(scheduler.key))
+              .toBeDefined();
+            expect(getTimeZoneCalculator(scheduler.key))
+              .toBeDefined();
           });
 
-          expect(scheduler.dataAccessors.expr)
-            .toEqual({
-              startDateExpr: 'startDate',
-              endDateExpr: 'endDate',
-              startDateTimeZoneExpr: 'startDateTimeZone',
-              endDateTimeZoneExpr: 'endDateTimeZone',
-              allDayExpr: 'allDay',
-              textExpr: 'text',
-              descriptionExpr: 'description',
-              recurrenceRuleExpr: 'recurrenceRule',
-              recurrenceExceptionExpr: 'recurrenceException',
+          it('should correctly create data accessors', () => {
+            const props = {
+              ...new SchedulerProps(),
+              startDateExpr: 'testStartDate',
+            };
+            const scheduler = new Scheduler(props);
+
+            const viewDataProvider = new ViewDataProvider('week') as any;
+            const cellsMetaData = {
+              dateTableCellsMeta: [],
+              allDayPanelCellsMeta: [],
+            };
+
+            scheduler.onViewRendered({
+              viewDataProvider,
+              cellsMetaData,
             });
-          expect(getAppointmentDataProvider(scheduler.key))
-            .toBeDefined();
-          expect(getTimeZoneCalculator(scheduler.key))
-            .toBeDefined();
+
+            expect(scheduler.dataAccessors.expr)
+              .toEqual({
+                startDateExpr: 'testStartDate',
+                endDateExpr: 'endDate',
+                startDateTimeZoneExpr: 'startDateTimeZone',
+                endDateTimeZoneExpr: 'endDateTimeZone',
+                allDayExpr: 'allDay',
+                textExpr: 'text',
+                descriptionExpr: 'description',
+                recurrenceRuleExpr: 'recurrenceRule',
+                recurrenceExceptionExpr: 'recurrenceException',
+              });
+
+            scheduler.dataAccessors.getter.startDate({ testStartDate: '2021-09-21T11:11:00' });
+            expect(props.dateSerializationFormat)
+              .toEqual('yyyy-MM-ddTHH:mm:ss');
+          });
+
+          it('should not create instances without viewDataProvider', () => {
+            const scheduler = new Scheduler(new SchedulerProps());
+
+            expect(scheduler.viewDataProvider)
+              .toBe(undefined);
+            expect(scheduler.cellsMetaData)
+              .toBe(undefined);
+
+            scheduler.createInstances();
+
+            expect(scheduler.dataAccessors)
+              .toBeUndefined();
+            expect(getAppointmentDataProvider(scheduler.key))
+              .toBeUndefined();
+            expect(getTimeZoneCalculator(scheduler.key))
+              .toBeUndefined();
+          });
         });
       });
 
