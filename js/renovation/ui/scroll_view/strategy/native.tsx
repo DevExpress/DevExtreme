@@ -75,7 +75,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     topPocketHeight, contentStyles, scrollViewContentRef, contentTranslateTop,
     hScrollLocation, vScrollLocation, vScrollOffsetMax, hScrollOffsetMax,
     props: {
-      aria, activeStateUnit, disabled, height, width, rtlEnabled, children, visible,
+      aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, needRenderScrollbars,
       pullingDownText, pulledDownText, refreshingText, reachBottomText, refreshStrategy,
@@ -88,7 +88,6 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   return (
     <Widget
       rootElementRef={scrollableRef}
-      activeStateUnit={activeStateUnit}
       aria={aria}
       addWidgetClass={false}
       classes={cssClasses}
