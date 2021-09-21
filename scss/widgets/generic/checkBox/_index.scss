@@ -50,6 +50,7 @@ $generic-checkbox-disable-opacity: 0.4;
   .dx-checkbox-checked & {
     @include dx-icon(check);
 
+    font-size: $generic-checkbox-arrow-font-size;
     color: $checkbox-checked-color;
 
     @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size);
@@ -57,6 +58,7 @@ $generic-checkbox-disable-opacity: 0.4;
 
   .dx-checkbox-indeterminate & {
     color: $checkbox-indeterminate-bg;
+    font-size: $generic-checkbox-indeterminate-font-size;
 
     @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size);
 
@@ -66,16 +68,6 @@ $generic-checkbox-disable-opacity: 0.4;
       border-radius: 2px;
       height: $generic-checkbox-indeterminate-icon-size;
     }
-  }
-}
-
-.dx-checkbox-container {
-  .dx-checkbox-checked & {
-    font-size: $generic-checkbox-arrow-font-size;
-  }
-
-  .dx-checkbox-indeterminate & {
-    font-size: $generic-checkbox-indeterminate-font-size;
   }
 }
 
