@@ -43,7 +43,6 @@ describe('DateTableCellBase', () => {
       expect(allDayTitle.props())
         .toEqual({
           ...new AllDayPanelTitleProps(),
-          visible: true,
           isSetTitleClass: true,
         });
     });

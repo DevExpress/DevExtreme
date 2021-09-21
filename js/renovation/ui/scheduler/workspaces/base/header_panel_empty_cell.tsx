@@ -19,7 +19,6 @@ export const viewFunction = ({
   >
     {isRenderAllDayTitle && (
       <AllDayPanelTitle
-        visible
         isSetTitleClass={isSetAllDayTitleClass}
       />
     )}

@@ -40,46 +40,25 @@ describe('AllDayPanelTitle', () => {
       });
 
       describe('classes', () => {
-        it('should not add "hidden" class if visible is true', () => {
+        it('should apply classes correctly', () => {
           const title = new AllDayPanelTitle({
             ...new AllDayPanelTitleProps(),
-            className: 'some-class',
-            visible: true,
           });
 
           expect(title.classes.split(' '))
             .toEqual([
               'dx-scheduler-all-day-title',
-              'some-class',
-            ]);
-        });
-
-        it('should add "hidden" class if visible is false', () => {
-          const title = new AllDayPanelTitle({
-            ...new AllDayPanelTitleProps(),
-            className: 'some-class',
-            visible: false,
-          });
-
-          expect(title.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-all-day-title',
-              'dx-scheduler-all-day-title-hidden',
               'some-class',
             ]);
         });
 
         it('should not set title class when isSetTitleClass is false', () => {
           const title = new AllDayPanelTitle({
-            className: 'some-class',
-            visible: true,
             isSetTitleClass: false,
           });
 
           expect(title.classes.split(' '))
-            .toEqual([
-              'some-class',
-            ]);
+            .toEqual([]);
         });
       });
     });
