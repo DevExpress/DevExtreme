@@ -50,17 +50,20 @@ $generic-checkbox-disable-opacity: 0.4;
   .dx-checkbox-checked & {
     @include dx-icon(check);
 
-    font-size: $generic-checkbox-arrow-font-size;
     color: $checkbox-checked-color;
 
     @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size);
+
+
+    font-size: $generic-checkbox-arrow-font-size;
   }
 
   .dx-checkbox-indeterminate & {
     color: $checkbox-indeterminate-bg;
-    font-size: $generic-checkbox-indeterminate-font-size;
 
     @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size);
+
+    font-size: $generic-checkbox-indeterminate-font-size;
 
     &::before {
       content: '';
