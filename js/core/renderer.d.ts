@@ -49,17 +49,11 @@ export interface dxElementWrapper {
 
   hasClass(className: string): boolean;
 
-  height(value: string | number): number;
-
   hide(): this;
 
   html(value: string): this;
 
   index(element: Element | dxElementWrapper): number;
-
-  innerHeight(value: string | number): number;
-
-  innerWidth(value: string | number): number;
 
   insertAfter(element: Element | dxElementWrapper): this;
 
@@ -76,10 +70,6 @@ export interface dxElementWrapper {
   offset(): Coordinates | undefined;
 
   offsetParent(): this;
-
-  outerHeight(value: number | string): this;
-
-  outerWidth(value: number | string): this;
 
   parent(selector?: string): this;
 
@@ -127,8 +117,6 @@ export interface dxElementWrapper {
   toggleClass(className: string, value?: boolean): this;
 
   val(value?: string | string[] | number): this;
-
-  width(value: number | string): this;
 
   wrap(wrappingElement: this | Element | string): this;
 

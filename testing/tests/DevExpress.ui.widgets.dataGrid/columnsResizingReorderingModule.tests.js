@@ -58,6 +58,7 @@ import { GroupingHeaderPanelExtender } from 'ui/data_grid/ui.data_grid.grouping'
 import { HeaderPanel } from 'ui/data_grid/ui.data_grid.header_panel';
 import Action from 'core/action';
 import devices from 'core/devices';
+import { getHeight } from 'core/utils/size';
 import publicComponentUtils from 'core/utils/public_component';
 
 const TestDraggingHeader2 = columnsResizingReordering.DraggingHeaderView.inherit({
@@ -319,7 +320,7 @@ QUnit.module('ColumnsSeparator', () => {
         columnsSeparator.height(73);
 
         // assert
-        assert.equal(columnsSeparator.element().height(), 73, 'element height');
+        assert.equal(getHeight(columnsSeparator.element()), 73, 'element height');
     });
 
     QUnit.test('Get/set width', function(assert) {
@@ -542,7 +543,7 @@ QUnit.module('ColumnsSeparator', () => {
 
         // arrange
         const $separator = separator.element();
-        assert.equal($separator.height(), 145, 'height of columns separator');
+        assert.equal(getHeight($separator), 145, 'height of columns separator');
         assert.equal($separator.css('top'), '100px', 'height of columns separator');
     });
 
@@ -630,7 +631,7 @@ QUnit.module('ColumnsSeparator', () => {
         tablePosition.update();
 
         // arrange
-        assert.equal(separator.element().height(), columnHeadersViewHeight + rowsViewHeight - scrollBarWidth, 'height of columns separator');
+        assert.equal(getHeight(separator.element()), columnHeadersViewHeight + rowsViewHeight - scrollBarWidth, 'height of columns separator');
     });
 
     function columnSeparatorHeightTest(assert, isResizing, isDragging) {
@@ -707,7 +708,7 @@ QUnit.module('ColumnsSeparator', () => {
             expectedHeight += rowsViewHeight - scrollBarWidth;
         }
 
-        assert.equal(separator.element().height(), expectedHeight, 'height of columns separator');
+        assert.equal(getHeight(separator.element()), expectedHeight, 'height of columns separator');
     }
 
     // T816406, T889787
@@ -2732,7 +2733,7 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.equal($tracker.css('top'), 'auto', 'top');
-        assert.equal($tracker.height(), 0, 'height');
+        assert.equal(getHeight($tracker), 0, 'height');
     });
 
     QUnit.test('TrackerView. It is visible when alloColumnResizing is true and empty columns options', function(assert) {

@@ -352,7 +352,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       colorGroups?: Array<number>;
       /**
        * @docid
-       * @type_function_param1 elements:Array<MapLayerElement>
        * @notUsedInTheme
        */
       customize?: ((elements: Array<MapLayerElement>) => void);
@@ -648,8 +647,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     annotations?: Array<dxVectorMapAnnotationConfig | any>;
     /**
      * @docid
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_return dxVectorMapAnnotationConfig
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -687,7 +684,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     coordinates?: Array<number>;
     /**
      * @docid
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
@@ -697,16 +693,12 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
     template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -718,13 +710,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
-     * @type_function_param1 itemInfo:object
-     * @type_function_param1_field1 start:number
-     * @type_function_param1_field2 end:number
-     * @type_function_param1_field3 index:number
-     * @type_function_param1_field4 color:string
-     * @type_function_param1_field5 size:number
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
@@ -738,13 +723,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxVectorMapOptions.legends.customizeText
-     * @type_function_param1 itemInfo:object
-     * @type_function_param1_field1 start:number
-     * @type_function_param1_field2 end:number
-     * @type_function_param1_field3 index:number
-     * @type_function_param1_field4 color:string
-     * @type_function_param1_field5 size:number
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
@@ -778,7 +756,6 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @docid dxVectorMapOptions.legends.markerTemplate
      * @default undefined
      * @type_function_param1 legendItem:VectorMapLegendItem
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -805,8 +782,6 @@ export interface dxVectorMapLegends extends BaseLegend {
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
-     * @type_function_param1 info:MapLayerElement
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -814,7 +789,6 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
-     * @type_function_param1 info:MapLayerElement
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
@@ -830,8 +804,6 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
 /**
  * @docid
  * @inherits BaseWidget
- * @module viz/vector_map
- * @export default
  * @namespace DevExpress.viz
  * @public
  */
@@ -839,14 +811,12 @@ export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
      * @docid
      * @publicName center()
-     * @return Array<number>
      * @public
      */
     center(): Array<number>;
     /**
      * @docid
      * @publicName center(centerCoordinates)
-     * @param1 centerCoordinates:Array<number>
      * @public
      */
     center(centerCoordinates: Array<number>): void;
@@ -859,9 +829,6 @@ export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
      * @docid
      * @publicName convertCoordinates(x, y)
-     * @param1 x:number
-     * @param2 y:number
-     * @return Array<number>
      * @deprecated dxVectorMap.convertToGeo
      * @public
      */
@@ -869,69 +836,54 @@ export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
      * @docid
      * @publicName convertToGeo(x, y)
-     * @param1 x:number
-     * @param2 y:number
-     * @return Array<number>
      * @public
      */
     convertToGeo(x: number, y: number): Array<number>;
     /**
      * @docid
      * @publicName convertToXY(longitude, latitude)
-     * @param1 longitude:number
-     * @param2 latitude:number
-     * @return Array<number>
      * @public
      */
     convertToXY(longitude: number, latitude: number): Array<number>;
     /**
      * @docid
      * @publicName getLayerByIndex(index)
-     * @return MapLayer
-     * @param1 index:number
      * @public
      */
     getLayerByIndex(index: number): MapLayer;
     /**
      * @docid
      * @publicName getLayerByName(name)
-     * @return MapLayer
-     * @param1 name:string
      * @public
      */
     getLayerByName(name: string): MapLayer;
     /**
      * @docid
      * @publicName getLayers()
-     * @return Array<MapLayer>
      * @public
      */
     getLayers(): Array<MapLayer>;
     /**
      * @docid
      * @publicName viewport()
-     * @return Array<number>
      * @public
      */
     viewport(): Array<number>;
     /**
      * @docid
      * @publicName viewport(viewportCoordinates)
-     * @param1 viewportCoordinates:Array<number>
      * @public
      */
     viewport(viewportCoordinates: Array<number>): void;
     /**
      * @docid
      * @publicName zoomFactor()
-     * @return number
      * @public
      */
     zoomFactor(): number;
     /**
      * @docid
      * @publicName zoomFactor(zoomFactor)
-     * @param1 zoomFactor:number
      * @public
      */
     zoomFactor(zoomFactor: number): void;

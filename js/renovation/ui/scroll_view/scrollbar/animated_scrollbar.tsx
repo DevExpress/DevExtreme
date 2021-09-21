@@ -202,7 +202,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbarRef.current!.moveTo(-clampIntoRange(value, -this.maxOffset, 0));
 
     this.needRiseEnd = true;
-    this.resetThumbScrolling();
   }
 
   @Method()

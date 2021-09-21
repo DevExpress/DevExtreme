@@ -96,6 +96,19 @@ describe('AllDayPanelLayout', () => {
       expect(allDayTable.exists())
         .toBe(false);
     });
+
+    it('should render all-day appointments', () => {
+      const layout = render({
+        props: {
+          allDayAppointments: (
+            <div className="all-day-appointments" />
+          ),
+        },
+      });
+
+      expect(layout.find('.all-day-appointments').exists())
+        .toBe(true);
+    });
   });
 
   describe('Logic', () => {

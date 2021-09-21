@@ -1,3 +1,13 @@
+import {
+    getOuterHeight,
+    getOuterWidth,
+    setWidth,
+    getHeight,
+    getInnerHeight,
+    getInnerWidth,
+    getWidth,
+} from 'core/utils/size';
+
 import $ from 'jquery';
 import devices from 'core/devices';
 import fx from 'animation/fx';
@@ -133,8 +143,8 @@ QUnit.module('basic', () => {
 
         const $wrapper = $('.' + POPUP_WRAPPER_CLASS);
 
-        assert.equal($wrapper.outerHeight(), $(document.body).outerHeight(), 'height is 100%');
-        assert.equal($wrapper.outerWidth(), $(document.body).outerWidth(), 'width is 100%');
+        assert.equal(getOuterHeight($wrapper), getOuterHeight($(document.body)), 'height is 100%');
+        assert.equal(getOuterWidth($wrapper), getOuterWidth($(document.body)), 'width is 100%');
     });
 
     QUnit.test('default options', function(assert) {
@@ -436,7 +446,7 @@ QUnit.module('dimensions', {
         const $popupContent = instance.$content();
         const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
-        assert.roughEqual($popupContent.offset().top + $popupContent.outerHeight(), $popupBottom.offset().top, 0.1, 'content doesn\'t overlap bottom buttons');
+        assert.roughEqual($popupContent.offset().top + getOuterHeight($popupContent), $popupBottom.offset().top, 0.1, 'content doesn\'t overlap bottom buttons');
         devices.current(devices.real());
     });
 
@@ -450,11 +460,11 @@ QUnit.module('dimensions', {
             }
         }).dxPopup('instance').$content();
 
-        const popupContentHeight = $content.height();
+        const popupContentHeight = getHeight($content);
         const addedContent = $('<div>').width(200).height(200);
         $content.append(addedContent);
 
-        assert.equal($content.height(), popupContentHeight + addedContent.height());
+        assert.equal(getHeight($content), popupContentHeight + getHeight(addedContent));
     });
 
     QUnit.test('dxPopup should render custom template with render function that returns dom node', function(assert) {
@@ -498,7 +508,7 @@ QUnit.module('dimensions', {
             bottomTemplate: floatingTemplate
         }).dxPopup('instance').$content();
 
-        const contentPaddings = $content.outerHeight() - $content.height();
+        const contentPaddings = getOuterHeight($content) - getHeight($content);
         const computedContentHeight = $content.get(0).getBoundingClientRect().height - contentPaddings;
 
         const realContentHeight = floatingTemplate().appendTo('#qunit-fixture').get(0).getBoundingClientRect().height;
@@ -517,7 +527,7 @@ QUnit.module('dimensions', {
 
         $popupContent.append($contentElement);
         instance.option('height', 'auto');
-        assert.notEqual($overlayContent.height(), 100, 'auto height option');
+        assert.notEqual(getHeight($overlayContent), 100, 'auto height option');
     });
 
     ['minWidth', 'maxWidth', 'minHeight', 'maxHeight'].forEach((option) => {
@@ -563,8 +573,8 @@ QUnit.module('dimensions', {
         const $popupBottom = $overlayContent.find('.dx-popup-bottom');
 
         assert.equal(
-            $popupContent.outerHeight(true) + $popupTitle.outerHeight(true) + $popupBottom.outerHeight(true),
-            $overlayContent.height()
+            getOuterHeight($popupContent, true) + getOuterHeight($popupTitle, true) + getOuterHeight($popupBottom, true),
+            getHeight($overlayContent)
         );
     });
 
@@ -586,8 +596,8 @@ QUnit.module('dimensions', {
         const $popupBottom = $overlayContent.find('.dx-popup-bottom');
 
         assert.equal(
-            $popupContent.outerHeight(true) + $popupTitle.outerHeight(true) + $popupBottom.outerHeight(true),
-            $overlayContent.height()
+            getOuterHeight($popupContent, true) + getOuterHeight($popupTitle, true) + getOuterHeight($popupBottom, true),
+            getHeight($overlayContent)
         );
     });
 
@@ -633,7 +643,7 @@ QUnit.module('dimensions', {
             const showingObserved = assert.async();
             const contentResizingObserved = assert.async();
             setTimeout(() => {
-                this.$scrollableContainer.width(300);
+                setWidth(this.$scrollableContainer, 300);
                 setTimeout(() => {
                     assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
                     contentResizingObserved();
@@ -709,10 +719,10 @@ QUnit.module('options changed callbacks', {
         const $overlayContent = instance.$content().parent();
 
         instance.option('width', 345);
-        assert.equal($overlayContent.outerWidth(), 345);
+        assert.equal(getOuterWidth($overlayContent), 345);
 
         instance.option('height', 567);
-        assert.equal($overlayContent.outerHeight(), 567);
+        assert.equal(getOuterHeight($overlayContent), 567);
     });
 
     QUnit.test('popup height can be changed according to the content if height = auto', function(assert) {
@@ -729,28 +739,28 @@ QUnit.module('options changed callbacks', {
         }).dxPopup('instance');
 
         const $popup = popup.$content().parent(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
-        const popupHeight = $popup.height();
+        const popupHeight = getHeight($popup);
 
         $('<div>').height(50).appendTo($content);
-        assert.strictEqual($popup.height(), (popupHeight + 50), 'popup height has been changed');
+        assert.strictEqual(getHeight($popup), (popupHeight + 50), 'popup height has been changed');
 
         $('<div>').height(450).appendTo($content);
-        assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed, it is equal to the maxHeight');
+        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed, it is equal to the maxHeight');
 
         $content.empty();
-        assert.strictEqual($popup.outerHeight(), minHeight, 'popup height has been changed, it is equal to the minHeight');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup height has been changed, it is equal to the minHeight');
 
         popup.option('autoResizeEnabled', false);
         $('<div>').height(450).appendTo($content);
-        assert.strictEqual($popup.outerHeight(), minHeight, 'popup height does not change if autoResizeEnabled = false');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup height does not change if autoResizeEnabled = false');
 
         popup.option('autoResizeEnabled', true);
-        assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
+        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
 
         popup.option('width', 'auto');
         $content.empty();
 
-        assert.strictEqual($popup.outerHeight(), minHeight, 'popup with auto width can change height');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup with auto width can change height');
     });
 
     QUnit.test('popup height should support top and bottom toolbars if height = auto', function(assert) {
@@ -770,23 +780,23 @@ QUnit.module('options changed callbacks', {
 
         const $popup = popup.$content().parent();
         const $popupContent = popup.$content();
-        const topToolbarHeight = $popup.find(`.${POPUP_TITLE_CLASS}`).eq(0).outerHeight();
-        const bottomToolbarHeight = $popup.find(`.${POPUP_BOTTOM_CLASS}`).eq(0).outerHeight();
-        const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+        const topToolbarHeight = getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`).eq(0));
+        const bottomToolbarHeight = getOuterHeight($popup.find(`.${POPUP_BOTTOM_CLASS}`).eq(0));
+        const popupContentPadding = getOuterHeight($popupContent) - getHeight($popupContent);
         const popupBordersHeight = parseInt($popup.css('borderTopWidth')) + parseInt($popup.css('borderBottomWidth'));
 
-        let popupContentHeight = $popupContent.outerHeight();
+        let popupContentHeight = getOuterHeight($popupContent);
 
-        assert.strictEqual($popup.outerHeight(), minHeight, 'popup has max height');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup has max height');
         assert.strictEqual(popupContentHeight, minHeight - topToolbarHeight - bottomToolbarHeight - popupBordersHeight, 'popup has minimum content height');
 
         $('<div>').height(150).appendTo($content);
-        popupContentHeight = $popupContent.innerHeight();
+        popupContentHeight = getInnerHeight($popupContent);
         assert.strictEqual(popupContentHeight, 150 + popupContentPadding, 'popup has right height');
 
         $('<div>').height(300).appendTo($content);
-        popupContentHeight = $popupContent.innerHeight();
-        assert.strictEqual($popup.outerHeight(), maxHeight, 'popup has max height');
+        popupContentHeight = getInnerHeight($popupContent);
+        assert.strictEqual(getOuterHeight($popup), maxHeight, 'popup has max height');
         assert.strictEqual(popupContentHeight, maxHeight - topToolbarHeight - bottomToolbarHeight - popupBordersHeight, 'popup has maximum content height');
     });
 
@@ -804,22 +814,22 @@ QUnit.module('options changed callbacks', {
         }).dxPopup('instance');
 
         const $popup = popup.$content().parent();
-        const windowHeight = $(window).innerHeight();
+        const windowHeight = getInnerHeight($(window));
         const $popupContent = popup.$content();
-        const topToolbarHeight = $popup.find(`.${POPUP_TITLE_CLASS}`).eq(0).outerHeight();
-        const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+        const topToolbarHeight = getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`).eq(0));
+        const popupContentPadding = getOuterHeight($popupContent) - getHeight($popupContent);
 
-        assert.roughEqual($popup.outerHeight(), windowHeight * 0.5, 1, 'minimum popup height in percentages');
+        assert.roughEqual(getOuterHeight($popup), windowHeight * 0.5, 1, 'minimum popup height in percentages');
 
         $('<div>').height(windowHeight).appendTo($content);
-        assert.roughEqual($popup.outerHeight(), windowHeight * 0.9, 1, 'maximum popup height in percentages');
+        assert.roughEqual(getOuterHeight($popup), windowHeight * 0.9, 1, 'maximum popup height in percentages');
 
         popup.option('maxHeight', 'none');
-        assert.roughEqual($popup.height(), windowHeight + popupContentPadding + topToolbarHeight, 1, 'popup maxHeight: none');
+        assert.roughEqual(getHeight($popup), windowHeight + popupContentPadding + topToolbarHeight, 1, 'popup maxHeight: none');
 
         $content.empty();
         popup.option('minHeight', 'auto');
-        assert.strictEqual($popup.height(), $popup.find(`.${POPUP_TITLE_CLASS}`).outerHeight() + popupContentPadding, 'popup minHeight: auto');
+        assert.strictEqual(getHeight($popup), getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`)) + popupContentPadding, 'popup minHeight: auto');
         devices.current(devices.real());
     });
 
@@ -870,8 +880,8 @@ QUnit.module('options changed callbacks', {
         });
 
         let treeviewContentHeight = 0;
-        $content.children().each(function(_, item) { treeviewContentHeight += $(item).height(); });
-        assert.roughEqual($content.height(), treeviewContentHeight, 1, 'treeview content can not be heighter than container');
+        $content.children().each(function(_, item) { treeviewContentHeight += getHeight($(item)); });
+        assert.roughEqual(getHeight($content), treeviewContentHeight, 1, 'treeview content can not be heighter than container');
     });
 
     QUnit.test('Set right content height if window.innerHeight was changed only (T834502)', function(assert) {
@@ -885,8 +895,8 @@ QUnit.module('options changed callbacks', {
 
         const $popup = instance.$content().parent();
         const $popupContent = instance.$content();
-        const topToolbarHeight = $popup.find(`.${POPUP_TITLE_CLASS}`).eq(0).outerHeight() || 0;
-        const bottomToolbarHeight = $popup.find(`.${POPUP_BOTTOM_CLASS}`).eq(0).outerHeight() || 0;
+        const topToolbarHeight = getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`).eq(0)) || 0;
+        const bottomToolbarHeight = getOuterHeight($popup.find(`.${POPUP_BOTTOM_CLASS}`).eq(0)) || 0;
         const popupBordersHeight = parseInt($popup.css('borderTopWidth')) + parseInt($popup.css('borderBottomWidth'));
 
         try {
@@ -894,7 +904,7 @@ QUnit.module('options changed callbacks', {
 
             resizeCallbacks.fire();
 
-            assert.roughEqual($popupContent.outerHeight() + topToolbarHeight + bottomToolbarHeight + popupBordersHeight, 100, 1);
+            assert.roughEqual(getOuterHeight($popupContent) + topToolbarHeight + bottomToolbarHeight + popupBordersHeight, 100, 1);
         } finally {
             windowUtils.getWindow.restore();
         }
@@ -911,15 +921,15 @@ QUnit.module('options changed callbacks', {
 
         const $overlayContent = this.instance.$content().parent();
 
-        assert.equal($overlayContent.outerWidth(), $(document.body).outerWidth(), 'wrapper has 100% width');
-        assert.equal($overlayContent.outerHeight(), $(document.body).outerHeight(), 'wrapper has 100% height');
+        assert.equal(getOuterWidth($overlayContent), getOuterWidth($(document.body)), 'wrapper has 100% width');
+        assert.equal(getOuterHeight($overlayContent), getOuterHeight($(document.body)), 'wrapper has 100% height');
 
         assert.ok($overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), 'fullscreen class added');
         assert.ok(!$overlayContent.hasClass(POPUP_NORMAL_CLASS), 'normal class is removed');
 
         this.instance.option('fullScreen', false);
-        assert.equal($overlayContent.outerWidth(), 345);
-        assert.equal($overlayContent.outerHeight(), 567);
+        assert.equal(getOuterWidth($overlayContent), 345);
+        assert.equal(getOuterHeight($overlayContent), 567);
         assert.ok(!$overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), 'fullscreen class deleted');
         assert.ok($overlayContent.hasClass(POPUP_NORMAL_CLASS), 'normal class is added');
     });
@@ -938,8 +948,8 @@ QUnit.module('options changed callbacks', {
 
         const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
-        assert.equal($overlayWrapper.outerWidth(), $(window).innerWidth(), 'wrapper has correct width');
-        assert.equal($overlayWrapper.outerHeight(), $(window).innerHeight(), 'wrapper has correct height');
+        assert.equal(getOuterWidth($overlayWrapper), getInnerWidth($(window)), 'wrapper has correct width');
+        assert.equal(getOuterHeight($overlayWrapper), getInnerHeight($(window)), 'wrapper has correct height');
     });
 
     QUnit.test('start scroll position is saved after full screen popup hiding', function(assert) {
@@ -1004,8 +1014,8 @@ QUnit.module('options changed callbacks', {
 
         const wrapper = this.instance.$wrapper().get(0);
 
-        assert.equal(parseInt(getComputedStyle(wrapper).width), $(window).width(), 'wrappers width specified');
-        assert.equal(parseInt(getComputedStyle(wrapper).height), $(window).height(), 'wrappers height specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).width), getWidth($(window)), 'wrappers width specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).height), getHeight($(window)), 'wrappers height specified');
     });
 
     QUnit.test('title', function(assert) {
@@ -1402,7 +1412,7 @@ QUnit.module('resize', {
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(-100, -100);
-        assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, 'size of popup and overlay is equal');
+        assert.roughEqual(getOuterHeight(popup.$content()), getHeight($overlayContent), 0.1, 'size of popup and overlay is equal');
     });
 
     QUnit.test('popup content position should be reset after show/hide', function(assert) {
@@ -1625,11 +1635,11 @@ QUnit.module('rendering', {
 
 
     QUnit.test('dx-popup-fullscreen-width class should be attached when width is equal to screen width', function(assert) {
-        this.instance.option('width', function() { return $(window).width(); });
+        this.instance.option('width', function() { return getWidth($(window)); });
         this.instance.show();
         assert.ok(this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
 
-        this.instance.option('width', function() { return $(window).width() - 1; });
+        this.instance.option('width', function() { return getWidth($(window)) - 1; });
         assert.ok(!this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
     });
 

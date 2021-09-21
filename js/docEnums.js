@@ -1189,6 +1189,16 @@
  */
 
 /**
+ * @typedef {string} Enums.GanttPdfExportMode
+ * @enum { 'all'|'treeList'|'chart' }
+ */
+
+/**
+ * @typedef {string} Enums.GanttPdfExportDateRange
+ * @enum { 'all'|'visible' }
+ */
+
+/**
  * @typedef {string} Enums.LegendMarkerState
  * @enum {'normal'|'hovered'|'selected'}
  */

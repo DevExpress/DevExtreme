@@ -1658,9 +1658,7 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (
-      options: LoadOptions<TValue>
-    ) => PromiseLike<TValue> | Array<TValue>;
+    load: (options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1858,7 +1856,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TKey, TValue>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1959,9 +1957,12 @@ declare module DevExpress.data {
      * [descr:DataSourceOptions.store]
      */
     store?:
+      | Array<TSourceValue>
       | Store<TKey, TSourceValue>
-      | StoreOptions<TKey, TSourceValue>
-      | Array<TSourceValue>;
+      | (ArrayStoreOptions<TKey, TSourceValue> & { type: 'array' })
+      | (LocalStoreOptions<TKey, TSourceValue> & { type: 'local' })
+      | (ODataStoreOptions<TKey, TSourceValue> & { type: 'odata' })
+      | CustomStoreOptions<TKey, TSourceValue>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2086,8 +2087,11 @@ declare module DevExpress.data {
   /**
    * [descr:LocalStore]
    */
-  export class LocalStore extends ArrayStore {
-    constructor(options?: LocalStoreOptions);
+  export class LocalStore<TKey = any, TValue = any> extends ArrayStore<
+    TKey,
+    TValue
+  > {
+    constructor(options?: LocalStoreOptions<TKey, TValue>);
     /**
      * [descr:LocalStore.clear()]
      */
@@ -2096,7 +2100,8 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
+  export interface LocalStoreOptions<TKey = any, TValue = any>
+    extends ArrayStoreOptions<TKey, TValue> {
     /**
      * [descr:LocalStoreOptions.flushInterval]
      */
@@ -3947,6 +3952,12 @@ declare module DevExpress.pdfExporter {
     options: PdfExportDataGridProps
   ): DevExpress.core.utils.DxPromise<void>;
   /**
+   * [descr:pdfExporter.exportGantt(options)]
+   */
+  export function exportGantt(
+    options: PdfExportGanttProps
+  ): DevExpress.core.utils.DxPromise<any>;
+  /**
    * [descr:PdfDataGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -4025,6 +4036,48 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.loadPanel]
      */
     loadPanel?: ExportLoadPanel;
+  }
+  /**
+   * [descr:PdfExportGanttProps]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfExportGanttProps {
+    /**
+     * [descr:PdfExportGanttProps.createDocumentMethod]
+     */
+    createDocumentMethod?: (options: any) => object;
+    /**
+     * [descr:PdfExportGanttProps.jsPDFDocument]
+     */
+    jsPDFDocument?: object;
+    /**
+     * [descr:PdfExportGanttProps.component]
+     */
+    component?: DevExpress.ui.dxGantt;
+    /**
+     * [descr:PdfExportGanttProps.format]
+     */
+    format?: string | object;
+    /**
+     * [descr:PdfExportGanttProps.landscape]
+     */
+    landscape?: boolean;
+    /**
+     * [descr:PdfExportGanttProps.fileName]
+     */
+    fileName?: string;
+    /**
+     * [descr:PdfExportGanttProps.margins]
+     */
+    margins?: object;
+    /**
+     * [descr:PdfExportGanttProps.exportMode]
+     */
+    exportMode?: 'all' | 'treeList' | 'chart';
+    /**
+     * [descr:PdfExportGanttProps.dateRange]
+     */
+    dateRange?: 'all' | 'visible' | object;
   }
 }
 declare module DevExpress.ui {
@@ -8013,6 +8066,14 @@ declare module DevExpress.ui {
       | DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName
       | dxDataGridToolbarItem
     >;
+    /**
+     * [descr:dxDataGridToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxDataGridToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxDataGridToolbarItem]
@@ -12674,10 +12735,6 @@ declare module DevExpress.ui {
      */
     scrollToDate(date: Date | Number | string): void;
     /**
-     * [descr:dxGantt.exportToPdf(options)]
-     */
-    exportToPdf(options: any): DevExpress.core.utils.DxPromise<any>;
-    /**
      * [descr:dxGantt.showResourceManagerDialog()]
      */
     showResourceManagerDialog(): void;
@@ -13238,6 +13295,33 @@ declare module DevExpress.ui {
       | 'months'
       | 'quarters'
       | 'years';
+    /**
+     * [descr:dxGanttOptions.scaleTypeRange]
+     */
+    scaleTypeRange?: {
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.start]
+       */
+      start?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.end]
+       */
+      end?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+    };
     /**
      * [descr:dxGanttOptions.selectedRowKey]
      */
@@ -20740,6 +20824,14 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
+    /**
+     * [descr:dxTreeListToolbarItem.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbarItem.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeView]
