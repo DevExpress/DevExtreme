@@ -4,7 +4,6 @@ const imageCreator = exporter.image.creator;
 import typeUtils from 'core/utils/type';
 const testingMarkupStart = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>';
 const testingMarkupEnd = '</svg>';
-import browser from 'core/utils/browser';
 import svgUtils from 'core/utils/svg';
 import { Deferred } from 'core/utils/deferred';
 
@@ -384,11 +383,6 @@ QUnit.test('toDataURL ImageQuality', function(assert) {
 
 // T374627
 QUnit.test('Special symbols drown on canvas correct', function(assert) {
-    if(browser.msie) {
-        assert.ok(true, 'This test is not for IE/Edge');
-        return;
-    }
-
     const that = this;
     const done = assert.async();
     const imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Специальные символы</text></g>' + testingMarkupEnd,
@@ -410,11 +404,6 @@ QUnit.test('Special symbols drown on canvas correct', function(assert) {
 });
 
 QUnit.test('Defined background', function(assert) {
-    if(browser.msie) {
-        assert.ok(true, 'This test is not for IE/Edge');
-        return;
-    }
-
     const that = this;
     const done = assert.async();
     const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
@@ -449,11 +438,6 @@ QUnit.test('Defined background', function(assert) {
 });
 
 QUnit.test('Transformation of canvas context args (T892041, T1020859)', function(assert) {
-    if(browser.msie) {
-        assert.ok(true, 'This test is not for IE/Edge');
-        return;
-    }
-
     const done = assert.async();
     const context = window.CanvasRenderingContext2D.prototype;
     const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
@@ -1060,11 +1044,6 @@ QUnit.test('Stroke-opacity / Fill-opacity', function(assert) {
 });
 
 QUnit.test('Filter shadow', function(assert) {
-    if(browser.msie) {
-        assert.ok(true, 'Not supported in Internet explorer');
-        return;
-    }
-
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart +
@@ -1812,7 +1791,7 @@ QUnit.test('Text with °. On error behavior', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="0" y="0" transform="translate(100,10) rotate(270,100,10)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Temperature, °C</text>' + testingMarkupEnd;
-    const imageBlob = getData(markup, browser.msie);
+    const imageBlob = getData(markup);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {

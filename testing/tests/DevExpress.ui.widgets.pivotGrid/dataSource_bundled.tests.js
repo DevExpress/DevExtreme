@@ -8,7 +8,6 @@ import xmlaStore, { XmlaStore } from 'ui/pivot_grid/xmla_store/xmla_store';
 import { LocalStore } from 'ui/pivot_grid/local_store';
 import RemoteStore from 'ui/pivot_grid/remote_store';
 import pivotGridUtils, { setFieldProperty } from 'ui/pivot_grid/ui.pivot_grid.utils';
-import browser from 'core/utils/browser';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import '../../../testing/content/orders.js';
@@ -4084,7 +4083,7 @@ QUnit.module('dxPivotGrid dataSource with Store', {
         });
     });
 
-    if(window.INTRANET && (!browser.msie || parseInt(browser.version) < 17)) {
+    if(window.INTRANET) {
 
         QUnit.test('XMLA store integration', function(assert) {
             const done = assert.async();
