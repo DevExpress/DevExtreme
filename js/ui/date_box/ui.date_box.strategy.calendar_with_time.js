@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -11,6 +12,7 @@ import uiDateUtils from './ui.date_utils';
 
 const SHRINK_VIEW_SCREEN_WIDTH = 573;
 const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
+const DATEBOX_TIMEVIEW_SIDE_CLASS = 'dx-datebox-datetime-time-side';
 
 const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
@@ -99,7 +101,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _isSmallScreen: function() {
-        return $(window).width() <= SHRINK_VIEW_SCREEN_WIDTH;
+        return getWidth(window) <= SHRINK_VIEW_SCREEN_WIDTH;
     },
 
     _isShrinkView: function() {
@@ -124,18 +126,22 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
         this._box = this.dateBox._createComponent($('<div>').appendTo($popupContent), Box, {
             direction: 'row',
-            crossAlign: 'start',
+            crossAlign: 'stretch',
             items: this._getBoxItems(),
-            itemTemplate: (function(data) {
+            itemTemplate: (function(data, i, element) {
                 const $container = $('<div>');
 
                 switch(data.name) {
                     case 'calendar':
                         $container.append(this._widget.$element());
-                        if(this._isShrinkView()) $container.append(this._timeView.$element());
+                        if(this._isShrinkView()) {
+                            this._timeView.$element().addClass(DATEBOX_TIMEVIEW_SIDE_CLASS);
+                            $container.append(this._timeView.$element());
+                        }
                         break;
                     case 'time':
                         $container.append(this._timeView.$element());
+                        $(element).addClass(DATEBOX_TIMEVIEW_SIDE_CLASS);
                         break;
                 }
 

@@ -6,21 +6,15 @@ import { getWindow } from './window';
 
 const window = getWindow();
 
-export const resetActiveElement = function() {
+export const resetActiveElement = () => {
     const activeElement = domAdapter.getActiveElement();
-    const body = domAdapter.getBody();
 
-    // TODO: remove this hack after msie 11 support stopped
-    if(activeElement && activeElement !== body && activeElement.blur) {
-        try {
-            activeElement.blur();
-        } catch(e) {
-            body.blur();
-        }
+    if(activeElement && activeElement !== domAdapter.getBody()) {
+        activeElement.blur?.();
     }
 };
 
-export const clearSelection = function() {
+export const clearSelection = () => {
     const selection = window.getSelection();
     if(!selection) return;
     if(selection.type === 'Caret') return;
@@ -35,7 +29,7 @@ export const clearSelection = function() {
     }
 };
 
-export const closestCommonParent = function(startTarget, endTarget) {
+export const closestCommonParent = (startTarget, endTarget) => {
     const $startTarget = $(startTarget);
     const $endTarget = $(endTarget);
 
@@ -54,7 +48,7 @@ export const closestCommonParent = function(startTarget, endTarget) {
     }
 };
 
-export const extractTemplateMarkup = function(element) {
+export const extractTemplateMarkup = (element) => {
     element = $(element);
 
     const templateTag = element.length && element.filter(function isNotExecutableScript() {
@@ -70,7 +64,7 @@ export const extractTemplateMarkup = function(element) {
     }
 };
 
-export const normalizeTemplateElement = function(element) {
+export const normalizeTemplateElement = (element) => {
     let $element = isDefined(element) && (element.nodeType || isRenderer(element))
         ? $(element)
         : $('<div>').html(element).contents();
@@ -86,17 +80,16 @@ export const normalizeTemplateElement = function(element) {
     return $element;
 };
 
-export const clipboardText = function(event, text) {
+export const clipboardText = (event, text) => {
     const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
-
-    if(arguments.length === 1) {
+    if(!text) {
         return clipboard && clipboard.getData('Text');
     }
 
     clipboard && clipboard.setData('Text', text);
 };
 
-export const contains = function(container, element) {
+export const contains = (container, element) => {
     if(!element) {
         return false;
     }
@@ -118,7 +111,7 @@ export const contains = function(container, element) {
         : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);
 };
 
-export const createTextElementHiddenCopy = function(element, text, options) {
+export const createTextElementHiddenCopy = (element, text, options) => {
     const elementStyles = window.getComputedStyle($(element).get(0));
     const includePaddings = options && options.includePaddings;
 

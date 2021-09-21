@@ -156,7 +156,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -180,8 +179,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default "group"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -286,7 +283,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default function() { return $(window).height() * 0.8 }
-     * @type_function_return number|string
      * @default 'auto' &for(desktop|iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -295,7 +291,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default function() {return $(window).width() * 0.8 }
-     * @type_function_return number|string
      * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } &for(iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -388,7 +383,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -428,8 +422,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/lookup
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

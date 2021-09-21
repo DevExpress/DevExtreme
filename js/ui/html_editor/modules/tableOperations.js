@@ -167,9 +167,9 @@ export const setLineElementsAttrValue = ($lineElements, property, value) => {
 export const getLineElements = ($table, index, direction) => {
     let result;
     if(direction !== 'vertical') {
-        result = $table.find(`td:nth-child(${(1 + index)})`);
+        result = $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
     } else {
-        result = $table.find('tr').eq(index).find('td');
+        result = $table.find('tr').eq(index).find('th, td');
     }
     return result;
 };

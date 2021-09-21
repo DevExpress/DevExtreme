@@ -6,14 +6,15 @@ import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
 import { getViewDataGeneratorByViewType } from './utils';
+import timeZoneUtils from '../../utils.timeZone';
 
 export default class ViewDataProvider {
     constructor(viewType) {
         this.viewDataGenerator = getViewDataGeneratorByViewType(viewType);
-        this.viewData = [];
+        this.viewData = {};
         this.completeViewDataMap = [];
         this.completeDateHeaderMap = [];
-        this.viewDataMap = [];
+        this.viewDataMap = {};
         this._groupedDataMapProvider = null;
     }
 
@@ -398,6 +399,34 @@ export default class ViewDataProvider {
 
     getIntervalDuration(intervalCount) {
         return this.viewDataGenerator._getIntervalDuration(intervalCount);
+    }
+
+    getLastCellEndDate() {
+        return new Date(
+            this.getLastViewDate().getTime() - dateUtils.dateToMilliseconds('minute')
+        );
+    }
+
+    getLastViewDateByEndDayHour(endDayHour) {
+        const lastCellEndDate = this.getLastCellEndDate();
+        const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
+
+        const endDateOfLastViewCell = new Date(
+            lastCellEndDate.setHours(
+                endTime.hours,
+                endTime.minutes
+            )
+        );
+
+        return this._adjustEndDateByDaylightDiff(lastCellEndDate, endDateOfLastViewCell);
+    }
+
+    _adjustEndDateByDaylightDiff(startDate, endDate) {
+        const daylightDiff = timeZoneUtils.getDaylightOffsetInMs(startDate, endDate);
+
+        const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
+
+        return new Date(endDateOfLastViewCell.getTime() - dateUtils.dateToMilliseconds('minute'));
     }
 
     getCellCountInDay(startDayHour, endDayHour, hoursInterval) {

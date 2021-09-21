@@ -165,7 +165,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:DxElement
-     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -230,8 +229,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @docid
  * @inherits DraggableBase
  * @hasTranscludedContent
- * @module ui/draggable
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

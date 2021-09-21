@@ -182,10 +182,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       connectorWidth?: number;
       /**
        * @docid
-       * @type_function_param1 barValue:object
        * @type_function_param1_field1 value:Number
-       * @type_function_param1_field2 valueText:string
-       * @type_function_return string
        * @notUsedInTheme
        */
       customizeText?: ((barValue: { value?: number; valueText?: string }) => string);
@@ -196,7 +193,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       font?: Font;
       /**
        * @docid
-       * @type Format
        * @default undefined
        */
       format?: Format;
@@ -303,10 +299,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
 export interface dxBarGaugeLegend extends BaseLegend {
     /**
      * @docid dxBarGaugeOptions.legend.customizeHint
-     * @type_function_param1 arg:object
-     * @type_function_param1_field1 item:BarGaugeBarInfo
-     * @type_function_param1_field2 text:string
-     * @type_function_return string
      * @public
      */
     customizeHint?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
@@ -319,17 +311,12 @@ export interface dxBarGaugeLegend extends BaseLegend {
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxBarGaugeOptions.legend.customizeText
-     * @type_function_param1 arg:object
-     * @type_function_param1_field1 item:BarGaugeBarInfo
-     * @type_function_param1_field2 text:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
     customizeText?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
     /**
      * @docid dxBarGaugeOptions.legend.itemTextFormat
-     * @type Format
      * @default undefined
      * @public
      */
@@ -338,7 +325,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @docid dxBarGaugeOptions.legend.markerTemplate
      * @default undefined
      * @type_function_param1 legendItem:BarGaugeLegendItem
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -362,11 +348,7 @@ export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate
-     * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param1_field3 index:number
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -375,10 +357,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param1_field3 index:number
      * @type_function_return object
      * @public
      */
@@ -393,8 +372,6 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
 /**
  * @docid
  * @inherits BaseWidget
- * @module viz/bar_gauge
- * @export default
  * @namespace DevExpress.viz
  * @public
  */
@@ -402,14 +379,12 @@ export default class dxBarGauge extends BaseWidget<dxBarGaugeOptions> {
     /**
      * @docid
      * @publicName values()
-     * @return Array<number>
      * @public
      */
     values(): Array<number>;
     /**
      * @docid
      * @publicName values(newValues)
-     * @param1 values:Array<number>
      * @public
      */
     values(values: Array<number>): void;

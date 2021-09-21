@@ -1,13 +1,14 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-@use "../../base/timeView/mixins" as *;
 
 // adduse
+$clock-digits-color: null !default;
 
-$timeview-bg: darken($base-bg, 5%) !default;
-$timeview-clock-bg: null !default;
-$timeview-hourarrow-bg: null !default;
-$timeview-minutearrow-bg: null !default;
+@if $mode == "light" {
+  $clock-digits-color: color.change($base-text-color, $alpha: 0.54) !default;
+}
 
-@include clock-action-icons-mixin($base-accent, $mode);
+@if $mode == "dark" {
+  $clock-digits-color: color.change($base-text-color, $alpha: 0.6) !default;
+}
