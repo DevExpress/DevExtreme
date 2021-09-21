@@ -15,7 +15,7 @@ export const getCurrentView = (
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   views: (ViewType | Partial<ViewProps>)[],
 ): ViewType | Partial<ViewProps> => {
-  let currentViewProps: ViewType | Partial<ViewProps> | undefined = views.find((view): boolean => {
+  let currentViewProps: ViewType | Partial<ViewProps> | undefined = views?.find((view): boolean => {
     const names = isObject(view)
       ? [view.name, view.type]
       : [view];
