@@ -52,6 +52,21 @@ describe('CheckBoxIconIcon', () => {
           }
         });
 
+        it('should not do anything if size is not specified', () => {
+          const checkBoxIcon = new CheckBoxIcon({});
+          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
+          const icon = checkBoxIcon.elementRef.current!;
+
+          setWindow(getWindow(), false);
+          try {
+            checkBoxIcon.updateFontSize();
+
+            expect(icon.style.fontSize).toEqual(undefined);
+          } finally {
+            setWindow(getWindow(), true);
+          }
+        });
+
         it('should set icon font size', () => {
           const checkBoxIcon = new CheckBoxIcon({ size: 22, isChecked: true });
           checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
@@ -91,12 +106,12 @@ describe('CheckBoxIconIcon', () => {
                   expect(icon.style.fontSize).toEqual(expectedValue);
                 });
 
-                it('should set fontSize properly when size is not specified', () => {
+                it('should set fontSize properly when size is set using percentage format', () => {
                   (current as Mock).mockReturnValue(theme);
                   const iconSize = getDefaultIconSize();
                   (getElementComputedStyle as Mock).mockReturnValue({ width: iconSize });
 
-                  const checkBoxIcon = new CheckBoxIcon({ isChecked });
+                  const checkBoxIcon = new CheckBoxIcon({ isChecked, size: '100%' });
                   checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
                   const icon = checkBoxIcon.elementRef.current!;
 
