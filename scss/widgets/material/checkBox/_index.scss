@@ -106,6 +106,16 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   }
 }
 
+.dx-checkbox-container {
+  .dx-checkbox-checked & {
+    font-size: $material-checkbox-arrow-font-size;
+  }
+
+  .dx-checkbox-indeterminate & {
+    font-size: $material-checkbox-indeterminate-font-size;
+  }
+}
+
 .dx-invalid {
   .dx-checkbox-icon {
     border: 2px solid $checkbox-invalid-focused-border-color;

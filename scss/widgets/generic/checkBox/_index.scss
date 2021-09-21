@@ -69,6 +69,16 @@ $generic-checkbox-disable-opacity: 0.4;
   }
 }
 
+.dx-checkbox-container {
+  .dx-checkbox-checked & {
+    font-size: $generic-checkbox-arrow-font-size;
+  }
+
+  .dx-checkbox-indeterminate & {
+    font-size: $generic-checkbox-indeterminate-font-size;
+  }
+}
+
 .dx-state-disabled {
   &.dx-checkbox,
   .dx-checkbox {
