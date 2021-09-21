@@ -163,7 +163,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 12 : 9);
+        assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 8 : 9);
     });
 
     QUnit.performanceTest(`dxScheduler timelineDay view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
