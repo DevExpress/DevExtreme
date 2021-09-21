@@ -17,6 +17,7 @@ import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent, isObject } from '../../core/utils/type';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
+import errors from '../../core/errors';
 import eventsEngine from '../../events/core/events_engine';
 import {
     move as dragEventMove
@@ -165,6 +166,8 @@ const Overlay = Widget.inherit({
 
             copyRootClassesToWrapper: false,
 
+            hideCopyClassesDeprecationWarning: false,
+
             onShowing: null,
 
             onShown: null,
@@ -237,6 +240,14 @@ const Overlay = Widget.inherit({
         extend(this._deprecatedOptions, {
             'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' }
         });
+    },
+
+    ctor: function(element, options) {
+        this.callBase(element, options);
+
+        if(options.copyRootClassesToWrapper && !options.hideCopyClassesDeprecationWarning) {
+            errors.log('W0001', this.NAME, 'copyRootClassesToWrapper', '21.2', 'Use the "wrapperAttr" option instead');
+        }
     },
 
     _init: function() {
