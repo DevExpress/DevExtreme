@@ -218,10 +218,8 @@ export class VirtualScrollingDispatcher {
     }
 
     attachScrollableEvents() {
-        if(this.horizontalScrollingAllowed || this.verticalScrollingAllowed) {
-            if(!this.height) {
-                this._attachWindowScroll();
-            }
+        if((this.horizontalScrollingAllowed || this.verticalScrollingAllowed) && !this.height) {
+            this._attachWindowScroll();
         }
     }
 
@@ -235,7 +233,7 @@ export class VirtualScrollingDispatcher {
             } = window;
 
             if(scrollX >= MIN_SCROLL_OFFSET || scrollY >= MIN_SCROLL_OFFSET) {
-                this.process({
+                this.handleOnScrollEvent({
                     left: scrollX,
                     top: scrollY,
                 });
@@ -245,7 +243,7 @@ export class VirtualScrollingDispatcher {
         eventsEngine.on(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
     }
 
-    process(scrollPosition) {
+    handleOnScrollEvent(scrollPosition) {
         if(scrollPosition) {
             const {
                 left,

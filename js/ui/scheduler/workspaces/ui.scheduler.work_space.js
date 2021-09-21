@@ -464,7 +464,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
                     currentOnScroll?.(e);
 
-                    this.virtualScrollingDispatcher.process(e?.scrollOffset);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent(e?.scrollOffset);
                 },
             };
         }
