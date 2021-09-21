@@ -8,6 +8,7 @@ import {
   JSXTemplate,
   OneWay,
   RefObject,
+  Slot,
   Template,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
@@ -27,9 +28,9 @@ import { GroupPanel } from './group_panel/group_panel';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { LayoutProps } from './layout_props';
 import { TimePaneLayoutProps } from './time_panel/layout';
-import { AllDayPanelTitle } from './date_table/all_day_panel/title';
 import { AllDayPanelLayout } from './date_table/all_day_panel/layout';
 import { ScrollableDirection } from '../../../scroll_view/common/types';
+import { HeaderPanelEmptyCell } from './header_panel_empty_cell';
 
 export const viewFunction = ({
   classes,
@@ -37,6 +38,10 @@ export const viewFunction = ({
   isStandaloneAllDayPanel,
   isSetAllDayTitleClass,
   groupPanelHeight,
+  headerEmptyCellWidth,
+
+  timePanelRef,
+  groupPanelRef,
 
   props: {
     headerPanelTemplate: HeaderPanel,
@@ -52,7 +57,8 @@ export const viewFunction = ({
     groups,
     groupByDate,
     groupPanelClassName,
-    isAllDayPanelSupported,
+    isRenderHeaderEmptyCell,
+    isAllDayPanelVisible,
     scrollingDirection,
 
     dataCellTemplate,
@@ -62,69 +68,86 @@ export const viewFunction = ({
 
     dateTableRef,
     allDayPanelRef,
+
+    appointments,
+    allDayAppointments,
   },
 }: OrdinaryLayout): JSX.Element => (
   <Widget
     className={classes}
   >
-    {isAllDayPanelSupported && (
-      <AllDayPanelTitle
-        visible={isStandaloneAllDayPanel}
-        isSetTitleClass={isSetAllDayTitleClass}
-      />
-    )}
-    <table className="dx-scheduler-header-panel">
-      <HeaderPanel
-        dateHeaderData={dateHeaderData}
-        groupPanelData={groupPanelData}
-        timeCellTemplate={timeCellTemplate}
-        dateCellTemplate={dateCellTemplate}
-        isRenderDateHeader={isRenderDateHeader}
+    <div className="dx-scheduler-header-panel-container">
+      {isRenderHeaderEmptyCell && (
+        <HeaderPanelEmptyCell
+          width={headerEmptyCellWidth}
+          isRenderAllDayTitle={isStandaloneAllDayPanel}
+          isSetAllDayTitleClass={isSetAllDayTitleClass}
+        />
+      )}
+      <div className="dx-scheduler-header-tables-container">
+        <table className="dx-scheduler-header-panel">
+          <HeaderPanel
+            dateHeaderData={dateHeaderData}
+            groupPanelData={groupPanelData}
+            timeCellTemplate={timeCellTemplate}
+            dateCellTemplate={dateCellTemplate}
+            isRenderDateHeader={isRenderDateHeader}
 
-        groupOrientation={groupOrientation}
-        groupByDate={groupByDate}
-        groups={groups}
-        resourceCellTemplate={resourceCellTemplate}
-      />
-    </table>
-    {isAllDayPanelSupported && (
-      <AllDayPanelLayout
-        visible={isStandaloneAllDayPanel}
-        viewData={viewData}
-        dataCellTemplate={dataCellTemplate}
-        tableRef={allDayPanelRef}
-      />
-    )}
+            groupOrientation={groupOrientation}
+            groupByDate={groupByDate}
+            groups={groups}
+            resourceCellTemplate={resourceCellTemplate}
+          />
+        </table>
+        {isAllDayPanelVisible && (
+          <AllDayPanelLayout
+            visible={isStandaloneAllDayPanel}
+            viewData={viewData}
+            dataCellTemplate={dataCellTemplate}
+            tableRef={allDayPanelRef}
+            allDayAppointments={allDayAppointments}
+          />
+        )}
+      </div>
+
+    </div>
     <Scrollable
       useKeyboard={false}
       bounceEnabled={false}
       direction={scrollingDirection}
       className="dx-scheduler-date-table-scrollable"
     >
-      {isRenderGroupPanel && (
-        <GroupPanel
-          groupPanelData={groupPanelData}
-          className={groupPanelClassName}
-          groupOrientation={groupOrientation}
-          groupByDate={groupByDate}
-          groups={groups}
-          resourceCellTemplate={resourceCellTemplate}
-          height={groupPanelHeight}
-        />
-      )}
-      {!!TimePanel && (
-        <TimePanel
-          timePanelData={timePanelData}
-          timeCellTemplate={timeCellTemplate}
-          groupOrientation={groupOrientation}
-        />
-      )}
-      <DateTable
-        tableRef={dateTableRef}
-        viewData={viewData}
-        groupOrientation={groupOrientation}
-        dataCellTemplate={dataCellTemplate}
-      />
+      <div className="dx-scheduler-date-table-scrollable-content">
+        {isRenderGroupPanel && (
+          <GroupPanel
+            groupPanelData={groupPanelData}
+            className={groupPanelClassName}
+            groupOrientation={groupOrientation}
+            groupByDate={groupByDate}
+            groups={groups}
+            resourceCellTemplate={resourceCellTemplate}
+            height={groupPanelHeight}
+            elementRef={groupPanelRef}
+          />
+        )}
+        {!!TimePanel && (
+          <TimePanel
+            timePanelData={timePanelData}
+            timeCellTemplate={timeCellTemplate}
+            groupOrientation={groupOrientation}
+            tableRef={timePanelRef}
+          />
+        )}
+        <div className="dx-scheduler-date-table-container">
+          <DateTable
+            tableRef={dateTableRef}
+            viewData={viewData}
+            groupOrientation={groupOrientation}
+            dataCellTemplate={dataCellTemplate}
+          />
+          {appointments}
+        </div>
+      </div>
     </Scrollable>
   </Widget>
 );
@@ -176,15 +199,19 @@ export class OrdinaryLayoutProps extends LayoutProps {
 
   @OneWay() isAllDayPanelCollapsed = true;
 
-  @OneWay() isAllDayPanelSupported = false;
-
   @OneWay() isAllDayPanelVisible = false;
+
+  @OneWay() isRenderHeaderEmptyCell = true;
 
   @OneWay() scrollingDirection?: ScrollableDirection;
 
   @ForwardRef() dateTableRef!: RefObject<HTMLTableElement>;
 
   @ForwardRef() allDayPanelRef?: RefObject<HTMLTableElement>;
+
+  @Slot() appointments?: JSX.Element;
+
+  @Slot() allDayAppointments?: JSX.Element;
 }
 
 @Component({
@@ -196,6 +223,15 @@ OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderDa
 >() {
   @InternalState()
   groupPanelHeight: number | undefined;
+
+  @InternalState()
+  headerEmptyCellWidth: number | undefined;
+
+  @ForwardRef()
+  timePanelRef!: RefObject<HTMLTableElement>;
+
+  @ForwardRef()
+  groupPanelRef!: RefObject<HTMLDivElement>;
 
   get classes(): string {
     const {
@@ -258,8 +294,16 @@ OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderDa
     return !isVerticalGroupingApplied(groups, groupOrientation);
   }
 
-  @Effect()
+  @Effect({ run: 'always' })
   groupPanelHeightEffect(): void {
     this.groupPanelHeight = this.props.dateTableRef.current?.getBoundingClientRect().height;
+  }
+
+  @Effect({ run: 'always' })
+  headerEmptyCellWidthEffect(): void {
+    const timePanelWidth = this.timePanelRef.current?.getBoundingClientRect().width ?? 0;
+    const groupPanelWidth = this.groupPanelRef.current?.getBoundingClientRect().width ?? 0;
+
+    this.headerEmptyCellWidth = timePanelWidth + groupPanelWidth;
   }
 }
