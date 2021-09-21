@@ -22,11 +22,6 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
 
 $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms, font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms, top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
-
-$material-editor-outlined-with-label-height: 48px;
-$material-editor-filled-with-label-height: 60px;
-$material-editor-underlined-with-label-height: 56px;
-
 @mixin dx-texteditor-icon() {
   position: absolute;
   top: 50%;
@@ -488,18 +483,11 @@ $material-editor-underlined-with-label-height: 56px;
   $label-position-top: floor(math.div($material-filled-texteditor-input-top-padding, 2));
 
   .dx-texteditor-label {
-    .dx-label {
-      padding-left: $material-filled-texteditor-input-horizontal-padding;
-    }
-  }
-
-  &.dx-rtl,
-  .dx-rtl & {
-    .dx-texteditor-label {
-      .dx-label {
-        padding-right: $material-filled-texteditor-input-horizontal-padding;
-        padding-left: 0;
-      }
+    .dx-label-after,
+    .dx-label-before {
+      display: block;
+      box-sizing: border-box;
+      min-width: $material-filled-texteditor-input-horizontal-padding;
     }
   }
 
@@ -785,7 +773,7 @@ $material-editor-underlined-with-label-height: 56px;
 
     .dx-label-after {
       flex-grow: 1;
-      min-width: 0;
+      min-width: $material-filled-texteditor-input-horizontal-padding;
       border-radius: 0 $texteditor-input-border-radius $texteditor-input-border-radius 0;
     }
   }
@@ -1090,73 +1078,133 @@ $material-editor-underlined-with-label-height: 56px;
     }
   }
 
-  .dx-texteditor-buttons-container {
-    > .dx-button.dx-button-mode-text {
-      height: $material-underlined-editor-button-height;
-      margin: 1px $material-editor-custom-button-margin 3px;
 
-      .dx-button-content {
-        display: flex;
-        justify-content: center;
-        padding-top: $material-button-vertical-padding - 1px;
-
-        .dx-icon {
-          align-self: center;
-          margin-top: 1px;
-        }
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
+      .dx-placeholder {
+        display: none;
       }
 
-      &.dx-button-has-text {
-        .dx-button-content .dx-icon {
-          margin-top: 3px;
-        }
+      .dx-texteditor-label {
+        transition: $material-editor-label-transition;
+        transform: $label-transform;
+        font-size: $material-texteditor-font-size;
+        top: 50%;
+        height: $material-texteditor-font-size;
+        margin-top: math.div(-$material-texteditor-font-size, 2);
+        line-height: $material-texteditor-font-size;
       }
 
-      &:not(.dx-button-has-text) {
-        min-width: $material-underlined-editor-button-height;
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: $input-top-padding;
+          margin-top: 0;
+          transform: $label-transform;
+          font-size: $material-texteditor-font-size;
+          line-height: $material-texteditor-font-size;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
+      }
+    }
+
+    &.dx-state-focused,
+    &.dx-textarea.dx-state-focused {
+      .dx-placeholder {
+        display: block;
+      }
+
+      .dx-texteditor-label {
+        transform: $label-transform;
+        font-size: $material-texteditor-label-font-size;
+        top: 0;
+        margin-top: 0;
+        height: $material-texteditor-label-font-size;
+        line-height: $material-texteditor-label-font-size;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: 0;
+        }
+      }
+    }
+  }
+
+  &.dx-texteditor-with-before-buttons {
+    .dx-texteditor-buttons-container {
+      > .dx-button.dx-button-mode-text {
+        height: $material-underlined-editor-button-height;
+        margin: 1px $material-editor-custom-button-margin 3px;
 
         .dx-button-content {
-          padding: 2px;
+          display: flex;
+          justify-content: center;
+          padding-top: $material-button-vertical-padding - 1px;
+
+          .dx-icon {
+            align-self: center;
+            margin-top: 1px;
+          }
+        }
+
+        &.dx-button-has-text {
+          .dx-button-content .dx-icon {
+            margin-top: 3px;
+          }
+        }
+
+        &:not(.dx-button-has-text) {
+          min-width: $material-underlined-editor-button-height;
+
+          .dx-button-content {
+            padding: 2px;
+          }
         }
       }
-    }
 
-    &:first-child {
-      > .dx-button {
-        &:first-child {
-          margin-left: 0;
-        }
-      }
-    }
-
-    &:last-child {
-      > .dx-button {
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-
-    @at-root #{selector-append(".dx-rtl", &)} {
       &:first-child {
         > .dx-button {
           &:first-child {
-            margin-left: $material-editor-custom-button-margin;
-            margin-right: 0;
+            margin-left: 0;
           }
         }
       }
 
       &:last-child {
         > .dx-button {
-          &:first-child {
-            margin-left: $material-editor-custom-button-margin;
-            margin-right: $material-editor-custom-button-margin;
-          }
-
           &:last-child {
-            margin-left: 0;
-            margin-right: $material-editor-custom-button-margin;
+            margin-right: 0;
+          }
+        }
+      }
+
+      @at-root #{selector-append(".dx-rtl", &)} {
+        &:first-child {
+          > .dx-button {
+            &:first-child {
+              margin-left: $material-editor-custom-button-margin;
+              margin-right: 0;
+            }
+          }
+        }
+
+        &:last-child {
+          > .dx-button {
+            &:first-child {
+              margin-left: $material-editor-custom-button-margin;
+              margin-right: $material-editor-custom-button-margin;
+            }
+
+            &:last-child {
+              margin-left: 0;
+              margin-right: $material-editor-custom-button-margin;
+            }
           }
         }
       }

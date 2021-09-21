@@ -47,13 +47,25 @@
   &.dx-texteditor-with-floating-label {
     &.dx-editor-filled {
       .dx-tag-container.dx-texteditor-input-container {
-        padding-top: 10px;
+        padding-top: 12px;
+        padding-bottom: 0;
+      }
+
+      .dx-texteditor-input {
+        margin-top: 0;
+        min-height: $material-base-inline-widget-height;
       }
     }
 
     &.dx-editor-underlined {
       .dx-tag-container.dx-texteditor-input-container {
-        padding-top: 10px;
+        padding-top: 16px;
+        padding-bottom: 0;
+      }
+
+      .dx-texteditor-input {
+        margin-top: 0;
+        min-height: $material-base-inline-widget-height;
       }
     }
   }

@@ -483,7 +483,7 @@ const TextEditorBase = Editor.inherit({
             this._$label.find('.dx-label-before').css('width', this._$beforeButtonsContainer.width());
         }
 
-        this._$label.find('.dx-label').css('max-width', this._$field ? this._$field.width() : (this._$tagsContainer ? this._$tagsContainer.width() : this._input().width()));
+        this._$label.find('.dx-label').css('max-width', (this._$field ? this._$field.width() : (this._$tagsContainer ? this._$tagsContainer.width() : this._input().width()))) - this._$label.find('.dx-label-after').width();
     },
 
     _renderPlaceholder: function() {
@@ -779,6 +779,7 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
+                this._renderLabel();
                 break;
             case 'buttons':
                 if(fullName === name) {

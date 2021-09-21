@@ -259,18 +259,11 @@ $generic-texteditor-label-transition:
   $input-vertical-diff: $generic-base-inline-borderedwidget-top-padding - 1;
 
   .dx-texteditor-label {
-    .dx-label {
-      padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
-    }
-  }
-
-  &.dx-rtl,
-  .dx-rtl & {
-    .dx-texteditor-label {
-      .dx-label {
-        padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-        padding-left: 0;
-      }
+    .dx-label-after,
+    .dx-label-before {
+      display: block;
+      box-sizing: border-box;
+      min-width: $generic-base-inline-borderedwidget-horizontal-padding;
     }
   }
 
@@ -295,8 +288,8 @@ $generic-texteditor-label-transition:
 
     .dx-texteditor-label {
       font-size: $generic-texteditor-label-size;
-      height: $generic-texteditor-label-size;
-      line-height: $generic-texteditor-label-size;
+      height: $generic-base-inline-block-height;
+      line-height: $generic-base-line-height;
       top: 0;
       margin-top: 0;
     }
@@ -330,10 +323,10 @@ $generic-texteditor-label-transition:
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
         font-size: $generic-base-font-size;
-        height: $generic-base-font-size;
-        line-height: $generic-base-font-size;
+        height: $generic-base-inline-block-height;
+        line-height: $generic-base-line-height;
         top: 50%;
-        margin-top: math.div(-$generic-base-font-size, 2);
+        margin-top: math.div(-$generic-base-inline-block-height, 2);
       }
 
       &.dx-textarea {
@@ -341,8 +334,8 @@ $generic-texteditor-label-transition:
           font-size: $generic-base-font-size;
           top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
           margin-top: 0;
-          height: $generic-base-font-size;
-          line-height: $generic-base-font-size;
+          height: $generic-base-inline-block-height;
+          line-height: $generic-base-line-height;
         }
 
         .dx-placeholder {
@@ -361,8 +354,8 @@ $generic-texteditor-label-transition:
         font-size: $generic-texteditor-label-size;
         top: 0;
         margin-top: 0;
-        height: $generic-texteditor-label-size;
-        line-height: $generic-texteditor-label-size;
+        height: $generic-base-inline-block-height;
+        line-height: $generic-base-line-height;
       }
 
       &.dx-textarea {
@@ -395,8 +388,8 @@ $generic-texteditor-label-transition:
         span {
           transform: translate(0, -$label-offset-y);
           font-size: $generic-texteditor-label-size;
-          line-height: $generic-texteditor-label-size;
-          height: $generic-texteditor-label-size;
+          line-height: $generic-base-line-height;
+          height: $generic-base-inline-block-height;
           margin-top: 0;
           top: 0;
         }
@@ -453,9 +446,9 @@ $generic-texteditor-label-transition:
           transform: $label-default-transform;
           font-size: $generic-base-font-size;
           top: 50%;
-          height: $generic-base-font-size;
-          margin-top: math.div(-$generic-base-font-size, 2);
-          line-height: $generic-base-font-size;
+          height: $generic-base-inline-block-height;
+          margin-top: math.div(- $generic-base-inline-block-height, 2);
+          line-height: $generic-base-line-height;
         }
       }
 
@@ -517,7 +510,7 @@ $generic-texteditor-label-transition:
     }
 
     .dx-label-after {
-      min-width: 0;
+      min-width: $generic-base-inline-borderedwidget-horizontal-padding;
       flex-grow: 1;
       border-radius: 0 $texteditor-border-radius $texteditor-border-radius 0;
     }
@@ -607,8 +600,8 @@ $generic-texteditor-label-transition:
         span {
           transform: translate(0, -$label-offset-y);
           font-size: $generic-texteditor-label-size;
-          line-height: $generic-texteditor-label-size;
-          height: $generic-texteditor-label-size;
+          line-height: $generic-base-line-height;
+          height: $generic-base-inline-block-height;
           top: 0;
           margin-top: 0;
         }
@@ -699,8 +692,8 @@ $generic-texteditor-label-transition:
       transform: $label-transform;
       top: 0;
       margin-top: 0;
-      height: $generic-texteditor-label-size;
-      line-height: $generic-texteditor-label-size;
+      height: $generic-base-inline-block-height;
+      line-height: $generic-base-line-height;
     }
 
     .dx-placeholder::before {
@@ -741,9 +734,9 @@ $generic-texteditor-label-transition:
         transform: translate(0, 0);
         font-size: $generic-base-font-size;
         top: 50%;
-        height: $generic-base-font-size;
-        margin-top: math.div(-$generic-base-font-size, 2);
-        line-height: $generic-base-font-size;
+        height: $generic-base-inline-block-height;
+        margin-top: math.div(-$generic-base-inline-block-height, 2);
+        line-height: $generic-base-line-height;
       }
 
       &.dx-textarea {
@@ -752,7 +745,8 @@ $generic-texteditor-label-transition:
           margin-top: 0;
           transform: translate(0, 0);
           font-size: $generic-base-font-size;
-          line-height: $generic-base-font-size;
+          line-height: $generic-base-line-height;
+          height: $generic-base-inline-block-height;
         }
 
         .dx-placeholder {
@@ -772,8 +766,8 @@ $generic-texteditor-label-transition:
         font-size: $generic-texteditor-label-size;
         top: 0;
         margin-top: 0;
-        height: $generic-texteditor-label-size;
-        line-height: $generic-texteditor-label-size;
+        height: $generic-base-inline-block-height;
+        line-height: $generic-base-line-height;
       }
 
       &.dx-textarea {

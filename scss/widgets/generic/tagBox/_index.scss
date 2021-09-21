@@ -57,13 +57,15 @@
 
   &.dx-editor-filled {
     .dx-tag-container.dx-texteditor-input-container {
-      padding-top: 10px;
+      padding-top: 12px;
+      padding-bottom: 2px;
     }
   }
 
   &.dx-editor-underlined {
     .dx-tag-container.dx-texteditor-input-container {
-      padding-top: 10px;
+      padding-top: 12px;
+      padding-bottom: 2px;
     }
   }
 }
