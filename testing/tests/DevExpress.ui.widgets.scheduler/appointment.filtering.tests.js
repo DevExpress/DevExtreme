@@ -73,10 +73,8 @@ module('Integration: Appointment filtering', {
             const scheduler = createInstanceBase(options, clock);
 
             if(scrollingMode === 'virtual') {
-                const virtualScrollingDispatcher = scheduler.instance.getWorkSpace().virtualScrollingDispatcher;
-                if(virtualScrollingDispatcher) {
-                    virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-                }
+                const workspace = scheduler.instance.getWorkSpace();
+                workspace.renderer.getRenderTimeout = () => -1;
             }
 
             return scheduler;

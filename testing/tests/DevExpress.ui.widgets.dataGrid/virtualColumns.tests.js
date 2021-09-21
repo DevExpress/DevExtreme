@@ -4,6 +4,7 @@ import 'ui/data_grid';
 import 'generic_light.css!';
 import { DataSource } from 'data/data_source/data_source';
 import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';
+import { getOuterWidth } from 'core/utils/size';
 
 const setupModule = function() {
     const columns = [];
@@ -634,8 +635,8 @@ QUnit.module('Rendering', { beforeEach: setupRenderingModule, afterEach: teardow
         // assert
         const $cells = this.rowsView.element().find('.dx-data-row').children();
         assert.strictEqual($cells.length, 6, 'cell count in data row');
-        assert.strictEqual($cells.eq(0).outerWidth(), 50, 'first cell width');
-        assert.strictEqual($cells.eq(5).outerWidth(), 2250, 'virtual cell width');
+        assert.strictEqual(getOuterWidth($cells.eq(0)), 50, 'first cell width');
+        assert.strictEqual(getOuterWidth($cells.eq(5)), 2250, 'virtual cell width');
         assert.strictEqual(this.getVisibleColumns()[0].dataField, 'field1', 'first rendered dataField');
     });
 });

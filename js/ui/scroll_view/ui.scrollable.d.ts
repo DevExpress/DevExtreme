@@ -96,8 +96,6 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     /**
      * @docid
      * @default 'onHover' &for(desktop)
-     * @type string
-     * @acceptValues 'onScroll'|'onHover'|'always'|'never'
      * @default 'onScroll'
      * @public
      */
@@ -134,7 +132,6 @@ export default class dxScrollable<TProperties = Properties> extends DOMComponent
     /**
      * @docid
      * @publicName content()
-     * @return DxElement
      * @public
      */
     content(): DxElement;

@@ -219,7 +219,12 @@ export const VirtualScrollController = Class.inherit((function() {
             return Math.round(itemOffset * 50) / 50;
         },
 
+        isScrollingBack: function() {
+            return this._position < this._prevPosition;
+        },
+
         _setViewportPositionCore: function(position) {
+            this._prevPosition = this._position || 0;
             this._position = position;
 
             const itemIndex = this.getItemIndexByPosition();
@@ -355,7 +360,7 @@ export const VirtualScrollController = Class.inherit((function() {
             const maxGap = this.pageSize();
             const minGap = this.option('scrolling.minGap');
             const skip = Math.floor(Math.max(0, topIndex - minGap) / maxGap) * maxGap;
-            let take = Math.ceil((bottomIndex + minGap) / maxGap) * maxGap - skip;
+            let take = Math.ceil((bottomIndex + minGap - skip) / maxGap) * maxGap;
 
             if(virtualMode) {
                 const remainedItems = Math.max(0, totalItemsCount - skip);

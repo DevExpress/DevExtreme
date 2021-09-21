@@ -27,14 +27,14 @@ module('API', () => {
     }, () => {
         test('Week view', function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
-            const index = this.instance.getCellIndexByCoordinates({ left: 100, top: 55 });
+            const index = this.instance.getCellIndexByCoordinates({ left: 0, top: 55 });
 
             assert.equal(index, 7, 'Index is OK');
         });
 
         test('Week view, fractional value', function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
-            const index = this.instance.getCellIndexByCoordinates({ left: 160.4, top: 55 });
+            const index = this.instance.getCellIndexByCoordinates({ left: 60.4, top: 55 });
 
             assert.equal(index, 7, 'Index is OK');
         });
@@ -48,14 +48,14 @@ module('API', () => {
 
         test('All day row', function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
-            let index = this.instance.getCellIndexByCoordinates({ left: 398, top: 0 });
+            let index = this.instance.getCellIndexByCoordinates({ left: 298, top: 0 });
 
             assert.equal(index, 3, 'Index is OK');
 
-            index = this.instance.getCellIndexByCoordinates({ left: 398, top: 45 });
+            index = this.instance.getCellIndexByCoordinates({ left: 298, top: 45 });
             assert.equal(index, 3, 'Index is OK');
 
-            index = this.instance.getCellIndexByCoordinates({ left: 398, top: 77 });
+            index = this.instance.getCellIndexByCoordinates({ left: 298, top: 77 });
             assert.equal(index, 10, 'Index is OK');
         });
 
@@ -65,7 +65,7 @@ module('API', () => {
                 height: 800,
                 groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]
             });
-            const index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });
+            const index = this.instance.getCellIndexByCoordinates({ left: 100, top: 55 });
 
             assert.equal(index, 16, 'Index is OK');
         });
@@ -79,7 +79,7 @@ module('API', () => {
 
             this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-            const index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });
+            const index = this.instance.getCellIndexByCoordinates({ left: 0, top: 55 });
 
             assert.equal(index, 7, 'Index is OK');
         });

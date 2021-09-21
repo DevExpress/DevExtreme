@@ -8,6 +8,7 @@ const exportModule = require('viz/core/export');
 const Deferred = require('core/utils/deferred').Deferred;
 const logger = require('core/utils/console').logger;
 const { isFunction } = require('core/utils/type');
+const getWindow = require('core/utils/window').getWindow;
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 
@@ -83,6 +84,37 @@ QUnit.test('Export method. Defined options', function(assert) {
     assert.equal(exportingStub.callCount, 1, 'exporting event');
     assert.equal(exportedStub.callCount, 1, 'exported event');
     assert.equal(fileSavingStub.callCount, 1, 'file saving event');
+});
+
+// T1020859
+QUnit.test('Export method params when devicePixelRatio !== 1', function(assert) {
+    let srcDevicePixelRatio;
+    try {
+        srcDevicePixelRatio = getWindow().devicePixelRatio;
+        window.devicePixelRatio = 2;
+
+        const exportFunc = clientExporter.export;
+        const widget = this.createWidget({
+            size: { width: 200, height: 300 }
+        });
+
+        widget.$element().css('backgroundColor', '#ff0000');
+
+        // act
+        widget.exportTo('testName', 'jpeg');
+
+        const firstExportCall = exportFunc.getCall(0);
+        firstExportCall.args[1].exportingAction();
+        firstExportCall.args[1].exportedAction();
+        firstExportCall.args[1].fileSavingAction();
+
+        // assert
+        assert.equal(firstExportCall.args[1].width, 400, 'width');
+        assert.equal(firstExportCall.args[1].height, 600, 'height');
+        assert.equal(firstExportCall.args[1].pixelRatio, 2, 'pixelRatio');
+    } finally {
+        getWindow().devicePixelRatio = srcDevicePixelRatio;
+    }
 });
 
 QUnit.test('Export method. PNG format', function(assert) {

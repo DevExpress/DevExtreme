@@ -2,7 +2,6 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
-import renderer from 'core/renderer';
 import browser from 'core/utils/browser';
 import { compare as compareVersion } from 'core/utils/version';
 import CustomFileSystemProvider from 'file_management/custom_provider';
@@ -11,6 +10,7 @@ import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTest
 import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
+import { implementationsMap } from 'core/utils/size';
 
 
 const { test } = QUnit;
@@ -1276,8 +1276,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('parent and all of selected folders must be disabled: copy folders in files area via toolbar (T939043)', function(assert) {
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 1200;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
 
         this.$element.dxFileManager('option', {
             selectionMode: 'multiple',
@@ -1305,7 +1305,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
         assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
-        renderer.fn.width = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 
     test('parent and selected folders must be disabled: copy folder in deep location (T939043)', function(assert) {
@@ -1736,8 +1736,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('it should not be possible to invoke move/copy dialog for treeView folders (T1004864)', function(assert) {
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 1200;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
 
         this.$element.dxFileManager('option', {
             selectionMode: 'multiple',
@@ -1777,6 +1777,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3', true), null, '\'Folder 3\' toggle is absent');
 
         this.wrapper.getDialogButton('Cancel').trigger('dxclick');
-        renderer.fn.width = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 });

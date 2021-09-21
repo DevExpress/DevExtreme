@@ -41,7 +41,7 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
   },
 }));
 
-test.only('allowExportSelectedData: false, menu: true', async (t) => {
+test('allowExportSelectedData: false, menu: true', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click('.dx-toolbar-menu-container > .dx-button');
@@ -59,7 +59,7 @@ test.only('allowExportSelectedData: false, menu: true', async (t) => {
   width: 30,
 }));
 
-test.only('allowExportSelectedData: true, menu: true', async (t) => {
+test('allowExportSelectedData: true, menu: true', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click('.dx-toolbar-menu-container > .dx-button');
