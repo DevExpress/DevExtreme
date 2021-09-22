@@ -1,15 +1,33 @@
 import { isDefined } from '../../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils_v3';
 
+function calculateColumnsWidths(doc, dataProvider, topLeft) {
+    const columnsWidths = dataProvider.getColumnsWidths();
+    if(!columnsWidths.length) {
+        return [];
+    }
 
-function initializeCellsWidth(rows, columnWidths) {
-    // TODO: handle colSpan in this method !!!!
+    const summaryGridWidth = columnsWidths
+        .reduce((accumulator, width) => accumulator + width);
+
+    // TODO: check future orientation, measure units and margins there
+    const availablePageWidth = doc.internal.pageSize.getWidth() - (topLeft?.x ?? 0);
+    const ratio = availablePageWidth >= summaryGridWidth
+        ? 1
+        : availablePageWidth / summaryGridWidth;
+
+    return columnsWidths.map(width => width * ratio);
+}
+
+function initializeCellsWidth(doc, dataProvider, rows, options) {
+    const columnWidths = options?.columnWidths ?? calculateColumnsWidths(doc, dataProvider, options?.topLeft);
     rows.forEach(row => {
         row.cells.forEach(({ gridCell, pdfCell }, index) => {
             pdfCell._rect.w = columnWidths[index];
         });
     });
 }
+
 
 function calculateHeights(doc, rows, options) {
     rows.forEach(row => {

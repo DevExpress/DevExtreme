@@ -45,6 +45,13 @@ export const TopPocketState = {
   STATE_PULLED: 5,
 };
 
+export const ShowScrollbarMode = {
+  HOVER: 'onHover',
+  ALWAYS: 'always',
+  NEVER: 'never',
+  SCROLL: 'onScroll',
+};
+
 export const KEY_CODES = {
   PAGE_UP: 'pageUp',
   PAGE_DOWN: 'pageDown',

@@ -1,4 +1,3 @@
-import { move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import devices from '../core/devices';
 import { getPublicElement } from '../core/element';
@@ -28,6 +27,7 @@ import Button from './button';
 import Overlay from './overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from './themes';
 import './toolbar/ui.toolbar.base';
+import { PopupPositionController } from './overlay/overlay_position_controller';
 
 const window = getWindow();
 
@@ -481,12 +481,19 @@ const Popup = Overlay.inherit({
         });
     },
 
-    _getContainer: function() {
-        if(this.option('fullScreen')) {
-            return $(window);
-        }
+    _getPositionControllerConfig() {
+        const { fullScreen, forceApplyBindings } = this.option();
 
-        return this.callBase();
+        return extend({}, this.callBase(), {
+            fullScreen,
+            forceApplyBindings
+        });
+    },
+
+    _initPositionController() {
+        this._positionController = new PopupPositionController(
+            this._getPositionControllerConfig()
+        );
     },
 
     _getDragTarget: function() {
@@ -580,7 +587,7 @@ const Popup = Overlay.inherit({
                 };
             }
         } else {
-            const container = $(this._getContainer()).get(0);
+            const container = $(this._positionController._$wrapperCoveredElement).get(0);
             const maxHeightValue = addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container);
             const minHeightValue = addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
@@ -653,21 +660,6 @@ const Popup = Overlay.inherit({
         this._renderPosition();
     },
 
-    _renderPosition: function() {
-        if(this.option('fullScreen')) {
-            move(this.$overlayContent(), {
-                top: 0,
-                left: 0
-            });
-
-            return { h: { location: 0 }, v: { location: 0 } };
-        } else {
-            (this.option('forceApplyBindings') || noop)();
-
-            return this.callBase(...arguments);
-        }
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'showTitle':
@@ -709,11 +701,12 @@ const Popup = Overlay.inherit({
                 triggerResizeEvent(this.$overlayContent());
                 break;
             case 'fullScreen':
+                this._positionController.fullScreen = args.value;
+
                 this._toggleFullScreenClass(args.value);
                 this._toggleSafariScrolling();
 
                 this._renderGeometry();
-
                 triggerResizeEvent(this.$overlayContent());
                 break;
             case 'showCloseButton':

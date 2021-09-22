@@ -43,6 +43,41 @@ import asyncForEach from '../../helpers/asyncForEach';
   });
 });
 
+fixture`Popup`
+  .page(url(__dirname, './pages/resizeObserverIntegration/windowResize.html'));
+
+test('popup should be repositioned after window resize', async (t) => {
+  await t.resizeWindow(200, 200);
+
+  const popup = new Popup('#popup');
+  const { wrapper, content } = popup;
+
+  const wrapperRect: { bottom: number; top: number; left: number; right: number } = {
+    bottom: 0, top: 0, left: 0, right: 0,
+  };
+  const contentRect: { bottom: number; top: number; left: number; right: number } = {
+    bottom: 0, top: 0, left: 0, right: 0,
+  };
+
+  await asyncForEach(['bottom', 'left', 'right', 'top'], async (prop) => {
+    wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
+    contentRect[prop] = await content.getBoundingClientRectProperty(prop);
+  });
+
+  const wrapperVerticalCenter = (wrapperRect.bottom + wrapperRect.top) / 2;
+  const wrapperHorizontalCenter = (wrapperRect.left + wrapperRect.right) / 2;
+  const contentVerticalCenter = (contentRect.bottom + contentRect.top) / 2;
+  const contentHorizontalCenter = (contentRect.left + contentRect.right) / 2;
+
+  await t
+    .expect(wrapperVerticalCenter)
+    .within(contentVerticalCenter - 0.5, contentVerticalCenter + 0.5);
+
+  await t
+    .expect(wrapperHorizontalCenter)
+    .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
+});
+
 fixture`Popup width/height animation`
   .page(url(__dirname, './pages/resizeObserverIntegration/popupSizesAnimation.html'))
   .beforeEach(async (t) => { await t.wait(10000); });
