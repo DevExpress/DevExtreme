@@ -5647,8 +5647,8 @@ declare module DevExpress.ui {
       indexes: number[]
     ): DevExpress.core.utils.DxPromise<TRowData[]>;
     showColumnChooser(): void;
-    state(): any;
-    state(state: any): void;
+    state(): DevExpress.ui.dxDataGrid.GridState;
+    state(state: DevExpress.ui.dxDataGrid.GridState): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;
   }
@@ -6344,11 +6344,11 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.stateStoring.customLoad]
        */
-      customLoad: () => PromiseLike<GridStateType>;
+      customLoad: () => PromiseLike<GridState>;
       /**
        * [descr:GridBaseOptions.stateStoring.customSave]
        */
-      customSave: (gridState: GridStateType) => void;
+      customSave: (gridState: GridState) => void;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6998,7 +6998,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type GridStateType = Record<string, unknown>;
+    type GridState = Record<string, unknown>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -22444,11 +22444,11 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.state()]
      */
-    state(): any;
+    state(): DevExpress.ui.dxDataGrid.GridState;
     /**
      * [descr:GridBase.state(state)]
      */
-    state(state: any): void;
+    state(state: DevExpress.ui.dxDataGrid.GridState): void;
     /**
      * [descr:GridBase.undeleteRow(rowIndex)]
      */

@@ -1510,7 +1510,7 @@ export interface Sorting {
     showSortIndexes?: boolean;
 }
 
-type GridStateType = Record<string, unknown>;
+type GridState = Record<string, unknown>;
 
 interface CustomStateStoring {
   type: 'custom';
@@ -1519,14 +1519,14 @@ interface CustomStateStoring {
    * @type Function
    * @type_function_return Promise<Object>
    */
-  customLoad: () => PromiseLike<GridStateType>;
+  customLoad: () => PromiseLike<GridState>;
   /**
    * @docid GridBaseOptions.stateStoring.customSave
    * @type Function
    * @type_function_param1 gridState:object
    * @type_function_return void
    */
-  customSave: (gridState: GridStateType) => void;
+  customSave: (gridState: GridState) => void;
 }
 
 interface LocalOrSessionStateStoring {
@@ -2324,14 +2324,14 @@ export interface GridBase
      * @return object
      * @public
      */
-    state(): any;
+    state(): GridState;
     /**
      * @docid
      * @publicName state(state)
      * @param1 state:object
      * @public
      */
-    state(state: any): void;
+    state(state: GridState): void;
     /**
      * @docid
      * @publicName undeleteRow(rowIndex)
@@ -4574,8 +4574,8 @@ declare class dxDataGrid
     selectRows(keys: TKey[], preserve: boolean): DxPromise<TRowData[]>;
     selectRowsByIndexes(indexes: number[]): DxPromise<TRowData[]>;
     showColumnChooser(): void;
-    state(): any;
-    state(state: any): void;
+    state(): GridState;
+    state(state: GridState): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;
 }
