@@ -3098,7 +3098,7 @@ QUnit.module('scrollView integration', {
         $list.dxScrollView('instance').scrollToElement = scrollToElementSpy;
 
         list.scrollToItem($item);
-        assert.equal(scrollToElementSpy.firstCall.args[0], $item.get(0), 'list scrolled to item');
+        assert.equal($(scrollToElementSpy.firstCall.args[0]).get(0), $item.get(0), 'list scrolled to item');
     });
 
     QUnit.test('it should be possible to scroll to an item by denormalized index', function(assert) {

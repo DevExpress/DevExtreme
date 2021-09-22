@@ -48,7 +48,7 @@ const getScrollOffset = function($scrollable) {
     };
 };
 
-const isRenovation = Scrollable.IS_RENOVATED_WIDGET;
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('useNative', moduleConfig);
 

@@ -459,10 +459,9 @@ export const AreaItem = Class.inherit({
             height: params.height
         });
 
-        // console.log('!!!!!', this._getAreaName());
         const scrollable = this._getScrollable();
 
-        if(isDefined(scrollable) && scrollable.isRenovated()) {
+        if(scrollable?.isRenovated()) {
             this._getScrollable().option('classes', 'dx-virtual-mode');
         } else {
             this.groupElement().addClass('dx-virtual-mode');
@@ -472,7 +471,7 @@ export const AreaItem = Class.inherit({
     disableVirtualMode: function() {
         const scrollable = this._getScrollable();
 
-        if(isDefined(scrollable) && scrollable.isRenovated()) {
+        if(scrollable?.isRenovated()) {
             this._getScrollable().option('classes', '');
         } else {
             this.groupElement().removeClass('dx-virtual-mode');
