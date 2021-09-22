@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { AllDayPanelTitle, AllDayPanelTitleProps } from '../date_table/all_day_panel/title';
+import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { viewFunction as HeaderEmptyCellView } from '../header_panel_empty_cell';
 
 jest.mock('../../utils', () => ({
@@ -38,9 +38,6 @@ describe('DateTableCellBase', () => {
       const allDayTitle = root.childAt(0);
       expect(allDayTitle.is(AllDayPanelTitle))
         .toBe(true);
-
-      expect(allDayTitle.props())
-        .toEqual(new AllDayPanelTitleProps());
     });
 
     it('should not render all-day title when "isRenderAllDayTitle" is flase', () => {
