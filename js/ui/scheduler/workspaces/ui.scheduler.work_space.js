@@ -104,7 +104,6 @@ const ALL_DAY_PANEL_CLASS = 'dx-scheduler-all-day-panel';
 const ALL_DAY_TABLE_CLASS = 'dx-scheduler-all-day-table';
 const ALL_DAY_CONTAINER_CLASS = 'dx-scheduler-all-day-appointments';
 const ALL_DAY_TITLE_CLASS = 'dx-scheduler-all-day-title';
-const ALL_DAY_TITLE_HIDDEN_CLASS = 'dx-scheduler-all-day-title-hidden';
 const ALL_DAY_TABLE_CELL_CLASS = 'dx-scheduler-all-day-table-cell';
 const ALL_DAY_TABLE_ROW_CLASS = 'dx-scheduler-all-day-table-row';
 const WORKSPACE_WITH_ALL_DAY_CLASS = 'dx-scheduler-work-space-all-day';
@@ -1899,14 +1898,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const options = {
                 viewData: this.viewDataProvider.viewData,
-                visible,
                 dataCellTemplate: this.option('dataCellTemplate'),
                 startCellIndex: 0,
                 ...(this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {}),
             };
 
             utils.renovation.renderComponent(this, this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
-            utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
+            utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
 
@@ -2543,8 +2541,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _toggleAllDayVisibility(isUpdateScrollable) {
         const showAllDayPanel = this._isShowAllDayPanel();
-        this._$allDayPanel.toggle(showAllDayPanel);
-        this._$allDayTitle && this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
         this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
