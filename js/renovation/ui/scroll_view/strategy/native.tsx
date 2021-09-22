@@ -418,6 +418,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Method()
   updateHandler(): void {
+    console.log('222##################################');
     this.updateHandleInternal();
   }
 
@@ -445,6 +446,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     );
   }
 
+  @Method()
   scrollByLocation(location: ScrollOffset): void {
     const containerEl = this.containerRef.current!;
 
