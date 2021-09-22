@@ -6,6 +6,7 @@ import renderer from 'core/renderer';
 import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import { Deferred } from 'core/utils/deferred';
+import { getHeight, getWidth, setWidth, getOffset } from 'core/utils/size';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
@@ -11638,11 +11639,12 @@ QUnit.module('Editing with validation', {
         assert.equal($overlayContent.length, 1, 'has tooltip');
         assert.strictEqual($overlayWrapper.css('visibility'), 'visible', 'validation message wrapper is visible');
         assert.ok(rowsView.element().find('.dx-freespace-row').is(':visible'), 'visible freespace row');
-        assert.ok(rowsView.element().find('.dx-freespace-row').height() > 0, 'freespace row has height ');
+        assert.ok(getHeight(rowsView.element().find('.dx-freespace-row')) > 0, 'freespace row has height ');
 
         // T526383
         const $modifiedCell = cells.eq(1);
-        assert.ok($overlayContent.offset().top >= ($modifiedCell.offset().top + $modifiedCell.height()), 'tooltip is under the cell');
+        const coercion = browser.mozilla ? 1 : 0;
+        assert.ok((getOffset($overlayContent[0]).top + coercion) >= (getOffset($modifiedCell[0]).top + getHeight($modifiedCell)), 'tooltip is under the cell');
     });
 
     // T200857
@@ -11862,8 +11864,8 @@ QUnit.module('Editing with validation', {
         assert.ok(selectBoxInstance.option('opened'), 'drop-down editor is shown');
         assert.ok(invalidTooltipInstance.option('visible'), 'invalid message tooltip is visible');
         assert.ok(revertTooltipInstance.option('visible'), 'revert tooltip is visible');
-        assert.ok(selectBoxInstance.$element().offset().left + selectBoxInstance.$element().width() < revertTooltipInstance.$content().offset().left, 'revert tooltip is shown after selectbox');
-        assert.ok(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width() < invalidTooltipInstance.$content().offset().left, 'invalid tooltip is shown after revert tooltip');
+        assert.ok(selectBoxInstance.$element().offset().left + getWidth(selectBoxInstance.$element()) < revertTooltipInstance.$content().offset().left, 'revert tooltip is shown after selectbox');
+        assert.ok(revertTooltipInstance.$content().offset().left + getWidth(revertTooltipInstance.$content()) < invalidTooltipInstance.$content().offset().left, 'invalid tooltip is shown after revert tooltip');
     });
 
     // T523770
@@ -11915,8 +11917,8 @@ QUnit.module('Editing with validation', {
         assert.ok(selectBoxInstance.option('opened'), 'drop-down editor is shown');
         assert.ok(invalidTooltipInstance.option('visible'), 'invalid message tooltip is visible');
         assert.ok(revertTooltipInstance.option('visible'), 'revert tooltip is visible');
-        assert.ok(invalidTooltipInstance.$content().offset().left + invalidTooltipInstance.$content().width() < revertTooltipInstance.$content().offset().left, 'revert tooltip is shown after invalid tooltip');
-        assert.roughEqual(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width(), selectBoxInstance.$element().offset().left, 1.1, 'selectbox is shown after revert tooltip');
+        assert.ok(invalidTooltipInstance.$content().offset().left + getWidth(invalidTooltipInstance.$content()) < revertTooltipInstance.$content().offset().left, 'revert tooltip is shown after invalid tooltip');
+        assert.roughEqual(revertTooltipInstance.$content().offset().left + getWidth(revertTooltipInstance.$content()), selectBoxInstance.$element().offset().left, 1.5, 'selectbox is shown after revert tooltip');
 
         $('#qunit-fixture').removeClass('qunit-fixture-static').css('width', '');
     });
@@ -14155,7 +14157,7 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = that.rowsView;
 
-        that.$element().width(400);
+        setWidth(that.$element(), 400);
 
         rowsView.render(that.gridContainer);
 
@@ -14196,7 +14198,7 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = that.rowsView;
 
-        that.$element().width(400);
+        setWidth(that.$element(), 400);
 
         rowsView.render(that.gridContainer);
 
@@ -14251,7 +14253,7 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = that.rowsView;
 
-        that.$element().width(500);
+        setWidth(that.$element(), 500);
 
         rowsView.render(that.gridContainer);
 
@@ -14297,7 +14299,7 @@ QUnit.module('Editing with validation', {
         // arrange
         const rowsView = this.rowsView;
 
-        this.$element().width(500);
+        setWidth(this.$element(), 500);
 
         rowsView.render(this.gridContainer);
 

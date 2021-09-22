@@ -1,3 +1,4 @@
+import { getOuterHeight } from 'core/utils/size';
 import config from 'core/config';
 import devices from 'core/devices';
 import CustomStore from 'data/custom_store';
@@ -417,12 +418,12 @@ QUnit.module('Options', {
             width: 800
         });
 
-        const initialAppointmentHeight = scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight();
+        const initialAppointmentHeight = getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
 
         scheduler.instance.option('height', 200);
         this.clock.tick();
 
-        assert.notEqual(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight(), initialAppointmentHeight, 'Appointment was repainted');
+        assert.notEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialAppointmentHeight, 'Appointment was repainted');
     });
 
     QUnit.test('appointments should be repainted after scheduler hiding/showing and dimensions changing', function(assert) {
@@ -439,7 +440,7 @@ QUnit.module('Options', {
             width: 800
         });
 
-        const initialAppointmentHeight = scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight();
+        const initialAppointmentHeight = getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
 
         triggerHidingEvent($('#scheduler'));
         $('#scheduler').hide();
@@ -448,7 +449,7 @@ QUnit.module('Options', {
         triggerShownEvent($('#scheduler'));
         this.clock.tick();
 
-        assert.notEqual(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight(), initialAppointmentHeight, 'Appointment was repainted');
+        assert.notEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialAppointmentHeight, 'Appointment was repainted');
     });
 
     QUnit.test('view.intervalCount is passed to workspace & header', function(assert) {

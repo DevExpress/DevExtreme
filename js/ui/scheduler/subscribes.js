@@ -210,10 +210,6 @@ const subscribes = {
         return this.getRenderingStrategyInstance().getDirection();
     },
 
-    getWorkSpaceDateTableOffset: function() {
-        return this.getWorkSpaceDateTableOffset();
-    },
-
     updateAppointmentStartDate: function(options) {
         const appointment = options.appointment;
         const firstViewDate = this._workSpace.getStartViewDate();

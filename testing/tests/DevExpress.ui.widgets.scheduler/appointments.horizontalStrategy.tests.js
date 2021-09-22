@@ -1,3 +1,4 @@
+import { getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import dataCoreUtils from 'core/utils/data';
 import typeUtils from 'core/utils/type';
@@ -124,7 +125,7 @@ module('Horizontal Month Strategy', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
         const allDayAppointmentWidth = BASE_WIDTH * 2;
-        assert.equal($appointment.eq(0).outerWidth(), allDayAppointmentWidth, 'appointment has right width');
+        assert.equal(getOuterWidth($appointment.eq(0)), allDayAppointmentWidth, 'appointment has right width');
     });
 
     test('Appointment should not be multiweek when its width some more than maxAllowedPosition(ie & ff pixels)', function(assert) {
@@ -245,7 +246,7 @@ module('Horizontal Strategy', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.outerWidth(), 2, 'Min width is OK');
+        assert.equal(getOuterWidth($appointment), 2, 'Min width is OK');
     });
 
 });

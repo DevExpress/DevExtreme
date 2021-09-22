@@ -16,6 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'generic_light.css!';
+import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 
 QUnit.testStart(function() {
     const markup =
@@ -96,8 +97,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.height(), 2, 'ok');
-        assert.notEqual(delimiter.width(), 0, 'ok');
+        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.notEqual(getWidth(delimiter), 0, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().left + 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
     });
@@ -115,8 +116,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.width(), 2, 'ok');
-        assert.notEqual(delimiter.height(), 0, 'ok');
+        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.notEqual(getHeight(delimiter), 0, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().left - 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
     });
@@ -134,8 +135,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.height(), 2, 'ok');
-        assert.notEqual(delimiter.width(), 0, 'ok');
+        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.notEqual(getWidth(delimiter), 0, 'ok');
         assert.roughEqual(rootMenuItem.offset().left + 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
     });
@@ -153,8 +154,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.width(), 2, 'ok');
-        assert.notEqual(delimiter.height(), 0, 'ok');
+        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.notEqual(getHeight(delimiter), 0, 'ok');
         assert.roughEqual(rootMenuItem.offset().left - 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
     });
@@ -2162,7 +2163,7 @@ QUnit.module('adaptivity: render', {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(700);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         try {
@@ -2644,7 +2645,8 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('Adaptive menu should not flick when the window has been resized with jQuery 3.3.1', function(assert) {
-        const outerWidth = sinon.spy(renderer.fn, 'outerWidth');
+        const getOuterWidth = sinon.spy(implementationsMap, 'getOuterWidth');
+        const setOuterWidth = sinon.spy(implementationsMap, 'setOuterWidth');
 
         try {
             new Menu(this.$element, {
@@ -2652,12 +2654,13 @@ QUnit.module('adaptivity: behavior', {
                 adaptivityEnabled: true
             });
 
-            assert.equal(outerWidth.callCount, 3, 'itemWidth has been called for each item and container on render');
+            assert.equal(getOuterWidth.callCount + setOuterWidth.callCount, 3, 'itemWidth has been called for each item and container on render');
 
             resizeCallbacks.fire();
-            assert.equal(outerWidth.callCount, 4, 'itemWidth has been called just for container on dimension change');
+            assert.equal(getOuterWidth.callCount + setOuterWidth.callCount, 4, 'itemWidth has been called just for container on dimension change');
         } finally {
-            outerWidth.restore();
+            getOuterWidth.restore();
+            setOuterWidth.restore();
         }
     });
 
@@ -2761,14 +2764,14 @@ QUnit.module('adaptivity: behavior', {
         overlay.on('positioned', overlayPositioned);
 
         $($button).trigger('dxclick');
-        const height = $overlayContent.outerHeight();
+        const height = getOuterHeight($overlayContent);
 
         $($item2).trigger('dxclick');
-        assert.ok($overlayContent.outerHeight() > height, 'overlay should be enlarged');
+        assert.ok(getOuterHeight($overlayContent) > height, 'overlay should be enlarged');
         assert.equal(overlayPositioned.callCount, 2, 'overlay\'s position should be recalculated');
 
         $($item2).trigger('dxclick');
-        assert.equal($overlayContent.outerHeight(), height, 'overlay should be shrinked');
+        assert.equal(getOuterHeight($overlayContent), height, 'overlay should be shrinked');
         assert.equal(overlayPositioned.callCount, 3, 'overlay\'s position should be recalculated');
     });
 

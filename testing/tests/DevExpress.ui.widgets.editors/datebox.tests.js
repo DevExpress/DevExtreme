@@ -11,7 +11,6 @@ import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import messageLocalization from 'localization/message';
 import pointerMock from '../../helpers/pointerMock.js';
-import renderer from 'core/renderer';
 import support from 'core/utils/support';
 import typeUtils from 'core/utils/type';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
@@ -23,6 +22,7 @@ import '../../helpers/calendarFixtures.js';
 
 import 'ui/validator';
 import 'generic_light.css!';
+import { implementationsMap } from 'core/utils/size';
 
 QUnit.testStart(() => {
     const markup =
@@ -2735,10 +2735,10 @@ QUnit.module('datebox with time component', {
     }
 }, () => {
     QUnit.test('date box should contain calendar and time view inside box in large screen', function(assert) {
-        const originalWidthFunction = renderer.fn.width;
+        const originalWidthFunction = implementationsMap.getWidth;
 
         try {
-            sinon.stub(renderer.fn, 'width').returns(600);
+            sinon.stub(implementationsMap, 'getWidth').returns(600);
 
             const $element = $('#dateBox').dxDateBox({
                 type: 'datetime',
@@ -2757,15 +2757,15 @@ QUnit.module('datebox with time component', {
             assert.ok(box.itemElements().eq(1).find('.' + TIMEVIEW_CLASS).length, 'timeview rendered');
             assert.equal($clock.length, 1, 'clock was rendered');
         } finally {
-            renderer.fn.width = originalWidthFunction;
+            implementationsMap.getWidth = originalWidthFunction;
         }
     });
 
     QUnit.test('date box should contain calendar and time view inside box in small screen', function(assert) {
-        const originalWidthFunction = renderer.fn.width;
+        const originalWidthFunction = implementationsMap.getWidth;
 
         try {
-            sinon.stub(renderer.fn, 'width').returns(300);
+            sinon.stub(implementationsMap, 'getWidth').returns(300);
 
             const $element = $('#dateBox').dxDateBox({
                 type: 'datetime',
@@ -2784,13 +2784,13 @@ QUnit.module('datebox with time component', {
             assert.ok(box.itemElements().eq(0).find('.' + TIMEVIEW_CLASS).length, 'timeview rendered');
             assert.equal($clock.length, 0, 'clock was not rendered');
         } finally {
-            renderer.fn.width = originalWidthFunction;
+            implementationsMap.getWidth = originalWidthFunction;
         }
     });
 
     [true, false].forEach((adaptivityEnabledValue) => {
         QUnit.test(`date box should change behavior if adaptivityEnabled option is changed to ${adaptivityEnabledValue} at runtime`, function(assert) {
-            const widthStub = sinon.stub(renderer.fn, 'width').returns(300);
+            const widthStub = sinon.stub(implementationsMap, 'getWidth').returns(300);
 
             try {
                 const $element = $('#dateBox').dxDateBox({
@@ -2868,7 +2868,7 @@ QUnit.module('datebox with time component', {
         const LARGE_SCREEN_SIZE = 2000;
         const SMALL_SCREEN_SIZE = 300;
 
-        let stub = sinon.stub(renderer.fn, 'width').returns(LARGE_SCREEN_SIZE);
+        let stub = sinon.stub(implementationsMap, 'getWidth').returns(LARGE_SCREEN_SIZE);
 
         try {
             const instance = $('#dateBox').dxDateBox({
@@ -2883,7 +2883,7 @@ QUnit.module('datebox with time component', {
             instance.close();
 
             stub.restore();
-            stub = sinon.stub(renderer.fn, 'width').returns(SMALL_SCREEN_SIZE);
+            stub = sinon.stub(implementationsMap, 'getWidth').returns(SMALL_SCREEN_SIZE);
 
             instance.open();
             assert.ok(instance._popup.$wrapper().hasClass(DATEBOX_ADAPTIVITY_MODE_CLASS), 'there is the adaptivity class for the small screen');

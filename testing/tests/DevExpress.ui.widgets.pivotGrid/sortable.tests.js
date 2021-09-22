@@ -7,6 +7,7 @@ const HORIZONTAL_WIDTH_SMALL = 900;
 import 'generic_light.css!';
 import 'ui/pivot_grid/ui.sortable';
 import 'ui/scroll_view/ui.scrollable';
+import { getWidth, getHeight } from 'core/utils/size';
 
 QUnit.testStart(function() {
     const markup =
@@ -1045,8 +1046,8 @@ QUnit.module('sortable when source item is hidden', {
                 sourceClass: 'hidden-source',
                 itemRender: function($sourceItem, target) {
                     const $item = $sourceItem.clone().css({
-                        width: $sourceItem.width(),
-                        height: $sourceItem.height(),
+                        width: getWidth($sourceItem),
+                        height: getHeight($sourceItem),
                     });
 
                     if(target === 'target') {
@@ -1860,8 +1861,8 @@ QUnit.module('Scroll group content', {
                 sourceClass: 'hidden-source',
                 itemRender: function($sourceItem, target) {
                     const $item = $sourceItem.clone().css({
-                        width: $sourceItem.width(),
-                        height: $sourceItem.height(),
+                        width: getWidth($sourceItem),
+                        height: getHeight($sourceItem),
                     });
 
                     if(target === 'target') {

@@ -36,6 +36,7 @@ import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getHeight, getWidth } from 'core/utils/size';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -883,7 +884,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const content = dataGrid.$element().find('.dx-datagrid-rowsview .dx-datagrid-content')[0];
         const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth(true);
 
-        assert.roughEqual(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 1.1, 'Content height is correct');
+        assert.roughEqual(getHeight(scrollable.$element()) - content.clientHeight, scrollbarWidth, 1.1, 'Content height is correct');
     });
 
     // T628787
@@ -1054,7 +1055,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         const scrollable = dataGrid.getScrollable();
-        assert.roughEqual(scrollable.$content().width(), $(scrollable.container()).width(), 0.01, 'no scrollbar');
+        assert.roughEqual(getWidth(scrollable.$content()), getWidth(scrollable.container()), 0.01, 'no scrollbar');
     });
 
     QUnit.test('The scroll position should be updated after resizing column', function(assert) {

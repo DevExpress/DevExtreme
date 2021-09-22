@@ -50,6 +50,7 @@ import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
+import { getOuterHeight } from 'core/utils/size';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -1269,7 +1270,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
 
         // act
         dataGrid.editCell(0, 0);
@@ -1277,14 +1278,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3.01, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 68, 3.01, 'height main table');
 
         dataGrid.closeEditCell();
         this.clock.tick();
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
     });
 
     QUnit.test('Error row is not hidden when rowKey is undefined by mode is cell', function(assert) {

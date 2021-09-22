@@ -14,7 +14,7 @@ const RENDERING_STRATEGIES = {
 
 export class AppointmentViewModel {
     initRenderingStrategy(options) {
-        const RenderingStrategy = RENDERING_STRATEGIES[options.viewRenderingStrategyName];
+        const RenderingStrategy = RENDERING_STRATEGIES[options.appointmentRenderingStrategyName];
         this.renderingStrategy = new RenderingStrategy(options);
     }
 
@@ -22,7 +22,7 @@ export class AppointmentViewModel {
         const {
             isRenovatedAppointments,
             filteredItems,
-            viewRenderingStrategyName
+            appointmentRenderingStrategyName
         } = options;
         const appointments = filteredItems
             ? filteredItems.slice()
@@ -31,7 +31,7 @@ export class AppointmentViewModel {
         this.initRenderingStrategy(options);
 
         const positionMap = this.getRenderingStrategy().createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
-        let viewModel = this.postProcess(appointments, positionMap, viewRenderingStrategyName, isRenovatedAppointments);
+        let viewModel = this.postProcess(appointments, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments);
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
@@ -43,7 +43,7 @@ export class AppointmentViewModel {
             viewModel
         };
     }
-    postProcess(filteredItems, positionMap, viewRenderingStrategyName, isRenovatedAppointments) {
+    postProcess(filteredItems, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments) {
         return filteredItems.map((data, index) => {
             // TODO research do we need this code
             if(!this.getRenderingStrategy().keepAppointmentSettings()) {
@@ -53,7 +53,7 @@ export class AppointmentViewModel {
             // TODO Seems we can analize direction in the rendering strategies
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach((item) => {
-                item.direction = viewRenderingStrategyName === 'vertical' && !item.allDay
+                item.direction = appointmentRenderingStrategyName === 'vertical' && !item.allDay
                     ? 'vertical'
                     : 'horizontal';
             });

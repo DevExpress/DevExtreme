@@ -8,11 +8,20 @@ import { isDefined } from '../../../core/utils/type';
 //      indentLevel, - readonly
 //      cells: [ - readonly
 //        {
-//          gridCell, - readonly
 //          colSpan, - readonly (for internal use/hide from api/useless???)
 //          rowSpan, - readonly (for internal use/hide from api/useless???)
-//          text,
-//          wordWrapEnabled,
+//          gridCell, - readonly
+//          pdfCell : {
+//              text,
+//              textColor: '#0000ff', // TODO: specify color format for docs
+//              backgroundColor: '#0000ff', // TODO: specify color format for docs
+//              verticalAlign: 'top' | 'bottom' | 'middle | undefined. Default value is middle
+//              wordWrapEnabled, // true | false. Default value is inherited from grid props,
+//              drawRightBorder,
+//              drawLeftBorder
+//              drawTopBorder
+//              drawBottomBorder
+//          }
 //        }
 //      ],
 //    }
@@ -60,6 +69,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
             gridCell: cellData.cellSourceData,
             pdfCell: {
                 text: cellData.value,
+                verticalAlign: 'middle',
                 wordWrapEnabled,
                 backgroundColor,
                 _rect: {}

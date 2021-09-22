@@ -10,8 +10,6 @@ define(function(require) {
     const devices = require('core/devices');
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
-    if(browser.msie && parseInt(browser.version) >= 17) return;
-
     const $ = require('jquery');
     const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
     const pivotGridDataSourceUtils = require('ui/pivot_grid/data_source.utils');
