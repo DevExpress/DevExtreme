@@ -466,7 +466,6 @@ export interface GridBaseOptions
    TRowData=any,
    TKey=any,
    TColumns extends (ColumnBase<TRowData, any> | string)[]=(ColumnBase<TRowData, any> | string)[],
-   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
   > extends WidgetOptions<TComponent> {
     /**
      * @docid
@@ -1049,7 +1048,7 @@ export interface GridBaseOptions
      * @type object
      * @public
      */
-    stateStoring?: StateStoring<TStateStoringType>;
+    stateStoring?: StateStoring;
     /**
      * @docid
      * @default true
@@ -1510,18 +1509,33 @@ export interface Sorting {
     showSortIndexes?: boolean;
 }
 
-export interface StateStoring<TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage' = 'custom' | 'localStorage' | 'sessionStorage'> {
+type GridStateType = Record<string, unknown>;
+
+interface CustomStateStoring {
+  type: 'custom';
   /**
    * @docid GridBaseOptions.stateStoring.customLoad
    * @type_function_return Promise<Object>
    */
-  customLoad?: TStateStoringType extends 'custom' ? (() => PromiseLike<any>) : never;
+  customLoad: () => PromiseLike<GridStateType>;
   /**
    * @docid GridBaseOptions.stateStoring.customSave
    * @type_function_param1 gridState:object
    * @type_function_return void
    */
-  customSave?: TStateStoringType extends 'custom' ? ((gridState: any) => void) : never;
+  customSave: (gridState: GridStateType) => void;
+}
+
+interface LocalOrSessionStateStoring {
+  type: 'localStorage' | 'sessionStorage';
+  /**
+   * @docid GridBaseOptions.stateStoring.storageKey
+   * @default null
+   */
+  storageKey?: string;
+}
+
+export type StateStoring = {
   /**
    * @docid GridBaseOptions.stateStoring.enabled
    * @default false
@@ -1533,17 +1547,12 @@ export interface StateStoring<TStateStoringType extends 'custom' | 'localStorage
    */
   savingTimeout?: number;
   /**
-   * @docid GridBaseOptions.stateStoring.storageKey
-   * @default null
-   */
-  storageKey?: TStateStoringType extends 'localStorage' | 'sessionStorage' ? string : never;
-  /**
    * @docid GridBaseOptions.stateStoring.type
    * @type Enums.StateStoringType
    * @default "localStorage"
    */
-  type?: TStateStoringType;
-}
+  type?: 'custom' | 'localStorage' | 'sessionStorage';
+} & (CustomStateStoring | LocalOrSessionStateStoring);
 
 /**
  * @public
@@ -3284,8 +3293,7 @@ export interface dxDataGridOptions
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    TColumns extends Array<Column<TRowData, TKey, any> | string>=Array<Column<TRowData, TKey, any> | string>,
    TSelectionDeferred extends boolean=boolean,
-   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
-  > extends GridBaseOptions<dxDataGrid<TRowData, TKeyExpr, TKey>, TRowData, TKey, TColumns, TStateStoringType> {
+  > extends GridBaseOptions<dxDataGrid<TRowData, TKeyExpr, TKey>, TRowData, TKey, TColumns> {
     /**
      * @docid
      * @type Array<dxDataGridColumn|string>
@@ -4376,8 +4384,7 @@ declare class dxDataGrid
    TKey=TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    TColumns extends Array<Column<TRowData, TKey, any> | string>=Array<Column<TRowData, TKey, any> | string>,
    TSelectionDeferred extends boolean=boolean,
-   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
-  > extends Widget<dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred, TStateStoringType>> implements GridBase<TRowData, TKey, TColumns> {
+  > extends Widget<dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred>> implements GridBase<TRowData, TKey, TColumns> {
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -4851,8 +4858,7 @@ export type Options
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
    TSelectionDeferred extends boolean=boolean,
-   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
-  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred, TStateStoringType>;
+  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred>;
 
 /** @deprecated use Properties instead */
 export type IOptions
@@ -4861,7 +4867,6 @@ export type IOptions
    TKey = TKeyExpr extends keyof TRowData ? TRowData[TKeyExpr] : any,
    TColumns extends Array<Column<TRowData, TKey, any> | string> = Array<Column<TRowData, TKey, any> | string>,
    TSelectionDeferred extends boolean=boolean,
-   TStateStoringType extends 'custom' | 'localStorage' | 'sessionStorage'='custom' | 'localStorage' | 'sessionStorage',
-  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred, TStateStoringType>;
+  > = dxDataGridOptions<TRowData, TKeyExpr, TKey, TColumns, TSelectionDeferred>;
 
 export default dxDataGrid;
