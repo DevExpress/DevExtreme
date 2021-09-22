@@ -55,7 +55,7 @@ export const getColumnElements = ($table, index = 0) => {
 
 const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
-        const autoWidthColumns = getAutoWidthColumns($table);
+        const autoWidthColumns = getAutoSizedElements($table);
 
         if(autoWidthColumns.length > 0) {
             $table.css('width', newWidth);
@@ -77,7 +77,7 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
         }
     }
 
-    const autoHeightRows = getAutoHeightRows($table);
+    const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows?.length > 0) {
         $table.css('height', newHeight);
@@ -95,23 +95,14 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     }
 };
 
-const getAutoHeightRows = ($table) => {
+export const getAutoSizedElements = ($table, direction = 'horizontal') => {
     const result = [];
-    getRowElements($table).each((index, element) => {
-        const $element = $(element);
-        if(!isDefined($element.attr('height'))) {
-            result.push($element);
-        }
-    });
+    const isHorizontal = direction === 'horizontal';
+    const $lineElements = isHorizontal ? getColumnElements($table) : getRowElements($table);
 
-    return result;
-};
-
-export const getAutoWidthColumns = ($table) => {
-    const result = [];
-    getColumnElements($table).each((index, element) => {
+    $lineElements.each((index, element) => {
         const $element = $(element);
-        if(!isDefined($element.attr('width'))) {
+        if(!isDefined($element.attr(isHorizontal ? 'width' : 'height'))) {
             result.push($element);
         }
     });
@@ -120,7 +111,6 @@ export const getAutoWidthColumns = ($table) => {
 };
 
 const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
-
     const $table = $($target.closest('table'));
     if(isDefined(newWidth)) {
         const index = $($target).index();
@@ -137,7 +127,7 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
-        const shouldUpdateNearestColumnWidth = getAutoWidthColumns($table).length === 0;
+        const shouldUpdateNearestColumnWidth = getAutoSizedElements($table).length === 0;
 
         if(shouldUpdateNearestColumnWidth) {
             unfixTableWidth($table);
@@ -158,14 +148,12 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
 
     const $horizontalCells = $target.closest('tr').find('td');
 
-
     setLineElementsAttrValue($horizontalCells, 'height', newHeight);
-    const autoHeightRows = getAutoHeightRows($table);
+    const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows.length === 0) {
         $table.css('height', 'auto');
     }
-
 };
 
 export const setLineElementsAttrValue = ($lineElements, property, value) => {
@@ -199,7 +187,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             borderStyle: tableStyles.borderStyle,
             borderColor: tableStyles.borderColor,
             borderWidth: tableStyles.borderWidth,
-            alignment: startTextAlign,
+            alignment: startTextAlign
         },
         items: [{
             itemType: 'group',
@@ -214,7 +202,6 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                         items: BORDER_STYLES
                     }
                 },
-
                 {
                     itemType: 'simple',
                     dataField: 'borderColor',
@@ -229,7 +216,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                             }
                         });
                         return $content;
-                    },
+                    }
                 },
                 {
                     dataField: 'borderWidth',
@@ -254,8 +241,8 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                             }
                         });
                         return $content;
-                    },
-                },
+                    }
+                }
             ]
         }, {
             itemType: 'group',
@@ -287,7 +274,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                             }
                         });
                         return $content;
-                    },
+                    }
                 }
             ]
         }, {
@@ -314,7 +301,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
-        minColWidth: 300,
+        minColWidth: 300
     };
 
     formPopup.option('contentTemplate', (container) => {
@@ -337,7 +324,6 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     createFormPopup(editorInstance);
 
     const window = getWindow();
-
     let formInstance;
     let alignmentEditorInstance;
     let verticalAlignmentEditorInstance;
@@ -357,7 +343,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             borderWidth: cellStyles.borderWidth,
             alignment: startTextAlign,
             verticalAlignment: cellStyles.verticalAlign,
-            padding: cellStyles.padding,
+            padding: cellStyles.padding
         },
         items: [{
             itemType: 'group',
@@ -386,7 +372,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                             }
                         });
                         return $content;
-                    },
+                    }
                 },
                 {
                     dataField: 'borderWidth',
@@ -411,7 +397,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                             }
                         });
                         return $content;
-                    },
+                    }
                 }
             ]
         }, {
