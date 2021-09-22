@@ -659,7 +659,7 @@ module('Table properties forms', {
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
         });
 
-        test('Check cell height edititng if all rows height is fixed nad new value is less than the minimum row content height', function(assert) {
+        test('Check cell height edititng if all rows height is fixed and new value is less than the minimum row content height', function(assert) {
             this.createWidget({ value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -687,8 +687,8 @@ module('Table properties forms', {
     });
 
     module('Table height calculations', {}, () => {
-        test('Check cell height edititng if all rows height is fixed', function(assert) {
-            this.createWidget({ value: tableWithFixedDimensionsMarkup });
+        test('Check table height edititng if all rows height is fixed', function(assert) {
+            this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
 
@@ -714,7 +714,7 @@ module('Table properties forms', {
             assert.roughEqual(parseInt($verticalCells.eq(1).attr('height')), 99, 2, 'second row cell height attr is applied');
         });
 
-        test('Check cell height edititng if new value is less than the content', function(assert) {
+        test('Check table height edititng if new value is less than the content', function(assert) {
             this.createWidget({ value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -743,7 +743,7 @@ module('Table properties forms', {
     });
 
     module('Table width calculations', {}, () => {
-        test('Check cell width edititng if all columns height is fixed', function(assert) {
+        test('Check table width edititng if all columns height is fixed', function(assert) {
             this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);

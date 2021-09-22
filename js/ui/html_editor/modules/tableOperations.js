@@ -9,7 +9,9 @@ import { getWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 
-const MIN_HEIGHT = 250;
+import { getOuterHeight, getOuterWidth } from '../../../core/utils/size';
+
+const MIN_HEIGHT = 400;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
 let formPopup;
 
@@ -35,7 +37,7 @@ const createFormPopup = (editorInstance) => {
 
 const getMaxHeight = () => {
     const window = getWindow();
-    const windowHeight = window && $(window).height() || 0;
+    const windowHeight = window?.innerHeight || 0;
     return Math.max(MIN_HEIGHT, windowHeight * 0.9);
 };
 
@@ -51,13 +53,13 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
             $table.css('width', newWidth); // to do support style width
         } else {
             const $columns = $table.find('tr').eq(0).find('td');
-            const oldTableWidth = $table.outerWidth();
+            const oldTableWidth = getOuterWidth($table);
 
             $table.css('width', 'initial');
 
             each($columns, (i, element) => {
                 const $element = $(element);
-                const newElementWidth = newWidth / oldTableWidth * $element.outerWidth();
+                const newElementWidth = newWidth / oldTableWidth * getOuterWidth($element);
                 $element.attr('width', newElementWidth);
 
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
@@ -73,11 +75,11 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
         $table.css('height', newHeight);
     } else {
         const $rows = getRowElements($table);
-        const oldTableHeight = $table.outerHeight();
+        const oldTableHeight = getOuterHeight($table);
 
         each($rows, (i, element) => {
             const $element = $(element);
-            const newElementHeight = newHeight / oldTableHeight * $element.outerHeight();
+            const newElementHeight = newHeight / oldTableHeight * getOuterHeight($element);
             const $lineElements = getLineElements($table, i, 'vertical');
 
             setLineElementsAttrValue($lineElements, 'height', newElementHeight);
@@ -117,8 +119,8 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         let $verticalCells = getLineElements($table, index);
 
 
-        const widthDiff = newWidth - $target.outerWidth();
-        const tableWidth = $table.outerWidth();
+        const widthDiff = newWidth - getOuterWidth($target);
+        const tableWidth = getOuterWidth($table);
 
         if(newWidth > tableWidth) {
             $table.css('width', 'initial');
@@ -133,13 +135,13 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
             $table.css('width', 'initial');
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
-                const nextColumnWidth = $verticalCells.eq(0).outerWidth() - widthDiff;
+                const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
                 setLineElementsAttrValue($verticalCells, 'width', nextColumnWidth > 0 ? nextColumnWidth : 0);
             } else {
                 const $prevColumnCell = $target.prev();
                 if($prevColumnCell.length === 1) {
                     $verticalCells = getLineElements($table, index - 1);
-                    const prevColumnWidth = $verticalCells.eq(0).outerWidth() - widthDiff;
+                    const prevColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
                     setLineElementsAttrValue($verticalCells, 'width', prevColumnWidth > 0 ? prevColumnWidth : 0);
                 }
             }
@@ -184,14 +186,14 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
     let alignmentEditorInstance;
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
-    const startTableWidth = $table.outerWidth();
+    const startTableWidth = getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
     const formOptions = {
         formData: {
             width: startTableWidth,
-            height: $table.outerHeight(),
+            height: getOuterHeight($table),
             backgroundColor: tableStyles.backgroundColor,
             borderStyle: tableStyles.borderStyle,
             borderColor: tableStyles.borderColor,
@@ -340,14 +342,14 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     let verticalAlignmentEditorInstance;
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
-    const startCellWidth = $cell.outerWidth();
+    const startCellWidth = getOuterWidth($cell);
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
 
     const formOptions = {
         formData: {
             width: startCellWidth,
-            height: $cell.outerHeight(),
+            height: getOuterHeight($cell),
             backgroundColor: cellStyles.backgroundColor,
             borderStyle: cellStyles.borderStyle,
             borderColor: cellStyles.borderColor,
