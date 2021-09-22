@@ -167,6 +167,10 @@ const nativeDOMAdapterStrategy = {
         return () => {
             element.removeEventListener(event, callback);
         };
+    },
+
+    elementsFromPoint(x, y) {
+        return this._document.elementsFromPoint(x, y);
     }
 };
 

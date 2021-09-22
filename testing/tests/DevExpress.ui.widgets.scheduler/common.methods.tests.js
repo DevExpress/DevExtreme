@@ -1,4 +1,3 @@
-import { getOuterWidth } from 'core/utils/size';
 import fx from 'animation/fx';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
@@ -535,44 +534,6 @@ QUnit.module('Methods', {
         scheduler.instance.focus();
 
         assert.ok(focusSpy.calledOnce, 'focus is called');
-    });
-
-    QUnit.test('Scheduler getWorkSpaceDateTableOffset should return right dateTable offset', function(assert) {
-        const scheduler = createInstance({
-            dataSource: 'day',
-            currentDate: new Date(2015, 10, 3)
-        });
-
-        const timePanelWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-time-panel').eq(0));
-        const offset = scheduler.instance.getWorkSpaceDateTableOffset();
-
-        assert.equal(offset, timePanelWidth, 'Date Table offset is correct');
-    });
-
-    QUnit.test('Scheduler getWorkSpaceDateTableOffset should return right dateTable offset, crossScrollingEnabled=true', function(assert) {
-        const scheduler = createInstance({
-            dataSource: 'day',
-            currentDate: new Date(2015, 10, 3),
-            crossScrollingEnabled: true
-        });
-
-        const offset = scheduler.instance.getWorkSpaceDateTableOffset();
-
-        assert.equal(offset, 0, 'Date Table offset is correct');
-    });
-
-    QUnit.test('Scheduler getWorkSpaceDateTableOffset should return right dateTable offset, crossScrollingEnabled=true, rtl mode', function(assert) {
-        const scheduler = createInstance({
-            currentView: 'day',
-            currentDate: new Date(2015, 10, 3),
-            crossScrollingEnabled: true,
-            rtlEnabled: true
-        });
-
-        const timePanelWidth = getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-time-panel').eq(0));
-        const offset = scheduler.instance.getWorkSpaceDateTableOffset();
-
-        assert.equal(offset, timePanelWidth, 'Date Table offset is correct');
     });
 
     QUnit.test('Scheduler dateTable should have right position, crossScrollingEnabled=true, rtl mode', function(assert) {

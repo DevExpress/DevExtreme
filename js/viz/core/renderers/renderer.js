@@ -1872,7 +1872,7 @@ Renderer.prototype = {
     },
 
     fixPlacement: function() {
-        if(!browser.mozilla && !browser.msie) {
+        if(!browser.mozilla) {
             return;
         }
 
@@ -1880,23 +1880,17 @@ Renderer.prototype = {
         const dx = roundValue(box.left % 1, 2);
         const dy = roundValue(box.top % 1, 2);
 
-        if(browser.msie) {
-            this.root.css({
-                transform: 'translate(' + -dx + 'px,' + -dy + 'px)'
-            });
-        } else if(browser.mozilla) {
+        if(browser.mozilla) {
             this.root.move(-dx, -dy);
         }
     },
 
     removePlacementFix: function() {
-        if(!browser.mozilla && !browser.msie) {
+        if(!browser.mozilla) {
             return;
         }
 
-        if(browser.msie) {
-            this.root.css({ transform: '' });
-        } else if(browser.mozilla) {
+        if(browser.mozilla) {
             this.root.attr({ transform: null });
         }
     },

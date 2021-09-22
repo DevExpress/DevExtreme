@@ -12,6 +12,7 @@ import {
   DIRECTION_BOTH,
   TopPocketState,
   HOVER_ENABLED_STATE,
+  ShowScrollbarMode,
 } from '../../common/consts';
 
 import devices from '../../../../../core/devices';
@@ -242,14 +243,14 @@ describe('Simulated > Render', () => {
         const scrollbars = helper.getScrollbars();
         const commonOptions = {
           scrollByThumb: true,
-          isScrollableHovered: false,
+          visible: false,
           bounceEnabled: true,
           showScrollbar,
         };
 
         const isHoverable = showScrollbar === 'onHover' || showScrollbar === 'always';
-        const vScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
-        const hScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+        const vScrollbarClasses = `dx-scrollable-scrollbar dx-scrollbar-vertical ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+        const hScrollbarClasses = `dx-scrollable-scrollbar dx-scrollbar-horizontal ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
 
         if (helper.isBoth) {
           expect(scrollbars.length).toEqual(2);
@@ -331,6 +332,62 @@ describe('Simulated > Behavior', () => {
         } else {
           expect(viewModel.locked).toEqual(false);
         }
+      });
+    });
+
+    it('should subscribe to mouseenter event if showScrollbar mode is onHover', () => {
+      const helper = new ScrollableTestHelper({
+        direction: 'vertical',
+        showScrollbar: 'onHover',
+      });
+      helper.viewModel.hovered = false;
+
+      helper.viewModel.mouseEnterEffect();
+      emit('mouseenter');
+
+      expect(helper.viewModel.hovered).toEqual(true);
+    });
+
+    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
+      it(`should not subscribe to mouseenter event if showScrollbar mode is ${showScrollbar}`, () => {
+        const helper = new ScrollableTestHelper({
+          direction: 'vertical',
+          showScrollbar,
+        });
+        helper.viewModel.hovered = false;
+
+        helper.viewModel.mouseEnterEffect();
+        emit('mouseenter');
+
+        expect(helper.viewModel.hovered).toEqual(false);
+      });
+    });
+
+    it('should subscribe to mouseleave event if showScrollbar mode is onHover', () => {
+      const helper = new ScrollableTestHelper({
+        direction: 'vertical',
+        showScrollbar: 'onHover',
+      });
+      helper.viewModel.hovered = true;
+
+      helper.viewModel.mouseLeaveEffect();
+      emit('mouseleave');
+
+      expect(helper.viewModel.hovered).toEqual(false);
+    });
+
+    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
+      it(`should not subscribe to mouseleave event if showScrollbar mode is ${showScrollbar}`, () => {
+        const helper = new ScrollableTestHelper({
+          direction: 'vertical',
+          showScrollbar,
+        });
+        helper.viewModel.hovered = true;
+
+        helper.viewModel.mouseLeaveEffect();
+        emit('mouseleave');
+
+        expect(helper.viewModel.hovered).toEqual(true);
       });
     });
 
@@ -997,20 +1054,6 @@ describe('Simulated > Behavior', () => {
             }
           });
         });
-      });
-    });
-
-    each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbar) => {
-      it('hoverStart, hoverEnd handlers should update hovered state only for onHover mode', () => {
-        const viewModel = new Scrollable({ direction: DIRECTION_HORIZONTAL, showScrollbar }) as any;
-
-        expect(viewModel.hovered).toBe(false);
-
-        viewModel.hoverInHandler();
-        expect(viewModel.hovered).toBe(showScrollbar === 'onHover');
-
-        viewModel.hoverOutHandler();
-        expect(viewModel.hovered).toBe(false);
       });
     });
   });

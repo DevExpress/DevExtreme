@@ -73,7 +73,6 @@ describe('ScrollView', () => {
   each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
     it('should pass all necessary properties to the Widget', () => {
       const config = {
-        activeStateUnit: '.UIFeedback',
         useNative: useNativeScrolling,
         direction: 'vertical' as ScrollableDirection,
         width: '120px',
@@ -83,7 +82,7 @@ describe('ScrollView', () => {
         rtlEnabled: true,
         disabled: true,
         focusStateEnabled: false,
-        hoverStateEnabled: !useNativeScrolling,
+        hoverStateEnabled: false,
         tabIndex: 0,
         visible: true,
       };
