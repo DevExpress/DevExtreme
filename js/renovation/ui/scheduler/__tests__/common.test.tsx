@@ -1,4 +1,5 @@
 import { createDataAccessors } from '../common';
+import { SchedulerProps } from '../props';
 
 describe('Scheduler common', () => {
   describe('createDataAccessors', () => {
@@ -9,6 +10,7 @@ describe('Scheduler common', () => {
       };
       const instance = { };
       const props = {
+        ...new SchedulerProps(),
         startDateExpr: 'testStartDateExpr',
         endDateExpr: 'testEndDateExpr',
         startDateTimeZoneExpr: 'test-startDateTimeZoneExpr-expr',
