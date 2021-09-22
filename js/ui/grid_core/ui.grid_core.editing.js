@@ -1809,7 +1809,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this._updateEditRowCore(row, !forceUpdateRow, isCustomSetCellValue);
             this._validateEditFormAfterUpdate(row, isCustomSetCellValue);
             if(!forceUpdateRow) {
-                // this._focusEditingCell();
+                this._focusEditingCell();
             }
         },
 
