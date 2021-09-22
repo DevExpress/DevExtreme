@@ -522,20 +522,40 @@ testModule('option', moduleConfig, () => {
         });
     });
 
-    test('show warning if deprecated "elementAttr" option is used', function(assert) {
+    [
+        { name: 'elementAttr', value: { class: '123' } },
+        { name: 'copyRootClassesToWrapper', value: true }
+    ].forEach(({ name, value }) => {
+        test(`should show warning if deprecated "${name}" option is used`, function(assert) {
+            sinon.spy(errors, 'log');
+
+            const options = {};
+            options[name] = value;
+
+            try {
+                $('#overlay').dxOverlay(options);
+                assert.deepEqual(errors.log.lastCall.args, [
+                    'W0001',
+                    'dxOverlay',
+                    `${name}`,
+                    '21.2',
+                    'Use the "wrapperAttr" option instead'
+                ], 'args of the log method');
+            } finally {
+                errors.log.restore();
+            }
+        });
+    });
+
+    test('should not show "copyRootClassesToWrapper" deprecation warning if "_ignoreCopyRootClassesToWrapperDeprecation" option enabled', function(assert) {
         sinon.spy(errors, 'log');
 
         try {
             $('#overlay').dxOverlay({
-                elementAttr: { class: 'someClass' },
+                copyRootClassesToWrapper: { class: '123' },
+                _ignoreCopyRootClassesToWrapperDeprecation: true
             });
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxOverlay',
-                'elementAttr',
-                '21.2',
-                'Use the "wrapperAttr" option instead'
-            ], 'args of the log method');
+            assert.ok(errors.log.notCalled, 'no warnings were logged');
         } finally {
             errors.log.restore();
         }
