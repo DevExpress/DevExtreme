@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -46,6 +47,8 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
+
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('useNative', moduleConfig);
 
@@ -216,7 +219,8 @@ QUnit.test('simulatedScrollbar visibility', function(assert) {
         .start()
         .wheel(10);
 
-    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'after move thumb is visible');
+    // in renovated widget thumb hides after scroll immediately using CSS animation
+    assert.equal($scroll.hasClass('dx-state-invisible'), isRenovation ? true : false, 'after move thumb is visible');
 });
 
 QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is true', function(assert) {
