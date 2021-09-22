@@ -16,7 +16,7 @@ const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 
 let formPopup;
 
 const createFormPopup = (editorInstance) => {
-    const $popup = $('<div>').addClass('test-123').appendTo(editorInstance.$element());
+    const $popup = $('<div>').appendTo(editorInstance.$element());
     formPopup = editorInstance._createComponent($popup, Popup, {
         deferRendering: true,
         showTitle: false,
@@ -45,17 +45,25 @@ const getRowElements = ($table, index = 0) => {
     return $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
 };
 
+export const unfixTableWidth = ($table) => {
+    $table.css('width', 'initial');
+};
+
+export const getColumnElements = ($table, index = 0) => {
+    return $table.find('tr').eq(index).find('th, td');
+};
+
 const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
         const autoWidthColumns = getAutoWidthColumns($table);
 
         if(autoWidthColumns.length > 0) {
-            $table.css('width', newWidth); // to do support style width
+            $table.css('width', newWidth);
         } else {
-            const $columns = $table.find('tr').eq(0).find('td');
+            const $columns = getColumnElements($table);
             const oldTableWidth = getOuterWidth($table);
 
-            $table.css('width', 'initial');
+            unfixTableWidth($table);
 
             each($columns, (i, element) => {
                 const $element = $(element);
@@ -101,7 +109,7 @@ const getAutoHeightRows = ($table) => {
 
 export const getAutoWidthColumns = ($table) => {
     const result = [];
-    $table.find('tr').eq(0).find('th, td').each((index, element) => {
+    getColumnElements($table).each((index, element) => {
         const $element = $(element);
         if(!isDefined($element.attr('width'))) {
             result.push($element);
@@ -123,7 +131,7 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         const tableWidth = getOuterWidth($table);
 
         if(newWidth > tableWidth) {
-            $table.css('width', 'initial');
+            unfixTableWidth($table);
         }
 
         setLineElementsAttrValue($verticalCells, 'width', newWidth);
@@ -132,17 +140,17 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
         const shouldUpdateNearestColumnWidth = getAutoWidthColumns($table).length === 0;
 
         if(shouldUpdateNearestColumnWidth) {
-            $table.css('width', 'initial');
+            unfixTableWidth($table);
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
                 const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                setLineElementsAttrValue($verticalCells, 'width', nextColumnWidth > 0 ? nextColumnWidth : 0);
+                setLineElementsAttrValue($verticalCells, 'width', Math.max(nextColumnWidth, 0));
             } else {
                 const $prevColumnCell = $target.prev();
                 if($prevColumnCell.length === 1) {
                     $verticalCells = getLineElements($table, index - 1);
                     const prevColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                    setLineElementsAttrValue($verticalCells, 'width', prevColumnWidth > 0 ? prevColumnWidth : 0);
+                    setLineElementsAttrValue($verticalCells, 'width', Math.max(prevColumnWidth, 0));
                 }
             }
         }
@@ -166,14 +174,8 @@ export const setLineElementsAttrValue = ($lineElements, property, value) => {
     });
 };
 
-export const getLineElements = ($table, index, direction) => {
-    let result;
-    if(direction !== 'vertical') {
-        result = getRowElements($table, index);
-    } else {
-        result = $table.find('tr').eq(index).find('th, td');
-    }
-    return result;
+export const getLineElements = ($table, index, direction = 'horizontal') => {
+    return direction === 'horizontal' ? getRowElements($table, index) : getColumnElements($table, index);
 };
 
 export const showTablePropertiesForm = (editorInstance, $table) => {
@@ -181,7 +183,6 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
     createFormPopup(editorInstance);
 
     const window = getWindow();
-
     let formInstance;
     let alignmentEditorInstance;
     let borderColorEditorInstance;

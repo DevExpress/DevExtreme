@@ -11,7 +11,7 @@ import Draggable from '../../draggable';
 import { each } from '../../../core/utils/iterator';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { extend } from '../../../core/utils/extend';
-import { setLineElementsAttrValue, getLineElements, getAutoWidthColumns } from './tableOperations';
+import { setLineElementsAttrValue, getLineElements, getAutoWidthColumns, getColumnElements, unfixTableWidth } from './tableOperations';
 
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
@@ -161,7 +161,7 @@ export default class TableResizingModule extends BaseModule {
             if(getAutoWidthColumns($table).length === 0) {
                 const { columnsSum } = this._getColumnElementsSum($columnElements);
 
-                $table.css('width', 'initial');
+                unfixTableWidth($table);
 
                 const tableWidth = this._tableLastWidth(frame) ?? getOuterWidth($table);
 
@@ -354,7 +354,7 @@ export default class TableResizingModule extends BaseModule {
         if(direction === 'vertical') {
             return $table.find('th:first-child, td:first-child');
         } else {
-            return $table.find('tr').eq(0).find('th, td');
+            return getColumnElements($table);
         }
     }
 
@@ -379,7 +379,7 @@ export default class TableResizingModule extends BaseModule {
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt(this._getSize($($determinantElements[index + 1]), directionInfo));
         } else if(direction === 'horizontal') {
-            frame.$table.css('width', 'initial');
+            unfixTableWidth(frame.$table);
         }
     }
 
