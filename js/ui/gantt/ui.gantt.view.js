@@ -44,7 +44,7 @@ export class GanttView extends Widget {
             taskProgressTooltipContentTemplate: this.option('taskProgressTooltipContentTemplate'),
             taskTimeTooltipContentTemplate: this.option('taskTimeTooltipContentTemplate'),
             taskContentTemplate: this.option('taskContentTemplate'),
-            sorting: this.option('sorting')
+            sieve: this.option('sieve')
         });
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
@@ -180,7 +180,7 @@ export class GanttView extends Widget {
             case 'dependencies':
             case 'resources':
             case 'resourceAssignments':
-                this._sortOptions = undefined;
+                this._sieveOptions = undefined;
                 this._update(true);
                 break;
             case 'showResources':
@@ -238,8 +238,8 @@ export class GanttView extends Widget {
             case 'taskContentTemplate':
                 this._ganttViewCore.setTaskContentTemplate(args.value);
                 break;
-            case 'sorting':
-                this._sort(args.value);
+            case 'sieve':
+                this._sortAndFilter(args.value);
                 break;
             default:
                 super._optionChanged(args);
@@ -258,21 +258,21 @@ export class GanttView extends Widget {
     }
     getGanttTasksData() {
         const tasks = this.option('tasks');
-        const sortingOptions = this.getSortingOptions();
-        if(sortingOptions?.sortedItems && sortingOptions?.sortColumn) {
-            return sortingOptions.sortedItems;
+        const sieveOptions = this.getSieveOptions();
+        if(sieveOptions?.sievedItems && sieveOptions?.sieveColumn) {
+            return sieveOptions.sievedItems;
         }
         return tasks;
     }
-    _sort(args) {
-        this._sortOptions = args;
+    _sortAndFilter(args) {
+        this._sieveOptions = args;
         this._update(true);
         const selectedRowKey = this.option('selectedRowKey');
         this._selectTask(selectedRowKey);
     }
 
-    getSortingOptions() {
-        return this._sortOptions;
+    getSieveOptions() {
+        return this._sieveOptions;
     }
     getGanttDependenciesData() {
         return this.option('dependencies');
