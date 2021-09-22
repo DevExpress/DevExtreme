@@ -131,7 +131,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'single'
      * @public
      */
-    selectionMode?: ButtonGroupSelectionMode | 'none';
+    selectionMode?: ButtonGroupSelectionMode;
     /**
      * @docid
      * @default 'contained'

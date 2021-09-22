@@ -69,7 +69,7 @@ export type BoxAlign = 'center' | 'end' | 'space-around' | 'space-between' | 'st
 
 export type BoxCrossAlign = 'center' | 'end' | 'start' | 'stretch';
 
-export type ButtonGroupSelectionMode = 'multiple' | 'single';
+export type ButtonGroupSelectionMode = 'multiple' | 'single' | 'none';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 export type Mode = 'auto';
