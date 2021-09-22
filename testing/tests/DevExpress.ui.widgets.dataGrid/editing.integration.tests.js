@@ -2932,6 +2932,31 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'unmodified cell is invalid');
         });
     });
+
+    QUnit.test('Editing cell should not be focused twice', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            }
+        });
+
+        const editingController = dataGrid.getController('editing');
+        const focusedSpy = sinon.spy(editingController, '_delayedInputFocus');
+
+        // act
+        this.clock.tick(100);
+        $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick(100);
+        $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').trigger('change');
+        this.clock.tick(100);
+
+        // assert
+
+        assert.strictEqual(focusedSpy.callCount, 1, 'focused only once');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
