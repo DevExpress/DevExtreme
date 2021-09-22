@@ -22,7 +22,7 @@ function drawCellText(doc, cell, docStyles) {
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
         const { textColor, font } = cell;
         setTextStyles(doc, { textColor, font }, docStyles);
-        drawTextInRect(doc, cell.text, cell._rect, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        drawTextInRect(doc, cell.text, cell._rect, cell.verticalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 }
 

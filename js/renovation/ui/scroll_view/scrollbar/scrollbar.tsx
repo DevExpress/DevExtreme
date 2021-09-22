@@ -9,24 +9,23 @@ import {
   Mutable,
 } from '@devextreme-generator/declarations';
 
-import { Widget } from '../../common/widget';
 import { combineClasses } from '../../../utils/combine_classes';
-import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
+import { EffectReturn } from '../../../utils/effect_return';
 import domAdapter from '../../../../core/dom_adapter';
-import { isDefined } from '../../../../core/utils/type';
-import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS,
   SCROLLABLE_SCROLL_CLASS,
   SCROLLABLE_SCROLL_CONTENT_CLASS,
-  HIDE_SCROLLBAR_TIMEOUT,
   SCROLLABLE_SCROLLBAR_ACTIVE_CLASS,
   HOVER_ENABLED_STATE,
+  ShowScrollbarMode,
 } from '../common/consts';
 
 import {
   subscribeToDXPointerDownEvent,
   subscribeToDXPointerUpEvent,
+  subscribeToMouseEnterEvent,
+  subscribeToMouseLeaveEvent,
 } from '../../../utils/subscribe_to_event';
 
 import { BaseWidgetProps } from '../../common/base_props';
@@ -34,7 +33,6 @@ import { inRange } from '../../../../core/utils/math';
 import { DxMouseEvent } from '../common/types';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { ScrollbarProps } from '../common/scrollbar_props';
-import { ScrollableProps } from '../common/scrollable_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
@@ -42,32 +40,20 @@ export const THUMB_MIN_SIZE = 15;
 
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
-    cssClasses, scrollStyles, scrollRef, scrollbarRef, hoverStateEnabled,
-    hoverInHandler, hoverOutHandler, isVisible,
-    props: { activeStateEnabled },
+    scrollbarRef, thumbRef, scrollbarClasses, thumbClasses, thumbStyles, hidden,
   } = viewModel;
 
   return (
-    <Widget
-      rootElementRef={scrollbarRef}
-      classes={cssClasses}
-      activeStateEnabled={activeStateEnabled}
-      hoverStateEnabled={hoverStateEnabled}
-      focusStateEnabled
-      visible={isVisible}
-      onHoverStart={hoverInHandler}
-      onHoverEnd={hoverOutHandler}
-    >
-      <div className={viewModel.scrollClasses} style={scrollStyles} ref={scrollRef}>
+    <div className={scrollbarClasses} ref={scrollbarRef} hidden={hidden}>
+      <div className={thumbClasses} style={thumbStyles} ref={thumbRef}>
         <div className={SCROLLABLE_SCROLL_CONTENT_CLASS} />
       </div>
-    </Widget>
+    </div>
   );
 };
 
 export type ScrollbarPropsType = ScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<ScrollableProps, 'direction'>
 & Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
 
 @Component({
@@ -80,10 +66,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() prevScrollLocation = 0;
 
-  @Mutable() hideScrollbarTimer?: unknown;
-
-  @InternalState() showOnScrollByWheel?: boolean;
-
   @InternalState() hovered = false;
 
   @InternalState() expanded = false;
@@ -92,16 +74,50 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
-  @Ref() scrollRef!: RefObject<HTMLDivElement>;
+  @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
   @Effect()
   pointerDownEffect(): EffectReturn {
-    return subscribeToDXPointerDownEvent(this.scrollRef.current, () => { this.expand(); });
+    return subscribeToDXPointerDownEvent(
+      this.thumbRef.current, () => {
+        this.expanded = true;
+      },
+    );
   }
 
   @Effect()
   pointerUpEffect(): EffectReturn {
-    return subscribeToDXPointerUpEvent(domAdapter.getDocument(), () => { this.collapse(); });
+    return subscribeToDXPointerUpEvent(
+      domAdapter.getDocument(), () => {
+        this.expanded = false;
+      },
+    );
+  }
+
+  @Effect()
+  mouseEnterEffect(): EffectReturn {
+    if (this.isHoverMode) {
+      return subscribeToMouseEnterEvent(
+        this.scrollbarRef.current, () => {
+          this.hovered = true;
+        },
+      );
+    }
+
+    return undefined;
+  }
+
+  @Effect()
+  mouseLeaveEffect(): EffectReturn {
+    if (this.isHoverMode) {
+      return subscribeToMouseLeaveEvent(
+        this.scrollbarRef.current, () => {
+          this.hovered = false;
+        },
+      );
+    }
+
+    return undefined;
   }
 
   @Method()
@@ -116,34 +132,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  show(): void {
-    this.visibility = true;
-  }
-
-  @Method()
-  hide(): void {
-    this.visibility = false;
-
-    if (isDefined(this.showOnScrollByWheel) && this.props.showScrollbar === 'onScroll') {
-      this.hideScrollbarTimer = setTimeout(() => {
-        this.showOnScrollByWheel = undefined;
-      }, HIDE_SCROLLBAR_TIMEOUT);
-    }
-  }
-
-  @Method()
   initHandler(
     event: DxMouseEvent,
     thumbScrolling: boolean,
     offset: number,
   ): void {
-    if (isDxMouseWheelEvent(event.originalEvent)) {
-      if (this.props.showScrollbar === 'onScroll') {
-        this.showOnScrollByWheel = true;
-      }
-      return;
-    }
-
     const { target } = event.originalEvent;
     const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
 
@@ -152,7 +145,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     if (thumbScrolling) {
-      this.expand();
+      this.expanded = true;
     }
   }
 
@@ -170,11 +163,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     this.scrollStep(resultDelta, minOffset, maxOffset);
-  }
-
-  @Effect({ run: 'once' })
-  disposeHideScrollbarTimer(): DisposeEffectReturn {
-    return (): void => this.clearHideScrollbarTimer();
   }
 
   @Method()
@@ -230,11 +218,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return this.props.direction === DIRECTION_HORIZONTAL;
   }
 
-  clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer as number);
-    this.hideScrollbarTimer = undefined;
-  }
-
   moveToMouseLocation(event: DxMouseEvent, offset: number): void {
     const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
     const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
@@ -264,48 +247,25 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return 1;
   }
 
-  expand(): void {
-    this.expanded = true;
-  }
-
-  collapse(): void {
-    this.expanded = false;
-  }
-
-  hoverInHandler(): void {
-    if (this.props.showScrollbar === 'onHover') {
-      this.hovered = true;
-    }
-  }
-
-  hoverOutHandler(): void {
-    if (this.props.showScrollbar === 'onHover') {
-      this.hovered = false;
-    }
-  }
-
-  get cssClasses(): string {
+  get scrollbarClasses(): string {
     const classesMap = {
       [SCROLLABLE_SCROLLBAR_CLASS]: true,
       [`dx-scrollbar-${this.props.direction}`]: true,
-      [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: !!this.expanded,
-      [HOVER_ENABLED_STATE]: !!this.hoverStateEnabled,
+      [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: this.expanded,
+      [HOVER_ENABLED_STATE]: this.isExpandable,
+      'dx-state-invisible': this.hidden,
     };
     return combineClasses(classesMap);
   }
 
-  get scrollStyles(): { [key: string]: string | number } {
+  get thumbStyles(): { [key: string]: string | number } {
     return {
       [this.dimension]: this.scrollSize || THUMB_MIN_SIZE, // TODO: remove ||
-      transform: this.scrollTransform,
+      transform: this.isNeverMode ? 'none' : this.thumbTransform,
     };
   }
 
-  get scrollTransform(): string {
-    if (this.props.showScrollbar === 'never') {
-      return 'none';
-    }
-
+  get thumbTransform(): string {
     const translateValue = -this.props.scrollLocation * this.scrollRatio;
 
     if (this.isHorizontal) {
@@ -315,36 +275,44 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return `translate(0px, ${translateValue}px)`;
   }
 
-  get scrollClasses(): string {
+  get thumbClasses(): string {
     return combineClasses({
       [SCROLLABLE_SCROLL_CLASS]: true,
-      'dx-state-invisible': !this.visible,
+      'dx-state-invisible': !this.isThumbVisible,
     });
   }
 
-  get isVisible(): boolean {
-    return this.props.showScrollbar !== 'never' && -this.props.maxOffset > 0 && this.props.containerSize > 15;
+  get hidden(): boolean {
+    return this.isNeverMode || this.props.maxOffset === 0 || this.props.containerSize < 15;
   }
 
-  get visible(): boolean {
-    const { showScrollbar, forceVisibility } = this.props;
-
-    if (!this.isVisible) {
+  get isThumbVisible(): boolean {
+    if (this.hidden) {
       return false;
     }
-    if (showScrollbar === 'onHover') {
-      return this.visibility || this.props.isScrollableHovered || this.hovered;
+    if (this.isHoverMode) {
+      return this.props.visible || this.visibility || this.hovered;
     }
-    if (showScrollbar === 'always') {
+    if (this.isAlwaysMode) {
       return true;
     }
 
-    return forceVisibility || this.visibility || !!this.showOnScrollByWheel;
+    return this.props.visible || this.visibility;
   }
 
-  get hoverStateEnabled(): boolean {
-    const { showScrollbar, scrollByThumb } = this.props;
+  get isExpandable(): boolean {
+    return (this.isHoverMode || this.isAlwaysMode) && this.props.scrollByThumb;
+  }
 
-    return (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
+  get isHoverMode(): boolean {
+    return this.props.showScrollbar === ShowScrollbarMode.HOVER;
+  }
+
+  get isAlwaysMode(): boolean {
+    return this.props.showScrollbar === ShowScrollbarMode.ALWAYS;
+  }
+
+  get isNeverMode(): boolean {
+    return this.props.showScrollbar === ShowScrollbarMode.NEVER;
   }
 }
