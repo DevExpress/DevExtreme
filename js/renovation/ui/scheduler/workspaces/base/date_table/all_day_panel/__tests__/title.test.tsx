@@ -48,7 +48,6 @@ describe('AllDayPanelTitle', () => {
           expect(title.classes.split(' '))
             .toEqual([
               'dx-scheduler-all-day-title',
-              'some-class',
             ]);
         });
 
@@ -58,7 +57,7 @@ describe('AllDayPanelTitle', () => {
           });
 
           expect(title.classes.split(' '))
-            .toEqual([]);
+            .toEqual(['']);
         });
       });
     });
