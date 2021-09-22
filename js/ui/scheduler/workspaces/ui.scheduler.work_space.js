@@ -1352,7 +1352,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         for(let i = startIndex; i < totalCellCount + cellCount; i++) {
-            width = width + getBoundingRect($($cells).eq(i).get(0)).width;
+            const element = $($cells).eq(i).get(0);
+            width = element ? width + getBoundingRect(element).width : width;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
