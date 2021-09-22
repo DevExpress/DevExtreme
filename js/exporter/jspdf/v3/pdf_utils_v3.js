@@ -74,13 +74,7 @@ function getLineHeightShift(doc) {
     return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
 }
 
-function drawTextInRect(doc, text, padding, rect, verticalAlign, wordWrapEnabled, jsPdfTextOptions) {
-    const textRect = {
-        x: rect.x + padding.left,
-        y: rect.y + padding.top,
-        w: rect.w - (padding.left + padding.right),
-        h: rect.h - (padding.top + padding.bottom)
-    };
+function drawTextInRect(doc, text, textRect, verticalAlign, wordWrapEnabled, jsPdfTextOptions) {
     const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, textWidth: textRect.w });
     const linesCount = textArray.length;
 
