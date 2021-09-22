@@ -170,10 +170,9 @@ const Overlay = Widget.inherit({
 
             restorePosition: {
                 always: false,
-                onDimensionChangeAfterDrag: false,
-                onDimensionChangeAfterResize: false,
-                onOpening: true,
-                onFullScreenDisable: false
+                onDimensionChangeAfterDragOrResize: false,
+                onFullScreenDisable: false,
+                onOpening: true
             },
 
             // NOTE: private options
