@@ -575,7 +575,9 @@
         "dxGantt-sortingAscendingText": "Orden Ascendente",
         "dxGantt-sortingDescendingText": "Orden Descendente",
         "dxGantt-sortingClearText": "Limpiar Ordenamiento",
-        "dxGantt-toggleResources": "TODO",
-        "dxGantt-toggleDependencies": "TODO"
+        "dxGantt-showResources": "Mostrar Recursos",
+        "dxGantt-showDependencies": "Mostrar Dependencias",
+        "dxGantt-dialogStartDateValidation": "La fecha de inicio debe ser anterior {0}",
+        "dxGantt-dialogEndDateValidation": "La fecha de finalización debe ser posterior {0}"
     }
 }

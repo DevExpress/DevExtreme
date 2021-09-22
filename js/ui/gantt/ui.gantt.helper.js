@@ -173,6 +173,10 @@ export const GanttHelper = {
             showRowLines: true,
             stripLines: undefined,
             scaleType: 'auto',
+            scaleTypeRange: {
+                start: 'minutes',
+                end: 'years'
+            },
             editing: {
                 enabled: false,
                 allowTaskAdding: true,
@@ -204,7 +208,7 @@ export const GanttHelper = {
                 ascendingText: messageLocalization.format('dxGantt-sortingAscendingText'),
                 descendingText: messageLocalization.format('dxGantt-sortingDescendingText'),
                 clearText: messageLocalization.format('dxGantt-sortingClearText'),
-                mode: 'none',
+                mode: 'single',
                 showSortIndexes: false
             }
         };

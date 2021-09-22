@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterHeight, getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { getWindow } from '../core/utils/window';
@@ -129,9 +130,9 @@ const Lookup = DropDownList.inherit({
             dropDownOptions: {
                 showTitle: true,
 
-                width: function() { return $(window).width() * 0.8; },
+                width: function() { return getWidth(window) * 0.8; },
 
-                height: function() { return $(window).height() * 0.8; },
+                height: function() { return getHeight(window) * 0.8; },
 
                 shading: true,
 
@@ -269,7 +270,7 @@ const Lookup = DropDownList.inherit({
                 device: { platform: 'ios', tablet: true },
                 options: {
                     dropDownOptions: {
-                        width: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
+                        width: function() { return Math.min(getWidth(window), getHeight(window)) * 0.4; },
                         height: 'auto'
                     },
 
@@ -501,11 +502,11 @@ const Lookup = DropDownList.inherit({
 
         const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
         const selectedIndex = this._listItemElements().index(selectedListItem);
-        const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
+        const differenceOfHeights = (getHeight(selectedListItem) - getHeight(this.element())) / 2;
         const lookupOffset = $(this._list.element()).offset().top;
         const dropDownHeightOption = this.option('dropDownOptions.height');
         const popupHeight = (typeof dropDownHeightOption === 'function') ? dropDownHeightOption() : dropDownHeightOption;
-        const windowHeight = $(window).height();
+        const windowHeight = getHeight(window);
 
         let offsetTop = 0;
 
@@ -513,7 +514,7 @@ const Lookup = DropDownList.inherit({
             if(this._isCenteringEnabled(selectedIndex, listItemsCount)) {
                 this._scrollToSelectedItem();
 
-                const scrollOffsetTop = (popupHeight - selectedListItem.height()) / 2 - this._getDifferenceOffsets(selectedListItem);
+                const scrollOffsetTop = (popupHeight - getHeight(selectedListItem)) / 2 - this._getDifferenceOffsets(selectedListItem);
 
                 this._list.scrollTo(this._list.scrollTop() + MATERIAL_LOOKUP_LIST_PADDING / 2 - scrollOffsetTop);
 
@@ -540,11 +541,11 @@ const Lookup = DropDownList.inherit({
             }
         }
 
-        const offsetBottom = popupHeight - offsetTop - $(this.element()).height();
+        const offsetBottom = popupHeight - offsetTop - getHeight(this.element());
 
         if(windowHeight - lookupOffset < offsetBottom) {
             this._list.scrollTo(this._list.scrollTop() + differenceOfHeights - offsetBottom);
-            offsetTop = popupHeight - $(this.element()).height() - MATERIAL_LOOKUP_LIST_PADDING;
+            offsetTop = popupHeight - getHeight(this.element()) - MATERIAL_LOOKUP_LIST_PADDING;
         }
 
         return offsetTop;
@@ -594,7 +595,7 @@ const Lookup = DropDownList.inherit({
             listHeight += MATERIAL_LOOKUP_LIST_PADDING;
         } else if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
             listItems.each((_, item) => {
-                listHeight += $(item).outerHeight();
+                listHeight += getOuterHeight(item);
             });
         } else {
             if(selectedIndex <= 1) {
@@ -606,7 +607,7 @@ const Lookup = DropDownList.inherit({
             }
 
             requireListItems.each((_, item) => {
-                listHeight += $(item).outerHeight();
+                listHeight += getOuterHeight(item);
             });
         }
 
@@ -616,9 +617,9 @@ const Lookup = DropDownList.inherit({
     _getPopupHeight: function() {
         if(this._list && this._list.itemElements()) {
             return this._calculateListHeight(this.option('grouped')) +
-                (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
-                (this._popup._$bottom ? this._popup._$bottom.outerHeight() : 0) +
-                (this._popup._$title ? this._popup._$title.outerHeight() : 0);
+                (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0) +
+                (this._popup._$bottom ? getOuterHeight(this._popup._$bottom) : 0) +
+                (this._popup._$title ? getOuterHeight(this._popup._$title) : 0);
         } else {
             return 'auto';
         }
@@ -647,10 +648,10 @@ const Lookup = DropDownList.inherit({
                 target: this.$element(),
                 fullScreen: false,
                 shading: false,
-                closeOnTargetScroll: true,
+                hideOnParentScroll: true,
                 _fixWrapperPosition: false,
                 width: this._isInitialOptionValue('dropDownOptions.width')
-                    ? (function() { return this.$element().outerWidth(); }).bind(this)
+                    ? (function() { return getOuterWidth(this.$element()); }).bind(this)
                     : this._popupConfig().width
             }));
 
@@ -689,7 +690,7 @@ const Lookup = DropDownList.inherit({
 
             toolbarItems: this._getPopupToolbarItems(),
 
-            closeOnTargetScroll: false,
+            hideOnParentScroll: false,
             onPositioned: null,
 
             maxHeight: '100vh',
@@ -717,7 +718,7 @@ const Lookup = DropDownList.inherit({
                 of: this.element()
             };
 
-            result.closeOnTargetScroll = true;
+            result.hideOnParentScroll = true;
         }
 
         each(['position', 'animation', 'width', 'height'], (_, optionName) => {
@@ -802,7 +803,7 @@ const Lookup = DropDownList.inherit({
 
     _dimensionChanged: function() {
         if(this.option('usePopover') && !this.option('dropDownOptions.width')) {
-            this.option('dropDownOptions.width', this.$element().width());
+            this.option('dropDownOptions.width', getWidth(this.$element()));
         }
 
         this._popup && this._updatePopupDimensions();
@@ -947,15 +948,15 @@ const Lookup = DropDownList.inherit({
         // NOTE: Focus can trigger "scroll" event
 
         const { _scrollToSelectedItemEnabled } = this.option();
-        const closeOnTargetScroll = this._popup.option('closeOnTargetScroll');
+        const hideOnParentScroll = this._popup.option('hideOnParentScroll');
 
         if(!_scrollToSelectedItemEnabled) {
             callback();
         } else {
-            this._popup.option('closeOnTargetScroll', false);
+            this._popup.option('hideOnParentScroll', false);
             callback();
-            this._closeOnTargetScrollTimer = setTimeout(() => { // T1018037
-                this._popup.option('closeOnTargetScroll', closeOnTargetScroll);
+            this._hideOnParentScrollTimer = setTimeout(() => { // T1018037
+                this._popup.option('hideOnParentScroll', hideOnParentScroll);
             });
         }
     },
@@ -1027,9 +1028,9 @@ const Lookup = DropDownList.inherit({
 
     _clean: function() {
         this._$fieldWrapper.remove();
-        clearTimeout(this._closeOnTargetScrollTimer);
+        clearTimeout(this._hideOnParentScrollTimer);
 
-        this._closeOnTargetScrollTimer = null;
+        this._hideOnParentScrollTimer = null;
         this._$searchBox = null;
 
         this.callBase();

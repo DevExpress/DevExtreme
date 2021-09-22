@@ -1,3 +1,4 @@
+import { getHeight, setHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
@@ -8,7 +9,7 @@ import Widget from './widget/ui.widget';
 import Button from './button';
 import Popover from './popover';
 import DataHelperMixin from '../data_helper';
-import List from './list';
+import List from './list_light';
 import { isMaterial } from './themes';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 
@@ -321,9 +322,9 @@ const DropDownMenu = Widget.inherit({
 
         this._setListDataSource();
 
-        const listMaxHeight = $(window).height() * 0.5;
-        if($content.height() > listMaxHeight) {
-            $content.height(listMaxHeight);
+        const listMaxHeight = getHeight(window) * 0.5;
+        if(getHeight($content) > listMaxHeight) {
+            setHeight($content, listMaxHeight);
         }
     },
 

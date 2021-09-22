@@ -32,4 +32,7 @@ export const subscribeToDXScrollCancelEvent = subscribeToEvent(scrollEvents.canc
 export const subscribeToDXPointerDownEvent = subscribeToEvent(pointerEvents.down);
 export const subscribeToDXPointerUpEvent = subscribeToEvent(pointerEvents.up);
 
+export const subscribeToMouseEnterEvent = subscribeToEvent('mouseenter');
+export const subscribeToMouseLeaveEvent = subscribeToEvent('mouseleave');
+
 export const subscribeToKeyDownEvent = subscribeToEvent('keydown');

@@ -2,14 +2,13 @@ import animationFrame from 'animation/frame';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import 'generic_light.css!';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import domUtils from 'core/utils/dom';
 import styleUtils from 'core/utils/style';
 import support from 'core/utils/support';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import initMobileViewport from 'mobile/init_mobile_viewport';
-import 'ui/scroll_view/ui.scrollable';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {
     calculateInertiaDistance,
@@ -56,6 +55,8 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
+
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('markup', moduleConfig);
 
@@ -330,11 +331,7 @@ QUnit.module('Hoverable interaction',
                             assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
                             assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, 'scrollable-disabled-class');
 
-                            if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
-                                assert.ok(true, 'Skip assert for Edge. The pointer-event property processed with a timeout');
-                            } else {
-                                assert.strictEqual($scrollBar.css('pointer-events'), disabled ? 'none' : 'auto', 'pointer-events');
-                            }
+                            assert.strictEqual($scrollBar.css('pointer-events'), disabled ? 'none' : 'auto', 'pointer-events');
                         });
                     });
                 });
@@ -509,6 +506,11 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
 });
 
 QUnit.test('simulated scrollable should stop animators on disposing', function(assert) {
+    if(isRenovation) {
+        assert.ok(true);
+        return;
+    }
+
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         direction: 'both'

@@ -3,6 +3,7 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -15,6 +16,8 @@ import {
     SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
     SCROLLABLE_SCROLLBAR_ACTIVE_CLASS
 } from './scrollable.constants.js';
+
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -51,15 +54,21 @@ const getScrollOffset = function($scrollable) {
 QUnit.module('scrolling by thumb', moduleConfig);
 
 QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
+    if(isRenovation) {
+        // test not relevant for renovated scrollable
+        assert.ok(true);
+        return;
+    }
+
     const $scrollable = $('#scrollable').dxScrollable({
-        showScrollbar: 'onScroll',
+        showScrollbar: true,
         useNative: false
     });
 
     let scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'onScroll', 'true normalize to onScroll');
 
-    $scrollable.dxScrollable('option', 'showScrollbar', 'never');
+    $scrollable.dxScrollable('option', 'showScrollbar', false);
 
     scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
     assert.equal(scrollbar.option('visibilityMode'), 'never', 'true normalize to onScroll');
@@ -373,9 +382,9 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 
-    $wrapScrollable.height(10);
-    $scrollable.height(20);
-    $scrollable.children().height(30);
+    $wrapScrollable.height(100);
+    $scrollable.height(200);
+    $scrollable.children().height(300);
 
     const scrollableOption = {
         useNative: false,
@@ -426,9 +435,9 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
     const $scrollable = $('#scrollable');
     const $wrapScrollable = $scrollable.wrap('<div>').parent();
 
-    $wrapScrollable.height(10);
-    $scrollable.height(20);
-    $scrollable.children().height(30);
+    $wrapScrollable.height(100);
+    $scrollable.height(200);
+    $scrollable.children().height(300);
 
     const scrollableOption = {
         useNative: false,
@@ -462,10 +471,10 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
 });
 
 QUnit.test('scrollbar is visible for parent scrollable after mouse leave for children scrollable', function(assert) {
-    const $scrollable = $('#scrollable').height(25);
-    const $childScrollable = $('<div>').height(50);
+    const $scrollable = $('#scrollable').height(250);
+    const $childScrollable = $('<div>').height(500);
 
-    $childScrollable.append('<div>').children().height(75);
+    $childScrollable.append('<div>').children().height(750);
     $childScrollable.appendTo($scrollable).dxScrollable({
         useNative: false,
         showScrollbar: 'onHover',

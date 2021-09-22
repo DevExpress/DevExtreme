@@ -824,7 +824,7 @@ declare module DevExpress {
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
-      rule: Partial<DevExpress.core.Rule<TProperties>>
+      rule: DevExpress.core.DefaultOptionsRule<TProperties>
     ): void;
 
     /**
@@ -1461,6 +1461,16 @@ declare module DevExpress.core {
    */
   interface Condition extends JQueryEventObject {}
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+  };
+  export type DefaultOptionsRule<T> = {
+    device?: Device | Device[] | ((device: Device) => boolean);
+    options: DeepPartial<T>;
+  };
+  /**
    * [descr:dxElement]
    * @deprecated [depNote:dxElement]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1530,19 +1540,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type RecursivePartial<T> = {
-    [P in keyof T]?: RecursivePartial<T[P]>;
-  };
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type Rule<T> = {
-    device: ((device: Device) => boolean) | Device | Device[];
-    options: RecursivePartial<T>;
-  };
   /**
    * [descr:template]
    */
@@ -1661,9 +1658,7 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (
-      options: LoadOptions<TValue>
-    ) => PromiseLike<TValue> | Array<TValue>;
+    load: (options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1861,7 +1856,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TKey, TValue>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1962,9 +1957,12 @@ declare module DevExpress.data {
      * [descr:DataSourceOptions.store]
      */
     store?:
+      | Array<TSourceValue>
       | Store<TKey, TSourceValue>
-      | StoreOptions<TKey, TSourceValue>
-      | Array<TSourceValue>;
+      | (ArrayStoreOptions<TKey, TSourceValue> & { type: 'array' })
+      | (LocalStoreOptions<TKey, TSourceValue> & { type: 'local' })
+      | (ODataStoreOptions<TKey, TSourceValue> & { type: 'odata' })
+      | CustomStoreOptions<TKey, TSourceValue>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2089,8 +2087,11 @@ declare module DevExpress.data {
   /**
    * [descr:LocalStore]
    */
-  export class LocalStore extends ArrayStore {
-    constructor(options?: LocalStoreOptions);
+  export class LocalStore<TKey = any, TValue = any> extends ArrayStore<
+    TKey,
+    TValue
+  > {
+    constructor(options?: LocalStoreOptions<TKey, TValue>);
     /**
      * [descr:LocalStore.clear()]
      */
@@ -2099,7 +2100,8 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
+  export interface LocalStoreOptions<TKey = any, TValue = any>
+    extends ArrayStoreOptions<TKey, TValue> {
     /**
      * [descr:LocalStoreOptions.flushInterval]
      */
@@ -3950,6 +3952,12 @@ declare module DevExpress.pdfExporter {
     options: PdfExportDataGridProps
   ): DevExpress.core.utils.DxPromise<void>;
   /**
+   * [descr:pdfExporter.exportGantt(options)]
+   */
+  export function exportGantt(
+    options: PdfExportGanttProps
+  ): DevExpress.core.utils.DxPromise<any>;
+  /**
    * [descr:PdfDataGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -4028,6 +4036,48 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.loadPanel]
      */
     loadPanel?: ExportLoadPanel;
+  }
+  /**
+   * [descr:PdfExportGanttProps]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfExportGanttProps {
+    /**
+     * [descr:PdfExportGanttProps.createDocumentMethod]
+     */
+    createDocumentMethod?: (options: any) => object;
+    /**
+     * [descr:PdfExportGanttProps.jsPDFDocument]
+     */
+    jsPDFDocument?: object;
+    /**
+     * [descr:PdfExportGanttProps.component]
+     */
+    component?: DevExpress.ui.dxGantt;
+    /**
+     * [descr:PdfExportGanttProps.format]
+     */
+    format?: string | object;
+    /**
+     * [descr:PdfExportGanttProps.landscape]
+     */
+    landscape?: boolean;
+    /**
+     * [descr:PdfExportGanttProps.fileName]
+     */
+    fileName?: string;
+    /**
+     * [descr:PdfExportGanttProps.margins]
+     */
+    margins?: object;
+    /**
+     * [descr:PdfExportGanttProps.exportMode]
+     */
+    exportMode?: 'all' | 'treeList' | 'chart';
+    /**
+     * [descr:PdfExportGanttProps.dateRange]
+     */
+    dateRange?: 'all' | 'visible' | object;
   }
 }
 declare module DevExpress.ui {
@@ -4625,6 +4675,10 @@ declare module DevExpress.ui {
      * [descr:dxActionSheetItem.type]
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    /**
+     * [descr:dxActionSheetItem.stylingMode]
+     */
+    stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
    * @deprecated use Properties instead
@@ -8012,6 +8066,14 @@ declare module DevExpress.ui {
       | DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName
       | dxDataGridToolbarItem
     >;
+    /**
+     * [descr:dxDataGridToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxDataGridToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxDataGridToolbarItem]
@@ -8695,11 +8757,8 @@ declare module DevExpress.ui {
         | 'bold'
         | 'italic'
         | 'underline'
-        | 'fontColor'
         | 'lineStyle'
         | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
         | 'textAlignLeft'
         | 'textAlignCenter'
         | 'textAlignRight'
@@ -9158,7 +9217,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.customDataExpr]
        */
-      customDataExpr?: string | ((data: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.dataSource]
        */
@@ -9170,59 +9229,59 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.fromExpr]
        */
-      fromExpr?: string | ((data: any) => any);
+      fromExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.fromLineEndExpr]
        */
-      fromLineEndExpr?: string | ((data: any) => any);
+      fromLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.fromPointIndexExpr]
        */
-      fromPointIndexExpr?: string | ((data: any) => any);
+      fromPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.keyExpr]
        */
-      keyExpr?: string | ((data: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.lineTypeExpr]
        */
-      lineTypeExpr?: string | ((data: any) => any);
+      lineTypeExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.lockedExpr]
        */
-      lockedExpr?: string | ((data: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.pointsExpr]
        */
-      pointsExpr?: string | ((data: any) => any);
+      pointsExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.styleExpr]
        */
-      styleExpr?: string | ((data: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.textExpr]
        */
-      textExpr?: string | ((data: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toExpr]
        */
-      toExpr?: string | ((data: any) => any);
+      toExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toLineEndExpr]
        */
-      toLineEndExpr?: string | ((data: any) => any);
+      toLineEndExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.toPointIndexExpr]
        */
-      toPointIndexExpr?: string | ((data: any) => any);
+      toPointIndexExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.edges.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * [descr:dxDiagramOptions.export]
@@ -9285,15 +9344,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.containerChildrenExpr]
        */
-      containerChildrenExpr?: string | ((data: any) => any);
+      containerChildrenExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.containerKeyExpr]
        */
-      containerKeyExpr?: string | ((data: any) => any);
+      containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.customDataExpr]
        */
-      customDataExpr?: string | ((data: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.dataSource]
        */
@@ -9305,59 +9364,59 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.heightExpr]
        */
-      heightExpr?: string | ((data: any) => any);
+      heightExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.imageUrlExpr]
        */
-      imageUrlExpr?: string | ((data: any) => any);
+      imageUrlExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.itemsExpr]
        */
-      itemsExpr?: string | ((data: any) => any);
+      itemsExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.keyExpr]
        */
-      keyExpr?: string | ((data: any) => any);
+      keyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.leftExpr]
        */
-      leftExpr?: string | ((data: any) => any);
+      leftExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.lockedExpr]
        */
-      lockedExpr?: string | ((data: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.parentKeyExpr]
        */
-      parentKeyExpr?: string | ((data: any) => any);
+      parentKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.styleExpr]
        */
-      styleExpr?: string | ((data: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.textExpr]
        */
-      textExpr?: string | ((data: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.topExpr]
        */
-      topExpr?: string | ((data: any) => any);
+      topExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.typeExpr]
        */
-      typeExpr?: string | ((data: any) => any);
+      typeExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.widthExpr]
        */
-      widthExpr?: string | ((data: any) => any);
+      widthExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any);
     };
     /**
      * [descr:dxDiagramOptions.hasChanges]
@@ -10728,6 +10787,14 @@ declare module DevExpress.ui {
     refresh(): DevExpress.core.utils.DxPromise<any>;
   }
   module dxFileManager {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    interface ActionEventInfo {
+      errorCode?: number;
+      errorText: string;
+      cancel: boolean | PromiseLike<void>;
+    }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileManager>;
     export type ContextMenuItemClickEvent =
       DevExpress.events.NativeEventInfo<dxFileManager> & {
@@ -10747,6 +10814,17 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxFileManager> & {
         readonly directory: DevExpress.fileManagement.FileSystemItem;
       };
+    export type DirectoryCreatedEvent =
+      DevExpress.events.EventInfo<dxFileManager> & {
+        readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
+        readonly name: string;
+      };
+    export type DirectoryCreatingEvent =
+      DevExpress.events.EventInfo<dxFileManager> &
+        ActionEventInfo & {
+          readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
+          readonly name: string;
+        };
     export type DisposingEvent = DevExpress.events.EventInfo<dxFileManager>;
     export type ErrorOccurredEvent =
       DevExpress.events.EventInfo<dxFileManager> & {
@@ -10754,6 +10832,17 @@ declare module DevExpress.ui {
         errorText?: string;
         readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
       };
+    export type FileUploadedEvent =
+      DevExpress.events.EventInfo<dxFileManager> & {
+        readonly fileData: File;
+        readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
+      };
+    export type FileUploadingEvent =
+      DevExpress.events.EventInfo<dxFileManager> &
+        ActionEventInfo & {
+          readonly fileData: File;
+          readonly destinationDirectory: DevExpress.fileManagement.FileSystemItem;
+        };
     export type FocusedItemChangedEvent =
       DevExpress.events.EventInfo<dxFileManager> & {
         readonly item?: DevExpress.fileManagement.FileSystemItem;
@@ -10761,6 +10850,51 @@ declare module DevExpress.ui {
       };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFileManager>;
+    export type ItemCopiedEvent = DevExpress.events.EventInfo<dxFileManager> & {
+      readonly sourceItem: DevExpress.fileManagement.FileSystemItem;
+      readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
+      readonly itemName: string;
+      readonly itemPath: string;
+    };
+    export type ItemCopyingEvent = DevExpress.events.EventInfo<dxFileManager> &
+      ActionEventInfo & {
+        readonly item: DevExpress.fileManagement.FileSystemItem;
+        readonly destinationDirectory: DevExpress.fileManagement.FileSystemItem;
+      };
+    export type ItemDeletedEvent =
+      DevExpress.events.EventInfo<dxFileManager> & {
+        readonly item: DevExpress.fileManagement.FileSystemItem;
+      };
+    export type ItemDeletingEvent = DevExpress.events.EventInfo<dxFileManager> &
+      ActionEventInfo & {
+        readonly item: DevExpress.fileManagement.FileSystemItem;
+      };
+    export type ItemDownloadingEvent =
+      DevExpress.events.EventInfo<dxFileManager> &
+        ActionEventInfo & {
+          readonly item: DevExpress.fileManagement.FileSystemItem;
+        };
+    export type ItemMovedEvent = DevExpress.events.EventInfo<dxFileManager> & {
+      readonly sourceItem: DevExpress.fileManagement.FileSystemItem;
+      readonly parentDirectory: DevExpress.fileManagement.FileSystemItem;
+      readonly itemName: string;
+      readonly itemPath: string;
+    };
+    export type ItemMovingEvent = DevExpress.events.EventInfo<dxFileManager> &
+      ActionEventInfo & {
+        readonly item: DevExpress.fileManagement.FileSystemItem;
+        readonly destinationDirectory: DevExpress.fileManagement.FileSystemItem;
+      };
+    export type ItemRenamedEvent =
+      DevExpress.events.EventInfo<dxFileManager> & {
+        readonly sourceItem: DevExpress.fileManagement.FileSystemItem;
+        readonly itemName: string;
+      };
+    export type ItemRenamingEvent = DevExpress.events.EventInfo<dxFileManager> &
+      ActionEventInfo & {
+        readonly item: DevExpress.fileManagement.FileSystemItem;
+        readonly newName: string;
+      };
     export type OptionChangedEvent =
       DevExpress.events.EventInfo<dxFileManager> &
         DevExpress.events.ChangedOptionInfo;
@@ -11010,6 +11144,66 @@ declare module DevExpress.ui {
      */
     onErrorOccurred?: (
       e: DevExpress.ui.dxFileManager.ErrorOccurredEvent
+    ) => void;
+    /**
+     * [descr:dxFileManagerOptions.onDirectoryCreating]
+     */
+    onDirectoryCreating?: (
+      e: DevExpress.ui.dxFileManager.DirectoryCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxFileManagerOptions.onDirectoryCreated]
+     */
+    onDirectoryCreated?: (
+      e: DevExpress.ui.dxFileManager.DirectoryCreatedEvent
+    ) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemRenaming]
+     */
+    onItemRenaming?: (e: DevExpress.ui.dxFileManager.ItemRenamingEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemRenamed]
+     */
+    onItemRenamed?: (e: DevExpress.ui.dxFileManager.ItemRenamedEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemMoving]
+     */
+    onItemMoving?: (e: DevExpress.ui.dxFileManager.ItemMovingEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemMoved]
+     */
+    onItemMoved?: (e: DevExpress.ui.dxFileManager.ItemMovedEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemCopying]
+     */
+    onItemCopying?: (e: DevExpress.ui.dxFileManager.ItemCopyingEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemCopied]
+     */
+    onItemCopied?: (e: DevExpress.ui.dxFileManager.ItemCopiedEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemDeleting]
+     */
+    onItemDeleting?: (e: DevExpress.ui.dxFileManager.ItemDeletingEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemDeleted]
+     */
+    onItemDeleted?: (e: DevExpress.ui.dxFileManager.ItemDeletedEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onFileUploading]
+     */
+    onFileUploading?: (
+      e: DevExpress.ui.dxFileManager.FileUploadingEvent
+    ) => void;
+    /**
+     * [descr:dxFileManagerOptions.onFileUploaded]
+     */
+    onFileUploaded?: (e: DevExpress.ui.dxFileManager.FileUploadedEvent) => void;
+    /**
+     * [descr:dxFileManagerOptions.onItemDownloading]
+     */
+    onItemDownloading?: (
+      e: DevExpress.ui.dxFileManager.ItemDownloadingEvent
     ) => void;
     /**
      * [descr:dxFileManagerOptions.permissions]
@@ -11304,6 +11498,10 @@ declare module DevExpress.ui {
      * [descr:dxFileUploaderOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;
+    /**
+     * [descr:dxFileUploaderOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
     /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
      */
@@ -12537,10 +12735,6 @@ declare module DevExpress.ui {
      */
     scrollToDate(date: Date | Number | string): void;
     /**
-     * [descr:dxGantt.exportToPdf(options)]
-     */
-    exportToPdf(options: any): DevExpress.core.utils.DxPromise<any>;
-    /**
      * [descr:dxGantt.showResourceManagerDialog()]
      */
     showResourceManagerDialog(): void;
@@ -12580,6 +12774,22 @@ declare module DevExpress.ui {
      * [descr:dxGantt.showDependencies(value)]
      */
     showDependencies(value: boolean): void;
+    /**
+     * [descr:dxGantt.zoomIn()]
+     */
+    zoomIn(): void;
+    /**
+     * [descr:dxGantt.zoomOut()]
+     */
+    zoomOut(): void;
+    /**
+     * [descr:dxGantt.unassignAllResourcesFromTask(taskKey)]
+     */
+    unassignAllResourcesFromTask(taskKey: any): void;
+    /**
+     * [descr:dxGantt.showTaskDetailsDialog(taskKey)]
+     */
+    showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
@@ -13086,6 +13296,33 @@ declare module DevExpress.ui {
       | 'quarters'
       | 'years';
     /**
+     * [descr:dxGanttOptions.scaleTypeRange]
+     */
+    scaleTypeRange?: {
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.start]
+       */
+      start?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.end]
+       */
+      end?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+    };
+    /**
      * [descr:dxGanttOptions.selectedRowKey]
      */
     selectedRowKey?: any;
@@ -13285,8 +13522,8 @@ declare module DevExpress.ui {
       | 'taskDetails'
       | 'fullScreen'
       | 'resourceManager'
-      | 'toggleResources'
-      | 'toggleDependencies'
+      | 'showResources'
+      | 'showDependencies'
     >;
   }
   /**
@@ -13512,6 +13749,15 @@ declare module DevExpress.ui {
   module dxHtmlEditor {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface dxHtmlEditorTableContextMenu {
+      /**
+       * [descr:dxHtmlEditorTableContextMenu.enabled]
+       */
+      enabled?: boolean;
+    }
     export type FocusInEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type FocusOutEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type InitializedEvent =
@@ -13628,6 +13874,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.mentions]
      */
     mentions?: Array<dxHtmlEditorMention>;
+    /**
+     * [descr:dxHtmlEditorOptions.tableContextMenu]
+     */
+    tableContextMenu?: DevExpress.ui.dxHtmlEditor.dxHtmlEditorTableContextMenu;
     /**
      * [descr:dxHtmlEditorOptions.name]
      */
@@ -15369,9 +15619,17 @@ declare module DevExpress.ui {
      */
     deferRendering?: boolean;
     /**
+     * [descr:dxOverlayOptions.dragAndResizeArea]
+     */
+    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
+    /**
      * [descr:dxOverlayOptions.dragEnabled]
      */
     dragEnabled?: boolean;
+    /**
+     * [descr:dxOverlayOptions.dragOutsideBoundary]
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxOverlayOptions.elementAttr]
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
@@ -15441,6 +15699,10 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
+    /**
+     * [descr:dxOverlayOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPivotGrid]
@@ -16335,6 +16597,10 @@ declare module DevExpress.ui {
      * [descr:dxPopoverOptions.width]
      */
     width?: number | string | (() => number | string);
+    /**
+     * [descr:dxPopoverOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPopup]
@@ -16453,6 +16719,16 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.resizeEnabled]
      */
     resizeEnabled?: boolean;
+    /**
+     * [descr:dxPopupOptions.restorePosition]
+     */
+    restorePosition?: {
+      always: boolean;
+      onDimensionChangeAfterDrag: boolean;
+      onDimensionChangeAfterResize: boolean;
+      onOpening: boolean;
+      onFullScreenDisable: boolean;
+    };
     /**
      * [descr:dxPopupOptions.showCloseButton]
      */
@@ -16574,7 +16850,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number;
+    value?: number | boolean;
   }
   /**
    * [descr:dxRadioGroup]
@@ -20558,6 +20834,14 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
+    /**
+     * [descr:dxTreeListToolbarItem.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbarItem.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeView]
@@ -23506,7 +23790,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     static defaultOptions<TProperties>(
-      rule: Partial<DevExpress.core.Rule<TProperties>>
+      rule: DevExpress.core.DefaultOptionsRule<TProperties>
     ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]

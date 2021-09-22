@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -9,7 +10,7 @@ import { isWindow, isDefined, isObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
-import List from '../list';
+import List from '../list_light';
 import errors from '../widget/ui.errors';
 import { addNamespace } from '../../events/utils/index';
 import devices from '../../core/devices';
@@ -824,9 +825,9 @@ const DropDownList = DropDownEditor.inherit({
         const $element = this.$element();
         const $customBoundaryContainer = this._$customBoundaryContainer;
         const offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0);
-        const windowHeight = $(window).outerHeight();
-        const containerHeight = $customBoundaryContainer ? Math.min($customBoundaryContainer.outerHeight(), windowHeight) : windowHeight;
-        const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
+        const windowHeight = getOuterHeight(window);
+        const containerHeight = $customBoundaryContainer ? Math.min(getOuterHeight($customBoundaryContainer), windowHeight) : windowHeight;
+        const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - getOuterHeight($element));
 
         return Math.min(containerHeight * 0.5, maxHeight);
     },

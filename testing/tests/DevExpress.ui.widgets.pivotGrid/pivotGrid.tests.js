@@ -17,8 +17,14 @@ QUnit.testStart(function() {
 import config from 'core/config';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
-import browser from 'core/utils/browser';
-import { getSize } from 'core/utils/size';
+import {
+    setHeight,
+    getSize,
+    getOuterHeight,
+    getHeight,
+    getOuterWidth,
+    getWidth,
+} from 'core/utils/size';
 import { isRenderer } from 'core/utils/type';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
@@ -34,7 +40,7 @@ import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import eventsEngine from 'events/core/events_engine';
-import { getScrollBarInfo } from 'ui/pivot_grid/utils/get_scrollbar_info.js';
+import { getScrollbarWidth } from 'ui/pivot_grid/utils/get_scrollbar_width.js';
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 
@@ -203,7 +209,7 @@ QUnit.module('dxPivotGrid', {
         const noDataElementOffset = $noDataElement.offset();
 
         assert.ok($noDataElement.is(':visible'));
-        assert.roughEqual(noDataElementOffset.top - dataAreaCellOffset.top, (dataAreaCellOffset.top + dataAreaCell.outerHeight()) - (noDataElementOffset.top + $noDataElement.height()), 2.5, 'no data element position');
+        assert.roughEqual(noDataElementOffset.top - dataAreaCellOffset.top, (dataAreaCellOffset.top + getOuterHeight(dataAreaCell)) - (noDataElementOffset.top + getHeight($noDataElement)), 2.5, 'no data element position');
     });
 
     QUnit.test('Not render pivot grid to invisible container', function(assert) {
@@ -276,7 +282,7 @@ QUnit.module('dxPivotGrid', {
         const loadIndicatorElementOffset = loadIndicatorElement.offset();
         const dataAreaGroupElementOffset = dataAreaGroupElement.offset();
 
-        assert.roughEqual(loadIndicatorElementOffset.top - dataAreaGroupElementOffset.top, (dataAreaGroupElementOffset.top + dataAreaGroupElement.height()) - (loadIndicatorElementOffset.top + loadIndicatorElement.outerHeight()), 2.1, 'loading element position');
+        assert.roughEqual(loadIndicatorElementOffset.top - dataAreaGroupElementOffset.top, (dataAreaGroupElementOffset.top + getHeight(dataAreaGroupElement)) - (loadIndicatorElementOffset.top + getOuterHeight(loadIndicatorElement)), 2.1, 'loading element position');
 
         this.clock.tick();
 
@@ -1068,24 +1074,24 @@ QUnit.module('dxPivotGrid', {
         pivotGrid.getFieldChooserPopup().show();
         this.clock.tick(500);
 
-        const $fieldChooserPopup = $('.dx-fieldchooser-popup');
+        const $fieldChooserPopup = $('.dx-fieldchooser-popup').dxPopup('instance').$wrapper();
         assert.ok($fieldChooserPopup.is(':visible'), 'fieldChooser popup is visible');
 
         const $handle = $fieldChooserPopup.find('.dx-resizable-handle-corner-bottom-right');
         const pointer = pointerMock($handle).start();
         const $fieldChooser = $fieldChooserPopup.find('.dx-pivotgridfieldchooser');
-        const fieldChooserHeight = $fieldChooser.outerHeight(true);
-        const fieldChooserWidth = $fieldChooser.outerWidth(true);
+        const fieldChooserHeight = getOuterHeight($fieldChooser, true);
+        const fieldChooserWidth = getOuterWidth($fieldChooser, true);
         const $fieldChooserContainer = $fieldChooserPopup.find('.dx-pivotgridfieldchooser-container');
-        const fieldChooserContainerHeight = $fieldChooserContainer.height();
+        const fieldChooserContainerHeight = getHeight($fieldChooserContainer);
 
         pointer.dragStart().drag(10, 15);
 
         assert.equal($handle.length, 1, 'resizable handle exists');
         assert.equal($fieldChooser.length, 1, 'pivotgridfieldchooser exists');
-        assert.equal($fieldChooser.outerWidth(true), fieldChooserWidth + 10, 'width of fieldChooser was changed');
-        assert.equal($fieldChooser.outerHeight(true), fieldChooserHeight + 15, 'height of fieldChooser was changed');
-        assert.ok($fieldChooserContainer.height() > fieldChooserContainerHeight, 'height of fieldChooser container was changed');
+        assert.equal(getOuterWidth($fieldChooser, true), fieldChooserWidth + 10, 'width of fieldChooser was changed');
+        assert.equal(getOuterHeight($fieldChooser, true), fieldChooserHeight + 15, 'height of fieldChooser was changed');
+        assert.ok(getHeight($fieldChooserContainer) > fieldChooserContainerHeight, 'height of fieldChooser container was changed');
     });
 
     QUnit.test('rtlEnabled assign for all children widgets', function(assert) {
@@ -1987,7 +1993,9 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
         assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has no horizontal scroll');
 
-        assert.equal(pivotGrid.__scrollBarWidth, getScrollBarInfo(true).scrollBarWidth);
+        const dataAreaContainerElement = $(pivotGrid._dataArea._getScrollable().container()).get(0);
+
+        assert.equal(pivotGrid.__scrollBarWidth, getScrollbarWidth(dataAreaContainerElement));
     });
 
     QUnit.test('Sorting by Summary context menu when sorting defined for grand total', function(assert) {
@@ -2523,7 +2531,7 @@ QUnit.module('dxPivotGrid', {
         });
         const tableElement = pivotGrid.$element().find('table').first();
 
-        assert.strictEqual(Math.round(tableElement.height()), 150);
+        assert.strictEqual(Math.round(getHeight(tableElement)), 150);
     });
 
     QUnit.test('T317921: dxPivotGrid - Scrollbar overlaps the last column when the document height slightly exceeds the window height. Without columns scroll', function(assert) {
@@ -2539,11 +2547,13 @@ QUnit.module('dxPivotGrid', {
 
         const tableElement = $pivotGridElement.find('table').first();
 
-        const dataAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-area-data').width();
-        const rowsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers.dx-pivotgrid-area').width();
+        const dataAreaWidth = getWidth(pivotGrid.$element().find('.dx-pivotgrid-area-data'));
+        const rowsAreaWidth = getWidth(
+            pivotGrid.$element().find('.dx-pivotgrid-vertical-headers.dx-pivotgrid-area')
+        );
 
-        assert.strictEqual(tableElement.width(), $pivotGridElement.width()),
-        assert.ok((dataAreaWidth + rowsAreaWidth) <= $pivotGridElement.width());
+        assert.strictEqual(getWidth(tableElement), getWidth($pivotGridElement)),
+        assert.ok((dataAreaWidth + rowsAreaWidth) <= getWidth($pivotGridElement));
     });
 
     QUnit.test('resize when height changed to no scroll', function(assert) {
@@ -2708,14 +2718,14 @@ QUnit.module('dxPivotGrid', {
             useNative: false
         };
         const pivotGrid = createPivotGrid(this.testOptions);
-        const dataAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-area-data').height();
+        const dataAreaHeight = getHeight(pivotGrid.$element().find('.dx-pivotgrid-area-data'));
 
         pivotGrid.option({
             scrolling: {
                 useNative: true
             }
         });
-        assert.roughEqual(pivotGrid.$element().find('.dx-pivotgrid-area-data').height(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
+        assert.roughEqual(getHeight(pivotGrid.$element().find('.dx-pivotgrid-area-data')), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
     });
 
     QUnit.test('mergeArraysByMaxValue', function(assert) {
@@ -2846,382 +2856,6 @@ QUnit.module('dxPivotGrid', {
         scrollable.scrollTo({ left: 10, top: 1 });
     });
 
-
-    ['row', 'column'].forEach((area) => {
-        [false, true].forEach((useNative) => {
-            function getHeaderCellByText($area, text) {
-                return $area.find('table:not(.dx-pivot-grid-fake-table) td')
-                    .filter((_, el) => { return el.innerText.trim() === text; })
-                    .get(0);
-            }
-
-            function getArea(pivotGrid, area) {
-                const $element = pivotGrid.$element();
-                return area === 'row'
-                    ? $element.find('.dx-pivotgrid-vertical-headers')
-                    : $element.find('.dx-pivotgrid-horizontal-headers');
-            }
-
-            function getVerticalOffset(pivotGrid, fromCellText, toCellText) {
-                const $rowsHeaderArea = getArea(pivotGrid, 'row');
-                const fromCellRect = getHeaderCellByText($rowsHeaderArea, fromCellText).getBoundingClientRect();
-                const toCellRect = getHeaderCellByText($rowsHeaderArea, toCellText).getBoundingClientRect();
-
-                return toCellRect.y - fromCellRect.y - 1;
-            }
-
-            function getHorizontalOffset(pivotGrid, fromCellText, toCellText) {
-                const $columnsHeaderArea = getArea(pivotGrid, 'column');
-                const fromCellRect = getHeaderCellByText($columnsHeaderArea, fromCellText).getBoundingClientRect();
-                const toCellRect = getHeaderCellByText($columnsHeaderArea, toCellText).getBoundingClientRect();
-
-                return toCellRect.x - fromCellRect.x - 1;
-            }
-
-            function checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, errorMessageDetails) {
-                const $rowsHeaderArea = getArea(pivotGrid, 'row');
-                const $columnsHeaderArea = getArea(pivotGrid, 'column');
-
-                const rowsAreaRect = $rowsHeaderArea.get(0).getBoundingClientRect();
-                const columnsAreaRect = $columnsHeaderArea.get(0).getBoundingClientRect();
-
-                const expectedRowCellRect = getHeaderCellByText($rowsHeaderArea, expectedRowHeaderCellText).getBoundingClientRect();
-                const expectedColumnCellRect = getHeaderCellByText($columnsHeaderArea, expectedColHeaderCellText).getBoundingClientRect();
-
-                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 2, `expected row position ${errorMessageDetails}`);
-                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 2, `expected column position ${errorMessageDetails}`);
-            }
-
-            function triggerScrollEvent(scrollable) {
-                $(scrollable.container()).trigger('scroll');
-            }
-
-            function filterPivotGrid(pivotGrid, filterValue, area) {
-                const ds = pivotGrid.getDataSource();
-                const fieldIndex = area === 'row' ? 1 : 0;
-                const fields = ds.fields();
-                fields[fieldIndex].filterValues = filterValue;
-                ds.fields(fields);
-                ds.load();
-            }
-
-            QUnit.module('T984139, T1010175', () => {
-                QUnit.test(`Render. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-
-                    this.clock.tick(100);
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, '1', '1', 'after initialization');
-                });
-
-                QUnit.test(`Render -> scrollTo(). UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-                    this.clock.tick(100);
-
-                    const scrollable = pivotGrid._dataArea._getScrollable();
-                    scrollable.scrollTo({
-                        left: getHorizontalOffset(pivotGrid, '1', '60'),
-                        top: getVerticalOffset(pivotGrid, '1', '60')
-                    });
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = '60';
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after scrolling');
-                });
-
-                QUnit.test(`Render -> scrollTo() -> expandHeader. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-
-                    this.clock.tick(100);
-
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({
-                        left: getHorizontalOffset(pivotGrid, '1', '60'),
-                        top: getVerticalOffset(pivotGrid, '1', '60')
-                    });
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const pathToExpand = [65];
-                    pivotGrid.getDataSource().expandHeaderItem(area, pathToExpand);
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-                    const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = '60';
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after expanding');
-
-                    const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                    assert.strictEqual(getExpandedCells().length, 2);
-                });
-
-                QUnit.test(`Render -> scrollTo() -> expandHeader -> collapseHeader. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-                    this.clock.tick(100);
-
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({
-                        left: getHorizontalOffset(pivotGrid, '1', '60'),
-                        top: getVerticalOffset(pivotGrid, '1', '60')
-                    });
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const pathToExpand = [65];
-                    pivotGrid.getDataSource().expandHeaderItem(area, pathToExpand);
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    pivotGrid.getDataSource().collapseHeaderItem(area, pathToExpand);
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = '60';
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after collapsing');
-                    const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                    assert.strictEqual(getExpandedCells().length, 0);
-                });
-
-                QUnit.test(`Render -> scrollTo() -> subField.visible=false. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'subField2', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-                    this.clock.tick(100);
-
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({
-                        left: getHorizontalOffset(pivotGrid, '1', '60'),
-                        top: getVerticalOffset(pivotGrid, '1', '60')
-                    });
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const dataSource = pivotGrid.getDataSource();
-                    dataSource.field('subField', { visible: false });
-                    dataSource.load();
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = '60';
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after changing visible to a false value');
-                });
-
-                QUnit.test(`Render -> scrollTo() -> subField.visible=false -> subField.visible=true. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'subField2', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-                    this.clock.tick(100);
-
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({
-                        left: getHorizontalOffset(pivotGrid, '1', '60'),
-                        top: getVerticalOffset(pivotGrid, '1', '60')
-                    });
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const dataSource = pivotGrid.getDataSource();
-                    dataSource.field('subField', { visible: false });
-                    dataSource.load();
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    dataSource.field('subField', { visible: true });
-                    dataSource.load();
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-                    const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = '60';
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after changing visible to a true value');
-                });
-
-                QUnit.test(`Render -> scrollTo() -> filter. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-                    this.clock.tick(100);
-
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({
-                        left: getHorizontalOffset(pivotGrid, '1', '60'),
-                        top: getVerticalOffset(pivotGrid, '1', '60')
-                    });
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    filterPivotGrid(pivotGrid, [11], area);
-                    this.clock.tick(100);
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, '11', '11', 'after filtering');
-                });
-
-                QUnit.test(`Render -> scrollTo() -> filter -> clearFilter. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
-                    const store = [];
-                    for(let i = 0; i < 200; i++) {
-                        store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
-                    }
-
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode: 'virtual', useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'subField', area: area },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-                    this.clock.tick(100);
-
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    scrollable.scrollTo({
-                        left: getHorizontalOffset(pivotGrid, '1', '60'),
-                        top: getVerticalOffset(pivotGrid, '1', '60')
-                    });
-                    useNative && triggerScrollEvent(scrollable, this.clock);
-                    this.clock.tick(100);
-
-                    const expectedRowHeaderCellText = '60';
-                    const expectedColHeaderCellText = '60';
-
-                    filterPivotGrid(pivotGrid, [11], area);
-                    this.clock.tick(100);
-
-                    filterPivotGrid(pivotGrid, [], area);
-                    this.clock.tick(100);
-                    checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after clearing filter');
-                });
-            });
-        });
-    });
-
     // T810822
     QUnit.test('hasScroll should return true if scrolling is virtual and data is empty', function(assert) {
         $('#pivotGrid').empty();
@@ -3247,7 +2881,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'rows area scroll');
     });
 
-    // T518512
+    // T518512;
     QUnit.test('render should be called once after expand item if virtual scrolling enabled', function(assert) {
         $('#pivotGrid').empty();
         $('#pivotGrid').width(100);
@@ -3292,7 +2926,7 @@ QUnit.module('dxPivotGrid', {
         assert.equal(contentReadyCallCount, 1);
     });
 
-    // T529461
+    // T529461;
     QUnit.test('Initial horizontal scroll position when rtl is enabled', function(assert) {
         $('#pivotGrid').empty();
         $('#pivotGrid').width(100);
@@ -3313,10 +2947,10 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), columnAreaScrollable.$content().width(), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
     });
 
-    // T529461
+    // T529461;
     QUnit.test('Initial horizontal scroll position when rtl is enabled and scrolling mode is virtual', function(assert) {
         $('#pivotGrid').empty();
         $('#pivotGrid').width(100);
@@ -3346,7 +2980,7 @@ QUnit.module('dxPivotGrid', {
 
         const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
         assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + $(columnAreaScrollable.container()).width(), columnAreaScrollable.$content().width(), 2.01, 'scrollLeft is in max right position');
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
         assert.equal(dataAreaFakeTable.css('right'), '0px');
         assert.equal(columnAreaFakeTable.css('right'), '0px');
         assert.equal(dataAreaContentTable.css('right'), '0px');
@@ -3389,7 +3023,7 @@ QUnit.module('dxPivotGrid', {
 
             const dataAreaContainerElement = $(dataAreaScrollable.container()).get(0);
             assert.roughEqual(dataAreaScrollable.scrollLeft() + 10, dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
-            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + $(columnAreaScrollable.container()).width(), columnAreaScrollable.$content().width(), 2.01, 'scrollLeft is in max right position');
+            assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + getWidth($(columnAreaScrollable.container())), getWidth($(columnAreaScrollable.content())), 2.01, 'scrollLeft is in max right position');
 
             done();
         };
@@ -3724,13 +3358,15 @@ QUnit.module('dxPivotGrid', {
 
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
-        const columnsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area').width();
+        const columnsAreaWidth = getWidth(
+            pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area')
+        );
 
         assert.roughEqual(columnsAreaWidth, columnsWidth, 0.2, 'stretched');
 
         const table = pivotGrid.$element().find('table').first();
 
-        assert.strictEqual(table.width(), 1005, 'table width');
+        assert.strictEqual(getWidth(table), 1005, 'table width');
     });
 
     QUnit.test('Stretch columns when scrolling has size', function(assert) {
@@ -3800,13 +3436,15 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
-        const columnsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area').width();
+        const columnsAreaWidth = getWidth(
+            pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area')
+        );
 
         assert.roughEqual(columnsAreaWidth, columnsWidth, 0.2, 'stretched');
 
         const table = pivotGrid.$element().find('table').first();
 
-        assert.strictEqual(table.width(), 1005, 'table width');
+        assert.strictEqual(getWidth(table), 1005, 'table width');
     });
 
 
@@ -3991,13 +3629,15 @@ QUnit.module('dxPivotGrid', {
         assert.ok(!pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
-        const columnsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area').width();
+        const columnsAreaWidth = getWidth(
+            pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area')
+        );
 
         assert.roughEqual(columnsAreaWidth, columnsWidth, 0.2, 'stretched');
 
         const table = pivotGrid.$element().find('table').first();
 
-        assert.strictEqual(table.width(), 1050, 'table width');
+        assert.strictEqual(getWidth(table), 1050, 'table width');
     });
 
     QUnit.test('B253995 - dxPivotGrid height is wrong when rows area has text wrapped to another line', function(assert) {
@@ -4059,8 +3699,8 @@ QUnit.module('dxPivotGrid', {
         assert.ok(Math.abs(getRealHeight(pivotGrid.$element().children()[0]) - 250) <= 1);
 
         const tableElement = pivotGrid.$element().find('table').first();
-        assert.strictEqual(tableElement.outerWidth(), 500);
-        assert.strictEqual(Math.round(tableElement.outerHeight()), 250);
+        assert.strictEqual(getOuterWidth(tableElement), 500);
+        assert.strictEqual(Math.round(getOuterHeight(tableElement)), 250);
     });
 
     QUnit.test('T510943. Row area width is higher than a container\'s width', function(assert) {
@@ -4075,7 +3715,7 @@ QUnit.module('dxPivotGrid', {
 
         this.clock.tick();
         const dataArea = pivotGrid._dataArea;
-        assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), dataArea.tableElement().width().toFixed(2));
+        assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), getWidth(dataArea.tableElement()).toFixed(2));
     });
 
     QUnit.test('PivotGrid table width should be correct if width is small and fieldPanel is visible', function(assert) {
@@ -4097,7 +3737,7 @@ QUnit.module('dxPivotGrid', {
 
         this.clock.tick();
 
-        assert.strictEqual($(pivotGrid.element()).find('table').first().width(), 300);
+        assert.strictEqual(getWidth($(pivotGrid.element()).find('table').first()), 300);
     });
 
     QUnit.test('Pivot grid with border', function(assert) {
@@ -4161,7 +3801,7 @@ QUnit.module('dxPivotGrid', {
 
 
         const tableElement = pivotGrid.$element().find('table').first();
-        assert.strictEqual(tableElement.outerWidth(), 500);
+        assert.strictEqual(getOuterWidth(tableElement), 500);
         assert.ok(Math.abs(getRealHeight(pivotGrid.$element().children()[0]) - 250) <= 1);
         assert.ok(tableElement.hasClass('dx-pivotgrid-border'));
     });
@@ -4228,7 +3868,7 @@ QUnit.module('dxPivotGrid', {
 
 
         const tableElement = pivotGrid.$element().find('table').first();
-        assert.strictEqual(tableElement.outerWidth(), 500);
+        assert.strictEqual(getOuterWidth(tableElement), 500);
         assert.ok(Math.abs(getRealHeight(pivotGrid.$element().children()[0]) - 250) <= 1);
         assert.ok(tableElement.hasClass('dx-pivotgrid-border'));
     });
@@ -4283,7 +3923,7 @@ QUnit.module('dxPivotGrid', {
             }
         });
 
-        assert.ok(widget.$element().find('.dx-area-column-cell').height() > 0, 'column area is visible');
+        assert.ok(getHeight(widget.$element().find('.dx-area-column-cell')) > 0, 'column area is visible');
     });
 
     // T845487
@@ -4386,6 +4026,390 @@ QUnit.module('dxPivotGrid', {
     });
 });
 
+
+QUnit.module('T984139, T1010175', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+    ['row', 'column'].forEach((area) => {
+        [false, true].forEach((useNative) => {
+
+            function getHeaderCellByText($area, text) {
+                return $area.find('table:not(.dx-pivot-grid-fake-table) td')
+                    .filter((_, el) => { return el.innerText.trim() === text; })
+                    .get(0);
+            }
+
+            function getArea(pivotGrid, area) {
+                const $element = pivotGrid.$element();
+                return area === 'row'
+                    ? $element.find('.dx-pivotgrid-vertical-headers')
+                    : $element.find('.dx-pivotgrid-horizontal-headers');
+            }
+
+            function getVerticalOffset(pivotGrid, fromCellText, toCellText) {
+                const $rowsHeaderArea = getArea(pivotGrid, 'row');
+                const fromCellRect = getHeaderCellByText($rowsHeaderArea, fromCellText).getBoundingClientRect();
+                const toCellRect = getHeaderCellByText($rowsHeaderArea, toCellText).getBoundingClientRect();
+
+                return toCellRect.y - fromCellRect.y - 1;
+            }
+
+            function getHorizontalOffset(pivotGrid, fromCellText, toCellText) {
+                const $columnsHeaderArea = getArea(pivotGrid, 'column');
+                const fromCellRect = getHeaderCellByText($columnsHeaderArea, fromCellText).getBoundingClientRect();
+                const toCellRect = getHeaderCellByText($columnsHeaderArea, toCellText).getBoundingClientRect();
+
+                return toCellRect.x - fromCellRect.x - 1;
+            }
+
+            function checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, errorMessageDetails) {
+                const $rowsHeaderArea = getArea(pivotGrid, 'row');
+                const $columnsHeaderArea = getArea(pivotGrid, 'column');
+
+                const rowsAreaRect = $rowsHeaderArea.get(0).getBoundingClientRect();
+                const columnsAreaRect = $columnsHeaderArea.get(0).getBoundingClientRect();
+
+                const expectedRowCellRect = getHeaderCellByText($rowsHeaderArea, expectedRowHeaderCellText).getBoundingClientRect();
+                const expectedColumnCellRect = getHeaderCellByText($columnsHeaderArea, expectedColHeaderCellText).getBoundingClientRect();
+
+                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 2, `expected row position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 2, `expected column position ${errorMessageDetails}`);
+            }
+
+            function triggerScrollEvent(scrollable) {
+                $(scrollable.container()).trigger('scroll');
+            }
+
+            function filterPivotGrid(pivotGrid, filterValue, area) {
+                const ds = pivotGrid.getDataSource();
+                const fieldIndex = area === 'row' ? 1 : 0;
+                const fields = ds.fields();
+                fields[fieldIndex].filterValues = filterValue;
+                ds.fields(fields);
+                ds.load();
+            }
+
+            QUnit.test(`Render. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+
+                this.clock.tick(100);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, '1', '1', 'after initialization');
+            });
+
+            QUnit.test(`Render -> scrollTo(). UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+                this.clock.tick(100);
+
+                const scrollable = pivotGrid._dataArea._getScrollable();
+                scrollable.scrollTo({
+                    left: getHorizontalOffset(pivotGrid, '1', '60'),
+                    top: getVerticalOffset(pivotGrid, '1', '60')
+                });
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const expectedRowHeaderCellText = '60';
+                const expectedColHeaderCellText = '60';
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after scrolling');
+            });
+
+            QUnit.test(`Render -> scrollTo() -> expandHeader. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+
+                this.clock.tick(100);
+
+                const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+                scrollable.scrollTo({
+                    left: getHorizontalOffset(pivotGrid, '1', '60'),
+                    top: getVerticalOffset(pivotGrid, '1', '60')
+                });
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const pathToExpand = [65];
+                pivotGrid.getDataSource().expandHeaderItem(area, pathToExpand);
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+                const expectedRowHeaderCellText = '60';
+                const expectedColHeaderCellText = '60';
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after expanding');
+
+                const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
+                assert.strictEqual(getExpandedCells().length, 2);
+            });
+
+            QUnit.test(`Render -> scrollTo() -> expandHeader -> collapseHeader. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+                this.clock.tick(100);
+
+                const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+                scrollable.scrollTo({
+                    left: getHorizontalOffset(pivotGrid, '1', '60'),
+                    top: getVerticalOffset(pivotGrid, '1', '60')
+                });
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const pathToExpand = [65];
+                pivotGrid.getDataSource().expandHeaderItem(area, pathToExpand);
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                pivotGrid.getDataSource().collapseHeaderItem(area, pathToExpand);
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const expectedRowHeaderCellText = '60';
+                const expectedColHeaderCellText = '60';
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after collapsing');
+                const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
+                assert.strictEqual(getExpandedCells().length, 0);
+            });
+
+            QUnit.test(`Render -> scrollTo() -> subField.visible=false. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'subField2', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+                this.clock.tick(100);
+
+                const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+                scrollable.scrollTo({
+                    left: getHorizontalOffset(pivotGrid, '1', '60'),
+                    top: getVerticalOffset(pivotGrid, '1', '60')
+                });
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const dataSource = pivotGrid.getDataSource();
+                dataSource.field('subField', { visible: false });
+                dataSource.load();
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const expectedRowHeaderCellText = '60';
+                const expectedColHeaderCellText = '60';
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after changing visible to a false value');
+            });
+
+            QUnit.test(`Render -> scrollTo() -> subField.visible=false -> subField.visible=true. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'subField2', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+                this.clock.tick(100);
+
+                const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+                scrollable.scrollTo({
+                    left: getHorizontalOffset(pivotGrid, '1', '60'),
+                    top: getVerticalOffset(pivotGrid, '1', '60')
+                });
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const dataSource = pivotGrid.getDataSource();
+                dataSource.field('subField', { visible: false });
+                dataSource.load();
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                dataSource.field('subField', { visible: true });
+                dataSource.load();
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+                const expectedRowHeaderCellText = '60';
+                const expectedColHeaderCellText = '60';
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after changing visible to a true value');
+            });
+
+            QUnit.test(`Render -> scrollTo() -> filter. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+                this.clock.tick(100);
+
+                const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+                scrollable.scrollTo({
+                    left: getHorizontalOffset(pivotGrid, '1', '60'),
+                    top: getVerticalOffset(pivotGrid, '1', '60')
+                });
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                filterPivotGrid(pivotGrid, [11], area);
+                this.clock.tick(100);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, '11', '11', 'after filtering');
+            });
+
+            QUnit.test(`Render -> scrollTo() -> filter -> clearFilter. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 200; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: area },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
+                });
+                this.clock.tick(100);
+
+                const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+                scrollable.scrollTo({
+                    left: getHorizontalOffset(pivotGrid, '1', '60'),
+                    top: getVerticalOffset(pivotGrid, '1', '60')
+                });
+                useNative && triggerScrollEvent(scrollable, this.clock);
+                this.clock.tick(100);
+
+                const expectedRowHeaderCellText = '60';
+                const expectedColHeaderCellText = '60';
+
+                filterPivotGrid(pivotGrid, [11], area);
+                this.clock.tick(100);
+
+                filterPivotGrid(pivotGrid, [], area);
+                this.clock.tick(100);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after clearing filter');
+            });
+        });
+    });
+});
+
 QUnit.module('Field Panel', {
     beforeEach: function() {
         moduleConfig.beforeEach.apply(this, arguments);
@@ -4428,8 +4452,8 @@ QUnit.module('Field Panel', {
 
         const tableElement = pivotGrid.$element().find('table').first();
 
-        assert.ok(250 - tableElement.outerHeight() <= 1 && 250 - tableElement.outerHeight() >= 0, 'height');
-        assert.strictEqual(tableElement.width(), 1200, 'width');
+        assert.ok(250 - getOuterHeight(tableElement) <= 1 && 250 - getOuterHeight(tableElement) >= 0, 'height');
+        assert.strictEqual(getWidth(tableElement), 1200, 'width');
         assert.ok(!pivotGrid.hasScroll('column'), 'stretch to all width');
         assert.ok(pivotGrid.hasScroll('row'));
 
@@ -4546,7 +4570,7 @@ QUnit.module('Field Panel', {
             }
         }));
         const tableElement = pivotGrid.$element().find('table').first();
-        assert.ok(150 - tableElement.height() <= 1, 'height');
+        assert.ok(150 - getHeight(tableElement) <= 1, 'height');
     });
 
     QUnit.test('Hide field headers at runtime', function(assert) {
@@ -4575,8 +4599,8 @@ QUnit.module('Field Panel', {
             }
         });
 
-        assert.ok(250 - tableElement.outerHeight() <= 1 && 250 - tableElement.outerHeight() >= 0, 'height');
-        assert.strictEqual(tableElement.width(), 1200, 'width');
+        assert.ok(250 - getOuterHeight(tableElement) <= 1 && 250 - getOuterHeight(tableElement) >= 0, 'height');
+        assert.strictEqual(getWidth(tableElement), 1200, 'width');
         assert.ok(!pivotGrid.hasScroll('column'), 'stretch to all width');
         assert.ok(pivotGrid.hasScroll('row'));
 
@@ -4634,7 +4658,7 @@ QUnit.module('Field Panel', {
         }));
         const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
 
-        assert.roughEqual(container.height(), 300, 1.01, 'height');
+        assert.roughEqual(getHeight(container), 300, 1.01, 'height');
     });
 
     QUnit.test('PivotGrid should have correct height if filter fields take several lines and pivot has not vertical scroll', function(assert) {
@@ -4676,7 +4700,7 @@ QUnit.module('Field Panel', {
         }));
         const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
 
-        assert.ok(container.height() < 600, 'height');
+        assert.ok(getHeight(container) < 600, 'height');
         assert.ok(!pivotGrid.hasScroll('row'), 'rows area has not scroll');
     });
 
@@ -4718,7 +4742,7 @@ QUnit.module('Field Panel', {
             height: 600
         }));
 
-        const dataAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-area-data').height();
+        const dataAreaHeight = getHeight(pivotGrid.$element().find('.dx-pivotgrid-area-data'));
 
         pivotGrid.option({
             scrolling: {
@@ -4726,8 +4750,10 @@ QUnit.module('Field Panel', {
             }
         });
 
-        const newDataAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-area-data').height();
-        const newRowsAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers.dx-pivotgrid-area').height();
+        const newDataAreaHeight = getHeight(pivotGrid.$element().find('.dx-pivotgrid-area-data'));
+        const newRowsAreaHeight = getHeight(
+            pivotGrid.$element().find('.dx-pivotgrid-vertical-headers.dx-pivotgrid-area')
+        );
 
         assert.roughEqual(newDataAreaHeight, dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
         assert.roughEqual(newRowsAreaHeight, dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
@@ -4761,8 +4787,8 @@ QUnit.module('Field Panel', {
         }));
         const tableElement = pivotGrid.$element().find('table').first();
 
-        assert.ok(250 - tableElement.outerHeight() <= 1 && 250 - tableElement.outerHeight() >= 0, 'height');
-        assert.strictEqual(tableElement.outerWidth(), 1200, 'width');
+        assert.ok(250 - getOuterHeight(tableElement) <= 1 && 250 - getOuterHeight(tableElement) >= 0, 'height');
+        assert.strictEqual(getOuterWidth(tableElement), 1200, 'width');
         assert.ok(!pivotGrid.hasScroll('column'), 'stretch to all width');
         assert.ok(pivotGrid.hasScroll('row'));
 
@@ -4819,7 +4845,7 @@ QUnit.module('Field Panel', {
 
                         const $dataAreaCell = pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).first();
                         const expectedHeight = fieldPanelVisible ? 31 : 86;
-                        assert.roughEqual($dataAreaCell.height(), expectedHeight, 1.1, 'data area has correct height');
+                        assert.roughEqual(getHeight($dataAreaCell), expectedHeight, 1.1, 'data area has correct height');
                         clock.restore();
                     });
                 });
@@ -4895,8 +4921,6 @@ QUnit.module('Tests with real timer', {}, () => {
         });
 
     });
-
-
 });
 
 QUnit.module('Tests with stubs', {
@@ -5101,7 +5125,7 @@ QUnit.module('Tests with stubs', {
         const tableElement = pivot.$element().find('table').first();
         const descriptionCell = tableElement.find('.dx-area-description-cell');
 
-        descriptionCell.height(80);
+        setHeight(descriptionCell, 80);
 
         const delta = (getSize(descriptionCell[0], 'height', {
             paddings: true,
@@ -5142,7 +5166,7 @@ QUnit.module('Tests with stubs', {
         });
 
         const tableElement = pivot.$element().find('table').first();
-        tableElement.find('.dx-area-description-cell').height(25);
+        setHeight(tableElement.find('.dx-area-description-cell'), 25);
 
         pivot.updateDimensions();
 
@@ -5166,7 +5190,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             height: 300,
             scrolling: {
@@ -5212,8 +5236,6 @@ QUnit.module('Tests with stubs', {
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
@@ -5236,7 +5258,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             scrolling: {
                 mode: 'virtual'
@@ -5271,7 +5293,7 @@ QUnit.module('Tests with stubs', {
             itemHeights: [43, 28],
             itemWidths: [20, 40, 60, 20],
             rowCount: 2,
-            viewportHeight: $(window).outerHeight(),
+            viewportHeight: getOuterHeight($(window)),
             viewportWidth: 899,
             virtualColumnWidth: 100,
             virtualRowHeight: 50
@@ -5281,8 +5303,6 @@ QUnit.module('Tests with stubs', {
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
-            useNative: pivotGrid.__scrollBarUseNative,
-            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
 
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
@@ -6102,9 +6122,6 @@ QUnit.module('Vertical headers', {
     });
 
     function needRunZoomTest() {
-        if(browser.msie) {
-            return false;
-        }
         const isNoJquery = !config().useJQuery;
         const isNewJQuery = parseInt($.fn.jquery) >= 3;
         return isNoJquery || isNewJQuery;
@@ -6341,11 +6358,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as object. Native promise. Retrieve fields as simple array', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6371,11 +6383,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as object. Native promise', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6465,11 +6472,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as object. Native promise', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6502,11 +6504,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as object. Native promise. Retrieve fields as simple array', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6603,11 +6600,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as object. Native promise', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -6640,11 +6632,6 @@ QUnit.module('Vertical headers', {
         });
 
         QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as object. Native promise. Retrieve fields as simple array', function(assert) {
-            if(browser.msie) {
-                assert.ok(true, 'IE not supports native promises');
-                return;
-            }
-
             const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
@@ -7127,7 +7114,7 @@ QUnit.module('Data area', () => {
 
     QUnit.test('setVirtualContentParams.', function(assert) {
         const area = createDataArea({
-            'scrolling.mode': 'virtual'
+            'scrolling.mode': 'virtual',
         });
         const testElement = $('#pivotGrid').addClass('dx-pivotgrid').addClass('dx-virtual-mode');
 
@@ -7138,8 +7125,11 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: false });
         area.renderScrollable();
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
 
         const virtualContent = area.tableElement().prev();
 
@@ -7150,7 +7140,7 @@ QUnit.module('Data area', () => {
         assert.strictEqual(virtualContent.css('display'), 'block');
         assert.strictEqual(virtualContent.css('width'), '500px');
         assert.strictEqual(virtualContent.css('height'), '250px');
-        assert.strictEqual(area._getScrollable().$content().css('height'), '250px');
+        assert.strictEqual($(area._getScrollable().content()).css('height'), '250px');
     });
 
     // T465337
@@ -7169,11 +7159,14 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.reset();
 
-        assert.strictEqual(area._getScrollable().$content().get(0).style.height, 'auto');
+        assert.strictEqual($(area._getScrollable().content()).get(0).style.height, 'auto');
     });
 
     QUnit.test('scrollTo with virtual scrolling. Horizontal scrolling', function(assert) {
@@ -7208,6 +7201,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7216,7 +7211,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7280,6 +7275,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7288,7 +7285,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7354,6 +7351,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7362,7 +7361,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false });
+        area.updateScrollableOptions({});
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
@@ -7428,6 +7427,9 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+
+        area.component.option = sinon.stub();
+        area.component.option.withArgs('scrolling').returns({ useNative: 'auto' });
         area.renderScrollable();
 
         area.setGroupWidth(200);
@@ -7436,7 +7438,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.updateScrollableOptions({ useNative: false, useSimulatedScrollbar: true, direction: 'vertical' });
+        area.updateScrollableOptions({ direction: 'vertical' });
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });

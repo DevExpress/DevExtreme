@@ -20,6 +20,8 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
+import { getTableOperationHandler } from './tableOperations';
+
 let ToolbarModule = BaseModule;
 
 if(Quill) {
@@ -29,7 +31,6 @@ if(Quill) {
     const TOOLBAR_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
     const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
     const ACTIVE_FORMAT_CLASS = 'dx-format-active';
-    const BOX_ITEM_CONTENT_CLASS = 'dx-box-item-content';
 
     const ICON_CLASS = 'dx-icon';
 
@@ -182,13 +183,14 @@ if(Quill) {
                 superscript: this._prepareShortcutHandler('script', 'super'),
                 subscript: this._prepareShortcutHandler('script', 'sub'),
                 insertTable: this._prepareInsertTableHandler(),
-                insertRowAbove: this._getTableOperationHandler('insertRowAbove'),
-                insertRowBelow: this._getTableOperationHandler('insertRowBelow'),
-                insertColumnLeft: this._getTableOperationHandler('insertColumnLeft'),
-                insertColumnRight: this._getTableOperationHandler('insertColumnRight'),
-                deleteColumn: this._getTableOperationHandler('deleteColumn'),
-                deleteRow: this._getTableOperationHandler('deleteRow'),
-                deleteTable: this._getTableOperationHandler('deleteTable')
+                insertHeaderRow: getTableOperationHandler(this.quill, 'insertHeaderRow'),
+                insertRowAbove: getTableOperationHandler(this.quill, 'insertRowAbove'),
+                insertRowBelow: getTableOperationHandler(this.quill, 'insertRowBelow'),
+                insertColumnLeft: getTableOperationHandler(this.quill, 'insertColumnLeft'),
+                insertColumnRight: getTableOperationHandler(this.quill, 'insertColumnRight'),
+                deleteColumn: getTableOperationHandler(this.quill, 'deleteColumn'),
+                deleteRow: getTableOperationHandler(this.quill, 'deleteRow'),
+                deleteTable: getTableOperationHandler(this.quill, 'deleteTable')
             };
         }
 
@@ -589,11 +591,6 @@ if(Quill) {
                         dataField: name,
                         editorType: 'dxColorView',
                         editorOptions: {
-                            onContentReady: (e) => {
-                                $(e.element)
-                                    .closest(`.${BOX_ITEM_CONTENT_CLASS}`)
-                                    .css('flexBasis', 'auto'); // WA for the T590137
-                            },
                             focusStateEnabled: false
                         },
                         label: { visible: false }

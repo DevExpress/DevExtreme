@@ -79,8 +79,6 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @docid
  * @isEditor
  * @inherits Editor, DataExpressionMixin
- * @module ui/radio_group
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

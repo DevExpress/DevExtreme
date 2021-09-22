@@ -17,6 +17,7 @@ import Lookup from 'ui/lookup';
 import Popup from 'ui/popup';
 import List from 'ui/list';
 import Popover from 'ui/popover';
+import { getWidth } from 'core/utils/size';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -1451,10 +1452,10 @@ QUnit.module('options', {
 
         $(instance._$field).trigger('dxclick');
 
-        assert.equal(Math.round(instance._$popup.width()), Math.round(instance.$element().width()), 'Option initialized correctly');
+        assert.equal(Math.round(getWidth(instance._$popup)), Math.round(getWidth(instance.$element())), 'Option initialized correctly');
 
         instance.option('width', 400);
-        assert.equal(Math.round(instance._$popup.width()), Math.round(instance.$element().width()), 'Option set correctly');
+        assert.equal(Math.round(getWidth(instance._$popup)), Math.round(getWidth(instance.$element())), 'Option set correctly');
     });
 
     QUnit.test('setting popupWidth to auto returns initial value', function(assert) {
@@ -2291,7 +2292,7 @@ QUnit.module('popup options', {
         assert.strictEqual(popup.option('animation'), null, 'animation option is passed to the popup after runtime change');
     });
 
-    QUnit.test('Check closeOnTargetScroll option in Material theme', function(assert) {
+    QUnit.test('Check hideOnParentScroll option in Material theme', function(assert) {
         const isMaterialStub = sinon.stub(themes, 'isMaterial');
         isMaterialStub.returns(true);
 
@@ -2300,11 +2301,11 @@ QUnit.module('popup options', {
                 .dxLookup({ deferRendering: false })
                 .dxLookup('instance');
 
-            assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'is true by default');
+            assert.ok(lookup.option('dropDownOptions.hideOnParentScroll'), 'is true by default');
 
             lookup.open();
             this.clock.tick();
-            assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'still true after opening');
+            assert.ok(lookup.option('dropDownOptions.hideOnParentScroll'), 'still true after opening');
 
         } finally {
             isMaterialStub.restore();

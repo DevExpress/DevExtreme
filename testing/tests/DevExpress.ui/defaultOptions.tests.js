@@ -192,14 +192,7 @@ testComponentDefaults(DateBox,
 
 testComponentDefaults(Box,
     {},
-    { _layoutStrategy: 'fallback' },
-    function() {
-        this._origMSIE = browser.msie;
-        browser.msie = true;
-    },
-    function() {
-        browser.msie = this._origMSIE;
-    }
+    { _layoutStrategy: 'flex' },
 );
 
 testComponentDefaults(ValidationMessage,
@@ -210,7 +203,7 @@ testComponentDefaults(ValidationMessage,
         width: 'auto',
         height: 'auto',
         closeOnOutsideClick: false,
-        closeOnTargetScroll: false,
+        hideOnParentScroll: false,
         animation: null,
         visible: true,
         propagateOutsideClick: true,

@@ -1,3 +1,4 @@
+import { getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDefined } from '../../core/utils/type';
@@ -257,7 +258,6 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 shading: false,
                 showTitle: false,
                 focusStateEnabled: false,
-                closeOnTargetScroll: false,
                 closeOnOutsideClick: true,
                 copyRootClassesToWrapper: true,
                 animation: false,
@@ -340,7 +340,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 that._filterRangeOverlayInstance && that._filterRangeOverlayInstance.hide();
                 that._filterRangeOverlayInstance = overlayInstance;
 
-                that._updateFilterRangeOverlay({ width: $cell.outerWidth(true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
+                that._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
                 that._filterRangeOverlayInstance && that._filterRangeOverlayInstance.show();
             }
         },
@@ -794,7 +794,7 @@ export const filterRowModule = {
 
                         if(overlayInstance) {
                             $cell = overlayInstance.$element().closest('td');
-                            that._columnHeadersView._updateFilterRangeOverlay({ width: $cell.outerWidth(true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
+                            that._columnHeadersView._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
                             overlayInstance.$content().show();
                         }
                     }

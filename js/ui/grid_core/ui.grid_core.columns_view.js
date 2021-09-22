@@ -1,3 +1,4 @@
+import { getOuterWidth, getWidth, getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from '../../core/utils/window';
@@ -272,7 +273,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const getOptions = function(event) {
             const $cell = $(event.currentTarget);
             const $fieldItemContent = $(event.target).closest('.' + FORM_FIELD_ITEM_CONTENT_CLASS);
-            const rowOptions = $cell.parent().data('options');
+            const $row = $cell.parent();
+            const rowOptions = $row.data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
@@ -282,6 +284,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 event: event,
                 eventType: event.type
             });
+
+            resultOptions.rowIndex = that.getRowIndex($row);
 
             if($fieldItemContent.length) {
                 const formItemOptions = $fieldItemContent.data('dx-form-item');
@@ -1101,7 +1105,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const $tableElement = this._tableElement;
 
         if($element && $tableElement) {
-            return isHorizontal ? ($tableElement.outerWidth() - $element.width() > 0) : ($tableElement.outerHeight() - $element.height() > 0);
+            return isHorizontal ? (getOuterWidth($tableElement) - getWidth($element) > 0) : (getOuterHeight($tableElement) - getHeight($element) > 0);
         }
 
         return false;

@@ -49,33 +49,6 @@ class VerticalGroupedStrategy {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
     }
 
-    getVerticalMax(groupIndex) {
-        let maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition(groupIndex);
-
-        maxAllowedPosition += this._getOffsetByAllDayPanel(groupIndex);
-
-        return maxAllowedPosition;
-    }
-
-    _getOffsetByAllDayPanel(groupIndex) {
-        let result = 0;
-
-        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-            result = this._workSpace.getAllDayHeight() * (groupIndex + 1);
-        }
-
-        return result;
-    }
-
-    _getGroupTop(groupIndex) {
-        const workspace = this._workSpace;
-        const rowCount = workspace.isVirtualScrolling()
-            ? workspace.viewDataProvider.getRowCountInGroup(groupIndex)
-            : workspace._getRowCount();
-
-        return workspace.getMaxAllowedVerticalPosition(groupIndex) - workspace.getCellHeight() * rowCount;
-    }
-
     calculateTimeCellRepeatCount() {
         return this._workSpace._getGroupCount() || 1;
     }
@@ -95,10 +68,6 @@ class VerticalGroupedStrategy {
         return 0;
     }
 
-    getAllDayTableHeight() {
-        return 0;
-    }
-
     getGroupCountClass(groups) {
         return getVerticalGroupCountClass(groups);
     }
@@ -108,8 +77,8 @@ class VerticalGroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return this.cache.get('groupBoundsOffset', () => {
-            const groupIndex = coordinates.groupIndex;
+        const groupIndex = coordinates.groupIndex;
+        return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
             const startOffset = $cells.eq(0).offset().left;
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
             const startDayHour = this._workSpace.option('startDayHour');

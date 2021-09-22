@@ -1,3 +1,4 @@
+import { getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
 import $ from '../../../core/renderer';
 import dateUtils from '../../../core/utils/date';
@@ -157,7 +158,7 @@ export class AppointmentPopup {
 
     _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
-        const resources = this.scheduler.getResourceManager().getResourcesFromItem(rawAppointment, true);
+        const resources = this.scheduler.getResourcesFromItem(rawAppointment);
 
         return {
             ...rawAppointment,
@@ -220,7 +221,7 @@ export class AppointmentPopup {
     _tryGetWindowWidth() {
         if(hasWindow()) {
             const window = getWindow();
-            return $(window).width();
+            return getWidth(window);
         }
     }
 
@@ -327,7 +328,7 @@ export class AppointmentPopup {
                     const endTime = endDate.getTime();
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
-                    const resources = this.scheduler.getResourceManager().getResourcesFromItem(this.state.lastEditData, true);
+                    const resources = this.scheduler.getResourcesFromItem(this.state.lastEditData);
 
                     this.scheduler.updateScrollPosition(startDate, resources, inAllDayRow);
                     this.state.lastEditData = null;

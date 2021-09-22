@@ -1,3 +1,4 @@
+import { getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
@@ -238,7 +239,7 @@ class Menu extends MenuBase {
             return;
         }
 
-        const containerWidth = this.$element().outerWidth();
+        const containerWidth = getOuterWidth(this.$element());
         this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
     }
 
@@ -337,7 +338,7 @@ class Menu extends MenuBase {
             deferRendering: false,
             shading: false,
             animation: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             onHidden: () => {
                 this._toggleHamburgerActiveState(false);
             },
@@ -931,8 +932,9 @@ class Menu extends MenuBase {
                 super._optionChanged(args);
                 break;
             default:
-                if(this._isAdaptivityEnabled()) {
-                    this._treeView.option(args.name, args.value);
+                if(this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
+                    // TODO: if(args.name === 'items') this._treeView.option('items', this.option('items')) or treeView.repaint() ?
+                    this._treeView.option(args.fullName, args.value);
                 }
                 super._optionChanged(args);
         }

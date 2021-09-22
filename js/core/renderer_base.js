@@ -3,13 +3,12 @@ import domAdapter from './dom_adapter';
 import { getWindow } from './utils/window';
 import { isObject, isWindow, isPlainObject, isString, isNumeric, isDefined, isFunction, type } from './utils/type';
 import { styleProp, normalizeStyleProp } from './utils/style';
-import { getOffset, getWindowByElement, elementSize } from './utils/size';
+import { getOffset, getWindowByElement } from './utils/size';
 import { parseHTML, isTablePart } from './utils/html_parser';
 
 const window = getWindow();
 
 let renderer;
-
 const initRender = function(selector, context) {
     if(!selector) {
         this.length = 0;
@@ -164,36 +163,6 @@ initRender.prototype.toggleClass = function(className, value) {
     }
     return this;
 };
-
-['width', 'height', 'outerWidth', 'outerHeight', 'innerWidth', 'innerHeight'].forEach(function(methodName) {
-    initRender.prototype[methodName] = function(value) {
-        const hasValueArg = arguments.length > 0;
-        const isValueBool = typeof value === 'boolean';
-        const element = this[0];
-
-        if(hasValueArg && this.length > 1) {
-            return repeatMethod.call(this, methodName, arguments);
-        }
-
-        if(element) {
-            if(!hasValueArg) {
-                return elementSize(element, methodName);
-            }
-
-            if(isValueBool) {
-                return elementSize(element, methodName, value);
-            }
-
-            if(isDefined(value)) {
-                elementSize(element, methodName, value);
-            }
-
-            return this;
-        }
-
-        return null;
-    };
-});
 
 initRender.prototype.html = function(value) {
     if(!arguments.length) {

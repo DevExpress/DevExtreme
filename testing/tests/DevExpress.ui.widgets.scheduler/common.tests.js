@@ -1,3 +1,4 @@
+import { getOuterHeight, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
@@ -384,7 +385,7 @@ QUnit.module('Small size', {
             this.clock.tick();
 
             const $appointment = $(schedulerInstance.$element().find('.dx-scheduler-appointment'));
-            assert.roughEqual($appointment.position().left, 100, 1.001, 'Appointment is rendered correctly');
+            assert.roughEqual($appointment.position().left, 0, 1.001, 'Appointment is rendered correctly');
         }
     });
 });
@@ -741,7 +742,7 @@ QUnit.module('View with configuration', {
 
             const $groupHeaders = $(scheduler.workSpace.groups.getGroupHeaders(0));
             $groupHeaders.each((index, groupHeader) => {
-                const groupHeaderHeight = $(groupHeader).outerHeight();
+                const groupHeaderHeight = getOuterHeight($(groupHeader));
                 const groupingCellHeight = scheduler.workSpace.getCellHeight(index, 0);
                 assert.equal(groupHeaderHeight, groupingCellHeight, `Group header ${index} has min height`);
             });
@@ -816,9 +817,9 @@ QUnit.module('View with configuration', {
 
         const dateTableHeight = scheduler.workSpace.getDateTableHeight();
         const scrollHeight = scrollable.scrollHeight();
-        const scrollableHeight = scrollable.$element().height();
+        const scrollableHeight = getHeight(scrollable.$element());
 
-        assert.equal(scrollableHeight, dateTableHeight, 'Correct dateTable height');
+        assert.roughEqual(scrollableHeight, dateTableHeight, 1.001, 'Correct dateTable height');
         assert.equal(scrollableHeight, scrollHeight, 'Correct scroll content height');
     });
 
@@ -843,7 +844,7 @@ QUnit.module('View with configuration', {
 
         const dateTableHeight = scheduler.workSpace.getDateTableHeight();
         const scrollHeight = scrollable.scrollHeight();
-        const scrollableHeight = scrollable.$element().height();
+        const scrollableHeight = getHeight(scrollable.$element());
 
         assert.equal(scrollHeight, dateTableHeight, 'Correct dateTable height');
         assert.notEqual(scrollableHeight, scrollHeight, 'Correct scroll content height');
@@ -935,5 +936,35 @@ QUnit.module('Getting timezones', {}, () => {
 
         assert.equal(timeZone.offset, -7, 'returned offset for timeZone with DST is OK');
         assert.equal(timeZone.title, '(GMT -07:00) America - Los Angeles', 'returned title for timeZone with DST is OK');
+    });
+
+    QUnit.test('Appointment should process resource names with spaces', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Appointment 1',
+                    startDate: new Date(2015, 10, 3, 9),
+                    endDate: new Date(2015, 10, 3, 11),
+                    someId: 'with space'
+                }
+            ],
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2015, 10, 3),
+            resources: [{
+                fieldExpr: 'someId',
+                allowMultiple: false,
+                dataSource: [{
+                    text: 'with space',
+                    id: 1,
+                }],
+                label: 'Priority',
+            }],
+        });
+
+        const appointment = scheduler.appointmentList[0];
+        const value = appointment.getElement().data('someidWith__32__space');
+
+        assert.ok(value, 'attr is right');
     });
 });

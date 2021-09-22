@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterWidth, getOuterHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import { locate } from 'animation/translator';
@@ -195,7 +196,7 @@ testModule('render', moduleConfig, () => {
 
                 onContentReady: function() {
                     resizeCallbacks.fire();
-                    $(toSelector(OVERLAY_CONTENT_CLASS)).width();
+                    getWidth($(toSelector(OVERLAY_CONTENT_CLASS)));
                     resizeCallbacks.fire();
                 }
             }).remove();
@@ -253,8 +254,8 @@ testModule('render', moduleConfig, () => {
 
         assert.ok(!$content.is(':visible'));
         assert.ok(!viewport().children(toSelector(OVERLAY_SHADER_CLASS)).is(':visible'));
-        assert.ok($content.width() < $(window).width());
-        assert.ok($content.height() < $(window).height());
+        assert.ok(getWidth($content) < getWidth($(window)));
+        assert.ok(getHeight($content) < getHeight($(window)));
     });
 
     test('RTL markup - rtlEnabled by default', function(assert) {
@@ -456,30 +457,6 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeFired.getCall(0).args.length, 1, 'event is passed');
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
         assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
-    });
-
-    test('resizeEnd should trigger positioned event', function(assert) {
-        const positionedHandlerStub = sinon.stub();
-
-        const instance = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true
-        }).dxOverlay('instance');
-        instance.on('positioned', positionedHandlerStub);
-
-        const $content = $(instance.$content());
-        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_TOP_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(0, 50).dragEnd();
-
-        const contentRect = $content.get(0).getBoundingClientRect();
-        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is triggered');
-        assert.deepEqual(
-            positionedHandlerStub.getCall(0).args[0].position,
-            { h: { location: contentRect.left }, v: { location: contentRect.top } },
-            'position parameter is correct'
-        );
     });
 
     test('resize should change overlay width/height options value', function(assert) {
@@ -933,8 +910,8 @@ testModule('position', moduleConfig, () => {
         const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
         const wrapperStyle = getComputedStyle($overlayWrapper.get(0));
 
-        assert.strictEqual(parseInt(wrapperStyle.width), $(window).width(), 'width is 100%');
-        assert.strictEqual(parseInt(wrapperStyle.height), $(window).height(), 'height is 100%');
+        assert.strictEqual(parseInt(wrapperStyle.width), getWidth($(window)), 'width is 100%');
+        assert.strictEqual(parseInt(wrapperStyle.height), getHeight($(window)), 'height is 100%');
     });
 
     test('overlay should be correctly animated with custom \'animation.show.to\'', function(assert) {
@@ -1000,8 +977,20 @@ testModule('position', moduleConfig, () => {
 
         const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
-        assert.roughEqual($overlayWrapper.width(), $(window).width(), 1.01, 'overlay wrapper width is correct');
-        assert.roughEqual($overlayWrapper.height(), $(window).height(), 1.01, 'overlay wrapper height is correct');
+        assert.roughEqual(getWidth($overlayWrapper), getWidth($(window)), 1.01, 'overlay wrapper width is correct');
+        assert.roughEqual(getHeight($overlayWrapper), getHeight($(window)), 1.01, 'overlay wrapper height is correct');
+    });
+
+    test('position.of as an event', function(assert) {
+        const event = $.Event('click', { target: $('#overlayInputTarget') });
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            position: { my: 'top', at: 'top', of: event }
+        }).dxOverlay('instance');
+
+        const $content = overlay.$content();
+
+        assert.strictEqual($content.position().top, event.target.position().top, 'overlay is positioned correctly');
     });
 });
 
@@ -1043,8 +1032,8 @@ testModule('shading', moduleConfig, () => {
                 top: 200
             });
         overlay.repaint();
-        assert.strictEqual($wrapper.width(), 200);
-        assert.strictEqual($wrapper.height(), 300);
+        assert.strictEqual(getWidth($wrapper), 200);
+        assert.strictEqual(getHeight($wrapper), 300);
         assert.strictEqual(locate($wrapper).left, 0);
         assert.strictEqual(locate($wrapper).top, 0);
     });
@@ -1073,33 +1062,33 @@ testModule('dimensions', moduleConfig, () => {
             height: 15
         }).dxOverlay('instance').$content();
 
-        assert.strictEqual($content.width(), 20);
-        assert.strictEqual($content.height(), 15);
+        assert.strictEqual(getWidth($content), 20);
+        assert.strictEqual(getHeight($content), 15);
 
         resizeCallbacks.fire();
 
-        assert.strictEqual($content.width(), 20);
-        assert.strictEqual($content.height(), 15);
+        assert.strictEqual(getWidth($content), 20);
+        assert.strictEqual(getHeight($content), 15);
     });
 
     test('dimensions should be set correctly as function', function(assert) {
         const $content = $('#overlay').dxOverlay({
             visible: true,
             width: () => {
-                return $(window).width();
+                return getWidth($(window));
             },
             height: () => {
-                return $(window).height();
+                return getHeight($(window));
             }
         }).dxOverlay('instance').$content();
 
-        assert.strictEqual($content.width(), $(window).width());
-        assert.strictEqual($content.height(), $(window).height());
+        assert.strictEqual(getWidth($content), getWidth($(window)));
+        assert.strictEqual(getHeight($content), getHeight($(window)));
 
         resizeCallbacks.fire();
 
-        assert.strictEqual($content.width(), $(window).width());
-        assert.strictEqual($content.height(), $(window).height());
+        assert.strictEqual(getWidth($content), getWidth($(window)));
+        assert.strictEqual(getHeight($content), getHeight($(window)));
     });
 
     test('dimensions should be shrunk correctly with max sizes specified', function(assert) {
@@ -1114,8 +1103,8 @@ testModule('dimensions', moduleConfig, () => {
             }
         }).dxOverlay('instance').$content();
 
-        assert.strictEqual($content.width(), 200);
-        assert.strictEqual($content.height(), 200);
+        assert.strictEqual(getWidth($content), 200);
+        assert.strictEqual(getHeight($content), 200);
     });
 
     test('dimensions should be shrunk correctly with max sizes changes dynamically', function(assert) {
@@ -1130,10 +1119,10 @@ testModule('dimensions', moduleConfig, () => {
         const $content = instance.$content();
 
         instance.option('maxWidth', 200);
-        assert.strictEqual($content.width(), 200);
+        assert.strictEqual(getWidth($content), 200);
 
         instance.option('maxHeight', 200);
-        assert.strictEqual($content.height(), 200);
+        assert.strictEqual(getHeight($content), 200);
     });
 
     test('dimensions should be expanded correctly with min sizes specified', function(assert) {
@@ -1145,8 +1134,8 @@ testModule('dimensions', moduleConfig, () => {
             minHeight: 200
         }).dxOverlay('instance').$content();
 
-        assert.strictEqual($content.width(), 200);
-        assert.strictEqual($content.height(), 200);
+        assert.strictEqual(getWidth($content), 200);
+        assert.strictEqual(getHeight($content), 200);
     });
 
     test('dimensions should be shrunk correctly with min sizes changes dynamically', function(assert) {
@@ -1158,10 +1147,10 @@ testModule('dimensions', moduleConfig, () => {
         const $content = instance.$content();
 
         instance.option('minWidth', 200);
-        assert.strictEqual($content.width(), 200);
+        assert.strictEqual(getWidth($content), 200);
 
         instance.option('minHeight', 200);
-        assert.strictEqual($content.height(), 200);
+        assert.strictEqual(getHeight($content), 200);
     });
 
     test('overlay wrapper dimensions should be equal to document client dimensions when container is window', function(assert) {
@@ -1172,8 +1161,8 @@ testModule('dimensions', moduleConfig, () => {
         const $wrapper = overlay.$wrapper();
 
         const documentElement = document.documentElement;
-        assert.roughEqual($wrapper.height(), window.innerHeight, 1.01, 'wrapper height is equal to document client height');
-        assert.roughEqual($wrapper.width(), documentElement.clientWidth, 1.01, 'wrapper width is equal to document client width');
+        assert.roughEqual(getHeight($wrapper), window.innerHeight, 1.01, 'wrapper height is equal to document client height');
+        assert.roughEqual(getWidth($wrapper), documentElement.clientWidth, 1.01, 'wrapper width is equal to document client width');
     });
 
     test('overlay wrapper should cover all window without scrollbar when container is window', function(assert) {
@@ -1186,8 +1175,8 @@ testModule('dimensions', moduleConfig, () => {
         const $wrapper = overlay.$wrapper();
 
         const documentElement = document.documentElement;
-        assert.roughEqual($wrapper.height(), documentElement.clientHeight, 1.01, 'wrapper height is equal to document client height');
-        assert.roughEqual($wrapper.width(), documentElement.clientWidth, 1.01, 'wrapper width is equal to document client width');
+        assert.roughEqual(getHeight($wrapper), documentElement.clientHeight, 1.01, 'wrapper height is equal to document client height');
+        assert.roughEqual(getWidth($wrapper), documentElement.clientWidth, 1.01, 'wrapper width is equal to document client width');
     });
 });
 
@@ -2013,7 +2002,7 @@ testModule('reset focus', moduleConfig, () => {
 testModule('close on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2033,7 +2022,7 @@ testModule('close on target scroll', moduleConfig, () => {
         fx.off = false;
 
         const overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2052,7 +2041,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
     test('overlay should be hidden if any of jQuery Event target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2070,7 +2059,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
     test('overlay should not be hidden on any target\'s parents scroll events if option set to false', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: false,
+            hideOnParentScroll: false,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2096,7 +2085,7 @@ testModule('close on target scroll', moduleConfig, () => {
             devices.real({ platform: 'generic', deviceType: 'desktop' });
 
             const $overlay = $('#overlay').dxOverlay({
-                closeOnTargetScroll: true
+                hideOnParentScroll: true
             });
 
             const overlay = $overlay.dxOverlay('instance');
@@ -2121,7 +2110,7 @@ testModule('close on target scroll', moduleConfig, () => {
             devices.real({ platform: 'ios', deviceType: 'phone' });
 
             const $overlay = $('#overlay').dxOverlay({
-                closeOnTargetScroll: true
+                hideOnParentScroll: true
             });
 
             const overlay = $overlay.dxOverlay('instance');
@@ -2141,7 +2130,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
         const $overlay = $('#overlay').dxOverlay({
             visible: true,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#test'),
             position: {
                 my: 'left top',
@@ -2166,7 +2155,7 @@ testModule('close on target scroll', moduleConfig, () => {
         const $container = $('#test');
 
         const $overlay = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $container,
             position: {
                 my: 'left top',
@@ -2188,13 +2177,13 @@ testModule('close on target scroll', moduleConfig, () => {
         const container = $('#overlayInputTarget');
 
         const $overlay1 = $('#overlay').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             visible: true,
             container
         });
 
         const $overlay2 = $('#overlay2').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             visible: true,
             container
         });
@@ -2208,7 +2197,7 @@ testModule('close on target scroll', moduleConfig, () => {
         const $target = $('#overlayInputTarget');
 
         const $overlay1 = $('#overlay').dxOverlay({
-            closeOnTargetScroll: function() {
+            hideOnParentScroll: function() {
                 return $overlay2.dxOverlay('option', 'visible');
             },
             container: $('#test'),
@@ -2219,7 +2208,7 @@ testModule('close on target scroll', moduleConfig, () => {
         });
 
         const $overlay2 = $('#overlay2').dxOverlay({
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             container: $('#overlay'),
             position: {
                 of: $target
@@ -2269,8 +2258,8 @@ testModule('container', moduleConfig, () => {
 
         const $wrapper = overlay.$wrapper();
         overlay.option('container', null);
-        assert.strictEqual($wrapper.width(), $(window).width(), 'width is restored after container option value changed to window');
-        assert.strictEqual($wrapper.height(), $(window).height(), 'height is restored after container option value changed to window');
+        assert.strictEqual(getWidth($wrapper), getWidth($(window)), 'width is restored after container option value changed to window');
+        assert.strictEqual(getHeight($wrapper), getHeight($(window)), 'height is restored after container option value changed to window');
     });
 
     test('content should not be moved to container', function(assert) {
@@ -2403,8 +2392,8 @@ testModule('container', moduleConfig, () => {
         const $shader = $container.find(toSelector(OVERLAY_SHADER_CLASS));
 
         assert.ok(Math.abs(Math.round($shader.offset().top) - Math.round($container.offset().top)) <= 1, 'shader top position is correct');
-        assert.strictEqual($shader.width(), $container.width(), 'shader width is correct');
-        assert.strictEqual($shader.height(), $container.height(), 'shader height is correct');
+        assert.strictEqual(getWidth($shader), getWidth($container), 'shader width is correct');
+        assert.strictEqual(getHeight($shader), getHeight($container), 'shader height is correct');
     });
 
     [true, false].forEach(shading => {
@@ -2459,8 +2448,8 @@ testModule('container', moduleConfig, () => {
         $overlay.dxOverlay('show');
 
         const $content = $container.find(toSelector(OVERLAY_CONTENT_CLASS));
-        assert.strictEqual($content.height(), $container.height() * 0.5, 'overlay height is correct');
-        assert.strictEqual($content.width(), $container.width() * 0.5, 'overlay width is correct');
+        assert.strictEqual(getHeight($content), getHeight($container) * 0.5, 'overlay height is correct');
+        assert.strictEqual(getWidth($content), getWidth($container) * 0.5, 'overlay width is correct');
     });
 
     test('wrong position targeted container (B236074)', function(assert) {
@@ -2896,7 +2885,7 @@ testModule('widget sizing render', moduleConfig, () => {
 
         instance.show();
 
-        assert.ok($element.outerWidth() > 0, 'outer width of the element must be more than zero');
+        assert.ok(getOuterWidth($element) > 0, 'outer width of the element must be more than zero');
     });
 
     test('constructor', function(assert) {
@@ -2906,7 +2895,7 @@ testModule('widget sizing render', moduleConfig, () => {
         instance.show();
 
         assert.strictEqual(instance.option('width'), 400);
-        assert.strictEqual(instance.$content().outerWidth(), 400, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance.$content()), 400, 'outer width of the element must be equal to custom width');
     });
 
     test('change width', function(assert) {
@@ -2918,7 +2907,7 @@ testModule('widget sizing render', moduleConfig, () => {
 
         instance.show();
 
-        assert.strictEqual(instance.$content().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance.$content()), customWidth, 'outer width of the element must be equal to custom width');
     });
 });
 
@@ -2984,7 +2973,8 @@ testModule('drag', moduleConfig, () => {
             dragEnabled: true,
             visible: true,
             width: 1,
-            height: 1
+            height: 1,
+            position: { of: viewPort() }
         });
         const overlay = $overlay.dxOverlay('instance');
         const $overlayContent = overlay.$content();
@@ -3001,35 +2991,13 @@ testModule('drag', moduleConfig, () => {
         assert.strictEqual($overlayContent.position().left, prevPosition, 'correct position after next move');
     });
 
-    test('dragged overlay should not be positioned at default location after toggle visibility', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            dragEnabled: true,
-            visible: true,
-            height: 10,
-            width: 10
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const pointer = pointerMock($overlayContent);
-        const position = $overlayContent.position();
-
-        pointer.start().dragStart().drag(50, 50).dragEnd();
-
-        overlay.hide();
-        overlay.show();
-
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top + 50,
-            left: position.left + 50
-        }, 'overlay dragged position was reset');
-    });
-
     test('overlay should not be dragged out of target', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             dragEnabled: true,
             width: 2,
             height: 2,
-            visible: true
+            visible: true,
+            position: { of: viewPort() }
         });
         const overlay = $overlay.dxOverlay('instance');
         const $overlayContent = overlay.$content();
@@ -3038,16 +3006,16 @@ testModule('drag', moduleConfig, () => {
 
         $container.css({ padding: '10px' });
 
-        const viewWidth = $container.outerWidth();
-        const viewHeight = $container.outerHeight();
+        const viewWidth = getOuterWidth($container);
+        const viewHeight = getOuterHeight($container);
         const position = $overlayContent.position();
 
         const startEvent = pointer.start().dragStart().lastEvent();
 
         assert.strictEqual(position.left - startEvent.maxLeftOffset, 0, 'overlay should not be dragged left of target');
-        assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - $overlayContent.outerWidth(), 'overlay should not be dragged right of target');
+        assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth($overlayContent), 'overlay should not be dragged right of target');
         assert.strictEqual(position.top - startEvent.maxTopOffset, 0, 'overlay should not be dragged above the target');
-        assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight(), 'overlay should not be dragged below than target');
+        assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight($overlayContent), 'overlay should not be dragged below than target');
     });
 
     test('overlay can be dragged out of target if viewport and container is not specified', function(assert) {
@@ -3067,14 +3035,14 @@ testModule('drag', moduleConfig, () => {
             $(toSelector(VIEWPORT_CLASS)).attr('style', 'width: 100px; height: 100px');
 
             const $container = $(window);
-            const viewWidth = Math.max($(document).outerWidth(), $container.outerWidth());
-            const viewHeight = Math.max($(document).outerHeight(), $container.outerHeight());
+            const viewWidth = Math.max(document.body.clientWidth, getOuterWidth($container));
+            const viewHeight = Math.max(document.body.clientHeight, getOuterHeight($container));
             const position = $overlayContent.position();
 
             const startEvent = pointer.start().dragStart().lastEvent();
 
-            assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - $overlayContent.outerWidth(), 'overlay should not be dragged right of target');
-            assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight(), 'overlay should not be dragged below than target');
+            assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth($overlayContent), 'overlay should not be dragged right of target');
+            assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight($overlayContent), 'overlay should not be dragged below than target');
         } finally {
             $(toSelector(VIEWPORT_CLASS)).removeAttr('style');
             viewPort(toSelector(VIEWPORT_CLASS));
@@ -3121,6 +3089,29 @@ testModule('drag', moduleConfig, () => {
         assert.strictEqual(startEvent.maxRightOffset, 0, 'overlay should not be dragged horizontally');
     });
 
+    test('overlay can be dragged when container size less than overlay content and outsideDragFactor is enabled', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(10).width(10);
+        const $overlay = $('#overlay').dxOverlay({
+            dragEnabled: true,
+            visible: true,
+            height: 10,
+            width: 10,
+            container: $container,
+            position: { of: $container },
+            outsideDragFactor: 1
+        });
+
+        const $overlayContent = $overlay.dxOverlay('$content');
+        const pointer = pointerMock($overlayContent);
+
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxTopOffset, 10, 'overlay can dragged vertically');
+        assert.strictEqual(startEvent.maxBottomOffset, 10, 'overlay can be dragged vertically');
+        assert.strictEqual(startEvent.maxLeftOffset, 10, 'overlay can be dragged horizontally');
+        assert.strictEqual(startEvent.maxRightOffset, 10, 'overlay can be dragged horizontally');
+    });
+
     test('overlay should be dragged correctly when position.of and shading (T534551)', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(0).width(200);
         $container.css('margin-left', '200px');
@@ -3138,16 +3129,16 @@ testModule('drag', moduleConfig, () => {
         const $overlayContent = $overlay.dxOverlay('$content');
         const overlayPosition = $overlayContent.position();
         const containerPosition = $container.position();
-        const viewWidth = viewport().outerWidth();
-        const viewHeight = viewport().outerHeight();
+        const viewWidth = getOuterWidth(viewport());
+        const viewHeight = getOuterHeight(viewport());
 
         const pointer = pointerMock($overlayContent);
         const startEvent = pointer.start().dragStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxRightOffset, viewWidth - $overlayContent.outerWidth() - overlayPosition.left - 200, 'overlay should be dragged right');
+        assert.strictEqual(startEvent.maxRightOffset, viewWidth - getOuterWidth($overlayContent) - overlayPosition.left - 200, 'overlay should be dragged right');
         assert.strictEqual(startEvent.maxLeftOffset, 200 + overlayPosition.left, 'overlay should be dragged left');
         assert.roughEqual(startEvent.maxTopOffset, 200 + overlayPosition.top + containerPosition.top, 1, 'overlay should be dragged top');
-        assert.roughEqual(startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight() - containerPosition.top - overlayPosition.top - 200, 1, 'overlay should be dragged bottom');
+        assert.roughEqual(startEvent.maxBottomOffset, viewHeight - getOuterHeight($overlayContent) - containerPosition.top - overlayPosition.top - 200, 1, 'overlay should be dragged bottom');
     });
 
     test('change position after dragging', function(assert) {
@@ -3167,8 +3158,24 @@ testModule('drag', moduleConfig, () => {
 
         assert.strictEqual($content.position().top, 20, 'overlay positioned correctly after change the \'position\' option');
     });
-});
 
+    test('should reposition after dragging if position is outside of drag area', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({
+            visible: true,
+            dragEnabled: true
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $content = overlay.$content();
+        const startOverlayPosition = $content.position().left;
+        const pointer = pointerMock($content);
+
+        pointer.start().down().move(10, 10).move(-10, -10).up();
+        const newOverlayPosition = $content.position().left;
+
+        assert.notStrictEqual(startOverlayPosition, newOverlayPosition, 'overlay repositioned after dragging');
+        assert.ok(newOverlayPosition < -9000, 'overlay now is positioned in viewport');
+    });
+});
 
 testModule('resize', moduleConfig, () => {
     test('overlay should have resizable component on content', function(assert) {
@@ -3219,11 +3226,11 @@ testModule('resize', moduleConfig, () => {
 
         pointer.start().dragStart().drag(10, 10).dragEnd();
         resizeCallbacks.fire();
-        assert.deepEqual([$overlayContent.width(), $overlayContent.height()], [210, 210], 'correct size');
+        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [210, 210], 'correct size');
 
         pointer.start().dragStart().drag(-20, -20).dragEnd();
         resizeCallbacks.fire();
-        assert.deepEqual([$overlayContent.width(), $overlayContent.height()], [190, 190], 'correct size');
+        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [190, 190], 'correct size');
     });
 
     test('resized overlay should not save dimensions after height changed', function(assert) {
@@ -3242,7 +3249,7 @@ testModule('resize', moduleConfig, () => {
         resizeCallbacks.fire();
 
         overlay.option('width', 300);
-        assert.deepEqual([$overlayContent.width(), $overlayContent.height()], [300, 210], 'correct size');
+        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [300, 210], 'correct size');
     });
 
     test('resized overlay should save dimension for the side which was not resized', function(assert) {
@@ -3280,7 +3287,51 @@ testModule('resize', moduleConfig, () => {
         overlay.hide();
         overlay.show();
 
-        assert.deepEqual([$overlayContent.width(), $overlayContent.height()], [250, 250], 'correct size');
+        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [250, 250], 'correct size');
+    });
+
+    QUnit.module('overlay should set resize area', {
+        beforeEach: function() {
+            this.$container = $('#parentContainer');
+            this.$resizeContainer = $('#container');
+            this.initialOptions = {
+                resizeEnabled: true,
+                visible: true,
+            };
+            this.reinit = (options) => {
+                this.overlay && this.overlay.dispose();
+
+                const newOptions = $.extend({}, this.initialOptions, options);
+                this.overlay = $('#overlay').dxOverlay(newOptions).dxOverlay('instance');
+                this.getResizableArea = () => this.overlay._resizable.option('area');
+            };
+
+            this.reinit({});
+        }
+    }, () => {
+        test('after dragAndResizeArea option set on init', function(assert) {
+            this.reinit({ dragAndResizeArea: this.$resizeContainer });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$resizeContainer.get(0), 'resize container was configured');
+        });
+
+        test('after container option set on init', function(assert) {
+            this.reinit({ container: this.$container });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was configured');
+        });
+
+        test('after dragAndResizeArea option runtime change', function(assert) {
+            this.overlay.option('dragAndResizeArea', this.$resizeContainer);
+
+            assert.equal(this.getResizableArea().get(0), this.$resizeContainer.get(0), 'resize container was changed');
+        });
+
+        test('after container option runtime change', function(assert) {
+            this.overlay.option('container', this.$container);
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
+        });
     });
 });
 
@@ -3316,7 +3367,8 @@ testModule('keyboard navigation', {
             dragEnabled: true,
             visible: true,
             width: 1,
-            height: 1
+            height: 1,
+            position: { of: viewPort() }
         });
 
         this.overlay = this.$overlay.dxOverlay('instance');
@@ -3372,13 +3424,13 @@ testModule('keyboard navigation', {
         assert.strictEqual($overlayContent.position().left, 0, 'overlay should not be dragged left of target');
 
         keyboard.keyDown('right');
-        assert.strictEqual($overlayContent.position().left, $container.width() - $overlayContent.outerWidth(), 'overlay should not be dragged right of target');
+        assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'overlay should not be dragged right of target');
 
         keyboard.keyDown('up');
         assert.strictEqual($overlayContent.position().top, 0, 'overlay should not be dragged above the target');
 
         keyboard.keyDown('down');
-        assert.strictEqual($overlayContent.position().top, $container.height() - $overlayContent.outerHeight(), 'overlay should not be dragged below than target');
+        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'overlay should not be dragged below than target');
     });
 
     test('arrows handling for rtl', function(assert) {
@@ -3392,23 +3444,19 @@ testModule('keyboard navigation', {
         assert.strictEqual(this.$overlayContent.position().left, this.position.left + offset, 'overlay position was change after pressing right arrow');
     });
 
-    test('arrows handling with dragEnable = false', function(assert) {
+    test('arrows handling with dragEnabled = false', function(assert) {
         this.overlay.option('dragEnabled', false);
 
         this.keyboard.keyDown('left');
-        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was change after pressing left arrow');
-        this.position = this.$overlayContent.position();
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was not changed after pressing left arrow');
 
         this.keyboard.keyDown('down');
-        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was change after pressing down arrow');
-        this.position = this.$overlayContent.position();
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was not changed after pressing down arrow');
 
         this.keyboard.keyDown('right');
-        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was change after pressing right arrow');
-        this.position = this.$overlayContent.position();
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'overlay position was not changed after pressing right arrow');
 
-        this.keyboard.keyDown('up');
-        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was change after pressing up arrow');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'overlay position was not changed after pressing up arrow');
     });
 
     test('overlay have focus on show click', function(assert) {
@@ -3986,20 +4034,19 @@ testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
         this.timeToWaitResize = 50;
-        this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
             dragEnabled: false,
             resizeEnabled: false,
-            onPositioned: this.positionedHandlerStub
         }).dxOverlay('instance');
+        this.renderGeometrySpy = sinon.spy(this.overlayInstance, '_renderGeometry');
         this.checkNoExcessResizeHandle = (assert) => {
             const done = assert.async();
-            const initialPositionHandlerCallCount = this.positionedHandlerStub.callCount;
+            const renderGeometryInitialCallCount = this.renderGeometrySpy.callCount;
             setTimeout(() => {
                 assert.strictEqual(
-                    this.positionedHandlerStub.callCount,
-                    initialPositionHandlerCallCount,
+                    this.renderGeometrySpy.callCount,
+                    renderGeometryInitialCallCount,
                     'no resize observer callback was raised'
                 );
                 done();
@@ -4013,13 +4060,13 @@ testModule('renderGeometry', {
     }
 }, () => {
     QUnit.testInActiveWindow('visibility change', function(assert) {
-        assert.ok(this.positionedHandlerStub.notCalled, 'render geometry isn\'t called yet');
+        assert.ok(this.renderGeometrySpy.notCalled, 'render geometry isn\'t called yet');
 
         const showingResizeHandled = assert.async();
         this.overlayInstance.show();
 
         setTimeout(() => {
-            assert.ok(this.positionedHandlerStub.calledOnce, 'render geometry called once');
+            assert.ok(this.renderGeometrySpy.calledOnce, 'render geometry called once');
             this.checkNoExcessResizeHandle(assert);
             showingResizeHandled();
         }, this.timeToWaitResize);
@@ -4031,7 +4078,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             resizeCallbacks.fire();
-            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            assert.strictEqual(this.renderGeometrySpy.callCount, 2);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
@@ -4042,7 +4089,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             this.overlayInstance.repaint();
-            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            assert.strictEqual(this.renderGeometrySpy.callCount, 2);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
@@ -4074,7 +4121,7 @@ testModule('renderGeometry', {
                 setTimeout(() => {
                     this.overlayInstance.option(optionName, newOptions[optionName]);
 
-                    assert.strictEqual(this.positionedHandlerStub.callCount, 2, 'renderGeomentry called 2 times');
+                    assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeomentry called 2 times');
                     this.checkNoExcessResizeHandle(assert);
                     showingResizeHandled();
                 }, this.timeToWaitResize);
@@ -4248,26 +4295,6 @@ QUnit.module('resizeObserver integration', {
         fx.off = false;
     }
 }, () => {
-    QUnit.testInActiveWindow('overlay should be repositioned only once on window resize', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnWindowResizeDone = assert.async();
-        const overlay = $('#overlay').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-        const positionedHandlerStub = sinon.stub();
-
-        overlay.on('positioned', positionedHandlerStub);
-
-        setTimeout(() => {
-            resizeCallbacks.fire();
-            setTimeout(() => {
-                assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
-                resizeOnWindowResizeDone();
-            }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
     QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();
@@ -4286,33 +4313,7 @@ QUnit.module('resizeObserver integration', {
         setTimeout(() => {
             pointer.start().dragStart().drag(10);
             setTimeout(() => {
-                assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
-                resizeOnDraggingDone();
-            }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
-    QUnit.testInActiveWindow('resize end should trigger the single geometry rendering', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnDraggingDone = assert.async();
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-        const positionedHandlerStub = sinon.stub();
-        overlay.on('positioned', positionedHandlerStub);
-
-        setTimeout(() => {
-            pointer.start().dragStart().drag(10, 10).dragEnd();
-            setTimeout(() => {
-                assert.ok(positionedHandlerStub.calledOnce);
+                assert.strictEqual(getWidth($overlayContent), 210, 'width was changed before pointerdown');
                 resizeOnDraggingDone();
             }, this.timeToWaitResize);
             resizeOnOpeningDone();

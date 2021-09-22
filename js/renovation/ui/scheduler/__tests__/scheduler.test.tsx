@@ -49,7 +49,7 @@ describe('Scheduler', () => {
       />,
     );
 
-    it('should render correct markup and pass correct props to the toolbar', () => {
+    it('should render widget', () => {
       const tree = renderComponent({});
 
       expect(tree.is(Widget)).toBe(true);
@@ -85,6 +85,13 @@ describe('Scheduler', () => {
         });
     });
 
+    it('should render scheduler-container', () => {
+      const tree = renderComponent({});
+
+      expect(tree.find('.dx-scheduler-container').exists())
+        .toBe(true);
+    });
+
     it('should render work space and pass to it correct props', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
@@ -98,6 +105,8 @@ describe('Scheduler', () => {
         .toEqual({
           ...defaultCurrentViewConfig,
           onViewRendered: expect.any(Function),
+          appointments: expect.anything(),
+          allDayAppointments: expect.anything(),
         });
     });
 

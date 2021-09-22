@@ -1,5 +1,6 @@
 import ValidationMessage from 'ui/validation_message';
 import $ from 'jquery';
+import { implementationsMap } from 'core/utils/size';
 
 const moduleSetup = {
     beforeEach: function() {
@@ -21,8 +22,10 @@ QUnit.module('options', moduleSetup, () => {
 
     QUnit.test('maxWidth option should be updated after target option change', function(assert) {
         const $target = $('<div>').attr('id', 'target');
-        $target.outerWidth = () => {
-            return 120;
+        const defaultGetOuterWidth = implementationsMap.getOuterWidth;
+        implementationsMap.getOuterWidth = function(element, value) {
+            if(element === $target) { return 120; }
+            return defaultGetOuterWidth(...arguments);
         };
 
         try {
@@ -31,6 +34,7 @@ QUnit.module('options', moduleSetup, () => {
             assert.strictEqual(this._validationMessage.option('maxWidth'), 120, 'maxWidth was updated');
         } finally {
             $target.remove();
+            implementationsMap.getOuterWidth = defaultGetOuterWidth;
         }
     });
 
@@ -187,5 +191,29 @@ QUnit.module('position', moduleSetup, () => {
                 assert.deepEqual(this._validationMessage.option('position.at'), 'left top', 'at is correct');
             });
         });
+    });
+});
+
+QUnit.module('content id', moduleSetup, () => {
+    QUnit.test('validation message should update content id after contentId option change', function(assert) {
+        const contentId = 'guid';
+        this._validationMessage.option('contentId', contentId);
+
+        assert.strictEqual(this._validationMessage.$content().attr('id'), contentId);
+    });
+
+    QUnit.test('validation message should update content id after container option change if contentId is not specified', function(assert) {
+        const contentId = 'guid';
+        const $container = $('<div>')
+            .attr('aria-describedby', contentId)
+            .appendTo('#qunit-fixture');
+
+        try {
+            this._validationMessage.option('container', $container);
+
+            assert.strictEqual(this._validationMessage.$content().attr('id'), contentId);
+        } finally {
+            $container.remove();
+        }
     });
 });

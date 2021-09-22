@@ -39,6 +39,7 @@ import {
     selectMenuItem,
     clickByButtonAndSelectMenuItem
 } from './helpers.js';
+import { implementationsMap } from 'core/utils/size';
 
 QUnit.module('Rendering', function() {
     QUnit.test('field menu test', function(assert) {
@@ -248,7 +249,7 @@ QUnit.module('Rendering', function() {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(300);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(300);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         const $operationButton = container.find('.' + FILTER_BUILDER_ITEM_OPERATION_CLASS);
@@ -1295,7 +1296,7 @@ QUnit.module('on value changed', function() {
         const popupInstance = container.children('.dx-filterbuilder-overlay').dxPopup('instance');
 
         // assert
-        assert.equal(popupInstance.option('closeOnTargetScroll'), true, 'popup\'s closeOnTargetScroll');
+        assert.equal(popupInstance.option('hideOnParentScroll'), true, 'popup\'s hideOnParentScroll');
     });
 
     // T804262

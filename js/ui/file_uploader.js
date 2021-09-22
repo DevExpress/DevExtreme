@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import Guid from '../core/guid';
 import { getWindow } from '../core/utils/window';
@@ -13,7 +14,6 @@ import ajax from '../core/utils/ajax';
 import Editor from './editor/editor';
 import Button from './button';
 import ProgressBar from './progress_bar';
-import browser from '../core/utils/browser';
 import devices from '../core/devices';
 import { addNamespace } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
@@ -183,6 +183,8 @@ class FileUploader extends Editor {
 
             validationMessageOffset: { h: 0, v: 0 },
 
+            hoverStateEnabled: true,
+
             useNativeInputClick: false,
             useDragOver: true,
             nativeDropSupported: true,
@@ -221,7 +223,7 @@ class FileUploader extends Editor {
                 }
             },
             {
-                device: () => browser.msie || devices.real().deviceType !== 'desktop',
+                device: () => devices.real().deviceType !== 'desktop',
                 options: {
                     nativeDropSupported: false
                 }
@@ -610,14 +612,16 @@ class FileUploader extends Editor {
     _updateFileNameMaxWidth() {
         const cancelButtonsCount = this.option('allowCanceling') && this.option('uploadMode') !== 'useForm' ? 1 : 0;
         const uploadButtonsCount = this.option('uploadMode') === 'useButtons' ? 1 : 0;
-        const filesContainerWidth = this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width();
+        const filesContainerWidth = getWidth(
+            this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first()
+        ) || getWidth(this._$filesContainer);
         const $buttonContainer = this._$filesContainer.find('.' + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0);
-        const buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount);
+        const buttonsWidth = getWidth($buttonContainer) * (cancelButtonsCount + uploadButtonsCount);
         const $fileSize = this._$filesContainer.find('.' + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
 
         const prevFileSize = $fileSize.text();
         $fileSize.text('1000 Mb');
-        const fileSizeWidth = $fileSize.width();
+        const fileSizeWidth = getWidth($fileSize);
         $fileSize.text(prevFileSize);
 
         this._$filesContainer.find('.' + FILEUPLOADER_FILE_NAME_CLASS).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth);
@@ -643,7 +647,8 @@ class FileUploader extends Editor {
                 icon: 'close',
                 visible: this.option('allowCanceling'),
                 disabled: this.option('readOnly'),
-                integrationOptions: {}
+                integrationOptions: {},
+                hoverStateEnabled: this.option('hoverStateEnabled')
             }
         );
 
@@ -662,7 +667,8 @@ class FileUploader extends Editor {
             Button,
             {
                 onClick: () => this._uploadFile(file),
-                icon: 'upload'
+                icon: 'upload',
+                hoverStateEnabled: this.option('hoverStateEnabled')
             }
         );
 
@@ -749,7 +755,8 @@ class FileUploader extends Editor {
             text: this.option('selectButtonText'),
             focusStateEnabled: false,
             integrationOptions: {},
-            disabled: this.option('readOnly')
+            disabled: this.option('readOnly'),
+            hoverStateEnabled: this.option('hoverStateEnabled')
         });
         this._selectFileDialogHandler = this._selectButtonClickHandler.bind(this);
 
@@ -805,7 +812,8 @@ class FileUploader extends Editor {
             text: this.option('uploadButtonText'),
             onClick: this._uploadButtonClickHandler.bind(this),
             type: this.option('_uploadButtonType'),
-            integrationOptions: {}
+            integrationOptions: {},
+            hoverStateEnabled: this.option('hoverStateEnabled')
         });
     }
 
@@ -1206,6 +1214,16 @@ class FileUploader extends Editor {
         this._attachDragEventHandlers(this._$inputWrapper);
     }
 
+    _updateHoverState() {
+        const value = this.option('hoverStateEnabled');
+        this._selectButton?.option('hoverStateEnabled', value);
+        this._uploadButton?.option('hoverStateEnabled', value);
+        this._files.forEach(file => {
+            file.uploadButton?.option('hoverStateEnabled', value);
+            file.cancelButton?.option('hoverStateEnabled', value);
+        });
+    }
+
     _optionChanged(args) {
         const { name, value, previousValue } = args;
 
@@ -1293,6 +1311,10 @@ class FileUploader extends Editor {
             case 'uploadHeaders':
             case 'uploadCustomData':
             case 'extendSelection':
+                break;
+            case 'hoverStateEnabled':
+                this._updateHoverState();
+                super._optionChanged(args);
                 break;
             case 'allowCanceling':
             case 'uploadMode':

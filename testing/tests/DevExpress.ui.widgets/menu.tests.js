@@ -16,6 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'generic_light.css!';
+import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 
 QUnit.testStart(function() {
     const markup =
@@ -59,6 +60,14 @@ const ANIMATION_TIMEOUT = 100;
 const MENU_ITEM_WIDTH = 100;
 const MOUSETIMEOUT = 50;
 
+const EXPECTED_TREEVIEW_SYNC_OPTIONS = [
+    // tested in separate tests: 'dataSource', 'items'
+    'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation',
+    'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
+    'itemsExpr', 'itemTemplate', 'selectedExpr',
+    'selectionMode', 'tabIndex', 'visible', 'selectByClick'
+];
+
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'if device is not desktop we do not test the case');
@@ -88,8 +97,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.height(), 2, 'ok');
-        assert.notEqual(delimiter.width(), 0, 'ok');
+        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.notEqual(getWidth(delimiter), 0, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().left + 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
     });
@@ -107,8 +116,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.width(), 2, 'ok');
-        assert.notEqual(delimiter.height(), 0, 'ok');
+        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.notEqual(getHeight(delimiter), 0, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().left - 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
     });
@@ -126,8 +135,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.height(), 2, 'ok');
-        assert.notEqual(delimiter.width(), 0, 'ok');
+        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.notEqual(getWidth(delimiter), 0, 'ok');
         assert.roughEqual(rootMenuItem.offset().left + 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
     });
@@ -145,8 +154,8 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(delimiter.width(), 2, 'ok');
-        assert.notEqual(delimiter.height(), 0, 'ok');
+        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.notEqual(getHeight(delimiter), 0, 'ok');
         assert.roughEqual(rootMenuItem.offset().left - 1, delimiter.offset().left, 1, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
     });
@@ -2079,7 +2088,7 @@ QUnit.module('adaptivity: render', {
         assert.equal(overlay.option('position').collision, 'flipfit', 'collision strategy is correct');
     });
 
-    QUnit.test('Overlay should have closeOnTargetScroll option', function(assert) {
+    QUnit.test('Overlay should have hideOnParentScroll option', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true,
@@ -2089,7 +2098,7 @@ QUnit.module('adaptivity: render', {
         const $overlay = this.$element.find('.dx-overlay').first();
         const overlay = $overlay.dxOverlay('instance');
 
-        assert.ok(overlay.option('closeOnTargetScroll'), 'overlay should close on target scroll');
+        assert.ok(overlay.option('hideOnParentScroll'), 'overlay should close on target scroll');
     });
 
     QUnit.test('Width option should transfer to the adaptive overlay', function(assert) {
@@ -2154,7 +2163,7 @@ QUnit.module('adaptivity: render', {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(700);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         try {
@@ -2260,18 +2269,9 @@ QUnit.module('adaptivity: transfer options', {
     });
 
     QUnit.test('Some menu options should be transferred to the treeview as is on init', function(assert) {
-        const options = [
-            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation',
-            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
-            'itemsExpr', 'itemTemplate', 'selectedExpr',
-            'selectionMode', 'tabIndex', 'visible'
-        ];
-        const menuOptions = {
-            items: this.items,
-            adaptivityEnabled: true
-        };
+        const menuOptions = { adaptivityEnabled: true };
 
-        $.each(options, function(_, option) {
+        $.each(EXPECTED_TREEVIEW_SYNC_OPTIONS, function(_, option) {
             menuOptions[option] = 'value';
         });
 
@@ -2280,32 +2280,108 @@ QUnit.module('adaptivity: transfer options', {
         const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
         const treeview = $treeview.dxTreeView('instance');
 
-        $.each(options, function(_, option) {
+        $.each(EXPECTED_TREEVIEW_SYNC_OPTIONS, function(_, option) {
             assert.equal(treeview.option(option), 'value', 'option ' + option + ' was transferred on init');
         });
     });
 
-    QUnit.test('Some menu options should be transferred to the treeview as is on optionChanged', function(assert) {
-        const options = [
-            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation',
-            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
-            'itemsExpr', 'itemTemplate', 'selectedExpr',
-            'selectionMode', 'tabIndex', 'visible'
-        ];
-
+    QUnit.test('Pass dataSource to treeview on init', function(assert) {
         const menu = new Menu(this.$element, {
-            items: this.items,
+            dataSource: ['item1'],
             adaptivityEnabled: true
         });
+
+        assert.strictEqual(menu._treeView.getDataSource().items()[0], 'item1', '_treeView.getDataSource().items()[0]');
+    });
+
+    QUnit.test('Pass items to treeview on init', function(assert) {
+        const items = ['item1'];
+        const menu = new Menu(this.$element, {
+            items: items,
+            adaptivityEnabled: true
+        });
+
+        assert.strictEqual(menu._treeView.option('items'), items, '_treeView.option(items)');
+    });
+
+    QUnit.test('Some menu options should be transferred to the treeview as is on optionChanged', function(assert) {
+        const menu = new Menu(this.$element, { adaptivityEnabled: true });
         const that = this;
 
-        $.each(options, function(_, option) {
-            menu.option(option, 'value2');
+        $.each(EXPECTED_TREEVIEW_SYNC_OPTIONS, function(_, option) {
+            if(option === 'animation') {
+                return; // complex object, difficult to compare
+            }
             const $treeview = that.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
             const treeview = $treeview.dxTreeView('instance');
 
+            menu.option(option, 'value2');
             assert.equal(treeview.option(option), 'value2', 'option ' + option + ' was transferred dynamically');
         });
+    });
+
+    QUnit.test('Pass dataSource to treeview on optionChanged', function(assert) {
+        const menu = new Menu(this.$element, {
+            dataSource: ['item1'],
+            adaptivityEnabled: true
+        });
+        menu.option('dataSource', ['item2']);
+        assert.strictEqual(menu._treeView.getDataSource().items()[0], 'item2', '_treeView.getDataSource().items()[0]');
+    });
+
+    QUnit.test('Pass items to treeview on optionChanged', function(assert) {
+        const menu = new Menu(this.$element, {
+            items: ['item1'],
+            adaptivityEnabled: true
+        });
+
+        const items2 = ['item2'];
+        menu.option('dataSource', items2);
+        assert.strictEqual(menu._treeView.option('items')[0], 'item2', '_treeView.option(items)[0]');
+    });
+
+    QUnit.test('Call option(items[0].disabled, true), adaptivityEnabled: false', function(assert) {
+        const menu = new Menu(this.$element, {
+            adaptivityEnabled: false,
+            items: [
+                { text: 'item1', disabled: false },
+                { text: 'item2', disabled: false },
+            ],
+        });
+
+        menu.option('items[0].disabled', true);
+        assert.strictEqual(menu.option('items[0].disabled'), true, 'menu.option(items[0].disabled)');
+        assert.equal(menu._treeView, null, 'menu._treeView');
+    });
+
+    QUnit.test('Call option(items[0].disabled, true), items, adaptivityEnabled:true', function(assert) {
+        const menu = new Menu(this.$element, {
+            adaptivityEnabled: true,
+            items: [
+                { text: 'item1', disabled: false },
+                { text: 'item2', disabled: false },
+            ],
+        });
+
+        menu.option('items[0].disabled', true);
+        assert.strictEqual(menu.option('items[0].disabled'), true, 'menu.option(items[0].disabled)');
+        assert.strictEqual(menu._treeView.option('items[0].disabled'), true, 'menu._treeView.option(items[0].disabled)');
+        // TODO: TreeView log is empty - assert.strictEqual(treeViewOptionChangedLog, 'item[0].disabled', 'treeViewOptionChangedLog');
+    });
+
+    QUnit.test('Call option(items[0].disabled, true), dataSource, adaptivityEnabled:true', function(assert) {
+        const menu = new Menu(this.$element, {
+            adaptivityEnabled: true,
+            dataSource: [
+                { text: 'item1', disabled: false },
+                { text: 'item2', disabled: false },
+            ],
+        });
+
+        menu.option('items[0].disabled', true);
+        assert.strictEqual(menu.option('items[0].disabled'), true, 'menu.option(items[0].disabled)');
+        assert.strictEqual(menu._treeView.option('items[0].disabled'), true, 'menu._treeView.option(items[0].disabled)');
+        // TODO: TreeView log is empty - assert.strictEqual(treeViewOptionChangedLog, 'item[0].disabled', 'treeViewOptionChangedLog');
     });
 
     QUnit.test('selectByClick option should be transferred to the treeview', function(assert) {
@@ -2569,7 +2645,8 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('Adaptive menu should not flick when the window has been resized with jQuery 3.3.1', function(assert) {
-        const outerWidth = sinon.spy(renderer.fn, 'outerWidth');
+        const getOuterWidth = sinon.spy(implementationsMap, 'getOuterWidth');
+        const setOuterWidth = sinon.spy(implementationsMap, 'setOuterWidth');
 
         try {
             new Menu(this.$element, {
@@ -2577,12 +2654,13 @@ QUnit.module('adaptivity: behavior', {
                 adaptivityEnabled: true
             });
 
-            assert.equal(outerWidth.callCount, 3, 'itemWidth has been called for each item and container on render');
+            assert.equal(getOuterWidth.callCount + setOuterWidth.callCount, 3, 'itemWidth has been called for each item and container on render');
 
             resizeCallbacks.fire();
-            assert.equal(outerWidth.callCount, 4, 'itemWidth has been called just for container on dimension change');
+            assert.equal(getOuterWidth.callCount + setOuterWidth.callCount, 4, 'itemWidth has been called just for container on dimension change');
         } finally {
-            outerWidth.restore();
+            getOuterWidth.restore();
+            setOuterWidth.restore();
         }
     });
 
@@ -2686,14 +2764,14 @@ QUnit.module('adaptivity: behavior', {
         overlay.on('positioned', overlayPositioned);
 
         $($button).trigger('dxclick');
-        const height = $overlayContent.outerHeight();
+        const height = getOuterHeight($overlayContent);
 
         $($item2).trigger('dxclick');
-        assert.ok($overlayContent.outerHeight() > height, 'overlay should be enlarged');
+        assert.ok(getOuterHeight($overlayContent) > height, 'overlay should be enlarged');
         assert.equal(overlayPositioned.callCount, 2, 'overlay\'s position should be recalculated');
 
         $($item2).trigger('dxclick');
-        assert.equal($overlayContent.outerHeight(), height, 'overlay should be shrinked');
+        assert.equal(getOuterHeight($overlayContent), height, 'overlay should be shrinked');
         assert.equal(overlayPositioned.callCount, 3, 'overlay\'s position should be recalculated');
     });
 

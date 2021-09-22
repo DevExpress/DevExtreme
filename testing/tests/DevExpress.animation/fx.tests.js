@@ -1181,6 +1181,84 @@ QUnit.test('fade', function(assert) {
     });
 });
 
+QUnit.test('fade - using AnimationState object', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test');
+
+    fx.animate($element, {
+        type: 'fade',
+        to: {
+            opacity: 0.5
+        },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '0.5');
+            done();
+        }
+    });
+});
+
+QUnit.test('fade - using AnimationState object - opacity fallback to 1', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test');
+
+    fx.animate($element, {
+        type: 'fade',
+        to: { },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '1');
+            done();
+        }
+    });
+});
+QUnit.test('fade - using AnimationState object - skipElementInitialStyles', function(assert) {
+    assert.expect(2);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fade',
+        skipElementInitialStyles: true,
+        from: {
+            opacity: 0.7
+        },
+        duration: 100,
+        start: function() {
+            assert.equal($element.css('opacity'), 0.7, 'starts from zero not from element\'s opacity');
+        },
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '1');
+            done();
+        }
+    });
+});
+
+QUnit.test('fade with skipElementInitialStyles: to={opacity:0} opacity should be regarded as specified', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fade',
+        skipElementInitialStyles: true,
+        to: {
+            opacity: 0
+        },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '0', 'ends on 0');
+            done();
+        }
+    });
+});
+
 QUnit.test('fadeIn', function(assert) {
     assert.expect(2);
 
@@ -1250,6 +1328,43 @@ QUnit.test('fadeOut', function(assert) {
         duration: 100,
         complete: function() {
             assert.strictEqual($element.css('opacity'), '0');
+            done();
+        }
+    });
+});
+
+QUnit.test('fadeOut skipElementInitialStyles', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fadeOut',
+        skipElementInitialStyles: true,
+        duration: 100,
+        start: function() {
+            assert.strictEqual($element.css('opacity'), '1', 'starts from 1 not from element\'s opacity');
+            done();
+        }
+    });
+});
+
+QUnit.test('fadeOut with skipElementInitialStyles: from={opacity:0} opacity should be regarded as specified', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fadeOut',
+        skipElementInitialStyles: true,
+        from: {
+            opacity: 0
+        },
+        duration: 100,
+        start: function() {
+            assert.strictEqual($element.css('opacity'), '0', 'start from 0');
             done();
         }
     });

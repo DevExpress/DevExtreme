@@ -4,7 +4,10 @@ concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
   cancel-in-progress: true
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches: [21_2]
 
 jobs:
   jest-tests:
@@ -60,3 +63,19 @@ jobs:
       run: |
         npx gulp localization
         npx gulp native-components-compilation-check
+
+  notify:
+    runs-on: ubuntu-latest
+    name: Send notifications
+    needs: [jest-tests, generation]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 21_2

@@ -1,3 +1,5 @@
+import { BaseTemplateProps } from '../types';
+
 export interface ViewCellData {
   startDate: Date;
   endDate: Date;
@@ -101,9 +103,6 @@ interface TemplateData extends BaseTemplateData {
   endDate?: Date;
 }
 
-interface BaseTemplateProps {
-  index: number;
-}
 export interface ContentTemplateProps extends BaseTemplateProps {
   data: TemplateData;
 }

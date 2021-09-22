@@ -1170,7 +1170,7 @@
 
 /**
  * @typedef {string} Enums.GanttToolbarItem
- * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'| 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies'}
+ * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'| 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies'}
  */
 
 /**
@@ -1186,6 +1186,16 @@
 /**
  * @typedef {string} Enums.GanttSortingMode
  * @enum {'multiple'|'none'|'single'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttPdfExportMode
+ * @enum { 'all'|'treeList'|'chart' }
+ */
+
+/**
+ * @typedef {string} Enums.GanttPdfExportDateRange
+ * @enum { 'all'|'visible' }
  */
 
 /**

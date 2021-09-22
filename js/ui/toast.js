@@ -104,6 +104,16 @@ const Toast = Overlay.inherit({
             * @name dxToastOptions.dragEnabled
             * @hidden
             */
+
+            /**
+            * @name dxToastOptions.dragOutsideBoundary
+            * @hidden
+            */
+
+            /**
+            * @name dxToastOptions.dragAndResizeArea
+            * @hidden
+            */
         });
     },
 
@@ -156,7 +166,7 @@ const Toast = Overlay.inherit({
                     return isPhone && isAndroid;
                 },
                 options: {
-                    width: function() { return window?.visualViewport?.width || $(window).width(); },
+                    width: '100vw',
 
                     position: {
                         at: 'bottom center',
@@ -170,7 +180,7 @@ const Toast = Overlay.inherit({
                     return device.deviceType === 'phone';
                 },
                 options: {
-                    width: function() { return window?.visualViewport?.width || $(window).width(); }
+                    width: '100vw',
                 }
             },
             {

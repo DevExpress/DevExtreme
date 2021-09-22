@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
@@ -160,6 +161,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         _handleDataChanged: function(e) {
             if(this.option(NEW_SCROLLING_MODE)) {
+                this._items = this._dataSource.items().slice();
                 this.callBase.apply(this, arguments);
                 return;
             }
@@ -178,9 +180,6 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             this.callBase.apply(this, arguments);
         },
         items: function() {
-            if(this.option(NEW_SCROLLING_MODE)) {
-                return this._dataSource.items();
-            }
             return this._items;
         },
         itemsCount: function(isBase) {
@@ -646,7 +645,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 this._updateContentPosition();
 
-                const viewportHeight = this._hasHeight ? this.element().outerHeight() : $(getWindow()).outerHeight();
+                const viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
                 const dataController = this._dataController;
                 dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 
@@ -782,7 +781,7 @@ export const virtualScrollingModule = {
                                     const isChromeLatest = browser.chrome && browser.version >= 91;
                                     const allowedTopOffset = browser.mozilla || isChromeLatest ? 1 : 0; // T884308
                                     if(top > allowedTopOffset) {
-                                        top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
+                                        top = Math.round(top + getOuterHeight($rowElement) * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
                                     }
                                 }
@@ -805,6 +804,7 @@ export const virtualScrollingModule = {
                         this._visibleItems = this.option(NEW_SCROLLING_MODE) ? null : [];
                         this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
                         this._viewportChanging = false;
+                        this._needUpdateViewportAfterLoading = false;
 
                         this._rowsScrollController.positionChanged.add(() => {
                             if(this.option(NEW_SCROLLING_MODE)) {
@@ -1159,16 +1159,34 @@ export const virtualScrollingModule = {
 
                         return dataSource?.setContentItemSizes(sizes);
                     },
+                    getPreloadCount: function() {
+                        const preloadCount = this.option('scrolling.preloadCount');
+                        const preloadEnabled = this.option('scrolling.preloadEnabled');
+
+                        if(isDefined(preloadCount)) {
+                            return preloadCount;
+                        }
+
+                        const viewportSize = this.viewportSize();
+
+                        return preloadEnabled ? 2 * viewportSize : viewportSize;
+                    },
                     getLoadPageParams: function(byLoadedPage) {
                         const viewportParams = this._loadViewportParams;
                         const lastLoadOptions = this._dataSource?.lastLoadOptions();
                         const loadedPageIndex = lastLoadOptions?.pageIndex || 0;
                         const loadedTake = lastLoadOptions?.take || 0;
 
-                        const takeCorrection = loadedTake ? loadedTake - this._itemCount : 0;
-                        const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(viewportParams.skip / this.pageSize());
-                        const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());
-                        const take = byLoadedPage ? loadedTake : skipForCurrentPage + takeCorrection + viewportParams.take;
+                        const isScrollingBack = this._rowsScrollController.isScrollingBack();
+                        const topPreloadCount = isScrollingBack ? this.getPreloadCount() : 0;
+                        const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadCount();
+                        const totalCountCorrection = this._dataSource?.totalCountCorrection() || 0;
+                        const skipWithPreload = Math.max(0, viewportParams.skip - topPreloadCount);
+                        const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(skipWithPreload / this.pageSize());
+                        const pageOffset = pageIndex * this.pageSize();
+                        const skipForCurrentPage = viewportParams.skip - pageOffset;
+                        const loadingTake = viewportParams.take + skipForCurrentPage + bottomPreloadCount - totalCountCorrection;
+                        const take = byLoadedPage ? loadedTake : loadingTake;
                         const loadPageCount = Math.ceil(take / this.pageSize());
 
                         return {
@@ -1177,25 +1195,32 @@ export const virtualScrollingModule = {
                             skipForCurrentPage: Math.max(0, skipForCurrentPage)
                         };
                     },
-                    loadViewport: function() {
+                    loadViewport: function(checkLoadedParamsOnly, checkLoading) {
                         const isVirtualPaging = isVirtualMode(this) || isAppendMode(this);
                         if(isVirtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
                             const loadedPageParams = this.getLoadPageParams(true);
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
                             const dataSourceAdapter = this._dataSource;
+                            const isLoading = this._isLoading;
+                            const loadedParamsChanged = !isLoading && (pageIndex !== loadedPageParams.pageIndex || loadPageCount !== loadedPageParams.loadPageCount);
 
-                            if(isVirtualPaging && (
-                                pageIndex !== loadedPageParams.pageIndex ||
-                                loadPageCount !== loadedPageParams.loadPageCount
-                            )) {
+                            if(isVirtualPaging && isLoading) {
+                                this._needUpdateViewportAfterLoading = true;
+                            }
+                            if(isVirtualPaging && loadedParamsChanged) {
                                 dataSourceAdapter.pageIndex(pageIndex);
                                 dataSourceAdapter.loadPageCount(loadPageCount);
                                 this._repaintChangesOnly = true;
                                 this.load().always(() => {
                                     this._repaintChangesOnly = undefined;
+                                }).done(() => {
+                                    if(this._needUpdateViewportAfterLoading) {
+                                        this._needUpdateViewportAfterLoading = false;
+                                        this.loadViewport(true);
+                                    }
                                 });
-                            } else if(!this._isLoading) {
+                            } else if(!checkLoadedParamsOnly && !(checkLoading && isLoading)) {
                                 this.updateItems({
                                     repaintChangesOnly: true
                                 });
@@ -1207,7 +1232,7 @@ export const virtualScrollingModule = {
                         const viewportIsNotFilled = viewportSize > this.items().length;
                         const currentTake = this._loadViewportParams?.take ?? 0;
                         const newTake = this._rowsScrollController?.getViewportParams().take;
-                        (viewportIsNotFilled || currentTake < newTake) && this.loadViewport();
+                        (viewportIsNotFilled || currentTake < newTake) && this.loadViewport(false, true);
                     },
                     loadIfNeed: function() {
                         if(this.option(NEW_SCROLLING_MODE)) {
@@ -1263,7 +1288,6 @@ export const virtualScrollingModule = {
                         const rowsScrollController = this._rowsScrollController;
 
                         rowsScrollController && rowsScrollController.dispose();
-
                         this.callBase.apply(this, arguments);
                     },
                     topItemIndex: function() {

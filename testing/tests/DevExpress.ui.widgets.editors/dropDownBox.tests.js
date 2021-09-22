@@ -12,6 +12,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 import 'generic_light.css!';
 import 'ui/validator';
+import { implementationsMap } from 'core/utils/size';
 
 const realDevice = devices.real();
 
@@ -496,7 +497,7 @@ QUnit.module('popup options', moduleConfig, () => {
         const editorHeight = this.$element.outerHeight();
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(scrollTopValue);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(windowHeightValue);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(windowHeightValue);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
         const instance = this.$element.dxDropDownBox('instance');
 
@@ -649,7 +650,7 @@ QUnit.module('popup options', moduleConfig, () => {
         assert.strictEqual($popupContent.height(), popupHeight + 50, 'popup height has been changed');
     });
 
-    QUnit.test('Dropdownbox popup should have function as closeOnTargetScroll option value (T845484)', function(assert) {
+    QUnit.test('Dropdownbox popup should have function as hideOnParentScroll option value (T845484)', function(assert) {
         const $content = $('<div>').attr('id', 'content');
 
         const instance = new DropDownBox($('#dropDownBox'), {
@@ -657,7 +658,7 @@ QUnit.module('popup options', moduleConfig, () => {
             contentTemplate: () => $content
         });
 
-        assert.ok(typeUtils.isFunction(instance.option('dropDownOptions.closeOnTargetScroll')));
+        assert.ok(typeUtils.isFunction(instance.option('dropDownOptions.hideOnParentScroll')));
     });
 
     [true, false].forEach((isMac) => {

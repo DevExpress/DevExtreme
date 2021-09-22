@@ -55,6 +55,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getOuterWidth } from 'core/utils/size';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -476,7 +477,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        $('.dx-datagrid-export-button').trigger('dxclick');
+        $('.dx-datagrid-export-button .dx-button').trigger('dxclick');
 
         checkDxFontIcon(assert, '.dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
         checkDxFontIcon(assert, '.dx-icon-exportselected', DX_ICON_EXPORT_SELECTED_CONTENT_CODE);
@@ -799,7 +800,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(keyOfSpy.callCount, 50, 'keyOf call count');
+        assert.equal(keyOfSpy.callCount, 55, 'keyOf call count');
     });
 
     QUnit.test('isReady when loading', function(assert) {
@@ -1043,7 +1044,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             sorting: { mode: 'none' },
             columns: [
                 { caption: 'my field', dataField: 'field1', width: 50 }
@@ -1061,7 +1061,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Column caption should have correct width when column is sorted (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             columns: [
                 { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
             ]
@@ -1079,7 +1078,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Column caption should have correct width when header filter is visible (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             headerFilter: {
                 visible: true
             },
@@ -1100,7 +1098,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Column caption should have correct width when header filter and sorting are enabled (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             headerFilter: {
                 visible: true
             },
@@ -1117,6 +1114,124 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
         assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
         assert.roughEqual($cellContent.width(), 4.5, 1, 'correct width');
+    });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        QUnit.test(`${editMode} - rowIndex should be correct in cellClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndices = [];
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onCellClick: function(e) {
+                    rowIndices.push(e.rowIndex);
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            rowIndices = [];
+            for(let i = 0; i < 2; i++) {
+                $(dataGrid.getCellElement(i, 0)).trigger('dxclick');
+            }
+
+            // assert
+            assert.deepEqual(rowIndices, [0, 1], 'cellClick row indices');
+        });
+
+        QUnit.test(`${editMode} - rowIndex should be correct in rowClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndex = null;
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onRowClick: function(e) {
+                    rowIndex = e.rowIndex;
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            $(dataGrid.getCellElement(1, 0)).trigger('dxclick');
+
+
+            // assert
+            assert.deepEqual(rowIndex, 1, 'rowClick row index');
+        });
+
+        QUnit.test(`${editMode} - rowIndex should be correct in cellDblClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndices = [];
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onCellDblClick: function(e) {
+                    rowIndices.push(e.rowIndex);
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            rowIndices = [];
+            for(let i = 0; i < 2; i++) {
+                $(dataGrid.getCellElement(i, 0)).trigger('dxdblclick');
+            }
+
+            // assert
+            assert.deepEqual(rowIndices, [0, 1], 'cellDblClick row indices');
+        });
+
+        QUnit.test(`${editMode} - rowIndex should be correct in rowDblClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndex = null;
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onRowDblClick: function(e) {
+                    rowIndex = e.rowIndex;
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            $(dataGrid.getCellElement(1, 0)).trigger('dxdblclick');
+
+
+            // assert
+            assert.deepEqual(rowIndex, 1, 'rowDblClick row index');
+        });
     });
 });
 
@@ -2573,6 +2688,38 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         const $selectBoxDisabled = $selectBoxDisabledContainer.find('.dx-selectbox');
         const selectBoxDisabled = $selectBoxDisabled.dxSelectBox('instance');
         assert.equal(selectBoxDisabled.option('value'), 'item2', 'selectbox state saved');
+    });
+
+    QUnit.test('Change toolbar.visible and toolbar.disabled options', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true
+            },
+            toolbar: {
+                visible: true
+            }
+        });
+
+        const $toolbar = dataGrid.$element().find('.dx-toolbar');
+
+        // assert
+        assert.notOk($toolbar.hasClass('dx-state-invisible'), 'toolbar is shown');
+        assert.notOk($toolbar.hasClass('dx-state-disabled'), 'toolbar is not disabled');
+
+        // act
+        dataGrid.option('toolbar.visible', false);
+
+        // assert
+        assert.ok($toolbar.hasClass('dx-state-invisible'), 'toolbar is hidden');
+
+        // act
+        dataGrid.option('toolbar.disabled', true);
+
+        // assert
+        assert.ok($toolbar.hasClass('dx-state-disabled'), 'toolbar is disabled');
     });
 });
 
@@ -4049,9 +4196,9 @@ QUnit.module('templates', baseModuleConfig, () => {
         // assert
         const $row = $(dataGrid.getRowElement(0));
         const $cells = $row.find('td');
-        assert.equal($cells.eq(0).outerWidth(), 900, 'first cell width');
-        assert.equal($cells.eq(1).outerWidth(), 100, 'second cell width');
-        assert.equal(dataGrid.$element().outerWidth(), 1000, 'dataGrid width');
+        assert.equal(getOuterWidth($cells.eq(0)), 900, 'first cell width');
+        assert.equal(getOuterWidth($cells.eq(1)), 100, 'second cell width');
+        assert.equal(getOuterWidth(dataGrid.$element()), 1000, 'dataGrid width');
     });
 
     // T952701
@@ -4093,9 +4240,9 @@ QUnit.module('templates', baseModuleConfig, () => {
         // assert
         const $row = $(dataGrid.getRowElement(0));
         const $cells = $row.find('td');
-        assert.equal($cells.eq(0).outerWidth(), 900, 'first cell width');
-        assert.equal($cells.eq(1).outerWidth(), 100, 'second cell width');
-        assert.equal(dataGrid.$element().outerWidth(), 1000, 'dataGrid width');
+        assert.equal(getOuterWidth($cells.eq(0)), 900, 'first cell width');
+        assert.equal(getOuterWidth($cells.eq(1)), 100, 'second cell width');
+        assert.equal(getOuterWidth(dataGrid.$element()), 1000, 'dataGrid width');
     });
 
     QUnit.test('rowElement argument of rowTemplate option is correct', function(assert) {

@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import Widget from '../internal/widget';
 import AppointmentPopup from './appointment/popup';
 import AppointmentTooltip from './appointment/tooltip';
@@ -119,5 +120,16 @@ export default class Scheduler extends Widget {
 
   getAppointmentCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointment}`).count;
+  }
+
+  scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
+    const { name, element } = this;
+    const scrollTo = (): any => $(element())[name]('instance').scrollTo(date, group, allDay);
+
+    return ClientFunction(scrollTo, {
+      dependencies: {
+        date, group, allDay, element, name,
+      },
+    })();
   }
 }

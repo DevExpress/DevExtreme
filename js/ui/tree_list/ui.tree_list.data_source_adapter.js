@@ -275,7 +275,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return parentIdsToLoad;
         },
 
-        _handleDataLoading: function(options) {
+        _handleCustomizeStoreLoadOptions: function(options) {
             const rootValue = this.option('rootValue');
             const parentIdExpr = this.option('parentIdExpr');
             let parentIds = options.storeLoadOptions.parentIds;

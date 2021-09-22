@@ -8,7 +8,6 @@ import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { isEmpty } from '../../core/utils/string';
-import browser from '../../core/utils/browser';
 import { triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { getPublicElement } from '../../core/element';
 import messageLocalization from '../../localization/message';
@@ -1173,11 +1172,7 @@ const Form = Widget.inherit({
         return this.$element().find('.' + FIELD_ITEM_CONTENT_CLASS + ' [tabindex]').first();
     },
 
-    _visibilityChanged: function(visible) {
-        if(visible && browser.msie) {
-            this._refresh();
-        }
-    },
+    _visibilityChanged: function() {},
 
     _dispose: function() {
         ValidationEngine.removeGroup(this._getValidationGroup());

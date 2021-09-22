@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
@@ -53,6 +54,10 @@ const ZOOM_LEVEL = {
     CENTURY: 'century'
 };
 
+function elementHasFocus(element) {
+    return element.hasClass(FOCUSED_STATE_CLASS);
+}
+
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
 
@@ -95,9 +100,7 @@ const Calendar = Editor.inherit({
 
             onCellClick: null,
             onContouredChanged: null,
-            hasFocus: function(element) {
-                return element.hasClass(FOCUSED_STATE_CLASS);
-            },
+            skipFocusCheck: false,
 
             _todayDate: () => new Date()
 
@@ -340,7 +343,7 @@ const Calendar = Editor.inherit({
     },
 
     _moveToClosestAvailableDate: function(baseDate = this.option('currentDate')) {
-        let currentDate = dateUtils.createDate(baseDate);
+        let currentDate = new Date(baseDate);
         const zoomLevel = this.option('zoomLevel');
 
         const isCurrentDateAvailable = !this._isDateNotAvailable(currentDate);
@@ -351,8 +354,8 @@ const Calendar = Editor.inherit({
         let isDateForwardInStartView;
         let isDateBackwardInStartView;
 
-        const dateForward = dateUtils.createDate(currentDate);
-        const dateBackward = dateUtils.createDate(currentDate);
+        const dateForward = new Date(currentDate);
+        const dateBackward = new Date(currentDate);
 
         do {
             if(isDateForwardAvailable) {
@@ -449,7 +452,7 @@ const Calendar = Editor.inherit({
         const normalizedDate = this._getNormalizedDate(date);
 
         if(date.getTime() !== normalizedDate.getTime()) {
-            this.option('currentDate', dateUtils.createDate(normalizedDate));
+            this.option('currentDate', new Date(normalizedDate));
             return;
         }
 
@@ -467,7 +470,7 @@ const Calendar = Editor.inherit({
     },
 
     _setViewContoured: function(date) {
-        if(this.option('hasFocus')(this._focusTarget())) {
+        if(this.option('skipFocusCheck') || elementHasFocus(this._focusTarget())) {
             this._view.option('contouredDate', date);
         }
     },
@@ -703,7 +706,7 @@ const Calendar = Editor.inherit({
     },
 
     _updateTimeComponent: function(date) {
-        const result = dateUtils.createDate(date);
+        const result = new Date(date);
         const currentValue = this._dateOption('value');
 
         if(currentValue) {
@@ -869,7 +872,7 @@ const Calendar = Editor.inherit({
 
     _viewWidth: function() {
         if(!this._viewWidthValue) {
-            this._viewWidthValue = this.$element().width();
+            this._viewWidthValue = getWidth(this.$element());
         }
 
         return this._viewWidthValue;
@@ -1003,7 +1006,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDate(value) {
-        return dateUtils.createDate(value);
+        return new Date(value);
     },
 
     _toTodayView: function(args) {
@@ -1207,7 +1210,7 @@ const Calendar = Editor.inherit({
                 value = this._convertToDate(value);
                 previousValue = this._convertToDate(previousValue);
                 this._updateAriaSelected(value, previousValue);
-                this.option('currentDate', isDefined(value) ? dateUtils.createDate(value) : new Date());
+                this.option('currentDate', isDefined(value) ? new Date(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
                 this.callBase(args);
@@ -1224,7 +1227,7 @@ const Calendar = Editor.inherit({
             case 'showTodayButton':
                 this._invalidate();
                 break;
-            case 'hasFocus':
+            case 'skipFocusCheck':
                 break;
             case '_todayDate':
                 this._refreshViews();
