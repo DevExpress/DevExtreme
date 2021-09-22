@@ -174,7 +174,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     resizeEnabled?: boolean;
     /**
      * @docid
-     * @default { always: false, onDimensionChangeAfterDrag: false, onDimensionChangeAfterResize: false, onOpening: true, onFullScreenDisable: false }
+     * @default { always: false, onDimensionChangeAfterDragOrResize: false, onFullScreenDisable: false, onOpening: true }
      * @public
      */
     restorePosition?: {
