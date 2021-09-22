@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'ui/html_editor';
+import devices from 'core/devices';
 
 import { showTablePropertiesForm, showCellPropertiesForm } from 'ui/html_editor/modules/tableOperations';
 
@@ -41,8 +42,6 @@ const tableWithFixedDimensionsMarkup = '\
     </table>\
     <br>';
 
-// const LIST_ITEM_CLASS = 'dx-list-item';
-
 const { test, module } = QUnit;
 
 module('Table properties forms', {
@@ -51,7 +50,7 @@ module('Table properties forms', {
 
         this.$element = $('#htmlEditor');
         this.options = {
-            // tableContextMenu: { enabled: true },
+            tableContextMenu: { enabled: true },
             value: tableMarkup
         };
 
@@ -62,6 +61,17 @@ module('Table properties forms', {
                 .dxHtmlEditor('instance');
 
             this.quillInstance = this.instance.getQuillInstance();
+        };
+
+        this.applyFormChanges = (formInstance) => {
+            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            $okButton.trigger('dxclick');
+
+            this.clock.tick();
+        };
+
+        this.getFormInstance = () => {
+            return $('.dx-form:not(.dx-formdialog-form)').dxForm('instance');
         };
     },
     afterEach: function() {
@@ -74,10 +84,9 @@ module('Table properties forms', {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
-            this.quillInstance.setSelection(50, 1);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
+            this.clock.tick();
             const $form = $('.dx-form:not(.dx-formdialog-form)');
             const $scrollView = $form.closest('.dx-scrollview');
 
@@ -86,16 +95,29 @@ module('Table properties forms', {
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
         });
 
+        test('Form popup use a fullscreen mode for mobile devices', function(assert) {
+            const isPhone = devices.real().deviceType === 'phone';
+
+            this.createWidget();
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+            const $popup = $('.dx-overlay-content');
+
+            assert.strictEqual($popup.hasClass('dx-popup-fullscreen'), isPhone);
+        });
+
         test('Check properties edititng at the table Form (without dimensions)', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
+            this.clock.tick();
 
-            const formInstance = $form.dxForm('instance');
+            const formInstance = this.getFormInstance();
 
             const borderStyleEditor = formInstance.getEditor('borderStyle');
             borderStyleEditor.option('value', 'dotted');
@@ -112,10 +134,7 @@ module('Table properties forms', {
             const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
             alignmentEditor.option('selectedItemKeys', ['right']);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-
-            this.clock.tick();
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($tableElement.css('borderStyle'), 'dotted', 'border style is applied');
             assert.strictEqual($tableElement.css('borderWidth'), '3px', 'border width is applied');
@@ -130,9 +149,8 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             const heightEditor = formInstance.getEditor('height');
@@ -147,10 +165,8 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 90);
@@ -158,10 +174,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 600);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-
-            this.clock.tick();
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($tableElement.outerHeight(), 90, 'cell height is applied');
             assert.strictEqual($tableElement.outerWidth(), 600, 'cell width is applied');
@@ -171,10 +184,9 @@ module('Table properties forms', {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
-            // this.quillInstance.setSelection(50, 1);
 
             showCellPropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
+            this.clock.tick();
             const $form = $('.dx-form:not(.dx-formdialog-form)');
             const $scrollView = $form.closest('.dx-scrollview');
 
@@ -187,15 +199,11 @@ module('Table properties forms', {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
-
-            // this.quillInstance.setSelection(50, 1);
             const $targetCell = $tableElement.find('td').eq(6);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const borderStyleEditor = formInstance.getEditor('borderStyle');
             borderStyleEditor.option('value', 'dotted');
@@ -218,10 +226,7 @@ module('Table properties forms', {
             const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
             verticalAlignmentEditor.option('selectedItemKeys', ['bottom']);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-
-            this.clock.tick();
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.css('borderStyle'), 'dotted', 'border style is applied');
             assert.strictEqual($targetCell.css('borderWidth'), '3px', 'border width is applied');
@@ -239,9 +244,8 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             const heightEditor = formInstance.getEditor('height');
@@ -260,10 +264,8 @@ module('Table properties forms', {
             const initialCellHeight = $targetCell.outerHeight();
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 80);
@@ -271,9 +273,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 180);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
             assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
@@ -308,16 +308,13 @@ module('Table properties forms', {
             $tableElement.css('width', 'initial');
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.next().outerWidth(), 350, 'next cell width is correct');
@@ -341,16 +338,13 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
@@ -366,16 +360,13 @@ module('Table properties forms', {
             $tableElement.css('width', 'initial');
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.prev().outerWidth(), 350, 'previous cell width is correct');
@@ -397,16 +388,13 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
         });
@@ -430,16 +418,13 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(1);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
@@ -467,16 +452,13 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(1);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 400);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 400, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '400px', 'cell width attr is applied');
@@ -504,16 +486,13 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 700);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 567, 1, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
@@ -529,16 +508,13 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 700);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 567, 1, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
@@ -553,31 +529,25 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            let $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            let formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            let formInstance = this.getFormInstance();
 
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 400);
 
-            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            $form = $('.dx-form:not(.dx-formdialog-form)');
-            formInstance = $form.dxForm('instance');
+            this.clock.tick();
+
+            formInstance = this.getFormInstance();
 
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 150);
 
-            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '150px', 'cell width attr is applied');
@@ -592,41 +562,32 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            let $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            let formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            let formInstance = this.getFormInstance();
 
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 800);
 
-            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            $form = $('.dx-form:not(.dx-formdialog-form)');
-            formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            formInstance = this.getFormInstance();
 
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 110);
 
-            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
+
             const $rowCells = $targetCell.closest('tr').find('td');
 
             assert.roughEqual($targetCell.outerWidth(), 110, 2, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '110px', 'cell width attr is applied');
             assert.roughEqual(parseInt($rowCells.eq(1).outerWidth()), 230, 2, 'second cell width attr is correct');
-            // assert.roughEqual(parseInt($rowCells.eq(1).attr('width')), 230, 2, 'second cell width attr is correct');
             assert.roughEqual(parseInt($rowCells.eq(2).outerWidth()), 230, 2, 'third cell width attr is correct');
-            // assert.roughEqual(parseInt($rowCells.eq(2).attr('width')), 230, 2, 'third cell width attr is correct');
             assert.roughEqual(parseInt($rowCells.eq(3).outerWidth()), 230, 2, 'fourth cell width attr is correct');
-            // assert.roughEqual(parseInt($rowCells.eq(3).attr('width')), 230, 2, 'fourth cell width attr is correct');
             assert.roughEqual($tableElement.outerWidth(), 800, 2, 'table width is correct');
         });
     });
@@ -641,17 +602,13 @@ module('Table properties forms', {
             const initialCellHeight = $targetCell.outerHeight();
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 80);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
             assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
@@ -666,17 +623,13 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(2);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 10);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerHeight(), 24, 'cell height is applied');
             assert.strictEqual($targetCell.attr('height'), '10px', 'cell height attribute is correct');
@@ -693,18 +646,13 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 150);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
-
+            this.applyFormChanges(formInstance);
             const $verticalCells = $tableElement.find('td:nth-child(1)');
 
             assert.roughEqual($tableElement.outerHeight(), 150, 2, 'table height is changed as expected');
@@ -720,17 +668,13 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 30);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             const $verticalCells = $tableElement.find('td:nth-child(1)');
 
@@ -749,17 +693,13 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 400);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
@@ -787,17 +727,13 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 900);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
@@ -814,17 +750,13 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            const formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
 
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 60);
 
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
@@ -853,29 +785,22 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            let $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            let formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            let formInstance = this.getFormInstance();
 
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 200);
 
-            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            $form = $('.dx-form:not(.dx-formdialog-form)');
-            formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            formInstance = this.getFormInstance();
 
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 800);
 
-            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 200, 2, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '200px', 'cell width attr is applied');
@@ -891,29 +816,22 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
 
             showCellPropertiesForm(this.instance, $targetCell);
-            this.clock.tick(500);
-            let $form = $('.dx-form:not(.dx-formdialog-form)');
-
-            let formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            let formInstance = this.getFormInstance();
 
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 200);
 
-            let $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick(500);
-            $form = $('.dx-form:not(.dx-formdialog-form)');
-            formInstance = $form.dxForm('instance');
+            this.clock.tick();
+            formInstance = this.getFormInstance();
 
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 450);
 
-            $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
-            $okButton.trigger('dxclick');
-            this.clock.tick(500);
+            this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
             assert.roughEqual(parseInt($targetCell.attr('width')), 150, 2, 'cell width attr is applied');

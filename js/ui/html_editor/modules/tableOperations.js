@@ -336,6 +336,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     let verticalAlignmentEditorInstance;
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
+
     const startCellWidth = getOuterWidth($cell);
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
