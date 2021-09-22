@@ -9,6 +9,8 @@ import { getWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 
+import devices from '../../../core/devices';
+
 import { getOuterHeight, getOuterWidth } from '../../../core/utils/size';
 
 const MIN_HEIGHT = 400;
@@ -29,7 +31,7 @@ const createFormPopup = (editorInstance) => {
             show: { type: 'fade', duration: 0, from: 0, to: 1 },
             hide: { type: 'fade', duration: 400, from: 1, to: 0 }
         },
-        fullScreen: false,
+        fullScreen: getFullScreen(),
         visible: false,
         maxHeight: getMaxHeight()
     });
@@ -39,6 +41,10 @@ const getMaxHeight = () => {
     const window = getWindow();
     const windowHeight = window?.innerHeight || 0;
     return Math.max(MIN_HEIGHT, windowHeight * 0.9);
+};
+
+const getFullScreen = () => {
+    return devices.real().deviceType === 'phone';
 };
 
 const getRowElements = ($table, index = 0) => {
@@ -263,6 +269,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                 },
                 {
                     itemType: 'simple',
+                    label: { text: 'Alignment' },
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
@@ -425,6 +432,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             items: [
                 {
                     itemType: 'simple',
+                    label: { text: 'Horizontal' },
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
@@ -439,7 +447,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                     }
                 }, {
                     itemType: 'simple',
-                    label: { text: 'Alignment' },
+                    label: { text: 'Vertical' },
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
