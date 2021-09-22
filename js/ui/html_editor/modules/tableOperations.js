@@ -16,21 +16,17 @@ let formPopup;
 const createFormPopup = (editorInstance) => {
     const $popup = $('<div>').addClass('test-123').appendTo(editorInstance.$element());
     formPopup = editorInstance._createComponent($popup, Popup, {
-        // contentTemplate: () => { return $('<div>').addClass('test-1234'); },
-        // deferRendering: true,
+        deferRendering: true,
         showTitle: false,
         width: 600,
         height: 'auto',
         shading: false,
-        // closeOnTargetScroll: true,
+        closeOnTargetScroll: true,
         closeOnOutsideClick: true,
-        // animation: {
-        //     show: null,
-        //     hide: null,
-        //     // show: { type: 'fade', duration: 0, from: 0, to: 1 },
-        //     // hide: { type: 'fade', duration: 400, from: 1, to: 0 }
-        // },
-        // animation: null,
+        animation: {
+            show: { type: 'fade', duration: 0, from: 0, to: 1 },
+            hide: { type: 'fade', duration: 400, from: 1, to: 0 }
+        },
         fullScreen: false,
         visible: false,
         maxHeight: getMaxHeight()
@@ -41,6 +37,10 @@ const getMaxHeight = () => {
     const window = getWindow();
     const windowHeight = window && $(window).height() || 0;
     return Math.max(MIN_HEIGHT, windowHeight * 0.9);
+};
+
+const getRowElements = ($table, index = 0) => {
+    return $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
 };
 
 const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
@@ -72,7 +72,7 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     if(autoHeightRows?.length > 0) {
         $table.css('height', newHeight);
     } else {
-        const $rows = $table.find('td:nth-child(1)');
+        const $rows = getRowElements($table);
         const oldTableHeight = $table.outerHeight();
 
         each($rows, (i, element) => {
@@ -87,7 +87,7 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
 
 const getAutoHeightRows = ($table) => {
     const result = [];
-    $table.find('td:nth-child(1)').each((index, element) => {
+    getRowElements($table).each((index, element) => {
         const $element = $(element);
         if(!isDefined($element.attr('height'))) {
             result.push($element);
@@ -99,7 +99,7 @@ const getAutoHeightRows = ($table) => {
 
 export const getAutoWidthColumns = ($table) => {
     const result = [];
-    $table.find('tr').eq(0).find('td').each((index, element) => {
+    $table.find('tr').eq(0).find('th, td').each((index, element) => {
         const $element = $(element);
         if(!isDefined($element.attr('width'))) {
             result.push($element);
@@ -167,7 +167,7 @@ export const setLineElementsAttrValue = ($lineElements, property, value) => {
 export const getLineElements = ($table, index, direction) => {
     let result;
     if(direction !== 'vertical') {
-        result = $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
+        result = getRowElements($table, index);
     } else {
         result = $table.find('tr').eq(index).find('th, td');
     }
@@ -491,8 +491,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
-        minColWidth: 300,
-
+        minColWidth: 300
     };
 
     formPopup.option('contentTemplate', (container) => {
