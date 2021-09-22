@@ -23,6 +23,8 @@ import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 
+const isScrollViewRenovated = !!ScrollView.IS_RENOVATED_WIDGET;
+
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
@@ -2696,7 +2698,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
 
         const scrollView = this.element.dxScrollView('instance');
 
-        assert.equal(scrollView._updateCount, 1, 'no update after render list');
+        assert.equal(scrollView._updateCount, isScrollViewRenovated ? 0 : 1, 'no update after render list');
 
         list.updateDimensions().done(function() {
             assert.ok(true);
@@ -2704,7 +2706,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
         });
 
         list.updateDimensions();
-        assert.equal(scrollView._updateCount, 3, '+2 after update() call');
+        assert.equal(scrollView._updateCount, isScrollViewRenovated ? 2 : 3, '+2 after update() call');
     });
 
     QUnit.test('width & height option change should call update method of scroll view', function(assert) {
