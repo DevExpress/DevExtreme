@@ -171,7 +171,7 @@ export const editingFormBasedModule = {
                         this._editPopup.on('shown', (e) => {
                             eventsEngine.trigger(e.component.$content()
                                 .find(FOCUSABLE_ELEMENT_SELECTOR)
-                                .not(`.${FOCUSABLE_SCROLLABLE_ELEMENT_CLASS + this._scrollable?.isRenovated() ? '' : '-container' }`)
+                                .not(`.${FOCUSABLE_SCROLLABLE_ELEMENT_CLASS}${this._scrollable?.isRenovated() ? '' : '-container' }`)
                                 .first(),
                             'focus');
 
