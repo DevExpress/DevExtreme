@@ -271,7 +271,7 @@ QUnit.module('select element', moduleSetup, () => {
         assert.equal($select.attr('name'), expectedName, 'the select element \'name\' attribute has correct value');
     });
 
-    QUnit.test('Custom seleacAllText', function(assert) {
+    QUnit.test('Custom selectAllText', function(assert) {
         if(!windowModule.hasWindow()) {
             assert.ok(true, 'no window');
             return;
