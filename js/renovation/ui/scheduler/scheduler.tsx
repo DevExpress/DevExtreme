@@ -18,7 +18,7 @@ import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
-import SchedulerToolbar from './header/header';
+import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
 
 export const viewFunction = ({
@@ -92,21 +92,24 @@ export const viewFunction = ({
       {...restAttributes}
     >
       <div className="dx-scheduler-container">
-        <SchedulerToolbar
-          items={toolbarItems}
-          views={views}
-          currentView={currentView}
-          onCurrentViewUpdate={setCurrentView}
-          currentDate={currentDate}
-          onCurrentDateUpdate={setCurrentDate}
-          startViewDate={startViewDate}
-          min={min}
-          max={max}
-          intervalCount={intervalCount}
-          firstDayOfWeek={firstDayOfWeek}
-          useDropDownViewSwitcher={useDropDownViewSwitcher}
-          customizationFunction={customizeDateNavigatorText}
-        />
+        {toolbarItems.length !== 0
+        && (
+          <SchedulerToolbar
+            items={toolbarItems}
+            views={views}
+            currentView={currentView}
+            onCurrentViewUpdate={setCurrentView}
+            currentDate={currentDate}
+            onCurrentDateUpdate={setCurrentDate}
+            startViewDate={startViewDate}
+            min={min}
+            max={max}
+            intervalCount={intervalCount}
+            firstDayOfWeek={firstDayOfWeek}
+            useDropDownViewSwitcher={useDropDownViewSwitcher}
+            customizationFunction={customizeDateNavigatorText}
+          />
+        )}
         <WorkSpace
           firstDayOfWeek={firstDayOfWeek}
           startDayHour={startDayHour}
