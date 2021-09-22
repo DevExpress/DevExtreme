@@ -361,7 +361,6 @@ describe('OrdinaryLayout', () => {
       const dataCellTemplate = () => null;
       const layout = render({
         props: {
-          isAllDayPanelVisible: true,
           dataCellTemplate,
           allDayPanelRef: 'allDayPanelRef',
         },
@@ -378,7 +377,6 @@ describe('OrdinaryLayout', () => {
           ...new AllDayPanelLayoutProps(),
           viewData,
           dataCellTemplate,
-          visible: true,
           tableRef: 'allDayPanelRef',
         });
     });

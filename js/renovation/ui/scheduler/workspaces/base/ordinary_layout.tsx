@@ -58,7 +58,6 @@ export const viewFunction = ({
     groupByDate,
     groupPanelClassName,
     isRenderHeaderEmptyCell,
-    isAllDayPanelVisible,
     scrollingDirection,
 
     dataCellTemplate,
@@ -99,9 +98,8 @@ export const viewFunction = ({
             resourceCellTemplate={resourceCellTemplate}
           />
         </table>
-        {isAllDayPanelVisible && (
+        {isStandaloneAllDayPanel && (
           <AllDayPanelLayout
-            visible={isStandaloneAllDayPanel}
             viewData={viewData}
             dataCellTemplate={dataCellTemplate}
             tableRef={allDayPanelRef}
