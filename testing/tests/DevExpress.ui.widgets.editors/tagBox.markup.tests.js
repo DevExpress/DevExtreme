@@ -23,6 +23,7 @@ const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
 const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
 const TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
+const SELECT_ALL_CLASS = 'dx-list-select-all';
 
 const moduleSetup = {
     beforeEach: function() {
@@ -267,6 +268,19 @@ QUnit.module('select element', moduleSetup, () => {
         const $select = $element.find('select');
 
         assert.equal($select.attr('name'), expectedName, 'the select element \'name\' attribute has correct value');
+    });
+
+    QUnit.test('Custom seleacAllText', function(assert) {
+        const selectAllText = 'Test';
+
+        $('#tagBox').dxTagBox({
+            items: ['P1', 'P2'],
+            selectAllText,
+            showSelectionControls: true,
+            opened: true
+        });
+
+        assert.equal($(`.${SELECT_ALL_CLASS}`).text(), selectAllText);
     });
 });
 

@@ -14469,6 +14469,10 @@ declare module DevExpress.ui {
      */
     showSelectionControls?: boolean;
     /**
+     * [descr:dxListOptions.selectAllText]
+     */
+    selectAllText?: string;
+    /**
      * [descr:dxListOptions.useNativeScrolling]
      */
     useNativeScrolling?: boolean;
@@ -19194,6 +19198,10 @@ declare module DevExpress.ui {
      * [descr:dxTagBoxOptions.selectedItems]
      */
     selectedItems?: Array<string | number | any>;
+    /**
+     * [descr:dxTagBoxOptions.selectAllText]
+     */
+    selectAllText?: string;
     /**
      * [descr:dxTagBoxOptions.showDropDownButton]
      */
