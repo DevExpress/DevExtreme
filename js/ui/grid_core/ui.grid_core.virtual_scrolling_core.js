@@ -216,7 +216,6 @@ export const VirtualScrollController = Class.inherit((function() {
                 offset += itemSize;
                 itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
             }
-
             return Math.round(itemOffset * 50) / 50;
         },
 

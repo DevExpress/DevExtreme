@@ -555,12 +555,6 @@ QUnit.test('scrollbar add active class when click on scrollbar area', function(a
 });
 
 QUnit.test('useSimulatedScrollbar is false when useNative option set to true', function(assert) {
-    if(isRenovation) {
-        // test not relevant for renovated widget
-        assert.ok(true);
-        return;
-    }
-
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
