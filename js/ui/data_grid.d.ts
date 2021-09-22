@@ -553,6 +553,7 @@ export interface GridBaseOptions
      * @docid
      * @default null
      * @public
+     * @type string | Array<any> | Store | DataSource | DataSourceOptions
      */
     dataSource?: string | TRowData[] | Store<TKey, TRowData> | DataSource<TKey, TRowData> | DataSourceOptions<TKey, TRowData>;
     /**
@@ -1003,7 +1004,7 @@ export interface GridBaseOptions
      * @fires GridBaseOptions.onSelectionChanged
      * @public
      */
-    selectedRowKeys?: TKey[];
+    selectedRowKeys?: Array<TKey>;
     /**
      * @docid
      * @public
@@ -1515,11 +1516,13 @@ interface CustomStateStoring {
   type: 'custom';
   /**
    * @docid GridBaseOptions.stateStoring.customLoad
+   * @type Function
    * @type_function_return Promise<Object>
    */
   customLoad: () => PromiseLike<GridStateType>;
   /**
    * @docid GridBaseOptions.stateStoring.customSave
+   * @type Function
    * @type_function_param1 gridState:object
    * @type_function_return void
    */
@@ -1572,8 +1575,9 @@ export interface EditingBase<TRowData=any, TKey=any> {
      * @default []
      * @fires GridBaseOptions.onOptionChanged
      * @public
+     * @type Array<DataChange>
      */
-    changes?: DataChange<TRowData, TKey>[];
+    changes?: Array<DataChange<TRowData, TKey>>;
     /**
      * @docid GridBaseOptions.editing.editColumnName
      * @default null
@@ -2485,6 +2489,7 @@ export interface ColumnBase<TRowData=any, TCellValue=any> {
     /**
      * @docid GridBaseColumn.editorOptions
      * @public
+     * @type any
      */
     editorOptions?: EditorOptions;
     /**
@@ -2526,7 +2531,7 @@ export interface ColumnBase<TRowData=any, TCellValue=any> {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    filterValues?: TCellValue[];
+    filterValues?: Array<TCellValue>;
     /**
      * @docid GridBaseColumn.fixed
      * @default false
@@ -3286,6 +3291,7 @@ export type RowTemplateData
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxDataGridOptions
   <TRowData = any,
@@ -3343,6 +3349,7 @@ export interface dxDataGridOptions
      * @docid
      * @default undefined
      * @public
+     * @type string | Array<string>
      */
     keyExpr?: TKeyExpr;
     /**
@@ -4294,6 +4301,7 @@ export interface Editing
     /**
      * @docid dxDataGridOptions.editing.allowDeleting
      * @default false
+     * @type boolean
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_return Boolean
      * @public
@@ -4302,6 +4310,7 @@ export interface Editing
     /**
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
+     * @type boolean
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_return Boolean
      * @public
@@ -4355,6 +4364,7 @@ export interface Selection<TDeferred extends boolean = boolean> extends Selectio
      * @docid dxDataGridOptions.selection.deferred
      * @default false
      * @public
+     * @type boolean
      */
     deferred?: TDeferred;
     /**
@@ -4758,6 +4768,7 @@ export interface dxDataGridColumnButton
     /**
      * @docid dxDataGridColumnButton.visible
      * @default true
+     * @type boolean
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
      * @type_function_return Boolean
@@ -4767,6 +4778,7 @@ export interface dxDataGridColumnButton
     /**
      * @docid dxDataGridColumnButton.disabled
      * @default false
+     * @type boolean
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
      * @type_function_return Boolean
@@ -4839,6 +4851,7 @@ export interface RowObject
     /**
      * @docid dxDataGridRowObject.values
      * @public
+     * @type Array<any>
      */
     readonly values: ColumnValueType<TColumns>[];
 }

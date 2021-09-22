@@ -5889,7 +5889,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.filterValues]
        */
-      filterValues?: TCellValue[];
+      filterValues?: Array<TCellValue>;
       /**
        * [descr:GridBaseColumn.fixed]
        */
@@ -6510,7 +6510,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.changes]
        */
-      changes?: DataChange<TRowData, TKey>[];
+      changes?: Array<DataChange<TRowData, TKey>>;
       /**
        * [descr:GridBaseOptions.editing.editColumnName]
        */
@@ -8340,7 +8340,6 @@ declare module DevExpress.ui {
   > = DevExpress.ui.dxDataGrid.Editing<TRowData, TKey, TColumns>;
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridOptions<
     TRowData = any,
@@ -22819,7 +22818,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.selectedRowKeys]
      */
-    selectedRowKeys?: TKey[];
+    selectedRowKeys?: Array<TKey>;
     /**
      * [descr:GridBaseOptions.selection]
      */
