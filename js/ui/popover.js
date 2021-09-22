@@ -410,7 +410,8 @@ const Popover = Popup.inherit({
         const contentLocation = contentOffset[axis];
         const contentSize = getBoundingRect(this.$overlayContent().get(0))[sizeProperty];
         const targetLocation = targetOffset[axis];
-        const targetSize = $target.get(0)?.preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
+        const targetElement = $target.get(0);
+        const targetSize = !targetElement || targetElement.preventDefault ? 0 : getBoundingRect(targetElement)[sizeProperty];
 
         const min = Math.max(contentLocation, targetLocation);
         const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
