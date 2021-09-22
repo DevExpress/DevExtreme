@@ -1742,7 +1742,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const dateTable = this._getDateTable();
         // We should use getBoundingClientRect in renovation
-        const dateTableRect = getBoundingRect(dateTable.get(0));
+        const dateTableRect = dateTable.get(0) ? getBoundingRect(dateTable.get(0)) : 0;
 
         const columnsCount = this.viewDataProvider.getColumnsCount();
 
