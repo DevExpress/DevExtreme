@@ -2108,7 +2108,7 @@ QUnit.module('positioning', {
                 assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
             });
 
-            [{ onDimensionChangeAfterDrag: true }, { always: true }].forEach(restorePosition => {
+            [{ onDimensionChangeAfterDragOrResize: true }, { always: true }].forEach(restorePosition => {
                 QUnit.test(`drag should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
                     this.reinit({ restorePosition });
 
@@ -2120,9 +2120,7 @@ QUnit.module('positioning', {
                     const newPosition = this.getPosition();
                     assert.deepEqual(newPosition, initialPosition, 'position is restored');
                 });
-            });
 
-            [{ onDimensionChangeAfterResize: true }, { always: true }].forEach(restorePosition => {
                 QUnit.test(`resize should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
                     this.reinit({ restorePosition });
 

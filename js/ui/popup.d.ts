@@ -179,10 +179,9 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      */
     restorePosition?: {
         always: boolean;
-        onDimensionChangeAfterDrag: boolean;
-        onDimensionChangeAfterResize: boolean;
-        onOpening: boolean;
+        onDimensionChangeAfterDragOrResize: boolean;
         onFullScreenDisable: boolean;
+        onOpening: boolean;
     };
     /**
      * @docid
