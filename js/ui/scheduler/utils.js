@@ -17,14 +17,14 @@ export const utils = {
             return settings?.info;
         },
 
-        init: ({
+        create: (
             instance,
             fields,
             currentDataAccessors,
             forceIsoDateParsing,
             getDateSerializationFormat,
             setDateSerializationFormat
-        }) => {
+        ) => {
             const isDateField = (field) => field === 'startDate' || field === 'endDate';
             const defaultDataAccessors = {
                 getter: {},
