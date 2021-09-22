@@ -370,6 +370,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      sorting?: dxGanttSorting;
     /**
      * @docid
+     * @public
+     */
+    filterRow?: dxGanttFilterRow;
+    /**
+     * @docid
+     * @public
+     */
+     headerFilter?: dxGanttHeaderFilter;
+    /**
+     * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
@@ -1352,6 +1362,174 @@ export interface dxGanttSorting {
      * @default false
      */
     showSortIndexes?: boolean;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxGanttFilterRow {
+    /**
+     * @docid
+     * @default "End"
+     */
+    betweenEndText?: string;
+    /**
+     * @docid
+     * @default "Start"
+     */
+    betweenStartText?: string;
+    /**
+     * @docid
+     * @type object
+     */
+    operationDescriptions?: dxGanttFilterRowOperationDescriptions;
+    /**
+     * @docid
+     * @default "Reset"
+     */
+    resetOperationText?: string;
+    /**
+     * @docid
+     * @default "(All)"
+     */
+    showAllText?: string;
+    /**
+     * @docid
+     * @default true
+     */
+    showOperationChooser?: boolean;
+    /**
+     * @docid
+     * @default false
+     */
+    visible?: boolean;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxGanttFilterRowOperationDescriptions {
+    /**
+     * @docid
+     * @default "Between"
+     */
+    between?: string;
+    /**
+     * @docid
+     * @default "Contains"
+     */
+    contains?: string;
+    /**
+     * @docid
+     * @default "Ends with"
+     */
+    endsWith?: string;
+    /**
+     * @docid
+     * @default "Equals"
+     */
+    equal?: string;
+    /**
+     * @docid
+     * @default "Greater than"
+     */
+    greaterThan?: string;
+    /**
+     * @docid
+     * @default "Greater than or equal to"
+     */
+    greaterThanOrEqual?: string;
+    /**
+     * @docid
+     * @default "Less than"
+     */
+    lessThan?: string;
+    /**
+     * @docid
+     * @default "Less than or equal to"
+     */
+    lessThanOrEqual?: string;
+    /**
+     * @docid
+     * @default "Does not contain"
+     */
+    notContains?: string;
+    /**
+     * @docid
+     * @default "Does not equal"
+     */
+    notEqual?: string;
+    /**
+     * @docid
+     * @default "Starts with"
+     */
+    startsWith?: string;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxGanttHeaderFilter {
+    /**
+     * @docid
+     * @default false
+     */
+    allowSearch?: boolean;
+    /**
+     * @docid
+     * @default 315 &for(Material)
+     * @default 325
+     */
+    height?: number;
+    /**
+     * @docid
+     * @default 500
+     */
+    searchTimeout?: number;
+    /**
+     * @docid
+     * @type object
+     */
+    texts?: dxGanttHeaderFilterTexts;
+    /**
+     * @docid
+     * @default false
+     */
+    visible?: boolean;
+    /**
+     * @docid
+     * @default 252
+     */
+    width?: number;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxGanttHeaderFilterTexts {
+    /**
+     * @docid
+     * @default "Cancel"
+     */
+    cancel?: string;
+    /**
+     * @docid
+     * @default "(Blanks)"
+     */
+    emptyValue?: string;
+    /**
+     * @docid
+     * @default "Ok"
+     */
+    ok?: string;
 }
 
 /** @public */

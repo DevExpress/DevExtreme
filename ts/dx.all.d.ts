@@ -12992,6 +12992,138 @@ declare module DevExpress.ui {
       | string;
   }
   /**
+   * [descr:dxGanttFilterRow]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttFilterRow {
+    /**
+     * [descr:dxGanttFilterRow.betweenEndText]
+     */
+    betweenEndText?: string;
+    /**
+     * [descr:dxGanttFilterRow.betweenStartText]
+     */
+    betweenStartText?: string;
+    /**
+     * [descr:dxGanttFilterRow.operationDescriptions]
+     */
+    operationDescriptions?: dxGanttFilterRowOperationDescriptions;
+    /**
+     * [descr:dxGanttFilterRow.resetOperationText]
+     */
+    resetOperationText?: string;
+    /**
+     * [descr:dxGanttFilterRow.showAllText]
+     */
+    showAllText?: string;
+    /**
+     * [descr:dxGanttFilterRow.showOperationChooser]
+     */
+    showOperationChooser?: boolean;
+    /**
+     * [descr:dxGanttFilterRow.visible]
+     */
+    visible?: boolean;
+  }
+  /**
+   * [descr:dxGanttFilterRowOperationDescriptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttFilterRowOperationDescriptions {
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.between]
+     */
+    between?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.contains]
+     */
+    contains?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.endsWith]
+     */
+    endsWith?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.equal]
+     */
+    equal?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.greaterThan]
+     */
+    greaterThan?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.greaterThanOrEqual]
+     */
+    greaterThanOrEqual?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.lessThan]
+     */
+    lessThan?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.lessThanOrEqual]
+     */
+    lessThanOrEqual?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.notContains]
+     */
+    notContains?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.notEqual]
+     */
+    notEqual?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.startsWith]
+     */
+    startsWith?: string;
+  }
+  /**
+   * [descr:dxGanttHeaderFilter]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttHeaderFilter {
+    /**
+     * [descr:dxGanttHeaderFilter.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:dxGanttHeaderFilter.height]
+     */
+    height?: number;
+    /**
+     * [descr:dxGanttHeaderFilter.searchTimeout]
+     */
+    searchTimeout?: number;
+    /**
+     * [descr:dxGanttHeaderFilter.texts]
+     */
+    texts?: dxGanttHeaderFilterTexts;
+    /**
+     * [descr:dxGanttHeaderFilter.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxGanttHeaderFilter.width]
+     */
+    width?: number;
+  }
+  /**
+   * [descr:dxGanttHeaderFilterTexts]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttHeaderFilterTexts {
+    /**
+     * [descr:dxGanttHeaderFilterTexts.cancel]
+     */
+    cancel?: string;
+    /**
+     * [descr:dxGanttHeaderFilterTexts.emptyValue]
+     */
+    emptyValue?: string;
+    /**
+     * [descr:dxGanttHeaderFilterTexts.ok]
+     */
+    ok?: string;
+  }
+  /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -13099,6 +13231,14 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.sorting]
      */
     sorting?: dxGanttSorting;
+    /**
+     * [descr:dxGanttOptions.filterRow]
+     */
+    filterRow?: dxGanttFilterRow;
+    /**
+     * [descr:dxGanttOptions.headerFilter]
+     */
+    headerFilter?: dxGanttHeaderFilter;
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
      */
