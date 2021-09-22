@@ -122,14 +122,17 @@ class App extends React.Component {
       getDataFrame(ajaxArgs)
         .then((dataFrame) => {
           this.packetsLock -= 1;
-          dataFrame = dataFrame.map((i) => ({
-            date: new Date(i.Date),
-            minTemp: i.MinTemp,
-            maxTemp: i.MaxTemp,
-          }));
 
           const componentStorage = dataSource.store();
-          dataFrame.forEach((item) => componentStorage.insert(item));
+
+          dataFrame
+            .map((i) => ({
+              date: new Date(i.Date),
+              minTemp: i.MinTemp,
+              maxTemp: i.MaxTemp,
+            }))
+            .forEach((item) => componentStorage.insert(item));
+
           dataSource.reload();
 
           this.onVisualRangeChanged(component);

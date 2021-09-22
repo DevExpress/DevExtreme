@@ -51,10 +51,7 @@ class App extends React.Component {
     this.handleRefreshModeChange = this.handleRefreshModeChange.bind(this);
   }
 
-  sendRequest(url, method, data) {
-    method = method || 'GET';
-    data = data || {};
-
+  sendRequest(url, method = 'GET', data = {}) {
     this.logRequest(method, url, data);
 
     if (method === 'GET') {

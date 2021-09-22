@@ -118,15 +118,16 @@ class App extends React.Component {
   }
 
   reorder(items, item, fromIndex, toIndex) {
+    let result = items;
     if (fromIndex >= 0) {
-      items = [...items.slice(0, fromIndex), ...items.slice(fromIndex + 1)];
+      result = [...items.slice(0, fromIndex), ...items.slice(fromIndex + 1)];
     }
 
     if (toIndex >= 0) {
-      items = [...items.slice(0, toIndex), item, ...items.slice(toIndex)];
+      result = [...items.slice(0, toIndex), item, ...items.slice(toIndex)];
     }
 
-    return items;
+    return result;
   }
 
   updateTask(listIndex, itemData, fromIndex, toIndex) {

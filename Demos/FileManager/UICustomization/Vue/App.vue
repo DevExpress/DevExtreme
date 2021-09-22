@@ -154,7 +154,7 @@ export default {
       }
     },
 
-    createFile(fileExtension, directory) {
+    createFile(fileExtension, directory = this.$refs.fileManager.instance.getCurrentDirectory()) {
       const newItem = {
         __KEY__: Date.now(),
         name: `New file${fileExtension}`,
@@ -162,7 +162,6 @@ export default {
         size: 0,
       };
 
-      directory = directory || this.$refs.fileManager.instance.getCurrentDirectory();
       if (!directory.isDirectory) {
         return false;
       }

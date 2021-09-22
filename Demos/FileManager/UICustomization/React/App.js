@@ -146,7 +146,7 @@ class App extends React.Component {
     }
   }
 
-  createFile(fileExtension, directory) {
+  createFile(fileExtension, directory = this.fileManager.getCurrentDirectory()) {
     const newItem = {
       __KEY__: Date.now(),
       name: `New file${fileExtension}`,
@@ -154,7 +154,6 @@ class App extends React.Component {
       size: 0,
     };
 
-    directory = directory || this.fileManager.getCurrentDirectory();
     if (!directory.isDirectory) {
       return false;
     }

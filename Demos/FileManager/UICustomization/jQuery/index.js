@@ -169,7 +169,7 @@ $(() => {
     }
   }
 
-  function createFile(fileExtension, directory) {
+  function createFile(fileExtension, directory = fileManager.getCurrentDirectory()) {
     const newItem = {
       __KEY__: Date.now(),
       name: `New file${fileExtension}`,
@@ -177,7 +177,6 @@ $(() => {
       size: 0,
     };
 
-    directory = directory || fileManager.getCurrentDirectory();
     if (!directory.isDirectory) {
       return false;
     }

@@ -100,10 +100,8 @@ $(() => {
     }
   }
 
-  function sendRequest(url, method, data) {
+  function sendRequest(url, method = 'GET', data) {
     const d = $.Deferred();
-
-    method = method || 'GET';
 
     $.ajax(url, {
       method,

@@ -1,6 +1,4 @@
-function setCookie(name, value, options) {
-  options = options || {};
-
+function setCookie(name, value, options = {}) {
   let { expires } = options;
 
   if (typeof expires === 'number' && expires) {
@@ -13,9 +11,7 @@ function setCookie(name, value, options) {
     options.expires = expires.toUTCString();
   }
 
-  value = encodeURIComponent(value);
-
-  let updatedCookie = `${name}=${value}`;
+  let updatedCookie = `${name}=${encodeURIComponent(value)}`;
 
   Object.keys(options).forEach((propName) => {
     updatedCookie += `; ${propName}`;

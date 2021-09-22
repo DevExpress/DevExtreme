@@ -106,15 +106,13 @@ $(() => {
     },
   });
 
-  function sendRequest(url, method, data) {
+  function sendRequest(url, method = 'GET', data) {
     const d = $.Deferred();
-
-    method = method || 'GET';
 
     logRequest(method, url, data);
 
     $.ajax(url, {
-      method: method || 'GET',
+      method,
       data,
       cache: false,
       xhrFields: { withCredentials: true },

@@ -14,17 +14,18 @@ const WAGNER_6_U_LAT = 2 / Math.sqrt(3) - 0.1;
 
 const customProjection = {
   aspectRatio: 2,
-  to([l, lt]) {
-    const x = l * RADIANS;
-    const y = Math.min(Math.max(lt * RADIANS, -WAGNER_6_P_LAT), +WAGNER_6_P_LAT);
+  to(coordinates) {
+    const x = coordinates[0] * RADIANS;
+    const y = Math.min(Math.max(coordinates[1] * RADIANS, -WAGNER_6_P_LAT), +WAGNER_6_P_LAT);
     const t = y / Math.PI;
     return [
       (x / Math.PI) * Math.sqrt(1 - 3 * t * t),
       (y * 2) / Math.PI,
     ];
   },
-  from([x, y]) {
-    y = Math.min(Math.max(y, -WAGNER_6_U_LAT), +WAGNER_6_U_LAT);
+  from(coordinates) {
+    const x = coordinates[0];
+    const y = Math.min(Math.max(coordinates[1], -WAGNER_6_U_LAT), +WAGNER_6_U_LAT);
     const t = y / 2;
     return [
       (x * Math.PI) / Math.sqrt(1 - 3 * t * t) / RADIANS,

@@ -144,10 +144,7 @@ export default {
     };
   },
   methods: {
-    sendRequest(url, method, data) {
-      method = method || 'GET';
-      data = data || {};
-
+    sendRequest(url, method = 'GET', data = {}) {
       this.logRequest(method, url, data);
 
       const params = Object.keys(data).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');

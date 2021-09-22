@@ -33,11 +33,11 @@ class App extends React.Component {
 
   onSelectionChanged({ items }) {
     let selectedItemNames = 'Nobody has been selected';
-    items = items
+    const filteredItems = items
       .filter((item) => item.itemType === 'shape')
       .map((item) => item.text);
-    if (items.length > 0) {
-      selectedItemNames = items.join(', ');
+    if (filteredItems.length > 0) {
+      selectedItemNames = filteredItems.join(', ');
     }
     this.setState({
       selectedItemNames,
