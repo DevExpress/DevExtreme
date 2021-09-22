@@ -136,7 +136,6 @@ describe('OrdinaryLayout', () => {
       const layout = render({
         headerEmptyCellWidth: 132,
         isStandaloneAllDayPanel: true,
-        isSetAllDayTitleClass: true,
       });
 
       const headerPanelContainer = layout.find('.dx-scheduler-header-panel-container');
@@ -151,7 +150,6 @@ describe('OrdinaryLayout', () => {
         .toEqual({
           width: 132,
           isRenderAllDayTitle: true,
-          isSetAllDayTitleClass: true,
         });
 
       expect(headerPanelContainer.childAt(1).hasClass('dx-scheduler-header-tables-container'))
@@ -550,22 +548,6 @@ describe('OrdinaryLayout', () => {
 
         expect(result)
           .toBe(false);
-        expect(isVerticalGroupingApplied)
-          .toBeCalledWith(groups, 'horizontal');
-      });
-    });
-
-    describe('isSetAllDayTitleClass', () => {
-      it('should call isVerticalGroupingApplied and revert its value', () => {
-        const layout = new OrdinaryLayout({
-          groups,
-          groupOrientation: 'horizontal',
-        } as any);
-
-        const result = layout.isSetAllDayTitleClass;
-
-        expect(result)
-          .toBe(true);
         expect(isVerticalGroupingApplied)
           .toBeCalledWith(groups, 'horizontal');
       });

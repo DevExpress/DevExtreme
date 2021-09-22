@@ -32,7 +32,6 @@ describe('DateTableCellBase', () => {
       const root = render({
         props: {
           isRenderAllDayTitle: true,
-          isSetAllDayTitleClass: true,
         },
       });
 
@@ -41,22 +40,18 @@ describe('DateTableCellBase', () => {
         .toBe(true);
 
       expect(allDayTitle.props())
-        .toEqual({
-          ...new AllDayPanelTitleProps(),
-          isSetTitleClass: true,
-        });
+        .toEqual(new AllDayPanelTitleProps());
     });
 
     it('should not render all-day title when "isRenderAllDayTitle" is flase', () => {
       const root = render({
         props: {
-          isRenderAllDayTitle: true,
-          isSetAllDayTitleClass: true,
+          isRenderAllDayTitle: false,
         },
       });
 
       expect(root.find(AllDayPanelTitle).exists())
-        .toBe(true);
+        .toBe(false);
     });
   });
 });

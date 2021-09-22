@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { viewFunction as TitleView, AllDayPanelTitle, AllDayPanelTitleProps } from '../title';
+import { viewFunction as TitleView, AllDayPanelTitle } from '../title';
 
 describe('AllDayPanelTitle', () => {
   describe('Render', () => {
@@ -8,22 +8,12 @@ describe('AllDayPanelTitle', () => {
       props: { ...viewModel.props },
     }) as any);
 
-    it('should spread restAttributes', () => {
-      const title = render({ restAttributes: { customAttribute: 'customAttribute' } });
-
-      expect(title.prop('customAttribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render correctly', () => {
       const title = render({
-        classes: 'test-class',
         text: 'some text',
       });
 
-      expect(title.hasClass('test-class'))
-        .toBe(true);
-      expect(title.hasClass('test-class'))
+      expect(title.hasClass('dx-scheduler-all-day-title'))
         .toBe(true);
       expect(title.text())
         .toEqual('some text');
@@ -37,28 +27,6 @@ describe('AllDayPanelTitle', () => {
 
         expect(title.text)
           .toEqual('All day');
-      });
-
-      describe('classes', () => {
-        it('should apply classes correctly', () => {
-          const title = new AllDayPanelTitle({
-            ...new AllDayPanelTitleProps(),
-          });
-
-          expect(title.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-all-day-title',
-            ]);
-        });
-
-        it('should not set title class when isSetTitleClass is false', () => {
-          const title = new AllDayPanelTitle({
-            isSetTitleClass: false,
-          });
-
-          expect(title.classes.split(' '))
-            .toEqual(['']);
-        });
       });
     });
   });
