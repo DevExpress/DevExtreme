@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateTextHeight, calculateTextWidth } from './pdf_utils_v3';
+import { calculateTextHeight, calculateTargetRectWidth } from './pdf_utils_v3';
 
 function updateRowsAndCellsHeights(doc, rows) {
     const rowsAdditionalHeights = calculateAdditionalRowsHeights(doc, rows);
@@ -27,10 +27,10 @@ function calculateAdditionalRowsHeights(doc, rows) {
             .filter(cell => isDefined(cell.rowSpan));
 
         cellsWithRowSpan.forEach(cell => {
-            const textWidth = calculateTextWidth(cell.pdfCell._rect.w, cell.pdfCell.padding);
+            const targetRectWidth = calculateTargetRectWidth(cell.pdfCell._rect.w, cell.pdfCell.padding);
             const textHeight = calculateTextHeight(doc, cell.pdfCell.text, cell.pdfCell.font, {
                 wordWrapEnabled: cell.pdfCell.wordWrapEnabled,
-                textWidth
+                targetRectWidth
             });
             const cellHeight = textHeight + cell.pdfCell.padding.top + cell.pdfCell.padding.bottom;
 
